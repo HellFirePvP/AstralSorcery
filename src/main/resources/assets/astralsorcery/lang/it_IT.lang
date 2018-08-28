@@ -317,39 +317,40 @@ astralsorcery.journal.DRAWING_TABLE.4.text=Rinforzando la carta con l'abilità d
 astralsorcery.journal.DRAWING_TABLE.6.text=Piazzando la carta e il vetro infuso sul tavolo e direzionando il piazzamento delle costellazioni sulla carta, un nuovo master di costellazioni interconnesse è creato sulla pagina.<NL>Troppa interferenza luminosa come al tramonto o all'alba aumenta la possibilità che la pergamena non riesca a trattenere cotanta energia e bruci. Una volta che tutte e tre le costellazioni sono state piazzate sulla carta senza bruciare il pattern verra scritto nel vetro infuso.
 astralsorcery.journal.DRAWING_TABLE.7.text=il passo finale per l'incantamento involve l'uso diretto di un nuovo pattern di costellazioni sopra a qualcosa di usabile. Un libro potrebbe essere sicuramente capace di trattere gli incantamenti, come anche la maggior parte delle armature e delle armi, se appropriate a quello che la costellazione garantisce.
 astralsorcery.journal.DRAWING_TABLE.8.text=Infine, dovrebbe anche essere possibile imbottigliare questi incantamenti. Piazzando una bottiglia di acqua, o di una pozione base nella luce stellare può collassare in puro succo stellare.<NL>Sembra che come creare le pozioni e i libri in quesa maniera si ha la possibilità di danneggiare il vetro, incantando direttamente è quasi garantito il danno.
+
+research.ALTAR4.name=L'altare Iridescente
+astralsorcery.journal.ALTAR4.1.text=Mentre l'altare Celestiale ha certamente raggiunto ciò per cui era stato creato, anche le sue falle sono visibili. Nuove idee hanno portato al pensiero di focalizzare la luce stellare da una specifica costellazione potrebbe essere meglio che assorbire luce stellare dai dintorni.<NL>Ora, questo non è possibile farlo con il progetto corrente. Forse con del marmo scuro, e l'appena scoperta forza dei cristalli celestiali, può essere creata una struttura migliore
+astralsorcery.journal.ALTAR4.4.text=Non solo il nuovo progetto ha bisogno di una specie di struttura molto delicata, ma anche oggetti di crafting aggiuntivi occasionali saranno necessari durante il processo di crafting. In modo da farlo, i ripetitori spettrali devono essere piazzati sul marmo scuro nella struttura.<NL> Mentre il crafting avviene il cristallo focalizza un raggio di luce colorata sopra ad un ripetitore spettrale vuoto che si trova li vicino, mostrando l'oggetto aspettato per continuare il crafting
+
+
+research.CRAFTING_FOCUS_HINT.name=Crafting Focalizzato
+astralsorcery.journal.CRAFTING_FOCUS_HINT.1.text=Inoltre, un crafting che viene interrotto a causa dell'intensità della luce stellare decrescente durante il giorno non fermerà più il crafting, ma lo bloccherà finche non c'è di nuovo abbastanza luce stellare.<NL>Un altro magnifico aspetto del layout del nuovo altare è la sua abilità, garantita dal cristallo celestiale che fluttua sopra all'altare, per interagire e focalizzare la luce stellare da una specifica costellazione sopra al tavolo mentre si crafta.
+astralsorcery.journal.CRAFTING_FOCUS_HINT.2.text=Il risultato sarà infuso con una essenza concentrata del pattern di luce che neanche l'altare della sintonizzazione è capace di raggiungere. Facendo così, tuttavia, ha bisogno di un focus per quella costellazione. Piazzando un cristallo sintonizzato nello spazio apposito sopra all'altare. dovrebbe essere possibile filtrare e dirigere la luce stellare per il processo di crafting.<NL>Questo permette metodi di crafting più complessi e potentidove l'essenza di una particolare costellazione deve essere in cielo per sbloccare forza migliore in alcuni oggetti
+
+research.ATT_CAPE.name=Mantello delle stelle
+astralsorcery.journal.ATT_CAPE.1.text=Un armatura mondana come la pelle e il ferro possono certamente servire i loro propositi, tuttavia, non sono ne particolarmente belle ne funzionali. Infondendo una normale corazza di pelle con le proprietà energetiche della gemma risonante,  e l'aspetto trasmittente della polvere stellare, permette di avere un pezzo di armatura più adatto.
+astralsorcery.journal.ATT_CAPE.3.text=Oltre a mostrare una grande affinità agli incantamenti il mantello sembra che sia spinto dalle energie circostanti circondando un'altare da sintonizzazione attivo. Come se una forte corrente scorresse attraverso esso.<NL> Un processo di sintonizzazione più forte potrebb essere necessario per sbloccare i poteri del mantello appropriatamente.
+astralsorcery.journal.ATT_CAPE.4.text=Le nuove opzioni di crafting più concentrato potrebbero essere proprio abbastanza per raggiungere ciò. Tuttavia, il mantello può essere allineato con una costellazione alla volta. Usandolo in una ricetta di concentrazione differente annullera il vecchio allineamento sostituendolo con i nuovi effetti.<NL>Per avere un idea migliore circa gli effetti sono aggiunte nuove pagine che descrivono dettagli ulteriori per ogni costellazione
+
+research.ATT_WANDS.name=Bacchetta risonante sintonizzata
+astralsorcery.journal.ATT_WANDS.1.text=Alla luce delle nuove scoperte di crafting, potrebbe essere che la bacchetta di divinazione per trovare i cristalli di roccia sia un po' alterata, per servire a nuovi propositi.<NL>Infondendo la bacchetta con vari metalli sotto la luce focalizzata potrebbe portare speranza di effetti più potenti.
+astralsorcery.journal.ATT_WANDS.2.text=Questo processo è delicato e i risultati non sono ancora chiaramente definiti, il risultato potrebbe non essere reversible o potrebbe sovrascriversi con un diverso tentativo di infusione.
+
+research.ATT_WAND_ARMARA.name=Sintonizzazione della bacchetta: Armara
+astralsorcery.journal.ATT_WAND_ARMARA.1.text=Resistente e protettivo, questa combinazione di materiali imbeve la bacchetta con proprieta di scudo. mentre la tieni, può essere usata come scuto, quando si viene colpiti mentre si protegge, il ricevitore del danno riceve protezione aggiuntiva
+
+research.ATT_WAND_DISCIDIA.name=Sintonizzazione della bacchetta: Discidia
+astralsorcery.journal.ATT_WAND_DISCIDIA.1.text=Come i pericoli della notte crescono forti, diventano anche più resistenti ad attacchi loro stessi. Mentre tieni questa bacchetta che mima gli effetti di Discidia, attacchi consecutivi allo stesso target faranno molto più danno.
+
+research.ATT_WAND_AEVITAS.name=Sintonizzazione della bacchetta: Aevitas
+astralsorcery.journal.ATT_WAND_AEVITAS.1.text=Una bacchetta immersa di aspetti di crescita e creazione garantisce la convenienza di camminare attraverso l'aria come se fosse un campo stellare solido, sotto ai piedi del portatore, fermandolo dal cadere in una caverna profonda per errore.
+
+research.ATT_WAND_EVORSIO.name=Sintonizzazione della bacchetta: Evorsio
+astralsorcery.journal.ATT_WAND_EVORSIO.1.text=Mentre Evorsio Fortunatamente non è abbastanza forte per far evaporare il mondo interamente per se stesso, la bacchetta allineata con le parti di questo potere. quando il portatore rompe un blocco tenendola in mano, i blocchi intorno dello stesso tipo evaporeranno nel loro drop appena dopo.
+
+research.ATT_WAND_VICIO.name=Sintonizzazione della bacchetta: Vicio
+astralsorcery.journal.ATT_WAND_VICIO.1.text=Mentre volare liberamente per l'aria e raggiungere il cielo sembra non raggiungibile con questo, la bacchetta quando esposa sotto gli effetti di vicio può certamente aiutare un po. Mentre tieni premuto tasto-destro può essere caricata come un arco. e dopo averla rilasciata non lancia una freccia ma il portatore stesso attraverso l'aria 
 #----------------------------------------------------------------------------------------------------------------------	TODO
-research.ALTAR4.name=Iridescent Altar
-astralsorcery.journal.ALTAR4.1.text=While the Celestial Altar has certainly served its purpose, its flaws are also plainly visible. Newer ideas lead to the thought that focusing starlight from specific constellations might be more powerful than just plainly trying to absorb any kind of starlight.<NL>Now, this is not possible to do with the current design. Maybe with some sooty marble, and the newfound strength of celestial crystals, a more fitting construct can be made.
-astralsorcery.journal.ALTAR4.4.text=Not only does the new design require a somewhat more delicate structure, while crafting additional items occasionally need to be added to during the crafting process. In order to do that, spectral relays have to be placed onto the sooty marble of the altar's structure.<NL>While crafting, the focusing crystal will project a beam of colored light to an empty spectral relay that's nearby, displaying the item expected in order to continue crafting.
-
-research.CRAFTING_FOCUS_HINT.name=Focused Crafting
-astralsorcery.journal.CRAFTING_FOCUS_HINT.1.text=Additionally, crafting that's being interrupted due to the starlight intensity decreasing during the day will no longer completely stop the crafting, but rather halt it until enough starlight is provided again.<NL>Another magnificent aspect of the new altar layout is its ability, granted by the celestial crystal floating above the altar, to interact and focus starlight from very specific constellations onto the table while crafting.
-astralsorcery.journal.CRAFTING_FOCUS_HINT.2.text=The result is infused with a concentrated essence of the light pattern that even the attunement altar isn't able to achieve. Doing so, however, requires a focus for that constellation. By placing an attuned crystal into a special slot on the altar, it should be able to filter and direct the starlight for the crafting process.<NL>This allows for more complex and powerful crafting methods where the essence of one particular constellation might be the key to unlocking greater strength in some items.
-
-research.ATT_CAPE.name=Mantle of Stars
-astralsorcery.journal.ATT_CAPE.1.text=Mundane armor like leather and iron certainly serve their purpose, however, they are neither particularly beautiful nor very functional. Infusing a normal leather chest with the energetic properties of the resonating gem, and the transmissive aspect of stardust, allow for a more suitable piece of armor.
-astralsorcery.journal.ATT_CAPE.3.text=Besides showing greater affinity to enchantments, the mantle feels like it's being tossed around by the energies surrounding an active attunement altar. As if a strong current flows through it, but can't find purchase.<NL>A stronger attunement process might be needed to unleash the mantle's powers appropriately.
-astralsorcery.journal.ATT_CAPE.4.text=The new options for more focused crafting might just be enough to achieve this. However, the mantle might only be aligned with one constellation at a time. Using it in a different focusing-recipe will nullify the old alignment so the mantle switches to the new effect.<NL>To get a better idea of the effects, additional pages on the details of each constellation are added for each constellation.
-
-research.ATT_WANDS.name=Attuned Resonating Wand
-astralsorcery.journal.ATT_WANDS.1.text=In the light of the new discoveries for crafting, maybe the small divining rod that allows for finding rock crystals can be slightly altered to serve a better, additional, purpose.<NL>Infusing a wand with various materials under focused light might bring forth some more powerful effects.
-astralsorcery.journal.ATT_WANDS.2.text=As this is a delicate process, and the results are not clearly defined, the result might not be reversible or overwritten with a different infusing attempt.
-
-research.ATT_WAND_ARMARA.name=Wand Attunement: Armara
-astralsorcery.journal.ATT_WAND_ARMARA.1.text=Resilient and protective, this combination of materials imbues the wand with shielding properties. While holding it, it can be used as a shield. When being hit while shielding, the wearer is granted additional protection.
-
-research.ATT_WAND_DISCIDIA.name=Wand Attunement: Discidia
-astralsorcery.journal.ATT_WAND_DISCIDIA.1.text=As the dangers of the night grow fiercer, they also become more resilient to strong attacks themselves. While holding the wand that's mimicking the effects of discidia, consecutive attacks against the same target will deal significantly more damage.
-
-research.ATT_WAND_AEVITAS.name=Wand Attunement: Aevitas
-astralsorcery.journal.ATT_WAND_AEVITAS.1.text=A wand immersed with the aspects of growth and creation grants the wielder the convenience of walking through air as a solid starfield will manifest itself below the wielder's feet, stopping him from falling into a deep cavern by accident.
-
-research.ATT_WAND_EVORSIO.name=Wand Attunement: Evorsio
-astralsorcery.journal.ATT_WAND_EVORSIO.1.text=While evorsio is thankfully not strong enough to evaporate the world entirely by itself, the wand aligned with it brings forth parts of this power. When the wielder breaks a block while holding it, blocks around it with the same type as the one broken might evaporate into their drops but an instant afterwards.
-
-research.ATT_WAND_VICIO.name=Wand Attunement: Vicio
-astralsorcery.journal.ATT_WAND_VICIO.1.text=While freely flying through the air and reaching for the stars might not be achievable with this, the wand being exposed to the effects of vicio certainly helps with that a bit. While holding right-click it can be charged up like a bow. Upon releasing, it doesn't shoot an arrow but the wielder themselves through the air.
-
 research.C_CHALICE.name=Containment Chalice
 astralsorcery.journal.C_CHALICE.1.text=The lightwell is certainly nice and functional, however its basin seems small. All that liquid uses more space than what it's worth - even more so, now that infusion works through a lot of it in no time.<NL>A stronger and more useful way of storing liquid might be worthwhile. Some sort of chalice, holding whatever fluid on top of it, compressing it into a more manageable size and holding up to 24 buckets of that liquid.
 astralsorcery.journal.C_CHALICE.3.text=Designing a chalice that is strong enough to contain the liquid, and keep the fluid in balance so nothing disperses and vanishes, proves to be very difficult. The now final contraption seems to hold the fluid stable, so it is safe for storing the excess liquids.<NL>While contained, the liquid acts strangely. As if being driven by the energies that hold it in place, occasional outbursts of fluid break free from the containment.
