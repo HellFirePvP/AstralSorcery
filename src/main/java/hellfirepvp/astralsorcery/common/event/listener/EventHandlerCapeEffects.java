@@ -122,7 +122,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
         CapeEffectEvorsio ev =  ItemCape.getCapeEffect(pl, Constellations.evorsio);
         if(ev != null &&
                 !pl.getHeldItemMainhand().isEmpty() &&
-                !pl.getHeldItemMainhand().getItem().getToolClasses(pl.getHeldItemMainhand()).isEmpty()) {
+                !pl.getHeldItemMainhand().getItem().getToolClasses(pl.getHeldItemMainhand()).isEmpty() &&
+                !pl.isSneaking()) {
             evorsioChainingBreak = true;
             try {
                 RayTraceResult rtr = MiscUtils.rayTraceLook(pl);

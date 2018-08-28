@@ -626,7 +626,7 @@ public class RegistryPerks {
                 .connect(perkSEP3);
 
         AttributeModifierPerk perkMD1 = new AttributeModifierPerk("key_mending_path_node", -21, 3);
-        perkMD1.addModifier(2F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_DODGE);
+        perkMD1.addModifier(0.02F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_DODGE);
         AttributeModifierPerk perkMD2 = new AttributeModifierPerk("key_mending_path_node_1", -22, 4);
         perkMD2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE);
         AttributeModifierPerk perkMD3 = new AttributeModifierPerk("key_mending_path_node_2", -23, 3).setNameOverride(perkMD2.getUnlocalizedName());
