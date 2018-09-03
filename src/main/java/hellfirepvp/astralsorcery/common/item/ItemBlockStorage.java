@@ -46,10 +46,6 @@ public abstract class ItemBlockStorage extends Item {
         NBTTagCompound stateTag = NBTHelper.getBlockStateNBTTag(stateToStore);
         if(stateTag == null) return;
 
-        if(getStoredStates(storeIn).size() >= 1) {
-            NBTHelper.getPersistentData(storeIn).removeTag("storedStates");
-        }
-
         NBTTagCompound cmp = NBTHelper.getPersistentData(storeIn);
         NBTTagList list = cmp.getTagList("storedStates", Constants.NBT.TAG_COMPOUND);
         list.appendTag(stateTag);

@@ -99,7 +99,7 @@ public class EventHandlerServer {
                 for (ConstellationPerk perk : perks.keySet()) {
                     if (!prog.isPerkActive(perk)) continue;
                     if (perk.mayExecute(ConstellationPerk.Target.PLAYER_HARVEST_SPEED)) {
-                        BlockPos p = event.getPos();
+                        BlockPos p = event.getLocationPos();
                         event.setNewSpeed(perk.onHarvestSpeed(harvester, event.getState(), (p == null || p.getY() < 0) ? null : p, event.getNewSpeed()));
                     }
                 }
@@ -315,12 +315,13 @@ public class EventHandlerServer {
                                         world.getBlockState(pos).getBlock().canHarvestBlock(world, pos, event.getPlayer()))));
                 for (BlockPos pos : foundBlocks.getPattern().keySet()) {
                     IBlockState atState = w.getBlockState(pos);
-                    w.setBlockState(pos, BlocksAS.blockFakeTree.getDefaultState());
-                    TileFakeTree tt = MiscUtils.getTileAt(w, pos, TileFakeTree.class, true);
-                    if(tt != null) {
-                        tt.setupTile(event.getPlayer(), event.getPlayer().getHeldItemMainhand(), atState);
-                    } else {
-                        w.setBlockState(pos, atState);
+                    if (w.setBlockState(pos, BlocksAS.blockFakeTree.getDefaultState())) {
+                        TileFakeTree tt = MiscUtils.getTileAt(w, pos, TileFakeTree.class, true);
+                        if(tt != null) {
+                            tt.setupTile(event.getPlayer(), event.getPlayer().getHeldItemMainhand(), atState);
+                        } else {
+                            w.setBlockState(pos, atState);
+                        }
                     }
                 }
             }

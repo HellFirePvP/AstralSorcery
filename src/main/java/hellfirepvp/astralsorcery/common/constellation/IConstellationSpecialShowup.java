@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -42,7 +43,7 @@ public interface IConstellationSpecialShowup extends IConstellation {
     }
 
     default public long dayToWorldTime(long day) {
-        return day * 24000L;
+        return day * Config.dayLength;
     }
 
 }

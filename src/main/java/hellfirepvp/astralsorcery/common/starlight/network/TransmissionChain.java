@@ -113,7 +113,7 @@ public class TransmissionChain {
         lossPerc *= node.getAdditionalTransmissionLossMultiplier();
         List<NodeConnection<IPrismTransmissionNode>> next = node.queryNext(handler);
         float nextLoss = (lossMultiplier * lossPerc) / ((float) next.size());
-        prevPath.push(node.getPos());
+        prevPath.push(node.getLocationPos());
 
         if(node.needsTransmissionUpdate() && !transmissionUpdateList.contains(node)) {
             transmissionUpdateList.add(node);
@@ -123,7 +123,7 @@ public class TransmissionChain {
             IPrismTransmissionNode trNode = nextNode.getNode();
             if(nextNode.canConnect()) {
                 BlockPos nextPos = nextNode.getTo();
-                addIfNonExistentConnection(node.getPos(), nextPos);
+                addIfNonExistentConnection(node.getLocationPos(), nextPos);
                 if(!prevPath.contains(nextPos)) { //Saves us from cycles. cyclic starlight transmission to a cyclic node means 100% loss.
 
                     Float currentLoss = remainMultiplierMap.get(nextPos);

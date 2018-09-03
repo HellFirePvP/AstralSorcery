@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "astralsorcery:items/shifting_star_enhanced_armara"
+    }
+}

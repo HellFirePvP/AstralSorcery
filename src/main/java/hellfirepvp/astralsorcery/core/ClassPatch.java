@@ -8,11 +8,11 @@
 
 package hellfirepvp.astralsorcery.core;
 
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import org.objectweb.asm.tree.*;
 
 import javax.annotation.Nonnull;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -56,9 +56,9 @@ public abstract class ClassPatch {
                 return m;
             }
         }
-        FMLLog.info("[AstralTransformer] Find method will fail. Printing all methods as debug...");
+        AstralCore.log.warn("[AstralTransformer] Find method will fail. Printing all methods as debug...");
         for (MethodNode found : cn.methods) {
-            FMLLog.info("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
+            AstralCore.log.warn("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
         }
         throw new ASMTransformationException("Could not find method: " + deobf + "/" + obf);
     }
@@ -70,9 +70,9 @@ public abstract class ClassPatch {
                 return m;
             }
         }
-        FMLLog.info("[AstralTransformer] Find method will fail. Printing all methods as debug...");
+        AstralCore.log.warn("[AstralTransformer] Find method will fail. Printing all methods as debug...");
         for (MethodNode found : cn.methods) {
-            FMLLog.info("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
+            AstralCore.log.warn("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
         }
         throw new ASMTransformationException("Could not find method: " + deobf + "/" + obf);
     }
@@ -111,6 +111,15 @@ public abstract class ClassPatch {
         for (int i = startingIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode ain = mn.instructions.get(i);
             if (ain.getOpcode() == opCode)
+                return i;
+        }
+        return -1;
+    }
+
+    public static int peekFirstInstructionAfter(MethodNode mn, int startIndex, Predicate<AbstractInsnNode> check) {
+        for (int i = startIndex; i < mn.instructions.size(); i++) {
+            AbstractInsnNode ain = mn.instructions.get(i);
+            if (check.test(ain))
                 return i;
         }
         return -1;

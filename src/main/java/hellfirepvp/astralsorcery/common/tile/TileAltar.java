@@ -335,15 +335,14 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(getAltarLevel().next() != to) return false;
 
         if(!doLevelUp) return true;
-        levelUnsafe(getAltarLevel().next());
-        return true;
+        return levelUnsafe(getAltarLevel().next());
     }
 
-    private void levelUnsafe(AltarLevel to) {
+    private boolean levelUnsafe(AltarLevel to) {
         onLevelUp(level, to);
         level = to;
         mbState = false;
-        world.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
+        return world.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
     }
 
     @Override
@@ -403,6 +402,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     public PatternBlockArray getRequiredStructure() {
         AltarLevel al = getAltarLevel();
         return al.getMatcher() instanceof PatternAltarMatcher ? ((PatternAltarMatcher) al.getMatcher()).getPattern().getPattern() : null;
+    }
+
+    @Nonnull
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
     }
 
     public float getAmbientStarlightPercent() {
@@ -608,7 +613,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
-                TileAltar ta = MiscUtils.getTileAt(world, getPos(), TileAltar.class, false);
+                TileAltar ta = MiscUtils.getTileAt(world, getLocationPos(), TileAltar.class, false);
                 if(ta != null) {
                     ta.receiveStarlight(type, amount);
                 }

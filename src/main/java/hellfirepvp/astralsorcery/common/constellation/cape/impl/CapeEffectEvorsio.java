@@ -182,7 +182,7 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
         }
     }
 
-    public void breakBlocksPlane(EntityPlayerMP player, EnumFacing sideBroken, World world, BlockPos at) {
+    public void breakBlocksPlaneVertical(EntityPlayerMP player, EnumFacing sideBroken, World world, BlockPos at) {
         for (int xx = -2; xx <= 2; xx++) {
             if(sideBroken.getDirectionVec().getX() != 0 && xx != 0) continue;
             for (int yy = -1; yy <= 3; yy++) {
@@ -203,10 +203,27 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
         }
     }
 
+    public void breakBlocksPlaneHorizontal(EntityPlayerMP player, EnumFacing sideBroken, World world, BlockPos at) {
+        for (int xx = -2; xx <= 2; xx++) {
+            if(sideBroken.getDirectionVec().getX() != 0 && xx != 0) continue;
+                for (int zz = -2; zz <= 2; zz++) {
+                    if(sideBroken.getDirectionVec().getZ() != 0 && zz != 0) continue;
+                    BlockPos other = at.add(xx, 0, zz);
+                    if(world.getTileEntity(other) == null && world.getBlockState(other).getBlockHardness(world, other) != -1) {
+                        IBlockState present = world.getBlockState(other);
+                        if(MiscUtils.breakBlockWithPlayer(other, player)) {
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CAPE_EVORSIO_BREAK, other);
+                            ev.setAdditionalData(Block.getStateId(present));
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, other, 16));
+                        }
+                    }
+                }
+        }
+    }
+
     @Override
     public void loadFromConfig(Configuration cfg) {
         percDamageAppliedNearby = cfg.getFloat(getKey() + "PercentLifeDamage", getConfigurationSection(), percDamageAppliedNearby, 0, 10, "Defines the multiplier how much of the dead entity's max-life should be dealt as AOE damage to mobs nearby.");
         rangeDeathAOE = cfg.getFloat(getKey() + "DeathAOERange", getConfigurationSection(), rangeDeathAOE, 0.5F,50, "Defines the Range of the death-AOE effect of when a mob gets killed by a player with this cape on.");
     }
-
 }

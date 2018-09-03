@@ -157,7 +157,9 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
             IBlockState state = world.getBlockState(pos);
             if (MiscUtils.getMatchingState(replaceableStates, state) != null) {
                 IBlockState newState = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
-                world.setBlockState(pos, newState);
+                if (!world.setBlockState(pos, newState)) {
+                    return;
+                }
                 RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
                 buf.addOre(pos);
 
@@ -165,8 +167,9 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                     pos = pos.add(random.nextInt(2), random.nextInt(2), random.nextInt(2));
                     state = world.getBlockState(pos);
                     if (MiscUtils.getMatchingState(replaceableStates, state) != null) {
-                        world.setBlockState(pos, newState);
-                        buf.addOre(pos);
+                        if (world.setBlockState(pos, newState)) {
+                            buf.addOre(pos);
+                        }
                     }
                 }
             }

@@ -31,12 +31,12 @@ public class EventHandlerRedirect {
         WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
         if (wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
             int eclTick = wsh.solarEclipseTick;
-            if (eclTick >= ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR) { //fading out
-                eclTick -= ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
+            if (eclTick >= ConstellationSkyHandler.getSolarEclipseHalfDuration()) { //fading out
+                eclTick -= ConstellationSkyHandler.getSolarEclipseHalfDuration();
             } else {
-                eclTick = ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR - eclTick;
+                eclTick = ConstellationSkyHandler.getSolarEclipseHalfDuration() - eclTick;
             }
-            float perc = ((float) eclTick) / ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
+            float perc = ((float) eclTick) / ConstellationSkyHandler.getSolarEclipseHalfDuration();
             return prevBrightness * (0.05F + (0.95F * perc));
         }
         return prevBrightness;
@@ -50,12 +50,12 @@ public class EventHandlerRedirect {
         WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
         if (wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
             int eclTick = wsh.solarEclipseTick;
-            if (eclTick >= ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR) { //fading out
-                eclTick -= ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
+            if (eclTick >= ConstellationSkyHandler.getSolarEclipseHalfDuration()) { //fading out
+                eclTick -= ConstellationSkyHandler.getSolarEclipseHalfDuration();
             } else {
-                eclTick = ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR - eclTick;
+                eclTick = ConstellationSkyHandler.getSolarEclipseHalfDuration() - eclTick;
             }
-            float perc = ((float) eclTick) / ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
+            float perc = ((float) eclTick) / ConstellationSkyHandler.getSolarEclipseHalfDuration();
             return prevBrightness * (0.05F + (0.95F * perc));
         }
         return prevBrightness;

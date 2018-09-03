@@ -62,7 +62,11 @@ public class GenListEntries {
             Biome.SpawnListEntry entry = applicable.get(world.rand.nextInt(applicable.size()));
             Class<? extends EntityLivingBase> applicableClass = entry.entityClass;
             ResourceLocation key = EntityList.getKey(applicableClass);
-            if(key != null && EntityUtils.canEntitySpawnHere(world, pos, key, true)) {
+            if(key != null && EntityUtils.canEntitySpawnHere(world, pos, key, true, (e) -> {
+                EventHandlerEntity.spawnSkipId = e.getEntityId();
+                return null;
+            })) {
+                EventHandlerEntity.spawnSkipId = -1;
                 return new PelotrioSpawnListEntry(pos, key);
             }
             return null;
@@ -81,7 +85,11 @@ public class GenListEntries {
         }
 
         public void spawn(World world) {
-            if(entityName != null && EntityUtils.canEntitySpawnHere(world, getPos(), entityName, true)) {
+            if(entityName != null && EntityUtils.canEntitySpawnHere(world, getPos(), entityName, true, (e) -> {
+                EventHandlerEntity.spawnSkipId = e.getEntityId();
+                return null;
+            })) {
+                EventHandlerEntity.spawnSkipId = -1;
                 Entity entity = EntityList.createEntityByIDFromName(entityName, world);
                 if(entity != null) {
                     BlockPos at = getPos();
@@ -93,9 +101,7 @@ public class GenListEntries {
                             return;
                         }
                     }
-                    EventHandlerEntity.spawnSkipId = entity.getEntityId();
                     world.spawnEntity(entity);
-                    EventHandlerEntity.spawnSkipId = -1;
                     world.playEvent(2004, entity.getPosition(), 0);
                     world.playEvent(2004, entity.getPosition(), 0);
                 }

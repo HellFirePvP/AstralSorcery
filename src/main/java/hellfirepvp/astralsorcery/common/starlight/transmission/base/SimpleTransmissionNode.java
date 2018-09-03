@@ -54,7 +54,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
     }
 
     @Override
-    public BlockPos getPos() {
+    public BlockPos getLocationPos() {
         return thisPos;
     }
 

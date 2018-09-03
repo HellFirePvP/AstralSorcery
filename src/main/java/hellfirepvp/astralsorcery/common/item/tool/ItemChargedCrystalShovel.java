@@ -43,13 +43,14 @@ public class ItemChargedCrystalShovel extends ItemCrystalShovel implements Charg
                 if (shovelables != null) {
                     Map<BlockPos, BlockArray.BlockInformation> pattern = shovelables.getPattern();
                     for (Map.Entry<BlockPos, BlockArray.BlockInformation> blocks : pattern.entrySet()) {
-                        world.setBlockState(blocks.getKey(), BlocksAS.blockFakeTree.getDefaultState());
-                        TileFakeTree tt = MiscUtils.getTileAt(world, blocks.getKey(), TileFakeTree.class, true);
-                        if(tt != null) {
-                            tt.setupTile(player, itemstack, blocks.getValue().state);
-                            itemstack.damageItem(1, player);
-                        } else {
-                            world.setBlockState(blocks.getKey(), blocks.getValue().state);
+                        if (world.setBlockState(blocks.getKey(), BlocksAS.blockFakeTree.getDefaultState())) {
+                            TileFakeTree tt = MiscUtils.getTileAt(world, blocks.getKey(), TileFakeTree.class, true);
+                            if(tt != null) {
+                                tt.setupTile(player, itemstack, blocks.getValue().state);
+                                itemstack.damageItem(1, player);
+                            } else {
+                                world.setBlockState(blocks.getKey(), blocks.getValue().state);
+                            }
                         }
                     }
                     if(!ChargedCrystalToolBase.tryRevertMainHand(player, itemstack)) {

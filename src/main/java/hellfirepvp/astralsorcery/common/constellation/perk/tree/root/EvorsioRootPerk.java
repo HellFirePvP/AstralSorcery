@@ -55,17 +55,17 @@ public class EvorsioRootPerk extends RootPerk {
             World world = event.getWorld();
             float gainedExp;
             try {
-                gainedExp = broken.getPlayerRelativeBlockHardness(player, world, event.getPos());
+                gainedExp = broken.getBlockHardness(world, event.getPos());
             } catch (Exception exc) {
-                gainedExp = 2F;
+                gainedExp = 0.5F;
             }
-            gainedExp /= 4.0F;
-            try {
-                Explosion exp = new Explosion(world, player, at.getX(), at.getY(), at.getZ(), 2F, true, true);
-                gainedExp *= Math.max(broken.getBlock().getExplosionResistance(world, at, player, exp) / 40F, 1F);
-            } catch (Exception exc) {}
+            if (gainedExp <= 0) {
+                return; //Unbreakable lol. you're not getting exp for that.
+            }
+            gainedExp *= 0.4F;
             gainedExp *= expMultiplier;
-            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
+            gainedExp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP);
+            gainedExp = (float) Math.sqrt(gainedExp);
             ResearchManager.modifyExp(player, gainedExp);
         }
     }

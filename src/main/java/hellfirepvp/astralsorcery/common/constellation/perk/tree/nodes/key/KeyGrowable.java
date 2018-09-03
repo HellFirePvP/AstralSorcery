@@ -84,8 +84,9 @@ public class KeyGrowable extends KeyPerk implements IPlayerTickPerk {
                             pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
                         }
                     } else*/ if(at.getBlock() instanceof BlockDirt && at.getValue(BlockDirt.VARIANT).equals(BlockDirt.DirtType.DIRT)) {
-                    w.setBlockState(pos, Blocks.GRASS.getDefaultState());
-                    pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
+                    if (w.setBlockState(pos, Blocks.GRASS.getDefaultState())) {
+                        pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
+                    }
                 }
             }
             if(pkt != null) {

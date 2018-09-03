@@ -78,8 +78,10 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
             }
         }
 
+        GL11.glEnable(GL11.GL_BLEND);
         GlStateManager.enableBlend();
         Blending.CONSTANT_ALPHA.applyStateManager();
+        Blending.CONSTANT_ALPHA.apply();
         //Sync Statemanager
         GlStateManager.color(1F, 1F, 1F,1F);
         GL11.glColor4f(1F, 1F, 1F, 1F);

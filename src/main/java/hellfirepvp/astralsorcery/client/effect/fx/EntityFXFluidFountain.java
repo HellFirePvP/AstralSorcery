@@ -53,7 +53,7 @@ public class EntityFXFluidFountain extends EntityComplexFX {
         EntityFXFloatingCube cube = new EntityFXFloatingCube(tas);
         cube.setPosition(offset);
         cube.setTextureSubSizePercentage(1F / 16F).setMaxAge(40 + rand.nextInt(40));
-        cube.setScale(0.3F).tumble();
+        cube.setScale(0.1F).tumble();
         Vector3 v = Vector3.positiveYRandom();
         v.setY(v.getY() * 8).normalize().multiply(new Vector3(
                 0.01F + rand.nextFloat() * 0.015F,

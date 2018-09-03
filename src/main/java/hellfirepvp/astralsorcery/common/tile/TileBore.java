@@ -828,6 +828,12 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         return MultiBlockArrays.patternFountain;
     }
 
+    @Nonnull
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
+    }
+
     @Override
     protected void onFirstTick() {}
 

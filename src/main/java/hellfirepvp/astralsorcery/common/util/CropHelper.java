@@ -200,8 +200,7 @@ public class CropHelper {
         public boolean tryGrow(World world, Random rand) {
             if(rand.nextBoolean()) {
                 IBlockState current = world.getBlockState(pos);
-                world.setBlockState(pos, current.withProperty(BlockNetherWart.AGE, (Math.min(3, current.getValue(BlockNetherWart.AGE) + 1))), 3);
-                return true;
+                return world.setBlockState(pos, current.withProperty(BlockNetherWart.AGE, (Math.min(3, current.getValue(BlockNetherWart.AGE) + 1))), 3);
             }
             return false;
         }
@@ -259,7 +258,7 @@ public class CropHelper {
                 BlockPos bp = pos.up(i);
                 IBlockState at = world.getBlockState(bp);
                 if(at.getBlock().equals(Blocks.CACTUS)) {
-                    MiscUtils.breakBlockWithoutPlayer((WorldServer)  world, bp);
+                    MiscUtils.breakBlockWithoutPlayer((WorldServer) world, bp);
                 }
             }
             return drops;
@@ -284,8 +283,7 @@ public class CropHelper {
                 cache = cache.up();
                 if(world.isAirBlock(cache)) {
                     if(rand.nextBoolean()) {
-                        world.setBlockState(cache, Blocks.CACTUS.getDefaultState());
-                        return true;
+                        return world.setBlockState(cache, Blocks.CACTUS.getDefaultState());
                     } else {
                         return false;
                     }
@@ -358,8 +356,7 @@ public class CropHelper {
                 cache = cache.up();
                 if(world.isAirBlock(cache)) {
                     if(rand.nextBoolean()) {
-                        world.setBlockState(cache, Blocks.REEDS.getDefaultState());
-                        return true;
+                        return world.setBlockState(cache, Blocks.REEDS.getDefaultState());
                     } else {
                         return false;
                     }

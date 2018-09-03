@@ -68,7 +68,10 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
 
     @Override
     public void generate(BlockPos pos, World world, Random rand) {
-        world.setBlockState(pos, BlocksAS.customFlower.getDefaultState().withProperty(BlockCustomFlower.FLOWER_TYPE, BlockCustomFlower.FlowerType.GLOW_FLOWER));
+        if (!world.setBlockState(pos, BlocksAS.customFlower.getDefaultState().withProperty(BlockCustomFlower.FLOWER_TYPE, BlockCustomFlower.FlowerType.GLOW_FLOWER))) {
+            return;
+        }
+
         if(!isGeneratingAdditional) {
             isGeneratingAdditional = true;
             try {

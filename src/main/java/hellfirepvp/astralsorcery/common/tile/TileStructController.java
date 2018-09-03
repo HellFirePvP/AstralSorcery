@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectConduit;
+import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -17,6 +19,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,7 +50,7 @@ public class TileStructController extends TileEntityTick {
                     this.world.setBlockToAir(this.pos);
                 } else {
                     PatternBlockArray match = this.type.matchProvider.apply(null);
-                    if (match == null || !match.matches(this.world, this.pos.down(3))) {
+                    if (match == null || !match.matches(this.world, this.pos.add(this.type.structureMatchOffset))) {
                         this.world.setBlockToAir(this.pos);
                     }
                 }
@@ -92,8 +95,43 @@ public class TileStructController extends TileEntityTick {
                 posTo.addY(-1 + rand.nextFloat() * 3).addX(rand.nextFloat());
                 EffectHandler.getInstance().lightning(posFrom, posTo).setOverlayColor(new Color(0x3C00FF));
             }
-        } else if (type == StructType.SUPPORT) {
+        } else if (type == StructType.CONDUIT) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).gravity(0.004);
+            p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.2F + rand.nextFloat() * 0.1F).setAlphaMultiplier(0.8F);
+            p.motion(
+                    rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1)).setMaxAge(30 + rand.nextInt(20));
+            p.setColor(new Color(0x3C00FF));
 
+            if(rand.nextBoolean()) {
+                Vector3 offset = new Vector3(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+                p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).gravity(0.004);
+                p.offset(offset.getX(), offset.getY(), offset.getZ());
+                p.scale(0.1F + rand.nextFloat() * 0.1F).setAlphaMultiplier(0.8F);
+                p.motion(0, 0, 0).setMaxAge(30 + rand.nextInt(20));
+                p.setColor(new Color(0x3C00FF));
+                p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).gravity(0.004);
+                p.offset(offset.getX(), offset.getY(), offset.getZ());
+                p.scale(0.05F + rand.nextFloat() * 0.05F).setAlphaMultiplier(0.8F);
+                p.motion(0, 0, 0).setMaxAge(30 + rand.nextInt(20));
+                p.setColor(Color.WHITE);
+            }
+
+            if (rand.nextInt(25) == 0) {
+                OrbitalEffectConduit prop = new OrbitalEffectConduit(2F);
+                OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(prop, prop, prop);
+                ctrl.setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
+                ctrl.setOrbitAxis(Vector3.random());
+                ctrl.setTicksPerRotation(200);
+            }
+
+            if (rand.nextInt(35) == 0) {
+                Vector3 posFrom = new Vector3(getPos()).add(0.4 + rand.nextFloat() * 0.2, 0.4 + rand.nextFloat() * 0.2, 0.4 + rand.nextFloat() * 0.2);
+                Vector3 posTo = new Vector3(getPos()).add(Vector3.random().multiply(1 + rand.nextFloat()));
+                EffectHandler.getInstance().lightning(posFrom, posTo).setOverlayColor(new Color(0x3C00FF));
+            }
         }
     }
 
@@ -120,16 +158,19 @@ public class TileStructController extends TileEntityTick {
 
     public static enum StructType {
 
-        GATE((v) -> MultiBlockArrays.patternSmallRuin),
-        SUPPORT((v) -> null),
-        ARC((v) -> null),
-        LENS((v) -> null),
-        CORE((v) -> null);
+        GATE((v) -> MultiBlockArrays.patternSmallRuin, new BlockPos(0, -3, 0)),
+        CONDUIT((v) -> MultiBlockArrays.patternSmallRuinConduit, new BlockPos(0, -6, 0)),
+        SUPPORT((v) -> null, null),
+        ARC((v) -> null, null),
+        LENS((v) -> null, null),
+        CORE((v) -> null, null);
 
         private Function<Void, PatternBlockArray> matchProvider;
+        private final BlockPos structureMatchOffset;
 
-        StructType(Function<Void, PatternBlockArray> matchProvider) {
+        StructType(Function<Void, PatternBlockArray> matchProvider, BlockPos offset) {
             this.matchProvider = matchProvider;
+            this.structureMatchOffset = offset;
         }
 
     }

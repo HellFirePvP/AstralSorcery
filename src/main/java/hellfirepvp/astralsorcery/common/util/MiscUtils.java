@@ -462,8 +462,7 @@ public class MiscUtils {
         } catch (Exception exc) {
             return true;
         }
-        if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() == null) return true;
-        return !FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().contains(player);
+        return false;
     }
 
     @Nullable

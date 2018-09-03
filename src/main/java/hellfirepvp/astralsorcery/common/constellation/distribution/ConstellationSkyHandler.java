@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.distribution;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestSeed;
 import net.minecraft.client.Minecraft;
@@ -28,10 +29,6 @@ import java.util.*;
  * Date: 16.11.2016 / 20:47
  */
 public class ConstellationSkyHandler implements ITickHandler {
-
-    //For effect purposes to determine how long those events are/last
-    public static final int SOLAR_ECLIPSE_HALF_DUR = 2400;
-    public static final int LUNAR_ECLIPSE_HALF_DUR = 2400;
 
     private static final ConstellationSkyHandler instance = new ConstellationSkyHandler();
     private static int activeSession = 0;
@@ -119,20 +116,31 @@ public class ConstellationSkyHandler implements ITickHandler {
     }
 
     //Convenience method
+
     public float getCurrentDaytimeDistribution(World world) {
-        float dayPart = ((world.getWorldTime() % 24000) + 24000) % 24000;
-        if(dayPart < 11000) return 0F;
-        if(dayPart < 15000) return (dayPart - 11000F) / 4000F;
-        if(dayPart > 20000) return 1F - (dayPart - 20000F) / 4000F;
+        int dLength = Config.dayLength;
+        float dayPart = ((world.getWorldTime() % dLength) + dLength) % dLength;
+        if(dayPart < (dLength / 2F)) return 0F;
+        float part = dLength / 7F;
+        if(dayPart < ((dLength / 2F) + part)) return ((dayPart - ((dLength / 2F) + part)) / part) + 1F;
+        if(dayPart > (dLength - part)) return 1F - (dayPart - (dLength - part)) / part;
         return 1F;
     }
-
     public boolean isNight(World world) {
         return getCurrentDaytimeDistribution(world) >= 0.65;
     }
 
     public boolean isDay(World world) {
         return !isNight(world);
+    }
+
+    //For effect purposes to determine how long those events are/last
+    public static int getSolarEclipseHalfDuration() {
+        return Config.dayLength / 10;
+    }
+
+    public static int getLunarEclipseHalfDuration() {
+        return Config.dayLength / 10;
     }
 
     @Nullable

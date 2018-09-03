@@ -297,7 +297,7 @@ public class ResearchManager {
             PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
         }
 
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
 
         progress.setExp(0);
         progress.setAttunedConstellation(constellation);
@@ -409,7 +409,7 @@ public class ResearchManager {
             PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
         }
 
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);

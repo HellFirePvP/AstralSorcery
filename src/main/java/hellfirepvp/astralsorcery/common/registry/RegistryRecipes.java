@@ -107,6 +107,7 @@ public class RegistryRecipes {
     public static Map<IMajorConstellation, ReAttunementStarRecipe> rAttStarRecipes = new HashMap<>();
 
     public static ResonatorLiquidRecipe rResonatorLiquid;
+    public static ResonatorStructureRecipe rResonatorStructure;
 
     public static WandAttunementRecipe rWandAugmentDiscidia, rWandAugmentAevitas, rWandAugmentVicio,
             rWandAugmentEvorsio, rWandAugmentArmara;
@@ -433,6 +434,7 @@ public class RegistryRecipes {
         rDrawingTable = registerAltarRecipe(new DrawingTableRecipe());
 
         rResonatorLiquid = registerAltarRecipe(new ResonatorLiquidRecipe());
+        rResonatorStructure = registerAltarRecipe(new ResonatorStructureRecipe());
 
         rBoreHeadLiquid = registerAltarRecipe(new LiquidBoreRecipe());
         rBoreHeadVortex = registerAltarRecipe(new VortexBoreRecipe());

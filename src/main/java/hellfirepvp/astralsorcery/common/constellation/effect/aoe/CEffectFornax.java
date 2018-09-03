@@ -103,18 +103,21 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
             if(state.getBlock().equals(Blocks.WATER) &&
                     state.getBlock() instanceof BlockStaticLiquid) {
                 if(state.getValue(BlockStaticLiquid.LEVEL) == 0) {
-                    world.setBlockState(at, Blocks.PACKED_ICE.getDefaultState());
-                    changed = true;
+                    if (world.setBlockState(at, Blocks.PACKED_ICE.getDefaultState())) {
+                        changed = true;
+                    }
                 }
             } else if(state.getBlock().equals(Blocks.LAVA) &&
                     state.getBlock() instanceof BlockStaticLiquid) {
                 if(state.getValue(BlockStaticLiquid.LEVEL) == 0) {
-                    world.setBlockState(at, Blocks.OBSIDIAN.getDefaultState());
-                    changed = true;
+                    if (world.setBlockState(at, Blocks.OBSIDIAN.getDefaultState())) {
+                        changed = true;
+                    }
                 }
             } else if(state.getBlock().equals(Blocks.FIRE)) {
-                world.setBlockToAir(at);
-                changed = true;
+                if (world.setBlockToAir(at)) {
+                    changed = true;
+                }
             } else if(state.getBlock() instanceof BlockFluidBase) {
                 if(state.getValue(BlockFluidBase.LEVEL) == 0) {
                     IBlockState generate = Blocks.STONE.getDefaultState();
@@ -126,12 +129,14 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
                             generate = Blocks.OBSIDIAN.getDefaultState();
                         }
                     }
-                    world.setBlockState(at, generate);
-                    changed = true;
+                    if (world.setBlockState(at, generate)) {
+                        changed = true;
+                    }
                 }
             } else if (state.getBlock().isAir(state, world, at) && state.getBlock().isReplaceable(world, at)) {
-                world.setBlockState(at, Blocks.ICE.getDefaultState());
-                changed = true;
+                if (world.setBlockState(at, Blocks.ICE.getDefaultState())) {
+                    changed = true;
+                }
             }
             return changed;
         } else {

@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.core;
 
 import hellfirepvp.astralsorcery.core.transform.AstralPatchTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraftforge.fml.common.FMLLog;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
@@ -60,8 +59,8 @@ public class AstralTransformer implements IClassTransformer {
             try {
                 subTransformer.transformClassNode(node, transformedName, name);
             } catch (ASMTransformationException asmException) {
-                FMLLog.warning("Access transformation failed for Transformer: " + subTransformer.getIdentifier());
-                FMLLog.warning("Transformer added information:");
+                AstralCore.log.warn("Access transformation failed for Transformer: " + subTransformer.getIdentifier());
+                AstralCore.log.warn("Transformer added information:");
                 subTransformer.addErrorInformation();
                 asmException.printStackTrace();
                 throw asmException; //Rethrow
@@ -72,7 +71,7 @@ public class AstralTransformer implements IClassTransformer {
         node.accept(writer);
         bytes = writer.toByteArray();
 
-        if (false) {
+        if (true) {
             try {
                 File f = new File("C:/ASTestClasses/" + transformedName + ".class");
                 f.getParentFile().mkdirs();

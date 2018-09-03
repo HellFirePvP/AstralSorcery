@@ -294,7 +294,7 @@ public class TileWell extends TileReceiverBaseInventory {
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
-                TileWell tw = MiscUtils.getTileAt(world, getPos(), TileWell.class, false);
+                TileWell tw = MiscUtils.getTileAt(world, getLocationPos(), TileWell.class, false);
                 if(tw != null) {
                     tw.receiveStarlight(type, amount);
                 }

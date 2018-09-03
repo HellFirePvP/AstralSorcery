@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
+import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
@@ -430,6 +431,14 @@ public class RegistryResearch {
                 "QUICK_CHARGE", 4, 4);
         resQuickCharge.addPage(getTextPage("QUICK_CHARGE.1"));
 
+        ItemStack resStruc = new ItemStack(ItemsAS.skyResonator);
+        ItemSkyResonator.setEnhanced(resStruc);
+        ItemSkyResonator.setUpgradeUnlocked(resStruc, ItemSkyResonator.ResonatorUpgrade.AREA_SIZE);
+        ItemSkyResonator.setCurrentUpgradeUnsafe(resStruc, ItemSkyResonator.ResonatorUpgrade.AREA_SIZE);
+        ResearchNode resResonatorStructure = new ResearchNode(resStruc, "RESONATOR_AREA_SIZE", 5, 4);
+        resResonatorStructure.addPage(getTextPage("RESONATOR_AREA_SIZE.1"));
+        resResonatorStructure.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rResonatorStructure));
+
         ResearchNode resStarlightNetwork = new ResearchNode(new ItemStack(BlocksAS.lens), "STARLIGHT_NETWORK", 3, 5);
         resStarlightNetwork.addPage(getTextPage("STARLIGHT_NETWORK.1"));
 
@@ -485,6 +494,7 @@ public class RegistryResearch {
         regAttunement.register(resShiftStar);
         regAttunement.register(resToolGrapple);
         regAttunement.register(resKnowledgeShare);
+        regAttunement.register(resResonatorStructure);
 
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);
@@ -502,6 +512,7 @@ public class RegistryResearch {
         resCelestialGateway.addSourceConnectionFrom(resStarResult);
         resShiftStar.addSourceConnectionFrom(resPlayerAtt);
         resToolGrapple.addSourceConnectionFrom(resQuickCharge);
+        resResonatorStructure.addSourceConnectionFrom(resStarResult);
     }
 
     private static void initCrafting() {

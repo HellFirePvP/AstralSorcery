@@ -45,10 +45,11 @@ public interface MeltInteraction {
         if(result != null) {
             world.setBlockState(pos, result, 3);
         } else {
-            world.setBlockToAir(pos);
-            ItemStack resultStack = getMeltResultStack();
-            if(!resultStack.isEmpty()) {
-                ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, resultStack);
+            if (world.setBlockToAir(pos)) {
+                ItemStack resultStack = getMeltResultStack();
+                if(!resultStack.isEmpty()) {
+                    ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, resultStack);
+                }
             }
         }
     }

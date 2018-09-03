@@ -186,7 +186,9 @@ public class BlockArray {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
             IBlockState state = info.state;
-            world.setBlockState(at, state, 3);
+            if (!world.setBlockState(at, state, 3)) {
+                continue;
+            }
             result.put(at, state);
 
             if(state.getBlock() instanceof BlockLiquid || state.getBlock() instanceof BlockFluidBase) {

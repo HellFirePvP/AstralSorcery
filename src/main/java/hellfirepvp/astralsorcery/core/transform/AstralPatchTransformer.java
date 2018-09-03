@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.core.ASMTransformationException;
 import hellfirepvp.astralsorcery.core.AstralCore;
 import hellfirepvp.astralsorcery.core.ClassPatch;
 import hellfirepvp.astralsorcery.core.SubClassTransformer;
-import net.minecraftforge.fml.common.FMLLog;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.io.IOException;
@@ -40,9 +39,9 @@ public class AstralPatchTransformer implements SubClassTransformer {
     private Map<String, List<ClassPatch>> availablePatches = new HashMap<>();
 
     public AstralPatchTransformer() throws IOException {
-        FMLLog.info("[AstralTransformer] Loading patches...");
+        AstralCore.log.info("[AstralTransformer] Loading patches...");
         int loaded = loadClassPatches();
-        FMLLog.info("[AstralTransformer] Initialized! Loaded " + loaded + " class patches!");
+        AstralCore.log.info("[AstralTransformer] Initialized! Loaded " + loaded + " class patches!");
     }
 
     private int loadClassPatches() throws IOException {
@@ -70,7 +69,7 @@ public class AstralPatchTransformer implements SubClassTransformer {
             }
         }
         if(load == 0) {
-            FMLLog.info("[AstralTransformer] Found 0 Transformers! Trying to recover with direct references...");
+            AstralCore.log.info("[AstralTransformer] Found 0 Transformers! Trying to recover with direct references...");
             String[] references = new String[] {
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchBlockModify",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchUpdateElytra",
@@ -78,7 +77,9 @@ public class AstralPatchTransformer implements SubClassTransformer {
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevelsTooltip",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevelsTooltipEvent",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchSunBrightnessWorldClient",
-                    "hellfirepvp.astralsorcery.core.patch.helper.PatchSunBrightnessWorldCommon"
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchSunBrightnessWorldCommon",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchEntityRendererExtendedEntityReach",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchServerExtendEntityInteractReach"
             };
             for (String str : references) {
                 try {
@@ -89,7 +90,7 @@ public class AstralPatchTransformer implements SubClassTransformer {
                     availablePatches.get(c.getClassName()).add(c);
                     load++;
                 } catch (Exception exc) {
-                    FMLLog.warning("Could not load ClassPatch: " + str);
+                    AstralCore.log.warn("Could not load ClassPatch: " + str);
                     exc.printStackTrace();
                 }
             }
@@ -103,16 +104,16 @@ public class AstralPatchTransformer implements SubClassTransformer {
         if(!availablePatches.isEmpty()) {
             List<ClassPatch> patches = availablePatches.get(transformedClassName);
             if(patches != null && !patches.isEmpty()) {
-                FMLLog.info("[AstralTransformer] Transforming " + obfName + " : " + transformedClassName + " with " + patches.size() + " patches!");
+                AstralCore.log.info("[AstralTransformer] Transforming " + obfName + " : " + transformedClassName + " with " + patches.size() + " patches!");
                 try {
                     for (ClassPatch patch : patches) {
                         if (!patch.canExecuteForSide(AstralCore.side)) {
-                            FMLLog.info("[AstralTransformer] Skipping " + patch.getClass().getSimpleName().toUpperCase() + " as it can't be applied for side " + AstralCore.side);
+                            AstralCore.log.info("[AstralTransformer] Skipping " + patch.getClass().getSimpleName().toUpperCase() + " as it can't be applied for side " + AstralCore.side);
                             continue;
                         }
                         currentPatch = patch;
                         patch.transform(cn);
-                        FMLLog.info("[AstralTransformer] Applied patch " + patch.getClass().getSimpleName().toUpperCase());
+                        AstralCore.log.info("[AstralTransformer] Applied patch " + patch.getClass().getSimpleName().toUpperCase());
                         currentPatch = null;
                     }
                 } catch (Exception exc) {
@@ -130,7 +131,7 @@ public class AstralPatchTransformer implements SubClassTransformer {
     @Override
     public void addErrorInformation() {
         if(currentPatch != null) {
-            FMLLog.warning("Patcher was in active patch: " + currentPatch.getClass().getSimpleName());
+            AstralCore.log.warn("Patcher was in active patch: " + currentPatch.getClass().getSimpleName());
         }
     }
 

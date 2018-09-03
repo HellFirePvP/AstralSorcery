@@ -10,11 +10,13 @@ package hellfirepvp.astralsorcery.common.item.wand;
 
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
+import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemAlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -106,30 +108,40 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
     @Override
     public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
-        if (stack.isEmpty()) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemIlluminationWand)) {
             return EnumActionResult.SUCCESS;
         }
         if (!worldIn.isRemote) {
             IBlockState at = worldIn.getBlockState(pos);
             if(!playerIn.isSneaking()) {
-                IBlockState iblockstate = worldIn.getBlockState(pos);
-                Block block = iblockstate.getBlock();
-                if (!block.isReplaceable(worldIn, pos)) {
-                    pos = pos.offset(facing);
-                }
-                if(playerIn.canPlayerEdit(pos, facing, stack)) {
-                    if (worldIn.getBlockState(pos).equals(getPlacingState(stack))) {
-                        SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
-                        if (worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3)) {
-                            worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                        }
+                TileIlluminator illum = MiscUtils.getTileAt(worldIn, pos, TileIlluminator.class, false);
+                if (illum != null) {
+                    EnumDyeColor thisColor = getConfiguredColor(stack);
+                    if (thisColor == null) {
+                        thisColor = EnumDyeColor.YELLOW;
                     }
-                    else if (worldIn.mayPlace(BlocksAS.blockVolatileLight, pos, true, facing, null) &&
-                            drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
-                        if (worldIn.setBlockState(pos, getPlacingState(stack), 3)) {
+                    illum.onWandUsed(thisColor);
+                    drainTempCharge(playerIn, PlayerChargeHandler.INSTANCE.getCharge(playerIn), false);
+                } else {
+                    IBlockState iblockstate = worldIn.getBlockState(pos);
+                    Block block = iblockstate.getBlock();
+                    if (!block.isReplaceable(worldIn, pos)) {
+                        pos = pos.offset(facing);
+                    }
+                    if(playerIn.canPlayerEdit(pos, facing, stack)) {
+                        if (worldIn.getBlockState(pos).equals(getPlacingState(stack))) {
                             SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
-                            worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                            drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                            if (worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3)) {
+                                worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                            }
+                        }
+                        else if (worldIn.mayPlace(BlocksAS.blockVolatileLight, pos, true, facing, null) &&
+                                drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
+                            if (worldIn.setBlockState(pos, getPlacingState(stack), 3)) {
+                                SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
+                                worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                                drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                            }
                         }
                     }
                 }
@@ -137,13 +149,14 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                 if(at.isNormalCube()) {
                     TileEntity te = worldIn.getTileEntity(pos);
                     if(te == null && !at.getBlock().hasTileEntity(at) && drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
-                        worldIn.setBlockState(pos, BlocksAS.translucentBlock.getDefaultState(), 3);
-                        TileTranslucent tt = MiscUtils.getTileAt(worldIn, pos, TileTranslucent.class, true);
-                        if(tt == null) {
-                            worldIn.setBlockState(pos, at, 3);
-                        } else {
-                            tt.setFakedState(at);
-                            drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                        if (worldIn.setBlockState(pos, BlocksAS.translucentBlock.getDefaultState(), 3)) {
+                            TileTranslucent tt = MiscUtils.getTileAt(worldIn, pos, TileTranslucent.class, true);
+                            if(tt == null) {
+                                worldIn.setBlockState(pos, at, 3);
+                            } else {
+                                tt.setFakedState(at);
+                                drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                            }
                         }
                     }
                 } else if(at.getBlock() instanceof BlockTranslucentBlock) {

@@ -75,7 +75,7 @@ public class StarlightNetworkDebugHandler implements ITickHandler {
         player.sendMessage(new TextComponentString("§aIs Transmission-Node present:§c " + (tr != null)));
         if(tr != null) {
             player.sendMessage(new TextComponentString("§aFull Transmission-Node class:§c " + tr.getClass().getName()));
-            player.sendMessage(new TextComponentString("§aInternal Transmission-Node position:§c " + tr.getPos().toString()));
+            player.sendMessage(new TextComponentString("§aInternal Transmission-Node position:§c " + tr.getLocationPos().toString()));
 
             List<BlockPos> sources = tr.getSources();
             player.sendMessage(new TextComponentString("§aTransmission-Node Network-Source-Positions:"));
@@ -95,7 +95,7 @@ public class StarlightNetworkDebugHandler implements ITickHandler {
             }
 
             if(tr instanceof ITransmissionSource) {
-                IIndependentStarlightSource source = wnh.getSourceAt(tr.getPos());
+                IIndependentStarlightSource source = wnh.getSourceAt(tr.getLocationPos());
                 if(source != null) {
                     player.sendMessage(new TextComponentString("§aFound starlight source:§c " + source.getClass().getName()));
 
@@ -118,7 +118,7 @@ public class StarlightNetworkDebugHandler implements ITickHandler {
             Collection<TransmissionChain> chains = twh.getTransmissionChains();
             for (TransmissionChain ch : chains) {
                 if (ch.getUncheckedEndpointsBlock().contains(pos)) {
-                    player.sendMessage(new TextComponentString("§aFound TransmissionChain transmitting starlight to this block from " + (ch.getSourceNode() == null ? "null" : ch.getSourceNode().getPos().toString()) + "!"));
+                    player.sendMessage(new TextComponentString("§aFound TransmissionChain transmitting starlight to this block from " + (ch.getSourceNode() == null ? "null" : ch.getSourceNode().getLocationPos().toString()) + "!"));
                 }
             }
         }

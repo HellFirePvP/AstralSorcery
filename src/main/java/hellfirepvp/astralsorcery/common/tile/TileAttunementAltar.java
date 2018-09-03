@@ -64,6 +64,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
@@ -249,6 +250,12 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     @Override
     public PatternBlockArray getRequiredStructure() {
         return MultiBlockArrays.patternAttunementFrame;
+    }
+
+    @Nonnull
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
     }
 
     public int getMode() {
@@ -1000,7 +1007,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
-                TileAttunementAltar ta = MiscUtils.getTileAt(world, getPos(), TileAttunementAltar.class, false);
+                TileAttunementAltar ta = MiscUtils.getTileAt(world, getLocationPos(), TileAttunementAltar.class, false);
                 if(ta != null) {
                     ta.receiveStarlight(type, amount);
                 }

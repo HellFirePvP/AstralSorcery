@@ -121,6 +121,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDataRegistry(OreTypes.TREASURE_SHRINE_GEN);
         Config.addDataRegistry(FluidRarityRegistry.INSTANCE);
         Config.addDataRegistry(AmuletEnchantmentRegistry.INSTANCE);
+        Config.addDataRegistry(HerdableAnimal.HerdableAdapter.INSTANCE);
     }
 
     public void preInit() {

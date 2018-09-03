@@ -16,10 +16,12 @@ import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +34,7 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
 
     private AbstractPerk perk;
     private boolean unlock;
-    private boolean clearAll = false;
+    private Type type = null;
 
     public PktSyncPerkActivity() {}
 
@@ -41,14 +43,19 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
         this.unlock = unlock;
     }
 
-    public PktSyncPerkActivity(boolean clearAll) {
-        this.clearAll = clearAll;
+    public PktSyncPerkActivity(Type type) {
+        this.type = type;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         this.unlock = buf.readBoolean();
-        this.clearAll = buf.readBoolean();
+        int tt = buf.readInt();
+        if (tt == -1) {
+            this.type = null;
+        } else {
+            this.type = Type.values()[MathHelper.clamp(tt, 0, Type.values().length - 1)];
+        }
         if (buf.readBoolean()) {
             this.perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(ByteBufUtils.readString(buf)));
         }
@@ -57,7 +64,11 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeBoolean(this.unlock);
-        buf.writeBoolean(this.clearAll);
+        if (this.type == null) {
+            buf.writeInt(-1);
+        } else {
+            buf.writeInt(this.type.ordinal());
+        }
         buf.writeBoolean(this.perk != null);
         if (this.perk != null) {
             ByteBufUtils.writeString(buf, this.perk.getRegistryName().toString());
@@ -70,15 +81,30 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
         return null;
     }
 
+    @SideOnly(Side.CLIENT)
     private void handleClientPerkUpdate(PktSyncPerkActivity pkt) {
         AstralSorcery.proxy.scheduleClientside(() -> {
             if (Minecraft.getMinecraft().player != null) {
-                if (pkt.clearAll) {
-                    PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getMinecraft().player);
+                if (pkt.type != null) {
+                    switch (pkt.type) {
+                        case CLEARALL:
+                            PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getMinecraft().player);
+                            break;
+                        case UNLOCKALL:
+                            PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getMinecraft().player);
+                            break;
+                    }
                 } else if (pkt.perk != null) {
                     PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);
                 }
             }
         });
+    }
+
+    public static enum Type {
+
+        CLEARALL,
+        UNLOCKALL
+
     }
 }

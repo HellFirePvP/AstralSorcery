@@ -88,7 +88,7 @@ public class WorldNetworkHandler {
                     continue;
                 }
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
-                if(sourceNode.getPos().getY() <= at.getY()) continue;
+                if(sourceNode.getLocationPos().getY() <= at.getY()) continue;
                 sourceNode.notifyLink(getWorld(), at);
                 markDirty();
 
@@ -242,7 +242,7 @@ public class WorldNetworkHandler {
                 List<NodeConnection<IPrismTransmissionNode>> nodeConnections = otherNode.queryNext(this);
                 for (NodeConnection<IPrismTransmissionNode> connection : nodeConnections) {
                     if(connection.getTo().equals(thisPos)) {
-                        node.notifySourceLink(getWorld(), otherNode.getPos());
+                        node.notifySourceLink(getWorld(), otherNode.getLocationPos());
                         if(handle != null) {
                             handle.notifyTransmissionNodeChange(otherNode);
                         }
