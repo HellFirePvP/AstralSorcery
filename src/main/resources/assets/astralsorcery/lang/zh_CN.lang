@@ -24,6 +24,8 @@ config.astralsorcery.category.treasure_shrine=矿物生成：神殿遗宝
 config.astralsorcery.category.treasure_shrine.tooltip=定义了神殿遗宝内能生成的矿石。
 config.astralsorcery.category.fluid_rarities=流体：纳耳狂曼喷口
 config.astralsorcery.category.fluid_rarities.tooltip=定义了喷口能找到的流体。
+config.astralsorcery.category.herdable_animals_blacklist=黑名单：可聚集动物
+config.astralsorcery.category.herdable_animals_blacklist.tooltip=定义了不受牧夫座效应影响的动物。
 
 potion.potency.1=II
 potion.potency.2=III
@@ -499,10 +501,10 @@ item.itemenchantmentamulet.pure=纯净
 
 item.itemskyresonator.starlight.name=法斯刻共振器
 item.itemskyresonator.liquid.name=艾克斯共振器
-item.itemskyresonator.structure.name=多米共振器
+item.itemskyresonator.structure.name=多米刻共振器
 item.itemskyresonator.upgrade.starlight.name=法斯刻
 item.itemskyresonator.upgrade.liquid.name=艾克斯
-item.itemskyresonator.upgrade.structure.name=多米
+item.itemskyresonator.upgrade.structure.name=多米刻
 
 item.itemcoloredlens.effect.fire.name=燃烧
 item.itemcoloredlens.effect.break.name=中断
