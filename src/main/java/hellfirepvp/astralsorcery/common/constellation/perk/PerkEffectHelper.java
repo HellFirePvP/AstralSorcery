@@ -219,7 +219,7 @@ public class PerkEffectHelper implements ITickHandler {
         batchRemoveConverters(player, side, converters, null);
     }
 
-    private void batchApplyConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyAdd) {
+    private synchronized void batchApplyConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyAdd) {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
@@ -237,7 +237,7 @@ public class PerkEffectHelper implements ITickHandler {
         }
     }
 
-    private void batchRemoveConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyRemove) {
+    private synchronized void batchRemoveConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyRemove) {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
