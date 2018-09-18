@@ -69,7 +69,6 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     private AbstractPerk unlockPrimed = null;
 
-
     private int guiOffsetX, guiOffsetY;
 
     private Map<AbstractPerk, Rectangle.Double> thisFramePerks = new HashMap<>();

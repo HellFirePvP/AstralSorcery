@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
+import hellfirepvp.astralsorcery.common.item.useables.ItemPerkSeal;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
@@ -50,6 +51,7 @@ public class ItemsAS {
     public static ItemGrappleWand grapplingWand;
     public static ItemInfusedGlass infusedGlass;
     public static ItemKnowledgeShare knowledgeShare;
+    public static ItemPerkSeal perkSeal;
 
     public static ItemUsableDust useableDust;
 

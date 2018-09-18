@@ -228,9 +228,11 @@ public class PerkEffectHelper implements ITickHandler {
 
             perks.forEach(perk -> perk.removePerk(player, side));
 
-            converters.forEach((c) -> attributeMap.applyConverter(player, c));
+            if (onlyAdd == null || !prog.isPerkSealed(onlyAdd)) {
+                converters.forEach((c) -> attributeMap.applyConverter(player, c));
+            }
 
-            if (!perks.contains(onlyAdd)) {
+            if (onlyAdd != null && !prog.isPerkSealed(onlyAdd) && !perks.contains(onlyAdd)) {
                 perks.add(onlyAdd);
             }
             perks.forEach(perk -> perk.applyPerk(player, side));

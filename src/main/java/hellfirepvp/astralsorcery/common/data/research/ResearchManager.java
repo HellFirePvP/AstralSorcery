@@ -336,6 +336,42 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean applyPerkSeal(EntityPlayer player, @Nonnull AbstractPerk perk) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+        if (!progress.hasPerkUnlocked(perk)) return false;
+        if (progress.isPerkSealed(perk)) return false;
+
+        if (!progress.sealPerk(perk)) {
+            return false;
+        }
+
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, false), (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean breakPerkSeal(EntityPlayer player, @Nonnull AbstractPerk perk) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+        if (!progress.hasPerkUnlocked(perk)) return false;
+        if (!progress.isPerkSealed(perk)) return false;
+
+        if (!progress.breakSeal(perk)) {
+            return false;
+        }
+
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
     public static boolean grantFreePerkPoint(EntityPlayer player, String token) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
