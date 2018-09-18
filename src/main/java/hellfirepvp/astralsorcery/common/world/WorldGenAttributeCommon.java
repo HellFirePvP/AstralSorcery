@@ -81,12 +81,13 @@ public abstract class WorldGenAttributeCommon extends WorldGenAttribute {
             StructureGenBuffer.StructureType type = ((WorldGenAttributeStructure) this).getStructureType();
             StructureGenBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_GEN);
             BlockPos pos = new BlockPos(chX * 16, 0, chZ * 16);
-            double dst = buf.getDstToClosest(type, new BlockPos(pos.getX(), world.getTopSolidOrLiquidBlock(pos).getY(), pos.getZ()));
+            double ideal = ((WorldGenAttributeStructure) this).getIdealDistance();
+
+            double dst = buf.getDstToClosest(type, ideal, new BlockPos(pos.getX(), world.getTopSolidOrLiquidBlock(pos).getY(), pos.getZ()));
             if(dst != -1) {
                 if(dst < 32) {
                     return false;
                 }
-                double ideal = ((WorldGenAttributeStructure) this).getIdealDistance();
                 chanceMultiplier = ideal / dst;
             } else {
                 chanceMultiplier = 0F;
