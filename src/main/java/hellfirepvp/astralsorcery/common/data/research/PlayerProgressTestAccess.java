@@ -63,7 +63,7 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public Collection<AbstractPerk> getSealedPerks() {
+    public List<AbstractPerk> getSealedPerks() {
         return Lists.newArrayList();
     }
 

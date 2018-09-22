@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree;
 
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
@@ -40,9 +41,9 @@ public class PerkTreeOffset extends PerkTreePoint {
     private final IConstellation associatedConstellation;
 
     private static final int haloSpriteSize = 45;
-    private SpriteQuery queryCstUnAllocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo4", 4, 8);
-    private SpriteQuery queryCstAllocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo5", 4, 8);
-    private SpriteQuery queryCstUnlockable = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo6", 4, 8);
+    private SpriteQuery queryCstUnAllocated;
+    private SpriteQuery queryCstAllocated;
+    private SpriteQuery queryCstUnlockable;
 
     public PerkTreeOffset(AbstractPerk perk, Point offset, IConstellation associatedConstellation) {
         super(perk, offset);
@@ -50,10 +51,32 @@ public class PerkTreeOffset extends PerkTreePoint {
         this.setRenderSize(haloSpriteSize / 2);
     }
 
+    public void setQueryRootPerkHaloUnAllocated(SpriteQuery queryCstUnAllocated) {
+        this.queryCstUnAllocated = queryCstUnAllocated;
+    }
+
+    public void setQueryRootPerkHaloUnlockable(SpriteQuery queryCstUnlockable) {
+        this.queryCstUnlockable = queryCstUnlockable;
+    }
+
+    public void setQueryRootPerkHaloAllocated(SpriteQuery queryCstAllocated) {
+        this.queryCstAllocated = queryCstAllocated;
+    }
+
     @Nullable
     @Override
     @SideOnly(Side.CLIENT)
     public Rectangle renderAtCurrentPos(AllocationStatus status, long spriteOffsetTick, float pTicks) {
+        if (queryCstUnAllocated == null) {
+            queryCstUnAllocated = SpriteQuery.of(SpriteLibrary.spriteHalo4);
+        }
+        if (queryCstAllocated == null) {
+            queryCstAllocated = SpriteQuery.of(SpriteLibrary.spriteHalo5);
+        }
+        if (queryCstUnlockable == null) {
+            queryCstUnlockable = SpriteQuery.of(SpriteLibrary.spriteHalo6);
+        }
+
         GlStateManager.color(1, 1, 1, 1);
         super.renderAtCurrentPos(status, spriteOffsetTick, pTicks);
 

@@ -689,15 +689,13 @@ astralsorcery.constellation.vorux.effect=Light from this Constellation invokes r
 astralsorcery.constellation.vorux.enchantments=The best defense is an aggressive offense for wielders of equipment bathed in this light. Potions imbued with this Constellation are often nicknamed "Liquid Courage".
 astralsorcery.constellation.vorux.trait=Burning the candle at both ends may provide for more illumination, but it invites the following darkness all the faster.
 
-perk.info.locked=§7Locked
-perk.info.available=§9Available
-perk.info.active=§aActive
-perk.info.inactive=§cInactive (Missing Alignment)
-perk.info.unlock=§aUnlocked perk '%s'
-perk.info.unlock.click=§7Click to unlock
-perk.info.unlocked.free=§7Basic perk
+perk.info.locked=Locked
+perk.info.available=Available
+perk.info.active=Active
 perk.info.points=Available points: %s
 perk.info.disabled=Perk effects disabled in your modpack.
+perk.info.sealed=Sealed
+perk.info.sealed.break=[Double-click to break]
 
 perk.category.root.name=Root Perk
 perk.category.major.name=Major Perk

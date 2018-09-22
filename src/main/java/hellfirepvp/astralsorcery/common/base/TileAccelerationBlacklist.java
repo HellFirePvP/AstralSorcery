@@ -88,7 +88,7 @@ public class TileAccelerationBlacklist {
 
         private static String[] DEFAULT_ENTRIES = new String[] {
                 "appeng", //I don't wanna run into issues that come from accelerating any network stuffs.
-                "raoulvdberge/refinedstorage" //Same as AE stuff
+                "raoulvdberge.refinedstorage" //Same as AE stuff
         };
 
         public TileAccelBlacklistEntry() {

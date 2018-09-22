@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.event;
 
+import hellfirepvp.astralsorcery.core.ASMCallHook;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,7 @@ public class ItemEnchantmentTooltipEvent extends PlayerEvent {
     private final ItemStack itemStack;
     private final List<String> toolTip;
 
+    @ASMCallHook
     public ItemEnchantmentTooltipEvent(@Nonnull ItemStack itemStack, EntityPlayer entityPlayer, List<String> toolTip, ITooltipFlag flags)
     {
         super(entityPlayer);

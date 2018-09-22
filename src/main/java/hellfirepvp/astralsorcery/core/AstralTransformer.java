@@ -71,7 +71,7 @@ public class AstralTransformer implements IClassTransformer {
         node.accept(writer);
         bytes = writer.toByteArray();
 
-        if (true) {
+        if (false) {
             try {
                 File f = new File("C:/ASTestClasses/" + transformedName + ".class");
                 f.getParentFile().mkdirs();

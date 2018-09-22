@@ -57,7 +57,7 @@ public class KeyBleed extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkUnlocked(this)) {
+            if (prog != null && prog.hasPerkEffect(this)) {
                 EntityLivingBase target = event.getEntityLiving();
 
                 float chance = bleedChance;

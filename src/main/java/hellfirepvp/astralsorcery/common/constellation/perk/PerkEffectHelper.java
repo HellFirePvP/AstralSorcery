@@ -304,7 +304,7 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress prog = ResearchManager.getProgress(ticked, side);
         if(prog != null) {
             for (AbstractPerk perk : prog.getAppliedPerks()) {
-                if (perk instanceof IPlayerTickPerk) {
+                if (perk instanceof IPlayerTickPerk && prog.hasPerkEffect(perk)) {
                     ((IPlayerTickPerk) perk).onPlayerTick(ticked, side);
                 }
             }

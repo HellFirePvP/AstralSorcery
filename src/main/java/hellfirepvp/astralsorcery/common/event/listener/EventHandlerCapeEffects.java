@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.core.ASMCallHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -265,6 +266,17 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @ASMCallHook
+    public static float getWaterSlowDown(float oldSlowDown, EntityLivingBase base) {
+        if (oldSlowDown < 1 && base instanceof EntityPlayer) {
+            CapeEffectOctans ceo = ItemCape.getCapeEffect((EntityPlayer) base, Constellations.octans);
+            if (ceo != null) {
+                oldSlowDown = 0.95F; //Make sure it's not setting it to > 1 by itself.
+            }
+        }
+        return oldSlowDown;
+    }
+
     private void tickFornaxMelting(EntityPlayer pl) {
         if(pl.isBurning()) {
             CapeEffectFornax cf = ItemCape.getCapeEffect(pl, Constellations.fornax);
@@ -363,6 +375,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @ASMCallHook
     public static void updateElytraEventPre(EntityLivingBase entity) {
         if(entity instanceof EntityPlayer) {
             CapeEffectVicio vic = ItemCape.getCapeEffect((EntityPlayer) entity, Constellations.vicio);
@@ -373,6 +386,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @ASMCallHook
     public static void updateElytraEventPost(EntityLivingBase entity) {
         inElytraCheck = false;
         if(entity instanceof EntityPlayer && updateElytraBuffer) {

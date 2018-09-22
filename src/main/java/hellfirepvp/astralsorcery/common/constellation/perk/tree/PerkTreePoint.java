@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree;
 
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
@@ -40,9 +41,10 @@ public class PerkTreePoint {
     private int renderSize;
 
     private static final int spriteSize = 11;
-    private SpriteQuery querySpriteUnallocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "flareperkinactive", 1, 40);
-    private SpriteQuery querySpriteAllocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "flareperkactive", 1, 40);
-    private SpriteQuery querySpriteUnlockable = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "flareperkactivateable", 1, 40);
+    private SpriteQuery querySpriteUnallocated;
+    private SpriteQuery querySpriteAllocated;
+    private SpriteQuery querySpriteUnlockable;
+    private SpriteQuery querySpriteSeal;
 
     public PerkTreePoint(AbstractPerk perk, Point offset) {
         this.offset = offset;
@@ -78,9 +80,23 @@ public class PerkTreePoint {
         this.querySpriteUnlockable = querySpriteUnlockable;
     }
 
+    public void setQuerySpriteSeal(SpriteQuery querySpriteSeal) {
+        this.querySpriteSeal = querySpriteSeal;
+    }
+
     @Nullable
     @SideOnly(Side.CLIENT)
     public Rectangle renderAtCurrentPos(AllocationStatus status, long spriteOffsetTick, float pTicks) {
+        if (querySpriteUnallocated == null) {
+            querySpriteUnallocated = SpriteQuery.of(SpriteLibrary.spritePerkInactive);
+        }
+        if (querySpriteAllocated == null) {
+            querySpriteAllocated = SpriteQuery.of(SpriteLibrary.spritePerkActive);
+        }
+        if (querySpriteUnlockable == null) {
+            querySpriteUnlockable = SpriteQuery.of(SpriteLibrary.spritePerkActivateable);
+        }
+
         SpriteSheetResource tex;
         switch (status) {
             case UNALLOCATED:
@@ -121,6 +137,39 @@ public class PerkTreePoint {
 
         GlStateManager.enableAlpha();
         return new Rectangle(-renderSize, -renderSize, renderSize * 2, renderSize * 2);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void renderSealAtCurrentPos(double radius, long spriteOffsetTick, float pTicks) {
+        if (querySpriteSeal == null) {
+            querySpriteSeal = SpriteQuery.of(SpriteLibrary.spritePerkSeal);
+        }
+        SpriteSheetResource tex = querySpriteSeal.resolveSprite();
+        if (tex == null) {
+            return;
+        }
+
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        GlStateManager.disableAlpha();
+
+        tex.bindTexture();
+        double uLength = tex.getULength();
+        double vLength = tex.getVLength();
+        Tuple<Double, Double> frameUV = tex.getUVOffset(spriteOffsetTick);
+        Vector3 starVec = new Vector3(-radius, -radius, 0);
+
+        for (int i = 0; i < 4; i++) {
+            int u = ((i + 1) & 2) >> 1;
+            int v = ((i + 2) & 2) >> 1;
+
+            Vector3 pos = starVec.clone().addX(radius * u * 2).addY(radius * v * 2);
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.key + uLength * u, frameUV.value + vLength * v).endVertex();
+        }
+        tes.draw();
+
+        GlStateManager.enableAlpha();
     }
 
     @Override

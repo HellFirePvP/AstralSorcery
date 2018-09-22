@@ -79,7 +79,7 @@ public class KeyLightningArc extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && side == Side.SERVER && prog.hasPerkUnlocked(this)) {
+            if (prog != null && side == Side.SERVER && prog.hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, arcChance);
                 if (rand.nextFloat() < chance) {

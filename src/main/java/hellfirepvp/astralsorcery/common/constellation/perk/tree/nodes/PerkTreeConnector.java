@@ -53,14 +53,14 @@ public class PerkTreeConnector extends AttributeModifierPerk {
 
         boolean hasAllAdjacent = true;
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {
-            if (!progress.hasPerkUnlocked(otherPerks)) {
+            if (!progress.hasPerkEffect(otherPerks)) {
                 hasAllAdjacent = false;
                 break;
             }
         }
         if (!hasAllAdjacent) {
             for (PerkTreeConnector conn : connectorCache) {
-                if (progress.hasPerkUnlocked(conn)) {
+                if (progress.hasPerkEffect(conn)) {
                     return true;
                 }
             }

@@ -312,8 +312,8 @@ public class PlayerProgress {
         return unlockedPerks == null ? Lists.newArrayList() : Collections.unmodifiableCollection(unlockedPerks.keySet());
     }
 
-    public Collection<AbstractPerk> getSealedPerks() {
-        return sealedPerks == null ? Lists.newArrayList() : Collections.unmodifiableCollection(sealedPerks);
+    public List<AbstractPerk> getSealedPerks() {
+        return sealedPerks == null ? Lists.newArrayList() : Collections.unmodifiableList(sealedPerks);
     }
 
     public Map<AbstractPerk, NBTTagCompound> getUnlockedPerkData() {
@@ -323,6 +323,10 @@ public class PlayerProgress {
     @Nullable
     protected NBTTagCompound getPerkData(AbstractPerk perk) {
         return unlockedPerks.get(perk);
+    }
+
+    public boolean hasPerkEffect(AbstractPerk perk) {
+        return hasPerkUnlocked(perk) && !isPerkSealed(perk);
     }
 
     public boolean hasPerkUnlocked(AbstractPerk perk) {
@@ -483,6 +487,7 @@ public class PlayerProgress {
         this.usedTargets = message.usedTargets;
         this.freePointTokens = message.freePointTokens;
         this.unlockedPerks = message.usedPerks;
+        this.sealedPerks = message.sealedPerks;
         this.perkExp = message.perkExp;
     }
 

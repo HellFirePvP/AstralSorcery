@@ -67,7 +67,7 @@ public class AevitasRootPerk extends RootPerk {
         if (side != Side.SERVER) return;
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog == null || !prog.hasPerkUnlocked(this)) {
+        if (prog == null || !prog.hasPerkEffect(this)) {
             return;
         }
 
@@ -110,7 +110,7 @@ public class AevitasRootPerk extends RootPerk {
         if (side != Side.SERVER) return;
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog == null || !prog.hasPerkUnlocked(this)) {
+        if (prog == null || !prog.hasPerkEffect(this)) {
             return;
         }
 

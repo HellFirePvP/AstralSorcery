@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree;
 
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
@@ -18,6 +19,8 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -32,18 +35,41 @@ import java.awt.*;
  */
 public class PerkTreeMajor extends PerkTreePoint {
 
-    private SpriteQuery queryCstUnAllocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo4", 4, 8);
-    private SpriteQuery queryCstAllocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo5", 4, 8);
-    private SpriteQuery queryCstUnlockable = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo6", 4, 8);
+    private SpriteQuery queryCstUnAllocated;
+    private SpriteQuery queryCstAllocated;
+    private SpriteQuery queryCstUnlockable;
 
     public PerkTreeMajor(AbstractPerk perk, Point offset) {
         super(perk, offset);
         this.setRenderSize((int) (this.getRenderSize() * 1.4));
     }
 
+    public void setQueryMajorPerkHaloUnAllocated(SpriteQuery queryCstUnAllocated) {
+        this.queryCstUnAllocated = queryCstUnAllocated;
+    }
+
+    public void setQueryMajorPerkHaloUnlockable(SpriteQuery queryCstUnlockable) {
+        this.queryCstUnlockable = queryCstUnlockable;
+    }
+
+    public void setQueryMajorPerkHaloAllocated(SpriteQuery queryCstAllocated) {
+        this.queryCstAllocated = queryCstAllocated;
+    }
+
     @Nullable
     @Override
+    @SideOnly(Side.CLIENT)
     public Rectangle renderAtCurrentPos(AllocationStatus status, long spriteOffsetTick, float pTicks) {
+        if (queryCstUnAllocated == null) {
+            queryCstUnAllocated = SpriteQuery.of(SpriteLibrary.spriteHalo4);
+        }
+        if (queryCstAllocated == null) {
+            queryCstAllocated = SpriteQuery.of(SpriteLibrary.spriteHalo5);
+        }
+        if (queryCstUnlockable == null) {
+            queryCstUnlockable = SpriteQuery.of(SpriteLibrary.spriteHalo6);
+        }
+
         int haloRenderSize = (int) (getRenderSize() * 0.8);
         SpriteSheetResource tex;
         switch (status) {
