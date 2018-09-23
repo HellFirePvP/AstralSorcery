@@ -109,6 +109,10 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         buildCapeText();
     }
 
+    public IConstellation getConstellation() {
+        return constellation;
+    }
+
     private void buildCapeText() {
         if(EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchManager.clientProgress.getTierReached())) {
             String unlocEnch = constellation.getUnlocalizedName() + ".capeeffect";

@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.JournalRecipeDisplayRecovery;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
+import hellfirepvp.astralsorcery.client.util.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
@@ -39,6 +40,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.entities.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
@@ -52,6 +54,7 @@ import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
+import hellfirepvp.astralsorcery.common.util.FileStorageUtil;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -98,6 +101,13 @@ public class ClientProxy extends CommonProxy {
     private final ClientScheduler scheduler = new ClientScheduler();
 
     @Override
+    public void setupConfiguration() {
+        super.setupConfiguration();
+
+        Config.addDynamicEntry(new PersistentDataManager.ConfigPersistency());
+    }
+
+    @Override
     public void preInit() {
         MinecraftForge.EVENT_BUS.register(this);
         try {
@@ -112,6 +122,7 @@ public class ClientProxy extends CommonProxy {
         super.preInit();
 
         CraftingAccessManager.ignoreJEI = false;
+        PersistentDataManager.INSTANCE.init(FileStorageUtil.getGeneralSubDirectory("astralsorcery_persistent"));
     }
 
     @SubscribeEvent

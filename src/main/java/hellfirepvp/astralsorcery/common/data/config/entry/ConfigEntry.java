@@ -46,7 +46,8 @@ public abstract class ConfigEntry {
         PERKS,
         COSTS,
         CAPE,
-        TOOLS
+        TOOLS,
+        DATA_PERSISTENCE
 
     }
 

@@ -143,7 +143,7 @@ public class Config {
     public static void addDataRegistry(ConfigDataAdapter<?> dataAdapter) {
         for (ConfigDataAdapter<?> cfg : dataAdapters) {
             if(cfg.getDataFileName().equalsIgnoreCase(dataAdapter.getDataFileName())) {
-                throw new IllegalArgumentException("Duplicate DataRegistry names! " + cfg.getDataFileName() + " - " + dataAdapter.getDataFileName());
+                throw new IllegalArgumentException("Duplicate DataRegistry names! " + cfg.getDataFileName() + " (" + cfg.getClass().getName() + ") - " + dataAdapter.getDataFileName() + " (" + dataAdapter.getClass().getName() + ")");
             }
         }
         dataAdapters.add(dataAdapter);

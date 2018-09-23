@@ -147,6 +147,7 @@ public class CommonProxy implements IGuiHandler {
         ConstellationEffectRegistry.init();
 
         RegistryPerks.initPerkTree();
+        RegistryKnowledgeFragments.init();
 
         registerCapabilities();
 
