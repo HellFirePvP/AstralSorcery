@@ -55,6 +55,7 @@ public class PlayerProgress {
     //Loading from flat-file, persistent data
     public void load(NBTTagCompound compound) {
         knownConstellations.clear();
+        seenConstellations.clear();
         researchProgression.clear();
         usedTargets.clear();
         attunedConstellation = null;
