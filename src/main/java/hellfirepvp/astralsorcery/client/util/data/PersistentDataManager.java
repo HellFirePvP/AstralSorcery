@@ -202,9 +202,11 @@ public class PersistentDataManager {
         File dataFile = new File(folder, name);
         if (createFile && !dataFile.exists()) {
             try {
-                if (!dataFile.createNewFile()) {
-                    AstralSorcery.log.info("Unable to create file for persistent data. Are you sure the mod has the permissions to create files?");
-                }
+                CompressedStreamTools.write(new NBTTagCompound(), dataFile);
+                //if (!dataFile.createNewFile()) {
+                //    CompressedStreamTools.write(new NBTTagCompound(), dataFile);
+                //    AstralSorcery.log.info("Unable to create file for persistent data. Are you sure the mod has the permissions to create files?");
+                //}
             } catch (IOException exc) {
                 exc.printStackTrace();
                 return null;
@@ -219,13 +221,11 @@ public class PersistentDataManager {
         File infoFile = new File(this.selectedPersistentDataFolder, "info.txt");
         if (!infoFile.exists()) {
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(infoFile))) {
-                if (infoFile.createNewFile()) {
-                    for (String line : infoFileContents) {
-                        bw.write(line);
-                        bw.newLine();
-                    }
-                    bw.flush();
+                for (String line : infoFileContents) {
+                    bw.write(line);
+                    bw.newLine();
                 }
+                bw.flush();
             } catch (IOException exc) {
                 exc.printStackTrace();
             }

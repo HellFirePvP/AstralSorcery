@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
@@ -33,21 +35,24 @@ public class RegistryKnowledgeFragments {
     public static void init() {
         KnowledgeFragmentManager mgr = KnowledgeFragmentManager.getInstance();
 
-        //Example Constellation info
-        mgr.register(onConstellations("constellation.lucerna.ritual.corrupted", Constellations.lucerna))
-                .setCanSeeTest(hasTier(ProgressionTier.TRAIT_CRAFT));
+        ConstellationRegistry.getAllConstellations().forEach(RegistryKnowledgeFragments::registerConstellationFragment);
+    }
 
-        //Example Research info
-        mgr.register(onResearchNodes("research.chalice.interactions", ResearchProgression.findNode("C_CHALICE")));
+    private static void registerConstellationFragment(IConstellation cst) {
+        KnowledgeFragmentManager mgr = KnowledgeFragmentManager.getInstance();
+        String cstKey = "constellation." + cst.getSimpleName();
 
-        //Example PerkTree General info
-        mgr.register(new KnowledgeFragment("perktree.pathing.info") {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public boolean isVisible(GuiScreenJournal journalGui) {
-                return journalGui instanceof GuiJournalPerkTree;
-            }
-        });
+        mgr.register(onConstellations(cstKey + ".showup", cst));
+        mgr.register(onConstellations(cstKey + ".potions", cst)
+                .setCanSeeTest(hasTier(ProgressionTier.CONSTELLATION_CRAFT)));
+        mgr.register(onConstellations(cstKey + ".enchantments", cst)
+                .setCanSeeTest(hasTier(ProgressionTier.CONSTELLATION_CRAFT)));
+        mgr.register(onConstellations(cstKey + ".ritual", cst)
+                .setCanSeeTest(hasTier(ProgressionTier.ATTUNEMENT)));
+        mgr.register(onConstellations(cstKey + ".ritual.corrupted", cst)
+                .setCanSeeTest(hasTier(ProgressionTier.TRAIT_CRAFT)));
+        mgr.register(onConstellations(cstKey + ".mantle", cst)
+                .setCanSeeTest(hasTier(ProgressionTier.CONSTELLATION_CRAFT)));
     }
 
 }
