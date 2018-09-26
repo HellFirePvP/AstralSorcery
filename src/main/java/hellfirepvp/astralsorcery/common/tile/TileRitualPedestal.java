@@ -610,8 +610,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
         private static final int MAX_MIRROR_COUNT = 5;
 
-        //TODO change to higher numbers for release?...
-        //Steps between trials: 10 minutes, 25 minutes, 50 minutes, 2 hours, 5 hours
         //private static final int[] secToNext =    new int[] { 12_000, 30_000, 60_000, 144_000, 360_000 };
         private static final int[] secToNext =    new int[] { 10, 10, 6, 10, 10 };
         //private static final int[] chanceToNext = new int[] { 50,     200,    500,    1000,    2000 };
@@ -770,7 +768,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
         }
 
-        //TODO occasionally returns with <0?
         private void doMainEffect(World world, ConstellationEffect ce, @Nullable IMinorConstellation trait) {
             ConstellationEffectProperties prop = ce.provideProperties(getCollectedBackmirrors());
             if(trait != null) {

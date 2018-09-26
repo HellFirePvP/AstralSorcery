@@ -63,8 +63,6 @@ public class PotionSpellPlague extends PotionCustomTexture {
         return Collections.emptyList();
     }
 
-    //TODO make liquid color change between colors blue <> purple
-
     @Override
     @SideOnly(Side.CLIENT)
     public BindableResource getResource() {

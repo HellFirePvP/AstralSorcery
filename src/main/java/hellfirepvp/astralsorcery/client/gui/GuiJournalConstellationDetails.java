@@ -606,19 +606,10 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
-            GuiJournalProgression.resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
+        if (handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p)) {
             return;
         }
-        if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
-            return;
-        }
-        if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
-            return;
-        }
+
         if(rectBack != null && rectBack.contains(p)) {
             Minecraft.getMinecraft().displayGuiScreen(origin);
             return;

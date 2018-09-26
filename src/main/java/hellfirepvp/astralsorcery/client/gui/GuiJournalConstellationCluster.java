@@ -263,17 +263,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
-            GuiJournalProgression.resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
-            return;
-        }
-        if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
-            return;
-        }
-        if(bookmarkIndex == -1 && rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(getConstellationScreen());
+        if (handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p)) {
             return;
         }
         for (Rectangle r : rectCRenderMap.keySet()) {

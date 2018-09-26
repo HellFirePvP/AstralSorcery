@@ -29,8 +29,6 @@ import java.util.*;
  */
 public class Config {
 
-    //TODO remember to do a configurable itemSword-classname blacklist for sharpening.
-
     private static Configuration latestConfig;
 
     private static File dirConfigurationRegistries;

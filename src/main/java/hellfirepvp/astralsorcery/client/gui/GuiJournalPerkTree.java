@@ -773,6 +773,10 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
 
+        if (handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p)) {
+            return;
+        }
+
         if (rectSealBox.contains(mouseX - guiLeft, mouseY - guiTop)) {
             if (!this.foundSeals.isEmpty()) {
                 this.mouseSealStack = new ItemStack(ItemsAS.perkSeal);
@@ -796,15 +800,6 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                     this.tickSealBreak = 4;
                 }
             }
-        }
-
-        if (rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
-            GuiJournalProgression.resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
-            return;
-        }
-        if (rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
         }
     }
 

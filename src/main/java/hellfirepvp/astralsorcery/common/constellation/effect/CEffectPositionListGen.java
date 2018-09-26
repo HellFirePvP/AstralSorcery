@@ -126,8 +126,6 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         return false;
     }
 
-    //FIXME SOMEDAY the read version is not world sensitive -> fertilitas reeds?... they need world dependent checking..
-
     @Override
     public void readFromNBT(NBTTagCompound cmp) {
         elements.clear();

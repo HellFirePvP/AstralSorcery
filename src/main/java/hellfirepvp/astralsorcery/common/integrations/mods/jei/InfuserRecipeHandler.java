@@ -41,7 +41,7 @@ public class InfuserRecipeHandler extends JEIBaseHandler<AbstractInfusionRecipe>
     public boolean isRecipeValid(AbstractInfusionRecipe recipe) {
         //return ModIntegrationJEI.jeiRegistrationPhase ||
         //        ResearchManager.clientProgress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT);
-        return true; //TODO uhm ^
+        return true;
     }
 
 }

@@ -318,19 +318,8 @@ public class GuiJournalPages extends GuiScreenJournal {
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(origin != null) {
-            if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
+            if (handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p)) {
                 saveSite = false;
-                Minecraft.getMinecraft().displayGuiScreen(origin);
-                return;
-            }
-            if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-                saveSite = false;
-                Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
-                return;
-            }
-            if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-                saveSite = false;
-                Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
                 return;
             }
         }

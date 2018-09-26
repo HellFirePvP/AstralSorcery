@@ -78,7 +78,6 @@ public class ResearchManager {
     }
 
     @Nullable
-    //TODO lookup and refactor accesses to PlayerProgress and replace with testaccess!~
     //Nonnull for server.
     public static PlayerProgress getProgress(EntityPlayer player, Side side) {
         if(side == Side.CLIENT) {

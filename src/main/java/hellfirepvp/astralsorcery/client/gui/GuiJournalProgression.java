@@ -198,14 +198,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-            resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
-            return;
-        }
-        if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-            resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
+        if (handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p)) {
             return;
         }
         progressionRenderer.propagateClick(p);

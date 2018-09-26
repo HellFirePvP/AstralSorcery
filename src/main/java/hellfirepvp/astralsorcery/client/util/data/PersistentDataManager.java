@@ -64,6 +64,10 @@ public class PersistentDataManager {
 
     private PersistentDataManager() {}
 
+    public boolean usePersistent() {
+        return !useLocal;
+    }
+
     public void init(File localDataDirectory) {
         if (initialized) {
             return;

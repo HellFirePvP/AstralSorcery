@@ -8,13 +8,23 @@
 
 package hellfirepvp.astralsorcery.client.gui.journal;
 
+import com.google.common.collect.Maps;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationCluster;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
+import hellfirepvp.astralsorcery.client.gui.journal.overlay.GuiJournalOverlayKnowledge;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.client.util.data.KnowledgeFragmentData;
+import hellfirepvp.astralsorcery.client.util.data.PersistentDataManager;
+import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -24,6 +34,9 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,10 +56,17 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
     protected final int bookmarkIndex;
 
     protected Rectangle rectResearchBookmark, rectConstellationBookmark, rectPerkMapBookmark;
+    protected Collection<KnowledgeFragment> fragmentList = null;
+    protected Map<Rectangle, KnowledgeFragment> pageFragments = Maps.newHashMap();
 
     public GuiScreenJournal(int bookmarkIndex) {
         super(270, 420);
         this.bookmarkIndex = bookmarkIndex;
+    }
+
+    private void resolveFragments() {
+        KnowledgeFragmentData data = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
+        this.fragmentList = data.getFragmentsFor(this);
     }
 
     public void drawDefault(BindableResource background) {
@@ -65,6 +85,10 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
     }
 
     private void drawBookmarks(float zLevel, Point mousePoint) {
+        if (fragmentList == null) {
+            resolveFragments();
+        }
+
         GL11.glPushMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
@@ -74,24 +98,53 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         double offsetX = guiLeft + guiWidth - 17.25;
         double offsetY = guiTop  + 20;
 
-        rectResearchBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 0 ? 0 : 5), zLevel, "gui.journal.bm.knowledge.name", 0xDDDDDDDD, mousePoint);
+        rectResearchBookmark = drawBookmark(
+                offsetX, offsetY,
+                bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 0 ? 0 : 5),
+                zLevel,
+                "gui.journal.bm.knowledge.name", 0xDDDDDDDD,
+                mousePoint, textureBookmark);
 
         if(!ResearchManager.clientProgress.getSeenConstellations().isEmpty()) {
-            offsetY = guiTop + 40;
-            rectConstellationBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 1 ? 0 : 5), zLevel, "gui.journal.bm.constellations.name", 0xDDDDDDDD, mousePoint);
+            offsetY += 20;
+            rectConstellationBookmark = drawBookmark(
+                    offsetX, offsetY,
+                    bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 1 ? 0 : 5),
+                    zLevel,
+                    "gui.journal.bm.constellations.name", 0xDDDDDDDD,
+                    mousePoint, textureBookmark);
         }
 
         //TODO ? if(ResearchManager.clientProgress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT))
         IMajorConstellation attuned = ResearchManager.clientProgress.getAttunedConstellation();
         if(attuned != null) {
-            offsetY = guiTop + 60;
-            rectPerkMapBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 2 ? 0 : 5), zLevel, "gui.journal.bm.perks.name", 0xDDDDDDDD, mousePoint);
+            offsetY += 20;
+            rectPerkMapBookmark = drawBookmark(
+                    offsetX, offsetY,
+                    bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 2 ? 0 : 5),
+                    zLevel,
+                    "gui.journal.bm.perks.name", 0xDDDDDDDD,
+                    mousePoint, textureBookmark);
+        }
+
+        this.pageFragments.clear();
+        for (KnowledgeFragment frag : this.fragmentList) {
+            if (frag.isFullyPresent()) {
+                offsetY += 20;
+                Rectangle rctFragment = drawBookmark(
+                        offsetX, offsetY,
+                        bookmarkWidth, bookmarkHeight, bookmarkWidth,
+                        zLevel,
+                        frag.getUnlocalizedBookmark(), 0xDDDDDDDD,
+                        mousePoint, textureBookmark);
+                this.pageFragments.put(rctFragment, frag);
+            }
         }
 
         GL11.glPopMatrix();
     }
 
-    private Rectangle drawBookmark(double offsetX, double offsetY, double width, double height, double mouseOverWidth, float zLevel, String title, int titleRGBColor, Point mousePoint) {
+    private Rectangle drawBookmark(double offsetX, double offsetY, double width, double height, double mouseOverWidth, float zLevel, String title, int titleRGBColor, Point mousePoint, AbstractRenderableTexture texture) {
         TextureHelper.setActiveTextureToAtlasSprite();
         //Reset styles, because MC fontrenderer is STUPID A F
         if(titleRGBColor == Color.WHITE.getRGB()) {
@@ -102,7 +155,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         GL11.glPushMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GlStateManager.color(1F, 1F, 1F, 1F);
-        textureBookmark.bind();
+        texture.bindTexture();
 
         Rectangle r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
         if(r.contains(mousePoint)) {
@@ -133,6 +186,36 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         GL11.glPopMatrix();
 
         return r;
+    }
+
+    protected boolean handleJournalNavigationBookmarkClick(Point p) {
+        if(bookmarkIndex != 0 && rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
+            GuiJournalProgression.resetJournal();
+            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
+            return true;
+        }
+        if(bookmarkIndex != 1 && rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
+            GuiJournalProgression.resetJournal();
+            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
+            return true;
+        }
+        if(bookmarkIndex != 2 && rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
+            GuiJournalProgression.resetJournal();
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean handleFragmentClick(Point mouse) {
+        for (Rectangle r : this.pageFragments.keySet()) {
+            if (r.contains(mouse)) {
+                KnowledgeFragment frag = this.pageFragments.get(r);
+                Minecraft.getMinecraft().displayGuiScreen(new GuiJournalOverlayKnowledge(this, frag));
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
