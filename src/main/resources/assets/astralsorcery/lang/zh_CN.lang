@@ -694,9 +694,9 @@ perk.info.available=可用
 perk.info.active=激活
 perk.info.points=可用属性点数：%s
 perk.info.disabled=在你的整合包内禁用技能效果。
-perk.info.sealed=密封的
+perk.info.sealed=已封印
 perk.info.sealed.break=[双击打开]
-perk.info.sealed.usage=Drag and drop a seal onto the perk you want to seal.
+perk.info.sealed.usage=将封印拖拽到你想封印的能力上。
 
 perk.category.root.name=根源技能
 perk.category.major.name=主要技能
