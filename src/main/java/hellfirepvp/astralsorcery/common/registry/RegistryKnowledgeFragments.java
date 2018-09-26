@@ -40,7 +40,7 @@ public class RegistryKnowledgeFragments {
 
     private static void registerConstellationFragment(IConstellation cst) {
         KnowledgeFragmentManager mgr = KnowledgeFragmentManager.getInstance();
-        String cstKey = "constellation." + cst.getSimpleName();
+        String cstKey = "fragment.constellation." + cst.getSimpleName();
 
         mgr.register(onConstellations(cstKey + ".showup", cst));
         mgr.register(onConstellations(cstKey + ".potions", cst)
