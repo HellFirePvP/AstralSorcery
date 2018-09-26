@@ -696,6 +696,7 @@ perk.info.points=Available points: %s
 perk.info.disabled=Perk effects disabled in your modpack.
 perk.info.sealed=Sealed
 perk.info.sealed.break=[Double-click to break]
+perk.info.sealed.usage=Drag and drop a seal onto the perk you want to seal.
 
 perk.category.root.name=Root Perk
 perk.category.major.name=Major Perk

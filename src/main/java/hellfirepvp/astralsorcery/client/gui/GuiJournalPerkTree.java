@@ -302,6 +302,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         if (!this.foundSeals.isEmpty() && rectSealBox.contains(mouseX - guiLeft, mouseY - guiTop)) {
             List<String> toolTip = this.foundSeals.getTooltip(Minecraft.getMinecraft().player,
                     Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
+            toolTip.add("");
+            toolTip.add(TextFormatting.GRAY + I18n.format("perk.info.sealed.usage"));
             RenderingUtils.renderBlueTooltip(mouseX, mouseY, toolTip, Minecraft.getMinecraft().fontRenderer);
             GlStateManager.color(1F, 1F, 1F, 1F);
             GL11.glColor4f(1F, 1F, 1F, 1F);
