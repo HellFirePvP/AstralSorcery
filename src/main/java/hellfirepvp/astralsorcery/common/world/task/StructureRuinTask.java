@@ -8,13 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.world.task;
 
-import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import java.util.Random;
@@ -40,6 +34,7 @@ public class StructureRuinTask implements Runnable {
 
     @Override
     public void run() {
+        /*
         lblSpawns:
         for (EnumFacing horizontal : EnumFacing.HORIZONTALS) {
             BlockPos at = this.pos.offset(horizontal, 50 + random.nextInt(35));
@@ -68,6 +63,7 @@ public class StructureRuinTask implements Runnable {
                 MultiBlockArrays.smallRuinConduit.placeInWorld(this.world, top);
             }
         }
+        */
     }
 
 }

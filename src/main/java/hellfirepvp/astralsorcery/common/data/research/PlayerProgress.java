@@ -117,7 +117,7 @@ public class PlayerProgress {
                 }
             }
             if(compound.hasKey("sealedPerks")) {
-                NBTTagList list = compound.getTagList("perks", 10);
+                NBTTagList list = compound.getTagList("sealedPerks", 10);
                 for (int i = 0; i < list.tagCount(); i++) {
                     NBTTagCompound tag = list.getCompoundTagAt(i);
                     String perkRegName = tag.getString("perkName");

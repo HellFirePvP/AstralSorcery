@@ -46,9 +46,9 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
         getBuffer(world).markStructureGeneration(pos, getStructureType());
 
         //Should be the case...
-        if (world instanceof WorldServer) {
-            AstralSorcery.proxy.scheduleDelayed(new StructureRuinTask((WorldServer) world, pos, rand));
-        }
+        //if (world instanceof WorldServer) {
+        //    AstralSorcery.proxy.scheduleDelayed(new StructureRuinTask((WorldServer) world, pos, rand));
+        //}
     }
 
     @Override

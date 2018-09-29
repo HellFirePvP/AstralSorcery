@@ -34,7 +34,7 @@ import java.util.List;
  */
 public abstract class ConstellationBase implements IConstellation {
 
-    private List<StarLocation> starLocations = new ArrayList<>(); //32x32 locations are valid. 0-indexed.
+    private List<StarLocation> starLocations = new ArrayList<>(); //31x31 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
     private List<ItemHandle> signatureItems = new LinkedList<>();
 
@@ -57,8 +57,8 @@ public abstract class ConstellationBase implements IConstellation {
     }
 
     public StarLocation addStar(int x, int y) {
-        x &= 30; //31x31
-        y &= 30;
+        x %= (STAR_GRID_SIZE - 1); //31x31
+        y %= (STAR_GRID_SIZE - 1);
         StarLocation star = new StarLocation(x, y);
         if (!starLocations.contains(star)) {
             starLocations.add(star);

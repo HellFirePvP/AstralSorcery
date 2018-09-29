@@ -98,7 +98,7 @@ public class RenderConstellation {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
 
-        double s = 1D / 31D * scale;
+        double s = 1D / ((double) IConstellation.STAR_GRID_SIZE) * scale;
 
         GlStateManager.translate(-15.5D * s, 0, -15.5D * s);
 
@@ -225,8 +225,8 @@ public class RenderConstellation {
     public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
-        double ulength = ((double) width) / 31;
-        double vlength = ((double) height) / 31;
+        double ulength = ((double) width) / IConstellation.STAR_GRID_SIZE;
+        double vlength = ((double) height) / IConstellation.STAR_GRID_SIZE;
 
         //TODO maybe move this into the calling code. actually please do.... at some point.... please...... :|
         if (!GL11.glGetBoolean(GL11.GL_BLEND)) {

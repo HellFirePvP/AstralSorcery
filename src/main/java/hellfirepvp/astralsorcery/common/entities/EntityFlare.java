@@ -189,7 +189,7 @@ public class EntityFlare extends EntityFlying {
                 }
 
                 if(getAttackTarget() != null && !getAttackTarget().isDead && getAttackTarget().getDistance(this) < 10 && rand.nextInt(40) == 0) {
-                    getAttackTarget().attackEntityFrom(CommonProxy.dmgSourceStellar, 4F);
+                    getAttackTarget().attackEntityFrom(CommonProxy.dmgSourceStellar, 5.5F);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.FLARE_PROC, new Vector3(posX, posY + this.height / 2, posZ));
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPosition(), 16));
                     AstralSorcery.proxy.fireLightning(world, Vector3.atEntityCenter(this), Vector3.atEntityCenter(getAttackTarget()), new Color(0, 0, 216));

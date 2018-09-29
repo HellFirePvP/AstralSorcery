@@ -717,6 +717,14 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                 }
             }
         }
+        if (I18n.format("perk.info.sealed").toLowerCase().contains(matchText)) {
+            PlayerProgress prog = ResearchManager.clientProgress;
+            for (AbstractPerk sealed : prog.getSealedPerks()) {
+                if (!this.searchMatches.contains(sealed)) {
+                    this.searchMatches.add(sealed);
+                }
+            }
+        }
     }
 
     @Override
@@ -819,6 +827,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     }
 
     public void playSealBreakAnimation(AbstractPerk perk) {
+        this.updateSearchHighlight();
         this.breakEffects.put(perk, ClientScheduler.getClientTick());
     }
 
