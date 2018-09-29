@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class ClientConstellationGenerator {
 
     public static IConstellation generateRandom(long seed, int stars) {
-        Random sRandom = new Random();
+        Random sRandom = new Random(seed);
         String name = RandomWordGenerator.getGenerator().generateWord(seed, sRandom.nextFloat() > 0.6F ? 7 : 6);
         IConstellation cst = new ClientConstellation(name);
         List<StarLocation> tmpStars = Lists.newArrayList();
