@@ -23,6 +23,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -35,7 +36,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -173,6 +176,18 @@ public class MiscUtils {
             }
         }
         return true;
+    }
+
+    public static boolean canPlayerBreakBlockPos(EntityPlayer player, BlockPos tryBreak) {
+        BlockEvent.BreakEvent ev = new BlockEvent.BreakEvent(player.getEntityWorld(), tryBreak, player.getEntityWorld().getBlockState(tryBreak), player);
+        MinecraftForge.EVENT_BUS.post(ev);
+        return !ev.isCanceled();
+    }
+
+    public static boolean canPlayerPlaceBlockPos(EntityPlayer player, EnumHand withHand, IBlockState tryPlace, BlockPos pos, EnumFacing againstSide) {
+        BlockSnapshot snapshot = new BlockSnapshot(player.getEntityWorld(), pos, tryPlace);
+        BlockEvent.PlaceEvent ev = ForgeEventFactory.onPlayerBlockPlace(player, snapshot, againstSide, withHand);
+        return !ev.isCanceled();
     }
 
     public static boolean isConnectionEstablished(EntityPlayerMP player) {

@@ -47,8 +47,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
 
     public GuiConstellationPaper(IConstellation c) {
         super(300, 250);
-        long seed = new Random().nextLong();
-        this.constellation = ClientConstellationGenerator.generateRandom(seed, 6);
+        this.constellation = c;
         testPhases();
     }
 

@@ -32,6 +32,12 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 public class ClientConstellationGenerator {
 
+    public static IConstellation generateRandom(long seed) {
+        Random sRandom = new Random(seed);
+        int stars = 5 + (sRandom.nextFloat() > 0.6F ? 1 : 0);
+        return generateRandom(seed, stars);
+    }
+
     public static IConstellation generateRandom(long seed, int stars) {
         Random sRandom = new Random(seed);
         String name = RandomWordGenerator.getGenerator().generateWord(seed, sRandom.nextFloat() > 0.6F ? 7 : 6);

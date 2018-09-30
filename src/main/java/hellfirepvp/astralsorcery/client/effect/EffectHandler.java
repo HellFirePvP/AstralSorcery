@@ -26,7 +26,7 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.client.util.StructureMatchPreview;
 import hellfirepvp.astralsorcery.client.util.UIGateway;
 import hellfirepvp.astralsorcery.client.util.UISextantTarget;
-import hellfirepvp.astralsorcery.client.util.data.PersistentDataManager;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;

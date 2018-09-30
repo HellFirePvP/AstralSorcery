@@ -21,7 +21,7 @@ import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.JournalRecipeDisplayRecovery;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
-import hellfirepvp.astralsorcery.client.util.data.PersistentDataManager;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;

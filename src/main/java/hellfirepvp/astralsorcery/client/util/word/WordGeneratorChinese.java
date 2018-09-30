@@ -17,6 +17,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 30.09.2018 / 14:15
  */
+//Credit to yuanjie000
 public class WordGeneratorChinese extends RandomWordGenerator {
 
     private static String[] a = { "乾", "震", "坎", "艮", "坤", "巽", "离", "兑"};

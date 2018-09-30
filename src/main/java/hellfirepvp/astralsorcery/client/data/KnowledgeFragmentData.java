@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.util.data;
+package hellfirepvp.astralsorcery.client.data;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
@@ -21,7 +21,9 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +38,8 @@ import java.util.stream.Collectors;
 public class KnowledgeFragmentData extends CachedPersistentData {
 
     private List<KnowledgeFragment> flattenedFragments = Lists.newArrayList();
+    private List<KnowledgeFragment> cacheCreativeFragments = Lists.newArrayList();
+    private List<KnowledgeFragment> mergedCache = null;
 
     KnowledgeFragmentData() {
         super(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
@@ -52,8 +56,24 @@ public class KnowledgeFragmentData extends CachedPersistentData {
         return changed;
     }
 
+    @Override
+    public void clearCreativeCaches() {
+        super.clearCreativeCaches();
+
+        cacheCreativeFragments.clear();
+    }
+
+    public List<KnowledgeFragment> getAllFragments() {
+        if (mergedCache == null) {
+            mergedCache = new ArrayList<>(flattenedFragments.size() + cacheCreativeFragments.size());
+            mergedCache.addAll(flattenedFragments);
+            mergedCache.addAll(cacheCreativeFragments);
+        }
+        return mergedCache;
+    }
+
     public Collection<KnowledgeFragment> getFragmentsFor(GuiScreenJournal journal) {
-        return this.flattenedFragments.stream().filter(f -> f.isVisible(journal)).collect(Collectors.toList());
+        return getAllFragments().stream().filter(f -> f.isVisible(journal)).collect(Collectors.toList());
     }
 
     public boolean addFragment(KnowledgeFragment fragment) {
@@ -61,7 +81,12 @@ public class KnowledgeFragmentData extends CachedPersistentData {
     }
 
     private boolean addFragmentCache(KnowledgeFragment frag) {
-        return !this.flattenedFragments.contains(frag) && this.flattenedFragments.add(frag);
+        List<KnowledgeFragment> target = creative ? cacheCreativeFragments : flattenedFragments;
+        if (getAllFragments().contains(frag)) {
+            return false;
+        }
+        mergedCache = null;
+        return target.add(frag);
     }
 
     @Override
@@ -82,7 +107,7 @@ public class KnowledgeFragmentData extends CachedPersistentData {
 
     @Override
     public void writeToNBT(NBTTagCompound cmp) {
-        Collection<KnowledgeFragment> flattened = this.flattenedFragments;
+        Collection<KnowledgeFragment> flattened = this.flattenedFragments; //Only save non-creative ones
         NBTTagList listFragments = new NBTTagList();
         for (KnowledgeFragment frag : flattened) {
             listFragments.appendTag(new NBTTagString(frag.getRegistryName().toString()));

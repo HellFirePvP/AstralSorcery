@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.util.data;
+package hellfirepvp.astralsorcery.client.data;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class CachedPersistentData {
 
     private final PersistentDataManager.PersistentKey key;
+    protected boolean creative = false;
 
     public CachedPersistentData(PersistentDataManager.PersistentKey key) {
         this.key = key;
@@ -42,5 +43,16 @@ public abstract class CachedPersistentData {
     public abstract void readFromNBT(NBTTagCompound cmp);
 
     public abstract void writeToNBT(NBTTagCompound cmp);
+
+    public void clearCreativeCaches() {}
+
+    public final void setCreativeFlag() {
+        creative = true;
+    }
+
+    public final void clearCreativeFlag() {
+        creative = false;
+        clearCreativeCaches();
+    }
 
 }

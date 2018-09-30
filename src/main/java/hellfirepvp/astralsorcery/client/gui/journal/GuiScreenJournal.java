@@ -15,8 +15,8 @@ import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
 import hellfirepvp.astralsorcery.client.gui.journal.overlay.GuiJournalOverlayKnowledge;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
-import hellfirepvp.astralsorcery.client.util.data.KnowledgeFragmentData;
-import hellfirepvp.astralsorcery.client.util.data.PersistentDataManager;
+import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -36,7 +36,6 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Map;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

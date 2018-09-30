@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.util.data;
+package hellfirepvp.astralsorcery.client.data;
 
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -229,6 +229,18 @@ public class PersistentDataManager {
             } catch (IOException exc) {
                 exc.printStackTrace();
             }
+        }
+    }
+
+    public void setCreative() {
+        for (CachedPersistentData data : this.cachedPersistentData.values()) {
+            data.setCreativeFlag();
+        }
+    }
+
+    public void clearCreative() {
+        for (CachedPersistentData data : this.cachedPersistentData.values()) {
+            data.clearCreativeFlag();
         }
     }
 
