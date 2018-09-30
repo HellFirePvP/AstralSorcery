@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.fragment;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import net.minecraft.util.ResourceLocation;
@@ -17,6 +18,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -46,6 +49,10 @@ public class KnowledgeFragmentManager {
     @Nullable
     public KnowledgeFragment getFragment(ResourceLocation name) {
         return fragments.get(name);
+    }
+
+    public List<KnowledgeFragment> getAllFragments() {
+        return Lists.newArrayList(fragments.values());
     }
 
     @Nonnull

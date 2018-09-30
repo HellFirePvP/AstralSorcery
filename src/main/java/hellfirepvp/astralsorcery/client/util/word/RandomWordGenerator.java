@@ -29,6 +29,10 @@ public abstract class RandomWordGenerator {
     @Nonnull
     public static RandomWordGenerator getGenerator() {
         String lang = Minecraft.getMinecraft().gameSettings.language;
+        if (lang == null) {
+            return fallback;
+        }
+        lang = lang.toLowerCase();
         RandomWordGenerator gen;
         if ((gen = localizedProviders.get(lang)) == null) {
             gen = fallback;
@@ -43,5 +47,6 @@ public abstract class RandomWordGenerator {
 
         //Add new/other providers here...
         localizedProviders.put("en_us", fallback);
+        localizedProviders.put("zh_cn", new WordGeneratorChinese());
     }
 }

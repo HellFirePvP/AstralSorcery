@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationDetails;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiJournalPages;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.util.ClientConstellationGenerator;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
@@ -25,6 +26,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Predicate;
 
 /**
@@ -39,11 +41,14 @@ public abstract class KnowledgeFragment {
     private static final Predicate<PlayerProgress> TRUE = (p) -> true;
 
     private final ResourceLocation name;
+    private final long seed;
     private Predicate<PlayerProgress> canSeeTest = TRUE;
     private Predicate<PlayerProgress> canDiscoverTest = TRUE;
 
     public KnowledgeFragment(ResourceLocation name) {
         this.name = name;
+        int hName = name.toString().hashCode();
+        this.seed = (hName << 31) | new Random(hName).nextInt();
     }
 
     public KnowledgeFragment(String name) {
@@ -113,6 +118,15 @@ public abstract class KnowledgeFragment {
 
     @SideOnly(Side.CLIENT)
     public abstract boolean isVisible(GuiScreenJournal journalGui);
+
+    public final long getSeed() {
+        return seed;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public final IConstellation getDiscoverConstellation() {
+        return ClientConstellationGenerator.generateRandom(this.seed);
+    }
 
     public String getUnlocalizedName() {
         return getLocalizationBaseString() + ".name";
