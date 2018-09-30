@@ -114,8 +114,8 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
             amountMap.put(stack, found);
         }
 
-        int heightNormal  =  26;
-        int heightSplit = 13;
+        int heightNormal = 26;
+        int heightSplit  = 13;
         int width   =  26;
         int offsetX =  30;
         int offsetY =  15;
@@ -375,18 +375,20 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
 
             if(drainTempCharge(playerIn, Config.exchangeWandUseCost, true)) {
                 if(((EntityPlayerMP) playerIn).interactionManager.tryHarvestBlock(placePos)) {
-                    drainTempCharge(playerIn, Config.exchangeWandUseCost, false);
-                    if(!playerIn.isCreative()) {
-                        ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
-                    }
                     IBlockState place = applicable.key;
                     try {
                         place = applicable.key.getBlock().getStateForPlacement(world, placePos, facing, hitX, hitY, hitZ, applicable.value.getMetadata(), playerIn, hand);
                     } catch (Exception exc) {}
-                    if (world.setBlockState(placePos, place)) {
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
-                        ev.setAdditionalData(Block.getStateId(atOrigin));
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                    if (MiscUtils.canPlayerPlaceBlockPos(playerIn, hand, place, placePos, EnumFacing.UP)) {
+                        if (world.setBlockState(placePos, place)) {
+                            drainTempCharge(playerIn, Config.exchangeWandUseCost, false);
+                            if(!playerIn.isCreative()) {
+                                ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
+                            }
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                            ev.setAdditionalData(Block.getStateId(atOrigin));
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                        }
                     }
                 }
             }
