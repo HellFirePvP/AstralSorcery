@@ -405,6 +405,12 @@ astralsorcery.journal.ATT_TRAIT.2.text=By placing an already Attuned crystal int
 research.ENH_SHIFTING_STAR.name=Irradiant Star
 astralsorcery.journal.ENH_SHIFTING_STAR.1.text=The problem with the Shifting Star is that it purges all starlight from your body.<NL>By focusing the energies of the Shifting Star into alignment with one of the Bright Constellations, this loss can be mitigated. Subequent use allows you to recover the starlight in your body by re-aligning its attunement to match the Star, and then directing the path of empowerment from that same light without it having first been purged.
 
+research.RESONATOR_AREA_SIZE.name=Domic Resonator
+astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=
+
+research.ATT_PERKS_SEAL.name=
+astralsorcery.journal.ATT_PERKS_SEAL.1.text=
+
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
 astralsorcery.journal.recipe.constellation=Requires focus to Constellation %s
@@ -498,6 +504,8 @@ item.itemsextant.name=Sextant
 item.itemsextant.upgraded=Augmented
 item.itemenchantmentamulet.name=Resplendent Prism
 item.itemenchantmentamulet.pure=Pure
+item.itemperkseal.name=
+item.itemknowledgefragment.name=
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator
