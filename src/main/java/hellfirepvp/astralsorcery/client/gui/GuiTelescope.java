@@ -551,12 +551,12 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
             for (StarConnection connection : sc) {
                 Rectangle fromRect = stars.get(connection.from);
                 if (fromRect == null) {
-                    AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
+                    AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
                     continue lblInfos;
                 }
                 Rectangle toRect = stars.get(connection.to);
                 if (toRect == null) {
-                    AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
+                    AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
                     continue lblInfos;
                 }
                 if (!containsMatch(drawnLines, fromRect, toRect)) {

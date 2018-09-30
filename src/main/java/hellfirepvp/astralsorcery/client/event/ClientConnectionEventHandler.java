@@ -49,7 +49,7 @@ public class ClientConnectionEventHandler {
     //Used to cleanup stuff on clientside to make the client functional to switch servers at any time.
     @SubscribeEvent
     public void onDc(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        AstralSorcery.log.info("[AstralSorcery] Cleaning client cache...");
+        AstralSorcery.log.info("Cleaning client cache...");
         EffectHandler.cleanUp();
         ClientCameraManager.getInstance().removeAllAndCleanup();
         ConstellationSkyHandler.getInstance().clientClearCache();
@@ -72,7 +72,7 @@ public class ClientConnectionEventHandler {
         ((DataPatreonFlares) SyncDataHolder.getDataClient(SyncDataHolder.DATA_PATREON_FLARES)).cleanUp(Side.CLIENT);
         PersistentDataManager.INSTANCE.clearCreative();
         ClientProxy.connected = false;
-        AstralSorcery.log.info("[AstralSorcery] Cleared cached client data! Disconnected from server.");
+        AstralSorcery.log.info("Cleared cached client data! Disconnected from server.");
     }
 
     @SubscribeEvent

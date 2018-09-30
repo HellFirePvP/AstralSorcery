@@ -86,7 +86,7 @@ public class PlayerProgress {
             String cst = compound.getString("attuned");
             IConstellation c = ConstellationRegistry.getConstellationByName(cst);
             if(c == null || !(c instanceof IMajorConstellation)) {
-                AstralSorcery.log.warn("[AstralSorcery] Failed to load attuned Constellation: " + cst + " - constellation doesn't exist or isn't major.");
+                AstralSorcery.log.warn("Failed to load attuned Constellation: " + cst + " - constellation doesn't exist or isn't major.");
             } else {
                 attunedConstellation = (IMajorConstellation) c;
             }

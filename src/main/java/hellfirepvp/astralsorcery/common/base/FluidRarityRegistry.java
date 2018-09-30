@@ -230,7 +230,7 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
             String fluidName = split[0];
             Fluid f = FluidRegistry.getFluid(fluidName);
             if(f == null) {
-                AstralSorcery.log.info("[AstralSorcery] Ignoring fluid " + fluidName + " for rarity registry - it doesn't exist in the current environment");
+                AstralSorcery.log.info("Ignoring fluid " + fluidName + " for rarity registry - it doesn't exist in the current environment");
                 return null;
             }
             String strGAmount = split[1];

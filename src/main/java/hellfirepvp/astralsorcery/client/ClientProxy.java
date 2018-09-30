@@ -114,7 +114,7 @@ public class ClientProxy extends CommonProxy {
         try {
             ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(AssetLibrary.resReloadInstance);
         } catch (Exception exc) {
-            AstralSorcery.log.warn("[AstralSorcery] Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
+            AstralSorcery.log.warn("Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
             AssetLibrary.resReloadInstance.onResourceManagerReload(null);
         }
         ModelLoaderRegistry.registerLoader(new DummyModelLoader()); //IItemRenderer Hook ModelLoader

@@ -179,7 +179,7 @@ public abstract class ConstellationBase implements IConstellation {
             phases = new ArrayList<>(applicablePhases.length);
             for (MoonPhase ph : applicablePhases) {
                 if(ph == null) {
-                    throw new IllegalArgumentException("[AstralSorcery] null MoonPhase passed to Minor constellation registration for " + name);
+                    throw new IllegalArgumentException("null MoonPhase passed to Minor constellation registration for " + name);
                 }
                 phases.add(ph);
             }
@@ -190,7 +190,7 @@ public abstract class ConstellationBase implements IConstellation {
             phases = new ArrayList<>(applicablePhases.length);
             for (MoonPhase ph : applicablePhases) {
                 if(ph == null) {
-                    throw new IllegalArgumentException("[AstralSorcery] null MoonPhase passed to Minor constellation registration for " + name);
+                    throw new IllegalArgumentException("null MoonPhase passed to Minor constellation registration for " + name);
                 }
                 phases.add(ph);
             }

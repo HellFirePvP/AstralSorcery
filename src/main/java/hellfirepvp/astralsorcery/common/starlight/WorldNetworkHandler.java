@@ -78,13 +78,13 @@ public class WorldNetworkHandler {
             if(source.key.distanceSq(at) <= 256) {
                 IPrismTransmissionNode node = getTransmissionNode(source.key);
                 if(node == null) {
-                    AstralSorcery.log.warn("[AstralSorcery] Didn't find a TransmissionNode at a position that's supposed to be a source!");
-                    AstralSorcery.log.warn("[AstralSorcery] Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    AstralSorcery.log.warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
                     continue;
                 }
                 if(!(node instanceof ITransmissionSource)) {
-                    AstralSorcery.log.warn("[AstralSorcery] Found TransmissionNode that isn't a source at a source position!");
-                    AstralSorcery.log.warn("[AstralSorcery] Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    AstralSorcery.log.warn("Found TransmissionNode that isn't a source at a source position!");
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
                     continue;
                 }
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
@@ -107,13 +107,13 @@ public class WorldNetworkHandler {
             if(source.key.distanceSq(at) <= 256) {
                 IPrismTransmissionNode node = getTransmissionNode(source.key);
                 if(node == null) {
-                    AstralSorcery.log.warn("[AstralSorcery] Didn't find a TransmissionNode at a position that's supposed to be a source!");
-                    AstralSorcery.log.warn("[AstralSorcery] Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    AstralSorcery.log.warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
                     continue;
                 }
                 if(!(node instanceof ITransmissionSource)) {
-                    AstralSorcery.log.warn("[AstralSorcery] Found TransmissionNode that isn't a source at a source position!");
-                    AstralSorcery.log.warn("[AstralSorcery] Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    AstralSorcery.log.warn("Found TransmissionNode that isn't a source at a source position!");
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
                     continue;
                 }
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
@@ -184,8 +184,8 @@ public class WorldNetworkHandler {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
             new Throwable().printStackTrace();
-            AstralSorcery.log.warn("[AstralSorcery] Could not find transmission node for Transmission tile '" + tr.getClass().getSimpleName() + "'");
-            AstralSorcery.log.warn("[AstralSorcery] This is an implementation error. Report it along with the steps to create this, if you come across this.");
+            AstralSorcery.log.warn("Could not find transmission node for Transmission tile '" + tr.getClass().getSimpleName() + "'");
+            AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
             return;
         }
 
@@ -202,8 +202,8 @@ public class WorldNetworkHandler {
     private void removeThisSourceFromNext(IStarlightTransmission tr) {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
-            AstralSorcery.log.warn("[AstralSorcery] Could not find transmission node for Transmission tile '" + tr.getClass().getSimpleName() + "'");
-            AstralSorcery.log.warn("[AstralSorcery] This is an implementation error. Report it along with the steps to create this, if you come across this.");
+            AstralSorcery.log.warn("Could not find transmission node for Transmission tile '" + tr.getClass().getSimpleName() + "'");
+            AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
             return;
         }
         TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(getWorld());
@@ -229,8 +229,8 @@ public class WorldNetworkHandler {
     private void linkNextToThisSources(IStarlightTransmission tr) {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
-            AstralSorcery.log.warn("[AstralSorcery] Previously added Transmission tile '" + tr.getClass().getSimpleName() + "' didn't create a Transmission node!");
-            AstralSorcery.log.warn("[AstralSorcery] This is an implementation error. Report it along with the steps to create this, if you come across this.");
+            AstralSorcery.log.warn("Previously added Transmission tile '" + tr.getClass().getSimpleName() + "' didn't create a Transmission node!");
+            AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
             return;
         }
         BlockPos thisPos = tr.getTrPos();

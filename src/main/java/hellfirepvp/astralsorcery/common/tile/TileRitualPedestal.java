@@ -500,16 +500,16 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 if(recNode != null) {
                     recNode.updateCrystalProperties(world, properties, tuned, trait);
                 } else {
-                    AstralSorcery.log.warn("[AstralSorcery] Updated inventory and tried to update pedestal state.");
-                    AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + world.provider.getDimension() + " pos=" + getLocationPos() + " - couldn't find it.");
+                    AstralSorcery.log.warn("Updated inventory and tried to update pedestal state.");
+                    AstralSorcery.log.warn("Tried to find receiver node at dimId=" + world.provider.getDimension() + " pos=" + getLocationPos() + " - couldn't find it.");
                 }
             } else {
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
                     recNode.updateCrystalProperties(world, null, null, null);
                 } else {
-                    AstralSorcery.log.warn("[AstralSorcery] Updated inventory and tried to update pedestal state.");
-                    AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + world.provider.getDimension() + " pos=" + getLocationPos() + " - couldn't find it.");
+                    AstralSorcery.log.warn("Updated inventory and tried to update pedestal state.");
+                    AstralSorcery.log.warn("Tried to find receiver node at dimId=" + world.provider.getDimension() + " pos=" + getLocationPos() + " - couldn't find it.");
                 }
             }
             markForUpdate();
@@ -981,8 +981,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             properties = CrystalProperties.readFromNBT(compound);
             IConstellation c = IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "Normal");
             if(c != null && !(c instanceof IWeakConstellation)) {
-                AstralSorcery.log.warn("[AstralSorcery] Tried to load RitualPedestal from NBT with a non-Major constellation as effect. Ignoring constellation...");
-                AstralSorcery.log.warn("[AstralSorcery] Block affected is at " + getLocationPos());
+                AstralSorcery.log.warn("Tried to load RitualPedestal from NBT with a non-Major constellation as effect. Ignoring constellation...");
+                AstralSorcery.log.warn("Block affected is at " + getLocationPos());
             } else if(c == null) {
                 channeling = null;
             } else {
@@ -990,8 +990,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
             c = IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "Trait");
             if(c != null && !(c instanceof IMinorConstellation)) {
-                AstralSorcery.log.warn("[AstralSorcery] Tried to load RitualPedestal from NBT with a non-Minor constellation as trait. Ignoring constellation...");
-                AstralSorcery.log.warn("[AstralSorcery] Block affected is at " + getLocationPos());
+                AstralSorcery.log.warn("Tried to load RitualPedestal from NBT with a non-Minor constellation as trait. Ignoring constellation...");
+                AstralSorcery.log.warn("Block affected is at " + getLocationPos());
             } else if(c == null) {
                 trait = null;
             } else {

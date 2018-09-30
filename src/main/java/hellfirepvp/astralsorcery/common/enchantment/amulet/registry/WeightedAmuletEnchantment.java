@@ -61,14 +61,14 @@ public class WeightedAmuletEnchantment extends WeightedRandom.Item implements Co
         }
         Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(domain, path.toString()));
         if(ench == null) {
-            AstralSorcery.log.info("[AstralSorcery] Ignoring whitelist entry " + str + " for amulet enchantments - Enchantment does not exist!");
+            AstralSorcery.log.info("Ignoring whitelist entry " + str + " for amulet enchantments - Enchantment does not exist!");
             return null;
         }
         int w;
         try {
             w = Integer.parseInt(weight);
         } catch (NumberFormatException exc) {
-            AstralSorcery.log.info("[AstralSorcery] Ignoring whitelist entry " + str + " for amulet enchantments - last :-separated argument is not a number!");
+            AstralSorcery.log.info("Ignoring whitelist entry " + str + " for amulet enchantments - last :-separated argument is not a number!");
             return null;
         }
         return new WeightedAmuletEnchantment(ench, w);

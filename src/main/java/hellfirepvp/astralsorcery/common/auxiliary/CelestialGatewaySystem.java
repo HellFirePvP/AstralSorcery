@@ -125,7 +125,7 @@ public class CelestialGatewaySystem {
             forceLoad(dim);
         }
         if(!serverCache.containsKey(dim)) {
-            AstralSorcery.log.info("[AstralSorcery] Couldn't add position for world " + dim + "! - Force loading the world resulted in... nothing.");
+            AstralSorcery.log.info("Couldn't add position for world " + dim + "! - Force loading the world resulted in... nothing.");
             return;
         }
 

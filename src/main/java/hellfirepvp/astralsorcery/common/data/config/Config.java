@@ -174,7 +174,7 @@ public class Config {
         out = config.getStringList("data", "data", out, "");
         for (String str : out) {
             if(cfg.appendDataSet(str) == null) {
-                AstralSorcery.log.warn("[AstralSorcery] Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
+                AstralSorcery.log.warn("Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
             }
         }
         config.save();
@@ -268,7 +268,7 @@ public class Config {
             try {
                 out.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'worldGenWhitelist': " + s + " is not a number!");
+                AstralSorcery.log.warn("Error while reading config entry 'worldGenWhitelist': " + s + " is not a number!");
             }
         }
         worldGenDimWhitelist = new ArrayList<>(out.size());
@@ -283,7 +283,7 @@ public class Config {
             try {
                 out.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'weakSkyRenders': " + s + " is not a number!");
+                AstralSorcery.log.warn("Error while reading config entry 'weakSkyRenders': " + s + " is not a number!");
             }
         }
         weakSkyRendersWhitelist = new ArrayList<>(out.size());
@@ -298,7 +298,7 @@ public class Config {
             try {
                 out.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'skySupportedDimensions': " + s + " is not a number!");
+                AstralSorcery.log.warn("Error while reading config entry 'skySupportedDimensions': " + s + " is not a number!");
             }
         }
         constellationSkyDimWhitelist = Lists.newArrayList(out);

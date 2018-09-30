@@ -33,7 +33,7 @@ public class EventHandlerNetwork {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
-        AstralSorcery.log.info("[AstralSorcery] Synchronizing baseline information to " + p.getName());
+        AstralSorcery.log.info("Synchronizing baseline information to " + p.getName());
         ResearchManager.sendInitClientKnowledge(p);
         CelestialGatewaySystem.instance.syncTo(p);
         SyncDataHolder.syncAllDataTo(p);

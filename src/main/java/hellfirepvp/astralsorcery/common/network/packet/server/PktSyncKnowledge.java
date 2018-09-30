@@ -118,7 +118,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             String attunement = ByteBufUtils.readString(buf);
             IConstellation c = ConstellationRegistry.getConstellationByName(attunement);
             if(c == null || !(c instanceof IMajorConstellation)) {
-                AstralSorcery.log.warn("[AstralSorcery] received constellation-attunement progress-packet with unknown constellation: " + attunement);
+                AstralSorcery.log.warn("received constellation-attunement progress-packet with unknown constellation: " + attunement);
             } else {
                 this.attunedConstellation = (IMajorConstellation) c;
             }
