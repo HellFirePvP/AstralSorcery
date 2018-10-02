@@ -406,10 +406,10 @@ research.ENH_SHIFTING_STAR.name=Irradiant Star
 astralsorcery.journal.ENH_SHIFTING_STAR.1.text=The problem with the Shifting Star is that it purges all starlight from your body.<NL>By focusing the energies of the Shifting Star into alignment with one of the Bright Constellations, this loss can be mitigated. Subequent use allows you to recover the starlight in your body by re-aligning its attunement to match the Star, and then directing the path of empowerment from that same light without it having first been purged.
 
 research.RESONATOR_AREA_SIZE.name=Domic Resonator
-astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=
+astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=With further alterations, the Resonator can be altered to show starlight displacement. This manifests in an ethereal field becoming visible, not entirely unlike light through a soap bubble, that shows how far the natural starlight distributions are disturbed by buildings or rituals that channel or alter starlight while holding this new Resonator.<NL>Shift-right-clicking will still cycle through the modes, as before.
 
-research.ATT_PERKS_SEAL.name=
-astralsorcery.journal.ATT_PERKS_SEAL.1.text=
+research.ATT_PERKS_SEAL.name=Sealing Sigil
+astralsorcery.journal.ATT_PERKS_SEAL.1.text=While the Irradiant Star is a major improvement in allowing for redirection of the infused starlight within the body, sometimes it's not enough to simply route the starlight flows around certain effects. To that end, a Sealing Sigil can be used to "mask" or otherwise retard certain effects, acting as an "off-switch" or bridge over an effect you may not want at that moment.
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
@@ -504,8 +504,8 @@ item.itemsextant.name=Sextant
 item.itemsextant.upgraded=Augmented
 item.itemenchantmentamulet.name=Resplendent Prism
 item.itemenchantmentamulet.pure=Pure
-item.itemperkseal.name=
-item.itemknowledgefragment.name=
+item.itemperkseal.name=Sealing Sigil
+item.itemknowledgefragment.name=Forgotten Knowledge
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator
@@ -1002,3 +1002,95 @@ perk.astralsorcery.armara.desc.1=20%% more Elemental Resistances
 perk.astralsorcery.armara.desc.2=Gain experience by taking damage
 
 constellation.noInformation=There is nothing here.
+
+fragment.constellations.discidia.potions.name=
+fragment.constellations.discidia.potions.bookmark=
+fragment.constellations.discidia.potions.description=
+
+fragment.constellations.armara.potions.name=
+fragment.constellations.armara.potions.bookmark=
+fragment.constellations.armara.potions.description=
+
+fragment.constellations.vicio.potions.name=
+fragment.constellations.vicio.potions.bookmark=
+fragment.constellations.vicio.potions.description=
+
+fragment.constellations.aevitas.potions.name=
+fragment.constellations.aevitas.potions.bookmark=
+fragment.constellations.aevitas.potions.description=
+
+fragment.constellations.evorsio.potions.name=
+fragment.constellations.evorsio.potions.bookmark=
+fragment.constellations.evorsio.potions.description=
+
+fragment.constellations.mineralis.potions.name=
+fragment.constellations.mineralis.potions.bookmark=
+fragment.constellations.mineralis.potions.description=
+
+fragment.constellations.lucerna.potions.name=
+fragment.constellations.lucerna.potions.bookmark=
+fragment.constellations.lucerna.potions.description=
+
+fragment.constellations.horologium.potions.name=
+fragment.constellations.horologium.potions.bookmark=
+fragment.constellations.horologium.potions.description=
+
+fragment.constellations.octans.potions.name=
+fragment.constellations.octans.potions.bookmark=
+fragment.constellations.octans.potions.description=
+
+fragment.constellations.bootes.potions.name=
+fragment.constellations.bootes.potions.bookmark=
+fragment.constellations.bootes.potions.description=
+
+fragment.constellations.fornax.potions.name=
+fragment.constellations.fornax.potions.bookmark=
+fragment.constellations.fornax.potions.description=
+
+fragment.constellations.pelotrio.potions.name=
+fragment.constellations.pelotrio.potions.bookmark=
+fragment.constellations.pelotrio.potions.description=
+
+fragment.constellations.gelu.potions.name=
+fragment.constellations.gelu.potions.bookmark=
+fragment.constellations.gelu.potions.description=
+
+fragment.constellations.ulteria.potions.name=
+fragment.constellations.ulteria.potions.bookmark=
+fragment.constellations.ulteria.potions.description=
+
+fragment.constellations.alcara.potions.name=
+fragment.constellations.alcara.potions.bookmark=
+fragment.constellations.alcara.potions.description=
+
+fragment.constellations.vorux.potions.name=
+fragment.constellations.vorux.potions.bookmark=
+fragment.constellations.vorux.potions.description=
+
+fragment.skyreso.cannibalism.name=
+fragment.skyreso.cannibalism.bookmark=
+fragment.skyreso.cannibalism.description=
+
+fragment.infuser.chalice.name=
+fragment.infuser.chalice.bookmark=
+fragment.infuser.chalice.description=
+
+fragment.attunement.limits.name=
+fragment.attunement.limits.bookmark=
+fragment.attunement.limits.description=
+
+fragment.cel_crystal_grow.starmetalore.name=
+fragment.cel_crystal_grow.starmetalore.name=
+fragment.cel_crystal_grow.starmetalore.name=
+
+fragment.sextant.icons.name=
+fragment.sextant.icons.bookmark=
+fragment.sextant.icons.description=
+
+fragment.shrines.templebiomes.name=
+fragment.shrines.templebiomes.bookmark=
+fragment.shrines.templebiomes.description=
+
+fragment.illuminator.coloring.name=
+fragment.illuminator.coloring.bookmark=
+fragment.illuminator.coloring.description=
