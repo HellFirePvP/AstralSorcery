@@ -98,6 +98,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
 
         double bookmarkWidth =  67;
         double bookmarkHeight = 15;
+        double bookmarkGap = 18;
 
         double offsetX = guiLeft + guiWidth - 17.25;
         double offsetY = guiTop  + 20;
@@ -110,7 +111,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
                 mousePoint, textureBookmark);
 
         if(!ResearchManager.clientProgress.getSeenConstellations().isEmpty()) {
-            offsetY += 20;
+            offsetY += bookmarkGap;
             rectConstellationBookmark = drawBookmark(
                     offsetX, offsetY,
                     bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 1 ? 0 : 5),
@@ -122,7 +123,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         //TODO ? if(ResearchManager.clientProgress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT))
         IMajorConstellation attuned = ResearchManager.clientProgress.getAttunedConstellation();
         if(attuned != null) {
-            offsetY += 20;
+            offsetY += bookmarkGap;
             rectPerkMapBookmark = drawBookmark(
                     offsetX, offsetY,
                     bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 2 ? 0 : 5),
@@ -133,7 +134,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
 
         KnowledgeFragmentData data = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
         if (!data.getAllFragments().isEmpty() || true) {
-            offsetY += 20;
+            offsetY += bookmarkGap;
             rectKnowledgeBookmark = drawBookmark(
                     offsetX, offsetY,
                     bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 3 ? 0 : 5),
@@ -145,7 +146,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         this.pageFragments.clear();
         for (KnowledgeFragment frag : this.fragmentList) {
             if (frag.isFullyPresent()) {
-                offsetY += 20;
+                offsetY += bookmarkGap;
                 Rectangle rctFragment = drawBookmark(
                         offsetX, offsetY,
                         bookmarkWidth, bookmarkHeight, bookmarkWidth,

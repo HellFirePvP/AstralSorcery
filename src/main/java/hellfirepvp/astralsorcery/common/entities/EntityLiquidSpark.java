@@ -118,7 +118,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super.entityInit();
 
         this.dataManager.register(ENTITY_TARGET, -1);
-        this.dataManager.register(FLUID_REPRESENTED, new FluidStack(FluidRegistry.WATER, 1));
+        this.dataManager.register(FLUID_REPRESENTED, null);
     }
 
     @Override
