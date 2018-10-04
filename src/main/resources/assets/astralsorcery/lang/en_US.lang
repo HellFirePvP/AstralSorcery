@@ -41,6 +41,7 @@ potion.as.crafted.name=Stardew
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
 misc.grindstone.double=Chance to double output: %s
+misc.transmutation.constellation=Requires focused light from %s
 misc.knowledge.missing=An empty and sparkly scroll
 misc.knowledge.inscribed=Contains knowledge from %s
 misc.knowledge.inscribed.creative=Contains massive knowledge

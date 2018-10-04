@@ -10,6 +10,9 @@ package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IItemStack;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.LightTransmutationAdd;
@@ -33,7 +36,7 @@ public class LightTransmutations extends BaseTweaker {
     protected static final String name = "AstralSorcery Starlight Transmutation";
 
     @ZenMethod
-    public static void addTransmutation(IItemStack stackIn, IItemStack stackOut, double cost) {
+    public static void addTransmutation(IItemStack stackIn, IItemStack stackOut, double cost, String requiredConstellation) {
         ItemStack in = convertToItemStack(stackIn);
         ItemStack out = convertToItemStack(stackOut);
         if(in.isEmpty() || out.isEmpty()) {
@@ -52,7 +55,23 @@ public class LightTransmutations extends BaseTweaker {
             return;
         }
 
-        ModIntegrationCrafttweaker.recipeModifications.add(new LightTransmutationAdd(in, out, cost));
+        IWeakConstellation req = null;
+        if (requiredConstellation != null && !requiredConstellation.isEmpty()) {
+            IConstellation cst = ConstellationRegistry.getConstellationByName(requiredConstellation);
+            if (cst != null && cst instanceof IWeakConstellation) {
+                req = (IWeakConstellation) cst;
+            } else {
+                CraftTweakerAPI.logError("[" + name + "] Skipping recipe - Unknown or Non-Bright/Non-Dim constellation: " + requiredConstellation);
+                return;
+            }
+        }
+
+        ModIntegrationCrafttweaker.recipeModifications.add(new LightTransmutationAdd(in, out, cost, req));
+    }
+
+    @ZenMethod
+    public static void addTransmutation(IItemStack stackIn, IItemStack stackOut, double cost) {
+        addTransmutation(stackIn, stackOut, cost, null);
     }
 
     @ZenMethod

@@ -113,7 +113,7 @@ public class TransmissionWorldHandler {
                                 ((IBlockStarlightRecipient) b).receiveStarlight(world, rand, endPointPos, type, starlight * multiplier);
                             }
                         } else {
-                            StarlightNetworkRegistry.IStarlightBlockHandler handle = StarlightNetworkRegistry.getStarlightHandler(world, endPointPos, endState);
+                            StarlightNetworkRegistry.IStarlightBlockHandler handle = StarlightNetworkRegistry.getStarlightHandler(world, endPointPos, endState, type);
                             if(handle != null) {
                                 Float multiplier = lossMultipliers.get(endPointPos);
                                 if (multiplier != null) {
