@@ -198,7 +198,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if (handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p)) {
+        if (handleBookmarkClick(p)) {
             return;
         }
         progressionRenderer.propagateClick(p);

@@ -263,7 +263,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if (handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p)) {
+        if (handleBookmarkClick(p)) {
             return;
         }
         for (Rectangle r : rectCRenderMap.keySet()) {

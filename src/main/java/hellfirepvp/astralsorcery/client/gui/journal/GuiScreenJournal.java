@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.gui.journal;
 
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationCluster;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalKnowledgeIndex;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
@@ -54,7 +55,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
 
     protected final int bookmarkIndex;
 
-    protected Rectangle rectResearchBookmark, rectConstellationBookmark, rectPerkMapBookmark;
+    protected Rectangle rectResearchBookmark, rectConstellationBookmark, rectPerkMapBookmark, rectKnowledgeBookmark;
     protected Collection<KnowledgeFragment> fragmentList = null;
     protected Map<Rectangle, KnowledgeFragment> pageFragments = Maps.newHashMap();
 
@@ -87,6 +88,10 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         if (fragmentList == null) {
             resolveFragments();
         }
+        rectResearchBookmark = null;
+        rectConstellationBookmark = null;
+        rectPerkMapBookmark = null;
+        rectKnowledgeBookmark = null;
 
         GL11.glPushMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -101,7 +106,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
                 offsetX, offsetY,
                 bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 0 ? 0 : 5),
                 zLevel,
-                "gui.journal.bm.knowledge.name", 0xDDDDDDDD,
+                "gui.journal.bm.research.name", 0xDDDDDDDD,
                 mousePoint, textureBookmark);
 
         if(!ResearchManager.clientProgress.getSeenConstellations().isEmpty()) {
@@ -123,6 +128,17 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
                     bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 2 ? 0 : 5),
                     zLevel,
                     "gui.journal.bm.perks.name", 0xDDDDDDDD,
+                    mousePoint, textureBookmark);
+        }
+
+        KnowledgeFragmentData data = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
+        if (!data.getAllFragments().isEmpty() || true) {
+            offsetY += 20;
+            rectKnowledgeBookmark = drawBookmark(
+                    offsetX, offsetY,
+                    bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 3 ? 0 : 5),
+                    zLevel,
+                    "gui.journal.bm.knowledge.name", 0xDDDDDDDD,
                     mousePoint, textureBookmark);
         }
 
@@ -187,7 +203,11 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         return r;
     }
 
-    protected boolean handleJournalNavigationBookmarkClick(Point p) {
+    protected boolean handleBookmarkClick(Point p) {
+        return handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p);
+    }
+
+    private boolean handleJournalNavigationBookmarkClick(Point p) {
         if(bookmarkIndex != 0 && rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
             GuiJournalProgression.resetJournal();
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
@@ -203,10 +223,15 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
             Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
             return true;
         }
+        if(bookmarkIndex != 3 && rectKnowledgeBookmark != null && rectKnowledgeBookmark.contains(p)) {
+            GuiJournalProgression.resetJournal();
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalKnowledgeIndex());
+            return true;
+        }
         return false;
     }
 
-    protected boolean handleFragmentClick(Point mouse) {
+    private boolean handleFragmentClick(Point mouse) {
         for (Rectangle r : this.pageFragments.keySet()) {
             if (r.contains(mouse)) {
                 KnowledgeFragment frag = this.pageFragments.get(r);

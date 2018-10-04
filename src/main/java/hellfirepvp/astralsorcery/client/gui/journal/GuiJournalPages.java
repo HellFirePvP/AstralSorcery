@@ -318,7 +318,7 @@ public class GuiJournalPages extends GuiScreenJournal {
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(origin != null) {
-            if (handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p)) {
+            if (handleBookmarkClick(p)) {
                 saveSite = false;
                 return;
             }

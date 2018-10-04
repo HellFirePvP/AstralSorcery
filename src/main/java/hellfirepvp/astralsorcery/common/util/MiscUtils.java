@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -40,6 +41,7 @@ import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nonnull;
@@ -113,7 +115,7 @@ public class MiscUtils {
         return map;
     }
 
-    public static <T> void mergeList(List<T> src, List<T> dst) {
+    public static <T> void mergeList(Collection<T> src, List<T> dst) {
         for (T element : src) {
             if (!dst.contains(element)) {
                 dst.add(element);
@@ -176,6 +178,10 @@ public class MiscUtils {
             }
         }
         return true;
+    }
+
+    public static boolean isFluidBlock(IBlockState state) {
+        return state.getBlock() instanceof BlockLiquid || state.getBlock() instanceof BlockFluidBase;
     }
 
     public static boolean canPlayerBreakBlockPos(EntityPlayer player, BlockPos tryBreak) {

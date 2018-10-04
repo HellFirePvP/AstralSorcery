@@ -72,9 +72,10 @@ amulet.enchantment.add_to_existing_all.name=+%s %s to all existing Enchantments
 enchantment.astralsorcery.enchantment.as.nightvision.desc=Grants the wearer night vision.
 enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with tools with this enchantment will cause the drops to be as if they were smelted. ("Auto-Smelt")
 
-gui.journal.bm.knowledge.name=Knowledge
+gui.journal.bm.research.name=Research
 gui.journal.bm.constellations.name=Constellations
 gui.journal.bm.perks.name=Perks
+gui.journal.bm.knowledge.name=Knowledge
 gui.journal.c.unmapped=Unknown
 
 death.attack.as.stellar=%1$s disintegrated into Stardust
