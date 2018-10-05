@@ -195,14 +195,9 @@ public class MiscUtils {
             if (plTarget.isSpectator() || plTarget.isCreative()) {
                 return false;
             }
-            if (source != null && source instanceof EntityPlayer) {
-                for (ScorePlayerTeam team : source.getEntityWorld().getScoreboard().getTeams()) {
-                    if (team.getMembershipCollection().contains(source.getCachedUniqueIdString()) &&
-                            team.getMembershipCollection().contains(target.getCachedUniqueIdString()) &&
-                            !team.getAllowFriendlyFire()) {
-                        return false;
-                    }
-                }
+            if (source != null && source instanceof EntityPlayer &&
+                    !((EntityPlayer) source).canAttackPlayer(plTarget)) {
+                return false;
             }
         }
         return true;
