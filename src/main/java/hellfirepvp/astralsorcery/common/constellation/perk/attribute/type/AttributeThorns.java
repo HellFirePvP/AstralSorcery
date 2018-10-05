@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
@@ -67,10 +68,10 @@ public class AttributeThorns extends PerkAttributeType {
 
         if (reflectTarget != null) {
             float dmgReflected = event.getAmount() * reflectAmount;
-            if (dmgReflected > 0 && !event.getEntityLiving().equals(reflectTarget) &&
-                    (!(event.getEntityLiving() instanceof EntityPlayer)) ||
-                        (!((EntityPlayer) event.getEntityLiving()).isSpectator() && !((EntityPlayer) event.getEntityLiving()).isCreative())) {
-                reflectTarget.attackEntityFrom(CommonProxy.dmgSourceReflect.setSource(player), dmgReflected);
+            if (dmgReflected > 0 && !event.getEntityLiving().equals(reflectTarget)) {
+                if (MiscUtils.canPlayerAttackServer(event.getEntityLiving(), reflectTarget)) {
+                    reflectTarget.attackEntityFrom(CommonProxy.dmgSourceReflect.setSource(player), dmgReflected);
+                }
             }
         }
     }

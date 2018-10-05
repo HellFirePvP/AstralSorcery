@@ -66,12 +66,11 @@ public class EntityStarburst extends EntityThrowable {
             if(targetId == -1) {
                 AxisAlignedBB box = searchBox.offset(posX, posY, posZ);
                 List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, box, EntitySelectors.IS_ALIVE);
-                if(!(world instanceof WorldServer) || !world.getMinecraftServer().isPVPEnabled()) {
-                    entities.removeIf(e -> e instanceof EntityPlayer);
-                }
                 if(getThrower() != null) {
                     entities.remove(getThrower());
                 }
+                entities.removeIf(e -> !MiscUtils.canPlayerAttackServer(getThrower(), e));
+
                 EntityLivingBase closest = EntityUtils.selectClosest(entities, entityLivingBase -> entityLivingBase.getDistanceSq(this));
                 if(closest != null) {
                     targetId = closest.getEntityId();

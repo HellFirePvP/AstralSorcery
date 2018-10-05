@@ -23,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -175,6 +176,33 @@ public class MiscUtils {
                 }
             } catch (Exception exc) {
                 return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean canPlayerAttackServer(@Nullable EntityLivingBase source, @Nonnull EntityLivingBase target) {
+        if (target.isDead) {
+            return false;
+        }
+        if (target instanceof EntityPlayer) {
+            EntityPlayer plTarget = (EntityPlayer) target;
+            if (target.getEntityWorld() instanceof WorldServer &&
+                    target.getEntityWorld().getMinecraftServer() != null &&
+                    target.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
+                return false;
+            }
+            if (plTarget.isSpectator() || plTarget.isCreative()) {
+                return false;
+            }
+            if (source != null && source instanceof EntityPlayer) {
+                for (ScorePlayerTeam team : source.getEntityWorld().getScoreboard().getTeams()) {
+                    if (team.getMembershipCollection().contains(source.getCachedUniqueIdString()) &&
+                            team.getMembershipCollection().contains(target.getCachedUniqueIdString()) &&
+                            !team.getAllowFriendlyFire()) {
+                        return false;
+                    }
+                }
             }
         }
         return true;

@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -141,11 +142,7 @@ public class KeyLightningArc extends KeyPerk {
                         entities.remove(player);
                     }
                     entities.removeAll(visitedEntities);
-                    if(!entity.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
-                        entities.removeIf(e -> e instanceof EntityPlayer);
-                    }
-                    entities.removeIf(e -> e.isDead);
-                    entities.removeIf(e -> e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator()));
+                    entities.removeIf(e -> !MiscUtils.canPlayerAttackServer(player, e));
 
                     if(!entities.isEmpty()) {
                         EntityLivingBase tmpEntity = entity; //Final for lambda
