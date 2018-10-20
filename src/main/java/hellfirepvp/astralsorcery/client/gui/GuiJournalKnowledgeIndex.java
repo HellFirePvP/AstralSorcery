@@ -59,6 +59,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
 
     public GuiJournalKnowledgeIndex() {
         super(3);
+        this.closeWithInventoryKey = false;
 
         KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
         List<KnowledgeFragment> known = Lists.newArrayList(dat.getAllFragments());
@@ -94,8 +95,8 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
 
         drawDefault(textureResBlank, mouse);
 
-        drawSearchBox();
         drawFragmentIndices(mouseX, mouseY, partialTicks);
+        drawSearchBox();
 
         zLevel += 150;
         drawNavArrows(mouseX, mouseY, partialTicks);
@@ -115,6 +116,8 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
 
         GlStateManager.enableDepth();
         GlStateManager.color(1F, 1F, 1F, 1F);
+
+        TextureHelper.refreshTextureBindState();
     }
 
     @Override

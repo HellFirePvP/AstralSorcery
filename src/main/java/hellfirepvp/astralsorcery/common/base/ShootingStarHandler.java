@@ -50,7 +50,7 @@ public class ShootingStarHandler implements ITickHandler {
 
             int midnight = Math.round(Config.dayLength * 0.75F);
             int tfHalf = Config.dayLength / 12;
-            int ch = Config.dayLength / 4;
+            int ch = Config.dayLength / 8;
             int dayTime = (int) (player.getEntityWorld().getWorldTime() % Config.dayLength);
             if (dayTime >= (midnight - tfHalf) && dayTime <= (midnight + tfHalf)) {
                 if (rand.nextInt(ch) == 0) {
