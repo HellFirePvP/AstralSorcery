@@ -243,7 +243,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     private void currRenderAroundAxis(float parTicks, double angle, Vector3 axis) {
         float scale = this.scale;
         if(scaleFunc != null) {
-            scale = scaleFunc.getScale(this, parTicks, scale);
+            scale = scaleFunc.getScale(this, pos.clone(), parTicks, scale);
         }
         texture.bindTexture();
         RenderingUtils.renderAngleRotatedTexturedRect(pos, axis, angle, scale, u, v, uLength, vLength, parTicks);

@@ -72,7 +72,10 @@ public class ModIntegrationJEI implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-        subtypeRegistry.useNbtForSubtypes(ItemsAS.wand, ItemsAS.armorImbuedCape);
+        subtypeRegistry.useNbtForSubtypes(
+                ItemsAS.wand,
+                ItemsAS.armorImbuedCape,
+                ItemsAS.shiftingStar);
     }
 
     @Override

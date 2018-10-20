@@ -282,6 +282,7 @@ public class CommonProxy implements IGuiHandler {
         //manager.register(SpellCastingManager.PERK_TREE);
         manager.register(PatreonFlareManager.INSTANCE);
         manager.register(PerkEffectHelper.EVENT_INSTANCE);
+        manager.register(ShootingStarHandler.getInstance());
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);

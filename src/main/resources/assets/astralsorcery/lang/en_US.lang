@@ -463,6 +463,7 @@ entity.EntityIlluminationSpark.name=Illumination Spark
 entity.EntityCrystalTool.name=Crystal Tool
 entity.EntitySpectralTool.name=Spectral Tool
 entity.EntityLiquidSpark.name=Liquid Spark
+entity.EntityShootingStar.name=Shooting Star
 
 item.itemcraftingcomponent.aquamarine.name=Aquamarine
 item.itemcraftingcomponent.starmetal_ingot.name=Starmetal Ingot
@@ -506,7 +507,7 @@ item.itemsextant.name=Sextant
 item.itemsextant.upgraded=Augmented
 item.itemenchantmentamulet.name=Resplendent Prism
 item.itemenchantmentamulet.pure=Pure
-item.itemperkseal.name=
+item.itemperkseal.name=Perk Seal
 item.itemknowledgefragment.name=
 
 item.itemskyresonator.starlight.name=Fosic Resonator

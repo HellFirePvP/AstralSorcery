@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
@@ -47,12 +49,18 @@ public class RegistryKnowledgeFragments {
                 .setCanSeeTest(hasTier(ProgressionTier.CONSTELLATION_CRAFT)));
         mgr.register(onConstellations(cstKey + ".enchantments", cst)
                 .setCanSeeTest(hasTier(ProgressionTier.CONSTELLATION_CRAFT)));
-        mgr.register(onConstellations(cstKey + ".ritual", cst)
-                .setCanSeeTest(hasTier(ProgressionTier.ATTUNEMENT)));
-        mgr.register(onConstellations(cstKey + ".ritual.corrupted", cst)
-                .setCanSeeTest(hasTier(ProgressionTier.TRAIT_CRAFT)));
-        mgr.register(onConstellations(cstKey + ".mantle", cst)
-                .setCanSeeTest(hasTier(ProgressionTier.CONSTELLATION_CRAFT)));
+
+        if (cst instanceof IWeakConstellation) {
+            mgr.register(onConstellations(cstKey + ".ritual", cst)
+                    .setCanSeeTest(hasTier(ProgressionTier.ATTUNEMENT)));
+            mgr.register(onConstellations(cstKey + ".ritual.corrupted", cst)
+                    .setCanSeeTest(hasTier(ProgressionTier.TRAIT_CRAFT)));
+            mgr.register(onConstellations(cstKey + ".mantle", cst)
+                    .setCanSeeTest(hasTier(ProgressionTier.CONSTELLATION_CRAFT)));
+        } else if (cst instanceof IMinorConstellation) {
+            mgr.register(onConstellations(cstKey + ".trait", cst)
+                    .setCanSeeTest(hasTier(ProgressionTier.CONSTELLATION_CRAFT)));
+        }
     }
 
 }

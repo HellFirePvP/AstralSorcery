@@ -142,16 +142,16 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         drawCellsWithEffects(partialTicks);
         zLevel += 5;
 
-        drawRotationArrows(partialTicks);
+        Point mouse = new Point(mouseX, mouseY);
+        drawRotationArrows(partialTicks, mouse);
 
         TextureHelper.refreshTextureBindState();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
 
-    private void drawRotationArrows(float partialTicks) {
+    private void drawRotationArrows(float partialTicks, Point mouse) {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        Point mouse = getCurrentMousePoint();
         rectArrowCW = null;
         rectArrowCCW = null;
 

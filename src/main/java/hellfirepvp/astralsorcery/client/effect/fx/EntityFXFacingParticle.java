@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.effect.fx;
 
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
@@ -44,7 +45,9 @@ public class EntityFXFacingParticle extends EntityComplexFX {
     private float scale = 1F;
 
     private AlphaFunction fadeFunction = AlphaFunction.CONSTANT;
+    private ScaleFunction scaleFunction = ScaleFunction.IDENTITY;
     private RenderOffsetController renderOffsetController = null;
+    private boolean distanceRemovable = true;
     private float alphaMultiplier = 1F;
     private float colorRed = 1F, colorGreen = 1F, colorBlue = 1F;
     private double motionX = 0, motionY = 0, motionZ = 0;
@@ -69,6 +72,11 @@ public class EntityFXFacingParticle extends EntityComplexFX {
         this.x += x;
         this.y += y;
         this.z += z;
+        return this;
+    }
+
+    public EntityFXFacingParticle setScaleFunction(@Nonnull ScaleFunction scaleFunction) {
+        this.scaleFunction = scaleFunction;
         return this;
     }
 
@@ -111,8 +119,17 @@ public class EntityFXFacingParticle extends EntityComplexFX {
         return this;
     }
 
+    public EntityFXFacingParticle setDistanceRemovable(boolean distanceRemovable) {
+        this.distanceRemovable = distanceRemovable;
+        return this;
+    }
+
     public Vector3 getPosition() {
         return new Vector3(x, y, z);
+    }
+
+    public boolean isDistanceRemovable() {
+        return distanceRemovable;
     }
 
     @Override
@@ -166,7 +183,9 @@ public class EntityFXFacingParticle extends EntityComplexFX {
             intY = result.getY();
             intZ = result.getZ();
         }
-        RenderingUtils.renderFacingFullQuadVB(vbDrawing, intX, intY, intZ, pTicks, scale, 0, colorRed, colorGreen, colorBlue, alpha);
+        float fScale = scale;
+        fScale = scaleFunction.getScale(this, new Vector3(intX, intY, intZ), pTicks, fScale);
+        RenderingUtils.renderFacingFullQuadVB(vbDrawing, intX, intY, intZ, pTicks, fScale, 0, colorRed, colorGreen, colorBlue, alpha);
     }
 
     @Override

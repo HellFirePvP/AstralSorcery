@@ -224,25 +224,27 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         lastFramePage = null;
 
+        Point mouse = new Point(mouseX, mouseY);
+
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         switch (doublePageID) {
             case 0:
                 drawCstBackground();
-                drawDefault(textureResShellCst);
+                drawDefault(textureResShellCst, mouse);
                 break;
             case 1:
-                drawDefault(textureResBlank);
+                drawDefault(textureResBlank, mouse);
                 break;
             case 2:
-                drawDefault(textureResBlank);
+                drawDefault(textureResBlank, mouse);
                 break;
         }
         TextureHelper.refreshTextureBindState();
 
         zLevel += 150;
-        drawArrows(partialTicks);
-        drawNavArrows(partialTicks);
+        drawArrows(partialTicks, mouse);
+        drawNavArrows(partialTicks, mouse);
         switch (doublePageID) {
             case 0:
                 drawConstellation(partialTicks);
@@ -316,9 +318,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         }
     }
 
-    private void drawNavArrows(float partialTicks) {
+    private void drawNavArrows(float partialTicks, Point mouse) {
         GlStateManager.disableDepth();
-        Point mouse = getCurrentMousePoint();
         rectNext = null;
         rectPrev = null;
         if(doublePageID - 1 >= 0) {
@@ -571,8 +572,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.color(1F, 1F, 1F, 1F);
     }
 
-    private void drawArrows(float partialTicks) {
-        Point mouse = getCurrentMousePoint();
+    private void drawArrows(float partialTicks, Point mouse) {
         int width = 30;
         int height = 15;
         rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);

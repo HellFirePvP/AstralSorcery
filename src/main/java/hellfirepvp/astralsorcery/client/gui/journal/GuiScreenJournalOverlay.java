@@ -34,7 +34,7 @@ public class GuiScreenJournalOverlay extends GuiWHScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        origin.drawScreen(mouseX, mouseY, partialTicks);
+        origin.drawScreen(0, 0, partialTicks);
     }
 
     @Override

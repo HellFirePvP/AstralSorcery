@@ -8,12 +8,17 @@
 
 package hellfirepvp.astralsorcery.common.item.useables;
 
+import hellfirepvp.astralsorcery.common.entities.EntityShootingStar;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -31,6 +36,16 @@ public class ItemPerkSeal extends Item {
         setMaxStackSize(16);
         setMaxDamage(0);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
+        if (!worldIn.isRemote) {
+            Vector3 movement = Vector3.positiveYRandom().setY(0).normalize().multiply(0.2);
+            EntityShootingStar star = new EntityShootingStar(player.getEntityWorld(), player.posX, 560, player.posZ, movement);
+            player.getEntityWorld().spawnEntity(star);
+        }
+        return super.onItemRightClick(worldIn, player, handIn);
     }
 
     public static int getPlayerSealCount(EntityPlayer player) {

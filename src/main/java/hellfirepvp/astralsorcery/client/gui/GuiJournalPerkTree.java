@@ -166,7 +166,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        drawDefault(textureResShell);
+        drawDefault(textureResShell, new Point(mouseX, mouseY));
         drawBackground(zLevel - 50);
 
         ScaledResolution res = new ScaledResolution(mc);

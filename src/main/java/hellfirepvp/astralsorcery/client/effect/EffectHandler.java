@@ -367,7 +367,7 @@ public final class EffectHandler {
                 continue;
             }
             effect.tick();
-            if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
+            if (effect.canRemove() || (effect.isDistanceRemovable() && effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq)) {
                 effect.flagAsRemoved();
                 fastRenderParticles.remove(effect);
             }
@@ -378,7 +378,7 @@ public final class EffectHandler {
                 continue;
             }
             effect.tick();
-            if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
+            if (effect.canRemove() || (effect.isDistanceRemovable() && effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq)) {
                 effect.flagAsRemoved();
                 fastRenderDepthParticles.remove(effect);
             }
@@ -389,7 +389,7 @@ public final class EffectHandler {
                 continue;
             }
             effect.tick();
-            if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
+            if (effect.canRemove() || (effect.isDistanceRemovable() && effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq)) {
                 effect.flagAsRemoved();
                 fastRenderGatewayParticles.remove(effect);
             }
