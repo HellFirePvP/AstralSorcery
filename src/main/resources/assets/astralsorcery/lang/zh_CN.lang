@@ -41,6 +41,7 @@ potion.as.crafted.name=星之酿
 misc.moreInformation=<按住 SHIFT 来查看详细内容>
 misc.craftInformation=§7点击查看合成
 misc.grindstone.double=可能双倍产出：%s
+misc.transmutation.constellation=需要从 %s 聚焦星能
 misc.knowledge.missing=一个空白光亮的卷轴
 misc.knowledge.inscribed=包含了 %s 的知识
 misc.knowledge.inscribed.creative=包含了大量的知识
@@ -71,9 +72,10 @@ amulet.enchantment.add_to_existing_all.name=对现有的所有附魔+%s%s
 enchantment.astralsorcery.enchantment.as.nightvision.desc=赋予佩戴者夜视效果。
 enchantment.astralsorcery.enchantment.as.smelting.desc=使用带有此附魔的工具开采的方块将获得熔炼后的掉落物。("自动冶炼")
 
-gui.journal.bm.knowledge.name=研究
+gui.journal.bm.research.name=研究
 gui.journal.bm.constellations.name=星座
 gui.journal.bm.perks.name=强化
+gui.journal.bm.knowledge.name=知识
 gui.journal.c.unmapped=未知
 
 death.attack.as.stellar=%1$s崩解成星尘
@@ -153,7 +155,7 @@ astralsorcery.journal.HAND_TELESCOPE.4.text=虽然望远镜是最基础的观测
 
 research.GRINDSTONE.name=砂轮
 astralsorcery.journal.GRINDSTONE.1.text=尽管工作台可以使用所有材料，但为了更完全的发挥某些材料的价值，需要用专业工具。它就是由大理石做成的砂轮。它能让你对不同类型的水晶石的纯度和抛光度进行打磨，还能将某些材料磨成粉。<NL>将物品放置在砂轮上右键以进行工作。在空手时shift+右键可以取下物品。
-astralsorcery.journal.GRINDSTONE.3.text=在试图对水晶石进行重塑抛光时发现将水晶石磨制成适当的程度十分麻烦。为了防止把水晶石磨碎最好时不时检查一番。由于水晶石成型所需要的高精密度，所以无法用机械设备代替人工。<NL>也行砂轮还能磨制除水晶石之外的其他东西。
+astralsorcery.journal.GRINDSTONE.3.text=在试图对水晶石进行重塑抛光时发现将水晶石磨制成适当的程度十分麻烦。为了防止把水晶石磨碎最好时不时检查一番。由于水晶石成型所需要的高精密度，所以无法用机械设备代替人工。<NL>也许砂轮还能磨制除水晶石之外的其他东西。
 
 research.TOOLS.name=水晶石工具
 astralsorcery.journal.TOOLS.1.text=经过一番仔细的检测后，很明显，在妥善的准备与处理后纯净的水晶石并不像刚挖出来的那样脆弱。用它们制作的工具比其他普通工具具有更高的耐久。具体来说，它们与正常的使用方式没有什么差别。水晶石工具的属性取决于合成时使用的水晶石，它们的属性（例如攻击伤害和挖掘速度）由水晶石的形状决定。
@@ -405,6 +407,12 @@ astralsorcery.journal.ATT_TRAIT.2.text=将共鸣过的共鸣水晶放入共鸣�
 research.ENH_SHIFTING_STAR.name=辐射之星
 astralsorcery.journal.ENH_SHIFTING_STAR.1.text=更替之星唯一的问题就是清除星能时把体内的星能全部清光了。<NL>将更替之星的能量集中到一个视星等为明亮的星座上进行修正，可以减轻这种损失。随后你就能通过与星座重新共鸣来恢复体内的星能，并引导体内残余的星能重新强化自身。
 
+research.RESONATOR_AREA_SIZE.name=多米刻共振器
+astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=
+
+research.ATT_PERKS_SEAL.name=能力的封印
+astralsorcery.journal.ATT_PERKS_SEAL.1.text=
+
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
 astralsorcery.journal.recipe.constellation=需要与 %s 星座进行聚焦
@@ -455,6 +463,7 @@ entity.EntityIlluminationSpark.name=荧光火花
 entity.EntityCrystalTool.name=水晶石工具
 entity.EntitySpectralTool.name=光谱调整器
 entity.EntityLiquidSpark.name=液态火花
+entity.EntityShootingStar.name=流星
 
 item.itemcraftingcomponent.aquamarine.name=海蓝宝石
 item.itemcraftingcomponent.starmetal_ingot.name=星辉锭
@@ -498,6 +507,8 @@ item.itemsextant.name=六分仪
 item.itemsextant.upgraded=增益型
 item.itemenchantmentamulet.name=璀璨棱镜
 item.itemenchantmentamulet.pure=纯净
+item.itemperkseal.name=能力封印
+item.itemknowledgefragment.name=
 
 item.itemskyresonator.starlight.name=法斯刻共振器
 item.itemskyresonator.liquid.name=艾克斯共振器
@@ -695,7 +706,7 @@ perk.info.active=激活
 perk.info.points=可用属性点数：%s
 perk.info.disabled=在你的整合包内禁用技能效果。
 perk.info.sealed=已封印
-perk.info.sealed.break=[双击打开]
+perk.info.sealed.break=[双击解封]
 perk.info.sealed.usage=将封印拖拽到你想封印的能力上。
 
 perk.category.root.name=根源技能
