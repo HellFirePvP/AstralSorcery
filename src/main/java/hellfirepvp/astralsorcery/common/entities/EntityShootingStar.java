@@ -12,16 +12,26 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.base.ShootingStarHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.util.ASDataSerializers;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.effect.ShootingStarExplosion;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,14 +47,15 @@ import java.util.Random;
 public class EntityShootingStar extends EntityThrowable implements EntityTechnicalAmbient {
 
     private static final DataParameter<Vector3> SHOOT_CONSTANT = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.VECTOR);
+    private static final DataParameter<Long> EFFECT_SEED = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.LONG);
 
     //Not saved or synced value to deny 'capturing' one.
     private boolean removalPending = true;
-    private long rSeed;
+    //Make sure to despawn if idle for too long
+    private long lastTrackedTick;
 
     public EntityShootingStar(World worldIn) {
         super(worldIn);
-        this.rSeed = rand.nextLong();
     }
 
     public EntityShootingStar(World worldIn, double x, double y, double z, Vector3 shot) {
@@ -52,7 +63,8 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         this.setSize(0.1F, 0.1F);
         this.dataManager.set(SHOOT_CONSTANT, shot);
         this.removalPending = false;
-        this.rSeed = rand.nextLong();
+        this.dataManager.set(EFFECT_SEED, rand.nextLong());
+        this.lastTrackedTick = worldIn.getTotalWorldTime();
         correctMovement();
     }
 
@@ -61,6 +73,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         super.entityInit();
 
         this.dataManager.register(SHOOT_CONSTANT, new Vector3());
+        this.dataManager.register(EFFECT_SEED, 0L);
     }
 
     private void correctMovement() {
@@ -74,13 +87,28 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         }
     }
 
+    public long getEffectSeed() {
+        return this.dataManager.get(EFFECT_SEED);
+    }
+
     @Override
     public void onUpdate() {
         super.onUpdate();
 
-        if (!world.isRemote && (removalPending || ConstellationSkyHandler.getInstance().isDay(world))) {
-            setDead();
-            return;
+        if (!world.isRemote) {
+            if ((removalPending || ConstellationSkyHandler.getInstance().isDay(world)) ||
+                    world.getTotalWorldTime() - lastTrackedTick >= 20) {
+                setDead();
+                return;
+            }
+            lastTrackedTick = world.getTotalWorldTime();
+
+            if (isInWater() || isInLava()) {
+                RayTraceResult rtr = new RayTraceResult(new Vec3d(0, 0, 0), EnumFacing.UP, this.getPosition());
+                if (!ForgeEventFactory.onProjectileImpact(this, rtr)) {
+                    this.onImpact(rtr);
+                }
+            }
         }
 
         correctMovement();
@@ -120,19 +148,19 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         };
 
         for (int i = 0; i < 4; i++) {
-            if (rand.nextFloat() > 0.65F) continue;
-            Vector3 dir = shot.clone().multiply(-(0.5F + rand.nextFloat() * 0.4F));
-            dir.setX(dir.getX() + rand.nextFloat() * 0.015 * (rand.nextBoolean() ? 1 : -1));
-            dir.setZ(dir.getZ() + rand.nextFloat() * 0.015 * (rand.nextBoolean() ? 1 : -1));
+            if (rand.nextFloat() > 0.75F) continue;
+            Vector3 dir = shot.clone().multiply(rand.nextFloat() * -0.6F);
+            dir.setX(dir.getX() + rand.nextFloat() * 0.008 * (rand.nextBoolean() ? 1 : -1));
+            dir.setZ(dir.getZ() + rand.nextFloat() * 0.008 * (rand.nextBoolean() ? 1 : -1));
             //dir.rotate(Math.toRadians((30 + rand.nextInt(15)) * (rand.nextBoolean() ? 1 : -1)), dir.perpendicular());
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(this.posX, this.posY, this.posZ);
             p.setColor(Color.WHITE)
                     .setDistanceRemovable(false)
-                    .scale(1.5F + rand.nextFloat() * 0.7F)
+                    .scale(1.2F + rand.nextFloat() * 0.5F)
                     .motion(dir.getX(), dir.getY(), dir.getZ())
                     .setAlphaMultiplier(0.85F)
                     .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                    .setMaxAge(100 + rand.nextInt(40));
+                    .setMaxAge(90 + rand.nextInt(40));
             //Position within view distance
             p.setRenderOffsetController(renderCtrl);
             //Make smaller if further away, not too linearly though.
@@ -142,7 +170,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         float scale = 4F + rand.nextFloat() * 3F;
         int age = 5 + rand.nextInt(2);
 
-        Random seeded = new Random(rSeed);
+        Random seeded = new Random(getEffectSeed());
         EntityFXFacingParticle star = EffectHelper.genericFlareParticle(this.posX, this.posY, this.posZ);
         star.setColor(Color.getHSBColor(seeded.nextFloat() * 360F, 1F, 1F))
                 .setDistanceRemovable(false)
@@ -163,11 +191,30 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
 
     @Override
     protected void onImpact(RayTraceResult result) {
-        if (removalPending) {
+        if (removalPending || result.typeOfHit == RayTraceResult.Type.MISS) {
             return;
         }
 
         setDead();
+
+        BlockPos hit = result.getBlockPos();
+        if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
+            hit = result.entityHit.getPosition();
+        }
+        if (MiscUtils.isChunkLoaded(world, hit)) {
+            IBlockState state = world.getBlockState(hit);
+            boolean eligableForExplosion = true;
+            if (MiscUtils.isFluidBlock(state)) {
+                Fluid f = MiscUtils.tryGetFuild(state);
+                if (f != null) {
+                    if (f.getTemperature(world, hit) <= 300) { //About room temp; incl. water
+                        eligableForExplosion = false;
+                    }
+                }
+            }
+            ShootingStarExplosion.play(world, Vector3.atEntityCenter(this), !eligableForExplosion, getEffectSeed());
+        }
+
     }
 
     @Override

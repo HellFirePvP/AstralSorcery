@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
 import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
+import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
+import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -29,18 +31,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemKnowledgeFragment
+ * Class: ItemKnowledgeShard
  * Created by HellFirePvP
- * Date: 29.09.2018 / 15:20
+ * Date: 21.10.2018 / 14:35
  */
-public class ItemKnowledgeFragment extends Item {
+public class ItemKnowledgeShard extends Item implements ItemHighlighted {
 
-    public ItemKnowledgeFragment() {
+    public ItemKnowledgeShard() {
         setMaxStackSize(1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
@@ -54,13 +58,33 @@ public class ItemKnowledgeFragment extends Item {
 
         if (!worldIn.isRemote &&
                 !stack.isEmpty() &&
-                stack.getItem() instanceof ItemKnowledgeFragment &&
+                stack.getItem() instanceof ItemKnowledgeShard &&
                 !getSeed(stack).isPresent()) {
             long baseRand = (((entityIn.getEntityId() << 6) | itemSlot) << 16) | worldIn.getTotalWorldTime();
             Random r = new Random(baseRand);
             r.nextLong();
             setSeed(stack, r.nextLong());
         }
+    }
+
+    @Override
+    public Color getHightlightColor(ItemStack stack) {
+        return new Color(0x00BBFF);
+    }
+
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public Entity createEntity(World world, Entity entity, ItemStack itemstack) {
+        EntityItemHighlighted ei = new EntityItemHighlighted(world, entity.posX, entity.posY, entity.posZ, itemstack);
+        ei.setDefaultPickupDelay();
+        ei.motionX = entity.motionX;
+        ei.motionY = entity.motionY;
+        ei.motionZ = entity.motionZ;
+        return ei;
     }
 
     @Nullable
@@ -81,11 +105,11 @@ public class ItemKnowledgeFragment extends Item {
     public static List<KnowledgeFragment> gatherFragments(EntityPlayer player) {
         Collection<ItemStack> fragItems = ItemUtils.findItemsInInventory(
                 player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
-                new ItemStack(ItemsAS.knowledgeFragment),
+                new ItemStack(ItemsAS.knowledgeShard),
                 false);
         List<KnowledgeFragment> frags = new LinkedList<>();
         for (ItemStack stack : fragItems) {
-            if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
+            if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeShard)) continue;
             KnowledgeFragment fr = resolveFragment(stack);
             if (!frags.contains(fr)) {
                 frags.add(fr);
@@ -95,12 +119,12 @@ public class ItemKnowledgeFragment extends Item {
     }
 
     public static void setSeed(ItemStack stack, long seed) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) return;
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeShard)) return;
         NBTHelper.getPersistentData(stack).setLong("seed", seed);
     }
 
     public static Optional<Long> getSeed(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) return Optional.empty();
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeShard)) return Optional.empty();
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
         if (!cmp.hasKey("seed")) {
             return Optional.empty();

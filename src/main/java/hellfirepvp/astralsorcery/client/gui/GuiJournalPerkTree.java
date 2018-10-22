@@ -314,7 +314,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                     AbstractPerk perk = rctPerk.getKey();
                     PlayerProgress prog = ResearchManager.clientProgress;
 
-                    toolTip.add(I18n.format(perk.getUnlocalizedName() + ".name"));
+                    toolTip.add(perk.getCategory().getTextFormatting() + I18n.format(perk.getUnlocalizedName() + ".name"));
                     perk.getLocalizedTooltip().forEach(line -> toolTip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + line));
                     toolTip.add("");
 
@@ -332,7 +332,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                     if (Minecraft.getMinecraft().gameSettings.advancedItemTooltips) {
                         String loc = perk.getCategory().getLocalizedName();
                         if (loc != null) {
-                            toolTip.add(perk.getCategory().getTextFormatting() + "[" + loc + "]");
+                            toolTip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + "[" + loc + "]");
                         }
                     }
                     Collection<String> modInfo = perk.getSource();

@@ -42,7 +42,7 @@ public class ItemPerkSeal extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
         if (!worldIn.isRemote) {
             Vector3 movement = Vector3.positiveYRandom().setY(0).normalize().multiply(0.2);
-            EntityShootingStar star = new EntityShootingStar(player.getEntityWorld(), player.posX, 560, player.posZ, movement);
+            EntityShootingStar star = new EntityShootingStar(player.getEntityWorld(), player.posX, 200, player.posZ, movement);
             player.getEntityWorld().spawnEntity(star);
         }
         return super.onItemRightClick(worldIn, player, handIn);

@@ -26,6 +26,8 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -137,7 +139,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         }
 
         KnowledgeFragmentData data = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
-        if (!data.getAllFragments().isEmpty() || true) { //TODO remove ||true
+        if (!data.getAllFragments().isEmpty()) {
             offsetY += bookmarkGap;
             rectKnowledgeBookmark = drawBookmark(
                     offsetX, offsetY,
@@ -245,6 +247,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
             if (r.contains(mouse)) {
                 KnowledgeFragment frag = this.pageFragments.get(r);
                 Minecraft.getMinecraft().displayGuiScreen(new GuiJournalOverlayKnowledge(this, frag));
+                SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
                 return true;
             }
         }

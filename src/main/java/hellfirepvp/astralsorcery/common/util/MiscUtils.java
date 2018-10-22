@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -43,6 +44,8 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nonnull;
@@ -205,6 +208,24 @@ public class MiscUtils {
 
     public static boolean isFluidBlock(IBlockState state) {
         return state.getBlock() instanceof BlockLiquid || state.getBlock() instanceof BlockFluidBase;
+    }
+
+    @Nullable
+    public static Fluid tryGetFuild(IBlockState state) {
+        if (!isFluidBlock(state)) {
+            return null;
+        }
+        if (state.getBlock() instanceof BlockLiquid) {
+            Material mat = state.getMaterial();
+            if (mat == Material.WATER) {
+                return FluidRegistry.WATER;
+            } else if (mat == Material.LAVA) {
+                return FluidRegistry.LAVA;
+            }
+        } else if (state.getBlock() instanceof BlockFluidBase) {
+            return ((BlockFluidBase) state.getBlock()).getFluid();
+        }
+        return null;
     }
 
     public static boolean canPlayerBreakBlockPos(EntityPlayer player, BlockPos tryBreak) {

@@ -45,10 +45,10 @@ public abstract class AbstractPerk {
 
     protected static final Random rand = new Random();
 
-    public static final PerkCategory CATEGORY_BASE = new PerkCategory("base");
-    public static final PerkCategory CATEGORY_ROOT = new PerkCategory("root");
-    public static final PerkCategory CATEGORY_MAJOR = new PerkCategory("major");
-    public static final PerkCategory CATEGORY_KEY = new PerkCategory("key");
+    public static final PerkCategory CATEGORY_BASE = new PerkCategory("base", TextFormatting.WHITE.toString());
+    public static final PerkCategory CATEGORY_ROOT = new PerkCategory("root", TextFormatting.WHITE.toString());
+    public static final PerkCategory CATEGORY_MAJOR = new PerkCategory("major", TextFormatting.WHITE.toString());
+    public static final PerkCategory CATEGORY_KEY = new PerkCategory("key", TextFormatting.GOLD.toString());
 
     private final ResourceLocation registryName;
     protected final Point offset;
@@ -234,9 +234,9 @@ public abstract class AbstractPerk {
         private final String unlocName;
         private String textFormatting;
 
-        public PerkCategory(@Nonnull String unlocName) {
+        public PerkCategory(@Nonnull String unlocName, @Nonnull String formattingPrefix) {
             this.unlocName = unlocName;
-            this.textFormatting = TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString();
+            this.textFormatting = formattingPrefix;
         }
 
         public String getUnlocalizedName() {

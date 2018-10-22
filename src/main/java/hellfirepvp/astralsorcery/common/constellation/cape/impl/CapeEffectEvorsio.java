@@ -70,8 +70,8 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
     @SideOnly(Side.CLIENT)
     public static void playBlockBreakParticles(PktParticleEvent event) {
         Vector3 at = event.getVec();
-        if(!Minecraft.getMinecraft().player.isCreative() && event.getAdditionalData() != 0) {
-            int stateId = (int) Math.round(event.getAdditionalData());
+        if(!Minecraft.getMinecraft().player.isCreative() && event.getAdditionalDataLong() != 0) {
+            int stateId = (int) event.getAdditionalDataLong();
             IBlockState state = Block.getStateById(stateId);
             if(state != Blocks.AIR.getDefaultState()) {
                 ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
@@ -194,7 +194,7 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
                         IBlockState present = world.getBlockState(other);
                         if(MiscUtils.breakBlockWithPlayer(other, player)) {
                             PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CAPE_EVORSIO_BREAK, other);
-                            ev.setAdditionalData(Block.getStateId(present));
+                            ev.setAdditionalDataLong(Block.getStateId(present));
                             PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, other, 16));
                         }
                     }
@@ -213,7 +213,7 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
                         IBlockState present = world.getBlockState(other);
                         if(MiscUtils.breakBlockWithPlayer(other, player)) {
                             PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CAPE_EVORSIO_BREAK, other);
-                            ev.setAdditionalData(Block.getStateId(present));
+                            ev.setAdditionalDataLong(Block.getStateId(present));
                             PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, other, 16));
                         }
                     }

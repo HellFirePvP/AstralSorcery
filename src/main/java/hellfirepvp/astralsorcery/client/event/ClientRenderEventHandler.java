@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -113,7 +114,9 @@ public class ClientRenderEventHandler {
         }
         if(Minecraft.getMinecraft().currentScreen != null &&
                 Minecraft.getMinecraft().currentScreen instanceof GuiScreenJournal &&
-                (event.getGui() == null || !(event.getGui() instanceof GuiScreenJournal))) {
+                (event.getGui() == null ||
+                        (!(event.getGui() instanceof GuiScreenJournal) &&
+                                !(event.getGui() instanceof GuiScreenJournalOverlay)))) {
             SoundHelper.playSoundClient(Sounds.bookClose, 1F, 1F);
         }
     }

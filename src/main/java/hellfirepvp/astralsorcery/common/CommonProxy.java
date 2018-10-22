@@ -114,6 +114,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
         Config.addDynamicEntry(new TileAccelerationBlacklist.TileAccelBlacklistEntry());
+        Config.addDynamicEntry(new ShootingStarHandler.StarConfigEntry());
     }
 
     public void registerConfigDataRegistries() {

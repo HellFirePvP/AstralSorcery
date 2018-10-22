@@ -160,7 +160,7 @@ public abstract class KnowledgeFragment {
 
     @SideOnly(Side.CLIENT)
     public String getLocalizedIndexName() {
-        return String.format("%s: %s", this.unlocPrefix, this.getUnlocalizedName());
+        return String.format("%s: %s", I18n.format(this.unlocPrefix), this.getLocalizedName());
     }
 
     public ResourceLocation getRegistryName() {

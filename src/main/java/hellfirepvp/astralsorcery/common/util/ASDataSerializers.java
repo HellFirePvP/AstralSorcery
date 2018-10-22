@@ -26,6 +26,28 @@ import java.io.IOException;
  */
 public class ASDataSerializers {
 
+    public static DataSerializer<Long> LONG = new DataSerializer<Long>() {
+        @Override
+        public void write(PacketBuffer buf, Long value) {
+            buf.writeLongLE(value);
+        }
+
+        @Override
+        public Long read(PacketBuffer buf) {
+            return buf.readLongLE();
+        }
+
+        @Override
+        public DataParameter<Long> createKey(int id) {
+            return new DataParameter<>(id, this);
+        }
+
+        @Override
+        public Long copyValue(Long value) {
+            return new Long(value);
+        }
+    };
+
     public static DataSerializer<Vector3> VECTOR = new DataSerializer<Vector3>() {
         @Override
         public void write(PacketBuffer buf, Vector3 value) {
@@ -78,6 +100,7 @@ public class ASDataSerializers {
     public static void registerSerializers() {
         DataSerializers.registerSerializer(VECTOR);
         DataSerializers.registerSerializer(FLUID);
+        DataSerializers.registerSerializer(LONG);
     }
 
 }

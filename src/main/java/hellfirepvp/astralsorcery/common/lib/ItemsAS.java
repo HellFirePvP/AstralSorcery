@@ -52,7 +52,7 @@ public class ItemsAS {
     public static ItemInfusedGlass infusedGlass;
     public static ItemKnowledgeShare knowledgeShare;
     public static ItemPerkSeal perkSeal;
-    public static ItemKnowledgeFragment knowledgeFragment;
+    public static ItemKnowledgeShard knowledgeShard;
 
     public static ItemUsableDust useableDust;
 

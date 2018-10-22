@@ -140,7 +140,7 @@ public class KeyChainMining extends KeyPerk {
                                 block.dropXpOnBlockBreak(world, at, exp);
                             }
                             PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, at);
-                            ev.setAdditionalData(Block.getStateId(atState));
+                            ev.setAdditionalDataLong(Block.getStateId(atState));
                             PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 16));
                             broken++;
                         }

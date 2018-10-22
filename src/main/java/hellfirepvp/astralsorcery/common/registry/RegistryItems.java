@@ -139,7 +139,7 @@ public class RegistryItems {
         useableDust = registerItem(new ItemUsableDust());
         knowledgeShare = registerItem(new ItemKnowledgeShare());
         perkSeal = registerItem(new ItemPerkSeal());
-        knowledgeFragment = registerItem(new ItemKnowledgeFragment());
+        knowledgeShard = registerItem(new ItemKnowledgeShard());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());
