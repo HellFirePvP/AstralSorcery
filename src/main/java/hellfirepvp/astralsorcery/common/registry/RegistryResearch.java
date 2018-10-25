@@ -389,6 +389,10 @@ public class RegistryResearch {
         resAttPerks.addPage(getTextPage("ATT_PERKS.1"));
         resAttPerks.addPage(getTextPage("ATT_PERKS.2"));
 
+        ResearchNode resAttPerkSeal = new ResearchNode(new ItemStack(ItemsAS.perkSeal), "ATT_PERKS_SEAL", 7, 2);
+        resAttPerkSeal.addPage(getTextPage("ATT_PERKS_SEAL.1"));
+        resAttPerkSeal.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rPerkSeal));
+
         ResearchNode resCrystalAtt = new ResearchNode(new ItemStack(ItemsAS.rockCrystal), "ATT_CRYSTAL", 7, 4);
         resCrystalAtt.addPage(getTextPage("ATT_CRYSTAL.1"));
         resCrystalAtt.addPage(getTextPage("ATT_CRYSTAL.2"));
@@ -474,6 +478,7 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(ItemsAS.shiftingStar, 1, OreDictionary.WILDCARD_VALUE),          resShiftStar,            0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.grapplingWand, 1, OreDictionary.WILDCARD_VALUE),         resToolGrapple,          0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.knowledgeShare, 1, OreDictionary.WILDCARD_VALUE),        resKnowledgeShare,       0, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(ItemsAS.perkSeal,       1, OreDictionary.WILDCARD_VALUE),        resAttPerkSeal,          0, ResearchProgression.ATTUNEMENT);
 
         regAttunement.register(resLens);
         regAttunement.register(resLinkTool);
@@ -495,6 +500,7 @@ public class RegistryResearch {
         regAttunement.register(resToolGrapple);
         regAttunement.register(resKnowledgeShare);
         regAttunement.register(resResonatorStructure);
+        regAttunement.register(resAttPerkSeal);
 
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);
@@ -513,6 +519,7 @@ public class RegistryResearch {
         resShiftStar.addSourceConnectionFrom(resPlayerAtt);
         resToolGrapple.addSourceConnectionFrom(resQuickCharge);
         resResonatorStructure.addSourceConnectionFrom(resStarResult);
+        resAttPerkSeal.addSourceConnectionFrom(resAttPerks);
     }
 
     private static void initCrafting() {

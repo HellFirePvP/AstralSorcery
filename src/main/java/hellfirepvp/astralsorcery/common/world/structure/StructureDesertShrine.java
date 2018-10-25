@@ -37,7 +37,7 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     @Override
     public void generate(BlockPos pos, World world, Random rand) {
-        getStructureTemplate().placeInWorld(world, pos.down());
+        generateAsSubmergedStructure(world, pos);
         getBuffer(world).markStructureGeneration(pos, getStructureType());
     }
 

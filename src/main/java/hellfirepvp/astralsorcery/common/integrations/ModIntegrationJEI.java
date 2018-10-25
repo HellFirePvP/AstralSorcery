@@ -72,7 +72,10 @@ public class ModIntegrationJEI implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-        subtypeRegistry.useNbtForSubtypes(ItemsAS.wand, ItemsAS.armorImbuedCape);
+        subtypeRegistry.useNbtForSubtypes(
+                ItemsAS.wand,
+                ItemsAS.armorImbuedCape,
+                ItemsAS.shiftingStar);
     }
 
     @Override
@@ -152,6 +155,7 @@ public class ModIntegrationJEI implements IModPlugin {
     }
 
     private void hideItems(IIngredientBlacklist blacklist) {
+        blacklist.addIngredientToBlacklist(new ItemStack(ItemsAS.knowledgeShard));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockFakeTree));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.translucentBlock));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockVanishing));
@@ -235,7 +239,7 @@ public class ModIntegrationJEI implements IModPlugin {
             }
         }
         if(unresolvedRecipes.size() > 0) {
-            AstralSorcery.log.warn("[AstralSorcery] JEI Initialization Ended up with " + unresolvedRecipes.size() + " unresolvable crafttweaker recipes!");
+            AstralSorcery.log.warn("JEI Initialization Ended up with " + unresolvedRecipes.size() + " unresolvable crafttweaker recipes!");
         }
     }
 

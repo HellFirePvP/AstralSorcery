@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.base;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
@@ -90,20 +91,20 @@ public class LightOreTransmutations {
     public static Transmutation registerTransmutation(Transmutation tr) {
         for (Transmutation t : registeredTransmutations) {
             if(t.matchesInput(tr)) {
-                AstralSorcery.log.warn("[AstralSorcery] Tried to register Transmutation that has the same input as an already existing one.");
+                AstralSorcery.log.warn("Tried to register Transmutation that has the same input as an already existing one.");
                 return null;
             }
         }
         if(!tr.hasValidInput()) {
-            AstralSorcery.log.warn("[AstralSorcery] Tried to register Transmutation with null input - Skipping!");
+            AstralSorcery.log.warn("Tried to register Transmutation with null input - Skipping!");
             return null;
         }
         if(tr.getInputAsBlock().equals(Blocks.CRAFTING_TABLE)) {
-            AstralSorcery.log.warn("[AstralSorcery] Cannot register Transmutation of workbench -> something. By default occupied by general crafting which is handled differently.");
+            AstralSorcery.log.warn("Cannot register Transmutation of workbench -> something. By default occupied by general crafting which is handled differently.");
             return null;
         }
         if(tr.output == null) {
-            AstralSorcery.log.warn("[AstralSorcery] Tried to register Transmutation with null output - Skipping!");
+            AstralSorcery.log.warn("Tried to register Transmutation with null output - Skipping!");
             return null;
         }
         registeredTransmutations.add(tr);
@@ -140,6 +141,8 @@ public class LightOreTransmutations {
         @Nonnull
         private final ItemStack inStack;
 
+        private IWeakConstellation requiredType = null;
+
         public Transmutation(Block input, IBlockState output, double cost) {
             this(input, output, ItemStack.EMPTY, ItemStack.EMPTY, cost);
         }
@@ -168,6 +171,15 @@ public class LightOreTransmutations {
             this.cost = cost;
             this.outStack = outputDisplay;
             this.inStack = inputDisplay;
+        }
+
+        public Transmutation setRequiredType(IWeakConstellation requiredType) {
+            this.requiredType = requiredType;
+            return this;
+        }
+
+        public IWeakConstellation getRequiredType() {
+            return requiredType;
         }
 
         public Block getInputAsBlock() {

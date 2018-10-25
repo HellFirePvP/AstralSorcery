@@ -55,7 +55,7 @@ public class KeyRampage extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && side == Side.SERVER && prog.hasPerkUnlocked(this)) {
+            if (prog != null && side == Side.SERVER && prog.hasPerkEffect(this)) {
                 float ch = chance;
                 ch = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, ch);

@@ -54,6 +54,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public boolean wasOnceAttuned = false;
     public Map<AbstractPerk, NBTTagCompound> usedPerks = new HashMap<>();
     public List<String> freePointTokens = Lists.newArrayList();
+    public List<AbstractPerk> sealedPerks = Lists.newArrayList();
     public double perkExp = 0;
 
     public PktSyncKnowledge() {}
@@ -70,6 +71,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.attunedConstellation = progress.getAttunedConstellation();
         this.freePointTokens = progress.getFreePointTokens();
         this.usedPerks = progress.getUnlockedPerkData();
+        this.sealedPerks = progress.getSealedPerks();
         this.perkExp = progress.getPerkExp();
         this.wasOnceAttuned = progress.wasOnceAttuned();
         this.usedTargets = progress.getUsedTargets();
@@ -116,7 +118,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             String attunement = ByteBufUtils.readString(buf);
             IConstellation c = ConstellationRegistry.getConstellationByName(attunement);
             if(c == null || !(c instanceof IMajorConstellation)) {
-                AstralSorcery.log.warn("[AstralSorcery] received constellation-attunement progress-packet with unknown constellation: " + attunement);
+                AstralSorcery.log.warn("received constellation-attunement progress-packet with unknown constellation: " + attunement);
             } else {
                 this.attunedConstellation = (IMajorConstellation) c;
             }
@@ -135,6 +137,20 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             }
         } else {
             this.usedPerks = new HashMap<>();
+        }
+
+        int sealLength = buf.readInt();
+        if (sealLength != -1) {
+            this.sealedPerks = new ArrayList<>(sealLength);
+            for (int i = 0; i < sealLength; i++) {
+                String key = ByteBufUtils.readString(buf);
+                AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(key));
+                if (perk != null) {
+                    this.sealedPerks.add(perk);
+                }
+            }
+        } else {
+            this.sealedPerks = Lists.newArrayList();
         }
 
         int targetLength = buf.readInt();
@@ -209,6 +225,15 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : usedPerks.entrySet()) {
                 ByteBufUtils.writeString(buf, perkEntry.getKey().getRegistryName().toString());
                 ByteBufUtils.writeNBTTag(buf, perkEntry.getValue());
+            }
+        } else {
+            buf.writeInt(-1);
+        }
+
+        if(sealedPerks != null) {
+            buf.writeInt(sealedPerks.size());
+            for (AbstractPerk perk : sealedPerks) {
+                ByteBufUtils.writeString(buf, perk.getRegistryName().toString());
             }
         } else {
             buf.writeInt(-1);

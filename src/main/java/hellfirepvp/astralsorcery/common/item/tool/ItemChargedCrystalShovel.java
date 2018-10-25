@@ -36,7 +36,7 @@ public class ItemChargedCrystalShovel extends ItemCrystalShovel implements Charg
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
         World world = player.getEntityWorld();
-        if (!world.isRemote && !player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalShovel)) {
+        if (!world.isRemote && !player.isSneaking() && !player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalShovel)) {
             IBlockState at = world.getBlockState(pos);
             if(at.getBlock().isToolEffective("shovel", at)) {
                 BlockArray shovelables = BlockDiscoverer.discoverBlocksWithSameStateAround(world, pos, true, 8, 100, true);

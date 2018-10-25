@@ -291,7 +291,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0.0F, -((float)(absPlayerHorizon - 16.0D)), 0.0F);
-        //GlStateManager.callList(glSkyList2); //TODO
+        //GlStateManager.callList(glSkyList2);
         GlStateManager.popMatrix();
         GlStateManager.enableTexture2D();
         GlStateManager.depthMask(true);

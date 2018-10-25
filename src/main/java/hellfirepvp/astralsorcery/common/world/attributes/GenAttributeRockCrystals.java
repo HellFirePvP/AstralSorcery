@@ -67,7 +67,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                     try {
                         resolvedTypes.add(BiomeDictionary.Type.getType(s));
                     } catch (Exception e) {
-                        AstralSorcery.log.error("[AstralSorcery] Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
+                        AstralSorcery.log.error("Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
                     }
                 }
                 biomeTypes = Lists.newArrayList(resolvedTypes);
@@ -77,7 +77,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                     try {
                         applicableDimensions.add(Integer.parseInt(s));
                     } catch (NumberFormatException exc) {
-                        AstralSorcery.log.error("[AstralSorcery] Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
+                        AstralSorcery.log.error("Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
                     }
                 }
                 String[] applicableReplacements = cfg.getStringList("ReplacementStates", getConfigurationSection(), new String[] {
@@ -118,7 +118,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
         for (String stateStr : replaceableStatesSerialized) {
             String[] spl = stateStr.split(":");
             if(spl.length != 3) {
-                AstralSorcery.log.info("[AstralSorcery] Skipping invalid replacement state: " + stateStr);
+                AstralSorcery.log.info("Skipping invalid replacement state: " + stateStr);
                 continue;
             }
             String strMeta = spl[2];
@@ -126,12 +126,12 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
             try {
                 meta = Integer.parseInt(strMeta);
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.error("[AstralSorcery] Skipping invalid replacement state: " + stateStr + " - Its 'meta' is not a number!");
+                AstralSorcery.log.error("Skipping invalid replacement state: " + stateStr + " - Its 'meta' is not a number!");
                 continue;
             }
             Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(spl[0], spl[1]));
             if(b == null || b == Blocks.AIR) {
-                AstralSorcery.log.error("[AstralSorcery] Skipping invalid replacement state: " + stateStr + " - The block does not exist!");
+                AstralSorcery.log.error("Skipping invalid replacement state: " + stateStr + " - The block does not exist!");
                 continue;
             }
             if(meta == -1) {

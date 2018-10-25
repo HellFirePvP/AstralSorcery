@@ -160,16 +160,22 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
             if (!contained.isEmpty()) {
                 if (entityIn.getEntityWorld().isRemote) return;
 
-                if (ItemUtils.hasOreName(contained, "logWood")) {
-                    contained = ItemUtils.copyStackWithSize(contained, contained.getCount() - 1);
-                    if (contained.isEmpty()) {
-                        entityIn.setDead();
-                    } else {
-                        ((EntityItem) entityIn).setItem(contained);
-                    }
-                    ItemUtils.dropItemNaturally(entityIn.getEntityWorld(), entityIn.posX, entityIn.posY, entityIn.posZ, BlockInfusedWood.WoodType.RAW.asStack());
+                if (Config.liquidStarlightInfusedWood) {
+                    interactInfusedWood(contained, entityIn);
                 }
             }
+        }
+    }
+
+    private void interactInfusedWood(ItemStack contained, Entity entityIn) {
+        if (ItemUtils.hasOreName(contained, "logWood")) {
+            contained = ItemUtils.copyStackWithSize(contained, contained.getCount() - 1);
+            if (contained.isEmpty()) {
+                entityIn.setDead();
+            } else {
+                ((EntityItem) entityIn).setItem(contained);
+            }
+            ItemUtils.dropItemNaturally(entityIn.getEntityWorld(), entityIn.posX, entityIn.posY, entityIn.posZ, BlockInfusedWood.WoodType.RAW.asStack());
         }
     }
 }

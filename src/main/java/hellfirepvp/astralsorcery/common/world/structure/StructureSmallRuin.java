@@ -42,13 +42,13 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
 
     @Override
     public void generate(BlockPos pos, World world, Random rand) {
-        getStructureTemplate().placeInWorld(world, pos);
+        generateAsSubmergedStructure(world, pos);
         getBuffer(world).markStructureGeneration(pos, getStructureType());
 
         //Should be the case...
-        if (world instanceof WorldServer) {
-            AstralSorcery.proxy.scheduleDelayed(new StructureRuinTask((WorldServer) world, pos, rand));
-        }
+        //if (world instanceof WorldServer) {
+        //    AstralSorcery.proxy.scheduleDelayed(new StructureRuinTask((WorldServer) world, pos, rand));
+        //}
     }
 
     @Override

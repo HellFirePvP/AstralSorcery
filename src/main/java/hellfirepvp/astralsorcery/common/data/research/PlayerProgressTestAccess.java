@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,11 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
+    public List<AbstractPerk> getSealedPerks() {
+        return Lists.newArrayList();
+    }
+
+    @Override
     public List<SextantFinder.TargetObject> getUsedTargets() {
         return Lists.newArrayList();
     }
@@ -96,6 +102,11 @@ public class PlayerProgressTestAccess extends PlayerProgress {
 
     @Override
     public boolean hasPerkUnlocked(AbstractPerk perk) {
+        return false;
+    }
+
+    @Override
+    public boolean isPerkSealed(AbstractPerk perk) {
         return false;
     }
 

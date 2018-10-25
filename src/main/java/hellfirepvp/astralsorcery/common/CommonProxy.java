@@ -113,6 +113,8 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
+        Config.addDynamicEntry(new TileAccelerationBlacklist.TileAccelBlacklistEntry());
+        Config.addDynamicEntry(new ShootingStarHandler.StarConfigEntry());
     }
 
     public void registerConfigDataRegistries() {
@@ -146,14 +148,15 @@ public class CommonProxy implements IGuiHandler {
         ConstellationEffectRegistry.init();
 
         RegistryPerks.initPerkTree();
+        RegistryKnowledgeFragments.init();
 
         registerCapabilities();
 
         if (Mods.CRAFTTWEAKER.isPresent()) {
-            AstralSorcery.log.info("[AstralSorcery] Crafttweaker found! Adding recipe handlers...");
+            AstralSorcery.log.info("Crafttweaker found! Adding recipe handlers...");
             ModIntegrationCrafttweaker.instance.load();
         } else {
-            AstralSorcery.log.info("[AstralSorcery] Crafttweaker not found!");
+            AstralSorcery.log.info("Crafttweaker not found!");
         }
     }
 
@@ -280,6 +283,7 @@ public class CommonProxy implements IGuiHandler {
         //manager.register(SpellCastingManager.PERK_TREE);
         manager.register(PatreonFlareManager.INSTANCE);
         manager.register(PerkEffectHelper.EVENT_INSTANCE);
+        manager.register(ShootingStarHandler.getInstance());
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);
@@ -293,7 +297,7 @@ public class CommonProxy implements IGuiHandler {
         AltarRecipeEffectRecovery.attemptRecipeRecovery();
         RegistryPerks.postInitPerkRemoval();
 
-        AstralSorcery.log.info("[AstralSorcery] Post compile recipes");
+        AstralSorcery.log.info("Post compile recipes");
 
         CraftingAccessManager.compile();
     }

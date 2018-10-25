@@ -43,7 +43,7 @@ public class ClientCameraFlightHelper {
 
         public CameraFlightBuilder addPoint(Vector3 nextPoint, int ticksToFlyThere) {
             if(ticksToFlyThere < 0) {
-                AstralSorcery.log.warn("[AstralSorcery] Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
+                AstralSorcery.log.warn("Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
                 return this;
             }
             this.flight.addPoint(nextPoint, ticksToFlyThere);
@@ -56,7 +56,7 @@ public class ClientCameraFlightHelper {
 
         public CameraFlightBuilder addCircularPoints(Vector3 centerOffset, DynamicRadiusGetter radius, int amountOfPointsOnCircle, int ticksBetweenEachPoint) {
             if(ticksBetweenEachPoint < 0) {
-                AstralSorcery.log.warn("[AstralSorcery] Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
+                AstralSorcery.log.warn("Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
                 return this;
             }
             double degPerPoint = 360D / ((double) amountOfPointsOnCircle);
@@ -84,7 +84,7 @@ public class ClientCameraFlightHelper {
 
         public CameraFlight finishAndStart() {
             if(this.flight.flightPoints.size() <= 0) {
-                AstralSorcery.log.warn("[AstralSorcery] Tried to start a camera flight without any points! Skipping...");
+                AstralSorcery.log.warn("Tried to start a camera flight without any points! Skipping...");
                 return null;
             }
 

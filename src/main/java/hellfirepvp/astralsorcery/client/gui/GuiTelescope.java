@@ -142,16 +142,16 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         drawCellsWithEffects(partialTicks);
         zLevel += 5;
 
-        drawRotationArrows(partialTicks);
+        Point mouse = new Point(mouseX, mouseY);
+        drawRotationArrows(partialTicks, mouse);
 
         TextureHelper.refreshTextureBindState();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
 
-    private void drawRotationArrows(float partialTicks) {
+    private void drawRotationArrows(float partialTicks, Point mouse) {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        Point mouse = getCurrentMousePoint();
         rectArrowCW = null;
         rectArrowCCW = null;
 
@@ -551,12 +551,12 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
             for (StarConnection connection : sc) {
                 Rectangle fromRect = stars.get(connection.from);
                 if (fromRect == null) {
-                    AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
+                    AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
                     continue lblInfos;
                 }
                 Rectangle toRect = stars.get(connection.to);
                 if (toRect == null) {
-                    AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
+                    AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
                     continue lblInfos;
                 }
                 if (!containsMatch(drawnLines, fromRect, toRect)) {

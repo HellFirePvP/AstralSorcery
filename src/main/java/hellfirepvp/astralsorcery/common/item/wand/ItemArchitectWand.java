@@ -271,18 +271,20 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                 if(applicable == null) break; //No more blocks. LUL
 
                 if(drainTempCharge(playerIn, Config.architectWandUseCost, true)) {
-                    drainTempCharge(playerIn, Config.architectWandUseCost, false);
-                    if(!playerIn.isCreative()) {
-                        ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
-                    }
                     IBlockState place = applicable.key;
                     try {
                         place = applicable.key.getBlock().getStateForPlacement(world, placePos, sideHit, (float) rtr.hitVec.x, (float) rtr.hitVec.y, (float) rtr.hitVec.z, applicable.value.getMetadata(), playerIn, hand);
                     } catch (Exception exc) {}
-                    if (world.setBlockState(placePos, place)) {
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
-                        ev.setAdditionalData(Block.getStateId(applicable.key));
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                    if (MiscUtils.canPlayerPlaceBlockPos(playerIn, hand, place, placePos, sideHit)) {
+                        if (world.setBlockState(placePos, place)) {
+                            drainTempCharge(playerIn, Config.architectWandUseCost, false);
+                            if(!playerIn.isCreative()) {
+                                ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
+                            }
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                            ev.setAdditionalDataLong(Block.getStateId(applicable.key));
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                        }
                     }
                 }
             }
@@ -323,18 +325,20 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                         if(applicable == null) break; //No more blocks. LUL
 
                         if(drainTempCharge(playerIn, Config.architectWandUseCost, true)) {
-                            drainTempCharge(playerIn, Config.architectWandUseCost, false);
-                            if(!playerIn.isCreative()) {
-                                ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
-                            }
                             IBlockState place = applicable.key;
                             try {
                                 place = applicable.key.getBlock().getStateForPlacement(world, placePos, facing, hitX, hitY, hitZ, applicable.value.getMetadata(), playerIn, hand);
                             } catch (Exception exc) {}
-                            if (world.setBlockState(placePos, place)) {
-                                PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
-                                ev.setAdditionalData(Block.getStateId(applicable.key));
-                                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                            if (MiscUtils.canPlayerPlaceBlockPos(playerIn, hand, place, placePos, facing)) {
+                                if (world.setBlockState(placePos, place)) {
+                                    drainTempCharge(playerIn, Config.architectWandUseCost, false);
+                                    if(!playerIn.isCreative()) {
+                                        ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
+                                    }
+                                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                                    ev.setAdditionalDataLong(Block.getStateId(applicable.key));
+                                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                                }
                             }
                         }
                     }
@@ -349,7 +353,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
     public static void playArchitectPlaceEvent(PktParticleEvent event) {
         AstralSorcery.proxy.scheduleClientside(() -> {
             Vector3 at = event.getVec();
-            IBlockState state = Block.getStateById((int) Math.round(event.getAdditionalData()));
+            IBlockState state = Block.getStateById((int) event.getAdditionalDataLong());
             RenderingUtils.playBlockBreakParticles(at.toBlockPos(), state);
             for (int i = 0; i < 9; i++) {
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(

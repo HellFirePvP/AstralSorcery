@@ -30,6 +30,18 @@ public class SpriteQuery extends TextureQuery {
         this.columns = columns;
     }
 
+    private SpriteQuery(Object spriteResource, int rows, int columns) {
+        super(null, "");
+        this.spriteResource = spriteResource;
+        this.rows = rows;
+        this.columns = columns;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static SpriteQuery of(SpriteSheetResource res) {
+        return new SpriteQuery(res, res.getRows(), res.getColumns());
+    }
+
     public int getRows() {
         return rows;
     }

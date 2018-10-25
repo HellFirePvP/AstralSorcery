@@ -79,7 +79,8 @@ public class AstralPatchTransformer implements SubClassTransformer {
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchSunBrightnessWorldClient",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchSunBrightnessWorldCommon",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchEntityRendererExtendedEntityReach",
-                    "hellfirepvp.astralsorcery.core.patch.helper.PatchServerExtendEntityInteractReach"
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchServerExtendEntityInteractReach",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchEntityLivingBaseWaterSlowDown"
             };
             for (String str : references) {
                 try {

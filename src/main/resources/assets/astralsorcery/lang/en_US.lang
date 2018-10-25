@@ -41,6 +41,7 @@ potion.as.crafted.name=Stardew
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
 misc.grindstone.double=Chance to double output: %s
+misc.transmutation.constellation=Requires focused light from %s
 misc.knowledge.missing=An empty and sparkly scroll
 misc.knowledge.inscribed=Contains knowledge from %s
 misc.knowledge.inscribed.creative=Contains massive knowledge
@@ -71,9 +72,10 @@ amulet.enchantment.add_to_existing_all.name=+%s %s to all existing Enchantments
 enchantment.astralsorcery.enchantment.as.nightvision.desc=Grants the wearer night vision.
 enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with tools with this enchantment will cause the drops to be as if they were smelted. ("Auto-Smelt")
 
-gui.journal.bm.knowledge.name=Knowledge
+gui.journal.bm.research.name=Research
 gui.journal.bm.constellations.name=Constellations
 gui.journal.bm.perks.name=Perks
+gui.journal.bm.knowledge.name=Knowledge
 gui.journal.c.unmapped=Unknown
 
 death.attack.as.stellar=%1$s disintegrated into Stardust
@@ -405,6 +407,12 @@ astralsorcery.journal.ATT_TRAIT.2.text=By placing an already Attuned crystal int
 research.ENH_SHIFTING_STAR.name=Irradiant Star
 astralsorcery.journal.ENH_SHIFTING_STAR.1.text=The problem with the Shifting Star is that it purges all starlight from your body.<NL>By focusing the energies of the Shifting Star into alignment with one of the Bright Constellations, this loss can be mitigated. Subequent use allows you to recover the starlight in your body by re-aligning its attunement to match the Star, and then directing the path of empowerment from that same light without it having first been purged.
 
+research.RESONATOR_AREA_SIZE.name=Domic Resonator
+astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=
+
+research.ATT_PERKS_SEAL.name=Perk Sealing
+astralsorcery.journal.ATT_PERKS_SEAL.1.text=
+
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
 astralsorcery.journal.recipe.constellation=Requires focus to Constellation %s
@@ -455,6 +463,7 @@ entity.EntityIlluminationSpark.name=Illumination Spark
 entity.EntityCrystalTool.name=Crystal Tool
 entity.EntitySpectralTool.name=Spectral Tool
 entity.EntityLiquidSpark.name=Liquid Spark
+entity.EntityShootingStar.name=Shooting Star
 
 item.itemcraftingcomponent.aquamarine.name=Aquamarine
 item.itemcraftingcomponent.starmetal_ingot.name=Starmetal Ingot
@@ -498,6 +507,8 @@ item.itemsextant.name=Sextant
 item.itemsextant.upgraded=Augmented
 item.itemenchantmentamulet.name=Resplendent Prism
 item.itemenchantmentamulet.pure=Pure
+item.itemperkseal.name=Perk Seal
+item.itemknowledgeshard.name=Shard of Knowledge
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator
@@ -689,15 +700,14 @@ astralsorcery.constellation.vorux.effect=Light from this Constellation invokes r
 astralsorcery.constellation.vorux.enchantments=The best defense is an aggressive offense for wielders of equipment bathed in this light. Potions imbued with this Constellation are often nicknamed "Liquid Courage".
 astralsorcery.constellation.vorux.trait=Burning the candle at both ends may provide for more illumination, but it invites the following darkness all the faster.
 
-perk.info.locked=§7Locked
-perk.info.available=§9Available
-perk.info.active=§aActive
-perk.info.inactive=§cInactive (Missing Alignment)
-perk.info.unlock=§aUnlocked perk '%s'
-perk.info.unlock.click=§7Click to unlock
-perk.info.unlocked.free=§7Basic perk
+perk.info.locked=Locked
+perk.info.available=Available
+perk.info.active=Active
 perk.info.points=Available points: %s
 perk.info.disabled=Perk effects disabled in your modpack.
+perk.info.sealed=Sealed
+perk.info.sealed.break=[Double-click to break]
+perk.info.sealed.usage=Drag and drop a seal onto the perk you want to seal.
 
 perk.category.root.name=Root Perk
 perk.category.major.name=Major Perk

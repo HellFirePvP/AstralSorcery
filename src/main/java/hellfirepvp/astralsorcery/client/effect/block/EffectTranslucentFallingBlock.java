@@ -46,7 +46,7 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
 
     private AlphaFunction alphaFunction = AlphaFunction.CONSTANT;
     private float alphaMultiplier = 1F;
-    private ScaleFunction<EffectTranslucentFallingBlock> scaleFunction = (fx, pTicks, scaleIn) -> 1F;
+    private ScaleFunction<EffectTranslucentFallingBlock> scaleFunction = (fx, pos, pTicks, scaleIn) -> 1F;
     private float scale = 1F;
     private boolean disableDepth = false;
 
@@ -196,7 +196,7 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
         GL11.glColor4f(1F, 1F, 1F, alpha);
 
         float scaleF = this.scale;
-        scaleF = scaleFunction.getScale(this, pTicks, scaleF);
+        scaleF = scaleFunction.getScale(this, translateTo, pTicks, scaleF);
         GL11.glTranslated(0.5, 0.5, 0.5);
         GL11.glScaled(scaleF, scaleF, scaleF);
         GL11.glTranslated(-0.5, -0.5, -0.5);

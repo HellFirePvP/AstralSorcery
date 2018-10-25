@@ -59,20 +59,20 @@ public class GatewayCache extends CachedWorldData {
         gatewayPositions.add(node);
         markDirty();
         CelestialGatewaySystem.instance.addPosition(world, node);
-        AstralSorcery.log.info("[AstralSorcery] Added new gateway node at: dim=" + world.provider.getDimension() + ", " + pos.toString());
+        AstralSorcery.log.info("Added new gateway node at: dim=" + world.provider.getDimension() + ", " + pos.toString());
     }
 
     public void removePosition(World world, BlockPos pos) {
         if(gatewayPositions.remove(pos)) {
             markDirty();
             CelestialGatewaySystem.instance.removePosition(world, pos);
-            AstralSorcery.log.info("[AstralSorcery] Removed gateway node at: dim=" + world.provider.getDimension() + ", " + pos.toString());
+            AstralSorcery.log.info("Removed gateway node at: dim=" + world.provider.getDimension() + ", " + pos.toString());
         }
     }
 
     @Override
     public void onLoad(World world) {
-        AstralSorcery.log.info("[AstralSorcery] Checking GatewayCache integrity for dimension " + world.provider.getDimension());
+        AstralSorcery.log.info("Checking GatewayCache integrity for dimension " + world.provider.getDimension());
         long msStart = System.currentTimeMillis();
 
         Iterator<GatewayNode> iterator = gatewayPositions.iterator();
@@ -82,16 +82,16 @@ public class GatewayCache extends CachedWorldData {
             try {
                 gateway = MiscUtils.getTileAt(world, node, TileCelestialGateway.class, true);
             } catch (Exception loadEx) {
-                AstralSorcery.log.info("[AstralSorcery] Failed to check gateway for " + node + " skipping");
+                AstralSorcery.log.info("Failed to check gateway for " + node + " skipping");
                 continue;
             }
             if (gateway == null) {
                 iterator.remove();
-                AstralSorcery.log.info("[AstralSorcery] Invalid entry: " + node + " - no gateway tileentity found there!");
+                AstralSorcery.log.info("Invalid entry: " + node + " - no gateway tileentity found there!");
             }
         }
 
-        AstralSorcery.log.info("[AstralSorcery] GatewayCache checked and fully loaded in " + (System.currentTimeMillis() - msStart) + "ms! Collected and checked " + gatewayPositions.size() + " gateway nodes!");
+        AstralSorcery.log.info("GatewayCache checked and fully loaded in " + (System.currentTimeMillis() - msStart) + "ms! Collected and checked " + gatewayPositions.size() + " gateway nodes!");
     }
 
     @Override

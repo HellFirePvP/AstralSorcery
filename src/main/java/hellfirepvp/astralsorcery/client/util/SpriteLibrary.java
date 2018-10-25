@@ -25,6 +25,7 @@ public class SpriteLibrary {
     private static final BindableResource texBurst1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1");
     private static final BindableResource texBurst2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2");
     private static final BindableResource texBurst3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3");
+    private static final BindableResource texBurstEffect3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst3");
     private static final BindableResource flareActive = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareperkactive");
     private static final BindableResource flareInactive = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareperkinactive");
     private static final BindableResource flareActivateable = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareperkactivateable");
@@ -35,6 +36,10 @@ public class SpriteLibrary {
     private static final BindableResource texHalo1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1");
     private static final BindableResource texHalo2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo2");
     private static final BindableResource texHalo3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo3");
+    private static final BindableResource texHalo4 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo4");
+    private static final BindableResource texHalo5 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo5");
+    private static final BindableResource texHalo6 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo6");
+    private static final BindableResource texHalo7 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo7");
     private static final BindableResource texVortex1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "vortex1");
     private static final BindableResource texStar1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star1");
     private static final BindableResource texStar2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star2");
@@ -50,13 +55,18 @@ public class SpriteLibrary {
     public static final SpriteSheetResource spriteHalo1 = texHalo1.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spriteHalo2 = texHalo2.asSpriteSheet(8, 8);
     public static final SpriteSheetResource spriteVortex1 = texVortex1.asSpriteSheet(5, 8);
+    public static final SpriteSheetResource spriteBurstEffect3 = texBurstEffect3.asSpriteSheet(7, 8);
     public static final SpriteSheetResource spriteHalo3 = texHalo3.asSpriteSheet(4, 8);
+    public static final SpriteSheetResource spriteHalo4 = texHalo4.asSpriteSheet(4, 8);
+    public static final SpriteSheetResource spriteHalo5 = texHalo5.asSpriteSheet(4, 8);
+    public static final SpriteSheetResource spriteHalo6 = texHalo6.asSpriteSheet(4, 8);
     public static final SpriteSheetResource spriteStar1 = texStar1.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spriteStar2 = texStar2.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spritePerkInactive = flareInactive.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spritePerkActive = flareActive.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spritePerkActivateable = flareActivateable.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spritePerkActivate = flareActivate.asSpriteSheet(5, 16);
+    public static final SpriteSheetResource spritePerkSeal = texHalo7.asSpriteSheet(4, 8);
     public static final SpriteSheetResource spriteCelestialBurst1 = texBurst1.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spriteCelestialBurst2 = texBurst2.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spriteCelestialBurst3 = texBurst3.asSpriteSheet(1, 40);

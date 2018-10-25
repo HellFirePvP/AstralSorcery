@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -122,11 +123,14 @@ public class CraftingAccessManager {
         markForRemoval(AltarRecipeRegistry.removeFindRecipeByOutputAndLevel(output, altarLevel));
     }
 
-    public static void addMTTransmutation(ItemStack in, ItemStack out, double cost) {
+    public static void addMTTransmutation(ItemStack in, ItemStack out, double cost, @Nullable IWeakConstellation cst) {
         IBlockState stateIn = ItemUtils.createBlockState(in);
         IBlockState stateOut = ItemUtils.createBlockState(out);
         if(stateIn != null && stateOut != null) {
             LightOreTransmutations.Transmutation tr = new LightOreTransmutations.Transmutation(stateIn, stateOut, in, out, cost);
+            if (cst != null) {
+                tr.setRequiredType(cst);
+            }
             tr = LightOreTransmutations.registerTransmutation(tr);
             if (tr != null) {
                 //addRecipe(tr); Is picked up by default logic

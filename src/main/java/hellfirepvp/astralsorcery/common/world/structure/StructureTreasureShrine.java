@@ -46,7 +46,7 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
     public void generate(BlockPos pos, World world, Random rand) {
         CaveAdjacencyInformation information = validatePosition(pos, world);
         if(information != null) { //Which i'd expect
-            this.getStructureTemplate().placeInWorld(world, pos);
+            generateAsSubmergedStructure(world, pos);
             BlockPos offsetPos = pos.add(0, 3, 0).offset(information.direction, 4);
             world.setBlockToAir(offsetPos);
             world.setBlockToAir(offsetPos.up());

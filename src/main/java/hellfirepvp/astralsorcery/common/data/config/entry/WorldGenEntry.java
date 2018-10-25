@@ -61,7 +61,7 @@ public class WorldGenEntry extends ConfigEntry {
             try {
                 resolvedTypes.add(BiomeDictionary.Type.getType(s));
             } catch (Exception e) {
-                AstralSorcery.log.error("[AstralSorcery] Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
+                AstralSorcery.log.error("Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
             }
         }
         biomeTypes = Lists.newArrayList(resolvedTypes);
@@ -71,7 +71,7 @@ public class WorldGenEntry extends ConfigEntry {
             try {
                 applicableDimensions.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.error("[AstralSorcery] Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
+                AstralSorcery.log.error("Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
             }
         }
         loaded = true;

@@ -51,7 +51,7 @@ public class DiscidiaRootPerk extends RootPerk {
         }
         if (player != null) {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkUnlocked(this)) {
+            if (prog != null && prog.hasPerkEffect(this)) {
                 float dmgDealt = event.getAmount();
                 dmgDealt *= 0.2F;
                 dmgDealt *= expMultiplier;

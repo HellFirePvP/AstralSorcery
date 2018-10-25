@@ -46,7 +46,7 @@ public class EvorsioRootPerk extends RootPerk {
         EntityPlayer player = event.getPlayer();
         if (player != null && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog == null || !prog.hasPerkUnlocked(this)) {
+            if (prog == null || !prog.hasPerkEffect(this)) {
                 return;
             }
 

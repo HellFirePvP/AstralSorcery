@@ -74,7 +74,7 @@ public class KeyChainMining extends KeyPerk {
         EntityPlayer player = event.getPlayer();
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null && side == Side.SERVER && player instanceof EntityPlayerMP && prog.hasPerkUnlocked(this) &&
+        if (prog != null && side == Side.SERVER && player instanceof EntityPlayerMP && prog.hasPerkEffect(this) &&
                 !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player) && !player.isSneaking()
                 && event.getWorld() instanceof WorldServer && !player.isCreative()) {
             if (chainOngoing) return;
@@ -140,7 +140,7 @@ public class KeyChainMining extends KeyPerk {
                                 block.dropXpOnBlockBreak(world, at, exp);
                             }
                             PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, at);
-                            ev.setAdditionalData(Block.getStateId(atState));
+                            ev.setAdditionalDataLong(Block.getStateId(atState));
                             PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 16));
                             broken++;
                         }

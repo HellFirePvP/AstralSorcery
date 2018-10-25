@@ -31,7 +31,7 @@ public abstract class ClassPatch {
         this.className = className;
     }
 
-    public void transform(ClassNode node) {
+    public final void transform(ClassNode node) {
         try {
             patch(node);
         } catch (ASMTransformationException exc) {

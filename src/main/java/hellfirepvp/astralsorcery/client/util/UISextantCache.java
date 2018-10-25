@@ -37,7 +37,7 @@ public class UISextantCache {
 
     public static final UISextantCache INSTANCE = new UISextantCache();
 
-    private static final long WAIT_TIME_MS = 7500;
+    private static final long WAIT_TIME_MS = 10_000;
     private static Map<SextantFinder.TargetObject, Long> wait = new HashMap<>();
     private static Map<Tuple<ChunkPos, Integer>, List<CachedSextantResult>> sextantCache = new HashMap<>();
 
@@ -72,6 +72,7 @@ public class UISextantCache {
 
     public void clearClient() {
         sextantCache.clear();
+        wait.clear();
     }
 
     static class CachedSextantResult {

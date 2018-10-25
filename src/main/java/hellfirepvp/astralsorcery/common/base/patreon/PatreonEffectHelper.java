@@ -139,6 +139,14 @@ public class PatreonEffectHelper {
                 UUID.fromString("083c3cd5-9c94-40c7-a166-5692e4dc4b2c"),
                 new PatreonEffect(null));
 
+        effectMap.put( //Dilaculo
+                UUID.fromString("ba192da4-c6a0-4815-8114-34ae8526574e"),
+                new PatreonEffect(FlareColor.ELDRITCH));
+
+        effectMap.put( //Missingpiece11
+                UUID.fromString("67f8b820-9c38-41e7-8e89-ed409b0165f0"),
+                new PatreonEffect(FlareColor.FIRE));
+
         effectMap.put( //tree_of_chaos
                 UUID.fromString("2a6871c0-2dfa-41d8-af58-8608c81b8864"),
                 new PtEffectTreeBeacon(FlareColor.DAWN)

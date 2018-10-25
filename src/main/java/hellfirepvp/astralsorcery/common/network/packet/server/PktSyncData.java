@@ -55,7 +55,7 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
             byte providerId = pb.readByte();
             AbstractData.AbstractDataProvider<? extends AbstractData> provider = AbstractData.Registry.getProvider(providerId);
             if (provider == null) {
-                AstralSorcery.log.warn("[AstralSorcery] Provider for ID " + providerId + " doesn't exist! Skipping...");
+                AstralSorcery.log.warn("Provider for ID " + providerId + " doesn't exist! Skipping...");
                 continue;
             }
 
@@ -63,8 +63,8 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
             try {
                 cmp = pb.readCompoundTag();
             } catch (IOException e) {
-                AstralSorcery.log.warn("[AstralSorcery] Provider Compound of " + providerId + " threw an IOException! Skipping...");
-                AstralSorcery.log.warn("[AstralSorcery] Exception message: " + e.getMessage());
+                AstralSorcery.log.warn("Provider Compound of " + providerId + " threw an IOException! Skipping...");
+                AstralSorcery.log.warn("Exception message: " + e.getMessage());
                 continue;
             }
 

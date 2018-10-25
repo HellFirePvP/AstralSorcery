@@ -43,7 +43,7 @@ public class ArmaraRootPerk extends RootPerk {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkUnlocked(this)) {
+            if (prog != null && prog.hasPerkEffect(this)) {
                 float expGain = event.getAmount();
                 expGain *= 2.5F;
                 if (event.getSource().isFireDamage()) {

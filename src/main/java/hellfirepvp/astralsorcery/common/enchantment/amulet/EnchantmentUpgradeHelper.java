@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import hellfirepvp.astralsorcery.core.ASMCallHook;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,6 +58,7 @@ public class EnchantmentUpgradeHelper {
         return getNewEnchantmentLevel(current, currentEnchantmentId, item, null);
     }
 
+    @ASMCallHook
     public static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack item) {
         if(isItemBlacklisted(item)) return current;
         return getNewEnchantmentLevel(current, enchantment, item, null);
@@ -102,6 +104,7 @@ public class EnchantmentUpgradeHelper {
         return current;
     }
 
+    @ASMCallHook
     public static NBTTagList modifyEnchantmentTags(@Nonnull NBTTagList existingEnchantments, ItemStack stack) {
         if(isItemBlacklisted(stack)) return existingEnchantments;
 
@@ -147,6 +150,7 @@ public class EnchantmentUpgradeHelper {
         return returnNew;
     }
 
+    @ASMCallHook
     public static Map<Enchantment, Integer> applyNewEnchantmentLevels(Map<Enchantment, Integer> enchantmentLevelMap, ItemStack stack) {
         if(isItemBlacklisted(stack)) return enchantmentLevelMap;
 

@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -79,7 +80,7 @@ public class KeyLightningArc extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && side == Side.SERVER && prog.hasPerkUnlocked(this)) {
+            if (prog != null && side == Side.SERVER && prog.hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, arcChance);
                 if (rand.nextFloat() < chance) {
@@ -141,11 +142,7 @@ public class KeyLightningArc extends KeyPerk {
                         entities.remove(player);
                     }
                     entities.removeAll(visitedEntities);
-                    if(!entity.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
-                        entities.removeIf(e -> e instanceof EntityPlayer);
-                    }
-                    entities.removeIf(e -> e.isDead);
-                    entities.removeIf(e -> e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator()));
+                    entities.removeIf(e -> !MiscUtils.canPlayerAttackServer(player, e));
 
                     if(!entities.isEmpty()) {
                         EntityLivingBase tmpEntity = entity; //Final for lambda

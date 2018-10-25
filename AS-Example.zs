@@ -34,6 +34,14 @@
 // Example:
 // mods.astralsorcery.LightTransmutation.addTransmutation(<minecraft:grass>, <minecraft:gold_ore>, 10);
 
+// Adds a light transmutation recipe requiring a specific constellation
+// Each input & output item specified *has to have* a block representation or the recipe will be skipped.
+// Metadata of the itemstacks is used to determine the blockstate.
+// Parameters:
+// InputBlock (as itemstack), OutputBlock (as itemstack), chargeUsed (until transmutation is complete), string name of the required constellation
+// Example:
+// mods.astralsorcery.LightTransmutation.addTransmutation(<minecraft:grass>, <minecraft:gold_ore>, 10, "astralsorcery.constellation.fornax");
+
 // Removes a light transmutation recipe
 // The inputstack can be an item or block, depending on that it'll try and find a recipe that matches.
 // Removes only the first it finds. Add multiple removeTransmutation-calls to remove multiples, if present.

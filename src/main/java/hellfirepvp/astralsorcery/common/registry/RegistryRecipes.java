@@ -105,6 +105,7 @@ public class RegistryRecipes {
     public static SextantUpgradeRecipe rSextantUpgrade;
     public static TraitRecipe rObservatory;
     public static Map<IMajorConstellation, ReAttunementStarRecipe> rAttStarRecipes = new HashMap<>();
+    public static AttunementRecipe rPerkSeal;
 
     public static ResonatorLiquidRecipe rResonatorLiquid;
     public static ResonatorStructureRecipe rResonatorStructure;
@@ -446,6 +447,17 @@ public class RegistryRecipes {
             registerAltarRecipe(recipe);
             rAttStarRecipes.put(cst, recipe);
         }
+
+        rPerkSeal = registerAttenuationRecipe(newShapedRecipe("internal/altar/perkseal", ItemsAS.perkSeal)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(ItemUsableDust.DustType.NOCTURNAL.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(OreDictAlias.ITEM_STARMETAL_DUST,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .unregisteredAccessibleShapedRecipe());
 
         rObservatory = registerTraitRecipe(newShapedRecipe("internal/altar/observatory", BlocksAS.blockObservatory)
                 .addPart(OreDictAlias.ITEM_GOLD_NUGGET,

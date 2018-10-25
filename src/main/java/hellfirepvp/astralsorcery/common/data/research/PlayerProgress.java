@@ -49,16 +49,20 @@ public class PlayerProgress {
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
     private List<String> freePointTokens = Lists.newArrayList();
     private Map<AbstractPerk, NBTTagCompound> unlockedPerks = new HashMap<>();
+    private List<AbstractPerk> sealedPerks = new ArrayList<>();
     private double perkExp = 0;
 
+    //Loading from flat-file, persistent data
     public void load(NBTTagCompound compound) {
         knownConstellations.clear();
+        seenConstellations.clear();
         researchProgression.clear();
         usedTargets.clear();
         attunedConstellation = null;
         tierReached = ProgressionTier.DISCOVERY;
         wasOnceAttuned = false;
         unlockedPerks.clear();
+        sealedPerks.clear();
         perkExp = 0;
 
         if (compound.hasKey("seenConstellations")) {
@@ -82,7 +86,7 @@ public class PlayerProgress {
             String cst = compound.getString("attuned");
             IConstellation c = ConstellationRegistry.getConstellationByName(cst);
             if(c == null || !(c instanceof IMajorConstellation)) {
-                AstralSorcery.log.warn("[AstralSorcery] Failed to load attuned Constellation: " + cst + " - constellation doesn't exist or isn't major.");
+                AstralSorcery.log.warn("Failed to load attuned Constellation: " + cst + " - constellation doesn't exist or isn't major.");
             } else {
                 attunedConstellation = (IMajorConstellation) c;
             }
@@ -109,6 +113,17 @@ public class PlayerProgress {
                     AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
                     if(perk != null) {
                         unlockedPerks.put(perk, data);
+                    }
+                }
+            }
+            if(compound.hasKey("sealedPerks")) {
+                NBTTagList list = compound.getTagList("sealedPerks", 10);
+                for (int i = 0; i < list.tagCount(); i++) {
+                    NBTTagCompound tag = list.getCompoundTagAt(i);
+                    String perkRegName = tag.getString("perkName");
+                    AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
+                    if(perk != null) {
+                        sealedPerks.add(perk);
                     }
                 }
             }
@@ -147,6 +162,7 @@ public class PlayerProgress {
         }
     }
 
+    //For file saving, persistent saving.
     public void store(NBTTagCompound cmp) {
         NBTTagList list = new NBTTagList();
         for (String s : knownConstellations) {
@@ -177,6 +193,13 @@ public class PlayerProgress {
             list.appendTag(tag);
         }
         cmp.setTag("perks", list);
+        list = new NBTTagList();
+        for (AbstractPerk perk : sealedPerks) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("perkName", perk.getRegistryName().toString());
+            list.appendTag(tag);
+        }
+        cmp.setTag("sealedPerks", list);
         cmp.setInteger("perkTreeVersion", PerkTree.PERK_TREE_VERSION);
 
         list = new NBTTagList();
@@ -188,6 +211,7 @@ public class PlayerProgress {
         cmp.setDouble("perkExp", perkExp);
     }
 
+    //For knowledge sharing; some information is not important to be shared.
     public void storeKnowledge(NBTTagCompound cmp) {
         NBTTagList list = new NBTTagList();
         for (String s : knownConstellations) {
@@ -214,6 +238,7 @@ public class PlayerProgress {
         cmp.setIntArray("research", researchArray);
     }
 
+    //For knowledge sharing; some information is not important to be shared.
     public void loadKnowledge(NBTTagCompound compound) {
         knownConstellations.clear();
         researchProgression.clear();
@@ -222,6 +247,7 @@ public class PlayerProgress {
         tierReached = ProgressionTier.DISCOVERY;
         wasOnceAttuned = false;
         unlockedPerks.clear();
+        sealedPerks.clear();
         perkExp = 0;
 
         if (compound.hasKey("seenConstellations")) {
@@ -287,6 +313,10 @@ public class PlayerProgress {
         return unlockedPerks == null ? Lists.newArrayList() : Collections.unmodifiableCollection(unlockedPerks.keySet());
     }
 
+    public List<AbstractPerk> getSealedPerks() {
+        return sealedPerks == null ? Lists.newArrayList() : Collections.unmodifiableList(sealedPerks);
+    }
+
     public Map<AbstractPerk, NBTTagCompound> getUnlockedPerkData() {
         return unlockedPerks == null ? Maps.newHashMap() : Collections.unmodifiableMap(unlockedPerks);
     }
@@ -296,8 +326,16 @@ public class PlayerProgress {
         return unlockedPerks.get(perk);
     }
 
+    public boolean hasPerkEffect(AbstractPerk perk) {
+        return hasPerkUnlocked(perk) && !isPerkSealed(perk);
+    }
+
     public boolean hasPerkUnlocked(AbstractPerk perk) {
         return unlockedPerks.containsKey(perk);
+    }
+
+    public boolean isPerkSealed(AbstractPerk perk) {
+        return sealedPerks.contains(perk);
     }
 
     public void putPerk(AbstractPerk perk, NBTTagCompound data) {
@@ -305,7 +343,22 @@ public class PlayerProgress {
     }
 
     protected boolean removePerk(AbstractPerk perk) {
-        return unlockedPerks.remove(perk) != null;
+        return unlockedPerks.remove(perk) != null &&
+                (!sealedPerks.contains(perk) || sealedPerks.remove(perk));
+    }
+
+    protected boolean sealPerk(AbstractPerk perk) {
+        if (sealedPerks.contains(perk) || !hasPerkUnlocked(perk)) {
+            return false;
+        }
+        return sealedPerks.add(perk);
+    }
+
+    protected boolean breakSeal(AbstractPerk perk) {
+        if (!sealedPerks.contains(perk) || !hasPerkUnlocked(perk)) {
+            return false;
+        }
+        return sealedPerks.remove(perk);
     }
 
     public List<ResearchProgression> getResearchProgression() {
@@ -435,6 +488,7 @@ public class PlayerProgress {
         this.usedTargets = message.usedTargets;
         this.freePointTokens = message.freePointTokens;
         this.unlockedPerks = message.usedPerks;
+        this.sealedPerks = message.sealedPerks;
         this.perkExp = message.perkExp;
     }
 

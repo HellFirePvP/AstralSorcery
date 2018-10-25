@@ -12,12 +12,14 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -112,7 +114,9 @@ public class ClientRenderEventHandler {
         }
         if(Minecraft.getMinecraft().currentScreen != null &&
                 Minecraft.getMinecraft().currentScreen instanceof GuiScreenJournal &&
-                (event.getGui() == null || !(event.getGui() instanceof GuiScreenJournal))) {
+                (event.getGui() == null ||
+                        (!(event.getGui() instanceof GuiScreenJournal) &&
+                                !(event.getGui() instanceof GuiScreenJournalOverlay)))) {
             SoundHelper.playSoundClient(Sounds.bookClose, 1F, 1F);
         }
     }
@@ -139,6 +143,11 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onTick(TickEvent.ClientTickEvent event) {
         if(event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null) {
+            if (Minecraft.getMinecraft().player.isCreative()) { //TODO move to a more appropriate handler
+                PersistentDataManager.INSTANCE.setCreative();
+            }
+
+
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND));
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND));
 

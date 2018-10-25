@@ -150,12 +150,14 @@ public abstract class EntityComplexFX implements IComplexEffect {
 
     public static interface ScaleFunction<T extends IComplexEffect> {
 
-        public float getScale(T fx, float pTicks, float scaleIn);
+        public static final ScaleFunction<IComplexEffect> IDENTITY = (ScaleFunction<IComplexEffect>) (fx, pos, pTicks, scaleIn) -> scaleIn;
+
+        public float getScale(T fx, Vector3 pos, float pTicks, float scaleIn);
 
         public static class Shrink<T extends EntityComplexFX> implements ScaleFunction<T> {
 
             @Override
-            public float getScale(T fx, float pTicks, float scaleIn) {
+            public float getScale(T fx, Vector3 pos, float pTicks, float scaleIn) {
                 float prevAge = Math.max(0F, ((float) fx.getAge() - 1)) / ((float) fx.getMaxAge());
                 float currAge = Math.max(0F, ((float) fx.getAge()))     / ((float) fx.getMaxAge());
                 return (float) (scaleIn * (1 - (RenderingUtils.interpolate(prevAge, currAge, pTicks))));

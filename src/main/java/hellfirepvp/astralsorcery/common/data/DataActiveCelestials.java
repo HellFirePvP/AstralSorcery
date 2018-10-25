@@ -80,8 +80,8 @@ public class DataActiveCelestials extends AbstractData {
             try {
                 dimId = Integer.parseInt(dimIdStr);
             } catch (Exception exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Received ConstellationUpdate packet with a non-integer dimensionId: " + dimIdStr);
-                AstralSorcery.log.warn("[AstralSorcery] Skipping...");
+                AstralSorcery.log.warn("Received ConstellationUpdate packet with a non-integer dimensionId: " + dimIdStr);
+                AstralSorcery.log.warn("Skipping...");
                 continue;
             }
             NBTTagList list = compound.getTagList(dimIdStr, 8);
@@ -91,7 +91,7 @@ public class DataActiveCelestials extends AbstractData {
                     String str = list.getStringTagAt(i);
                     IConstellation c = ConstellationRegistry.getConstellationByName(str);
                     if (c == null) {
-                        AstralSorcery.log.warn("[AstralSorcery] Received unknown constellation from server: " + str);
+                        AstralSorcery.log.warn("Received unknown constellation from server: " + str);
                     } else {
                         toUpdate.add(c);
                     }

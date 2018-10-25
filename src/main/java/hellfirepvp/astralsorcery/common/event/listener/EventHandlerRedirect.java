@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.core.ASMCallHook;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class EventHandlerRedirect {
 
+    @ASMCallHook
     public static float getSunBrightnessFactorInj(float prevBrightness, World world) {
         if(Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
             return prevBrightness;
@@ -42,6 +44,7 @@ public class EventHandlerRedirect {
         return prevBrightness;
     }
 
+    @ASMCallHook
     @SideOnly(Side.CLIENT)
     public static float getSunBrightnessBodyInj(float prevBrightness, World world) {
         if(Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {

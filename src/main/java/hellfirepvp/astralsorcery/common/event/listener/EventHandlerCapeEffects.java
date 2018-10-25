@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.core.ASMCallHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -265,6 +266,17 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @ASMCallHook
+    public static float getWaterSlowDown(float oldSlowDown, EntityLivingBase base) {
+        if (oldSlowDown < 1 && base instanceof EntityPlayer) {
+            CapeEffectOctans ceo = ItemCape.getCapeEffect((EntityPlayer) base, Constellations.octans);
+            if (ceo != null) {
+                oldSlowDown = 0.95F; //Make sure it's not setting it to > 1 by itself.
+            }
+        }
+        return oldSlowDown;
+    }
+
     private void tickFornaxMelting(EntityPlayer pl) {
         if(pl.isBurning()) {
             CapeEffectFornax cf = ItemCape.getCapeEffect(pl, Constellations.fornax);
@@ -363,6 +375,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @ASMCallHook
     public static void updateElytraEventPre(EntityLivingBase entity) {
         if(entity instanceof EntityPlayer) {
             CapeEffectVicio vic = ItemCape.getCapeEffect((EntityPlayer) entity, Constellations.vicio);
@@ -373,6 +386,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @ASMCallHook
     public static void updateElytraEventPost(EntityLivingBase entity) {
         inElytraCheck = false;
         if(entity instanceof EntityPlayer && updateElytraBuffer) {
@@ -387,14 +401,13 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     }
                 }
 
-                //TODO find a better solution.
                 //Vector3 mV = new Vector3(entity.motionX, entity.motionY, entity.motionZ).normalize().multiply(0.65F);
                 //entity.motionX += mV.getX() * 0.1D + (mV.getX() * 1.5D - entity.motionX) * 0.5D;
                 //entity.motionY += mV.getY() * 0.1D + (mV.getY() * 1.5D - entity.motionY) * 0.5D;
                 //entity.motionZ += mV.getZ() * 0.1D + (mV.getZ() * 1.5D - entity.motionZ) * 0.5D;
-                entity.motionX *= 1.005F;
-                entity.motionY *= 1.005F;
-                entity.motionZ *= 1.005F;
+                entity.motionX *= 1.006F;
+                entity.motionY *= 1.006F;
+                entity.motionZ *= 1.006F;
             }
         }
     }

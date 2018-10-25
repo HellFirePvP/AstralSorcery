@@ -39,6 +39,7 @@ public abstract class ConfigEntry {
 
     public static enum Section {
 
+        GENERAL,
         MACHINERY,
         WORLDGEN,
         RITUAL_EFFECTS,
@@ -46,7 +47,8 @@ public abstract class ConfigEntry {
         PERKS,
         COSTS,
         CAPE,
-        TOOLS
+        TOOLS,
+        DATA_PERSISTENCE
 
     }
 

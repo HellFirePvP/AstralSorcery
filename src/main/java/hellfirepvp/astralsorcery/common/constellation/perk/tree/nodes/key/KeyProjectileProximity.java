@@ -41,7 +41,7 @@ public class KeyProjectileProximity extends KeyPerk {
                 EntityPlayer player = (EntityPlayer) source.getTrueSource();
                 Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
                 PlayerProgress prog = ResearchManager.getProgress(player, side);
-                if (prog != null && prog.hasPerkUnlocked(this)) {
+                if (prog != null && prog.hasPerkEffect(this)) {
                     float added = 0.75F;
                     added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
 

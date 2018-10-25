@@ -219,7 +219,7 @@ public class PerkEffectHelper implements ITickHandler {
         batchRemoveConverters(player, side, converters, null);
     }
 
-    private void batchApplyConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyAdd) {
+    private synchronized void batchApplyConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyAdd) {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
@@ -228,16 +228,18 @@ public class PerkEffectHelper implements ITickHandler {
 
             perks.forEach(perk -> perk.removePerk(player, side));
 
-            converters.forEach((c) -> attributeMap.applyConverter(player, c));
+            if (onlyAdd == null || !prog.isPerkSealed(onlyAdd)) {
+                converters.forEach((c) -> attributeMap.applyConverter(player, c));
+            }
 
-            if (!perks.contains(onlyAdd)) {
+            if (onlyAdd != null && !prog.isPerkSealed(onlyAdd) && !perks.contains(onlyAdd)) {
                 perks.add(onlyAdd);
             }
             perks.forEach(perk -> perk.applyPerk(player, side));
         }
     }
 
-    private void batchRemoveConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyRemove) {
+    private synchronized void batchRemoveConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyRemove) {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
@@ -302,7 +304,7 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress prog = ResearchManager.getProgress(ticked, side);
         if(prog != null) {
             for (AbstractPerk perk : prog.getAppliedPerks()) {
-                if (perk instanceof IPlayerTickPerk) {
+                if (perk instanceof IPlayerTickPerk && prog.hasPerkEffect(perk)) {
                     ((IPlayerTickPerk) perk).onPlayerTick(ticked, side);
                 }
             }

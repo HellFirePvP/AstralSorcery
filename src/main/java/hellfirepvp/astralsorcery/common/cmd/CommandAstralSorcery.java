@@ -129,7 +129,7 @@ public class CommandAstralSorcery extends CommandBase {
 
                     }
                     case "progress":
-                        return getListOfStringsMatchingLastWord(args, "all"); // fixme
+                        return getListOfStringsMatchingLastWord(args, "all");
 
                     case "attune": {
                         List<String> names = new ArrayList<String>();

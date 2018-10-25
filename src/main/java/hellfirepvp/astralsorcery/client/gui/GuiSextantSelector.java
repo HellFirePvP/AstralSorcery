@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.base.GuiSkyScreen;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
@@ -34,12 +35,15 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -230,7 +234,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         zLevel -= 20;
         TextureHelper.refreshTextureBindState();
 
-        drawSelectorBox(guiLeft + guiWidth + 10, guiTop + (guiHeight / 2D - (selectionsPerFrame / 2D) * 16 - 6),
+        drawSelectorBox(new Point(mouseX, mouseY), guiLeft + guiWidth + 10, guiTop + (guiHeight / 2D - (selectionsPerFrame / 2D) * 16 - 6),
                 availableTargets, this.selectedTarget == null ? -1 : availableTargets.indexOf(this.selectedTarget));
 
         if (dragging != null) {
@@ -417,7 +421,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         GL11.glDisable(GL11.GL_ALPHA_TEST);
     }
 
-    private void drawSelectorBox(double offsetX, double offsetY, List<SextantFinder.TargetObject> objects, int selectedOption) {
+    private void drawSelectorBox(Point mouse, double offsetX, double offsetY, List<SextantFinder.TargetObject> objects, int selectedOption) {
         textureSextant.bindTexture();
         GlStateManager.color(1F, 1F, 1F, 1F);
         int totalInnerHeight = Math.min(selectionsPerFrame, objects.size()) * 16;
@@ -498,6 +502,17 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         if (selectedInternal >= 0) {
             textureSextant.bindTexture();
             drawTexturedRect(offsetX, offsetY + selectedInternal * 16, 28, 28, partSelectFrame);
+        }
+
+        if (!Mouse.isGrabbed()) {
+            for (Rectangle.Double r : this.selectMap.keySet()) {
+                if (r.contains(mouse)) {
+                    RenderingUtils.renderBlueTooltip(mouse.x, mouse.y,
+                            Lists.newArrayList(TextFormatting.GOLD.toString() +
+                                    I18n.format(I18n.format("item.itemsextant.target." + this.selectMap.get(r).getRegistryName() + ".name"))),
+                            fontRenderer);
+                }
+            }
         }
 
         TextureHelper.refreshTextureBindState();

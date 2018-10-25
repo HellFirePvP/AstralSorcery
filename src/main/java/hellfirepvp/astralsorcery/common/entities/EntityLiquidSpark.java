@@ -118,7 +118,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super.entityInit();
 
         this.dataManager.register(ENTITY_TARGET, -1);
-        this.dataManager.register(FLUID_REPRESENTED, new FluidStack(FluidRegistry.WATER, 1));
+        this.dataManager.register(FLUID_REPRESENTED, null);
     }
 
     @Override
@@ -187,12 +187,17 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
                 if(getDistance(target.getX(), target.getY(), target.getZ()) < 1.1F) {
                     setDead();
-                    if(getRepresentitiveFluid().getFluid() == BlocksAS.fluidLiquidStarlight && tileTarget instanceof ILiquidStarlightPowered) {
-                        ((ILiquidStarlightPowered) tileTarget).acceptStarlight(getRepresentitiveFluid().amount);
+                    FluidStack contained = getRepresentitiveFluid();
+                    if (contained == null) {
+                        return;
+                    }
+
+                    if(contained.getFluid() == BlocksAS.fluidLiquidStarlight && tileTarget instanceof ILiquidStarlightPowered) {
+                        ((ILiquidStarlightPowered) tileTarget).acceptStarlight(contained.amount);
                     } else if(tileTarget.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
                         IFluidHandler handler = tileTarget.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                         if(handler != null) {
-                            handler.fill(getRepresentitiveFluid(), true);
+                            handler.fill(contained, true);
                         }
                     }
                     if(tileTarget instanceof TileEntitySynchronized) {
@@ -203,8 +208,8 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                     Vector3 at = Vector3.atEntityCenter(this);
 
                     PktLiquidInteractionBurst ev = new PktLiquidInteractionBurst(
-                            getRepresentitiveFluid(),
-                            getRepresentitiveFluid(),
+                            contained,
+                            contained,
                             at);
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(this.world, at.toBlockPos(), 32));
                 } else {
@@ -268,7 +273,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
     @SideOnly(Side.CLIENT)
     private void playAmbientParticles() {
-        FluidStack stack = this.dataManager.get(FLUID_REPRESENTED);
+        FluidStack stack = getRepresentitiveFluid();
         if(stack == null) return;
         TextureAtlasSprite tas = RenderingUtils.tryGetFlowingTextureOfFluidStack(stack);
 

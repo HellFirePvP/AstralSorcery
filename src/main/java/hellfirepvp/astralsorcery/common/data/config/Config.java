@@ -29,8 +29,6 @@ import java.util.*;
  */
 public class Config {
 
-    //TODO remember to do a configurable itemSword-classname blacklist for sharpening.
-
     private static Configuration latestConfig;
 
     private static File dirConfigurationRegistries;
@@ -65,6 +63,7 @@ public class Config {
     public static boolean liquidStarlightAquamarine = true;
     public static boolean liquidStarlightSand = true;
     public static boolean liquidStarlightIce = true;
+    public static boolean liquidStarlightInfusedWood = true;
 
     public static boolean enableFlatGen = false;
     public static boolean enableRetroGen = false;
@@ -142,7 +141,7 @@ public class Config {
     public static void addDataRegistry(ConfigDataAdapter<?> dataAdapter) {
         for (ConfigDataAdapter<?> cfg : dataAdapters) {
             if(cfg.getDataFileName().equalsIgnoreCase(dataAdapter.getDataFileName())) {
-                throw new IllegalArgumentException("Duplicate DataRegistry names! " + cfg.getDataFileName() + " - " + dataAdapter.getDataFileName());
+                throw new IllegalArgumentException("Duplicate DataRegistry names! " + cfg.getDataFileName() + " (" + cfg.getClass().getName() + ") - " + dataAdapter.getDataFileName() + " (" + dataAdapter.getClass().getName() + ")");
             }
         }
         dataAdapters.add(dataAdapter);
@@ -175,7 +174,7 @@ public class Config {
         out = config.getStringList("data", "data", out, "");
         for (String str : out) {
             if(cfg.appendDataSet(str) == null) {
-                AstralSorcery.log.warn("[AstralSorcery] Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
+                AstralSorcery.log.warn("Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
             }
         }
         config.save();
@@ -230,6 +229,7 @@ public class Config {
         liquidStarlightAquamarine = latestConfig.getBoolean("liquidStarlightAquamarine", "crafting", liquidStarlightAquamarine, "Set this to false to disable that liquid starlight + lava occasionally/rarely produces aquamarine shale instead of sand.");
         liquidStarlightSand = latestConfig.getBoolean("liquidStarlightSand", "crafting", liquidStarlightSand, "Set this to false to disable that liquid starlight + lava produces sand.");
         liquidStarlightIce = latestConfig.getBoolean("liquidStarlightIce", "crafting", liquidStarlightIce, "Set this to false to disable that liquid starlight + water produces ice.");
+        liquidStarlightInfusedWood = latestConfig.getBoolean("liquidStarlightInfusedWood", "crafting", liquidStarlightInfusedWood, "Set this to false to disable the functionality that wood logs will be converted to infused wood when thrown into liquid starlight.");
 
         latestConfig.addCustomCategoryComment("lightnetwork", "Maintenance options for the Starlight network. Use the integrity check when you did a bigger rollback or MC-Edited stuff out of the world. Note that it will only affect worlds that get loaded. So if you edited out something on, for example, dimension -76, be sure to go into that dimension with the maintenance options enabled to properly perform maintenance there.");
         performNetworkIntegrityCheck = latestConfig.getBoolean("performNetworkIntegrityCheck", "lightnetwork", false, "NOTE: ONLY run this once and set it to false again afterwards, nothing will be gained by setting this to true permanently, just longer loading times. When set to true and the server started, this will perform an integrity check over all nodes of the starlight network whenever a world gets loaded, removing invalid ones in the process. This might, depending on network sizes, take a while. It'll leave a message in the console when it's done. After this check has been run, you might need to tear down and rebuild your starlight network in case something doesn't work anymore.");
@@ -268,7 +268,7 @@ public class Config {
             try {
                 out.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'worldGenWhitelist': " + s + " is not a number!");
+                AstralSorcery.log.warn("Error while reading config entry 'worldGenWhitelist': " + s + " is not a number!");
             }
         }
         worldGenDimWhitelist = new ArrayList<>(out.size());
@@ -283,7 +283,7 @@ public class Config {
             try {
                 out.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'weakSkyRenders': " + s + " is not a number!");
+                AstralSorcery.log.warn("Error while reading config entry 'weakSkyRenders': " + s + " is not a number!");
             }
         }
         weakSkyRendersWhitelist = new ArrayList<>(out.size());
@@ -298,7 +298,7 @@ public class Config {
             try {
                 out.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'skySupportedDimensions': " + s + " is not a number!");
+                AstralSorcery.log.warn("Error while reading config entry 'skySupportedDimensions': " + s + " is not a number!");
             }
         }
         constellationSkyDimWhitelist = Lists.newArrayList(out);
