@@ -101,11 +101,11 @@ public class GuiConstellationPaper extends GuiWHScreen {
         FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
         double length = fr.getStringWidth(locName) * 1.8;
         double offsetLeft = width / 2 - length / 2;
-        int offsetTop = guiTop + 31;
+        int offsetTop = guiTop + 40;
         //new Color(0.3F, 0.3F, 0.3F, 0.8F);
         //GL11.glColor4f(0.3F, 0.3F, 0.3F, 0.8F);
         GL11.glPushMatrix();
-        GL11.glTranslated(offsetLeft + 15, offsetTop, 0);
+        GL11.glTranslated(offsetLeft + 2, offsetTop, 0);
         GL11.glScaled(1.8, 1.8, 1.8);
         fr.drawString(locName, 0, 0, 0xAA4D4D4D, false);
         GL11.glPopMatrix();
@@ -144,7 +144,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
             double offsetLeft = width / 2 - length / 2;
             int offsetTop = guiTop + 207;
             GL11.glPushMatrix();
-            GL11.glTranslated(offsetLeft + 10, offsetTop, 0);
+            GL11.glTranslated(offsetLeft, offsetTop, 0);
             GL11.glScaled(scale, scale, scale);
             fr.drawString("? ? ?", 0, 0, 0xAA4D4D4D, false);
             GL11.glPopMatrix();
@@ -160,7 +160,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
             }
 
             int size = 15;
-            int offsetX = (width / 2 + 5) - (phases.size() * (size + 2)) / 2;
+            int offsetX = (width / 2) - (phases.size() * (size + 2)) / 2;
             int offsetY = guiTop + 206;
             for (int i = 0; i < phases.size(); i++) {
                 MoonPhase ph = phases.get(i);
