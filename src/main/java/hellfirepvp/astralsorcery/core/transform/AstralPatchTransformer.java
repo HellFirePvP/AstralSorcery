@@ -72,6 +72,7 @@ public class AstralPatchTransformer implements SubClassTransformer {
             AstralCore.log.info("[AstralTransformer] Found 0 Transformers! Trying to recover with direct references...");
             String[] references = new String[] {
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchBlockModify",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchApplyPotionEffectEvent",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchUpdateElytra",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevels",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevelsTooltip",

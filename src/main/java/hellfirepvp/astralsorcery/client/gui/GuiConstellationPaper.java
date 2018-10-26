@@ -46,7 +46,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
     private List<MoonPhase> phases = new LinkedList<>();
 
     public GuiConstellationPaper(IConstellation c) {
-        super(300, 250);
+        super(344, 275);
         this.constellation = c;
         testPhases();
     }
@@ -101,14 +101,12 @@ public class GuiConstellationPaper extends GuiWHScreen {
         FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
         double length = fr.getStringWidth(locName) * 1.8;
         double offsetLeft = width / 2 - length / 2;
-        int offsetTop = guiTop + 40;
-        //new Color(0.3F, 0.3F, 0.3F, 0.8F);
-        //GL11.glColor4f(0.3F, 0.3F, 0.3F, 0.8F);
-        GL11.glPushMatrix();
-        GL11.glTranslated(offsetLeft + 2, offsetTop, 0);
-        GL11.glScaled(1.8, 1.8, 1.8);
+        int offsetTop = guiTop + 45;
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(offsetLeft + 2, offsetTop, 0);
+        GlStateManager.scale(1.8, 1.8, 1.8);
         fr.drawString(locName, 0, 0, 0xAA4D4D4D, false);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
         GlStateManager.color(1, 1, 1, 1);
         GL11.glColor4f(1, 1, 1, 1);
     }
@@ -118,9 +116,9 @@ public class GuiConstellationPaper extends GuiWHScreen {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderConstellation.renderConstellationIntoGUI(
                 new Color(0.4F, 0.4F, 0.4F, 0.8F), constellation,
-                width / 2 - 110 / 2, guiTop + 84,
+                width / 2 - 145 / 2, guiTop + 84,
                 zLevel,
-                110, 110, 2F, new RenderConstellation.BrightnessFunction() {
+                145, 145, 2F, new RenderConstellation.BrightnessFunction() {
                     @Override
                     public float getBrightness() {
                         //return 0.8F - (0.6F * (tierN / h));
@@ -140,13 +138,13 @@ public class GuiConstellationPaper extends GuiWHScreen {
             double scale = 1.8;
             TextureHelper.refreshTextureBindState();
             FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-            double length = fr.getStringWidth("? ? ?") * scale;
+            double length = fr.getStringWidth("?  ?  ?") * scale;
             double offsetLeft = width / 2 - length / 2;
-            int offsetTop = guiTop + 207;
+            int offsetTop = guiTop + 239;
             GL11.glPushMatrix();
             GL11.glTranslated(offsetLeft, offsetTop, 0);
             GL11.glScaled(scale, scale, scale);
-            fr.drawString("? ? ?", 0, 0, 0xAA4D4D4D, false);
+            fr.drawString("?  ?  ?", 0, 0, 0xAA4D4D4D, false);
             GL11.glPopMatrix();
             GlStateManager.color(1, 1, 1, 1);
             GL11.glColor4f(1, 1, 1, 1);
@@ -159,9 +157,9 @@ public class GuiConstellationPaper extends GuiWHScreen {
                 }
             }
 
-            int size = 15;
+            int size = 16;
             int offsetX = (width / 2) - (phases.size() * (size + 2)) / 2;
-            int offsetY = guiTop + 206;
+            int offsetY = guiTop + 237;
             for (int i = 0; i < phases.size(); i++) {
                 MoonPhase ph = phases.get(i);
                 MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();

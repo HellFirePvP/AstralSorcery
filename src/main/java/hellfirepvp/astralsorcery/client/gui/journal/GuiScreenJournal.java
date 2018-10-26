@@ -139,7 +139,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         }
 
         KnowledgeFragmentData data = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
-        if (!data.getAllFragments().isEmpty()) {
+        if (!data.getAllFragments().isEmpty() || true) {
             offsetY += bookmarkGap;
             rectKnowledgeBookmark = drawBookmark(
                     offsetX, offsetY,
