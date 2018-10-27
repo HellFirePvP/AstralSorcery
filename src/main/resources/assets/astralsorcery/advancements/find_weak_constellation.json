@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:blockmachine"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.find_weak_constellation.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.find_weak_constellation.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:find_constellation",
+    "criteria": {
+        "weak_constellation_discovered": {
+            "trigger": "astralsorcery:find_constellation",
+            "conditions": {
+                "weak": true
+            }
+        }
+    }
+}

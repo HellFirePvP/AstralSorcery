@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -110,6 +111,8 @@ public class CraftingAccessManager {
     }
 
     public static void registerMTAltarRecipe(AbstractAltarRecipe recipe) {
+        tryRemoveAltarRecipe(recipe.getNativeRecipe().getRegistryName());
+
         TileAltar.AltarLevel al = recipe.getNeededLevel();
         AltarRecipeRegistry.mtRecipes.get(al).add(recipe);
         addRecipe(recipe);
@@ -119,8 +122,13 @@ public class CraftingAccessManager {
         markForRemoval(InfusionRecipeRegistry.removeFindRecipeByOutput(output));
     }
 
+    @Deprecated
     public static void tryRemoveAltarRecipeByOutputAndLevel(ItemStack output, TileAltar.AltarLevel altarLevel) {
         markForRemoval(AltarRecipeRegistry.removeFindRecipeByOutputAndLevel(output, altarLevel));
+    }
+
+    public static void tryRemoveAltarRecipe(ResourceLocation recipeRegistryName) {
+        markForRemoval(AltarRecipeRegistry.getRecipeSlow(recipeRegistryName));
     }
 
     public static void addMTTransmutation(ItemStack in, ItemStack out, double cost, @Nullable IWeakConstellation cst) {

@@ -77,6 +77,10 @@ public class AltarTraitRecipeWrapper extends JEIBaseWrapper {
         ingredients.setOutput(ItemStack.class, recipe.getOutputForRender());
     }
 
+    public TraitRecipe getRecipe() {
+        return recipe;
+    }
+
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         if(recipe.getRequiredConstellation() != null) {

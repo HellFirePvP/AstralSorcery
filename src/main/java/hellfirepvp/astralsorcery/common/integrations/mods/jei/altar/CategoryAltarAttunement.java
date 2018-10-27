@@ -16,7 +16,9 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -64,5 +66,12 @@ public class CategoryAltarAttunement extends JEIBaseCategory<AltarAttunementReci
         group.init(13, true, 87, 133);
 
         group.set(ingredients);
+
+        group.addTooltipCallback((slot, input, stack, tooltip) -> {
+            if (!input && Minecraft.getMinecraft().gameSettings.showDebugInfo) {
+                tooltip.add("");
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.recipename", recipeWrapper.getRecipe().getNativeRecipe().getRegistryName().toString()));
+            }
+        });
     }
 }

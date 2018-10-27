@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:blockobservatory"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.find_minor_constellation.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.find_minor_constellation.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:find_weak_constellation",
+    "criteria": {
+        "minor_constellation_discovered": {
+            "trigger": "astralsorcery:find_constellation",
+            "conditions": {
+                "minor": true
+            }
+        }
+    }
+}

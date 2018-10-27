@@ -134,6 +134,7 @@ public class CommonProxy implements IGuiHandler {
 
         RegistryConstellations.init();
         ASDataSerializers.registerSerializers();
+        RegistryAdvancements.init();
 
         PacketChannel.init();
 

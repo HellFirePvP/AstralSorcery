@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:blockattunementrelay"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.perk_level_small.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.perk_level_small.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:attune_self",
+    "criteria": {
+        "gain_perk_level_small": {
+            "trigger": "astralsorcery:perk_level",
+            "conditions": {
+                "level": 10
+            }
+        }
+    }
+}

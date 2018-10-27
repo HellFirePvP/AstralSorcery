@@ -17,6 +17,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -61,16 +62,13 @@ public class PktAttuneConstellation implements IMessage, IMessageHandler<PktAttu
     public IMessage onMessage(PktAttuneConstellation message, MessageContext ctx) {
         IMajorConstellation cst = message.attunement;
         if(cst != null) {
-            World w = DimensionManager.getWorld(message.worldId);
-            TileAttunementAltar ta = MiscUtils.getTileAt(w, message.at, TileAttunementAltar.class, false);
-            if(ta != null) {
-                ta.askForAttunement(ctx.getServerHandler().player, cst);
-            }
-            /*EntityPlayer req = ctx.getServerHandler().playerEntity;
-            PlayerProgress prog = ResearchManager.getProgress(req, Side.SERVER);
-            if(prog != null && prog.getAttunedConstellation() == null) {
-                ResearchManager.setAttunedConstellation(req, cst);
-            }*/
+            FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+                World w = DimensionManager.getWorld(message.worldId);
+                TileAttunementAltar ta = MiscUtils.getTileAt(w, message.at, TileAttunementAltar.class, false);
+                if(ta != null) {
+                    ta.askForAttunement(ctx.getServerHandler().player, cst);
+                }
+            });
         }
         return null;
     }
