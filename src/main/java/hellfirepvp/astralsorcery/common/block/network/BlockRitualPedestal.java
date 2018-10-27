@@ -142,6 +142,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
                 TileReceiverBaseInventory.ItemHandlerTile handle = te.getInventoryHandler();
                 ItemUtils.dropInventory(te.getInventoryHandler(), worldIn, pos);
                 handle.clearInventory();
+                te.placeCrystalIntoPedestal(ItemStack.EMPTY);
                 te.markForUpdate();
             }
         }
