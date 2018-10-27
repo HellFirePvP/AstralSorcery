@@ -67,7 +67,7 @@ public class ShootingStarHandler implements ITickHandler {
                     int day = (int) (player.getEntityWorld().getWorldTime() / Config.dayLength);
                     if (!handledDays.contains(day)) {
                         Vector3 movement = Vector3.positiveYRandom().setY(0).normalize().multiply(0.2);
-                        EntityShootingStar star = new EntityShootingStar(player.getEntityWorld(), player.posX, 560, player.posZ, movement);
+                        EntityShootingStar star = new EntityShootingStar(player.getEntityWorld(), player.posX, 560, player.posZ, movement, player);
                         player.getEntityWorld().spawnEntity(star);
                         handledDays.add(day);
                         fleetingServerCache.put(player.getUniqueID(), handledDays);

@@ -26,6 +26,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
@@ -97,6 +98,10 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
         ei.motionX = entity.motionX;
         ei.motionY = entity.motionY;
         ei.motionZ = entity.motionZ;
+        if (entity instanceof EntityItem) {
+            ei.setThrower(((EntityItem) entity).getThrower());
+            ei.setOwner(((EntityItem) entity).getOwner());
+        }
         return ei;
     }
 

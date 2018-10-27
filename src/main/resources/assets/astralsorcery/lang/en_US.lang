@@ -85,6 +85,15 @@ misc.link.link=Linked %s to %s!
 misc.link.link.block=a block
 misc.link.unlink=Unlinked %s from %s!
 misc.link.unlink.all=Unlinked all links!
+misc.fragment.container.desc=Something is shining inside the casing.
+misc.fragment.container.open=Right-click to open.
+misc.fragment.constellation.desc.1=A strange constellation is drawn on this scroll.
+misc.fragment.constellation.desc.2=Discovering it should provide additional clues.
+misc.fragment.content.desc.1=The scroll has some pale scribblings on it.
+misc.fragment.content.desc.2=Right-click to add it to your tome.
+misc.fragment.content.empty=The scroll appears to be blank.
+misc.fragment.added.cst=The constellation %s vanishes out of sight.
+misc.fragment.added=Gained Knowledge about: %s
 
 misc.sword.sharpened=Sharpened (%s increased Damage)
 misc.chaos.resistance=+%s Chaos Resistance
@@ -540,7 +549,8 @@ item.itemsextant.upgraded=Augmented
 item.itemenchantmentamulet.name=Resplendent Prism
 item.itemenchantmentamulet.pure=Pure
 item.itemperkseal.name=Perk Seal
-item.itemknowledgeshard.name=Shard of Knowledge
+item.itemknowledgefragment.name=Lucent Scroll
+item.itemfragmentcapsule.name=Shining Casing
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator

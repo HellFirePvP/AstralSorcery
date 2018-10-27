@@ -405,7 +405,8 @@ public class CommonProxy implements IGuiHandler {
         JOURNAL,
         JOURNAL_STORAGE,
         OBSERVATORY(TileObservatory.class),
-        SEXTANT;
+        SEXTANT,
+        KNOWLEDGE_CONSTELLATION;
 
         private final Class<? extends TileEntity> tileClass;
 

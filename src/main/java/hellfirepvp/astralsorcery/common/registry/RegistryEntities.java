@@ -44,6 +44,7 @@ public class RegistryEntities {
         registerEntity(EntityObservatoryHelper.class, "EntityObservatoryHelper", modEid++, 64, 1, true);
         //registerEntity(SpellProjectile.class, "EntitySpellProjectile", modEid++, 128, 1, true);
         registerEntity(EntityShootingStar.class, "EntityShootingStar", modEid++, 128, 1, true);
+        registerEntity(EntityItemExplosionResistant.class, "EntityItemDamageResistant", modEid++, 64, 1, true);
     }
 
     // trackingRange refers x/z distance, not y.

@@ -44,6 +44,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspacebook")                .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspaceconstellation")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guicontippaper")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guicontippaper_blank")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmark")                 .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmarkstretched")        .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiknowledgebookmark")         .allocateGlId();

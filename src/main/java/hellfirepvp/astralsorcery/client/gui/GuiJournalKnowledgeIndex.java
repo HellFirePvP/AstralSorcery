@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
 import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
-import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
 import hellfirepvp.astralsorcery.client.gui.journal.overlay.GuiJournalOverlayKnowledge;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.GuiTextEntry;
@@ -21,9 +20,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
-import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
@@ -71,9 +68,8 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
 
         KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
         List<KnowledgeFragment> known = Lists.newArrayList(dat.getAllFragments());
-        known = KnowledgeFragmentManager.getInstance().getAllFragments();
         known.sort(Comparator.comparing(KnowledgeFragment::getLocalizedIndexName));
-        this.allFragments = KnowledgeFragmentManager.getInstance().getAllFragments();
+        this.allFragments = known;
         this.searchResult = Lists.newArrayList(this.allFragments);
         this.searchResult.sort(Comparator.comparing(KnowledgeFragment::getLocalizedIndexName));
 
@@ -146,6 +142,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
             KnowledgeFragment frag = this.searchResult.get(index);
             String line = frag.getLocalizedIndexName();
             int length = fontRenderer.drawString(line, offsetX, y, 0x00D0D0D0, false);
+            length -= offsetX;
 
             Rectangle rctString = new Rectangle(offsetX - 2, y - 2, length + 4, 7 + 4);
             if (!drewHover && rctString.contains(mouseX, mouseY)) {

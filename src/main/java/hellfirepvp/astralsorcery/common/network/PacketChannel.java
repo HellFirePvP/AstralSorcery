@@ -93,6 +93,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktSetSextantTarget.class, PktSetSextantTarget.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktRequestSextantTarget.class, PktRequestSextantTarget.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktRequestPerkSealAction.class, PktRequestPerkSealAction.class, id++, Side.SERVER);
+        CHANNEL.registerMessage(PktRemoveKnowledgeFragment.class, PktRemoveKnowledgeFragment.class, id++, Side.SERVER);
 
         /*Method registerPacket = ReflectionHelper.findMethod(
                 EnumConnectionState.class,

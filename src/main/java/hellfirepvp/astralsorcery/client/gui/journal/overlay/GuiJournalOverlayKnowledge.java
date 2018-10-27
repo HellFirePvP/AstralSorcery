@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class GuiJournalOverlayKnowledge extends GuiScreenJournalOverlay {
 
-    public static final BindableResource textureKnowledgeOverlay = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guicontippaper");
+    public static final BindableResource textureKnowledgeOverlay = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guicontippaper_blank");
     private static final int DEFAULT_WIDTH = 175;
 
     private final KnowledgeFragment knowledgeFragment;
