@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network;
 
+import crafttweaker.CraftTweakerAPI;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -67,7 +68,9 @@ public class AltarRecipeRemove implements SerializeableRecipe {
         if (this.matchOutRemove != null) {
             CraftingAccessManager.tryRemoveAltarRecipeByOutputAndLevel(this.matchOutRemove, this.level);
         } else {
-            CraftingAccessManager.tryRemoveAltarRecipe(new ResourceLocation(this.recipeRegistryName));
+            if (!CraftingAccessManager.tryRemoveAltarRecipe(new ResourceLocation(this.recipeRegistryName))) {
+                CraftTweakerAPI.logError("[AstralSorcery Altar Crafting] Could not find recipe to remove with name " + this.recipeRegistryName);
+            }
         }
     }
 

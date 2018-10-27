@@ -127,8 +127,10 @@ public class CraftingAccessManager {
         markForRemoval(AltarRecipeRegistry.removeFindRecipeByOutputAndLevel(output, altarLevel));
     }
 
-    public static void tryRemoveAltarRecipe(ResourceLocation recipeRegistryName) {
-        markForRemoval(AltarRecipeRegistry.getRecipeSlow(recipeRegistryName));
+    public static boolean tryRemoveAltarRecipe(ResourceLocation recipeRegistryName) {
+        AbstractAltarRecipe recipe = AltarRecipeRegistry.getRecipeSlow(recipeRegistryName);
+        markForRemoval(recipe);
+        return recipe != null;
     }
 
     public static void addMTTransmutation(ItemStack in, ItemStack out, double cost, @Nullable IWeakConstellation cst) {
