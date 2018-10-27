@@ -23,9 +23,9 @@ config.astralsorcery.category.mineralis_ritual.tooltip=Defines the OreDictionary
 config.astralsorcery.category.treasure_shrine=Ore-Spawning: Treasure Shrine
 config.astralsorcery.category.treasure_shrine.tooltip=Defines the OreDictionary-ores the treasure shrine can spawn.
 config.astralsorcery.category.fluid_rarities=Fluids: Neromantic Prime
-config.astralsorcery.category.fluid_rarities.tooltip=Defines the fluids the prime can find.
+config.astralsorcery.category.fluid_rarities.tooltip=Defines the fluids the Prime can find.
 config.astralsorcery.category.herdable_animals_blacklist=Blacklist: Herdable Animals
-config.astralsorcery.category.herdable_animals_blacklist.tooltip=Defines which animals the bootes ritual can't interact with.
+config.astralsorcery.category.herdable_animals_blacklist.tooltip=Defines which animals the Bootes ritual can't interact with.
 
 potion.potency.1=II
 potion.potency.2=III
@@ -69,7 +69,7 @@ amulet.enchantment.add_to_existing_specific.name=+%s %s to existing %s
 amulet.enchantment.add_to_existing_all.name=+%s %s to all existing Enchantments
 
 enchantment.astralsorcery.enchantment.as.nightvision.desc=Grants the wearer night vision.
-enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with tools with this enchantment will cause the drops to be as if they were smelted. ("Auto-Smelt")
+enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with this enchantment will have their drops smelted, as though in a furnace.
 
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
@@ -98,7 +98,7 @@ achievement.astralsorcery.liquidstarlight.desc=Obtain Liquid Starlight
 achievement.astralsorcery.playerattunement=Alignment with the stars
 achievement.astralsorcery.playerattunement.desc=Attune yourself with a Constellation
 
-progress.missing.knowledge=Something seems to be here, but you can’t tell what it is yet...
+progress.missing.knowledge=Something seems to be here, but understanding of it is not yet revealed.
 progress.gain.progress.chat=Your vision expands.
 progress.gain.research.chat=You learned more about '%s'.
 progress.discover.constellation.chat=Discovered Constellation %s!
@@ -120,9 +120,9 @@ astralsorcery.journal.constellation.dst.minor=Faint
 research.SHRINES.name=Ancient Shrines
 astralsorcery.journal.SHRINES.1.text=Scattered across the world are ancient shrines, built from marble by a civilization long past. Some of the most impressive shrines, featuring elaborate structures, have been located atop high hills and mountains, while smaller ones have been dug up from under the sands in deserts.<NL>While they don't seem to be very special at first, it's told that many of them harbor old and sacred treasures. Unlike the legends, however, only a few old chests and stories of strange floating crystals have ever been found.
 
-astralsorcery.journal.SHRINES.2.text=The the floating crystals are quite bizarre. They appear to emit a constant shimmering Starlight that flickers in an eerie and enchanting way.<NL>There is little doubt that these crystals are artificial. Their true age and origin is practically impossible to determine, but after some observation the crystal energies seem to be fixed in their alignment with the stars.
+astralsorcery.journal.SHRINES.2.text=The floating crystals are quite bizarre. They appear to emit a constant shimmering Starlight that flickers in an eerie and enchanting way.<NL>There is little doubt that these crystals are artificial. Their true age and origin is practically impossible to determine, but after some observation the crystal energies seem to be fixed in their alignment with the stars.
 
-astralsorcery.journal.SHRINES.3.text=Not even the tiniest sliver can be chipped from the crystals in these shrines, even with the most destructive methods.<NL>The behavior of these crystals also seems strange. The light they emit appears to ebb and flow, almost like water, in response to certain objects being nearby. §3Maybe placing a crafting §3table close by would yield §3something interesting?§r
+astralsorcery.journal.SHRINES.3.text=Not even the tiniest sliver can be chipped from the crystals in these shrines, even with the most destructive methods.<NL>The behavior of these crystals also seems strange. The light they emit appears to ebb and flow, like water, in response to certain objects being nearby. §3Maybe placing a crafting §3table close by would yield §3something interesting?§r
 
 research.CPAPER.name=Constellation Paper
 astralsorcery.journal.CPAPER.1.text=Inside chests found in the scattered shrines across the land, explorers occasionally find blank scrolls. Removing one of these scrolls from the chest causes a name to appear across the top, along with a strange drawing that resembles some of the stars seen in the night sky.<NL>After collecting a number of them, it appears that each scroll shows a different set of stars, but eventually they begin staying blank.
@@ -168,10 +168,10 @@ astralsorcery.journal.CRYSTAL_GROWTH.1.text=Upon immersing single Rock Crystals 
 astralsorcery.journal.CRYSTAL_GROWTH.2.text=Crystals seems to have a maximum size they will grow to. You do wonder what would happen if a fully-grown crystal was continuously submerged in Liquid Starlight, and what it would mean for its purity.
 
 research.MARBLETYPES.name=Marble
-astralsorcery.journal.MARBLETYPES.1.text=A pristine and light-reflecting variety of marble can be found from time to time while mining underground. The ancient shrines are also built entirely from this marble, and its reflective capabilities seem to interact with Starlight in a promising manner.<NL>If the ancient builders recognized marble’s importance in Starlight sensitive structures, then it may prove to be a useful building block in the future. It is unlikely that a less pure marble from other sources would see the same results. Carving channels into the marble seems to alter the way it directs Starlight energy.
+astralsorcery.journal.MARBLETYPES.1.text=A pristine and light-reflecting variety of marble can be found from time to time while mining underground. The ancient shrines are also built entirely from this marble, and its reflective capabilities seem to interact with Starlight in a promising manner.<NL>If the ancient builders recognized this marble’s importance in Starlight sensitive structures, then it is unlikely that a less pure marble from other sources would see the same results. Carving channels into the marble seems to alter the way it directs Starlight energy.
 
 research.SOOTYMARBLE.name=Sooty Marble
-astralsorcery.journal.SOOTYMARBLE.1.text=Coating the surface of marble with a very dark material, such as coal, will reverse its innate reflective properties into strong absorptive properties. Sooty marble collects sunlight during the day by heating up, and radiates it throughout the night. This marble may prove to be just as useful as white marble in the future, as the thermally radiated sun energies seem to improve the effects or starlight nearby.
+astralsorcery.journal.SOOTYMARBLE.1.text=Coating the surface of marble with a very dark material, such as coal, will reverse its innate reflective properties into strong absorptive properties. Sooty marble collects sunlight during the day by heating up, and radiates it throughout the night. This marble may prove to be just as useful as white marble in the future, as the thermally radiated sun energies seem to improve the effects of starlight nearby.
 
 research.ALTAR2.name=Starlight Crafting Altar
 astralsorcery.journal.ALTAR2.1.text=The Starlight focusing abilities of the Luminous Crafting Table and addition of a Starlight reservoir make it a significant upgrade to a normal crafting table. However, even that can be improved upon. The table can be engineered into a larger altar with reinforced extensions designed to capture and support increased Starlight flow.<NL>In order to focus enough Starlight to actually make use of the extensions however, a large Starlight collection structure made of various types of marble is required.
@@ -180,13 +180,13 @@ astralsorcery.journal.ALTAR2.4.text=The Starlight reservoir in the crafting alta
 
 research.WELL.name=Lightwell
 astralsorcery.journal.WELL.1.text=At night, a strange crystalline liquid seems to collect on Aquamarine gems and Rock Crystals. On closer examination, the liquid is a condensate of pure energy derived from Starlight.<NL>A carefully carved basin of marble makes the collection of this liquid quite easy. The liquid emits a bright and pure light, feels very cold, and a bucket full of it weighs almost nothing. Standing in Liquid Starlight results in nightvision being bestowed on you until it evaporates away.
-astralsorcery.journal.WELL.3.text=In order to use the Lightwell, an Aquamarine gem or Rock Crystal needs to be placed on top to condense Starlight into liquid. Gems and crystals used to gather Starlight will constantly degrade until the point of completely shattering. Once placed on the Lightwell, they cannot be retrieved.<NL>This Liquid Starlight seems to have interesting interactions with Rock Crystals and other liquids. Perhaps this warrants some experimentation.<NL>You cannot help but wonder if other materials in a Lightwell would produce other liquids.
+astralsorcery.journal.WELL.3.text=In order to use the Lightwell, an Aquamarine gem or Rock Crystal needs to be placed on top to condense Starlight into liquid. Gems and crystals used to gather Starlight will constantly degrade until the point of completely shattering, and cannot be retrieved.<NL>This Liquid Starlight seems to have interesting interactions with Rock Crystals and other liquids. Perhaps this warrants some experimentation.<NL>You cannot help but wonder if other materials in a Lightwell would produce other liquids.
 
 research.INFUSED_WOOD.name=Infused Wood
 astralsorcery.journal.INFUSED_WOOD.1.text=As infusing materials with Liquid Starlight empowers them, the versatility of strengthened wood would have great value in construction and crafting.<NL>Because it's an organic material, leaving it to soak in Liquid Starlight seems to have a different absorption pattern than the crystals, though the end result is the same: the starlight is drawn fully into the wood, though it may not be completely even in distribution. This could require some further investigation in the future, but for now functions sufficiently for your needs.
 
 research.ILLUM_POWDER.name=Illumination Powder
-astralsorcery.journal.ILLUM_POWDER.1.text=Glowstone and Aquamarine exhibit a strange reaction when brought in close proximity of each other. Tiny flame-like sparks rapidly flicker between both of them. These sparks can scatter quite far from their source before going out. Shattering Aquamarine into dust and mixing it with Glowstone dust creates a small pile of radiant powder, illuminating the space around it. This powder may prove to be an improved alternative to plebeian torches that are commonly used, as it is harder to accidentally remove them, requiring the light be smothered with another block.
+astralsorcery.journal.ILLUM_POWDER.1.text=Glowstone and Aquamarine exhibit a strange reaction when brought in close proximity of each other. Tiny flame-like sparks rapidly flicker between both of them. These sparks can scatter quite far from their source before going out. Shattering Aquamarine into dust and mixing it with Glowstone dust creates a small pile of radiant powder, illuminating the space around it. This is an improved alternative to more commonly used torches, as it is harder to accidentally remove them, requiring the light be smothered with another block.
 
 research.NOC_POWDER.name=Nocturnal Powder
 astralsorcery.journal.NOC_POWDER.1.text=The night harbors many dangers and brings forth endless creatures with malicious intent. While those monsters are not often interesting by themselves, the things they carry with them are usually much more desirable.<NL>Unfortunately, those creatures either avoid daytime completely, or act friendly when under the light of day. Illumination Powder, if darkened sufficiently with additives, could be used to encourage these hostile monsters to spawn.
@@ -217,8 +217,8 @@ astralsorcery.journal.ATT_PLAYER.4.text=Such a blanket collection method would r
 astralsorcery.journal.ATT_PLAYER.6.text=Once everything is properly arranged, the central altar and the relays will start glowing as bright blue Starlight streams through them, but only at night. Calculations show that the focused rays should sufficiently strong enough to lift the golden ornaments of the altar from the ground when active.<NL>The only real questions that remain: what types of objects can readily accept Attunement? What about Rock Crystals and Crystal Tools? Can a body withstand the rays if it steps into the light?
 
 research.ATT_PERKS.name=Alignment Perks
-astralsorcery.journal.ATT_PERKS.1.text=By nature of Attunement, after connecting with a Constellation the other Constellations seems to dim for the attuned. This seems to be a natural effect, as Attunement of a Constellation crowds out the other forms of Starlight a receptacle can receive. Re-attunement with another Constellation would require resetting this relationship. Nevertheless, subjects report experiencing various benefits such as increased strength, endurance, or even a greener thumb as they go about their daily activities.
-astralsorcery.journal.ATT_PERKS.2.text=Additional stars can be seen at night by an Attuned individual that relate to that Constellation. These new Constellations likely help track progress within alignment, and users with stronger alignments to a Constellation experienced magnified benefits. To help keep track of alignment progress, a new section in the Astral Tome is dedicated to this strange pattern. It should be possible to look back at it from time to time after using some of the newly gained powers.<NL>Also, being attuned appears to deepen visibility into the Astral, and new constellations can be seen in the sky. Formerly blank Constellation Papers may now have more to say about this.
+astralsorcery.journal.ATT_PERKS.1.text=By undergoing a self-attunement, some of the starlight energies that naturally imbue a body over time are forced into a specific frequency, granting magical abilities. While this initial starlight shaping provides a root for the magical benefits, it also provides a manner to stretch these magical "muscles" into additional magical perks. By exercising this, the remaining starlight in the body can be dragged into alignment, furthering the magical abilities granted. Unfortunately, once set, this root cannot be easily changed and will require an external tool to forcibly de-attune this starlight energy, scrambling it into its normal chaotic state, ready to be attuned again.
+astralsorcery.journal.ATT_PERKS.2.text=By meditating on the resonating energies within, an individual can shape how this energy expands over time. Unfortunately, this isn't as simple a process as selecting enchantments to pound into a tool or weapon, or scribing runes onto paper or glove, and the magical power must be shaped in a more organic fashion. Much like sympathetic wavelengths of light or sound, these magical energies have natural resonance points where they interact.<NL>Scribing these points into the Astral Tome has resulted in a helpful "Perk Map" to aid in the meditations used to control the growth of these powers.
 
 research.ATT_CRYSTAL.name=Crystal Attunement
 astralsorcery.journal.ATT_CRYSTAL.1.text=Just as someone can Attune themselves to a Constellation and become more sensitive to a Constellation's Starlight, Rock Crystals can also be attuned and will react more strongly to that Constellation and channel its effects.<NL>The application may not be immediately self evident, but a construction that amplifies the crystal's channeling effect enough will have physical effects on the world around it. These focusing properties may even have uses for some other things as well...
@@ -244,7 +244,7 @@ research.GRAPPLE_WAND.name=Impulsion Wand
 astralsorcery.journal.GRAPPLE_WAND.1.text=Enderpearls would be very useful if they weren't so hard to obtain, weren't so easily used up, and self-damaging upon use.<NL>Thanks to your knowledge about the strange patterns of Starlight energy, a wand can be created to channels these energies through Enderpearls to provide a safer means of transportation.<NL>In contrast to the pearls, though, the wand has only limited range and pulls its user towards whatever it finds rather than providing an instant teleportation.
 
 research.RIT_PEDESTAL.name=Ritual Pedestal
-astralsorcery.journal.RIT_PEDESTAL.1.text=Just as suspected, the Attuned crystal already seems almost strong enough to make its effects manifest in the world. To be actually useful, a specialized pedestal for using another Rock Crystal to help focus the collected Starlight will need to be constructed.<NL>As the crystal seems to receive stress Fractures when powering the structure, just like when being used in a Lightwell. To mitigate this, adding some Liquid Starlight internally should fill the Fractures as they appear though there are be limits to the amount of stress this internal reservoir can correct.
+astralsorcery.journal.RIT_PEDESTAL.1.text=While an Attuned crystal can almost manifest the power of a constellation directly, a specialized pedestal is needed to focus the collected Starlight.<NL>As manifesting received starlight power is stressful, and Fractures will occur over time. The pedestal having an internal Liquid Starlight reservoir helps dissipate the stressful energies, but even it has limits, and crystals will need to be manually soaked in Liquid Starlight to repair if Fracturing begins accruing.
 
 research.TELESCOPE.name=Telescope
 astralsorcery.journal.TELESCOPE.1.text=The Looking Glass was all good and fine, but holding still all the time is exhausting and doesn't give a good view. It is also difficult to make out more than one Constellation at a time in one night, so discovering everything those Constellation Papers show would take forever.<NL>The telescope will need a fixture for this. That way, it should be possible to look deeper into the sky, finding stars and Constellations that are even further away in a much easier fashion.
@@ -257,7 +257,7 @@ astralsorcery.journal.ALTAR3.4.text=Because of these properties, enhancing the S
 
 research.LENS.name=Crystal Lens
 astralsorcery.journal.LENS.1.text=Bending Starlight simply from a source to a location might not be enough. The source might be at an unfitting place, or the destination for the Starlight is just too far away.<NL>A brilliant, yet seemingly obvious, idea comes to mind: redirecting and refocusing the Starlight via a network of lenses to provide enough reach to direct it wherever needed.
-astralsorcery.journal.LENS.3.text=Constantly shifting the light into different directions over long distances takes its toll. The further the light travels, the weaker it will get as each lens takes its toll.<NL>Since the crystal used to construct a lens capable of redirecting this volatile light makes up most of the lens, the properties the crystal had will affect the transmission rate significantly. The bigger the crystal used to craft, the more lenses that can be crafted at once. A very impure crystal will most likely occlude Starlight passing through by the dust and other material it has embedded within.
+astralsorcery.journal.LENS.3.text=Constantly shifting the light into different directions over long distances takes its toll. The further the light travels, the weaker it will get as each lens takes its toll.<NL>Since the crystal used to construct a lens capable of redirecting this volatile light makes up most of the lens, the properties the crystal had will affect the transmission rate significantly. The bigger the crystal, the more lenses that can be crafted at once. A very impure crystal will most likely occlude Starlight passing through by the dust and other material it has embedded within.
 astralsorcery.journal.LENS.4.text=The quality of the facets cut into the lens will determine how focused the beam of transmitted light is, further reducing losses.<NL>Bound by its basic physicality, a lens might accept Starlight from multiple directions, though it is only able to direct the light into one direction. Wherever the outgoing Starlight is aimed, the lens will rotate to direct it there.<NL>Obviously, a clear line-of-sight is required to successfully transmit, for now.
 
 research.STARLIGHT_NETWORK.name=Focused Starlight
@@ -280,7 +280,7 @@ astralsorcery.journal.ILLUMINATION_WAND.1.text=While trying to reach for the sta
 astralsorcery.journal.ILLUMINATION_WAND.3.text=Given sufficient charge, shift-right-clicking a block will try to convert it into its luminescent state, or revert it back into its normal form.<NL>Right-clicking will create a small flare, much like the ones created by the Illumination Powder. Right-clicking a second time on the same block will remove the flare.<NL>It should be possible to alter the light frequency by crafting a dye with the wand, with the resulting flare taking on the same color.
 
 research.SHIFT_STAR.name=Shifting Star
-astralsorcery.journal.SHIFT_STAR.1.text=While Attunement with a Constellation provides significant passive benefits, it also limits flexibility as the powers of the other Constellations are blocked.<NL>A way to dissipate the celestial Attunement and its currently granted powers into the surroundings, dissipating the connection and gathered charge to that Constellation, is possible.<NL>Unfortunately, the catalyst used for this will crack and shatter after all the energy is dissipated, making this a costly endeavor.
+astralsorcery.journal.SHIFT_STAR.1.text=While being attuned to a constellation does provide significant benefits, the ultimately limited starlight energies within a body mean that sometimes one desires to alter their powers, or change how they expand them. Unfortunately, this means disrupting the attuned resonances, which require an outside focus.<NL>The catalyst used for this focus, having its own internal magical energies, will unfortunately be destroyed in the process, but will leave the users' innate powers returned to their natural disorganized and weakened state, ready to start all over.
 
 research.STARMETAL_ORE.name=Iron Transmutation
 astralsorcery.journal.STARMETAL_ORE.1.text=Focused beams of Starlight likely have other uses besides looking pretty, and directly impact the world. Focusing the light directly onto an Iron Ore block with a Linking Tool from a strong source should suffice to test this. Clearing a path to the sky for one of the Collector Crystals the Ancients left in storage at a shrine should provide that source.<NL>The Iron Ore's reaction to the focused light should see a change in its basic makeup after sufficient time...
@@ -299,23 +299,23 @@ research.COLL_CRYSTAL.name=Collector Crystal
 astralsorcery.journal.COLL_CRYSTAL.1.text=Growing more familiar with handling attuned crystals and their properties, recreating what was found in those shrines may be possible. A simple Attuned crystal alone has proven to be too weak to properly channel the same amount of Starlight energies that those big floating crystals seem to contain.<NL>Enhancing the Attuned crystals however might lead to something similar to the collector crystals. By changing the base crystal, even further enhancement beyond the shrine crystals may be possible.
 
 research.CEL_CRYSTAL_GROW.name=Crystal Clusters
-astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=The Stardust appears to be far more useful to experiment with than the raw Starmetal Ore. The little grains occasionally flash with light and sparkle while flowing like sand against an ocean tide.<NL>As you've not found any direct uses from the Ancients, experimentation by rubbing it on various celestial items and devices has revealed it readily bonds to the surface of Rock Crystals in a thin, but rough, coating.<NL>This is not helpful in itself, and refused to be removed from the crystal without grinding.
+astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=The Stardust appears to be far more useful to experiment with than the raw Starmetal Ore. The little grains occasionally flash with light and sparkle while flowing like sand against an ocean tide.<NL>As you've not found any direct uses from the Ancients, experimentation has revealed it readily bonds to the surface of Rock Crystals in a thin, but rough, coating.<NL>This is not helpful in itself, and refuses to be removed from the crystal without grinding.
 astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=Since removal of the rough coating would leave you at square one, changing how the dust collects on the crystal surface may be a better approach. Placing the Stardust into Liquid Starlight, and subsequently tossing in a crystal, seems to result in more even application of the dust, as well as a promoting growth of the crystal into a stable cluster that seems hungry for Starlight.<NL>Leaving this cluster to grow with Starlight shining on it may create something much more useful, and these clusters seem to interact symbiotically with Starmetal Ore itself.
 
 research.CEL_CRYSTALS.name=Celestial Crystals
 astralsorcery.journal.CEL_CRYSTALS.1.text=The resulting fully-grown Crystal Cluster yielded a much larger crystal that was more robust, and deeply blue tinted from the Stardust.<NL>Study shows that while they resemble Rock Crystals in many ways, they exceed them in almost every capacity. Using them in place of a Rock Crystal for any endeavor should be very profitable.
 
 research.PED_ACCEL.name=Ritual Acceleration
-astralsorcery.journal.PED_ACCEL.1.text=While a Ritual Pedestal accomplishes the goal of channeling Constellation energies, it's slow and needs a view of the sky to collect Starlight power, which is...clunky.<NL>Since it appears it's only the Starlight of the Constellation involved that's needed, feeding it that Starlight from that same Constellation via a network of lenses should be perfectly fine.
-astralsorcery.journal.PED_ACCEL.2.text=Sending Starlight to the Ritual Pedestal seems to put an immense stress on the crystal beyond what it already experiences, resulting in beams of light shooting off from the focusing crystal to release the pressure. Using a Crystal Lens to focus that light back into the ritual should allow that lost light to boost the ritual, instead.<NL>The limited number of beams that are created in this manner means there's a limit to what can be handled by the crystals safely.
-astralsorcery.journal.PED_ACCEL.3.text=Accelerating a ritual beyond what it can handle does result in Fracturing beyond what the pedestal can manage on its own. While these Fractures don't appear to impact the performance of the crystal, over time these accruing Fractures will add up, and the eventual shattering of the crystal will occur.<NL>Thankfully, removing the crystal from the pedestal and allowing it to recover in Liquid Starlight repairs this damage.
+astralsorcery.journal.PED_ACCEL.1.text=While a Ritual Pedestal accomplishes the goal of channeling Constellation energies, it's slow and needs a view of the sky to collect Starlight power, which is...clunky.<NL>Since it appears it's only the Starlight of the Constellation involved that's needed, feeding Starlight from that same Constellation via a network of lenses should boost the performance of the ritual.
+astralsorcery.journal.PED_ACCEL.2.text=Sending Starlight to the Ritual Pedestal is not a perfect process due to the nature of the crystal facets, resulting in beams of light shooting off from the ritual crystal. Using a Crystal Lens to focus that otherwise lost light back into the ritual will instead allow the full light to boost the ritual.<NL>While there are a limited number of such beams, the crystal can continue to receive additional starlight energy, though crystal stress is a risk.
+astralsorcery.journal.PED_ACCEL.3.text=Additional starlight than what is needed to spill out for all five lenses will often result in Fracturing beyond what the pedestal can mitigate. No impact will be seen in the efficacy of the ritual, but over time these accruing Fractures will result in errant particles in the ritual display, as well as destroy the crystal once the fracturing spreads 100% through the crystal. The more starlight acting on a ritual, the faster these Fractures will accrue.
 
 research.CELESTIAL_GATEWAY.name=Celestial Gateway
 astralsorcery.journal.CELESTIAL_GATEWAY.1.text=The endless stars above form intricate Constellations that guide all things. For eons the world has drawn upon them for references in navigation and direction, finding the morrow by the night's stars. It seems the stars acted as a guide for the Ancients long ago, but in a much more literal sense.<NL>By focusing illumination, and embedding Starlight into an encased Rock Crystal, a base can be built to connect distant locations, even to those in another world.
-astralsorcery.journal.CELESTIAL_GATEWAY.3.text=After constructing a suitable structure to support the gateway and stepping into the center, the celestial alignment of all other of these gateways across the world should become evident.<NL>When an individual focuses on a point in the direction desired while crouching, they will be whisked away as pure Starlight and brought to their destination. Once a gateway has linked with a destination the first time, remnant images of that place will remain for future observations while focusing.<NL>To ease navigation, naming the Gateway in an Anvil may be a prudent idea.
+astralsorcery.journal.CELESTIAL_GATEWAY.3.text=After constructing a suitable structure to support the gateway and stepping into the center, the celestial alignment of all the other gateways across the worlds should become evident.<NL>Focusing on the desired destination alignment while crouching will result in the gateway carrying them away as Starlight to that target. Once traveling that pathway, remnant images of that place will remain for future observations while focusing.<NL>Anvil-naming a Gateway can ease ease navigation.
 
 research.ENHANCED_COLLECTOR.name=Enhanced Collector Crystal
-astralsorcery.journal.ENHANCED_COLLECTOR.1.text=The superior Celestial Crystals create superior Collector Crystals, but it doesn't stop the wane of Starlight during the day, in the rain, or when the Constellation is itself waning. Creating a stabilizing platform to even out the flow of Starlight should resolve this problem, though it will need Liquid Starlight to maintain the crystal's resonance. Direct contact with the Collector would negate the benefit, and so an air gap is needed between structure and crystal.<NL>This won't prevent losses due to cannibalization from crystals being too close to each other, however.
+astralsorcery.journal.ENHANCED_COLLECTOR.1.text=The superior Celestial Crystals create superior Collector Crystals, but doesn't stop the wane of Starlight during the day, in the rain, or when the Constellation is itself waning. Creating a stabilizing platform to even out the flow of Starlight should resolve this problem, though it needs Liquid Starlight to maintain the crystal's resonance. An air gap is needed between structure and crystal to accomplish this.<NL>This won't prevent losses due to starlight cannibalization, however.
 
 research.SPECTRAL_LENS.name=Spectral Lens
 astralsorcery.journal.SPECTRAL_LENS.1.text=Proper Starlight transmission is paramount to properly powering all the rituals, devices, and effects emanating from the Starlight source. Working under an open sky affords freedom of movement and transmission, but becomes impractical in some situations where working behind closed doors or underground is more ideal. By infusing Illumination Powder with Stardust and Resonating Gems as a regulator, it is possible to create a Starlight transmission that ethereally phases through any solid matter in its path, at the cost of some of the light's potency.
@@ -403,13 +403,16 @@ astralsorcery.journal.ATT_TRAIT.1.text=Your earlier suspicions concerning the Fa
 astralsorcery.journal.ATT_TRAIT.2.text=By placing an already Attuned crystal into the Attunement Altar, the Starlight of the Faint Constellation will alter the properties of the Attuned crystal, modifying the effects of rituals using that crystal.<NL>Additional information about the traits that can be applied have been added to the Faint Constellations in the Constellations tab.
 
 research.ENH_SHIFTING_STAR.name=Irradiant Star
-astralsorcery.journal.ENH_SHIFTING_STAR.1.text=The problem with the Shifting Star is that it purges all starlight from your body.<NL>By focusing the energies of the Shifting Star into alignment with one of the Bright Constellations, this loss can be mitigated. Subequent use allows you to recover the starlight in your body by re-aligning its attunement to match the Star, and then directing the path of empowerment from that same light without it having first been purged.
+astralsorcery.journal.ENH_SHIFTING_STAR.1.text=The problem with the Shifting Star is that it purges all attuned starlight from the body.<NL>By focusing the energies of the Shifting Star into alignment with one of the Bright Constellations, this loss can be mitigated as the resonance is shifted to a new root to match the Star used. This allows gathered starlight to be directed via meditation into new perk resonances without having to start over from nothing.
 
 research.RESONATOR_AREA_SIZE.name=Domic Resonator
-astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=With further alterations, the Resonator can be altered to show starlight displacement. This manifests in an ethereal field becoming visible, not entirely unlike light through a soap bubble, that shows how far the natural starlight distributions are disturbed by buildings or rituals that channel or alter starlight while holding this new Resonator.<NL>Shift-right-clicking will still cycle through the modes, as before.
+astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=With further alterations, the Resonator can be altered to show starlight displacement. This manifests in an ethereal field becoming visible while holding this new Resonator, not entirely unlike light through a soap bubble, that shows how far the natural starlight distributions are disturbed by buildings or rituals that channel or alter starlight.<NL>Shift-right-clicking still cycles through the modes, as before.
 
 research.ATT_PERKS_SEAL.name=Sealing Sigil
-astralsorcery.journal.ATT_PERKS_SEAL.1.text=While the Irradiant Star is a major improvement in allowing for redirection of the infused starlight within the body, sometimes it's not enough to simply route the starlight flows around certain effects. To that end, a Sealing Sigil can be used to "mask" or otherwise retard certain effects, acting as an "off-switch" or bridge over an effect you may not want at that moment.
+astralsorcery.journal.ATT_PERKS_SEAL.1.text=While the Irradiant Star is a major improvement in allowing for redirection of the infused starlight within the body, sometimes it's not enough to simply route the limited starlight flows around certain resonations. To that end, a Sealing Sigil can be used to "mask" or otherwise retard certain effects, acting as a removable "off-switch" or bridge over an effect not desired at that moment.
+
+research.KNOWLEDGE_FRAGMENT.name=Forgotten Knowledge
+astralsorcery.journal.KNOWLEDGE_FRAGMENT.1.text=Occasionally, ancient fragments of text describing odd, seemingly incomplete, constellations are found. While it is obvious they have no direct power like normal Constellations, an unshakable certainty accompanies holding these papers that discovering the constellation an Ancient scribed onto it would greatly expand understanding of other Astral concepts, burning it into the mind like wildfire.
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
@@ -1003,414 +1006,418 @@ perk.astralsorcery.armara.desc.2=Gain experience by taking damage
 
 constellation.noInformation=There is nothing here.
 
-fragment.constellations.discidia.showup.name=
-fragment.constellations.discidia.showup.bookmark=
-fragment.constellations.discidia.showup.description=
-
-fragment.constellations.discidia.potions.name=
-fragment.constellations.discidia.potions.bookmark=
-fragment.constellations.discidia.potions.description=
-
-fragment.constellations.discidia.enchantments.name=
-fragment.constellations.discidia.enchantments.bookmark=
-fragment.constellations.discidia.enchantments.description=
-
-fragment.constellations.discidia.ritual.name=
-fragment.constellations.discidia.ritual.bookmark=
-fragment.constellations.discidia.ritual.description=
-
-fragment.constellations.discidia.ritual.corrupted.name=
-fragment.constellations.discidia.ritual.corrupted.bookmark=
-fragment.constellations.discidia.ritual.corrupted.description=
-
-fragment.constellations.discidia.mantle.name=
-fragment.constellations.discidia.mantle.bookmark=
-fragment.constellations.discidia.mantle.description=
-
-fragment.constellations.armara.showup.name=
-fragment.constellations.armara.showup.bookmark=
-fragment.constellations.armara.showup.description=
-
-fragment.constellations.armara.potions.name=
-fragment.constellations.armara.potions.bookmark=
-fragment.constellations.armara.potions.description=
-
-fragment.constellations.armara.enchantments.name=
-fragment.constellations.armara.enchantments.bookmark=
-fragment.constellations.armara.enchantments.description=
-
-fragment.constellations.armara.ritual.name=
-fragment.constellations.armara.ritual.bookmark=
-fragment.constellations.armara.ritual.description=
-
-fragment.constellations.armara.ritual.corrupted.name=
-fragment.constellations.armara.ritual.corrupted.bookmark=
-fragment.constellations.armara.ritual.corrupted.description=
-
-fragment.constellations.armara.mantle.name=
-fragment.constellations.armara.mantle.bookmark=
-fragment.constellations.armara.mantle.description=
-
-fragment.constellations.vicio.showup.name=
-fragment.constellations.vicio.showup.bookmark=
-fragment.constellations.vicio.showup.description=
-
-fragment.constellations.vicio.potions.name=
-fragment.constellations.vicio.potions.bookmark=
-fragment.constellations.vicio.potions.description=
-
-fragment.constellations.vicio.enchantments.name=
-fragment.constellations.vicio.enchantments.bookmark=
-fragment.constellations.vicio.enchantments.description=
-
-fragment.constellations.vicio.ritual.name=
-fragment.constellations.vicio.ritual.bookmark=
-fragment.constellations.vicio.ritual.description=
-
-fragment.constellations.vicio.ritual.corrupted.name=
-fragment.constellations.vicio.ritual.corrupted.bookmark=
-fragment.constellations.vicio.ritual.corrupted.description=
-
-fragment.constellations.vicio.mantle.name=
-fragment.constellations.vicio.mantle.bookmark=
-fragment.constellations.vicio.mantle.description=
-
-fragment.constellations.aevitas.showup.name=
-fragment.constellations.aevitas.showup.bookmark=
-fragment.constellations.aevitas.showup.description=
-
-fragment.constellations.aevitas.potions.name=
-fragment.constellations.aevitas.potions.bookmark=
-fragment.constellations.aevitas.potions.description=
-
-fragment.constellations.aevitas.enchantments.name=
-fragment.constellations.aevitas.enchantments.bookmark=
-fragment.constellations.aevitas.enchantments.description=
-
-fragment.constellations.aevitas.ritual.name=
-fragment.constellations.aevitas.ritual.bookmark=
-fragment.constellations.aevitas.ritual.description=
-
-fragment.constellations.aevitas.ritual.corrupted.name=
-fragment.constellations.aevitas.ritual.corrupted.bookmark=
-fragment.constellations.aevitas.ritual.corrupted.description=
-
-fragment.constellations.aevitas.mantle.name=
-fragment.constellations.aevitas.mantle.bookmark=
-fragment.constellations.aevitas.mantle.description=
-
-fragment.constellations.evorsio.showup.name=
-fragment.constellations.evorsio.showup.bookmark=
-fragment.constellations.evorsio.showup.description=
-
-fragment.constellations.evorsio.potions.name=
-fragment.constellations.evorsio.potions.bookmark=
-fragment.constellations.evorsio.potions.description=
-
-fragment.constellations.evorsio.enchantments.name=
-fragment.constellations.evorsio.enchantments.bookmark=
-fragment.constellations.evorsio.enchantments.description=
-
-fragment.constellations.evorsio.ritual.name=
-fragment.constellations.evorsio.ritual.bookmark=
-fragment.constellations.evorsio.ritual.description=
-
-fragment.constellations.evorsio.ritual.corrupted.name=
-fragment.constellations.evorsio.ritual.corrupted.bookmark=
-fragment.constellations.evorsio.ritual.corrupted.description=
-
-fragment.constellations.evorsio.mantle.name=
-fragment.constellations.evorsio.mantle.bookmark=
-fragment.constellations.evorsio.mantle.description=
-
-fragment.constellations.mineralis.showup.name=
-fragment.constellations.mineralis.showup.bookmark=
-fragment.constellations.mineralis.showup.description=
-
-fragment.constellations.mineralis.potions.name=
-fragment.constellations.mineralis.potions.bookmark=
-fragment.constellations.mineralis.potions.description=
-
-fragment.constellations.mineralis.enchantments.name=
-fragment.constellations.mineralis.enchantments.bookmark=
-fragment.constellations.mineralis.enchantments.description=
-
-fragment.constellations.mineralis.ritual.name=
-fragment.constellations.mineralis.ritual.bookmark=
-fragment.constellations.mineralis.ritual.description=
-
-fragment.constellations.mineralis.ritual.corrupted.name=
-fragment.constellations.mineralis.ritual.corrupted.bookmark=
-fragment.constellations.mineralis.ritual.corrupted.description=
-
-fragment.constellations.mineralis.mantle.name=
-fragment.constellations.mineralis.mantle.bookmark=
-fragment.constellations.mineralis.mantle.description=
-
-fragment.constellations.lucerna.showup.name=
-fragment.constellations.lucerna.showup.bookmark=
-fragment.constellations.lucerna.showup.description=
-
-fragment.constellations.lucerna.potions.name=
-fragment.constellations.lucerna.potions.bookmark=
-fragment.constellations.lucerna.potions.description=
-
-fragment.constellations.lucerna.enchantments.name=
-fragment.constellations.lucerna.enchantments.bookmark=
-fragment.constellations.lucerna.enchantments.description=
-
-fragment.constellations.lucerna.ritual.name=
-fragment.constellations.lucerna.ritual.bookmark=
-fragment.constellations.lucerna.ritual.description=
-
-fragment.constellations.lucerna.ritual.corrupted.name=
-fragment.constellations.lucerna.ritual.corrupted.bookmark=
-fragment.constellations.lucerna.ritual.corrupted.description=
-
-fragment.constellations.lucerna.mantle.name=
-fragment.constellations.lucerna.mantle.bookmark=
-fragment.constellations.lucerna.mantle.description=
-
-fragment.constellations.horologium.showup.name=
-fragment.constellations.horologium.showup.bookmark=
-fragment.constellations.horologium.showup.description=
-
-fragment.constellations.horologium.potions.name=
-fragment.constellations.horologium.potions.bookmark=
-fragment.constellations.horologium.potions.description=
-
-fragment.constellations.horologium.enchantments.name=
-fragment.constellations.horologium.enchantments.bookmark=
-fragment.constellations.horologium.enchantments.description=
-
-fragment.constellations.horologium.ritual.name=
-fragment.constellations.horologium.ritual.bookmark=
-fragment.constellations.horologium.ritual.description=
-
-fragment.constellations.horologium.ritual.corrupted.name=
-fragment.constellations.horologium.ritual.corrupted.bookmark=
-fragment.constellations.horologium.ritual.corrupted.description=
-
-fragment.constellations.horologium.mantle.name=
-fragment.constellations.horologium.mantle.bookmark=
-fragment.constellations.horologium.mantle.description=
-
-fragment.constellations.octans.showup.name=
-fragment.constellations.octans.showup.bookmark=
-fragment.constellations.octans.showup.description=
-
-fragment.constellations.octans.potions.name=
-fragment.constellations.octans.potions.bookmark=
-fragment.constellations.octans.potions.description=
-
-fragment.constellations.octans.enchantments.name=
-fragment.constellations.octans.enchantments.bookmark=
-fragment.constellations.octans.enchantments.description=
-
-fragment.constellations.octans.ritual.name=
-fragment.constellations.octans.ritual.bookmark=
-fragment.constellations.octans.ritual.description=
-
-fragment.constellations.octans.ritual.corrupted.name=
-fragment.constellations.octans.ritual.corrupted.bookmark=
-fragment.constellations.octans.ritual.corrupted.description=
-
-fragment.constellations.octans.mantle.name=
-fragment.constellations.octans.mantle.bookmark=
-fragment.constellations.octans.mantle.description=
-
-fragment.constellations.bootes.showup.name=
-fragment.constellations.bootes.showup.bookmark=
-fragment.constellations.bootes.showup.description=
-
-fragment.constellations.bootes.potions.name=
-fragment.constellations.bootes.potions.bookmark=
-fragment.constellations.bootes.potions.description=
-
-fragment.constellations.bootes.enchantments.name=
-fragment.constellations.bootes.enchantments.bookmark=
-fragment.constellations.bootes.enchantments.description=
-
-fragment.constellations.bootes.ritual.name=
-fragment.constellations.bootes.ritual.bookmark=
-fragment.constellations.bootes.ritual.description=
-
-fragment.constellations.bootes.ritual.corrupted.name=
-fragment.constellations.bootes.ritual.corrupted.bookmark=
-fragment.constellations.bootes.ritual.corrupted.description=
-
-fragment.constellations.bootes.mantle.name=
-fragment.constellations.bootes.mantle.bookmark=
-fragment.constellations.bootes.mantle.description=
-
-fragment.constellations.fornax.showup.name=
-fragment.constellations.fornax.showup.bookmark=
-fragment.constellations.fornax.showup.description=
-
-fragment.constellations.fornax.potions.name=
-fragment.constellations.fornax.potions.bookmark=
-fragment.constellations.fornax.potions.description=
-
-fragment.constellations.fornax.enchantments.name=
-fragment.constellations.fornax.enchantments.bookmark=
-fragment.constellations.fornax.enchantments.description=
-
-fragment.constellations.fornax.ritual.name=
-fragment.constellations.fornax.ritual.bookmark=
-fragment.constellations.fornax.ritual.description=
-
-fragment.constellations.fornax.ritual.corrupted.name=
-fragment.constellations.fornax.ritual.corrupted.bookmark=
-fragment.constellations.fornax.ritual.corrupted.description=
-
-fragment.constellations.fornax.mantle.name=
-fragment.constellations.fornax.mantle.bookmark=
-fragment.constellations.fornax.mantle.description=
-
-fragment.constellations.pelotrio.showup.name=
-fragment.constellations.pelotrio.showup.bookmark=
-fragment.constellations.pelotrio.showup.description=
-
-fragment.constellations.pelotrio.potions.name=
-fragment.constellations.pelotrio.potions.bookmark=
-fragment.constellations.pelotrio.potions.description=
-
-fragment.constellations.pelotrio.enchantments.name=
-fragment.constellations.pelotrio.enchantments.bookmark=
-fragment.constellations.pelotrio.enchantments.description=
-
-fragment.constellations.pelotrio.ritual.name=
-fragment.constellations.pelotrio.ritual.bookmark=
-fragment.constellations.pelotrio.ritual.description=
-
-fragment.constellations.pelotrio.ritual.corrupted.name=
-fragment.constellations.pelotrio.ritual.corrupted.bookmark=
-fragment.constellations.pelotrio.ritual.corrupted.description=
-
-fragment.constellations.pelotrio.mantle.name=
-fragment.constellations.pelotrio.mantle.bookmark=
-fragment.constellations.pelotrio.mantle.description=
-
-fragment.constellations.gelu.showup.name=
-fragment.constellations.gelu.showup.bookmark=
-fragment.constellations.gelu.showup.description=
-
-fragment.constellations.gelu.potions.name=
-fragment.constellations.gelu.potions.bookmark=
-fragment.constellations.gelu.potions.description=
-
-fragment.constellations.gelu.enchantments.name=
-fragment.constellations.gelu.enchantments.bookmark=
-fragment.constellations.gelu.enchantments.description=
-
-fragment.constellations.gelu.ritual.name=
-fragment.constellations.gelu.ritual.bookmark=
-fragment.constellations.gelu.ritual.description=
-
-fragment.constellations.gelu.ritual.corrupted.name=
-fragment.constellations.gelu.ritual.corrupted.bookmark=
-fragment.constellations.gelu.ritual.corrupted.description=
-
-fragment.constellations.gelu.mantle.name=
-fragment.constellations.gelu.mantle.bookmark=
-fragment.constellations.gelu.mantle.description=
-
-fragment.constellations.ulteria.showup.name=
-fragment.constellations.ulteria.showup.bookmark=
-fragment.constellations.ulteria.showup.description=
-
-fragment.constellations.ulteria.potions.name=
-fragment.constellations.ulteria.potions.bookmark=
-fragment.constellations.ulteria.potions.description=
-
-fragment.constellations.ulteria.enchantments.name=
-fragment.constellations.ulteria.enchantments.bookmark=
-fragment.constellations.ulteria.enchantments.description=
-
-fragment.constellations.ulteria.ritual.name=
-fragment.constellations.ulteria.ritual.bookmark=
-fragment.constellations.ulteria.ritual.description=
-
-fragment.constellations.ulteria.ritual.corrupted.name=
-fragment.constellations.ulteria.ritual.corrupted.bookmark=
-fragment.constellations.ulteria.ritual.corrupted.description=
-
-fragment.constellations.ulteria.mantle.name=
-fragment.constellations.ulteria.mantle.bookmark=
-fragment.constellations.ulteria.mantle.description=
-
-fragment.constellations.alcara.showup.name=
-fragment.constellations.alcara.showup.bookmark=
-fragment.constellations.alcara.showup.description=
-
-fragment.constellations.alcara.potions.name=
-fragment.constellations.alcara.potions.bookmark=
-fragment.constellations.alcara.potions.description=
-
-fragment.constellations.alcara.enchantments.name=
-fragment.constellations.alcara.enchantments.bookmark=
-fragment.constellations.alcara.enchantments.description=
-
-fragment.constellations.alcara.ritual.name=
-fragment.constellations.alcara.ritual.bookmark=
-fragment.constellations.alcara.ritual.description=
-
-fragment.constellations.alcara.ritual.corrupted.name=
-fragment.constellations.alcara.ritual.corrupted.bookmark=
-fragment.constellations.alcara.ritual.corrupted.description=
-
-fragment.constellations.alcara.mantle.name=
-fragment.constellations.alcara.mantle.bookmark=
-fragment.constellations.alcara.mantle.description=
-
-fragment.constellations.vorux.showup.name=
-fragment.constellations.vorux.showup.bookmark=
-fragment.constellations.vorux.showup.description=
-
-fragment.constellations.vorux.potions.name=
-fragment.constellations.vorux.potions.bookmark=
-fragment.constellations.vorux.potions.description=
-
-fragment.constellations.vorux.enchantments.name=
-fragment.constellations.vorux.enchantments.bookmark=
-fragment.constellations.vorux.enchantments.description=
-
-fragment.constellations.vorux.ritual.name=
-fragment.constellations.vorux.ritual.bookmark=
-fragment.constellations.vorux.ritual.description=
-
-fragment.constellations.vorux.ritual.corrupted.name=
-fragment.constellations.vorux.ritual.corrupted.bookmark=
-fragment.constellations.vorux.ritual.corrupted.description=
-
-fragment.constellations.vorux.mantle.name=
-fragment.constellations.vorux.mantle.bookmark=
-fragment.constellations.vorux.mantle.description=
-
-fragment.skyreso.cannibalism.name=
-fragment.skyreso.cannibalism.bookmark=
-fragment.skyreso.cannibalism.description=
-
-fragment.infuser.chalice.name=
-fragment.infuser.chalice.bookmark=
-fragment.infuser.chalice.description=
-
-fragment.attunement.playerlimits.name=
-fragment.attunement.playerlimits.bookmark=
-fragment.attunement.playerlimits.description=
-
-fragment.cel_crystal_grow.starmetalore.name=
-fragment.cel_crystal_grow.starmetalore.name=
-fragment.cel_crystal_grow.starmetalore.name=
-
-fragment.sextant.icons.name=
-fragment.sextant.icons.bookmark=
-fragment.sextant.icons.description=
-
-fragment.shrines.templebiomes.name=
-fragment.shrines.templebiomes.bookmark=
-fragment.shrines.templebiomes.description=
-
-fragment.illuminator.coloring.name=
-fragment.illuminator.coloring.bookmark=
-fragment.illuminator.coloring.description=
+fragment.discovery.ancientshrine.name=Ancient Shrine Locations
+fragment.discovery.ancientshrine.bookmark=Locations
+fragment.discovery.ancientshrine.description=Ancient temples containing Collector Crystals are normally located in very cold, very hot, or very mountainous areas, but only if enough level ground exists to build a temple upon. The crystals will always be attuned to one of the five Bright constellations.
+
+fragment.discovery.resowand.name=Resonation Locations
+fragment.discovery.resowand.bookmark=Crystal loc.
+fragment.discovery.resowand.description=While indicator plumes are only visible above ground, Rock Crystal Ore spawns at the lowest depths: at bedrock. While occassional groupings may be within several steps of each other, it is rare and often will have tens or hundreds of meters between rock crystal ores. If holding a Resonating Wand in either hand, sparkles will show through the stone surrounding the ore when within a few strides to aid in locating it.
+
+fragment.misc.altar.name=Altar Multicrafting
+fragment.misc.altar.bookmark=Multicrafting
+fragment.misc.altar.description=All altars have the ability to craft multiple copies of the same item, as long as all the ingredients are stacked up in the table at once, and it has sufficient starlight and time to complete the crafting operation. This is more valuable with higher tier altars, due to increased crafting speed and starlight reservoir size.
+
+fragment.discovery.startable.name=Starlight Network
+fragment.discovery.startable.bookmark=Network links
+fragment.discovery.startable.description=While only crystals generated with the world will automatically link to crafting tables placed near them, any collector crystal can be linked to a table using a Linking Tool to achieve the same effect. Collectors (or lenses carrying collector starlight) can also be linked into a network to provide starlight to any consumer of starlight, no matter if table, altar, or device.
+
+fragment.exploration.lightwellprod.name=Lightwell Production Efficiency
+fragment.exploration.lightwellprod.bookmark=Efficiency
+fragment.exploration.lightwellprod.description=While catalyst duration is subject to the whims of the world, the distillation rate of Liquid Starlight can be vastly increased within that time. Placing a Lightwell in areas of high starlight concentration will increase efficiency, as will linking one to a starlight network.<NL>Durability of catalyst lifespan increases as follows: Aquamarine, Resonating Aquamarine, Rock Crystal, Celestial Crystal, Attuned Rock Crystal, Attuned Celestial Crystal.
+
+fragment.exploration.lightwelluses.name=Other Lightwell Uses
+fragment.exploration.lightwelluses.bookmark=Alternate uses
+fragment.exploration.lightwelluses.description=Lightwells are not limited in creating only Liquid Starlight. By using snow or ice blocks, a Lightwell can distill water. Distillation of lava can also be achieved by using netherrack or magma blocks, as well. The same principles apply for production efficiency as for Liquid Starlight.
+
+fragment.exploration.crystalgrowth.name=Splitting Crystals
+fragment.exploration.crystalgrowth.bookmark=Splitting
+fragment.exploration.crystalgrowth.description=If a crystal with maximum size is continuously placed into Liquid Starlight, there is a 25% chance that the crystal will destabilize from the starlight exposure, undergoing spontaneous division and "birthing" an additional crystal. While both crystals will see an impact to their size and facet cuts during this division, the emerging "child" crystal will often see fewer impurities over its parent, by an almost 10% purity increase in some cases. This process can be continued with each new generation of crystal until no impurities remain.
+
+fragment.exploration.crystaltools.name=Tool Stats
+fragment.exploration.crystaltools.bookmark=Finer details
+fragment.exploration.crystaltools.description=Crystal tools operate differently than most normal tools due to their construction, with three stats governing their performance.<NL>Purity - Higher purity tools lose less size when grinding.<NL>Size - Durability of the tool. Lost when sharpened, and recovered by soaking in Liquid Starlight. When the size of a tool is 0, the tool is destroyed.<NL>Cutting - Determines a tool's efficiency, and can be recovered via sharpening. Much like a knife, the tool will dull more quickly when very sharp than when already somewhat dulled. The "Unbreaking" enchantment slows cutting losses.
+
+fragment.exploration.grindstone.name=Weapons and Ores
+fragment.exploration.grindstone.bookmark=Additional use
+fragment.exploration.grindstone.description=In addition to shaping crystals, a Grindstone used to grind up an ore may sometimes generate more dust than is needed for a single ingot smelting.<NL>Swords can also be sharpened on a Grindstone, increasing the damage. The increase is higher for swords that are naturally more damaging, though some worlds may see the degree of improvement to be higher than others.
+
+fragment.misc.cannibalism.name=Cannibalism and Reach
+fragment.misc.cannibalism.bookmark=Cannibalism
+fragment.misc.cannibalism.description=Any device that collects starlight gathers it from within 8 paces of the device itself. Much like rain-collecting barrels overlapping each other, devices sharing circular gathering areas will see diminished returns as each can only gather the same starlight once. Spreading out any devices that collect starlight, regardless of device type, so they are 16 paces apart will prevent them from cannibalising the starlight gathered from each other.
+
+fragment.exploration.caveillumplace.name=Illuminator Deployment
+fragment.exploration.caveillumplace.bookmark=Placement
+fragment.exploration.caveillumplace.description=When active, a Cave Illuminator attempts to fill in dark areas, placing lights in a spiralling pattern from a center marked by the Illuminator itself, out to its maximum range. It maintains a vertical distance approximately 8 meters apart for light "layers" when performing these placements.
+
+fragment.exploration.caveillumwand.name=Colors and Operation
+fragment.exploration.caveillumwand.bookmark=Function
+fragment.exploration.caveillumwand.description=When without sky access, or if it is not nighttime, a Cave Illuminator can be powered by an Illumination Wand for 10 seconds at a time when right-clicked.<NL>Additionally, the color of a Cave Illuminator's spawned lights will change to match the color the Illumination Wand has been dyed.
+
+fragment.exploration.nocturnal.name=Spawn Types and Rarity
+fragment.exploration.nocturnal.bookmark=Spawning
+fragment.exploration.nocturnal.description=The powder draws from the monsters that innately spawn where it is located. Natural rarity of the monsters in that is ignored, so all possibilities have an equal spawning chance.
+
+fragment.attunement.starlightchunks.name=Starlight Persistence
+fragment.attunement.starlightchunks.bookmark=Persistence
+fragment.attunement.starlightchunks.description=The issue with all things, is that when not being watched, the world seems to stand still for them. Lenses, and other Starlight Network transmission pieces, are kept active by the starlight itself, and so do not stop working when not observed, no matter how far away the nearest person is. The same cannot be said for the blocks they are acting upon.
+
+fragment.attunement.alignmentcharge.name=Alignment Charge Rate
+fragment.attunement.alignmentcharge.bookmark=Charging
+fragment.attunement.alignmentcharge.description=The absorbed energy used by various focusing tools will recover slowly when left on its own. When under the open sky, or during the night, it will recover much more quickly.
+
+fragment.attunement.attunement.name=Personal Attunement
+fragment.attunement.attunement.bookmark=Personal
+fragment.attunement.attunement.description=While many objects can be attuned to Bright or Dim constellations, people can only be attuned to Brights. Faint attunements can only be placed on a crystal that already possesses an attunement.
+
+fragment.attunement.ritualpedestal.name=Starlight Limits
+fragment.attunement.ritualpedestal.bookmark=Limits
+fragment.attunement.ritualpedestal.description=Extensive testing has shown there is no limit to the amount of starlight that may be channeled into a ritual, which means there is no limit to how frequently a ritual will function. However, the faster a ritual is forced to operate, the more likely that stresses on the crystal in the ritual pedestal will begin to fracture apart, eventually leading to its destruction if not allowed to repair in liquid starlight.
+
+fragment.constellation.colorlens.name=Lens Function
+fragment.constellation.colorlens.bookmark=Function
+fragment.constellation.colorlens.description=Of the lenses, some functions may not be immediately obvious.<NL>Ignition: Sets things on fire, and can smelt items dropped into its beam or blocks placed in the beam like a furnace.<NL>Growth: Functions like bonemeal, unless the plant doesn't like bonemeal, in which case it just makes it grow quickly.<NL>Break: Has no harvest level, unlike a pick, it just breaks things that are breakable.<NL>Damage: Deals a set amount of damage, with frequency based on amount of starlight being channeled.
+
+fragment.constellation.refractiontable.name=Table Optimizations
+fragment.constellation.refractiontable.bookmark=Optimizations
+fragment.constellation.refractiontable.description=While up to three constellations can be placed at a time, duplicates provide no bonus. Perfect placement involves minimizing overlap of the constellations drawn.<NL>Using this table as close to midnight as possible will minimize the risk of fire, and directly enchanting objects while using it can result in enchanted items with combinations conventional enchanting cannot match.
+
+fragment.constellation.treebeaconuse.name=Beacon Usage
+fragment.constellation.treebeaconuse.bookmark=Usage
+fragment.constellation.treebeaconuse.description=Placing a sapling within reach and causing it to grow will generate the ghostly starlight version of the tree. Resonant echoes of this ghost will be used by the Beacon to fabricate far more items than harvesting the tree would normally provide on its own. It also has the benefit of performing this on multiple trees with reach, without the hassle of waiting for constant growth of more saplings, or diminished tool durability.
+
+fragment.constellation.treebeaconboost.name=Beacon Boosts
+fragment.constellation.treebeaconboost.bookmark=Boosting
+fragment.constellation.treebeaconboost.description=While a Tree Beacon operates much more effectively during the night, it is possible to accelerate it to mind-boggling rates using channeled starlight, much like a ritual. Linking starlight to a Tree Beacon will increase the rate at which it fabricates tree parts, with the light of Aevitas providing the biggest increase.<NL>A Tree Beacon is less likely to fabricate foliage than logs.
+
+fragment.constellation.inftool.name=Infused Tool Powers
+fragment.constellation.inftool.bookmark=Function
+fragment.constellation.inftool.description=Axe: Harvests the entire tree at once when used on a log.<NL>Sword: Deals a magical burst of damage around the target.<NL>Pickaxe: Indicates what ores are nearby, and their direction, when right-clicked.<NL>Shovel: Digs a large hole in a horizontal orientation.
+
+fragment.constellation.illumwand.name=Illuminated Block Strength
+fragment.constellation.illumwand.bookmark=Unreakability
+fragment.constellation.illumwand.description=Blocks converted to their Illuminated state are unbreakable.
+
+fragment.constellation.prism.name=Enchantment Improvements
+fragment.constellation.prism.bookmark=Enchantments
+fragment.constellation.prism.description=Each Resplendent Prims has three modifiers for changing enchantments, with each modifier providing up to a +3 bonus to one or more enchantments. Any combination of boosting existing enchantments or adding new enchantments is possible. However, any modifier that increases all existing enchantments will occupy two of these modifier slots.<NL>The color of the Prism is random, with white being far more rare than all the others.
+
+fragment.constellation.clusterbonus.name=Boosting Crystal Yield
+fragment.constellation.clusterbonus.bookmark=Growth yield
+fragment.constellation.clusterbonus.description=Testing has confirmed that clusters not only grow more quickly, but have a chance to provide more than one usable crystal if grown and harvested while on top of starmetal ore. Preliminary testing has also shown that the crystals harvested tend to be of higher purity.
+
+fragment.constellation.clusterspeed.name=Boosting Growing Speed
+fragment.constellation.clusterspeed.bookmark=Growth rate
+fragment.constellation.clusterspeed.description=If provided with starlight from a Starlight Network, or simply access to the night sky, crystal clusters will grow more quickly.
+
+fragment.constellation.ec3.name=Enhanced Celestial Collector Crytals
+fragment.constellation.ec3.bookmark=Structure gains
+fragment.constellation.ec3.description=In addition to preventing starlight losses due to daytime, or the constellation not being in the sky, the structure aids in gathering efficiency, with 10% gains.
+
+fragment.radiance.fysallidic.name=Impact of Mythical Creatures
+fragment.radiance.fysallidic.bookmark=Mythicals
+fragment.radiance.fysallidic.description=As the internal reservoir of an Evershifting Fountain is finite, the increased rate of Liquid Starlight consumption caused by more mythical creatures can result in early release. Endermen don't often trigger this unless left trapped for a bit, but something like a Wither or Ender Dragon can leave a much more short window wherein they are held trapped. Beings beyond even their power should be expected to be held for even less time, should they exist.
+
+fragment.misc.perks.name=Difference Within Bonuses.
+fragment.misc.perks.bookmark=Bonuses
+fragment.misc.perks.description=There are three magnitudes of bonuses provided by internal starlight.<NL>Added/Subtracted - Adds a flat value to the base amount.<NL>Increased/Decreased - All of thse are added together, then applied as a percentage change after all Added/Subtracted values are applied.<NL>More/Less - Applied individually as a percentage change following Increase/Decrease changes, not summed and then applied.
+
+fragment.constellations.discidia.potions.name=Potion Effects
+fragment.constellations.discidia.potions.bookmark=Potions
+fragment.constellations.discidia.potions.description=Grants increased Strength, potentially double that of conventional potions.
+
+fragment.constellations.discidia.enchantments.name=Refraction Table Enchanting
+fragment.constellations.discidia.enchantments.bookmark=Enchantment
+fragment.constellations.discidia.enchantments.description=Grants increased Power and Sharpness to weapons. The strength will never be as weak as low-level conventional enchantments, and could potentially be stronger.
+
+fragment.constellations.discidia.ritual.name=Ritual Effects
+fragment.constellations.discidia.ritual.bookmark=Ritual
+fragment.constellations.discidia.ritual.description=All mobs within the area of this field suffer regularly occurring damage, with the intensity of that damage increasing as more starlight is channeled into the ritual.
+
+fragment.constellations.discidia.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.discidia.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.discidia.ritual.corrupted.description=Corruption of the light turns it from an offensive weapon, into an empowerment of foes. Mobs find themselves rapidly healed of damage and highly resistance to additional damage, while those previously protected by the constellation find themselves under attack.
+
+fragment.constellations.discidia.mantle.name=Mantle Powers
+fragment.constellations.discidia.mantle.bookmark=Mantle
+fragment.constellations.discidia.mantle.description=Roughly 1/3 of the power of the last blow dealt against the wearer is channeled back into enemies by the wearer's attacks.
+
+fragment.constellations.armara.potions.name=Potion Effects
+fragment.constellations.armara.potions.bookmark=Potions
+fragment.constellations.armara.potions.description=Grants Resistance.
+
+fragment.constellations.armara.enchantments.name=Refraction Table Enchanting
+fragment.constellations.armara.enchantments.bookmark=Enchantment
+fragment.constellations.armara.enchantments.description=Grants increased Protection to armor. The strength will never be as weak as low-level conventional enchantments, and could potentially be stronger.
+
+fragment.constellations.armara.ritual.name=Ritual Effects
+fragment.constellations.armara.ritual.bookmark=Ritual
+fragment.constellations.armara.ritual.description=Rapid and constant application of force drives mobs and projectiles directly away from the ritual pedestal or anchor.
+
+fragment.constellations.armara.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.armara.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.armara.ritual.corrupted.description=Protection turns into assault, with previously repelled creatures instead greatly empowered by the ritual effect.
+
+fragment.constellations.armara.mantle.name=Mantle Powers
+fragment.constellations.armara.mantle.bookmark=Mantle
+fragment.constellations.armara.mantle.description=The mantle can store up to 3 charges, each charge will completely negate one damaging attack against the wearer. A mantle can be fully charged from empty in under 1 minute.
+
+fragment.constellations.vicio.potions.name=Potion Effects
+fragment.constellations.vicio.potions.bookmark=Potions
+fragment.constellations.vicio.potions.description=Grants increased Speed, ranging from the strongest conventional potions of swiftness to double their strength.
+
+fragment.constellations.vicio.enchantments.name=Refraction Table Enchanting
+fragment.constellations.vicio.enchantments.bookmark=Enchantment
+fragment.constellations.vicio.enchantments.description=Reduces the damage received from Falling. The strength will never be as weak as low-level conventional enchantments, and could potentially be stronger.
+
+fragment.constellations.vicio.ritual.name=Ritual Effects
+fragment.constellations.vicio.ritual.bookmark=Ritual
+fragment.constellations.vicio.ritual.description=The amount of starlight received by this ritual has two effects, frequency of application of flight and total radius of the ritual. As radius is controlled by the maximum number of lenses providing starlight feedback on the ritual altar, that means that one effect of this ritual does, indeed, have a maximum cap at 5 lenses.
+
+fragment.constellations.vicio.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.vicio.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.vicio.ritual.corrupted.description=The air turns against those within the ritual, disabling flight abilities and greatly slowing those sensitive to starlight.
+
+fragment.constellations.vicio.mantle.name=Mantle Powers
+fragment.constellations.vicio.mantle.bookmark=Mantle
+fragment.constellations.vicio.mantle.description=Unlike a normal elytra, this mantle does not decay from usage of the flight abilities, and it is faster.
+
+fragment.constellations.aevitas.potions.name=Potion Effects
+fragment.constellations.aevitas.potions.bookmark=Potions
+fragment.constellations.aevitas.potions.description=Grants accelerate life Regeneration, up to potentially double that of conventional potions.
+
+fragment.constellations.aevitas.enchantments.name=Refraction Table Enchanting
+fragment.constellations.aevitas.enchantments.bookmark=Enchantment
+fragment.constellations.aevitas.enchantments.description=Provides for Mending of items. While the strength of the effect can exceed conventional enchantments, it does not appear anyone has yet discovered a method to improve the power of the mending effect to take advantage of this.
+
+fragment.constellations.aevitas.ritual.name=Ritual Effects
+fragment.constellations.aevitas.ritual.bookmark=Ritual
+fragment.constellations.aevitas.ritual.description=Increasing the starlight fed to this ritual doesn't increase power of its effects, only how often it applies them. This makes boosting the ritual less important for the regeneration effect, and far more important for large fields of plants.
+
+fragment.constellations.aevitas.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.aevitas.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.aevitas.ritual.corrupted.description=The light of creation turns to decay, with nearby plants succumbing to the draining effects, and creatures find themselves sapped of both energy and life.
+
+fragment.constellations.aevitas.mantle.name=Mantle Powers
+fragment.constellations.aevitas.mantle.bookmark=Mantle
+fragment.constellations.aevitas.mantle.description=There is no way to determine what a plant will change to when effected by the power of this mantle. Be wary of trees in enclosed spaces.
+
+fragment.constellations.evorsio.potions.name=Potion Effects
+fragment.constellations.evorsio.potions.bookmark=Potions
+fragment.constellations.evorsio.potions.description=Mining and Attack speed is increased by these potions. Attack speed could potentially be increased by nearly half, and mining speed by more than three-quarters.
+
+fragment.constellations.evorsio.enchantments.name=Refraction Table Enchanting
+fragment.constellations.evorsio.enchantments.bookmark=Enchantment
+fragment.constellations.evorsio.enchantments.description=Increases the Efficiency of enchanted items. While the strength of this enchantment will not exceed conventional enchantment strength, ir will never be as weak as low level conventional enchantments.
+
+fragment.constellations.evorsio.ritual.name=Ritual Effects
+fragment.constellations.evorsio.ritual.bookmark=Ritual
+fragment.constellations.evorsio.ritual.description=This will not destroy unbreakable blocks, lava, or water.
+
+fragment.constellations.evorsio.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.evorsio.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.evorsio.ritual.corrupted.description=Destruction turns to creation, as nearby stone and dirt become random valuable ores.
+
+fragment.constellations.evorsio.mantle.name=Mantle Powers
+fragment.constellations.evorsio.mantle.bookmark=Mantle
+fragment.constellations.evorsio.mantle.description=Breaking blocks effects others within the same "plane", and applies 50% of the life of a creature killed by the wearer as damage to other nearby mobs.
+
+fragment.constellations.mineralis.potions.name=Potion Effects
+fragment.constellations.mineralis.potions.bookmark=Potions
+fragment.constellations.mineralis.potions.description=Mining and Attack speed is increased by these potions. Attack speed could potentially be increased by nearly half, and mining speed by more than three-quarters.
+
+fragment.constellations.mineralis.enchantments.name=Refraction Table Enchanting
+fragment.constellations.mineralis.enchantments.bookmark=Enchantment
+fragment.constellations.mineralis.enchantments.description=Increases the wielder's good Fortune when harvesting blocks.
+
+fragment.constellations.mineralis.ritual.name=Ritual Effects
+fragment.constellations.mineralis.ritual.bookmark=Ritual
+fragment.constellations.mineralis.ritual.description=Feeding additional starlight into this ritual affects how often it converts stone, the maximum reach stays the same.
+
+fragment.constellations.mineralis.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.mineralis.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.mineralis.ritual.corrupted.description=Instead of converting stone to ores of value, the ritual now creates chunks of stone where there is none, but only beneath those within reach.
+
+fragment.constellations.mineralis.mantle.name=Mantle Powers
+fragment.constellations.mineralis.mantle.bookmark=Mantle
+fragment.constellations.mineralis.mantle.description=The held block will be displayed if within roughly 20 paces, and even works if in the off-hand.
+
+fragment.constellations.lucerna.potions.name=Potion Effects
+fragment.constellations.lucerna.potions.bookmark=Potions
+fragment.constellations.lucerna.potions.description=Grants the ability to see in the dark.
+
+fragment.constellations.lucerna.enchantments.name=Refraction Table Enchanting
+fragment.constellations.lucerna.enchantments.bookmark=Enchantment
+fragment.constellations.lucerna.enchantments.description=Provides for the ability to see in the dark.
+
+fragment.constellations.lucerna.ritual.name=Ritual Effects
+fragment.constellations.lucerna.ritual.bookmark=Ritual
+fragment.constellations.lucerna.ritual.description=Unlike most other rituals, there is a cap to the effectiveness of this ritual based on total lenses reflecting light back to the pedestal. Additional starlight beyond what is needed to fuel five lenses has no impact, as the ritual range will not increase beyond that point.
+
+fragment.constellations.lucerna.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.lucerna.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.lucerna.ritual.corrupted.description=While the sun is down, starlight reigns while the rest of the world seems to slow.
+
+fragment.constellations.lucerna.mantle.name=Mantle Powers
+fragment.constellations.lucerna.mantle.bookmark=Mantle
+fragment.constellations.lucerna.mantle.description=The visibility range for mobs and spawners illuminated by this mantle is roughly three dozen paces.
+
+fragment.constellations.horologium.showup.name=Appearance Limits
+fragment.constellations.horologium.showup.bookmark=Appearances
+fragment.constellations.horologium.showup.description=While the initial appearance of this constellation could be anytime between the third and fifth weeks of any given world, subsequent appearances will always be 36 days apart.
+
+fragment.constellations.horologium.potions.name=Potion Effects
+fragment.constellations.horologium.potions.bookmark=Potions
+fragment.constellations.horologium.potions.description=The power of this constellation grants not only increased Speed, but faster movements by more than twice.
+
+fragment.constellations.horologium.enchantments.name=Refraction Table Enchanting
+fragment.constellations.horologium.enchantments.bookmark=Enchantment
+fragment.constellations.horologium.enchantments.description=Good Fortune and Luck overflow for the wielder of these enchantments, with even the weakest versions being as strong or stronger than conventional enchanting, and the strongest being twice that of a conventional enchantment.
+
+fragment.constellations.horologium.ritual.name=Ritual Effects
+fragment.constellations.horologium.ritual.bookmark=Ritual
+fragment.constellations.horologium.ritual.description=While there is no maximum to the rate of acceleration of affected blocks, world instability could increase the faster this accelerates. Boosting this ritual should be done with care in highly populated worlds.
+
+fragment.constellations.horologium.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.horologium.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.horologium.ritual.corrupted.description=Creatures are removed from the flow of time in the localized area.
+
+fragment.constellations.horologium.mantle.name=Mantle Powers
+fragment.constellations.horologium.mantle.bookmark=Mantle
+fragment.constellations.horologium.mantle.description=Affects all mobs within 20 paces for roughly 9 seconds when triggered. Can be triggered roughly once per minute, though it is not guaranteed for any given hit against the wearer.
+
+fragment.constellations.octans.potions.name=Potion Effects
+fragment.constellations.octans.potions.bookmark=Potions
+fragment.constellations.octans.potions.description=Mild improvement to visibility underwater, and water breathing.
+
+fragment.constellations.octans.enchantments.name=Refraction Table Enchanting
+fragment.constellations.octans.enchantments.bookmark=Enchantment
+fragment.constellations.octans.enchantments.description=Extends the length of time breath can be held while underwater, and lengthens the amount of time needed to drown once out of breath.
+
+fragment.constellations.octans.ritual.name=Ritual Effects
+fragment.constellations.octans.ritual.bookmark=Ritual
+fragment.constellations.octans.ritual.description=Any fishable item could be retrieved by this ritual into the nearby waters.
+
+fragment.constellations.octans.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.octans.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.octans.ritual.corrupted.description=The oceans and the land invert, with water replacing air, fish spawning from nothing, and some liquids drying to sand.
+
+fragment.constellations.octans.mantle.name=Mantle Powers
+fragment.constellations.octans.mantle.bookmark=Mantle
+fragment.constellations.octans.mantle.description=The normal penalties for moving and attempting to use tools underwater are negated, and other methods of underwater breathing aren't required.
+
+fragment.constellations.bootes.potions.name=Potion Effects
+fragment.constellations.bootes.potions.bookmark=Potions
+fragment.constellations.bootes.potions.description=These potions replenish hunger and saturation both.
+
+fragment.constellations.bootes.enchantments.name=Refraction Table Enchanting
+fragment.constellations.bootes.enchantments.bookmark=Enchantment
+fragment.constellations.bootes.enchantments.description=Delicate items can be picked up without breaking, as though touched by silk.
+
+fragment.constellations.bootes.ritual.name=Ritual Effects
+fragment.constellations.bootes.ritual.bookmark=Ritual
+fragment.constellations.bootes.ritual.description=Increasing starlight provided to this ritual will not increase the number of resources per animal, but it will increase how often these resources may be shed.
+
+fragment.constellations.bootes.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.bootes.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.bootes.ritual.corrupted.description=Damaged creatures of the field are slaughtered, though with an overabundance of resources from their corpses.
+
+fragment.constellations.bootes.mantle.name=Mantle Powers
+fragment.constellations.bootes.mantle.bookmark=Mantle
+fragment.constellations.bootes.mantle.description=Flares will only attack those who have hit the player, and will attack the most recent attacker.
+
+fragment.constellations.fornax.potions.name=Potion Effects
+fragment.constellations.fornax.potions.bookmark=Potions
+fragment.constellations.fornax.potions.description=Immunity to Fire damage.
+
+fragment.constellations.fornax.enchantments.name=Refraction Table Enchanting
+fragment.constellations.fornax.enchantments.bookmark=Enchantment
+fragment.constellations.fornax.enchantments.description=Enchantments deal fire damage, set enemies on fire, and automatically smelt harvested blocks.
+
+fragment.constellations.fornax.ritual.name=Ritual Effects
+fragment.constellations.fornax.ritual.bookmark=Ritual
+fragment.constellations.fornax.ritual.description=Due to the nature of the ritual, blocks with exceptionally high melting points such as ores will not be melted, only those that melt into lava or water.
+
+fragment.constellations.fornax.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.fornax.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.fornax.ritual.corrupted.description=Liquids are chilled, fires drained of heat, and the very moisture in the air turned to ice.
+
+fragment.constellations.fornax.mantle.name=Mantle Powers
+fragment.constellations.fornax.mantle.bookmark=Mantle
+fragment.constellations.fornax.mantle.description=While the default healing won't result in a net gain of health, effects that boost the healing will result in a net gain.
+
+fragment.constellations.pelotrio.showup.name=Appearance Limits
+fragment.constellations.pelotrio.showup.bookmark=Appearances
+fragment.constellations.pelotrio.showup.description=This constellation only appears when the moon is in the Full or New phases.
+
+fragment.constellations.pelotrio.potions.name=Potion Effects
+fragment.constellations.pelotrio.potions.bookmark=Potions
+fragment.constellations.pelotrio.potions.description=These potions provide superior health recovery, potentially higher than conventional potions. They also can provide magical damage Absorption.
+
+fragment.constellations.pelotrio.enchantments.name=Refraction Table Enchanting
+fragment.constellations.pelotrio.enchantments.bookmark=Enchantment
+fragment.constellations.pelotrio.enchantments.description=Superior fishing rods and bows that never run out of ammunition can be enchantable.
+
+fragment.constellations.pelotrio.ritual.name=Ritual Effects
+fragment.constellations.pelotrio.ritual.bookmark=Ritual
+fragment.constellations.pelotrio.ritual.description=This ritual will continue to summon creatures irrelevant of presence of a Lucerna ritual.
+
+fragment.constellations.pelotrio.ritual.corrupted.name=Corrupted Ritual
+fragment.constellations.pelotrio.ritual.corrupted.bookmark=Corruptions
+fragment.constellations.pelotrio.ritual.corrupted.description=The darkness inside creatures is called forth, irrevocably twisting them into a darker form. Creatures so changed are filled with valuable items that burst forth when they are slain.
+
+fragment.constellations.pelotrio.mantle.name=Mantle Powers
+fragment.constellations.pelotrio.mantle.bookmark=Mantle
+fragment.constellations.pelotrio.mantle.description=Spectral tools or weapons will only spawn if the proper tool is held in the main hand.
+
+fragment.constellations.gelu.potions.name=Potion Effects
+fragment.constellations.gelu.potions.bookmark=Potions
+fragment.constellations.gelu.potions.description=The chill of these brewed potions extends fire resistance, resistance to damage, and causes slowness of speed.
+
+fragment.constellations.gelu.enchantments.name=Refraction Table Enchanting
+fragment.constellations.gelu.enchantments.bookmark=Enchantment
+fragment.constellations.gelu.enchantments.description=Converting water that is walked on into a solid surface of ice, reducing damage from speedy falls, and solidifying tools and armor to reduce breakage are all within the realm of these enchants.
+
+fragment.constellations.gelu.trait.name=Trait Effects
+fragment.constellations.gelu.trait.bookmark=Traits
+fragment.constellations.gelu.trait.description=While expanding the reach of the ritual nearly 4 times over, it also decreases the power of the ritual to nearly 1/6th of the previous strength.
+
+fragment.constellations.ulteria.potions.name=Potion Effects
+fragment.constellations.ulteria.potions.bookmark=Potions
+fragment.constellations.ulteria.potions.description=While increasing natural health regeneration and instantly healing some damage as it is taken, these brewed potions also reduce the damage that can be dealt in return.
+
+fragment.constellations.ulteria.enchantments.name=Refraction Table Enchanting
+fragment.constellations.ulteria.enchantments.bookmark=Enchantment
+fragment.constellations.ulteria.enchantments.description=Normal protective enchantments conflict with each other, preventing armor from channeling the energies of more than one. Enchantments from the light of this constellation have no such restriction.
+
+fragment.constellations.ulteria.trait.name=Trait Effects
+fragment.constellations.ulteria.trait.bookmark=Traits
+fragment.constellations.ulteria.trait.description=Ritual power is increased to four times normal, but the area of the ritual is reduced to 1/5th normal.
+
+fragment.constellations.horologium.showup.name=Appearance Limits
+fragment.constellations.horologium.showup.bookmark=Appearances
+fragment.constellations.horologium.showup.description=Like a pendulum swinging between two extremes, the constellation is only visible when the moon is in the First Quarter or Third Quarter phases.
+
+fragment.constellations.alcara.potions.name=Potion Effects
+fragment.constellations.alcara.potions.bookmark=Potions
+fragment.constellations.alcara.potions.description=Both harmonious and destructive resonance stem from the distillations of this constellation, increasing a drinker's Luck and removing them from view, while also increasing their hunger.
+
+fragment.constellations.alcara.enchantments.name=Refraction Table Enchanting
+fragment.constellations.alcara.enchantments.bookmark=Enchantment
+fragment.constellations.alcara.enchantments.description=Fishing rods send out subtle vibrations, greatly increasing fishing yields, while those same vibrations improve harvesting delicate blocks. Swords enchanted have a destructive resonance, spreading their cuts to other nearby enemies.
+
+fragment.constellations.alcara.trait.name=Trait Effects
+fragment.constellations.alcara.trait.bookmark=Traits
+fragment.constellations.alcara.trait.description=Rituals are corrupted, and the strain of that causes the ritual crystal to fracture like a house of cards in a strong breeze when any starlight is received by the crystal.
+
+fragment.constellations.vorux.potions.name=Potion Effects
+fragment.constellations.vorux.potions.bookmark=Potions
+fragment.constellations.vorux.potions.description=In exchange for instilling lethargy with tools this brew helps fight through lesser injuries and greatly increases damage from weapon swings.
+
+fragment.constellations.vorux.enchantments.name=Refraction Table Enchanting
+fragment.constellations.vorux.enchantments.bookmark=Enchantment
+fragment.constellations.vorux.enchantments.description=All foes will find themselves at the mercy of your weapons, which will strike far harder than normal.
+
+fragment.constellations.vorux.trait.name=Trait Effects
+fragment.constellations.vorux.trait.bookmark=Traits
+fragment.constellations.vorux.trait.description=This constellation doubles ritual power and increases the reach of a ritual by three-quarters, but at the cost of increased fracturation of the ritual crystal.
