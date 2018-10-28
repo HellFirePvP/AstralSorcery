@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
@@ -108,7 +109,11 @@ public abstract class ItemCrystalToolBase extends ItemTool implements CrystalPro
         newItem.motionX = ei.motionX;
         newItem.motionY = ei.motionY;
         newItem.motionZ = ei.motionZ;
-        newItem.setPickupDelay(40);
+        newItem.setDefaultPickupDelay();
+        if (ei instanceof EntityItem) {
+            newItem.setThrower(((EntityItem) ei).getThrower());
+            newItem.setOwner(((EntityItem) ei).getOwner());
+        }
         return newItem;
     }
 

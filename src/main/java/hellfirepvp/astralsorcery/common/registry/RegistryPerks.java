@@ -1356,6 +1356,7 @@ public class RegistryPerks {
         registerPerkType(new AttributeArrowSpeed());
         registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP));
         registerPerkType(new AttributeLifeRecovery());
+        registerPerkType(new AttributePotionDuration());
         registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_ARC_CHAINS));
         registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION));
         registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_BLEED_STACKS));

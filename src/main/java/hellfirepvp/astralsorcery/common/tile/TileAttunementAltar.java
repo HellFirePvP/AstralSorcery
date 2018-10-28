@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.AdvancementTriggers;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
@@ -224,12 +225,21 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                                 ItemTunedCrystalBase.applyMainConstellation(tunedStack, (IWeakConstellation) activeFound);
                                 CrystalProperties.applyCrystalProperties(tunedStack, CrystalProperties.getCrystalProperties(current));
                             } else if(EntityUtils.selectItemStack(traitAcceptor).apply(activeEntity) && activeFound instanceof IMinorConstellation) {
-                                tunedStack = ItemUtils.copyStackWithSize(((EntityItem) activeEntity).getItem(), 1);
+                                ItemStack current = ((EntityItem) activeEntity).getItem();
+                                tunedStack = ItemUtils.copyStackWithSize(current, 1);
                                 ItemTunedCrystalBase.applyTrait(tunedStack, (IMinorConstellation) activeFound);
                             } else {
                                 activeEntity.setDead();
                                 setAttunementState(0, null);
                                 return;
+                            }
+
+                            String thrower = ((EntityItem) activeEntity).getThrower();
+                            if (thrower != null && !thrower.isEmpty()) {
+                                EntityPlayer player = this.world.getPlayerEntityByName(thrower);
+                                if (player != null && player instanceof EntityPlayerMP) {
+                                    AdvancementTriggers.ATTUNE_CRYSTAL.trigger((EntityPlayerMP) player, activeFound);
+                                }
                             }
 
                             activeEntity.setDead();

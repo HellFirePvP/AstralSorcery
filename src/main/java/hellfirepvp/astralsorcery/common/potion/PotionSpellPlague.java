@@ -41,7 +41,7 @@ public class PotionSpellPlague extends PotionCustomTexture {
         //    SpellPlague plague = entityLivingBaseIn.getCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null);
         //    if(plague != null){
         //        plague.onTick(entityLivingBaseIn);
-        //        PotionEffect pe = entityLivingBaseIn.getActivePotionEffect(this);
+        //        PotionApplyEvent pe = entityLivingBaseIn.getActivePotionEffect(this);
         //        if(pe != null) {
         //            if(plague.onTick(entityLivingBaseIn)) {
         //                pe.duration = 1;

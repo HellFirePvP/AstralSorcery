@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -24,6 +25,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -109,6 +111,8 @@ public class CraftingAccessManager {
     }
 
     public static void registerMTAltarRecipe(AbstractAltarRecipe recipe) {
+        tryRemoveAltarRecipe(recipe.getNativeRecipe().getRegistryName());
+
         TileAltar.AltarLevel al = recipe.getNeededLevel();
         AltarRecipeRegistry.mtRecipes.get(al).add(recipe);
         addRecipe(recipe);
@@ -118,15 +122,25 @@ public class CraftingAccessManager {
         markForRemoval(InfusionRecipeRegistry.removeFindRecipeByOutput(output));
     }
 
+    @Deprecated
     public static void tryRemoveAltarRecipeByOutputAndLevel(ItemStack output, TileAltar.AltarLevel altarLevel) {
         markForRemoval(AltarRecipeRegistry.removeFindRecipeByOutputAndLevel(output, altarLevel));
     }
 
-    public static void addMTTransmutation(ItemStack in, ItemStack out, double cost) {
+    public static boolean tryRemoveAltarRecipe(ResourceLocation recipeRegistryName) {
+        AbstractAltarRecipe recipe = AltarRecipeRegistry.getRecipeSlow(recipeRegistryName);
+        markForRemoval(recipe);
+        return recipe != null;
+    }
+
+    public static void addMTTransmutation(ItemStack in, ItemStack out, double cost, @Nullable IWeakConstellation cst) {
         IBlockState stateIn = ItemUtils.createBlockState(in);
         IBlockState stateOut = ItemUtils.createBlockState(out);
         if(stateIn != null && stateOut != null) {
             LightOreTransmutations.Transmutation tr = new LightOreTransmutations.Transmutation(stateIn, stateOut, in, out, cost);
+            if (cst != null) {
+                tr.setRequiredType(cst);
+            }
             tr = LightOreTransmutations.registerTransmutation(tr);
             if (tr != null) {
                 //addRecipe(tr); Is picked up by default logic

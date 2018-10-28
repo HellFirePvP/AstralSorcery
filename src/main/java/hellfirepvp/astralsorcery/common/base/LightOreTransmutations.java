@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.base;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
@@ -140,6 +141,8 @@ public class LightOreTransmutations {
         @Nonnull
         private final ItemStack inStack;
 
+        private IWeakConstellation requiredType = null;
+
         public Transmutation(Block input, IBlockState output, double cost) {
             this(input, output, ItemStack.EMPTY, ItemStack.EMPTY, cost);
         }
@@ -168,6 +171,15 @@ public class LightOreTransmutations {
             this.cost = cost;
             this.outStack = outputDisplay;
             this.inStack = inputDisplay;
+        }
+
+        public Transmutation setRequiredType(IWeakConstellation requiredType) {
+            this.requiredType = requiredType;
+            return this;
+        }
+
+        public IWeakConstellation getRequiredType() {
+            return requiredType;
         }
 
         public Block getInputAsBlock() {

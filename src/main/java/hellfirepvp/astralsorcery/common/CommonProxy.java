@@ -114,6 +114,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
         Config.addDynamicEntry(new TileAccelerationBlacklist.TileAccelBlacklistEntry());
+        Config.addDynamicEntry(new ShootingStarHandler.StarConfigEntry());
     }
 
     public void registerConfigDataRegistries() {
@@ -133,6 +134,7 @@ public class CommonProxy implements IGuiHandler {
 
         RegistryConstellations.init();
         ASDataSerializers.registerSerializers();
+        RegistryAdvancements.init();
 
         PacketChannel.init();
 
@@ -282,6 +284,7 @@ public class CommonProxy implements IGuiHandler {
         //manager.register(SpellCastingManager.PERK_TREE);
         manager.register(PatreonFlareManager.INSTANCE);
         manager.register(PerkEffectHelper.EVENT_INSTANCE);
+        manager.register(ShootingStarHandler.getInstance());
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);
@@ -402,7 +405,8 @@ public class CommonProxy implements IGuiHandler {
         JOURNAL,
         JOURNAL_STORAGE,
         OBSERVATORY(TileObservatory.class),
-        SEXTANT;
+        SEXTANT,
+        KNOWLEDGE_CONSTELLATION;
 
         private final Class<? extends TileEntity> tileClass;
 

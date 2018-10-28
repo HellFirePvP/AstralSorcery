@@ -16,7 +16,11 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,6 +51,7 @@ public class CategoryAltarDiscovery extends JEIBaseCategory<AltarDiscoveryRecipe
     public void setRecipe(IRecipeLayout recipeLayout, AltarDiscoveryRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         group.init(0, false, 48, 18);
+
         group.init(1, true, 22, 70);
         group.init(2, true, 49, 70);
         group.init(3, true, 76, 70);
@@ -58,6 +63,13 @@ public class CategoryAltarDiscovery extends JEIBaseCategory<AltarDiscoveryRecipe
         group.init(9, true, 76, 124);
 
         group.set(ingredients);
+
+        group.addTooltipCallback((slot, input, stack, tooltip) -> {
+            if (!input && Minecraft.getMinecraft().gameSettings.showDebugInfo) {
+                tooltip.add("");
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.recipename", recipeWrapper.getRecipe().getNativeRecipe().getRegistryName().toString()));
+            }
+        });
     }
 
 }

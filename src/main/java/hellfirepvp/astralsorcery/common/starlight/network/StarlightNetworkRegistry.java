@@ -34,11 +34,11 @@ public class StarlightNetworkRegistry {
     private static List<IStarlightBlockHandler> dynamicBlockHandlers = new LinkedList<>();
 
     @Nullable
-    public static IStarlightBlockHandler getStarlightHandler(World world, BlockPos pos, IBlockState state) {
+    public static IStarlightBlockHandler getStarlightHandler(World world, BlockPos pos, IBlockState state, IWeakConstellation cst) {
         Block b = state.getBlock();
         if(b instanceof IBlockStarlightRecipient) return null;
         for (IStarlightBlockHandler handler : dynamicBlockHandlers) {
-            if(handler.isApplicable(world, pos, state)) return handler;
+            if(handler.isApplicable(world, pos, state, cst)) return handler;
         }
         return null;
     }
@@ -55,7 +55,15 @@ public class StarlightNetworkRegistry {
     //This is NOT suggested as "first choice" - please implement IBlockStarlightRecipient instead if possible.
     public static interface IStarlightBlockHandler {
 
+        /**
+         * See Constellation-dependent method.
+         */
+        @Deprecated
         public boolean isApplicable(World world, BlockPos pos, IBlockState state);
+
+        default public boolean isApplicable(World world, BlockPos pos, IBlockState state, @Nullable IWeakConstellation starlightType) {
+            return isApplicable(world, pos, state);
+        }
 
         public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IWeakConstellation starlightType, double amount);
 

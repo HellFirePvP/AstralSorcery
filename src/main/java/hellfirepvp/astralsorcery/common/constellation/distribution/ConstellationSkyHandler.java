@@ -127,7 +127,7 @@ public class ConstellationSkyHandler implements ITickHandler {
         return 1F;
     }
     public boolean isNight(World world) {
-        return getCurrentDaytimeDistribution(world) >= 0.65;
+        return getCurrentDaytimeDistribution(world) >= 0.6;
     }
 
     public boolean isDay(World world) {

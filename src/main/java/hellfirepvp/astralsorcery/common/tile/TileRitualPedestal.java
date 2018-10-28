@@ -272,10 +272,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
         TransmissionReceiverRitualPedestal recNode = getUpdateCache();
         if(recNode != null) {
-            if(recNode.getCrystal().isEmpty()) {
-                markForUpdate();
-                recNode.setChannelingCrystal(crystal, this.world);
-            }
+            markForUpdate();
+            recNode.setChannelingCrystal(crystal, this.world);
         }
         return ItemUtils.copyStackWithSize(crystal, Math.max(0, crystal.getCount() - 1));
     }

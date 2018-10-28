@@ -58,6 +58,37 @@ advancements.astralsorcery.rock_crystals.desc=
 advancements.astralsorcery.root.title=Astral Sorcery
 advancements.astralsorcery.root.desc=
 
+advancements.astralsorcery.attune_crystal.title=
+advancements.astralsorcery.attune_crystal.desc=
+advancements.astralsorcery.attune_self.title=
+advancements.astralsorcery.attune_self.desc=
+advancements.astralsorcery.attune_trait.title=
+advancements.astralsorcery.attune_trait.desc=
+advancements.astralsorcery.celestial_crystals.title=
+advancements.astralsorcery.celestial_crystals.desc=
+advancements.astralsorcery.craft_t2_altar.title=
+advancements.astralsorcery.craft_t2_altar.desc=
+advancements.astralsorcery.craft_t3_altar.title=
+advancements.astralsorcery.craft_t3_altar.desc=
+advancements.astralsorcery.craft_t4_altar.title=
+advancements.astralsorcery.craft_t4_altar.desc=
+advancements.astralsorcery.find_constellation.title=
+advancements.astralsorcery.find_constellation.desc=
+advancements.astralsorcery.find_minor_constellation.title=
+advancements.astralsorcery.find_minor_constellation.desc=
+advancements.astralsorcery.find_weak_constellation.title=
+advancements.astralsorcery.find_weak_constellation.desc=
+advancements.astralsorcery.perk_level_large.title=
+advancements.astralsorcery.perk_level_large.desc=
+advancements.astralsorcery.perk_level_medium.title=
+advancements.astralsorcery.perk_level_medium.desc=
+advancements.astralsorcery.perk_level_small.title=
+advancements.astralsorcery.perk_level_small.desc=
+advancements.astralsorcery.rock_crystals.title=
+advancements.astralsorcery.rock_crystals.desc=
+advancements.astralsorcery.root.title=Astral Sorcery
+advancements.astralsorcery.root.desc=
+
 potion.potency.1=II
 potion.potency.2=III
 potion.potency.3=IV
@@ -113,7 +144,7 @@ amulet.enchantment.add_to_existing_all.name=+%s %s to all existing Enchantments
 enchantment.astralsorcery.enchantment.as.nightvision.desc=Grants the wearer night vision.
 enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with this enchantment will have their drops smelted, as though in a furnace.
 
-gui.journal.bm.knowledge.name=Knowledge
+gui.journal.bm.research.name=Research
 gui.journal.bm.constellations.name=Constellations
 gui.journal.bm.perks.name=Perks
 gui.journal.bm.knowledge.name=Knowledge
@@ -455,7 +486,7 @@ research.ATT_PERKS_SEAL.name=Perk Sealing
 astralsorcery.journal.ATT_PERKS_SEAL.1.text=While the Irradiant Star is a major improvement in allowing for redirection of the infused starlight within the body, sometimes it's not enough to simply route the limited starlight flows around certain resonations. To that end, a Sealing Sigil can be used to "mask" or otherwise retard certain effects, acting as a removable "off-switch" or bridge over an effect not desired at that moment.
 
 research.KNOWLEDGE_FRAGMENT.name=Forgotten Knowledge
-astralsorcery.journal.KNOWLEDGE_FRAGMENT.1.text=Occasionally, ancient fragments of text describing odd, seemingly incomplete, constellations are found. While it is obvious they have no direct power like normal Constellations, an unshakable certainty accompanies holding these papers that discovering the constellation an Ancient scribed onto it would greatly expand understanding of other Astral concepts, burning it into the mind like wildfire.
+astralsorcery.journal.KNOWLEDGE_FRAGMENT.1.text=Occasionally, ancient fragments of text describing odd, seemingly incomplete, constellations are found. While it is obvious they have no direct power like normal Constellations, an unshakable certainty accompanies holding these papers that discovering the constellation an Ancient scribed onto it would greatly expand understanding of other Astral concepts, burning it into the mind like wildfire.TT_PERKS_SEAL.1.text=
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime

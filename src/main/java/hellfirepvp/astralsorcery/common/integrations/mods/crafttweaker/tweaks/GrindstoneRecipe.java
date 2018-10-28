@@ -55,11 +55,6 @@ public class GrindstoneRecipe extends BaseTweaker {
 
     @ZenMethod
     public static void removeRecipe(IItemStack output) {
-        removeReipce(output);
-    }
-
-    @ZenMethod
-    public static void removeReipce(IItemStack output) {
         ItemStack out = convertToItemStack(output);
         if (out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-add due to invalid output itemstack.");
@@ -67,6 +62,12 @@ public class GrindstoneRecipe extends BaseTweaker {
         }
 
         ModIntegrationCrafttweaker.recipeModifications.add(new GrindstoneRecipeRemove(out));
+    }
+
+    @ZenMethod
+    @Deprecated
+    public static void removeReipce(IItemStack output) {
+        removeRecipe(output);
     }
 
 }

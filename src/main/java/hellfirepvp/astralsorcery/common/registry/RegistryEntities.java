@@ -43,8 +43,11 @@ public class RegistryEntities {
         registerEntity(EntityLiquidSpark.class, "EntityLiquidSpark", modEid++, 64, 1, true);
         registerEntity(EntityObservatoryHelper.class, "EntityObservatoryHelper", modEid++, 64, 1, true);
         //registerEntity(SpellProjectile.class, "EntitySpellProjectile", modEid++, 128, 1, true);
+        registerEntity(EntityShootingStar.class, "EntityShootingStar", modEid++, 128, 1, true);
+        registerEntity(EntityItemExplosionResistant.class, "EntityItemDamageResistant", modEid++, 64, 1, true);
     }
 
+    // trackingRange refers x/z distance, not y.
     private static void registerEntity(Class<? extends Entity> entityClass, String name, int id, int trackingRange, int updateFreq, boolean sendVelUpdates) {
         EntityRegistry.registerModEntity(new ResourceLocation(AstralSorcery.MODID, name.toLowerCase()), entityClass, name, id, AstralSorcery.instance, trackingRange, updateFreq, sendVelUpdates);
     }

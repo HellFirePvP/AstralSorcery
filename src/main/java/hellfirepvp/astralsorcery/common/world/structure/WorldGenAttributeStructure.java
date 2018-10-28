@@ -8,14 +8,24 @@
 
 package hellfirepvp.astralsorcery.common.world.structure;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
+import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 import hellfirepvp.astralsorcery.common.world.WorldGenAttributeCommon;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -69,6 +79,33 @@ public abstract class WorldGenAttributeStructure extends WorldGenAttributeCommon
             super.generate(random, chunkX, chunkZ, world);
         } finally {
             generatingStructure = false;
+        }
+    }
+
+    protected void generateAsSubmergedStructure(World world, BlockPos center) {
+        Map<BlockPos, IBlockState> prevStates = Maps.newHashMap();
+        BlockArray array = this.query.getStructure();
+        for (BlockPos offset : array.getPattern().keySet()) {
+            BlockPos at = offset.add(center);
+            prevStates.put(at, world.getBlockState(at));
+        }
+        Map<BlockPos, IBlockState> placedStates = array.placeInWorld(world, center);
+        List<BlockPos> positions = Lists.newLinkedList(prevStates.keySet());
+        MiscUtils.mergeList(placedStates.keySet(), positions);
+        IBlockState airState = Blocks.AIR.getDefaultState();
+        for (BlockPos pos : positions) {
+            IBlockState prev = prevStates.getOrDefault(pos, airState);
+            IBlockState now  = placedStates.getOrDefault(pos, airState);
+            if (MiscUtils.isFluidBlock(prev)) {
+                BlockPos it = pos;
+                while (now.getBlock().isAir(now, world, it) && world.setBlockState(it, prev)) {
+                    it = it.down();
+                    if (!placedStates.containsKey(it)) {
+                        break;
+                    }
+                    now = placedStates.getOrDefault(it, airState);
+                }
+            }
         }
     }
 

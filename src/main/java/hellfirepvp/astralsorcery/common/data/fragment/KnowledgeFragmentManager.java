@@ -55,10 +55,4 @@ public class KnowledgeFragmentManager {
         return Lists.newArrayList(fragments.values());
     }
 
-    @Nonnull
-    @SideOnly(Side.CLIENT)
-    public Collection<KnowledgeFragment> getAllFragmentsFor(GuiScreenJournal journal) {
-        return this.fragments.values().stream().filter(k -> k.isVisible(journal)).collect(Collectors.toList());
-    }
-
 }

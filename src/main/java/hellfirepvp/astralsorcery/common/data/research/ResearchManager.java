@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
+import hellfirepvp.astralsorcery.common.lib.AdvancementTriggers;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
@@ -245,6 +246,8 @@ public class ResearchManager {
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //player.addStat(RegistryAchievements.achvDiscoverConstellation);
 
+        AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
+
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
         return true;
@@ -309,6 +312,8 @@ public class ResearchManager {
             PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(root, true), (EntityPlayerMP) player);
         }
 
+        AdvancementTriggers.ATTUNE_SELF.trigger((EntityPlayerMP) player, constellation);
+
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //player.addStat(RegistryAchievements.achvPlayerAttunement);
 
@@ -364,10 +369,14 @@ public class ResearchManager {
         }
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
+
+        //Send way after research sync...
+        AstralSorcery.proxy.scheduleDelayed(() -> {
+            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+        });
         return true;
     }
 
@@ -457,6 +466,8 @@ public class ResearchManager {
 
         progress.setExp(exp);
 
+        AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
+
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
         return true;
@@ -467,6 +478,8 @@ public class ResearchManager {
         if(progress == null) return false;
 
         progress.modifyExp(exp);
+
+        AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -692,7 +705,7 @@ public class ResearchManager {
 
     public static void informCraftingAltarCompletion(TileAltar altar, ActiveCraftingTask recipeToCraft) {
         EntityPlayer crafter = recipeToCraft.tryGetCraftingPlayerServer();
-        if(crafter == null) {
+        if(crafter == null || !(crafter instanceof EntityPlayerMP)) {
             AstralSorcery.log.warn("Crafting finished, player that initialized crafting could not be found!");
             AstralSorcery.log.warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
             return;
@@ -702,6 +715,8 @@ public class ResearchManager {
         Item iOut = out.getItem();
 
         informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
+
+        AdvancementTriggers.ALTAR_CRAFT.trigger((EntityPlayerMP) crafter, recipeToCraft.getRecipeToCraft());
     }
 
     private static void informCraft(EntityPlayer crafter, ItemStack crafted, Item itemCrafted, @Nullable Block iBlock) {

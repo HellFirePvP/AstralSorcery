@@ -13,6 +13,7 @@
 // Example:
 // mods.astralsorcery.PerkTree.removePerk("astralsorcery:base_inc_perkeffect_t1_1");
 
+
 // Adds a new Infusion recipe to the starlight infusion
 // Parameters:
 // InputStack, OutputStack, consumeMultiple (true/false), consumptionChance, craftTickTime
@@ -26,6 +27,7 @@
 // Example:
 // mods.astralsorcery.StarlightInfusion.removeInfusion(<minecraft:ice>);
 
+
 // Adds a light transmutation recipe
 // Each input & output item specified *has to have* a block representation or the recipe will be skipped.
 // Metadata of the itemstacks is used to determine the blockstate.
@@ -34,6 +36,14 @@
 // Example:
 // mods.astralsorcery.LightTransmutation.addTransmutation(<minecraft:grass>, <minecraft:gold_ore>, 10);
 
+// Adds a light transmutation recipe requiring a specific constellation
+// Each input & output item specified *has to have* a block representation or the recipe will be skipped.
+// Metadata of the itemstacks is used to determine the blockstate.
+// Parameters:
+// InputBlock (as itemstack), OutputBlock (as itemstack), chargeUsed (until transmutation is complete), string name of the required constellation
+// Example:
+// mods.astralsorcery.LightTransmutation.addTransmutation(<minecraft:grass>, <minecraft:gold_ore>, 10, "astralsorcery.constellation.fornax");
+
 // Removes a light transmutation recipe
 // The inputstack can be an item or block, depending on that it'll try and find a recipe that matches.
 // Removes only the first it finds. Add multiple removeTransmutation-calls to remove multiples, if present.
@@ -41,6 +51,7 @@
 // matchStack (itemstack that is matched against the output of the transmutation), true/false (respect metadata in the check, false ignores metadata and only looks for a block match)
 // Example:
 // mods.astralsorcery.LightTransmutation.removeTransmutation(<minecraft:end_stone>, false);
+
 
 // Removes a lightwell recipe
 // Tries to find the recipe to remove via the given ItemStack and optionally the fluid together with it.
@@ -61,6 +72,7 @@
 // Example:
 // mods.astralsorcery.Lightwell.addLiquefaction(<minecraft:dirt>, <liquid:water>, 1, 0.2, 0);
 
+
 // Adds a liquid interaction to the chalice-interactions
 // FluidStack amounts count as the amount of liquid that will be consumed if an interaction occurs.
 // chance1 and chance2 define the chances the input fluids input1 and input2 are consumed respectively.
@@ -79,6 +91,7 @@
 // Example:
 // mods.astralsorcery.LiquidInteraction.removeInteraction(<liquid:lava>, <liquid:water>, <minecraft:obsidian>);
 
+
 // Adds a grindstone recipe
 // The 'Input' can be both an itemstack or a oredict name!
 // Parameters:
@@ -91,17 +104,20 @@
 // Parameters:
 // Output-ItemStack
 // Example:
-// mods.astralsorcery.Grindstone.removeReipce(<minecraft:redstone>);
+// mods.astralsorcery.Grindstone.removeRecipe(<minecraft:redstone>);
+
 
 // Removes a recipe from the altar recipe registry.
 // Removes only the first it finds. Add multiple removeAltarRecipe-calls to remove multiples, if present.
+// You can see the altar-recipe-registryname of existing recipes by hovering over the output of it in the tome or JEI while the F3-Debug screen is active!
 // Parameters:
-// OutputStack, AltarLevel to remove the recipe from (0=Luminous CrafingTable, 1=Starlight Crafting Altar, 2=Celestial Altar)
+// - recipeRegistryName (The altar recipe's recipe registry name)
 // Example:
-// mods.astralsorcery.Altar.removeAltarRecipe(<astralsorcery:blockblackmarble>, 0);
+// mods.astralsorcery.Altar.removeAltarRecipe("astralsorcery:shaped/internal/altar/lightwell");
 
 
 // Adds a recipe to the discovery/tier1 altar recipes
+// You can see the altar-recipe-registryname of existing recipes by hovering over the output of it in the tome or JEI while the F3-Debug screen is active!
 // This cannot be shapeless.
 // Can accept an ItemStack, OreDicitionary, LiquidStack or null in any slot.
 // Formats (just as reminder): (ItemStack should be known), OreDicitionary: <ore:OreDictName>, Liquid: <liquid:LiquidName>
@@ -114,9 +130,13 @@
 // [ 6] [ 7] [ 7] 
 //
 // Parameters:
-// OutputStack, (int) starlightRequired, (int) craftTickTime, Inputs-Array (*has* to be 9 elements)
+// - recipeRegistryName (If a recipe with the same name already exists, the existing recipe will be removed!)
+// - OutputStack,
+// - (int) starlightRequired,
+// - (int) craftTickTime,
+// - Inputs-Array (*has* to be 9 elements)
 // Example:
-// mods.astralsorcery.Altar.addDiscoveryAltarRecipe(<minecraft:dirt>, 200, 200, [
+// mods.astralsorcery.Altar.addDiscoveryAltarRecipe("mypackname:shaped/internal/altar/dirtfromstuff", <minecraft:dirt>, 200, 200, [
 // <minecraft:grass>, null, <ore:treeLeaves>,
 // null, <minecraft:grass>, null,
 // <liquid:astralsorcery.liquidstarlight>, null, <ore:treeLeaves>
@@ -124,6 +144,7 @@
 
 
 // Adds a recipe to the attunement/tier2 altar recipes
+// You can see the altar-recipe-registryname of existing recipes by hovering over the output of it in the tome or JEI while the F3-Debug screen is active!
 // This cannot be shapeless.
 // Can accept an ItemStack, OreDicitionary, LiquidStack or null in any slot.
 // Formats (just as reminder): (ItemStack should be known), OreDicitionary: <ore:OreDictName>, Liquid: <liquid:LiquidName>
@@ -138,9 +159,13 @@
 // [11]                [12] 
 //
 // Parameters:
-// OutputStack, (int) starlightRequired, (int) craftTickTime, Inputs-Array (*has* to be 13 elements)
+// - recipeRegistryName (If a recipe with the same name already exists, the existing recipe will be removed!)
+// - OutputStack,
+// - (int) starlightRequired,
+// - (int) craftTickTime,
+// - Inputs-Array (*has* to be 13 elements)
 // Example:
-// mods.astralsorcery.Altar.addAttunmentAltarRecipe(<minecraft:dirt>, 500, 300, [
+// mods.astralsorcery.Altar.addAttunmentAltarRecipe("mypackname:shaped/internal/altar/iguessmarble", <minecraft:dirt>, 500, 300, [
 // null, null, null,
 // <ore:treeLeaves>, <astralsorcery:blockmarble:2>, <ore:treeLeaves>,
 // null, <liquid:astralsorcery.liquidstarlight>, null,
@@ -149,6 +174,7 @@
 
 
 // Adds a recipe to the constellation/tier3 altar recipes
+// You can see the altar-recipe-registryname of existing recipes by hovering over the output of it in the tome or JEI while the F3-Debug screen is active!
 // This cannot be shapeless.
 // Can accept an ItemStack, OreDicitionary, LiquidStack or null in any slot.
 // Formats (just as reminder): (ItemStack should be known), OreDicitionary: <ore:OreDictName>, Liquid: <liquid:LiquidName>
@@ -163,9 +189,13 @@
 // [11] [19]      [20] [12] 
 //
 // Parameters:
-// OutputStack, (int) starlightRequired, (int) craftTickTime, Inputs-Array (*has* to be 21 elements)
+// - recipeRegistryName (If a recipe with the same name already exists, the existing recipe will be removed!)
+// - OutputStack,
+// - (int) starlightRequired,
+// - (int) craftTickTime,
+// - Inputs-Array (*has* to be 21 elements)
 // Example:
-// mods.astralsorcery.Altar.addConstellationAltarRecipe(<astralsorcery:itemcraftingcomponent:2>, 2000, 10, [
+// mods.astralsorcery.Altar.addConstellationAltarRecipe("mypackname:shaped/internal/altar/thisisveryexpensive", <astralsorcery:itemcraftingcomponent:2>, 2000, 10, [
 // <ore:blockMarble>, <astralsorcery:blocklens>, <ore:blockMarble>,
 // <ore:blockMarble>, <astralsorcery:itemcraftingcomponent:2>, <ore:blockMarble>,
 // <ore:blockMarble>, <minecraft:nether_star>, <ore:blockMarble>,
@@ -178,6 +208,7 @@
 
 
 // Adds a recipe to the trait/tier4 altar recipes
+// You can see the altar-recipe-registryname of existing recipes by hovering over the output of it in the tome or JEI while the F3-Debug screen is active!
 // This cannot be shapeless.
 // Can accept an ItemStack, OreDicitionary, LiquidStack or null in any slot.
 // Formats (just as reminder): (ItemStack should be known), OreDicitionary: <ore:OreDictName>, Liquid: <liquid:LiquidName>
@@ -193,9 +224,14 @@
 // [11] [19] [24] [20] [12]
 //
 // Parameters:
-// OutputStack, (int) starlightRequired, (int) craftTickTime, Inputs-Array (*has* to be 25 or more elements), (optional, string) required-unlocalized-constellation-name
+// - recipeRegistryName (If a recipe with the same name already exists, the existing recipe will be removed!)
+// - OutputStack,
+// - (int) starlightRequired,
+// - (int) craftTickTime,
+// - Inputs-Array (*has* to be 13 elements)
+// - (optional, string) required-unlocalized-constellation-name
 // Example:
-// mods.astralsorcery.Altar.addTraitAltarRecipe(<minecraft:tnt>, 4500, 100, [
+// mods.astralsorcery.Altar.addTraitAltarRecipe("mypackname:shaped/internal/altar/seemsalotforjusttnt", <minecraft:tnt>, 4500, 100, [
 // <liquid:lava>, <liquid:lava>, <liquid:lava>,
 // <liquid:lava>, <minecraft:gunpowder>, <liquid:lava>,
 // <liquid:lava>, <liquid:lava>, <liquid:lava>,

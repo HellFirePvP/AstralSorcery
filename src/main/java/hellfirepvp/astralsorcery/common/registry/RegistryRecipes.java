@@ -1394,7 +1394,7 @@ public class RegistryRecipes {
             List<ItemHandle> signature = c.getConstellationSignatureItems();
             if(!signature.isEmpty()) {
                 ItemHandle first = Iterables.getFirst(signature, null); //Never null.
-                AccessibleRecipeAdapater ar = newShapedRecipe("internal/cape/att/aevitas", ItemsAS.armorImbuedCape)
+                AccessibleRecipeAdapater ar = newShapedRecipe("internal/cape/att/" + c.getSimpleName().toLowerCase(), ItemsAS.armorImbuedCape)
                         .addPart(ItemsAS.armorImbuedCape, ShapedRecipeSlot.CENTER)
                         .addPart(first,
                                 ShapedRecipeSlot.UPPER_CENTER,

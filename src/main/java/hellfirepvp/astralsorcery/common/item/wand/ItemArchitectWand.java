@@ -282,7 +282,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                                 ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
                             }
                             PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
-                            ev.setAdditionalData(Block.getStateId(applicable.key));
+                            ev.setAdditionalDataLong(Block.getStateId(applicable.key));
                             PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
                         }
                     }
@@ -336,7 +336,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                                         ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
                                     }
                                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
-                                    ev.setAdditionalData(Block.getStateId(applicable.key));
+                                    ev.setAdditionalDataLong(Block.getStateId(applicable.key));
                                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
                                 }
                             }
@@ -353,7 +353,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
     public static void playArchitectPlaceEvent(PktParticleEvent event) {
         AstralSorcery.proxy.scheduleClientside(() -> {
             Vector3 at = event.getVec();
-            IBlockState state = Block.getStateById((int) Math.round(event.getAdditionalData()));
+            IBlockState state = Block.getStateById((int) event.getAdditionalDataLong());
             RenderingUtils.playBlockBreakParticles(at.toBlockPos(), state);
             for (int i = 0; i < 9; i++) {
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(

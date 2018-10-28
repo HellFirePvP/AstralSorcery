@@ -56,6 +56,10 @@ public class AltarDiscoveryRecipeWrapper extends JEIBaseWrapper {
         ingredients.setOutput(ItemStack.class, recipe.getOutputForRender());
     }
 
+    public DiscoveryRecipe getRecipe() {
+        return recipe;
+    }
+
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         /*FontRenderer fr = minecraft.fontRenderer;

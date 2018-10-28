@@ -8,12 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.data.fragment;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationDetails;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiJournalPages;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.util.ClientConstellationGenerator;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
@@ -24,9 +27,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -41,18 +44,13 @@ public abstract class KnowledgeFragment {
     private static final Predicate<PlayerProgress> TRUE = (p) -> true;
 
     private final ResourceLocation name;
-    private final long seed;
+    private String unlocPrefix;
     private Predicate<PlayerProgress> canSeeTest = TRUE;
     private Predicate<PlayerProgress> canDiscoverTest = TRUE;
 
-    public KnowledgeFragment(ResourceLocation name) {
+    public KnowledgeFragment(ResourceLocation name, String unlocalizedPrefix) {
         this.name = name;
-        int hName = name.toString().hashCode();
-        this.seed = (hName << 31) | new Random(hName).nextInt();
-    }
-
-    public KnowledgeFragment(String name) {
-        this(new ResourceLocation(AstralSorcery.MODID, name));
+        this.unlocPrefix = unlocalizedPrefix;
     }
 
     public static KnowledgeFragment onConstellations(String name, IConstellation... constellations) {
@@ -60,12 +58,14 @@ public abstract class KnowledgeFragment {
     }
 
     public static KnowledgeFragment onConstellations(ResourceLocation name, IConstellation... constellations) {
-        return new KnowledgeFragment(name) {
+        List<IConstellation> cst = Arrays.asList(constellations);
+        IConstellation c = Iterables.getFirst(cst, null);
+        return new KnowledgeFragment(name, c == null ? "unknown" : c.getUnlocalizedName()) {
             @Override
             @SideOnly(Side.CLIENT)
             public boolean isVisible(GuiScreenJournal journalGui) {
                 return journalGui instanceof GuiJournalConstellationDetails &&
-                        MiscUtils.contains(Arrays.asList(constellations), n -> n.equals(((GuiJournalConstellationDetails) journalGui).getConstellation()));
+                        MiscUtils.contains(cst, n -> n.equals(((GuiJournalConstellationDetails) journalGui).getConstellation()));
             }
         };
     }
@@ -75,12 +75,14 @@ public abstract class KnowledgeFragment {
     }
 
     private static KnowledgeFragment onResearchNodes(ResourceLocation name, ResearchNode... nodes) {
-        return new KnowledgeFragment(name) {
+        List<ResearchNode> nds = Arrays.asList(nodes);
+        ResearchNode n = Iterables.getFirst(nds, null);
+        return new KnowledgeFragment(name, n == null ? "unknown" : n.getUnLocalizedName()) {
             @Override
             @SideOnly(Side.CLIENT)
             public boolean isVisible(GuiScreenJournal journalGui) {
                 return journalGui instanceof GuiJournalPages &&
-                        MiscUtils.contains(Arrays.asList(nodes), n -> n.equals(((GuiJournalPages) journalGui).getResearchNode()));
+                        MiscUtils.contains(nds, n -> n.equals(((GuiJournalPages) journalGui).getResearchNode()));
             }
         };
     }
@@ -103,6 +105,42 @@ public abstract class KnowledgeFragment {
         return (p) -> p.hasConstellationDiscovered(cst);
     }
 
+    // If this knowledge fragment is gated behind the random constellation minigame
+    @SideOnly(Side.CLIENT)
+    private boolean isConstellationGated(long seed) {
+        return new Random(seed).nextInt(4) == 0;
+    }
+
+    @Nullable
+    @SideOnly(Side.CLIENT)
+    public IConstellation getDiscoverConstellation(long seed) {
+        if (!isConstellationGated(seed)) {
+            return null;
+        }
+        ClientConstellationGenerator.ClientConstellation cst = ClientConstellationGenerator.generateRandom(seed);
+        cst.setFragment(this);
+        return cst;
+    }
+
+    @Nonnull
+    @SideOnly(Side.CLIENT)
+    public List<MoonPhase> getShowupPhases(long seed) {
+        if (!isConstellationGated(seed)) {
+            return Lists.newArrayList();
+        }
+        Random r = new Random(seed);
+        int amt = 2 + r.nextInt(2);
+        List<MoonPhase> phases = new ArrayList<>(amt);
+        for (int i = 0; i < amt; i++) {
+            MoonPhase phase;
+            do {
+                phase = MoonPhase.values()[r.nextInt(MoonPhase.values().length)];
+            } while (phases.contains(phase));
+            phases.add(phase);
+        }
+        return phases;
+    }
+
     //If the content of the knowledge fragment can be seen at the current progress
     //Might be earlier than #canDiscover
     public boolean canSee(PlayerProgress progress) {
@@ -119,29 +157,20 @@ public abstract class KnowledgeFragment {
     @SideOnly(Side.CLIENT)
     public abstract boolean isVisible(GuiScreenJournal journalGui);
 
-    public final long getSeed() {
-        return seed;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public final IConstellation getDiscoverConstellation() {
-        return ClientConstellationGenerator.generateRandom(this.seed);
-    }
-
     public String getUnlocalizedName() {
-        return getLocalizationBaseString() + ".name";
+        return String.format("%s.name", getLocalizationBaseString());
     }
 
     public String getUnlocalizedBookmark() {
-        return getLocalizationBaseString() + ".bookmark";
+        return String.format("%s.bookmark", getLocalizationBaseString());
     }
 
     public String getUnlocalizedPage() {
-        return getLocalizationBaseString() + ".description";
+        return String.format("%s.description", getLocalizationBaseString());
     }
 
     private String getLocalizationBaseString() {
-        return "knowledge." + name.getResourceDomain() + "." + name.getResourcePath();
+        return String.format("knowledge.%s.%s", name.getResourceDomain(), name.getResourcePath());
     }
 
     @SideOnly(Side.CLIENT)
@@ -164,6 +193,11 @@ public abstract class KnowledgeFragment {
     @SideOnly(Side.CLIENT)
     public String getLocalizedPage() {
         return I18n.format(getUnlocalizedPage());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getLocalizedIndexName() {
+        return String.format("%s: %s", I18n.format(this.unlocPrefix), this.getLocalizedName());
     }
 
     public ResourceLocation getRegistryName() {

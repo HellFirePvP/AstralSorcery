@@ -43,7 +43,7 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe implements ChargedCrys
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
         World world = player.getEntityWorld();
-        if (!world.isRemote && !player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalAxe)) {
+        if (!world.isRemote && !player.isSneaking() && !player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalAxe)) {
             BlockArray tree = TreeDiscoverer.tryCaptureTreeAt(world, pos, 9, true);
             if (tree != null) {
                 Map<BlockPos, BlockArray.BlockInformation> pattern = tree.getPattern();

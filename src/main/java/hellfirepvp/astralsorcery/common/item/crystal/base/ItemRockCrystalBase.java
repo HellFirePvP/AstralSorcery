@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -85,6 +86,10 @@ public abstract class ItemRockCrystalBase extends Item implements ItemHighlighte
         crystal.motionX = location.motionX;
         crystal.motionY = location.motionY;
         crystal.motionZ = location.motionZ;
+        if (location instanceof EntityItem) {
+            crystal.setThrower(((EntityItem) location).getThrower());
+            crystal.setOwner(((EntityItem) location).getOwner());
+        }
         return crystal;
     }
 

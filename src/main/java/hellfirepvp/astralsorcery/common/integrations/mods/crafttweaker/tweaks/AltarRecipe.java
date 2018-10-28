@@ -42,7 +42,15 @@ public class AltarRecipe extends BaseTweaker {
     public static int SLOT_COUNT_T4 = 25;
 
     @ZenMethod
+    public static void removeAltarRecipe(String recipeRegistryName) {
+        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeRemove(recipeRegistryName));
+    }
+
+    @ZenMethod
+    @Deprecated
     public static void removeAltarRecipe(IItemStack output, int altarLevel) {
+        CraftTweakerAPI.logError("[" + name + "] Using deprecated 'removeAltarRecipe'! Use the new method to remove recipes by their registry-name!");
+
         ItemStack out = convertToItemStack(output);
         if(out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-removal due to invalid output.");
@@ -59,7 +67,7 @@ public class AltarRecipe extends BaseTweaker {
     }
 
     @ZenMethod
-    public static void addDiscoveryAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+    public static void addDiscoveryAltarRecipe(String recipeRegistryName, IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         if(!matchNeededSlots(inputs, TileAltar.AltarLevel.DISCOVERY)) return;
 
         ItemStack out = convertToItemStack(output);
@@ -73,18 +81,19 @@ public class AltarRecipe extends BaseTweaker {
             handles[i] = convertToHandle(inputs[i]);
         }
 
-
-
-        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeDiscovery(handles, out, starlightRequired, craftingTickTime));
+        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeDiscovery(recipeRegistryName, handles, out, starlightRequired, craftingTickTime));
     }
 
     @ZenMethod
-    public static void addAttunementAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
-        addAttunmentAltarRecipe(output, starlightRequired, craftingTickTime, inputs);
+    @Deprecated
+    public static void addDiscoveryAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addDiscoveryAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
+        addDiscoveryAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs);
     }
 
     @ZenMethod
-    public static void addAttunmentAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+    public static void addAttunmentAltarRecipe(String recipeRegistryName, IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         if(!matchNeededSlots(inputs, TileAltar.AltarLevel.ATTUNEMENT)) return;
 
         ItemStack out = convertToItemStack(output);
@@ -98,11 +107,26 @@ public class AltarRecipe extends BaseTweaker {
             handles[i] = convertToHandle(inputs[i]);
         }
 
-        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeAttunement(handles, out, starlightRequired, craftingTickTime));
+        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeAttunement(recipeRegistryName, handles, out, starlightRequired, craftingTickTime));
     }
 
     @ZenMethod
-    public static void addConstellationAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+    @Deprecated
+    public static void addAttunementAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addAttunementAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
+        addAttunmentAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs);
+    }
+
+    @ZenMethod
+    @Deprecated
+    public static void addAttunmentAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addAttunmentAltarRecipe' with the TYPO! This method will be removed in an upcoming update!");
+        addAttunementAltarRecipe(output, starlightRequired, craftingTickTime, inputs);
+    }
+
+    @ZenMethod
+    public static void addConstellationAltarRecipe(String recipeRegistryName, IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         if(!matchNeededSlots(inputs, TileAltar.AltarLevel.CONSTELLATION_CRAFT)) return;
 
         ItemStack out = convertToItemStack(output);
@@ -116,16 +140,19 @@ public class AltarRecipe extends BaseTweaker {
             handles[i] = convertToHandle(inputs[i]);
         }
 
-        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeConstellation(handles, out, starlightRequired, craftingTickTime));
+        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeConstellation(recipeRegistryName, handles, out, starlightRequired, craftingTickTime));
     }
 
     @ZenMethod
-    public static void addTraitAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
-        addTraitAltarRecipe(output, starlightRequired, craftingTickTime, inputs, null);
+    @Deprecated
+    public static void addConstellationAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addConstellationAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
+        addConstellationAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs);
     }
 
     @ZenMethod
-    public static void addTraitAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs, @Nullable String iRequiredConstellationFocusName) {
+    public static void addTraitAltarRecipe(String recipeRegistryName, IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs, @Nullable String iRequiredConstellationFocusName) {
         if(!matchNeededSlots(inputs, TileAltar.AltarLevel.TRAIT_CRAFT)) return;
 
         ItemStack out = convertToItemStack(output);
@@ -148,7 +175,28 @@ public class AltarRecipe extends BaseTweaker {
             handles[i] = convertToHandle(inputs[i]);
         }
 
-        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeTrait(handles, out, starlightRequired, craftingTickTime, cst));
+        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeTrait(recipeRegistryName, handles, out, starlightRequired, craftingTickTime, cst));
+    }
+
+    @ZenMethod
+    public static void addTraitAltarRecipe(String recipeRegistryName, IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        addTraitAltarRecipe(recipeRegistryName, output, starlightRequired, craftingTickTime, inputs, null);
+    }
+
+    @ZenMethod
+    @Deprecated
+    public static void addTraitAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addTraitAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
+        addTraitAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs, null);
+    }
+
+    @ZenMethod
+    @Deprecated
+    public static void addTraitAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs, @Nullable String iRequiredConstellationFocusName) {
+        CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addTraitAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
+        addTraitAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs, iRequiredConstellationFocusName);
     }
 
     private static boolean isEmpty(IIngredient[] inputs) {

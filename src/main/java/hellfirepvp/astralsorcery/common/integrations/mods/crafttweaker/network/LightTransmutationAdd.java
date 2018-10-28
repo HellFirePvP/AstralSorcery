@@ -8,10 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network;
 
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,13 +29,15 @@ public class LightTransmutationAdd implements SerializeableRecipe {
 
     private ItemStack in, out;
     private double cost;
+    private IWeakConstellation cst;
 
     LightTransmutationAdd() {}
 
-    public LightTransmutationAdd(ItemStack in, ItemStack out, double cost) {
+    public LightTransmutationAdd(ItemStack in, ItemStack out, double cost, @Nullable IWeakConstellation cst) {
         this.in = in;
         this.out = out;
         this.cost = cost;
+        this.cst = cst;
     }
 
     @Override
@@ -43,6 +50,10 @@ public class LightTransmutationAdd implements SerializeableRecipe {
         this.in = ByteBufUtils.readItemStack(buf);
         this.out = ByteBufUtils.readItemStack(buf);
         this.cost = buf.readDouble();
+        if (buf.readBoolean()) {
+            IConstellation c = ConstellationRegistry.getConstellationByName(ByteBufUtils.readString(buf));
+            this.cst = c instanceof IWeakConstellation ? (IWeakConstellation) c : null;
+        }
     }
 
     @Override
@@ -50,11 +61,15 @@ public class LightTransmutationAdd implements SerializeableRecipe {
         ByteBufUtils.writeItemStack(buf, this.in);
         ByteBufUtils.writeItemStack(buf, this.out);
         buf.writeDouble(this.cost);
+        buf.writeBoolean(this.cst != null);
+        if (this.cst != null) {
+            ByteBufUtils.writeString(buf, this.cst.getUnlocalizedName());
+        }
     }
 
     @Override
     public void applyRecipe() {
-        CraftingAccessManager.addMTTransmutation(this.in, this.out, this.cost);
+        CraftingAccessManager.addMTTransmutation(this.in, this.out, this.cost, this.cst);
     }
 
 }

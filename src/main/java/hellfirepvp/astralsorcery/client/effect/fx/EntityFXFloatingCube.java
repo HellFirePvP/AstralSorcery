@@ -51,7 +51,7 @@ public class EntityFXFloatingCube extends EntityComplexFX {
     private AlphaFunction alphaFunction = AlphaFunction.CONSTANT;
     private RefreshFunction refreshFunction = null;
     private float alphaMultiplier = 1F, tumbleIntensityMultiplier = 1F;
-    private ScaleFunction<EntityFXFloatingCube> scaleFunction = (fx, pTicks, scaleIn) -> scaleIn;
+    private ScaleFunction<EntityFXFloatingCube> scaleFunction = (fx, pos, pTicks, scaleIn) -> scaleIn;
     private float scale = 1F;
     private boolean disableDepth = false;
 
@@ -268,7 +268,7 @@ public class EntityFXFloatingCube extends EntityComplexFX {
         GlStateManager.translate(translateTo.getX(), translateTo.getY(), translateTo.getZ());
 
         float scaleF = this.scale;
-        scaleF = scaleFunction.getScale(this, pTicks, scaleF);
+        scaleF = scaleFunction.getScale(this, translateTo, pTicks, scaleF);
 
         Vector3 rotation = getInterpolatedRotation(pTicks);
         GlStateManager.rotate(((float) rotation.getX()), 1, 0, 0);

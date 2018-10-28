@@ -25,8 +25,10 @@ import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -150,7 +152,7 @@ public class CEffectArmara extends ConstellationEffect {
         }
         List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
         for (EntityLivingBase entity : entities) {
-            if(!entity.isDead) {
+            if(!entity.isDead && (entity instanceof EntityMob || entity instanceof EntityPlayer)) {
                 if(modified.isCorrupted()) {
                     if(entity instanceof EntityPlayer) continue;
 

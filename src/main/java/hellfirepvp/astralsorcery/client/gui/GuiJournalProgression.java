@@ -123,22 +123,25 @@ public class GuiJournalProgression extends GuiScreenJournal {
             dragging = false;
         }
 
+        Point mouse = new Point(mouseX, mouseY);
+
         //Zooming stuff.
         int dWheelChange = Mouse.getDWheel();
         if(dWheelChange < 0) {
             progressionRenderer.handleZoomOut();
         }
         if(dWheelChange > 0)  {
-            progressionRenderer.handleZoomIn();
+            progressionRenderer.handleZoomIn(mouse);
         }
+
 
         ScaledResolution res = new ScaledResolution(mc);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor((guiLeft + 27) * res.getScaleFactor(), (guiTop + 27) * res.getScaleFactor(), (guiWidth - 54) * res.getScaleFactor(), (guiHeight - 54) * res.getScaleFactor());
-        progressionRenderer.drawProgressionPart(zLevel);
+        progressionRenderer.drawProgressionPart(zLevel, mouse);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
-        drawDefault(textureResShell);
+        drawDefault(textureResShell, mouse);
 
         Rectangle guiStar = null;
         if(!ResearchManager.clientProgress.wasOnceAttuned()) {
@@ -147,7 +150,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
             GL11.glEnable(GL11.GL_DEPTH_TEST);
         }
         zLevel += 150;
-        drawMouseHighlight(zLevel, getCurrentMousePoint(), guiStar);
+        drawMouseHighlight(zLevel, mouse, guiStar);
         zLevel -= 150;
 
         GL11.glPopAttrib();
@@ -174,7 +177,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
         super.updateScreen();
 
         if(queryInput(mc.gameSettings.keyBindForward.getKeyCode())) {
-            progressionRenderer.handleZoomIn();
+            progressionRenderer.handleZoomIn(getCurrentMousePoint());
         } else if(queryInput(mc.gameSettings.keyBindBack.getKeyCode())) {
             progressionRenderer.handleZoomOut();
         }
@@ -198,7 +201,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if (handleJournalNavigationBookmarkClick(p) || handleFragmentClick(p)) {
+        if (handleBookmarkClick(p)) {
             return;
         }
         progressionRenderer.propagateClick(p);

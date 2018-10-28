@@ -11,6 +11,7 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: "java"
 
 version = "1.12.2-1.10.1"
 group= "hellfirepvp.astralsorcery"
@@ -81,6 +82,10 @@ dependencies {
 
     compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
 
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
 }
 
 task signMainJar(type: SignJar, dependsOn: reobfJar) {

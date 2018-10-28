@@ -29,6 +29,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
@@ -143,7 +144,7 @@ public class ItemShiftingStar extends Item implements INBTModel {
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-        if(!worldIn.isRemote && entityLiving instanceof EntityPlayer) {
+        if(!worldIn.isRemote && entityLiving instanceof EntityPlayerMP) {
             EntityPlayer pl = (EntityPlayer) entityLiving;
             IMajorConstellation cst;
             if ((cst = getAttunement(stack)) != null) {

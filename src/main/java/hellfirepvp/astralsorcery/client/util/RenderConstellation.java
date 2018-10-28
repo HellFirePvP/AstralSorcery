@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositio
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -327,8 +328,8 @@ public class RenderConstellation {
         return flickerSin(wtime, partialTicks, divisor, 4F, 0.375F);
     }
 
-    public static float flickerSin(long wtime, float partialTicks, int divisor, float div, float move) {
-        double rad = (((double) wtime) + partialTicks) / divisor;
+    public static float flickerSin(long wtime, float partialTicks, double divisor, float div, float move) {
+        double rad = ((wtime % (Config.dayLength / 2)) + partialTicks) / divisor;
         float sin = MathHelper.sin((float) rad);
         return (sin / div) + move;
     }

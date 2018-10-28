@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,16 +33,16 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 public class ClientConstellationGenerator {
 
-    public static IConstellation generateRandom(long seed) {
+    public static ClientConstellation generateRandom(long seed) {
         Random sRandom = new Random(seed);
         int stars = 5 + (sRandom.nextFloat() > 0.6F ? 1 : 0);
         return generateRandom(seed, stars);
     }
 
-    public static IConstellation generateRandom(long seed, int stars) {
+    public static ClientConstellation generateRandom(long seed, int stars) {
         Random sRandom = new Random(seed);
         String name = RandomWordGenerator.getGenerator().generateWord(seed, sRandom.nextFloat() > 0.6F ? 7 : 6);
-        IConstellation cst = new ClientConstellation(name);
+        ClientConstellation cst = new ClientConstellation(name);
         List<StarLocation> tmpStars = Lists.newArrayList();
         List<StarConnection> tmpConnections = Lists.newArrayList();
         for (int i = 0; i < stars; i++) {
@@ -130,16 +131,25 @@ public class ClientConstellationGenerator {
         }
     }
 
-    static class ClientConstellation implements IConstellation {
+    public static class ClientConstellation implements IConstellation {
 
         private List<StarLocation> starLocations = Lists.newArrayList();
         private List<StarConnection> connections = Lists.newArrayList();
+
+        private final String localizedName;
+        private KnowledgeFragment associatedFragment;
 
         private ClientConstellation(String localizedName) {
             this.localizedName = localizedName;
         }
 
-        private final String localizedName;
+        public void setFragment(KnowledgeFragment fragment) {
+            this.associatedFragment = fragment;
+        }
+
+        public KnowledgeFragment getFragment() {
+            return associatedFragment;
+        }
 
         @Override
         public StarLocation addStar(int x, int y) {

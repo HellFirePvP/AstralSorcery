@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -92,6 +93,28 @@ public class AltarRecipeRegistry {
     public static AbstractAltarRecipe getRecipe(int id) {
         if(id < 0 || id >= compiledRecipeArray.length) return null;
         return compiledRecipeArray[id];
+    }
+
+    @Nullable
+    public static AbstractAltarRecipe getRecipeSlow(@Nullable ResourceLocation id) {
+        if (id == null) {
+            return null;
+        }
+        for (Collection<AbstractAltarRecipe> recipeList : recipes.values()) {
+            for (AbstractAltarRecipe recipe : recipeList) {
+                if (recipe.getNativeRecipe().getRegistryName().equals(id)) {
+                    return recipe;
+                }
+            }
+        }
+        for (Collection<AbstractAltarRecipe> recipeList : mtRecipes.values()) {
+            for (AbstractAltarRecipe recipe : recipeList) {
+                if (recipe.getNativeRecipe().getRegistryName().equals(id)) {
+                    return recipe;
+                }
+            }
+        }
+        return null;
     }
 
     public static List<AbstractAltarRecipe> getAltarRecipesByOutput(ItemStack output, TileAltar.AltarLevel altarLevel) {
