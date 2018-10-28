@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
@@ -17,12 +18,9 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.ResourceLocation;
 
+import static hellfirepvp.astralsorcery.common.data.research.ResearchProgression.findNode;
 import static hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment.*;
 
 /**
@@ -38,6 +36,92 @@ public class RegistryKnowledgeFragments {
         KnowledgeFragmentManager mgr = KnowledgeFragmentManager.getInstance();
 
         ConstellationRegistry.getAllConstellations().forEach(RegistryKnowledgeFragments::registerConstellationFragment);
+
+        mgr.register(onResearchNodes("fragment.discovery.ancientshrine",
+                findNode("SHRINES")));
+        mgr.register(onResearchNodes("fragment.discovery.resowand",
+                findNode("WAND")));
+        mgr.register(onResearchNodes("fragment.misc.altar",
+                findNode("ALTAR1"),
+                findNode("ALTAR2"),
+                findNode("ALTAR3"),
+                findNode("ALTAR4")));
+        mgr.register(onResearchNodes("fragment.discovery.startable",
+                findNode("LINKTOOL"),
+                findNode("LENS"),
+                findNode("PRISM"),
+                findNode("STARLIGHT_NETWORK"),
+                findNode("COLL_CRYSTAL"),
+                findNode("ENHANCED_COLLECTOR")));
+        mgr.register(onResearchNodes("fragment.exploration.lightwellprod",
+                findNode("WELL")));
+        mgr.register(onResearchNodes("fragment.exploration.lightwelluses",
+                findNode("WELL")));
+        mgr.register(onResearchNodes("fragment.exploration.crystalgrowth",
+                findNode("CRYSTAL_GROWTH")));
+        mgr.register(onResearchNodes("fragment.exploration.crystaltools",
+                findNode("TOOLS")));
+        mgr.register(onResearchNodes("fragment.exploration.grindstone",
+                findNode("GRINDSTONE")));
+        mgr.register(onResearchNodes("fragment.misc.cannibalism",
+                findNode("COLL_CRYSTAL"),
+                findNode("ENHANCED_COLLECTOR"),
+                findNode("SPEC_RELAY"),
+                findNode("ALTAR1"),
+                findNode("ALTAR2"),
+                findNode("ALTAR3"),
+                findNode("ALTAR4")));
+        mgr.register(onResearchNodes("fragment.exploration.caveillumplace",
+                findNode("ILLUMINATOR")));
+        mgr.register(onResearchNodes("fragment.exploration.caveillumwand",
+                findNode("ILLUMINATOR"),
+                findNode("ILLUMINATION_WAND")));
+        mgr.register(onResearchNodes("fragment.exploration.nocturnal",
+                findNode("NOC_POWDER")));
+        mgr.register(onResearchNodes("fragment.attunement.starlightchunks",
+                findNode("LENS"),
+                findNode("PRISM"),
+                findNode("STARLIGHT_NETWORK"),
+                findNode("COLL_CRYSTAL"),
+                findNode("ENHANCED_COLLECTOR"),
+                findNode("RIT_PEDESTAL")));
+        mgr.register(onResearchNodes("fragment.attunement.alignmentcharge",
+                findNode("QUICK_CHARGE"),
+                findNode("TOOL_WANDS"),
+                findNode("GRAPPLE_WAND")));
+        mgr.register(onResearchNodes("fragment.attunement.attunement",
+                findNode("ATT_PLAYER")));
+        mgr.register(onResearchNodes("fragment.attunement.ritualpedestal",
+                findNode("RIT_PEDESTAL"),
+                findNode("PED_ACCEL")));
+        mgr.register(onResearchNodes("fragment.constellation.colorlens",
+                findNode("LENSES_EFFECTS")));
+        mgr.register(onResearchNodes("fragment.constellation.refractiontable",
+                findNode("DRAWING_TABLE")));
+        mgr.register(onResearchNodes("fragment.constellation.treebeaconuse",
+                findNode("TREEBEACON")));
+        mgr.register(onResearchNodes("fragment.constellation.treebeaconboost",
+                findNode("TREEBEACON")));
+        mgr.register(onResearchNodes("fragment.constellation.inftool",
+                findNode("CHARGED_TOOLS")));
+        mgr.register(onResearchNodes("fragment.constellation.illumwand",
+                findNode("ILLUMINATION_WAND")));
+        mgr.register(onResearchNodes("fragment.constellation.prism",
+                findNode("ENCHANTMENT_AMULET")));
+        mgr.register(onResearchNodes("fragment.constellation.clusterbonus",
+                findNode("CEL_CRYSTAL_GROW")));
+        mgr.register(onResearchNodes("fragment.constellation.clusterspeed",
+                findNode("CEL_CRYSTAL_GROW")));
+        mgr.register(onResearchNodes("fragment.constellation.ec3",
+                findNode("ENHANCED_COLLECTOR")));
+        mgr.register(onResearchNodes("fragment.radiance.fysallidic",
+                findNode("BORE_HEAD_VORTEX")));
+        mgr.register(new KnowledgeFragment(new ResourceLocation(AstralSorcery.MODID, "fragment.misc.perks"), "gui.journal.bm.perks.name") {
+            @Override
+            public boolean isVisible(GuiScreenJournal journalGui) {
+                return journalGui instanceof GuiJournalPerkTree;
+            }
+        }).setCanSeeTest(prog -> prog.getAttunedConstellation() != null);
     }
 
     private static void registerConstellationFragment(IConstellation cst) {

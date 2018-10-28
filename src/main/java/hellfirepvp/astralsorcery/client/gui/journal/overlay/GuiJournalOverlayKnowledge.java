@@ -19,8 +19,10 @@ import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,6 +36,7 @@ import java.util.List;
 public class GuiJournalOverlayKnowledge extends GuiScreenJournalOverlay {
 
     public static final BindableResource textureKnowledgeOverlay = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guicontippaper_blank");
+    private static final int HEADER_WIDTH = 190;
     private static final int DEFAULT_WIDTH = 175;
 
     private final KnowledgeFragment knowledgeFragment;
@@ -78,7 +81,7 @@ public class GuiJournalOverlayKnowledge extends GuiScreenJournalOverlay {
 
     private void drawPageText() {
         GlStateManager.color(1, 1, 1, 1);
-        int offsetY = guiTop + 35;
+        int offsetY = guiTop + 40;
         int offsetX = guiLeft + guiWidth / 2 - DEFAULT_WIDTH / 2;
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
@@ -91,13 +94,23 @@ public class GuiJournalOverlayKnowledge extends GuiScreenJournalOverlay {
         String locTitle = this.knowledgeFragment.getLocalizedIndexName();
         TextureHelper.refreshTextureBindState();
         FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-        double length = fr.getStringWidth(locTitle) * 1.8;
-        double offsetLeft = width / 2 - length / 2;
-        int offsetTop = guiTop + 10;
+        List<String> split = fr.listFormattedStringToWidth(locTitle, MathHelper.floor(HEADER_WIDTH / 1.4));
+        int step = 14;
+
+        int offsetTop = guiTop + 15 - (split.size() * step) / 2;
+
         GlStateManager.pushMatrix();
-        GlStateManager.translate(offsetLeft + 2, offsetTop, 0);
-        GlStateManager.scale(1.8, 1.8, 1.8);
-        fr.drawString(locTitle, 0, 0, 0xEE333333, false);
+        GlStateManager.translate(0, offsetTop, 0);
+        for (int i = 0; i < split.size(); i++) {
+            String s = split.get(i);
+
+            double offsetLeft = width / 2 - (fr.getStringWidth(s) * 1.4) / 2;
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(offsetLeft, i * step, 0);
+            GlStateManager.scale(1.4, 1.4, 1.4);
+            fr.drawString(s, 0, 0, 0xEE333333, false);
+            GlStateManager.popMatrix();
+        }
         GlStateManager.popMatrix();
         GlStateManager.color(1, 1, 1, 1);
         GL11.glColor4f(1, 1, 1, 1);

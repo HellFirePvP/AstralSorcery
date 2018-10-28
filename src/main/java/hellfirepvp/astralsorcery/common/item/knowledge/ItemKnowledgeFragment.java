@@ -208,6 +208,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
         Random sRand = new Random(seedOpt.get());
         KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
         List<KnowledgeFragment> all = dat.getDiscoverableFragments();
+        all.removeIf(f -> !f.isFullyPresent());
         if (all.isEmpty()) return null;
         int index = sRand.nextInt(all.size());
         return all.get(index);
@@ -223,7 +224,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
         for (ItemStack stack : fragItems) {
             if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
             KnowledgeFragment fr = resolveFragment(stack);
-            if (!frags.contains(fr)) {
+            if (fr != null) {
                 frags.add(stack);
             }
         }

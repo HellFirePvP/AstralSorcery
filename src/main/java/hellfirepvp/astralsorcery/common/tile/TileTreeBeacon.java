@@ -446,7 +446,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
         public static double treeBeaconRange = 16D;
         public static int maxCount = 600;
         public static int dropsChance = 4;
-        public static int breakChance = 350;
+        public static int breakChance = 1400;
         public static float speedLimiter = 1;
 
         private ConfigEntryTreeBeacon() {

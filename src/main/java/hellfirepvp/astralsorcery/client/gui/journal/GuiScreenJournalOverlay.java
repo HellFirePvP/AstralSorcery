@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui.journal;
 
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
 import net.minecraft.client.Minecraft;
@@ -41,6 +42,9 @@ public class GuiScreenJournalOverlay extends GuiWHScreen {
     protected boolean handleRightClickClose(int mouseX, int mouseY) {
         if (origin instanceof GuiJournalProgression) {
             ((GuiJournalProgression) origin).expectReinit = true;
+        }
+        if (origin instanceof GuiJournalPerkTree) {
+            ((GuiJournalPerkTree) origin).expectReinit = true;
         }
         Minecraft.getMinecraft().displayGuiScreen(origin);
         return true;

@@ -81,6 +81,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private int tickSealBreak = 0;
 
     private int guiOffsetX, guiOffsetY;
+    public boolean expectReinit = false;
 
     private Map<AbstractPerk, Rectangle.Double> thisFramePerks = new HashMap<>();
     private Map<AbstractPerk, Long> unlockEffects = new HashMap<>();
@@ -118,6 +119,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         this.guiOffsetX = guiLeft + 10;
         this.guiOffsetY = guiTop + 10;
+
+        if (this.expectReinit) {
+            this.expectReinit = false;
+            return;
+        }
 
         boolean shifted = false;
         PlayerProgress progress = ResearchManager.clientProgress;

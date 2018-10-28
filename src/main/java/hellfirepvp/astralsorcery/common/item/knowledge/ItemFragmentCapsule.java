@@ -65,7 +65,7 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (!worldIn.isRemote && (!(entityIn instanceof EntityPlayer) || !isValid((EntityPlayer) entityIn, stack))) {
             stack.setCount(0);
-            SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, entityIn.getEntityWorld(), entityIn.getPosition(), 1.4F, 0.8F);
+            SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, entityIn.getEntityWorld(), entityIn.getPosition(), 1.4F, 1F);
         }
     }
 
@@ -75,7 +75,7 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
             ItemStack stack = entityItem.getItem();
             EntityPlayer thrower = entityItem.getThrower() == null ? null : entityItem.world.getPlayerEntityByName(entityItem.getThrower());
             if (thrower == null || !isValid(thrower, stack)) {
-                SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, entityItem.getEntityWorld(), entityItem.getPosition(), 1.4F, 0.8F);
+                SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, entityItem.getEntityWorld(), entityItem.getPosition(), 1.4F, 1F);
                 entityItem.setDead();
                 stack.setCount(0);
                 entityItem.setItem(stack);
@@ -149,7 +149,6 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
         EntityItemExplosionResistant e = new EntityItemExplosionResistant(world, location.posX, location.posY, location.posZ, itemstack);
         e.setDefaultPickupDelay();
-        e.setNoDespawn();
         e.motionX = location.motionX;
         e.motionY = location.motionY;
         e.motionZ = location.motionZ;

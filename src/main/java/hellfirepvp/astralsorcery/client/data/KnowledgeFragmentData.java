@@ -83,7 +83,7 @@ public class KnowledgeFragmentData extends CachedPersistentData {
 
     public Collection<KnowledgeFragment> getFragmentsFor(GuiScreenJournal journal) {
         PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
-        return getAllFragments().stream().filter(f -> f.isVisible(journal) && f.canSee(prog)).collect(Collectors.toList());
+        return getAllFragments().stream().filter(f -> f.isVisible(journal) && f.canSee(prog) && f.isFullyPresent()).collect(Collectors.toList());
     }
 
     public boolean addFragment(KnowledgeFragment fragment) {

@@ -149,7 +149,6 @@ public class CommonProxy implements IGuiHandler {
         ConstellationEffectRegistry.init();
 
         RegistryPerks.initPerkTree();
-        RegistryKnowledgeFragments.init();
 
         registerCapabilities();
 
@@ -221,6 +220,7 @@ public class CommonProxy implements IGuiHandler {
         RegistryRecipes.initGrindstoneOreRecipes();
         SextantFinder.initialize();
         PatreonEffectHelper.init();
+        RegistryKnowledgeFragments.init();
 
         RegistryConstellations.initMapEffects();
 
