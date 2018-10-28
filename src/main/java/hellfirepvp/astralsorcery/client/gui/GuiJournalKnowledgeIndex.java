@@ -73,7 +73,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
         this.closeWithInventoryKey = false;
 
         KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
-        List<KnowledgeFragment> known = Lists.newArrayList(KnowledgeFragmentManager.getInstance().getAllFragments());
+        List<KnowledgeFragment> known = Lists.newArrayList(dat.getAllFragments());
         known.removeIf(f -> !f.isFullyPresent());
         known.sort(Comparator.comparing(KnowledgeFragment::getLocalizedIndexName));
         this.allFragments = known;
