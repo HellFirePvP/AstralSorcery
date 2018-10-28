@@ -153,6 +153,10 @@ public class PatreonEffectHelper {
                         .setOverlayColor(0xFFC30711)
                         .setDrainColor(0xFFFF0000)
                         .setTreeColor(0xFFC30711));
+
+        effectMap.put( // Kittenplays01 / Kittenplays01
+                UUID.fromString("ac71a42e-fa17-4d54-a1ae-57928fdbead0"),
+                new PatreonEffect(FlareColor.STANDARD));
     }
 
     @Nullable
