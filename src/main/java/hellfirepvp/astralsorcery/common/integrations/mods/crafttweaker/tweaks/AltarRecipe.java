@@ -93,7 +93,7 @@ public class AltarRecipe extends BaseTweaker {
     }
 
     @ZenMethod
-    public static void addAttunmentAltarRecipe(String recipeRegistryName, IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+    public static void addAttunementAltarRecipe(String recipeRegistryName, IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         if(!matchNeededSlots(inputs, TileAltar.AltarLevel.ATTUNEMENT)) return;
 
         ItemStack out = convertToItemStack(output);
@@ -112,6 +112,13 @@ public class AltarRecipe extends BaseTweaker {
 
     @ZenMethod
     @Deprecated
+    public static void addAttunmentAltarRecipe(String recipeRegistryName, IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addAttunmentAltarRecipe' with the TYPO! This method will be removed in an upcoming update!");
+        addAttunementAltarRecipe(recipeRegistryName, output, starlightRequired, craftingTickTime, inputs);
+    }
+
+    @ZenMethod
+    @Deprecated
     public static void addAttunementAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addAttunementAltarRecipe'! Use the new method with an additional registry-name parameter!");
         CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
@@ -121,6 +128,7 @@ public class AltarRecipe extends BaseTweaker {
     @ZenMethod
     @Deprecated
     public static void addAttunmentAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addAttunmentAltarRecipe'! Use the new method with an additional registry-name parameter!");
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addAttunmentAltarRecipe' with the TYPO! This method will be removed in an upcoming update!");
         addAttunementAltarRecipe(output, starlightRequired, craftingTickTime, inputs);
     }

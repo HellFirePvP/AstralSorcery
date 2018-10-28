@@ -129,6 +129,7 @@ public class CraftingAccessManager {
 
     public static boolean tryRemoveAltarRecipe(ResourceLocation recipeRegistryName) {
         AbstractAltarRecipe recipe = AltarRecipeRegistry.getRecipeSlow(recipeRegistryName);
+        recipe = AltarRecipeRegistry.removeRecipeFromCache(recipe);
         markForRemoval(recipe);
         return recipe != null;
     }

@@ -151,6 +151,27 @@ public class AltarRecipeRegistry {
         return null;
     }
 
+    /*
+     * Returns the Recipe that was removed if successful.
+     */
+    @Nullable
+    public static AbstractAltarRecipe removeRecipeFromCache(@Nullable AbstractAltarRecipe recipe) {
+        if (recipe == null) {
+            return null;
+        }
+        for (TileAltar.AltarLevel al : recipes.keySet()) {
+            Iterator<AbstractAltarRecipe> iterator = recipes.get(al).iterator();
+            while (iterator.hasNext()) {
+                AbstractAltarRecipe regRecipe = iterator.next();
+                if (regRecipe.getNativeRecipe().getRegistryName().equals(recipe.getNativeRecipe().getRegistryName())) {
+                    iterator.remove();
+                    return regRecipe;
+                }
+            }
+        }
+        return null;
+    }
+
     public static TraitRecipe registerTraitRecipe(AccessibleRecipeAdapater recipe) {
         TraitRecipe tr = new TraitRecipe(recipe);
         registerAltarRecipe(tr);

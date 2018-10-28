@@ -41,6 +41,7 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
     protected int starlightRequired, craftingTickTime;
 
     public BaseAltarRecipe(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime) {
+        this.name = name;
         this.inputs = inputs;
         this.output = output;
         this.starlightRequired = starlightRequired;
