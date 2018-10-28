@@ -487,6 +487,21 @@ public class RegistryPerks {
                 .connect(perkLL1);
         PERK_TREE.registerPerk(perkVampirism)
                 .connect(perkLL2);
+
+        AttributeModifierPerk perkFD1 = new AttributeModifierPerk("ds_inc_potion_duration", 21, -6);
+        perkFD1.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
+        AttributeModifierPerk perkFD2 = new AttributeModifierPerk("ds_inc_potion_duration_1", 22, -5).setNameOverride(perkFD1.getUnlocalizedName());
+        perkFD2.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
+        MajorPerk perkFD3 = new MajorPerk("major_ds_inc_potion_duration", 23, -6);
+        perkFD3.addModifier(0.3F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
+        perkFD3.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+
+        PERK_TREE.registerPerk(perkFD1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_5"));
+        PERK_TREE.registerPerk(perkFD2)
+                .connect(perkFD1);
+        PERK_TREE.registerPerk(perkFD3)
+                .connect(perkFD2);
     }
 
     private static void initializeEvorsioKeyPerks() {
@@ -590,6 +605,21 @@ public class RegistryPerks {
         PERK_TREE.registerPerk(perkDoubleL1)
                 .connect(perkChainL2)
                 .connect(perkChanceL2);
+
+        AttributeModifierPerk perkFD1 = new AttributeModifierPerk("ev_inc_potion_duration", -15, -16);
+        perkFD1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
+        AttributeModifierPerk perkFD2 = new AttributeModifierPerk("ev_inc_potion_duration_1", -14, -17).setNameOverride(perkFD1.getUnlocalizedName());
+        perkFD2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
+        MajorPerk perkFD3 = new MajorPerk("major_ev_inc_potion_duration", -15, -18);
+        perkFD3.addModifier(0.4F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
+        perkFD3.addModifier(-0.25F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
+
+        PERK_TREE.registerPerk(perkFD1)
+                .connect(PERK_TREE.getAstralSorceryPerk("med_added_hrv_speed"));
+        PERK_TREE.registerPerk(perkFD2)
+                .connect(perkFD1);
+        PERK_TREE.registerPerk(perkFD3)
+                .connect(perkFD2);
     }
 
     private static void initializeAevitasKeyPerks() {
@@ -662,7 +692,7 @@ public class RegistryPerks {
     }
 
     private static void initializeTreeConnectorPerks() {
-        float more_ch = 0.08F;
+        float more_ch = 0.2F;
 
         AttributeModifierPerk perkEvorsioCh1 = new AttributeModifierPerk("threshold_evorsio", -11, -21);
         perkEvorsioCh1.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
