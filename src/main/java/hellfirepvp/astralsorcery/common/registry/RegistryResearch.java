@@ -461,6 +461,9 @@ public class RegistryResearch {
         resKnowledgeShare.addPage(getTextPage("KNOWLEDGE_SHARE.1"));
         resKnowledgeShare.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rKnowledgeShare));
 
+        ResearchNode resShootingStars = new ResearchNode(new ItemStack(ItemsAS.knowledgeFragment), "KNOWLEDGE_FRAGMENT", 3, 7);
+        resShootingStars.addPage(getTextPage("KNOWLEDGE_FRAGMENT.1"));
+
         registerItemLookup(new ItemStack(BlocksAS.lens, 1, OreDictionary.WILDCARD_VALUE),                 resLens,                 0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.linkingTool, 1, OreDictionary.WILDCARD_VALUE),           resLinkTool,             0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(BlockCustomOre.OreType.STARMETAL.asStack(),                                            resStarOre,              0, ResearchProgression.ATTUNEMENT);
@@ -502,6 +505,7 @@ public class RegistryResearch {
         regAttunement.register(resKnowledgeShare);
         regAttunement.register(resResonatorStructure);
         regAttunement.register(resAttPerkSeal);
+        regAttunement.register(resShootingStars);
 
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);

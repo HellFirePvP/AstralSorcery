@@ -99,7 +99,7 @@ public class ShootingStarHandler implements ITickHandler {
     public static class StarConfigEntry extends ConfigEntry {
 
         public static boolean enabled = true;
-        public static boolean doExplosion = false;
+        public static boolean doExplosion = true;
 
         public StarConfigEntry() {
             super(Section.GENERAL, "shooting_stars");

@@ -8,15 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.entities;
 
+import com.google.common.collect.Iterables;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
-import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.base.ShootingStarHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
 import hellfirepvp.astralsorcery.common.util.ASDataSerializers;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.LootTableUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.effect.ShootingStarExplosion;
@@ -25,8 +25,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
@@ -34,12 +34,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -234,6 +238,16 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
                 generated.setDefaultPickupDelay();
                 generated.setThrower(player.getName());
                 world.spawnEntity(generated);
+
+                LootTable table = world.getLootTableManager().getLootTableFromLocation(LootTableUtil.LOOT_TABLE_SHOOTING_STAR);
+                if (table != null && world instanceof WorldServer) {
+                    LootContext context = new LootContext.Builder((WorldServer) world)
+                            .build();
+                    List<ItemStack> stacks = table.generateLootForPools(rand, context);
+                    for (ItemStack stack : stacks) {
+                        ItemUtils.dropItemNaturally(world, v.getX(), v.getY(), v.getZ(), stack);
+                    }
+                }
             }
         }
 
