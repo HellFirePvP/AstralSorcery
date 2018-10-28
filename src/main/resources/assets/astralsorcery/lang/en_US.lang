@@ -27,6 +27,37 @@ config.astralsorcery.category.fluid_rarities.tooltip=Defines the fluids the Prim
 config.astralsorcery.category.herdable_animals_blacklist=Blacklist: Herdable Animals
 config.astralsorcery.category.herdable_animals_blacklist.tooltip=Defines which animals the Bootes ritual can't interact with.
 
+advancements.astralsorcery.attune_crystal.title=
+advancements.astralsorcery.attune_crystal.desc=
+advancements.astralsorcery.attune_self.title=
+advancements.astralsorcery.attune_self.desc=
+advancements.astralsorcery.attune_trait.title=
+advancements.astralsorcery.attune_trait.desc=
+advancements.astralsorcery.celestial_crystals.title=
+advancements.astralsorcery.celestial_crystals.desc=
+advancements.astralsorcery.craft_t2_altar.title=
+advancements.astralsorcery.craft_t2_altar.desc=
+advancements.astralsorcery.craft_t3_altar.title=
+advancements.astralsorcery.craft_t3_altar.desc=
+advancements.astralsorcery.craft_t4_altar.title=
+advancements.astralsorcery.craft_t4_altar.desc=
+advancements.astralsorcery.find_constellation.title=
+advancements.astralsorcery.find_constellation.desc=
+advancements.astralsorcery.find_minor_constellation.title=
+advancements.astralsorcery.find_minor_constellation.desc=
+advancements.astralsorcery.find_weak_constellation.title=
+advancements.astralsorcery.find_weak_constellation.desc=
+advancements.astralsorcery.perk_level_large.title=
+advancements.astralsorcery.perk_level_large.desc=
+advancements.astralsorcery.perk_level_medium.title=
+advancements.astralsorcery.perk_level_medium.desc=
+advancements.astralsorcery.perk_level_small.title=
+advancements.astralsorcery.perk_level_small.desc=
+advancements.astralsorcery.rock_crystals.title=
+advancements.astralsorcery.rock_crystals.desc=
+advancements.astralsorcery.root.title=Astral Sorcery
+advancements.astralsorcery.root.desc=
+
 potion.potency.1=II
 potion.potency.2=III
 potion.potency.3=IV
@@ -40,7 +71,9 @@ potion.as.crafted.name=Stardew
 
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
+misc.recipename=Altar-recipe-registryname: %s
 misc.grindstone.double=Chance to double output: %s
+misc.transmutation.constellation=Requires focused light from %s
 misc.knowledge.missing=An empty and sparkly scroll
 misc.knowledge.inscribed=Contains knowledge from %s
 misc.knowledge.inscribed.creative=Contains massive knowledge
@@ -52,6 +85,15 @@ misc.link.link=Linked %s to %s!
 misc.link.link.block=a block
 misc.link.unlink=Unlinked %s from %s!
 misc.link.unlink.all=Unlinked all links!
+misc.fragment.container.desc=Something is shining inside the casing.
+misc.fragment.container.open=Right-click to open.
+misc.fragment.constellation.desc.1=A strange constellation is drawn on this scroll.
+misc.fragment.constellation.desc.2=Discovering it should provide additional clues.
+misc.fragment.content.desc.1=The scroll has some pale scribblings on it.
+misc.fragment.content.desc.2=Right-click to add it to your tome.
+misc.fragment.content.empty=The scroll appears to be blank.
+misc.fragment.added.cst=The constellation %s vanishes out of sight.
+misc.fragment.added=Gained Knowledge about: %s
 
 misc.sword.sharpened=Sharpened (%s increased Damage)
 misc.chaos.resistance=+%s Chaos Resistance
@@ -74,6 +116,7 @@ enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with this en
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
 gui.journal.bm.perks.name=Perks
+gui.journal.bm.knowledge.name=Knowledge
 gui.journal.c.unmapped=Unknown
 
 death.attack.as.stellar=%1$s disintegrated into Stardust
@@ -408,7 +451,7 @@ astralsorcery.journal.ENH_SHIFTING_STAR.1.text=The problem with the Shifting Sta
 research.RESONATOR_AREA_SIZE.name=Domic Resonator
 astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=With further alterations, the Resonator can be altered to show starlight displacement. This manifests in an ethereal field becoming visible while holding this new Resonator, not entirely unlike light through a soap bubble, that shows how far the natural starlight distributions are disturbed by buildings or rituals that channel or alter starlight.<NL>Shift-right-clicking still cycles through the modes, as before.
 
-research.ATT_PERKS_SEAL.name=Sealing Sigil
+research.ATT_PERKS_SEAL.name=Perk Sealing
 astralsorcery.journal.ATT_PERKS_SEAL.1.text=While the Irradiant Star is a major improvement in allowing for redirection of the infused starlight within the body, sometimes it's not enough to simply route the limited starlight flows around certain resonations. To that end, a Sealing Sigil can be used to "mask" or otherwise retard certain effects, acting as a removable "off-switch" or bridge over an effect not desired at that moment.
 
 research.KNOWLEDGE_FRAGMENT.name=Forgotten Knowledge
@@ -464,6 +507,7 @@ entity.EntityIlluminationSpark.name=Illumination Spark
 entity.EntityCrystalTool.name=Crystal Tool
 entity.EntitySpectralTool.name=Spectral Tool
 entity.EntityLiquidSpark.name=Liquid Spark
+entity.EntityShootingStar.name=Shooting Star
 
 item.itemcraftingcomponent.aquamarine.name=Aquamarine
 item.itemcraftingcomponent.starmetal_ingot.name=Starmetal Ingot
@@ -509,6 +553,7 @@ item.itemenchantmentamulet.name=Resplendent Prism
 item.itemenchantmentamulet.pure=Pure
 item.itemperkseal.name=Sealing Sigil
 item.itemknowledgefragment.name=Lucent Scroll
+item.itemfragmentcapsule.name=Shining Casing
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator
