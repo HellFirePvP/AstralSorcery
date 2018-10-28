@@ -388,6 +388,7 @@ public class RegistryResearch {
         ResearchNode resAttPerks = new ResearchNode(new ItemStack(BlocksAS.attunementRelay), "ATT_PERKS", 6, 3);
         resAttPerks.addPage(getTextPage("ATT_PERKS.1"));
         resAttPerks.addPage(getTextPage("ATT_PERKS.2"));
+        resAttPerks.addPage(getTextPage("ATT_PERKS.3"));
 
         ResearchNode resAttPerkSeal = new ResearchNode(new ItemStack(ItemsAS.perkSeal), "ATT_PERKS_SEAL", 7, 2);
         resAttPerkSeal.addPage(getTextPage("ATT_PERKS_SEAL.1"));
