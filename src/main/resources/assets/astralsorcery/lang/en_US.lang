@@ -27,36 +27,36 @@ config.astralsorcery.category.fluid_rarities.tooltip=Defines the fluids the Prim
 config.astralsorcery.category.herdable_animals_blacklist=Blacklist: Herdable Animals
 config.astralsorcery.category.herdable_animals_blacklist.tooltip=Defines which animals the Bootes ritual can't interact with.
 
-advancements.astralsorcery.attune_crystal.title=
-advancements.astralsorcery.attune_crystal.desc=
-advancements.astralsorcery.attune_self.title=
-advancements.astralsorcery.attune_self.desc=
-advancements.astralsorcery.attune_trait.title=
-advancements.astralsorcery.attune_trait.desc=
-advancements.astralsorcery.celestial_crystals.title=
-advancements.astralsorcery.celestial_crystals.desc=
-advancements.astralsorcery.craft_t2_altar.title=
-advancements.astralsorcery.craft_t2_altar.desc=
-advancements.astralsorcery.craft_t3_altar.title=
-advancements.astralsorcery.craft_t3_altar.desc=
-advancements.astralsorcery.craft_t4_altar.title=
-advancements.astralsorcery.craft_t4_altar.desc=
-advancements.astralsorcery.find_constellation.title=
-advancements.astralsorcery.find_constellation.desc=
-advancements.astralsorcery.find_minor_constellation.title=
-advancements.astralsorcery.find_minor_constellation.desc=
-advancements.astralsorcery.find_weak_constellation.title=
-advancements.astralsorcery.find_weak_constellation.desc=
-advancements.astralsorcery.perk_level_large.title=
-advancements.astralsorcery.perk_level_large.desc=
-advancements.astralsorcery.perk_level_medium.title=
-advancements.astralsorcery.perk_level_medium.desc=
-advancements.astralsorcery.perk_level_small.title=
-advancements.astralsorcery.perk_level_small.desc=
-advancements.astralsorcery.rock_crystals.title=
-advancements.astralsorcery.rock_crystals.desc=
+advancements.astralsorcery.attune_crystal.title=Picking up good vibrations
+advancements.astralsorcery.attune_crystal.desc=Attune a crystal to a Constellation.
+advancements.astralsorcery.attune_self.title=I can see the light
+advancements.astralsorcery.attune_self.desc=Attune yourself to a Bright constellation.C
+advancements.astralsorcery.attune_trait.title=We have to go deeper
+advancements.astralsorcery.attune_trait.desc=Further modify the attunement of a crystal by adding a Faint trait.
+advancements.astralsorcery.celestial_crystals.title=Homegrown is best
+advancements.astralsorcery.celestial_crystals.desc=Harvest a Celestial Crystal from a Crystal Cluster.
+advancements.astralsorcery.craft_t2_altar.title=Upgrade complete
+advancements.astralsorcery.craft_t2_altar.desc=Upgrade a Luminous Crafting Table into a Starlight Crafting Altar.
+advancements.astralsorcery.craft_t3_altar.title=Shooting across the sky
+advancements.astralsorcery.craft_t3_altar.desc=Craft a Celestial Altar.
+advancements.astralsorcery.craft_t4_altar.title=Can you take me higher
+advancements.astralsorcery.craft_t4_altar.desc=Craft an Iridescent Altar.
+advancements.astralsorcery.find_constellation.title=I can see clearly now
+advancements.astralsorcery.find_constellation.desc=Discover a Bright Constellation using the Looking Glass.
+advancements.astralsorcery.find_minor_constellation.title=Is there anybody out there
+advancements.astralsorcery.find_minor_constellation.desc=Discover a Faint Constellation using an Observatory.
+advancements.astralsorcery.find_weak_constellation.title=Gotta squint sometimes
+advancements.astralsorcery.find_weak_constellation.desc=Discover a Dim Constellation using the Telescope.
+advancements.astralsorcery.perk_level_large.title=No sign of the morning coming
+advancements.astralsorcery.perk_level_large.desc=Develop your personal starlight to level 20.
+advancements.astralsorcery.perk_level_medium.title=It all looks so different on this side
+advancements.astralsorcery.perk_level_medium.desc=Develop your personal starlight to maximum level.
+advancements.astralsorcery.perk_level_small.title=It's a start
+advancements.astralsorcery.perk_level_small.desc=Develop your personal starlight to level 10.
+advancements.astralsorcery.rock_crystals.title=It's worth how much?
+advancements.astralsorcery.rock_crystals.desc=Gather a Rock Crystal.
 advancements.astralsorcery.root.title=Astral Sorcery
-advancements.astralsorcery.root.desc=
+advancements.astralsorcery.root.desc=Ride the light
 
 potion.potency.1=II
 potion.potency.2=III
@@ -260,8 +260,9 @@ astralsorcery.journal.ATT_PLAYER.4.text=Such a blanket collection method would r
 astralsorcery.journal.ATT_PLAYER.6.text=Once everything is properly arranged, the central altar and the relays will start glowing as bright blue Starlight streams through them, but only at night. Calculations show that the focused rays should sufficiently strong enough to lift the golden ornaments of the altar from the ground when active.<NL>The only real questions that remain: what types of objects can readily accept Attunement? What about Rock Crystals and Crystal Tools? Can a body withstand the rays if it steps into the light?
 
 research.ATT_PERKS.name=Alignment Perks
-astralsorcery.journal.ATT_PERKS.1.text=By undergoing a self-attunement, some of the starlight energies that naturally imbue a body over time are forced into a specific frequency, granting magical abilities. While this initial starlight shaping provides a root for the magical benefits, it also provides a manner to stretch these magical "muscles" into additional magical perks. By exercising this, the remaining starlight in the body can be dragged into alignment, furthering the magical abilities granted. Unfortunately, once set, this root cannot be easily changed and will require an external tool to forcibly de-attune this starlight energy, scrambling it into its normal chaotic state, ready to be attuned again.
+astralsorcery.journal.ATT_PERKS.1.text=By undergoing a self-attunement, some of the starlight energies that naturally imbue a body over time are forced into a specific frequency, granting magical abilities. While this initial starlight shaping provides a root for the magical benefits, it also provides a manner to stretch these magical "muscles" into additional magical perks. By exercising this, the remaining starlight in the body can be dragged into alignment, furthering the magical abilities granted. 
 astralsorcery.journal.ATT_PERKS.2.text=By meditating on the resonating energies within, an individual can shape how this energy expands over time. Unfortunately, this isn't as simple a process as selecting enchantments to pound into a tool or weapon, or scribing runes onto paper or glove, and the magical power must be shaped in a more organic fashion. Much like sympathetic wavelengths of light or sound, these magical energies have natural resonance points where they interact.<NL>Scribing these points into the Astral Tome has resulted in a helpful "Perk Map" to aid in the meditations used to control the growth of these powers.
+astralsorcery.journal.ATT_PERKS.3.text=Unfortunately, once set, this root cannot be easily changed and will require an external tool to forcibly de-attune this starlight energy, scrambling it into its normal chaotic state, ready to be attuned again.<NL>This unfortunately means any progress made towards reigning in additional starlight energies will be lost.
 
 research.ATT_CRYSTAL.name=Crystal Attunement
 astralsorcery.journal.ATT_CRYSTAL.1.text=Just as someone can Attune themselves to a Constellation and become more sensitive to a Constellation's Starlight, Rock Crystals can also be attuned and will react more strongly to that Constellation and channel its effects.<NL>The application may not be immediately self evident, but a construction that amplifies the crystal's channeling effect enough will have physical effects on the world around it. These focusing properties may even have uses for some other things as well...
@@ -454,8 +455,8 @@ astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=With further alterations, the R
 research.ATT_PERKS_SEAL.name=Perk Sealing
 astralsorcery.journal.ATT_PERKS_SEAL.1.text=While the Irradiant Star is a major improvement in allowing for redirection of the infused starlight within the body, sometimes it's not enough to simply route the limited starlight flows around certain resonations. To that end, a Sealing Sigil can be used to "mask" or otherwise retard certain effects, acting as a removable "off-switch" or bridge over an effect not desired at that moment.
 
-research.KNOWLEDGE_FRAGMENT.name=Forgotten Knowledge
-astralsorcery.journal.KNOWLEDGE_FRAGMENT.1.text=Occasionally, ancient fragments of text describing odd, seemingly incomplete, constellations are found. While it is obvious they have no direct power like normal Constellations, an unshakable certainty accompanies holding these papers that discovering the constellation an Ancient scribed onto it would greatly expand understanding of other Astral concepts, burning it into the mind like wildfire.TT_PERKS_SEAL.1.text=
+research.KNOWLEDGE_FRAGMENT.name=Shooting Stars
+astralsorcery.journal.KNOWLEDGE_FRAGMENT.1.text=Occasionally, shooting stars can be seen falling from above. Recovering whatever is left after impact might be of value to a scholar of the stars.
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
@@ -1121,7 +1122,7 @@ knowledge.astralsorcery.fragment.attunement.ritualpedestal.description=Extensive
 
 knowledge.astralsorcery.fragment.constellation.colorlens.name=Lens Function
 knowledge.astralsorcery.fragment.constellation.colorlens.bookmark=Function
-knowledge.astralsorcery.fragment.constellation.colorlens.description=Of the lenses, some functions may not be immediately obvious.<NL>Ignition: Sets things on fire, and can smelt items dropped into its beam or blocks placed in the beam like a furnace.<NL>Growth: Functions like bonemeal, unless the plant doesn't like bonemeal, in which case it just makes it grow quickly.<NL>Break: Has no harvest level, unlike a pick, it just breaks things that are breakable.<NL>Damage: Deals a set amount of damage, with frequency based on amount of starlight being channeled.
+knowledge.astralsorcery.fragment.constellation.colorlens.description=Ignition: Sets things on fire, and can smelt items dropped into its beam or blocks placed in the beam like a furnace.<NL>Growth: Functions like bonemeal, unless the plant doesn't like bonemeal, in which case it just makes it grow quickly.<NL>Break: Has no harvest level, unlike a pick, it just breaks things that are breakable.<NL>Damage: Deals a set amount of damage, with frequency based on amount of starlight being channeled.
 
 knowledge.astralsorcery.fragment.constellation.refractiontable.name=Table Optimizations
 knowledge.astralsorcery.fragment.constellation.refractiontable.bookmark=Optimizations
