@@ -50,6 +50,7 @@ public class AltarRecipe extends BaseTweaker {
     @Deprecated
     public static void removeAltarRecipe(IItemStack output, int altarLevel) {
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'removeAltarRecipe'! Use the new method to remove recipes by their registry-name!");
+        CraftTweakerAPI.logError("[" + name + "] Enable the F3-Debug screen and hover over the receipe output of an altar recipe to see existing ones!");
 
         ItemStack out = convertToItemStack(output);
         if(out.isEmpty()) {
@@ -88,6 +89,7 @@ public class AltarRecipe extends BaseTweaker {
     @Deprecated
     public static void addDiscoveryAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addDiscoveryAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Enable the F3-Debug screen and hover over the receipe output of an altar recipe to see existing ones!");
         CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
         addDiscoveryAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs);
     }
@@ -121,6 +123,7 @@ public class AltarRecipe extends BaseTweaker {
     @Deprecated
     public static void addAttunementAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addAttunementAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Enable the F3-Debug screen and hover over the receipe output of an altar recipe to see existing ones!");
         CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
         addAttunmentAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs);
     }
@@ -129,6 +132,7 @@ public class AltarRecipe extends BaseTweaker {
     @Deprecated
     public static void addAttunmentAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addAttunmentAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Enable the F3-Debug screen and hover over the receipe output of an altar recipe to see existing ones!");
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addAttunmentAltarRecipe' with the TYPO! This method will be removed in an upcoming update!");
         addAttunementAltarRecipe(output, starlightRequired, craftingTickTime, inputs);
     }
@@ -155,6 +159,7 @@ public class AltarRecipe extends BaseTweaker {
     @Deprecated
     public static void addConstellationAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addConstellationAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Enable the F3-Debug screen and hover over the receipe output of an altar recipe to see existing ones!");
         CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
         addConstellationAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs);
     }
@@ -195,6 +200,7 @@ public class AltarRecipe extends BaseTweaker {
     @Deprecated
     public static void addTraitAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addTraitAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Enable the F3-Debug screen and hover over the receipe output of an altar recipe to see existing ones!");
         CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
         addTraitAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs, null);
     }
@@ -203,6 +209,7 @@ public class AltarRecipe extends BaseTweaker {
     @Deprecated
     public static void addTraitAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs, @Nullable String iRequiredConstellationFocusName) {
         CraftTweakerAPI.logError("[" + name + "] Using deprecated 'addTraitAltarRecipe'! Use the new method with an additional registry-name parameter!");
+        CraftTweakerAPI.logError("[" + name + "] Enable the F3-Debug screen and hover over the receipe output of an altar recipe to see existing ones!");
         CraftTweakerAPI.logError("[" + name + "] Should you try to replace an existing crafting recipe, make sure you use the same recipe name!");
         addTraitAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs, iRequiredConstellationFocusName);
     }
