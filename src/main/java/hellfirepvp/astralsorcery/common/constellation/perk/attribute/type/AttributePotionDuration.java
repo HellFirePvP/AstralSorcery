@@ -44,6 +44,10 @@ public class AttributePotionDuration extends PerkAttributeType {
     }
 
     private void modifyPotionDuration(EntityPlayer player, PotionEffect effect) {
+        if (player.world.isRemote) {
+            return;
+        }
+
         int dur = effect.getDuration();
 
         float newDur = PerkAttributeHelper.getOrCreateMap(player, player.world.isRemote ? Side.CLIENT : Side.SERVER)
