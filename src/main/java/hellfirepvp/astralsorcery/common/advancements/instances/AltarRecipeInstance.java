@@ -40,10 +40,7 @@ public class AltarRecipeInstance extends AbstractCriterionInstance {
             if (!je.isJsonPrimitive() || je.getAsJsonPrimitive().isString()) {
                 continue;
             }
-            AbstractAltarRecipe recipe = AltarRecipeRegistry.getRecipeSlow(new ResourceLocation(je.getAsString()));
-            if (recipe != null) {
-                i.recipeNames.add(recipe.getNativeRecipe().getRegistryName());
-            }
+            i.recipeNames.add(new ResourceLocation(je.getAsString()));
         }
         return i;
     }
