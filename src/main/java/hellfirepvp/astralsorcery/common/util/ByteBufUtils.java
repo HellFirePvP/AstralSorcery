@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 /**
@@ -44,13 +45,13 @@ public class ByteBufUtils {
     }
 
     public static void writeString(PacketBuffer buf, String toWrite) {
-        byte[] str = toWrite.getBytes();
+        byte[] str = toWrite.getBytes(Charset.forName("UTF-8"));
         buf.writeInt(str.length);
         buf.writeBytes(str);
     }
 
     public static void writeString(ByteBuf buf, String toWrite) {
-        byte[] str = toWrite.getBytes();
+        byte[] str = toWrite.getBytes(Charset.forName("UTF-8"));
         buf.writeInt(str.length);
         buf.writeBytes(str);
     }
@@ -59,14 +60,14 @@ public class ByteBufUtils {
         int length = buf.readInt();
         byte[] strBytes = new byte[length];
         buf.readBytes(strBytes, 0, length);
-        return new String(strBytes);
+        return new String(strBytes, Charset.forName("UTF-8"));
     }
 
     public static String readString(ByteBuf buf) {
         int length = buf.readInt();
         byte[] strBytes = new byte[length];
         buf.readBytes(strBytes, 0, length);
-        return new String(strBytes);
+        return new String(strBytes, Charset.forName("UTF-8"));
     }
 
     public static void writePos(ByteBuf buf, BlockPos pos) {

@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -94,6 +95,28 @@ public class AltarRecipeRegistry {
         return compiledRecipeArray[id];
     }
 
+    @Nullable
+    public static AbstractAltarRecipe getRecipeSlow(@Nullable ResourceLocation id) {
+        if (id == null) {
+            return null;
+        }
+        for (Collection<AbstractAltarRecipe> recipeList : recipes.values()) {
+            for (AbstractAltarRecipe recipe : recipeList) {
+                if (recipe.getNativeRecipe().getRegistryName().equals(id)) {
+                    return recipe;
+                }
+            }
+        }
+        for (Collection<AbstractAltarRecipe> recipeList : mtRecipes.values()) {
+            for (AbstractAltarRecipe recipe : recipeList) {
+                if (recipe.getNativeRecipe().getRegistryName().equals(id)) {
+                    return recipe;
+                }
+            }
+        }
+        return null;
+    }
+
     public static List<AbstractAltarRecipe> getAltarRecipesByOutput(ItemStack output, TileAltar.AltarLevel altarLevel) {
         List<AbstractAltarRecipe> list = new LinkedList<>();
         for (AbstractAltarRecipe recipe : recipes.get(altarLevel)) {
@@ -123,6 +146,27 @@ public class AltarRecipeRegistry {
             if (!out.isEmpty() && ItemUtils.matchStackLoosely(rec.getOutputForMatching(), output)) {
                 iterator.remove();
                 return rec;
+            }
+        }
+        return null;
+    }
+
+    /*
+     * Returns the Recipe that was removed if successful.
+     */
+    @Nullable
+    public static AbstractAltarRecipe removeRecipeFromCache(@Nullable AbstractAltarRecipe recipe) {
+        if (recipe == null) {
+            return null;
+        }
+        for (TileAltar.AltarLevel al : recipes.keySet()) {
+            Iterator<AbstractAltarRecipe> iterator = recipes.get(al).iterator();
+            while (iterator.hasNext()) {
+                AbstractAltarRecipe regRecipe = iterator.next();
+                if (regRecipe.getNativeRecipe().getRegistryName().equals(recipe.getNativeRecipe().getRegistryName())) {
+                    iterator.remove();
+                    return regRecipe;
+                }
             }
         }
         return null;

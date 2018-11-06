@@ -139,7 +139,7 @@ public class JournalRecipeDisplayRecovery {
         }
 
         if(rec > 0) {
-            AstralSorcery.log.info("[AstralSorcery] Recovered " + rec + " changed recipes into journal!");
+            AstralSorcery.log.info("Recovered " + rec + " changed recipes into journal!");
         }
     }
 

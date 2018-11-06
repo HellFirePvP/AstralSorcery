@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network;
 
+import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
@@ -87,7 +88,7 @@ public class TransmissionWorldHandler {
 
                 Map<BlockPos, Float> lossMultipliers = chain.getLossMultipliers();
                 for (ITransmissionReceiver rec : chain.getEndpointsNodes()) {
-                    BlockPos pos = rec.getPos();
+                    BlockPos pos = rec.getLocationPos();
                     Float multiplier = lossMultipliers.get(pos);
                     if (multiplier != null) {
                         rec.onStarlightReceive(world, MiscUtils.isChunkLoaded(world, new ChunkPos(pos)), type, starlight * multiplier);
@@ -112,7 +113,7 @@ public class TransmissionWorldHandler {
                                 ((IBlockStarlightRecipient) b).receiveStarlight(world, rand, endPointPos, type, starlight * multiplier);
                             }
                         } else {
-                            StarlightNetworkRegistry.IStarlightBlockHandler handle = StarlightNetworkRegistry.getStarlightHandler(world, endPointPos, endState);
+                            StarlightNetworkRegistry.IStarlightBlockHandler handle = StarlightNetworkRegistry.getStarlightHandler(world, endPointPos, endState, type);
                             if(handle != null) {
                                 Float multiplier = lossMultipliers.get(endPointPos);
                                 if (multiplier != null) {
@@ -169,16 +170,24 @@ public class TransmissionWorldHandler {
         }
     }
 
+    public Collection<TransmissionChain> getTransmissionChains() {
+        return ImmutableList.copyOf(this.cachedSourceChain.values());
+    }
+
     //Fired if the node's state related to the network changes.
     //Break all networks associated with that node to trigger recalculations as needed.
     public void notifyTransmissionNodeChange(IPrismTransmissionNode node) {
-        BlockPos pos = node.getPos();
+        BlockPos pos = node.getLocationPos();
         synchronized (accessLock) {
             List<IIndependentStarlightSource> sources = posToSourceMap.get(pos);
             if(sources != null) {
                 new ArrayList<>(sources).forEach(this::breakSourceNetwork);
             }
         }
+    }
+
+    public TransmissionChain getSourceChain(IIndependentStarlightSource source) {
+        return cachedSourceChain.get(source);
     }
 
     //Remove a source from the network to trigger recalculation!

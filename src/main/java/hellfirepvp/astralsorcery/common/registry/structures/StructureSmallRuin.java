@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.common.registry.structures;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockMarbleStairs;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.tile.TilePortalNode;
+import hellfirepvp.astralsorcery.common.tile.TileStructController;
 import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -19,8 +19,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
-import java.util.Random;
 
 import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 
@@ -51,13 +49,13 @@ public class StructureSmallRuin extends StructureBlockArray {
         addTileCallback(new BlockPos(0, 3, 0), new TileEntityCallback() {
             @Override
             public boolean isApplicable(TileEntity te) {
-                return te != null && te instanceof TilePortalNode;
+                return te != null && te instanceof TileStructController;
             }
 
             @Override
             public void onPlace(IBlockAccess access, BlockPos at, TileEntity te) {
-                if(te instanceof TilePortalNode) {
-                    ((TilePortalNode) te).setWorldGen(true);
+                if(te instanceof TileStructController) {
+                    ((TileStructController) te).setType(TileStructController.StructType.GATE);
                 }
             }
         });

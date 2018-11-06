@@ -19,22 +19,22 @@ import net.minecraft.util.math.BlockPos;
  */
 public interface ILocatable {
 
-    public BlockPos getPos();
+    public BlockPos getLocationPos();
 
     public static ILocatable fromPos(BlockPos pos) {
-        return new PosLocateable(pos);
+        return new PosLocatable(pos);
     }
 
-    class PosLocateable implements ILocatable {
+    class PosLocatable implements ILocatable {
 
         private final BlockPos pos;
 
-        private PosLocateable(BlockPos pos) {
+        private PosLocatable(BlockPos pos) {
             this.pos = pos;
         }
 
         @Override
-        public BlockPos getPos() {
+        public BlockPos getLocationPos() {
             return pos;
         }
 

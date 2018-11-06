@@ -37,7 +37,6 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -251,6 +250,12 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     }
 
     @Nonnull
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
+    }
+
+    @Nonnull
     public ItemStack getInputStack() {
         return stack;
     }
@@ -321,7 +326,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             int recipeId = compound.getInteger("recipeId");
             AbstractInfusionRecipe recipe = InfusionRecipeRegistry.getRecipe(recipeId);
             if(recipe == null) {
-                AstralSorcery.log.info("[AstralSorcery] Recipe with unknown/invalid ID found: " + recipeId + " for Starlight Infuser at " + getPos());
+                AstralSorcery.log.info("Recipe with unknown/invalid ID found: " + recipeId + " for Starlight Infuser at " + getPos());
             } else {
                 UUID uuidCraft = compound.getUniqueId("crafterUUID");
                 int tick = compound.getInteger("recipeTick");
@@ -329,7 +334,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                 NBTTagList tl = compound.getTagList("chalicePositions", Constants.NBT.TAG_COMPOUND);
                 List<BlockPos> tcList = new LinkedList<>();
                 for (int i = 0; i < tl.tagCount(); i++) {
-                    tcList.add(NBTUtils.readBlockPosFromNBT(tl.getCompoundTagAt(i)));
+                    tcList.add(NBTHelper.readBlockPosFromNBT(tl.getCompoundTagAt(i)));
                 }
 
                 this.craftingTask = new ActiveInfusionTask(recipe, uuidCraft);
@@ -357,7 +362,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             NBTTagList chalicePositions = new NBTTagList();
             for (TileChalice tc : craftingTask.getSupportingChalices()) {
                 NBTTagCompound cmp = new NBTTagCompound();
-                NBTUtils.writeBlockPosToNBT(tc.getPos(), cmp);
+                NBTHelper.writeBlockPosToNBT(tc.getPos(), cmp);
                 chalicePositions.appendTag(cmp);
             }
             compound.setTag("chalicePositions", chalicePositions);
@@ -421,7 +426,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
-                TileStarlightInfuser ta = MiscUtils.getTileAt(world, getPos(), TileStarlightInfuser.class, false);
+                TileStarlightInfuser ta = MiscUtils.getTileAt(world, getLocationPos(), TileStarlightInfuser.class, false);
                 if(ta != null) {
                     ta.receiveStarlight(type, amount);
                 }

@@ -9,16 +9,13 @@
 package hellfirepvp.astralsorcery.common.item.wearable;
 
 import baubles.api.BaubleType;
-import baubles.api.BaublesApi;
 import baubles.api.IBauble;
-import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantment;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.EnchantmentUpgradeHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
-import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -26,11 +23,11 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -176,7 +173,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
             for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
                 ItemStack stack = player.getItemStackFromSlot(slot);
                 if (canBeAffected(stack, enchList)) {
-                    EnchantmentUpgradeHelper.applyAmuletTag(player.getItemStackFromSlot(slot), (EntityPlayer) player);
+                    EnchantmentUpgradeHelper.applyAmuletOwner(player.getItemStackFromSlot(slot), (EntityPlayer) player);
                 }
             }
         }
@@ -196,11 +193,11 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
     private static boolean canInfluenceType(AmuletEnchantment.Type type, ItemStack stack, Collection<AmuletEnchantment> enchantments) {
         for (AmuletEnchantment ench : enchantments) {
             Enchantment e = ench.getEnchantment();
-            if(ench.getType() != type) continue;
+            if (ench.getType() != type) continue;
 
             switch (type) {
                 case ADD_TO_SPECIFIC:
-                    if (e.type.canEnchantItem(stack.getItem())) {
+                    if (e.type != null && e.type.canEnchantItem(stack.getItem())) {
                         return true;
                     }
                     break;

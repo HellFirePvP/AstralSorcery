@@ -9,10 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
-import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 
 import javax.annotation.Nullable;

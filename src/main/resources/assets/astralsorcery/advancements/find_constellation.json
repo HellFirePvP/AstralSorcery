@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:blockmachine"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.find_constellation.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.find_constellation.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:root",
+    "criteria": {
+        "bright_constellation_discovered": {
+            "trigger": "astralsorcery:find_constellation",
+            "conditions": {
+                "major": true
+            }
+        }
+    }
+}

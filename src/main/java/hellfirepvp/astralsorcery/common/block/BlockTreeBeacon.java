@@ -13,12 +13,17 @@ import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.block.network.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
@@ -26,10 +31,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +71,16 @@ public class BlockTreeBeacon extends BlockStarlightNetwork implements BlockDynam
             return "festive";
         }
         return "normal";
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+
+        TileTreeBeacon ttb = MiscUtils.getTileAt(worldIn, pos, TileTreeBeacon.class, true);
+        if (ttb != null && !worldIn.isRemote && placer instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) placer)) {
+            ttb.setPlacedBy((EntityPlayer) placer);
+        }
     }
 
     @Override

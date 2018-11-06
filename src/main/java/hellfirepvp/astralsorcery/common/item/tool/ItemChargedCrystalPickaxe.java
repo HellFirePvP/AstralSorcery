@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.item.tool;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
+import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationOreStages;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktOreScan;
@@ -97,10 +99,21 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
 
     @SideOnly(Side.CLIENT)
     public static void playClientEffects(Collection<BlockPos> positions, boolean tumble) {
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        if(player == null) return;
+        List<IBlockState> changed = new LinkedList<>();
+
         for (BlockPos at : positions) {
             Vector3 atPos = new Vector3(at).add(0.5, 0.5, 0.5);
             atPos.add(itemRand.nextFloat() - itemRand.nextFloat(), itemRand.nextFloat() - itemRand.nextFloat(), itemRand.nextFloat() - itemRand.nextFloat());
             IBlockState state = Minecraft.getMinecraft().world.getBlockState(at);
+            if(Mods.ORESTAGES.isPresent()) {
+                if(changed.contains(state) || !ModIntegrationOreStages.canSeeOreClient(state)) {
+                    changed.add(state);
+                    continue;
+                }
+            }
+
             EffectTranslucentFallingBlock bl = EffectHandler.getInstance().translucentFallingBlock(atPos, state);
             bl.setDisableDepth(true).setScaleFunction(new EntityComplexFX.ScaleFunction.Shrink<>());
             bl.setMotion(0, 0.03, 0).setAlphaFunction(EntityComplexFX.AlphaFunction.PYRAMID);

@@ -99,12 +99,12 @@ public class ClientScreenshotCache {
                         positions.removeIf(entry -> entry.key.equals(pos));
                         positions.add(addr);
                     } catch (Exception exc) {
-                        AstralSorcery.log.info("[AstralSorcery] Couldn't save screenshot for position: dimid=" + dim + ", pos=" + pos.toString());
+                        AstralSorcery.log.info("Couldn't save screenshot for position: dimid=" + dim + ", pos=" + pos.toString());
                         exc.printStackTrace();
                     }
                 });
             } catch (Exception exc) {
-                AstralSorcery.log.info("[AstralSorcery] Couldn't save screenshot for position: dimid=" + dim + ", pos=" + pos.toString());
+                AstralSorcery.log.info("Couldn't save screenshot for position: dimid=" + dim + ", pos=" + pos.toString());
                 exc.printStackTrace();
             }
         });
@@ -127,9 +127,9 @@ public class ClientScreenshotCache {
 
         try {
             loadScreenshots(getDirectoryForCurrentContext());
-            AstralSorcery.log.info("[AstralSorcery] Using gateway screenshots for folder '" + addrContext + "'");
+            AstralSorcery.log.info("Using gateway screenshots for folder '" + addrContext + "'");
         } catch (Exception exc) {
-            AstralSorcery.log.info("[AstralSorcery] Couldn't load screenshots from local cache for address " + addrContext);
+            AstralSorcery.log.info("Couldn't load screenshots from local cache for address " + addrContext);
             exc.printStackTrace();
         }
     }
@@ -143,7 +143,7 @@ public class ClientScreenshotCache {
             try {
                 dimId = Integer.parseInt(fileName);
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.info("[AstralSorcery] Couldn't load screenshots from folder " + fileName + " as its not a dimensionID. Skipping.");
+                AstralSorcery.log.info("Couldn't load screenshots from folder " + fileName + " as its not a dimensionID. Skipping.");
                 continue;
             }
             List<Tuple<BlockPos, ResourceLocation>> textures = new LinkedList<>();

@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.data.world.data;
 
 import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -102,7 +102,7 @@ public class RockCrystalBuffer extends CachedWorldData {
                 NBTTagList entries = chList.getTagList("crystals", 10);
                 for (int j = 0; j < entries.tagCount(); j++) {
                     NBTTagCompound tag = entries.getCompoundTagAt(j);
-                    positions.add(NBTUtils.readBlockPosFromNBT(tag));
+                    positions.add(NBTHelper.readBlockPosFromNBT(tag));
                 }
                 work.put(pos, positions);
             }
@@ -124,7 +124,7 @@ public class RockCrystalBuffer extends CachedWorldData {
                 NBTTagList chList = new NBTTagList();
                 for (BlockPos exactPos : crystalPositions.get(pos)) {
                     NBTTagCompound tag = new NBTTagCompound();
-                    NBTUtils.writeBlockPosToNBT(exactPos, tag);
+                    NBTHelper.writeBlockPosToNBT(exactPos, tag);
                     chList.appendTag(tag);
                 }
                 comp.setTag("crystals", chList);

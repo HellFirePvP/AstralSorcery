@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.client.gui.journal;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationCluster;
-import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
@@ -132,8 +132,10 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
+        Point mouse = new Point(mouseX, mouseY);
+
         if(origin != null) {
-            drawDefault(textureResBlank);
+            drawDefault(textureResBlank, mouse);
         } else {
             drawWHRect(textureResBlank);
         }
@@ -142,12 +144,6 @@ public class GuiJournalPages extends GuiScreenJournal {
         zLevel += 100;
         int pageOffsetY = 20;
         if(currentPageOffset == 0) {
-            /*texUnderline.bind();
-            GL11.glPushMatrix();
-            GL11.glTranslated(guiLeft + 20, guiTop + 15, zLevel);
-            drawTexturedRectAtCurrentPos(175, 6);
-            GL11.glPopMatrix();*/
-
             TextureHelper.refreshTextureBindState();
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -190,8 +186,8 @@ public class GuiJournalPages extends GuiScreenJournal {
             TextureHelper.refreshTextureBindState();
         }
 
-        drawBackArrow(partialTicks);
-        drawNavArrows(partialTicks);
+        drawBackArrow(partialTicks, mouse);
+        drawNavArrows(partialTicks, mouse);
         TextureHelper.refreshTextureBindState();
 
         index = currentPageOffset * 2;
@@ -221,9 +217,8 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glPopAttrib();
     }
 
-    private void drawBackArrow(float partialTicks) {
+    private void drawBackArrow(float partialTicks, Point mouse) {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        Point mouse = getCurrentMousePoint();
         int width = 30;
         int height = 15;
         rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
@@ -246,9 +241,8 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
-    private void drawNavArrows(float partialTicks) {
+    private void drawNavArrows(float partialTicks, Point mouse) {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        Point mouse = getCurrentMousePoint();
         int cIndex = currentPageOffset * 2;
         rectNext = null;
         rectPrev = null;
@@ -318,19 +312,8 @@ public class GuiJournalPages extends GuiScreenJournal {
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(origin != null) {
-            if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
+            if (handleBookmarkClick(p)) {
                 saveSite = false;
-                Minecraft.getMinecraft().displayGuiScreen(origin);
-                return;
-            }
-            if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-                saveSite = false;
-                Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
-                return;
-            }
-            if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-                saveSite = false;
-                Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
                 return;
             }
         }

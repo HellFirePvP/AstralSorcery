@@ -8,14 +8,13 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
-import hellfirepvp.astralsorcery.client.models.base.ASgrindingstone;
+import hellfirepvp.astralsorcery.client.models.base.ASgrindstone;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
-import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -33,16 +32,16 @@ import org.lwjgl.opengl.GL11;
  */
 public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
 
-    private static final ASgrindingstone modelGrindstone = new ASgrindingstone();
-    private static final BindableResource texGrindstone = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/grindingstone");
+    private static final ASgrindstone modelGrindstone = new ASgrindstone();
+    private static final BindableResource texGrindstone = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/grindstone");
 
     @Override
     public void render(TileGrindstone te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x + 0.5, y + 1.65, z + 0.5);
+        GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
         GlStateManager.rotate(180, 1, 0, 0);
-        GlStateManager.scale(0.067, 0.067, 0.067);
+        GlStateManager.scale(0.0625, 0.0625, 0.0625);
 
         GlStateManager.pushMatrix();
         GlStateManager.rotate(-30.0F, 0.0F, 1.0F, 0.0F);
@@ -61,9 +60,10 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
 
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glPushMatrix();
-            GL11.glTranslated(x + 0.5, y + 0.75, z + 0.6);
-            GL11.glRotated(125, 1, 0, 0);
-            GL11.glRotated(180, 0, 0, 1);
+            GL11.glTranslated(x + 0.75, y + 1.0, z + 0.5);
+            GL11.glRotated(120, 1, 0, 0);
+            GL11.glRotated(-15, 0, 1, 0);
+            GL11.glRotated(135, 0, 0, 1);
 
             RenderHelper.enableStandardItemLighting();
             Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);

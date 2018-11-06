@@ -31,7 +31,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -52,7 +51,7 @@ public abstract class AbstractAltarRecipe {
     private int experiencePerCraft = 5, passiveStarlightRequirement;
     private final TileAltar.AltarLevel neededLevel;
     private final AccessibleRecipe recipe;
-    private ItemStack out = ItemStack.EMPTY;
+    private ItemStack out;
 
     private int uniqueRecipeId = -1;
 
@@ -308,7 +307,7 @@ public abstract class AbstractAltarRecipe {
 
     public void onCraftServerFinish(TileAltar altar, Random rand) {}
 
-    public void onCraftServerTick(TileAltar altar, ActiveCraftingTask.CraftingState state, int tick, Random rand) {}
+    public void onCraftServerTick(TileAltar altar, ActiveCraftingTask.CraftingState state, int tick, int totalCraftingTime, Random rand) {}
 
     @SideOnly(Side.CLIENT)
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {

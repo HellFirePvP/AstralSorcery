@@ -47,6 +47,11 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase implements I
     }
 
     @Override
+    public int getMaxSize(ItemStack stack) {
+        return CrystalProperties.MAX_SIZE_CELESTIAL;
+    }
+
+    @Override
     public ItemTunedCrystalBase getTunedItemVariant() {
         return this;
     }

@@ -29,7 +29,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.Callable;
 
 /**
@@ -123,6 +126,11 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
         }
         rarityList.add(entry);
         return Optional.of(entry);
+    }
+
+    @Override
+    public void resetRegistry() {
+        rarityList.clear();
     }
 
     @Nullable
@@ -222,7 +230,7 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
             String fluidName = split[0];
             Fluid f = FluidRegistry.getFluid(fluidName);
             if(f == null) {
-                AstralSorcery.log.info("[AstralSorcery] Ignoring fluid " + fluidName + " for rarity registry - it doesn't exist in the current environment");
+                AstralSorcery.log.info("Ignoring fluid " + fluidName + " for rarity registry - it doesn't exist in the current environment");
                 return null;
             }
             String strGAmount = split[1];

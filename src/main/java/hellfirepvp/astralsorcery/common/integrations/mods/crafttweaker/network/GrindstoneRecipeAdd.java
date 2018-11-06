@@ -25,12 +25,18 @@ public class GrindstoneRecipeAdd implements SerializeableRecipe {
 
     private ItemHandle in;
     private ItemStack out;
+    private float doubleChance = 0F;
 
     GrindstoneRecipeAdd() {}
 
     public GrindstoneRecipeAdd(ItemHandle in, ItemStack out) {
+        this(in, out, 0F);
+    }
+
+    public GrindstoneRecipeAdd(ItemHandle in, ItemStack out, float doubleChance) {
         this.in = in;
         this.out = out;
+        this.doubleChance = doubleChance;
     }
 
     @Override
@@ -42,17 +48,19 @@ public class GrindstoneRecipeAdd implements SerializeableRecipe {
     public void read(ByteBuf buf) {
         this.in = ItemHandle.deserialize(buf);
         this.out = ByteBufUtils.readItemStack(buf);
+        this.doubleChance = buf.readFloat();
     }
 
     @Override
     public void write(ByteBuf buf) {
         this.in.serialize(buf);
         ByteBufUtils.writeItemStack(buf, this.out);
+        buf.writeFloat(this.doubleChance);
     }
 
     @Override
     public void applyRecipe() {
-        CraftingAccessManager.addGrindstoneRecipe(this.in, this.out, 12);
+        CraftingAccessManager.addGrindstoneRecipe(this.in, this.out, 12, this.doubleChance);
     }
 
 }

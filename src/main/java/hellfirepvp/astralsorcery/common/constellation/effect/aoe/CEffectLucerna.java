@@ -70,7 +70,7 @@ public class CEffectLucerna extends ConstellationEffect implements Constellation
 
         if(modified.isCorrupted()) {
             if(ConstellationSkyHandler.getInstance().isNight(world)) {
-                if(rand.nextInt(4) == 0) {
+                if(rand.nextBoolean()) {
                     ConstellationSkyHandler.getInstance().revertWorldTimeTick(world);
                 }
             }

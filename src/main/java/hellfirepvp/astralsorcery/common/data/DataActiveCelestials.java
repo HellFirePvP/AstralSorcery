@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -79,8 +80,8 @@ public class DataActiveCelestials extends AbstractData {
             try {
                 dimId = Integer.parseInt(dimIdStr);
             } catch (Exception exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Received ConstellationUpdate packet with a non-integer dimensionId: " + dimIdStr);
-                AstralSorcery.log.warn("[AstralSorcery] Skipping...");
+                AstralSorcery.log.warn("Received ConstellationUpdate packet with a non-integer dimensionId: " + dimIdStr);
+                AstralSorcery.log.warn("Skipping...");
                 continue;
             }
             NBTTagList list = compound.getTagList(dimIdStr, 8);
@@ -90,7 +91,7 @@ public class DataActiveCelestials extends AbstractData {
                     String str = list.getStringTagAt(i);
                     IConstellation c = ConstellationRegistry.getConstellationByName(str);
                     if (c == null) {
-                        AstralSorcery.log.warn("[AstralSorcery] Received unknown constellation from server: " + str);
+                        AstralSorcery.log.warn("Received unknown constellation from server: " + str);
                     } else {
                         toUpdate.add(c);
                     }
@@ -117,7 +118,7 @@ public class DataActiveCelestials extends AbstractData {
         }
 
         @Override
-        public DataActiveCelestials provideNewInstance() {
+        public DataActiveCelestials provideNewInstance(Side side) {
             return new DataActiveCelestials();
         }
 

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
+import hellfirepvp.astralsorcery.common.block.BlockInfusedWood;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
@@ -44,7 +45,7 @@ public class LensRecipe extends AttunementRecipe {
                         ShapedRecipeSlot.CENTER)
                 .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(OreDictAlias.BLOCK_WOOD_LOGS,
+                .addPart(BlockInfusedWood.WoodType.ENGRAVED.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT)
         .unregisteredAccessibleShapedRecipe());

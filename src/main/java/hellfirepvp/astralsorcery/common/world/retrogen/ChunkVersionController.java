@@ -13,14 +13,11 @@ import hellfirepvp.astralsorcery.common.data.world.data.ChunkVersionBuffer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.event.world.ChunkDataEvent;
-import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * This class is part of the Astral Sorcery Mod

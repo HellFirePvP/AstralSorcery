@@ -8,15 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileVanishing;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -26,6 +21,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -42,7 +38,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -96,6 +91,16 @@ public class BlockVanishing extends BlockContainer {
 
     @Override
     public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
+
+    @Override
+    public int quantityDropped(Random random) {
+        return 0;
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return Items.AIR;
+    }
 
     @Override
     @SideOnly(Side.CLIENT)

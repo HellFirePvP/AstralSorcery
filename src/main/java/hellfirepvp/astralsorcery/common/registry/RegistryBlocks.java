@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.migration.MappingMigrationHandler;
 import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
@@ -29,6 +30,7 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -93,6 +95,8 @@ public class RegistryBlocks {
         blockMarbleDoubleSlab = registerBlock(new BlockMarbleDoubleSlab());
         blockBlackMarble = registerBlock(new BlockBlackMarble());
         queueCustomNameItemBlock(blockBlackMarble);
+        blockInfusedWood = registerBlock(new BlockInfusedWood());
+        queueCustomNameItemBlock(blockInfusedWood);
         blockVolatileLight = registerBlock(new BlockFlareLight());
         queueDefaultItemBlock(blockVolatileLight);
         blockVanishing = registerBlock(new BlockVanishing());
@@ -134,6 +138,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(drawingTable);
         celestialGateway = registerBlock(new BlockCelestialGateway());
         queueDefaultItemBlock(celestialGateway);
+        blockObservatory = registerBlock(new BlockObservatory());
+        queueDefaultItemBlock(blockObservatory);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -157,6 +163,7 @@ public class RegistryBlocks {
     public static void initRenderRegistry() {
         registerBlockRender(blockMarble);
         registerBlockRender(blockBlackMarble);
+        registerBlockRender(blockInfusedWood);
         registerBlockRender(blockAltar);
         registerBlockRender(blockBoreHead);
         registerBlockRender(customOre);
@@ -192,7 +199,8 @@ public class RegistryBlocks {
         registerTile(TileVanishing.class);
         registerTile(TileChalice.class);
         registerTile(TileBore.class);
-        registerTile(TilePortalNode.class);
+        registerTile(TileStructController.class);
+        registerTile(TileObservatory.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);
@@ -233,9 +241,9 @@ public class RegistryBlocks {
     }
 
     private static void registerTile(Class<? extends TileEntity> tile, String name) {
-        GameRegistry.registerTileEntity(tile, name);
-        //TODO once 1.13 hits, break all tiles
-        //GameRegistry.registerTileEntity(tile, new ResourceLocation(AstralSorcery.MODID, name).toString());
+        GameRegistry.registerTileEntity(tile, new ResourceLocation(AstralSorcery.MODID, name).toString());
+
+        MappingMigrationHandler.listenTileMigration(name);
     }
 
     public static void registerTile(Class<? extends TileEntity> tile) {

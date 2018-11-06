@@ -33,6 +33,7 @@ public class BlocksAS {
     public static BlockMarbleStairs blockMarbleStairs;
     public static BlockMarbleSlab blockMarbleSlab;
     public static BlockMarbleDoubleSlab blockMarbleDoubleSlab;
+    public static BlockInfusedWood blockInfusedWood;
     public static BlockBlackMarble blockBlackMarble;
     public static BlockFlareLight blockVolatileLight;
     public static BlockWorldIlluminator blockIlluminator;
@@ -56,6 +57,7 @@ public class BlocksAS {
     public static BlockBore blockBore;
     public static BlockBoreHead blockBoreHead;
     public static BlockPortalNode blockPortalNode;
+    public static BlockObservatory blockObservatory;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

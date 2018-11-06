@@ -9,13 +9,17 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,8 +64,13 @@ public class PktOreScan implements IMessage, IMessageHandler<PktOreScan, IMessag
 
     @Override
     public IMessage onMessage(PktOreScan message, MessageContext ctx) {
-        ItemChargedCrystalPickaxe.playClientEffects(message.positions, message.tumble);
+        playEffect(message);
         return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playEffect(PktOreScan message) {
+        AstralSorcery.proxy.scheduleClientside(() -> ItemChargedCrystalPickaxe.playClientEffects(message.positions, message.tumble));
     }
 
 }

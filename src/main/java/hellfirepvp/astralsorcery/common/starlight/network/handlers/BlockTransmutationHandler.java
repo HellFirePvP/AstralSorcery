@@ -40,7 +40,13 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
     private static Map<BlockPos, ActiveTransmutation> runningTransmutations = new HashMap<>();
 
     @Override
+    @Deprecated
     public boolean isApplicable(World world, BlockPos pos, IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isApplicable(World world, BlockPos pos, IBlockState state, @Nullable IWeakConstellation starlightType) {
         return LightOreTransmutations.searchForTransmutation(state) != null;
     }
 
@@ -51,7 +57,7 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         if(!runningTransmutations.containsKey(pos)) {
             IBlockState tryStateIn = world.getBlockState(pos);
             LightOreTransmutations.Transmutation tr = LightOreTransmutations.searchForTransmutation(tryStateIn);
-            if(tr != null) {
+            if(tr != null && (tr.getRequiredType() == null || tr.getRequiredType().equals(starlightType))) {
                 ActiveTransmutation atr = new ActiveTransmutation();
                 runningTransmutations.put(pos, atr);
                 atr.accCharge = 0D;
@@ -66,6 +72,10 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
             runningTransmutations.remove(pos);
             return;
         }
+        //Accept, but don't add charge
+        if (node.runningTransmutation.getRequiredType() != null && !node.runningTransmutation.getRequiredType().equals(starlightType)) {
+            return;
+        }
         long diff = ms - node.lastMSrec;
         if(diff >= 15_000) node.accCharge = 0;
         node.accCharge += amount;
@@ -75,9 +85,11 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
 
         if(node.accCharge >= node.runningTransmutation.getCost()) {
-            runningTransmutations.remove(pos);
-
-            world.setBlockState(pos, node.runningTransmutation.getOutput());
+            if (!world.setBlockState(pos, node.runningTransmutation.getOutput())) {
+                node.accCharge -= 1000;
+            } else {
+                runningTransmutations.remove(pos);
+            }
         }
 
     }

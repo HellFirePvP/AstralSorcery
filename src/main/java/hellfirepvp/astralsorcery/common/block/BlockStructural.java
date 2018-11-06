@@ -19,6 +19,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -37,7 +38,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -49,6 +49,7 @@ import java.util.List;
  */
 public class BlockStructural extends BlockContainer implements BlockCustomName, BlockVariants {
 
+    private static boolean effectLoop = false;
     public static PropertyEnum<BlockType> BLOCK_TYPE = PropertyEnum.create("blocktype", BlockType.class);
 
     public BlockStructural() {
@@ -63,9 +64,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
             case TELESCOPE_STRUCT:
                 IBlockState downState = world.getBlockState(pos.down());
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getSoundType(downState, world, pos, entity);
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    downState = world.getBlockState(pos.down());
-            //    return BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState().getBlock().getSoundType(downState, world, pos, entity);
         }
         return super.getSoundType(state, world, pos, entity);
     }
@@ -78,16 +76,17 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
+        if (effectLoop) return false;
+        effectLoop = true;
         IBlockState state = world.getBlockState(pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().addDestroyEffects(world, pos.down(), manager);
+                Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos.down(), world.getBlockState(pos.down()));
+                effectLoop = false;
                 return true;
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState().getBlock().addDestroyEffects(world, pos.down(), manager);
-            //    return true;
         }
-        return super.addDestroyEffects(world, pos, manager);
+        effectLoop = false;
+        return false;
     }
 
     @Override
@@ -101,8 +100,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return new AxisAlignedBB(0, -1, 0, 1, 1, 1);
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
         }
         return FULL_BLOCK_AABB;
     }
@@ -120,8 +117,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().onBlockActivated(worldIn, pos.down(), BlockType.TELESCOPE_STRUCT.getSupportedState(), playerIn, hand, facing, hitX, hitY, hitZ);
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    return BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState().getBlock().onBlockActivated(worldIn, pos.down(), BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState(), playerIn, hand, heldItem, side, hitX, hitY, hitZ);
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
@@ -132,9 +127,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
             case TELESCOPE_STRUCT:
                 drops.add(BlockMachine.MachineType.TELESCOPE.asStack());
                 break;
-            ///case ATTUNEMENT_ALTAR_STRUCT:
-            ///    out.add(new ItemStack(BlocksAS.attunementAltar));
-            ///    break;
         }
     }
 
@@ -143,8 +135,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (blockState.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlockHardness(worldIn, pos.down());
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    return BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState().getBlockHardness(worldIn, pos.down());
         }
         return super.getBlockHardness(blockState, worldIn, pos);
     }
@@ -154,9 +144,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         IBlockState state = world.getBlockState(pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlockHardness(world, pos.down());
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    return BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState().getBlockHardness(world, pos.down());
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getExplosionResistance(world, pos.down(), exploder, explosion);
         }
         return super.getExplosionResistance(world, pos, exploder, explosion);
     }
@@ -167,8 +155,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getPickBlock(BlockType.TELESCOPE_STRUCT.getSupportedState(), target, world, pos.down(), player);
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    return BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState().getBlock().getPickBlock(BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState(), target, world, pos.down(), player);
         }
         return super.getPickBlock(state, target, world, pos, player);
     }
@@ -181,11 +167,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
                     world.setBlockToAir(pos);
                 }
                 break;
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    if(world.isAirBlock(pos.down())) {
-            //        world.setBlockToAir(pos);
-            //    }
-            //    break;
         }
     }
 
@@ -202,11 +183,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
                     ((World) world).setBlockToAir(pos);
                 }
                 break;
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    if(world.isAirBlock(pos.down())) {
-            //        ((World) world).setBlockToAir(pos);
-            //    }
-            //    break;
         }
     }
 
@@ -252,8 +228,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().isNormalCube();
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    return BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState().isNormalCube();
         }
         return super.isNormalCube(state);
     }
@@ -263,8 +237,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (base_state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().isSideSolid(world, pos.down(), side);
-            //case ATTUNEMENT_ALTAR_STRUCT:
-            //    return BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState().isSideSolid(world, pos.down(), side);
         }
         return super.isSideSolid(base_state, world, pos, side);
     }
@@ -292,15 +264,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         return li;
     }
 
-    /*@Override
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
-        state = worldIn.getBlockState(pos);
-        BlockType bt = state.getValue(BLOCK_TYPE);
-        if(bt.equals(BlockType.ATTUNEMENT_ALTAR_STRUCT)) return;
-
-        super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);
-    }*/
-
     @Override
     public String getStateName(IBlockState state) {
         return state.getValue(BLOCK_TYPE).getName();
@@ -324,7 +287,6 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     public static enum BlockType implements IStringSerializable {
 
         TELESCOPE_STRUCT(BlocksAS.blockMachine.getDefaultState().withProperty(BlockMachine.MACHINE_TYPE, BlockMachine.MachineType.TELESCOPE));
-        //ATTUNEMENT_ALTAR_STRUCT(BlocksAS.attunementAltar.getDefaultState());
 
         private final IBlockState supportedState;
 

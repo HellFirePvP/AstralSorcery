@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -71,16 +73,18 @@ public class PktLightningEffect implements IMessage, IMessageHandler<PktLightnin
 
     @Override
     public IMessage onMessage(PktLightningEffect message, MessageContext ctx) {
-        playLightningEffect(message);
+        AstralSorcery.proxy.scheduleClientside(() -> playLightningEffect(message));
         return null;
     }
 
     @SideOnly(Side.CLIENT)
     private void playLightningEffect(PktLightningEffect p) {
-        EffectLightning lightning = EffectHandler.getInstance().lightning(p.from, p.to);
-        if(p.colorOverlay != null) {
-            lightning.setOverlayColor(p.colorOverlay);
-        }
+        Minecraft.getMinecraft().addScheduledTask(() -> {
+            EffectLightning lightning = EffectHandler.getInstance().lightning(p.from, p.to);
+            if(p.colorOverlay != null) {
+                lightning.setOverlayColor(p.colorOverlay);
+            }
+        });
     }
 
 }

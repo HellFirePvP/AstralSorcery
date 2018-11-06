@@ -76,8 +76,8 @@ public class WorldCacheManager implements ITickHandler {
 
     private static void ensureFolder(File f) {
         if(!f.isDirectory()) {
-            AstralSorcery.log.warn("[AstralSorcery] AstralSorcery dataFile exists, but is a file instead of a folder! Please ensure that this is a folder/delete the file!");
-            AstralSorcery.log.warn("[AstralSorcery] Encountered illegal state. Crashing to prevent further, harder to resolve errors!");
+            AstralSorcery.log.warn("AstralSorcery dataFile exists, but is a file instead of a folder! Please ensure that this is a folder/delete the file!");
+            AstralSorcery.log.warn("Encountered illegal state. Crashing to prevent further, harder to resolve errors!");
             throw new IllegalStateException("Affected file: " + f.getAbsolutePath());
         }
     }
@@ -100,8 +100,8 @@ public class WorldCacheManager implements ITickHandler {
         }
         Map<SaveKey, CachedWorldData> dataMap = cachedData.get(dimId);
         if(dataMap.containsKey(key)) {
-            AstralSorcery.log.warn("[AstralSorcery] Duplicate loading of the same WorldData! Discarding old data.");
-            AstralSorcery.log.warn("[AstralSorcery] Affected data: Dim=" + dimId + " key=" + key.identifier);
+            AstralSorcery.log.warn("Duplicate loading of the same WorldData! Discarding old data.");
+            AstralSorcery.log.warn("Affected data: Dim=" + dimId + " key=" + key.identifier);
             dataMap.remove(key);
         }
         dataMap.put(key, loaded);
@@ -114,7 +114,7 @@ public class WorldCacheManager implements ITickHandler {
         if (!f.actualFile.exists() && !f.backupFile.exists()) {
             return key.getNewInstance();
         }
-        AstralSorcery.log.info("[AstralSorcery] Load CachedWorldData '" + key.identifier + "' for world " + world.provider.getDimension());
+        AstralSorcery.log.info("Load CachedWorldData '" + key.identifier + "' for world " + world.provider.getDimension());
         boolean errored = false;
         CachedWorldData data = null;
         try {
@@ -122,7 +122,7 @@ public class WorldCacheManager implements ITickHandler {
                 data = attemptLoad(key, f.actualFile);
             }
         } catch (Exception exc) {
-            AstralSorcery.log.info("[AstralSorcery] Loading worlddata '" + key.identifier + "' failed for its actual save file. Attempting load from backup file.");
+            AstralSorcery.log.info("Loading worlddata '" + key.identifier + "' failed for its actual save file. Attempting load from backup file.");
             errored = true;
         }
         if(data == null) {
@@ -131,7 +131,7 @@ public class WorldCacheManager implements ITickHandler {
                     data = attemptLoad(key, f.backupFile);
                 }
             } catch (Exception exc) {
-                AstralSorcery.log.info("[AstralSorcery] Loading worlddata '" + key.identifier + "' failed for its backup save file. Creating empty one for current runtime and copying erroneous files to error files.");
+                AstralSorcery.log.info("Loading worlddata '" + key.identifier + "' failed for its backup save file. Creating empty one for current runtime and copying erroneous files to error files.");
                 errored = true;
             }
         }
@@ -147,7 +147,7 @@ public class WorldCacheManager implements ITickHandler {
                     f.backupFile.delete();
                 }
             } catch (Exception e) {
-                AstralSorcery.log.info("[AstralSorcery] Attempting to copy erroneous worlddata '" + key.identifier + "' to its error files failed.");
+                AstralSorcery.log.info("Attempting to copy erroneous worlddata '" + key.identifier + "' to its error files failed.");
                 e.printStackTrace();
             }
         }
@@ -164,13 +164,13 @@ public class WorldCacheManager implements ITickHandler {
                         f.backupFile.delete();
                     }
                 } catch (Exception e) {
-                    AstralSorcery.log.info("[AstralSorcery] Attempting to copy erroneous worlddata '" + key.identifier + "' to its error files failed.");
+                    AstralSorcery.log.info("Attempting to copy erroneous worlddata '" + key.identifier + "' to its error files failed.");
                     e.printStackTrace();
                 }
             }
             data = key.getNewInstance();
         }
-        AstralSorcery.log.info("[AstralSorcery] Loading of '" + key.identifier + "' for world " + world.provider.getDimension() + " finished.");
+        AstralSorcery.log.info("Loading of '" + key.identifier + "' for world " + world.provider.getDimension() + " finished.");
         return data;
     }
 
@@ -191,7 +191,7 @@ public class WorldCacheManager implements ITickHandler {
             try {
                 Files.copy(f.actualFile, f.backupFile);
             } catch (Exception exc) {
-                AstralSorcery.log.info("[AstralSorcery] Copying '" + key.identifier + "' 's actual file to its backup file failed!");
+                AstralSorcery.log.info("Copying '" + key.identifier + "' 's actual file to its backup file failed!");
                 exc.printStackTrace();
             }
         }
@@ -229,9 +229,9 @@ public class WorldCacheManager implements ITickHandler {
                     try {
                         saveDataToFile(world, data);
                     } catch (IOException e) {
-                        AstralSorcery.log.warn("[AstralSorcery] Unable to save WorldData!");
-                        AstralSorcery.log.warn("[AstralSorcery] Affected data: Dim=" + dimId + " key=" + key.identifier);
-                        AstralSorcery.log.warn("[AstralSorcery] Printing StackTrace details...");
+                        AstralSorcery.log.warn("Unable to save WorldData!");
+                        AstralSorcery.log.warn("Affected data: Dim=" + dimId + " key=" + key.identifier);
+                        AstralSorcery.log.warn("Printing StackTrace details...");
                         e.printStackTrace();
                     }
                     data.clearDirtyFlag();

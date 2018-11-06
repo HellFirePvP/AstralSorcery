@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.starlight.transmission.base;
 
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -42,7 +42,7 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
     }
 
     @Override
-    public BlockPos getPos() {
+    public BlockPos getLocationPos() {
         return thisPos;
     }
 
@@ -68,28 +68,28 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
 
     @Nullable
     public <T extends TileEntity> T getTileAtPos(World world, Class<T> tileClass) {
-        return MiscUtils.getTileAt(world, getPos(), tileClass, false);
+        return MiscUtils.getTileAt(world, getLocationPos(), tileClass, false);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        this.thisPos = NBTUtils.readBlockPosFromNBT(compound);
+        this.thisPos = NBTHelper.readBlockPosFromNBT(compound);
         this.sourcesToThis.clear();
 
         NBTTagList list = compound.getTagList("sources", 10);
         for (int i = 0; i < list.tagCount(); i++) {
-            sourcesToThis.add(NBTUtils.readBlockPosFromNBT(list.getCompoundTagAt(i)));
+            sourcesToThis.add(NBTHelper.readBlockPosFromNBT(list.getCompoundTagAt(i)));
         }
     }
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
-        NBTUtils.writeBlockPosToNBT(thisPos, compound);
+        NBTHelper.writeBlockPosToNBT(thisPos, compound);
 
         NBTTagList sources = new NBTTagList();
         for (BlockPos source : sourcesToThis) {
             NBTTagCompound comp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(source, comp);
+            NBTHelper.writeBlockPosToNBT(source, comp);
             sources.appendTag(comp);
         }
         compound.setTag("sources", sources);

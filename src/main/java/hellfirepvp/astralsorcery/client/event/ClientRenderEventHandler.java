@@ -10,21 +10,24 @@ package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.common.block.BlockObservatory;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -49,6 +52,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -59,7 +64,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -110,7 +114,9 @@ public class ClientRenderEventHandler {
         }
         if(Minecraft.getMinecraft().currentScreen != null &&
                 Minecraft.getMinecraft().currentScreen instanceof GuiScreenJournal &&
-                (event.getGui() == null || !(event.getGui() instanceof GuiScreenJournal))) {
+                (event.getGui() == null ||
+                        (!(event.getGui() instanceof GuiScreenJournal) &&
+                                !(event.getGui() instanceof GuiScreenJournalOverlay)))) {
             SoundHelper.playSoundClient(Sounds.bookClose, 1F, 1F);
         }
     }
@@ -137,12 +143,17 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onTick(TickEvent.ClientTickEvent event) {
         if(event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null) {
+            if (Minecraft.getMinecraft().player.isCreative()) { //TODO move to a more appropriate handler
+                PersistentDataManager.INSTANCE.setCreative();
+            }
+
+
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND));
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND));
 
             tickTimeFreezeEffects();
 
-            if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkMap) {
+            if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkTree) {
                 requestPermChargeReveal(20);
             }
             chargePermRevealTicks--;
@@ -248,13 +259,22 @@ public class ClientRenderEventHandler {
         }
     }
 
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onBoxDraw(DrawBlockHighlightEvent event) {
+        if(event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK &&
+                event.getPlayer().getEntityWorld().getBlockState(event.getTarget().getBlockPos()).getBlock() instanceof BlockObservatory) {
+            event.setCanceled(true);
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.LOW)
     @SideOnly(Side.CLIENT)
     public void onOverlay(RenderGameOverlayEvent.Post event) {
         if(event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             if(visibilityTempCharge > 0) {
                 SpriteSheetResource ssr = SpriteLibrary.spriteCharge;
-                ssr.getResource().bind();
+                ssr.getResource().bindTexture();
 
                 ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
                 int width = res.getScaledWidth();
@@ -352,7 +372,7 @@ public class ClientRenderEventHandler {
         tes.draw();
 
         //Draw charge
-        float filled = ConstellationPerkLevelManager.getPercToNextLevel(ResearchManager.clientProgress);
+        float filled = PerkLevelManager.INSTANCE.getNextLevelPercent(ResearchManager.clientProgress.getPerkExp());
         height = 78F;
         offsetY = 27.5F + (1F - filled) * height;
         GL11.glColor4f(255F / 255F, 230F / 255F, 0F / 255F, visibilityPermCharge * 0.9F);
@@ -369,16 +389,18 @@ public class ClientRenderEventHandler {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         TextureHelper.refreshTextureBindState();
         //Draw level
-        int level = ResearchManager.clientProgress.getAlignmentLevel();
+        int level = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(ResearchManager.clientProgress.getPerkExp()));
+        String strLevel = String.valueOf(level);
+        int strLength = Minecraft.getMinecraft().fontRenderer.getStringWidth(strLevel);
         GL11.glColor4f(0.86F, 0.86F, 0.86F, visibilityPermCharge);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glPushMatrix();
-        GL11.glTranslated(offsetX + 13, 94, 0);
+        GL11.glTranslated(offsetX + 15 - (strLength / 2), 94, 0);
         GL11.glScaled(1.2, 1.2, 1.2);
         int c = 0x00DDDDDD;
         c |= ((int) (255F * visibilityPermCharge)) << 24;
         if(visibilityPermCharge > 0.1E-4) {
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(String.valueOf(level + 1), 0, 0, c);
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(strLevel, 0, 0, c);
         }
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_DEPTH_TEST);

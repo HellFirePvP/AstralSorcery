@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:blockaltar",
+            "data": 2
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.craft_t3_altar.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.craft_t3_altar.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:craft_t2_altar",
+    "criteria": {
+        "altar_craft_t3_altar": {
+            "trigger": "astralsorcery:altar_craft",
+            "conditions": {
+                "recipes": [
+                    "astralsorcery:shaped/internal/altar/upgrade_tier3"
+                ]
+            }
+        }
+    }
+}

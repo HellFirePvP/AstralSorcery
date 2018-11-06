@@ -18,8 +18,8 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBotania;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemAlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemAlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHandRender;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHudRender;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -114,8 +114,8 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
             amountMap.put(stack, found);
         }
 
-        int heightNormal  =  26;
-        int heightSplit = 13;
+        int heightNormal = 26;
+        int heightSplit  = 13;
         int width   =  26;
         int offsetX =  30;
         int offsetY =  15;
@@ -186,7 +186,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         for (Map.Entry<ItemStack, Integer> entry : amountMap.entrySet()) {
             String amountStr = String.valueOf(entry.getValue());
             if(entry.getValue() == -1) {
-                amountStr = "∞";
+                amountStr = "\u221E";
             }
             GlStateManager.pushMatrix();
             GlStateManager.translate(-Minecraft.getMinecraft().fontRenderer.getStringWidth(amountStr) / 3, 0, 0);
@@ -213,17 +213,18 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
     public void onRenderWhileInHand(ItemStack stack, EnumHand hand, float pTicks) {
         Map<IBlockState, ItemStack> storedStates = getMappedStoredStates(stack);
         if(storedStates.isEmpty()) return;
-        Random r = getPreviewRandomFromWorld(Minecraft.getMinecraft().world);
+        World world = Minecraft.getMinecraft().world;
+        Random r = getPreviewRandomFromWorld(world);
 
         EntityPlayer pl = Minecraft.getMinecraft().player;
         PlayerControllerMP ctrl = Minecraft.getMinecraft().playerController;
         if(ctrl == null || pl == null) return;
         RayTraceResult rtr = getLookBlock(pl, false, true, ctrl.getBlockReachDistance());
-        if(rtr == null) return;
+        if(rtr == null || rtr.typeOfHit != RayTraceResult.Type.BLOCK) return;
 
-        IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType());
+        IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, world.getWorldType());
         BlockPos origin = rtr.getBlockPos();
-        IBlockState atOrigin = Minecraft.getMinecraft().world.getBlockState(origin);
+        IBlockState atOrigin = world.getBlockState(origin);
         IBlockState match = MiscUtils.getMatchingState(storedStates.keySet(), atOrigin);
         if(match != null && storedStates.keySet().size() <= 1) {
             storedStates.remove(match);
@@ -231,7 +232,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         if(storedStates.isEmpty()) {
             return;
         }
-        float hardness = atOrigin.getBlockHardness(Minecraft.getMinecraft().world, origin);
+        float hardness = atOrigin.getBlockHardness(world, origin);
         if(Config.exchangeWandMaxHardness != -1) {
             if(hardness > Config.exchangeWandMaxHardness) {
                 return;
@@ -258,7 +259,13 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         }
 
         Map<IBlockState, Integer> amtMap = MiscUtils.remap(amountMap, tpl -> tpl.value);
-        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAroundLimited(amtMap, Minecraft.getMinecraft().world, origin, true, searchDepth, total, false);
+        if(pl.isCreative()) {
+            for (IBlockState state : amtMap.keySet()) {
+                amtMap.put(state, Integer.MAX_VALUE);
+            }
+            total = Integer.MAX_VALUE;
+        }
+        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(world, origin, true, searchDepth, total, false);
         if(found.isEmpty()) return;
 
         List<IBlockState> applicableStates = Lists.newArrayList(storedStates.keySet());
@@ -277,7 +284,11 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (BlockPos pos : found.getPattern().keySet()) {
             Collections.shuffle(applicableStates, r);
-            RenderingUtils.renderBlockSafely(airWorld, pos, Iterables.getFirst(applicableStates, Blocks.AIR.getDefaultState()), vb);
+            IBlockState potentialState = Iterables.getFirst(applicableStates, Blocks.AIR.getDefaultState());
+            try {
+                potentialState = potentialState.getBlock().getStateForPlacement(world, pos, rtr.sideHit, (float) rtr.hitVec.x, (float) rtr.hitVec.y, (float) rtr.hitVec.z, potentialState.getBlock().getMetaFromState(potentialState), pl, hand);
+            } catch (Exception exc) {}
+            RenderingUtils.renderBlockSafely(airWorld, pos, potentialState, vb);
         }
         vb.sortVertexData((float) TileEntityRendererDispatcher.staticPlayerX, (float) TileEntityRendererDispatcher.staticPlayerY, (float) TileEntityRendererDispatcher.staticPlayerZ);
         tes.draw();
@@ -336,7 +347,13 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         }
 
         Map<IBlockState, Integer> amtMap = MiscUtils.remap(amountMap, tpl -> tpl.value);
-        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAroundLimited(amtMap, playerIn.getEntityWorld(), origin, true, searchDepth, total, false);
+        if(playerIn.isCreative()) {
+            for (IBlockState state : amtMap.keySet()) {
+                amtMap.put(state, Integer.MAX_VALUE);
+            }
+            total = Integer.MAX_VALUE;
+        }
+        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(playerIn.getEntityWorld(), origin, true, searchDepth, total, false);
         if(found.isEmpty()) return  EnumActionResult.SUCCESS;
 
 
@@ -358,18 +375,21 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
 
             if(drainTempCharge(playerIn, Config.exchangeWandUseCost, true)) {
                 if(((EntityPlayerMP) playerIn).interactionManager.tryHarvestBlock(placePos)) {
-                    drainTempCharge(playerIn, Config.exchangeWandUseCost, false);
-                    if(!playerIn.isCreative()) {
-                        ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
-                    }
                     IBlockState place = applicable.key;
                     try {
                         place = applicable.key.getBlock().getStateForPlacement(world, placePos, facing, hitX, hitY, hitZ, applicable.value.getMetadata(), playerIn, hand);
                     } catch (Exception exc) {}
-                    world.setBlockState(placePos, place);
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
-                    ev.setAdditionalData(Block.getStateId(atOrigin));
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                    if (MiscUtils.canPlayerPlaceBlockPos(playerIn, hand, place, placePos, EnumFacing.UP)) {
+                        if (world.setBlockState(placePos, place)) {
+                            drainTempCharge(playerIn, Config.exchangeWandUseCost, false);
+                            if(!playerIn.isCreative()) {
+                                ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(applicable.value, 1), false);
+                            }
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                            ev.setAdditionalDataLong(Block.getStateId(atOrigin));
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                        }
+                    }
                 }
             }
         }

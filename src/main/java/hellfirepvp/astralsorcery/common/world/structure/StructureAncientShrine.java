@@ -37,7 +37,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
 
     @Override
     public void generate(BlockPos pos, World world, Random rand) {
-        getStructureTemplate().placeInWorld(world, pos);
+        generateAsSubmergedStructure(world, pos);
         getBuffer(world).markStructureGeneration(pos, getStructureType());
     }
 

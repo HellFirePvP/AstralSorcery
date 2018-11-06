@@ -50,7 +50,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -74,6 +74,7 @@ public class TileWell extends TileReceiverBaseInventory {
         super(1, EnumFacing.UP);
         this.tank = new PrecisionSingleFluidCapabilityTank(MAX_CAPACITY, EnumFacing.DOWN);
         this.tank.setAllowInput(false);
+        this.tank.setOnUpdate(this::markForUpdate);
     }
 
     @Override
@@ -251,6 +252,7 @@ public class TileWell extends TileReceiverBaseInventory {
         if(!tank.hasCapability(EnumFacing.DOWN)) {
             tank.accessibleSides.add(EnumFacing.DOWN);
         }
+        this.tank.setOnUpdate(this::markForUpdate);
     }
 
     @Override
@@ -292,7 +294,7 @@ public class TileWell extends TileReceiverBaseInventory {
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
-                TileWell tw = MiscUtils.getTileAt(world, getPos(), TileWell.class, false);
+                TileWell tw = MiscUtils.getTileAt(world, getLocationPos(), TileWell.class, false);
                 if(tw != null) {
                     tw.receiveStarlight(type, amount);
                 }

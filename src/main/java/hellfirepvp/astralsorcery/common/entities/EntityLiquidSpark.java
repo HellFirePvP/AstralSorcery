@@ -22,7 +22,6 @@ import hellfirepvp.astralsorcery.common.util.ASDataSerializers;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
@@ -35,7 +34,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -120,7 +118,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super.entityInit();
 
         this.dataManager.register(ENTITY_TARGET, -1);
-        this.dataManager.register(FLUID_REPRESENTED, new FluidStack(FluidRegistry.WATER, 1));
+        this.dataManager.register(FLUID_REPRESENTED, null);
     }
 
     @Override
@@ -189,12 +187,17 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
                 if(getDistance(target.getX(), target.getY(), target.getZ()) < 1.1F) {
                     setDead();
-                    if(getRepresentitiveFluid().getFluid() == BlocksAS.fluidLiquidStarlight && tileTarget instanceof ILiquidStarlightPowered) {
-                        ((ILiquidStarlightPowered) tileTarget).acceptStarlight(getRepresentitiveFluid().amount);
+                    FluidStack contained = getRepresentitiveFluid();
+                    if (contained == null) {
+                        return;
+                    }
+
+                    if(contained.getFluid() == BlocksAS.fluidLiquidStarlight && tileTarget instanceof ILiquidStarlightPowered) {
+                        ((ILiquidStarlightPowered) tileTarget).acceptStarlight(contained.amount);
                     } else if(tileTarget.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
                         IFluidHandler handler = tileTarget.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                         if(handler != null) {
-                            handler.fill(getRepresentitiveFluid(), true);
+                            handler.fill(contained, true);
                         }
                     }
                     if(tileTarget instanceof TileEntitySynchronized) {
@@ -205,8 +208,8 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                     Vector3 at = Vector3.atEntityCenter(this);
 
                     PktLiquidInteractionBurst ev = new PktLiquidInteractionBurst(
-                            getRepresentitiveFluid(),
-                            getRepresentitiveFluid(),
+                            contained,
+                            contained,
                             at);
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(this.world, at.toBlockPos(), 32));
                 } else {
@@ -253,7 +256,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super.readEntityFromNBT(compound);
 
         if(compound.hasKey("tileTarget")) {
-            this.resolvableTilePos = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("tileTarget"));
+            this.resolvableTilePos = NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("tileTarget"));
         }
     }
 
@@ -263,14 +266,14 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
         if(this.tileTarget != null) {
             NBTTagCompound cmp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(this.tileTarget.getPos(), cmp);
+            NBTHelper.writeBlockPosToNBT(this.tileTarget.getPos(), cmp);
             compound.setTag("tileTarget", cmp);
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void playAmbientParticles() {
-        FluidStack stack = this.dataManager.get(FLUID_REPRESENTED);
+        FluidStack stack = getRepresentitiveFluid();
         if(stack == null) return;
         TextureAtlasSprite tas = RenderingUtils.tryGetFlowingTextureOfFluidStack(stack);
 
@@ -279,7 +282,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         cube.setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
         cube.setWorldLightCoord(Minecraft.getMinecraft().world, at.toBlockPos());
         cube.setColorHandler(cb -> new Color(stack.getFluid().getColor(stack)));
-        cube.setScale(0.3F).tumble().setMotion(
+        cube.setScale(0.14F).tumble().setMotion(
                 rand.nextFloat() * 0.02F * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.02F * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.02F * (rand.nextBoolean() ? 1 : -1));

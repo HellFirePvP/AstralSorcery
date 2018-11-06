@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:blockattunementrelay"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.perk_level_medium.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.perk_level_medium.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:perk_level_small",
+    "criteria": {
+        "gain_perk_level_medium": {
+            "trigger": "astralsorcery:perk_level",
+            "conditions": {
+                "level": 20
+            }
+        }
+    }
+}

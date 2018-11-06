@@ -31,8 +31,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class CapeEffectFornax extends CapeArmorEffect {
 
-    private static float fireMultiplier = 0F;
-    private static float healMultiplier = 1F;
+    private static float fireMultiplier = 0.4F;
+    private static float healMultiplier = 0.4F;
     private static boolean burningMelt = true;
 
     public CapeEffectFornax(NBTTagCompound cmp) {

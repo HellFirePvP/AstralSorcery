@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "particle": "astralsorcery:models/grindstone/grindstone_particle",
+        "all": "astralsorcery:misc/blank"
+    }
+}

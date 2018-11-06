@@ -8,8 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
-import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.tile.TilePortalNode;
+import hellfirepvp.astralsorcery.common.tile.TileStructController;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -162,13 +161,13 @@ public class BlockPortalNode extends BlockContainer {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TilePortalNode();
+        return new TileStructController();
     }
 
     @Nullable
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TilePortalNode();
+        return new TileStructController();
     }
 
 }

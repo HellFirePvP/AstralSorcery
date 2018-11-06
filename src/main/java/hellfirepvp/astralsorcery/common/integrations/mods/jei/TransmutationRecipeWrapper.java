@@ -11,8 +11,10 @@ package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -45,7 +47,16 @@ public class TransmutationRecipeWrapper extends JEIBaseWrapper {
     }
 
     @Override
-    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {}
+    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+        if (minecraft.fontRenderer != null) {
+            if (this.transmutation.getRequiredType() != null) {
+                String name = this.transmutation.getRequiredType().getUnlocalizedName();
+                String out = I18n.format("misc.transmutation.constellation", I18n.format(name));
+                int length = minecraft.fontRenderer.getStringWidth(out);
+                minecraft.fontRenderer.drawString(out, recipeWidth / 2 - length / 2, recipeHeight - 12, 0xFF454545, false);
+            }
+        }
+    }
 
     @Nullable
     @Override

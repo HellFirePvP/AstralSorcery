@@ -78,7 +78,7 @@ public class RenderEntityHook extends Render<EntityGrapplingHook> {
 
 
         SpriteSheetResource sprite = SpriteLibrary.spriteHook;
-        sprite.getResource().bind();
+        sprite.getResource().bindTexture();
         Tuple<Double, Double> currentUV = sprite.getUVOffset(ClientScheduler.getClientTick() + entity.ticksExisted);
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         RenderingUtils.renderFacingQuadVB(bb, iPosE.getX(), iPosE.getY(), iPosE.getZ(), partialTicks, 1.3F, 0F,

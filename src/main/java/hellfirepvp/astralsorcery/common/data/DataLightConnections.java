@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -250,7 +251,7 @@ public class DataLightConnections extends AbstractData {
         }
 
         @Override
-        public DataLightConnections provideNewInstance() {
+        public DataLightConnections provideNewInstance(Side side) {
             return new DataLightConnections();
         }
 

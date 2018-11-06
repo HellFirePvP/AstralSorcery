@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.List;
 
 /**
@@ -76,6 +75,10 @@ public class AltarTraitRecipeWrapper extends JEIBaseWrapper {
         ingredients.setInputLists(ItemStack.class, stackList);
 
         ingredients.setOutput(ItemStack.class, recipe.getOutputForRender());
+    }
+
+    public TraitRecipe getRecipe() {
+        return recipe;
     }
 
     @Override

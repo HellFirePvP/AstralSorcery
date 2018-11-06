@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;

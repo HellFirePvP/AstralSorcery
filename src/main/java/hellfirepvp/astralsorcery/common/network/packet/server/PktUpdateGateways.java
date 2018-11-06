@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -72,7 +73,7 @@ public class PktUpdateGateways implements IMessage, IMessageHandler<PktUpdateGat
 
     @Override
     public IMessage onMessage(PktUpdateGateways message, MessageContext ctx) {
-        CelestialGatewaySystem.instance.updateClientCache(message.positions);
+        AstralSorcery.proxy.scheduleClientside(() -> CelestialGatewaySystem.instance.updateClientCache(message.positions));
         return null;
     }
 }

@@ -12,10 +12,12 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.*;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
+import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.EnchantmentsAS;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.init.Blocks;
@@ -29,10 +31,12 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.Random;
 
+import static hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry.registerCapeArmorEffect;
 import static hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
-import static hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -130,7 +134,6 @@ public class RegistryConstellations {
                 Arrays.asList(new PotionMapEffect(MobEffects.FIRE_RESISTANCE, 0, 0)));
         registerMapEffect(pelotrio,
                 Arrays.asList(
-                        new EnchantmentMapEffect(Enchantments.MENDING, 2, 3),
                         new EnchantmentMapEffect(Enchantments.INFINITY, 1, 1),
                         new EnchantmentMapEffect(Enchantments.LURE, 4, 6)),
                 Arrays.asList(
@@ -141,42 +144,42 @@ public class RegistryConstellations {
                 Arrays.asList(
                         new EnchantmentMapEffect(Enchantments.FROST_WALKER),
                         new EnchantmentMapEffect(Enchantments.FEATHER_FALLING),
-                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 1, 4)
+                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 4)
                         ),
                 Arrays.asList(
                         new PotionMapEffect(MobEffects.RESISTANCE, 1, 2),
                         new PotionMapEffect(MobEffects.FIRE_RESISTANCE, 0, 0),
-                        new PotionMapEffect(MobEffects.SLOWNESS, 0, 0)));
+                        new PotionMapEffect(MobEffects.SLOWNESS, 0, 1)));
         registerMapEffect(ulteria,
                 Arrays.asList(
-                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 4).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 3).setIgnoreCompatibility(),
                         new EnchantmentMapEffect(Enchantments.FIRE_PROTECTION, 4, 6).setIgnoreCompatibility(),
                         new EnchantmentMapEffect(Enchantments.BLAST_PROTECTION, 4, 6).setIgnoreCompatibility(),
                         new EnchantmentMapEffect(Enchantments.PROJECTILE_PROTECTION, 4, 6).setIgnoreCompatibility()),
                 Arrays.asList(
-                        new PotionMapEffect(MobEffects.ABSORPTION, 0, 3),
-                        new PotionMapEffect(MobEffects.REGENERATION, 1, 2),
+                        new PotionMapEffect(MobEffects.ABSORPTION, 0, 2),
+                        new PotionMapEffect(MobEffects.REGENERATION, 1, 1),
                         new PotionMapEffect(MobEffects.WEAKNESS, 1, 2)));
         registerMapEffect(alcara,
                 Arrays.asList(
-                        new EnchantmentMapEffect(Enchantments.SWEEPING, 3, 6),
+                        new EnchantmentMapEffect(Enchantments.SWEEPING, 3, 7),
                         new EnchantmentMapEffect(Enchantments.LURE, 2, 5).setIgnoreCompatibility(),
                         new EnchantmentMapEffect(Enchantments.LUCK_OF_THE_SEA, 3, 6).setIgnoreCompatibility(),
                         new EnchantmentMapEffect(Enchantments.SILK_TOUCH, 1, 1)),
                 Arrays.asList(
                         new PotionMapEffect(MobEffects.LUCK, 2, 4),
                         new PotionMapEffect(MobEffects.INVISIBILITY, 0, 1),
-                        new PotionMapEffect(MobEffects.HUNGER, 0, 1)));
+                        new PotionMapEffect(MobEffects.HUNGER, 1, 2)));
         registerMapEffect(vorux,
                 Arrays.asList(
-                        new EnchantmentMapEffect(Enchantments.SMITE, 4, 6).setIgnoreCompatibility(),
-                        new EnchantmentMapEffect(Enchantments.BANE_OF_ARTHROPODS, 4, 6).setIgnoreCompatibility(),
-                        new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 5).setIgnoreCompatibility(),
-                        new EnchantmentMapEffect(Enchantments.POWER, 3, 5).setIgnoreCompatibility()),
+                        new EnchantmentMapEffect(Enchantments.SMITE, 4, 7).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.BANE_OF_ARTHROPODS, 4, 7).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 4).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.POWER, 3, 4).setIgnoreCompatibility()),
                 Arrays.asList(
                         new PotionMapEffect(MobEffects.STRENGTH, 2, 3),
                         new PotionMapEffect(MobEffects.RESISTANCE, 0, 1),
-                        new PotionMapEffect(MobEffects.MINING_FATIGUE, 0, 1)));
+                        new PotionMapEffect(MobEffects.MINING_FATIGUE, 1, 3)));
     }
 
     private static void registerConstellations() {
@@ -260,10 +263,31 @@ public class RegistryConstellations {
         fornax.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_IRON_INGOT));
         fornax.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GUNPOWDER));
 
+        pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.ROTTEN_FLESH)));
         pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.BLAZE_POWDER)));
         pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.APPLE)));
         pelotrio.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_EGG));
-        pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.ROTTEN_FLESH)));
+
+
+        gelu.addSignatureItem(new ItemHandle(new ItemStack(Items.SNOWBALL)));
+        gelu.addSignatureItem(new ItemHandle(new ItemStack(Blocks.ICE)));
+        gelu.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_NETHER_QUARTZ));
+        gelu.addSignatureItem(new ItemHandle(new ItemStack(Items.FEATHER)));
+
+        ulteria.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_STARMETAL_INGOT));
+        ulteria.addSignatureItem(new ItemHandle(new ItemStack(Items.LEATHER)));
+        ulteria.addSignatureItem(new ItemHandle(new ItemStack(Items.DIAMOND)));
+        ulteria.addSignatureItem(new ItemHandle(new ItemStack(Items.BLAZE_ROD)));
+
+        alcara.addSignatureItem(new ItemHandle(new ItemStack(Items.NETHER_WART)));
+        alcara.addSignatureItem(new ItemHandle(new ItemStack(Items.ENDER_PEARL)));
+        alcara.addSignatureItem(new ItemHandle(new ItemStack(Blocks.SOUL_SAND)));
+        alcara.addSignatureItem(new ItemHandle(new ItemStack(Items.COAL)));
+
+        vorux.addSignatureItem(new ItemHandle(new ItemStack(Items.BLAZE_POWDER)));
+        vorux.addSignatureItem(new ItemHandle(ItemUsableDust.DustType.NOCTURNAL.asStack()));
+        vorux.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GUNPOWDER));
+        vorux.addSignatureItem(new ItemHandle(new ItemStack(Items.NETHERBRICK)));
     }
 
     private static void buildConstellations() {
@@ -392,7 +416,17 @@ public class RegistryConstellations {
         horologium = new ConstellationBase.WeakSpecial("horologium", new Color(0x7D16B4)) {
             @Override
             public boolean doesShowUp(WorldSkyHandler handle, World world, long day) {
-                return isDayOfSolarEclipse(day);
+                long rSeed;
+                if(world.isRemote) {
+                    Optional<Long> testSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(world);
+                    if (!testSeed.isPresent()) {
+                        return false;
+                    }
+                    rSeed = testSeed.get();
+                } else {
+                    rSeed = new Random(world.getSeed()).nextLong();
+                }
+                return isDayOfSolarEclipse(rSeed, day);
             }
 
             @Override
@@ -478,7 +512,7 @@ public class RegistryConstellations {
         pelotrio.addConnection(sl4, sl6);
         pelotrio.addConnection(sl6, sl3);
 
-        gelu = new ConstellationBase.Minor("gelu", new Color(0x758BA8));
+        gelu = new ConstellationBase.Minor("gelu", new Color(0x758BA8), MoonPhase.NEW, MoonPhase.WAXING1_4, MoonPhase.WAXING1_2);
         sl1 = gelu.addStar(8, 7);
         sl2 = gelu.addStar(28, 8);
         sl3 = gelu.addStar(23, 21);
@@ -491,7 +525,7 @@ public class RegistryConstellations {
         gelu.addConnection(sl2, sl5);
         gelu.addConnection(sl4, sl6);
 
-        ulteria = new ConstellationBase.Minor("ulteria", new Color(0x347463));
+        ulteria = new ConstellationBase.Minor("ulteria", new Color(0x347463), MoonPhase.WANING1_2, MoonPhase.WANING3_4, MoonPhase.NEW);
         sl1 = ulteria.addStar(14, 9);
         sl2 = ulteria.addStar(17, 16);
         sl3 = ulteria.addStar(25, 19);
@@ -502,7 +536,7 @@ public class RegistryConstellations {
         ulteria.addConnection(sl2, sl3);
         ulteria.addConnection(sl4, sl5);
 
-        alcara = new ConstellationBase.Minor("alcara", new Color(0x802952));
+        alcara = new ConstellationBase.Minor("alcara", new Color(0x802952), MoonPhase.WANING1_2, MoonPhase.WAXING1_2);
         sl1 = alcara.addStar(6, 27);
         sl2 = alcara.addStar(14, 20);
         sl3 = alcara.addStar(17, 24);
@@ -516,7 +550,7 @@ public class RegistryConstellations {
         alcara.addConnection(sl4, sl5);
         alcara.addConnection(sl4, sl6);
 
-        vorux = new ConstellationBase.Minor("vorux", new Color(0xA8881E));
+        vorux = new ConstellationBase.Minor("vorux", new Color(0xA8881E), MoonPhase.FULL, MoonPhase.WAXING3_4, MoonPhase.WANING3_4);
         sl1 = vorux.addStar(3, 21);
         sl2 = vorux.addStar(7, 7);
         sl3 = vorux.addStar(14, 15);

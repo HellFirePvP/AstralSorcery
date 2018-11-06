@@ -19,7 +19,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**

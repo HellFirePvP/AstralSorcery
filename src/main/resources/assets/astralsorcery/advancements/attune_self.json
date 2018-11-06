@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:blockattunementaltar"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.attune_self.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.attune_self.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:find_constellation",
+    "criteria": {
+        "attune_self_major": {
+            "trigger": "astralsorcery:attune_self",
+            "conditions": {
+                "major": true
+            }
+        }
+    }
+}

@@ -11,12 +11,12 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
+import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
 import hellfirepvp.astralsorcery.common.base.Mods;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.event.EntityKnockbackEvent;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationDraconicEvolution;
 import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
@@ -28,16 +28,16 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
-import hellfirepvp.astralsorcery.common.util.data.*;
+import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
+import hellfirepvp.astralsorcery.common.util.data.TimeoutList;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -46,13 +46,15 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -77,30 +79,17 @@ public class EventHandlerEntity {
     private static final Random rand = new Random();
     private static final Color discidiaWandColor = new Color(0x880100);
 
+    public static int spawnSkipId = -1;
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> ritualFlight = new TimeoutList<>(player -> {
-        if(!player.isCreative()) {
+        if(player instanceof EntityPlayerMP && ((EntityPlayerMP) player).interactionManager.getGameType().isSurvivalOrAdventure()) {
             player.capabilities.allowFlying = false;
             player.capabilities.isFlying = false;
             player.sendPlayerAbilities();
         }
     }, TickEvent.Type.SERVER);
     public static Map<Integer, EntityAttackStack> attackStack = new HashMap<>();
-
-    @SubscribeEvent
-    public void onClone(PlayerEvent.Clone event) {
-        EventHandlerServer.PlayerWrapperContainer ctOld = new EventHandlerServer.PlayerWrapperContainer(event.getOriginal());
-        removeTimeoutContents(EventHandlerServer.perkCooldowns, ctOld);
-        removeTimeoutContents(EventHandlerServer.perkCooldownsClient, ctOld);
-    }
-
-    private <V> void removeTimeoutContents(TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, V> container,
-                                           EventHandlerServer.PlayerWrapperContainer old) {
-        if(container.hasList(old)) {
-            container.removeList(old);
-        }
-    }
 
     @SubscribeEvent
     public void onTarget(LivingSetAttackTargetEvent event) {
@@ -116,22 +105,20 @@ public class EventHandlerEntity {
     }
 
     @SubscribeEvent
-    public void onKnockback(EntityKnockbackEvent event) {
-        Entity attacker = event.getAttacker();
-        if (attacker == null || attacker.getEntityWorld().isRemote) return;
-
-        if (attacker instanceof EntityPlayer) {
-            EntityPlayer p = (EntityPlayer) attacker;
-            PlayerProgress prog = ResearchManager.getProgress(p, Side.SERVER);
-            if (prog != null) {
-                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-                for (ConstellationPerk perk : perks.keySet()) {
-                    if (!prog.isPerkActive(perk)) continue;
-                    if (perk.mayExecute(ConstellationPerk.Target.ENTITY_KNOCKBACK)) {
-                        perk.onEntityKnockback(p, event.getEntityLiving());
-                    }
-                }
+    public void onSleep(PlayerSleepInBedEvent event) {
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(event.getEntityPlayer().getEntityWorld());
+        if(wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
+            if (event.getResultStatus() == null) {
+                event.setResult(EntityPlayer.SleepResult.NOT_POSSIBLE_NOW);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onSpawnDropCloud(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof EntityAreaEffectCloud &&
+                MiscUtils.iterativeSearch(((EntityAreaEffectCloud) event.getEntity()).effects, (pEffect) -> pEffect.getPotion().equals(RegistryPotions.potionDropModifier)) != null) {
+            event.setCanceled(true);
         }
     }
 
@@ -243,6 +230,15 @@ public class EventHandlerEntity {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onRightClickDebug(PlayerInteractEvent.RightClickBlock event) {
+        if(event.getEntityPlayer().isCreative() && !event.getWorld().isRemote) {
+            if(StarlightNetworkDebugHandler.INSTANCE.beginDebugFor(event.getWorld(), event.getPos(), event.getEntityPlayer())) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onDamage(LivingHurtEvent event) {
         EntityLivingBase living = event.getEntityLiving();
@@ -292,38 +288,9 @@ public class EventHandlerEntity {
                 //There's no great way to test for item here.
                 event.setAmount(event.getAmount() * (1 + ((float) Config.swordSharpMultiplier)));
             }
-
-            PlayerProgress prog = ResearchManager.getProgress(p, Side.SERVER);
-            if (prog != null) {
-                float dmg = event.getAmount();
-                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-                for (ConstellationPerk perk : perks.keySet()) {
-                    if (!prog.isPerkActive(perk)) continue;
-                    if (perk.mayExecute(ConstellationPerk.Target.ENTITY_ATTACK)) {
-                        dmg = perk.onEntityAttack(p, event.getEntityLiving(), dmg);
-                    }
-                }
-                event.setAmount(dmg);
-            }
         }
         EntityLivingBase entity = event.getEntityLiving();
         if (entity != null) {
-            if(entity instanceof EntityPlayer) {
-                EntityPlayer hurt = (EntityPlayer) entity;
-                PlayerProgress prog = ResearchManager.getProgress(hurt, Side.SERVER);
-                if (prog != null) {
-                    float dmg = event.getAmount();
-                    Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-                    for (ConstellationPerk perk : perks.keySet()) {
-                        if (!prog.isPerkActive(perk)) continue;
-                        if (perk.mayExecute(ConstellationPerk.Target.ENTITY_HURT)) {
-                            dmg = perk.onEntityHurt(hurt, source, dmg);
-                        }
-                    }
-                    event.setAmount(dmg);
-                }
-            }
-
             ItemStack active = entity.getActiveItemStack();
             if(!active.isEmpty() && active.getItem() instanceof ItemWand) {
                 WandAugment wa = ItemWand.getAugment(active);
@@ -344,8 +311,14 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
         if (event.getResult() == Event.Result.DENY) return; //Already denied anyway.
+        if (event.getWorld().isRemote) return;
+        if (event.getSpawner() != null) return; //FINE, i'll allow spawners.
 
         EntityLivingBase toTest = event.getEntityLiving();
+        if (spawnSkipId != -1 && toTest.getEntityId() == spawnSkipId) {
+            return;
+        }
+
         Vector3 at = Vector3.atEntityCorner(toTest);
         boolean mayDeny = Config.doesMobSpawnDenyDenyEverything || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
         if (mayDeny) {

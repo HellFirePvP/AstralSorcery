@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.data.world.data;
 
 import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -46,11 +46,28 @@ public class StructureGenBuffer extends CachedWorldData {
         markDirty();
     }
 
-    public double getDstToClosest(StructureType type, BlockPos dstTo) {
+    public double getDstToClosest(StructureType type, double idealDistance, BlockPos dstTo) {
         double closest = Double.MAX_VALUE;
+        double halfDst = idealDistance / 2.0D;
         int x = dstTo.getX();
         int y = dstTo.getY();
         int z = dstTo.getZ();
+
+        if (type.needsDistanceToAnyStructure()) {
+            for (StructureType tt : StructureType.values()) {
+                if (!tt.needsDistanceToAnyStructure() ||
+                        tt == type) {
+                    continue;
+                }
+                for (BlockPos position : generatedStructures.get(type)) {
+                    double dst = position.getDistance(x, y, z);
+                    if (dst <= halfDst) {
+                        return dst; //Fast fail on close structures
+                    }
+                }
+            }
+        }
+
         for (BlockPos position : generatedStructures.get(type)) {
             double dst = position.getDistance(x, y, z);
             if(dst < closest) {
@@ -87,7 +104,7 @@ public class StructureGenBuffer extends CachedWorldData {
             NBTTagList list = compound.getTagList(type.name().toLowerCase(), Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound cmp = list.getCompoundTagAt(i);
-                BlockPos pos = NBTUtils.readBlockPosFromNBT(cmp);
+                BlockPos pos = NBTHelper.readBlockPosFromNBT(cmp);
                 generatedStructures.get(type).add(pos);
             }
         }
@@ -99,7 +116,7 @@ public class StructureGenBuffer extends CachedWorldData {
             NBTTagList list = new NBTTagList();
             for (BlockPos pos : generatedStructures.get(type)) {
                 NBTTagCompound tag = new NBTTagCompound();
-                NBTUtils.writeBlockPosToNBT(pos, tag);
+                NBTHelper.writeBlockPosToNBT(pos, tag);
                 list.appendTag(tag);
             }
             compound.setTag(type.name().toLowerCase(), list);
@@ -111,12 +128,25 @@ public class StructureGenBuffer extends CachedWorldData {
 
     public static enum StructureType {
 
-        MOUNTAIN,
-        DESERT,
-        SMALL,
+        MOUNTAIN(true),
+        DESERT(true),
+        SMALL(true),
         TREASURE,
-        SMALL_RUIN
+        SMALL_RUIN(true);
 
+        private final boolean averageDistanceRequired;
+
+        StructureType() {
+            this(false);
+        }
+
+        StructureType(boolean averageDistanceRequired) {
+            this.averageDistanceRequired = averageDistanceRequired;
+        }
+
+        public boolean needsDistanceToAnyStructure() {
+            return this.averageDistanceRequired;
+        }
     }
 
 }

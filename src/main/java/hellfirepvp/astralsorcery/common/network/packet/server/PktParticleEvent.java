@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
@@ -25,6 +24,7 @@ import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.effect.CelestialStrike;
+import hellfirepvp.astralsorcery.common.util.effect.ShootingStarExplosion;
 import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -46,7 +46,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
 
     private int typeOrdinal;
     private double xCoord, yCoord, zCoord;
-    private double additionalData = 0.0D;
+    private double additionalDataDouble = 0.0D;
+    private long additionalDataLong = 0L;
 
     public PktParticleEvent() {}
 
@@ -66,11 +67,19 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
     }
 
     public void setAdditionalData(double additionalData) {
-        this.additionalData = additionalData;
+        this.additionalDataDouble = additionalData;
     }
 
     public double getAdditionalData() {
-        return additionalData;
+        return additionalDataDouble;
+    }
+
+    public void setAdditionalDataLong(long additionalDataLong) {
+        this.additionalDataLong = additionalDataLong;
+    }
+
+    public long getAdditionalDataLong() {
+        return additionalDataLong;
     }
 
     @Override
@@ -79,7 +88,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         this.xCoord = buf.readDouble();
         this.yCoord = buf.readDouble();
         this.zCoord = buf.readDouble();
-        this.additionalData = buf.readDouble();
+        this.additionalDataDouble = buf.readDouble();
+        this.additionalDataLong = buf.readLong();
     }
 
     @Override
@@ -88,7 +98,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         buf.writeDouble(this.xCoord);
         buf.writeDouble(this.yCoord);
         buf.writeDouble(this.zCoord);
-        buf.writeDouble(this.additionalData);
+        buf.writeDouble(this.additionalDataDouble);
+        buf.writeLong(this.additionalDataLong);
     }
 
     @Override
@@ -97,10 +108,10 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
             ParticleEventType type = ParticleEventType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
             if(trigger != null) {
-                triggerClientside(trigger, message);
+                AstralSorcery.proxy.scheduleClientside(() -> triggerClientside(trigger, message));
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn("[AstralSorcery] Error executing ParticleEventType " + message.typeOrdinal + " at " + xCoord + ", " + yCoord + ", " + zCoord);
+            AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " at " + xCoord + ", " + yCoord + ", " + zCoord);
         }
         return null;
     }
@@ -130,6 +141,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         TREE_VORTEX,
         ARCHITECT_PLACE,
         CEL_STRIKE,
+        SH_STAR,
+        SH_STAR_EX,
         BURN_PARCHMENT,
         ENGRAVE_LENS,
         GEN_STRUCTURE,
@@ -193,6 +206,10 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return RaytraceAssist::playDebug;
                 case CEL_STRIKE:
                     return CelestialStrike::playEffects;
+                case SH_STAR:
+                    return ShootingStarExplosion::playEffects;
+                case SH_STAR_EX:
+                    return ShootingStarExplosion::playExEffects;
                 case BURN_PARCHMENT:
                     return TileMapDrawingTable::burnParchmentEffects;
                 case ENGRAVE_LENS:

@@ -21,8 +21,6 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.OreDictUniqueStackList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
@@ -127,7 +125,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
             b = MathHelper.clamp(b, 0, 255);
             return new Color(r, g, b).brighter();
         } catch (Exception exc) {
-            AstralSorcery.log.error("[AstralSorcery] Item Colorization Helper: Ignoring non-resolvable image " + tas.getIconName());
+            AstralSorcery.log.error("Item Colorization Helper: Ignoring non-resolvable image " + tas.getIconName());
             exc.printStackTrace();
         }
         return null;
@@ -164,11 +162,11 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
     }
 
     public void reloadRegistry() {
-        AstralSorcery.log.info("[AstralSorcery] Item Colorization Helper: Rebuilding colorization cache! This might take longer for higher-res texture packs...");
+        AstralSorcery.log.info("Item Colorization Helper: Rebuilding colorization cache! This might take longer for higher-res texture packs...");
         long startMs = System.currentTimeMillis();
         nukeRegistry();
         setupRegistry();
-        AstralSorcery.log.info("[AstralSorcery] Item Colorization Helper: Cache rebuilt! Time required: " + (System.currentTimeMillis() - startMs) + "ms - Entries cached: " + colorizationMap.size());
+        AstralSorcery.log.info("Item Colorization Helper: Cache rebuilt! Time required: " + (System.currentTimeMillis() - startMs) + "ms - Entries cached: " + colorizationMap.size());
     }
 
     @Override

@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollec
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.entity.EntityLivingBase;
@@ -61,7 +60,7 @@ public class CEffectBootes extends CEffectEntityCollect<EntityLivingBase> {
                 if(modified.isCorrupted()) {
                     did = true;
                     e.hurtResistantTime = 0;
-                    e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 4000, 0));
+                    e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 4000, 5));
                     e.attackEntityFrom(CommonProxy.dmgSourceStellar, 5000);
                     continue;
                 }

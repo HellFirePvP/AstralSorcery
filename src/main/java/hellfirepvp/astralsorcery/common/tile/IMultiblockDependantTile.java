@@ -8,8 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -19,7 +22,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 31.10.2017 / 15:51
  */
-public interface IMultiblockDependantTile {
+public interface IMultiblockDependantTile extends ILocatable {
 
     //'this' tile needs to be centered on that structure
     @Nullable

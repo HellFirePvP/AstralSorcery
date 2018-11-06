@@ -18,7 +18,6 @@ import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityFlyHelper;
@@ -29,7 +28,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -40,8 +38,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Random;
-import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -323,9 +319,10 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         if(d3 < 3D) {
                             this.actionTicks++;
                             if(this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockPick() && this.parentEntity.world instanceof WorldServer) {
-                                MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
-                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true);
-                                resetTimer = true;
+                                if (MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
+                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true)) {
+                                    resetTimer = true;
+                                }
                             }
                         }
                     }
@@ -347,9 +344,10 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         if(d3 < 3D) {
                             this.actionTicks++;
                             if(this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockAxe() && this.parentEntity.world instanceof WorldServer) {
-                                MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
-                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true);
-                                resetTimer = true;
+                                if (MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
+                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true)) {
+                                    resetTimer = true;
+                                }
                             }
                         }
                     }

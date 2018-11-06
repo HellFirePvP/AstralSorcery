@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.util.struct;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.item.base.render.ISpecialStackDescriptor;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -186,10 +187,12 @@ public class BlockArray {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
             IBlockState state = info.state;
-            world.setBlockState(at, state, 3);
+            if (!world.setBlockState(at, state, 3)) {
+                continue;
+            }
             result.put(at, state);
 
-            if(state.getBlock() instanceof BlockLiquid || state.getBlock() instanceof BlockFluidBase) {
+            if(MiscUtils.isFluidBlock(state)) {
                 world.neighborChanged(at, state.getBlock(), at);
             }
 

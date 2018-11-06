@@ -28,7 +28,7 @@ public abstract class ConfigEntry {
     }
 
     public String getConfigurationSection() {
-        return section.name().toLowerCase();
+        return section.name().toLowerCase() + "." + key;
     }
 
     public String getKey() {
@@ -39,13 +39,16 @@ public abstract class ConfigEntry {
 
     public static enum Section {
 
+        GENERAL,
         MACHINERY,
         WORLDGEN,
         RITUAL_EFFECTS,
         PERK_LEVELS,
         PERKS,
         COSTS,
-        CAPE
+        CAPE,
+        TOOLS,
+        DATA_PERSISTENCE
 
     }
 

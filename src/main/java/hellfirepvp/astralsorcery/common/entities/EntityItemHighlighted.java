@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.entities;
 
+import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -35,12 +36,19 @@ public class EntityItemHighlighted extends EntityItem {
 
     public EntityItemHighlighted(World worldIn, double x, double y, double z, ItemStack stack) {
         super(worldIn, x, y, z, stack);
-        applyColor(Color.WHITE);
+        applyColor((!stack.isEmpty() && stack.getItem() instanceof ItemHighlighted) ? ((ItemHighlighted) stack.getItem()).getHightlightColor(stack) : Color.WHITE);
     }
 
     public EntityItemHighlighted(World worldIn, double x, double y, double z) {
         super(worldIn, x, y, z);
         applyColor(Color.WHITE);
+    }
+
+    @Override
+    public void setItem(ItemStack stack) {
+        super.setItem(stack);
+
+        applyColor((!stack.isEmpty() && stack.getItem() instanceof ItemHighlighted) ? ((ItemHighlighted) stack.getItem()).getHightlightColor(stack) : Color.WHITE);
     }
 
     @Override

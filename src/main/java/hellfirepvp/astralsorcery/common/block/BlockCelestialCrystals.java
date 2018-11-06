@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
@@ -46,7 +45,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
 import java.util.Random;
 
 /**

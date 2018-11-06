@@ -29,7 +29,7 @@ import java.util.List;
 public interface IPrismTransmissionNode extends ILocatable {
 
     //Get the exact position of this Node
-    public BlockPos getPos();
+    public BlockPos getLocationPos();
 
     //Get his node's transmission properties to calculate transmission loss and so on
     //Arbitrarily this returns a max. sized Property by default...

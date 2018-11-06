@@ -25,15 +25,12 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
-import hellfirepvp.astralsorcery.common.item.base.ItemConstellationFocus;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
+import hellfirepvp.astralsorcery.common.item.base.ItemConstellationFocus;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockAltar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -272,7 +269,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
         ActiveCraftingTask.CraftingState prev = craftingTask.getState();
         craftingTask.setState(ActiveCraftingTask.CraftingState.ACTIVE);
-        craftingTask.getRecipeToCraft().onCraftServerTick(this, ActiveCraftingTask.CraftingState.ACTIVE, craftingTask.getTicksCrafting(), rand);
+        craftingTask.getRecipeToCraft().onCraftServerTick(this, ActiveCraftingTask.CraftingState.ACTIVE, craftingTask.getTicksCrafting(), craftingTask.getTotalCraftingTime(), rand);
         return (prev != craftingTask.getState()) || needUpdate;
     }
 
@@ -338,15 +335,14 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(getAltarLevel().next() != to) return false;
 
         if(!doLevelUp) return true;
-        levelUnsafe(getAltarLevel().next());
-        return true;
+        return levelUnsafe(getAltarLevel().next());
     }
 
-    private void levelUnsafe(AltarLevel to) {
+    private boolean levelUnsafe(AltarLevel to) {
         onLevelUp(level, to);
         level = to;
         mbState = false;
-        world.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
+        return world.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
     }
 
     @Override
@@ -408,6 +404,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         return al.getMatcher() instanceof PatternAltarMatcher ? ((PatternAltarMatcher) al.getMatcher()).getPattern().getPattern() : null;
     }
 
+    @Nonnull
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
+    }
+
     public float getAmbientStarlightPercent() {
         return ((float) starlightStored) / ((float) getMaxStarlightStorage());
     }
@@ -465,7 +467,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             if(!((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
         }
         if(recipe != null) {
-            this.craftingTask = new ActiveCraftingTask(recipe, crafter.getUniqueID());
+            int divisor = Math.max(0, this.getAltarLevel().ordinal() - recipe.getNeededLevel().ordinal());
+            divisor = (int) Math.round(Math.pow(2, divisor));
+            this.craftingTask = new ActiveCraftingTask(recipe, divisor, crafter.getUniqueID());
             markForUpdate();
         }
     }
@@ -609,7 +613,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
-                TileAltar ta = MiscUtils.getTileAt(world, getPos(), TileAltar.class, false);
+                TileAltar ta = MiscUtils.getTileAt(world, getLocationPos(), TileAltar.class, false);
                 if(ta != null) {
                     ta.receiveStarlight(type, amount);
                 }

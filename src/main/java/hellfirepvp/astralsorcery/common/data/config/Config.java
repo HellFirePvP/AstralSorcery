@@ -8,14 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.data.config;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -27,12 +29,11 @@ import java.util.*;
  */
 public class Config {
 
-    //TODO remember to do a configurable itemSword-classname blacklist for sharpening.
-
     private static Configuration latestConfig;
-    public static List<PktSyncConfig.SyncTuple> savedSyncTuples = new LinkedList<>();
 
     private static File dirConfigurationRegistries;
+
+    public static boolean enablePatreonEffects = true;
 
     public static boolean respectIdealDistances = true;
     public static int aquamarineAmount = 64;
@@ -47,22 +48,24 @@ public class Config {
     public static boolean doesMobSpawnDenyDenyEverything = false;
     public static boolean rockCrystalOreSilkTouchHarvestable = false;
 
-    @Sync public static float capeChaosResistance = 0.8F;
+    public static float capeChaosResistance = 0.8F;
 
     //Attuned wands configs
-    @Sync public static float evorsioEffectChance = 0.8F;
-    @Sync public static int discidiaStackCap = 10;
-    @Sync public static float discidiaStackMultiplier = 1F;
+    public static float evorsioEffectChance = 0.8F;
+    public static int discidiaStackCap = 10;
+    public static float discidiaStackMultiplier = 1F;
 
-    @Sync public static boolean craftingLiqCrystalGrowth = true;
-    @Sync public static boolean craftingLiqCrystalToolGrowth = true;
-    @Sync public static boolean craftingLiqCelestialCrystalForm = true;
-    @Sync public static boolean canCrystalGrowthYieldDuplicates = true;
+    public static boolean craftingLiqCrystalGrowth = true;
+    public static boolean craftingLiqCrystalToolGrowth = true;
+    public static boolean craftingLiqCelestialCrystalForm = true;
+    public static boolean canCrystalGrowthYieldDuplicates = true;
 
     public static boolean liquidStarlightAquamarine = true;
     public static boolean liquidStarlightSand = true;
     public static boolean liquidStarlightIce = true;
+    public static boolean liquidStarlightInfusedWood = true;
 
+    public static boolean enableFlatGen = false;
     public static boolean enableRetroGen = false;
 
     //Also has a squared field to provide slightly faster rendering.
@@ -77,14 +80,16 @@ public class Config {
     public static int revertStart = 40;
     public static int revertChance = 80;
 
-    @Sync public static double swordSharpMultiplier = 0.1;
+    public static double swordSharpMultiplier = 0.1;
 
-    @Sync public static float illuminationWandUseCost = 0.5F;
-    @Sync public static float grappleWandUseCost = 0.7F;
-    @Sync public static float architectWandUseCost = 0.07F;
-    @Sync public static float exchangeWandUseCost = 0.08F;
+    public static float illuminationWandUseCost = 0.5F;
+    public static float grappleWandUseCost = 0.7F;
+    public static float architectWandUseCost = 0.07F;
+    public static float exchangeWandUseCost = 0.08F;
 
     public static float exchangeWandMaxHardness = -1;
+
+    public static int dayLength = 24000;
 
     public static List<Integer> constellationSkyDimWhitelist = Lists.newArrayList();
     public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
@@ -95,18 +100,40 @@ public class Config {
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
     private static List<ConfigDataAdapter<?>> dataAdapters = new LinkedList<>();
 
+    private static Map<String, Configuration> cachedConfigs = new HashMap<>();
+
     private Config() {}
 
-    public static void load(File file) {
+    public static void loadAndSetup(File file) {
         latestConfig = new Configuration(file);
         latestConfig.load();
         loadData();
         latestConfig.save();
+        cachedConfigs.put(AstralSorcery.MODID, latestConfig);
+
+        MinecraftForge.EVENT_BUS.register(new Config());
+    }
+
+    @SubscribeEvent
+    public void onCfgChange(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (AstralSorcery.MODID.equals(event.getModID())) {
+            Configuration cfg = cachedConfigs.get(event.getConfigID());
+            if (cfg != null) {
+                cfg.save();
+
+                //Reload all configurations
+                loadData();
+                loadConfigRegistries(ConfigDataAdapter.LoadPhase.PRE_INIT);
+                loadConfigRegistries(ConfigDataAdapter.LoadPhase.INIT);
+                loadConfigRegistries(ConfigDataAdapter.LoadPhase.POST_INIT);
+            }
+        }
     }
 
     public static void addDynamicEntry(ConfigEntry entry) {
         if(latestConfig != null) {
-            throw new IllegalStateException("Too late to add dynamic configuration entries");
+            entry.loadFromConfig(latestConfig);
+            latestConfig.save();
         }
         dynamicConfigEntries.add(entry);
     }
@@ -114,23 +141,10 @@ public class Config {
     public static void addDataRegistry(ConfigDataAdapter<?> dataAdapter) {
         for (ConfigDataAdapter<?> cfg : dataAdapters) {
             if(cfg.getDataFileName().equalsIgnoreCase(dataAdapter.getDataFileName())) {
-                throw new IllegalArgumentException("Duplicate DataRegistry names! " + cfg.getDataFileName() + " - " + dataAdapter.getDataFileName());
+                throw new IllegalArgumentException("Duplicate DataRegistry names! " + cfg.getDataFileName() + " (" + cfg.getClass().getName() + ") - " + dataAdapter.getDataFileName() + " (" + dataAdapter.getClass().getName() + ")");
             }
         }
         dataAdapters.add(dataAdapter);
-    }
-
-    public static void rebuildClientConfig() {
-        try {
-            for (PktSyncConfig.SyncTuple tuple : savedSyncTuples) {
-                Field field = Config.class.getField(tuple.key);
-                field.set(null, tuple.value);
-            }
-            savedSyncTuples.clear();
-        } catch (Throwable exc) {
-            AstralSorcery.log.error("[AstralSorcery] Failed to reapply saved client config!");
-            throw new RuntimeException(exc);
-        }
     }
 
     public static void loadDataRegistries(File cfgDirectory) {
@@ -151,6 +165,7 @@ public class Config {
     }
 
     private static void attemptLoad(ConfigDataAdapter<?> cfg, File file) {
+        cfg.resetRegistry();
         String[] out = cfg.serializeDataSet();
 
         Configuration config = new Configuration(file);
@@ -159,10 +174,17 @@ public class Config {
         out = config.getStringList("data", "data", out, "");
         for (String str : out) {
             if(cfg.appendDataSet(str) == null) {
-                AstralSorcery.log.warn("[AstralSorcery] Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
+                AstralSorcery.log.warn("Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
             }
         }
         config.save();
+        if (!cachedConfigs.containsKey(cfg.getDataFileName())) {
+            cachedConfigs.put(cfg.getDataFileName(), config);
+        }
+    }
+
+    public static Map<String, Configuration> getAvailableConfigurations() {
+        return ImmutableMap.copyOf(cachedConfigs);
     }
 
     private static void loadData() {
@@ -174,6 +196,7 @@ public class Config {
         String[] weakSkyRenders = latestConfig.getStringList("weakSkyRenders", "general", new String[] {}, "IF a dimensionId is listed in 'skySupportedDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.");
         String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "techreborn" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
         modidOreGenBlacklist = Lists.newArrayList(oreModidBlacklist);
+        dayLength = latestConfig.getInt("dayLength", "general", dayLength, 100, Integer.MAX_VALUE, "Defines the length of a day (both daytime & nighttime obviously) for the mod's internal logic. NOTE: This does NOT CHANGE HOW LONG A DAY IN MC IS! It is only to provide potential compatibility for mods that do provide such functionality.");
 
         ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", ambientFlareChance, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
         flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");
@@ -206,6 +229,7 @@ public class Config {
         liquidStarlightAquamarine = latestConfig.getBoolean("liquidStarlightAquamarine", "crafting", liquidStarlightAquamarine, "Set this to false to disable that liquid starlight + lava occasionally/rarely produces aquamarine shale instead of sand.");
         liquidStarlightSand = latestConfig.getBoolean("liquidStarlightSand", "crafting", liquidStarlightSand, "Set this to false to disable that liquid starlight + lava produces sand.");
         liquidStarlightIce = latestConfig.getBoolean("liquidStarlightIce", "crafting", liquidStarlightIce, "Set this to false to disable that liquid starlight + water produces ice.");
+        liquidStarlightInfusedWood = latestConfig.getBoolean("liquidStarlightInfusedWood", "crafting", liquidStarlightInfusedWood, "Set this to false to disable the functionality that wood logs will be converted to infused wood when thrown into liquid starlight.");
 
         latestConfig.addCustomCategoryComment("lightnetwork", "Maintenance options for the Starlight network. Use the integrity check when you did a bigger rollback or MC-Edited stuff out of the world. Note that it will only affect worlds that get loaded. So if you edited out something on, for example, dimension -76, be sure to go into that dimension with the maintenance options enabled to properly perform maintenance there.");
         performNetworkIntegrityCheck = latestConfig.getBoolean("performNetworkIntegrityCheck", "lightnetwork", false, "NOTE: ONLY run this once and set it to false again afterwards, nothing will be gained by setting this to true permanently, just longer loading times. When set to true and the server started, this will perform an integrity check over all nodes of the starlight network whenever a world gets loaded, removing invalid ones in the process. This might, depending on network sizes, take a while. It'll leave a message in the console when it's done. After this check has been run, you might need to tear down and rebuild your starlight network in case something doesn't work anymore.");
@@ -222,8 +246,11 @@ public class Config {
         constellationPaperQuality = latestConfig.getInt("constellationPaperQuality", "worldgen", 2, 1, 128, "Defines the quality of the constellation paper item in loot chests.");
         respectIdealDistances = latestConfig.getBoolean("respectIdealStructureDistances", "worldgen", respectIdealDistances, "If this is set to true, the world generator will try and spawn structures more evenly distributed by their 'ideal' distance set in their config entries. WARNING: might add additional worldgen time.");
         String[] dimGenWhitelist = latestConfig.getStringList("worldGenWhitelist", "worldgen", new String[] { "0" }, "the Astral Sorcery-specific worldgen will only run in Dimension ID's listed here.");
+        enableFlatGen = latestConfig.getBoolean("enableFlatGen", "worldgen", false, "By default, Astral Sorcery does not generate structures or ores in Super-Flat worlds. If, for some reason, you wish to enable generation of structures and ores in a Super-Flat world, then set this value to true.");
 
         enableRetroGen = latestConfig.getBoolean("enableRetroGen", "retrogen", false, "WARNING: Setting this to true, will check on every chunk load if the chunk has been generated depending on the current AstralSorcery version. If the chunk was then generated with an older version, the mod will try and do the worldgen that's needed from the last recorded version to the current version. DO NOT ENABLE THIS FEATURE UNLESS SPECIFICALLY REQUIRED. It might/will slow down chunk loading.");
+
+        enablePatreonEffects = latestConfig.getBoolean("enablePatreonEffects", "patreon", enablePatreonEffects, "Enables/Disables all patreon effects.");
 
         fillWhitelistIDs(dimWhitelist);
         fillWeakSkyRenders(weakSkyRenders);
@@ -241,7 +268,7 @@ public class Config {
             try {
                 out.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'worldGenWhitelist': " + s + " is not a number!");
+                AstralSorcery.log.warn("Error while reading config entry 'worldGenWhitelist': " + s + " is not a number!");
             }
         }
         worldGenDimWhitelist = new ArrayList<>(out.size());
@@ -256,7 +283,7 @@ public class Config {
             try {
                 out.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'weakSkyRenders': " + s + " is not a number!");
+                AstralSorcery.log.warn("Error while reading config entry 'weakSkyRenders': " + s + " is not a number!");
             }
         }
         weakSkyRendersWhitelist = new ArrayList<>(out.size());
@@ -271,7 +298,7 @@ public class Config {
             try {
                 out.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'skySupportedDimensions': " + s + " is not a number!");
+                AstralSorcery.log.warn("Error while reading config entry 'skySupportedDimensions': " + s + " is not a number!");
             }
         }
         constellationSkyDimWhitelist = Lists.newArrayList(out);

@@ -8,17 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.block.network.BlockLens;
-import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalToolBase;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -26,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -140,35 +134,21 @@ public class CrystalProperties {
             return MAX_SIZE_ROCK;
         }
 
-        if(stack.getItem() instanceof ItemCollectorCrystal) {
-            BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
-            if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
-                return MAX_SIZE_CELESTIAL;
-            }
-            return MAX_SIZE_ROCK;
+        if(stack.getItem() instanceof CrystalPropertyItem) {
+            return ((CrystalPropertyItem) stack.getItem()).getMaxSize(stack);
         }
-
         if(stack.getItem() instanceof ItemBlock) {
             Block b = ((ItemBlock) stack.getItem()).getBlock();
-            if(b instanceof BlockLens || b instanceof BlockPrism) {
-                return MAX_SIZE_CELESTIAL;
+            if(b instanceof CrystalPropertyItem) {
+                return ((CrystalPropertyItem) b).getMaxSize(stack);
             }
         }
-
-        if(stack.getItem() instanceof ItemCrystalToolBase) {
-            return ((ItemCrystalToolBase) stack.getItem()).getCrystalCount() * CrystalProperties.MAX_SIZE_CELESTIAL;
-        }
-        if(stack.getItem() instanceof ItemCrystalSword) {
-            return 2 * CrystalProperties.MAX_SIZE_CELESTIAL;
-        }
-
-        return (stack.getItem() instanceof ItemCelestialCrystal || stack.getItem() instanceof ItemTunedCelestialCrystal) ?
-                MAX_SIZE_CELESTIAL : MAX_SIZE_ROCK;
+        return MAX_SIZE_ROCK;
     }
 
     @SideOnly(Side.CLIENT)
     public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, int maxSize) {
-        return addPropertyTooltip(prop, tooltip, Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54), maxSize);
+        return addPropertyTooltip(prop, tooltip, GuiScreen.isShiftKeyDown(), maxSize);
     }
 
     @SideOnly(Side.CLIENT)
@@ -191,19 +171,19 @@ public class CrystalProperties {
             if (extended) {
                 boolean missing = false;
                 if(EnumGatedKnowledge.CRYSTAL_SIZE.canSee(tier)) {
-                    TextFormatting color = (prop.getSize() > maxSize ? TextFormatting.RED : prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    TextFormatting color = (prop.getSize() > maxSize ? TextFormatting.AQUA : prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE);
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + color + prop.getSize());
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_PURITY.canSee(tier)) {
-                    TextFormatting color = (prop.getPurity() > 100 ? TextFormatting.RED : prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    TextFormatting color = (prop.getPurity() > 100 ? TextFormatting.AQUA : prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + color + prop.getPurity() + "%");
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_COLLECT.canSee(tier)) {
-                    TextFormatting color = (prop.getCollectiveCapability() > 100 ? TextFormatting.RED : prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    TextFormatting color = (prop.getCollectiveCapability() > 100 ? TextFormatting.AQUA : prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + color + prop.getCollectiveCapability() + "%");
                 } else {
                     missing = true;
@@ -236,7 +216,7 @@ public class CrystalProperties {
         }
         int collectToAdd = 3 + rand.nextInt(4);
         copy.size = size - grind;
-        copy.collectiveCapability = Math.min(100, collectiveCapability + collectToAdd);
+        copy.collectiveCapability = Math.min((collectiveCapability > 100 ? collectiveCapability : 100), collectiveCapability + collectToAdd);
         if(copy.size <= 0)
             return null;
         return copy;
@@ -253,6 +233,7 @@ public class CrystalProperties {
         cmp.setTag("crystalProperties", crystalProp);
     }
 
+    @Nullable
     public static CrystalProperties getCrystalProperties(ItemStack stack) {
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
         if (!cmp.hasKey("crystalProperties")) return null;

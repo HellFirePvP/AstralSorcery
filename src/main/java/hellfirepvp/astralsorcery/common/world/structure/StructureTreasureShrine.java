@@ -13,16 +13,13 @@ import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemEnderEye;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.BiomeDictionary;
 
 import javax.annotation.Nullable;
@@ -49,7 +46,7 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
     public void generate(BlockPos pos, World world, Random rand) {
         CaveAdjacencyInformation information = validatePosition(pos, world);
         if(information != null) { //Which i'd expect
-            this.getStructureTemplate().placeInWorld(world, pos);
+            generateAsSubmergedStructure(world, pos);
             BlockPos offsetPos = pos.add(0, 3, 0).offset(information.direction, 4);
             world.setBlockToAir(offsetPos);
             world.setBlockToAir(offsetPos.up());

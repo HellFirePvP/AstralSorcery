@@ -12,8 +12,10 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
 import java.util.Optional;
 
@@ -31,10 +33,20 @@ public class StructureMatchPreview {
 
     public StructureMatchPreview(IMultiblockDependantTile tile) {
         this.tile = tile;
-        this.timeout = 300;
+        this.timeout = 100;
     }
 
     public void tick() {
+        if (tile.getRequiredStructure() != null && Minecraft.getMinecraft().player != null) {
+            BlockPos at = tile.getLocationPos();
+            Vec3i v = tile.getRequiredStructure().getSize();
+            int maxDim = Math.max(Math.max(v.getX(), v.getY()), v.getZ());
+            maxDim = Math.max(9, maxDim);
+            if (Minecraft.getMinecraft().player.getDistance(at.getX(), at.getY(), at.getZ()) <= maxDim) {
+                resetTimeout();
+                return;
+            }
+        }
         timeout--;
     }
 
@@ -65,7 +77,7 @@ public class StructureMatchPreview {
             if(key.equals(BlockPos.ORIGIN)) continue;
             Optional<Boolean> match = pba.matchSingleBlock(Minecraft.getMinecraft().world, center, key);
             if(match.isPresent() && !match.get()) {
-                TESRTranslucentBlock.addForRender(pba.getPattern().get(key).state, center.add(key));
+                TESRTranslucentBlock.addForRender(null, pba.getPattern().get(key).state, center.add(key));
             }
         }
     }

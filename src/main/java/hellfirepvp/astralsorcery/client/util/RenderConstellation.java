@@ -13,9 +13,11 @@ import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositio
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
@@ -37,6 +39,7 @@ import java.util.Map;
 public class RenderConstellation {
 
     //TODO sometimes on certain sky positions, completely vertical or completely horizontal lines go invisible due to the crossproduct returning a NAN vec
+    //TODO re-check blending states on calls
 
     @SideOnly(Side.CLIENT)
     public static void renderConstellation(IConstellation c, ClientConstellationPositionMapping.RenderPosition renderPos, BrightnessFunction brFunc) {
@@ -92,18 +95,19 @@ public class RenderConstellation {
 
     //non-rotating, builds into x/z space
     public static void renderConstellationIntoWorldFlat(IConstellation c, Color rC, Vector3 offsetPos, double scale, double lineBreadth, float br) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
 
-        double s = 1D / 31D * scale;
+        double s = 1D / ((double) IConstellation.STAR_GRID_SIZE) * scale;
 
-        GL11.glTranslated(-15.5D * s, 0, -15.5D * s);
+        GlStateManager.translate(-15.5D * s, 0, -15.5D * s);
 
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GlStateManager.disableCull();
+        GlStateManager.disableAlpha();
+        GlStateManager.enableBlend();
         GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.applyStateManager();
         Blending.DEFAULT.apply();
 
         float fRed = ((float) rC.getRed()) / 255F;
@@ -116,6 +120,7 @@ public class RenderConstellation {
             float brightness = br;
             brightness *= 0.8;
             float fAlpha = brightness < 0 ? 0 : brightness;
+            offsetPos.addY(0.001);
 
             Vector3 offset = offsetPos.clone().addX(sc.from.x * s).addZ(sc.from.y * s);
             Vector3 dirU = new Vector3(sc.to.x, 0, sc.to.y).subtract(sc.from.x, 0, sc.from.y).multiply(s);
@@ -154,8 +159,10 @@ public class RenderConstellation {
         }
         tes.draw();
 
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        GlStateManager.enableCull();
+        GlStateManager.enableAlpha();
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
     }
 
     public static void renderConstellationIntoWorld(IConstellation c, Color rC, Vector3 offsetPos, double lineBreadth, BrightnessFunction func) {
@@ -219,8 +226,16 @@ public class RenderConstellation {
     public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
-        double ulength = ((double) width) / 31;
-        double vlength = ((double) height) / 31;
+        double ulength = ((double) width) / IConstellation.STAR_GRID_SIZE;
+        double vlength = ((double) height) / IConstellation.STAR_GRID_SIZE;
+
+        //TODO maybe move this into the calling code. actually please do.... at some point.... please...... :|
+        if (!GL11.glGetBoolean(GL11.GL_BLEND)) {
+            GlStateManager.enableBlend();
+            GL11.glEnable(GL11.GL_BLEND);
+            Blending.DEFAULT.applyStateManager();
+            Blending.DEFAULT.apply();
+        }
 
         Vector3 offsetVec = new Vector3(offsetX, offsetY, zLevel);
         RenderAstralSkybox.TEX_CONNECTION.bind();
@@ -313,8 +328,8 @@ public class RenderConstellation {
         return flickerSin(wtime, partialTicks, divisor, 4F, 0.375F);
     }
 
-    public static float flickerSin(long wtime, float partialTicks, int divisor, float div, float move) {
-        double rad = (((double) wtime) + partialTicks) / divisor;
+    public static float flickerSin(long wtime, float partialTicks, double divisor, float div, float move) {
+        double rad = ((wtime % (Config.dayLength / 2)) + partialTicks) / divisor;
         float sin = MathHelper.sin((float) rad);
         return (sin / div) + move;
     }

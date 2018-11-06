@@ -25,7 +25,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceCl
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -86,17 +86,17 @@ public class LightNetworkBuffer extends CachedWorldData {
                             }
                         }
                     } else {
-                        AstralSorcery.log.warn("[AstralSorcery] Cached source at " + pos + " but didn't find the TileEntity!");
-                        AstralSorcery.log.warn("[AstralSorcery] Purging cache entry and removing erroneous block!");
+                        AstralSorcery.log.warn("Cached source at " + pos + " but didn't find the TileEntity!");
+                        AstralSorcery.log.warn("Purging cache entry and removing erroneous block!");
                         IBlockState there = world.getBlockState(pos);
-                        AstralSorcery.log.warn("[AstralSorcery] Block that gets purged: " + there.getBlock().getUnlocalizedName() + " with meta " + there.getBlock().getMetaFromState(there));
+                        AstralSorcery.log.warn("Block that gets purged: " + there.getBlock().getUnlocalizedName() + " with meta " + there.getBlock().getMetaFromState(there));
                         iterator.remove();
-                        world.setBlockToAir(pos);
-                        ChunkNetworkData data = getChunkData(chPos);
-                        if(data != null) {
-                            data.removeSourceTile(pos);
+                        if (world.setBlockToAir(pos)) {
+                            ChunkNetworkData data = getChunkData(chPos);
+                            if(data != null) {
+                                data.removeSourceTile(pos);
+                            }
                         }
-                        continue;
                     }
                 }
             }
@@ -115,13 +115,13 @@ public class LightNetworkBuffer extends CachedWorldData {
             for (ChunkNetworkData data : chunkSortedData.values()) {
                 for (ChunkSectionNetworkData secData : data.sections.values()) {
                     for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
-                        TileEntity te = world.getTileEntity(node.getPos());
+                        TileEntity te = world.getTileEntity(node.getLocationPos());
                         if(te == null || !(te instanceof IStarlightTransmission)) {
                             invalidRemoval.add(node);
                             continue;
                         }
                         IStarlightTransmission ism = (IStarlightTransmission) te;
-                        IPrismTransmissionNode newNode = ism.provideTransmissionNode(node.getPos());
+                        IPrismTransmissionNode newNode = ism.provideTransmissionNode(node.getLocationPos());
                         if(!node.getClass().isAssignableFrom(newNode.getClass())) {
                             invalidRemoval.add(node);
                             continue;
@@ -137,7 +137,7 @@ public class LightNetworkBuffer extends CachedWorldData {
 
             AstralSorcery.log.info("[LightNetworkIntegrityCheck] Performed StarlightNetwork integrity check. Found " + invalidRemoval.size() + " invalid transmission nodes.");
             for (IPrismTransmissionNode node : invalidRemoval) {
-                removeTransmission(node.getPos());
+                removeTransmission(node.getLocationPos());
             }
             AstralSorcery.log.info("[LightNetworkIntegrityCheck] Removed invalid transmission nodes from the network.");
 
@@ -224,25 +224,25 @@ public class LightNetworkBuffer extends CachedWorldData {
             NBTTagList list = nbt.getTagList("sources", 10);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound sourcePos = list.getCompoundTagAt(i);
-                BlockPos at = NBTUtils.readBlockPosFromNBT(sourcePos);
+                BlockPos at = NBTHelper.readBlockPosFromNBT(sourcePos);
                 ChunkSectionNetworkData section = getSectionData(at);
                 if(section == null) {
-                    AstralSorcery.log.warn("[AstralSorcery] Expected source tile at " + at + " but didn't even find chunk section!");
+                    AstralSorcery.log.warn("Expected source tile at " + at + " but didn't even find chunk section!");
                 } else {
                     IPrismTransmissionNode node = section.getTransmissionNode(at);
                     if(node == null) {
-                        AstralSorcery.log.warn("[AstralSorcery] Expected source tile at " + at + " but didn't find a transmission node!");
+                        AstralSorcery.log.warn("Expected source tile at " + at + " but didn't find a transmission node!");
                         continue;
                     }
                     if(!(node instanceof ITransmissionSource)) {
-                        AstralSorcery.log.warn("[AstralSorcery] Expected source tile at " + at + " but transmission node isn't a source!");
+                        AstralSorcery.log.warn("Expected source tile at " + at + " but transmission node isn't a source!");
                         continue;
                     }
                     NBTTagCompound comp = sourcePos.getCompoundTag("source");
                     String identifier = comp.getString("sTypeId");
                     SourceClassRegistry.SourceProvider provider = SourceClassRegistry.getProvider(identifier);
                     if(provider == null) {
-                        AstralSorcery.log.warn("[AstralSorcery] Couldn't load source tile at " + at + " - invalid identifier: " + identifier);
+                        AstralSorcery.log.warn("Couldn't load source tile at " + at + " - invalid identifier: " + identifier);
                         continue;
                     }
                     IIndependentStarlightSource source = provider.provideEmptySource();
@@ -273,14 +273,14 @@ public class LightNetworkBuffer extends CachedWorldData {
         NBTTagList sourceList = new NBTTagList();
         for (BlockPos pos : starlightSources.keySet()) {
             NBTTagCompound sourceTag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos, sourceTag);
+            NBTHelper.writeBlockPosToNBT(pos, sourceTag);
             NBTTagCompound source = new NBTTagCompound();
             IIndependentStarlightSource sourceNode = starlightSources.get(pos);
             try {
                 sourceNode.writeToNBT(source);
             } catch (Exception exc) {
-                AstralSorcery.log.warn("[AstralSorcery] Couldn't write source-node data for network node at " + pos.toString() + "!");
-                AstralSorcery.log.warn("[AstralSorcery] This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
+                AstralSorcery.log.warn("Couldn't write source-node data for network node at " + pos.toString() + "!");
+                AstralSorcery.log.warn("This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
                 continue;
             }
             source.setString("sTypeId", sourceNode.getProvider().getIdentifier());
@@ -317,7 +317,7 @@ public class LightNetworkBuffer extends CachedWorldData {
                 sourceTuple.getValue().threadedUpdateProximity(sourceTuple.getKey(), copyTr);
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn("[AstralSorcery] Failed to update proximity status for source nodes.");
+            AstralSorcery.log.warn("Failed to update proximity status for source nodes.");
             exc.printStackTrace();
         }
     }
@@ -514,13 +514,13 @@ public class LightNetworkBuffer extends CachedWorldData {
             }*/
             for (int i = 0; i < sectionData.tagCount(); i++) {
                 NBTTagCompound nodeComp = sectionData.getCompoundTagAt(i);
-                BlockPos pos = NBTUtils.readBlockPosFromNBT(nodeComp);
+                BlockPos pos = NBTHelper.readBlockPosFromNBT(nodeComp);
 
                 NBTTagCompound prismComp = nodeComp.getCompoundTag("nodeTag");
                 String nodeIdentifier = prismComp.getString("trNodeId");
                 TransmissionClassRegistry.TransmissionProvider provider = TransmissionClassRegistry.getProvider(nodeIdentifier);
                 if(provider == null) {
-                    AstralSorcery.log.warn("[AstralSorcery] Couldn't load node tile at " + pos + " - invalid identifier: " + nodeIdentifier);
+                    AstralSorcery.log.warn("Couldn't load node tile at " + pos + " - invalid identifier: " + nodeIdentifier);
                     continue;
                 }
                 IPrismTransmissionNode node = provider.provideEmptyNode();
@@ -534,7 +534,7 @@ public class LightNetworkBuffer extends CachedWorldData {
             for (Map.Entry<BlockPos, IPrismTransmissionNode> node : nodes.entrySet()) {
                 try {
                     NBTTagCompound nodeComp = new NBTTagCompound();
-                    NBTUtils.writeBlockPosToNBT(node.getKey(), nodeComp);
+                    NBTHelper.writeBlockPosToNBT(node.getKey(), nodeComp);
 
                     NBTTagCompound prismComp = new NBTTagCompound();
                     IPrismTransmissionNode prismNode = node.getValue();
@@ -546,16 +546,16 @@ public class LightNetworkBuffer extends CachedWorldData {
                 } catch (Exception exc) {
                     try {
                         BlockPos at = node.getKey();
-                        AstralSorcery.log.warn("[AstralSorcery] Couldn't write node data for network node at " + at.toString() + "!");
-                        AstralSorcery.log.warn("[AstralSorcery] This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
+                        AstralSorcery.log.warn("Couldn't write node data for network node at " + at.toString() + "!");
+                        AstralSorcery.log.warn("This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
                     } catch (Exception exc2) {
                         try {
-                            BlockPos at = node.getValue().getPos();
-                            AstralSorcery.log.warn("[AstralSorcery] Couldn't write node data for network node at " + at.toString() + "!");
-                            AstralSorcery.log.warn("[AstralSorcery] This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
+                            BlockPos at = node.getValue().getLocationPos();
+                            AstralSorcery.log.warn("Couldn't write node data for network node at " + at.toString() + "!");
+                            AstralSorcery.log.warn("This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
                         } catch (Exception exc3) {
                             //Duh. we don't have much information if everything's inaccessible
-                            AstralSorcery.log.warn("[AstralSorcery] Couldn't write node data for a network node! Skipping...");
+                            AstralSorcery.log.warn("Couldn't write node data for a network node! Skipping...");
                         }
                     }
                 }

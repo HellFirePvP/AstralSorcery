@@ -156,8 +156,10 @@ public class GuiProgressionRenderer {
             if(sizeHandler.getScalingFactor() <= 6) {
                 long current = System.currentTimeMillis();
                 if(current - this.doubleClickLast < 400L) {
-                    while (focusedClusterMouse != null && sizeHandler.getScalingFactor() < 9.9) {
-                        handleZoomIn();
+                    int timeout = 500; //Handles irregular clicks on the GUI so it doesn't loop trying to find a focus cluster
+                    while (focusedClusterMouse != null && sizeHandler.getScalingFactor() < 9.9 && timeout > 0) {
+                        handleZoomIn(p);
+                        timeout--;
                     }
                     this.doubleClickLast = 0L;
                 }
@@ -194,12 +196,12 @@ public class GuiProgressionRenderer {
      * 4.0 - 6.0 has to have focus + centering to center of cluster
      * 6.0 - 10.0 transition (6.0 - 8.0) + cluster rendering + handling (cursor movement)
      */
-    public void handleZoomIn() {
+    public void handleZoomIn(Point mouse) {
         double scale = sizeHandler.getScalingFactor();
         //double nextScale = Math.min(10.0D, scale + 0.2D);
         if(scale >= 4.0D) {
             if(focusedClusterZoom == null) {
-                ResearchProgression prog = tryFocusCluster();
+                ResearchProgression prog = tryFocusCluster(mouse);
                 if(prog != null) {
                     focus(prog);
                 }
@@ -245,12 +247,12 @@ public class GuiProgressionRenderer {
         updateMouseState();
     }
 
-    public void drawProgressionPart(float zLevel) {
+    public void drawProgressionPart(float zLevel, Point mouse) {
         drawBaseBackground(zLevel);
 
         drawClusters(zLevel);
 
-        focusedClusterMouse = tryFocusCluster();
+        focusedClusterMouse = tryFocusCluster(mouse);
 
         double scaleX = this.mousePointScaled.getPosX();
         double scaleY = this.mousePointScaled.getPosY();
@@ -354,11 +356,9 @@ public class GuiProgressionRenderer {
     }*/
 
     @Nullable
-    private ResearchProgression tryFocusCluster() {
-        Point mousePoint = parentGui.getCurrentMousePoint();
-
+    private ResearchProgression tryFocusCluster(Point mouse) {
         for (Rectangle r : this.clusterRectMap.keySet()) {
-            if(r.contains(mousePoint)) {
+            if(r.contains(mouse)) {
                 return this.clusterRectMap.get(r);
             }
         }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui.container;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
@@ -100,7 +101,7 @@ public class GuiAltarTrait extends GuiAltarBase {
             int y = rand.nextInt(54);
 
             GL11.glPushMatrix();
-            float brightness = 0.3F + (RenderConstellation.stdFlicker(Minecraft.getMinecraft().world.getWorldTime(), pTicks, 10 + rand.nextInt(20))) * 0.6F;
+            float brightness = 0.3F + (RenderConstellation.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + rand.nextInt(20))) * 0.6F;
             GL11.glColor4f(brightness, brightness, brightness, brightness);
             drawRect(15 + x, 39 + y, 5, 5);
             GL11.glColor4f(1, 1, 1, 1);
@@ -166,7 +167,7 @@ public class GuiAltarTrait extends GuiAltarBase {
 
         if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
-            spriteStarlight.getResource().bind();
+            spriteStarlight.getResource().bindTexture();
             int t = containerAltarBase.tileAltar.getTicksExisted();
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
             drawRect(guiLeft + 11, guiTop + 104, (int) (232 * percFilled), 10,

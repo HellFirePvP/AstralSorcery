@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
@@ -23,11 +22,11 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
@@ -68,8 +67,6 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
             items.add(new ItemStack(this, 1));
 
             for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
-                if (c instanceof IMinorConstellation) continue;
-
                 ItemStack cPaper = new ItemStack(this, 1);
                 setConstellation(cPaper, c);
                 items.add(cPaper);
@@ -101,6 +98,10 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
         ei.motionX = entity.motionX;
         ei.motionY = entity.motionY;
         ei.motionZ = entity.motionZ;
+        if (entity instanceof EntityItem) {
+            ei.setThrower(((EntityItem) entity).getThrower());
+            ei.setOwner(((EntityItem) entity).getOwner());
+        }
         return ei;
     }
 
@@ -225,7 +226,13 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
     @Override
     public Color getHightlightColor(ItemStack stack) {
         IConstellation c = getConstellation(stack);
-        return c == null ? Color.GRAY : c.getTierRenderColor();
+        if(c != null) {
+            if(ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+                return c.getConstellationColor();
+            }
+            return c.getTierRenderColor();
+        }
+        return Color.GRAY;
     }
 
     public static IConstellation getConstellation(ItemStack stack) {

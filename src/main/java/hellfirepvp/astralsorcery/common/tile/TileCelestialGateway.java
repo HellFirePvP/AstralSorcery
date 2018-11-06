@@ -22,14 +22,17 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IWorldNameable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,6 +50,7 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
     private boolean gatewayRegistered = false;
 
     private Object clientSphere = null;
+    private UUID placedBy;
 
     @Override
     public void update() {
@@ -104,8 +108,22 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         return MultiBlockArrays.patternCelestialGateway;
     }
 
+    @Nonnull
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
+    }
+
     public void setGatewayName(String displayName) {
         this.display = displayName;
+    }
+
+    public void setPlacedBy(UUID placedBy) {
+        this.placedBy = placedBy;
+    }
+
+    public UUID getPlacedBy() {
+        return placedBy;
     }
 
     private void updateMultiblockState(boolean matches) {
@@ -169,7 +187,7 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
                 Minecraft.getMinecraft().gameSettings.thirdPersonView = 0;
             }
             if(playerDst < 2.5) {
-                EffectHandler.getInstance().requestGatewayUIFor(world, sphereVec, 5.5);
+                EffectHandler.getInstance().requestGatewayUIFor(world, pos, sphereVec, 5.5);
             }
         } else {
             if(clientSphere != null) {
@@ -214,6 +232,12 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         this.hasMultiblock = compound.getBoolean("mbState");
         this.doesSeeSky = compound.getBoolean("skyState");
         this.display = compound.getString("display");
+
+        if (compound.hasUniqueId("placer")) {
+            this.placedBy = compound.getUniqueId("placer");
+        } else {
+            this.placedBy = null;
+        }
     }
 
     @Override
@@ -223,6 +247,9 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         compound.setBoolean("mbState", this.hasMultiblock);
         compound.setBoolean("skyState", this.doesSeeSky);
         compound.setString("display", display == null ? "" : display);
+        if (this.placedBy != null) {
+            compound.setUniqueId("placer", this.placedBy);
+        }
     }
 
 }

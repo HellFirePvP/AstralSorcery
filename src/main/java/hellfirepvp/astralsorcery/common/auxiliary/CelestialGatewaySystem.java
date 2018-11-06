@@ -33,8 +33,12 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -121,7 +125,7 @@ public class CelestialGatewaySystem {
             forceLoad(dim);
         }
         if(!serverCache.containsKey(dim)) {
-            AstralSorcery.log.info("[AstralSorcery] Couldn't add position for world " + dim + "! - Force loading the world resulted in... nothing.");
+            AstralSorcery.log.info("Couldn't add position for world " + dim + "! - Force loading the world resulted in... nothing.");
             return;
         }
 

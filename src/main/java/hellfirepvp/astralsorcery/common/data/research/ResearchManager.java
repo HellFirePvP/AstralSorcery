@@ -15,14 +15,19 @@ import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
+import hellfirepvp.astralsorcery.common.lib.AdvancementTriggers;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -34,6 +39,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -58,6 +64,7 @@ import java.util.*;
 public class ResearchManager {
 
     public static PlayerProgress clientProgress = new PlayerProgress();
+    public static boolean clientInitialized = false;
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
@@ -72,7 +79,6 @@ public class ResearchManager {
     }
 
     @Nullable
-    //TODO lookup and refactor accesses to PlayerProgress and replace with testaccess!~
     //Nonnull for server.
     public static PlayerProgress getProgress(EntityPlayer player, Side side) {
         if(side == Side.CLIENT) {
@@ -124,8 +130,8 @@ public class ResearchManager {
             loadPlayerKnowledge(p);
         }
         if (playerProgressServer.get(uuid) == null) {
-            AstralSorcery.log.warn("[AstralSorcery] Failed to load AstralSocery Progress data for " + p.getName());
-            AstralSorcery.log.warn("[AstralSorcery] Erroneous file: " + uuid.toString() + ".astral");
+            AstralSorcery.log.warn("Failed to load AstralSocery Progress data for " + p.getName());
+            AstralSorcery.log.warn("Erroneous file: " + uuid.toString() + ".astral");
             return;
         }
         pushProgressToClientUnsafe(p);
@@ -204,6 +210,17 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean useSextantTarget(SextantFinder.TargetObject to, EntityPlayer player) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if(progress == null) return false;
+
+        progress.useTarget(to);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
     public static boolean discoverConstellations(Collection<IConstellation> csts, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
@@ -228,6 +245,8 @@ public class ResearchManager {
 
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //player.addStat(RegistryAchievements.achvDiscoverConstellation);
+
+        AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -273,9 +292,27 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
-        progress.clearPerks();
-        progress.forceCharge(0);
+        Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
+        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
+            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
+            progress.removePerk(perkEntry.getKey());
+            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
+        }
+
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
+
+        progress.setExp(0);
         progress.setAttunedConstellation(constellation);
+        AbstractPerk root;
+        if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
+            NBTTagCompound data = new NBTTagCompound();
+            root.onUnlockPerkServer(player, progress, data);
+            progress.putPerk(root, data);
+            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, root, false);
+            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(root, true), (EntityPlayerMP) player);
+        }
+
+        AdvancementTriggers.ATTUNE_SELF.trigger((EntityPlayerMP) player, constellation);
 
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //player.addStat(RegistryAchievements.achvPlayerAttunement);
@@ -285,15 +322,120 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean applyPerk(EntityPlayer player, @Nonnull ConstellationPerks perk) {
+    public static boolean applyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
-        if(!progress.hasFreeAlignmentLevel()) return false;
-        if(progress.hasPerkUnlocked(perk)) return false;
+        if (progress == null) return false;
+        if (!progress.hasFreeAllocationPoint()) return false;
+        if (progress.hasPerkUnlocked(perk)) return false;
 
-        int free = progress.getNextFreeLevel();
-        if(free == -1) return false;
-        progress.addPerk(perk.getSingleInstance(), free);
+        NBTTagCompound data = new NBTTagCompound();
+        perk.onUnlockPerkServer(player, progress, data);
+        progress.putPerk(perk, data);
+
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean applyPerkSeal(EntityPlayer player, @Nonnull AbstractPerk perk) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+        if (!progress.hasPerkUnlocked(perk)) return false;
+        if (progress.isPerkSealed(perk)) return false;
+
+        if (!progress.sealPerk(perk)) {
+            return false;
+        }
+
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, false), (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean breakPerkSeal(EntityPlayer player, @Nonnull AbstractPerk perk) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+        if (!progress.hasPerkUnlocked(perk)) return false;
+        if (!progress.isPerkSealed(perk)) return false;
+
+        if (!progress.breakSeal(perk)) {
+            return false;
+        }
+
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+
+        //Send way after research sync...
+        AstralSorcery.proxy.scheduleDelayed(() -> {
+            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+        });
+        return true;
+    }
+
+    public static boolean grantFreePerkPoint(EntityPlayer player, String token) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        if (!progress.grantFreeAllocationPoint(token)) {
+            return false;
+        }
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean revokeFreePoint(EntityPlayer player, String token) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        if (!progress.tryRevokeAllocationPoint(token)) {
+            return false;
+        }
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean forceApplyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+        if (progress.hasPerkUnlocked(perk)) return false;
+
+        NBTTagCompound data = new NBTTagCompound();
+        perk.onUnlockPerkServer(player, progress, data);
+        progress.putPerk(perk, data);
+
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean removePerk(EntityPlayer player, AbstractPerk perk) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        NBTTagCompound data = progress.getPerkData(perk);
+        if (data == null) {
+            return false;
+        }
+        perk.onRemovePerkServer(player, progress, data);
+        progress.removePerk(perk);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
+
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, false), (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -302,33 +444,42 @@ public class ResearchManager {
 
     public static boolean resetPerks(EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if (progress == null) return false;
 
-        progress.clearPerks();
+        Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
+        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
+            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
+            progress.removePerk(perkEntry.getKey());
+            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
+        }
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
-        return true;
-    }
-
-    public static boolean forceCharge(EntityPlayer player, int charge) {
-        PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
-
-        progress.forceCharge(charge);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
-    public static boolean modifyAlignmentCharge(EntityPlayer player, double charge) {
+    public static boolean setExp(EntityPlayer player, int exp) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        progress.setExp(exp);
+
+        AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean modifyExp(EntityPlayer player, double exp) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
-        progress.modifyCharge(charge);
+        progress.modifyExp(exp);
 
-        //AstralSorcery.log.info("NewCharge: " + player.getName() + " - " + progress.getAlignmentCharge());
+        AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -344,6 +495,9 @@ public class ResearchManager {
         ResearchManager.maximizeTier(player);
         ResearchManager.forceMaximizeResearch(player);
         ResearchManager.setAttunedBefore(player, true);
+        for (SextantFinder.TargetObject to : SextantFinder.getSelectableTargets()) {
+            progress.useTarget(to);
+        }
 
         if(progress.getTierReached().isThisLater(before)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(progress.getTierReached());
@@ -392,7 +546,7 @@ public class ResearchManager {
         try {
             Files.copy(playerFile, getPlayerBackupFile(pUUID));
         } catch (IOException exc) {
-            AstralSorcery.log.warn("[AstralSorcery] Failed copying progress file contents to backup file!");
+            AstralSorcery.log.warn("Failed copying progress file contents to backup file!");
             exc.printStackTrace();
         }
         try {
@@ -413,8 +567,8 @@ public class ResearchManager {
         try {
             load_unsafe(pUUID, playerFile);
         } catch (Exception e) {
-            AstralSorcery.log.warn("[AstralSorcery] Unable to load progress from default progress file. Attempting loading backup.");
-            AstralSorcery.log.warn("[AstralSorcery] Erroneous file: " + playerFile.getName());
+            AstralSorcery.log.warn("Unable to load progress from default progress file. Attempting loading backup.");
+            AstralSorcery.log.warn("Erroneous file: " + playerFile.getName());
             e.printStackTrace();
 
             playerFile = getPlayerBackupFile(pUUID);
@@ -422,8 +576,8 @@ public class ResearchManager {
                 load_unsafe(pUUID, playerFile);
                 Files.copy(playerFile, getPlayerFile(pUUID)); //Copying back.
             } catch (Exception e1) {
-                AstralSorcery.log.warn("[AstralSorcery] Unable to load progress from backup progress file. Copying relevant files to error files.");
-                AstralSorcery.log.warn("[AstralSorcery] Erroneous file: " + playerFile.getName());
+                AstralSorcery.log.warn("Unable to load progress from backup progress file. Copying relevant files to error files.");
+                AstralSorcery.log.warn("Erroneous file: " + playerFile.getName());
                 e1.printStackTrace();
 
                 File plOriginal = getPlayerFile(pUUID);
@@ -431,11 +585,11 @@ public class ResearchManager {
                 try {
                     Files.copy(plOriginal, new File(plOriginal.getParent(), plOriginal.getName() + ".lerror"));
                     Files.copy(plBackup,   new File(plBackup.getParent(),     plBackup.getName() + ".lerror"));
-                    AstralSorcery.log.warn("[AstralSorcery] Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
-                    AstralSorcery.log.warn("[AstralSorcery] send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
+                    AstralSorcery.log.warn("Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
+                    AstralSorcery.log.warn("send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
                 } catch (IOException e2) {
-                    AstralSorcery.log.warn("[AstralSorcery] Unable to copy files to error-files.");
-                    AstralSorcery.log.warn("[AstralSorcery] I've had enough. I can't even access or open the files apparently. I'm giving up.");
+                    AstralSorcery.log.warn("Unable to copy files to error-files.");
+                    AstralSorcery.log.warn("I've had enough. I can't even access or open the files apparently. I'm giving up.");
                     e2.printStackTrace();
                 }
                 plOriginal.delete();
@@ -516,10 +670,11 @@ public class ResearchManager {
     }*/
 
     public static void recieveProgressFromServer(PktSyncKnowledge message) {
-        int currentLvl = clientProgress == null ? 0 : ConstellationPerkLevelManager.getAlignmentLevel(clientProgress);
+        int currentLvl = clientProgress == null ? 0 : PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp()));
         clientProgress = new PlayerProgress();
         clientProgress.receive(message);
-        if(ConstellationPerkLevelManager.getAlignmentLevel(clientProgress) > currentLvl) {
+        clientInitialized = true;
+        if(PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp())) > currentLvl) {
             showBar();
         }
     }
@@ -537,8 +692,8 @@ public class ResearchManager {
     public static void informCraftingInfusionCompletion(TileStarlightInfuser infuser, ActiveInfusionTask recipe) {
         EntityPlayer crafter = recipe.tryGetCraftingPlayerServer();
         if(crafter == null) {
-            AstralSorcery.log.warn("[AstralSorcery] Infusion finished, player that initialized crafting could not be found!");
-            AstralSorcery.log.warn("[AstralSorcery] Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
+            AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
+            AstralSorcery.log.warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
             return;
         }
 
@@ -550,9 +705,9 @@ public class ResearchManager {
 
     public static void informCraftingAltarCompletion(TileAltar altar, ActiveCraftingTask recipeToCraft) {
         EntityPlayer crafter = recipeToCraft.tryGetCraftingPlayerServer();
-        if(crafter == null) {
-            AstralSorcery.log.warn("[AstralSorcery] Crafting finished, player that initialized crafting could not be found!");
-            AstralSorcery.log.warn("[AstralSorcery] Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
+        if(crafter == null || !(crafter instanceof EntityPlayerMP)) {
+            AstralSorcery.log.warn("Crafting finished, player that initialized crafting could not be found!");
+            AstralSorcery.log.warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
             return;
         }
 
@@ -560,6 +715,8 @@ public class ResearchManager {
         Item iOut = out.getItem();
 
         informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
+
+        AdvancementTriggers.ALTAR_CRAFT.trigger((EntityPlayerMP) crafter, recipeToCraft.getRecipeToCraft());
     }
 
     private static void informCraft(EntityPlayer crafter, ItemStack crafted, Item itemCrafted, @Nullable Block iBlock) {

@@ -10,8 +10,11 @@ package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -19,8 +22,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -29,10 +36,16 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nonnull;
@@ -97,6 +110,31 @@ public class MiscUtils {
                 .collect(Collectors.toList());
     }
 
+    public static <K, V, L> Map<K, V> splitMap(Collection<L> col, Function<L, Tuple<K, V>> split) {
+        Map<K, V> map = new HashMap<>();
+        col.forEach(l -> {
+            Tuple<K, V> result = split.apply(l);
+            map.put(result.key, result.value);
+        });
+        return map;
+    }
+
+    public static <T> void mergeList(Collection<T> src, List<T> dst) {
+        for (T element : src) {
+            if (!dst.contains(element)) {
+                dst.add(element);
+            }
+        }
+    }
+
+    public static <T> void cutList(List<T> toRemove, List<T> from) {
+        for (T element : toRemove) {
+            if (from.contains(element)) {
+                from.remove(element);
+            }
+        }
+    }
+
     @Nullable
     public static <T> T iterativeSearch(Collection<T> collection, Function<T, Boolean> matchingFct) {
         for (T element : collection) {
@@ -105,6 +143,10 @@ public class MiscUtils {
             }
         }
         return null;
+    }
+
+    public static <T> boolean contains(Collection<T> collection, Function<T, Boolean> matchingFct) {
+        return iterativeSearch(collection, matchingFct) != null;
     }
 
     @Nullable
@@ -142,8 +184,83 @@ public class MiscUtils {
         return true;
     }
 
+    public static boolean canPlayerAttackServer(@Nullable EntityLivingBase source, @Nonnull EntityLivingBase target) {
+        if (target.isDead) {
+            return false;
+        }
+        if (target instanceof EntityPlayer) {
+            EntityPlayer plTarget = (EntityPlayer) target;
+            if (target.getEntityWorld() instanceof WorldServer &&
+                    target.getEntityWorld().getMinecraftServer() != null &&
+                    target.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
+                return false;
+            }
+            if (plTarget.isSpectator() || plTarget.isCreative()) {
+                return false;
+            }
+            if (source != null && source instanceof EntityPlayer &&
+                    !((EntityPlayer) source).canAttackPlayer(plTarget)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isFluidBlock(IBlockState state) {
+        return state.getBlock() instanceof BlockLiquid || state.getBlock() instanceof BlockFluidBase;
+    }
+
+    @Nullable
+    public static Fluid tryGetFuild(IBlockState state) {
+        if (!isFluidBlock(state)) {
+            return null;
+        }
+        if (state.getBlock() instanceof BlockLiquid) {
+            Material mat = state.getMaterial();
+            if (mat == Material.WATER) {
+                return FluidRegistry.WATER;
+            } else if (mat == Material.LAVA) {
+                return FluidRegistry.LAVA;
+            }
+        } else if (state.getBlock() instanceof BlockFluidBase) {
+            return ((BlockFluidBase) state.getBlock()).getFluid();
+        }
+        return null;
+    }
+
+    public static boolean canPlayerBreakBlockPos(EntityPlayer player, BlockPos tryBreak) {
+        BlockEvent.BreakEvent ev = new BlockEvent.BreakEvent(player.getEntityWorld(), tryBreak, player.getEntityWorld().getBlockState(tryBreak), player);
+        MinecraftForge.EVENT_BUS.post(ev);
+        return !ev.isCanceled();
+    }
+
+    public static boolean canPlayerPlaceBlockPos(EntityPlayer player, EnumHand withHand, IBlockState tryPlace, BlockPos pos, EnumFacing againstSide) {
+        BlockSnapshot snapshot = new BlockSnapshot(player.getEntityWorld(), pos, tryPlace);
+        BlockEvent.PlaceEvent ev = ForgeEventFactory.onPlayerBlockPlace(player, snapshot, againstSide, withHand);
+        return !ev.isCanceled();
+    }
+
     public static boolean isConnectionEstablished(EntityPlayerMP player) {
         return player.connection != null && player.connection.netManager != null && player.connection.netManager.isChannelOpen();
+    }
+
+    @Nullable
+    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search) {
+        return getMainOrOffHand(entity, search, null);
+    }
+
+    @Nullable
+    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search, @Nullable Function<ItemStack, Boolean> acceptorFnc) {
+        EnumHand hand = EnumHand.MAIN_HAND;
+        ItemStack held = entity.getHeldItem(hand);
+        if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.apply(held))) {
+            hand = EnumHand.OFF_HAND;
+            held = entity.getHeldItem(hand);
+        }
+        if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.apply(held))) {
+            return null;
+        }
+        return new Tuple<>(hand, held);
     }
 
     @Nonnull
@@ -319,6 +436,22 @@ public class MiscUtils {
         entity.setPositionAndUpdate(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
     }
 
+    @Nullable
+    public static BlockPos itDownTopBlock(World world, BlockPos at) {
+        Chunk chunk = world.getChunkFromBlockCoords(at);
+        BlockPos downPos = null;
+
+        for (BlockPos blockpos = new BlockPos(at.getX(), chunk.getTopFilledSegment() + 16, at.getZ()); blockpos.getY() >= 0; blockpos = downPos) {
+            downPos = blockpos.down();
+            IBlockState test = world.getBlockState(downPos);
+            if (!world.isAirBlock(downPos) && !test.getBlock().isLeaves(test, world, downPos) && !test.getBlock().isFoliage(world, downPos)) {
+                break;
+            }
+        }
+
+        return downPos;
+    }
+
     public static List<Vector3> getCirclePositions(Vector3 centerOffset, Vector3 axis, double radius, int amountOfPointsOnCircle) {
         List<Vector3> out = new LinkedList<>();
         Vector3 circleVec = axis.clone().perpendicular().normalize().multiply(radius);
@@ -394,8 +527,7 @@ public class MiscUtils {
         } catch (Exception exc) {
             return true;
         }
-        if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() == null) return true;
-        return !FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().contains(player);
+        return false;
     }
 
     @Nullable
