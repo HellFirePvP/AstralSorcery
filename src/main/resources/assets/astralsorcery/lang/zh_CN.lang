@@ -434,7 +434,7 @@ research.ENH_SHIFTING_STAR.name=辐射之星
 astralsorcery.journal.ENH_SHIFTING_STAR.1.text=更替之星的问题在于它把体内的所有星能全部清除了。<NL>将更替之星的能量集中到一个视星等为明亮的星座上进行修正，可以适当地减少星能的流失，因为根源星座被修正到新的星座上。这允许引导体内残余的星能重新通过冥想进行自身的特化，而不必重头开始。
 
 research.RESONATOR_AREA_SIZE.name=多米刻共振器
-astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=通过对共振器的进一步改造，现在共振器能显示星辉的位移变换。这使一个空灵的领域变的可见，这和肥皂泡的折射光完全不同，它揭示了自然中的星能受建筑物和效应放大仪式的干扰程度，在手持这个共振器时可以引导或改变星能的状态。<NL>Shift右键仍将像以前一样循环切换模式。
+astralsorcery.journal.RESONATOR_AREA_SIZE.1.text=通过对共振器的进一步改造，现在共振器能显示星辉场的范围。这使得原来空灵的领域变的可见，与肥皂泡导致的折射光完全不同，它揭示了自然中的星能受建筑物和效应放大仪式的干扰程度，在手持这个共振器时可以引导或改变星能的状态。<NL>Shift右键仍将像以前一样循环切换模式。
 
 research.ATT_PERKS_SEAL.name=能力的封印
 astralsorcery.journal.ATT_PERKS_SEAL.1.text=虽然辐射之星的主要目的是修改体内星能力的指向，但某些时候并不能满足于星能力间的环绕路由效果。为此，可以用封闭印章当做能力的开关对某些能力进行封印或桥接那些你厌恶的能力。
@@ -538,7 +538,7 @@ item.itemenchantmentamulet.name=璀璨棱镜
 item.itemenchantmentamulet.pure=纯净
 item.itemperkseal.name=封闭印章
 item.itemknowledgefragment.name=微光卷轴
-item.itemfragmentcapsule.name=闪光箱子
+item.itemfragmentcapsule.name=闪光星核
 
 item.itemskyresonator.starlight.name=法斯刻共振器
 item.itemskyresonator.liquid.name=艾克斯共振器
