@@ -11,6 +11,53 @@ jei.category.altar.attunement=Altare da lavoro della luce stellare
 jei.category.altar.constellation=Altare Celestiale
 jei.category.altar.trait=Altare Iridescente
 
+astralsorcery.config.title.overview=Configurazione della Stregoneria Astrale
+config.astralsorcery.category.astralsorcery=StregoneriaAstrale
+config.astralsorcery.category.astralsorcery.tooltip=Configurazione Generale
+config.astralsorcery.category.amulet_enchantments=Amuleti incantati
+config.astralsorcery.category.amulet_enchantments.tooltip=Definisce gli incantamenti per il Prisma risplendente
+config.astralsorcery.category.aevitas_ore_perk=Generazione di Minerali: Il beneficio di Aevitas sulla generazione
+config.astralsorcery.category.aevitas_ore_perk.tooltip=Definisce l'Oredictionary dei minerali che il perk può creare
+config.astralsorcery.category.mineralis_ritual=Generazione di Minerali: Rituale di Mineralis
+config.astralsorcery.category.mineralis_ritual.tooltip=Definisce l'Oredictionary dei minerali che il rituale può creare
+config.astralsorcery.category.treasure_shrine=Generazione di Minerali: Tesori del tempio
+config.astralsorcery.category.treasure_shrine.tooltip=Definisce l'Oredictionary dei minerali che si possono trovare nei templi
+config.astralsorcery.category.fluid_rarities=Fluidi: Primo Neromantico
+config.astralsorcery.category.fluid_rarities.tooltip=Definisce i fluidi che il Primo Neromantico può trovare.
+config.astralsorcery.category.herdable_animals_blacklist=Blacklist: Animali Herdable
+config.astralsorcery.category.herdable_animals_blacklist.tooltip=Definisce gli animali con cui il rituale di Bootes non può interagire
+
+advancements.astralsorcery.attune_crystal.title=Raccogliendo vibrazioni positive
+advancements.astralsorcery.attune_crystal.desc=Sintonizza un cristallo ad una costellazione
+advancements.astralsorcery.attune_self.title=Posso vedere la luce!
+advancements.astralsorcery.attune_self.desc=Sintonizza te stesso da una costellazione luminosa
+advancements.astralsorcery.attune_trait.title=Dobbiamo andare più in profondità
+advancements.astralsorcery.attune_trait.desc=Modifica ulteriormente la sintonizzazione di un cristallo aggiungendo un tratto lieve
+advancements.astralsorcery.celestial_crystals.title=Ciò che è cresciuto in casa è il migliore
+advancements.astralsorcery.celestial_crystals.desc=Raccogli un cristallo celestiale da un grappolo di cristallo
+advancements.astralsorcery.craft_t2_altar.title=Miglioramento completato
+advancements.astralsorcery.craft_t2_altar.desc=Migliora un tavolo da lavoro luminoso in un altare da lavoro della luce stellare
+advancements.astralsorcery.craft_t3_altar.title=Sparando attraverso il cielo
+advancements.astralsorcery.craft_t3_altar.desc=Crafta un altare celestiale
+advancements.astralsorcery.craft_t4_altar.title=Puoi portarmi più in alto
+advancements.astralsorcery.craft_t4_altar.desc=Crafta un altare iridescente.
+advancements.astralsorcery.find_constellation.title=Posso vedere chiaramente ora
+advancements.astralsorcery.find_constellation.desc=Scopri una costellazione Luminosa utilizzando il vetro dell'osservatore
+advancements.astralsorcery.find_minor_constellation.title=C'è qualcuno la fuori?
+advancements.astralsorcery.find_minor_constellation.desc=Scopri una costellazione fievole utilizzando un Osservatorio
+advancements.astralsorcery.find_weak_constellation.title=Devo socchiudere gli occhi qualche volta
+advancements.astralsorcery.find_weak_constellation.desc=Scopri una costellazione oscura usando il telescopio
+advancements.astralsorcery.perk_level_large.title=Sembra tutto diverso da questo lato
+advancements.astralsorcery.perk_level_large.desc=Sviluppa la tua luce stellare personale al massimo livello
+advancements.astralsorcery.perk_level_medium.title=Nessun segno della mattino in arrivo
+advancements.astralsorcery.perk_level_medium.desc=Sviluppa la tua luce stellare personale al livello 20
+advancements.astralsorcery.perk_level_small.title=E' un inizio
+advancements.astralsorcery.perk_level_small.desc=Sviluppa la tua luce stellare personale al livello 10
+advancements.astralsorcery.rock_crystals.title=Quanto ne vale la pena?
+advancements.astralsorcery.rock_crystals.desc=Ottieni un Cristallo di roccia
+advancements.astralsorcery.root.title=Stregoneria Astrale
+advancements.astralsorcery.root.desc=Cavalca la luce
+
 potion.potency.1=II
 potion.potency.2=III
 potion.potency.3=IV
@@ -24,7 +71,9 @@ potion.as.crafted.name=Rugiada di Stella
 
 misc.moreInformation=<Premi SHIFT per ottenere più dettagli>
 misc.craftInformation=§7Clicca per vedere la ricetta
+misc.recipename=Nome-di-registro-della-ricetta-dell'altare: %s
 misc.grindstone.double=Probabilità di raddoppiare il prodotto: %s
+misc.transmutation.constellation=Necessita di una luce focalizzata da %s
 misc.knowledge.missing=Una pergamena vuota e scintillante
 misc.knowledge.inscribed=Contiene il sapere da %s
 misc.knowledge.inscribed.creative=Contiene il sapere supremo
@@ -36,6 +85,15 @@ misc.link.link= Collegato %s a %s!
 misc.link.link.block=un blocco
 misc.link.unlink=Scollegato %s da %s!
 misc.link.unlink.all=Scollegato tutti i link!
+misc.fragment.container.desc=Qualcosa sta scintillando all'interno dell'involucro.
+misc.fragment.container.open=Tasto Destro per aprire
+misc.fragment.constellation.desc.1=Una strana costellazione è disegnata su questa pergamena.
+misc.fragment.constellation.desc.2=Scoprirlo dovrebbe provvedere indizzi aggiuntivi.
+misc.fragment.content.desc.1=La pergamena ha qualche pallido scarabocchio scritto sopra.
+misc.fragment.content.desc.2=Tasto destro per aggiungerlo al tomo.
+misc.fragment.content.empty=La pergamena sembra essere vuota.
+misc.fragment.added.cst=La costellazione %s sparisce fuori dalla vista.
+misc.fragment.added=Ottenuta conoscenza circa: %s
 
 misc.sword.sharpened=Affilato (%s Danno aumentato)
 misc.chaos.resistance=+%s Resistenza al Caos
@@ -53,11 +111,12 @@ amulet.enchantment.add_to_existing_specific.name=+%s %s all'esistente %s
 amulet.enchantment.add_to_existing_all.name=+%s %s a tutti gli incantamenti esistenti
 
 enchantment.astralsorcery.enchantment.as.nightvision.desc=Garantisce visione notturna a colui che indossa.
-enchantment.astralsorcery.enchantment.as.smelting.desc=I blocchi minati con gli attrezzi che hanno questo incantamento saranno cotti automaticamente. ("Auto-cottura")
+enchantment.astralsorcery.enchantment.as.smelting.desc=I blocchi minati con questo incantamento avranno i loro risultati cotti, come se ci fosse una fornace incorporata.
 
-gui.journal.bm.knowledge.name=Conoscenza
+gui.journal.bm.research.name=Ricerca
 gui.journal.bm.constellations.name=Costellazioni
-gui.journal.bm.perks.name=benefici
+gui.journal.bm.perks.name=Benefici
+gui.journal.bm.knowledge.name=Conoscenza
 gui.journal.c.unmapped=Sconosciuto
 
 death.attack.as.stellar=%1$s è stato disintegrato in polvere di stelle
@@ -66,29 +125,14 @@ death.attack.as.bleed=%1$s è morto di emorragia
 enchantment.as.nightvision=Visione Notturna
 enchantment.as.smelting=Calore Rovente
 
-achievementpage.astralsorcery.name=Stregoneria Astrale
-achievement.astralsorcery.minerockcrystal=Cristalli purissimi levissimi altissimi!
-achievement.astralsorcery.minerockcrystal.desc=Mina dei cristalli rocciosi
-achievement.astralsorcery.celestialcrystal=Purezza Celestiale
-achievement.astralsorcery.celestialcrystal.desc=Acquisisci dei cristalli celestiali
-achievement.astralsorcery.buildtelescope.1=Una visione chiara del cielo
-achievement.astralsorcery.buildtelescope.1.desc=Crea un vetro da osservazione
-achievement.astralsorcery.seeconstellation=Che schema perfetto!
-achievement.astralsorcery.seeconstellation.desc=Scopri una costellazione
-achievement.astralsorcery.buildtelescope.2=Osservazione avanzata!
-achievement.astralsorcery.buildtelescope.2.desc=Costruisci un telescopio fisso
-achievement.astralsorcery.liquidstarlight=Luce Liquefatta
-achievement.astralsorcery.liquidstarlight.desc=Ottieni della Luce Stellare Liquefatta
-achievement.astralsorcery.playerAttunement=Allineamento delle stelle
-achievement.astralsorcery.playerAttunement.desc=Sincronizzati ad una costellazione
-
 progress.missing.knowledge=Qualcosa sembra essere qui, ma per ora non capisci cosa possa essere...
 progress.gain.progress.chat=La tua visione si espande.
 progress.gain.research.chat=Hai imparato di più circa '%s'.
 progress.discover.constellation.chat=Scoperta la costellazione %s!
 progress.seen.constellation.chat=Hai memorizzato il disegno di %s!
 progress.seen.constellation.first.chat=Hai aggiunto una sezione al Tomo Astrale per tenerne traccia.
-progress.remove.attunement=Il tuo potere svanisce...
+progress.remove.attunement=La tua luce svanisce...
+progress.switch.attunement=La luce cambia sottilmente...
 
 astralsorcery.journal.cluster.discovery.name=Scoperta
 astralsorcery.journal.cluster.basic_craft.name=Esplorazione
@@ -124,7 +168,6 @@ astralsorcery.journal.ORES.2.text=Cercare questi minerali mentre si è sottoterr
 
 research.ALTAR1.name=Il tavolo da lavoro luminoso
 astralsorcery.journal.ALTAR1.1.text=Usare un tavolo da lavoro regolare per interagire con la luce stellare emessa dai cristalli dei templi sembra essere abbastanza inefficiente. Il tavolo è capace di ricevevere una piccola somma dal cristallo. Non solo quello, ma il tavolo deve essere molto vicino al cristallo per riuscire a ricevere la luce stellare
-
 astralsorcery.journal.ALTAR1.2.text=Il tavolo da lavoro luminoso risolve entrambi i problemi perfettamente. Può assorbire e utilizzare molta più luce stellare e non necessita di una connessione con un cristallo fluttuante.
 
 astralsorcery.journal.ALTAR1.4.text=Tuttavia il tavolo da lavoro luminoso ha i suoi inconvenienti. Prima di tutto deve essere piazzato da qualche parte sopra al terreno con un panorama non ostruito del cielo in modo da collezionare luce stellare. Inoltre la sua collezione sembra essere inefficiente, anche nel più chiaro dei giorni.<NL>Piazzando il tavolo in luoghi più elevati consente di collezionare più luce stellare, le interferenze atmosferiche di luce stellare sembrano sparire completamente circa al doppio dell'altezza del mare. Inoltre, colleziona molta più luce stellare durante la notte. Il serbatoio di luce stellare e visibile nell'interfaccia del tavolo.
@@ -137,27 +180,25 @@ astralsorcery.journal.HAND_TELESCOPE.4.text=Il vetro dell'osservatore, avanza mo
 
 research.GRINDSTONE.name=Mola
 astralsorcery.journal.GRINDSTONE.1.text=Un tavolo da lavoro è utile e tutto, ma per manipolare certi materiali è necessario uno strumento più specializzato. Una mola con una ruota da macinazione di marmo fa proprio quello. Permette di aggiustare e tagliare diversi tipi di cristalli, così come dare l'abilità di macinare alcuni materiali in polvere.<NL>Un materiale o un oggetto può essere piazzato sopra di esso e poi macinato facendo tasto-destro, sneak-tasto-destro per rimuovere l'oggetto.
-
 astralsorcery.journal.GRINDSTONE.3.text=L'utilizzo dei crystalli di roccia per aggiustarli è un processo un po' tedioso. Una frequente ispezione è raccomandata mentre si raffina uno di questi cristalli poiché è possibile distruggerli.
 
 research.TOOLS.name=Strumenti di cristallo
 astralsorcery.journal.TOOLS.1.text=Dopo un attenta prova, diventa ovvio che i cristalli di roccia puri non sono fragili come sembra. Gli strumenti craftati con essi hanno molta più durabilità di altri strumenti fatti di altri materiali. Più in specifico, non sembrano rompersi con attività normali. Gli strumenti di cristallo conservano le caratteristiche dei cristalli utilizzati per craftarli, e anche le loro proprietà come il danno sono determinate da loro.
-
 astralsorcery.journal.TOOLS.2.text=Sfortunatamente, gli strumenti di cristallo non sono perfetti. Diventano smussati dopo un costante uso, causando una riduzione del danno, e un uso più lento e faticoso, etc. E' possibile Affilarli su di un grindstone per riottenere i loro attributi persi, ma quando vengono affilati perderanno di grandezza similmente a cosa succede con i singoli cristalli di roccia. per compensare la massa persa, si possono sommergere nella luce stellare liquida in modo da renderli grandi ancora.
-
 astralsorcery.journal.TOOLS.3.text=Comunque, questa crescita artificale degli strumenti di cristallo, porta a delle deformazioni, e sarà necessario affilarli di nuovo. Non è possibile aumentare le statistiche dello strumento nella mola più della somma presente quando è stato appena craftato.
 
 research.ROCK_CRYSTALS.name=Le Proprietà dei Cristalli di Roccia
 astralsorcery.journal.ROCK_CRYSTALS.1.text=Quasi tutte i cristalli di roccia scavati sono unici. Variano in grandezza, purezza e forma. Sembra che non ci sia un modo di determinare quanto saranno quelle statistiche mentre si scava.<NL>Mentre aumentare la purezza dei cristalli di roccia non sembra possibile al momento, macinandone piccoli pezzi con una mola per renderli di una forma migliore sembra facile.
 
 research.CRYSTAL_GROWTH.name=Cresità dei Cristalli
-astralsorcery.journal.CRYSTAL_GROWTH.1.text=Quando si immerge un singolo cristallo di roccia dentro questo strano, freddo, leggero liquido, un po di liquido continua ad aderire al cristallo.<NL>Dopo una ispezione da più vicino sembra quasi che parte del liquido stellare solidifichi sulla superficie e si sciolga di nuovo subito, aggiungendo massa temporanea. Forse lasciando il cristallo a lungo nel liquido si può ottenere un aumento di grandezza permanente...
+astralsorcery.journal.CRYSTAL_GROWTH.1.text=Quando si immege un singoli cristalli di roccia in uno strano liquido freddo ed etereo, parte di esso si aggrappa al cristallo.<NL>Ad un ispezione più attenta, sembra quasi che la luce stellare liquida si sia solidificata sulla superficie tuttavia si scioglie via ancora velocemente quando rimosso, togliendo la massa aggiunta temporaneamente. Lasciarlo nel liquido abbastanza tanto potrebbe aumentare permanentemente la sua grandezza... Se un cristallo fosse fatto più grande, probabilmente più di alcuno oggetti potrebbero essere craftati da un cristallo.
+astralsorcery.journal.CRYSTAL_GROWTH.2.text=I cristalli sembrano avere una grandezza massima a cui possono crescere. Tu stai pensando cosa accadrebbe se un cristallo completamente cresciuto continuasse a essere sommerso nella luce stellare liquida, e cosa significherebbe ciò per la sua purezza.
 
 research.MARBLETYPES.name=Marmo
 astralsorcery.journal.MARBLETYPES.1.text=Un incontaminata e riflettente varietà di marmo può essere trovata mentre si scava sottoterra. Anche gli antichi templi sono interamente costruiti con esso, e la sua capacità riflettente sembra interagire con la luce stellare in un modo promettente. Se gli antichi costruttori riconobbero l'importanza del marmo nelle strutture sensibili alla luce stellare, allora magari il marmo potrebbe dimostrarsi un utile materiale da costruzione nel futuro.
 
 research.SOOTYMARBLE.name=Marmo Fuligginoso
-astralsorcery.journal.SOOTYMARBLE.1.text=Coprendo la superficie del marmo con un materiale scuro come il carbone, invertirà la sua innata proprietà di riflessione in forti proprietà assorbenti. Il marmo fuligginoso colleziona la luce durante il giorno scaldandosi e la restituisce durante la notte. Questo nuovo tipo di marmo potrebbe dimostrarsi utile come il marmo regolare nel futuro.
+astralsorcery.journal.SOOTYMARBLE.1.text=Coprendo la superficie del marmo con un materiale scuro come il carbone, invertirà la sua innata proprietà di riflessione in forti proprietà assorbenti. Il marmo fuligginoso colleziona la luce durante il giorno scaldandosi e la restituisce durante la notte. Questo nuovo tipo di marmo potrebbe dimostrarsi utile come il marmo bianco nel futuro, così come le energie irradiate termalmente del sole sembrano migliorare gli effetti della luce stellare vicino.
 
 research.ALTAR2.name=L'altare di lavoro della luce stellare
 astralsorcery.journal.ALTAR2.1.text=La capacità di concentrazione della luce stellare sul tavolo da lavoro luminoso è significante per permettere un aggiornamento di essa. Il tavolo può essere ingegnerizzato con delle estensioni progettate per catturare la luce stellare e rinforzi per reggere un flusso più ampio.<NL>In modo da concentrare abbastanza luce stellare da dare un uso alle estensioni tuttavia è necessaria una grande struttura di vari tipi di marmo.
@@ -166,20 +207,20 @@ astralsorcery.journal.ALTAR2.4.text=Il serbatoio di luce stellare nell'altare no
 
 research.WELL.name=Il pozzo di luce
 astralsorcery.journal.WELL.1.text=Di notte, uno strano liquido cristallino sembra collezionarsi sopra alle gemme di acquamarina o i cristalli di roccia, questo liquido sembra derivare da una pura energia dalla luce stellare.<NL>Un vaso di marmo può essere utilizzato per collezionare il liquido abbastanza facilmente. Il liquido emette una luminosa e chiara luce e sembra molto freddo, un secchiello di esso non pesa praticamente niente
-
 astralsorcery.journal.WELL.3.text=In modo di usare il pozzo di luce avrai bisogno di una gemma di acquamarina o di un cristallo di roccia, che devono essere piazzati sopra di esso in modo da far condensare la luce stellare in liquido. Le gemme e i cristalli che sono usati per ottenere luce stellare costantemente comunceranno a degradarsi fino a rompersi completamente. Una volta piazzato sopra al pozzo di luce non possono più essere utilizzati per altro scopo oltre a collezionare luce stellare.<NL>Questo liquido stellare sembra avere interessanti interazioni con i cristalli di roccia e con altri liquidi.
 
-research.ILLUM_POWDER.name=Illumination Powder
+research.INFUSED_WOOD.name=Il Legno infuso
+astralsorcery.journal.INFUSED_WOOD.1.text=Siccome infondendo i materiali con la luce stellare liquida li potenzia, la versatilità di un legno rinforzato dovrebbe avere un grande valore nella costruzione e nel crafting.<NL>Poiché è un materiale organico, lasciandolo immerso nella luce stellare liquida sembra avere un pattern di assorbimento diverso da quello dei cristalli, tuttavia il risultato finale è lo stesso: la luce stellare è trascinata completamente dentro il legno, tuttavia potrebbe non essere completamente distribuita. Questo potrebbe richiedere qualche investigatione ulteriore nel futuro, ma per ora le funzioni sono sufficienti per le tue necessità.
+
+research.ILLUM_POWDER.name=La Polvere di Illuminazione
 astralsorcery.journal.ILLUM_POWDER.1.text=La pietraluce e l'acquamarina esibiscono una strana reazione quando sono portati in prossimità l'uno all'altro. Piccole scintille a forma di fiamma scattano velocemente tra di loro. queste scintille possono scattare anche abbastanza lontano dalla loro origine prima di sparire. Distruggendo l'acquamarina in polvere e mischiandola con la pietraluce si crea una pila di polvere irradiante, che illumina lo spazio circostante. Questa polvere potrebbe dimostrarsi un'alternativa alle torche usate comunemente.
 
-research.NOC_POWDER.name=Nocturnal Powder
+research.NOC_POWDER.name=La polvere notturna
 astralsorcery.journal.NOC_POWDER.1.text=La notte porta pericoli e creature con intenti malvagi. Mentre questi mostri non sono molto interessanti di per loro, gli oggetti che portano con se sono molto più desiderabili.<NL>Tuttavia, quelle creature o evitano il giorno completamente, oppure diventano amichevoli quando esposti alla luce solare. La polvere appena scoperta che può creare una forte luce dal nulla potrebbe forse essere ribaltata per creare un'area buia permettendo ai mostri di generarsi.
-
 astralsorcery.journal.NOC_POWDER.3.text=Mentre un blocco può essere cliccato per creare questo campo di generazione di mostri per alcuni secondi, farlo apparire vicino potrebbe non essere una grande idea. la  polvere può essere lanciata in modo da creare il campo dove atterra.
 
-research.SKY_RESO.name=Fosic Resonator
+research.SKY_RESO.name=Il risonatore fosico
 astralsorcery.journal.SKY_RESO.1.text=Cercando nel cielo ad occhio nudo, è praticamente impossibile capire il magnitudo della luce stellare emessa in una certa area. Tuttavia, esiste un evidenza empirica basata sul serbatoio dell'altare da solo che la luce riempe più o meno a seconda della data area; la luce di una stella può allinearsi con un altra amplificando la forza di questo campo.<NL>Gli altari e le altre strutture che hanno bisono di luce stellare possono performare più capacita in campi di luce stellare amplificati.
-
 astralsorcery.journal.SKY_RESO.3.text=Trovare queste posizioni semplicemente osservando il serbatoio dell'altare sembra tedioso e inefficace.<NL>Una soluzione migliore potrebbe essere un dipositivo che risuona con la luce visibile dall'occhio umano, quando si trova un campo di luce stellare amplificata. Ciò non rimpiazza il bisogno di esplorazione per trovare un posto adatto, ma dovrebbe facilitare la locazione di un posto sulla superficie. Tuttavia, calcoli preliminare mostrano che le aree di alta concentrazione di luce stellare sono rare e potrebbero essere a distanza di centinaia o migliaia di metri.
 
 research.SPEC_RELAY.name=Ripetitore spettrale
@@ -205,6 +246,7 @@ astralsorcery.journal.ATT_PLAYER.6.text=Una volta che tutto è allineato, l'alta
 research.ATT_PERKS.name=I benefici dell'allineamento
 astralsorcery.journal.ATT_PERKS.1.text=Dopo essersi connesso con una costellazione, le altre costellazioni non sono più disponibili per la sintonizzazione. Questo è un effetto naturale, una re-sincronizzazione avrebbe bisogno di un reset della scorsa sincronizzazione, ogni costellazione conferisce benefici diversi, dalla forza alla velocità alla protezione, al pollice verde.
 astralsorcery.journal.ATT_PERKS.2.text=E' stato riscontrato che più stelle sono viste di notte dopo essersi sincronizzati. E' sospetto che queste nuove costellazioni aiutino a tenere traccia del proprio progresso con l'allineamento. Per aiutare a tenere traccia del progresso, una nuova sezione del tomo astrale è stata aggiunta, questa sezione progetta I vari benefici secondo uno strano pattern.
+astralsorcery.journal.ATT_PERKS.3.text=Sfortunatamente, una volta impostata, questa radice non può essere cambiata facilmente e avrà bisogno di un attrezzo esterno per desintonizzare questa energia stellare, rimescolandola nel suo normale stato caotico, pronta per essere sintonizzata ancora.<NL>Questo sfortunatamente significa che qualsiasi progresso fatto in favore ad una certa costellazione verra perso.
 
 research.ATT_CRYSTAL.name=Sintonizzazione dei cristalli
 astralsorcery.journal.ATT_CRYSTAL.1.text=Così come le persone possono sintonizzarsi ad una costellazione, così possono fare anche i cristalli di roccia. Questo cristallo poi reagirà più forte a quella costellazione e ne incanalerà gli effetti.<NL>L'applicazione potrebbe non essere immediatamente evidente, ma una costruzione che amplifica questo effetto di incanalazione in modo da vederne i cambiamenti fisici nel mondo potrebbe funzionare. La sua proprieta focalizzante potrebbe forse anche essere usata per altro...
@@ -215,12 +257,12 @@ astralsorcery.journal.INFUSER.1.text=La luce stellare liquida ha proprietà unic
 astralsorcery.journal.INFUSER.3.text=Tuttavia, un dispositivo specificatamente costruito per infondere la luce stellare liquida dovrebbe essere abbastanza per permettere a questo effetto sull'acquamarina persistente. Costruendo su vecchi progetti, la struttura avrà bisogno di includere la luce stellare liquida che serve per l'infusione. Il processo dell'infusione può essere inizializzato nello stesso modo di un altare.<NL>Il processo dell'infondere qualcosa con la luce stellare liquida è molto energetico, quindi questo dispositivo può tenere un oggetto alla volta. Dal lato positivo, l'infusione consuma poco o niente liquido.
 
 research.TREEBEACON.name=Il Faro degli alberi
-astralsorcery.journal.TREEBEACON.1.text= çLe proprietà della gemma risonante, specificatamente i suoi effetti di assorbimento della luce stellare liquida, impongono una domanda su come possa essere applicata.<NL>Un semplice progetto in modo che gli alberelli siano infusi proprio prima di crescere con della luce stellare liquida sembra permettere alla gemma di ricavare i pezzi di quest'alberi una volta cresciuti.
+astralsorcery.journal.TREEBEACON.1.text= Le proprietà della gemma risonante, specificatamente i suoi effetti di assorbimento della luce stellare liquida, impongono una domanda su come possa essere applicata.<NL>Un semplice progetto in modo che gli alberelli siano infusi proprio prima di crescere con della luce stellare liquida sembra permettere alla gemma di ricavare i pezzi di quest'alberi una volta cresciuti.
 astralsorcery.journal.TREEBEACON.3.text=Questo ha anche i suoi limiti: circa la natura del processo della raccolta, gli alberi infusi con la luce stellare verranno piano piano consumati lungo il tempo.<NL>Inoltre, c'è un numero massimo di alberi che un faro può supportare. Se il faro viene rotto tutti gli alberi torneranno alla loro forma normale
 
 research.CHARGED_TOOLS.name=Strumenti di Cristallo Infusi
 astralsorcery.journal.CHARGED_TOOLS.1.text=Avendo esperienza con gli effetti di crescita della luce stellare liquida sui cristalli di roccia, si nota che lo stesso effetto avviene sugli strumenti di cristalli di roccia, ma a lungo andare questi hanno bisogno di essere riaffilati.<NL>Inoltre con la nuova invenzione e un po di luce stellare liquida in più potrebbe essere raggiunto...
-astralsorcery.journal.CHARGED_TOOLS.2.text=Infatti, dopo averi infuso gli strumenti, prima inerti loro sembrano brillare e riflettere il cielo sopra.<NL>Avere questa luce stellare liquida vibrante che scorre lungo gli strumenti potrebbe performare molto migliore di quanto ci si aspettava.<NL>Tuttavia, il liquido potrebbe essere assorbito ad un certo punto...
+astralsorcery.journal.CHARGED_TOOLS.2.text=Infatti, dopo aver infuso gli strumenti, prima inerti loro sembrano brillare e riflettere il cielo sopra.<NL>Avere questa luce stellare liquida vibrante che scorre lungo gli strumenti potrebbe performare molto migliore di quanto ci si aspettava.<NL>Tuttavia, il liquido potrebbe essere assorbito ad un certo punto...
 
 research.TOOL_WANDS.name=Active Channeling
 astralsorcery.journal.TOOL_WANDS.1.text=Il tentativo di incanalare l'energia della luce stellare a mani nude è fallito, ed ha portato a niente ma forse un piccolo flash di luce.<NL>Con i poteri dell'appena trovata polvere di stelle, costruire bacchette che incanalano l'energia per fare COSE diventa possibile. Piazzare i blocchi in una linea dritta o rimpiazzarne alcuni con altri, dovrebbe essere facile per le suddette bacchette
