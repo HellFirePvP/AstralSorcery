@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.event.PotionApplyEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;

@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
@@ -63,7 +63,6 @@ public class KeyBleed extends KeyPerk {
                 float chance = bleedChance;
                 chance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(AttributeTypeRegistry.ATTR_TYPE_BLEED_CHANCE, chance);
-                chance *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
                 if (rand.nextFloat() < chance) {
                     int stackCap = 3; //So the "real" stackcap is 'amplifier = 3' that means we always have to be lower than this value.
                     stackCap = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
@@ -71,7 +70,6 @@ public class KeyBleed extends KeyPerk {
                     int duration = bleedDuration;
                     duration = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION, duration));
-                    duration *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
 
                     int setAmplifier = 0;
                     if (target.isPotionActive(RegistryPotions.potionBleed)) {

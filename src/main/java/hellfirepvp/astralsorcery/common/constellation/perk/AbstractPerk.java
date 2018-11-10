@@ -170,8 +170,8 @@ public abstract class AbstractPerk {
     }
 
     @SideOnly(Side.CLIENT)
-    public Collection<String> getLocalizedTooltip() {
-        if (tooltipCache != null) {
+    public final Collection<String> getLocalizedTooltip() {
+        if (false && tooltipCache != null) {
             return tooltipCache;
         }
 
@@ -183,17 +183,29 @@ public abstract class AbstractPerk {
             if (key == null) {
                 key = "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath();
             }
+            int prevLength = tooltipCache.size();
+            boolean shouldAdd = addLocalizedTooltip(tooltipCache);
+            if (shouldAdd && prevLength != tooltipCache.size()) {
+                tooltipCache.add(""); //Add empty line..
+            }
             if (I18n.hasKey(key + ".desc.1")) { // Might have a indexed list there
                 int count = 1;
                 while (I18n.hasKey(key + ".desc." + count)) {
                     tooltipCache.add(I18n.format(key + ".desc." + count));
                     count++;
                 }
+                tooltipCache.add("");
             } else if (I18n.hasKey(key + ".desc")) {
                 tooltipCache.add(I18n.format(key + ".desc"));
+                tooltipCache.add("");
             }
         }
         return tooltipCache;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean addLocalizedTooltip(Collection<String> tooltip) {
+        return false;
     }
 
     //Should return a localized string of the mod (or part of a mod) that added this perk

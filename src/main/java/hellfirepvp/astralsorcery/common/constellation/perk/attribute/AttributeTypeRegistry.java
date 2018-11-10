@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
+package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.AstralSorcery;

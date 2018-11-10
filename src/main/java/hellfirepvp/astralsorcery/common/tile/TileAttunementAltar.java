@@ -590,7 +590,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         } else {
             if(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) > 0) {
                 if(activeSound == null || ((PositionedLoopSound) activeSound).hasStoppedPlaying()) {
-                    activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.4F, 0.8F,
+                    activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.2F, 0.8F,
                             () -> isInvalid() ||
                                     activeFound == null ||
                                     !ConstellationSkyHandler.getInstance().isNight(world) ||

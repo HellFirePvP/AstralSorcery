@@ -6,14 +6,14 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
+package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -41,6 +41,11 @@ public class PerkAttributeType {
     }
 
     protected void init() {}
+
+    @Nonnull
+    public PerkAttributeModifier createModifier(float modifier, PerkAttributeModifier.Mode mode) {
+        return new PerkAttributeModifier(getTypeString(), mode, modifier);
+    }
 
     public void onApply(EntityPlayer player, Side side) {
         List<UUID> applied = applicationCache.computeIfAbsent(side, s -> Lists.newArrayList());

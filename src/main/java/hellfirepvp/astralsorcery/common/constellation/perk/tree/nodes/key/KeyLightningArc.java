@@ -12,12 +12,14 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
+import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -142,6 +144,7 @@ public class KeyLightningArc extends KeyPerk {
                         entities.remove(player);
                     }
                     entities.removeAll(visitedEntities);
+                    entities.removeIf(e -> e instanceof EntityTechnicalAmbient || e instanceof EntityFlare);
                     entities.removeIf(e -> !MiscUtils.canPlayerAttackServer(player, e));
 
                     if(!entities.isEmpty()) {

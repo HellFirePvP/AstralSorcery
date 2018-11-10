@@ -243,6 +243,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
             KnowledgeFragment fr = resolveFragment(stack);
             if (fr != null && fr.equals(frag)) {
                 PacketChannel.CHANNEL.sendToServer(new PktRemoveKnowledgeFragment(entry.getKey()));
+                player.inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
                 break;
             }
         }

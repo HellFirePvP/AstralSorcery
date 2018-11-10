@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -44,10 +46,7 @@ public class AttributeCritMultiplier extends PerkAttributeType {
                     return;
                 }
 
-                float dmgMod = 1F;
-                dmgMod = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(getTypeString(), dmgMod);
-                dmgMod *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                float dmgMod = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(getTypeString(), 1F);
                 arrow.setDamage(arrow.getDamage() * dmgMod);
             }
         }
@@ -65,10 +64,8 @@ public class AttributeCritMultiplier extends PerkAttributeType {
             return;
         }
 
-        float dmgMod = event.getDamageModifier();
-        dmgMod = PerkAttributeHelper.getOrCreateMap(event.getEntityPlayer(), side)
-                .modifyValue(getTypeString(), dmgMod);
-        dmgMod *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+        float dmgMod = PerkAttributeHelper.getOrCreateMap(event.getEntityPlayer(), side)
+                .modifyValue(getTypeString(), event.getDamageModifier());
         event.setDamageModifier(dmgMod);
     }
 

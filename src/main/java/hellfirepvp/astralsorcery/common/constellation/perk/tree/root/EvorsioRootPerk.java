@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -18,7 +18,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;

@@ -322,7 +322,6 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
                     toolTip.add(perk.getCategory().getTextFormatting() + I18n.format(perk.getUnlocalizedName() + ".name"));
                     perk.getLocalizedTooltip().forEach(line -> toolTip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + line));
-                    toolTip.add("");
 
                     if (prog.isPerkSealed(perk)) {
                         toolTip.add(TextFormatting.RED + I18n.format("perk.info.sealed"));

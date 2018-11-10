@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;

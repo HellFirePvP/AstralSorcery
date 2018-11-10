@@ -29,6 +29,7 @@ import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
@@ -52,6 +53,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -69,6 +71,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -292,16 +295,10 @@ public class EventHandlerServer {
             WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
         }
 
-        ItemStack active = event.getPlayer().getHeldItemMainhand();
-        WandAugment found = null;
-        if(!active.isEmpty() && active.getItem() instanceof ItemWand) {
-            found = ItemWand.getAugment(active);
-        }
-        active = event.getPlayer().getHeldItemOffhand();
-        if(found == null && !active.isEmpty() && active.getItem() instanceof ItemWand) {
-            found = ItemWand.getAugment(active);
-        }
-        if(found != null && found.equals(WandAugment.EVORSIO)) {
+
+        Tuple<EnumHand, ItemStack> heldStack =
+                MiscUtils.getMainOrOffHand(event.getPlayer(), ItemsAS.wand,stack -> ItemWand.getAugment(stack) != null);
+        if(heldStack != null && ItemWand.getAugment(heldStack.value) == WandAugment.EVORSIO) {
             if(rand.nextFloat() < Config.evorsioEffectChance) {
                 World w = event.getWorld();
                 IBlockState stateAt = w.getBlockState(at);
@@ -323,6 +320,9 @@ public class EventHandlerServer {
                             w.setBlockState(pos, atState);
                         }
                     }
+                }
+                if (foundBlocks.getPattern().containsKey(at)) {
+                    event.setCanceled(true);
                 }
             }
         }

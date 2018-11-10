@@ -128,6 +128,13 @@ public class PlayerProgress {
                     }
                 }
             }
+
+            if (compound.hasKey("pointTokens")) {
+                NBTTagList list = compound.getTagList("pointTokens", Constants.NBT.TAG_STRING);
+                for (int i = 0; i < list.tagCount(); i++) {
+                    this.freePointTokens.add(list.getStringTagAt(i));
+                }
+            }
         }
 
         if (compound.hasKey("tierReached")) {
@@ -153,13 +160,6 @@ public class PlayerProgress {
                 if (to != null && !this.usedTargets.contains(to)) {
                     this.usedTargets.add(to);
                 }
-            }
-        }
-
-        if (compound.hasKey("pointTokens")) {
-            NBTTagList list = compound.getTagList("pointTokens", Constants.NBT.TAG_STRING);
-            for (int i = 0; i < list.tagCount(); i++) {
-                this.freePointTokens.add(list.getStringTagAt(i));
             }
         }
 
@@ -238,14 +238,9 @@ public class PlayerProgress {
         for (SextantFinder.TargetObject to : usedTargets) {
             listTargets.appendTag(new NBTTagString(to.getRegistryName()));
         }
-        NBTTagList listTokens = new NBTTagList();
-        for (String s : freePointTokens) {
-            listTokens.appendTag(new NBTTagString(s));
-        }
         cmp.setTag("constellations", list);
         cmp.setTag("seenConstellations", l);
         cmp.setTag("sextanttargets", listTargets);
-        cmp.setTag("pointTokens", listTokens);
         cmp.setInteger("tierReached", tierReached.ordinal());
         cmp.setBoolean("wasAttuned", wasOnceAttuned);
         int[] researchArray = new int[researchProgression.size()];

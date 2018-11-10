@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -43,8 +45,8 @@ public class AttributeCritChance extends PerkAttributeType {
                 }
                 float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(getTypeString(), 0F);
-                critChance *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
-                if ((critChance / 100F) >= rand.nextFloat()) {
+                critChance /= 100.0F;
+                if (critChance >= rand.nextFloat()) {
                     arrow.setIsCritical(true);
                 }
             }
@@ -64,8 +66,8 @@ public class AttributeCritChance extends PerkAttributeType {
 
         float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
                 .modifyValue(getTypeString(), 0F);
-        critChance *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
-        if ((critChance / 100F) >= rand.nextFloat()) {
+        critChance /= 100.0F;
+        if (critChance >= rand.nextFloat()) {
             event.setResult(Event.Result.ALLOW);
         }
     }

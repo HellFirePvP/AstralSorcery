@@ -21,7 +21,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.data.*;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;

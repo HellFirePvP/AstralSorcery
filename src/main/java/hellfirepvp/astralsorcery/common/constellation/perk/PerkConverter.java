@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
-import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 

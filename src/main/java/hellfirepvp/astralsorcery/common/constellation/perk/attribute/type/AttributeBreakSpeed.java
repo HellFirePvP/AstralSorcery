@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -35,10 +37,8 @@ public class AttributeBreakSpeed extends PerkAttributeType {
         if (!hasTypeApplied(player, side)) {
             return;
         }
-        float speed = event.getNewSpeed(); //Take the one other mods might have modified
-        speed = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(getTypeString(), speed);
-        speed *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+        float speed = PerkAttributeHelper.getOrCreateMap(player, side)
+                .modifyValue(getTypeString(), event.getNewSpeed()); //Take the one other mods might have modified
         event.setNewSpeed(speed);
     }
 

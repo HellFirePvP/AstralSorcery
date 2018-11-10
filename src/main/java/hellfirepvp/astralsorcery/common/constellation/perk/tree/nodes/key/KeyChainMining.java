@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
@@ -84,7 +84,6 @@ public class KeyChainMining extends KeyPerk {
                 if(doMiningChain(world, event.getPos(), event.getState(), player, side)) {
                     float doubleChance = PerkAttributeHelper.getOrCreateMap(player, side)
                             .getModifier(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN);
-                    doubleChance *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
                     if (rand.nextFloat() < doubleChance) {
                         while (doMiningChain(world, event.getPos(), event.getState(), player, side)) {}
                     }
@@ -99,12 +98,10 @@ public class KeyChainMining extends KeyPerk {
         float ch = chainChance;
         ch = PerkAttributeHelper.getOrCreateMap(player, side)
                 .modifyValue(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_CHANCE, ch);
-        ch *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
         if (rand.nextFloat() < ch) {
             float fLength = chainLength;
             fLength = PerkAttributeHelper.getOrCreateMap(player, side)
                     .modifyValue(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_LENGTH, fLength);
-            fLength *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
             BlockArray chain = BlockDiscoverer.discoverBlocksWithSameStateAroundChain(world, pos, state, Math.round(fLength), null,
                     ((world1, pos1, state1) ->
                             pos1.getY() >= player.getPosition().getY() &&

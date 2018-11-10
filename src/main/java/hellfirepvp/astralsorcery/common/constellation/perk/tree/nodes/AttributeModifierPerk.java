@@ -12,14 +12,14 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerAttributeMap;
-import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,9 +37,15 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
         super(name, x, y);
     }
 
-    public <T> T addModifier(float modifier, PerkAttributeModifier.Mode mode, String type) {
-        typeModifierList.add(new PerkAttributeModifier(type, mode, modifier));
-        return (T) this;
+    @Nullable
+    public <T extends PerkAttributeModifier> T addModifier(float modifier, PerkAttributeModifier.Mode mode, String type) {
+        PerkAttributeType attrType = AttributeTypeRegistry.getType(type);
+        if (attrType != null) {
+            PerkAttributeModifier mod = attrType.createModifier(modifier, mode);
+            typeModifierList.add(mod);
+            return (T) mod;
+        }
+        return null;
     }
 
     @Override
@@ -78,5 +84,22 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
                 }
             }
         }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean addLocalizedTooltip(Collection<String> tooltip) {
+        boolean addEmptyLine = !this.typeModifierList.isEmpty();
+
+        for (PerkAttributeModifier modifier : this.typeModifierList) {
+            String modifierDisplay = modifier.getLocalizedDisplayString();
+            if (modifierDisplay != null) {
+                tooltip.add(modifierDisplay);
+            } else {
+                addEmptyLine = false;
+            }
+        }
+
+        return addEmptyLine;
     }
 }

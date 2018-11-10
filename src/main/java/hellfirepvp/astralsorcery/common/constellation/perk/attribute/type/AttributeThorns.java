@@ -10,6 +10,10 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.modifier.AttributeModifierThorns;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +21,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,6 +35,12 @@ public class AttributeThorns extends PerkAttributeType {
 
     public AttributeThorns() {
         super(AttributeTypeRegistry.ATTR_TYPE_INC_THORNS);
+    }
+
+    @Nonnull
+    @Override
+    public PerkAttributeModifier createModifier(float modifier, PerkAttributeModifier.Mode mode) {
+        return new AttributeModifierThorns(getTypeString(), mode, modifier);
     }
 
     @SubscribeEvent
@@ -44,8 +56,7 @@ public class AttributeThorns extends PerkAttributeType {
 
         float reflectAmount = PerkAttributeHelper.getOrCreateMap(player, side)
                 .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_THORNS, 0F);
-        reflectAmount *= PerkAttributeHelper.getOrCreateMap(player, side)
-                .getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+        reflectAmount /= 100.0F;
         if (reflectAmount <= 0) {
             return;
         }

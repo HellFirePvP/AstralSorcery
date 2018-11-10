@@ -9,8 +9,11 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,11 +43,10 @@ public class AttributeAllElementalResist extends PerkAttributeType {
         }
         DamageSource ds = event.getSource();
         if (isMaybeElementalDamage(ds)) {
-            float multiplier = 1F;
-            multiplier = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(getTypeString(), multiplier);
-            multiplier = Math.max(0, multiplier);
-            multiplier = 1F - ((1F - multiplier) * PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT));
+            float multiplier = PerkAttributeHelper.getOrCreateMap(player, side)
+                    .modifyValue(getTypeString(), 1F);
+            multiplier -= 1F;
+            multiplier = 1F - MathHelper.clamp(multiplier, 0F, 1F);
             event.setAmount(event.getAmount() * multiplier);
         }
     }

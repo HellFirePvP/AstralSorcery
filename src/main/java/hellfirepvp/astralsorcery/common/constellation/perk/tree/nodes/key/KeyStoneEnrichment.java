@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;

@@ -9,9 +9,10 @@
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.AttributeType;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -181,15 +182,20 @@ public class PlayerAttributeMap {
         PerkAttributeType attributeType = AttributeTypeRegistry.getType(type);
         if (attributeType == null) return value;
 
+        float perkEffectModifier = 1F;
+        if (!type.equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT)) {
+            perkEffectModifier = modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, 1F);
+        }
+
         for (PerkAttributeModifier mod : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDITION)) {
-            value += mod.getValue();
+            value += (mod.getValue() * perkEffectModifier);
         }
         float multiply = value;
         for (PerkAttributeModifier mod : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
-            value += multiply * mod.getValue();
+            value += multiply * (mod.getValue() * perkEffectModifier);
         }
         for (PerkAttributeModifier mod : getModifiersByType(attributeType, PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
-            value *= mod.getValue();
+            value *= (mod.getValue() * perkEffectModifier);
         }
         return value;
     }
