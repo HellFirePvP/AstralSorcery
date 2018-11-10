@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.*;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,7 +41,7 @@ public class PotionSpellPlague extends PotionCustomTexture {
         //    SpellPlague plague = entityLivingBaseIn.getCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null);
         //    if(plague != null){
         //        plague.onTick(entityLivingBaseIn);
-        //        PotionEffect pe = entityLivingBaseIn.getActivePotionEffect(this);
+        //        PotionApplyEvent pe = entityLivingBaseIn.getActivePotionEffect(this);
         //        if(pe != null) {
         //            if(plague.onTick(entityLivingBaseIn)) {
         //                pe.duration = 1;
@@ -62,8 +62,6 @@ public class PotionSpellPlague extends PotionCustomTexture {
     public List<ItemStack> getCurativeItems() {
         return Collections.emptyList();
     }
-
-    //TODO make liquid color change between colors blue <> purple
 
     @Override
     @SideOnly(Side.CLIENT)

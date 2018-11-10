@@ -79,7 +79,7 @@ public enum TreeTypes {
 
     private void load(@Nullable int[] logMeta, @Nullable int[] leaveMeta, @Nullable Integer saplingMeta) {
         if (!Loader.isModLoaded(this.parentModId) && !this.parentModId.equals("minecraft")) {
-            AstralSorcery.log.info("[AstralSorcery] Not loading tree type " + name() + " as the mod " + this.parentModId + " is not loaded.");
+            AstralSorcery.log.info("Not loading tree type " + name() + " as the mod " + this.parentModId + " is not loaded.");
             return;
         }
 
@@ -88,7 +88,7 @@ public enum TreeTypes {
         Block sapling = ForgeRegistries.BLOCKS.getValue(this.resSaplingName);
 
         if (isEmpty(log) || isEmpty(leaf) || isEmpty(sapling)) {
-            AstralSorcery.log.info("[AstralSorcery] Not loading tree type " + name() + " as its blocks don't exist in the currently loaded mods.");
+            AstralSorcery.log.info("Not loading tree type " + name() + " as its blocks don't exist in the currently loaded mods.");
             return;
         }
 
@@ -125,7 +125,7 @@ public enum TreeTypes {
         }
 
         exists = true;
-        AstralSorcery.log.info("[AstralSorcery] Loaded " + name() + " of " + this.parentModId + " into tree registry.");
+        AstralSorcery.log.info("Loaded " + name() + " of " + this.parentModId + " into tree registry.");
     }
 
     private boolean isEmpty(@Nullable Block block) {

@@ -54,7 +54,7 @@ public class AssetLibrary implements IResourceManagerReloadListener {
     public void onResourceManagerReload(@Nullable IResourceManager resourceManager) {
         if(reloading) return;
         reloading = true;
-        AstralSorcery.log.info("[AstralSorcery] [AssetLibrary] Refreshing and Invalidating Resources");
+        AstralSorcery.log.info("[AssetLibrary] Refreshing and Invalidating Resources");
         for (Map<String, BindableResource> map : loadedTextures.values()) {
             for (BindableResource res : map.values()) {
                 res.invalidateAndReload(); //Massively unloading all textures.
@@ -62,10 +62,10 @@ public class AssetLibrary implements IResourceManagerReloadListener {
         }
         reloading = false;
 
-        AstralSorcery.log.info("[AstralSorcery] [AssetLibrary] Finished reloading, rebinding textures...");
+        AstralSorcery.log.info("[AssetLibrary] Finished reloading, rebinding textures...");
         TexturePreloader.doPreloadRoutine();
         RenderSkybox.resetAstralSkybox();
-        AstralSorcery.log.info("[AstralSorcery] [AssetLibrary] Successfully reloaded and rebound library.");
+        AstralSorcery.log.info("[AssetLibrary] Successfully reloaded and rebound library.");
     }
 
 }

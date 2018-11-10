@@ -20,7 +20,10 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -166,4 +169,9 @@ public class OreTypes implements ConfigDataAdapter<OreEntry> {
         return Optional.of(entry);
     }
 
+    @Override
+    public void resetRegistry() {
+        oreDictWeights.clear();
+        totalWeight = 0.0D;
+    }
 }

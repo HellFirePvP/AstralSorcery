@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:itemcelestialcrystal"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.attune_trait.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.attune_trait.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:attune_crystal",
+    "criteria": {
+        "attune_crystal_minor": {
+            "trigger": "astralsorcery:attune_crystal",
+            "conditions": {
+                "minor": true
+            }
+        }
+    }
+}

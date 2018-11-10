@@ -11,11 +11,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
-import net.minecraft.entity.player.EntityPlayer;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

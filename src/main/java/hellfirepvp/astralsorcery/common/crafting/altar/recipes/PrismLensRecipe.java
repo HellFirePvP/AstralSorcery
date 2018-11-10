@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
+import hellfirepvp.astralsorcery.common.block.BlockInfusedWood;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
@@ -63,7 +64,7 @@ public class PrismLensRecipe extends ConstellationRecipe {
         setCstItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
                 ConstellationAtlarSlot.UP_UP_LEFT,
                 ConstellationAtlarSlot.UP_UP_RIGHT);
-        setCstItem(OreDictAlias.BLOCK_WOOD_LOGS,
+        setCstItem(BlockInfusedWood.WoodType.ENGRAVED.asStack(),
                 ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
                 ConstellationAtlarSlot.DOWN_LEFT_LEFT);
         setCstItem(OreDictAlias.ITEM_GOLD_INGOT,

@@ -61,7 +61,7 @@ public class MultiblockCrystalEnhancement extends PatternBlockArray {
             @Override
             public void onPlace(IBlockAccess access, BlockPos at, TileEntity te) {
                 IWeakConstellation rand = ConstellationRegistry.getWeakConstellations().get(new Random().nextInt(ConstellationRegistry.getWeakConstellations().size()));
-                ((TileCollectorCrystal) te).onPlace(rand, CrystalProperties.getMaxCelestialProperties(),
+                ((TileCollectorCrystal) te).onPlace(rand, null, CrystalProperties.getMaxCelestialProperties(),
                         true, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL);
             }
         });

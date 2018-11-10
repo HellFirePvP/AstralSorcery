@@ -23,11 +23,11 @@ import net.minecraft.item.ItemStack;
 public class AltarRecipeDiscovery extends BaseAltarRecipe {
 
     AltarRecipeDiscovery() {
-        super(null, null, 0, 0);
+        super(null, null, null, 0, 0);
     }
 
-    public AltarRecipeDiscovery(ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime) {
-        super(inputs, output, starlightRequired, craftingTickTime);
+    public AltarRecipeDiscovery(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime) {
+        super(name, inputs, output, starlightRequired, craftingTickTime);
     }
 
     @Override

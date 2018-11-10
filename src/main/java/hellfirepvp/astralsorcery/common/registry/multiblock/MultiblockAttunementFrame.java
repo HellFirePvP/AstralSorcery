@@ -91,10 +91,12 @@ public class MultiblockAttunementFrame extends PatternBlockArray {
     @Override
     public Map<BlockPos, IBlockState> placeInWorld(World world, BlockPos center) {
         Map<BlockPos, IBlockState> placed = super.placeInWorld(world, center);
-        world.setBlockToAir(center);
-        world.setBlockToAir(center.offset(EnumFacing.UP, 1));
-        placed.remove(center);
-        placed.remove(center.offset(EnumFacing.UP, 1));
+        if (world.setBlockToAir(center)) {
+            placed.remove(center);
+        }
+        if (world.setBlockToAir(center.offset(EnumFacing.UP, 1))) {
+            placed.remove(center.offset(EnumFacing.UP, 1));
+        }
         return placed;
     }
 }

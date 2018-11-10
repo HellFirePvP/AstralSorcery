@@ -9,14 +9,12 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -98,6 +96,25 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         return false;
     }
 
+    public boolean findNewPositionAt(World world, BlockPos pos, BlockPos at, ConstellationEffectProperties prop) {
+        if(maxCount > elements.size()) {
+            double searchRange = prop.getSize();
+            if (Math.abs(pos.getX() - at.getX()) > searchRange ||
+                    Math.abs(pos.getY() - at.getY()) > searchRange ||
+                    Math.abs(pos.getZ() - at.getZ()) > searchRange) {
+                return false;
+            }
+            if(MiscUtils.isChunkLoaded(world, at) && verifier.isValid(world, at) && !containsElementAt(at)) {
+                T element = newElement(world, at);
+                if(element != null) {
+                    elements.add(element);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     public T newElement(World world, BlockPos at) {
         return elementProvider.apply(at);
     }
@@ -109,15 +126,13 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         return false;
     }
 
-    //FIXME SOMEDAY the read version is not world sensitive -> fertilitas reeds?... they need world dependent checking..
-
     @Override
     public void readFromNBT(NBTTagCompound cmp) {
         elements.clear();
         NBTTagList list = cmp.getTagList("positions", 10);
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound tag = list.getCompoundTagAt(i);
-            BlockPos pos = NBTUtils.readBlockPosFromNBT(tag);
+            BlockPos pos = NBTHelper.readBlockPosFromNBT(tag);
             T element = elementProvider.apply(pos);
             if(element != null) {
                 element.readFromNBT(tag);
@@ -131,7 +146,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         NBTTagList listPositions = new NBTTagList();
         for (T elem : elements) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(elem.getPos(), tag);
+            NBTHelper.writeBlockPosToNBT(elem.getPos(), tag);
             elem.writeToNBT(tag);
             listPositions.appendTag(tag);
         }

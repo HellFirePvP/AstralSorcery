@@ -10,10 +10,7 @@ package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
@@ -32,7 +29,8 @@ import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.data.*;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
 import net.minecraft.block.Block;
@@ -60,7 +58,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -70,11 +68,10 @@ import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
-import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -87,8 +84,6 @@ public class EventHandlerServer {
 
     private static final Random rand = new Random();
 
-    public static TimeoutListContainer<PlayerWrapperContainer, Integer> perkCooldowns = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
-    public static TimeoutListContainer<PlayerWrapperContainer, Integer> perkCooldownsClient = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.CLIENT);
 
     @SubscribeEvent
     public void attachPlague(AttachCapabilitiesEvent<Entity> event) {
@@ -97,7 +92,7 @@ public class EventHandlerServer {
         //}
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void onHarvestSpeedCheck(net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed event) {
         EntityPlayer harvester = event.getEntityPlayer();
         if (harvester != null) {
@@ -107,7 +102,7 @@ public class EventHandlerServer {
                 for (ConstellationPerk perk : perks.keySet()) {
                     if (!prog.isPerkActive(perk)) continue;
                     if (perk.mayExecute(ConstellationPerk.Target.PLAYER_HARVEST_SPEED)) {
-                        BlockPos p = event.getPos();
+                        BlockPos p = event.getLocationPos();
                         event.setNewSpeed(perk.onHarvestSpeed(harvester, event.getState(), (p == null || p.getY() < 0) ? null : p, event.getNewSpeed()));
                     }
                 }
@@ -132,7 +127,7 @@ public class EventHandlerServer {
                 }
             }
         }
-    }
+    }*/
 
     @SubscribeEvent
     public void onContainerOpen(PlayerContainerEvent.Open event) {
@@ -148,23 +143,6 @@ public class EventHandlerServer {
         }
         if (phoenixProtect(event.getEntityLiving())) {
             event.setCanceled(true);
-        } else {
-            if (event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote) return;
-
-            DamageSource source = event.getSource();
-            if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntityPlayer) {
-                EntityPlayer p = (EntityPlayer) source.getImmediateSource();
-                PlayerProgress prog = ResearchManager.getProgress(p, Side.SERVER);
-                if (prog != null) {
-                    Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-                    for (ConstellationPerk perk : perks.keySet()) {
-                        if (!prog.isPerkActive(perk)) continue;
-                        if (perk.mayExecute(ConstellationPerk.Target.ENTITY_KILL)) {
-                            perk.onEntityKilled(p, event.getEntityLiving());
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -208,15 +186,13 @@ public class EventHandlerServer {
         }
 
         ItemStack hand = event.getItemStack();
-        if (event.getHand() == EnumHand.OFF_HAND) {
-            hand = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
-        }
         if (hand.isEmpty()) return;
         if (hand.getItem() instanceof ISpecialInteractItem) {
             ISpecialInteractItem i = (ISpecialInteractItem) hand.getItem();
             if (i.needsSpecialHandling(event.getWorld(), event.getPos(), event.getEntityPlayer(), hand)) {
-                if(i.onRightClick(event.getWorld(), event.getPos(), event.getEntityPlayer(), event.getFace(), event.getHand(), hand)) {
+                if (i.onRightClick(event.getWorld(), event.getPos(), event.getEntityPlayer(), event.getFace(), event.getHand(), hand)) {
                     event.setCanceled(true);
+                    event.setCancellationResult(EnumActionResult.SUCCESS);
                 }
             }
         }
@@ -319,16 +295,10 @@ public class EventHandlerServer {
             WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
         }
 
-        ItemStack active = event.getPlayer().getHeldItemMainhand();
-        WandAugment found = null;
-        if(!active.isEmpty() && active.getItem() instanceof ItemWand) {
-            found = ItemWand.getAugment(active);
-        }
-        active = event.getPlayer().getHeldItemOffhand();
-        if(found == null && !active.isEmpty() && active.getItem() instanceof ItemWand) {
-            found = ItemWand.getAugment(active);
-        }
-        if(found != null && found.equals(WandAugment.EVORSIO)) {
+
+        Tuple<EnumHand, ItemStack> heldStack =
+                MiscUtils.getMainOrOffHand(event.getPlayer(), ItemsAS.wand,stack -> ItemWand.getAugment(stack) != null);
+        if(heldStack != null && ItemWand.getAugment(heldStack.value) == WandAugment.EVORSIO) {
             if(rand.nextFloat() < Config.evorsioEffectChance) {
                 World w = event.getWorld();
                 IBlockState stateAt = w.getBlockState(at);
@@ -342,13 +312,17 @@ public class EventHandlerServer {
                                         world.getBlockState(pos).getBlock().canHarvestBlock(world, pos, event.getPlayer()))));
                 for (BlockPos pos : foundBlocks.getPattern().keySet()) {
                     IBlockState atState = w.getBlockState(pos);
-                    w.setBlockState(pos, BlocksAS.blockFakeTree.getDefaultState());
-                    TileFakeTree tt = MiscUtils.getTileAt(w, pos, TileFakeTree.class, true);
-                    if(tt != null) {
-                        tt.setupTile(event.getPlayer(), event.getPlayer().getHeldItemMainhand(), atState);
-                    } else {
-                        w.setBlockState(pos, atState);
+                    if (w.setBlockState(pos, BlocksAS.blockFakeTree.getDefaultState())) {
+                        TileFakeTree tt = MiscUtils.getTileAt(w, pos, TileFakeTree.class, true);
+                        if(tt != null) {
+                            tt.setupTile(event.getPlayer(), event.getPlayer().getHeldItemMainhand(), atState);
+                        } else {
+                            w.setBlockState(pos, atState);
+                        }
                     }
+                }
+                if (foundBlocks.getPattern().containsKey(at)) {
+                    event.setCanceled(true);
                 }
             }
         }
@@ -385,32 +359,6 @@ public class EventHandlerServer {
                 }
             }
         }
-    }
-
-    public static class PlayerWrapperContainer {
-
-        @Nonnull
-        public final EntityPlayer player;
-
-        public PlayerWrapperContainer(@Nonnull EntityPlayer player) {
-            this.player = player;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if(this == obj) return true;
-            if(obj == null) return player == null;
-            if(player == null) return false;
-            if(!(obj instanceof PlayerWrapperContainer)) return false;
-
-            return ((PlayerWrapperContainer) obj).player.getUniqueID().equals(player.getUniqueID());
-        }
-
-        @Override
-        public int hashCode() {
-            return player != null ? player.getUniqueID().hashCode() : 0;
-        }
-
     }
 
 }

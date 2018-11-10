@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -46,17 +46,19 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     private float fixDegree = 0;
     private int maxAge = -1;
     private Vector3 pos = new Vector3(0, 0, 0);
+    private Vector3 prevPos = new Vector3(0, 0, 0);
     private float scale = 1F;
     private EntityComplexFX.AlphaFunction alphaFunction = EntityComplexFX.AlphaFunction.CONSTANT;
     private EntityComplexFX.RenderAlphaFunction<TexturePlane> renderAlphaFunction = null;
     private float alphaMultiplier = 1F;
     private EntityComplexFX.ScaleFunction<TexturePlane> scaleFunc;
+    private EntityComplexFX.PositionController<TexturePlane> posFunc;
     private boolean flagRemoved = true;
 
-    private final BindableResource texture;
+    private final AbstractRenderableTexture texture;
     private final Vector3 axis;
 
-    public TexturePlane(BindableResource texture, Vector3 axis) {
+    public TexturePlane(AbstractRenderableTexture texture, Vector3 axis) {
         this.texture = texture;
         this.axis = axis;
     }
@@ -101,6 +103,11 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
 
     public TexturePlane setScale(float scale) {
         this.scale = scale;
+        return this;
+    }
+
+    public TexturePlane setPosFunc(EntityComplexFX.PositionController<TexturePlane> posFunc) {
+        this.posFunc = posFunc;
         return this;
     }
 
@@ -177,7 +184,12 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     public void tick() {
         counter++;
 
-        if(maxAge >= 0 && counter >= maxAge) {
+        this.prevPos = this.pos.clone();
+        if (this.posFunc != null) {
+            this.pos = this.posFunc.updatePosition(this, this.pos.clone(), new Vector3());
+        }
+
+        if (maxAge >= 0 && counter >= maxAge) {
             if(refreshFunc != null) {
                 Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
                 if(rView == null) rView = Minecraft.getMinecraft().player;
@@ -201,7 +213,11 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     public void render(float partialTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
         if(rView == null) rView = Minecraft.getMinecraft().player;
-        double dst = rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
+        Vector3 rPos = new Vector3(
+                RenderingUtils.interpolate(this.prevPos.getX(), this.pos.getX(), partialTicks),
+                RenderingUtils.interpolate(this.prevPos.getY(), this.pos.getY(), partialTicks),
+                RenderingUtils.interpolate(this.prevPos.getZ(), this.pos.getZ(), partialTicks));
+        double dst = rView.getDistanceSq(rPos.getX(), rPos.getY(), rPos.getZ());
         if(dst > Config.maxEffectRenderDistanceSq) return;
 
         float alphaMul = alphaFunction.getAlpha(counter, maxAge);
@@ -231,7 +247,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         GlStateManager.disableCull();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0001F);
 
-        currRenderAroundAxis(partialTicks, Math.toRadians(deg), axis);
+        currRenderAroundAxis(rPos, partialTicks, Math.toRadians(deg), axis);
 
         GlStateManager.enableCull();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
@@ -240,13 +256,13 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         GlStateManager.popMatrix();
     }
 
-    private void currRenderAroundAxis(float parTicks, double angle, Vector3 axis) {
+    private void currRenderAroundAxis(Vector3 position, float parTicks, double angle, Vector3 axis) {
         float scale = this.scale;
         if(scaleFunc != null) {
-            scale = scaleFunc.getScale(this, parTicks, scale);
+            scale = scaleFunc.getScale(this, position.clone(), parTicks, scale);
         }
-        texture.bind();
-        RenderingUtils.renderAngleRotatedTexturedRect(pos, axis, angle, scale, u, v, uLength, vLength, parTicks);
+        texture.bindTexture();
+        RenderingUtils.renderAngleRotatedTexturedRect(position, axis, angle, scale, u, v, uLength, vLength, parTicks);
     }
 
 }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -43,7 +44,7 @@ public class PktSyncCharge implements IMessage, IMessageHandler<PktSyncCharge, I
 
     @Override
     public IMessage onMessage(PktSyncCharge message, MessageContext ctx) {
-        PlayerChargeHandler.INSTANCE.setClientCharge(message.charge);
+        AstralSorcery.proxy.scheduleClientside(() -> PlayerChargeHandler.INSTANCE.setClientCharge(message.charge));
         return null;
     }
 }

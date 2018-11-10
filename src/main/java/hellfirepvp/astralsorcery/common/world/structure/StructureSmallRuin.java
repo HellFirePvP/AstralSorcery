@@ -8,11 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.world.structure;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.world.task.StructureRuinTask;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
@@ -39,8 +42,13 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
 
     @Override
     public void generate(BlockPos pos, World world, Random rand) {
-        getStructureTemplate().placeInWorld(world, pos);
+        generateAsSubmergedStructure(world, pos);
         getBuffer(world).markStructureGeneration(pos, getStructureType());
+
+        //Should be the case...
+        //if (world instanceof WorldServer) {
+        //    AstralSorcery.proxy.scheduleDelayed(new StructureRuinTask((WorldServer) world, pos, rand));
+        //}
     }
 
     @Override

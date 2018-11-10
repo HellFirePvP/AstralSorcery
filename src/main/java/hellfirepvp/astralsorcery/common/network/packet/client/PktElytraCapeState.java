@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -57,21 +58,23 @@ public class PktElytraCapeState implements IMessageHandler<PktElytraCapeState, I
 
     @Override
     public IMessage onMessage(PktElytraCapeState message, MessageContext ctx) {
-        EntityPlayer pl = ctx.getServerHandler().player;
-        switch (message.type) {
-            case 0: {
-                pl.fallDistance = 0F;
-                break;
+        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+            EntityPlayer pl = ctx.getServerHandler().player;
+            switch (message.type) {
+                case 0: {
+                    pl.fallDistance = 0F;
+                    break;
+                }
+                case 1: {
+                    pl.setFlag(7, true);
+                    break;
+                }
+                case 2: {
+                    pl.setFlag(7, false);
+                    break;
+                }
             }
-            case 1: {
-                pl.setFlag(7, true);
-                break;
-            }
-            case 2: {
-                pl.setFlag(7, false);
-                break;
-            }
-        }
+        });
         return null;
     }
 }

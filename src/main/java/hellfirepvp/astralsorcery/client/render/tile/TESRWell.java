@@ -22,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -35,16 +37,15 @@ public class TESRWell extends TileEntitySpecialRenderer<TileWell> {
     public void render(TileWell te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         ItemStack catalyst = te.getInventoryHandler().getStackInSlot(0);
         if(!catalyst.isEmpty()) {
-            EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, catalyst);
-            ei.age = te.getTicksExisted();
-            ei.hoverStart = 0;
-            Minecraft.getMinecraft().getRenderManager().renderEntity(ei, x + 0.5, y + 0.8, z + 0.5, 0, partialTicks, true);
+            RenderingUtils.renderItemAsEntity(catalyst, x, y, z, partialTicks, te.getTicksExisted());
         }
         if(te.getFluidAmount() > 0 && te.getHeldFluid() != null) {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glEnable(GL11.GL_BLEND);
             Blending.DEFAULT.apply();
             GL11.glColor4f(1F, 1F, 1F, 1F);
+            Color c = new Color(te.getHeldFluid().getColor(te.getWorld(), te.getPos()));
+            GL11.glColor4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, c.getAlpha() / 255F);
             GL11.glDisable(GL11.GL_ALPHA_TEST);
             RenderHelper.disableStandardItemLighting();
             Vector3 offset = new Vector3(te).add(0.5D, 0.32D, 0.5D);

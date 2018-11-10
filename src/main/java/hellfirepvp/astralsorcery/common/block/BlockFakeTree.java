@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.block;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
@@ -21,11 +23,14 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -67,14 +72,21 @@ public class BlockFakeTree extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileFakeTree tft = MiscUtils.getTileAt(worldIn, pos, TileFakeTree.class, false);
-        if(tft != null && tft.getReference() == null) return;
+        if(tft == null || tft.getReference() == null) return;
         if(rand.nextInt(20) == 0) {
+            Color c = new Color(63, 255, 63);
+            PatreonEffectHelper.PatreonEffect pe;
+            if (tft.getPlayerEffectRef() != null && (pe = PatreonEffectHelper.getEffect(Side.CLIENT, tft.getPlayerEffectRef())) != null &&
+                    pe instanceof PtEffectTreeBeacon) {
+                c = new Color(((PtEffectTreeBeacon) pe).getColorTreeDrainEffects());
+            }
+
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                     pos.getX() + rand.nextFloat(),
                     pos.getY() + rand.nextFloat(),
                     pos.getZ() + rand.nextFloat());
             p.motion(0, 0, 0);
-            p.scale(0.45F).setColor(new Color(63, 255, 63)).setMaxAge(65);
+            p.scale(0.45F).setColor(c).setMaxAge(65);
         }
     }
 
@@ -86,6 +98,19 @@ public class BlockFakeTree extends BlockContainer {
             return fake.getBlock().getSoundType(fake, world, pos, entity);
         }
         return super.getSoundType(state, world, pos, entity);
+    }
+
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
+
+    @Override
+    public int quantityDropped(Random random) {
+        return 0;
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return Items.AIR;
     }
 
     @Override

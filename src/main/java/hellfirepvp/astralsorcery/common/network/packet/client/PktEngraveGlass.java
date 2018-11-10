@@ -18,6 +18,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -77,13 +78,15 @@ public class PktEngraveGlass implements IMessage, IMessageHandler<PktEngraveGlas
 
     @Override
     public IMessage onMessage(PktEngraveGlass message, MessageContext ctx) {
-        World w = DimensionManager.getWorld(message.dimId);
-        if(w != null) {
-            TileMapDrawingTable tmt = MiscUtils.getTileAt(w, message.pos, TileMapDrawingTable.class, false);
-            if(tmt != null) {
-                tmt.tryEngraveGlass(message.constellations);
+        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+            World w = DimensionManager.getWorld(message.dimId);
+            if(w != null) {
+                TileMapDrawingTable tmt = MiscUtils.getTileAt(w, message.pos, TileMapDrawingTable.class, false);
+                if(tmt != null) {
+                    tmt.tryEngraveGlass(message.constellations);
+                }
             }
-        }
+        });
         return null;
     }
 }

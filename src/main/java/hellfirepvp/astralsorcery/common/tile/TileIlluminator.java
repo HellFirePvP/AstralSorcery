@@ -10,14 +10,18 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.DirectionalLayerBlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
@@ -36,7 +40,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 01.11.2016 / 16:01
  */
-public class TileIlluminator extends TileSkybound {
+public class TileIlluminator extends TileEntityTick {
 
     private static final Random rand = new Random();
     public static final LightCheck illuminatorCheck = new LightCheck();
@@ -49,20 +53,24 @@ public class TileIlluminator extends TileSkybound {
     private int ticksUntilNext = 180;
     private boolean playerPlaced = false;
 
+    private int boost = 0;
+    private EnumDyeColor chosenColor = EnumDyeColor.YELLOW;
+
     @Override
     public void update() {
         super.update();
 
         if (!playerPlaced) return;
 
-        if (!world.isRemote && doesSeeSky()) {
+        if (!world.isRemote) {
             if(validPositions == null) recalculate();
             if(rand.nextInt(3) == 0 && placeFlares()) {
                 recalcRequested = true;
             }
+            boost--;
             ticksUntilNext--;
             if(ticksUntilNext <= 0) {
-                ticksUntilNext = 180;
+                ticksUntilNext = boost > 0 ? 30 : 180;
                 if(recalcRequested) {
                     recalcRequested = false;
                     recalculate();
@@ -75,8 +83,14 @@ public class TileIlluminator extends TileSkybound {
     }
 
     public void setPlayerPlaced() {
-        playerPlaced = true;
-        markForUpdate();
+        this.playerPlaced = true;
+        this.markForUpdate();
+    }
+
+    public void onWandUsed(EnumDyeColor color) {
+        this.boost = 10 * 60 * 20;
+        this.chosenColor = color;
+        this.markForUpdate();
     }
 
     @SideOnly(Side.CLIENT)
@@ -90,15 +104,21 @@ public class TileIlluminator extends TileSkybound {
                     (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
                     (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
             p.scale(0.25F);
+
+            Color col = MiscUtils.flareColorFromDye(EnumDyeColor.YELLOW);
+            if (this.chosenColor != null) {
+                col = MiscUtils.flareColorFromDye(this.chosenColor);
+            }
+
             switch (rand.nextInt(3)) {
                 case 0:
                     p.setColor(Color.WHITE);
                     break;
                 case 1:
-                    p.setColor(new Color(0xFEFF9E));
+                    p.setColor(col.brighter().brighter());
                     break;
                 case 2:
-                    p.setColor(new Color(0xFFE539));
+                    p.setColor(col);
                     break;
             }
         }
@@ -116,9 +136,15 @@ public class TileIlluminator extends TileSkybound {
             if(!needsRecalc && list.isEmpty()) needsRecalc = true;
             at = at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
             if(world.isBlockLoaded(at) && illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
-                world.setBlockState(at, BlocksAS.blockVolatileLight.getDefaultState());
-                if(rand.nextInt(4) == 0) {
-                    EntityFlare.spawnAmbient(world, new Vector3(this).add(-1 + rand.nextFloat() * 3, 0.6, -1 + rand.nextFloat() * 3));
+                EnumDyeColor color = EnumDyeColor.YELLOW;
+                if (this.chosenColor != null) {
+                    color = this.chosenColor;
+                }
+                IBlockState lightState = BlocksAS.blockVolatileLight.getDefaultState().withProperty(BlockFlareLight.COLOR, color);
+                if (world.setBlockState(at, lightState)) {
+                    if(rand.nextInt(4) == 0) {
+                        EntityFlare.spawnAmbient(world, new Vector3(this).add(-1 + rand.nextFloat() * 3, 0.6, -1 + rand.nextFloat() * 3));
+                    }
                 }
             }
         }
@@ -152,6 +178,12 @@ public class TileIlluminator extends TileSkybound {
         super.writeCustomNBT(compound);
 
         compound.setBoolean("playerPlaced", this.playerPlaced);
+        compound.setInteger("boostTimeout", this.boost);
+        if (chosenColor != null) {
+            compound.setInteger("wandColor", this.chosenColor.getMetadata());
+        } else {
+            compound.setInteger("wandColor", EnumDyeColor.YELLOW.getMetadata());
+        }
     }
 
     @Override
@@ -159,6 +191,13 @@ public class TileIlluminator extends TileSkybound {
         super.readCustomNBT(compound);
 
         this.playerPlaced = compound.getBoolean("playerPlaced");
+        this.boost = compound.getInteger("boostTimeout");
+        if (compound.hasKey("wandColor")) {
+            this.chosenColor = EnumDyeColor.byMetadata(compound.getInteger("wandColor"));
+        }
+        if (this.chosenColor == null) {
+            this.chosenColor = EnumDyeColor.YELLOW;
+        }
     }
 
     @Override

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.block;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
 import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -20,10 +21,8 @@ import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -36,9 +35,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -82,10 +80,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
         IBlockState state = world.getBlockState(pos);
         switch (state.getValue(MACHINE_TYPE)) {
             case TELESCOPE:
-                RenderingUtils.playBlockBreakParticles(pos.up(), Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
-            case GRINDSTONE:
-                RenderingUtils.playBlockBreakParticles(pos, Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
-                break;
+                RenderingUtils.playBlockBreakParticles(pos.up(), BlocksAS.blockMachine.getDefaultState().withProperty(MACHINE_TYPE, MachineType.TELESCOPE));
         }
         return false;
     }
@@ -158,7 +153,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return null;
+        return createTileEntity(worldIn, getStateFromMeta(meta));
     }
 
     @Override
@@ -182,9 +177,13 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     public boolean handleSpecificActivateEvent(PlayerInteractEvent.RightClickBlock event) {
+        EntityPlayer player = event.getEntityPlayer();
+        if (player instanceof EntityPlayerMP && MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
+            return false;
+        }
+
         EnumHand hand = event.getHand();
         World world = event.getWorld();
-        EntityPlayer player = event.getEntityPlayer();
         BlockPos pos = event.getPos();
         IBlockState state = world.getBlockState(pos);
         MachineType type = state.getValue(MACHINE_TYPE);

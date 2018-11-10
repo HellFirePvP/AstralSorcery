@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,8 +23,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,6 +38,11 @@ public class CapeEffectAevitas extends CapeArmorEffect {
     private static float range = 10F;
     private static float potency = 1F;
     private static float turnChance = 0.2F;
+
+    private static float healPerCycle = 0.04F;
+    private static float feedChancePerCycle = 0.01F;
+    private static int foodLevelPerCycle = 1;
+    private static float foodSaturationLevelPerCycle = 0.1F;
 
     public CapeEffectAevitas(NBTTagCompound cmp) {
         super(cmp, "aevitas");
@@ -125,11 +127,31 @@ public class CapeEffectAevitas extends CapeArmorEffect {
         return potency;
     }
 
+    public float getHealPerCycle() {
+        return healPerCycle;
+    }
+
+    public int getFoodLevelPerCycle() {
+        return foodLevelPerCycle;
+    }
+
+    public float getFoodSaturationLevelPerCycle() {
+        return foodSaturationLevelPerCycle;
+    }
+
+    public float getFeedChancePerCycle() {
+        return feedChancePerCycle;
+    }
+
     @Override
     public void loadFromConfig(Configuration cfg) {
         range = cfg.getFloat(getKey() + "Range", getConfigurationSection(), range, 1, 32, "Defines the radius (in blocks) for the aoe effect.");
         potency = cfg.getFloat(getKey() + "Potency", getConfigurationSection(), potency, 0, 1, "Defines the multiplier if the aoe will happen at all");
         turnChance = cfg.getFloat(getKey() + "PlantTransformChance", getConfigurationSection(), turnChance, 0, 1, "Defines the chance that the aoe will search for a plant to turn into another plant.");
+        feedChancePerCycle = cfg.getFloat(getKey() + "FeedChancePerCycle", getConfigurationSection(), feedChancePerCycle, 0, 1F, "Defines the chance that food-level increasing effects will happen on a specific cape-effect-cycle/tick");
+        healPerCycle = cfg.getFloat(getKey() + "HealPerCycle", getConfigurationSection(), healPerCycle, 0F, 4F, "Defines the amount of health that is regenerated per cape-effect-cycle/tick");
+        foodLevelPerCycle = cfg.getInt(getKey() + "FoodLevelPerCycle", getConfigurationSection(), foodLevelPerCycle, 0, 5, "Defines the food-level that is 'fed' to the player per cape-effect-cycle/tick");
+        foodSaturationLevelPerCycle = cfg.getFloat(getKey() + "FoodSaturationPerCycle", getConfigurationSection(), foodSaturationLevelPerCycle, 0, 5F, "Defines the amount of saturation that is 'fed' to the player per cape-effect-cycle/tick");
     }
 
 }

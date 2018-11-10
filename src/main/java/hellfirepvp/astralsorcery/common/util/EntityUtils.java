@@ -40,15 +40,18 @@ public class EntityUtils {
 
     private static final Method getLootTableMethod;
 
-    public static boolean canEntitySpawnHere(World world, BlockPos at, ResourceLocation entityKey, boolean respectConditions) {
+    public static boolean canEntitySpawnHere(World world, BlockPos at, ResourceLocation entityKey, boolean respectConditions, @Nullable Function<Entity, Void> preCheckEntity) {
         Entity entity = EntityList.createEntityByIDFromName(entityKey, world);
         if(entity == null) {
             return false;
         }
         entity.setLocationAndAngles(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, world.rand.nextFloat() * 360.0F, 0.0F);
+        if (preCheckEntity != null) {
+            preCheckEntity.apply(entity);
+        }
         if(respectConditions) {
             if(entity instanceof EntityLiving) {
-                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving) entity, world, at.getX() + 0.5F, at.getY() + 0.5F, at.getZ() + 0.5F, false);
+                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving) entity, world, at.getX() + 0.5F, at.getY() + 0.5F, at.getZ() + 0.5F, null);
                 if (canSpawn != Event.Result.ALLOW && (canSpawn != Event.Result.DEFAULT || (!((EntityLiving) entity).getCanSpawnHere() || !((EntityLiving) entity).isNotColliding()))) {
                     return false;
                 }
@@ -138,10 +141,11 @@ public class EntityUtils {
 
     @Nullable
     public static LootTable getLootTable(EntityLiving entity) {
+        ResourceLocation table = entity.deathLootTable;
         if(getLootTableMethod == null) return null;
         try {
-            ResourceLocation lootTable = (ResourceLocation) getLootTableMethod.invoke(entity);
-            return entity.world.getLootTableManager().getLootTableFromLocation(lootTable);
+            if (table == null) table = (ResourceLocation) getLootTableMethod.invoke(entity);
+            return entity.world.getLootTableManager().getLootTableFromLocation(table);
         } catch (Exception e) {
             return null;
         }

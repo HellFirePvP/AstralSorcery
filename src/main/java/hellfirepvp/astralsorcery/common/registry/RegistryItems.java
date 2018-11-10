@@ -22,9 +22,12 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
+import hellfirepvp.astralsorcery.common.item.useables.ItemPerkSeal;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
@@ -62,7 +65,7 @@ public class RegistryItems {
     public static List<ItemDynamicColor> pendingDynamicColorItems = new LinkedList<>();
 
     public static Item.ToolMaterial crystalToolMaterial;
-    public static EnumRarity rarityCelestial;
+    public static EnumRarity rarityCelestial, rarityRelic;
     public static Material materialTransparentReplaceable;
     public static ItemArmor.ArmorMaterial imbuedLeatherMaterial;
 
@@ -94,6 +97,7 @@ public class RegistryItems {
         crystalToolMaterial.setRepairItem(ItemStack.EMPTY);
 
         rarityCelestial = EnumHelper.addRarity("CELESTIAL", TextFormatting.BLUE, "Celestial");
+        rarityRelic = EnumHelper.addRarity("AS_RELIC", TextFormatting.GOLD, "Relic");
         materialTransparentReplaceable = new MaterialAirish();
 
         imbuedLeatherMaterial = EnumHelper.addArmorMaterial("AS_IMBUEDLEATHER",
@@ -136,6 +140,9 @@ public class RegistryItems {
         grapplingWand = registerItem(new ItemGrappleWand());
         useableDust = registerItem(new ItemUsableDust());
         knowledgeShare = registerItem(new ItemKnowledgeShare());
+        perkSeal = registerItem(new ItemPerkSeal());
+        knowledgeFragment = registerItem(new ItemKnowledgeFragment());
+        fragmentCapsule = registerItem(new ItemFragmentCapsule());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());
@@ -201,9 +208,9 @@ public class RegistryItems {
 
     private static <T extends IForgeRegistryEntry> T registerItem(String modId, T item, String name) {
         try {
-            LoadController modController = (LoadController) Loader.class.getField("modController").get(Loader.INSTANCE());
+            LoadController modController = (LoadController) Loader.class.getField("modController").get(Loader.PERK_TREE());
             Object oldMod = modController.getClass().getField("activeContainer").get(modController);
-            modController.getClass().getField("activeContainer").set(modController, Loader.INSTANCE().getIndexedModList().get(modId));
+            modController.getClass().getField("activeContainer").set(modController, Loader.PERK_TREE().getIndexedModList().get(modId));
 
             register(item, name);
 

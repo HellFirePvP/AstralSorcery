@@ -106,6 +106,20 @@ public class EntityFlare extends EntityFlying {
     }
 
     @Override
+    public void applyEntityCollision(Entity entityIn) {
+        if(entityIn != null && entityIn instanceof EntityFlare) {
+            super.applyEntityCollision(entityIn);
+        }
+    }
+
+    @Override
+    protected void collideWithEntity(Entity entityIn) {
+        if(entityIn != null && entityIn instanceof EntityFlare) {
+            super.collideWithEntity(entityIn);
+        }
+    }
+
+    @Override
     public void onUpdate() {
         super.onUpdate();
 
@@ -175,7 +189,7 @@ public class EntityFlare extends EntityFlying {
                 }
 
                 if(getAttackTarget() != null && !getAttackTarget().isDead && getAttackTarget().getDistance(this) < 10 && rand.nextInt(40) == 0) {
-                    getAttackTarget().attackEntityFrom(CommonProxy.dmgSourceStellar, 4F);
+                    getAttackTarget().attackEntityFrom(CommonProxy.dmgSourceStellar, 5.5F);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.FLARE_PROC, new Vector3(posX, posY + this.height / 2, posZ));
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPosition(), 16));
                     AstralSorcery.proxy.fireLightning(world, Vector3.atEntityCenter(this), Vector3.atEntityCenter(getAttackTarget()), new Color(0, 0, 216));
@@ -312,7 +326,7 @@ public class EntityFlare extends EntityFlying {
     @SideOnly(Side.CLIENT)
     private void setupSprite() {
         EntityFXFacingSprite p = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteFlare1, posX, posY, posZ, 0.8F, 2);
-        p.setPositionUpdateFunction((fx, v, m) -> Vector3.atEntityCorner(this).addY(this.height / 2));
+        p.setPositionUpdateFunction((fx, v, m) -> Vector3.atEntityCenter(this));
         p.setRefreshFunc(() -> !isDead);
         EffectHandler.getInstance().registerFX(p);
         this.texSprite = p;

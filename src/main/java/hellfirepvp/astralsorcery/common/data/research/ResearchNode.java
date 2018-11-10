@@ -153,6 +153,10 @@ public class ResearchNode {
         return String.format("research.%s.name", unlocName);
     }
 
+    public String getSimpleName() {
+        return this.unlocName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
 import javax.annotation.Nullable;
+import java.awt.*;
+import java.awt.geom.Point2D;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,11 +22,13 @@ import javax.annotation.Nullable;
 public abstract class SizeHandler {
 
     private static final int W_H_NODE = 18;
-    private static final int SPACE_BETWEEN_NODES = W_H_NODE;
 
     //Space between outermost nodes and border.
     public final double heightToBorder;
     public final double widthToBorder;
+
+    private int widthHeightNodes = W_H_NODE;
+    private int spaceBetweenNodes = W_H_NODE;
 
     private double midX;
     private double midY;
@@ -54,6 +58,14 @@ public abstract class SizeHandler {
         this.minScale = minScale;
     }
 
+    public void setWidthHeightNodes(int widthHeightNodes) {
+        this.widthHeightNodes = widthHeightNodes;
+    }
+
+    public void setSpaceBetweenNodes(int spaceBetweenNodes) {
+        this.spaceBetweenNodes = spaceBetweenNodes;
+    }
+
     public void updateSize() {
         resetZoom();
 
@@ -76,11 +88,11 @@ public abstract class SizeHandler {
         upperMost = Math.abs(upperMost);
         lowerMost = Math.abs(lowerMost);
 
-        int leftAdded  = (leftMost  * W_H_NODE + leftMost  * SPACE_BETWEEN_NODES);
-        int rightAdded = (rightMost * W_H_NODE + rightMost * SPACE_BETWEEN_NODES);
+        int leftAdded  = (leftMost  * this.widthHeightNodes + leftMost  * this.spaceBetweenNodes);
+        int rightAdded = (rightMost * this.widthHeightNodes + rightMost * this.spaceBetweenNodes);
 
-        int upperAdded = (upperMost * W_H_NODE + upperMost * SPACE_BETWEEN_NODES);
-        int lowerAdded = (lowerMost * W_H_NODE + lowerMost * SPACE_BETWEEN_NODES);
+        int upperAdded = (upperMost * this.widthHeightNodes + upperMost * this.spaceBetweenNodes);
+        int lowerAdded = (lowerMost * this.widthHeightNodes + lowerMost * this.spaceBetweenNodes);
 
         midX = widthToBorder + leftAdded;
         totalWidth = widthToBorder + rightAdded + midX;
@@ -112,11 +124,11 @@ public abstract class SizeHandler {
     }
 
     public double getZoomedWHNode() {
-        return W_H_NODE * scalingFactor;
+        return this.widthHeightNodes * scalingFactor;
     }
 
     public double getZoomedSpaceBetweenNodes() {
-        return SPACE_BETWEEN_NODES * scalingFactor;
+        return this.spaceBetweenNodes * scalingFactor;
     }
 
     public double scaleAccordingly(double toScale) {
@@ -164,7 +176,6 @@ public abstract class SizeHandler {
         return centerY;
     }
 
-
     //Translates a renderPos into a gui-valid renderPosition (zoomed)
     public double evRelativePosX(int relativeX) {
         return getMidX() + (relativeX * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
@@ -172,6 +183,10 @@ public abstract class SizeHandler {
 
     public double evRelativePosY(int relativeY) {
         return getMidY() + (relativeY * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
+    }
+
+    public Point.Double evRelativePos(Point offset) {
+        return new Point.Double(evRelativePosX(offset.x), evRelativePosY(offset.y));
     }
 
 }

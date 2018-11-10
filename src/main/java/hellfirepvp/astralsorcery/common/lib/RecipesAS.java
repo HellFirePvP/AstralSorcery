@@ -38,6 +38,7 @@ public class RecipesAS {
             rMarblePillar, rMarbleBricks, rMarbleStairs, rMarbleSlab;
     public static AccessibleRecipeAdapater rBlackMarbleRaw, rBlackMarbleRuned, rBlackMarbleEngraved,
             rBlackMarbleChiseled, rBlackMarbleArch, rBlackMarblePillar, rBlackMarbleBricks;
+    public static AccessibleRecipeAdapater rWoodPlanks, rWoodPillar, rWoodArch, rWoodEngraved;
     public static AccessibleRecipeAdapater rRJournal;
     public static AccessibleRecipeAdapater rCCParchment;
 

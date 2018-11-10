@@ -26,9 +26,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class CapeEffectPelotrio extends CapeArmorEffect {
 
-    private static float chanceSpawnPick = 0.5F;
-    private static float chanceSpawnAxe = 0.65F;
-    private static float chanceSpawnSword = 0.2F;
+    private static float chanceSpawnPick = 0.8F;
+    private static float chanceSpawnAxe = 0.8F;
+    private static float chanceSpawnSword = 0.5F;
 
     private static float swordAttackDamage = 4F;
 

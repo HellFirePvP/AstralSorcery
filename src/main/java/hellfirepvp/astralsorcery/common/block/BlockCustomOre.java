@@ -39,8 +39,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -70,7 +68,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
 
-        if(state.getValue(ORE_TYPE).equals(OreType.STARMETAL)) {
+        if(state.getValue(ORE_TYPE).equals(OreType.ROCK_CRYSTAL)) {
             ((RockCrystalBuffer) WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL)).removeOre(pos);
         }
     }

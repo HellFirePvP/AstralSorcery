@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalAxe;
-import hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalShovel;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktDualParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
@@ -17,7 +16,7 @@ import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -36,6 +35,7 @@ import net.minecraft.util.math.ChunkPos;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,6 +48,8 @@ public class TileFakeTree extends TileEntityTick {
 
     private TickAction ta;
     private IBlockState fakedState;
+
+    private UUID playerEffectRef = null;
 
     @Override
     public void update() {
@@ -88,6 +90,14 @@ public class TileFakeTree extends TileEntityTick {
         markForUpdate();
     }
 
+    public void setPlayerEffectRef(UUID playerEffectRef) {
+        this.playerEffectRef = playerEffectRef;
+    }
+
+    public UUID getPlayerEffectRef() {
+        return playerEffectRef;
+    }
+
     public IBlockState getFakedState() {
         return fakedState;
     }
@@ -114,6 +124,12 @@ public class TileFakeTree extends TileEntityTick {
             this.ta = new ClearAction();
         }
 
+        if (compound.hasUniqueId("playerEffectRef")) {
+            this.playerEffectRef = compound.getUniqueId("playerEffectRef");
+        } else {
+            this.playerEffectRef = null;
+        }
+
         if(compound.hasKey("Block") && compound.hasKey("Data")) {
             int data = compound.getInteger("Data");
             Block b = Block.getBlockFromName(compound.getString("Block"));
@@ -138,6 +154,10 @@ public class TileFakeTree extends TileEntityTick {
         if(fakedState != null) {
             compound.setString("Block", Block.REGISTRY.getNameForObject(fakedState.getBlock()).toString());
             compound.setInteger("Data", fakedState.getBlock().getMetaFromState(fakedState));
+        }
+
+        if (this.playerEffectRef != null) {
+            compound.setUniqueId("playerEffectRef", this.playerEffectRef);
         }
     }
 
@@ -261,13 +281,13 @@ public class TileFakeTree extends TileEntityTick {
         @Override
         public void write(NBTTagCompound cmp) {
             if(ref != null) {
-                NBTUtils.writeBlockPosToNBT(ref, cmp);
+                NBTHelper.writeBlockPosToNBT(ref, cmp);
             }
         }
 
         @Override
         public void read(NBTTagCompound cmp) {
-            ref = NBTUtils.readBlockPosFromNBT(cmp);
+            ref = NBTHelper.readBlockPosFromNBT(cmp);
         }
     }
 

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFluidFountain;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -58,7 +59,7 @@ public class PktPlayLiquidSpring implements IMessageHandler<PktPlayLiquidSpring,
 
     @SideOnly(Side.CLIENT)
     private void playEffect() {
-        EntityFXFluidFountain.spawnAt(vec, stack);
+        AstralSorcery.proxy.scheduleClientside(() -> EntityFXFluidFountain.spawnAt(vec, stack));
     }
 
 }

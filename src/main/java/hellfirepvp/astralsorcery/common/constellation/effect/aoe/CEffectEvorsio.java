@@ -11,11 +11,8 @@ package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
-import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -66,8 +63,13 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
         if(world.isAirBlock(pos) || hardness < 0 || hardness > 75) {
             return false;
         }
-        if(origin != null && MiscUtils.isChunkLoaded(world, origin.getPos())) {
-            TileRitualPedestal pedestal = MiscUtils.getTileAt(world, origin.getPos(), TileRitualPedestal.class, true);
+        if(origin != null && MiscUtils.isChunkLoaded(world, origin.getLocationPos())) {
+            BlockPos originPedestal = origin.getLocationPos();
+            TileRitualLink link = MiscUtils.getTileAt(world, originPedestal, TileRitualLink.class, true);
+            if(link != null && link.getLinkedTo() != null && MiscUtils.isChunkLoaded(world, link.getLinkedTo())) {
+                originPedestal = link.getLinkedTo();
+            }
+            TileRitualPedestal pedestal = MiscUtils.getTileAt(world, originPedestal, TileRitualPedestal.class, true);
             if(pedestal != null) {
                 if(copyResizedPedestal == null) {
                     if(MultiBlockArrays.patternRitualPedestalWithLink != null) {
@@ -79,19 +81,17 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                     }
                 }
                 if(copyResizedPedestal != null) {
-                    if(copyResizedPedestal.hasBlockAt(pos.subtract(origin.getPos()))) {
+                    if(copyResizedPedestal.hasBlockAt(pos.subtract(originPedestal))) {
                         return false;
                     }
                 }
-            } else {
-                TileRitualLink link = MiscUtils.getTileAt(world, origin.getPos(), TileRitualLink.class, true);
-                if(link != null) {
-                    return false;
-                }
+                return true;
             }
+            // Critical state: Has a link leading into a nonexistent pedestal OR
+            // is an unlinked anchor casting a ritual...
             return true;
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -157,9 +157,10 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
             TileRitualLink link = MiscUtils.getTileAt(world, pos, TileRitualLink.class, false);
             if(link != null) {
                 if(!at.equals(pos)) {
-                    world.setBlockState(at, toSet, 2);
-                    world.playEvent(2001, at, Block.getStateId(toSet));
-                    return true;
+                    if(world.setBlockState(at, toSet, 2)) {
+                        world.playEvent(2001, at, Block.getStateId(toSet));
+                        return true;
+                    }
                 }
             } else {
                 TileRitualPedestal ped = MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);
@@ -174,9 +175,10 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                             ba.addAll(MultiBlockArrays.patternRitualPedestalWithLink, (p) -> p.add(pos).add(0, finalI, 0));
                         }
                         if(!ba.hasBlockAt(at)) {
-                            world.setBlockState(at, toSet, 2);
-                            world.playEvent(2001, at, Block.getStateId(toSet));
-                            return true;
+                            if(world.setBlockState(at, toSet, 2)) {
+                                world.playEvent(2001, at, Block.getStateId(toSet));
+                                return true;
+                            }
                         }
                     }
                 }
@@ -187,15 +189,19 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                 BlockBreakAssist.BreakEntry be = getRandomElement(world.rand);
                 if(be != null) {
                     removeElement(be);
+
+                    boolean broken = false;
                     BlockDropCaptureAssist.startCapturing();
                     try {
-                        MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
+                        broken = MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
                     } finally {
                         NonNullList<ItemStack> captured = BlockDropCaptureAssist.getCapturedStacksAndStop();
                         captured.forEach((stack) -> ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack));
                     }
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_BREAK_BLOCK, be.getPos());
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, be.getPos(), 16));
+                    if (broken) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_BREAK_BLOCK, be.getPos());
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, be.getPos(), 16));
+                    }
                 }
             }
         }

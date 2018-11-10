@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.gui.base;
 
-import hellfirepvp.astralsorcery.client.gui.GuiWHScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 

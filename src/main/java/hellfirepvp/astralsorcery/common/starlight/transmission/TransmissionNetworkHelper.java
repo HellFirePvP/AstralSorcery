@@ -59,7 +59,7 @@ public class TransmissionNetworkHelper {
     public static boolean createTransmissionLink(IStarlightTransmission tr, BlockPos next) {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
-            AstralSorcery.log.info("[AstralSorcery] Trying to create transmission link on non-existing transmission tile! Not creating link!");
+            AstralSorcery.log.info("Trying to create transmission link on non-existing transmission tile! Not creating link!");
             return false;
         }
         createLink(node, tr, next);
@@ -124,12 +124,12 @@ public class TransmissionNetworkHelper {
         } else if(tileNetwork instanceof IStarlightTransmission) {
             handler.addTransmissionTile((IStarlightTransmission) tileNetwork);
         } else {
-            AstralSorcery.log.warn("[AstralSorcery] Placed a network tile that's not transmission/receiver or source! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
+            AstralSorcery.log.warn("Placed a network tile that's not transmission/receiver or source! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
         }
 
         IPrismTransmissionNode node = handler.getTransmissionNode(tileNetwork.getPos());
         if(node == null) {
-            AstralSorcery.log.warn("[AstralSorcery] Placed a network tile that didn't produce a network node! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
+            AstralSorcery.log.warn("Placed a network tile that didn't produce a network node! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
         } else if(node.needsUpdate()) {
             StarlightUpdateHandler.getInstance().addNode(tileNetwork.getWorld(), node);
         }
@@ -140,7 +140,7 @@ public class TransmissionNetworkHelper {
 
         IPrismTransmissionNode node = handler.getTransmissionNode(tileNetwork.getPos());
         if(node == null) {
-            AstralSorcery.log.warn("[AstralSorcery] Tried to get a network node at a TileEntity, but didn't find one! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
+            AstralSorcery.log.warn("Tried to get a network node at a TileEntity, but didn't find one! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
         } else {
             StarlightUpdateHandler.getInstance().removeNode(((IStarlightTransmission) tileNetwork).getTrWorld(), node);
         }
@@ -150,7 +150,7 @@ public class TransmissionNetworkHelper {
         } else if(tileNetwork instanceof IStarlightTransmission) {
             handler.removeTransmission((IStarlightTransmission) tileNetwork);
         } else {
-            AstralSorcery.log.warn("[AstralSorcery] Removed a network tile that's not transmission/receiver or source! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
+            AstralSorcery.log.warn("Removed a network tile that's not transmission/receiver or source! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
         }
     }
 

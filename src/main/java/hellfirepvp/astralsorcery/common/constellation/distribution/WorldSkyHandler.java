@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositio
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -80,7 +81,7 @@ public class WorldSkyHandler {
 
         evaluateCelestialEventTimes(w);
 
-        int currentDay = (int) (w.getWorldTime() / 24000);
+        int currentDay = (int) (w.getWorldTime() / Config.dayLength);
 
         int trackingDifference = currentDay - lastRecordedDay;
         lastRecordedDay = currentDay;
@@ -118,7 +119,7 @@ public class WorldSkyHandler {
             if(c instanceof IConstellationSpecialShowup) continue;
 
             if(c instanceof IMinorConstellation) {
-                for (MoonPhase ph : ((IMinorConstellation) c).getShowupMoonPhases()) {
+                for (MoonPhase ph : ((IMinorConstellation) c).getShowupMoonPhases(savedSeed)) {
                     initialValueMappings.get(ph.ordinal()).add(c);
                 }
                 for (int i = 0; i < 8; i++) {
@@ -187,13 +188,18 @@ public class WorldSkyHandler {
         activeConstellations.clear();
         activeDistributions.clear();
 
-        int activeDay = lastRecordedDay % 8;
+        int activeDay = ((lastRecordedDay % 8) + 8) % 8;
         LinkedList<IConstellation> linkedConstellations = initialValueMappings.computeIfAbsent(activeDay, day -> new LinkedList<>());
         for (int i = 0; i < Math.min(10, linkedConstellations.size()); i++) {
             activeConstellations.addLast(linkedConstellations.get(i));
         }
 
-        activeDistributions = Maps.newHashMap(dayDistributionMap.get(activeDay));
+        Map<IConstellation, Float> iteration = dayDistributionMap.get(activeDay);
+        while (iteration == null) {
+            setupInitialFunctions();
+            iteration = dayDistributionMap.get(activeDay);
+        }
+        activeDistributions = Maps.newHashMap(iteration);
 
         for (IConstellationSpecialShowup special : ConstellationRegistry.getSpecialShowupConstellations()) {
             if(special.doesShowUp(this, w, lastRecordedDay)) {
@@ -280,7 +286,7 @@ public class WorldSkyHandler {
     }
 
     public MoonPhase getCurrentMoonPhase() {
-        return MoonPhase.values()[lastRecordedDay % 8];
+        return MoonPhase.values()[((lastRecordedDay % 8) + 8) % 8];
     }
 
     public List<IConstellation> getConstellationsForMoonPhase(MoonPhase phase) {
@@ -312,24 +318,56 @@ public class WorldSkyHandler {
     }
 
     private void evaluateCelestialEventTimes(World world) {
-        int solarTime = (int) (world.getWorldTime() % 864000);
-        dayOfSolarEclipse = solarTime < 24000;
-        if (world.getWorldTime() > 24000 && solarTime > 3600 && solarTime < 8400) {
+        long seed = new Random(world.getWorldInfo().getSeed()).nextLong();
+        if(world.isRemote) {
+            Optional<Long> testSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(world);
+            if (!testSeed.isPresent()) {
+                return;
+            }
+            seed = testSeed.get();
+        }
+        Random r = new Random(seed);
+        for (int i = 0; i < 10 + r.nextInt(10); i++) {
+            r.nextLong(); //Flush
+        }
+        int rand = r.nextInt(36);
+        if (rand >= 18) {
+            rand -= 36;
+        }
+
+        int offset = 36 - rand;
+        int repeat = 36;
+        long wTime = world.getWorldTime();
+
+        int suggestedDayLength = Config.dayLength;
+
+        int solarTime = (int) ((wTime - offset * suggestedDayLength) % (repeat * suggestedDayLength));
+        dayOfSolarEclipse = solarTime < suggestedDayLength;
+        int midSOffset = suggestedDayLength / 4; //Rounding errors are not my fault.
+
+        if (wTime > suggestedDayLength &&
+                solarTime > (midSOffset - ConstellationSkyHandler.getSolarEclipseHalfDuration()) &&
+                solarTime < (midSOffset + ConstellationSkyHandler.getSolarEclipseHalfDuration())) {
             solarEclipse = true;
             prevSolarEclipseTick = solarEclipseTick;
-            solarEclipseTick = solarTime - 3600;
+            solarEclipseTick = solarTime - (midSOffset - ConstellationSkyHandler.getSolarEclipseHalfDuration());
         } else {
             solarEclipse = false;
             solarEclipseTick = 0;
             prevSolarEclipseTick = 0;
         }
 
-        int lunarTime = (int) (world.getWorldTime() % 1632000);
-        dayOfLunarEclipse = lunarTime < 24000;
-        if (world.getWorldTime() > 24000 && lunarTime > 15600 && lunarTime < 20400) {
+        repeat = 68;
+        int lunarTime = (int) (wTime % (repeat * suggestedDayLength));
+        dayOfLunarEclipse = lunarTime < suggestedDayLength;
+        int midLOffset = Math.round(suggestedDayLength * 0.75F); //Rounding errors are not my fault.
+
+        if (wTime > suggestedDayLength &&
+                lunarTime > (midLOffset - ConstellationSkyHandler.getLunarEclipseHalfDuration()) &&
+                lunarTime < (midLOffset + ConstellationSkyHandler.getLunarEclipseHalfDuration())) {
             lunarEclipse = true;
             prevLunarEclipseTick = lunarEclipseTick;
-            lunarEclipseTick = lunarTime - 15600;
+            lunarEclipseTick = lunarTime - (midLOffset - ConstellationSkyHandler.getLunarEclipseHalfDuration());
         } else {
             lunarEclipse = false;
             lunarEclipseTick = 0;

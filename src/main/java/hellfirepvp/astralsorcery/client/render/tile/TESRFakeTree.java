@@ -8,9 +8,14 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraftforge.fml.relauncher.Side;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,7 +31,14 @@ public class TESRFakeTree extends TileEntitySpecialRenderer<TileFakeTree> {
         if(te.getFakedState() == null) return;
         IBlockState renderState = te.getFakedState();
         if(x * x + y * y + z * z >= 64 * 64) return;
-        TESRTranslucentBlock.blocks.add(new TESRTranslucentBlock.TranslucentBlockState(renderState, te.getPos()));
+        Color effect = null;
+        if (te.getPlayerEffectRef() != null) {
+            PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getEffect(Side.CLIENT, te.getPlayerEffectRef());
+            if (pe != null && pe instanceof PtEffectTreeBeacon) {
+                effect = new Color(((PtEffectTreeBeacon) pe).getColorTranslucentOverlay(), true);
+            }
+        }
+        TESRTranslucentBlock.addForRender(effect, renderState, te.getPos());
     }
 
 }

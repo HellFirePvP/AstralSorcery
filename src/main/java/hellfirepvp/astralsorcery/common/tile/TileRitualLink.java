@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Collection;
@@ -104,12 +105,18 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMu
         return MultiBlockArrays.patternRitualPedestalWithLink;
     }
 
+    @Nonnull
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
+    }
+
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
         if(compound.hasKey("posLink")) {
-            this.linkedTo = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("posLink"));
+            this.linkedTo = NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("posLink"));
         } else {
             this.linkedTo = null;
         }
@@ -121,7 +128,7 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMu
 
         if(this.linkedTo != null) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(this.linkedTo, tag);
+            NBTHelper.writeBlockPosToNBT(this.linkedTo, tag);
             compound.setTag("posLink", tag);
         }
     }

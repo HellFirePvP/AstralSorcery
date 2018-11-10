@@ -27,6 +27,8 @@ import java.util.List;
  */
 public interface IConstellation {
 
+    public static final int STAR_GRID_SIZE = 31;
+
     static final Color major = new Color(40, 67, 204);
     static final Color weak  = new Color(67, 44, 176);
     static final Color minor = new Color(93, 25, 127);
@@ -44,6 +46,8 @@ public interface IConstellation {
     public List<StarLocation> getStars();
 
     public List<StarConnection> getStarConnections();
+
+    public String getSimpleName();
 
     public String getUnlocalizedName();
 

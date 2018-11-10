@@ -9,13 +9,12 @@
 package hellfirepvp.astralsorcery.common.util.effect.time;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -188,7 +187,7 @@ public class TimeStopEffectHelper {
     @Nonnull
     public NBTTagCompound serializeNBT() {
         NBTTagCompound out = new NBTTagCompound();
-        NBTUtils.writeBlockPosToNBT(this.position, out);
+        NBTHelper.writeBlockPosToNBT(this.position, out);
         out.setFloat("range", this.range);
         out.setTag("targetController", this.targetController.serializeNBT());
         out.setBoolean("reducedParticles", this.reducedParticles);
@@ -197,7 +196,7 @@ public class TimeStopEffectHelper {
 
     @Nonnull
     public static TimeStopEffectHelper deserializeNBT(NBTTagCompound cmp) {
-        BlockPos at = NBTUtils.readBlockPosFromNBT(cmp);
+        BlockPos at = NBTHelper.readBlockPosFromNBT(cmp);
         float range = cmp.getFloat("range");
         boolean reducedParticles = cmp.getBoolean("reducedParticles");
         return new TimeStopEffectHelper(at, range, TimeStopZone.EntityTargetController.deserializeNBT(cmp.getCompoundTag("targetController")), reducedParticles);

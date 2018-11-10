@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.core.ASMCallHook;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -41,7 +42,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -123,14 +123,19 @@ public class EventHandlerCapeEffects implements ITickHandler {
         CapeEffectEvorsio ev =  ItemCape.getCapeEffect(pl, Constellations.evorsio);
         if(ev != null &&
                 !pl.getHeldItemMainhand().isEmpty() &&
-                !pl.getHeldItemMainhand().getItem().getToolClasses(pl.getHeldItemMainhand()).isEmpty()) {
+                !pl.getHeldItemMainhand().getItem().getToolClasses(pl.getHeldItemMainhand()).isEmpty() &&
+                !pl.isSneaking()) {
             evorsioChainingBreak = true;
             try {
                 RayTraceResult rtr = MiscUtils.rayTraceLook(pl);
                 if(rtr != null) {
                     EnumFacing faceHit = rtr.sideHit;
                     if(faceHit != null) {
-                        ev.breakBlocksPlane((EntityPlayerMP) pl, faceHit, event.getWorld(), event.getPos());
+                        if (faceHit.getAxis() == EnumFacing.Axis.Y) {
+                            ev.breakBlocksPlaneHorizontal((EntityPlayerMP) pl, faceHit, event.getWorld(), event.getPos());
+                        } else {
+                            ev.breakBlocksPlaneVertical((EntityPlayerMP) pl, faceHit, event.getWorld(), event.getPos());
+                        }
                     }
                 }
             } finally {
@@ -261,6 +266,17 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @ASMCallHook
+    public static float getWaterSlowDown(float oldSlowDown, EntityLivingBase base) {
+        if (oldSlowDown < 1 && base instanceof EntityPlayer) {
+            CapeEffectOctans ceo = ItemCape.getCapeEffect((EntityPlayer) base, Constellations.octans);
+            if (ceo != null) {
+                oldSlowDown = 0.95F; //Make sure it's not setting it to > 1 by itself.
+            }
+        }
+        return oldSlowDown;
+    }
+
     private void tickFornaxMelting(EntityPlayer pl) {
         if(pl.isBurning()) {
             CapeEffectFornax cf = ItemCape.getCapeEffect(pl, Constellations.fornax);
@@ -282,8 +298,10 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 Predicate<Entity> pr = EntitySelectors.NOT_SPECTATING.and(EntitySelectors.IS_ALIVE);
                 List<EntityPlayer> players = w.getEntitiesWithinAABB(EntityPlayer.class, bb, pr::test);
                 for (EntityPlayer player : players) {
-                    player.heal(0.1F);
-                    player.getFoodStats().addStats(1, 0.2F);
+                    if(rand.nextFloat() <= cd.getFeedChancePerCycle()) {
+                        player.heal(cd.getHealPerCycle());
+                        player.getFoodStats().addStats(cd.getFoodLevelPerCycle(), cd.getFoodSaturationLevelPerCycle());
+                    }
                 }
             }
             if(rand.nextFloat() < cd.getTurnChance()) {
@@ -294,9 +312,10 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 IBlockState state = pl.getEntityWorld().getBlockState(at);
                 if(Plants.matchesAny(state)) {
                     state = Plants.getAnyRandomState();
-                    pl.getEntityWorld().setBlockState(at, state);
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(pl.getEntityWorld(), at, 16));
+                    if (pl.getEntityWorld().setBlockState(at, state)) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(pl.getEntityWorld(), at, 16));
+                    }
                 } else {
                     CropHelper.GrowablePlant growable = CropHelper.wrapPlant(pl.getEntityWorld(), at);
                     if(growable != null) {
@@ -356,6 +375,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @ASMCallHook
     public static void updateElytraEventPre(EntityLivingBase entity) {
         if(entity instanceof EntityPlayer) {
             CapeEffectVicio vic = ItemCape.getCapeEffect((EntityPlayer) entity, Constellations.vicio);
@@ -366,6 +386,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @ASMCallHook
     public static void updateElytraEventPost(EntityLivingBase entity) {
         inElytraCheck = false;
         if(entity instanceof EntityPlayer && updateElytraBuffer) {
@@ -380,14 +401,13 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     }
                 }
 
-                //TODO find a better solution.
                 //Vector3 mV = new Vector3(entity.motionX, entity.motionY, entity.motionZ).normalize().multiply(0.65F);
                 //entity.motionX += mV.getX() * 0.1D + (mV.getX() * 1.5D - entity.motionX) * 0.5D;
                 //entity.motionY += mV.getY() * 0.1D + (mV.getY() * 1.5D - entity.motionY) * 0.5D;
                 //entity.motionZ += mV.getZ() * 0.1D + (mV.getZ() * 1.5D - entity.motionZ) * 0.5D;
-                entity.motionX *= 1.005F;
-                entity.motionY *= 1.005F;
-                entity.motionZ *= 1.005F;
+                entity.motionX *= 1.006F;
+                entity.motionY *= 1.006F;
+                entity.motionZ *= 1.006F;
             }
         }
     }

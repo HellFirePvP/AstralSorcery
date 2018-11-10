@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.block.network;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.render.ISpecialStackDescriptor;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -61,7 +62,7 @@ import java.util.Optional;
  * Created by HellFirePvP
  * Date: 15.09.2016 / 19:03
  */
-public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork implements ISpecialStackDescriptor {
+public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork implements ISpecialStackDescriptor, CrystalPropertyItem {
 
     private static AxisAlignedBB boxCrystal = new AxisAlignedBB(0.3, 0, 0.3, 0.7, 1, 0.7);
 
@@ -129,7 +130,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
-        Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, CrystalProperties.getMaxSize(stack));
+        Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, getMaxSize(stack));
 
         if(missing.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
@@ -137,11 +138,34 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
             if(c != null) {
                 if(EnumGatedKnowledge.COLLECTOR_TYPE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collect.type", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
+                    IMinorConstellation tr = ItemCollectorCrystal.getTrait(stack);
+                    if(tr != null) {
+                        if(EnumGatedKnowledge.CRYSTAL_TRAIT.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(tr.getUnlocalizedName())) {
+                            tooltip.add(TextFormatting.GRAY + I18n.format("crystal.trait", TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName())));
+                        } else {
+                            tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
+                        }
+                    }
                 } else if(!missing.get()) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }
             }
         }
+    }
+
+    @Override
+    public int getMaxSize(ItemStack stack) {
+        BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
+        if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+            return CrystalProperties.MAX_SIZE_CELESTIAL;
+        }
+        return CrystalProperties.MAX_SIZE_ROCK;
+    }
+
+    @Nullable
+    @Override
+    public CrystalProperties provideCurrentPropertiesOrNull(ItemStack stack) {
+        return CrystalProperties.getCrystalProperties(stack);
     }
 
     /*@Override
@@ -177,7 +201,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
 
         IWeakConstellation c = ItemCollectorCrystal.getConstellation(stack);
         if(c != null) {
-            te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
+            te.onPlace(c, ItemCollectorCrystal.getTrait(stack), CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
         }
     }
 
@@ -209,6 +233,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, te.getCrystalProperties());
             ItemCollectorCrystal.setConstellation(stack, te.getConstellation());
+            ItemCollectorCrystal.setTraitConstellation(stack, te.getTrait());
             ItemCollectorCrystal.setType(stack, te.getType());
             return stack;
         }
@@ -249,6 +274,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
                     CrystalProperties.applyCrystalProperties(drop, te.getCrystalProperties());
                     ItemCollectorCrystal.setType(drop, te.getType() != null ? te.getType() : CollectorCrystalType.ROCK_CRYSTAL);
                     ItemCollectorCrystal.setConstellation(drop, te.getConstellation());
+                    ItemCollectorCrystal.setTraitConstellation(drop, te.getTrait());
                     ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
                 }
             }

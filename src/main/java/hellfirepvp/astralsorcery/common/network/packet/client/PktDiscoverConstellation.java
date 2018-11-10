@@ -55,7 +55,7 @@ public class PktDiscoverConstellation implements IMessage, IMessageHandler<PktDi
     public IMessage onMessage(PktDiscoverConstellation message, MessageContext ctx) {
         IConstellation received = ConstellationRegistry.getConstellationByName(message.discoveredConstellation);
         if (received == null) {
-            AstralSorcery.log.info("[AstralSorcery] Received unknown constellation from client: " + message.discoveredConstellation);
+            AstralSorcery.log.info("Received unknown constellation from client: " + message.discoveredConstellation);
         } else {
             PlayerProgress prog = ResearchManager.getProgress(ctx.getServerHandler().player, Side.SERVER);
             if(prog != null && received.canDiscover(prog)) {

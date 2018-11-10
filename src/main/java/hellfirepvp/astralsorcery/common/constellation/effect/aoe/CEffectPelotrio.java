@@ -40,7 +40,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -110,11 +109,11 @@ public class CEffectPelotrio extends CEffectPositionListGen<GenListEntries.Pelot
             boolean did = false;
             List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(modified.getSize()).offset(pos));
             for (EntityLivingBase e : entities) {
-                if(e != null && !e.isDead && rand.nextInt(100) == 0) {
+                if(e != null && !e.isDead && rand.nextInt(350) == 0) {
                     e = trySwapEntity(world, e);
                     if(e != null) {
                         EntityLivingBase finalEntity = e;
-                        e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, Integer.MAX_VALUE, 2));
+                        e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, Integer.MAX_VALUE, 3));
                         AstralSorcery.proxy.scheduleDelayed(() -> world.spawnEntity(finalEntity));
                         did = true;
                     }

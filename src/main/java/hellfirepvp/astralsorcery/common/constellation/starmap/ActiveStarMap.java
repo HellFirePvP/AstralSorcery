@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.DrawnConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -208,7 +209,15 @@ public class ActiveStarMap {
                     perc = MathHelper.clamp(perc, 0F, 1F);
                     int amp = effect.minPotionAmplifier + Math.round((effect.maxPotionAmplifier - effect.minPotionAmplifier) * perc);
                     int tDuration = 4 * 1200 + Math.round(rand.nextFloat() * 2 * 1200);
-                    applicableEffects.add(new PotionEffect(effect.potion, tDuration, amp, false, true));
+                    PotionEffect eff;
+                    if ((eff = MiscUtils.iterativeSearch(applicableEffects, (pe) -> pe.getPotion().equals(effect.potion))) != null) {
+                        if (eff.getAmplifier() < amp) {
+                            applicableEffects.remove(eff);
+                            applicableEffects.add(new PotionEffect(effect.potion, tDuration, amp, false, true));
+                        }
+                    } else {
+                        applicableEffects.add(new PotionEffect(effect.potion, tDuration, amp, false, true));
+                    }
                 }
             }
         }

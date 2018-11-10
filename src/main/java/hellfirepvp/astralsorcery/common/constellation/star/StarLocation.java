@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.constellation.star;
 
+import java.awt.*;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -26,6 +28,10 @@ public class StarLocation {
 
     public int getDistanceToOrigin() {
         return x + y;
+    }
+
+    public Point asPoint() {
+        return new Point(x, y);
     }
 
     @Override

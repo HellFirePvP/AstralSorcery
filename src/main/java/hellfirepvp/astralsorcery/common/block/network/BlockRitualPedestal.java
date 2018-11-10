@@ -23,7 +23,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -31,7 +30,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.items.ItemStackHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -84,6 +82,18 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         return BlockFaceShape.UNDEFINED;
     }
 
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileRitualPedestal pedestal = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
+        if(pedestal != null && !worldIn.isRemote) {
+            TileReceiverBaseInventory.ItemHandlerTile handle = pedestal.getInventoryHandler();
+            ItemUtils.dropInventory(handle, worldIn, pos);
+            handle.clearInventory();
+        }
+
+        super.breakBlock(worldIn, pos, state);
+    }
+
     /*@Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
@@ -110,11 +120,11 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         }
         ItemStack heldItem = playerIn.getHeldItem(hand);
 
-        if(!heldItem.isEmpty() && ItemTunedCrystalBase.getMainConstellation(heldItem) != null) {
+        ItemStack in = pedestal.getCurrentPedestalCrystal();
+        if(!heldItem.isEmpty() && in.isEmpty() && ItemTunedCrystalBase.getMainConstellation(heldItem) != null) {
             playerIn.setHeldItem(hand, pedestal.placeCrystalIntoPedestal(heldItem));
             return true;
         }
-        ItemStack in = pedestal.getCurrentPedestalCrystal();
         if(!in.isEmpty() && playerIn.isSneaking()) {
             pedestal.placeCrystalIntoPedestal(ItemStack.EMPTY);
             playerIn.inventory.placeItemBackInInventory(worldIn, in);
@@ -132,6 +142,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
                 TileReceiverBaseInventory.ItemHandlerTile handle = te.getInventoryHandler();
                 ItemUtils.dropInventory(te.getInventoryHandler(), worldIn, pos);
                 handle.clearInventory();
+                te.placeCrystalIntoPedestal(ItemStack.EMPTY);
                 te.markForUpdate();
             }
         }

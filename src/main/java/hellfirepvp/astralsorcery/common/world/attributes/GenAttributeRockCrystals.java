@@ -16,15 +16,18 @@ import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.world.WorldGenAttribute;
-import net.minecraft.block.BlockStone;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.*;
 
@@ -46,6 +49,9 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
     private List<Integer> applicableDimensions = new ArrayList<>();
     private int crystalDensity = 15;
 
+    private List<IBlockState> replaceableStates = null;
+    private List<String> replaceableStatesSerialized = new ArrayList<>(); //Delay resolving states to a later state...
+
     public GenAttributeRockCrystals() {
         super(0);
         this.entry = new ConfigEntry(ConfigEntry.Section.WORLDGEN, "rockcrystals") {
@@ -61,7 +67,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                     try {
                         resolvedTypes.add(BiomeDictionary.Type.getType(s));
                     } catch (Exception e) {
-                        AstralSorcery.log.error("[AstralSorcery] Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
+                        AstralSorcery.log.error("Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
                     }
                 }
                 biomeTypes = Lists.newArrayList(resolvedTypes);
@@ -71,14 +77,13 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                     try {
                         applicableDimensions.add(Integer.parseInt(s));
                     } catch (NumberFormatException exc) {
-                        AstralSorcery.log.error("[AstralSorcery] Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
+                        AstralSorcery.log.error("Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
                     }
                 }
-            }
-
-            @Override
-            public String getConfigurationSection() {
-                return super.getConfigurationSection() + "." + getKey();
+                String[] applicableReplacements = cfg.getStringList("ReplacementStates", getConfigurationSection(), new String[] {
+                        "minecraft:stone:0"
+                }, "Defines the blockstates that may be replaced by rock crystal ore when trying to generate a rock crystal ore. format: <modid>:<name>:<meta> - Use meta -1 for wildcard");
+                replaceableStatesSerialized = Arrays.asList(applicableReplacements);
             }
         };
         Config.addDynamicEntry(this.entry);
@@ -108,8 +113,41 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
         return applicable;
     }
 
+    private void resolveReplaceableStates() {
+        replaceableStates = new LinkedList<>();
+        for (String stateStr : replaceableStatesSerialized) {
+            String[] spl = stateStr.split(":");
+            if(spl.length != 3) {
+                AstralSorcery.log.info("Skipping invalid replacement state: " + stateStr);
+                continue;
+            }
+            String strMeta = spl[2];
+            Integer meta;
+            try {
+                meta = Integer.parseInt(strMeta);
+            } catch (NumberFormatException exc) {
+                AstralSorcery.log.error("Skipping invalid replacement state: " + stateStr + " - Its 'meta' is not a number!");
+                continue;
+            }
+            Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(spl[0], spl[1]));
+            if(b == null || b == Blocks.AIR) {
+                AstralSorcery.log.error("Skipping invalid replacement state: " + stateStr + " - The block does not exist!");
+                continue;
+            }
+            if(meta == -1) {
+                replaceableStates.addAll(b.getBlockState().getValidStates());
+            } else {
+                replaceableStates.add(b.getStateFromMeta(meta));
+            }
+        }
+    }
+
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world) {
+        if(replaceableStates == null) {
+            resolveReplaceableStates();
+        }
+
         if (doGenerate && random.nextInt(crystalDensity) == 0) {
             int xPos = chunkX * 16 + random.nextInt(16) + 8;
             int zPos = chunkZ * 16 + random.nextInt(16) + 8;
@@ -117,21 +155,20 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
             BlockPos pos = new BlockPos(xPos, yPos, zPos);
             if(!fitsBiome(world, pos) || !isApplicableWorld(world)) return;
             IBlockState state = world.getBlockState(pos);
-            if (state.getBlock().equals(Blocks.STONE)) {
-                BlockStone.EnumType stoneType = state.getValue(BlockStone.VARIANT);
-                if (stoneType.equals(BlockStone.EnumType.STONE)) {
-                    IBlockState newState = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
-                    world.setBlockState(pos, newState);
-                    RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
-                    buf.addOre(pos);
+            if (MiscUtils.getMatchingState(replaceableStates, state) != null) {
+                IBlockState newState = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
+                if (!world.setBlockState(pos, newState)) {
+                    return;
+                }
+                RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+                buf.addOre(pos);
 
-                    if(random.nextInt(4) == 0) {
-                        pos = pos.add(random.nextInt(2), random.nextInt(2), random.nextInt(2));
-                        if (state.getBlock().equals(Blocks.STONE)) {
-                            if (stoneType.equals(BlockStone.EnumType.STONE)) {
-                                world.setBlockState(pos, newState);
-                                buf.addOre(pos);
-                            }
+                if(random.nextInt(4) == 0) {
+                    pos = pos.add(random.nextInt(2), random.nextInt(2), random.nextInt(2));
+                    state = world.getBlockState(pos);
+                    if (MiscUtils.getMatchingState(replaceableStates, state) != null) {
+                        if (world.setBlockState(pos, newState)) {
+                            buf.addOre(pos);
                         }
                     }
                 }

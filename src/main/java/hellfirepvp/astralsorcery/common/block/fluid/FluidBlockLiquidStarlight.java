@@ -11,9 +11,11 @@ package hellfirepvp.astralsorcery.common.block.fluid;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
+import hellfirepvp.astralsorcery.common.block.BlockInfusedWood;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.MapColor;
@@ -26,6 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
@@ -153,7 +156,26 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
         if (entityIn instanceof EntityPlayer) {
             ((EntityPlayer) entityIn).addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, 0, true, true));
         } else if (entityIn instanceof EntityItem) {
+            ItemStack contained = ((EntityItem) entityIn).getItem();
+            if (!contained.isEmpty()) {
+                if (entityIn.getEntityWorld().isRemote) return;
 
+                if (Config.liquidStarlightInfusedWood) {
+                    interactInfusedWood(contained, entityIn);
+                }
+            }
+        }
+    }
+
+    private void interactInfusedWood(ItemStack contained, Entity entityIn) {
+        if (ItemUtils.hasOreName(contained, "logWood")) {
+            contained = ItemUtils.copyStackWithSize(contained, contained.getCount() - 1);
+            if (contained.isEmpty()) {
+                entityIn.setDead();
+            } else {
+                ((EntityItem) entityIn).setItem(contained);
+            }
+            ItemUtils.dropItemNaturally(entityIn.getEntityWorld(), entityIn.posX, entityIn.posY, entityIn.posZ, BlockInfusedWood.WoodType.RAW.asStack());
         }
     }
 }

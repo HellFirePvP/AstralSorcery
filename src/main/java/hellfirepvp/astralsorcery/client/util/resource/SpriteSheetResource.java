@@ -22,13 +22,13 @@ import java.awt.*;
  */
 public class SpriteSheetResource extends AbstractRenderableTexture {
 
-    private final double uPart, vPart;
+    protected double uPart, vPart;
+    protected int frameCount;
+    protected int rows, columns;
 
-    private final int frameCount;
-    private final int rows, columns;
-    private final BindableResource resource;
+    private final AbstractRenderableTexture resource;
 
-    public SpriteSheetResource(BindableResource resource, int rows, int columns) {
+    public SpriteSheetResource(AbstractRenderableTexture resource, int rows, int columns) {
         if(rows <= 0 || columns <= 0)
             throw new IllegalArgumentException("Can't instantiate a sprite sheet without any rows or columns!");
 
@@ -63,7 +63,7 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
         return getVLength();
     }
 
-    public BindableResource getResource() {
+    public AbstractRenderableTexture getResource() {
         return resource;
     }
 

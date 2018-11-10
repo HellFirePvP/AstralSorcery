@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.effect;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
 import hellfirepvp.astralsorcery.client.effect.compound.CompoundObjectEffect;
+import hellfirepvp.astralsorcery.client.effect.controller.InfluenceSizePreview;
 import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -22,14 +23,16 @@ import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.render.tile.TESRMapDrawingTable;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
-import hellfirepvp.astralsorcery.client.util.*;
+import hellfirepvp.astralsorcery.client.util.StructureMatchPreview;
+import hellfirepvp.astralsorcery.client.util.UIGateway;
+import hellfirepvp.astralsorcery.client.util.UISextantTarget;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
-import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
+import hellfirepvp.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
@@ -69,7 +72,7 @@ public final class EffectHandler {
     public boolean renderGateway = true;
 
     private StructureMatchPreview structurePreview = null;
-    private UISextantTarget sextantTarget = null;
+    private InfluenceSizePreview influenceSizePreview = null;
 
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingDepthParticle> fastRenderDepthParticles = new LinkedList<>();
@@ -84,9 +87,9 @@ public final class EffectHandler {
         return instance;
     }
 
-    public void requestGatewayUIFor(World world, Vector3 pos, double sphereRadius) {
+    public void requestGatewayUIFor(World world, BlockPos gateway, Vector3 pos, double sphereRadius) {
         if(uiGateway == null || !uiGateway.getPos().equals(pos)) {
-            uiGateway = UIGateway.initialize(world, pos, sphereRadius);
+            uiGateway = UIGateway.initialize(world, gateway, pos, sphereRadius);
         }
         gatewayUITicks = 20;
     }
@@ -99,17 +102,21 @@ public final class EffectHandler {
         structurePreview.resetTimeout();
     }
 
-    public void requestSextantTargetAt(World world, BlockPos target, SextantFinder.TargetObject sextantTarget) {
-        this.sextantTarget = UISextantTarget.initialize(world, target, sextantTarget);
-    }
-
-    public void resetSextantTarget() {
-        this.sextantTarget = null;
+    public void requestSizePreviewFor(IStructureAreaOfInfluence tile) {
+        if (!(tile instanceof TileEntity)) return;
+        InfluenceSizePreview prev = new InfluenceSizePreview(tile);
+        this.influenceSizePreview = prev;
+        register(prev);
     }
 
     @Nullable
     public UIGateway getUiGateway() {
         return uiGateway;
+    }
+
+    @Nullable
+    public IStructureAreaOfInfluence getCurrentActiveAOEView() {
+        return influenceSizePreview == null ? null : influenceSizePreview.getTile();
     }
 
     public static int getDebugEffectCount() {
@@ -147,6 +154,7 @@ public final class EffectHandler {
     public void onDebugText(RenderGameOverlayEvent.Text event) {
         if(Minecraft.getMinecraft().gameSettings.showDebugInfo) {
             event.getLeft().add("");
+            event.getLeft().add(TextFormatting.BLUE + "[AstralSorcery]" + TextFormatting.RESET + " Use Local persistent data: " + PersistentDataManager.INSTANCE.usePersistent());
             event.getLeft().add(TextFormatting.BLUE + "[AstralSorcery]" + TextFormatting.RESET + " EffectHandler:");
             event.getLeft().add(TextFormatting.BLUE + "[AstralSorcery]" + TextFormatting.RESET + " > Complex effects: " + getDebugEffectCount());
         }
@@ -160,9 +168,7 @@ public final class EffectHandler {
         if(structurePreview != null) {
             structurePreview.appendPreviewBlocks();
         }
-        if(sextantTarget != null) {
-            sextantTarget.renderStar(pTicks);
-        }
+        UISextantTarget.renderTargets(pTicks);
         GlStateManager.disableDepth();
         EntityFXFacingParticle.renderFast(pTicks, fastRenderDepthParticles);
         GlStateManager.enableDepth();
@@ -310,30 +316,28 @@ public final class EffectHandler {
             objects.clear();
             toAddBuffer.clear();
             uiGateway = null;
-            resetSextantTarget();
             structurePreview = null;
+            influenceSizePreview = null;
             gatewayUITicks = 0;
             cleanRequested = false;
         }
+
+        if (influenceSizePreview != null && influenceSizePreview.isRemoved()) {
+            influenceSizePreview = null;
+        }
+
         if(Minecraft.getMinecraft().player == null) {
             return;
         }
 
-        if(structurePreview != null) {
+        if (structurePreview != null) {
             structurePreview.tick();
             if(structurePreview.shouldBeRemoved()) {
                 structurePreview = null;
             }
         }
 
-        if(sextantTarget != null) {
-            if(Minecraft.getMinecraft().world != null &&
-                            sextantTarget.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension()) {
-                resetSextantTarget();
-            }
-        }
-
-        if(gatewayUITicks > 0) {
+        if (gatewayUITicks > 0) {
             gatewayUITicks--;
             if(gatewayUITicks <= 0) {
                 uiGateway = null;
@@ -363,7 +367,7 @@ public final class EffectHandler {
                 continue;
             }
             effect.tick();
-            if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
+            if (effect.canRemove() || (effect.isDistanceRemovable() && effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq)) {
                 effect.flagAsRemoved();
                 fastRenderParticles.remove(effect);
             }
@@ -374,7 +378,7 @@ public final class EffectHandler {
                 continue;
             }
             effect.tick();
-            if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
+            if (effect.canRemove() || (effect.isDistanceRemovable() && effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq)) {
                 effect.flagAsRemoved();
                 fastRenderDepthParticles.remove(effect);
             }
@@ -385,7 +389,7 @@ public final class EffectHandler {
                 continue;
             }
             effect.tick();
-            if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
+            if (effect.canRemove() || (effect.isDistanceRemovable() && effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq)) {
                 effect.flagAsRemoved();
                 fastRenderGatewayParticles.remove(effect);
             }

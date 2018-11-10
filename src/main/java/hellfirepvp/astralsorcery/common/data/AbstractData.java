@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.data;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,7 +71,7 @@ public abstract class AbstractData {
             this.providerId = providerId;
         }
 
-        public abstract T provideNewInstance();
+        public abstract T provideNewInstance(Side side);
 
         public final String getKey() {
             return key;

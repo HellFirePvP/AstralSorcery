@@ -10,15 +10,19 @@ package hellfirepvp.astralsorcery.common.item.block;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,6 +53,10 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
         ei.motionX = entity.motionX;
         ei.motionY = entity.motionY;
         ei.motionZ = entity.motionZ;
+        if (entity instanceof EntityItem) {
+            ei.setThrower(((EntityItem) entity).getThrower());
+            ei.setOwner(((EntityItem) entity).getOwner());
+        }
         return ei;
     }
 
@@ -75,6 +83,15 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
 
     public static IWeakConstellation getConstellation(ItemStack stack) {
         return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
+    }
+
+    public static void setTraitConstellation(ItemStack stack, @Nullable IMinorConstellation constellation) {
+        if(constellation == null) return;
+        constellation.writeToNBT(NBTHelper.getPersistentData(stack), IConstellation.getDefaultSaveKey() + "trait");
+    }
+
+    public static IMinorConstellation getTrait(ItemStack stack) {
+        return (IMinorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack), IConstellation.getDefaultSaveKey() + "trait");
     }
 
 }

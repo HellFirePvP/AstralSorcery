@@ -48,11 +48,6 @@ public abstract class ConstellationEffect extends ConfigEntry {
         this.constellation = constellation;
     }
 
-    @Override
-    public String getConfigurationSection() {
-        return super.getConfigurationSection() + "." + getKey();
-    }
-
     public IWeakConstellation getConstellation() {
         return constellation;
     }

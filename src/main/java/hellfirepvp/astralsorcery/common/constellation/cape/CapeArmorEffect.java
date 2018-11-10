@@ -49,11 +49,6 @@ public abstract class CapeArmorEffect extends ConfigEntry {
     @SideOnly(Side.CLIENT)
     public abstract void playActiveParticleTick(EntityPlayer pl);
 
-    @Override
-    public String getConfigurationSection() {
-        return super.getConfigurationSection() + "." + getKey();
-    }
-
     public final NBTTagCompound getData() {
         return this.data;
     }

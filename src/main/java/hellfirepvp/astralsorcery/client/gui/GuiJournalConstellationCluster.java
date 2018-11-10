@@ -94,15 +94,17 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        Point mouse = new Point(mouseX, mouseY);
+
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         drawCstBackground();
-        drawDefault(textureResShell);
+        drawDefault(textureResShell, mouse);
 
         zLevel += 250;
-        drawNavArrows(partialTicks);
+        drawNavArrows(partialTicks, mouse);
         rectCRenderMap.clear();
-        drawConstellations(partialTicks);
+        drawConstellations(partialTicks, mouse);
         zLevel -= 250;
 
         GlStateManager.popMatrix();
@@ -130,8 +132,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         GlStateManager.color(1F, 1F, 1F, 1F);
     }
 
-    private void drawConstellations(float partial) {
-        Point mouse = getCurrentMousePoint();
+    private void drawConstellations(float partial, Point mouse) {
         List<IConstellation> cs = constellations.subList(pageId * CONSTELLATIONS_PER_PAGE, Math.min((pageId + 1) * CONSTELLATIONS_PER_PAGE, constellations.size()));
         for (int i = 0; i < cs.size(); i++) {
             IConstellation c = cs.get(i);
@@ -141,8 +142,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         TextureHelper.refreshTextureBindState();
     }
 
-    private void drawNavArrows(float partialTicks) {
-        Point mouse = getCurrentMousePoint();
+    private void drawNavArrows(float partialTicks, Point mouse) {
         int cIndex = pageId * CONSTELLATIONS_PER_PAGE;
         rectBack = null;
         rectNext = null;
@@ -263,17 +263,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
-            GuiJournalProgression.resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
-            return;
-        }
-        if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
-            return;
-        }
-        if(bookmarkIndex == -1 && rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(getConstellationScreen());
+        if (handleBookmarkClick(p)) {
             return;
         }
         for (Rectangle r : rectCRenderMap.keySet()) {

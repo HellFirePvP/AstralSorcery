@@ -14,11 +14,17 @@ import hellfirepvp.astralsorcery.client.gui.container.*;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
+import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
+import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -27,6 +33,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,7 +63,7 @@ public class ClientGuiHandler {
             case CONSTELLATION_PAPER:
                 IConstellation c = ConstellationRegistry.getConstellationById(x); //Suggested Constellation id;
                 if(c == null) {
-                    AstralSorcery.log.info("[AstralSorcery] Tried opening ConstellationPaper GUI with out-of-range constellation id!");
+                    AstralSorcery.log.info("Tried opening ConstellationPaper GUI with out-of-range constellation id!");
                     return null;
                 } else {
                     return new GuiConstellationPaper(c);
@@ -77,6 +86,19 @@ public class ClientGuiHandler {
                     if(held.getItem() instanceof ItemJournal) {
                         return new GuiJournalContainer(player.inventory, held, player.inventory.currentItem);
                     }
+                }
+            case OBSERVATORY:
+                return new GuiObservatory(player, (TileObservatory) t);
+            case SEXTANT:
+                Tuple<EnumHand, ItemStack> heldSextant = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant);
+                if (heldSextant != null) {
+                    return new GuiSextantSelector(heldSextant.value, heldSextant.key);
+                }
+            case KNOWLEDGE_CONSTELLATION:
+                Tuple<EnumHand, ItemStack> handFragment = MiscUtils.getMainOrOffHand(player, ItemsAS.knowledgeFragment);
+                Tuple<IConstellation, List<MoonPhase>> cstInfo = ItemKnowledgeFragment.getConstellationInformation(handFragment.value);
+                if (cstInfo != null) {
+                    return new GuiKnowledgeFragment(cstInfo.key, cstInfo.value);
                 }
             default:
                 return null;

@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.models.base;
 
 import hellfirepvp.astralsorcery.client.util.ModelArmorBase;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;

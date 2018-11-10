@@ -16,8 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +34,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -60,6 +58,8 @@ public class CapeEffectLucerna extends CapeArmorEffect {
 
     @SideOnly(Side.CLIENT)
     public void playClientHighlightTick(EntityPlayer player) {
+        if (player != Minecraft.getMinecraft().player) return;
+
         World w = player.getEntityWorld();
         List<EntityLivingBase> entities = w.getEntities(EntityLivingBase.class, EntitySelectors.withinRange(player.posX, player.posY, player.posZ, range));
         for (EntityLivingBase entity : entities) {

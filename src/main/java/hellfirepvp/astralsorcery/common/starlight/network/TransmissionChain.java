@@ -47,9 +47,11 @@ public class TransmissionChain {
     private List<IPrismTransmissionNode> transmissionUpdateList = new LinkedList<>();
 
     private final WorldNetworkHandler handler;
+    private final IPrismTransmissionNode sourceNode;
 
-    private TransmissionChain(WorldNetworkHandler netHandler) {
+    private TransmissionChain(WorldNetworkHandler netHandler, IPrismTransmissionNode sourceNode) {
         this.handler = netHandler;
+        this.sourceNode = sourceNode;
     }
 
     public static void threadedBuildTransmissionChain(TransmissionWorldHandler handle, IIndependentStarlightSource source, WorldNetworkHandler netHandler, BlockPos sourcePos) {
@@ -66,10 +68,11 @@ public class TransmissionChain {
     }
 
     private static TransmissionChain buildFromSource(WorldNetworkHandler netHandler, BlockPos at) {
-        TransmissionChain chain = new TransmissionChain(netHandler);
+        TransmissionChain chain = new TransmissionChain(netHandler, null);
 
         IPrismTransmissionNode node = netHandler.getTransmissionNode(at);
         if(node != null) { //Well otherwise we don't need to do anything huh...
+            chain = new TransmissionChain(netHandler, node);
             chain.recBuildChain(node, 1F, new LinkedList<>());
         }
 
@@ -110,7 +113,7 @@ public class TransmissionChain {
         lossPerc *= node.getAdditionalTransmissionLossMultiplier();
         List<NodeConnection<IPrismTransmissionNode>> next = node.queryNext(handler);
         float nextLoss = (lossMultiplier * lossPerc) / ((float) next.size());
-        prevPath.push(node.getPos());
+        prevPath.push(node.getLocationPos());
 
         if(node.needsTransmissionUpdate() && !transmissionUpdateList.contains(node)) {
             transmissionUpdateList.add(node);
@@ -120,7 +123,7 @@ public class TransmissionChain {
             IPrismTransmissionNode trNode = nextNode.getNode();
             if(nextNode.canConnect()) {
                 BlockPos nextPos = nextNode.getTo();
-                addIfNonExistentConnection(node.getPos(), nextPos);
+                addIfNonExistentConnection(node.getLocationPos(), nextPos);
                 if(!prevPath.contains(nextPos)) { //Saves us from cycles. cyclic starlight transmission to a cyclic node means 100% loss.
 
                     Float currentLoss = remainMultiplierMap.get(nextPos);
@@ -158,6 +161,10 @@ public class TransmissionChain {
 
     public List<BlockPos> getResolvedNormalBlockPositions() {
         return resolvedNormalBlockPositions;
+    }
+
+    public IPrismTransmissionNode getSourceNode() {
+        return sourceNode;
     }
 
     //For rendering purposes.

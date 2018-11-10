@@ -26,7 +26,6 @@ import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.*;
-import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
@@ -73,7 +72,10 @@ public class ModIntegrationJEI implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-        subtypeRegistry.useNbtForSubtypes(ItemsAS.wand, ItemsAS.armorImbuedCape);
+        subtypeRegistry.useNbtForSubtypes(
+                ItemsAS.wand,
+                ItemsAS.armorImbuedCape,
+                ItemsAS.shiftingStar);
     }
 
     @Override
@@ -153,10 +155,13 @@ public class ModIntegrationJEI implements IModPlugin {
     }
 
     private void hideItems(IIngredientBlacklist blacklist) {
+        blacklist.addIngredientToBlacklist(new ItemStack(ItemsAS.knowledgeFragment));
+        blacklist.addIngredientToBlacklist(new ItemStack(ItemsAS.fragmentCapsule));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockFakeTree));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.translucentBlock));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockVanishing));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockStructural));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockPortalNode));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
         if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.hideJEIGeolosysSample(blacklist);
@@ -235,7 +240,7 @@ public class ModIntegrationJEI implements IModPlugin {
             }
         }
         if(unresolvedRecipes.size() > 0) {
-            AstralSorcery.log.warn("[AstralSorcery] JEI Initialization Ended up with " + unresolvedRecipes.size() + " unresolvable crafttweaker recipes!");
+            AstralSorcery.log.warn("JEI Initialization Ended up with " + unresolvedRecipes.size() + " unresolvable crafttweaker recipes!");
         }
     }
 

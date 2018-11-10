@@ -10,15 +10,11 @@ package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMapRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
@@ -38,11 +34,11 @@ import java.util.List;
  */
 public abstract class ConstellationBase implements IConstellation {
 
-    private List<StarLocation> starLocations = new ArrayList<>(); //32x32 locations are valid. 0-indexed.
+    private List<StarLocation> starLocations = new ArrayList<>(); //31x31 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
     private List<ItemHandle> signatureItems = new LinkedList<>();
 
-    private final String name;
+    private final String name, simpleName;
     private final Color color;
 
     public ConstellationBase(String name) {
@@ -50,6 +46,7 @@ public abstract class ConstellationBase implements IConstellation {
     }
 
     public ConstellationBase(String name, Color color) {
+        this.simpleName = name;
         ModContainer mod = Loader.instance().activeModContainer();
         if(mod != null) {
             this.name = mod.getModId() + ".constellation." + name;
@@ -60,8 +57,8 @@ public abstract class ConstellationBase implements IConstellation {
     }
 
     public StarLocation addStar(int x, int y) {
-        x &= 30; //31x31
-        y &= 30;
+        x %= (STAR_GRID_SIZE - 1); //31x31
+        y %= (STAR_GRID_SIZE - 1);
         StarLocation star = new StarLocation(x, y);
         if (!starLocations.contains(star)) {
             starLocations.add(star);
@@ -111,6 +108,11 @@ public abstract class ConstellationBase implements IConstellation {
     }
 
     @Override
+    public String getSimpleName() {
+        return simpleName;
+    }
+
+    @Override
     public String toString() {
         return "Constellation={name:" + getUnlocalizedName() + "}";
     }
@@ -121,7 +123,6 @@ public abstract class ConstellationBase implements IConstellation {
         if (o == null || getClass() != o.getClass()) return false;
         ConstellationBase that = (ConstellationBase) o;
         return name.equals(that.name);
-
     }
 
     @Override
@@ -137,12 +138,6 @@ public abstract class ConstellationBase implements IConstellation {
 
         public Major(String name, Color color) {
             super(name, color);
-        }
-
-        @Override
-        @Nullable
-        public ConstellationPerkMap getPerkMap() {
-            return ConstellationPerkMapRegistry.getPerkMap(this);
         }
 
     }
@@ -184,7 +179,7 @@ public abstract class ConstellationBase implements IConstellation {
             phases = new ArrayList<>(applicablePhases.length);
             for (MoonPhase ph : applicablePhases) {
                 if(ph == null) {
-                    throw new IllegalArgumentException("[AstralSorcery] null MoonPhase passed to Minor constellation registration for " + name);
+                    throw new IllegalArgumentException("null MoonPhase passed to Minor constellation registration for " + name);
                 }
                 phases.add(ph);
             }
@@ -195,15 +190,27 @@ public abstract class ConstellationBase implements IConstellation {
             phases = new ArrayList<>(applicablePhases.length);
             for (MoonPhase ph : applicablePhases) {
                 if(ph == null) {
-                    throw new IllegalArgumentException("[AstralSorcery] null MoonPhase passed to Minor constellation registration for " + name);
+                    throw new IllegalArgumentException("null MoonPhase passed to Minor constellation registration for " + name);
                 }
                 phases.add(ph);
             }
         }
 
         @Override
-        public List<MoonPhase> getShowupMoonPhases() {
-            return Collections.unmodifiableList(phases);
+        public List<MoonPhase> getShowupMoonPhases(long rSeed) {
+            List<MoonPhase> shifted = new ArrayList<>(phases.size());
+            for (MoonPhase mp : this.phases) {
+                int index = mp.ordinal() + (((int) (rSeed % MoonPhase.values().length)) + MoonPhase.values().length);
+                while (index >= MoonPhase.values().length) {
+                    index -= MoonPhase.values().length;
+                }
+                index = MathHelper.clamp(index, 0, MoonPhase.values().length - 1);
+                MoonPhase offset = MoonPhase.values()[index];
+                if(!shifted.contains(offset)) {
+                    shifted.add(offset);
+                }
+            }
+            return shifted;
         }
 
     }

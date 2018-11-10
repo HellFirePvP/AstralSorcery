@@ -26,8 +26,6 @@ import java.awt.*;
  */
 public class EffectHelper {
 
-    private static final BindableResource staticFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarestatic");
-
     public static EntityFXFacingParticle genericFlareParticle(Vector3 v) {
         return genericFlareParticle(v.getX(), v.getY(), v.getZ());
     }
@@ -52,12 +50,5 @@ public class EffectHelper {
         EffectHandler.getInstance().registerFX(p);
         return p;
     }
-
-    /*public static EntityFXFacingParticle genericFlareStarParticle(double x, double y, double z) {
-        EntityFXFacingParticle p = new EntityFXFacingParticle(starFlareTex, x, y, z);
-        p.enableAlphaFade().setAlphaMultiplier(0.75F).setColor(new Color(130, 0, 255)).gravity(0);
-        EffectHandler.getInstance().registerFX(p);
-        return p;
-    }*/
 
 }

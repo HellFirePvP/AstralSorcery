@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.util.BlockBreakAssist;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -61,10 +60,10 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
             EffectType type = EffectType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
             if(trigger != null) {
-                trigger.trigger(message);
+                AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn("[AstralSorcery] Error executing ParticleEventType " + message.typeOrdinal + " for pos " + pos.toString());
+            AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " for pos " + pos.toString());
         }
         return null;
     }

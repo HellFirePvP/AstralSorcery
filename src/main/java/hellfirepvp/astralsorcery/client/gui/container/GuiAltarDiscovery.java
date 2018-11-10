@@ -98,7 +98,7 @@ public class GuiAltarDiscovery extends GuiAltarBase {
 
         if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
-            spriteStarlight.getResource().bind();
+            spriteStarlight.getResource().bindTexture();
             int t = containerAltarBase.tileAltar.getTicksExisted();
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
             drawRect(guiLeft + 6, guiTop + 69, (int) (165 * percFilled), 10,

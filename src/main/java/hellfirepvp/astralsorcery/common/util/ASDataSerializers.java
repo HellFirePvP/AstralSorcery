@@ -9,13 +9,10 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.io.IOException;
@@ -28,6 +25,28 @@ import java.io.IOException;
  * Date: 18.07.2017 / 23:46
  */
 public class ASDataSerializers {
+
+    public static DataSerializer<Long> LONG = new DataSerializer<Long>() {
+        @Override
+        public void write(PacketBuffer buf, Long value) {
+            buf.writeLongLE(value);
+        }
+
+        @Override
+        public Long read(PacketBuffer buf) {
+            return buf.readLongLE();
+        }
+
+        @Override
+        public DataParameter<Long> createKey(int id) {
+            return new DataParameter<>(id, this);
+        }
+
+        @Override
+        public Long copyValue(Long value) {
+            return new Long(value);
+        }
+    };
 
     public static DataSerializer<Vector3> VECTOR = new DataSerializer<Vector3>() {
         @Override
@@ -56,12 +75,15 @@ public class ASDataSerializers {
     public static DataSerializer<FluidStack> FLUID = new DataSerializer<FluidStack>() {
         @Override
         public void write(PacketBuffer buf, FluidStack value) {
-            ByteBufUtils.writeFluidStack(buf, value);
+            buf.writeBoolean(value != null);
+            if (value != null) {
+                ByteBufUtils.writeFluidStack(buf, value);
+            }
         }
 
         @Override
         public FluidStack read(PacketBuffer buf) throws IOException {
-            return ByteBufUtils.readFluidStack(buf);
+            return buf.readBoolean() ? ByteBufUtils.readFluidStack(buf) : null;
         }
 
         @Override
@@ -71,13 +93,14 @@ public class ASDataSerializers {
 
         @Override
         public FluidStack copyValue(FluidStack value) {
-            return value.copy();
+            return value == null ? null : value.copy();
         }
     };
 
     public static void registerSerializers() {
         DataSerializers.registerSerializer(VECTOR);
         DataSerializers.registerSerializer(FLUID);
+        DataSerializers.registerSerializer(LONG);
     }
 
 }

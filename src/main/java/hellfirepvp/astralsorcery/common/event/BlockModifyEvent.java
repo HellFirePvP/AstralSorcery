@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.event;
 
+import hellfirepvp.astralsorcery.core.ASMCallHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -32,6 +33,7 @@ public class BlockModifyEvent extends Event {
     private final BlockPos at;
     private final IBlockState oldState, newState;
 
+    @ASMCallHook
     public BlockModifyEvent(Chunk chunk, BlockPos at, IBlockState oldState, IBlockState newState) {
         this.at = at;
         this.chunk = chunk;

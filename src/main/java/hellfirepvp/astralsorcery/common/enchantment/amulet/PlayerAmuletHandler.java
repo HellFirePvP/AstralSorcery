@@ -10,13 +10,18 @@ package hellfirepvp.astralsorcery.common.enchantment.amulet;
 
 import baubles.api.BaubleType;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
+import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
+import hellfirepvp.astralsorcery.common.registry.RegistryEnchantments;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.EnumSet;
 
@@ -33,9 +38,35 @@ public class PlayerAmuletHandler implements ITickHandler {
 
     private PlayerAmuletHandler() {}
 
+    @SubscribeEvent
+    public void attachAmuletItemCapability(AttachCapabilitiesEvent<ItemStack> itemCapEvent) {
+        if(!EnchantmentUpgradeHelper.isItemBlacklisted(itemCapEvent.getObject())) {
+            itemCapEvent.addCapability(AmuletHolderCapability.CAP_AMULETHOLDER_NAME, new AmuletHolderCapability.Provider());
+        }
+    }
+
+    @SubscribeEvent
+    public void onAmuletEnchantApply(DynamicEnchantmentEvent.Add event) {
+        if(EnchantmentUpgradeHelper.isItemBlacklisted(event.getEnchantedItemStack())) return;
+        Tuple<ItemStack, EntityPlayer> linkedAmulet = EnchantmentUpgradeHelper.getWornAmulet(event.getEnchantedItemStack());
+        if(linkedAmulet == null || linkedAmulet.key.isEmpty() || linkedAmulet.value == null) return;
+
+        event.getEnchantmentsToApply().addAll(ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet.key));
+        event.setResolvedPlayer(linkedAmulet.value);
+    }
+
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        clearAmuletTags((EntityPlayer) context[0]);
+        EntityPlayer player = (EntityPlayer) context[0];
+        clearAmuletTags(player);
+
+        boolean client = player.getEntityWorld().isRemote;
+        for (EnchantmentPlayerWornTick e : RegistryEnchantments.wearableTickEnchantments) {
+            int max = EnchantmentHelper.getMaxEnchantmentLevel(e, player);
+            if(max > 0) {
+                e.onWornTick(client, player, max);
+            }
+        }
     }
 
     public void clearAmuletTags(EntityPlayer player) {

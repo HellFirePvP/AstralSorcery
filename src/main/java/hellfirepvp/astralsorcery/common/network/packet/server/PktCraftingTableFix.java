@@ -56,27 +56,7 @@ public class PktCraftingTableFix implements IMessage, IMessageHandler<PktCraftin
     //A crafting table that knows its position. useful.
     @SideOnly(Side.CLIENT)
     private void openProperCraftingTableGui(PktCraftingTableFix message) {
-        AstralSorcery.proxy.scheduleClientside(new TaskOpenProperCraftingTable(message));
-    }
-
-    public BlockPos getPos() {
-        return at;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static class TaskOpenProperCraftingTable implements Runnable {
-
-        private final PktCraftingTableFix message;
-
-        public TaskOpenProperCraftingTable(PktCraftingTableFix message) {
-            this.message = message;
-        }
-
-        @Override
-        public void run() {
-            ShapedLightProximityRecipe.clientWorkbenchPosition = message.at;
-        }
-
+        AstralSorcery.proxy.scheduleClientside(() -> ShapedLightProximityRecipe.clientWorkbenchPosition = message.at);
     }
 
 }

@@ -21,7 +21,8 @@ import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayLiquidSpring;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
+import hellfirepvp.astralsorcery.common.tile.IStructureAreaOfInfluence;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -38,7 +39,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -64,7 +64,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.01.2017 / 00:53
  */
-public class ItemSkyResonator extends Item implements INBTModel {
+public class ItemSkyResonator extends Item implements INBTModel, ISpecialInteractItem {
 
     private static Random rand = new Random();
 
@@ -119,6 +119,31 @@ public class ItemSkyResonator extends Item implements INBTModel {
             }
         }
         return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
+    }
+
+    @Override
+    public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
+        ResonatorUpgrade upgr = getCurrentUpgrade(player, stack);
+        return upgr == ResonatorUpgrade.AREA_SIZE && MiscUtils.getTileAt(world, at, IStructureAreaOfInfluence.class, false) != null;
+    }
+
+    @Override
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer player, EnumFacing side, EnumHand hand, ItemStack stack) {
+        ResonatorUpgrade upgr = getCurrentUpgrade(player, stack);
+        if (upgr == ResonatorUpgrade.AREA_SIZE) {
+            if (world.isRemote) {
+                IStructureAreaOfInfluence aoe = MiscUtils.getTileAt(world, pos, IStructureAreaOfInfluence.class, false);
+                if (aoe != null) {
+                    playAoEDisplayEffect(aoe);
+                }
+            }
+        }
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playAoEDisplayEffect(IStructureAreaOfInfluence aoe) {
+        EffectHandler.getInstance().requestSizePreviewFor(aoe);
     }
 
     @Override
@@ -276,7 +301,8 @@ public class ItemSkyResonator extends Item implements INBTModel {
     public static enum ResonatorUpgrade {
 
         STARLIGHT("starlight", (p, s) -> true),
-        FLUID_FIELDS("liquid", (p, s) -> ResearchManager.getProgressTestAccess(p).getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT));
+        FLUID_FIELDS("liquid", (p, s) -> ResearchManager.getProgressTestAccess(p).getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT)),
+        AREA_SIZE("structure", (p, s) -> ResearchManager.getProgressTestAccess(p).getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT));
 
         private final ResonatorUpgradeCheck check;
         private final String appendixUpgrade;

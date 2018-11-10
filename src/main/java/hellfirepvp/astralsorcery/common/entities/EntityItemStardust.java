@@ -83,22 +83,25 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
     }
 
     private void buildCelestialCrystals() {
-        PacketChannel.CHANNEL.sendToAllAround(new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_FORM, posX, posY, posZ),
-                PacketChannel.pointFromPos(world, getPosition(), 64));
+        if (world.setBlockState(getPosition(), BlocksAS.celestialCrystals.getDefaultState())) {
+            PacketChannel.CHANNEL.sendToAllAround(new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_FORM, posX, posY, posZ),
+                    PacketChannel.pointFromPos(world, getPosition(), 64));
 
-        world.setBlockState(getPosition(), BlocksAS.celestialCrystals.getDefaultState());
-        getItem().setCount(getItem().getCount() - 1);
-        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).grow(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
-        if(foundItems.size() > 0) {
-            EntityItem ei = (EntityItem) foundItems.get(0);
-            ItemStack stack = ei.getItem();
             getItem().setCount(getItem().getCount() - 1);
-            stack.setCount(stack.getCount() - 1);
-            if(stack.getCount() <= 0) {
-                ei.setDead();
-            } else {
-                ei.setItem(stack);
+            List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).grow(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
+            if(foundItems.size() > 0) {
+                EntityItem ei = (EntityItem) foundItems.get(0);
+                ItemStack stack = ei.getItem();
+                getItem().setCount(getItem().getCount() - 1);
+                stack.setCount(stack.getCount() - 1);
+                if(stack.getCount() <= 0) {
+                    ei.setDead();
+                } else {
+                    ei.setItem(stack);
+                }
             }
+        } else {
+            inertMergeTick -= 20; //Retry later...
         }
     }
 

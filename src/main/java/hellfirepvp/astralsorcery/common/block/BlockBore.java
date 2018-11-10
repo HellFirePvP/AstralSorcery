@@ -56,9 +56,10 @@ public class BlockBore extends BlockContainer {
             ItemStack held = playerIn.getHeldItem(hand);
             if(tb != null && !held.isEmpty() && held.getItem() instanceof ItemBlock && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
                 if(!worldIn.isRemote) {
-                    worldIn.setBlockState(pos.down(), BlocksAS.blockBoreHead.getStateFromMeta(held.getItemDamage()));
-                    if(!playerIn.isCreative()) {
-                        held.shrink(1);
+                    if (worldIn.setBlockState(pos.down(), BlocksAS.blockBoreHead.getStateFromMeta(held.getItemDamage()))) {
+                        if(!playerIn.isCreative()) {
+                            held.shrink(1);
+                        }
                     }
                 }
                 return true;

@@ -43,17 +43,19 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe implements ChargedCrys
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
         World world = player.getEntityWorld();
-        if (!world.isRemote && !player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalAxe)) {
+        if (!world.isRemote && !player.isSneaking() && !player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalAxe)) {
             BlockArray tree = TreeDiscoverer.tryCaptureTreeAt(world, pos, 9, true);
             if (tree != null) {
                 Map<BlockPos, BlockArray.BlockInformation> pattern = tree.getPattern();
                 for (Map.Entry<BlockPos, BlockArray.BlockInformation> blocks : pattern.entrySet()) {
-                    world.setBlockState(blocks.getKey(), BlocksAS.blockFakeTree.getDefaultState());
-                    TileFakeTree tt = MiscUtils.getTileAt(world, blocks.getKey(), TileFakeTree.class, true);
-                    if(tt != null) {
-                        tt.setupTile(player, itemstack, blocks.getValue().state);
-                    } else {
-                        world.setBlockState(blocks.getKey(), blocks.getValue().state);
+                    if (world.setBlockState(blocks.getKey(), BlocksAS.blockFakeTree.getDefaultState())) {
+                        TileFakeTree tt = MiscUtils.getTileAt(world, blocks.getKey(), TileFakeTree.class, true);
+                        if(tt != null) {
+                            tt.setupTile(player, itemstack, blocks.getValue().state);
+                            itemstack.damageItem(1, player);
+                        } else {
+                            world.setBlockState(blocks.getKey(), blocks.getValue().state);
+                        }
                     }
                 }
                 if(!ChargedCrystalToolBase.tryRevertMainHand(player, itemstack)) {

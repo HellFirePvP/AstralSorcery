@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.util.nbt;
 import com.google.common.base.Optional;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -20,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -142,7 +144,7 @@ public class NBTHelper {
                 try {
                     Optional<T> opt = match.parseValue(valueStr);
                     if(opt.isPresent()) {
-                        state.withProperty(match, opt.get());
+                        state = state.withProperty(match, opt.get());
                     }
                 } catch (Exception exc) {}
             }
@@ -205,4 +207,35 @@ public class NBTHelper {
         return compound.hasKey(tag) ? compound.getLong(tag) : defaultValue;
     }
 
+    public static void writeBlockPosToNBT(BlockPos pos, NBTTagCompound compound) {
+        compound.setInteger("bposX", pos.getX());
+        compound.setInteger("bposY", pos.getY());
+        compound.setInteger("bposZ", pos.getZ());
+    }
+
+    public static BlockPos readBlockPosFromNBT(NBTTagCompound compound) {
+        int x = compound.getInteger("bposX");
+        int y = compound.getInteger("bposY");
+        int z = compound.getInteger("bposZ");
+        return new BlockPos(x, y, z);
+    }
+
+    public static NBTTagCompound writeVector3(Vector3 v) {
+        NBTTagCompound cmp = new NBTTagCompound();
+        writeVector3(v, cmp);
+        return cmp;
+    }
+
+    public static void writeVector3(Vector3 v, NBTTagCompound compound) {
+        compound.setDouble("vecPosX", v.getX());
+        compound.setDouble("vecPosY", v.getY());
+        compound.setDouble("vecPosZ", v.getZ());
+    }
+
+    public static Vector3 readVector3(NBTTagCompound compound) {
+        return new Vector3(
+                compound.getDouble("vecPosX"),
+                compound.getDouble("vecPosY"),
+                compound.getDouble("vecPosZ"));
+    }
 }

@@ -8,9 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,6 +25,24 @@ import net.minecraft.util.math.MathHelper;
  * Date: 04.08.2016 / 23:41
  */
 public class CrystalCalculations {
+
+    private static Map<IConstellation, Float> fractureModifierMap = new HashMap<IConstellation, Float>() {
+        {
+            put(Constellations.aevitas,     0.001F);
+            put(Constellations.discidia,    0.005F);
+            put(Constellations.evorsio,     0.001F);
+            put(Constellations.armara,      0.001F);
+            put(Constellations.vicio,       0.001F);
+
+            put(Constellations.lucerna,     0.0007F);
+            put(Constellations.bootes,      0.1F);
+            put(Constellations.mineralis,   0.007F);
+            put(Constellations.octans,      0.1F);
+            put(Constellations.pelotrio,    4F);
+            put(Constellations.horologium,  0.0007F);
+            put(Constellations.fornax,      0.009F);
+        }
+    };
 
     //Depends on size and collectivity
     //Can collect up to 9F at max, 4F max for rock crystals
@@ -59,7 +82,7 @@ public class CrystalCalculations {
             return 0F;
         }
         int remaining = castTimes - cap;
-        return Math.max(1E-8F, remaining / 100_000F);
+        return Math.max(1E-8F, remaining / 500_000F);
     }
 
     public static float getPerfection(CrystalProperties properties, int maxSize) {
@@ -67,6 +90,14 @@ public class CrystalCalculations {
         float cutting = MathHelper.sqrt((((float) properties.getCollectiveCapability()) / 100D));
         float size = MathHelper.sqrt((((float) properties.getSize()) / maxSize));
         return purity * cutting * size;
+    }
+
+    //Defines an additional modifier to determine if a single tick of a constellation effect is "strong" or "weak"
+    public static float getCstFractureModifier(IWeakConstellation channeling) {
+        if (fractureModifierMap.containsKey(channeling)) {
+            return fractureModifierMap.get(channeling);
+        }
+        return 1F;
     }
 
     //Between 0-18

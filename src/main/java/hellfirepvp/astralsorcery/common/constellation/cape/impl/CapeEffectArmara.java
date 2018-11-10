@@ -34,7 +34,7 @@ import java.util.Random;
  */
 public class CapeEffectArmara extends CapeArmorEffect {
 
-    private static int immunityRechargeTicks = 80;
+    private static int immunityRechargeTicks = 300;
     private static int immunityStacks = 3;
 
     public CapeEffectArmara(NBTTagCompound cmp) {

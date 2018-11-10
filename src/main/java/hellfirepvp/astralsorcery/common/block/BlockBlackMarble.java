@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.SoundType;
@@ -128,7 +129,7 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
         BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
         IBlockState other = world.getBlockState(pos.offset(face));
-        if((other.getBlock() instanceof BlockLiquid || other.getBlock() instanceof BlockFluidBase) &&
+        if(MiscUtils.isFluidBlock(other) &&
                 (marbleType == BlackMarbleBlockType.PILLAR || marbleType == BlackMarbleBlockType.PILLAR_BOTTOM || marbleType == BlackMarbleBlockType.PILLAR_TOP)) {
             return true;
         }

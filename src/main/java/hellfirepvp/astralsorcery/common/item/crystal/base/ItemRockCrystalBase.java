@@ -11,12 +11,14 @@ package hellfirepvp.astralsorcery.common.item.crystal.base;
 import hellfirepvp.astralsorcery.common.entities.EntityCrystal;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,7 +39,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 21:38
  */
-public abstract class ItemRockCrystalBase extends Item implements ItemHighlighted {
+public abstract class ItemRockCrystalBase extends Item implements ItemHighlighted, CrystalPropertyItem {
 
     private static Random rand = new Random();
 
@@ -84,6 +86,10 @@ public abstract class ItemRockCrystalBase extends Item implements ItemHighlighte
         crystal.motionX = location.motionX;
         crystal.motionY = location.motionY;
         crystal.motionZ = location.motionZ;
+        if (location instanceof EntityItem) {
+            crystal.setThrower(((EntityItem) location).getThrower());
+            crystal.setOwner(((EntityItem) location).getOwner());
+        }
         return crystal;
     }
 
@@ -93,9 +99,20 @@ public abstract class ItemRockCrystalBase extends Item implements ItemHighlighte
         addCrystalPropertyToolTip(stack, tooltip);
     }
 
+    @Override
+    public int getMaxSize(ItemStack stack) {
+        return CrystalProperties.MAX_SIZE_ROCK;
+    }
+
+    @Nullable
+    @Override
+    public CrystalProperties provideCurrentPropertiesOrNull(ItemStack stack) {
+        return CrystalProperties.getCrystalProperties(stack);
+    }
+
     @SideOnly(Side.CLIENT)
     protected Optional<Boolean> addCrystalPropertyToolTip(ItemStack stack, List<String> tooltip) {
-        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, CrystalProperties.getMaxSize(stack));
+        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, getMaxSize(stack));
     }
 
     public abstract ItemTunedCrystalBase getTunedItemVariant();

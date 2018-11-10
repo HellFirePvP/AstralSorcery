@@ -10,14 +10,20 @@ package hellfirepvp.astralsorcery;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
+import hellfirepvp.astralsorcery.common.base.ShootingStarHandler;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.data.DataPatreonFlares;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,6 +32,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,14 +44,15 @@ import org.apache.logging.log4j.Logger;
  * Date: 07.05.2016 / 00:20
  */
 @Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION,
-        dependencies = "required-after:forge@[14.23.2.2611,);required-after:baubles;after:crafttweaker",
+        dependencies = "required-after:forge@[14.23.4.2748,);required-after:baubles;after:crafttweaker",
+        guiFactory = "hellfirepvp.astralsorcery.common.data.config.ingame.ConfigGuiFactory",
         certificateFingerprint = "a0f0b759d895c15ceb3e3bcb5f3c2db7c582edf0",
         acceptedMinecraftVersions = "[1.12.2]")
 public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";
     public static final String NAME = "Astral Sorcery";
-    public static final String VERSION = "1.9.0";
+    public static final String VERSION = "1.10.3";
     public static final String CLIENT_PROXY = "hellfirepvp.astralsorcery.client.ClientProxy";
     public static final String COMMON_PROXY = "hellfirepvp.astralsorcery.common.CommonProxy";
 
@@ -63,8 +71,9 @@ public class AstralSorcery {
         event.getModMetadata().version = VERSION;
         devEnvChache = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
-        proxy.preLoadConfigEntries();
-        Config.load(event.getSuggestedConfigurationFile());
+        proxy.setupConfiguration();
+
+        Config.loadAndSetup(event.getSuggestedConfigurationFile());
 
         proxy.registerConfigDataRegistries();
         Config.loadDataRegistries(event.getModConfigurationDirectory());
@@ -106,17 +115,21 @@ public class AstralSorcery {
     public void onServerStopping(FMLServerStoppingEvent event) {
         ResearchManager.saveAndClearServerCache();
         StarlightTransmissionHandler.getInstance().serverCleanHandlers();
-        EventHandlerServer.perkCooldowns.clear();
+        PerkEffectHelper.perkCooldowns.clear();
         EventHandlerEntity.invulnerabilityCooldown.clear();
         EventHandlerEntity.ritualFlight.clear();
         EventHandlerEntity.attackStack.clear();
         EventHandlerEntity.spawnDenyRegions.clear();
+        ((DataPatreonFlares) SyncDataHolder.getDataClient(SyncDataHolder.DATA_PATREON_FLARES)).cleanUp(Side.SERVER);
+        PerkAttributeHelper.clearServer();
+        ShootingStarHandler.getInstance().clearServerCache();
     }
 
     @Mod.EventHandler
     public void onServerStop(FMLServerStoppedEvent event) {
         WorldCacheManager.wipeCache();
-        //SpellCastingManager.INSTANCE.clearEffects();
+        AttributeTypeRegistry.getTypes().forEach(t -> t.clear(Side.SERVER));
+        PerkTree.PERK_TREE.clearCache(Side.SERVER);
     }
 
     public static boolean isRunningInDevEnvironment() {

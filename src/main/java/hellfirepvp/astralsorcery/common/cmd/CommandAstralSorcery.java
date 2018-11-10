@@ -8,9 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.cmd;
 
+import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.constellation.*;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
@@ -27,16 +28,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -85,10 +83,11 @@ public class CommandAstralSorcery extends CommandBase {
             "research",
             "progress",
             "reset",
-            "charge",
+            "exp",
             "attune",
             "build",
-            "maximize"
+            "maximize",
+            "slnetwork"
     };
 
     @Override
@@ -130,7 +129,7 @@ public class CommandAstralSorcery extends CommandBase {
 
                     }
                     case "progress":
-                        return getListOfStringsMatchingLastWord(args, "all"); // fixme
+                        return getListOfStringsMatchingLastWord(args, "all");
 
                     case "attune": {
                         List<String> names = new ArrayList<String>();
@@ -157,6 +156,8 @@ public class CommandAstralSorcery extends CommandBase {
             String identifier = args[0];
             if (identifier.equalsIgnoreCase("help")) {
                 displayHelp(sender);
+            } else if (identifier.equalsIgnoreCase("slnetwork")) {
+                tryEnterSLNetworkDebugMode(server, sender);
             } else if (identifier.equalsIgnoreCase("constellation") || identifier.equalsIgnoreCase("constellations")) {
                 if (args.length == 1) {
                     listConstellations(sender);
@@ -179,9 +180,9 @@ public class CommandAstralSorcery extends CommandBase {
                 if (args.length == 2) {
                     wipeProgression(server, sender, args[1]);
                 }
-            } else if (identifier.equalsIgnoreCase("charge")) {
+            } else if (identifier.equalsIgnoreCase("charge") || identifier.equalsIgnoreCase("exp")) {
                 if (args.length == 3) {
-                    setCharge(server, sender, args[1], args[2]);
+                    setExp(server, sender, args[1], args[2]);
                 }
             } else if (identifier.equalsIgnoreCase("attune")) {
                 if(args.length == 3) {
@@ -199,6 +200,21 @@ public class CommandAstralSorcery extends CommandBase {
                 }
             }
         }
+    }
+
+    private void tryEnterSLNetworkDebugMode(MinecraftServer server, ICommandSender sender) {
+        if(!(sender instanceof EntityPlayer)) {
+            sender.sendMessage(new TextComponentString("This command can only be executed by a player!"));
+            return;
+        }
+
+        EntityPlayer player = (EntityPlayer) sender;
+        if (!player.isCreative()) {
+            sender.sendMessage(new TextComponentString("§cYou have to be in creative-mode to use the debug mode!"));
+            return;
+        }
+        StarlightNetworkDebugHandler.INSTANCE.awaitDebugInteraction(player, () -> sender.sendMessage(new TextComponentString("§cStarlight network debug-rightclick timed out.")));
+        sender.sendMessage(new TextComponentString("§aRightclick a block within 20 seconds to collect information about its starlight network activity."));
     }
 
     private void attuneToConstellation(MinecraftServer server, ICommandSender sender, String otherPlayerName, String majorConstellationStr) {
@@ -223,7 +239,7 @@ public class CommandAstralSorcery extends CommandBase {
         }
     }
 
-    private void setCharge(MinecraftServer server, ICommandSender sender, String otherPlayerName, String strCharge) {
+    private void setExp(MinecraftServer server, ICommandSender sender, String otherPlayerName, String strCharge) {
         Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
@@ -239,7 +255,7 @@ public class CommandAstralSorcery extends CommandBase {
             return;
         }
 
-        if(ResearchManager.forceCharge(other, chargeToSet)) {
+        if(ResearchManager.setExp(other, chargeToSet)) {
             sender.sendMessage(new TextComponentString("§aSuccess! Player charge has been set to " + chargeToSet));
         } else {
             sender.sendMessage(new TextComponentString("§cFailed! Player specified doesn't seem to have a research progress!"));
@@ -377,10 +393,10 @@ public class CommandAstralSorcery extends CommandBase {
 
         sender.sendMessage(new TextComponentString("§aProgression tier: " + progress.getTierReached().name()));
         sender.sendMessage(new TextComponentString("§aAttuned to: " + (progress.getAttunedConstellation() == null ? "<none>" : progress.getAttunedConstellation().getUnlocalizedName())));
-        sender.sendMessage(new TextComponentString("§aAlignment charge: " + progress.getAlignmentCharge() + " - As level: " + ConstellationPerkLevelManager.getAlignmentLevel(progress)));
+        sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(progress.getPerkExp()))));
         sender.sendMessage(new TextComponentString("§aUnlocked perks + unlock-level:"));
-        for (Map.Entry<ConstellationPerk, Integer> entry : progress.getAppliedPerks().entrySet()) {
-            sender.sendMessage(new TextComponentString("§7" + entry.getKey().getUnlocalizedName() + " / " + entry.getValue()));
+        for (AbstractPerk perk : progress.getAppliedPerks()) {
+            sender.sendMessage(new TextComponentString("§7" + (perk.getUnlocalizedName() + ".name")));
         }
         sender.sendMessage(new TextComponentString("§aUnlocked research groups:"));
         StringBuilder sb = new StringBuilder();
@@ -475,21 +491,22 @@ public class CommandAstralSorcery extends CommandBase {
         sender.sendMessage(new TextComponentString("§a/astralsorcery reset [playerName]§7 - resets all progression-related data for that player."));
         sender.sendMessage(new TextComponentString("§a/astralsorcery build [structure]§7 - builds the named structure wherever the player is looking at."));
         sender.sendMessage(new TextComponentString("§a/astralsorcery maximize [playerName]§7 - unlocks everything for that player."));
-        sender.sendMessage(new TextComponentString("§a/astralsorcery charge [playerName] <charge>§7 - sets the alignment charge for a player"));
+        sender.sendMessage(new TextComponentString("§a/astralsorcery exp [playerName] <exp>§7 - sets the perk exp for a player"));
         sender.sendMessage(new TextComponentString("§a/astralsorcery attune [playerName] <majorConstellationName>§7 - sets the attunement constellation for a player"));
+        sender.sendMessage(new TextComponentString("§a/astralsorcery slnetwork§7 - Executing player enters StarlightNetwork debug mode for the next block"));
     }
 
     private void listConstellations(ICommandSender sender) {
-        sender.sendMessage(new TextComponentString("§cMajor Constellations:"));
+        sender.sendMessage(new TextComponentString("§cMajor \"Bright\" Constellations:"));
         for (IMajorConstellation c : ConstellationRegistry.getMajorConstellations()) {
             sender.sendMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
-        sender.sendMessage(new TextComponentString("§Weak Constellations:"));
+        sender.sendMessage(new TextComponentString("§Weak \"Dim\" Constellations:"));
         for (IWeakConstellation c : ConstellationRegistry.getWeakConstellations()) {
             if(c instanceof IMajorConstellation) continue;
             sender.sendMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
-        sender.sendMessage(new TextComponentString("§cMinor Constellations:"));
+        sender.sendMessage(new TextComponentString("§cMinor \"Faint\" Constellations:"));
         for (IMinorConstellation c : ConstellationRegistry.getMinorConstellations()) {
             sender.sendMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }

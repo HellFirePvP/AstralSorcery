@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods.jei.altar;
 
-import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
@@ -18,8 +17,10 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -94,5 +95,12 @@ public class CategoryAltarTrait extends JEIBaseCategory<AltarTraitRecipeWrapper>
         }
 
         group.set(ingredients);
+
+        group.addTooltipCallback((slot, input, stack, tooltip) -> {
+            if (!input && Minecraft.getMinecraft().gameSettings.showDebugInfo) {
+                tooltip.add("");
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.recipename", recipeWrapper.getRecipe().getNativeRecipe().getRegistryName().toString()));
+            }
+        });
     }
 }
