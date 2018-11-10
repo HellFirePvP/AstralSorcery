@@ -171,7 +171,7 @@ public abstract class AbstractPerk {
 
     @SideOnly(Side.CLIENT)
     public final Collection<String> getLocalizedTooltip() {
-        if (false && tooltipCache != null) {
+        if (tooltipCache != null) {
             return tooltipCache;
         }
 
