@@ -80,6 +80,16 @@ public class MiscUtils {
         return null;
     }
 
+    public static boolean canEntityTickAt(World world, BlockPos pos) {
+        if (!isChunkLoaded(world, pos)) {
+            return false;
+        }
+        BlockPos test = new BlockPos(pos.getX(), 0, pos.getZ());
+        boolean isForced = world.getPersistentChunks().containsKey(new ChunkPos(test));
+        int range = isForced ? 0 : 32;
+        return world.isAreaLoaded(test.add(-range, 0, -range), test.add(range, 0, range), true);
+    }
+
     @Nullable
     public static <T> T getRandomEntry(List<T> list, Random rand) {
         if(list == null || list.isEmpty()) return null;

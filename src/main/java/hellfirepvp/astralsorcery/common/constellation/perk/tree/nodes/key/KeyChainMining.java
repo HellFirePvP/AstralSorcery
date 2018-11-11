@@ -31,6 +31,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -67,6 +68,14 @@ public class KeyChainMining extends KeyPerk {
                         "Defines the base chance a chain is tried to be built.");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.chainChance *= multiplier;
+        this.chainLength = MathHelper.ceil(this.chainLength * multiplier);
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -145,11 +154,13 @@ public class KeyChainMining extends KeyPerk {
                         capturing = false;
                         Vector3 plPos = Vector3.atEntityCenter(player);
                         for (ItemStack stack : drops) {
-                            ItemUtils.dropItemNaturally(player.getEntityWorld(),
-                                    plPos.getX() + rand.nextFloat() - rand.nextFloat(),
-                                    player.posY,
-                                    plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
-                                    stack);
+                            if (!player.addItemStackToInventory(stack)) {
+                                ItemUtils.dropItemNaturally(player.getEntityWorld(),
+                                        plPos.getX() + rand.nextFloat() - rand.nextFloat(),
+                                        player.posY,
+                                        plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
+                                        stack);
+                            }
                         }
                     } catch (Exception ignored) {
                     } finally {

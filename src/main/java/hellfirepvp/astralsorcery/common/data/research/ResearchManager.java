@@ -460,7 +460,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean setExp(EntityPlayer player, int exp) {
+    public static boolean setExp(EntityPlayer player, long exp) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
 
@@ -670,11 +670,11 @@ public class ResearchManager {
     }*/
 
     public static void recieveProgressFromServer(PktSyncKnowledge message) {
-        int currentLvl = clientProgress == null ? 0 : PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp()));
+        int currentLvl = clientProgress == null ? 0 : clientProgress.getPerkLevel();
         clientProgress = new PlayerProgress();
         clientProgress.receive(message);
         clientInitialized = true;
-        if(PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp())) > currentLvl) {
+        if (clientProgress.getPerkLevel() > currentLvl) {
             showBar();
         }
     }

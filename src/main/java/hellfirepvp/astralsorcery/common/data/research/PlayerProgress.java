@@ -430,7 +430,7 @@ public class PlayerProgress {
 
     public int getAvailablePerkPoints() {
         int allocatedPerks = this.unlockedPerks.size() - 1; //Root perk doesn't count
-        int allocationLevels = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(getPerkExp()));
+        int allocationLevels = PerkLevelManager.INSTANCE.getLevel(getPerkExp());
         return (allocationLevels + this.freePointTokens.size()) - allocatedPerks;
     }
 
@@ -442,14 +442,22 @@ public class PlayerProgress {
         return perkExp;
     }
 
+    public int getPerkLevel() {
+        return PerkLevelManager.INSTANCE.getLevel(getPerkExp());
+    }
+
+    public float getPercentToNextLevel() {
+        return PerkLevelManager.INSTANCE.getNextLevelPercent(getPerkExp());
+    }
+
     protected void modifyExp(double exp) {
-        int currLevel = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(getPerkExp()));
+        int currLevel = PerkLevelManager.INSTANCE.getLevel(getPerkExp());
         if (exp >= 0 && currLevel >= PerkLevelManager.INSTANCE.getLevelCap()) {
             return;
         }
-        int expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel);
-        int expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel + 1);
-        int cap = MathHelper.floor(((float) (expNextLevel - expThisLevel)) * 0.08F);
+        long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel);
+        long expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel + 1);
+        long cap = MathHelper.lfloor(((float) (expNextLevel - expThisLevel)) * 0.08F);
         if (exp > cap) {
             exp = cap;
         }

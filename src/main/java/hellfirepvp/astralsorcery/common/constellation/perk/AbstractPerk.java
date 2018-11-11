@@ -24,9 +24,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -83,6 +83,14 @@ public abstract class AbstractPerk {
         return (T) this;
     }
 
+    @Optional.Method(modid = "crafttweaker")
+    public final void adjustMultipliers() {
+        double multiplier = hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.PerkTree.getMultiplier(this);
+        applyEffectMultiplier(multiplier);
+    }
+
+    protected void applyEffectMultiplier(double multiplier) {}
+
     //Return true to display that the perk's modifiers got disabled by pack's configurations
     public boolean modifiersDisabled(EntityPlayer player, Side side) {
         APIRegistryEvent.PerkDisable event = new APIRegistryEvent.PerkDisable(this, player, side);
@@ -125,6 +133,10 @@ public abstract class AbstractPerk {
      * Data in the dataStorage is filled with the data set in onUnlockPerkServer
      */
     public void onRemovePerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
+
+    public <T> T setNameOverride(AbstractPerk other) {
+        return setNameOverride(other.getUnlocalizedName());
+    }
 
     public <T> T setNameOverride(String namePrefix) {
         this.ovrUnlocalizedNamePrefix = namePrefix;

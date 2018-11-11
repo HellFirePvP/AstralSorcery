@@ -44,6 +44,13 @@ public class KeyNoArmor extends KeyPerk {
         });
     }
 
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.dmgReductionMultiplier *= multiplier;
+    }
+
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
         if (!(event.getEntityLiving() instanceof EntityPlayer)) {

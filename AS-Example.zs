@@ -13,6 +13,16 @@
 // Example:
 // mods.astralsorcery.PerkTree.removePerk("astralsorcery:base_inc_perkeffect_t1_1");
 
+// Modifies the multipliers of all modifiers on a perk.
+// The default values will be multiplied with the passed multiplier.
+// Enable the F3-debug screen (press f3...) and then open the perks-tab to see the registry names of the perks on their tooltip.
+// Warning: Should a modifier become "useless" (so "+0 added" or similiar) it'll be removed from the perk.
+// Parameters:
+// String (RegistryName)
+// Float (The multiplier)
+// Example:
+// mods.astralsorcery.PerkTree.modifyPerk("astralsorcery:base_inc_perkeffect_t1", 0);
+
 
 // Adds a new Infusion recipe to the starlight infusion
 // Parameters:

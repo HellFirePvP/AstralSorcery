@@ -29,7 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeyMending extends KeyPerk implements IPlayerTickPerk {
 
-    private static int chanceToRepair = 800;
+    private int chanceToRepair = 800;
 
     public KeyMending(String name, int x, int y) {
         super(name, x, y);
@@ -40,6 +40,13 @@ public class KeyMending extends KeyPerk implements IPlayerTickPerk {
                         "Sets the chance (Random.nextInt(chance) == 0) to try to see if a piece of armor on the player that is damageable and damaged can be repaired; the lower the more likely");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.chanceToRepair = MathHelper.ceil(this.chanceToRepair * multiplier);
     }
 
     @Override

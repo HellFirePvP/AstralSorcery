@@ -6,28 +6,37 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
+package hellfirepvp.astralsorcery.common.constellation.perk.tree.weak;
 
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePointConstellation;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: MajorPerk
+ * Class: ConstellationPerk
  * Created by HellFirePvP
- * Date: 17.07.2018 / 18:54
+ * Date: 11.11.2018 / 10:00
  */
-public class MajorPerk extends AttributeModifierPerk {
+public class ConstellationPerk extends AttributeModifierPerk {
 
-    public MajorPerk(String name, int x, int y) {
+    private IConstellation constellation;
+
+    public ConstellationPerk(String name, IConstellation cst, int x, int y) {
         super(name, x, y);
-        setCategory(CATEGORY_MAJOR);
+        this.constellation = cst;
+    }
+
+    public IConstellation getConstellation() {
+        return constellation;
     }
 
     @Override
     public PerkTreePoint getPoint() {
-        return new PerkTreeMajor(this, this.getOffset());
+        return new PerkTreePointConstellation(this, getOffset(),
+                this.constellation, PerkTreePointConstellation.MINOR_SPRITE_SIZE);
     }
+
 }

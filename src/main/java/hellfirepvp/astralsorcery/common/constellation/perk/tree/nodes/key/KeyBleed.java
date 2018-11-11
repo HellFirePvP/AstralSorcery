@@ -20,6 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -48,6 +49,14 @@ public class KeyBleed extends KeyPerk {
                         "Defines the base chance a bleed can/is applied when an entity is being hit by this entity");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.bleedDuration = MathHelper.ceil(this.bleedDuration * multiplier);
+        this.bleedChance *= multiplier;
     }
 
     @SubscribeEvent

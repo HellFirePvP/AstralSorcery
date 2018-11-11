@@ -83,6 +83,7 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             if (added > 0) {
                 added *= 0.0025F;
                 added *= expMultiplier;
+                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, added);
                 added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
                 ResearchManager.modifyExp(player, added);
             }

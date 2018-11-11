@@ -48,6 +48,16 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
+    public int getPerkLevel() {
+        return 0;
+    }
+
+    @Override
+    public float getPercentToNextLevel() {
+        return 0F;
+    }
+
+    @Override
     public IMajorConstellation getAttunedConstellation() {
         return null;
     }

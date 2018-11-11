@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.container.*;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
@@ -115,6 +116,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
         Config.addDynamicEntry(new TileAccelerationBlacklist.TileAccelBlacklistEntry());
         Config.addDynamicEntry(new ShootingStarHandler.StarConfigEntry());
+        Config.addDynamicEntry(PerkLevelManager.INSTANCE);
     }
 
     public void registerConfigDataRegistries() {
@@ -296,7 +298,7 @@ public class CommonProxy implements IGuiHandler {
 
     public void postInit() {
         AltarRecipeEffectRecovery.attemptRecipeRecovery();
-        RegistryPerks.postInitPerkRemoval();
+        RegistryPerks.postProcessPerks();
 
         AstralSorcery.log.info("Post compile recipes");
 

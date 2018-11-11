@@ -32,23 +32,27 @@ import java.awt.*;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: PerkTreeOffset
+ * Class: PerkTreePointConstellation
  * Created by HellFirePvP
  * Date: 17.06.2018 / 09:32
  */
-public class PerkTreeOffset extends PerkTreePoint {
+public class PerkTreePointConstellation extends PerkTreePoint {
+
+    public static final int ROOT_SPRITE_SIZE = 45;
+    public static final int MINOR_SPRITE_SIZE = 30;
 
     private final IConstellation associatedConstellation;
 
-    private static final int haloSpriteSize = 45;
     private SpriteQuery queryCstUnAllocated;
     private SpriteQuery queryCstAllocated;
     private SpriteQuery queryCstUnlockable;
+    private final int perkSpriteSize;
 
-    public PerkTreeOffset(AbstractPerk perk, Point offset, IConstellation associatedConstellation) {
+    public PerkTreePointConstellation(AbstractPerk perk, Point offset, IConstellation associatedConstellation, int perkSpriteSize) {
         super(perk, offset);
         this.associatedConstellation = associatedConstellation;
-        this.setRenderSize(haloSpriteSize / 2);
+        this.perkSpriteSize = perkSpriteSize;
+        this.setRenderSize(perkSpriteSize / 2);
     }
 
     public void setQueryRootPerkHaloUnAllocated(SpriteQuery queryCstUnAllocated) {
@@ -80,7 +84,7 @@ public class PerkTreeOffset extends PerkTreePoint {
         GlStateManager.color(1, 1, 1, 1);
         super.renderAtCurrentPos(status, spriteOffsetTick, pTicks);
 
-        int haloRenderSize = haloSpriteSize;
+        int haloRenderSize = perkSpriteSize;
         SpriteSheetResource tex;
         switch (status) {
             case UNALLOCATED:
@@ -136,7 +140,7 @@ public class PerkTreeOffset extends PerkTreePoint {
                     break;
             }
 
-            int size = MathHelper.floor(haloSpriteSize * 0.85);
+            int size = MathHelper.floor(perkSpriteSize * 0.85);
 
             RenderConstellation.renderConstellationIntoGUI(overlay, this.associatedConstellation,
                     -size, -size, 0,
@@ -150,6 +154,6 @@ public class PerkTreeOffset extends PerkTreePoint {
 
         }
 
-        return new Rectangle(-haloSpriteSize, -haloSpriteSize, haloSpriteSize * 2, haloSpriteSize * 2);
+        return new Rectangle(-perkSpriteSize, -perkSpriteSize, perkSpriteSize * 2, perkSpriteSize * 2);
     }
 }

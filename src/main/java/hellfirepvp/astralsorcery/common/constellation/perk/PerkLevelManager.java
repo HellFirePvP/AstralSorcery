@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
+import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.config.Configuration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,37 +23,47 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 12.12.2016 / 00:33
  */
-public class PerkLevelManager {
+public class PerkLevelManager extends ConfigEntry {
 
+    public static int LEVEL_CAP = 30;
     public static final PerkLevelManager INSTANCE = new PerkLevelManager();
 
-    private final int LEVEL_CAP = 30;
-    private Map<Integer, Integer> totalExpLevelRequired = new HashMap<>();
+    private Map<Integer, Long> totalExpLevelRequired = new HashMap<>();
 
     private PerkLevelManager() {
-        setupLevels();
+        super(Section.PERK_LEVELS, "level");
     }
 
-    private void setupLevels() {
-        for (int i = 1; i <= LEVEL_CAP; i++) {
-            int prev = totalExpLevelRequired.getOrDefault(i - 1, 0);
-            totalExpLevelRequired.put(i, prev + 150 + (MathHelper.floor(Math.pow(2, (i / 2) + 3))));
+    private void ensureLevels() {
+        if (totalExpLevelRequired.isEmpty()) {
+            for (int i = 1; i <= LEVEL_CAP; i++) {
+                long prev = totalExpLevelRequired.getOrDefault(i - 1, 0L);
+                totalExpLevelRequired.put(i, prev + 150L + (MathHelper.lfloor(Math.pow(2, (i / 2) + 3))));
+            }
         }
     }
 
-    public int getLevel(int totalExp) {
+    public int getLevel(double totalExp) {
+        return getLevel(MathHelper.lfloor(totalExp));
+    }
+
+    public int getLevel(long totalExp) {
+        ensureLevels();
+
         if (totalExp <= 0) {
             return 1;
         }
         for (int i = 1; i <= LEVEL_CAP; i++) {
-            if (totalExp < totalExpLevelRequired.getOrDefault(i, Integer.MAX_VALUE)) {
+            if (totalExp < totalExpLevelRequired.getOrDefault(i, Long.MAX_VALUE)) {
                 return i;
             }
         }
         return LEVEL_CAP;
     }
 
-    public int getExpForLevel(int level) {
+    public long getExpForLevel(int level) {
+        ensureLevels();
+
         if (level <= 1) {
             return 0;
         }
@@ -61,16 +74,25 @@ public class PerkLevelManager {
     }
 
     public float getNextLevelPercent(double totalExp) {
-        int level = getLevel(MathHelper.floor(totalExp));
+        ensureLevels();
+
+        int level = getLevel(totalExp);
         if (level >= LEVEL_CAP) {
             return 1F; //Done.
         }
-        int nextLevel = this.totalExpLevelRequired.getOrDefault(level, 0);
-        int prevLevel = this.totalExpLevelRequired.getOrDefault(level - 1, 0);
+        long nextLevel = this.totalExpLevelRequired.getOrDefault(level, 0L);
+        long prevLevel = this.totalExpLevelRequired.getOrDefault(level - 1, 0L);
         return ((float) (totalExp - prevLevel)) / ((float) (nextLevel - prevLevel));
     }
 
     public int getLevelCap() {
         return LEVEL_CAP;
+    }
+
+    @Override
+    public void loadFromConfig(Configuration cfg) {
+        this.totalExpLevelRequired.clear();
+
+        LEVEL_CAP = cfg.getInt(getKey() + "Cap", getConfigurationSection(), LEVEL_CAP, 1, 100, "Sets the max level for the perk tree levels.");
     }
 }

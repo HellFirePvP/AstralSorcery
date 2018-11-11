@@ -45,6 +45,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
@@ -129,14 +130,19 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
 
     private boolean tryHarvestBlock(World world, BlockPos out, BlockPos treeBlockPos, IBlockState fakedState) {
         if(rand.nextInt(ConfigEntryTreeBeacon.dropsChance) == 0) {
-            Block b = fakedState.getBlock();
-            List<ItemStack> drops = b.getDrops(world, treeBlockPos, fakedState, 2);
-            for (ItemStack i : drops) {
-                if(i.isEmpty()) continue;
-                ItemUtils.dropItemNaturally(world,
-                        out.getX() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1),
-                        out.getY() + rand.nextFloat() * 3,
-                        out.getZ() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1), i);
+            if (MiscUtils.canEntityTickAt(world, pos)) {
+                Block b = fakedState.getBlock();
+                List<ItemStack> drops = b.getDrops(world, treeBlockPos, fakedState, 2);
+                for (ItemStack i : drops) {
+                    if(i.isEmpty()) continue;
+                    ItemUtils.dropItemNaturally(world,
+                            out.getX() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1),
+                            out.getY() + rand.nextFloat() * 3,
+                            out.getZ() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1), i);
+                }
+            } else {
+                //Don't break the block then. We do nothing.
+                return false;
             }
         }
         return rand.nextInt(ConfigEntryTreeBeacon.breakChance) == 0;

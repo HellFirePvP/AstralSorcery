@@ -54,6 +54,10 @@ public class PerkAttributeModifier {
         this.absolute = true;
     }
 
+    void multiplyValue(double multiplier) {
+        this.value *= multiplier;
+    }
+
     /**
      * Use this method for PerkConverters returning a new PerkAttributeModifier!
      */

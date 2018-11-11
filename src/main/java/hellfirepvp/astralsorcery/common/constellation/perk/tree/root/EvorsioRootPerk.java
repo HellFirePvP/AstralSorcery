@@ -63,6 +63,7 @@ public class EvorsioRootPerk extends RootPerk {
             }
             gainedExp *= 0.4F;
             gainedExp *= expMultiplier;
+            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, gainedExp);
             gainedExp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP);
             gainedExp = (float) Math.sqrt(gainedExp);
             ResearchManager.modifyExp(player, gainedExp);

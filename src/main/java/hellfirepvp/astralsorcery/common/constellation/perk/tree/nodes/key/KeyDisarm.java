@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeyDisarm extends KeyPerk {
 
-    private static float dropChance = 0.05F;
+    private float dropChance = 0.05F;
 
     public KeyDisarm(String name, int x, int y) {
         super(name, x, y);
@@ -47,6 +47,13 @@ public class KeyDisarm extends KeyPerk {
                         "Defines the chance (in percent) per hit to make the attacked entity drop its armor.");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.dropChance *= multiplier;
     }
 
     @SubscribeEvent

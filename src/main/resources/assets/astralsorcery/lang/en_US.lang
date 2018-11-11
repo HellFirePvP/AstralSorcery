@@ -95,6 +95,9 @@ misc.fragment.content.empty=The scroll appears to be blank.
 misc.fragment.added.cst=The constellation %s vanishes out of sight.
 misc.fragment.added=Gained Knowledge about: %s
 
+misc.ctrlcopy=CTRL + leftclick to copy
+misc.ctrlcopy.copied=Copied: %s
+
 misc.sword.sharpened=Sharpened (%s increased Damage)
 misc.chaos.resistance=+%s Chaos Resistance
 misc.chaos.resistance.max=Chaos Immunity
@@ -786,6 +789,12 @@ perk.attribute.astralsorcery.expgain.name=Perk Experience gained
 perk.attribute.astralsorcery.dodge.name=Dodge Chance
 perk.attribute.astralsorcery.thorns.name=%% of melee damage taken is reflected
 perk.attribute.astralsorcery.lifeleech.name=%% of damage dealt gained as life
+
+perk.astralsorcery.outer_s_inc_life.name=Increased Maximum Life
+perk.astralsorcery.outer_s_inc_mine.name=Increased Mining Speed
+perk.astralsorcery.outer_s_inc_dmg.name=Increased Melee and Projecile Damage
+perk.astralsorcery.outer_s_inc_def.name=Increased Armor and Elemental Resistances
+perk.astralsorcery.outer_s_inc_trv.name=Increased Reach and Movement Speed
 
 perk.astralsorcery.base_inc_life.name=Increased Maximum Life
 perk.astralsorcery.med_inc_life.name=Increased Maximum Life

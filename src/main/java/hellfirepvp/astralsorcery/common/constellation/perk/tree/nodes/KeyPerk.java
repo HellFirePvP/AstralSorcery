@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.AttributeModifierPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
 
 /**
  * This class is part of the Astral Sorcery Mod

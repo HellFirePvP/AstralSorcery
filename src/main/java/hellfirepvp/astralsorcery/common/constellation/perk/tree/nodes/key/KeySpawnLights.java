@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -18,6 +17,7 @@ import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -44,6 +44,14 @@ public class KeySpawnLights extends KeyPerk implements IPlayerTickPerk {
                         "Defines the radius around the player the perk will search for a suitable position.");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.lightSpawnRate = MathHelper.ceil(this.lightSpawnRate * multiplier);
+        this.radiusToSpawnLight = MathHelper.ceil(this.radiusToSpawnLight * multiplier);
     }
 
     @Override

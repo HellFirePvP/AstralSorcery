@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -40,6 +41,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.input.Keyboard;
@@ -349,6 +351,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                     if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
                         toolTip.add("");
                         toolTip.add(TextFormatting.GRAY + perk.getRegistryName().toString());
+                        toolTip.add(TextFormatting.GRAY + I18n.format("misc.ctrlcopy"));
                     }
                     RenderingUtils.renderBlueTooltip(mouseX, mouseY, toolTip, Minecraft.getMinecraft().fontRenderer);
                     GlStateManager.color(1F, 1F, 1F, 1F);
@@ -803,6 +806,12 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         for (Map.Entry<AbstractPerk, Rectangle.Double> rctPerk : this.thisFramePerks.entrySet()) {
             if (rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 AbstractPerk perk = rctPerk.getKey();
+                if (Minecraft.getMinecraft().gameSettings.showDebugInfo && isCtrlKeyDown()) {
+                    String perkKey = perk.getRegistryName().toString();
+                    GuiScreen.setClipboardString(perkKey);
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("misc.ctrlcopy.copied", perkKey));
+                    break;
+                }
                 if (!prog.hasPerkUnlocked(perk) && perk.mayUnlockPerk(prog)) {
                     this.unlockPrimed = perk;
                     break;

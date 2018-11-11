@@ -9,9 +9,10 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.*;
@@ -23,6 +24,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.*;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,9 +52,9 @@ public class RegistryPerks {
                     perkRootMajorHarvest;
 
     public static void initPerkTree() {
-        MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
-
         initializeAttributeTypes();
+
+        MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
 
         initializeRoot();
 
@@ -73,7 +75,6 @@ public class RegistryPerks {
         initializeEvorsioBranch();
 
         initializePerkExteriorTravelWheel();
-        initializeTreeConnectorPerks();
 
         initializeAevitasKeyPerks();
         initializeEvorsioKeyPerks();
@@ -82,34 +83,210 @@ public class RegistryPerks {
         initializeVicioKeyPerks();
 
         initializePerkEffectPerks();
+
+        initializeOuterAevitasPerks();
+        initializeOuterEvorsioPerks();
+        initializeOuterDiscidiaPerks();
+        initializeOuterArmaraPerks();
+        initializeOuterVicioPerks();
+
+        initializeTreeConnectorPerks();
     }
 
-    public static void postInitPerkRemoval() {
+    public static void postProcessPerks() {
         List<AbstractPerk> copyPerks = PerkTree.PERK_TREE.getPerkPoints().stream().map(PerkTreePoint::getPerk).collect(Collectors.toList());
+        if (Mods.CRAFTTWEAKER.isPresent()) {
+            applyCraftTweakerModifications(copyPerks);
+        }
+
         for (AbstractPerk perk : copyPerks) {
             APIRegistryEvent.PerkPostRemove remove = new APIRegistryEvent.PerkPostRemove(perk);
             MinecraftForge.EVENT_BUS.post(remove);
             if (remove.isRemoved()) {
-                PerkTree.PERK_TREE.removePerk(perk);
+                PERK_TREE.removePerk(perk);
             }
         }
+
+    }
+
+    @Optional.Method(modid = "crafttweaker")
+    private static void applyCraftTweakerModifications(List<AbstractPerk> perks) {
+        perks.forEach(AbstractPerk::adjustMultipliers);
+    }
+
+    private static void initializeOuterVicioPerks() {
+        float addedIncMsReach = 0.02F;
+
+        AttributeModifierPerk perkVR1 = new AttributeModifierPerk("outer_s_inc_trv", 13, 23);
+        perkVR1.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        perkVR1.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+        AttributeModifierPerk perkVR2 = new AttributeModifierPerk("outer_s_inc_trv_1", 7, 26).setNameOverride(perkVR1);
+        perkVR2.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        perkVR2.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+        AttributeModifierPerk perkVR3 = new AttributeModifierPerk("outer_s_inc_trv_2", 1, 29).setNameOverride(perkVR1);
+        perkVR3.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        perkVR3.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+        AttributeModifierPerk perkVR4 = new AttributeModifierPerk("outer_s_inc_trv_3", -7, 27).setNameOverride(perkVR1);
+        perkVR4.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        perkVR4.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+        AttributeModifierPerk perkVR5 = new AttributeModifierPerk("outer_s_inc_trv_4", -12, 24).setNameOverride(perkVR1);
+        perkVR5.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        perkVR5.addModifier(addedIncMsReach, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+
+        PERK_TREE.registerPerk(perkVR1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_def_4"));
+        PERK_TREE.registerPerk(perkVR2)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_12"))
+                .connect(perkVR1);
+        PERK_TREE.registerPerk(perkVR3)
+                .connect(perkVR2);
+        PERK_TREE.registerPerk(perkVR4)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_13"))
+                .connect(perkVR3);
+        PERK_TREE.registerPerk(perkVR5)
+                .connect(perkVR4)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_life"));
+    }
+
+    private static void initializeOuterArmaraPerks() {
+        float addedIncArmorEle = 0.02F;
+
+        AttributeModifierPerk perkDef1 = new AttributeModifierPerk("outer_s_inc_def", 26, -5);
+        perkDef1.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        perkDef1.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        AttributeModifierPerk perkDef2 = new AttributeModifierPerk("outer_s_inc_def_1", 24, 1).setNameOverride(perkDef1);
+        perkDef2.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        perkDef2.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        AttributeModifierPerk perkDef3 = new AttributeModifierPerk("outer_s_inc_def_2", 26, 9).setNameOverride(perkDef1);
+        perkDef3.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        perkDef3.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        AttributeModifierPerk perkDef4 = new AttributeModifierPerk("outer_s_inc_def_3", 22, 15).setNameOverride(perkDef1);
+        perkDef4.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        perkDef4.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        AttributeModifierPerk perkDef5 = new AttributeModifierPerk("outer_s_inc_def_4", 21, 21).setNameOverride(perkDef1);
+        perkDef5.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        perkDef5.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+
+        PERK_TREE.registerPerk(perkDef1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_dmg_5"));
+        PERK_TREE.registerPerk(perkDef2)
+                .connect(perkDef1);
+        PERK_TREE.registerPerk(perkDef3)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_7"))
+                .connect(perkDef2);
+        PERK_TREE.registerPerk(perkDef4)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_9"))
+                .connect(perkDef3);
+        PERK_TREE.registerPerk(perkDef5)
+                .connect(perkDef4);
+    }
+
+    private static void initializeOuterDiscidiaPerks() {
+        float addedIncDmg = 0.02F;
+
+        AttributeModifierPerk perkDmg1 = new AttributeModifierPerk("outer_s_inc_dmg", -5, -27);
+        perkDmg1.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        perkDmg1.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDmg2 = new AttributeModifierPerk("outer_s_inc_dmg_1", 3, -28).setNameOverride(perkDmg1);
+        perkDmg2.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        perkDmg2.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDmg3 = new AttributeModifierPerk("outer_s_inc_dmg_2", 11, -25).setNameOverride(perkDmg1);
+        perkDmg3.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        perkDmg3.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDmg4 = new AttributeModifierPerk("outer_s_inc_dmg_3", 19, -23).setNameOverride(perkDmg1);
+        perkDmg4.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        perkDmg4.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDmg5 = new AttributeModifierPerk("outer_s_inc_dmg_4", 23, -17).setNameOverride(perkDmg1);
+        perkDmg5.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        perkDmg5.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDmg6 = new AttributeModifierPerk("outer_s_inc_dmg_5", 25, -11).setNameOverride(perkDmg1);
+        perkDmg6.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        perkDmg6.addModifier(addedIncDmg, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+
+        PERK_TREE.registerPerk(perkDmg1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_mine_4"));
+        PERK_TREE.registerPerk(perkDmg2)
+                .connect(perkDmg1);
+        PERK_TREE.registerPerk(perkDmg3)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_3"))
+                .connect(perkDmg2);
+        PERK_TREE.registerPerk(perkDmg4)
+                .connect(perkDmg3);
+        PERK_TREE.registerPerk(perkDmg5)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_4"))
+                .connect(perkDmg4);
+        PERK_TREE.registerPerk(perkDmg6)
+                .connect(perkDmg5);
+    }
+
+    private static void initializeOuterEvorsioPerks() {
+        float addedIncMining = 0.02F;
+
+        AttributeModifierPerk perkMine1 = new AttributeModifierPerk("outer_s_inc_mine", -29, -3);
+        perkMine1.addModifier(addedIncMining, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        AttributeModifierPerk perkMine2 = new AttributeModifierPerk("outer_s_inc_mine_1", -27, -9).setNameOverride(perkMine1);
+        perkMine2.addModifier(addedIncMining, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        AttributeModifierPerk perkMine3 = new AttributeModifierPerk("outer_s_inc_mine_2", -23, -15).setNameOverride(perkMine1);
+        perkMine3.addModifier(addedIncMining, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        AttributeModifierPerk perkMine4 = new AttributeModifierPerk("outer_s_inc_mine_3", -18, -19).setNameOverride(perkMine1);
+        perkMine4.addModifier(addedIncMining, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        AttributeModifierPerk perkMine5 = new AttributeModifierPerk("outer_s_inc_mine_4", -12, -24).setNameOverride(perkMine1);
+        perkMine5.addModifier(addedIncMining, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+
+        PERK_TREE.registerPerk(perkMine1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_life_4"));
+        PERK_TREE.registerPerk(perkMine2)
+                .connect(perkMine1);
+        PERK_TREE.registerPerk(perkMine3)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_20"))
+                .connect(perkMine2);
+        PERK_TREE.registerPerk(perkMine4)
+                .connect(perkMine3);
+        PERK_TREE.registerPerk(perkMine5)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4"))
+                .connect(perkMine4);
+    }
+
+    private static void initializeOuterAevitasPerks() {
+        float addedIncLife = 0.02F;
+
+        AttributeModifierPerk perkLife1 = new AttributeModifierPerk("outer_s_inc_life", -17, 22);
+        perkLife1.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+        AttributeModifierPerk perkLife2 = new AttributeModifierPerk("outer_s_inc_life_1", -20, 18).setNameOverride(perkLife1);
+        perkLife1.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+        AttributeModifierPerk perkLife3 = new AttributeModifierPerk("outer_s_inc_life_2", -25, 14).setNameOverride(perkLife1);
+        perkLife2.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+        AttributeModifierPerk perkLife4 = new AttributeModifierPerk("outer_s_inc_life_3", -26, 8).setNameOverride(perkLife1);
+        perkLife3.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+        AttributeModifierPerk perkLife5 = new AttributeModifierPerk("outer_s_inc_life_4", -28, 2).setNameOverride(perkLife1);
+        perkLife4.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+
+        PERK_TREE.registerPerk(perkLife1);
+        PERK_TREE.registerPerk(perkLife2)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_16"))
+                .connect(perkLife1);
+        PERK_TREE.registerPerk(perkLife3)
+                .connect(perkLife2);
+        PERK_TREE.registerPerk(perkLife4)
+                .connect(perkLife3)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_17"));
+        PERK_TREE.registerPerk(perkLife5)
+                .connect(perkLife4);
     }
 
     private static void initializePerkEffectPerks() {
         float addedIncPerkEffect = 0.15F;
         float addedIncPerkExp = 0.2F;
-        String unlocEff, unlocExp;
 
         MajorPerk majorPerkEffect1 = new MajorPerk("major_perk_eff_nt", 9, 9);
-        unlocEff = majorPerkEffect1.getUnlocalizedName();
         majorPerkEffect1.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        MajorPerk majorPerkEffect2 = new MajorPerk("major_perk_eff_nt_1", 10, -4).setNameOverride(unlocEff);
+        MajorPerk majorPerkEffect2 = new MajorPerk("major_perk_eff_nt_1", 10, -4).setNameOverride(majorPerkEffect1);
         majorPerkEffect2.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        MajorPerk majorPerkEffect3 = new MajorPerk("major_perk_eff_nt_2", -3, -11).setNameOverride(unlocEff);
+        MajorPerk majorPerkEffect3 = new MajorPerk("major_perk_eff_nt_2", -3, -11).setNameOverride(majorPerkEffect1);
         majorPerkEffect3.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        MajorPerk majorPerkEffect4 = new MajorPerk("major_perk_eff_nt_3", -11, 0).setNameOverride(unlocEff);
+        MajorPerk majorPerkEffect4 = new MajorPerk("major_perk_eff_nt_3", -11, 0).setNameOverride(majorPerkEffect1);
         majorPerkEffect4.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        MajorPerk majorPerkEffect5 = new MajorPerk("major_perk_eff_nt_4", -5, 11).setNameOverride(unlocEff);
+        MajorPerk majorPerkEffect5 = new MajorPerk("major_perk_eff_nt_4", -5, 11).setNameOverride(majorPerkEffect1);
         majorPerkEffect5.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
         PERK_TREE.registerPerk(majorPerkEffect1)
@@ -124,15 +301,14 @@ public class RegistryPerks {
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_10"));
 
         MajorPerk majorPerkExp1 = new MajorPerk("major_perk_exp_nt", 5, 11);
-        unlocExp = majorPerkExp1.getUnlocalizedName();
         majorPerkExp1.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        MajorPerk majorPerkExp2 = new MajorPerk("major_perk_exp_nt_1", 12, 0).setNameOverride(unlocExp);
+        MajorPerk majorPerkExp2 = new MajorPerk("major_perk_exp_nt_1", 12, 0).setNameOverride(majorPerkExp1);
         majorPerkExp2.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        MajorPerk majorPerkExp3 = new MajorPerk("major_perk_exp_nt_2", 2, -11).setNameOverride(unlocExp);
+        MajorPerk majorPerkExp3 = new MajorPerk("major_perk_exp_nt_2", 2, -11).setNameOverride(majorPerkExp1);
         majorPerkExp3.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        MajorPerk majorPerkExp4 = new MajorPerk("major_perk_exp_nt_3", -10, -5).setNameOverride(unlocExp);
+        MajorPerk majorPerkExp4 = new MajorPerk("major_perk_exp_nt_3", -10, -5).setNameOverride(majorPerkExp1);
         majorPerkExp4.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        MajorPerk majorPerkExp5 = new MajorPerk("major_perk_exp_nt_4", -9, 9).setNameOverride(unlocExp);
+        MajorPerk majorPerkExp5 = new MajorPerk("major_perk_exp_nt_4", -9, 9).setNameOverride(majorPerkExp1);
         majorPerkExp5.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
 
         PERK_TREE.registerPerk(majorPerkExp1)
@@ -148,7 +324,7 @@ public class RegistryPerks {
 
         MajorPerk perkEE1 = new MajorPerk("major_inc_encheffect", -2, -3);
         perkEE1.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ENCH_EFFECT);
-        MajorPerk perkEE2 = new MajorPerk("major_inc_encheffect_1", -3, 1).setNameOverride(perkEE1.getUnlocalizedName());
+        MajorPerk perkEE2 = new MajorPerk("major_inc_encheffect_1", -3, 1).setNameOverride(perkEE1);
         perkEE2.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ENCH_EFFECT);
 
         PERK_TREE.registerPerk(perkEE1)
@@ -162,9 +338,9 @@ public class RegistryPerks {
     private static void initializeVicioKeyPerks() {
         AttributeModifierPerk perkSwimSpeed1 = new AttributeModifierPerk("key_path_swim_conversion", -2, 23);
         perkSwimSpeed1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_SWIMSPEED);
-        AttributeModifierPerk perkSwimSpeed2 = new AttributeModifierPerk("key_path_swim_conversion_1", -3, 24).setNameOverride(perkSwimSpeed1.getUnlocalizedName());
+        AttributeModifierPerk perkSwimSpeed2 = new AttributeModifierPerk("key_path_swim_conversion_1", -3, 24).setNameOverride(perkSwimSpeed1);
         perkSwimSpeed2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_SWIMSPEED);
-        AttributeModifierPerk perkSwimSpeed3 = new AttributeModifierPerk("key_path_swim_conversion_2", -2, 25).setNameOverride(perkSwimSpeed1.getUnlocalizedName());
+        AttributeModifierPerk perkSwimSpeed3 = new AttributeModifierPerk("key_path_swim_conversion_2", -2, 25).setNameOverride(perkSwimSpeed1);
         perkSwimSpeed3.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_SWIMSPEED);
         KeyPerk swimSpeedConversion = new KeyPerk("key_swim_conversion", -3, 26);
         swimSpeedConversion.addConverter(new PerkConverter() {
@@ -213,7 +389,7 @@ public class RegistryPerks {
 
         AttributeModifierPerk incAttackSpeed1 = new AttributeModifierPerk("major_ats_inc_ats", 9, 14);
         incAttackSpeed1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
-        AttributeModifierPerk incAttackSpeed2 = new AttributeModifierPerk("major_ats_inc_ats_1", 8, 15).setNameOverride(incAttackSpeed1.getUnlocalizedName());
+        AttributeModifierPerk incAttackSpeed2 = new AttributeModifierPerk("major_ats_inc_ats_1", 8, 15).setNameOverride(incAttackSpeed1);
         incAttackSpeed2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
         MajorPerk perkZeal = new MajorPerk("major_increased_ats_zeal", 7, 14);
         perkZeal.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
@@ -229,7 +405,7 @@ public class RegistryPerks {
         incReachStepAssist.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
         AttributeModifierPerk incMovespeedStepAssist1 = new AttributeModifierPerk("key_stepassist_path_movespeed", -6, 18);
         incMovespeedStepAssist1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
-        AttributeModifierPerk incMovespeedStepAssist2 = new AttributeModifierPerk("key_stepassist_path_movespeed_1", -7, 17).setNameOverride(incMovespeedStepAssist1.getUnlocalizedName());
+        AttributeModifierPerk incMovespeedStepAssist2 = new AttributeModifierPerk("key_stepassist_path_movespeed_1", -7, 17).setNameOverride(incMovespeedStepAssist1);
         incMovespeedStepAssist2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
         KeyStepAssist stepAssistKey = new KeyStepAssist("key_step_assist", -6, 16);
 
@@ -245,7 +421,7 @@ public class RegistryPerks {
 
         AttributeModifierPerk lightsMs1 = new AttributeModifierPerk("key_lights_path_ms", 6, 17);
         lightsMs1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
-        AttributeModifierPerk lightsMs2 = new AttributeModifierPerk("key_lights_path_ms_1", 7, 16).setNameOverride(lightsMs1.getUnlocalizedName());
+        AttributeModifierPerk lightsMs2 = new AttributeModifierPerk("key_lights_path_ms_1", 7, 16).setNameOverride(lightsMs1);
         lightsMs2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
         KeySpawnLights spawnLightsKey = new KeySpawnLights("key_spawn_lights", 6, 15);
 
@@ -256,13 +432,13 @@ public class RegistryPerks {
         PERK_TREE.registerPerk(spawnLightsKey)
                 .connect(lightsMs2);
 
-        AttributeModifierPerk redFoodPathDodge1 = new AttributeModifierPerk("key_redfood_path_dodge", 4, 22);
+        AttributeModifierPerk redFoodPathDodge1 = new AttributeModifierPerk("key_redfood_path_dodge", 3, 22);
         redFoodPathDodge1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE);
-        AttributeModifierPerk redFoodPathDodge2 = new AttributeModifierPerk("key_redfood_path_dodge_1", 3, 23).setNameOverride(redFoodPathDodge1.getUnlocalizedName());
+        AttributeModifierPerk redFoodPathDodge2 = new AttributeModifierPerk("key_redfood_path_dodge_1", 2, 23).setNameOverride(redFoodPathDodge1);
         redFoodPathDodge2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE);
-        AttributeModifierPerk redFoodPathDodge3 = new AttributeModifierPerk("key_redfood_path_dodge_2", 4, 24).setNameOverride(redFoodPathDodge1.getUnlocalizedName());
+        AttributeModifierPerk redFoodPathDodge3 = new AttributeModifierPerk("key_redfood_path_dodge_2", 3, 24).setNameOverride(redFoodPathDodge1);
         redFoodPathDodge3.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE);
-        KeyReducedFood reducedFoodKey = new KeyReducedFood("key_reduced_food", 5, 23);
+        KeyReducedFood reducedFoodKey = new KeyReducedFood("key_reduced_food", 4, 23);
 
         PERK_TREE.registerPerk(redFoodPathDodge1)
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_12"));
@@ -277,7 +453,7 @@ public class RegistryPerks {
     private static void initializeArmaraKeyPerks() {
         AttributeModifierPerk perkALC1 = new AttributeModifierPerk("key_alc_inc_armor", 15, -4);
         perkALC1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
-        AttributeModifierPerk perkALC2 = new AttributeModifierPerk("key_alc_inc_armor_1", 16, -3).setNameOverride(perkALC1.getUnlocalizedName());
+        AttributeModifierPerk perkALC2 = new AttributeModifierPerk("key_alc_inc_armor_1", 16, -3).setNameOverride(perkALC1);
         perkALC2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
         KeyPerk keyArmorConversion = new KeyPerk("key_armor_life_conversion", 17, -4);
         keyArmorConversion.addConverter(new PerkConverter() {
@@ -333,9 +509,9 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkPhEle1 = new AttributeModifierPerk("key_phoenix_path", 17, 18);
         perkPhEle1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
-        AttributeModifierPerk perkPhEle2 = new AttributeModifierPerk("key_phoenix_path_1", 18, 19).setNameOverride(perkPhEle1.getUnlocalizedName());
+        AttributeModifierPerk perkPhEle2 = new AttributeModifierPerk("key_phoenix_path_1", 18, 19).setNameOverride(perkPhEle1);
         perkPhEle2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
-        AttributeModifierPerk perkPhEle3 = new AttributeModifierPerk("key_phoenix_path_2", 17, 20).setNameOverride(perkPhEle1.getUnlocalizedName());
+        AttributeModifierPerk perkPhEle3 = new AttributeModifierPerk("key_phoenix_path_2", 17, 20).setNameOverride(perkPhEle1);
         perkPhEle3.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
         KeyCheatDeath cheatDeathKey = new KeyCheatDeath("key_cheat_death", 16, 19);
 
@@ -350,9 +526,9 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkArmor1 = new AttributeModifierPerk("inc_added_armor", 21, 5);
         perkArmor1.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARMOR);
-        AttributeModifierPerk perkArmor2 = new AttributeModifierPerk("inc_added_armor_1", 22, 4).setNameOverride(perkArmor1.getUnlocalizedName());
+        AttributeModifierPerk perkArmor2 = new AttributeModifierPerk("inc_added_armor_1", 22, 4).setNameOverride(perkArmor1);
         perkArmor2.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARMOR);
-        AttributeModifierPerk perkArmor3 = new AttributeModifierPerk("inc_added_armor_2", 23, 5).setNameOverride(perkArmor1.getUnlocalizedName());
+        AttributeModifierPerk perkArmor3 = new AttributeModifierPerk("inc_added_armor_2", 23, 5).setNameOverride(perkArmor1);
         perkArmor3.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARMOR);
         MajorPerk perkArmor4 = new MajorPerk("major_flat_armor", 22, 6);
         perkArmor4.addModifier(6F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARMOR);
@@ -382,101 +558,54 @@ public class RegistryPerks {
     }
 
     private static void initializeDiscidiaKeyPerks() {
-        KeyBleed bleedKey = new KeyBleed("key_bleed", 20, -13);
-        AttributeModifierPerk perkBl1 = new AttributeModifierPerk("key_bleed_inc_duration", 21, -14);
+        KeyBleed bleedKey = new KeyBleed("key_bleed", 15, -6);
+        AttributeModifierPerk perkBl1 = new AttributeModifierPerk("key_bleed_inc_duration", 16, -7);
         perkBl1.addModifier(0.3F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_BLEED_DURATION);
-        AttributeModifierPerk perkBl2 = new AttributeModifierPerk("key_bleed_inc_duration_greater", 20, -15);
+        AttributeModifierPerk perkBl2 = new AttributeModifierPerk("key_bleed_inc_duration_greater", 15, -8);
         perkBl2.addModifier(0.4F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_BLEED_DURATION);
-        AttributeModifierPerk perkBl3 = new AttributeModifierPerk("key_bleed_inc_duration_2", 19, -14).setNameOverride(perkBl1.getUnlocalizedName());
-        perkBl3.addModifier(0.3F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_BLEED_DURATION);
 
         PERK_TREE.registerPerk(bleedKey)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_4"));
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_3"));
         PERK_TREE.registerPerk(perkBl1)
                 .connect(bleedKey);
         PERK_TREE.registerPerk(perkBl2)
                 .connect(perkBl1);
-        PERK_TREE.registerPerk(perkBl3)
-                .connect(perkBl2);
 
-        AttributeModifierPerk perkDst1 = new AttributeModifierPerk("key_dst_less_dmg", 14, -8);
+        AttributeModifierPerk perkDst1 = new AttributeModifierPerk("key_dst_less_dmg", 17, -15);
         perkDst1.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        AttributeModifierPerk perkDst2 = new AttributeModifierPerk("key_dst_less_dmg_2", 15, -7).setNameOverride(perkDst1.getUnlocalizedName());
+        AttributeModifierPerk perkDst2 = new AttributeModifierPerk("key_dst_less_dmg_2", 18, -16).setNameOverride(perkDst1);
         perkDst2.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        KeyProjectileProximity projectileProximityKey = new KeyProjectileProximity("key_projectile_proximity", 14, -6);
+        KeyProjectileProximity projectileProximityKey = new KeyProjectileProximity("key_projectile_proximity", 17, -17);
 
         PERK_TREE.registerPerk(perkDst1)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_3"));
+                .connect(PERK_TREE.getAstralSorceryPerk("med_reach_arrowspeed"));
         PERK_TREE.registerPerk(perkDst2)
                 .connect(perkDst1);
         PERK_TREE.registerPerk(projectileProximityKey)
                 .connect(perkDst2);
 
-        AttributeModifierPerk perkDst3 = new AttributeModifierPerk("key_dst_less_dmg_3", 6, -17).setNameOverride(perkDst1.getUnlocalizedName());
+        AttributeModifierPerk perkDst3 = new AttributeModifierPerk("key_dst_less_dmg_3", 13, -19).setNameOverride(perkDst1);
         perkDst3.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        AttributeModifierPerk perkDst4 = new AttributeModifierPerk("key_dst_less_dmg_4", 5, -16).setNameOverride(perkDst1.getUnlocalizedName());
+        AttributeModifierPerk perkDst4 = new AttributeModifierPerk("key_dst_less_dmg_4", 14, -20).setNameOverride(perkDst1);
         perkDst4.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        KeyProjectileDistance projectileDistanceKey = new KeyProjectileDistance("key_projectile_distance", 6, -15);
+        KeyProjectileDistance projectileDistanceKey = new KeyProjectileDistance("key_projectile_distance", 15, -19);
 
         PERK_TREE.registerPerk(perkDst3)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_3"));
+                .connect(PERK_TREE.getAstralSorceryPerk("med_reach_arrowspeed"));
         PERK_TREE.registerPerk(perkDst4)
                 .connect(perkDst3);
         PERK_TREE.registerPerk(projectileDistanceKey)
                 .connect(perkDst4);
 
-        AttributeModifierPerk perkCrJ1 = new AttributeModifierPerk("crit_inc_chance_proj", 12, -19);
-        perkCrJ1.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
-        perkCrJ1.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        AttributeModifierPerk perkCrJ2 = new AttributeModifierPerk("crit_inc_chance_proj_1", 14, -20).setNameOverride(perkCrJ1.getUnlocalizedName());
-        perkCrJ2.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
-        perkCrJ2.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        MajorPerk perkProjMul = new MajorPerk("major_crit_proj", 15, -22);
-        perkProjMul.addModifier(0.25F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
-        perkProjMul.addModifier(0.3F , PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        AttributeModifierPerk perkCrM1 = new AttributeModifierPerk("crit_inc_chance_melee", 10, -20);
-        perkCrM1.addModifier(4F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
-        perkCrM1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
-        AttributeModifierPerk perkCrM2 = new AttributeModifierPerk("crit_inc_chance_melee_1", 9, -22).setNameOverride(perkCrM1.getUnlocalizedName());
-        perkCrM2.addModifier(4F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
-        perkCrM2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
-        MajorPerk perkMeleeMul = new MajorPerk("major_crit_melee", 10, -24);
-        perkMeleeMul.addModifier(0.3F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
-        perkMeleeMul.addModifier(0.2F , PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
-        AttributeModifierPerk perkCrit1 = new AttributeModifierPerk("crit_inc_ch_mul", 12, -25);
-        perkCrit1.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE);
-        perkCrit1.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
-        AttributeModifierPerk perkCrit2 = new AttributeModifierPerk("crit_inc_ch_mul_1", 14, -24).setNameOverride(perkCrit1.getUnlocalizedName());
-        perkCrit2.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE);
-        perkCrit2.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
-
-        PERK_TREE.registerPerk(perkCrJ1)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_3"));
-        PERK_TREE.registerPerk(perkCrJ2)
-                .connect(perkCrJ1);
-        PERK_TREE.registerPerk(perkProjMul)
-                .connect(perkCrJ2);
-        PERK_TREE.registerPerk(perkCrM1)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_3"));
-        PERK_TREE.registerPerk(perkCrM2)
-                .connect(perkCrM1);
-        PERK_TREE.registerPerk(perkMeleeMul)
-                .connect(perkCrM2);
-        PERK_TREE.registerPerk(perkCrit1)
-                .connect(perkMeleeMul);
-        PERK_TREE.registerPerk(perkCrit2)
-                .connect(perkCrit1)
-                .connect(perkProjMul);
-
-        AttributeModifierPerk perkRPCrit = new AttributeModifierPerk("key_rampage_path_node_crit", 3, -19);
+        AttributeModifierPerk perkRPCrit = new AttributeModifierPerk("key_rampage_path_node_crit", 4, -18);
         perkRPCrit.addModifier(3, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
-        AttributeModifierPerk perkRPDmg = new AttributeModifierPerk("key_rampage_path_node_dmg", 2, -16);
+        AttributeModifierPerk perkRPDmg = new AttributeModifierPerk("key_rampage_path_node_dmg", 3, -15);
         perkRPDmg.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
         perkRPDmg.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        AttributeModifierPerk perkRPDmg2 = new AttributeModifierPerk("key_rampage_path_node_dmg_1", 3, -17).setNameOverride(perkRPDmg.getUnlocalizedName());
+        AttributeModifierPerk perkRPDmg2 = new AttributeModifierPerk("key_rampage_path_node_dmg_1", 4, -16).setNameOverride(perkRPDmg);
         perkRPDmg2.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
         perkRPDmg2.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        KeyRampage rampageKey = new KeyRampage("key_rampage", 2, -18);
+        KeyRampage rampageKey = new KeyRampage("key_rampage", 3, -17);
 
         PERK_TREE.registerPerk(perkRPCrit)
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_2"));
@@ -490,7 +619,7 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkLL1 = new AttributeModifierPerk("inc_leech_vamp", -1, -15);
         perkLL1.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH);
-        AttributeModifierPerk perkLL2 = new AttributeModifierPerk("inc_leech_vamp_1", -2, -16).setNameOverride(perkLL1.getUnlocalizedName());
+        AttributeModifierPerk perkLL2 = new AttributeModifierPerk("inc_leech_vamp_1", -2, -16).setNameOverride(perkLL1);
         perkLL2.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH);
         MajorPerk perkVampirism = new MajorPerk("major_leech_vamp", -1, -17);
         perkVampirism.addModifier(5F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH);
@@ -505,7 +634,7 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkFD1 = new AttributeModifierPerk("ds_inc_potion_duration", 21, -6);
         perkFD1.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
-        AttributeModifierPerk perkFD2 = new AttributeModifierPerk("ds_inc_potion_duration_1", 22, -5).setNameOverride(perkFD1.getUnlocalizedName());
+        AttributeModifierPerk perkFD2 = new AttributeModifierPerk("ds_inc_potion_duration_1", 22, -5).setNameOverride(perkFD1);
         perkFD2.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
         MajorPerk perkFD3 = new MajorPerk("major_ds_inc_potion_duration", 23, -6);
         perkFD3.addModifier(0.3F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
@@ -522,7 +651,7 @@ public class RegistryPerks {
     private static void initializeEvorsioKeyPerks() {
         AttributeModifierPerk perkLL1 = new AttributeModifierPerk("key_lastbreath_path_node", -7, -17);
         perkLL1.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
-        AttributeModifierPerk perkLL2 = new AttributeModifierPerk("key_lastbreath_path_node_1", -6, -16).setNameOverride(perkLL1.getUnlocalizedName());
+        AttributeModifierPerk perkLL2 = new AttributeModifierPerk("key_lastbreath_path_node_1", -6, -16).setNameOverride(perkLL1);
         perkLL2.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         KeyLastBreath lastBreathKey = new KeyLastBreath("key_lastbreath", -5, -17);
 
@@ -535,7 +664,7 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkDTM1 = new AttributeModifierPerk("key_digtypes_path_node_inc", -15, -8);
         perkDTM1.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
-        AttributeModifierPerk perkDTM2 = new AttributeModifierPerk("key_digtypes_path_node_inc_1", -14, -7).setNameOverride(perkDTM1.getUnlocalizedName());
+        AttributeModifierPerk perkDTM2 = new AttributeModifierPerk("key_digtypes_path_node_inc_1", -14, -7).setNameOverride(perkDTM1);
         perkDTM2.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         AttributeModifierPerk perkDTM3 = new AttributeModifierPerk("key_digtypes_path_add", -14, -5);
         perkDTM3.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_HARVEST_SPEED);
@@ -553,9 +682,9 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkAD1 = new AttributeModifierPerk("key_disarm_path_node", -16, -2);
         perkAD1.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
-        AttributeModifierPerk perkAD2 = new AttributeModifierPerk("key_disarm_path_node_1", -17, -1).setNameOverride(perkAD1.getUnlocalizedName());
+        AttributeModifierPerk perkAD2 = new AttributeModifierPerk("key_disarm_path_node_1", -17, -1).setNameOverride(perkAD1);
         perkAD2.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
-        AttributeModifierPerk perkAD3 = new AttributeModifierPerk("key_disarm_path_node_2", -18, -2).setNameOverride(perkAD1.getUnlocalizedName());
+        AttributeModifierPerk perkAD3 = new AttributeModifierPerk("key_disarm_path_node_2", -18, -2).setNameOverride(perkAD1);
         perkAD3.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
         KeyDisarm disarmKey = new KeyDisarm("key_disarm", -17, -3);
 
@@ -574,7 +703,7 @@ public class RegistryPerks {
         perkACH1.addModifier(1, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARC_CHAINS);
         AttributeModifierPerk perkACH2 = new MajorPerk("key_arc_chains_major", -6, -23);
         perkACH2.addModifier(2, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARC_CHAINS);
-        AttributeModifierPerk perkACH3 = new AttributeModifierPerk("key_arc_chains_1", -5, -22).setNameOverride(perkACH1.getUnlocalizedName());
+        AttributeModifierPerk perkACH3 = new AttributeModifierPerk("key_arc_chains_1", -5, -22).setNameOverride(perkACH1);
         perkACH3.addModifier(1, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARC_CHAINS);
         KeyLightningArc arcKey = new KeyLightningArc("key_lightning_arc", -2, -23);
 
@@ -589,13 +718,13 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkChainL1 = new AttributeModifierPerk("key_chain_mining_length", -21, -9);
         perkChainL1.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_LENGTH);
-        AttributeModifierPerk perkChainL2 = new AttributeModifierPerk("key_chain_mining_length_1", -22, -10).setNameOverride(perkChainL1.getUnlocalizedName());
+        AttributeModifierPerk perkChainL2 = new AttributeModifierPerk("key_chain_mining_length_1", -22, -10).setNameOverride(perkChainL1);
         perkChainL2.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_LENGTH);
         MajorPerk perkChainL3 = new MajorPerk("key_chain_mining_length_greater", -23, -12);
         perkChainL3.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_LENGTH);
         AttributeModifierPerk perkChanceL1 = new AttributeModifierPerk("key_chain_mining_chance", -22, -6);
         perkChanceL1.addModifier(0.15F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_CHANCE);
-        AttributeModifierPerk perkChanceL2 = new AttributeModifierPerk("key_chain_mining_chance_1", -23, -5).setNameOverride(perkChanceL1.getUnlocalizedName());
+        AttributeModifierPerk perkChanceL2 = new AttributeModifierPerk("key_chain_mining_chance_1", -23, -5).setNameOverride(perkChanceL1);
         perkChanceL2.addModifier(0.15F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_CHANCE);
         MajorPerk perkChanceL3 = new MajorPerk("key_chain_mining_chance_greater", -24, -3);
         perkChanceL3.addModifier(1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MINING_CHAIN_CHANCE);
@@ -623,7 +752,7 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkFD1 = new AttributeModifierPerk("ev_inc_potion_duration", -15, -16);
         perkFD1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
-        AttributeModifierPerk perkFD2 = new AttributeModifierPerk("ev_inc_potion_duration_1", -14, -17).setNameOverride(perkFD1.getUnlocalizedName());
+        AttributeModifierPerk perkFD2 = new AttributeModifierPerk("ev_inc_potion_duration_1", -14, -17).setNameOverride(perkFD1);
         perkFD2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
         MajorPerk perkFD3 = new MajorPerk("major_ev_inc_potion_duration", -15, -18);
         perkFD3.addModifier(0.4F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION);
@@ -640,7 +769,7 @@ public class RegistryPerks {
     private static void initializeAevitasKeyPerks() {
         AttributeModifierPerk perkReachP1 = new AttributeModifierPerk("key_reach_path_node", -12, 11);
         perkReachP1.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
-        AttributeModifierPerk perkReachP2 = new AttributeModifierPerk("key_reach_path_node_1", -11, 12).setNameOverride(perkReachP1.getUnlocalizedName());
+        AttributeModifierPerk perkReachP2 = new AttributeModifierPerk("key_reach_path_node_1", -11, 12).setNameOverride(perkReachP1);
         perkReachP2.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
         KeyReach reachKey = new KeyReach("key_reach", -12, 13);
         reachKey.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_REACH);
@@ -655,9 +784,9 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkSEP1 = new AttributeModifierPerk("key_enrich_path_node", -18, 13);
         perkSEP1.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
-        AttributeModifierPerk perkSEP2 = new AttributeModifierPerk("key_enrich_path_node_1", -19, 12).setNameOverride(perkSEP1.getUnlocalizedName());
+        AttributeModifierPerk perkSEP2 = new AttributeModifierPerk("key_enrich_path_node_1", -19, 12).setNameOverride(perkSEP1);
         perkSEP2.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
-        AttributeModifierPerk perkSEP3 = new AttributeModifierPerk("key_enrich_path_node_2", -20, 13).setNameOverride(perkSEP1.getUnlocalizedName());
+        AttributeModifierPerk perkSEP3 = new AttributeModifierPerk("key_enrich_path_node_2", -20, 13).setNameOverride(perkSEP1);
         perkSEP3.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         KeyStoneEnrichment stoneEnrichmentKey = new KeyStoneEnrichment("key_stone_enrichment", -19, 14);
 
@@ -674,7 +803,7 @@ public class RegistryPerks {
         perkMD1.addModifier(2F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_DODGE);
         AttributeModifierPerk perkMD2 = new AttributeModifierPerk("key_mending_path_node_1", -22, 4);
         perkMD2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE);
-        AttributeModifierPerk perkMD3 = new AttributeModifierPerk("key_mending_path_node_2", -23, 3).setNameOverride(perkMD2.getUnlocalizedName());
+        AttributeModifierPerk perkMD3 = new AttributeModifierPerk("key_mending_path_node_2", -23, 3).setNameOverride(perkMD2);
         perkMD3.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE);
         KeyMending mendingKey = new KeyMending("key_mending", -22, 2);
 
@@ -689,9 +818,9 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkGP1 = new AttributeModifierPerk("key_growables_path_node", -9, 15);
         perkGP1.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
-        AttributeModifierPerk perkGP2 = new AttributeModifierPerk("key_growables_path_node_1", -10, 14).setNameOverride(perkGP1.getUnlocalizedName());
+        AttributeModifierPerk perkGP2 = new AttributeModifierPerk("key_growables_path_node_1", -10, 14).setNameOverride(perkGP1);
         perkGP2.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
-        AttributeModifierPerk perkGP3 = new AttributeModifierPerk("key_growables_path_node_2", -11, 15).setNameOverride(perkGP1.getUnlocalizedName());
+        AttributeModifierPerk perkGP3 = new AttributeModifierPerk("key_growables_path_node_2", -11, 15).setNameOverride(perkGP1);
         perkGP3.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
         KeyGrowable growableKey = new KeyGrowable("key_growables", -10, 16);
 
@@ -707,18 +836,18 @@ public class RegistryPerks {
     }
 
     private static void initializeTreeConnectorPerks() {
-        float more_ch = 0.12F;
+        float more_ch = 0.15F;
 
-        AttributeModifierPerk perkEvorsioCh1 = new AttributeModifierPerk("threshold_evorsio", -11, -21);
+        AttributeModifierPerk perkEvorsioCh1 = new AttributeModifierPerk("threshold_evorsio", -13, -27);
         perkEvorsioCh1.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        AttributeModifierPerk perkEvorsioCh2 = new AttributeModifierPerk("threshold_evorsio_1", -13, -24).setNameOverride(perkEvorsioCh1.getUnlocalizedName());
+        AttributeModifierPerk perkEvorsioCh2 = new AttributeModifierPerk("threshold_evorsio_1", -15, -30).setNameOverride(perkEvorsioCh1);
         perkEvorsioCh2.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        AttributeModifierPerk perkEvorsioCh3 = new AttributeModifierPerk("threshold_evorsio_2", -9, -24).setNameOverride(perkEvorsioCh1.getUnlocalizedName());
+        AttributeModifierPerk perkEvorsioCh3 = new AttributeModifierPerk("threshold_evorsio_2", -11, -30).setNameOverride(perkEvorsioCh1);
         perkEvorsioCh3.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        PerkTreeConnector thresholdEvorsio = new PerkTreeConnector("epi_evorsio", -11, -23);
+        PerkTreeConnector thresholdEvorsio = new PerkTreeConnector("epi_evorsio", -13, -29);
 
         PERK_TREE.registerPerk(perkEvorsioCh1)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4"));
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_mine_4"));
         PERK_TREE.registerPerk(perkEvorsioCh2)
                 .connect(perkEvorsioCh1);
         PERK_TREE.registerPerk(perkEvorsioCh3)
@@ -729,16 +858,16 @@ public class RegistryPerks {
                 .connect(perkEvorsioCh2)
                 .connect(perkEvorsioCh3);
 
-        AttributeModifierPerk perkArmaraCh1 = new AttributeModifierPerk("threshold_armara", 21, 0);
+        AttributeModifierPerk perkArmaraCh1 = new AttributeModifierPerk("threshold_armara", 29, -4);
         perkArmaraCh1.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        AttributeModifierPerk perkArmaraCh2 = new AttributeModifierPerk("threshold_armara_1", 24, 2).setNameOverride(perkArmaraCh1.getUnlocalizedName());
+        AttributeModifierPerk perkArmaraCh2 = new AttributeModifierPerk("threshold_armara_1", 32, -2).setNameOverride(perkArmaraCh1);
         perkArmaraCh2.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        AttributeModifierPerk perkArmaraCh3 = new AttributeModifierPerk("threshold_armara_2", 24, -2).setNameOverride(perkArmaraCh1.getUnlocalizedName());
+        AttributeModifierPerk perkArmaraCh3 = new AttributeModifierPerk("threshold_armara_2", 32, -6).setNameOverride(perkArmaraCh1);
         perkArmaraCh3.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        PerkTreeConnector thresholdArmara = new PerkTreeConnector("epi_armara", 23, 0);
+        PerkTreeConnector thresholdArmara = new PerkTreeConnector("epi_armara", 31, -4);
 
         PERK_TREE.registerPerk(perkArmaraCh1)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_6"));
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_def"));
         PERK_TREE.registerPerk(perkArmaraCh2)
                 .connect(perkArmaraCh1);
         PERK_TREE.registerPerk(perkArmaraCh3)
@@ -749,16 +878,16 @@ public class RegistryPerks {
                 .connect(perkArmaraCh2)
                 .connect(perkArmaraCh3);
 
-        AttributeModifierPerk perkVicioCh1 = new AttributeModifierPerk("threshold_vicio", -10, 22);
+        AttributeModifierPerk perkVicioCh1 = new AttributeModifierPerk("threshold_vicio", -6, 30);
         perkVicioCh1.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        AttributeModifierPerk perkVicioCh2 = new AttributeModifierPerk("threshold_vicio_1", -8, 25).setNameOverride(perkVicioCh1.getUnlocalizedName());
+        AttributeModifierPerk perkVicioCh2 = new AttributeModifierPerk("threshold_vicio_1", -4, 33).setNameOverride(perkVicioCh1);
         perkVicioCh2.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        AttributeModifierPerk perkVicioCh3 = new AttributeModifierPerk("threshold_vicio_2", -12, 25).setNameOverride(perkVicioCh1.getUnlocalizedName());
+        AttributeModifierPerk perkVicioCh3 = new AttributeModifierPerk("threshold_vicio_2", -8, 33).setNameOverride(perkVicioCh1);
         perkVicioCh3.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
-        PerkTreeConnector thresholdVicio = new PerkTreeConnector("epi_vicio", -10, 24);
+        PerkTreeConnector thresholdVicio = new PerkTreeConnector("epi_vicio", -6, 32);
 
         PERK_TREE.registerPerk(perkVicioCh1)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_14"));
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_trv_3"));
         PERK_TREE.registerPerk(perkVicioCh2)
                 .connect(perkVicioCh1);
         PERK_TREE.registerPerk(perkVicioCh3)
@@ -772,17 +901,15 @@ public class RegistryPerks {
 
     private static void initializePerkExteriorTravelWheel() {
         float inc_t4 = 0.03F;
-        String unloc;
 
         // Evorsio -> Discidia
         AttributeModifierPerk perkEff1 = new AttributeModifierPerk("base_inc_perkeffect_t4", -10, -18);
         perkEff1.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        unloc = perkEff1.getUnlocalizedName();
-        AttributeModifierPerk perkEff2 = new AttributeModifierPerk("base_inc_perkeffect_t4_1", -3, -20).setNameOverride(unloc);
+        AttributeModifierPerk perkEff2 = new AttributeModifierPerk("base_inc_perkeffect_t4_1", -3, -20).setNameOverride(perkEff1);
         perkEff2.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff3 = new AttributeModifierPerk("base_inc_perkeffect_t4_2", 5, -21).setNameOverride(unloc);
+        AttributeModifierPerk perkEff3 = new AttributeModifierPerk("base_inc_perkeffect_t4_2", 5, -21).setNameOverride(perkEff1);
         perkEff3.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff4 = new AttributeModifierPerk("base_inc_perkeffect_t4_3", 9, -18).setNameOverride(unloc);
+        AttributeModifierPerk perkEff4 = new AttributeModifierPerk("base_inc_perkeffect_t4_3", 9, -18).setNameOverride(perkEff1);
         perkEff4.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
         PERK_TREE.registerPerk(perkEff1)
@@ -798,13 +925,13 @@ public class RegistryPerks {
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_2"));
 
         // Discidia -> Armara
-        AttributeModifierPerk perkEff5 = new AttributeModifierPerk("base_inc_perkeffect_t4_4", 17, -12).setNameOverride(unloc);
+        AttributeModifierPerk perkEff5 = new AttributeModifierPerk("base_inc_perkeffect_t4_4", 17, -12).setNameOverride(perkEff1);
         perkEff5.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff6 = new AttributeModifierPerk("base_inc_perkeffect_t4_5", 19, -7).setNameOverride(unloc);
+        AttributeModifierPerk perkEff6 = new AttributeModifierPerk("base_inc_perkeffect_t4_5", 19, -7).setNameOverride(perkEff1);
         perkEff6.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff7 = new AttributeModifierPerk("base_inc_perkeffect_t4_6", 18, -1).setNameOverride(unloc);
+        AttributeModifierPerk perkEff7 = new AttributeModifierPerk("base_inc_perkeffect_t4_6", 18, -1).setNameOverride(perkEff1);
         perkEff7.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff8 = new AttributeModifierPerk("base_inc_perkeffect_t4_7", 19, 6).setNameOverride(unloc);
+        AttributeModifierPerk perkEff8 = new AttributeModifierPerk("base_inc_perkeffect_t4_7", 19, 6).setNameOverride(perkEff1);
         perkEff8.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
         PERK_TREE.registerPerk(perkEff5)
@@ -820,13 +947,13 @@ public class RegistryPerks {
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_5"));
 
         // Armara -> Vicio
-        AttributeModifierPerk perkEff9 = new AttributeModifierPerk("base_inc_perkeffect_t4_9", 15, 13).setNameOverride(unloc);
+        AttributeModifierPerk perkEff9 = new AttributeModifierPerk("base_inc_perkeffect_t4_9", 15, 13).setNameOverride(perkEff1);
         perkEff9.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff10 = new AttributeModifierPerk("base_inc_perkeffect_t4_10", 14, 17).setNameOverride(unloc);
+        AttributeModifierPerk perkEff10 = new AttributeModifierPerk("base_inc_perkeffect_t4_10", 14, 17).setNameOverride(perkEff1);
         perkEff10.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff11 = new AttributeModifierPerk("base_inc_perkeffect_t4_11", 9, 18).setNameOverride(unloc);
+        AttributeModifierPerk perkEff11 = new AttributeModifierPerk("base_inc_perkeffect_t4_11", 9, 18).setNameOverride(perkEff1);
         perkEff11.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff12 = new AttributeModifierPerk("base_inc_perkeffect_t4_12", 5, 19).setNameOverride(unloc);
+        AttributeModifierPerk perkEff12 = new AttributeModifierPerk("base_inc_perkeffect_t4_12", 5, 19).setNameOverride(perkEff1);
         perkEff12.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
         PERK_TREE.registerPerk(perkEff9)
@@ -842,13 +969,13 @@ public class RegistryPerks {
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_8"));
 
         // Vicio -> Aevitas
-        AttributeModifierPerk perkEff13 = new AttributeModifierPerk("base_inc_perkeffect_t4_13", -5, 20).setNameOverride(unloc);
+        AttributeModifierPerk perkEff13 = new AttributeModifierPerk("base_inc_perkeffect_t4_13", -5, 20).setNameOverride(perkEff1);
         perkEff13.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff14 = new AttributeModifierPerk("base_inc_perkeffect_t4_14", -9, 19).setNameOverride(unloc);
+        AttributeModifierPerk perkEff14 = new AttributeModifierPerk("base_inc_perkeffect_t4_14", -9, 19).setNameOverride(perkEff1);
         perkEff14.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff15 = new AttributeModifierPerk("base_inc_perkeffect_t4_15", -14, 17).setNameOverride(unloc);
+        AttributeModifierPerk perkEff15 = new AttributeModifierPerk("base_inc_perkeffect_t4_15", -14, 17).setNameOverride(perkEff1);
         perkEff15.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff16 = new AttributeModifierPerk("base_inc_perkeffect_t4_16", -16, 12).setNameOverride(unloc);
+        AttributeModifierPerk perkEff16 = new AttributeModifierPerk("base_inc_perkeffect_t4_16", -16, 12).setNameOverride(perkEff1);
         perkEff16.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
         PERK_TREE.registerPerk(perkEff13)
@@ -864,13 +991,13 @@ public class RegistryPerks {
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_11"));
 
         // Aevitas -> Evorsio
-        AttributeModifierPerk perkEff17 = new AttributeModifierPerk("base_inc_perkeffect_t4_17", -19, 4).setNameOverride(unloc);
+        AttributeModifierPerk perkEff17 = new AttributeModifierPerk("base_inc_perkeffect_t4_17", -19, 4).setNameOverride(perkEff1);
         perkEff17.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff18 = new AttributeModifierPerk("base_inc_perkeffect_t4_18", -20, -1).setNameOverride(unloc);
+        AttributeModifierPerk perkEff18 = new AttributeModifierPerk("base_inc_perkeffect_t4_18", -20, -1).setNameOverride(perkEff1);
         perkEff18.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff19 = new AttributeModifierPerk("base_inc_perkeffect_t4_19", -18, -6).setNameOverride(unloc);
+        AttributeModifierPerk perkEff19 = new AttributeModifierPerk("base_inc_perkeffect_t4_19", -18, -6).setNameOverride(perkEff1);
         perkEff19.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff20 = new AttributeModifierPerk("base_inc_perkeffect_t4_20", -16, -10).setNameOverride(unloc);
+        AttributeModifierPerk perkEff20 = new AttributeModifierPerk("base_inc_perkeffect_t4_20", -16, -10).setNameOverride(perkEff1);
         perkEff20.addModifier(inc_t4, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
         PERK_TREE.registerPerk(perkEff17)
@@ -889,17 +1016,17 @@ public class RegistryPerks {
     private static void initializeEvorsioBranch() {
         AttributeModifierPerk perkM1 = new AttributeModifierPerk("med_inc_hrv_speed", -11, -11);
         perkM1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
-        AttributeModifierPerk perkM2 = new AttributeModifierPerk("med_inc_hrv_speed_1", -13, -11).setNameOverride(perkM1.getUnlocalizedName());
+        AttributeModifierPerk perkM2 = new AttributeModifierPerk("med_inc_hrv_speed_1", -13, -11).setNameOverride(perkM1);
         perkM2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
 
         AttributeModifierPerk perkHrvAts = new MajorPerk("not_evo_hrv_ats", -12, -10);
         perkHrvAts.addModifier(1.1F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         perkHrvAts.addModifier(1.1F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
 
-        AttributeModifierPerk perkS1 = new AttributeModifierPerk("med_inc_hrv_speed_2", -10, -13).setNameOverride(perkM1.getUnlocalizedName());
-        perkS1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
-        AttributeModifierPerk perkS2 = new AttributeModifierPerk("med_inc_hrv_speed_3", -12, -13).setNameOverride(perkM1.getUnlocalizedName());
-        perkS2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        AttributeModifierPerk perkS1 = new AttributeModifierPerk("med_inc_hrv_speed_2", -10, -13).setNameOverride(perkM1);
+        perkS1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        AttributeModifierPerk perkS2 = new AttributeModifierPerk("med_inc_hrv_speed_3", -12, -13).setNameOverride(perkM1);
+        perkS2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
 
         AttributeModifierPerk perkHrvReach = new MajorPerk("not_evo_hrv_reach", -11, -14);
         perkHrvReach.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
@@ -931,7 +1058,7 @@ public class RegistryPerks {
     private static void initializeDiscidiaBranch() {
         AttributeModifierPerk perkP1 = new AttributeModifierPerk("med_inc_proj_damage", 11, -12);
         perkP1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        AttributeModifierPerk perkP2 = new AttributeModifierPerk("med_inc_proj_damage_1", 13, -12).setNameOverride(perkP1.getUnlocalizedName());
+        AttributeModifierPerk perkP2 = new AttributeModifierPerk("med_inc_proj_damage_1", 13, -12).setNameOverride(perkP1);
         perkP2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
 
         AttributeModifierPerk perkProjCrit = new MajorPerk("not_dsc_proj_crit", 12, -11);
@@ -940,14 +1067,14 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkM1 = new AttributeModifierPerk("med_inc_melee_damage", 10, -14);
         perkM1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
-        AttributeModifierPerk perkM2 = new AttributeModifierPerk("med_inc_melee_damage_1", 12, -14).setNameOverride(perkM1.getUnlocalizedName());
+        AttributeModifierPerk perkM2 = new AttributeModifierPerk("med_inc_melee_damage_1", 12, -14).setNameOverride(perkM1);
         perkM2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
 
         AttributeModifierPerk perkMeleeMulti = new MajorPerk("not_dsc_melee_multi", 11, -15);
         perkMeleeMulti.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
         perkMeleeMulti.addModifier(0.3F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
 
-        AttributeModifierPerk perkReachProjSpeed = new MajorPerk("med_reach_arrowspeed", 15, -16);
+        AttributeModifierPerk perkReachProjSpeed = new MajorPerk("med_reach_arrowspeed", 14, -16);
         perkReachProjSpeed.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_REACH);
         perkReachProjSpeed.addModifier(1.15F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_SPEED);
 
@@ -973,7 +1100,7 @@ public class RegistryPerks {
     private static void initializeArmaraBranch() {
         AttributeModifierPerk perkAr1 = new AttributeModifierPerk("med_inc_armor", 14, 8);
         perkAr1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
-        AttributeModifierPerk perkAr2 = new AttributeModifierPerk("med_inc_armor_1", 14, 10).setNameOverride(perkAr1.getUnlocalizedName());
+        AttributeModifierPerk perkAr2 = new AttributeModifierPerk("med_inc_armor_1", 14, 10).setNameOverride(perkAr1);
         perkAr2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
 
         AttributeModifierPerk perkArmorDodge = new MajorPerk("not_arm_armor_dodge", 13, 9);
@@ -982,7 +1109,7 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkRes1 = new AttributeModifierPerk("med_inc_resist", 16, 7);
         perkRes1.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
-        AttributeModifierPerk perkRes2 = new AttributeModifierPerk("med_inc_resist_1", 16, 9).setNameOverride(perkRes1.getUnlocalizedName());
+        AttributeModifierPerk perkRes2 = new AttributeModifierPerk("med_inc_resist_1", 16, 9).setNameOverride(perkRes1);
         perkRes2.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
 
         AttributeModifierPerk perkResistLife = new MajorPerk("not_arm_res_life", 17, 8);
@@ -1013,21 +1140,18 @@ public class RegistryPerks {
     }
 
     private static void initializeVicioBranch() {
-        String unloc;
-
         AttributeModifierPerk perkM1 = new AttributeModifierPerk("med_inc_ms", 1, 16);
         perkM1.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
-        unloc = perkM1.getUnlocalizedName();
-        AttributeModifierPerk perkM2 = new AttributeModifierPerk("med_inc_ms_1", 1, 18).setNameOverride(unloc);
+        AttributeModifierPerk perkM2 = new AttributeModifierPerk("med_inc_ms_1", 1, 18).setNameOverride(perkM1);
         perkM2.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
 
         AttributeModifierPerk perkDodgeMs = new MajorPerk("not_vic_dodge_ms", 2, 17);
         perkDodgeMs.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
         perkDodgeMs.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE);
 
-        AttributeModifierPerk perkM3 = new AttributeModifierPerk("mec_inc_ms_2", -1, 17).setNameOverride(unloc);
+        AttributeModifierPerk perkM3 = new AttributeModifierPerk("mec_inc_ms_2", -1, 17).setNameOverride(perkM1);
         perkM3.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
-        AttributeModifierPerk perkM4 = new AttributeModifierPerk("mec_inc_ms_3", -1, 19).setNameOverride(unloc);
+        AttributeModifierPerk perkM4 = new AttributeModifierPerk("mec_inc_ms_3", -1, 19).setNameOverride(perkM1);
         perkM4.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
 
         AttributeModifierPerk perkAtsMs = new MajorPerk("not_vic_ats", -2, 18);
@@ -1057,21 +1181,18 @@ public class RegistryPerks {
     }
 
     private static void initializeAevitasBranch() {
-        String unloc;
-
         AttributeModifierPerk perkL1 = new AttributeModifierPerk("med_inc_life", -15, 6);
         perkL1.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
-        unloc = perkL1.getUnlocalizedName();
-        AttributeModifierPerk perkL2 = new AttributeModifierPerk("med_inc_life_1", -17, 6).setNameOverride(unloc);
+        AttributeModifierPerk perkL2 = new AttributeModifierPerk("med_inc_life_1", -17, 6).setNameOverride(perkL1);
         perkL2.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
 
         AttributeModifierPerk perkArmorLife = new MajorPerk("not_aev_armor_life", -16, 5);
         perkArmorLife.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
         perkArmorLife.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
 
-        AttributeModifierPerk perkL3 = new AttributeModifierPerk("med_inc_life_2", -14, 8).setNameOverride(unloc);
+        AttributeModifierPerk perkL3 = new AttributeModifierPerk("med_inc_life_2", -14, 8).setNameOverride(perkL1);
         perkL3.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
-        AttributeModifierPerk perkL4 = new AttributeModifierPerk("med_inc_life_3", -16, 8).setNameOverride(unloc);
+        AttributeModifierPerk perkL4 = new AttributeModifierPerk("med_inc_life_3", -16, 8).setNameOverride(perkL1);
         perkL4.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
 
         AttributeModifierPerk perkAllResLife = new MajorPerk("not_aev_res_life", -15, 9);
@@ -1103,16 +1224,14 @@ public class RegistryPerks {
     //Registers T1 perk-effect perks
     private static void initializePerkCore() {
         float inc_t1 = 0.07F;
-        String unloc;
 
         AttributeModifierPerk perkEff1 = new AttributeModifierPerk("base_inc_perkeffect_t1", 1, -2);
         perkEff1.addModifier(inc_t1, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        unloc = perkEff1.getUnlocalizedName();
-        AttributeModifierPerk perkEff2 = new AttributeModifierPerk("base_inc_perkeffect_t1_1", 2, 1).setNameOverride(unloc);
+        AttributeModifierPerk perkEff2 = new AttributeModifierPerk("base_inc_perkeffect_t1_1", 2, 1).setNameOverride(perkEff1);
         perkEff2.addModifier(inc_t1, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff3 = new AttributeModifierPerk("base_inc_perkeffect_t1_2", -1, 2).setNameOverride(unloc);
+        AttributeModifierPerk perkEff3 = new AttributeModifierPerk("base_inc_perkeffect_t1_2", -1, 2).setNameOverride(perkEff1);
         perkEff3.addModifier(inc_t1, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEff4 = new AttributeModifierPerk("base_inc_perkeffect_t1_3", -2, -1).setNameOverride(unloc);
+        AttributeModifierPerk perkEff4 = new AttributeModifierPerk("base_inc_perkeffect_t1_3", -2, -1).setNameOverride(perkEff1);
         perkEff4.addModifier(inc_t1, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
         CoreRootPerk core = new CoreRootPerk();
@@ -1138,42 +1257,40 @@ public class RegistryPerks {
     //Registers T2 perk-effect perks
     private static void initializePerkInteriorTravelWheel() {
         float inc_t2 = 0.05F;
-        String unloc;
 
         AttributeModifierPerk perkEffectEvDis1 = new AttributeModifierPerk("base_inc_perkeffect_t2", -1, -10);
         perkEffectEvDis1.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        unloc = perkEffectEvDis1.getUnlocalizedName();
-        AttributeModifierPerk perkEffectEvDis2 = new AttributeModifierPerk("base_inc_perkeffect_t2_1", 1, -8).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectEvDis2 = new AttributeModifierPerk("base_inc_perkeffect_t2_1", 1, -8).setNameOverride(perkEffectEvDis1);
         perkEffectEvDis2.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectEvDis3 = new AttributeModifierPerk("base_inc_perkeffect_t2_2", 0, -5).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectEvDis3 = new AttributeModifierPerk("base_inc_perkeffect_t2_2", 0, -5).setNameOverride(perkEffectEvDis1);
         perkEffectEvDis3.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
-        AttributeModifierPerk perkEffectDisArm1 = new AttributeModifierPerk("base_inc_perkeffect_t2_3", 10, -2).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectDisArm1 = new AttributeModifierPerk("base_inc_perkeffect_t2_3", 10, -2).setNameOverride(perkEffectEvDis1);
         perkEffectDisArm1.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectDisArm2 = new AttributeModifierPerk("base_inc_perkeffect_t2_4", 7, -3).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectDisArm2 = new AttributeModifierPerk("base_inc_perkeffect_t2_4", 7, -3).setNameOverride(perkEffectEvDis1);
         perkEffectDisArm2.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectDisArm3 = new AttributeModifierPerk("base_inc_perkeffect_t2_5", 4, -1).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectDisArm3 = new AttributeModifierPerk("base_inc_perkeffect_t2_5", 4, -1).setNameOverride(perkEffectEvDis1);
         perkEffectDisArm3.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
-        AttributeModifierPerk perkEffectArmVic1 = new AttributeModifierPerk("base_inc_perkeffect_t2_6", 6, 9).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectArmVic1 = new AttributeModifierPerk("base_inc_perkeffect_t2_6", 6, 9).setNameOverride(perkEffectEvDis1);
         perkEffectArmVic1.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectArmVic2 = new AttributeModifierPerk("base_inc_perkeffect_t2_7", 4, 6).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectArmVic2 = new AttributeModifierPerk("base_inc_perkeffect_t2_7", 4, 6).setNameOverride(perkEffectEvDis1);
         perkEffectArmVic2.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectArmVic3 = new AttributeModifierPerk("base_inc_perkeffect_t2_8", 1, 4).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectArmVic3 = new AttributeModifierPerk("base_inc_perkeffect_t2_8", 1, 4).setNameOverride(perkEffectEvDis1);
         perkEffectArmVic3.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
-        AttributeModifierPerk perkEffectVicAev1 = new AttributeModifierPerk("base_inc_perkeffect_t2_9", -6, 9).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectVicAev1 = new AttributeModifierPerk("base_inc_perkeffect_t2_9", -6, 9).setNameOverride(perkEffectEvDis1);
         perkEffectVicAev1.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectVicAev2 = new AttributeModifierPerk("base_inc_perkeffect_t2_10", -5, 5).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectVicAev2 = new AttributeModifierPerk("base_inc_perkeffect_t2_10", -5, 5).setNameOverride(perkEffectEvDis1);
         perkEffectVicAev2.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectVicAev3 = new AttributeModifierPerk("base_inc_perkeffect_t2_11", -2, 4).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectVicAev3 = new AttributeModifierPerk("base_inc_perkeffect_t2_11", -2, 4).setNameOverride(perkEffectEvDis1);
         perkEffectVicAev3.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
-        AttributeModifierPerk perkEffectAevEv1 = new AttributeModifierPerk("base_inc_perkeffect_t2_12", -10, -2).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectAevEv1 = new AttributeModifierPerk("base_inc_perkeffect_t2_12", -10, -2).setNameOverride(perkEffectEvDis1);
         perkEffectAevEv1.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectAevEv2 = new AttributeModifierPerk("base_inc_perkeffect_t2_13", -7, -1).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectAevEv2 = new AttributeModifierPerk("base_inc_perkeffect_t2_13", -7, -1).setNameOverride(perkEffectEvDis1);
         perkEffectAevEv2.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectAevEv3 = new AttributeModifierPerk("base_inc_perkeffect_t2_14", -5, -2).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectAevEv3 = new AttributeModifierPerk("base_inc_perkeffect_t2_14", -5, -2).setNameOverride(perkEffectEvDis1);
         perkEffectAevEv3.addModifier(inc_t2, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
         PERK_TREE.registerPerk(perkEffectEvDis1)
@@ -1215,42 +1332,40 @@ public class RegistryPerks {
     //Registers T3 perk-effect perks
     private static void initializeRootPerkWheel() {
         float inc_t3 = 0.04F;
-        String unloc;
 
         AttributeModifierPerk perkEffectEvDis1 = new AttributeModifierPerk("base_inc_perkeffect_t3", -5, -12);
         perkEffectEvDis1.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        unloc = perkEffectEvDis1.getUnlocalizedName();
-        AttributeModifierPerk perkEffectEvDis2 = new AttributeModifierPerk("base_inc_perkeffect_t3_1", 0, -13).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectEvDis2 = new AttributeModifierPerk("base_inc_perkeffect_t3_1", 0, -13).setNameOverride(perkEffectEvDis1);
         perkEffectEvDis2.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectEvDis3 = new AttributeModifierPerk("base_inc_perkeffect_t3_2", 5, -12).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectEvDis3 = new AttributeModifierPerk("base_inc_perkeffect_t3_2", 5, -12).setNameOverride(perkEffectEvDis1);
         perkEffectEvDis3.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
-        AttributeModifierPerk perkEffectDisArm1 = new AttributeModifierPerk("base_inc_perkeffect_t3_3", 11, -7).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectDisArm1 = new AttributeModifierPerk("base_inc_perkeffect_t3_3", 11, -7).setNameOverride(perkEffectEvDis1);
         perkEffectDisArm1.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectDisArm2 = new AttributeModifierPerk("base_inc_perkeffect_t3_4", 13, -3).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectDisArm2 = new AttributeModifierPerk("base_inc_perkeffect_t3_4", 13, -3).setNameOverride(perkEffectEvDis1);
         perkEffectDisArm2.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectDisArm3 = new AttributeModifierPerk("base_inc_perkeffect_t3_5", 14, 2).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectDisArm3 = new AttributeModifierPerk("base_inc_perkeffect_t3_5", 14, 2).setNameOverride(perkEffectEvDis1);
         perkEffectDisArm3.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
-        AttributeModifierPerk perkEffectArmVic1 = new AttributeModifierPerk("base_inc_perkeffect_t3_6", 11, 9).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectArmVic1 = new AttributeModifierPerk("base_inc_perkeffect_t3_6", 11, 9).setNameOverride(perkEffectEvDis1);
         perkEffectArmVic1.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectArmVic2 = new AttributeModifierPerk("base_inc_perkeffect_t3_7", 8, 12).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectArmVic2 = new AttributeModifierPerk("base_inc_perkeffect_t3_7", 8, 12).setNameOverride(perkEffectEvDis1);
         perkEffectArmVic2.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectArmVic3 = new AttributeModifierPerk("base_inc_perkeffect_t3_8", 4, 13).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectArmVic3 = new AttributeModifierPerk("base_inc_perkeffect_t3_8", 4, 13).setNameOverride(perkEffectEvDis1);
         perkEffectArmVic3.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
-        AttributeModifierPerk perkEffectVicAev1 = new AttributeModifierPerk("base_inc_perkeffect_t3_9", -3, 13).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectVicAev1 = new AttributeModifierPerk("base_inc_perkeffect_t3_9", -3, 13).setNameOverride(perkEffectEvDis1);
         perkEffectVicAev1.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectVicAev2 = new AttributeModifierPerk("base_inc_perkeffect_t3_10", -8, 12).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectVicAev2 = new AttributeModifierPerk("base_inc_perkeffect_t3_10", -8, 12).setNameOverride(perkEffectEvDis1);
         perkEffectVicAev2.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectVicAev3 = new AttributeModifierPerk("base_inc_perkeffect_t3_11", -11, 9).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectVicAev3 = new AttributeModifierPerk("base_inc_perkeffect_t3_11", -11, 9).setNameOverride(perkEffectEvDis1);
         perkEffectVicAev3.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
-        AttributeModifierPerk perkEffectAevEv1 = new AttributeModifierPerk("base_inc_perkeffect_t3_12", -14, 2).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectAevEv1 = new AttributeModifierPerk("base_inc_perkeffect_t3_12", -14, 2).setNameOverride(perkEffectEvDis1);
         perkEffectAevEv1.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectAevEv2 = new AttributeModifierPerk("base_inc_perkeffect_t3_13", -13, -3).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectAevEv2 = new AttributeModifierPerk("base_inc_perkeffect_t3_13", -13, -3).setNameOverride(perkEffectEvDis1);
         perkEffectAevEv2.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
-        AttributeModifierPerk perkEffectAevEv3 = new AttributeModifierPerk("base_inc_perkeffect_t3_14", -11, -7).setNameOverride(unloc);
+        AttributeModifierPerk perkEffectAevEv3 = new AttributeModifierPerk("base_inc_perkeffect_t3_14", -11, -7).setNameOverride(perkEffectEvDis1);
         perkEffectAevEv3.addModifier(inc_t3, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
 
         PERK_TREE.registerPerk(perkEffectEvDis1).connect(perkRootMajorHarvest);
@@ -1277,8 +1392,7 @@ public class RegistryPerks {
     private static void initializeEvorsioRoot() {
         AttributeModifierPerk breakRoot1 = new AttributeModifierPerk("base_inc_harvest", -7, -7);
         breakRoot1.addModifier(0.10F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
-        String unlocHrv = breakRoot1.getUnlocalizedName();
-        AttributeModifierPerk breakRoot2 = new AttributeModifierPerk("base_inc_harvest_1", -6, -9).setNameOverride(unlocHrv);
+        AttributeModifierPerk breakRoot2 = new AttributeModifierPerk("base_inc_harvest_1", -6, -9).setNameOverride(breakRoot1);
         breakRoot2.addModifier(0.10F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         perkRootMajorHarvest = new MajorPerk("major_inc_harvest", -9, -10);
         perkRootMajorHarvest.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
@@ -1297,7 +1411,7 @@ public class RegistryPerks {
         AttributeModifierPerk dmgRoot1 = new AttributeModifierPerk("base_inc__melee_damage", 7, -7);
         dmgRoot1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
         AttributeModifierPerk dmgRoot2 = new AttributeModifierPerk("base_inc_proj_damage", 6, -9);
-        dmgRoot2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        dmgRoot2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
         perkRootMajorDamage = new MajorPerk("major_inc_damage", 9, -10);
         perkRootMajorDamage.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
         perkRootMajorDamage.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
@@ -1315,8 +1429,7 @@ public class RegistryPerks {
     private static void initializeArmaraRoot() {
         AttributeModifierPerk armorRoot1 = new AttributeModifierPerk("base_inc_armor", 9, 3);
         armorRoot1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
-        String unlocArmor = armorRoot1.getUnlocalizedName();
-        AttributeModifierPerk armorRoot2 = new AttributeModifierPerk("base_inc_armor_1", 8, 5).setNameOverride(unlocArmor);
+        AttributeModifierPerk armorRoot2 = new AttributeModifierPerk("base_inc_armor_1", 8, 5).setNameOverride(armorRoot1);
         armorRoot2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
         perkRootMajorArmor = new MajorPerk("major_inc_armor", 12, 6);
         perkRootMajorArmor.addModifier(1.20F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
@@ -1333,8 +1446,7 @@ public class RegistryPerks {
     private static void initializeVicioRoot() {
         AttributeModifierPerk moveRoot1 = new AttributeModifierPerk("base_inc_ms", 1, 10);
         moveRoot1.addModifier(0.03F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
-        String unlocMoveSpeed = moveRoot1.getUnlocalizedName();
-        AttributeModifierPerk moveRoot2 = new AttributeModifierPerk("base_inc_ms_1", -1, 11).setNameOverride(unlocMoveSpeed);
+        AttributeModifierPerk moveRoot2 = new AttributeModifierPerk("base_inc_ms_1", -1, 11).setNameOverride(moveRoot1);
         moveRoot2.addModifier(0.03F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
         perkRootMajorMovespeed = new MajorPerk("major_inc_ms_fs", 0, 14);
         perkRootMajorMovespeed.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
@@ -1352,8 +1464,7 @@ public class RegistryPerks {
     private static void initializeAevitasRoot() {
         AttributeModifierPerk lifeRoot1 = new AttributeModifierPerk("base_inc_life", -9, 3);
         lifeRoot1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
-        String unlocLife = lifeRoot1.getUnlocalizedName();
-        AttributeModifierPerk lifeRoot2 = new AttributeModifierPerk("base_inc_life_1", -8, 5).setNameOverride(unlocLife);
+        AttributeModifierPerk lifeRoot2 = new AttributeModifierPerk("base_inc_life_1", -8, 5).setNameOverride(lifeRoot1);
         lifeRoot2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
         perkRootMajorHealth = new MajorPerk("major_inc_life", -12, 6);
         perkRootMajorHealth.addModifier(1.15F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
@@ -1424,113 +1535,5 @@ public class RegistryPerks {
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkAttributeTypeRegister());
     }
-
-    /*public static void init() {
-        ConstellationPerkMap map = new ConstellationPerkMap();
-        map.addPerk(ConstellationPerks.DMG_INCREASE,  ConstellationPerkMap.PerkOrder.DEFAULT,  1, 13);
-
-        map.addPerk(ConstellationPerks.DMG_DISTANCE,  ConstellationPerkMap.PerkOrder.DEFAULT,  5, 12,
-                ConstellationPerks.DMG_INCREASE);
-
-        map.addPerk(ConstellationPerks.DMG_KNOCKBACK, ConstellationPerkMap.PerkOrder.DEFAULT,  2,  9,
-                ConstellationPerks.DMG_INCREASE);
-
-        map.addPerk(ConstellationPerks.DMG_AFTERKILL, ConstellationPerkMap.PerkOrder.DEFAULT,  8,  6,
-                ConstellationPerks.DMG_KNOCKBACK,
-                ConstellationPerks.DMG_DISTANCE);
-
-        map.addPerk(ConstellationPerks.DMG_BLEED,     ConstellationPerkMap.PerkOrder.DEFAULT,  13,  1,
-                ConstellationPerks.DMG_AFTERKILL);
-
-        map.addPerk(ConstellationPerks.DMG_REFLECT,   ConstellationPerkMap.PerkOrder.DEFAULT,  10, 2,
-                ConstellationPerks.DMG_AFTERKILL);
-
-        ConstellationPerkMapRegistry.registerPerkMap(Constellations.discidia, map);
-
-        map = new ConstellationPerkMap();
-
-        map.addPerk(ConstellationPerks.TRV_MOVESPEED,   ConstellationPerkMap.PerkOrder.DEFAULT,  1, 13);
-
-        map.addPerk(ConstellationPerks.TRV_SWIMSPEED,   ConstellationPerkMap.PerkOrder.DEFAULT,  5,  9,
-                ConstellationPerks.TRV_MOVESPEED);
-
-        map.addPerk(ConstellationPerks.TRV_PLACELIGHTS, ConstellationPerkMap.PerkOrder.DEFAULT,  13,  6,
-                ConstellationPerks.TRV_SWIMSPEED);
-
-        map.addPerk(ConstellationPerks.TRV_REDFOODNEED, ConstellationPerkMap.PerkOrder.DEFAULT,  4,  5,
-                ConstellationPerks.TRV_SWIMSPEED);
-
-        map.addPerk(ConstellationPerks.TRV_LAVAPROTECT, ConstellationPerkMap.PerkOrder.DEFAULT,  13,  1,
-                ConstellationPerks.TRV_REDFOODNEED);
-
-        map.addPerk(ConstellationPerks.TRV_STEPASSIST,  ConstellationPerkMap.PerkOrder.DEFAULT,  10, 10,
-                ConstellationPerks.TRV_SWIMSPEED);
-
-        ConstellationPerkMapRegistry.registerPerkMap(Constellations.vicio, map);
-
-        map = new ConstellationPerkMap();
-
-        map.addPerk(ConstellationPerks.DEF_DMGREDUCTION,  ConstellationPerkMap.PerkOrder.DEFAULT,  7,  13);
-
-        map.addPerk(ConstellationPerks.DEF_FALLREDUCTION, ConstellationPerkMap.PerkOrder.DEFAULT,  2,  9,
-                ConstellationPerks.DEF_DMGREDUCTION);
-
-        map.addPerk(ConstellationPerks.DEF_ELEMENTAL,     ConstellationPerkMap.PerkOrder.DEFAULT,  3,  1,
-                ConstellationPerks.DEF_FALLREDUCTION);
-
-        map.addPerk(ConstellationPerks.DEF_DODGE,         ConstellationPerkMap.PerkOrder.DEFAULT,  11,  10,
-                ConstellationPerks.DEF_DMGREDUCTION);
-
-        map.addPerk(ConstellationPerks.DEF_NOARMOR,       ConstellationPerkMap.PerkOrder.DEFAULT,  10, 2,
-                ConstellationPerks.DEF_DODGE);
-
-        map.addPerk(ConstellationPerks.DEF_CHEATDEATH,    ConstellationPerkMap.PerkOrder.DEFAULT,  8, 6,
-                ConstellationPerks.DEF_DODGE);
-
-        ConstellationPerkMapRegistry.registerPerkMap(Constellations.armara, map);
-
-        map = new ConstellationPerkMap();
-
-        map.addPerk(ConstellationPerks.CRE_GROWTH, ConstellationPerkMap.PerkOrder.DEFAULT, 7, 7);
-
-        map.addPerk(ConstellationPerks.CRE_BREEDING, ConstellationPerkMap.PerkOrder.DEFAULT, 14, 6,
-                ConstellationPerks.CRE_GROWTH);
-
-        map.addPerk(ConstellationPerks.CRE_REACH, ConstellationPerkMap.PerkOrder.DEFAULT, 4, 2,
-                ConstellationPerks.CRE_BREEDING);
-
-        map.addPerk(ConstellationPerks.CRE_MEND, ConstellationPerkMap.PerkOrder.DEFAULT, 0, 8,
-                ConstellationPerks.CRE_GROWTH);
-
-        map.addPerk(ConstellationPerks.CRE_OREGEN, ConstellationPerkMap.PerkOrder.DEFAULT, 12, 13,
-                ConstellationPerks.CRE_MEND);
-
-        map.addPerk(ConstellationPerks.CRE_FLARES, ConstellationPerkMap.PerkOrder.DEFAULT,  12, 2,
-                ConstellationPerks.CRE_BREEDING);
-
-        ConstellationPerkMapRegistry.registerPerkMap(Constellations.aevitas, map);
-
-        map = new ConstellationPerkMap();
-
-        map.addPerk(ConstellationPerks.DTR_DIG_SPEED, ConstellationPerkMap.PerkOrder.DEFAULT, 7, 7);
-
-        map.addPerk(ConstellationPerks.DTR_DAMAGE_ARC, ConstellationPerkMap.PerkOrder.DEFAULT, 2, 6,
-                ConstellationPerks.DTR_DIG_SPEED);
-
-        map.addPerk(ConstellationPerks.DTR_DIG_TYPES, ConstellationPerkMap.PerkOrder.DEFAULT, 7, 1,
-                ConstellationPerks.DTR_DIG_SPEED);
-
-        map.addPerk(ConstellationPerks.DTR_LOW_HEALTH, ConstellationPerkMap.PerkOrder.DEFAULT, 4, 13,
-                ConstellationPerks.DTR_DAMAGE_ARC);
-
-        map.addPerk(ConstellationPerks.DTR_ARMOR_BREAK, ConstellationPerkMap.PerkOrder.DEFAULT, 12, 4,
-                ConstellationPerks.DTR_DIG_SPEED);
-
-        map.addPerk(ConstellationPerks.DTR_STACK, ConstellationPerkMap.PerkOrder.DEFAULT, 12, 10,
-                ConstellationPerks.DTR_LOW_HEALTH);
-
-
-        ConstellationPerkMapRegistry.registerPerkMap(Constellations.evorsio, map);
-    }*/
 
 }

@@ -6,15 +6,14 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
+package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerAttributeMap;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.PerkTree;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,6 +45,23 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
             return (T) mod;
         }
         return null;
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        typeModifierList.forEach(t -> t.multiplyValue(multiplier));
+        typeModifierList.removeIf(t -> {
+            switch (t.getMode()) {
+                case ADDITION:
+                case ADDED_MULTIPLY:
+                    return Math.abs(t.getValue()) <= 1E-4;
+                case STACKING_MULTIPLY:
+                    return (Math.abs(t.getValue()) - 1) <= 1E-4;
+            }
+            return false;
+        });
     }
 
     @Override

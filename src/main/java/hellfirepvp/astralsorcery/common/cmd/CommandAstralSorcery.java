@@ -247,9 +247,9 @@ public class CommandAstralSorcery extends CommandBase {
         PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
 
-        int chargeToSet;
+        long chargeToSet;
         try {
-            chargeToSet = Integer.parseInt(strCharge);
+            chargeToSet = Long.parseLong(strCharge);
         } catch (NumberFormatException exc) {
             sender.sendMessage(new TextComponentString("§cFailed! Alignment charge to set should be a number! " + strCharge));
             return;
@@ -393,7 +393,7 @@ public class CommandAstralSorcery extends CommandBase {
 
         sender.sendMessage(new TextComponentString("§aProgression tier: " + progress.getTierReached().name()));
         sender.sendMessage(new TextComponentString("§aAttuned to: " + (progress.getAttunedConstellation() == null ? "<none>" : progress.getAttunedConstellation().getUnlocalizedName())));
-        sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(progress.getPerkExp()))));
+        sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + progress.getPerkLevel()));
         sender.sendMessage(new TextComponentString("§aUnlocked perks + unlock-level:"));
         for (AbstractPerk perk : progress.getAppliedPerks()) {
             sender.sendMessage(new TextComponentString("§7" + (perk.getUnlocalizedName() + ".name")));

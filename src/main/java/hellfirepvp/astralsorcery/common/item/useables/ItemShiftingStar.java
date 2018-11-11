@@ -154,7 +154,7 @@ public class ItemShiftingStar extends Item implements INBTModel {
                 }
                 double exp = prog.getPerkExp();
                 if (ResearchManager.setAttunedConstellation(pl, cst)) {
-                    ResearchManager.setExp(pl, (int) Math.floor(exp));
+                    ResearchManager.setExp(pl, MathHelper.lfloor(exp));
                     pl.sendMessage(new TextComponentTranslation("progress.switch.attunement").setStyle(new Style().setColor(TextFormatting.BLUE)));
                     SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldIn, entityLiving.getPosition(), 1F, 1F);
                 } else {

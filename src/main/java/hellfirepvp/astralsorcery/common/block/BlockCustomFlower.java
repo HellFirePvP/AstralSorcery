@@ -61,34 +61,28 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        if (!(world instanceof World)) {
+            return;
+        }
+        switch (state.getValue(FLOWER_TYPE)) {
+            case GLOW_FLOWER:
+                int size = 1;
+                for (int i = 0; i < fortune; i++) {
+                    size += rand.nextInt(3) + 1;
+                }
+                for (int i = 0; i < size; i++) {
+                    ItemUtils.dropItemNaturally((World) world,
+                            pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5,
+                            new ItemStack(Items.GLOWSTONE_DUST));
+                }
+                break;
+        }
+    }
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
-    }
-
-    @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-        if(!worldIn.isRemote && !player.isCreative()) {
-            switch (state.getValue(FLOWER_TYPE)) {
-                case GLOW_FLOWER:
-                    int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItemMainhand());
-                    int looting = EnchantmentHelper.getEnchantmentLevel(Enchantments.LOOTING, player.getHeldItemMainhand());
-                    if(looting > fortune) {
-                        fortune = looting;
-                    }
-                    int size = 1;
-                    for (int i = 0; i < fortune; i++) {
-                        size += rand.nextInt(3) + 1;
-                    }
-                    for (int i = 0; i < size; i++) {
-                        ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, new ItemStack(Items.GLOWSTONE_DUST));
-                    }
-                    break;
-            }
-        }
-        super.onBlockHarvested(worldIn, pos, state, player);
     }
 
     @Override

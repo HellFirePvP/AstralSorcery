@@ -50,9 +50,10 @@ public class KeyLightningArc extends KeyPerk {
 
     private static boolean chainingDamage = false;
 
-    private static float arcChance = 0.6F;
-    private static float arcPercent = 0.75F;
-    private static int arcTicks = 3;
+    private float arcChance = 0.6F;
+    private float arcPercent = 0.75F;
+    private int arcTicks = 3;
+
     private static float distanceSearch = 7F;
     private static int arcBaseChains = 3;
 
@@ -71,6 +72,15 @@ public class KeyLightningArc extends KeyPerk {
                         "Defines the amount of times an arc will repetitively chain between the mobs and deal damage after initially spawned/triggered");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.arcChance *= multiplier;
+        this.arcPercent *= multiplier;
+        this.arcTicks = MathHelper.ceil(this.arcTicks * multiplier);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

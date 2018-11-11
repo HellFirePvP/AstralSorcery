@@ -372,7 +372,7 @@ public class ClientRenderEventHandler {
         tes.draw();
 
         //Draw charge
-        float filled = PerkLevelManager.INSTANCE.getNextLevelPercent(ResearchManager.clientProgress.getPerkExp());
+        float filled = ResearchManager.clientProgress.getPercentToNextLevel();
         height = 78F;
         offsetY = 27.5F + (1F - filled) * height;
         GL11.glColor4f(255F / 255F, 230F / 255F, 0F / 255F, visibilityPermCharge * 0.9F);
@@ -389,7 +389,7 @@ public class ClientRenderEventHandler {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         TextureHelper.refreshTextureBindState();
         //Draw level
-        int level = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(ResearchManager.clientProgress.getPerkExp()));
+        int level = ResearchManager.clientProgress.getPerkLevel();
         String strLevel = String.valueOf(level);
         int strLength = Minecraft.getMinecraft().fontRenderer.getStringWidth(strLevel);
         GL11.glColor4f(0.86F, 0.86F, 0.86F, visibilityPermCharge);

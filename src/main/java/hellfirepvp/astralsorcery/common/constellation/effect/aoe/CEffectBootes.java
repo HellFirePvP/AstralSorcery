@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -64,7 +65,7 @@ public class CEffectBootes extends CEffectEntityCollect<EntityLivingBase> {
                     e.attackEntityFrom(CommonProxy.dmgSourceStellar, 5000);
                     continue;
                 }
-                if(rand.nextFloat() < herdChance) {
+                if(rand.nextFloat() < herdChance && MiscUtils.canEntityTickAt(world, e.getPosition())) {
                     List<ItemStack> drops = herd.getHerdingDropsTick(e, world, rand, herdingLuck);
                     for (ItemStack stack : drops) {
                         if(rand.nextFloat() < dropChance) {

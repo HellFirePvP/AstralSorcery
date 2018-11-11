@@ -112,7 +112,7 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
         boolean changed = false;
         GenListEntries.CounterMaxListEntry entry = getRandomElementByChance(rand);
         if(entry != null) {
-            if(MiscUtils.isChunkLoaded(world, new ChunkPos(entry.getPos()))) {
+            if(MiscUtils.canEntityTickAt(world, entry.getPos())) {
                 if(!verifier.isValid(world, entry.getPos())) {
                     removeElement(entry);
                     changed = true;

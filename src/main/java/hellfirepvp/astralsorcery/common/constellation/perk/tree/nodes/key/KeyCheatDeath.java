@@ -34,12 +34,12 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeyCheatDeath extends KeyPerk {
 
-    public static float thresholdApplyPerkHealth = 4F;
-    public static float thresholdApplyPerkDamage = 6F;
-    public static int cooldownPotionApplication = 1000;
+    public float thresholdApplyPerkHealth = 4F;
+    public float thresholdApplyPerkDamage = 6F;
+    public int cooldownPotionApplication = 1000;
 
-    public static int potionDuration = 600;
-    public static int potionAmplifier = 0;
+    public int potionDuration = 600;
+    public int potionAmplifier = 0;
 
     public KeyCheatDeath(String name, int x, int y) {
         super(name, x, y);
@@ -59,6 +59,14 @@ public class KeyCheatDeath extends KeyPerk {
                         potionAmplifier, 0, 32, "Once the potion effect gets applied by any of the triggers, this will be used as amplifier of the potion effect.");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.potionDuration = MathHelper.ceil(this.potionDuration * multiplier);
+        this.potionAmplifier = MathHelper.ceil(this.potionAmplifier * multiplier);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

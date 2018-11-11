@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,8 +40,8 @@ public class KeyStoneEnrichment extends KeyPerk implements IPlayerTickPerk {
 
     private static final BlockStateCheck stoneCheck = new CleanStoneCheck();
 
-    private static int enrichmentRadius = 3;
-    private static int chanceToEnrich = 70;
+    private int enrichmentRadius = 3;
+    private int chanceToEnrich = 70;
 
     public KeyStoneEnrichment(String name, int x, int y) {
         super(name, x, y);
@@ -53,6 +54,14 @@ public class KeyStoneEnrichment extends KeyPerk implements IPlayerTickPerk {
                         "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random stone next to the player should get turned into an ore; the lower the more likely");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.enrichmentRadius = MathHelper.ceil(this.enrichmentRadius * multiplier);
+        this.chanceToEnrich = MathHelper.ceil(this.chanceToEnrich * multiplier);
     }
 
     @Override

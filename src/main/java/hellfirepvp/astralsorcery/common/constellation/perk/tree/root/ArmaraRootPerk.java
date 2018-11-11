@@ -66,6 +66,7 @@ public class ArmaraRootPerk extends RootPerk {
                     expGain *= 1.3F;
                 }
                 expGain *= expMultiplier;
+                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, expGain);
                 expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
                 ResearchManager.modifyExp(player, expGain);
             }

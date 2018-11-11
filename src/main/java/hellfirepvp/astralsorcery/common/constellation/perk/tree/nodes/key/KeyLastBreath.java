@@ -32,8 +32,8 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeyLastBreath extends KeyPerk {
 
-    private static float digSpeedIncrease = 1.5F;
-    private static float damageIncrease = 3F;
+    private float digSpeedIncrease = 1.5F;
+    private float damageIncrease = 3F;
 
     public KeyLastBreath(String name, int x, int y) {
         super(name, x, y);
@@ -46,6 +46,14 @@ public class KeyLastBreath extends KeyPerk {
                         "Defines the damage multiplier you get additionally to your normal damage when being low on health (25% health = 75% of this additional multiplier)");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.digSpeedIncrease *= multiplier;
+        this.damageIncrease *= multiplier;
     }
 
     @SubscribeEvent

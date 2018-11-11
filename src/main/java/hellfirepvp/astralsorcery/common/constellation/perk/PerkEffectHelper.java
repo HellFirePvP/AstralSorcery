@@ -119,10 +119,10 @@ public class PerkEffectHelper implements ITickHandler {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog != null) {
-                int exp = MathHelper.floor(prog.getPerkExp());
-                int level = PerkLevelManager.INSTANCE.getLevel(exp);
-                int expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(level - 1);
-                int expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(level);
+                long exp = MathHelper.lfloor(prog.getPerkExp());
+                int level = prog.getPerkLevel();
+                long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(level - 1);
+                long expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(level);
 
                 float removePerDeath = 0.25F;
                 int remove = MathHelper.floor(((float) (expNextLevel - expThisLevel)) * removePerDeath);

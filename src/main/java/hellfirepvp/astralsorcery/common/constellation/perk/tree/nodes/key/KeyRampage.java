@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -46,6 +47,14 @@ public class KeyRampage extends KeyPerk {
                         "Defines the duration of the rampage in ticks.");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.duration = MathHelper.ceil(this.duration * multiplier);
+        this.chance *= multiplier;
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST) //Monitoring outcome after all other mods might've cancelled this

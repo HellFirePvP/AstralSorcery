@@ -55,6 +55,7 @@ public class DiscidiaRootPerk extends RootPerk {
                 float dmgDealt = event.getAmount();
                 dmgDealt *= 0.2F;
                 dmgDealt *= expMultiplier;
+                dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dmgDealt);
                 dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, dmgDealt);
                 ResearchManager.modifyExp(player, dmgDealt);
             }

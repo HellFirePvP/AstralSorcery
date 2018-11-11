@@ -36,8 +36,8 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeyGrowable extends KeyPerk implements IPlayerTickPerk {
 
-    private static int chanceToBonemeal = 3;
-    private static int radius = 3;
+    private int chanceToBonemeal = 3;
+    private int radius = 3;
 
     public KeyGrowable(String name, int x, int y) {
         super(name, x, y);
@@ -50,6 +50,14 @@ public class KeyGrowable extends KeyPerk implements IPlayerTickPerk {
                         "Defines the radius around which the perk effect should apply around the player");
             }
         });
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.chanceToBonemeal = MathHelper.ceil(this.chanceToBonemeal * multiplier);
+        this.radius = MathHelper.ceil(this.radius * multiplier);
     }
 
     @Override
