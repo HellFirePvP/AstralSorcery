@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,6 +58,11 @@ public class ItemPerkGem extends Item {
         for (GemAttributeModifier mod : getModifiers(stack)) {
             tooltip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC + mod.getLocalizedDisplayString());
         }
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return RegistryItems.rarityRelic;
     }
 
     @Override

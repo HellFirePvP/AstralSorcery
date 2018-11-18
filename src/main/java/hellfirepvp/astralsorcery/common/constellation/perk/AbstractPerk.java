@@ -130,6 +130,7 @@ public abstract class AbstractPerk {
 
     /**
      * Called when the perk is in any way modified in regards to its 'contents' for a specific player e.g. gems
+     * Called AFTER the perk has been re-applied with the new data.
      */
     public void modifyPerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
 

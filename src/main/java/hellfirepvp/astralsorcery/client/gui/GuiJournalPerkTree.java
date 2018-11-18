@@ -32,6 +32,7 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktPerkGemModifica
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestPerkSealAction;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -46,6 +47,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -966,6 +968,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                             PktPerkGemModification pkt = PktPerkGemModification.insertItem((AbstractPerk) socketMenu, slotId);
                             PacketChannel.CHANNEL.sendToServer(pkt);
                             closeSocketMenu();
+                            SoundHelper.playSoundClient(SoundEvents.BLOCK_GLASS_PLACE, .35F, 9f);
                         }
                         return;
                     }
@@ -999,6 +1002,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                         if (((GemSlotPerk) perk).hasItem(Minecraft.getMinecraft().player, Side.CLIENT)) {
                             PktPerkGemModification pkt = PktPerkGemModification.dropItem(perk);
                             PacketChannel.CHANNEL.sendToServer(pkt);
+                            SoundHelper.playSoundClient(SoundEvents.BLOCK_GLASS_PLACE, .35F, 9f);
                             return;
                         } else {
                             this.socketMenu = (GemSlotPerk) perk;

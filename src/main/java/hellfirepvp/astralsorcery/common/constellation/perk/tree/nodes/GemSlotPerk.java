@@ -82,6 +82,7 @@ public interface GemSlotPerk {
         if (data == null) {
             return false;
         }
+        NBTTagCompound prev = data.copy();
 
         if (stack.isEmpty()) {
             data.removeTag(SOCKET_DATA_KEY);
@@ -90,7 +91,7 @@ public interface GemSlotPerk {
         }
 
         if (updateData) {
-            ResearchManager.setPerkData(player, (AbstractPerk) this, data);
+            ResearchManager.setPerkData(player, (AbstractPerk) this, prev, data);
         }
         return true;
     }
@@ -112,17 +113,21 @@ public interface GemSlotPerk {
         if (updateData) {
             data = ((AbstractPerk) this).getPerkData(player, Side.SERVER);
         }
+        if (data == null) {
+            return;
+        }
+        NBTTagCompound prev = data.copy();
 
         ItemStack contained = getContainedItem(player, Side.SERVER, data);
         if (!contained.isEmpty()) {
             if (!player.addItemStackToInventory(contained)) {
                 ItemUtils.dropItem(player.world, player.posX, player.posY, player.posZ, contained);
             }
-            setContainedItem(player, Side.SERVER, data, ItemStack.EMPTY);
         }
+        setContainedItem(player, Side.SERVER, data, ItemStack.EMPTY);
 
         if (updateData) {
-            ResearchManager.setPerkData(player, (AbstractPerk) this, data);
+            ResearchManager.setPerkData(player, (AbstractPerk) this, prev, data);
         }
     }
 

@@ -319,20 +319,19 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean setPerkData(EntityPlayer player, @Nonnull AbstractPerk perk, NBTTagCompound data) {
+    public static boolean setPerkData(EntityPlayer player, @Nonnull AbstractPerk perk, NBTTagCompound prevoiusData, NBTTagCompound newData) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
         if (!progress.hasPerkEffect(perk)) return false;
 
-        progress.setPerkData(perk, data);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
+        progress.setPerkData(perk, newData);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, prevoiusData, newData), (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
-
-        //Send way after research sync...
-        AstralSorcery.proxy.scheduleDelayed(() -> {
-            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.REFRESHALL), (EntityPlayerMP) player);
-        });
         return true;
     }
 

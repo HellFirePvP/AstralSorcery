@@ -344,10 +344,11 @@ public class PlayerProgress {
 
     @Nullable
     public NBTTagCompound getPerkData(AbstractPerk perk) {
-        return unlockedPerks.get(perk);
+        NBTTagCompound tag = unlockedPerks.get(perk);
+        return tag == null ? null : tag.copy();
     }
 
-    protected void setPerkData(AbstractPerk perk, NBTTagCompound data) {
+    public void setPerkData(AbstractPerk perk, NBTTagCompound data) {
         this.unlockedPerks.put(perk, data);
     }
 

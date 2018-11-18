@@ -542,6 +542,7 @@ item.itemenchantmentamulet.pure=Pure
 item.itemperkseal.name=Sealing Sigil
 item.itemknowledgefragment.name=Lucent Scroll
 item.itemfragmentcapsule.name=Shining Casing
+item.itemperkgem.name=[WIP] PerkGem
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator

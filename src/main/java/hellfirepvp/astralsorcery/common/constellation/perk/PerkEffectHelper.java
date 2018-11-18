@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.util.data.TimeoutListContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -175,6 +176,14 @@ public class PerkEffectHelper implements ITickHandler {
             converters = ((IConverterProvider) perk).provideConverters(player, side);
         }
         batchRemoveConverters(player, side, converters, perk);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void notifyPerkDataChangeClient(EntityPlayer player, AbstractPerk perk, NBTTagCompound oldData, NBTTagCompound newData) {
+        ResearchManager.getProgress(player, Side.CLIENT).setPerkData(perk, oldData);
+        notifyPerkChange(player, Side.CLIENT, perk, true);
+        ResearchManager.getProgress(player, Side.CLIENT).setPerkData(perk, newData);
+        notifyPerkChange(player, Side.CLIENT, perk, false);
     }
 
     @SideOnly(Side.CLIENT)
