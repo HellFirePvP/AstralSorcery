@@ -78,6 +78,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private static final AbstractRenderableTexture textureSearchMark = SpriteLibrary.spriteHalo4;
 
     private static Rectangle rectSealBox = new Rectangle(29, 16, 16, 16);
+    private static Rectangle rectSearchTextEntry = new Rectangle(300, 16, 88, 15);
 
     private SizeHandler sizeHandler;
     private GuiRenderBoundingBox guiBox;
@@ -924,6 +925,10 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     @Override
     protected boolean handleRightClickClose(int mouseX, int mouseY) {
+        if (rectSearchTextEntry.contains(mouseX - guiLeft, mouseY - guiTop)) {
+            searchTextEntry.setText("");
+            return true;
+        }
         if (socketMenu != null &&
                 rSocketMenu != null &&
                 !rSocketMenu.contains(mouseX, mouseY)) {
