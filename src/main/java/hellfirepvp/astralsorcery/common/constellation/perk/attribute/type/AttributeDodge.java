@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -43,7 +44,7 @@ public class AttributeDodge extends PerkAttributeType {
             return;
         }
         float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(getTypeString(), BASE_DODGE);
+                .modifyValue(ResearchManager.getProgress(player, side), getTypeString(), BASE_DODGE);
         chance /= 100.0F;
         if (chance >= rand.nextFloat()) {
             event.setCanceled(true);

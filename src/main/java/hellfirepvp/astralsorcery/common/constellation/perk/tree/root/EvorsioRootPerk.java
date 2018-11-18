@@ -45,7 +45,7 @@ public class EvorsioRootPerk extends RootPerk {
         EntityPlayer player = event.getPlayer();
         if (player != null && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog == null || !prog.hasPerkEffect(this)) {
+            if (!prog.hasPerkEffect(this)) {
                 return;
             }
 
@@ -61,10 +61,10 @@ public class EvorsioRootPerk extends RootPerk {
             if (gainedExp <= 0) {
                 return; //Unbreakable lol. you're not getting exp for that.
             }
-            gainedExp *= 0.4F;
+            gainedExp *= 0.15F;
             gainedExp *= expMultiplier;
-            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, gainedExp);
-            gainedExp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP);
+            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, gainedExp);
+            gainedExp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP);
             gainedExp = (float) Math.sqrt(gainedExp);
             ResearchManager.modifyExp(player, gainedExp);
         }

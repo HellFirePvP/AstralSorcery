@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
@@ -65,12 +67,13 @@ public class KeyGrowable extends KeyPerk implements IPlayerTickPerk {
         if (side != Side.SERVER) {
             return;
         }
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
         float cChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToBonemeal);
+                .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToBonemeal);
         int chance = Math.max(MathHelper.floor(cChance), 1);
         if(rand.nextInt(chance) == 0) {
             float fRadius = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, radius);
+                    .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, radius);
             int rRadius = Math.max(MathHelper.floor(fRadius), 1);
 
             BlockPos pos = player.getPosition().add(

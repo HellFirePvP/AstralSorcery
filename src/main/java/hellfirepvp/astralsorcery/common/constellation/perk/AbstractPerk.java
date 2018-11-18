@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -54,6 +55,7 @@ public abstract class AbstractPerk {
     protected final Point offset;
     private PerkCategory category = CATEGORY_BASE;
     private List<String> tooltipCache = null;
+    private boolean cacheTooltip = true;
     private String ovrUnlocalizedNamePrefix = null;
 
     public AbstractPerk(String name, int x, int y) {
@@ -121,6 +123,16 @@ public abstract class AbstractPerk {
 
     protected abstract void removePerkLogic(EntityPlayer player, Side side);
 
+    @Nullable
+    public NBTTagCompound getPerkData(EntityPlayer player, Side side) {
+        return ResearchManager.getProgress(player, side).getPerkData(this);
+    }
+
+    /**
+     * Called when the perk is in any way modified in regards to its 'contents' for a specific player e.g. gems
+     */
+    public void modifyPerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
+
     /**
      * Called ONCE when the perk is unlocked
      * You may use the NBTTagCompound to save data to remove it again later
@@ -160,11 +172,11 @@ public abstract class AbstractPerk {
             return PerkTreePoint.AllocationStatus.ALLOCATED;
         }
 
-        return mayUnlockPerk(progress) ? PerkTreePoint.AllocationStatus.UNLOCKABLE : PerkTreePoint.AllocationStatus.UNALLOCATED;
+        return mayUnlockPerk(progress, player) ? PerkTreePoint.AllocationStatus.UNLOCKABLE : PerkTreePoint.AllocationStatus.UNALLOCATED;
     }
 
-    public boolean mayUnlockPerk(PlayerProgress progress) {
-        if (!progress.hasFreeAllocationPoint()) return false;
+    public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
+        if (!progress.hasFreeAllocationPoint(player)) return false;
 
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {
             if (progress.hasPerkUnlocked(otherPerks)) {
@@ -181,9 +193,13 @@ public abstract class AbstractPerk {
         return "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath();
     }
 
+    protected void disableToltipCaching() {
+        this.cacheTooltip = false;
+    }
+
     @SideOnly(Side.CLIENT)
     public final Collection<String> getLocalizedTooltip() {
-        if (tooltipCache != null) {
+        if (cacheTooltip && tooltipCache != null) {
             return tooltipCache;
         }
 
@@ -251,6 +267,11 @@ public abstract class AbstractPerk {
     @Override
     public int hashCode() {
         return Objects.hash(getRegistryName());
+    }
+
+    // Return true to prevent further, other interactions when left-clicking this perk
+    public boolean handleMouseClick(GuiJournalPerkTree gui, int mouseX, int mouseY) {
+        return false;
     }
 
     public static class PerkCategory {

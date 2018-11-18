@@ -124,7 +124,6 @@ public class ClientProxy extends CommonProxy {
 
         RandomWordGenerator.init();
         CraftingAccessManager.ignoreJEI = false;
-        PersistentDataManager.INSTANCE.init(FileStorageUtil.getGeneralSubDirectory("astralsorcery_persistent"));
     }
 
     @SubscribeEvent
@@ -171,6 +170,8 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init() {
         super.init();
+
+        PersistentDataManager.INSTANCE.init(FileStorageUtil.getGeneralSubDirectory("astralsorcery_persistent"));
 
         registerPendingIBlockColorBlocks();
         registerPendingIItemColorItems();

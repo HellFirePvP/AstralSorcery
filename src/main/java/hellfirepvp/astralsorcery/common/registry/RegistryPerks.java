@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.*;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraftforge.common.MinecraftForge;
@@ -346,26 +347,26 @@ public class RegistryPerks {
         swimSpeedConversion.addConverter(new PerkConverter() {
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public PerkAttributeModifier convertModifier(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 return modifier;
             }
 
             @Nonnull
             @Override
-            public Collection<PerkAttributeModifier> gainExtraModifiers(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 List<PerkAttributeModifier> modifiers = Lists.newArrayList();
                 if (modifier.getAttributeType().equals(ATTR_TYPE_MOVESPEED)) {
                     PerkAttributeModifier mod;
                     switch (modifier.getMode()) {
                         case ADDITION:
                         case ADDED_MULTIPLY:
-                            mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_SWIMSPEED, modifier.getMode(), modifier.getValue() / 2F);
+                            mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_SWIMSPEED, modifier.getMode(), modifier.getValue(progress) / 2F);
                             if (mod != null) {
                                 modifiers.add(mod);
                             }
                             break;
                         case STACKING_MULTIPLY:
-                            float val = modifier.getValue() - 1;
+                            float val = modifier.getValue(progress) - 1;
                             val /= 2F; //Halve the actual value
                             mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_SWIMSPEED, modifier.getMode(), val + 1);
                             if (mod != null) {
@@ -459,16 +460,16 @@ public class RegistryPerks {
         keyArmorConversion.addConverter(new PerkConverter() {
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public PerkAttributeModifier convertModifier(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 if (modifier.getAttributeType().equals(ATTR_TYPE_ARMOR)) {
-                    return modifier.convertModifier(ATTR_TYPE_HEALTH, modifier.getMode(), modifier.getValue());
+                    return modifier.convertModifier(ATTR_TYPE_HEALTH, modifier.getMode(), modifier.getValue(progress));
                 }
                 return modifier;
             }
 
             @Nonnull
             @Override
-            public Collection<PerkAttributeModifier> gainExtraModifiers(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 Collection<PerkAttributeModifier> modifiers = Lists.newArrayList();
                 if (modifier.getAttributeType().equals(ATTR_TYPE_ARMOR)) {
                     PerkAttributeModifier mod;
@@ -846,6 +847,8 @@ public class RegistryPerks {
         perkEvorsioCh3.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
         PerkTreeConnector thresholdEvorsio = new PerkTreeConnector("epi_evorsio", -13, -29);
 
+        GemSlotMajorPerk perk = new GemSlotMajorPerk("test_perk_slot", -15, -33);
+
         PERK_TREE.registerPerk(perkEvorsioCh1)
                 .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_mine_4"));
         PERK_TREE.registerPerk(perkEvorsioCh2)
@@ -857,6 +860,7 @@ public class RegistryPerks {
                 .connect(perkEvorsioCh1)
                 .connect(perkEvorsioCh2)
                 .connect(perkEvorsioCh3);
+        PERK_TREE.registerPerk(perk).connect(perkEvorsioCh2);
 
         AttributeModifierPerk perkArmaraCh1 = new AttributeModifierPerk("threshold_armara", 29, -4);
         perkArmaraCh1.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);

@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
+import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -48,12 +49,12 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public int getPerkLevel() {
+    public int getPerkLevel(EntityPlayer player) {
         return 0;
     }
 
     @Override
-    public float getPercentToNextLevel() {
+    public float getPercentToNextLevel(EntityPlayer player) {
         return 0F;
     }
 
@@ -101,12 +102,12 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public int getAvailablePerkPoints() {
+    public int getAvailablePerkPoints(EntityPlayer player) {
         return 0;
     }
 
     @Override
-    public boolean hasFreeAllocationPoint() {
+    public boolean hasFreeAllocationPoint(EntityPlayer player) {
         return false;
     }
 

@@ -164,6 +164,18 @@ public class PatreonEffectHelper {
         effectMap.put( // Kittenplays01 / Kittenplays01
                 UUID.fromString("ac71a42e-fa17-4d54-a1ae-57928fdbead0"),
                 new PatreonEffect(FlareColor.STANDARD));
+
+        effectMap.put( //Peteparker_ / ???
+                UUID.fromString("1268d40d-ce09-4f1f-80f3-1856d1df27e9"),
+                new PatreonEffect(FlareColor.BLUE));
+
+        effectMap.put( //Justfines / Justfines
+                UUID.fromString("f3c927d4-c55d-4c36-881e-8ddd3d07c961"),
+                new PatreonEffect(FlareColor.FIRE));
+
+        effectMap.put( //MineForFish / MineForFish
+                UUID.fromString("42270669-9ae8-4d0e-a7a0-a32f3467d01d"),
+                new PatreonEffect(FlareColor.WATER));
     }
 
     @Nullable

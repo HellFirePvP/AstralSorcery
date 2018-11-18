@@ -93,6 +93,9 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
                         case UNLOCKALL:
                             PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getMinecraft().player);
                             break;
+                        case REFRESHALL:
+                            PerkEffectHelper.EVENT_INSTANCE.refreshAllPerksClient(Minecraft.getMinecraft().player);
+                            break;
                     }
                 } else if (pkt.perk != null) {
                     PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);
@@ -104,7 +107,8 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
     public static enum Type {
 
         CLEARALL,
-        UNLOCKALL
+        UNLOCKALL,
+        REFRESHALL
 
     }
 }

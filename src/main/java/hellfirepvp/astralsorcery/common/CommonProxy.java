@@ -41,6 +41,7 @@ import hellfirepvp.astralsorcery.common.integrations.ModIntegrationChisel;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
+import hellfirepvp.astralsorcery.common.item.gem.GemAttributeHelper;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.migration.MappingMigrationHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -97,9 +98,9 @@ import java.util.UUID;
  */
 public class CommonProxy implements IGuiHandler {
 
-    public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
-    public static DamageSourceEntity dmgSourceReflect = (DamageSourceEntity) new DamageSourceEntity("thorns");
-    public static DamageSourceEntity dmgSourceStellar = (DamageSourceEntity) new DamageSourceEntity("as.stellar").setDamageBypassesArmor().setMagicDamage();
+    public static DamageSource dmgSourceBleed   = DamageSourceUtil.newType("as.bleed").setDamageBypassesArmor();
+    public static DamageSource dmgSourceStellar = DamageSourceUtil.newType("as.stellar").setDamageBypassesArmor().setMagicDamage();
+    public static DamageSource dmgSourceReflect = DamageSourceUtil.newType("thorns");
     public static InternalRegistryPrimer registryPrimer;
     private static UUID fakePlayerUUID = UUID.fromString("BD4F59E2-4E26-4388-B903-B533D482C205");
 
@@ -114,6 +115,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
+        Config.addDynamicEntry(new GemAttributeHelper.CfgEntry());
         Config.addDynamicEntry(new TileAccelerationBlacklist.TileAccelBlacklistEntry());
         Config.addDynamicEntry(new ShootingStarHandler.StarConfigEntry());
         Config.addDynamicEntry(PerkLevelManager.INSTANCE);
@@ -287,6 +289,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(PatreonFlareManager.INSTANCE);
         manager.register(PerkEffectHelper.EVENT_INSTANCE);
         manager.register(ShootingStarHandler.getInstance());
+        manager.register(ParticleEffectWatcher.INSTANCE);
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);

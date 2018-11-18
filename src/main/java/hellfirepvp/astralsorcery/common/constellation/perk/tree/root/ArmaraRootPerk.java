@@ -43,7 +43,7 @@ public class ArmaraRootPerk extends RootPerk {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 float expGain = event.getAmount();
                 expGain *= 2.5F;
                 if (event.getSource().isFireDamage()) {
@@ -66,8 +66,8 @@ public class ArmaraRootPerk extends RootPerk {
                     expGain *= 1.3F;
                 }
                 expGain *= expMultiplier;
-                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, expGain);
-                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
+                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, expGain);
+                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
                 ResearchManager.modifyExp(player, expGain);
             }
         }

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -40,7 +41,7 @@ public abstract class PerkConverter {
     public static final PerkConverter IDENTITY = new PerkConverter() {
         @Nonnull
         @Override
-        public PerkAttributeModifier convertModifier(PerkAttributeModifier perkAttributeModifier, @Nullable AbstractPerk owningPerk) {
+        public PerkAttributeModifier convertModifier(PlayerProgress progress, PerkAttributeModifier perkAttributeModifier, @Nullable AbstractPerk owningPerk) {
             return perkAttributeModifier;
         }
     };
@@ -49,14 +50,14 @@ public abstract class PerkConverter {
      * Use {@link PerkAttributeModifier#convertModifier(String, PerkAttributeModifier.Mode, float)} to convert the given modifier
      */
     @Nonnull
-    public abstract PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
+    public abstract PerkAttributeModifier convertModifier(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
 
     /**
      * Use {@link PerkAttributeModifier#gainAsExtraModifier(PerkConverter, String, PerkAttributeModifier.Mode, float)} to create new modifiers
      * based off of the given modifier! The resulting modifiers cannot be modified with perk converters.
      */
     @Nonnull
-    public Collection<PerkAttributeModifier> gainExtraModifiers(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+    public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
         return Lists.newArrayList();
     }
 
@@ -69,8 +70,8 @@ public abstract class PerkConverter {
         return new PerkConverter() {
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-                return thisConverter.convertModifier(next.convertModifier(modifier, owningPerk), owningPerk);
+            public PerkAttributeModifier convertModifier(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                return thisConverter.convertModifier(progress, next.convertModifier(progress, modifier, owningPerk), owningPerk);
             }
         };
     }
@@ -80,14 +81,14 @@ public abstract class PerkConverter {
         return new Radius(offset, radius) {
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifierInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-                return thisConverter.convertModifier(modifier, owningPerk);
+            public PerkAttributeModifier convertModifierInRange(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                return thisConverter.convertModifier(progress, modifier, owningPerk);
             }
 
             @Nonnull
             @Override
-            public Collection<PerkAttributeModifier> gainExtraModifiersInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-                return thisConverter.gainExtraModifiers(modifier, owningPerk);
+            public Collection<PerkAttributeModifier> gainExtraModifiersInRange(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                return thisConverter.gainExtraModifiers(progress, modifier, owningPerk);
             }
         };
     }
@@ -123,45 +124,45 @@ public abstract class PerkConverter {
             return new Radius(thisRadius.getOffset(), radius) {
                 @Nonnull
                 @Override
-                public PerkAttributeModifier convertModifierInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-                    return thisRadius.convertModifierInRange(modifier, owningPerk);
+                public PerkAttributeModifier convertModifierInRange(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                    return thisRadius.convertModifierInRange(progress, modifier, owningPerk);
                 }
 
                 @Nonnull
                 @Override
-                public Collection<PerkAttributeModifier> gainExtraModifiersInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-                    return thisRadius.gainExtraModifiersInRange(modifier, owningPerk);
+                public Collection<PerkAttributeModifier> gainExtraModifiersInRange(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                    return thisRadius.gainExtraModifiersInRange(progress, modifier, owningPerk);
                 }
             };
         }
 
-        protected boolean canAffectPerk(@Nullable AbstractPerk otherPerk) {
+        protected boolean canAffectPerk(PlayerProgress progress, @Nullable AbstractPerk otherPerk) {
             return otherPerk != null && getOffset().distance(otherPerk.getOffset()) <= getRadius();
         }
 
         @Nonnull
         @Override
-        public PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-            if (!canAffectPerk(owningPerk)) {
+        public PerkAttributeModifier convertModifier(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            if (!canAffectPerk(progress, owningPerk)) {
                 return modifier;
             }
-            return convertModifierInRange(modifier, owningPerk);
+            return convertModifierInRange(progress, modifier, owningPerk);
         }
 
         @Nonnull
         @Override
-        public Collection<PerkAttributeModifier> gainExtraModifiers(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-            if (!canAffectPerk(owningPerk)) {
+        public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            if (!canAffectPerk(progress, owningPerk)) {
                 return Collections.emptyList();
             }
-            return gainExtraModifiersInRange(modifier, owningPerk);
+            return gainExtraModifiersInRange(progress, modifier, owningPerk);
         }
 
         @Nonnull
-        public abstract PerkAttributeModifier convertModifierInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
+        public abstract PerkAttributeModifier convertModifierInRange(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
 
         @Nonnull
-        public abstract Collection<PerkAttributeModifier> gainExtraModifiersInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
+        public abstract Collection<PerkAttributeModifier> gainExtraModifiersInRange(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
 
     }
 

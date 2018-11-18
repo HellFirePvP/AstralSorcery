@@ -12,12 +12,12 @@ import hellfirepvp.astralsorcery.client.gui.journal.GuiJournalPages;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiProgressionRenderer;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
+import hellfirepvp.astralsorcery.client.util.ClientUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -176,22 +176,10 @@ public class GuiJournalProgression extends GuiScreenJournal {
     public void updateScreen() {
         super.updateScreen();
 
-        if(queryInput(mc.gameSettings.keyBindForward.getKeyCode())) {
+        if (ClientUtils.isKeybindUsed(mc.gameSettings.keyBindForward)) {
             progressionRenderer.handleZoomIn(getCurrentMousePoint());
-        } else if(queryInput(mc.gameSettings.keyBindBack.getKeyCode())) {
+        } else if (ClientUtils.isKeybindUsed(mc.gameSettings.keyBindBack)) {
             progressionRenderer.handleZoomOut();
-        }
-    }
-
-    private boolean queryInput(int key) {
-        try {
-            return Keyboard.isKeyDown(key);
-        } catch (Throwable tr) {
-            try {
-                return Mouse.isButtonDown(key);
-            } catch (Throwable tr2) {
-                return false;
-            }
         }
     }
 

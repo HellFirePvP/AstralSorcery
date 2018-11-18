@@ -11,7 +11,10 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerAttributeMap;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.PerkTree;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,29 +55,28 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
         super.applyEffectMultiplier(multiplier);
 
         typeModifierList.forEach(t -> t.multiplyValue(multiplier));
-        typeModifierList.removeIf(t -> {
-            switch (t.getMode()) {
-                case ADDITION:
-                case ADDED_MULTIPLY:
-                    return Math.abs(t.getValue()) <= 1E-4;
-                case STACKING_MULTIPLY:
-                    return (Math.abs(t.getValue()) - 1) <= 1E-4;
-            }
-            return false;
-        });
+    }
+
+    protected Collection<PerkAttributeModifier> getModifiers(EntityPlayer player, Side side) {
+        if (modifiersDisabled(player, side)) {
+            return Collections.emptyList();
+        }
+
+        return new ArrayList<>(this.typeModifierList);
     }
 
     @Override
     public void applyPerkLogic(EntityPlayer player, Side side) {
         super.applyPerkLogic(player, side);
 
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
-        for (PerkAttributeModifier modifier : typeModifierList) {
+        for (PerkAttributeModifier modifier : getModifiers(player, side)) {
             List<PerkAttributeModifier> modify = Lists.newArrayList();
             modify.add(modifier);
-            modify.addAll(attr.gainModifiers(modifier, this));
+            modify.addAll(attr.gainModifiers(prog, modifier, this));
             for (PerkAttributeModifier mod : modify) {
-                mod = attr.convertModifier(mod, this);
+                mod = attr.convertModifier(prog, mod, this);
                 if(!attr.applyModifier(player, mod.getAttributeType(), mod)) {
                     //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
                     //System.out.println("FAILED TO ADD MODIFIER! ALREADY PRESENT!");
@@ -87,13 +89,14 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     public void removePerkLogic(EntityPlayer player, Side side) {
         super.removePerkLogic(player, side);
 
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
-        for (PerkAttributeModifier modifier : typeModifierList) {
+        for (PerkAttributeModifier modifier : getModifiers(player, side)) {
             List<PerkAttributeModifier> modify = Lists.newArrayList();
             modify.add(modifier);
-            modify.addAll(attr.gainModifiers(modifier, this));
+            modify.addAll(attr.gainModifiers(prog, modifier, this));
             for (PerkAttributeModifier mod : modify) {
-                mod = attr.convertModifier(mod, this);
+                mod = attr.convertModifier(prog, mod, this);
                 if(!attr.removeModifier(player, mod.getAttributeType(), mod)) {
                     //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
                     //System.out.println("FAILED TO REMOVE MODIFIER! NOT FOUND!");
@@ -105,9 +108,10 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addLocalizedTooltip(Collection<String> tooltip) {
-        boolean addEmptyLine = !this.typeModifierList.isEmpty();
+        Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getMinecraft().player, Side.CLIENT);
+        boolean addEmptyLine = !modifiers.isEmpty();
 
-        for (PerkAttributeModifier modifier : this.typeModifierList) {
+        for (PerkAttributeModifier modifier : modifiers) {
             String modifierDisplay = modifier.getLocalizedDisplayString();
             if (modifierDisplay != null) {
                 tooltip.add(modifierDisplay);

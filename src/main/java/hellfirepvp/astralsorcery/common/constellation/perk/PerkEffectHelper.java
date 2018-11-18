@@ -120,9 +120,9 @@ public class PerkEffectHelper implements ITickHandler {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog != null) {
                 long exp = MathHelper.lfloor(prog.getPerkExp());
-                int level = prog.getPerkLevel();
-                long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(level - 1);
-                long expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(level);
+                int level = prog.getPerkLevel(player);
+                long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(level - 1, player);
+                long expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(level, player);
 
                 float removePerDeath = 0.25F;
                 int remove = MathHelper.floor(((float) (expNextLevel - expThisLevel)) * removePerDeath);
@@ -179,13 +179,10 @@ public class PerkEffectHelper implements ITickHandler {
 
     @SideOnly(Side.CLIENT)
     public void clearAllPerksClient(EntityPlayer player) {
-        PlayerProgress prog = ResearchManager.getProgress(player, Side.CLIENT);
-        if (prog != null) {
-            PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, Side.CLIENT);
-            List<AbstractPerk> copyPerks = new ArrayList<>(attr.getCacheAppliedPerks());
-            for (AbstractPerk perk : copyPerks) {
-                handlePerkRemoval(perk, player, Side.CLIENT);
-            }
+        PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, Side.CLIENT);
+        List<AbstractPerk> copyPerks = new ArrayList<>(attr.getCacheAppliedPerks());
+        for (AbstractPerk perk : copyPerks) {
+            handlePerkRemoval(perk, player, Side.CLIENT);
         }
     }
 
@@ -200,6 +197,12 @@ public class PerkEffectHelper implements ITickHandler {
         if (perkCooldownsClient.hasList(container)) {
             perkCooldownsClient.removeList(container);
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void refreshAllPerksClient(EntityPlayer player) {
+        clearAllPerksClient(player);
+        reapplyAllPerksClient(player);
     }
 
     //Know that if you apply global converters, you're also responsible for removing them at the appropriate time...

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -43,7 +44,7 @@ public class AttributeProjectileAttackDamage extends PerkAttributeType {
                 }
 
                 float amt = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(getTypeString(), event.getAmount());
+                        .modifyValue(ResearchManager.getProgress(player, side), getTypeString(), event.getAmount());
                 event.setAmount(amt);
             }
         }

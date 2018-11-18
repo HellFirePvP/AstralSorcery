@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeMo
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 
 /**
@@ -67,14 +68,14 @@ public class RootPerk extends AttributeModifierPerk {
     }
 
     @Override
-    public boolean mayUnlockPerk(PlayerProgress progress) {
-        if (progress.hasFreeAllocationPoint()) {
+    public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
+        if (progress.hasFreeAllocationPoint(player)) {
             AbstractPerk core = PerkTree.PERK_TREE.getAstralSorceryPerk("core");
             if (core != null && progress.hasPerkEffect(core)) {
                 return true;
             }
         }
 
-        return super.mayUnlockPerk(progress);
+        return super.mayUnlockPerk(progress, player);
     }
 }

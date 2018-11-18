@@ -393,7 +393,7 @@ public class CommandAstralSorcery extends CommandBase {
 
         sender.sendMessage(new TextComponentString("§aProgression tier: " + progress.getTierReached().name()));
         sender.sendMessage(new TextComponentString("§aAttuned to: " + (progress.getAttunedConstellation() == null ? "<none>" : progress.getAttunedConstellation().getUnlocalizedName())));
-        sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + progress.getPerkLevel()));
+        sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + progress.getPerkLevel(other)));
         sender.sendMessage(new TextComponentString("§aUnlocked perks + unlock-level:"));
         for (AbstractPerk perk : progress.getAppliedPerks()) {
             sender.sendMessage(new TextComponentString("§7" + (perk.getUnlocalizedName() + ".name")));

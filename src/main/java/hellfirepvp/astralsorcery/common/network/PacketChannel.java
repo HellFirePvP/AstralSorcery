@@ -94,6 +94,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktRequestSextantTarget.class, PktRequestSextantTarget.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktRequestPerkSealAction.class, PktRequestPerkSealAction.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktRemoveKnowledgeFragment.class, PktRemoveKnowledgeFragment.class, id++, Side.SERVER);
+        CHANNEL.registerMessage(PktPerkGemModification.class, PktPerkGemModification.class, id++, Side.SERVER);
 
         /*Method registerPacket = ReflectionHelper.findMethod(
                 EnumConnectionState.class,

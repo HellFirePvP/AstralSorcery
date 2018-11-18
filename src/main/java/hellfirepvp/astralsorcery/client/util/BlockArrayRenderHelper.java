@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -16,11 +17,13 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -34,8 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -68,15 +70,27 @@ public class BlockArrayRenderHelper {
         this.rotZ += z;
     }
 
+    public int getDefaultSlice() {
+        return Collections.min(renderAccess.blockRenderData.keySet(), Comparator.comparing(BlockPos::getY)).getY();
+    }
+
+    public boolean hasSlice(int y) {
+        return MiscUtils.contains(renderAccess.blockRenderData.keySet(), pos -> pos.getY() == y);
+    }
+
     public void render3DGUI(double x, double y, float pTicks) {
+        render3DSliceGUI(x, y, pTicks, Optional.empty());
+    }
+
+    public void render3DSliceGUI(double x, double y, float pTicks, Optional<Integer> slice) {
         GuiScreen scr = Minecraft.getMinecraft().currentScreen;
         if(scr == null) return;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         Minecraft mc = Minecraft.getMinecraft();
         double sc = new ScaledResolution(mc).getScaleFactor();
-        GL11.glTranslated(x + 16D / sc, y + 16D / sc, 512);
+        GlStateManager.translate(x + 16D / sc, y + 16D / sc, 512);
 
         double mul = 10.5;
 
@@ -100,24 +114,32 @@ public class BlockArrayRenderHelper {
         }
 
         double dr = -5.75*size;
-        GL11.glTranslated(dr, dr, dr);
-        GL11.glRotated(rotX, 1, 0, 0);
-        GL11.glRotated(rotY, 0, 1, 0);
-        GL11.glRotated(rotZ, 0, 0, 1);
-        GL11.glTranslated(-dr, -dr, -dr);
+        GlStateManager.translate(dr, dr, dr);
+        GlStateManager.rotate((float) rotX, 1, 0, 0);
+        GlStateManager.rotate((float) rotY, 0, 1, 0);
+        GlStateManager.rotate((float) rotZ, 0, 0, 1);
+        GlStateManager.translate(-dr, -dr, -dr);
 
-        GL11.glScaled(-size*mul, -size*mul, -size*mul);
+        GlStateManager.scale(-size*mul, -size*mul, -size*mul);
 
-        BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
         VertexFormat blockFormat = DefaultVertexFormats.BLOCK;
 
         TextureHelper.setActiveTextureToAtlasSprite();
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
 
+        Set<Map.Entry<BlockPos, BakedBlockData>> renderArray = renderAccess.blockRenderData.entrySet();
+        renderAccess.slice = slice;
+        slice.ifPresent(ySlice -> GlStateManager.translate(0, -ySlice, 0));
+
         vb.begin(GL11.GL_QUADS, blockFormat);
-        for (Map.Entry<BlockPos, BakedBlockData> data : renderAccess.blockRenderData.entrySet()) {
+        for (Map.Entry<BlockPos, BakedBlockData> data : renderArray) {
             BlockPos offset = data.getKey();
+            if (slice.isPresent()) {
+                if (offset.getY() != slice.get()) {
+                    continue;
+                }
+            }
             BakedBlockData renderData = data.getValue();
             if(renderData.tileEntity != null) {
                 renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
@@ -129,8 +151,13 @@ public class BlockArrayRenderHelper {
         }
         tes.draw();
 
-        for (Map.Entry<BlockPos, BakedBlockData> data : renderAccess.blockRenderData.entrySet()) {
+        for (Map.Entry<BlockPos, BakedBlockData> data : renderArray) {
             BlockPos offset = data.getKey();
+            if (slice.isPresent()) {
+                if (offset.getY() != slice.get()) {
+                    continue;
+                }
+            }
             BakedBlockData renderData = data.getValue();
             if(renderData.tileEntity != null && renderData.tesr != null) {
                 renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
@@ -138,8 +165,9 @@ public class BlockArrayRenderHelper {
                 renderData.tesr.render(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0, 1F);
             }
         }
+        renderAccess.slice = Optional.empty();
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
         GL11.glPopAttrib();
     }
 
@@ -161,6 +189,7 @@ public class BlockArrayRenderHelper {
     public static class WorldBlockArrayRenderAccess implements IBlockAccess {
 
         private Map<BlockPos, BakedBlockData> blockRenderData = new HashMap<>();
+        private Optional<Integer> slice = Optional.empty();
 
         public WorldBlockArrayRenderAccess(BlockArray array) {
             for (Map.Entry<BlockPos, BlockArray.BlockInformation> entry : array.getPattern().entrySet()) {
@@ -184,7 +213,7 @@ public class BlockArrayRenderHelper {
         @Nullable
         @Override
         public TileEntity getTileEntity(BlockPos pos) {
-            return blockRenderData.containsKey(pos) ? blockRenderData.get(pos).tileEntity : null;
+            return isInBounds(pos) ? blockRenderData.get(pos).tileEntity : null;
         }
 
         @Override
@@ -206,11 +235,11 @@ public class BlockArrayRenderHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public Biome getBiome(BlockPos pos) {
-            return Biome.getBiome(0);
+            return Biomes.PLAINS;
         }
 
         private boolean isInBounds(BlockPos pos) {
-            return blockRenderData.containsKey(pos);
+            return blockRenderData.containsKey(pos) && (!slice.isPresent() || pos.getY() == slice.get());
         }
 
         @Override

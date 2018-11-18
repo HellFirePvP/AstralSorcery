@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
@@ -53,7 +54,7 @@ public class KeyMending extends KeyPerk implements IPlayerTickPerk {
     public void onPlayerTick(EntityPlayer player, Side side) {
         if(side == Side.SERVER) {
             float fChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToRepair);
+                    .modifyValue(ResearchManager.getProgress(player, side), AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToRepair);
             int chance = Math.max(MathHelper.floor(fChance), 1);
             for (ItemStack armor : player.getArmorInventoryList()) {
                 if(rand.nextInt(chance) != 0) continue;

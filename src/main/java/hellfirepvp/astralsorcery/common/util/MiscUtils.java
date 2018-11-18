@@ -28,6 +28,7 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -94,6 +95,16 @@ public class MiscUtils {
     public static <T> T getRandomEntry(List<T> list, Random rand) {
         if(list == null || list.isEmpty()) return null;
         return list.get(rand.nextInt(list.size()));
+    }
+
+    @Nullable
+    public static <T> T getWeightedRandomEntry(Collection<T> list, Random rand, Function<T, Integer> getWeightFunction) {
+        List<WRItemObject<T>> weightedItems = new ArrayList<>(list.size());
+        for (T e : list) {
+            weightedItems.add(new WRItemObject<>(getWeightFunction.apply(e), e));
+        }
+        WRItemObject<T> item = WeightedRandom.getRandomItem(rand, weightedItems);
+        return item != null ? item.getValue() : null;
     }
 
     public static <T, V extends Comparable<V>> V getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {

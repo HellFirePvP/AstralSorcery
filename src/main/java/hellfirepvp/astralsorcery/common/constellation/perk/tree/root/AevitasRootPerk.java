@@ -67,7 +67,7 @@ public class AevitasRootPerk extends RootPerk {
         if (side != Side.SERVER) return;
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog == null || !prog.hasPerkEffect(this)) {
+        if (!prog.hasPerkEffect(this)) {
             return;
         }
 
@@ -97,8 +97,8 @@ public class AevitasRootPerk extends RootPerk {
             float xp = Math.max(event.getPlacedBlock().getBlockHardness(event.getWorld(), event.getPos()) / 20F, 1);
             xp *= expMultiplier;
             xp *= same;
-            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, xp);
-            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
+            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, xp);
+            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
             ResearchManager.modifyExp(player, xp);
         }
 

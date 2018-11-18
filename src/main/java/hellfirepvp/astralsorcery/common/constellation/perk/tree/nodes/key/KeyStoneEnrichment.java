@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -67,11 +69,12 @@ public class KeyStoneEnrichment extends KeyPerk implements IPlayerTickPerk {
     @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
         if (side == Side.SERVER) {
+            PlayerProgress prog = ResearchManager.getProgress(player, side);
             float modChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToEnrich);
+                    .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToEnrich);
             if(rand.nextInt(Math.round(Math.max(modChance, 1))) == 0) {
                 float enrRad = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, enrichmentRadius);
+                        .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, enrichmentRadius);
                 Vector3 vec = Vector3.atEntityCenter(player).add(
                         (rand.nextFloat() * enrRad * 2) - enrRad,
                         (rand.nextFloat() * enrRad * 2) - enrRad,

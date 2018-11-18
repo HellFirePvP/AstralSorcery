@@ -81,7 +81,7 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
                             PlayerProgress prog = ResearchManager.getProgress(pl, ctx.side);
                             if(prog != null) {
                                 if(!prog.hasPerkUnlocked(perk)) {
-                                    if(perk.mayUnlockPerk(prog) && ResearchManager.applyPerk(pl, message.perk)) {
+                                    if(perk.mayUnlockPerk(prog, pl) && ResearchManager.applyPerk(pl, message.perk)) {
                                         PacketChannel.CHANNEL.sendTo(new PktUnlockPerk(true, message.perk), (EntityPlayerMP) pl);
                                     }
                                 }

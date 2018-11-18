@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.PotionApplyEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
@@ -53,7 +54,7 @@ public class AttributePotionDuration extends PerkAttributeType {
         int dur = effect.getDuration();
 
         float newDur = PerkAttributeHelper.getOrCreateMap(player, player.world.isRemote ? Side.CLIENT : Side.SERVER)
-                .modifyValue(AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION, dur);
+                .modifyValue(ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION, dur);
         effect.duration = MathHelper.floor(newDur);
     }
 

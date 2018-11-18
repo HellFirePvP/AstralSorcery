@@ -24,8 +24,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -213,7 +212,7 @@ public class BlockArray {
             int meta = info.metadata;
             ItemStack s;
             if(info.type instanceof BlockFluidBase) {
-                s = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ((BlockFluidBase) info.type).getFluid());
+                s = FluidUtil.getFilledBucket(new FluidStack(((BlockFluidBase) info.type).getFluid(), Fluid.BUCKET_VOLUME));
             } else if(info.type instanceof BlockStructural) {
                 continue;
                 //IBlockState otherState = info.state.getValue(BlockStructural.BLOCK_TYPE).getSupportedState();

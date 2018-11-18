@@ -51,12 +51,12 @@ public class DiscidiaRootPerk extends RootPerk {
         }
         if (player != null) {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 float dmgDealt = event.getAmount();
-                dmgDealt *= 0.2F;
+                dmgDealt *= 0.12F;
                 dmgDealt *= expMultiplier;
-                dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dmgDealt);
-                dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, dmgDealt);
+                dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dmgDealt);
+                dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, dmgDealt);
                 ResearchManager.modifyExp(player, dmgDealt);
             }
         }

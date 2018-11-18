@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
 import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import hellfirepvp.astralsorcery.common.item.tool.*;
@@ -143,6 +144,7 @@ public class RegistryItems {
         perkSeal = registerItem(new ItemPerkSeal());
         knowledgeFragment = registerItem(new ItemKnowledgeFragment());
         fragmentCapsule = registerItem(new ItemFragmentCapsule());
+        perkGem = registerItem(new ItemPerkGem());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

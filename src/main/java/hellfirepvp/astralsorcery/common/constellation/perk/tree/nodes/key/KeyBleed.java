@@ -66,19 +66,19 @@ public class KeyBleed extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 EntityLivingBase target = event.getEntityLiving();
 
                 float chance = bleedChance;
                 chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(AttributeTypeRegistry.ATTR_TYPE_BLEED_CHANCE, chance);
+                        .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_CHANCE, chance);
                 if (rand.nextFloat() < chance) {
                     int stackCap = 3; //So the "real" stackcap is 'amplifier = 3' that means we always have to be lower than this value.
                     stackCap = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(AttributeTypeRegistry.ATTR_TYPE_BLEED_STACKS, stackCap));
+                            .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_STACKS, stackCap));
                     int duration = bleedDuration;
                     duration = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION, duration));
+                            .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION, duration));
 
                     int setAmplifier = 0;
                     if (target.isPotionActive(RegistryPotions.potionBleed)) {

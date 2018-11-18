@@ -37,6 +37,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -123,11 +124,19 @@ public class ItemUtils {
         return stacksOut;
     }
 
+    public static Map<Integer, ItemStack> findItemsIndexedInPlayerInventory(EntityPlayer player, Predicate<ItemStack> match) {
+        return findItemsIndexedInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), match);
+    }
+
     public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, ItemStack match, boolean strict) {
+        return findItemsIndexedInInventory(handler, (s) -> strict ? matchStacks(s, match) : matchStackLoosely(s, match));
+    }
+
+    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, Predicate<ItemStack> match) {
         Map<Integer, ItemStack> stacksOut = new HashMap<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if (strict ? matchStacks(s, match) : matchStackLoosely(s, match)) {
+            if (match.test(s)) {
                 stacksOut.put(j, copyStackWithSize(s, s.getCount()));
             }
         }

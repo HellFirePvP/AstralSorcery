@@ -63,9 +63,9 @@ public class KeyLastBreath extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, damageIncrease);
+                        .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, damageIncrease);
                 float healthPerc = 1F - (player.getHealth() / player.getMaxHealth());
                 event.setAmount(event.getAmount() * (1F + (healthPerc * actIncrease)));
             }
@@ -77,9 +77,9 @@ public class KeyLastBreath extends KeyPerk {
         EntityPlayer player = event.getEntityPlayer();
         Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null && prog.hasPerkEffect(this)) {
+        if (prog.hasPerkEffect(this)) {
             float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, digSpeedIncrease);
+                    .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, digSpeedIncrease);
             float healthPerc = 1F - (player.getHealth() / player.getMaxHealth());
             event.setNewSpeed(event.getNewSpeed() * (1F + (healthPerc * actIncrease)));
         }

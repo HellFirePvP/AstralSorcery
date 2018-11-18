@@ -83,7 +83,7 @@ public class KeyChainMining extends KeyPerk {
         EntityPlayer player = event.getPlayer();
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null && side == Side.SERVER && player instanceof EntityPlayerMP && prog.hasPerkEffect(this) &&
+        if (side == Side.SERVER && player instanceof EntityPlayerMP && prog.hasPerkEffect(this) &&
                 !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player) && !player.isSneaking()
                 && event.getWorld() instanceof WorldServer && !player.isCreative()) {
             if (chainOngoing) return;
@@ -92,7 +92,7 @@ public class KeyChainMining extends KeyPerk {
                 WorldServer world = (WorldServer) event.getWorld();
                 if(doMiningChain(world, event.getPos(), event.getState(), player, side)) {
                     float doubleChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                            .getModifier(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN);
+                            .getModifier(prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN);
                     if (rand.nextFloat() < doubleChance) {
                         while (doMiningChain(world, event.getPos(), event.getState(), player, side)) {}
                     }
@@ -104,13 +104,14 @@ public class KeyChainMining extends KeyPerk {
     }
 
     private boolean doMiningChain(WorldServer world, BlockPos pos, IBlockState state, EntityPlayer player, Side side) {
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
         float ch = chainChance;
         ch = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_CHANCE, ch);
+                .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_CHANCE, ch);
         if (rand.nextFloat() < ch) {
             float fLength = chainLength;
             fLength = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_LENGTH, fLength);
+                    .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_LENGTH, fLength);
             BlockArray chain = BlockDiscoverer.discoverBlocksWithSameStateAroundChain(world, pos, state, Math.round(fLength), null,
                     ((world1, pos1, state1) ->
                             pos1.getY() >= player.getPosition().getY() &&

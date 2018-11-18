@@ -41,7 +41,7 @@ public class PerkLevelInstance extends AbstractCriterionInstance {
     }
 
     public boolean test(EntityPlayerMP player) {
-        return ResearchManager.getProgress(player, Side.SERVER).getPerkLevel() >= this.levelNeeded;
+        return ResearchManager.getProgress(player, Side.SERVER).getPerkLevel(player) >= this.levelNeeded;
     }
 
 }

@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktElytraCapeState;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.core.ASMCallHook;
@@ -232,8 +233,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
                 discidiaChainingAttack = true;
                 try {
-                    event.getEntityLiving().attackEntityFrom(CommonProxy.dmgSourceStellar, (float) (added / 2));
-                    event.getEntityLiving().attackEntityFrom(DamageSource.causePlayerDamage(attacker), (float) (added / 2));
+                    DamageUtil.attackEntityFrom(event.getEntityLiving(), CommonProxy.dmgSourceStellar, (float) (added / 2.0F));
+                    DamageUtil.attackEntityFrom(event.getEntityLiving(), DamageSource.causePlayerDamage(attacker), (float) (added / 2.0F));
                 } finally {
                     discidiaChainingAttack = false;
                 }

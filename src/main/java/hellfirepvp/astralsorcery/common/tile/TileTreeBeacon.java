@@ -27,10 +27,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionRece
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
-import hellfirepvp.astralsorcery.common.util.WRItemObject;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.NonDuplicateCappedWeightedList;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
@@ -112,8 +109,10 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                                 changed = true;
                             }
                         }
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, actPos);
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, actPos, 32));
+                        if (ParticleEffectWatcher.INSTANCE.mayFire(world, actPos)) {
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, actPos);
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, actPos, 32));
+                        }
                     } else {
                         if(treePositions.removeElement(randPos)) {
                             changed = true;

@@ -16,7 +16,6 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
@@ -39,7 +38,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -78,15 +76,14 @@ public class ResearchManager {
         return progress;
     }
 
-    @Nullable
-    //Nonnull for server.
+    @Nonnull
     public static PlayerProgress getProgress(EntityPlayer player, Side side) {
         if(side == Side.CLIENT) {
             return clientProgress;
         } else if(player instanceof EntityPlayerMP) {
             return getProgress((EntityPlayerMP) player);
         } else {
-            return null;
+            throw new IllegalStateException("Called getProgress on neither server or client - what are you?");
         }
     }
 
@@ -307,7 +304,7 @@ public class ResearchManager {
         if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
             NBTTagCompound data = new NBTTagCompound();
             root.onUnlockPerkServer(player, progress, data);
-            progress.putPerk(root, data);
+            progress.setPerkData(root, data);
             PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, root, false);
             PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(root, true), (EntityPlayerMP) player);
         }
@@ -322,15 +319,32 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean setPerkData(EntityPlayer player, @Nonnull AbstractPerk perk, NBTTagCompound data) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+        if (!progress.hasPerkEffect(perk)) return false;
+
+        progress.setPerkData(perk, data);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+
+        //Send way after research sync...
+        AstralSorcery.proxy.scheduleDelayed(() -> {
+            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.REFRESHALL), (EntityPlayerMP) player);
+        });
+        return true;
+    }
+
     public static boolean applyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
-        if (!progress.hasFreeAllocationPoint()) return false;
+        if (!progress.hasFreeAllocationPoint(player)) return false;
         if (progress.hasPerkUnlocked(perk)) return false;
 
         NBTTagCompound data = new NBTTagCompound();
         perk.onUnlockPerkServer(player, progress, data);
-        progress.putPerk(perk, data);
+        progress.setPerkData(perk, data);
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
@@ -413,7 +427,7 @@ public class ResearchManager {
 
         NBTTagCompound data = new NBTTagCompound();
         perk.onUnlockPerkServer(player, progress, data);
-        progress.putPerk(perk, data);
+        progress.setPerkData(perk, data);
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
@@ -477,7 +491,7 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
-        progress.modifyExp(exp);
+        progress.modifyExp(exp, player);
 
         AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
 
@@ -669,12 +683,13 @@ public class ResearchManager {
         PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) player);
     }*/
 
-    public static void recieveProgressFromServer(PktSyncKnowledge message) {
-        int currentLvl = clientProgress == null ? 0 : clientProgress.getPerkLevel();
+    @SideOnly(Side.CLIENT)
+    public static void recieveProgressFromServer(PktSyncKnowledge message, EntityPlayer player) {
+        int currentLvl = clientProgress == null ? 0 : clientProgress.getPerkLevel(player);
         clientProgress = new PlayerProgress();
         clientProgress.receive(message);
         clientInitialized = true;
-        if (clientProgress.getPerkLevel() > currentLvl) {
+        if (clientProgress.getPerkLevel(player) > currentLvl) {
             showBar();
         }
     }

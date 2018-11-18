@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -342,8 +343,12 @@ public class PlayerProgress {
     }
 
     @Nullable
-    protected NBTTagCompound getPerkData(AbstractPerk perk) {
+    public NBTTagCompound getPerkData(AbstractPerk perk) {
         return unlockedPerks.get(perk);
+    }
+
+    protected void setPerkData(AbstractPerk perk, NBTTagCompound data) {
+        this.unlockedPerks.put(perk, data);
     }
 
     public boolean hasPerkEffect(AbstractPerk perk) {
@@ -356,10 +361,6 @@ public class PlayerProgress {
 
     public boolean isPerkSealed(AbstractPerk perk) {
         return sealedPerks.contains(perk);
-    }
-
-    public void putPerk(AbstractPerk perk, NBTTagCompound data) {
-        this.unlockedPerks.put(perk, data);
     }
 
     protected boolean removePerk(AbstractPerk perk) {
@@ -428,35 +429,35 @@ public class PlayerProgress {
         return Collections.unmodifiableList(freePointTokens);
     }
 
-    public int getAvailablePerkPoints() {
+    public int getAvailablePerkPoints(EntityPlayer player) {
         int allocatedPerks = this.unlockedPerks.size() - 1; //Root perk doesn't count
-        int allocationLevels = PerkLevelManager.INSTANCE.getLevel(getPerkExp());
+        int allocationLevels = PerkLevelManager.INSTANCE.getLevel(getPerkExp(), player);
         return (allocationLevels + this.freePointTokens.size()) - allocatedPerks;
     }
 
-    public boolean hasFreeAllocationPoint() {
-        return getAvailablePerkPoints() > 0;
+    public boolean hasFreeAllocationPoint(EntityPlayer player) {
+        return getAvailablePerkPoints(player) > 0;
     }
 
     public double getPerkExp() {
         return perkExp;
     }
 
-    public int getPerkLevel() {
-        return PerkLevelManager.INSTANCE.getLevel(getPerkExp());
+    public int getPerkLevel(EntityPlayer player) {
+        return PerkLevelManager.INSTANCE.getLevel(getPerkExp(), player);
     }
 
-    public float getPercentToNextLevel() {
-        return PerkLevelManager.INSTANCE.getNextLevelPercent(getPerkExp());
+    public float getPercentToNextLevel(EntityPlayer player) {
+        return PerkLevelManager.INSTANCE.getNextLevelPercent(getPerkExp(), player);
     }
 
-    protected void modifyExp(double exp) {
-        int currLevel = PerkLevelManager.INSTANCE.getLevel(getPerkExp());
-        if (exp >= 0 && currLevel >= PerkLevelManager.INSTANCE.getLevelCap()) {
+    protected void modifyExp(double exp, EntityPlayer player) {
+        int currLevel = PerkLevelManager.INSTANCE.getLevel(getPerkExp(), player);
+        if (exp >= 0 && currLevel >= PerkLevelManager.getLevelCapFor(player)) {
             return;
         }
-        long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel);
-        long expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel + 1);
+        long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel, player);
+        long expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel + 1, player);
         long cap = MathHelper.lfloor(((float) (expNextLevel - expThisLevel)) * 0.08F);
         if (exp > cap) {
             exp = cap;
