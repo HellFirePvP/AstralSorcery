@@ -56,6 +56,8 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
     private static final int entriesLeft = 15;
     private static final int entriesRight = 14;
     private static final Random rand = new Random();
+    
+    private static Rectangle rectSearchTextEntry = new Rectangle(300, 20, 88, 15);
 
     private Rectangle rectNext, rectPrev;
     private KnowledgeFragment lastRenderHover = null;
@@ -242,6 +244,15 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
         GlStateManager.color(1F, 1F, 1F, 1F);
 
         TextureHelper.refreshTextureBindState();
+    }
+
+    @Override
+    protected boolean handleRightClickClose(int mouseX, int mouseY) {
+        if (rectSearchTextEntry.contains(mouseX - guiLeft, mouseY - guiTop)) {
+            searchTextEntry.setText("");
+            return true;
+        }
+        return false;
     }
 
     @Override
