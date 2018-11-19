@@ -133,19 +133,30 @@ public interface GemSlotPerk {
 
     @SideOnly(Side.CLIENT)
     default public void addTooltipInfo(Collection<String> tooltip) {
+        if (!(this instanceof AbstractPerk)) {
+            return;
+        }
+        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        if (prog == null) {
+            return;
+        }
         ItemStack contained = getContainedItem(Minecraft.getMinecraft().player, Side.CLIENT);
         if (contained.isEmpty()) {
             tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.empty"));
-            tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.content.empty"));
+            if (prog.hasPerkEffect((AbstractPerk) this)) {
+                tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.content.empty"));
 
-            boolean has = !ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getMinecraft().player,
-                    s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !ItemPerkGem.getModifiers(s).isEmpty()).isEmpty();
-            if (!has) {
-                tooltip.add(TextFormatting.RED + I18n.format("perk.info.gem.content.empty.none"));
+                boolean has = !ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getMinecraft().player,
+                        s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !ItemPerkGem.getModifiers(s).isEmpty()).isEmpty();
+                if (!has) {
+                    tooltip.add(TextFormatting.RED + I18n.format("perk.info.gem.content.empty.none"));
+                }
             }
         } else {
             tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.content.item", contained.getRarity().rarityColor + contained.getDisplayName()));
-            tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.remove"));
+            if (prog.hasPerkEffect((AbstractPerk) this)) {
+                tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.remove"));
+            }
         }
     }
 

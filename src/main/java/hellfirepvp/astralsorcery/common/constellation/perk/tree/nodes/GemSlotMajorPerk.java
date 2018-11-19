@@ -52,6 +52,14 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
     }
 
     @Override
+    public String getUnlocalizedName() {
+        if (this.ovrUnlocalizedNamePrefix != null) {
+            return this.ovrUnlocalizedNamePrefix;
+        }
+        return "perk.astralsorcery.gemsocket";
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public boolean addLocalizedTooltip(Collection<String> tooltip) {
         if (super.addLocalizedTooltip(tooltip)) {

@@ -107,6 +107,16 @@ public abstract class ClassPatch {
         throw new ASMTransformationException("Couldn't find Instruction with opcode " + opCode);
     }
 
+    @Nonnull
+    public static AbstractInsnNode findFirstInstructionAfter(MethodNode mn, int startIndex, Predicate<AbstractInsnNode> check) {
+        for (int i = startIndex; i < mn.instructions.size(); i++) {
+            AbstractInsnNode ain = mn.instructions.get(i);
+            if (check.test(ain))
+                return ain;
+        }
+        throw new ASMTransformationException("Couldn't find Instruction with opcode with custom matching...");
+    }
+
     public static int peekFirstInstructionAfter(MethodNode mn, int startingIndex, int opCode) {
         for (int i = startingIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode ain = mn.instructions.get(i);

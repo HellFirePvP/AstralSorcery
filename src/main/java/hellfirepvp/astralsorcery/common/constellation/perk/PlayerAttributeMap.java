@@ -157,20 +157,26 @@ public class PlayerAttributeMap {
         if (attributeType == null) return 1F;
 
         float mod = 1F;
+
+        float perkEffectModifier = 1F;
+        if (!type.equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT)) {
+            perkEffectModifier = modifyValue(progress, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, 1F);
+        }
+
         if (applicableModes.contains(PerkAttributeModifier.Mode.ADDITION)) {
             for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDITION)) {
-                mod += modifier.getValue(progress);
+                mod += (modifier.getValue(progress) * perkEffectModifier);
             }
         }
         if (applicableModes.contains(PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
             float multiply = mod;
             for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
-                mod += multiply * modifier.getValue(progress);
+                mod += multiply * (modifier.getValue(progress) * perkEffectModifier);
             }
         }
         if (applicableModes.contains(PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
             for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
-                mod *= modifier.getValue(progress);
+                mod *= (modifier.getValue(progress) * perkEffectModifier);
             }
         }
         return mod;

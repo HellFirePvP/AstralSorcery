@@ -56,7 +56,7 @@ public abstract class AbstractPerk {
     private PerkCategory category = CATEGORY_BASE;
     private List<String> tooltipCache = null;
     private boolean cacheTooltip = true;
-    private String ovrUnlocalizedNamePrefix = null;
+    protected String ovrUnlocalizedNamePrefix = null;
 
     public AbstractPerk(String name, int x, int y) {
         this.registryName = new ResourceLocation(AstralSorcery.MODID, name.toLowerCase());

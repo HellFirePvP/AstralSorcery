@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.DamageSourceUtil;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -80,7 +81,7 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
         List<EntityLivingBase> entities = collectEntities(world, pos, modified);
         if(!entities.isEmpty()) {
             EntityPlayer owner = getOwningPlayerInWorld(world, pos);
-            DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSource.causePlayerDamage(owner);
+            DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSourceUtil.withEntityDirect(CommonProxy.dmgSourceStellar, owner);
             if(modified.isCorrupted() && owner != null && owner.getDistanceSq(pos) <= (modified.getSize() * modified.getSize())) {
                 DamageUtil.attackEntityFrom(owner, CommonProxy.dmgSourceStellar, 1.2F * percStrength);
                 did = true;

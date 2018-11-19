@@ -55,8 +55,6 @@ public class RegistryPerks {
     public static void initPerkTree() {
         initializeAttributeTypes();
 
-        MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
-
         initializeRoot();
 
         initializeAevitasRoot();
@@ -92,6 +90,8 @@ public class RegistryPerks {
         initializeOuterVicioPerks();
 
         initializeTreeConnectorPerks();
+
+        MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
     }
 
     public static void postProcessPerks() {
@@ -164,7 +164,7 @@ public class RegistryPerks {
         AttributeModifierPerk perkDef4 = new AttributeModifierPerk("outer_s_inc_def_3", 22, 15).setNameOverride(perkDef1);
         perkDef4.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
         perkDef4.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
-        AttributeModifierPerk perkDef5 = new AttributeModifierPerk("outer_s_inc_def_4", 21, 21).setNameOverride(perkDef1);
+        AttributeModifierPerk perkDef5 = new AttributeModifierPerk("outer_s_inc_def_4", 20, 20).setNameOverride(perkDef1);
         perkDef5.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
         perkDef5.addModifier(addedIncArmorEle, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
 
@@ -180,6 +180,19 @@ public class RegistryPerks {
                 .connect(perkDef3);
         PERK_TREE.registerPerk(perkDef5)
                 .connect(perkDef4);
+
+        AttributeModifierPerk perkPerkEffSlot1 = new AttributeModifierPerk("def_gem_path", 15, 20);
+        perkPerkEffSlot1.addModifier(1.02F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkPerkEffSlot2 = new AttributeModifierPerk("def_gem_path_1", 14, 21).setNameOverride(perkPerkEffSlot1);
+        perkPerkEffSlot2.addModifier(1.02F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        GemSlotMajorPerk perkDefGemSlot = new GemSlotMajorPerk("def_gem_slot", 13, 20);
+
+        PERK_TREE.registerPerk(perkPerkEffSlot1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_10"));
+        PERK_TREE.registerPerk(perkPerkEffSlot2)
+                .connect(perkPerkEffSlot1);
+        PERK_TREE.registerPerk(perkDefGemSlot)
+                .connect(perkPerkEffSlot2);
     }
 
     private static void initializeOuterDiscidiaPerks() {
@@ -218,6 +231,19 @@ public class RegistryPerks {
                 .connect(perkDmg4);
         PERK_TREE.registerPerk(perkDmg6)
                 .connect(perkDmg5);
+
+        AttributeModifierPerk perkPerkEffSlot1 = new AttributeModifierPerk("dsc_gem_path", 18, -19);
+        perkPerkEffSlot1.addModifier(1.02F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkPerkEffSlot2 = new AttributeModifierPerk("dsc_gem_path_1", 17, -21).setNameOverride(perkPerkEffSlot1);
+        perkPerkEffSlot2.addModifier(1.02F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        GemSlotMajorPerk perkDscGemSlot = new GemSlotMajorPerk("dsc_gem_slot", 15, -22);
+
+        PERK_TREE.registerPerk(perkPerkEffSlot1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_dmg_3"));
+        PERK_TREE.registerPerk(perkPerkEffSlot2)
+                .connect(perkPerkEffSlot1);
+        PERK_TREE.registerPerk(perkDscGemSlot)
+                .connect(perkPerkEffSlot2);
     }
 
     private static void initializeOuterEvorsioPerks() {
@@ -246,6 +272,19 @@ public class RegistryPerks {
         PERK_TREE.registerPerk(perkMine5)
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4"))
                 .connect(perkMine4);
+
+        AttributeModifierPerk perkPerkEffSlot1 = new AttributeModifierPerk("ev_gem_path", -19, -16);
+        perkPerkEffSlot1.addModifier(1.02F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkPerkEffSlot2 = new AttributeModifierPerk("ev_gem_path_1", -18, -15).setNameOverride(perkPerkEffSlot1);
+        perkPerkEffSlot2.addModifier(1.02F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        GemSlotMajorPerk perkEvGemSlot = new GemSlotMajorPerk("ev_gem_slot", -17, -16);
+
+        PERK_TREE.registerPerk(perkPerkEffSlot1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_mine_3"));
+        PERK_TREE.registerPerk(perkPerkEffSlot2)
+                .connect(perkPerkEffSlot1);
+        PERK_TREE.registerPerk(perkEvGemSlot)
+                .connect(perkPerkEffSlot2);
     }
 
     private static void initializeOuterAevitasPerks() {
@@ -273,6 +312,19 @@ public class RegistryPerks {
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_17"));
         PERK_TREE.registerPerk(perkLife5)
                 .connect(perkLife4);
+
+        AttributeModifierPerk perkPerkEffSlot1 = new AttributeModifierPerk("life_gem_path", -16, 15);
+        perkPerkEffSlot1.addModifier(1.02F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkPerkEffSlot2 = new AttributeModifierPerk("life_gem_path_1", -17, 17).setNameOverride(perkPerkEffSlot1);
+        perkPerkEffSlot2.addModifier(1.02F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        GemSlotMajorPerk perkLifeGemSlot = new GemSlotMajorPerk("life_gem_slot", -16, 19);
+
+        PERK_TREE.registerPerk(perkPerkEffSlot1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_15"));
+        PERK_TREE.registerPerk(perkPerkEffSlot2)
+                .connect(perkPerkEffSlot1);
+        PERK_TREE.registerPerk(perkLifeGemSlot)
+                .connect(perkPerkEffSlot2);
     }
 
     private static void initializePerkEffectPerks() {
@@ -508,13 +560,13 @@ public class RegistryPerks {
         PERK_TREE.registerPerk(perkRangedThorns)
                 .connect(perkTh2);
 
-        AttributeModifierPerk perkPhEle1 = new AttributeModifierPerk("key_phoenix_path", 17, 18);
+        AttributeModifierPerk perkPhEle1 = new AttributeModifierPerk("key_phoenix_path", 16, 16);
         perkPhEle1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
-        AttributeModifierPerk perkPhEle2 = new AttributeModifierPerk("key_phoenix_path_1", 18, 19).setNameOverride(perkPhEle1);
+        AttributeModifierPerk perkPhEle2 = new AttributeModifierPerk("key_phoenix_path_1", 17, 15).setNameOverride(perkPhEle1);
         perkPhEle2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
-        AttributeModifierPerk perkPhEle3 = new AttributeModifierPerk("key_phoenix_path_2", 17, 20).setNameOverride(perkPhEle1);
+        AttributeModifierPerk perkPhEle3 = new AttributeModifierPerk("key_phoenix_path_2", 18, 16).setNameOverride(perkPhEle1);
         perkPhEle3.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
-        KeyCheatDeath cheatDeathKey = new KeyCheatDeath("key_cheat_death", 16, 19);
+        KeyCheatDeath cheatDeathKey = new KeyCheatDeath("key_cheat_death", 17, 17);
 
         PERK_TREE.registerPerk(perkPhEle1)
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_10"));
@@ -847,8 +899,6 @@ public class RegistryPerks {
         perkEvorsioCh3.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
         PerkTreeConnector thresholdEvorsio = new PerkTreeConnector("epi_evorsio", -13, -29);
 
-        GemSlotMajorPerk perk = new GemSlotMajorPerk("test_perk_slot", -15, -33);
-
         PERK_TREE.registerPerk(perkEvorsioCh1)
                 .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_mine_4"));
         PERK_TREE.registerPerk(perkEvorsioCh2)
@@ -860,7 +910,6 @@ public class RegistryPerks {
                 .connect(perkEvorsioCh1)
                 .connect(perkEvorsioCh2)
                 .connect(perkEvorsioCh3);
-        PERK_TREE.registerPerk(perk).connect(perkEvorsioCh2);
 
         AttributeModifierPerk perkArmaraCh1 = new AttributeModifierPerk("threshold_armara", 29, -4);
         perkArmaraCh1.addModifier(more_ch, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);

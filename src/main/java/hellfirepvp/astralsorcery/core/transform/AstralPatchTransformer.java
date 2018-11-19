@@ -82,7 +82,11 @@ public class AstralPatchTransformer implements SubClassTransformer {
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchEntityRendererExtendedEntityReach",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchServerExtendEntityInteractReach",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchEntityLivingBaseWaterSlowDown",
-                    "hellfirepvp.astralsorcery.core.patch.helper.PatchPostProcessAttributes"
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchPostProcessAttributes",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchAddPlayerAttribute",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchSetPlayerAttribute",
+
+                    "hellfirepvp.astralsorcery.core.patch.hook.PatchRunicShieldingHook"
             };
             for (String str : references) {
                 try {

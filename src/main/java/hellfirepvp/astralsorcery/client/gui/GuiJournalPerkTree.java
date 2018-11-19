@@ -201,8 +201,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         drawSearchBox();
         drawMiscInfo();
-        drawSealBox();
         drawSocketContextMenu(mouseX, mouseY);
+        drawSealBox();
         drawHoverTooltips(mouseX, mouseY);
 
         TextureHelper.refreshTextureBindState();
@@ -285,8 +285,6 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             offsetY -= 12 * scale;
 
             textureSlotContext.bindTexture();
-            GlStateManager.enableBlend();
-            GL11.glEnable(GL11.GL_BLEND);
 
             GlStateManager.color(1F, 1F, 1F, 1F);
             GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -339,6 +337,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         GlStateManager.disableDepth();
         GlStateManager.disableAlpha();
+        GlStateManager.enableBlend();
         AbstractRenderableTexture tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridslot");
         tex.bindTexture();
         drawTexturedRect(guiLeft + rectSealBox.x - 1, guiTop + rectSealBox.y - 1, rectSealBox.width + 2, rectSealBox.height + 2, tex);

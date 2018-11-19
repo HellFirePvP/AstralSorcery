@@ -30,6 +30,7 @@ public enum Mods {
     TICONSTRUCT("tconstruct"),
     CRAFTTWEAKER("crafttweaker"),
     JEI("jei"),
+    THAUMCRAFT("thaumcraft"),
     BLOODMAGIC("bloodmagic"),
     BOTANIA("botania"),
     CHISEL("chisel"),

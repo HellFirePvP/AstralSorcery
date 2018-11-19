@@ -752,6 +752,8 @@ perk.category.root.name=Root Perk
 perk.category.major.name=Major Perk
 perk.category.key.name=Key Perk
 
+perk.astralsorcery.compat.thaumcraft=Astral Sorcery: Thaumcraft Compat
+
 ###
 # Note: Different modifiers may have different formats.
 ###
@@ -796,12 +798,21 @@ perk.attribute.astralsorcery.dodge.name=Dodge Chance
 perk.attribute.astralsorcery.thorns.name=%% of melee damage taken is reflected
 perk.attribute.astralsorcery.lifeleech.name=%% of damage dealt gained as life
 
+perk.attribute.astralsorcery.compat.thaumcraft.runicshield.name=Runic Shielding
+
 perk.astralsorcery.outer_s_inc_life.name=Increased Maximum Life
 perk.astralsorcery.outer_s_inc_mine.name=Increased Mining Speed
 perk.astralsorcery.outer_s_inc_dmg.name=Increased Melee and Projecile Damage
 perk.astralsorcery.outer_s_inc_def.name=Increased Armor and Elemental Resistances
 perk.astralsorcery.outer_s_inc_trv.name=Increased Reach and Movement Speed
 
+perk.astralsorcery.mod_tc_added_runic.name=Added Runic Shielding
+perk.astralsorcery.mod_tc_inc_runic.name=Increased Runic Shielding
+
+perk.astralsorcery.mod_tc_key_ci.name=Vis Inoculation
+perk.astralsorcery.mod_tc_key_ci.desc=Your health is set to 1.
+
+perk.astralsorcery.gemsocket.name=Gem Socket
 perk.astralsorcery.base_inc_life.name=Increased Maximum Life
 perk.astralsorcery.med_inc_life.name=Increased Maximum Life
 perk.astralsorcery.med_add_life.name=Added Maximum Life
@@ -867,6 +878,10 @@ perk.astralsorcery.ds_inc_potion_duration.name=Increased PotionEffect Duration
 perk.astralsorcery.major_ds_inc_potion_duration.name=Alchemists Flasks
 perk.astralsorcery.ev_inc_potion_duration.name=Increased PotionEffect Duration
 perk.astralsorcery.major_ev_inc_potion_duration.name=Profane Chemistry
+perk.astralsorcery.ev_gem_path.name=More Perk Effect
+perk.astralsorcery.dsc_gem_path.name=More Perk Effect
+perk.astralsorcery.def_gem_path.name=More Perk Effect
+perk.astralsorcery.life_gem_path.name=More Perk Effect
 
 perk.astralsorcery.major_inc_life.name=Bloom
 perk.astralsorcery.not_aev_armor_life.name=Thick Skin

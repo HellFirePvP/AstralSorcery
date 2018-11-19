@@ -39,6 +39,7 @@ import hellfirepvp.astralsorcery.common.event.listener.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationChisel;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationThaumcraft;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.gem.GemAttributeHelper;
@@ -151,6 +152,10 @@ public class CommonProxy implements IGuiHandler {
 
         LootTableUtil.initLootTable();
         ConstellationEffectRegistry.init();
+
+        if (Mods.THAUMCRAFT.isPresent()) {
+            MinecraftForge.EVENT_BUS.register(ModIntegrationThaumcraft.INSTANCE);
+        }
 
         RegistryPerks.initPerkTree();
 

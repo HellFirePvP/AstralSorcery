@@ -47,6 +47,7 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
         if (side == Side.SERVER) {
             this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
             this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
         }
     }
 
@@ -66,9 +67,11 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             StatisticsManager manager = ((EntityPlayerMP) player).getStatFile();
             int walked = manager.readStat(StatList.WALK_ONE_CM);
             int sprint = manager.readStat(StatList.SPRINT_ONE_CM);
+            int flown = manager.readStat(StatList.FLY_ONE_CM);
 
             int lastWalked = this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> walked);
             int lastSprint = this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> sprint);
+            int lastFly = this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> flown);
 
             float added = 0;
 
@@ -78,6 +81,10 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             }
             if (sprint > lastSprint) {
                 added += (sprint - lastSprint) * 1.2F;
+                this.moveTrackMap.get(StatList.SPRINT_ONE_CM).put(uuid, sprint);
+            }
+            if (flown > lastFly) {
+                added += (flown - lastFly) * 0.4F;
                 this.moveTrackMap.get(StatList.SPRINT_ONE_CM).put(uuid, sprint);
             }
 
