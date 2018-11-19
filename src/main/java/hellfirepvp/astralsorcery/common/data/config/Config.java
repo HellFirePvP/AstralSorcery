@@ -188,7 +188,7 @@ public class Config {
     }
 
     private static void loadData() {
-        giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal if he joins the server for the first time.");
+        giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal when they join the server for the first time.");
         doesMobSpawnDenyDenyEverything = latestConfig.getBoolean("doesMobSpawnDenyAllTypes", "general", false, "If set to 'true' anything that prevents mobspawning by this mod, will also prevent EVERY natural mobspawning of any mobtype. When set to 'false' it'll only stop monsters from spawning.");
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
         rockCrystalOreSilkTouchHarvestable = latestConfig.getBoolean("isRockCrystalOreSilkHarvestable", "general", rockCrystalOreSilkTouchHarvestable, "If this is set to true, Rock-Crystal-Ore may be silk-touch harvested by a player.");
