@@ -36,10 +36,10 @@ import java.util.Objects;
  * Created by HellFirePvP
  * Date: 17.06.2018 / 09:32
  */
-public class PerkTreePoint {
+public class PerkTreePoint<T extends AbstractPerk> {
 
     private Point offset;
-    private final AbstractPerk perk;
+    private final T perk;
     private int renderSize;
 
     private static final int spriteSize = 11;
@@ -48,7 +48,7 @@ public class PerkTreePoint {
     private SpriteQuery querySpriteUnlockable;
     private SpriteQuery querySpriteSeal;
 
-    public PerkTreePoint(AbstractPerk perk, Point offset) {
+    public PerkTreePoint(T perk, Point offset) {
         this.offset = offset;
         this.perk = perk;
         this.renderSize = spriteSize;

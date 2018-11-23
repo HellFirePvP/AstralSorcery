@@ -41,7 +41,7 @@ public class DynamicEnchantmentEvent {
             return itemStack;
         }
 
-        public void setResolvedPlayer(EntityPlayer resolvedPlayer) {
+        public final void setResolvedPlayer(EntityPlayer resolvedPlayer) {
             this.resolvedPlayer = resolvedPlayer;
         }
 

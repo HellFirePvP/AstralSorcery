@@ -565,7 +565,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         ATTUNEMENT         (13, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarAttunement)),
         CONSTELLATION_CRAFT(21, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarConstellation)),
         TRAIT_CRAFT        (25, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarTrait)),
-        ENDGAME            (25, (ta) -> true       );
+        BRILLIANCE         (25, (ta) -> true       );
 
         private final int maxStarlightStorage;
         private final int accessibleInventorySize;
@@ -598,7 +598,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
 
         public AltarLevel next() {
-            if(this == ENDGAME) return this;
+            if(this == BRILLIANCE) return this;
             return AltarLevel.values()[ordinal() + 1];
         }
 

@@ -54,7 +54,7 @@ public class KeyMending extends KeyPerk implements IPlayerTickPerk {
     public void onPlayerTick(EntityPlayer player, Side side) {
         if(side == Side.SERVER) {
             float fChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(ResearchManager.getProgress(player, side), AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToRepair);
+                    .modifyValue(player, ResearchManager.getProgress(player, side), AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToRepair);
             int chance = Math.max(MathHelper.floor(fChance), 1);
             for (ItemStack armor : player.getArmorInventoryList()) {
                 if(rand.nextInt(chance) != 0) continue;

@@ -12,10 +12,12 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -45,8 +47,9 @@ public class AttributeAllElementalResist extends PerkAttributeType {
         DamageSource ds = event.getSource();
         if (isMaybeElementalDamage(ds)) {
             float multiplier = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(ResearchManager.getProgress(player, side), getTypeString(), 1F);
+                    .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 1F);
             multiplier -= 1F;
+            multiplier = AttributeEvent.postProcessModded(player, this, multiplier);
             multiplier = 1F - MathHelper.clamp(multiplier, 0F, 1F);
             event.setAmount(event.getAmount() * multiplier);
         }
@@ -54,7 +57,7 @@ public class AttributeAllElementalResist extends PerkAttributeType {
 
     private boolean isMaybeElementalDamage(DamageSource source) {
         // "Magic" is often used for any kinds of damages... poison for example
-        if (source.isFireDamage() || source.isMagicDamage() || source.isExplosion()) {
+        if (source.isFireDamage() || source.isMagicDamage()) {
             return true;
         }
         String key = source.getDamageType();

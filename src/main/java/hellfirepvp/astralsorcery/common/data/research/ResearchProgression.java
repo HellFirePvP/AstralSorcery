@@ -29,6 +29,7 @@ public enum ResearchProgression {
     ATTUNEMENT(2, ProgressionTier.ATTUNEMENT, BASIC_CRAFT),
     CONSTELLATION(3, ProgressionTier.CONSTELLATION_CRAFT, ATTUNEMENT),
     RADIANCE(4, ProgressionTier.TRAIT_CRAFT, CONSTELLATION),
+    BRILLIANCE(5, ProgressionTier.BRILLIANCE, RADIANCE)
     ;
 
     private final int progressId;

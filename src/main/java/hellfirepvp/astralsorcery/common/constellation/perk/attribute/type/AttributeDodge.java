@@ -12,7 +12,9 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -34,7 +36,7 @@ public class AttributeDodge extends PerkAttributeType {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onDamageTaken(LivingHurtEvent event) {
+    public void onDamageTaken(LivingDamageEvent event) {
         if (!(event.getEntityLiving() instanceof EntityPlayer)) {
             return;
         }
@@ -44,8 +46,9 @@ public class AttributeDodge extends PerkAttributeType {
             return;
         }
         float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(ResearchManager.getProgress(player, side), getTypeString(), BASE_DODGE);
+                .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), BASE_DODGE);
         chance /= 100.0F;
+        chance = AttributeEvent.postProcessModded(player, this, chance);
         if (chance >= rand.nextFloat()) {
             event.setCanceled(true);
         }

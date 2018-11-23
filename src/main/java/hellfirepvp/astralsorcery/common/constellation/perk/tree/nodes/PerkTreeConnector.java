@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
@@ -31,19 +32,14 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 15.07.2018 / 17:29
  */
-public class PerkTreeConnector extends AttributeModifierPerk {
+public class PerkTreeConnector extends MajorPerk {
 
     private static List<PerkTreeConnector> connectorCache = Lists.newArrayList();
 
     public PerkTreeConnector(String name, int x, int y) {
         super(name, x, y);
-        setCategory(CATEGORY_KEY);
+        setCategory(CATEGORY_EPIPHANY);
         connectorCache.add(this);
-    }
-
-    @Override
-    public PerkTreePoint getPoint() {
-        return new PerkTreeMajor(this, this.getOffset());
     }
 
     @Override

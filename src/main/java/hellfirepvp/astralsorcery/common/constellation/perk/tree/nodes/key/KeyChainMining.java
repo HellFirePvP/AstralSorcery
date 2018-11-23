@@ -92,7 +92,7 @@ public class KeyChainMining extends KeyPerk {
                 WorldServer world = (WorldServer) event.getWorld();
                 if(doMiningChain(world, event.getPos(), event.getState(), player, side)) {
                     float doubleChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                            .getModifier(prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN);
+                            .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN);
                     if (rand.nextFloat() < doubleChance) {
                         while (doMiningChain(world, event.getPos(), event.getState(), player, side)) {}
                     }
@@ -107,11 +107,11 @@ public class KeyChainMining extends KeyPerk {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         float ch = chainChance;
         ch = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_CHANCE, ch);
+                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_CHANCE, ch);
         if (rand.nextFloat() < ch) {
             float fLength = chainLength;
             fLength = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_LENGTH, fLength);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_LENGTH, fLength);
             BlockArray chain = BlockDiscoverer.discoverBlocksWithSameStateAroundChain(world, pos, state, Math.round(fLength), null,
                     ((world1, pos1, state1) ->
                             pos1.getY() >= player.getPosition().getY() &&

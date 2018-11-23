@@ -28,6 +28,6 @@ public class MajorPerk extends AttributeModifierPerk {
 
     @Override
     public PerkTreePoint getPoint() {
-        return new PerkTreeMajor(this, this.getOffset());
+        return new PerkTreeMajor<>(this, this.getOffset());
     }
 }

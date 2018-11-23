@@ -13,7 +13,9 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTy
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.util.PlayerActivityManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.stats.StatBase;
@@ -88,13 +90,19 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
                 this.moveTrackMap.get(StatList.SPRINT_ONE_CM).put(uuid, sprint);
             }
 
+            if (!PlayerActivityManager.INSTANCE.isPlayerActiveServer(player)) {
+                return;
+            }
+
             if (added > 0) {
                 PlayerProgress prog = ResearchManager.getProgress(player, side);
 
-                added *= 0.0025F;
+
+                added *= 0.004F;
                 added *= expMultiplier;
-                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, added);
-                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
+                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, added);
+                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
+                added = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
                 ResearchManager.modifyExp(player, added);
             }
         }

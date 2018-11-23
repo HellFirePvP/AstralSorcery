@@ -758,7 +758,9 @@ public class ResearchManager {
                         giveProgressionIgnoreFail(crafter, ProgressionTier.TRAIT_CRAFT);
                         giveResearchIgnoreFail(crafter, ResearchProgression.RADIANCE);
                         break;
-                    case ENDGAME:
+                    case BRILLIANCE:
+                        giveProgressionIgnoreFail(crafter, ProgressionTier.BRILLIANCE);
+                        giveResearchIgnoreFail(crafter, ResearchProgression.BRILLIANCE);
                         break;
                 }
             }

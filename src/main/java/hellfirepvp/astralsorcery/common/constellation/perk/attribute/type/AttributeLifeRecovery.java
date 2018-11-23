@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -43,9 +44,10 @@ public class AttributeLifeRecovery extends PerkAttributeType {
             return;
         }
 
-        float healMultiplier = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(ResearchManager.getProgress(player, side), getTypeString(), 1F);
-        float val = event.getAmount() * healMultiplier;
+        float heal = PerkAttributeHelper.getOrCreateMap(player, side)
+                .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), event.getAmount());
+        heal = AttributeEvent.postProcessModded(player, this, heal);
+        float val = heal;
         if (val <= 0) {
             event.setCanceled(true);
         } else {

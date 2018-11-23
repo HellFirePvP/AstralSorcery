@@ -189,6 +189,10 @@ public class RegistryRecipes {
     }
 
     public static void initGrindstoneOreRecipes() {
+        if (!Config.grindstoneAddDustRecipes) {
+            return;
+        }
+
         String srcPrefix = "ore";
         String dstPrefix = "dust";
 

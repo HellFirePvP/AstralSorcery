@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -69,7 +70,7 @@ public class KeyNoArmor extends KeyPerk {
             }
             if (eq < 2) {
                 float effMulti = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .getModifier(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                        .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
                 event.setAmount(event.getAmount() * (dmgReductionMultiplier * (1F / effMulti)));
             }
         }

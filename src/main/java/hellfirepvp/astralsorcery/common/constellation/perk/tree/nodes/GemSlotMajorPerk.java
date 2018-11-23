@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeGem;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +33,11 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
     public GemSlotMajorPerk(String name, int x, int y) {
         super(name, x, y);
         disableToltipCaching();
+    }
+
+    @Override
+    public PerkTreePoint getPoint() {
+        return new PerkTreeGem<>(this, getOffset());
     }
 
     @Override

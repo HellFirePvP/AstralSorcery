@@ -295,7 +295,7 @@ public class GuiProgressionRenderer {
                 GL11.glTranslated(offsetX + ((rX - lX) / 2), offsetY + ((rY - lY) / 3), 0);
                 FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
                 int width = fr.getStringWidth(name);
-                GL11.glTranslated(-width / 2, 0, 0);
+                GL11.glTranslated((-width / 2) * 1.4, 0, 0);
                 GL11.glScaled(1.4, 1.4, 1.4);
                 int alpha = 0xCC;
                 alpha *= br;

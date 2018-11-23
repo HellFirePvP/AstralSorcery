@@ -73,7 +73,7 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
                 return new ContainerAltarConstellation(playerInv, tileAltar);
             case TRAIT_CRAFT:
                 return new ContainerAltarTrait(playerInv, tileAltar);
-            case ENDGAME:
+            case BRILLIANCE:
                 break;
         }
         return new ContainerAltarDiscovery(playerInv, tileAltar);

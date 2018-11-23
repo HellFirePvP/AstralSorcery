@@ -76,6 +76,9 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud3")                       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud4")                       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud5")                       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud6")                       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud7")                       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud8")                       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiconpaper")                  .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar1")                    .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar2")                    .allocateGlId();

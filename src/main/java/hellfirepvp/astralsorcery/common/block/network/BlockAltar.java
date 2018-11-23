@@ -91,7 +91,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                     case TRAIT_CRAFT:
                         AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_TRAIT, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
                         return true;
-                    case ENDGAME:
+                    case BRILLIANCE:
                         break;
                 }
             }
@@ -169,7 +169,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                     return boxConstellation;
                 case TRAIT_CRAFT:
                     break;
-                case ENDGAME:
+                case BRILLIANCE:
                     break;
             }
         }*/
@@ -289,7 +289,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         ALTAR_2((world, state) -> new TileAltar(TileAltar.AltarLevel.ATTUNEMENT)),
         ALTAR_3((world, state) -> new TileAltar(TileAltar.AltarLevel.CONSTELLATION_CRAFT)),
         ALTAR_4((world, state) -> new TileAltar(TileAltar.AltarLevel.TRAIT_CRAFT)),
-        ALTAR_5((world, state) -> new TileAltar(TileAltar.AltarLevel.ENDGAME));
+        ALTAR_5((world, state) -> new TileAltar(TileAltar.AltarLevel.BRILLIANCE));
 
         //Ugly workaround to make constructors nicer
         private final IVariantTileProvider provider;

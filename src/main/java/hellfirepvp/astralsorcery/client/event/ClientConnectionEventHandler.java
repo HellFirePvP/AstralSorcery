@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.data.*;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.PlayerActivityManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.server.integrated.IntegratedServer;
@@ -66,6 +67,7 @@ public class ClientConnectionEventHandler {
         AttributeTypeRegistry.getTypes().forEach(t -> t.clear(Side.CLIENT));
         PerkTree.PERK_TREE.clearCache(Side.CLIENT);
         UISextantCache.INSTANCE.clearClient();
+        PlayerActivityManager.INSTANCE.clearCache(Side.CLIENT);
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();
         ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).clientClean();
         ((DataTimeFreezeEffects) SyncDataHolder.getDataClient(SyncDataHolder.DATA_TIME_FREEZE_EFFECTS)).clientClean();

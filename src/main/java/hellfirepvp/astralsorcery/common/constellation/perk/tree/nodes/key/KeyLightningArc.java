@@ -95,7 +95,7 @@ public class KeyLightningArc extends KeyPerk {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (side == Side.SERVER && prog.hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, arcChance);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, arcChance);
                 if (rand.nextFloat() < chance) {
                     float dmg = event.getAmount();
                     dmg = Math.max(MathHelper.sqrt(dmg), 1.5F);
@@ -128,7 +128,7 @@ public class KeyLightningArc extends KeyPerk {
 
             Color c = new Color(0x0195FF);
             int chainTimes = Math.round(PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
-                    .modifyValue(ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_ARC_CHAINS, arcBaseChains));
+                    .modifyValue(player, ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_ARC_CHAINS, arcBaseChains));
             List<EntityLivingBase> visitedEntities = Lists.newArrayList();
             Entity start = world.getEntityByID(entityStartId);
             if (start != null && start instanceof EntityLivingBase && !start.isDead) {

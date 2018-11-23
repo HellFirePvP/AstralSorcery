@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -44,7 +45,8 @@ public class AttributeArrowSpeed extends PerkAttributeType {
                 }
 
                 Vector3 motion = new Vector3(arrow.motionX, arrow.motionY, arrow.motionZ);
-                float mul = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(ResearchManager.getProgress(player, side), getTypeString(), 1F);
+                float mul = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 1F);
+                mul = AttributeEvent.postProcessModded(player, this, mul);
                 motion.multiply(mul);
                 arrow.motionX = motion.getX();
                 arrow.motionY = motion.getY();

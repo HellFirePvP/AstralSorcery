@@ -50,6 +50,8 @@ public abstract class AbstractPerk {
     public static final PerkCategory CATEGORY_ROOT = new PerkCategory("root", TextFormatting.WHITE.toString());
     public static final PerkCategory CATEGORY_MAJOR = new PerkCategory("major", TextFormatting.WHITE.toString());
     public static final PerkCategory CATEGORY_KEY = new PerkCategory("key", TextFormatting.GOLD.toString());
+    public static final PerkCategory CATEGORY_EPIPHANY = new PerkCategory("epiphany", TextFormatting.GOLD.toString());
+    public static final PerkCategory CATEGORY_FOCUS = new PerkCategory("focus", TextFormatting.GOLD.toString());
 
     private final ResourceLocation registryName;
     protected final Point offset;

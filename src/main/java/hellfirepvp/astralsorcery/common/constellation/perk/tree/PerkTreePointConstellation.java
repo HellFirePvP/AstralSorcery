@@ -36,10 +36,10 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 17.06.2018 / 09:32
  */
-public class PerkTreePointConstellation extends PerkTreePoint {
+public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTreePoint<T> {
 
-    public static final int ROOT_SPRITE_SIZE = 45;
-    public static final int MINOR_SPRITE_SIZE = 30;
+    public static final int ROOT_SPRITE_SIZE = 50;
+    public static final int MINOR_SPRITE_SIZE = 40;
 
     private final IConstellation associatedConstellation;
 
@@ -48,7 +48,7 @@ public class PerkTreePointConstellation extends PerkTreePoint {
     private SpriteQuery queryCstUnlockable;
     private final int perkSpriteSize;
 
-    public PerkTreePointConstellation(AbstractPerk perk, Point offset, IConstellation associatedConstellation, int perkSpriteSize) {
+    public PerkTreePointConstellation(T perk, Point offset, IConstellation associatedConstellation, int perkSpriteSize) {
         super(perk, offset);
         this.associatedConstellation = associatedConstellation;
         this.perkSpriteSize = perkSpriteSize;

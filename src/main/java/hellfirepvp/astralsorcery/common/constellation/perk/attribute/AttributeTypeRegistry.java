@@ -9,7 +9,11 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Range;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.VanillaAttributeType;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
@@ -70,6 +74,19 @@ public class AttributeTypeRegistry {
         }
     }
 
+    public static void limitPerkType(String type, float lowerBound, float upperBound) {
+        PerkAttributeType pType = getType(type);
+        if (pType != null) {
+            limitPerkType(pType, lowerBound, upperBound);
+        }
+    }
+
+    public static void limitPerkType(PerkAttributeType type, float lowerBound, float upperBound) {
+        if (typeMap.containsValue(type)) {
+            AttributeTypeLimiter.INSTANCE.putLimit(type, lowerBound, upperBound);
+        }
+    }
+
     public static Collection<PerkAttributeType> getTypes() {
         return ImmutableList.copyOf(typeMap.values());
     }
@@ -77,6 +94,14 @@ public class AttributeTypeRegistry {
     @Nullable
     public static PerkAttributeType getType(String typeStr) {
         return typeMap.get(typeStr);
+    }
+
+    @Nullable
+    public static PerkAttributeType findType(IAttribute vanillaType) {
+        return MiscUtils.iterativeSearch(typeMap.values(),
+                type -> type instanceof VanillaAttributeType &&
+                ((VanillaAttributeType) type).getAttribute() != null &&
+                ((VanillaAttributeType) type).getAttribute().equals(vanillaType));
     }
 
 }

@@ -65,7 +65,7 @@ public class KeyDisarm extends KeyPerk {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dropChance);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dropChance);
                 float currentChance = MathHelper.clamp(chance, 0F, 1F);
                 for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
                     if(slot.getSlotType() != EntityEquipmentSlot.Type.ARMOR) continue;

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,6 +32,12 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     public GemAttributeModifier(UUID uniqueId, String type, Mode mode, float value) {
         super(type, mode, value);
         this.uuid = uniqueId;
+    }
+
+    @Override
+    protected void initModifier() {
+        super.initModifier();
+
         this.setAbsolute();
     }
 
@@ -49,20 +56,20 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     }
 
     @Override
-    public float getValue(PlayerProgress progress) {
+    public float getValue(EntityPlayer player, PlayerProgress progress) {
         if (!resolveModifier()) {
-            return super.getValue(progress);
+            return super.getValue(player, progress);
         }
-        return actualModifier.getValue(progress);
+        return actualModifier.getValue(player, progress);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public float getValueForDisplay(PlayerProgress progress) {
+    public float getValueForDisplay(EntityPlayer player, PlayerProgress progress) {
         if (!resolveModifier()) {
-            return super.getValueForDisplay(progress);
+            return super.getValueForDisplay(player, progress);
         }
-        return actualModifier.getValueForDisplay(progress);
+        return actualModifier.getValueForDisplay(player, progress);
     }
 
     @Override

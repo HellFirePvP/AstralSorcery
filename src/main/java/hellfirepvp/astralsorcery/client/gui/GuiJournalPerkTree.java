@@ -288,6 +288,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
             GlStateManager.color(1F, 1F, 1F, 1F);
             GL11.glColor4f(1F, 1F, 1F, 1F);
+            GlStateManager.enableBlend();
+            GL11.glEnable(GL11.GL_BLEND);
 
             GlStateManager.disableDepth();
             GL11.glDisable(GL11.GL_DEPTH_TEST);

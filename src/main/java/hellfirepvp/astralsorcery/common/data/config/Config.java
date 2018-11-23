@@ -55,6 +55,8 @@ public class Config {
     public static int discidiaStackCap = 10;
     public static float discidiaStackMultiplier = 1F;
 
+    public static boolean grindstoneAddDustRecipes = true;
+
     public static boolean craftingLiqCrystalGrowth = true;
     public static boolean craftingLiqCrystalToolGrowth = true;
     public static boolean craftingLiqCelestialCrystalForm = true;
@@ -220,6 +222,8 @@ public class Config {
         evorsioEffectChance = latestConfig.getFloat("evorsioAttunedWandEffectChance", "tools", evorsioEffectChance, 0F, 1F, "Defines the chance per mined block that the effect for holding an evorsio attuned resonating wand will fire.");
         discidiaStackCap = latestConfig.getInt("discidiaDamageStackCap", "tools", discidiaStackCap, 1, 200, "Defines the amount of stacks you have to get against the same mob until you reach 100% of the damage multiplier.");
         discidiaStackMultiplier = latestConfig.getFloat("discidiaDamageStackMultipler", "tools", discidiaStackMultiplier, 0F, 200F, "Defines the additional damage multiplier gradually increased by gaining attack-stacks against a mob. (Applied multiplier = damage * 1 + (thisConfigOption * (currentStacks / maxStacks)) )");
+
+        grindstoneAddDustRecipes = latestConfig.getBoolean("grindstoneAddOreToDustRecipes", "crafting", true, "Set this to false to prevent the lookup and registration of oreblock -> ore dust recipes on the grindstone.");
 
         craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");
         craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");

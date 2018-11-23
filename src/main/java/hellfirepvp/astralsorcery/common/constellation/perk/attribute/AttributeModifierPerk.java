@@ -43,11 +43,15 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     public <T extends PerkAttributeModifier> T addModifier(float modifier, PerkAttributeModifier.Mode mode, String type) {
         PerkAttributeType attrType = AttributeTypeRegistry.getType(type);
         if (attrType != null) {
-            PerkAttributeModifier mod = attrType.createModifier(modifier, mode);
-            typeModifierList.add(mod);
-            return (T) mod;
+            return addModifier((T) attrType.createModifier(modifier, mode));
         }
         return null;
+    }
+
+    @Nullable
+    protected <T extends PerkAttributeModifier> T addModifier(T modifier) {
+        typeModifierList.add(modifier);
+        return modifier;
     }
 
     @Override
@@ -74,9 +78,9 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
         for (PerkAttributeModifier modifier : getModifiers(player, side)) {
             List<PerkAttributeModifier> modify = Lists.newArrayList();
             modify.add(modifier);
-            modify.addAll(attr.gainModifiers(prog, modifier, this));
+            modify.addAll(attr.gainModifiers(player, prog, modifier, this));
             for (PerkAttributeModifier mod : modify) {
-                mod = attr.convertModifier(prog, mod, this);
+                mod = attr.convertModifier(player, prog, mod, this);
                 if(!attr.applyModifier(player, mod.getAttributeType(), mod)) {
                     //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
                     //System.out.println("FAILED TO ADD MODIFIER! ALREADY PRESENT!");
@@ -94,9 +98,9 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
         for (PerkAttributeModifier modifier : getModifiers(player, side)) {
             List<PerkAttributeModifier> modify = Lists.newArrayList();
             modify.add(modifier);
-            modify.addAll(attr.gainModifiers(prog, modifier, this));
+            modify.addAll(attr.gainModifiers(player, prog, modifier, this));
             for (PerkAttributeModifier mod : modify) {
-                mod = attr.convertModifier(prog, mod, this);
+                mod = attr.convertModifier(player, prog, mod, this);
                 if(!attr.removeModifier(player, mod.getAttributeType(), mod)) {
                     //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
                     //System.out.println("FAILED TO REMOVE MODIFIER! NOT FOUND!");

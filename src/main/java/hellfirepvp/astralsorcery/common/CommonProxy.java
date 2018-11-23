@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeLimiter;
 import hellfirepvp.astralsorcery.common.container.*;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
@@ -263,6 +264,8 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PlayerAmuletHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PerkEffectHelper.EVENT_INSTANCE);
+        MinecraftForge.EVENT_BUS.register(AttributeTypeLimiter.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(PlayerActivityManager.INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -295,6 +298,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(PerkEffectHelper.EVENT_INSTANCE);
         manager.register(ShootingStarHandler.getInstance());
         manager.register(ParticleEffectWatcher.INSTANCE);
+        manager.register(PlayerActivityManager.INSTANCE);
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);

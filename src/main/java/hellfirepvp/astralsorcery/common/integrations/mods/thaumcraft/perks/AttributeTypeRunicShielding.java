@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTy
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.event.RunicShieldingCalculateEvent;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationThaumcraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,9 +40,9 @@ public class AttributeTypeRunicShielding extends PerkAttributeType {
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         val = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(prog, ModIntegrationThaumcraft.ATTR_TYPE_RUNIC_SHIELDING, val);
-        val = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, val);
+                .modifyValue(player, prog, ModIntegrationThaumcraft.ATTR_TYPE_RUNIC_SHIELDING, val);
+
+        val = AttributeEvent.postProcessModded(player, this, val);
         event.setRunicShieldingValue(Math.round(val));
     }
 

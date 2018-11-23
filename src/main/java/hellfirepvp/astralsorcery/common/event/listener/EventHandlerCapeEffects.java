@@ -13,6 +13,9 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.base.Plants;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.*;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key.KeyMantleFlight;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -340,14 +343,19 @@ public class EventHandlerCapeEffects implements ITickHandler {
     private void tickVicioClientEffect(EntityPlayer player) {
         if(player instanceof EntityPlayerSP) {
             EntityPlayerSP spl = (EntityPlayerSP) player;
-            if(spl.movementInput.jump && !spl.onGround && spl.motionY < -0.5 && !spl.capabilities.isFlying && !spl.isInWater() && !spl.isInLava()) {
+            boolean hasFlightPerk = false;
+            PlayerProgress prog = ResearchManager.getProgress(spl, Side.CLIENT);
+            if (prog != null) {
+                hasFlightPerk = prog.hasPerkEffect(p -> p instanceof KeyMantleFlight);
+            }
+            if(spl.movementInput.jump && !hasFlightPerk && !spl.onGround && spl.motionY < -0.5 && !spl.capabilities.isFlying && !spl.isInWater() && !spl.isInLava()) {
                 PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
                 if(!spl.isElytraFlying()) {
                     PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.setFlying());
                 }
             } else if(spl.isElytraFlying()) {
                 PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
-                if(spl.capabilities.isFlying || spl.onGround || spl.isInWater() || spl.isInLava()) {
+                if(spl.capabilities.isFlying || hasFlightPerk || spl.onGround || spl.isInWater() || spl.isInLava()) {
                     PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFlying());
                 } else {
                     Vector3 mov = new Vector3(((EntityPlayerSP) player).motionX, 0, ((EntityPlayerSP) player).motionZ);
@@ -373,6 +381,22 @@ public class EventHandlerCapeEffects implements ITickHandler {
         CapeEffectBootes ceo = ItemCape.getCapeEffect(pl, Constellations.bootes);
         if(ceo != null) {
             ceo.onPlayerTick(pl);
+        }
+    }
+
+    private void tickVicioEffect(EntityPlayer pl) {
+        if (!(pl instanceof EntityPlayerMP)) {
+            return;
+        }
+        CapeEffectVicio ceo = ItemCape.getCapeEffect(pl, Constellations.vicio);
+        if (ceo != null) {
+            if (!pl.capabilities.allowFlying) {
+                pl.capabilities.allowFlying = true;
+                pl.sendPlayerAbilities();
+            }
+        } else {
+            pl.capabilities.allowFlying = false;
+            pl.sendPlayerAbilities();
         }
     }
 
@@ -416,8 +440,6 @@ public class EventHandlerCapeEffects implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         switch (type) {
-            case WORLD:
-                break;
             case PLAYER:
                 EntityPlayer pl = (EntityPlayer) context[0];
                 Side side = (Side) context[1];
@@ -430,6 +452,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     tickArmaraWornEffect(pl);
                     tickOctansEffect(pl);
                     tickBootesEffect(pl);
+                    tickVicioEffect(pl);
                 } else if(side == Side.CLIENT) {
                     CapeArmorEffect cae = ItemCape.getCapeEffect(pl);
                     if(cae != null) {
@@ -448,12 +471,6 @@ public class EventHandlerCapeEffects implements ITickHandler {
                         min.playClientHighlightTick(pl);
                     }
                 }
-                break;
-            case CLIENT:
-                break;
-            case SERVER:
-                break;
-            case RENDER:
                 break;
         }
     }

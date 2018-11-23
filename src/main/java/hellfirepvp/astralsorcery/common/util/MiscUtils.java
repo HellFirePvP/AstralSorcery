@@ -56,6 +56,7 @@ import java.util.*;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -157,16 +158,16 @@ public class MiscUtils {
     }
 
     @Nullable
-    public static <T> T iterativeSearch(Collection<T> collection, Function<T, Boolean> matchingFct) {
+    public static <T> T iterativeSearch(Collection<T> collection, Predicate<T> matchingFct) {
         for (T element : collection) {
-            if(matchingFct.apply(element)) {
+            if(matchingFct.test(element)) {
                 return element;
             }
         }
         return null;
     }
 
-    public static <T> boolean contains(Collection<T> collection, Function<T, Boolean> matchingFct) {
+    public static <T> boolean contains(Collection<T> collection, Predicate<T>  matchingFct) {
         return iterativeSearch(collection, matchingFct) != null;
     }
 

@@ -33,7 +33,7 @@ public class PatchPostProcessAttributes extends ClassPatch {
             AbstractInsnNode ain = mn.instructions.get(instr).getPrevious();
             mn.instructions.insert(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,
                     "hellfirepvp/astralsorcery/common/event/AttributeEvent",
-                    "postProcess",
+                    "postProcessVanilla",
                     "(DLnet/minecraft/entity/ai/attributes/ModifiableAttributeInstance;)D",
                     false));
             mn.instructions.insert(ain, new VarInsnNode(Opcodes.ALOAD, 0));

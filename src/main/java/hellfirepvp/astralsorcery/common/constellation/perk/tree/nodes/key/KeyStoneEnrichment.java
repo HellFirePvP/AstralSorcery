@@ -71,10 +71,10 @@ public class KeyStoneEnrichment extends KeyPerk implements IPlayerTickPerk {
         if (side == Side.SERVER) {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             float modChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToEnrich);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToEnrich);
             if(rand.nextInt(Math.round(Math.max(modChance, 1))) == 0) {
                 float enrRad = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, enrichmentRadius);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, enrichmentRadius);
                 Vector3 vec = Vector3.atEntityCenter(player).add(
                         (rand.nextFloat() * enrRad * 2) - enrRad,
                         (rand.nextFloat() * enrRad * 2) - enrRad,

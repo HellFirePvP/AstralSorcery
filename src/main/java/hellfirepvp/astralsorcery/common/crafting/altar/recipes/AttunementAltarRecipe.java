@@ -102,7 +102,7 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
                         break;
                     case TRAIT_CRAFT:
                         break;
-                    case ENDGAME:
+                    case BRILLIANCE:
                         break;
                 }
             }

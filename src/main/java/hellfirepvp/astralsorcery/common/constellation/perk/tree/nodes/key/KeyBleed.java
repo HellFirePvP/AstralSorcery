@@ -71,14 +71,14 @@ public class KeyBleed extends KeyPerk {
 
                 float chance = bleedChance;
                 chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_CHANCE, chance);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_CHANCE, chance);
                 if (rand.nextFloat() < chance) {
                     int stackCap = 3; //So the "real" stackcap is 'amplifier = 3' that means we always have to be lower than this value.
                     stackCap = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_STACKS, stackCap));
+                            .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_STACKS, stackCap));
                     int duration = bleedDuration;
                     duration = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION, duration));
+                            .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION, duration));
 
                     int setAmplifier = 0;
                     if (target.isPotionActive(RegistryPotions.potionBleed)) {

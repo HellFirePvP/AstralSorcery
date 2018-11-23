@@ -27,7 +27,6 @@ import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
 import hellfirepvp.astralsorcery.client.util.item.ItemRendererFilteredTESR;
 import hellfirepvp.astralsorcery.client.util.mappings.ClientJournalMapping;
-import hellfirepvp.astralsorcery.client.util.mappings.ClientPerkTextureMapping;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.word.RandomWordGenerator;
 import hellfirepvp.astralsorcery.common.CommonProxy;
@@ -191,7 +190,6 @@ public class ClientProxy extends CommonProxy {
         //TexturePreloader.doPreloadRoutine();
 
         ClientJournalMapping.init();
-        ClientPerkTextureMapping.init();
         OBJModelLibrary.init();
 
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ItemColorizationHelper.instance);

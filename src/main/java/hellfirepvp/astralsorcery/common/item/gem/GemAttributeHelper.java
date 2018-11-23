@@ -49,6 +49,9 @@ public class GemAttributeHelper {
             put(AttributeTypeRegistry.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST,  2);
             put(AttributeTypeRegistry.ATTR_TYPE_INC_DODGE,                 2);
             put(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP,              1);
+
+            //TC runic shielding
+            put(AstralSorcery.MODID + ".compat.thaumcraft.runicshield", 2);
         }
     };
     private static Map<String, Integer> configuredModifiers = Maps.newHashMap();

@@ -18,12 +18,17 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttribu
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.constellation.PerkAlcara;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.constellation.PerkGelu;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.constellation.PerkUlteria;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.constellation.PerkVorux;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.*;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Optional;
 
@@ -89,6 +94,7 @@ public class RegistryPerks {
         initializeOuterArmaraPerks();
         initializeOuterVicioPerks();
 
+        initializeMinorConstellationPerks();
         initializeTreeConnectorPerks();
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
@@ -113,6 +119,60 @@ public class RegistryPerks {
     @Optional.Method(modid = "crafttweaker")
     private static void applyCraftTweakerModifications(List<AbstractPerk> perks) {
         perks.forEach(AbstractPerk::adjustMultipliers);
+    }
+
+    private static void initializeMinorConstellationPerks() {
+        AttributeModifierPerk perkGelu1 = new AttributeModifierPerk("gelu_inc_perkexp", 23, 18);
+        perkGelu1.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
+        AttributeModifierPerk perkGelu2 = new AttributeModifierPerk("gelu_inc_perkexp_1", 25, 16).setNameOverride(perkGelu1);
+        perkGelu2.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
+        PerkGelu gelu = new PerkGelu(26, 19);
+
+        PERK_TREE.registerPerk(perkGelu1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_def_3"));
+        PERK_TREE.registerPerk(perkGelu2)
+                .connect(perkGelu1);
+        PERK_TREE.registerPerk(gelu)
+                .connect(perkGelu2);
+
+        AttributeModifierPerk perkUlteria1 = new AttributeModifierPerk("ulteria_more_perkexp", -28, 15);
+        perkUlteria1.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
+        AttributeModifierPerk perkUlteria2 = new AttributeModifierPerk("ulteria_more_perkexp_1", -26, 17).setNameOverride(perkUlteria1);
+        perkUlteria2.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
+        PerkUlteria ulteria = new PerkUlteria(-29, 18);
+
+        PERK_TREE.registerPerk(perkUlteria1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_life_2"));
+        PERK_TREE.registerPerk(perkUlteria2)
+                .connect(perkUlteria1);
+        PERK_TREE.registerPerk(ulteria)
+                .connect(perkUlteria2);
+
+        AttributeModifierPerk perkVorux1 = new AttributeModifierPerk("vorux_inc_perkeff", 14, -27);
+        perkVorux1.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkVorux2 = new AttributeModifierPerk("vorux_inc_perkeff_1", 12, -29).setNameOverride(perkVorux1);
+        perkVorux2.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        PerkVorux vorux = new PerkVorux(15, -30);
+
+        PERK_TREE.registerPerk(perkVorux1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_dmg_2"));
+        PERK_TREE.registerPerk(perkVorux2)
+                .connect(perkVorux1);
+        PERK_TREE.registerPerk(vorux)
+                .connect(perkVorux2);
+
+        AttributeModifierPerk perkAlcara1 = new AttributeModifierPerk("alcara_more_perkeff", -25, -17);
+        perkAlcara1.addModifier(1.04F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkAlcara2 = new AttributeModifierPerk("alcara_more_perkeff_1", -27, -15).setNameOverride(perkAlcara1);
+        perkAlcara2.addModifier(1.04F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        PerkAlcara alcara = new PerkAlcara(-28, -18);
+
+        PERK_TREE.registerPerk(perkAlcara1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_mine_2"));
+        PERK_TREE.registerPerk(perkAlcara2)
+                .connect(perkAlcara1);
+        PERK_TREE.registerPerk(alcara)
+                .connect(perkAlcara2);
     }
 
     private static void initializeOuterVicioPerks() {
@@ -399,26 +459,26 @@ public class RegistryPerks {
         swimSpeedConversion.addConverter(new PerkConverter() {
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifier(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public PerkAttributeModifier convertModifier(EntityPlayer player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 return modifier;
             }
 
             @Nonnull
             @Override
-            public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public Collection<PerkAttributeModifier> gainExtraModifiers(EntityPlayer player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 List<PerkAttributeModifier> modifiers = Lists.newArrayList();
                 if (modifier.getAttributeType().equals(ATTR_TYPE_MOVESPEED)) {
                     PerkAttributeModifier mod;
                     switch (modifier.getMode()) {
                         case ADDITION:
                         case ADDED_MULTIPLY:
-                            mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_SWIMSPEED, modifier.getMode(), modifier.getValue(progress) / 2F);
+                            mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_SWIMSPEED, modifier.getMode(), modifier.getValue(player, progress) / 2F);
                             if (mod != null) {
                                 modifiers.add(mod);
                             }
                             break;
                         case STACKING_MULTIPLY:
-                            float val = modifier.getValue(progress) - 1;
+                            float val = modifier.getValue(player, progress) - 1;
                             val /= 2F; //Halve the actual value
                             mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_SWIMSPEED, modifier.getMode(), val + 1);
                             if (mod != null) {
@@ -512,16 +572,16 @@ public class RegistryPerks {
         keyArmorConversion.addConverter(new PerkConverter() {
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifier(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public PerkAttributeModifier convertModifier(EntityPlayer player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 if (modifier.getAttributeType().equals(ATTR_TYPE_ARMOR)) {
-                    return modifier.convertModifier(ATTR_TYPE_HEALTH, modifier.getMode(), modifier.getValue(progress));
+                    return modifier.convertModifier(ATTR_TYPE_HEALTH, modifier.getMode(), modifier.getValue(player, progress));
                 }
                 return modifier;
             }
 
             @Nonnull
             @Override
-            public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public Collection<PerkAttributeModifier> gainExtraModifiers(EntityPlayer player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 Collection<PerkAttributeModifier> modifiers = Lists.newArrayList();
                 if (modifier.getAttributeType().equals(ATTR_TYPE_ARMOR)) {
                     PerkAttributeModifier mod;
@@ -1585,6 +1645,10 @@ public class RegistryPerks {
         registerPerkType(new AttributeTypeArmorToughness());
         registerPerkType(new AttributeTypeAttackSpeed());
         registerPerkType(new AttributeTypeMaxReach());
+
+        limitPerkType(ATTR_TYPE_INC_DODGE, 0F, 0.75F);
+        limitPerkType(ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST, 0F, 0.75F);
+        limitPerkType(ATTR_TYPE_ATTACK_LIFE_LEECH, 0F, 0.25F);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkAttributeTypeRegister());
     }

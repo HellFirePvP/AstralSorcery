@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -31,6 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -350,6 +352,11 @@ public class PlayerProgress {
 
     public void setPerkData(AbstractPerk perk, NBTTagCompound data) {
         this.unlockedPerks.put(perk, data);
+    }
+
+    public boolean hasPerkEffect(Predicate<AbstractPerk> perkMatch) {
+        AbstractPerk perk = MiscUtils.iterativeSearch(unlockedPerks.keySet(), perkMatch);
+        return perk != null && hasPerkEffect(perk);
     }
 
     public boolean hasPerkEffect(AbstractPerk perk) {

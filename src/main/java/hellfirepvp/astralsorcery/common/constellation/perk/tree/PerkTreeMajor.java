@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.MajorPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -33,13 +34,13 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 08.07.2018 / 23:40
  */
-public class PerkTreeMajor extends PerkTreePoint {
+public class PerkTreeMajor<T extends MajorPerk> extends PerkTreePoint<T> {
 
     private SpriteQuery queryCstUnAllocated;
     private SpriteQuery queryCstAllocated;
     private SpriteQuery queryCstUnlockable;
 
-    public PerkTreeMajor(AbstractPerk perk, Point offset) {
+    public PerkTreeMajor(T perk, Point offset) {
         super(perk, offset);
         this.setRenderSize((int) (this.getRenderSize() * 1.4));
     }
@@ -77,7 +78,7 @@ public class PerkTreeMajor extends PerkTreePoint {
                 tex = queryCstUnAllocated.resolveSprite();
                 break;
             case ALLOCATED:
-                haloRenderSize *= 1.3;
+                haloRenderSize *= 1.5;
                 tex = queryCstAllocated.resolveSprite();
                 break;
             case UNLOCKABLE:

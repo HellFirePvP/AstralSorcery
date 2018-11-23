@@ -6,12 +6,18 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.constellation.perk.tree.weak;
+package hellfirepvp.astralsorcery.common.constellation.perk.tree.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePointConstellation;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,12 +26,13 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePointCon
  * Created by HellFirePvP
  * Date: 11.11.2018 / 10:00
  */
-public class ConstellationPerk extends AttributeModifierPerk {
+public abstract class ConstellationPerk extends AttributeModifierPerk {
 
     private IConstellation constellation;
 
     public ConstellationPerk(String name, IConstellation cst, int x, int y) {
         super(name, x, y);
+        setCategory(CATEGORY_KEY);
         this.constellation = cst;
     }
 
@@ -35,7 +42,7 @@ public class ConstellationPerk extends AttributeModifierPerk {
 
     @Override
     public PerkTreePoint getPoint() {
-        return new PerkTreePointConstellation(this, getOffset(),
+        return new PerkTreePointConstellation<>(this, getOffset(),
                 this.constellation, PerkTreePointConstellation.MINOR_SPRITE_SIZE);
     }
 

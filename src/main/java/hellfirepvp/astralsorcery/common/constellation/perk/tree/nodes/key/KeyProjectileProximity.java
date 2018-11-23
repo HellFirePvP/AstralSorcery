@@ -43,7 +43,7 @@ public class KeyProjectileProximity extends KeyPerk {
                 PlayerProgress prog = ResearchManager.getProgress(player, side);
                 if (prog.hasPerkEffect(this)) {
                     float added = 0.75F;
-                    added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                    added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
 
                     float capDstSq = 100; //10 * 10
                     float dst = -(((float) (player.getDistanceSq(event.getEntityLiving()))) - capDstSq);

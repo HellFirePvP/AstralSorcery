@@ -13,7 +13,9 @@ import com.google.common.collect.Table;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -53,7 +55,10 @@ public class PerkAttributeModifier {
         this.attributeType = type;
         this.mode = mode;
         this.value = value;
+        initModifier();
     }
+
+    protected void initModifier() {}
 
     protected void setAbsolute() {
         this.absolute = true;
@@ -100,18 +105,20 @@ public class PerkAttributeModifier {
         return modifier;
     }
 
+    // Should not be accessed directly unless for internal calculation purposes.
+    // The actual effect of the modifier might depend on the player's AS-data.
     @Deprecated
     public final float getFlatValue() {
         return value;
     }
 
-    public float getValue(PlayerProgress progress) {
-        return value;
+    public float getValue(EntityPlayer player, PlayerProgress progress) {
+        return getFlatValue();
     }
 
     @SideOnly(Side.CLIENT)
-    public float getValueForDisplay(PlayerProgress progress) {
-        return getValue(progress);
+    public float getValueForDisplay(EntityPlayer player, PlayerProgress progress) {
+        return getValue(player, progress);
     }
 
     public Mode getMode() {
@@ -133,12 +140,12 @@ public class PerkAttributeModifier {
 
     @SideOnly(Side.CLIENT)
     public String getLocalizedAttributeValue() {
-        return getMode().stringifyValue(getValueForDisplay(ResearchManager.clientProgress));
+        return getMode().stringifyValue(getValueForDisplay(Minecraft.getMinecraft().player, ResearchManager.clientProgress));
     }
 
     @SideOnly(Side.CLIENT)
     public String getLocalizedModifierName() {
-        return I18n.format(getMode().getUnlocalizedModifierName(getValueForDisplay(ResearchManager.clientProgress)));
+        return I18n.format(getMode().getUnlocalizedModifierName(getValueForDisplay(Minecraft.getMinecraft().player, ResearchManager.clientProgress)));
     }
 
     @SideOnly(Side.CLIENT)

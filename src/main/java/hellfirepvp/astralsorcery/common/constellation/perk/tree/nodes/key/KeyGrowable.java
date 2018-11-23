@@ -69,11 +69,11 @@ public class KeyGrowable extends KeyPerk implements IPlayerTickPerk {
         }
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         float cChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToBonemeal);
+                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToBonemeal);
         int chance = Math.max(MathHelper.floor(cChance), 1);
         if(rand.nextInt(chance) == 0) {
             float fRadius = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, radius);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, radius);
             int rRadius = Math.max(MathHelper.floor(fRadius), 1);
 
             BlockPos pos = player.getPosition().add(
