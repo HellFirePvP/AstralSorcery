@@ -88,7 +88,8 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-task signMainJar(type: SignJar, dependsOn: reobfJar) {
+//Sign jar from flatfile if present - local build
+task signMainJarFile(type: SignJar, dependsOn: reobfJar) {
     onlyIf { // Skip the task if our secret data isn't available
         project.hasProperty('keyStore')
     }
@@ -101,7 +102,7 @@ task signMainJar(type: SignJar, dependsOn: reobfJar) {
         outputFile = jar.archivePath
     }
 }
-build.dependsOn signMainJar
+build.dependsOn signMainJarFile
 
 jar {
     manifest {
