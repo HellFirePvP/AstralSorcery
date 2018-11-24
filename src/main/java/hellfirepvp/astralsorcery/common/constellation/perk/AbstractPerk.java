@@ -206,6 +206,7 @@ public abstract class AbstractPerk {
 
     protected void disableToltipCaching() {
         this.cacheTooltip = false;
+        this.tooltipCache = null;
     }
 
     @SideOnly(Side.CLIENT)
@@ -218,7 +219,9 @@ public abstract class AbstractPerk {
         String key = this.ovrUnlocalizedNamePrefix;
         if (modifiersDisabled(Minecraft.getMinecraft().player, Side.CLIENT)) {
             tooltipCache.add(TextFormatting.GRAY + I18n.format("perk.info.disabled"));
-        } else {
+        } else if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
+            tooltipCache.add(this.getCategory().getTextFormatting() + I18n.format(this.getUnlocalizedName() + ".name"));
+
             if (key == null) {
                 key = "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath();
             }
@@ -238,6 +241,8 @@ public abstract class AbstractPerk {
                 tooltipCache.add(I18n.format(key + ".desc"));
                 tooltipCache.add("");
             }
+        } else {
+            tooltipCache.add(TextFormatting.RED + I18n.format("perk.info.missing_progress"));
         }
         return tooltipCache;
     }

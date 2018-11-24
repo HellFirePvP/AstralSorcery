@@ -29,6 +29,7 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Optional;
 
@@ -98,8 +99,6 @@ public class RegistryPerks {
         initializeTreeConnectorPerks();
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
-
-        PerkTree.PERK_TREE.freeze();
     }
 
     public static void postProcessPerks() {
@@ -116,6 +115,7 @@ public class RegistryPerks {
             }
         }
 
+        PerkTree.PERK_TREE.freeze();
     }
 
     @Optional.Method(modid = "crafttweaker")
@@ -137,6 +137,10 @@ public class RegistryPerks {
         PERK_TREE.registerPerk(gelu)
                 .connect(perkGelu2);
 
+        perkGelu1.setRequireDiscoveredConstellation(Constellations.gelu);
+        perkGelu2.setRequireDiscoveredConstellation(Constellations.gelu);
+        gelu.setRequireDiscoveredConstellation(Constellations.gelu);
+
         AttributeModifierPerk perkUlteria1 = new AttributeModifierPerk("ulteria_more_perkexp", -28, 15);
         perkUlteria1.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
         AttributeModifierPerk perkUlteria2 = new AttributeModifierPerk("ulteria_more_perkexp_1", -26, 17).setNameOverride(perkUlteria1);
@@ -149,6 +153,10 @@ public class RegistryPerks {
                 .connect(perkUlteria1);
         PERK_TREE.registerPerk(ulteria)
                 .connect(perkUlteria2);
+
+        perkUlteria1.setRequireDiscoveredConstellation(Constellations.ulteria);
+        perkUlteria2.setRequireDiscoveredConstellation(Constellations.ulteria);
+        ulteria.setRequireDiscoveredConstellation(Constellations.ulteria);
 
         AttributeModifierPerk perkVorux1 = new AttributeModifierPerk("vorux_inc_perkeff", 14, -27);
         perkVorux1.addModifier(0.04F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
@@ -163,6 +171,10 @@ public class RegistryPerks {
         PERK_TREE.registerPerk(vorux)
                 .connect(perkVorux2);
 
+        perkVorux1.setRequireDiscoveredConstellation(Constellations.vorux);
+        perkVorux2.setRequireDiscoveredConstellation(Constellations.vorux);
+        vorux.setRequireDiscoveredConstellation(Constellations.vorux);
+
         AttributeModifierPerk perkAlcara1 = new AttributeModifierPerk("alcara_more_perkeff", -25, -17);
         perkAlcara1.addModifier(1.04F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
         AttributeModifierPerk perkAlcara2 = new AttributeModifierPerk("alcara_more_perkeff_1", -27, -15).setNameOverride(perkAlcara1);
@@ -175,6 +187,10 @@ public class RegistryPerks {
                 .connect(perkAlcara1);
         PERK_TREE.registerPerk(alcara)
                 .connect(perkAlcara2);
+
+        perkAlcara1.setRequireDiscoveredConstellation(Constellations.alcara);
+        perkAlcara2.setRequireDiscoveredConstellation(Constellations.alcara);
+        alcara.setRequireDiscoveredConstellation(Constellations.alcara);
     }
 
     private static void initializeOuterVicioPerks() {
@@ -209,6 +225,46 @@ public class RegistryPerks {
         PERK_TREE.registerPerk(perkVR5)
                 .connect(perkVR4)
                 .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_life"));
+
+        AttributeModifierPerk lssArmorLife1 = new AttributeModifierPerk("flight_life_armor", 4, 30);
+        lssArmorLife1.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
+        lssArmorLife1.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk lssArmorLife2 = new AttributeModifierPerk("flight_life_armor_1", 5, 31).setNameOverride(lssArmorLife1);
+        lssArmorLife2.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
+        lssArmorLife2.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk lssArmorLife3 = new AttributeModifierPerk("flight_life_armor_2", 4, 32).setNameOverride(lssArmorLife1);
+        lssArmorLife3.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
+        lssArmorLife3.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk lssDodgeMs = new AttributeModifierPerk("flight_ms_dodge", 5, 33);
+        lssDodgeMs.addModifier(0.7F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_DODGE);
+        lssDodgeMs.addModifier(0.7F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        KeyMantleFlight mantleFlight = new KeyMantleFlight("key_mantle_flight", 4, 34);
+
+        PERK_TREE.registerPerk(lssArmorLife1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_trv_2"));
+        PERK_TREE.registerPerk(lssArmorLife2)
+                .connect(lssArmorLife1);
+        PERK_TREE.registerPerk(lssArmorLife3)
+                .connect(lssArmorLife2);
+        PERK_TREE.registerPerk(lssDodgeMs)
+                .connect(lssArmorLife3);
+        PERK_TREE.registerPerk(mantleFlight)
+                .connect(lssDodgeMs);
+
+        AttributeModifierPerk atsReach1 = new AttributeModifierPerk("magnet_ats_reach", -10, 23);
+        atsReach1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
+        atsReach1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+        AttributeModifierPerk atsReach2 = new AttributeModifierPerk("magnet_ats_reach_1", -9, 24).setNameOverride(atsReach1);
+        atsReach2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
+        atsReach2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+        KeyMagnetDrops magnetDrops = new KeyMagnetDrops("key_magnet_drops", -8, 23);
+
+        PERK_TREE.registerPerk(atsReach1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_trv_4"));
+        PERK_TREE.registerPerk(atsReach2)
+                .connect(atsReach1);
+        PERK_TREE.registerPerk(magnetDrops)
+                .connect(atsReach2);
     }
 
     private static void initializeOuterArmaraPerks() {
@@ -255,6 +311,38 @@ public class RegistryPerks {
                 .connect(perkPerkEffSlot1);
         PERK_TREE.registerPerk(perkDefGemSlot)
                 .connect(perkPerkEffSlot2);
+
+        AttributeModifierPerk perkIncLRedA1 = new AttributeModifierPerk("unwav_life_armor", 27, 11);
+        perkIncLRedA1.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+        perkIncLRedA1.addModifier(0.75F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk perkIncLRedA2 = new AttributeModifierPerk("unwav_life_armor_1", 28, 12).setNameOverride(perkIncLRedA1);
+        perkIncLRedA2.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+        perkIncLRedA2.addModifier(0.75F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
+        KeyNoKnockBack noKnockBack = new KeyNoKnockBack("key_no_knockback", 29, 11);
+
+        PERK_TREE.registerPerk(perkIncLRedA1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_def_2"));
+        PERK_TREE.registerPerk(perkIncLRedA2)
+                .connect(perkIncLRedA1);
+        PERK_TREE.registerPerk(noKnockBack)
+                .connect(perkIncLRedA2);
+
+        AttributeModifierPerk perkIncArmor1 = new AttributeModifierPerk("bol_red_inc_armor", 26, 2);
+        perkIncArmor1.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk perkIncArmor2 = new AttributeModifierPerk("bol_red_inc_armor_1", 27, 3).setNameOverride(perkIncArmor1);
+        perkIncArmor2.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk perkIncArmor3 = new AttributeModifierPerk("bol_red_inc_armor_2", 28, 2).setNameOverride(perkIncArmor1);
+        perkIncArmor3.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        KeyDamageArmor keyDamageArmor = new KeyDamageArmor("key_damage_armor", 29, 3, 0.05F);
+
+        PERK_TREE.registerPerk(perkIncArmor1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_def_1"));
+        PERK_TREE.registerPerk(perkIncArmor2)
+                .connect(perkIncArmor1);
+        PERK_TREE.registerPerk(perkIncArmor3)
+                .connect(perkIncArmor2);
+        PERK_TREE.registerPerk(keyDamageArmor)
+                .connect(perkIncArmor3);
     }
 
     private static void initializeOuterDiscidiaPerks() {
@@ -306,6 +394,36 @@ public class RegistryPerks {
                 .connect(perkPerkEffSlot1);
         PERK_TREE.registerPerk(perkDscGemSlot)
                 .connect(perkPerkEffSlot2);
+
+        AttributeModifierPerk perkIncAts1 = new AttributeModifierPerk("inc_ats_ailm", 9, -24);
+        perkIncAts1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
+        AttributeModifierPerk perkIncAts2 = new AttributeModifierPerk("inc_ats_ailm_1", 8, -23).setNameOverride(perkIncAts1);
+        perkIncAts2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
+        KeyDamageEffect keyAilments = new KeyDamageEffect("key_ailments", 7, -24);
+
+        PERK_TREE.registerPerk(perkIncAts1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_dmg_2"));
+        PERK_TREE.registerPerk(perkIncAts2)
+                .connect(perkIncAts1);
+        PERK_TREE.registerPerk(keyAilments)
+                .connect(perkIncAts2);
+
+        AttributeModifierPerk perkIncMs1 = new AttributeModifierPerk("inc_cull_ms", 23, -10);
+        perkIncMs1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        AttributeModifierPerk perkIncMs2 = new AttributeModifierPerk("inc_cull_ms_1", 22, -11).setNameOverride(perkIncMs1);
+        perkIncMs2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        AttributeModifierPerk perkIncCrit = new AttributeModifierPerk("inc_cull_crit", 21, -10);
+        perkIncCrit.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE);
+        KeyCullAttack keyCull = new KeyCullAttack("key_cull_attack", 20, -11);
+
+        PERK_TREE.registerPerk(perkIncMs1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_dmg_5"));
+        PERK_TREE.registerPerk(perkIncMs2)
+                .connect(perkIncMs1);
+        PERK_TREE.registerPerk(perkIncCrit)
+                .connect(perkIncMs2);
+        PERK_TREE.registerPerk(keyCull)
+                .connect(perkIncCrit);
     }
 
     private static void initializeOuterEvorsioPerks() {
@@ -347,6 +465,37 @@ public class RegistryPerks {
                 .connect(perkPerkEffSlot1);
         PERK_TREE.registerPerk(perkEvGemSlot)
                 .connect(perkPerkEffSlot2);
+
+        AttributeModifierPerk perkReach1 = new AttributeModifierPerk("inc_reach_sweep", -20, -20);
+        perkReach1.addModifier(0.03F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+        AttributeModifierPerk perkReach2 = new AttributeModifierPerk("inc_reach_sweep_1", -19, -21).setNameOverride(perkReach1);
+        perkReach2.addModifier(0.03F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+        AttributeModifierPerk perkReach3 = new AttributeModifierPerk("inc_reach_sweep_2", -20, -22).setNameOverride(perkReach1);
+        perkReach3.addModifier(0.03F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+        KeyAreaOfEffect aoeSweep = new KeyAreaOfEffect("key_sweep_range", -19, -23);
+
+        PERK_TREE.registerPerk(perkReach1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_mine_3"));
+        PERK_TREE.registerPerk(perkReach2)
+                .connect(perkReach1);
+        PERK_TREE.registerPerk(perkReach3)
+                .connect(perkReach2);
+        PERK_TREE.registerPerk(aoeSweep)
+                .connect(perkReach3);
+
+        AttributeModifierPerk perkLessMine1 = new AttributeModifierPerk("less_hrv_speed", -31, -4);
+        perkLessMine1.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        AttributeModifierPerk perkLessMine2 = new AttributeModifierPerk("less_hrv_speed_1", -32, -5).setNameOverride(perkLessMine1);
+        perkLessMine2.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        KeyAddEnchantment addLuck = new KeyAddEnchantment("key_add_fortune", -31, -6)
+                .addEnchantment(Enchantments.FORTUNE, 1);
+
+        PERK_TREE.registerPerk(perkLessMine1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_mine"));
+        PERK_TREE.registerPerk(perkLessMine2)
+                .connect(perkLessMine1);
+        PERK_TREE.registerPerk(addLuck)
+                .connect(perkLessMine2);
     }
 
     private static void initializeOuterAevitasPerks() {
@@ -387,6 +536,32 @@ public class RegistryPerks {
                 .connect(perkPerkEffSlot1);
         PERK_TREE.registerPerk(perkLifeGemSlot)
                 .connect(perkPerkEffSlot2);
+
+        AttributeModifierPerk perkEffectMine1 = new AttributeModifierPerk("inc_mine_perk", -16, 25);
+        perkEffectMine1.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        AttributeModifierPerk perkEffectMine2 = new AttributeModifierPerk("inc_mine_perk_1", -17, 26).setNameOverride(perkEffectMine1);
+        perkEffectMine2.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        KeyVoidTrash voidTrash = new KeyVoidTrash("key_void_trash", -16, 27);
+
+        PERK_TREE.registerPerk(perkEffectMine1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_life"));
+        PERK_TREE.registerPerk(perkEffectMine2)
+                .connect(perkEffectMine1);
+        PERK_TREE.registerPerk(voidTrash)
+                .connect(perkEffectMine2);
+
+        AttributeModifierPerk perkIncRec1 = new AttributeModifierPerk("inc_life_rec", -28, 9);
+        perkIncRec1.addModifier(0.12F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
+        AttributeModifierPerk perkIncRec2 = new AttributeModifierPerk("inc_life_rec_1", -29, 8).setNameOverride(perkIncRec1);
+        perkIncRec2.addModifier(0.12F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
+        KeyCleanseBadPotions cureBadEffects = new KeyCleanseBadPotions("key_rem_badeffects", -30, 9);
+
+        PERK_TREE.registerPerk(perkIncRec1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_life_3"));
+        PERK_TREE.registerPerk(perkIncRec2)
+                .connect(perkIncRec1);
+        PERK_TREE.registerPerk(cureBadEffects)
+                .connect(perkIncRec2);
     }
 
     private static void initializePerkEffectPerks() {

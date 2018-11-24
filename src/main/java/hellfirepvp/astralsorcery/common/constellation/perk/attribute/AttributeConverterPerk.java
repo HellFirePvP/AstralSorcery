@@ -9,17 +9,15 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.ImmutableList;
-import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
+import hellfirepvp.astralsorcery.common.constellation.perk.ProgressGatedPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IConverterProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +28,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 03.08.2018 / 07:35
  */
-public abstract class AttributeConverterPerk extends AbstractPerk implements IConverterProvider {
+public abstract class AttributeConverterPerk extends ProgressGatedPerk implements IConverterProvider {
 
     private List<PerkConverter> converters = new ArrayList<>();
 

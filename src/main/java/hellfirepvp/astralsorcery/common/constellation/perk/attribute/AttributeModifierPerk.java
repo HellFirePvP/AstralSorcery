@@ -120,12 +120,14 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
         Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getMinecraft().player, Side.CLIENT);
         boolean addEmptyLine = !modifiers.isEmpty();
 
-        for (PerkAttributeModifier modifier : modifiers) {
-            String modifierDisplay = modifier.getLocalizedDisplayString();
-            if (modifierDisplay != null) {
-                tooltip.add(modifierDisplay);
-            } else {
-                addEmptyLine = false;
+        if (canSeeClient()) {
+            for (PerkAttributeModifier modifier : modifiers) {
+                String modifierDisplay = modifier.getLocalizedDisplayString();
+                if (modifierDisplay != null) {
+                    tooltip.add(modifierDisplay);
+                } else {
+                    addEmptyLine = false;
+                }
             }
         }
 

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeGem;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -73,7 +74,9 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
         if (super.addLocalizedTooltip(tooltip)) {
             tooltip.add("");
         }
-        this.addTooltipInfo(tooltip);
+        if (canSeeClient()) {
+            this.addTooltipInfo(tooltip);
+        }
         return true;
     }
 }

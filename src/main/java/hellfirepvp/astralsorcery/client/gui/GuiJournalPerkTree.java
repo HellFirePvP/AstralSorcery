@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.ProgressGatedPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.GemSlotPerk;
@@ -477,7 +478,6 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                     AbstractPerk perk = rctPerk.getKey();
                     PlayerProgress prog = ResearchManager.clientProgress;
 
-                    toolTip.add(perk.getCategory().getTextFormatting() + I18n.format(perk.getUnlocalizedName() + ".name"));
                     perk.getLocalizedTooltip().forEach(line -> toolTip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + line));
 
                     if (prog.isPerkSealed(perk)) {
@@ -901,19 +901,18 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         if (matchText.length() < 3) return;
         for (PerkTreePoint point : PerkTree.PERK_TREE.getPerkPoints()) {
             AbstractPerk perk = point.getPerk();
-            String name = I18n.format(perk.getUnlocalizedName() + ".name").toLowerCase();
-            if (name.contains(matchText)) {
+            if (perk instanceof ProgressGatedPerk &&
+                    !((ProgressGatedPerk) perk).canSeeClient()) {
+                continue;
+            }
+            String catStr = perk.getCategory().getLocalizedName();
+            if (catStr != null && catStr.toLowerCase().contains(matchText)) {
                 this.searchMatches.add(perk);
             } else {
-                String catStr = perk.getCategory().getLocalizedName();
-                if (catStr != null && catStr.toLowerCase().contains(matchText)) {
-                    this.searchMatches.add(perk);
-                } else {
-                    for (String tooltip : perk.getLocalizedTooltip()) {
-                        if (tooltip.toLowerCase().contains(matchText)) {
-                            this.searchMatches.add(perk);
-                            break;
-                        }
+                for (String tooltip : perk.getLocalizedTooltip()) {
+                    if (tooltip.toLowerCase().contains(matchText)) {
+                        this.searchMatches.add(perk);
+                        break;
                     }
                 }
             }

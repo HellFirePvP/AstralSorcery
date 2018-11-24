@@ -44,7 +44,8 @@ public class PerkTreeConnector extends MajorPerk {
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
-        if (!progress.hasFreeAllocationPoint(player)) return false;
+        if (!progress.hasFreeAllocationPoint(player) ||
+                !canSee(player, progress)) return false;
 
         boolean hasAllAdjacent = true;
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {

@@ -69,7 +69,7 @@ public class RootPerk extends AttributeModifierPerk {
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
-        if (progress.hasFreeAllocationPoint(player)) {
+        if (progress.hasFreeAllocationPoint(player) && canSee(player, progress)) {
             AbstractPerk core = PerkTree.PERK_TREE.getAstralSorceryPerk("core");
             if (core != null && progress.hasPerkEffect(core)) {
                 return true;

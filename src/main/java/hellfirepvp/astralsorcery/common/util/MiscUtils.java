@@ -181,6 +181,15 @@ public class MiscUtils {
         return null;
     }
 
+    public static <T> boolean matchesAny(T element, Collection<Predicate<T>> tests) {
+        for (Predicate<T> test : tests) {
+            if (test.test(element)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean matchStateExact(@Nullable IBlockState state, @Nullable IBlockState stateToTest) {
         if(state == null) {
             return stateToTest == null;
