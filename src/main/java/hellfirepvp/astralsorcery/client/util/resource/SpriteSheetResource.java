@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -92,4 +93,16 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
         return columns;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpriteSheetResource that = (SpriteSheetResource) o;
+        return Objects.equals(resource, that.resource);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.resource.hashCode();
+    }
 }

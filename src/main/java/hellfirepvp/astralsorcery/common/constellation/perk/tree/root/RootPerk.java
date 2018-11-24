@@ -49,6 +49,12 @@ public class RootPerk extends AttributeModifierPerk {
     }
 
     @Override
+    protected PerkTreePoint<? extends RootPerk> initPerkTreePoint() {
+        return new PerkTreePointConstellation<>(this, getOffset(),
+                constellation, PerkTreePointConstellation.ROOT_SPRITE_SIZE);
+    }
+
+    @Override
     protected void applyEffectMultiplier(double multiplier) {
         super.applyEffectMultiplier(multiplier);
 
@@ -59,12 +65,6 @@ public class RootPerk extends AttributeModifierPerk {
 
     public IConstellation getConstellation() {
         return constellation;
-    }
-
-    @Override
-    public PerkTreePoint getPoint() {
-        return new PerkTreePointConstellation(this, getOffset(),
-                constellation, PerkTreePointConstellation.ROOT_SPRITE_SIZE);
     }
 
     @Override

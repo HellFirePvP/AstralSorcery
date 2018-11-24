@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePointConstellation;
@@ -36,14 +37,14 @@ public abstract class ConstellationPerk extends AttributeModifierPerk {
         this.constellation = cst;
     }
 
-    public IConstellation getConstellation() {
-        return constellation;
-    }
-
     @Override
-    public PerkTreePoint getPoint() {
+    protected PerkTreePoint<? extends ConstellationPerk> initPerkTreePoint() {
         return new PerkTreePointConstellation<>(this, getOffset(),
                 this.constellation, PerkTreePointConstellation.MINOR_SPRITE_SIZE);
+    }
+
+    public IConstellation getConstellation() {
+        return constellation;
     }
 
 }

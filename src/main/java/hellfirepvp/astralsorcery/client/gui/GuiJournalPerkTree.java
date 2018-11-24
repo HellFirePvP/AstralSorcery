@@ -12,6 +12,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.journal.*;
+import hellfirepvp.astralsorcery.client.gui.perk.BatchPerkContext;
+import hellfirepvp.astralsorcery.client.gui.perk.DynamicPerkRender;
+import hellfirepvp.astralsorcery.client.gui.perk.PerkRenderGroup;
 import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
@@ -33,6 +36,7 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestPerkSeal
 import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.data.NonDuplicateArrayList;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -44,6 +48,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -81,6 +86,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     private static Rectangle rectSealBox = new Rectangle(29, 16, 16, 16);
     private static Rectangle rectSearchTextEntry = new Rectangle(300, 16, 88, 15);
+
+    private static final BufferBatch drawBufferConnections = BufferBatch.make();
+    private static BatchPerkContext drawBuffer;
+    private static BatchPerkContext.TextureObjectGroup searchContext;
+    private static BatchPerkContext.TextureObjectGroup sealContext;
 
     private SizeHandler sizeHandler;
     private GuiRenderBoundingBox guiBox;
@@ -129,6 +139,20 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         this.sizeHandler.updateSize();
 
         this.mousePosition = ScalingPoint.createPoint(0, 0, this.sizeHandler.getScalingFactor(), false);
+    }
+
+    public static void initializeDrawBuffer() {
+        drawBuffer = new BatchPerkContext();
+
+        searchContext = drawBuffer.addContext(textureSearchMark, BatchPerkContext.PRIORITY_OVERLAY);
+        sealContext = drawBuffer.addContext(SpriteLibrary.spritePerkSeal, BatchPerkContext.PRIORITY_FOREGROUND);
+        NonDuplicateArrayList<PerkRenderGroup> groups = new NonDuplicateArrayList<>();
+        for (PerkTreePoint<?> p : PerkTree.PERK_TREE.getPerkPoints()) {
+            p.addGroups(groups);
+        }
+        for (PerkRenderGroup group : groups) {
+            group.batchRegister(drawBuffer);
+        }
     }
 
     @Override
@@ -500,49 +524,62 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private void drawPerkTree(float partialTicks) {
         EntityPlayer player = Minecraft.getMinecraft().player;
 
+        GlStateManager.color(1, 1, 1, 1);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.disableAlpha();
+
+        BufferBuilder connBuffer = drawBufferConnections.getBuffer();
+        connBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         texturePerkConnection.bindTexture();
+        PlayerProgress progress = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+
         for (Tuple<AbstractPerk, AbstractPerk> perkConnection : PerkTree.PERK_TREE.getConnections()) {
-            PerkTreePoint.AllocationStatus status = PerkTreePoint.AllocationStatus.UNALLOCATED;
-            PlayerProgress progress = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
-            if (progress != null) {
-                int alloc = 0;
-                if (progress.hasPerkUnlocked(perkConnection.key)) {
-                    alloc++;
-                }
-                if (progress.hasPerkUnlocked(perkConnection.value)) {
-                    alloc++;
-                }
-                if (alloc == 2) {
-                    status = PerkTreePoint.AllocationStatus.ALLOCATED;
-                } else if (alloc == 1 && progress.hasFreeAllocationPoint(player)) {
-                    status = PerkTreePoint.AllocationStatus.UNLOCKABLE;
-                } else {
-                    status = PerkTreePoint.AllocationStatus.UNALLOCATED;
-                }
+            PerkTreePoint.AllocationStatus status;
+
+            int alloc = 0;
+            if (progress.hasPerkUnlocked(perkConnection.key)) {
+                alloc++;
+            }
+            if (progress.hasPerkUnlocked(perkConnection.value)) {
+                alloc++;
+            }
+            if (alloc == 2) {
+                status = PerkTreePoint.AllocationStatus.ALLOCATED;
+            } else if (alloc == 1 && progress.hasFreeAllocationPoint(player)) {
+                status = PerkTreePoint.AllocationStatus.UNLOCKABLE;
+            } else {
+                status = PerkTreePoint.AllocationStatus.UNALLOCATED;
             }
 
             Point offsetOne = perkConnection.key.getPoint().getOffset();
             Point offsetTwo = perkConnection.value.getPoint().getOffset();
             Point.Double shiftOne = this.sizeHandler.evRelativePos(offsetOne);
             Point.Double shiftTwo = this.sizeHandler.evRelativePos(offsetTwo);
-            drawConnection(status, shiftOne, shiftTwo, partialTicks, ClientScheduler.getClientTick() + offsetOne.x + offsetOne.y + offsetTwo.x + offsetTwo.y);
+            drawConnection(connBuffer, status, shiftOne, shiftTwo, partialTicks, ClientScheduler.getClientTick() + offsetOne.x + offsetOne.y + offsetTwo.x + offsetTwo.y);
         }
+        drawBufferConnections.draw();
 
-        List<Runnable> drawHighlight = Lists.newArrayList();
+        drawBuffer.beginDrawingPerks();
+
+        List<Runnable> renderDynamic = Lists.newArrayList();
         for (PerkTreePoint perkPoint : PerkTree.PERK_TREE.getPerkPoints()) {
             Point offset = perkPoint.getOffset();
             double x = this.sizeHandler.evRelativePosX(offset.x);
             double y = this.sizeHandler.evRelativePosY(offset.y);
-            Rectangle.Double perkRect = drawPerk(perkPoint,
+            Rectangle.Double perkRect = drawPerk(drawBuffer, perkPoint,
                     x, y,
                     partialTicks, ClientScheduler.getClientTick() + offset.x + offset.y,
-                    ResearchManager.clientProgress.isPerkSealed(perkPoint.getPerk()),
-                    drawHighlight);
+                    progress.isPerkSealed(perkPoint.getPerk()),
+                    renderDynamic);
             if (perkRect != null) {
                 this.thisFramePerks.put(perkPoint.getPerk(), perkRect);
             }
         }
-        drawHighlight.forEach(Runnable::run);
+        drawBuffer.draw();
+
+        renderDynamic.forEach(Runnable::run);
+        GlStateManager.enableAlpha();
+
         this.unlockEffects.keySet().removeIf(perk -> !drawPerkUnlock(perk, this.unlockEffects.get(perk)));
         this.breakEffects.keySet().removeIf(perk -> !drawPerkSealBreak(perk, this.breakEffects.get(perk), partialTicks));
         TextureHelper.refreshTextureBindState();
@@ -557,6 +594,9 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         Point.Double oPos = this.sizeHandler.evRelativePos(perk.getOffset());
         Point.Double offset = shift2DOffset(oPos.x, oPos.y);
 
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+
         float sealFade = 1.0F - (((float) count) + pTicks) / ((float) sprite.getFrameCount());
         double width = 22;
         Rectangle.Double rct;
@@ -565,18 +605,25 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
         width *= 0.75;
 
+        GlStateManager.disableAlpha();
+
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        SpriteLibrary.spritePerkSeal.bindTexture();
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(offset.x, offset.y, 0);
 
         Point pOffset = perk.getPoint().getOffset();
-        GlStateManager.color(1F, 1F, 1F, sealFade * 0.75F);
-        perk.getPoint().renderSealAtCurrentPos(width, ClientScheduler.getClientTick() + pOffset.x + pOffset.y, pTicks);
+        drawSeal(vb, width, 0, 0,
+                ClientScheduler.getClientTick() + pOffset.x + pOffset.y, pTicks, sealFade * 0.75F);
+
         GlStateManager.color(1F, 1F, 1F, 0.85F);
 
-        GlStateManager.disableAlpha();
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
+        tes.draw();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
         sprite.bindTexture();
 
         Vector3 starVec = new Vector3(-width, -width, 0);
@@ -593,6 +640,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.x + uLength * u, frameUV.y + vLength * v).endVertex();
         }
         tes.draw();
+
         GlStateManager.enableAlpha();
         GlStateManager.popMatrix();
 
@@ -648,7 +696,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         return true;
     }
 
-    private void drawConnection(PerkTreePoint.AllocationStatus status, Point.Double offset, Point.Double target, float pTicks, long effectTick) {
+    private void drawConnection(BufferBuilder vb, PerkTreePoint.AllocationStatus status, Point.Double offset, Point.Double target, float pTicks, long effectTick) {
         Point.Double offsetSrc = shift2DOffset(offset.x, offset.y);
         Point.Double offsetDst = shift2DOffset(target.x, target.y);
         Color overlay = Color.WHITE;
@@ -670,12 +718,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         float rG = (overlay.getGreen() / 255F) * br;
         float rB = (overlay.getBlue()  / 255F) * br;
         float rA = (overlay.getAlpha() / 255F) * br;
-        GlStateManager.color(rR, rG, rB, rA);
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         Vector3 fromStar = new Vector3(offsetSrc.x, offsetSrc.y, 0);
         Vector3 toStar   = new Vector3(offsetDst.x, offsetDst.y, 0);
 
@@ -692,61 +735,78 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             int v = ((i + 2) & 2) >> 1;
 
             Vector3 pos = vec00.clone().add(dir.clone().multiply(u)).add(vecV.clone().multiply(v));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(u, v).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(u, v).color(rR, rG, rB, rA).endVertex();
         }
-        tes.draw();
-        GlStateManager.color(1, 1, 1, 1);
     }
 
     @Nullable
-    private Rectangle.Double drawPerk(PerkTreePoint perkPoint, double lowX, double lowY, float pTicks, long effectTick, boolean renderSeal, List<Runnable> outRenderHighlights) {
+    private Rectangle.Double drawPerk(BatchPerkContext ctx, PerkTreePoint perkPoint,
+                                      double lowX, double lowY, float pTicks, long effectTick, boolean renderSeal,
+                                      Collection<Runnable> outRenderDynamic) {
         Point.Double offset = shift2DOffset(lowX, lowY);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(offset.x, offset.y, 0);
-        GlStateManager.color(1, 1, 1, 1);
-        GlStateManager.scale(this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor());
-        Rectangle draw = perkPoint.renderAtCurrentPos(perkPoint.getPerk().getPerkStatus(Minecraft.getMinecraft().player, Side.CLIENT), effectTick, pTicks);
-        GlStateManager.popMatrix();
+        double scale = this.sizeHandler.getScalingFactor();
+        PerkTreePoint.AllocationStatus status = perkPoint.getPerk().getPerkStatus(Minecraft.getMinecraft().player, Side.CLIENT);
 
-        if (draw == null) {
+        Rectangle.Double drawSize = perkPoint.renderPerkAtBatch(ctx,
+                status, effectTick, pTicks, offset.x, offset.y, scale);
+        if (perkPoint instanceof DynamicPerkRender) {
+            outRenderDynamic.add(() ->
+                    ((DynamicPerkRender) perkPoint).renderAt(status, effectTick, pTicks, offset.x, offset.y, scale));
+        }
+
+        if (drawSize == null) {
             return null;
         }
 
         if (renderSeal) {
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(offset.x, offset.y, 0);
-            GlStateManager.color(1, 1, 1, 1);
-            GlStateManager.scale(this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor());
-            perkPoint.renderSealAtCurrentPos(draw.width * 0.75, effectTick, pTicks);
-            GlStateManager.popMatrix();
+            this.drawSeal(ctx, drawSize.width * 0.75, offset.x, offset.y, effectTick, pTicks);
         }
 
         if (this.searchMatches.contains(perkPoint.getPerk())) {
-            outRenderHighlights.add(() -> {
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(offset.x, offset.y, 0);
-                GlStateManager.scale(this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor());
-                GlStateManager.color(0.8F, 0.1F, 0.1F, 1F);
-                drawSearchMarkHalo(draw, effectTick, pTicks);
-                GlStateManager.color(1, 1, 1, 1);
-                GlStateManager.popMatrix();
-            });
+            drawSearchMarkHalo(ctx, drawSize, effectTick, pTicks, offset.x, offset.y, scale);
         }
 
-        double rctWidth = draw.width * sizeHandler.getScalingFactor();
-        double rctHeight = draw.height * sizeHandler.getScalingFactor();
-        return new Rectangle.Double(offset.x - (rctWidth / 2), offset.y - (rctHeight / 2), rctWidth, rctHeight);
+        return new Rectangle.Double(offset.x - (drawSize.width / 2), offset.y - (drawSize.height / 2),
+                drawSize.width, drawSize.height);
     }
 
-    private void drawSearchMarkHalo(Rectangle draw, long effectTick, float pTicks) {
-        int size = draw.width;
+    private void drawSeal(BatchPerkContext ctx, double size, double x, double y, long spriteOffsetTick, float pTicks) {
+        BufferBatch batch = ctx.getContext(sealContext);
+        BufferBuilder vb = batch.getBuffer();
+        drawSeal(vb, size, x, y, spriteOffsetTick, pTicks, 1F);
+    }
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+    private void drawSeal(BufferBuilder vb, double size, double x, double y, long spriteOffsetTick, float pTicks, float alpha) {
+        SpriteSheetResource tex = SpriteLibrary.spritePerkSeal;
+        if (tex == null) {
+            return;
+        }
 
-        Vector3 starVec = new Vector3(-size, -size, 0);
+        double uLength = tex.getULength();
+        double vLength = tex.getVLength();
+        Tuple<Double, Double> frameUV = tex.getUVOffset(spriteOffsetTick);
+        Vector3 starVec = new Vector3(x - size, y - size, 0);
+
+        for (int i = 0; i < 4; i++) {
+            int u = ((i + 1) & 2) >> 1;
+            int v = ((i + 2) & 2) >> 1;
+
+            Vector3 pos = starVec.clone().addX(size * u * 2).addY(size * v * 2);
+            vb.pos(pos.getX(), pos.getY(), pos.getZ())
+                    .tex(frameUV.key + uLength * u, frameUV.value + vLength * v)
+                    .color(1F, 1F, 1F, alpha)
+                    .endVertex();
+        }
+    }
+
+    private void drawSearchMarkHalo(BatchPerkContext ctx, Rectangle.Double draw, long effectTick, float pTicks, double x, double y, double scale) {
+        double size = draw.width;
+
+        BufferBatch batch = ctx.getContext(searchContext);
+        BufferBuilder vb = batch.getBuffer();
+
+        Vector3 starVec = new Vector3(x - size, y - size, 0);
         textureSearchMark.bindTexture();
         double uLength = textureSearchMark.getUWidth();
         double vLength = textureSearchMark.getVWidth();
@@ -757,12 +817,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             int v = ((i + 2) & 2) >> 1;
 
             Vector3 pos = starVec.clone().addX(size * u * 2).addY(size * v * 2);
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.x + uLength * u, frameUV.y + vLength * v).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ())
+                    .tex(frameUV.x + uLength * u, frameUV.y + vLength * v)
+                    .color(0.8F, 0.1F, 0.1F, 1F)
+                    .endVertex();
         }
-
-        GlStateManager.disableAlpha();
-        tes.draw();
-        GlStateManager.enableAlpha();
     }
 
     private Point.Double shift2DOffset(double x, double y) {

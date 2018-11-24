@@ -98,6 +98,8 @@ public class RegistryPerks {
         initializeTreeConnectorPerks();
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
+
+        PerkTree.PERK_TREE.freeze();
     }
 
     public static void postProcessPerks() {

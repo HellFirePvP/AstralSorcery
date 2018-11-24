@@ -59,6 +59,7 @@ public abstract class AbstractPerk {
     private List<String> tooltipCache = null;
     private boolean cacheTooltip = true;
     protected String ovrUnlocalizedNamePrefix = null;
+    private PerkTreePoint<? extends AbstractPerk> treePoint = null;
 
     public AbstractPerk(String name, int x, int y) {
         this.registryName = new ResourceLocation(AstralSorcery.MODID, name.toLowerCase());
@@ -70,6 +71,10 @@ public abstract class AbstractPerk {
         this.offset = new Point(x, y);
     }
 
+    protected PerkTreePoint<? extends AbstractPerk> initPerkTreePoint() {
+        return new PerkTreePoint<>(this, this.getOffset());
+    }
+
     public ResourceLocation getRegistryName() {
         return registryName;
     }
@@ -78,8 +83,11 @@ public abstract class AbstractPerk {
         return offset;
     }
 
-    public PerkTreePoint getPoint() {
-        return new PerkTreePoint(this, this.getOffset());
+    public final PerkTreePoint<? extends AbstractPerk> getPoint() {
+        if (treePoint == null) {
+            treePoint = initPerkTreePoint();
+        }
+        return treePoint;
     }
 
     public <T> T setCategory(PerkCategory category) {

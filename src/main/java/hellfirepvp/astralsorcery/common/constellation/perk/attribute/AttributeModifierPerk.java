@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.PerkTree;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,6 +37,10 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     private List<PerkAttributeModifier> typeModifierList = Lists.newArrayList();
 
     public AttributeModifierPerk(String name, int x, int y) {
+        super(name, x, y);
+    }
+
+    public AttributeModifierPerk(ResourceLocation name, int x, int y) {
         super(name, x, y);
     }
 

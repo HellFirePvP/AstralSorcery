@@ -8,6 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree;
 
+import hellfirepvp.astralsorcery.client.gui.perk.BatchPerkContext;
+import hellfirepvp.astralsorcery.client.gui.perk.DynamicPerkRender;
+import hellfirepvp.astralsorcery.client.gui.perk.PerkRenderGroup;
+import hellfirepvp.astralsorcery.client.gui.perk.group.PerkPointHaloRenderGroup;
+import hellfirepvp.astralsorcery.client.util.BufferBatch;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -28,6 +33,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,16 +42,13 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 17.06.2018 / 09:32
  */
-public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTreePoint<T> {
+public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTreePoint<T> implements DynamicPerkRender {
 
     public static final int ROOT_SPRITE_SIZE = 50;
     public static final int MINOR_SPRITE_SIZE = 40;
 
     private final IConstellation associatedConstellation;
 
-    private SpriteQuery queryCstUnAllocated;
-    private SpriteQuery queryCstAllocated;
-    private SpriteQuery queryCstUnlockable;
     private final int perkSpriteSize;
 
     public PerkTreePointConstellation(T perk, Point offset, IConstellation associatedConstellation, int perkSpriteSize) {
@@ -55,77 +58,16 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
         this.setRenderSize(perkSpriteSize / 2);
     }
 
-    public void setQueryRootPerkHaloUnAllocated(SpriteQuery queryCstUnAllocated) {
-        this.queryCstUnAllocated = queryCstUnAllocated;
-    }
-
-    public void setQueryRootPerkHaloUnlockable(SpriteQuery queryCstUnlockable) {
-        this.queryCstUnlockable = queryCstUnlockable;
-    }
-
-    public void setQueryRootPerkHaloAllocated(SpriteQuery queryCstAllocated) {
-        this.queryCstAllocated = queryCstAllocated;
-    }
-
-    @Nullable
     @Override
     @SideOnly(Side.CLIENT)
-    public Rectangle renderAtCurrentPos(AllocationStatus status, long spriteOffsetTick, float pTicks) {
-        if (queryCstUnAllocated == null) {
-            queryCstUnAllocated = SpriteQuery.of(SpriteLibrary.spriteHalo4);
-        }
-        if (queryCstAllocated == null) {
-            queryCstAllocated = SpriteQuery.of(SpriteLibrary.spriteHalo5);
-        }
-        if (queryCstUnlockable == null) {
-            queryCstUnlockable = SpriteQuery.of(SpriteLibrary.spriteHalo6);
-        }
+    public void addGroups(Collection<PerkRenderGroup> groups) {
+        super.addGroups(groups);
+        groups.add(PerkPointHaloRenderGroup.INSTANCE);
+    }
 
-        GlStateManager.color(1, 1, 1, 1);
-        super.renderAtCurrentPos(status, spriteOffsetTick, pTicks);
-
-        int haloRenderSize = perkSpriteSize;
-        SpriteSheetResource tex;
-        switch (status) {
-            case UNALLOCATED:
-                tex = queryCstUnAllocated.resolveSprite();
-                break;
-            case ALLOCATED:
-                haloRenderSize *= 1.3;
-                tex = queryCstAllocated.resolveSprite();
-                break;
-            case UNLOCKABLE:
-                tex = queryCstUnlockable.resolveSprite();
-                break;
-            default:
-                tex = queryCstUnAllocated.resolveSprite();
-                break;
-        }
-        if (tex == null) return null;
-
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-
-        Vector3 starVec = new Vector3(-haloRenderSize, -haloRenderSize, 0);
-
-        tex.bindTexture();
-        double uLength = tex.getULength();
-        double vLength = tex.getVLength();
-        Tuple<Double, Double> frameUV = tex.getUVOffset(spriteOffsetTick);
-
-        for (int i = 0; i < 4; i++) {
-            int u = ((i + 1) & 2) >> 1;
-            int v = ((i + 2) & 2) >> 1;
-
-            Vector3 pos = starVec.clone().addX(haloRenderSize * u * 2).addY(haloRenderSize * v * 2);
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.key + uLength * u, frameUV.value + vLength * v).endVertex();
-        }
-
-        GlStateManager.disableAlpha();
-        tes.draw();
-        GlStateManager.enableAlpha();
-
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y, double scale) {
         if (this.associatedConstellation != null) {
             Color overlay = Color.WHITE;
             switch (status) {
@@ -140,11 +82,13 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
                     break;
             }
 
-            int size = MathHelper.floor(perkSpriteSize * 0.85);
+            int size = MathHelper.floor(perkSpriteSize * 0.85 * scale);
+            int fX = (int) Math.round(x);
+            int fY = (int) Math.round(y);
 
             RenderConstellation.renderConstellationIntoGUI(overlay, this.associatedConstellation,
-                    -size, -size, 0,
-                    size * 2, size * 2, 1.5,
+                    fX - size, fY - size, 0,
+                    size * 2, size * 2, 1.5 * scale,
                     new RenderConstellation.BrightnessFunction() {
                         @Override
                         public float getBrightness() {
@@ -153,7 +97,47 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
                     }, true, false);
 
         }
-
-        return new Rectangle(-perkSpriteSize, -perkSpriteSize, perkSpriteSize * 2, perkSpriteSize * 2);
     }
+
+    @Nullable
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Rectangle.Double renderPerkAtBatch(BatchPerkContext drawCtx,
+                                       AllocationStatus status, long spriteOffsetTick, float pTicks,
+                                       double x, double y, double scale) {
+        SpriteSheetResource tex = getHaloSprite(status);
+        BatchPerkContext.TextureObjectGroup grp = PerkPointHaloRenderGroup.INSTANCE.getGroup(tex);
+        if (grp == null) {
+            return new Rectangle.Double();
+        }
+        BufferBatch buf = drawCtx.getContext(grp);
+        BufferBuilder vb = buf.getBuffer();
+
+        double haloSize = perkSpriteSize * scale;
+        if (status == AllocationStatus.ALLOCATED) {
+            haloSize *= 1.3;
+        }
+
+        Vector3 starVec = new Vector3(x - haloSize, y - haloSize, 0);
+
+        double uLength = tex.getULength();
+        double vLength = tex.getVLength();
+        Tuple<Double, Double> frameUV = tex.getUVOffset(spriteOffsetTick);
+
+        for (int i = 0; i < 4; i++) {
+            int u = ((i + 1) & 2) >> 1;
+            int v = ((i + 2) & 2) >> 1;
+
+            Vector3 pos = starVec.clone().addX(haloSize * u * 2).addY(haloSize * v * 2);
+            vb.pos(pos.getX(), pos.getY(), pos.getZ())
+                    .tex(frameUV.key + uLength * u, frameUV.value + vLength * v)
+                    .color(1F, 1F, 1F, 1F).endVertex();
+        }
+
+        super.renderPerkAtBatch(drawCtx, status, spriteOffsetTick, pTicks, x, y, scale);
+
+        double actualSize = perkSpriteSize * scale;
+        return new Rectangle.Double(-actualSize, -actualSize, actualSize * 2, actualSize * 2);
+    }
+
 }

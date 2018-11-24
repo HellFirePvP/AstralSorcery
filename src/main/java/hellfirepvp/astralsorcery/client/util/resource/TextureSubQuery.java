@@ -59,6 +59,16 @@ public class TextureSubQuery extends TextureQuery {
             public double getVWidth() {
                 return vLength;
             }
+
+            @Override
+            public boolean equals(Object obj) {
+                return res.equals(obj);
+            }
+
+            @Override
+            public int hashCode() {
+                return res.hashCode();
+            }
         };
     }
 }

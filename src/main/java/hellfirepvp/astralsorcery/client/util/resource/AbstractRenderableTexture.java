@@ -28,6 +28,12 @@ public abstract class AbstractRenderableTexture {
 
     public abstract double getVWidth();
 
+    @Override
+    public abstract boolean equals(Object obj);
+
+    @Override
+    public abstract int hashCode();
+
     public static abstract class Full extends AbstractRenderableTexture {
 
         @Override

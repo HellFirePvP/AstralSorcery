@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.render.entity.*;
 import hellfirepvp.astralsorcery.client.render.tile.*;
@@ -171,6 +172,8 @@ public class ClientProxy extends CommonProxy {
         super.init();
 
         PersistentDataManager.INSTANCE.init(FileStorageUtil.getGeneralSubDirectory("astralsorcery_persistent"));
+
+        GuiJournalPerkTree.initializeDrawBuffer();
 
         registerPendingIBlockColorBlocks();
         registerPendingIItemColorItems();

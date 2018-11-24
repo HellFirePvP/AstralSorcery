@@ -388,6 +388,11 @@ public class EventHandlerCapeEffects implements ITickHandler {
         if (!(pl instanceof EntityPlayerMP)) {
             return;
         }
+        PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
+        if (prog == null || !prog.hasPerkEffect(p -> p instanceof KeyMantleFlight)) {
+            return;
+        }
+
         CapeEffectVicio ceo = ItemCape.getCapeEffect(pl, Constellations.vicio);
         if (ceo != null) {
             if (!pl.capabilities.allowFlying) {
