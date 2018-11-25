@@ -10,6 +10,6 @@ focused around harnessing the powers of starlight and the constellations.
 #### Curse Forge: [Project Link](https://minecraft.curseforge.com/projects/astral-sorcery)
 #### Discord: [Astral Sorcery on Discord](https://discord.gg/q37VRcT)
 
-
 Test Change
 New Change
+Another Change
