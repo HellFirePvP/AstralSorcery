@@ -40,8 +40,6 @@ import java.util.*;
  */
 public class GenAttributeRockCrystals extends WorldGenAttribute {
 
-    private final ConfigEntry entry;
-
     private boolean doGenerate = false;
     private boolean doIgnoreBiomeSpecifications = true;
     private boolean doIgnoreDimensionSpecifications = true;
@@ -54,7 +52,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
 
     public GenAttributeRockCrystals() {
         super(0);
-        this.entry = new ConfigEntry(ConfigEntry.Section.WORLDGEN, "rockcrystals") {
+        Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.WORLDGEN, "rockcrystals") {
             @Override
             public void loadFromConfig(Configuration cfg) {
                 doGenerate = cfg.getBoolean("Generate", getConfigurationSection(), true, "Generate " + getKey());
@@ -85,8 +83,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                 }, "Defines the blockstates that may be replaced by rock crystal ore when trying to generate a rock crystal ore. format: <modid>:<name>:<meta> - Use meta -1 for wildcard");
                 replaceableStatesSerialized = Arrays.asList(applicableReplacements);
             }
-        };
-        Config.addDynamicEntry(this.entry);
+        });
     }
 
     private boolean isApplicableWorld(World world) {
