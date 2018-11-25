@@ -1,3 +1,5 @@
+[![Build Status](http://176.9.2.48:8080/job/AstralSorcery/job/master/badge/icon)](http://176.9.2.48:8080/job/AstralSorcery/job/master/)
+
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/351fc047dc0241d08d48a197728d3a47)](https://www.codacy.com/app/HellFirePvP/AstralSorcery?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=HellFirePvP/AstralSorcery&amp;utm_campaign=Badge_Grade)
 
 # Astral Sorcery
