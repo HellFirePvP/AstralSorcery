@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
 import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import hellfirepvp.astralsorcery.common.item.tool.*;
@@ -37,7 +38,6 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
@@ -77,19 +77,19 @@ public class RegistryItems {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
             @Override
             public ItemStack getTabIconItem() {
-                return new ItemStack(ItemsAS.journal);
+                return new ItemStack(journal);
             }
         };
         creativeTabAstralSorceryPapers = new CreativeTabs(AstralSorcery.MODID + ".papers") {
             @Override
             public ItemStack getTabIconItem() {
-                return new ItemStack(ItemsAS.constellationPaper);
+                return new ItemStack(constellationPaper);
             }
         };
         creativeTabAstralSorceryTunedCrystals = new CreativeTabs(AstralSorcery.MODID + ".crystals") {
             @Override
             public ItemStack getTabIconItem() {
-                return new ItemStack(ItemsAS.tunedRockCrystal);
+                return new ItemStack(tunedRockCrystal);
             }
         };
 
@@ -143,6 +143,7 @@ public class RegistryItems {
         perkSeal = registerItem(new ItemPerkSeal());
         knowledgeFragment = registerItem(new ItemKnowledgeFragment());
         fragmentCapsule = registerItem(new ItemFragmentCapsule());
+        perkGem = registerItem(new ItemPerkGem());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

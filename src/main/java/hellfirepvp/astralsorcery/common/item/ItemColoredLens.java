@@ -185,7 +185,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     if(!(entity instanceof EntityLivingBase)) return;
                     if(itemRand.nextFloat() > percStrength) return;
                     if(entity instanceof EntityPlayer && entity.getServer() != null && entity.getServer().isPVPEnabled()) return;
-                    entity.attackEntityFrom(CommonProxy.dmgSourceStellar, 6.5F);
+                    DamageUtil.attackEntityFrom(entity, CommonProxy.dmgSourceStellar, 6.5F);
                     break;
                 case REGEN:
                     if(!(entity instanceof EntityLivingBase)) return;

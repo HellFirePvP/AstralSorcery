@@ -62,7 +62,7 @@ public abstract class ConstellationEffect extends ConfigEntry {
 
     @Nullable
     public TileRitualPedestal getPedestal(World world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = MiscUtils.getTileAt(world, pos, TileEntity.class, false);
         if(te == null) return null;
         if(te instanceof TileRitualLink) {
             TileRitualLink link = (TileRitualLink) te;

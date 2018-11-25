@@ -43,20 +43,12 @@ import java.util.List;
 public class BlockModelRenderHelper {
 
     private static BlockFluidRenderer bfr;
-    private static BlockModelRenderer bmr;
 
     private static BlockFluidRenderer getFluidRenderer() {
         if (bfr == null) {
             bfr = new BlockFluidRenderer(new BlockColorsOverride(Minecraft.getMinecraft().getBlockColors()));
         }
         return bfr;
-    }
-
-    private static BlockModelRenderer getModelRenderer() {
-        if (bmr == null) {
-            bmr = new ForgeBlockModelRenderer(new BlockColorsOverride(Minecraft.getMinecraft().getBlockColors()));
-        }
-        return bmr;
     }
 
     public static void renderBlockModelWithColor(IBlockAccess world, BlockPos pos, IBlockState state, BufferBuilder vb, int color) {
@@ -127,7 +119,6 @@ public class BlockModelRenderHelper {
                 color = TextureUtil.anaglyphColor(color);
             }
 
-            float alpha = (float) (color >> 24  & 255) / 255F;
             float red   = (float) (color >> 16  & 255) / 255F;
             float green = (float) (color >> 8   & 255) / 255F;
             float blue  = (float) (color        & 255) / 255F;

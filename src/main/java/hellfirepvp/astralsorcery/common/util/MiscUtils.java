@@ -24,10 +24,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -55,6 +55,7 @@ import java.util.*;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -80,10 +81,30 @@ public class MiscUtils {
         return null;
     }
 
+    public static boolean canEntityTickAt(World world, BlockPos pos) {
+        if (!isChunkLoaded(world, pos)) {
+            return false;
+        }
+        BlockPos test = new BlockPos(pos.getX(), 0, pos.getZ());
+        boolean isForced = world.getPersistentChunks().containsKey(new ChunkPos(test));
+        int range = isForced ? 0 : 32;
+        return world.isAreaLoaded(test.add(-range, 0, -range), test.add(range, 0, range), true);
+    }
+
     @Nullable
     public static <T> T getRandomEntry(List<T> list, Random rand) {
         if(list == null || list.isEmpty()) return null;
         return list.get(rand.nextInt(list.size()));
+    }
+
+    @Nullable
+    public static <T> T getWeightedRandomEntry(Collection<T> list, Random rand, Function<T, Integer> getWeightFunction) {
+        List<WRItemObject<T>> weightedItems = new ArrayList<>(list.size());
+        for (T e : list) {
+            weightedItems.add(new WRItemObject<>(getWeightFunction.apply(e), e));
+        }
+        WRItemObject<T> item = WeightedRandom.getRandomItem(rand, weightedItems);
+        return item != null ? item.getValue() : null;
     }
 
     public static <T, V extends Comparable<V>> V getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {
@@ -136,16 +157,16 @@ public class MiscUtils {
     }
 
     @Nullable
-    public static <T> T iterativeSearch(Collection<T> collection, Function<T, Boolean> matchingFct) {
+    public static <T> T iterativeSearch(Collection<T> collection, Predicate<T> matchingFct) {
         for (T element : collection) {
-            if(matchingFct.apply(element)) {
+            if(matchingFct.test(element)) {
                 return element;
             }
         }
         return null;
     }
 
-    public static <T> boolean contains(Collection<T> collection, Function<T, Boolean> matchingFct) {
+    public static <T> boolean contains(Collection<T> collection, Predicate<T>  matchingFct) {
         return iterativeSearch(collection, matchingFct) != null;
     }
 
@@ -157,6 +178,15 @@ public class MiscUtils {
             }
         }
         return null;
+    }
+
+    public static <T> boolean matchesAny(T element, Collection<Predicate<T>> tests) {
+        for (Predicate<T> test : tests) {
+            if (test.test(element)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean matchStateExact(@Nullable IBlockState state, @Nullable IBlockState stateToTest) {

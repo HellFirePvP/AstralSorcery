@@ -24,6 +24,8 @@ import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeLimiter;
 import hellfirepvp.astralsorcery.common.container.*;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
@@ -38,8 +40,10 @@ import hellfirepvp.astralsorcery.common.event.listener.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationChisel;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationThaumcraft;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
+import hellfirepvp.astralsorcery.common.item.gem.GemAttributeHelper;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.migration.MappingMigrationHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -96,11 +100,10 @@ import java.util.UUID;
  */
 public class CommonProxy implements IGuiHandler {
 
-    public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
-    public static DamageSourceEntity dmgSourceReflect = (DamageSourceEntity) new DamageSourceEntity("thorns");
-    public static DamageSourceEntity dmgSourceStellar = (DamageSourceEntity) new DamageSourceEntity("as.stellar").setDamageBypassesArmor().setMagicDamage();
+    public static DamageSource dmgSourceBleed   = DamageSourceUtil.newType("as.bleed").setDamageBypassesArmor();
+    public static DamageSource dmgSourceStellar = DamageSourceUtil.newType("as.stellar").setDamageBypassesArmor().setMagicDamage();
+    public static DamageSource dmgSourceReflect = DamageSourceUtil.newType("thorns");
     public static InternalRegistryPrimer registryPrimer;
-    private static UUID fakePlayerUUID = UUID.fromString("BD4F59E2-4E26-4388-B903-B533D482C205");
 
     public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
     private CommonScheduler commonScheduler = new CommonScheduler();
@@ -113,14 +116,17 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
+        Config.addDynamicEntry(new GemAttributeHelper.CfgEntry());
         Config.addDynamicEntry(new TileAccelerationBlacklist.TileAccelBlacklistEntry());
         Config.addDynamicEntry(new ShootingStarHandler.StarConfigEntry());
+        Config.addDynamicEntry(PerkLevelManager.INSTANCE);
     }
 
     public void registerConfigDataRegistries() {
         Config.addDataRegistry(OreTypes.RITUAL_MINERALIS);
         Config.addDataRegistry(OreTypes.AEVITAS_ORE_PERK);
         Config.addDataRegistry(OreTypes.TREASURE_SHRINE_GEN);
+        Config.addDataRegistry(OreTypes.PERK_VOID_TRASH_REPLACEMENT);
         Config.addDataRegistry(FluidRarityRegistry.INSTANCE);
         Config.addDataRegistry(AmuletEnchantmentRegistry.INSTANCE);
         Config.addDataRegistry(HerdableAnimal.HerdableAdapter.INSTANCE);
@@ -147,6 +153,10 @@ public class CommonProxy implements IGuiHandler {
 
         LootTableUtil.initLootTable();
         ConstellationEffectRegistry.init();
+
+        if (Mods.THAUMCRAFT.isPresent()) {
+            MinecraftForge.EVENT_BUS.register(ModIntegrationThaumcraft.INSTANCE);
+        }
 
         RegistryPerks.initPerkTree();
 
@@ -254,6 +264,8 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PlayerAmuletHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PerkEffectHelper.EVENT_INSTANCE);
+        MinecraftForge.EVENT_BUS.register(AttributeTypeLimiter.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(PlayerActivityManager.INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -285,6 +297,8 @@ public class CommonProxy implements IGuiHandler {
         manager.register(PatreonFlareManager.INSTANCE);
         manager.register(PerkEffectHelper.EVENT_INSTANCE);
         manager.register(ShootingStarHandler.getInstance());
+        manager.register(ParticleEffectWatcher.INSTANCE);
+        manager.register(PlayerActivityManager.INSTANCE);
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);
@@ -296,7 +310,7 @@ public class CommonProxy implements IGuiHandler {
 
     public void postInit() {
         AltarRecipeEffectRecovery.attemptRecipeRecovery();
-        RegistryPerks.postInitPerkRemoval();
+        RegistryPerks.postProcessPerks();
 
         AstralSorcery.log.info("Post compile recipes");
 

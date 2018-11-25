@@ -47,6 +47,9 @@ public class ClientJournalMapping {
         BindableResource cloudRd = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud3");
         map.put(ResearchProgression.RADIANCE, new JournalCluster(cloudRd, cloudRd, 5, -3, 8, -1));
 
+        BindableResource cloudBr = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud8");
+        map.put(ResearchProgression.BRILLIANCE, new JournalCluster(cloudBr, cloudBr, 8, -1, 10, 1));
+
         //BindableResource cloudTr = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud3");
         //map.put(ResearchProgression.TRAIT_CRAFT, new JournalCluster(cloudTr, cloudTr, 0, 0, 2, 2));
     }

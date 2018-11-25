@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -50,9 +51,10 @@ public class KeyLightningArc extends KeyPerk {
 
     private static boolean chainingDamage = false;
 
-    private static float arcChance = 0.6F;
-    private static float arcPercent = 0.75F;
-    private static int arcTicks = 3;
+    private float arcChance = 0.6F;
+    private float arcPercent = 0.75F;
+    private int arcTicks = 3;
+
     private static float distanceSearch = 7F;
     private static int arcBaseChains = 3;
 
@@ -73,6 +75,15 @@ public class KeyLightningArc extends KeyPerk {
         });
     }
 
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.arcChance *= multiplier;
+        this.arcPercent *= multiplier;
+        this.arcTicks = MathHelper.ceil(this.arcTicks * multiplier);
+    }
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onAttack(LivingHurtEvent event) {
         if (chainingDamage) return;
@@ -82,9 +93,9 @@ public class KeyLightningArc extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && side == Side.SERVER && prog.hasPerkEffect(this)) {
+            if (side == Side.SERVER && prog.hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, arcChance);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, arcChance);
                 if (rand.nextFloat() < chance) {
                     float dmg = event.getAmount();
                     dmg = Math.max(MathHelper.sqrt(dmg), 1.5F);
@@ -117,14 +128,13 @@ public class KeyLightningArc extends KeyPerk {
 
             Color c = new Color(0x0195FF);
             int chainTimes = Math.round(PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
-                    .modifyValue(AttributeTypeRegistry.ATTR_TYPE_ARC_CHAINS, arcBaseChains));
+                    .modifyValue(player, ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_ARC_CHAINS, arcBaseChains));
             List<EntityLivingBase> visitedEntities = Lists.newArrayList();
             Entity start = world.getEntityByID(entityStartId);
             if (start != null && start instanceof EntityLivingBase && !start.isDead) {
                 AxisAlignedBB box = new AxisAlignedBB(-distanceSearch, -distanceSearch, -distanceSearch,
                         distanceSearch, distanceSearch, distanceSearch);
 
-                DamageSource src = CommonProxy.dmgSourceStellar.setSource(player);
                 EntityLivingBase last = null;
                 EntityLivingBase entity = (EntityLivingBase) start;
                 while (entity != null && !entity.isDead && chainTimes > 0) {
@@ -164,7 +174,7 @@ public class KeyLightningArc extends KeyPerk {
                 if (visitedEntities.size() > 1) {
                     visitedEntities.forEach((e) -> {
                         chainingDamage = true;
-                        e.attackEntityFrom(src, damage);
+                        DamageUtil.attackEntityFrom(e, CommonProxy.dmgSourceStellar, damage, player);
                         chainingDamage = false;
                     });
                 }

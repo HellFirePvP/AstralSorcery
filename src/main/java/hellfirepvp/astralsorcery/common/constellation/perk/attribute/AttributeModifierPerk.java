@@ -6,20 +6,24 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
+package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerAttributeMap;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,28 +41,52 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
         super(name, x, y);
     }
 
+    public AttributeModifierPerk(ResourceLocation name, int x, int y) {
+        super(name, x, y);
+    }
+
     @Nullable
     public <T extends PerkAttributeModifier> T addModifier(float modifier, PerkAttributeModifier.Mode mode, String type) {
         PerkAttributeType attrType = AttributeTypeRegistry.getType(type);
         if (attrType != null) {
-            PerkAttributeModifier mod = attrType.createModifier(modifier, mode);
-            typeModifierList.add(mod);
-            return (T) mod;
+            return addModifier((T) attrType.createModifier(modifier, mode));
         }
         return null;
+    }
+
+    @Nullable
+    protected <T extends PerkAttributeModifier> T addModifier(T modifier) {
+        typeModifierList.add(modifier);
+        return modifier;
+    }
+
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        typeModifierList.forEach(t -> t.multiplyValue(multiplier));
+    }
+
+    protected Collection<PerkAttributeModifier> getModifiers(EntityPlayer player, Side side) {
+        if (modifiersDisabled(player, side)) {
+            return Collections.emptyList();
+        }
+
+        return new ArrayList<>(this.typeModifierList);
     }
 
     @Override
     public void applyPerkLogic(EntityPlayer player, Side side) {
         super.applyPerkLogic(player, side);
 
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
-        for (PerkAttributeModifier modifier : typeModifierList) {
+        for (PerkAttributeModifier modifier : getModifiers(player, side)) {
             List<PerkAttributeModifier> modify = Lists.newArrayList();
             modify.add(modifier);
-            modify.addAll(attr.gainModifiers(modifier, this));
+            modify.addAll(attr.gainModifiers(player, prog, modifier, this));
             for (PerkAttributeModifier mod : modify) {
-                mod = attr.convertModifier(mod, this);
+                mod = attr.convertModifier(player, prog, mod, this);
                 if(!attr.applyModifier(player, mod.getAttributeType(), mod)) {
                     //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
                     //System.out.println("FAILED TO ADD MODIFIER! ALREADY PRESENT!");
@@ -71,13 +99,14 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     public void removePerkLogic(EntityPlayer player, Side side) {
         super.removePerkLogic(player, side);
 
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
-        for (PerkAttributeModifier modifier : typeModifierList) {
+        for (PerkAttributeModifier modifier : getModifiers(player, side)) {
             List<PerkAttributeModifier> modify = Lists.newArrayList();
             modify.add(modifier);
-            modify.addAll(attr.gainModifiers(modifier, this));
+            modify.addAll(attr.gainModifiers(player, prog, modifier, this));
             for (PerkAttributeModifier mod : modify) {
-                mod = attr.convertModifier(mod, this);
+                mod = attr.convertModifier(player, prog, mod, this);
                 if(!attr.removeModifier(player, mod.getAttributeType(), mod)) {
                     //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
                     //System.out.println("FAILED TO REMOVE MODIFIER! NOT FOUND!");
@@ -89,14 +118,17 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addLocalizedTooltip(Collection<String> tooltip) {
-        boolean addEmptyLine = !this.typeModifierList.isEmpty();
+        Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getMinecraft().player, Side.CLIENT);
+        boolean addEmptyLine = !modifiers.isEmpty();
 
-        for (PerkAttributeModifier modifier : this.typeModifierList) {
-            String modifierDisplay = modifier.getLocalizedDisplayString();
-            if (modifierDisplay != null) {
-                tooltip.add(modifierDisplay);
-            } else {
-                addEmptyLine = false;
+        if (canSeeClient()) {
+            for (PerkAttributeModifier modifier : modifiers) {
+                String modifierDisplay = modifier.getLocalizedDisplayString();
+                if (modifierDisplay != null) {
+                    tooltip.add(modifierDisplay);
+                } else {
+                    addEmptyLine = false;
+                }
             }
         }
 

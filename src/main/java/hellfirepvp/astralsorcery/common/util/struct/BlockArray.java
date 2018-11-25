@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.item.base.render.ISpecialStackDescriptor
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -23,9 +22,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -213,7 +213,7 @@ public class BlockArray {
             int meta = info.metadata;
             ItemStack s;
             if(info.type instanceof BlockFluidBase) {
-                s = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ((BlockFluidBase) info.type).getFluid());
+                s = FluidUtil.getFilledBucket(new FluidStack(((BlockFluidBase) info.type).getFluid(), Fluid.BUCKET_VOLUME));
             } else if(info.type instanceof BlockStructural) {
                 continue;
                 //IBlockState otherState = info.state.getValue(BlockStructural.BLOCK_TYPE).getSupportedState();

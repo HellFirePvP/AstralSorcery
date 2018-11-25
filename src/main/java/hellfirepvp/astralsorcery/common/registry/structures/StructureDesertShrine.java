@@ -213,13 +213,11 @@ public class StructureDesertShrine extends StructureBlockArray {
     private void load() {
         Block marble = BlocksAS.blockMarble;
 
-        IBlockState mch = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.CHISELED);
         IBlockState mbr = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
         IBlockState mrw = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW);
         IBlockState mar = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.ARCH);
         IBlockState mpl = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.PILLAR);
         IBlockState air = Blocks.AIR.getDefaultState();
-        IBlockState sand = Blocks.SAND.getDefaultState();
 
         addBlockCube(mrw, -4, 0, -3, 4, -7, 3);
         addBlockCube(mrw, -3, 0, -4, 3, -7, 4);

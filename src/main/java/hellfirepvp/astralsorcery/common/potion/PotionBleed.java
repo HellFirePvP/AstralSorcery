@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.WorldServer;
@@ -35,16 +36,16 @@ public class PotionBleed extends PotionCustomTexture {
     }
 
     @Override
-    public void performEffect(EntityLivingBase entityLivingBaseIn, int amplifier) {
-        if(entityLivingBaseIn instanceof EntityPlayer &&
-                !entityLivingBaseIn.getEntityWorld().isRemote &&
-                entityLivingBaseIn.getEntityWorld() instanceof WorldServer &&
-                entityLivingBaseIn.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
+    public void performEffect(EntityLivingBase entity, int amplifier) {
+        if(entity instanceof EntityPlayer &&
+                !entity.getEntityWorld().isRemote &&
+                entity.getEntityWorld() instanceof WorldServer &&
+                entity.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
             return;
         }
-        int preTime = entityLivingBaseIn.hurtResistantTime;
-        entityLivingBaseIn.attackEntityFrom(CommonProxy.dmgSourceBleed, 0.5F * (amplifier + 1));
-        entityLivingBaseIn.hurtResistantTime = Math.max(preTime, entityLivingBaseIn.hurtResistantTime);
+        int preTime = entity.hurtResistantTime;
+        DamageUtil.attackEntityFrom(entity, CommonProxy.dmgSourceBleed, 0.5F * (amplifier + 1));
+        entity.hurtResistantTime = Math.max(preTime, entity.hurtResistantTime);
     }
 
     @Override

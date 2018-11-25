@@ -212,7 +212,7 @@ public class EnchantmentUpgradeHelper {
 
     //This is more or less just a map to say whatever we add upon.
     private static List<DynamicEnchantment> fireEnchantmentGatheringEvent(ItemStack tool) {
-        DynamicEnchantmentEvent.Add addEvent = new DynamicEnchantmentEvent.Add(tool);
+        DynamicEnchantmentEvent.Add addEvent = new DynamicEnchantmentEvent.Add(tool, getPlayerHavingTool(tool));
         MinecraftForge.EVENT_BUS.post(addEvent);
         DynamicEnchantmentEvent.Modify modifyEvent = new DynamicEnchantmentEvent.Modify(tool, addEvent.getEnchantmentsToApply(), addEvent.getResolvedPlayer());
         MinecraftForge.EVENT_BUS.post(modifyEvent);
@@ -264,8 +264,7 @@ public class EnchantmentUpgradeHelper {
     }
 
     @Nullable
-    static Tuple<ItemStack, EntityPlayer> getWornAmulet(ItemStack anyTool) {
-        //Check if the player is online and exists & is set properly
+    static EntityPlayer getPlayerHavingTool(ItemStack anyTool) {
         UUID plUUID = getWornPlayerUUID(anyTool);
         if(plUUID == null) return null;
         EntityPlayer player;
@@ -288,6 +287,14 @@ public class EnchantmentUpgradeHelper {
             }
         }
         if(!foundTool) return null;
+
+        return player;
+    }
+
+    @Nullable
+    static Tuple<ItemStack, EntityPlayer> getWornAmulet(ItemStack anyTool) {
+        EntityPlayer player = getPlayerHavingTool(anyTool);
+        if (player == null) return null;
 
         //Check if the player wears an amulet and return that one then..
         if(BaublesHelper.doesPlayerWearBauble(player, BaubleType.AMULET, (stack) -> !stack.isEmpty() && stack.getItem() instanceof ItemEnchantmentAmulet)) {

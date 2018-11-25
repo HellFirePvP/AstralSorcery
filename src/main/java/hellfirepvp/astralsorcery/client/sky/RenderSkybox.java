@@ -29,15 +29,12 @@ public class RenderSkybox extends IRenderHandler {
 
     private static boolean inRender = false;
 
-    private static final RenderDefaultSkybox defaultSky = new RenderDefaultSkybox();
     private static final RenderAstralSkybox astralSky = new RenderAstralSkybox();
 
     private final IRenderHandler otherSkyRenderer;
-    private final World world;
 
-    public RenderSkybox(World world, IRenderHandler skyRenderer) {
+    public RenderSkybox(IRenderHandler skyRenderer) {
         this.otherSkyRenderer = skyRenderer;
-        this.world = world;
     }
 
     @Override

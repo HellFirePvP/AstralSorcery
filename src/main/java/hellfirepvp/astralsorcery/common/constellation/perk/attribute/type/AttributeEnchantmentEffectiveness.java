@@ -11,7 +11,9 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -39,11 +41,12 @@ public class AttributeEnchantmentEffectiveness extends PerkAttributeType {
                 return;
             }
             float inc = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_ENCH_EFFECT);
+                    .getModifier(player, ResearchManager.getProgress(player, side), AttributeTypeRegistry.ATTR_TYPE_INC_ENCH_EFFECT);
             for (DynamicEnchantment ench : event.getEnchantmentsToApply()) {
                 float lvl = ench.getLevelAddition();
                 lvl *= inc;
-                ench.setLevelAddition(Math.round(lvl));
+                float post = AttributeEvent.postProcessModded(player, this, lvl);
+                ench.setLevelAddition(Math.round(post));
             }
         }
     }

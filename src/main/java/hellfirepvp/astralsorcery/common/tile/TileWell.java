@@ -195,7 +195,7 @@ public class TileWell extends TileReceiverBaseInventory {
         }
     }
 
-    private void receiveStarlight(IWeakConstellation type, double amount) {
+    private void receiveStarlight(double amount) {
         this.starlightBuffer += amount;
     }
 
@@ -296,7 +296,7 @@ public class TileWell extends TileReceiverBaseInventory {
             if(isChunkLoaded) {
                 TileWell tw = MiscUtils.getTileAt(world, getLocationPos(), TileWell.class, false);
                 if(tw != null) {
-                    tw.receiveStarlight(type, amount);
+                    tw.receiveStarlight(amount);
                 }
             }
         }

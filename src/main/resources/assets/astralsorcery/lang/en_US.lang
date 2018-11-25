@@ -95,6 +95,9 @@ misc.fragment.content.empty=The scroll appears to be blank.
 misc.fragment.added.cst=The constellation %s vanishes out of sight.
 misc.fragment.added=Gained Knowledge about: %s
 
+misc.ctrlcopy=CTRL + leftclick to copy
+misc.ctrlcopy.copied=Copied: %s
+
 misc.sword.sharpened=Sharpened (%s increased Damage)
 misc.chaos.resistance=+%s Chaos Resistance
 misc.chaos.resistance.max=Chaos Immunity
@@ -139,6 +142,7 @@ astralsorcery.journal.cluster.basic_craft.name=Exploration
 astralsorcery.journal.cluster.attunement.name=Attunement
 astralsorcery.journal.cluster.constellation.name=Constellation
 astralsorcery.journal.cluster.radiance.name=Radiance
+astralsorcery.journal.cluster.brilliance.name=Brilliance
 
 astralsorcery.journal.constellation.dst.major=Bright
 astralsorcery.journal.constellation.dst.weak=Dim
@@ -539,6 +543,7 @@ item.itemenchantmentamulet.pure=Pure
 item.itemperkseal.name=Sealing Sigil
 item.itemknowledgefragment.name=Lucent Scroll
 item.itemfragmentcapsule.name=Shining Casing
+item.itemperkgem.name=[WIP] PerkGem
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator
@@ -735,13 +740,23 @@ perk.info.available=Available
 perk.info.active=Active
 perk.info.points=Available points: %s
 perk.info.disabled=Perk effects disabled in your modpack.
+perk.info.missing_progress=You're unable to grasp the effects of this perk.
 perk.info.sealed=Sealed
 perk.info.sealed.break=[Double-click to break]
 perk.info.sealed.usage=Drag and drop a seal onto the perk you want to seal.
+perk.info.gem.empty=Empty Gem Socket
+perk.info.gem.remove=Right-click to remove gem and add to your inventory.
+perk.info.gem.content.item=Socketed Gem: %s
+perk.info.gem.content.empty=Right-click to choose gem from your inventory.
+perk.info.gem.content.empty.none=You have no gems in your inventory!
 
 perk.category.root.name=Root Perk
 perk.category.major.name=Major Perk
 perk.category.key.name=Key Perk
+perk.category.epiphany.name=Epiphany Perk
+perk.category.focus.name=Focus Perk
+
+perk.astralsorcery.compat.thaumcraft=Astral Sorcery: Thaumcraft Compat
 
 ###
 # Note: Different modifiers may have different formats.
@@ -787,6 +802,19 @@ perk.attribute.astralsorcery.dodge.name=Dodge Chance
 perk.attribute.astralsorcery.thorns.name=%% of melee damage taken is reflected
 perk.attribute.astralsorcery.lifeleech.name=%% of damage dealt gained as life
 
+perk.attribute.astralsorcery.compat.thaumcraft.runicshield.name=Runic Shielding
+
+perk.astralsorcery.outer_s_inc_life.name=Increased Maximum Life
+perk.astralsorcery.outer_s_inc_mine.name=Increased Mining Speed
+perk.astralsorcery.outer_s_inc_dmg.name=Increased Melee and Projecile Damage
+perk.astralsorcery.outer_s_inc_def.name=Increased Armor and Elemental Resistances
+perk.astralsorcery.outer_s_inc_trv.name=Increased Reach and Movement Speed
+perk.astralsorcery.mod_tc_added_runic.name=Added Runic Shielding
+perk.astralsorcery.mod_tc_inc_runic.name=Increased Runic Shielding
+perk.astralsorcery.mod_tc_key_ci.name=Vis Inoculation
+perk.astralsorcery.mod_tc_key_ci.desc=Your health is set to 1.
+
+perk.astralsorcery.gemsocket.name=Gem Socket
 perk.astralsorcery.base_inc_life.name=Increased Maximum Life
 perk.astralsorcery.med_inc_life.name=Increased Maximum Life
 perk.astralsorcery.med_add_life.name=Added Maximum Life
@@ -852,6 +880,46 @@ perk.astralsorcery.ds_inc_potion_duration.name=Increased PotionEffect Duration
 perk.astralsorcery.major_ds_inc_potion_duration.name=Alchemists Flasks
 perk.astralsorcery.ev_inc_potion_duration.name=Increased PotionEffect Duration
 perk.astralsorcery.major_ev_inc_potion_duration.name=Profane Chemistry
+perk.astralsorcery.ev_gem_path.name=More Perk Effect
+perk.astralsorcery.dsc_gem_path.name=More Perk Effect
+perk.astralsorcery.def_gem_path.name=More Perk Effect
+perk.astralsorcery.life_gem_path.name=More Perk Effect
+perk.astralsorcery.gelu_inc_perkexp.name=Increased Perk Experience
+perk.astralsorcery.ulteria_more_perkexp.name=More Perk Experience
+perk.astralsorcery.vorux_inc_perkeff.name=Increased Perk Effect
+perk.astralsorcery.alcara_more_perkeff.name=More Perk Effect
+perk.astralsorcery.less_hrv_speed.name=Less Mining Speed
+perk.astralsorcery.inc_reach_sweep.name=Increased Reach
+perk.astralsorcery.inc_ats_ailm.name=Increased Attack Speed
+perk.astralsorcery.inc_cull_ms.name=Increased Movement Speed
+perk.astralsorcery.inc_cull_crit.name=Increased Critical Hit Chance
+perk.astralsorcery.bol_red_inc_armor.name=Increased Armor
+perk.astralsorcery.unwav_life_armor.name=Increased Maximum Life and less Armor
+perk.astralsorcery.flight_life_armor.name=Less Maximum Life and Armor
+perk.astralsorcery.flight_ms_dodge.name=Less Movement Speed and Dodge Chance
+perk.astralsorcery.magnet_ats_reach.name=Increased Attack Speed and Reach
+perk.astralsorcery.inc_mine_perk.name=Increased Mining Speed
+perk.astralsorcery.inc_life_rec.name=Increased Life Recovery
+
+perk.astralsorcery.cst_gelu.name=Focus: Gelu
+perk.astralsorcery.cst_gelu.desc.1=Gain +3%% increased Perk Experience per allocated Perk.
+perk.astralsorcery.cst_gelu.desc.2=Other modifiers to Perk Experience no longer apply.
+perk.astralsorcery.cst_gelu.desc.3=
+perk.astralsorcery.cst_gelu.desc.4=You can only unlock 1 Focus Perk.
+perk.astralsorcery.cst_ulteria.name=Focus: Ulteria
+perk.astralsorcery.cst_ulteria.desc.1=+5%% more Perk Experience per unspent Perk Point.
+perk.astralsorcery.cst_ulteria.desc.2=
+perk.astralsorcery.cst_ulteria.desc.3=You can only unlock 1 Focus Perk.
+perk.astralsorcery.cst_vorux.name=Focus: Vorux
+perk.astralsorcery.cst_vorux.desc.1=Gain +1%% Perk Effect per unsealed allocated Perk.
+perk.astralsorcery.cst_vorux.desc.2=You cannot gain Perk Experience.
+perk.astralsorcery.cst_vorux.desc.3=
+perk.astralsorcery.cst_vorux.desc.4=You can only unlock 1 Focus Perk.
+perk.astralsorcery.cst_alcara.name=Focus: Alcara
+perk.astralsorcery.cst_alcara.desc.1=Increases and decreases to Perk Experience
+perk.astralsorcery.cst_alcara.desc.2=apply to Perk Effect instead at 50%% of their value.
+perk.astralsorcery.cst_alcara.desc.3=
+perk.astralsorcery.cst_alcara.desc.4=You can only unlock 1 Focus Perk.
 
 perk.astralsorcery.major_inc_life.name=Bloom
 perk.astralsorcery.not_aev_armor_life.name=Thick Skin
@@ -959,6 +1027,32 @@ perk.astralsorcery.key_spawn_lights.name=Miner's delight
 perk.astralsorcery.key_spawn_lights.desc=Places light sources close to you in caves
 perk.astralsorcery.key_reduced_food.name=Bigger Stomach
 perk.astralsorcery.key_reduced_food.desc=Reduces your overall need for food.
+
+perk.astralsorcery.key_mantle_flight.name=Spectral wings
+perk.astralsorcery.key_mantle_flight.desc.1=The vicio mantle now grants flight
+perk.astralsorcery.key_mantle_flight.desc.2=instead of elytra gliding.
+perk.astralsorcery.key_magnet_drops.name=Spatial Manipulation
+perk.astralsorcery.key_magnet_drops.desc.1=Items dropped when mining or slaying monsters are
+perk.astralsorcery.key_magnet_drops.desc.2=directly transferred to your inventory.
+perk.astralsorcery.key_no_knockback.name=Unwavering
+perk.astralsorcery.key_no_knockback.desc=You cannot be knocked back.
+perk.astralsorcery.key_damage_armor.name=Body Blocking
+perk.astralsorcery.key_damage_armor.desc.1=5%% of damage taken is instead directly applied
+perk.astralsorcery.key_damage_armor.desc.2=to your armor per armor piece worn.
+perk.astralsorcery.key_ailments.name=Cursed Touch
+perk.astralsorcery.key_ailments.desc=Adds a chance to poison, slow or ignite enemies on it.
+perk.astralsorcery.key_cull_attack.name=Culling Strike
+perk.astralsorcery.key_cull_attack.desc=Enemies hit below 15%% of their maximum life are instantly killed.
+perk.astralsorcery.key_sweep_range.name=Area of Effect
+perk.astralsorcery.key_sweep_range.desc.1=+2 levels to Sweeping Edge.
+perk.astralsorcery.key_sweep_range.desc.2=Sweeping Edge also works on ranged attacks.
+perk.astralsorcery.key_add_fortune.name=Consistent Luck
+perk.astralsorcery.key_add_fortune.desc=+1 level of Fortune.
+perk.astralsorcery.key_void_trash.name=Trash to Treasure
+perk.astralsorcery.key_void_trash.desc.1=Voids all dropped trash items.
+perk.astralsorcery.key_void_trash.desc.2=Occasionally yield valuable ore when voiding trash.
+perk.astralsorcery.key_rem_badeffects.name=Cleansing
+perk.astralsorcery.key_rem_badeffects.desc=Regenerating life may remove a negative status effect.
 
 perk.astralsorcery.aevitas.name=Root: Aevitas
 perk.astralsorcery.aevitas.desc=Gain experience by building things

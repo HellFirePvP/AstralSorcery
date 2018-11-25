@@ -31,7 +31,7 @@ public class KeyReducedFood extends KeyPerk implements IPlayerTickPerk {
     public void onPlayerTick(EntityPlayer player, Side side) {
         if(side == Side.SERVER) {
             FoodStats stats = player.getFoodStats();
-            if(stats.foodExhaustionLevel > -20F) {
+            if(stats.foodExhaustionLevel > -10F) {
                 stats.addExhaustion(-0.01F);
             }
         }

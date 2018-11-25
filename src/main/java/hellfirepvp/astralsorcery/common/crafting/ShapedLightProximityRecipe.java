@@ -50,7 +50,7 @@ public class ShapedLightProximityRecipe extends BasePlainRecipe {
 
     @Override
     public boolean matches(InventoryCrafting inv, World world) {
-        if(!vanillaMatch(inv, world)) return false;
+        if(!vanillaMatch(inv)) return false;
 
         Container c = inv.eventHandler;
         if (!(c instanceof ContainerWorkbench)) return false;
@@ -71,7 +71,7 @@ public class ShapedLightProximityRecipe extends BasePlainRecipe {
         return true;
     }
 
-    private boolean vanillaMatch(InventoryCrafting inv, World worldIn) {
+    private boolean vanillaMatch(InventoryCrafting inv) {
         for (int x = 0; x <= ShapedOreRecipe.MAX_CRAFT_GRID_WIDTH - grid.getWidth(); x++) {
             for (int y = 0; y <= ShapedOreRecipe.MAX_CRAFT_GRID_HEIGHT - grid.getHeight(); ++y) {
                 if (checkMatch(inv, x, y)) {

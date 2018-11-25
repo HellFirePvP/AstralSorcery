@@ -46,12 +46,12 @@ public class TESRTelescope extends TileEntitySpecialRenderer<TileTelescope> {
         RenderHelper.enableStandardItemLighting();
         GlStateManager.popMatrix();
 
-        renderModel(te, 1);
+        renderModel();
         GlStateManager.popMatrix();
         GL11.glPopAttrib();
     }
 
-    private void renderModel(TileTelescope te, float partialTicks) {
+    private void renderModel() {
         texTelescope.bind();
         GlStateManager.disableCull();
         modelTelescope.render(null, 0, 0, 0, 0, 0, 1);

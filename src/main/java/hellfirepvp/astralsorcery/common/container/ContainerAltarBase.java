@@ -29,7 +29,6 @@ public abstract class ContainerAltarBase extends Container {
     public final InventoryPlayer playerInv;
     public final TileAltar tileAltar;
     public final ItemStackHandler invHandler;
-    private final int plSize;
 
     public ContainerAltarBase(InventoryPlayer playerInv, TileAltar tileAltar) {
         this.playerInv = playerInv;
@@ -38,8 +37,6 @@ public abstract class ContainerAltarBase extends Container {
 
         bindPlayerInventory();
         bindAltarInventory();
-
-        this.plSize = playerInv.mainInventory.size();
     }
 
     abstract void bindPlayerInventory();

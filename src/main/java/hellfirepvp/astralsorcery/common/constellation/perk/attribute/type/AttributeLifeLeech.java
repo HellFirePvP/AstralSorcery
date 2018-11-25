@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -39,8 +41,9 @@ public class AttributeLifeLeech extends PerkAttributeType {
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             if (side == Side.SERVER && hasTypeApplied(player, side)) {
                 float leechPerc = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(AttributeTypeRegistry.ATTR_TYPE_ATTACK_LIFE_LEECH, 0F);
+                        .modifyValue(player, ResearchManager.getProgress(player, side), AttributeTypeRegistry.ATTR_TYPE_ATTACK_LIFE_LEECH, 0F);
                 leechPerc /= 100.0F;
+                leechPerc = AttributeEvent.postProcessModded(player, this, leechPerc);
                 if (leechPerc > 0) {
                     float leech = event.getAmount() * leechPerc;
                     if (leech > 0) {

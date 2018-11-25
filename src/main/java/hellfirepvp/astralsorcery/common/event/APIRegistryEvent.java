@@ -67,6 +67,10 @@ public class APIRegistryEvent {
             AttributeTypeRegistry.registerPerkType(type);
         }
 
+        public void setAttributeLimit(PerkAttributeType type, float lowerBound, float upperBound) {
+            AttributeTypeRegistry.limitPerkType(type, lowerBound, upperBound);
+        }
+
     }
 
     /**

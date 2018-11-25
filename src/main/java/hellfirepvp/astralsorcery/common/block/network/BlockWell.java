@@ -32,6 +32,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -186,6 +187,20 @@ public class BlockWell extends BlockStarlightNetwork {
         for (AxisAlignedBB box : collisionBoxes) {
             addCollisionBoxToList(pos, entityBox, collidingBoxes, box);
         }
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+        TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, false);
+        if (tw != null) {
+            return MathHelper.ceil(tw.getPercFilled() * 15F);
+        }
+        return 0;
     }
 
     @Override

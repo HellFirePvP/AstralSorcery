@@ -14,10 +14,15 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTy
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.modifier.AttributeModifierThorns;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,12 +59,16 @@ public class AttributeThorns extends PerkAttributeType {
             return;
         }
 
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
+
         float reflectAmount = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_THORNS, 0F);
+                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS, 0F);
+        reflectAmount = AttributeEvent.postProcessModded(player, this, reflectAmount);
         reflectAmount /= 100.0F;
         if (reflectAmount <= 0) {
             return;
         }
+        reflectAmount = MathHelper.clamp(reflectAmount, 0F, 1F);
 
         DamageSource source = event.getSource();
         EntityLivingBase reflectTarget = null;
@@ -69,7 +78,10 @@ public class AttributeThorns extends PerkAttributeType {
             reflectTarget = (EntityLivingBase) source.getImmediateSource();
         }
 
-        if (reflectTarget == null && PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_THORNS_RANGED) > 1) {
+        if (reflectTarget == null &&
+                AttributeEvent.postProcessModded(player, this,
+                        PerkAttributeHelper.getOrCreateMap(player, side)
+                                .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS_RANGED)) > 1) {
             if (source.getTrueSource() != null &&
                     source.getTrueSource() instanceof EntityLivingBase &&
                     !source.getTrueSource().isDead) {
@@ -81,7 +93,7 @@ public class AttributeThorns extends PerkAttributeType {
             float dmgReflected = event.getAmount() * reflectAmount;
             if (dmgReflected > 0 && !event.getEntityLiving().equals(reflectTarget)) {
                 if (MiscUtils.canPlayerAttackServer(event.getEntityLiving(), reflectTarget)) {
-                    reflectTarget.attackEntityFrom(CommonProxy.dmgSourceReflect.setSource(player), dmgReflected);
+                    DamageUtil.attackEntityFrom(reflectTarget, CommonProxy.dmgSourceReflect, dmgReflected, player);
                 }
             }
         }

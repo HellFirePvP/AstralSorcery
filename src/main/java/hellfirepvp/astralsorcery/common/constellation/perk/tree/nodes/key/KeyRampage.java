@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -48,6 +49,14 @@ public class KeyRampage extends KeyPerk {
         });
     }
 
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.duration = MathHelper.ceil(this.duration * multiplier);
+        this.chance *= multiplier;
+    }
+
     @SubscribeEvent(priority = EventPriority.LOWEST) //Monitoring outcome after all other mods might've cancelled this
     public void onEntityDeath(LivingDeathEvent event) {
         DamageSource source = event.getSource();
@@ -55,17 +64,17 @@ public class KeyRampage extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && side == Side.SERVER && prog.hasPerkEffect(this)) {
+            if (side == Side.SERVER && prog.hasPerkEffect(this)) {
                 float ch = chance;
                 ch = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, ch);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, ch);
                 if (rand.nextFloat() < ch) {
 
                     int dur = duration;
                     dur = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(AttributeTypeRegistry.ATTR_TYPE_RAMPAGE_DURATION, dur));
+                            .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_RAMPAGE_DURATION, dur));
                     dur = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dur));
+                            .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dur));
                     if (dur > 0) {
                         player.addPotionEffect(new PotionEffect(MobEffects.SPEED, dur, 1, false, false));
                         player.addPotionEffect(new PotionEffect(MobEffects.HASTE, dur, 1, false, false));

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectPelotrio;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -113,7 +114,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
         } else {
             this.ticksUntilDeath--;
             if(this.ticksUntilDeath <= 0) {
-                attackEntityFrom(CommonProxy.dmgSourceStellar, 50000);
+                DamageUtil.attackEntityFrom(this, CommonProxy.dmgSourceStellar, 5000.0F);
             }
         }
     }
@@ -381,7 +382,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         if(d3 < 3D) {
                             this.actionTicks++;
                             if(this.actionTicks > CapeEffectPelotrio.getTicksSwordAttacks()) {
-                                this.designatedAttackTarget.attackEntityFrom(CommonProxy.dmgSourceStellar, CapeEffectPelotrio.getSwordAttackDamage());
+                                DamageUtil.attackEntityFrom(this.designatedAttackTarget, CommonProxy.dmgSourceStellar, CapeEffectPelotrio.getSwordAttackDamage());
                                 resetTimer = true;
                             }
                         }

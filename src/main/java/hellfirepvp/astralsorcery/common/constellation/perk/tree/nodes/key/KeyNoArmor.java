@@ -44,6 +44,13 @@ public class KeyNoArmor extends KeyPerk {
         });
     }
 
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.dmgReductionMultiplier *= multiplier;
+    }
+
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
         if (!(event.getEntityLiving() instanceof EntityPlayer)) {
@@ -53,7 +60,7 @@ public class KeyNoArmor extends KeyPerk {
         EntityPlayer player = (EntityPlayer) event.getEntityLiving();
         Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null && prog.hasPerkEffect(this)) {
+        if (prog.hasPerkEffect(this)) {
             int eq = 0;
             for (ItemStack stack : player.getArmorInventoryList()) {
                 if(!stack.isEmpty()) {
@@ -62,7 +69,7 @@ public class KeyNoArmor extends KeyPerk {
             }
             if (eq < 2) {
                 float effMulti = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                        .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
                 event.setAmount(event.getAmount() * (dmgReductionMultiplier * (1F / effMulti)));
             }
         }

@@ -36,7 +36,6 @@ import java.util.Random;
  */
 public class ClientLightbeamHandler implements ITickHandler {
 
-    private static final Random rand = new Random();
     private int ticksExisted = 0;
 
     @Override

@@ -47,7 +47,7 @@ public class OreDiscoverer {
                         IBlockState at = c.getBlockState(pooledPos);
                         if(successfulOres.contains(at)) {
                             out.addBlock(new BlockPos(pooledPos), at);
-                        } else if (isOre(world, at, pooledPos)) {
+                        } else if (isOre(at)) {
                             out.addBlock(new BlockPos(pooledPos), at);
                             successfulOres.add(at);
                         }
@@ -60,7 +60,7 @@ public class OreDiscoverer {
         return out;
     }
 
-    private static boolean isOre(World world, IBlockState state, BlockPos pos) {
+    private static boolean isOre(IBlockState state) {
         if (state.getBlock() instanceof BlockOre) { //WELL that's easy enough.
             return true;
         }

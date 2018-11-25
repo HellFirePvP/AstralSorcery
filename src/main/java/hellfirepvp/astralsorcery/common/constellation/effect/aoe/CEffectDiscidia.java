@@ -19,6 +19,8 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.DamageSourceUtil;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -79,9 +81,9 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
         List<EntityLivingBase> entities = collectEntities(world, pos, modified);
         if(!entities.isEmpty()) {
             EntityPlayer owner = getOwningPlayerInWorld(world, pos);
-            DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSource.causePlayerDamage(owner);
+            DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSourceUtil.withEntityDirect(CommonProxy.dmgSourceStellar, owner);
             if(modified.isCorrupted() && owner != null && owner.getDistanceSq(pos) <= (modified.getSize() * modified.getSize())) {
-                owner.attackEntityFrom(CommonProxy.dmgSourceStellar, 1.2F * percStrength);
+                DamageUtil.attackEntityFrom(owner, CommonProxy.dmgSourceStellar, 1.2F * percStrength);
                 did = true;
             }
             for (EntityLivingBase entity : entities) {
@@ -95,7 +97,7 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
                     int hrTime = entity.hurtResistantTime;
                     entity.hurtResistantTime = 0;
                     try {
-                        if(entity.attackEntityFrom(dmgSource, actDamageDealt)) {
+                        if(DamageUtil.attackEntityFrom(entity, dmgSource, actDamageDealt)) {
                             PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_DMG_ENTITY, entity.posX, entity.posY + entity.height / 2, entity.posZ);
                             PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 16));
                         }

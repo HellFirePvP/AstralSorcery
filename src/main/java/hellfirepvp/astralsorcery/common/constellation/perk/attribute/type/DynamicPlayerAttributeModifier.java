@@ -9,8 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,6 +45,6 @@ public class DynamicPlayerAttributeModifier extends AttributeModifier {
     @Override
     public double getAmount() {
         PerkAttributeModifier.Mode mode = PerkAttributeModifier.Mode.fromVanillaAttributeOperation(getOperation());
-        return PerkAttributeHelper.getOrCreateMap(player, side).getModifier(type, mode) - 1;
+        return PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, ResearchManager.getProgress(player, side), type, mode) - 1;
     }
 }

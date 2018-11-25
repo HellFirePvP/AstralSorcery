@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
@@ -29,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeyMending extends KeyPerk implements IPlayerTickPerk {
 
-    private static int chanceToRepair = 800;
+    private int chanceToRepair = 800;
 
     public KeyMending(String name, int x, int y) {
         super(name, x, y);
@@ -43,10 +44,17 @@ public class KeyMending extends KeyPerk implements IPlayerTickPerk {
     }
 
     @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.chanceToRepair = MathHelper.ceil(this.chanceToRepair * multiplier);
+    }
+
+    @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
         if(side == Side.SERVER) {
             float fChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToRepair);
+                    .modifyValue(player, ResearchManager.getProgress(player, side), AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToRepair);
             int chance = Math.max(MathHelper.floor(fChance), 1);
             for (ItemStack armor : player.getArmorInventoryList()) {
                 if(rand.nextInt(chance) != 0) continue;

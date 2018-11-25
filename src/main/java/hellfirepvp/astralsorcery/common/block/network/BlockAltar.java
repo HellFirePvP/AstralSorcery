@@ -56,10 +56,6 @@ import java.util.Map;
  */
 public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName, BlockVariants {
 
-    //private static final AxisAlignedBB boxDiscovery =     new AxisAlignedBB(  1D / 16D,  0D,   1D / 16D,        15D / 16D,  15D / 16D,       15D / 16D);
-    private static final AxisAlignedBB boxAttenuation =   new AxisAlignedBB(-( 8D / 16D), 0D, -( 8D / 16D), 1D + ( 8D / 16D), 1D + ( 3D / 16D), 1D + ( 8D / 16D));
-    private static final AxisAlignedBB boxConstellation = new AxisAlignedBB(-(12D / 16D), 0D, -(12D / 16D), 1D + (12D / 16D), 1D + ( 8D / 16D), 1D + (12D / 16D));
-
     public static PropertyBool RENDER_FULLY = PropertyBool.create("render");
     public static PropertyEnum<AltarType> ALTAR_TYPE = PropertyEnum.create("altartype", AltarType.class);
 
@@ -91,33 +87,13 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                     case TRAIT_CRAFT:
                         AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_TRAIT, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
                         return true;
-                    case ENDGAME:
+                    case BRILLIANCE:
                         break;
                 }
             }
         }
         return true;
     }
-
-    //@Override
-    //public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-    //    return state.withProperty(RENDER_FULLY, false);
-    //}
-
-    /*@Override
-    @SideOnly(Side.CLIENT)
-    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        RenderingUtils.playBlockBreakParticles(pos,
-                BlocksAS.blockMarble.getDefaultState()
-                        .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
-        return true;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
-        return true;
-    }*/
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
@@ -157,22 +133,6 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        /*TileAltar ta = MiscUtils.getTileAt(source, pos, TileAltar.class, true);
-        if(ta != null) {
-            TileAltar.AltarLevel al = ta.getAltarLevel();
-            switch (al) {
-                case DISCOVERY:
-                    return boxDiscovery;
-                case ATTENUATION:
-                    return boxAttenuation;
-                case CONSTELLATION_CRAFT:
-                    return boxConstellation;
-                case TRAIT_CRAFT:
-                    break;
-                case ENDGAME:
-                    break;
-            }
-        }*/
         AltarType type = state.getValue(ALTAR_TYPE);
         AxisAlignedBB box = type.getBox();
         if(box != null) {
@@ -289,7 +249,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         ALTAR_2((world, state) -> new TileAltar(TileAltar.AltarLevel.ATTUNEMENT)),
         ALTAR_3((world, state) -> new TileAltar(TileAltar.AltarLevel.CONSTELLATION_CRAFT)),
         ALTAR_4((world, state) -> new TileAltar(TileAltar.AltarLevel.TRAIT_CRAFT)),
-        ALTAR_5((world, state) -> new TileAltar(TileAltar.AltarLevel.ENDGAME));
+        ALTAR_5((world, state) -> new TileAltar(TileAltar.AltarLevel.BRILLIANCE));
 
         //Ugly workaround to make constructors nicer
         private final IVariantTileProvider provider;
@@ -319,10 +279,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                     return FULL_BLOCK_AABB;
                 case ALTAR_2:
                     return FULL_BLOCK_AABB;
-                    //return boxAttenuation;
                 case ALTAR_3:
                     return FULL_BLOCK_AABB;
-                    //return boxConstellation;
                 case ALTAR_4:
                     return null;
                 case ALTAR_5:

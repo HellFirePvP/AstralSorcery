@@ -37,7 +37,7 @@ import java.util.Map;
 public class TileStorageCore extends TileEntityTick implements IStorageNetworkTile {
 
     private Map<StorageKey, StorageCache> contents = new HashMap<>();
-    private TileStorageCore masterCore = null;
+    //private TileStorageCore masterCore = null;
 
     @Override
     public void update() {
@@ -68,9 +68,8 @@ public class TileStorageCore extends TileEntityTick implements IStorageNetworkTi
         return this;
     }
 
-    private void checkMasterIntegrity() {
-
-    }
+    //private void checkMasterIntegrity() {
+    //}
 
     public void fillAndDiscardItemOwnership(TileStorageCore newMaster, StorageNetworkHandler.MappingChange out) {
 

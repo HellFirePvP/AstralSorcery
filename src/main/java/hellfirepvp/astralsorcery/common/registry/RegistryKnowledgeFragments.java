@@ -20,8 +20,8 @@ import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import net.minecraft.util.ResourceLocation;
 
-import static hellfirepvp.astralsorcery.common.data.research.ResearchProgression.findNode;
 import static hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment.*;
+import static hellfirepvp.astralsorcery.common.data.research.ResearchProgression.findNode;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -10,8 +10,8 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.advancements.*;
 
-import static net.minecraft.advancements.CriteriaTriggers.*;
 import static hellfirepvp.astralsorcery.common.lib.AdvancementTriggers.*;
+import static net.minecraft.advancements.CriteriaTriggers.register;
 
 /**
  * This class is part of the Astral Sorcery Mod

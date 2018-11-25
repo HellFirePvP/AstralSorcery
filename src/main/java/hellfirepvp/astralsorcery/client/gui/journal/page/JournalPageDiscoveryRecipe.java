@@ -28,12 +28,14 @@ import hellfirepvp.astralsorcery.common.registry.RegistryBookLookups;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
@@ -82,6 +84,13 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
 
         @Override
         public boolean propagateMouseClick(int mouseX, int mouseZ) {
+            if (Minecraft.getMinecraft().gameSettings.showDebugInfo && GuiScreen.isCtrlKeyDown() &&
+                    outputStackPos != null && outputStackPos.getKey().contains(mouseX, mouseZ)) {
+                String recipeName = recipe.getNativeRecipe().getRegistryName().toString();
+                GuiScreen.setClipboardString(recipeName);
+                Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("misc.ctrlcopy.copied", recipeName));
+                return true;
+            }
             for (Rectangle r : thisFrameStackFrames.keySet()) {
                 if(r.contains(mouseX, mouseZ)) {
                     ItemStack stack = thisFrameStackFrames.get(r);
@@ -112,6 +121,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             Rectangle r = drawItemStack(out, 0, 0, 0);
             r = new Rectangle((int) offsetX + 78, (int) offsetY + 25, (int) (r.getWidth() * 1.4), (int) (r.getHeight() * 1.4));
             this.outputStackPos = new Tuple<>(r, out);
+            addRenderedStackRectangle(r, out);
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
             RenderHelper.disableStandardItemLighting();
@@ -204,6 +214,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.recipename", recipe.getNativeRecipe().getRegistryName().toString()));
+                    tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.ctrlcopy"));
                 }
             }
         }

@@ -50,14 +50,14 @@ public class RenderDefaultSkybox extends IRenderHandler {
         vertexBufferFormat.addElement(new VertexFormatElement(0, VertexFormatElement.EnumType.FLOAT, VertexFormatElement.EnumUsage.POSITION, 3));
 
         Tessellator tessellator = Tessellator.getInstance();
-        net.minecraft.client.renderer.BufferBuilder vb = tessellator.getBuffer();
+        BufferBuilder vb = tessellator.getBuffer();
 
         setupStars(vb);
         setupSky1(vb);
         setupSky2(vb);
     }
 
-    private static void setupSky2(net.minecraft.client.renderer.BufferBuilder vb) {
+    private static void setupSky2(BufferBuilder vb) {
         if (sky2VBO != null) sky2VBO.deleteGlBuffers();
 
         if (glSkyList2 >= 0) {
@@ -80,7 +80,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         }
     }
 
-    private static void setupSky1(net.minecraft.client.renderer.BufferBuilder vb) {
+    private static void setupSky1(BufferBuilder vb) {
         if (skyVBO != null) skyVBO.deleteGlBuffers();
 
         if (glSkyList >= 0) {
@@ -103,7 +103,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         }
     }
 
-    private static void setupStars(net.minecraft.client.renderer.BufferBuilder vb) {
+    private static void setupStars(BufferBuilder vb) {
         if (starVBO != null) starVBO.deleteGlBuffers();
 
         if (starGLCallList >= 0) {
@@ -128,7 +128,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         }
     }
 
-    private static void setupSkyVertices(net.minecraft.client.renderer.BufferBuilder vb, float y, boolean invert) {
+    private static void setupSkyVertices(BufferBuilder vb, float y, boolean invert) {
         vb.begin(7, DefaultVertexFormats.POSITION);
 
         for (int k = -384; k <= 384; k += 64) {
@@ -150,7 +150,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         }
     }
 
-    private static void setupStarVertices(net.minecraft.client.renderer.BufferBuilder vb) {
+    private static void setupStarVertices(BufferBuilder vb) {
         Random random = new Random(10842L);
         vb.begin(7, DefaultVertexFormats.POSITION);
         for (int i = 0; i < 1500; ++i) {
