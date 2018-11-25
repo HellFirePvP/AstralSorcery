@@ -167,52 +167,6 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         GlStateManager.translate(-x, -y, -z);
     }
 
-    private void renderBeamOnAngles(BufferBuilder vb, Tuple<Double, Double> uvOffset, float br) {
-        double uWidth = SpriteLibrary.spriteLightbeam.getULength();
-        double vHeight = SpriteLibrary.spriteLightbeam.getVLength();
-        double u = uvOffset.key;
-        double v = uvOffset.value;
-
-        Vector3 perp = aimPerp.clone().normalize();
-        Vector3 perpFrom = perp.clone().multiply(fromSize);
-        Vector3 perpTo = perp.multiply(toSize);
-
-        Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight).color(br, br, br, br).endVertex();
-        vec = from.clone().add(perpFrom);
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v + vHeight).color(br, br, br, br).endVertex();
-        vec = to.clone().add(perpTo);
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v)          .color(br, br, br, br).endVertex();
-        vec = to.clone().add(perpTo.clone().multiply(-1));
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v)          .color(br, br, br, br).endVertex();
-
-        perp = aimPerp.clone().rotate(Math.toRadians(120F), aim).normalize();
-        perpFrom = perp.clone().multiply(fromSize);
-        perpTo = perp.multiply(toSize);
-
-        vec = from.clone().add(perpFrom.clone().multiply(-1));
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight).color(br, br, br, br).endVertex();
-        vec = from.clone().add(perpFrom);
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v + vHeight).color(br, br, br, br).endVertex();
-        vec = to.clone().add(perpTo);
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v)          .color(br, br, br, br).endVertex();
-        vec = to.clone().add(perpTo.clone().multiply(-1));
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v)          .color(br, br, br, br).endVertex();
-
-        perp = aimPerp.clone().rotate(Math.toRadians(240F), aim).normalize();
-        perpFrom = perp.clone().multiply(fromSize);
-        perpTo = perp.multiply(toSize);
-
-        vec = from.clone().add(perpFrom.clone().multiply(-1));
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight).color(br, br, br, br).endVertex();
-        vec = from.clone().add(perpFrom);
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v + vHeight).color(br, br, br, br).endVertex();
-        vec = to.clone().add(perpTo);
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v)          .color(br, br, br, br).endVertex();
-        vec = to.clone().add(perpTo.clone().multiply(-1));
-        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v)          .color(br, br, br, br).endVertex();
-    }
-
     private void renderCurrentTextureAroundAxis(double angle) {
         Vector3 perp = aimPerp.clone().rotate(angle, aim).normalize();
         Vector3 perpFrom = perp.clone().multiply(fromSize);

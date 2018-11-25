@@ -34,7 +34,7 @@ public class PacketChannel {
 
         @Override
         public void sendToServer(IMessage message) {
-            if(message instanceof ClientReplyPacket && !PacketChannel.canBeSent(message)) {
+            if(message instanceof ClientReplyPacket && !PacketChannel.canBeSent()) {
                 return;
             }
             super.sendToServer(message);
@@ -42,7 +42,7 @@ public class PacketChannel {
     };
 
     @SideOnly(Side.CLIENT)
-    private static boolean canBeSent(IMessage message) {
+    private static boolean canBeSent() {
         return ClientProxy.connected;
     }
 

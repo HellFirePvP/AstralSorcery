@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 
-import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;

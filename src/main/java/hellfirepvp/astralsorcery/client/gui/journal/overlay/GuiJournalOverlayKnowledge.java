@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 

@@ -29,13 +29,9 @@ public class OrbitalEffectCollector implements OrbitalEffectController.OrbitPers
 
     private static final Random rand = new Random();
 
-    private final BlockPos thisPos;
-    private final int dim;
     private final Color colorOverride;
 
     public OrbitalEffectCollector(TileCollectorCrystal tile) {
-        this.thisPos = tile.getPos();
-        this.dim = tile.getWorld().provider.getDimension();
         this.colorOverride = tile.getConstellation().getConstellationColor();
     }
 

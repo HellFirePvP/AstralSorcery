@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.modifier.At
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
-import hellfirepvp.astralsorcery.common.util.DamageSourceUtil;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.EntityLivingBase;

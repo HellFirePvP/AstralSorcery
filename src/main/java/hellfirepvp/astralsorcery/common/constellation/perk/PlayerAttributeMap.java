@@ -9,8 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import net.minecraft.entity.player.EntityPlayer;

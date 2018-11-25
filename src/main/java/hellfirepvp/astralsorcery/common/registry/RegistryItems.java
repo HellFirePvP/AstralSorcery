@@ -38,7 +38,6 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
@@ -78,19 +77,19 @@ public class RegistryItems {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
             @Override
             public ItemStack getTabIconItem() {
-                return new ItemStack(ItemsAS.journal);
+                return new ItemStack(journal);
             }
         };
         creativeTabAstralSorceryPapers = new CreativeTabs(AstralSorcery.MODID + ".papers") {
             @Override
             public ItemStack getTabIconItem() {
-                return new ItemStack(ItemsAS.constellationPaper);
+                return new ItemStack(constellationPaper);
             }
         };
         creativeTabAstralSorceryTunedCrystals = new CreativeTabs(AstralSorcery.MODID + ".crystals") {
             @Override
             public ItemStack getTabIconItem() {
-                return new ItemStack(ItemsAS.tunedRockCrystal);
+                return new ItemStack(tunedRockCrystal);
             }
         };
 

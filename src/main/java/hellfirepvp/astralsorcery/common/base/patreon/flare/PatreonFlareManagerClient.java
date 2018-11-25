@@ -22,7 +22,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.EnumSet;
-import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod

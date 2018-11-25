@@ -194,26 +194,6 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
         }
     }
 
-    private void removeInventoryConstellations(InventoryPlayer inventory, List<IConstellation> constellations) {
-        if (inventory == null) return;
-        for (ItemStack stack : inventory.mainInventory) {
-            if (stack.isEmpty()) continue;
-            if (stack.getItem() instanceof ItemConstellationPaper) {
-                IConstellation c = getConstellation(stack);
-                if (c != null) {
-                    constellations.remove(c);
-                }
-            }
-            if (stack.getItem() instanceof ItemJournal) {
-                for(IConstellation c : ItemJournal.getStoredConstellations(stack)) {
-                    if(c != null) {
-                        constellations.remove(c);
-                    }
-                }
-            }
-        }
-    }
-
     private List<WRItemObject<IConstellation>> buildWeightedRandomList(List<IConstellation> constellations) {
         List<WRItemObject<IConstellation>> wrc = new ArrayList<>();
         for (IConstellation c : constellations) {

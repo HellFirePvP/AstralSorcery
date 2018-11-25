@@ -9,14 +9,11 @@
 package hellfirepvp.astralsorcery.common.advancements.instances;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 
 /**

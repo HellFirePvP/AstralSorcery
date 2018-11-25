@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
 import com.google.common.collect.Maps;
+import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationCluster;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalKnowledgeIndex;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
@@ -16,15 +18,12 @@ import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
 import hellfirepvp.astralsorcery.client.gui.journal.overlay.GuiJournalOverlayKnowledge;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
-import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
-import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
-import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
@@ -40,7 +39,6 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod

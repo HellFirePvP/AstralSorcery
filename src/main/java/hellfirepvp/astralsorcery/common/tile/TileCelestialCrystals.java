@@ -44,9 +44,6 @@ public class TileCelestialCrystals extends TileSkybound {
     //Just in case you wonder. i do have a reason to control growth in the TileEntity other than just in the block itself.
 
     private static final Random rand = new Random();
-    private static Vector3[] crystalEffectPositions = new Vector3[] {
-            new Vector3(0.5, 0.5, 0.5)
-    };
 
     public int getGrowth() {
         IBlockState state = world.getBlockState(getPos());

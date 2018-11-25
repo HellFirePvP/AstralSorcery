@@ -375,8 +375,6 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         return "tile.blockstarlightinfuser.name";
     }
 
-    private void receiveStarlight(IWeakConstellation type, double amount) {}
-
     @Override
     @Nonnull
     public ITransmissionReceiver provideEndpoint(BlockPos at) {
@@ -424,14 +422,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
-            if(isChunkLoaded) {
-                TileStarlightInfuser ta = MiscUtils.getTileAt(world, getLocationPos(), TileStarlightInfuser.class, false);
-                if(ta != null) {
-                    ta.receiveStarlight(type, amount);
-                }
-            }
-        }
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {}
 
         @Override
         public TransmissionClassRegistry.TransmissionProvider getProvider() {

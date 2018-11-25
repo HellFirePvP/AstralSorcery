@@ -39,7 +39,6 @@ import java.util.Map;
  */
 public class GuiProgressionClusterRenderer {
 
-    private static final BindableResource frameBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "frameblank");
     private static final BindableResource frameWooden = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "framewooden");
 
     private PartSizeHandler partSizeHandler;

@@ -75,7 +75,7 @@ public class RegistryBlocks {
                 .setRegistryName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase()));
         fluidLiquidStarlight.setBlock(blockLiquidStarlight);
 
-        FluidRegistry.addBucketForFluid(BlocksAS.fluidLiquidStarlight);
+        FluidRegistry.addBucketForFluid(fluidLiquidStarlight);
     }
 
     //Blocks

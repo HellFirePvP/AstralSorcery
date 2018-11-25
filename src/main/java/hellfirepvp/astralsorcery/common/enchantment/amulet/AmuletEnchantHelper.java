@@ -40,16 +40,16 @@ public class AmuletEnchantHelper {
     private static float chanceToAll = 0.02F;
     private static float chanceToNonExisting = 0.35F;
 
-    public static void rollAmulet(ItemStack stack, float perfectionDegree) {
+    public static void rollAmulet(ItemStack stack) {
         if(stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
             return;
         }
 
         List<AmuletEnchantment> ench = new ArrayList<>();
-        while (mayGetAdditionalRoll(ench, perfectionDegree)) {
-            AmuletEnchantment.Type type = getRollType(ench, perfectionDegree);
+        while (mayGetAdditionalRoll(ench)) {
+            AmuletEnchantment.Type type = getRollType(ench);
             if(type != null) {
-                int lvl = getRollLevel(perfectionDegree);
+                int lvl = getRollLevel();
                 if(type.hasEnchantmentTag()) {
                     Enchantment e = AmuletEnchantmentRegistry.getRandomEnchant();
                     if(e != null) {
@@ -64,7 +64,7 @@ public class AmuletEnchantHelper {
     }
 
     @Nullable
-    private static AmuletEnchantment.Type getRollType(List<AmuletEnchantment> existing, float perfection) {
+    private static AmuletEnchantment.Type getRollType(List<AmuletEnchantment> existing) {
         int exAll = getAdditionAll(existing);
         switch (existing.size()) {
             case 0:
@@ -97,14 +97,14 @@ public class AmuletEnchantHelper {
         return null;
     }
 
-    private static int getRollLevel(float perfection) {
+    private static int getRollLevel() {
         if(rand.nextFloat() < chance2Level) {
             return 2;
         }
         return 1;
     }
 
-    private static boolean mayGetAdditionalRoll(List<AmuletEnchantment> existing, float perfection) {
+    private static boolean mayGetAdditionalRoll(List<AmuletEnchantment> existing) {
         if(existing.isEmpty()) return true;
         switch (existing.size()) {
             case 1:

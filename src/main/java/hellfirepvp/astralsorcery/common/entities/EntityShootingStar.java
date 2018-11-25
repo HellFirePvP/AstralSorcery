@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.entities;
 
-import com.google.common.collect.Iterables;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;

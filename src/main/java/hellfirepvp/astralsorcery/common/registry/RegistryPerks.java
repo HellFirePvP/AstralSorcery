@@ -13,10 +13,11 @@ import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.PointConnector;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.constellation.PerkAlcara;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.constellation.PerkGelu;
@@ -35,13 +36,12 @@ import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.*;
-import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.*;
+import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.PERK_TREE;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -1688,9 +1688,9 @@ public class RegistryPerks {
         perkRootMajorHarvest.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         perkRootMajorHarvest.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
 
-        PerkTree.PointConnector ctHarvest1 = PERK_TREE.registerPerk(breakRoot1);
-        PerkTree.PointConnector ctHarvest2 = PERK_TREE.registerPerk(breakRoot2);
-        PerkTree.PointConnector ctMajorHarvest = PERK_TREE.registerPerk(perkRootMajorHarvest);
+        PointConnector ctHarvest1 = PERK_TREE.registerPerk(breakRoot1);
+        PointConnector ctHarvest2 = PERK_TREE.registerPerk(breakRoot2);
+        PointConnector ctMajorHarvest = PERK_TREE.registerPerk(perkRootMajorHarvest);
 
         ctHarvest1.connect(PERK_TREE.getRootPerk(Constellations.evorsio));
         ctHarvest2.connect(ctHarvest1);
@@ -1707,9 +1707,9 @@ public class RegistryPerks {
         perkRootMajorDamage.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
         perkRootMajorDamage.addModifier(2F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
 
-        PerkTree.PointConnector ctDamage1 = PERK_TREE.registerPerk(dmgRoot1);
-        PerkTree.PointConnector ctDamage2 = PERK_TREE.registerPerk(dmgRoot2);
-        PerkTree.PointConnector ctMajorDamage = PERK_TREE.registerPerk(perkRootMajorDamage);
+        PointConnector ctDamage1 = PERK_TREE.registerPerk(dmgRoot1);
+        PointConnector ctDamage2 = PERK_TREE.registerPerk(dmgRoot2);
+        PointConnector ctMajorDamage = PERK_TREE.registerPerk(perkRootMajorDamage);
 
         ctDamage1.connect(PERK_TREE.getRootPerk(Constellations.discidia));
         ctDamage2.connect(ctDamage1);
@@ -1724,9 +1724,9 @@ public class RegistryPerks {
         perkRootMajorArmor = new MajorPerk("major_inc_armor", 12, 6);
         perkRootMajorArmor.addModifier(1.20F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
 
-        PerkTree.PointConnector ctArmor1 = PERK_TREE.registerPerk(armorRoot1);
-        PerkTree.PointConnector ctArmor2 = PERK_TREE.registerPerk(armorRoot2);
-        PerkTree.PointConnector ctMajorArmor = PERK_TREE.registerPerk(perkRootMajorArmor);
+        PointConnector ctArmor1 = PERK_TREE.registerPerk(armorRoot1);
+        PointConnector ctArmor2 = PERK_TREE.registerPerk(armorRoot2);
+        PointConnector ctMajorArmor = PERK_TREE.registerPerk(perkRootMajorArmor);
 
         ctArmor1.connect(PERK_TREE.getRootPerk(Constellations.armara));
         ctArmor2.connect(ctArmor1);
@@ -1742,9 +1742,9 @@ public class RegistryPerks {
         perkRootMajorMovespeed.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
         perkRootMajorMovespeed.addModifier(5F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_DODGE);
 
-        PerkTree.PointConnector ctMove1 = PERK_TREE.registerPerk(moveRoot1);
-        PerkTree.PointConnector ctMove2 = PERK_TREE.registerPerk(moveRoot2);
-        PerkTree.PointConnector ctMajorMobility = PERK_TREE.registerPerk(perkRootMajorMovespeed);
+        PointConnector ctMove1 = PERK_TREE.registerPerk(moveRoot1);
+        PointConnector ctMove2 = PERK_TREE.registerPerk(moveRoot2);
+        PointConnector ctMajorMobility = PERK_TREE.registerPerk(perkRootMajorMovespeed);
 
         ctMove1.connect(PERK_TREE.getRootPerk(Constellations.vicio));
         ctMove2.connect(ctMove1);
@@ -1759,9 +1759,9 @@ public class RegistryPerks {
         perkRootMajorHealth = new MajorPerk("major_inc_life", -12, 6);
         perkRootMajorHealth.addModifier(1.15F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
 
-        PerkTree.PointConnector ctLife1 = PERK_TREE.registerPerk(lifeRoot1);
-        PerkTree.PointConnector ctLife2 = PERK_TREE.registerPerk(lifeRoot2);
-        PerkTree.PointConnector ctMajorLife = PERK_TREE.registerPerk(perkRootMajorHealth);
+        PointConnector ctLife1 = PERK_TREE.registerPerk(lifeRoot1);
+        PointConnector ctLife2 = PERK_TREE.registerPerk(lifeRoot2);
+        PointConnector ctMajorLife = PERK_TREE.registerPerk(perkRootMajorHealth);
 
         ctLife1.connect(PERK_TREE.getRootPerk(Constellations.aevitas));
         ctLife2.connect(ctLife1);

@@ -272,18 +272,6 @@ public class EntityFlare extends EntityFlying {
     }
 
     @SideOnly(Side.CLIENT)
-    private void deathEffectsOngoing() {
-        for (int i = 0; i < 3; i++) {
-            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
-            particle.motion(-0.05 + rand.nextFloat() * 0.1, -0.05 + rand.nextFloat() * 0.1, -0.05 + rand.nextFloat() * 0.1);
-            particle.scale(0.1F + rand.nextFloat() * 0.2F).gravity(-0.02);
-            if(rand.nextBoolean()) {
-                particle.setColor(Color.WHITE);
-            }
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
     private void deathEffectsEnd() {
         EntityFXFacingSprite p = (EntityFXFacingSprite) texSprite;
         if(p != null) {

@@ -43,16 +43,16 @@ public class AttributeTypeLimiter {
     public void onProcess(AttributeEvent.PostProcessVanilla ev) {
         PerkAttributeType type = ev.resolveAttributeType();
         if (type != null) { //If managed
-            checkValue(type, ev.getPlayer(), (float) ev.getValue(), ev::setValue);
+            checkValue(type, (float) ev.getValue(), ev::setValue);
         }
     }
 
     @SubscribeEvent
     public void onProcess(AttributeEvent.PostProcessModded ev) {
-        checkValue(ev.getType(), ev.getPlayer(), (float) ev.getValue(), ev::setValue);
+        checkValue(ev.getType(), (float) ev.getValue(), ev::setValue);
     }
 
-    private void checkValue(PerkAttributeType type, @Nullable EntityPlayer player, float value, Callable<Float> setValue) {
+    private void checkValue(PerkAttributeType type, float value, Callable<Float> setValue) {
         Tuple<Float, Float> limit = perkTypeLimits.getOrDefault(type, ANY);
         setValue.call(MathHelper.clamp(value, limit.key, limit.value));
     }

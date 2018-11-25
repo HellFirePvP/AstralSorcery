@@ -255,9 +255,6 @@ public class RenderAstralSkybox extends IRenderHandler {
             f2 = f5;
         }
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vb = tessellator.getBuffer();
-
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();
         GlStateManager.color(f, f1, f2);

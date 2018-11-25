@@ -49,7 +49,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,7 +57,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -67,8 +65,10 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -226,7 +226,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         drawSearchBox();
         drawMiscInfo();
-        drawSocketContextMenu(mouseX, mouseY);
+        drawSocketContextMenu();
         drawSealBox();
         drawHoverTooltips(mouseX, mouseY);
 
@@ -263,7 +263,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
     }
 
-    private void drawSocketContextMenu(int mouseX, int mouseY) {
+    private void drawSocketContextMenu() {
         this.rSocketMenu = null;
         this.slotsSocketMenu.clear();
 
@@ -555,7 +555,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             Point offsetTwo = perkConnection.value.getPoint().getOffset();
             Point.Double shiftOne = this.sizeHandler.evRelativePos(offsetOne);
             Point.Double shiftTwo = this.sizeHandler.evRelativePos(offsetTwo);
-            drawConnection(connBuffer, status, shiftOne, shiftTwo, partialTicks, ClientScheduler.getClientTick() + offsetOne.x + offsetOne.y + offsetTwo.x + offsetTwo.y);
+            drawConnection(connBuffer, status, shiftOne, shiftTwo, ClientScheduler.getClientTick() + offsetOne.x + offsetOne.y + offsetTwo.x + offsetTwo.y);
         }
         drawBufferConnections.draw();
 
@@ -617,7 +617,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         Point pOffset = perk.getPoint().getOffset();
         drawSeal(vb, width, 0, 0,
-                ClientScheduler.getClientTick() + pOffset.x + pOffset.y, pTicks, sealFade * 0.75F);
+                ClientScheduler.getClientTick() + pOffset.x + pOffset.y, sealFade * 0.75F);
 
         GlStateManager.color(1F, 1F, 1F, 0.85F);
 
@@ -696,7 +696,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         return true;
     }
 
-    private void drawConnection(BufferBuilder vb, PerkTreePoint.AllocationStatus status, Point.Double offset, Point.Double target, float pTicks, long effectTick) {
+    private void drawConnection(BufferBuilder vb, PerkTreePoint.AllocationStatus status, Point.Double offset, Point.Double target, long effectTick) {
         Point.Double offsetSrc = shift2DOffset(offset.x, offset.y);
         Point.Double offsetDst = shift2DOffset(target.x, target.y);
         Color overlay = Color.WHITE;
@@ -760,24 +760,24 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
 
         if (renderSeal) {
-            this.drawSeal(ctx, drawSize.width * 0.75, offset.x, offset.y, effectTick, pTicks);
+            this.drawSeal(ctx, drawSize.width * 0.75, offset.x, offset.y, effectTick);
         }
 
         if (this.searchMatches.contains(perkPoint.getPerk())) {
-            drawSearchMarkHalo(ctx, drawSize, effectTick, pTicks, offset.x, offset.y, scale);
+            drawSearchMarkHalo(ctx, drawSize, offset.x, offset.y);
         }
 
         return new Rectangle.Double(offset.x - (drawSize.width / 2), offset.y - (drawSize.height / 2),
                 drawSize.width, drawSize.height);
     }
 
-    private void drawSeal(BatchPerkContext ctx, double size, double x, double y, long spriteOffsetTick, float pTicks) {
+    private void drawSeal(BatchPerkContext ctx, double size, double x, double y, long spriteOffsetTick) {
         BufferBatch batch = ctx.getContext(sealContext);
         BufferBuilder vb = batch.getBuffer();
-        drawSeal(vb, size, x, y, spriteOffsetTick, pTicks, 1F);
+        drawSeal(vb, size, x, y, spriteOffsetTick, 1F);
     }
 
-    private void drawSeal(BufferBuilder vb, double size, double x, double y, long spriteOffsetTick, float pTicks, float alpha) {
+    private void drawSeal(BufferBuilder vb, double size, double x, double y, long spriteOffsetTick, float alpha) {
         SpriteSheetResource tex = SpriteLibrary.spritePerkSeal;
         if (tex == null) {
             return;
@@ -800,7 +800,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
     }
 
-    private void drawSearchMarkHalo(BatchPerkContext ctx, Rectangle.Double draw, long effectTick, float pTicks, double x, double y, double scale) {
+    private void drawSearchMarkHalo(BatchPerkContext ctx, Rectangle.Double draw, double x, double y) {
         double size = draw.width;
 
         BufferBatch batch = ctx.getContext(searchContext);

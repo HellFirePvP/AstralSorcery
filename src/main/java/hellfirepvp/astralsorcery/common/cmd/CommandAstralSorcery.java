@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.cmd;
 import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
@@ -28,13 +27,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -112,7 +113,7 @@ public class CommandAstralSorcery extends CommandBase {
             } else if (args.length == 3) {
                 switch (identifier) {
                     case "constellations": {
-                        List<String> names = new ArrayList<String>();
+                        List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
                             names.add(c.getUnlocalizedName());
                         }
@@ -120,7 +121,7 @@ public class CommandAstralSorcery extends CommandBase {
                         return getListOfStringsMatchingLastWord(args, names);
                     }
                     case "research": {
-                        List<String> names = new ArrayList<String>();
+                        List<String> names = new ArrayList<>();
                         for (ResearchProgression r : ResearchProgression.values()) {
                             names.add(r.name());
                         }
@@ -132,7 +133,7 @@ public class CommandAstralSorcery extends CommandBase {
                         return getListOfStringsMatchingLastWord(args, "all");
 
                     case "attune": {
-                        List<String> names = new ArrayList<String>();
+                        List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getMajorConstellations()) {
                             names.add(c.getUnlocalizedName());
                         }
@@ -157,7 +158,7 @@ public class CommandAstralSorcery extends CommandBase {
             if (identifier.equalsIgnoreCase("help")) {
                 displayHelp(sender);
             } else if (identifier.equalsIgnoreCase("slnetwork")) {
-                tryEnterSLNetworkDebugMode(server, sender);
+                tryEnterSLNetworkDebugMode(sender);
             } else if (identifier.equalsIgnoreCase("constellation") || identifier.equalsIgnoreCase("constellations")) {
                 if (args.length == 1) {
                     listConstellations(sender);
@@ -190,7 +191,7 @@ public class CommandAstralSorcery extends CommandBase {
                 }
             } else if (identifier.equalsIgnoreCase("build")) {
                 if(args.length == 2) {
-                    buildStruct(server, sender, args[1]);
+                    buildStruct(sender, args[1]);
                 } else {
                     RegistryStructures.init(); //Reload
                 }
@@ -202,7 +203,7 @@ public class CommandAstralSorcery extends CommandBase {
         }
     }
 
-    private void tryEnterSLNetworkDebugMode(MinecraftServer server, ICommandSender sender) {
+    private void tryEnterSLNetworkDebugMode(ICommandSender sender) {
         if(!(sender instanceof EntityPlayer)) {
             sender.sendMessage(new TextComponentString("This command can only be executed by a player!"));
             return;
@@ -222,7 +223,6 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
 
         IMajorConstellation cst = ConstellationRegistry.getMajorConstellationByName(majorConstellationStr);
@@ -244,7 +244,6 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
 
         long chargeToSet;
@@ -267,7 +266,6 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayerMP other = prTuple.key;
 
         if(research.equalsIgnoreCase("all")) {
@@ -291,14 +289,13 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
 
         ResearchManager.forceMaximizeAll(other);
         sender.sendMessage(new TextComponentString("§aSuccess!"));
     }
 
-    private void buildStruct(MinecraftServer server, ICommandSender sender, String name) {
+    private void buildStruct(ICommandSender sender, String name) {
         BlockArray array;
         try {
             Field f = MultiBlockArrays.class.getDeclaredField(name);
@@ -347,7 +344,6 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayerMP other = prTuple.key;
 
         ResearchManager.wipeKnowledge(other);
@@ -359,7 +355,6 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
         if(argument.equalsIgnoreCase("all")) {
             if(!ResearchManager.maximizeTier(other)) {
@@ -423,7 +418,6 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
         if (argument.equals("all")) {
             Collection<IConstellation> constellations = ConstellationRegistry.getAllConstellations();
@@ -454,7 +448,6 @@ public class CommandAstralSorcery extends CommandBase {
             return;
         }
         PlayerProgress progress = prTuple.value;
-        EntityPlayer other = prTuple.key;
         sender.sendMessage(new TextComponentString("§c" + otherPlayerName + " has discovered the constellations:"));
         if (progress.getKnownConstellations().size() == 0) {
             sender.sendMessage(new TextComponentString("§c NONE"));

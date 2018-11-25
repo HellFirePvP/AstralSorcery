@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
@@ -19,7 +20,6 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
-import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -27,7 +27,6 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.block.BlockObservatory;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
-import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -53,7 +52,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
@@ -83,7 +81,6 @@ public class ClientRenderEventHandler {
 
     private static final Map<ItemHudRender, ItemStackHudRenderInstance> ongoingItemRenders = new HashMap<>();
 
-    private static final Random rand = new Random();
     private static final int fadeTicks = 15;
     private static final float visibilityChange = 1F / ((float) fadeTicks);
 
@@ -99,7 +96,7 @@ public class ClientRenderEventHandler {
         World world = Minecraft.getMinecraft().world;
         if(Config.constellationSkyDimWhitelist.contains(world.provider.getDimension())) {
             if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
-                world.provider.setSkyRenderer(new RenderSkybox(world, world.provider.getSkyRenderer()));
+                world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
             }
         }
 
@@ -308,7 +305,7 @@ public class ClientRenderEventHandler {
             }
 
             if(visibilityPermCharge > 0) {
-                renderAlignmentChargeOverlay(event.getPartialTicks());
+                renderAlignmentChargeOverlay();
             }
             if(!ongoingItemRenders.isEmpty()) {
                 for (Map.Entry<ItemHudRender, ItemStackHudRenderInstance> entry : new HashSet<>(ongoingItemRenders.entrySet())) {
@@ -347,7 +344,7 @@ public class ClientRenderEventHandler {
     }
 
     @SideOnly(Side.CLIENT)
-    private void renderAlignmentChargeOverlay(float partialTicks) {
+    private void renderAlignmentChargeOverlay() {
         EntityPlayer player = Minecraft.getMinecraft().player;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);

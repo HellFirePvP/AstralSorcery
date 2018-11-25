@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
@@ -22,7 +23,6 @@ import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.JournalRecipeDisplayRecovery;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
-import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;

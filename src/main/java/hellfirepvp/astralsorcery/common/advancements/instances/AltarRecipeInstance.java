@@ -12,7 +12,6 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;

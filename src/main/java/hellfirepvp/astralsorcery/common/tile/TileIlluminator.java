@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
-import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.DirectionalLayerBlockDiscoverer;
@@ -156,7 +155,7 @@ public class TileIlluminator extends TileEntityTick {
         validPositions = new LinkedList[parts];
         for (int i = 1; i <= parts; i++) {
             int yLevel = (int) (((float) getPos().getY()) * (((float) i) / ((float) parts)));
-            LinkedList<BlockPos> calcPositions = new DirectionalLayerBlockDiscoverer(world, new BlockPos(getPos().getX(), yLevel, getPos().getZ()), SEARCH_RADIUS, STEP_WIDTH).discoverApplicableBlocks();
+            LinkedList<BlockPos> calcPositions = new DirectionalLayerBlockDiscoverer(new BlockPos(getPos().getX(), yLevel, getPos().getZ()), SEARCH_RADIUS, STEP_WIDTH).discoverApplicableBlocks();
             validPositions[i - 1] = repeatList(calcPositions);
         }
     }

@@ -50,7 +50,6 @@ public class EvorsioRootPerk extends RootPerk {
                 return;
             }
 
-            BlockPos at = event.getPos();
             IBlockState broken = event.getState();
             World world = event.getWorld();
             float gainedExp;

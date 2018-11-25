@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
-import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.util.BlockArrayRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
@@ -21,7 +20,6 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -114,13 +112,13 @@ public class JournalPageStructure implements IJournalPage {
             if(unlocName != null) {
                 renderHeadline(offsetX + shift, offsetY + 5, unlocName);
             }
-            renderSliceButtons(offsetX, offsetY + 10, mouseX, mouseY, pTicks);
+            renderSliceButtons(offsetX, offsetY + 10, mouseX, mouseY);
 
             GlStateManager.popMatrix();
             GL11.glPopAttrib();
         }
 
-        private void renderSliceButtons(float offsetX, float offsetY, float mouseX, float mouseY, float pTicks) {
+        private void renderSliceButtons(float offsetX, float offsetY, float mouseX, float mouseY) {
             texSlices.bindTexture();
             GlStateManager.disableDepth();
 

@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class StorageNetworkHandler {
 
-    private static final AxisAlignedBB box = new AxisAlignedBB(-3, 0, -3, 3, 0, 3);
+    //private static final AxisAlignedBB box = new AxisAlignedBB(-3, 0, -3, 3, 0, 3);
     private static Map<Integer, MappingHandler> storageClusters = new HashMap<>();
 
     public static MappingHandler getHandler(World world) {

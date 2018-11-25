@@ -32,8 +32,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.*;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

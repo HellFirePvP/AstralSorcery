@@ -24,12 +24,10 @@ import java.util.List;
  */
 public class DirectionalLayerBlockDiscoverer {
 
-    private World world;
     private BlockPos start;
     private int rad, stepWidth;
 
-    public DirectionalLayerBlockDiscoverer(World world, BlockPos start, int discoverRadius, int stepWidth) {
-        this.world = world;
+    public DirectionalLayerBlockDiscoverer(BlockPos start, int discoverRadius, int stepWidth) {
         this.start = start;
         this.rad = discoverRadius;
         this.stepWidth = stepWidth;
@@ -37,7 +35,6 @@ public class DirectionalLayerBlockDiscoverer {
 
     public LinkedList<BlockPos> discoverApplicableBlocks() {
         LinkedList<BlockPos> visited = new LinkedList<>();
-        //LinkedList<BlockPos> validCache = new LinkedList<>();
 
         int xPos = start.getX();
         int yPos = start.getY();

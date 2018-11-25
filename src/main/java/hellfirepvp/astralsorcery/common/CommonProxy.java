@@ -104,7 +104,6 @@ public class CommonProxy implements IGuiHandler {
     public static DamageSource dmgSourceStellar = DamageSourceUtil.newType("as.stellar").setDamageBypassesArmor().setMagicDamage();
     public static DamageSource dmgSourceReflect = DamageSourceUtil.newType("thorns");
     public static InternalRegistryPrimer registryPrimer;
-    private static UUID fakePlayerUUID = UUID.fromString("BD4F59E2-4E26-4388-B903-B533D482C205");
 
     public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
     private CommonScheduler commonScheduler = new CommonScheduler();

@@ -18,7 +18,8 @@ import hellfirepvp.astralsorcery.common.integrations.mods.thaumcraft.perks.Modif
 import hellfirepvp.astralsorcery.common.integrations.mods.thaumcraft.perks.key.KeyEnergyShield;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.*;
+import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.ATTR_TYPE_ARMOR;
+import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST;
 
 /**
  * This class is part of the Astral Sorcery Mod

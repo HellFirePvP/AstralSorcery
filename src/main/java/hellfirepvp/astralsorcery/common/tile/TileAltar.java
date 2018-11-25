@@ -339,7 +339,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     private boolean levelUnsafe(AltarLevel to) {
-        onLevelUp(level, to);
         level = to;
         mbState = false;
         return world.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
@@ -349,8 +348,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
         return oldState.getBlock() != newSate.getBlock();
     }
-
-    private void onLevelUp(AltarLevel current, AltarLevel next) {}
 
     private void abortCrafting() {
         this.craftingTask = null;

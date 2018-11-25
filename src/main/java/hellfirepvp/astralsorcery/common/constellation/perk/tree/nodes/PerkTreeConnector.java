@@ -10,17 +10,13 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.List;

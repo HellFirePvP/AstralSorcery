@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Range;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.VanillaAttributeType;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;

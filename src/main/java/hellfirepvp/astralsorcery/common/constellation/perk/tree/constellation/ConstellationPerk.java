@@ -9,16 +9,9 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePointConstellation;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod

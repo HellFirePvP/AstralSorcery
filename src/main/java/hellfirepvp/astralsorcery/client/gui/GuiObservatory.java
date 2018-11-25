@@ -31,7 +31,6 @@ import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
@@ -190,7 +189,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         zLevel += 10;
-        drawFrame(partialTicks);
+        drawFrame();
         zLevel -= 10;
     }
 
@@ -463,7 +462,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         return false;
     }
 
-    private void drawFrame(float pticks) {
+    private void drawFrame() {
         texPartFrame.bindTexture();
         GlStateManager.color(1F, 1F, 1F, 1F);
 

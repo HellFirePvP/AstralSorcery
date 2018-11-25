@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTy
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.GemAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;

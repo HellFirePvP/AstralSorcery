@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.BaseTweak
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
