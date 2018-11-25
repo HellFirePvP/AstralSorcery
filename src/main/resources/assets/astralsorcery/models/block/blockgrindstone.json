@@ -2,7 +2,6 @@
 	"__comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
 	"parent": "block/block",
 	"textures": {
-		"texture": "astralsorcery:models/grindstone/grindstone",
 		"texture": "astralsorcery:models/grindstone/grindstone"
 	},
 	"elements": [ 	 
