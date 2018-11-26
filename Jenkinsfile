@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  environment {
+    WEBHOOKURL = credentials('JenkinsDiscordWebhook')
+  }
   stages {
     stage('Build') {
       steps {
@@ -14,6 +17,11 @@ find . ! -name \'*.jar\' -delete'''
     stage('Archive') {
       steps {
         archiveArtifacts '*.jar'
+      }
+    }
+    stage('Notify') {
+      steps {
+        discordSendHellFire link: env.BUILD_URL, result: currentBuild.currentResult, webhookURL: "${WEBHOOKURL}"
       }
     }
   }
