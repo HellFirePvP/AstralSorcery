@@ -122,6 +122,8 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                     case 2:
                         p.setColor(Constellations.armara.getConstellationColor());
                         break;
+                    default:
+                        break;
                 }
             }
         }
@@ -227,6 +229,8 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                     break;
                 case 2:
                     p.setColor(Constellations.armara.getConstellationColor());
+                    break;
+                default:
                     break;
             }
         }

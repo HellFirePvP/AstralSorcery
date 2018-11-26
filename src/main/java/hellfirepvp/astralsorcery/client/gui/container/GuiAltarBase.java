@@ -75,6 +75,8 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
                 return new ContainerAltarTrait(playerInv, tileAltar);
             case BRILLIANCE:
                 break;
+            default:
+                break;
         }
         return new ContainerAltarDiscovery(playerInv, tileAltar);
     }

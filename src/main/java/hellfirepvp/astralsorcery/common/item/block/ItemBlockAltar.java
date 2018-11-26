@@ -55,6 +55,8 @@ public class ItemBlockAltar extends ItemBlockCustomName {
                 }
                 mut.release();
                 break;
+            default:
+                break;
         }
 
         return super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);

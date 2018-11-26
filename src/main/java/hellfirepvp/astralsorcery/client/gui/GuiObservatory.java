@@ -84,6 +84,9 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
 
     private boolean grabCursor = false;
 
+    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
+    private Point start, end;
+
     public GuiObservatory(EntityPlayer owningPlayer, TileObservatory te) {
         super(te,
                 new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight() - (frameSize * 2),
@@ -625,9 +628,6 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
             informRelease(mouseX, mouseY);
         }
     }
-
-    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
-    private Point start, end;
 
     private void tryStartDrawing(int mouseX, int mouseY) {
         if (!canStartDrawing()) return;

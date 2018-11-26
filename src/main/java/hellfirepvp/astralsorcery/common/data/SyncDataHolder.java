@@ -77,6 +77,8 @@ public class SyncDataHolder implements ITickHandler {
                 return getDataClient(key);
             case SERVER:
                 return getDataServer(key);
+            default:
+                break;
         }
         throw new IllegalArgumentException("Side not defined: " + side);
     }

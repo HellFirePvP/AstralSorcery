@@ -63,6 +63,8 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
             case 2:
                 p.setColor(new Color(0xFFE539));
                 break;
+            default:
+                break;
         }
         p.scale(0.1F).gravity(0.004);
         if(rand.nextInt(4) == 0) {
@@ -80,6 +82,8 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
                     break;
                 case 1:
                     p.setColor(new Color(0xFFE539));
+                    break;
+                default:
                     break;
             }
             p.scale(0.15F);

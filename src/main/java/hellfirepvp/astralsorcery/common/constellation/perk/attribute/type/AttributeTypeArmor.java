@@ -51,6 +51,8 @@ public class AttributeTypeArmor extends VanillaAttributeType {
                 return ARMOR_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return ARMOR_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

@@ -41,6 +41,9 @@ import java.util.List;
  */
 public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawingTable> {
 
+    private static final ASstarmapper modelDrawingTable = new ASstarmapper();
+    private static final BindableResource texDrawingTable = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "starmapper/astralsorcery_starmapper");
+
     private static List<BlockPos> requiredGlasses = new LinkedList<>();
 
     public static void renderRemainingGlasses(float pTicks) {
@@ -77,9 +80,6 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
 
         TextureHelper.refreshTextureBindState();
     }
-
-    private static final ASstarmapper modelDrawingTable = new ASstarmapper();
-    private static final BindableResource texDrawingTable = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "starmapper/astralsorcery_starmapper");
 
     @Override
     public void render(TileMapDrawingTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

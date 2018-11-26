@@ -44,7 +44,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
     private boolean dragging = false;
 
     private GuiJournalProgression() {
-        super(0);
+        super(10);
     }
 
     public static GuiJournalProgression getJournalInstance() {

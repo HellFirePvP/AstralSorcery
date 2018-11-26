@@ -171,6 +171,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                             }
                         }
                         break;
+                    default:
+                        break;
                 }
             }
         } else {
@@ -211,6 +213,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                     vortexExplosion();
                                 }
                                 break;
+                            default:
+                                break;
                         }
                         break;
                     case PRE_RUN:
@@ -224,8 +228,12 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                 playLowVortex();
                                 updateNoisePlane();
                                 break;
+                            default:
+                                break;
                         }
                         playArcs(1);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -767,6 +775,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                 }
                                 break;
                             }
+                            default:
+                                break;
                         }
                     } else {
                         if(!world.isAirBlock(at)) {

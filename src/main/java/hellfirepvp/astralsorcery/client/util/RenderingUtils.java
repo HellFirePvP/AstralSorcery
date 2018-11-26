@@ -174,6 +174,8 @@ public class RenderingUtils {
                                 state = state.getBlock().getExtendedState(state, world, offset);
                             } catch (Exception ignored) {}
                             brd.getBlockModelRenderer().renderModel(world, model, state, offset, vb, true);
+                        default:
+                            break;
                     }
                 }
             }

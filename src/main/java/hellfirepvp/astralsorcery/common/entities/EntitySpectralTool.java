@@ -266,6 +266,8 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                                 e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
                         EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
                         return entity != null;
+                    default:
+                        break;
                 }
                 return false;
             }

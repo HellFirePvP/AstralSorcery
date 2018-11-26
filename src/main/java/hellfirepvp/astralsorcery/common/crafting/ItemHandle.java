@@ -239,6 +239,8 @@ public final class ItemHandle {
                     return false;
                 }
                 return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false).isSuccess();
+            default:
+                break;
         }
         return false;
     }
@@ -258,6 +260,8 @@ public final class ItemHandle {
             case FLUID:
                 ByteBufUtils.writeFluidStack(byteBuf, this.fluidTypeAndAmount);
                 break;
+            default:
+                break;
         }
     }
 
@@ -276,6 +280,8 @@ public final class ItemHandle {
                 break;
             case FLUID:
                 handle.fluidTypeAndAmount = ByteBufUtils.readFluidStack(byteBuf);
+                break;
+            default:
                 break;
         }
         return handle;

@@ -95,6 +95,8 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                 return bbStage3;
             case 4:
                 return bbStage4;
+            default:
+                break;
         }
         return super.getBoundingBox(state, source, pos);
     }
@@ -177,6 +179,8 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                         drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); //Lucky~~
                     }
                 }
+                break;
+            default:
                 break;
         }
     }

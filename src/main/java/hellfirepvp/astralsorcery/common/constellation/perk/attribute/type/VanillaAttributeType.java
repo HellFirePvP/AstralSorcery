@@ -74,6 +74,8 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
             case STACKING_MULTIPLY:
                 attr.applyModifier(new DynamicPlayerAttributeModifier(getID(mode), getDescription() + " Stack Add", getTypeString(), mode, player, side));
                 break;
+            default:
+                break;
         }
     }
 
@@ -91,6 +93,8 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
                 break;
             case STACKING_MULTIPLY:
                 attr.removeModifier(getID(mode));
+                break;
+            default:
                 break;
         }
     }

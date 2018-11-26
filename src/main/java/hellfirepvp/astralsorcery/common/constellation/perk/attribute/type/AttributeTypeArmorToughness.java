@@ -51,6 +51,8 @@ public class AttributeTypeArmorToughness extends VanillaAttributeType {
                 return ARMOR_TOUGHNESS_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return ARMOR_TOUGHNESS_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

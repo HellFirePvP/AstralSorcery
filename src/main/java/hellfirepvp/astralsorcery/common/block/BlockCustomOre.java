@@ -129,6 +129,8 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
             case STARMETAL:
                 drops.add(new ItemStack(this, 1, OreType.STARMETAL.ordinal()));
                 break;
+            default:
+                break;
         }
     }
 

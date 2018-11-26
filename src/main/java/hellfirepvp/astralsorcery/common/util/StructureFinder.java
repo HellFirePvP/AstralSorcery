@@ -31,8 +31,6 @@ import java.util.Random;
  */
 public class StructureFinder {
 
-    private StructureFinder() {}
-
     public static final String STRUCT_VILLAGE = "Village";
     public static final String STRUCT_STRONGHOLD = "Stronghold";
     public static final String STRUCT_MASNION = "Mansion";
@@ -41,6 +39,8 @@ public class StructureFinder {
     public static final String STRUCT_TEMPLE = "Temple";
     public static final String STRUCT_ENDCITY = "EndCity";
     public static final String STRUCT_FORTRESS = "Fortress";
+
+    private StructureFinder() {}
 
     @Nullable
     public static BlockPos tryFindClosestAstralSorceryStructure(WorldServer world, BlockPos playerPos, StructureGenBuffer.StructureType searchKey) {

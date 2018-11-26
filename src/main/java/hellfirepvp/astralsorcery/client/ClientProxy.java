@@ -108,6 +108,9 @@ public class ClientProxy extends CommonProxy {
     public static boolean connected = false;
     private final ClientScheduler scheduler = new ClientScheduler();
 
+    private static List<RenderInfoBlock> blockRegister = new ArrayList<>();
+    private static List<RenderInfoItem> itemRegister = new ArrayList<>();
+
     @Override
     public void setupConfiguration() {
         super.setupConfiguration();
@@ -199,7 +202,7 @@ public class ClientProxy extends CommonProxy {
         GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.perks.name", 30,
                 GuiJournalPerkTree::new,
                 () -> ResearchManager.clientProgress.getAttunedConstellation() != null));
-        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.perks.name", 30,
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.perks.name", 40,
                 GuiJournalKnowledgeIndex::new,
                 () -> !((KnowledgeFragmentData) PersistentDataManager.INSTANCE
                         .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS))
@@ -412,9 +415,6 @@ public class ClientProxy extends CommonProxy {
     public void registerItemRender(Item item, int metadata, String name, boolean variant) {
         itemRegister.add(new RenderInfoItem(item, metadata, name, variant));
     }
-
-    private static List<RenderInfoBlock> blockRegister = new ArrayList<>();
-    private static List<RenderInfoItem> itemRegister = new ArrayList<>();
 
     private static class RenderInfoBlock {
 

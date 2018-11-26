@@ -283,6 +283,8 @@ public class GuiProgressionClusterRenderer {
                 TextureHelper.refreshTextureBindState();
                 GlStateManager.enableAlpha();
                 break;
+            default:
+                break;
         }
         GL11.glPopMatrix();
     }

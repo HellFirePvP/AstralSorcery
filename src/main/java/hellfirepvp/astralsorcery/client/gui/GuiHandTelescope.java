@@ -77,6 +77,9 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
 
     private boolean grabCursor = false;
 
+    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
+    private Point start, end;
+
     public GuiHandTelescope() {
         super(216, 216);
 
@@ -503,9 +506,6 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
             informRelease(mouseX, mouseY);
         }
     }
-
-    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
-    private Point start, end;
 
     private void tryStartDrawing(int mouseX, int mouseY) {
         if (!canStartDrawing()) return;

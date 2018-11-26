@@ -238,6 +238,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             case 2:
                 drawDefault(textureResBlank, mouse);
                 break;
+            default:
+                break;
         }
         TextureHelper.refreshTextureBindState();
 
@@ -255,6 +257,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
                 break;
             case 2:
                 drawCapeInformationPages(partialTicks, mouseX, mouseY);
+                break;
+            default:
                 break;
         }
         zLevel -= 150;

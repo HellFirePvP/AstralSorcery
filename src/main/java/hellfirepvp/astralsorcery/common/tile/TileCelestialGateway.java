@@ -220,6 +220,8 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
                 case 2:
                     c = new Color(0x0078FF);
                     break;
+                default:
+                    break;
             }
             p.setColor(c);
         }

@@ -256,6 +256,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
                 case EVORSIO:
                 case AEVITAS:
                 case DISCIDIA:
+                default:
                     break;
             }
         }

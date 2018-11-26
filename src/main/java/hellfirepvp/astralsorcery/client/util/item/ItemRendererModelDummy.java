@@ -34,14 +34,13 @@ public class ItemRendererModelDummy implements IModel {
     //Copy-pasta from ModelBakery
     private static final String EMPTY_MODEL_RAW = "{    \'elements\': [        {   \'from\': [0, 0, 0],            \'to\': [16, 16, 16],            \'faces\': {                \'down\': {\'uv\': [0, 0, 16, 16], \'texture\': \'\' }            }        }    ]}".replaceAll("\'", "\"");
     public static final ModelBlock MODEL_GENERATED = ModelBlock.deserialize(EMPTY_MODEL_RAW);
+    private static final IModelState NO_STATE = (part) -> Optional.empty();
 
     private ResourceLocation parent;
 
     public ItemRendererModelDummy(ResourceLocation parent) {
         this.parent = parent;
     }
-
-    private static final IModelState NO_STATE = (part) -> Optional.empty();
 
     @Override
     public Collection<ResourceLocation> getDependencies() {

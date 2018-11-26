@@ -54,6 +54,8 @@ public class InfuserRecipeWrapper extends JEIBaseWrapper {
             case FLUID:
                 ingredients.setInput(ItemStack.class, UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, inputHandle.getFluidTypeAndAmount().getFluid()));
                 break;
+            default:
+                break;
         }
 
         ingredients.setOutput(ItemStack.class, recipe.getOutput(null));

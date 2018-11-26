@@ -68,7 +68,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
     private GuiTextEntry searchTextEntry = new GuiTextEntry();
 
     public GuiJournalKnowledgeIndex() {
-        super(3);
+        super(40);
         this.closeWithInventoryKey = false;
 
         KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);

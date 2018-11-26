@@ -89,6 +89,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                         return true;
                     case BRILLIANCE:
                         break;
+                    default:
+                        break;
                 }
             }
         }
@@ -285,6 +287,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                     return null;
                 case ALTAR_5:
                     return null;
+                default:
+                    break;
             }
             return null;
         }

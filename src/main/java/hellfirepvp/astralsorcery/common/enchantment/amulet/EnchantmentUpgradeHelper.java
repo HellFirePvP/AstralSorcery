@@ -99,6 +99,8 @@ public class EnchantmentUpgradeHelper {
                         current += mod.getLevelAddition();
                     }
                     break;
+                default:
+                    break;
             }
         }
         return current;

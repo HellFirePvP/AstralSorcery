@@ -93,6 +93,8 @@ public class AmuletEnchantHelper {
                     }
                     return AmuletEnchantment.Type.ADD_TO_EXISTING_SPECIFIC;
                 }
+            default:
+                break;
         }
         return null;
     }
@@ -111,6 +113,8 @@ public class AmuletEnchantHelper {
                 return rand.nextFloat() < chance2nd;
             case 2:
                 return getAdditionAll(existing) < 2 && rand.nextFloat() < chance3rd;
+            default:
+                break;
         }
         return false;
     }

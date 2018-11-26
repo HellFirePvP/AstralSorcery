@@ -123,7 +123,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private ItemStack foundSeals = ItemStack.EMPTY;
 
     public GuiJournalPerkTree() {
-        super(2);
+        super(30);
         this.closeWithInventoryKey = false;
         this.searchTextEntry.setChangeCallback(this::updateSearchHighlight);
 
@@ -709,6 +709,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                 break;
             case UNLOCKABLE:
                 overlay = new Color(0x0071FF);
+                break;
+            default:
                 break;
         }
 

@@ -237,6 +237,8 @@ public class ModIntegrationJEI implements IModPlugin {
                         iterator.remove();
                     }
                     break;
+                default:
+                    break;
             }
         }
         if(unresolvedRecipes.size() > 0) {

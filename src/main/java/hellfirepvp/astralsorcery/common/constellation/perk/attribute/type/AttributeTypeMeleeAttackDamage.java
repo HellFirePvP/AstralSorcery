@@ -51,6 +51,8 @@ public class AttributeTypeMeleeAttackDamage extends VanillaAttributeType {
                 return MELEE_ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return MELEE_ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

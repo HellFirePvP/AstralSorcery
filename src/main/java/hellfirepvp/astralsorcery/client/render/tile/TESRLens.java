@@ -222,6 +222,8 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                     GlStateManager.color(1F, 1F, 1F, 1F);
                 }
                 break;
+            default:
+                break;
         }
 
         TextureHelper.refreshTextureBindState();

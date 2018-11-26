@@ -393,6 +393,8 @@ public class CommonProxy implements IGuiHandler {
             }
             case OBSERVATORY:
                 return new ContainerObservatory();
+            default:
+                break;
         }
         return null;
     }

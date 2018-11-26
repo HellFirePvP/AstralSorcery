@@ -41,6 +41,8 @@ public class AttributeTypeMaxReach extends VanillaAttributeType {
                 return REACH_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return REACH_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

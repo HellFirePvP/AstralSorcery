@@ -100,6 +100,8 @@ public class PktPerkGemModification implements IMessageHandler<PktPerkGemModific
                         ((GemSlotPerk) perk).dropItemToPlayer(player);
                     }
                     break;
+                default:
+                    break;
             }
         });
         return null;

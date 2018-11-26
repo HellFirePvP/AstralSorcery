@@ -84,6 +84,8 @@ public class DataTimeFreezeEffects extends AbstractData {
             case CLEAR:
                 clientActiveFreezeZones.remove(action.dimId);
                 break;
+            default:
+                break;
         }
     }
 
@@ -178,6 +180,8 @@ public class DataTimeFreezeEffects extends AbstractData {
                 case REMOVE:
                     out.setTag("effectTag", involvedEffect.serializeNBT());
                     break;
+                default:
+                    break;
             }
             return out;
         }
@@ -190,6 +194,8 @@ public class DataTimeFreezeEffects extends AbstractData {
                 case ADD:
                 case REMOVE:
                     helper = TimeStopEffectHelper.deserializeNBT(cmp.getCompoundTag("effectTag"));
+                    break;
+                default:
                     break;
             }
             return new ServerSyncAction(type, dimId, helper);

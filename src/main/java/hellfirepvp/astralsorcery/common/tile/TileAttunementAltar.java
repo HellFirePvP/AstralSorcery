@@ -460,6 +460,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 this.entityIdActive = trigger.getEntityId();
                 this.activeEntity = trigger;
                 break;
+            default:
+                break;
         }
         markForUpdate();
     }

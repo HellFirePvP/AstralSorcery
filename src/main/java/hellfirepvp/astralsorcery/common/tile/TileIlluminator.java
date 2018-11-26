@@ -119,6 +119,8 @@ public class TileIlluminator extends TileEntityTick {
                 case 2:
                     p.setColor(col);
                     break;
+                default:
+                    break;
             }
         }
     }

@@ -119,6 +119,8 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
                         case DATACHANGE:
                             PerkEffectHelper.EVENT_INSTANCE.notifyPerkDataChangeClient(Minecraft.getMinecraft().player, pkt.perk, pkt.oldData, pkt.newData);
                             break;
+                        default:
+                            break;
                     }
                 } else if (pkt.perk != null) {
                     PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);

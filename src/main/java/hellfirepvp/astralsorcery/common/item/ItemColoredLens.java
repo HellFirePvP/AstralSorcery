@@ -199,6 +199,8 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     entity.motionY = Math.min(1F, entity.motionY + dir.getY());
                     entity.motionZ = Math.min(1F, entity.motionZ + dir.getZ());
                     break;
+                default:
+                    break;
             }
         }
 
@@ -255,6 +257,8 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                         PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, at, 16));
                     }
                     break;*/
+                default:
+                    break;
             }
         }
 

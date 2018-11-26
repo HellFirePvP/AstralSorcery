@@ -119,6 +119,8 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
             case CELESTIAL_CRYSTAL:
                 renderTile(texBlue);
                 break;
+            default:
+                break;
         }
         GlStateManager.popMatrix();
         RenderHelper.enableStandardItemLighting();

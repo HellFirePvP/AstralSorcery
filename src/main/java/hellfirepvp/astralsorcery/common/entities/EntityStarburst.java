@@ -120,6 +120,8 @@ public class EntityStarburst extends EntityThrowable {
                 case 2:
                     particle.setColor(new Color(0x0078FF));
                     break;
+                default:
+                    break;
             }
         }
         if(ticksExisted % 12 == 0) {
@@ -143,6 +145,8 @@ public class EntityStarburst extends EntityThrowable {
                     case 2:
                         particle.setColor(new Color(0x3A4ABD));
                         break;
+                    default:
+                        break;
                 }
             }
         }
@@ -158,6 +162,8 @@ public class EntityStarburst extends EntityThrowable {
             case 2:
                 particle.setColor(new Color(0x0078FF));
                 break;
+            default:
+                break;
         }
         particle = EffectHelper.genericFlareParticle(posX + motionX / 2F, posY + motionY / 2F, posZ + motionZ / 2F);
         particle.scale(0.6F);
@@ -170,6 +176,8 @@ public class EntityStarburst extends EntityThrowable {
                 break;
             case 2:
                 particle.setColor(new Color(0x0078FF));
+                break;
+            default:
                 break;
         }
     }

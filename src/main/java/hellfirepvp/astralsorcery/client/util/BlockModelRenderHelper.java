@@ -55,8 +55,7 @@ public class BlockModelRenderHelper {
             if (type == EnumBlockRenderType.INVISIBLE) return;
             state = state.getActualState(world, pos);
 
-            switch (type)
-            {
+            switch (type) {
                 case MODEL:
                     IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
                     state = state.getBlock().getExtendedState(state, world, pos);
@@ -66,6 +65,8 @@ public class BlockModelRenderHelper {
                     BlockColorsOverride.override = color;
                     getFluidRenderer().renderFluid(world, state, pos, vb);
                     BlockColorsOverride.override = -1;
+                    break;
+                default:
                     break;
             }
         } catch (Throwable throwable) {
@@ -196,6 +197,8 @@ public class BlockModelRenderHelper {
             case EAST:
                 boundsFlags.set(1, f1 >= 1.0E-4F || f2 >= 1.0E-4F || f4 <= 0.9999F || f5 <= 0.9999F);
                 boundsFlags.set(0, (f3 > 0.9999F || stateIn.isFullCube()) && f == f3);
+            default:
+                break;
         }
     }
 

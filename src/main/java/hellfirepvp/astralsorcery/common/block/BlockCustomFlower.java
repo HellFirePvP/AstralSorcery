@@ -75,6 +75,8 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
                             new ItemStack(Items.GLOWSTONE_DUST));
                 }
                 break;
+            default:
+                break;
         }
     }
 

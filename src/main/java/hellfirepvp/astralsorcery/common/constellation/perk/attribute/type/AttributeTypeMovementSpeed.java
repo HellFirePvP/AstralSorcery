@@ -51,6 +51,8 @@ public class AttributeTypeMovementSpeed extends VanillaAttributeType {
                 return MOVE_SPEED_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return MOVE_SPEED_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

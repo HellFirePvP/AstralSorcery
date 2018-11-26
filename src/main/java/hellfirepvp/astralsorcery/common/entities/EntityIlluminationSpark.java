@@ -82,6 +82,8 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
             case 2:
                 particle.setColor(new Color(0xFFE539));
                 break;
+            default:
+                break;
         }
     }
 

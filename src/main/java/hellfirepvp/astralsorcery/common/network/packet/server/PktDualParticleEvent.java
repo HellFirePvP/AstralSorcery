@@ -107,6 +107,8 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
             switch (type) {
                 case CHARGE_HARVEST:
                     return ItemChargedCrystalAxe::playDrainParticles;
+                default:
+                    break;
             }
             return null;
         }

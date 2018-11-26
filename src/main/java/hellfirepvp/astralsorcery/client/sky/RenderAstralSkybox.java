@@ -124,6 +124,8 @@ public class RenderAstralSkybox extends IRenderHandler {
                 case 3:
                     l.resource = TEX_STAR_4;
                     break;
+                default:
+                    break;
             }
             GlStateManager.glNewList(l.glList, GL11.GL_COMPILE);
             l.resource.bind();

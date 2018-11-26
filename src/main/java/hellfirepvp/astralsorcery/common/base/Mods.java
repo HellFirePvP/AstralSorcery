@@ -96,6 +96,8 @@ public enum Mods {
                     } catch (Exception ignored) {}
                 }
                 return urPlayerClass;
+            default:
+                break;
         }
         return null;
     }

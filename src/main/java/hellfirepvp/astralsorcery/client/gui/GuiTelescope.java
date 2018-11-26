@@ -77,6 +77,9 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
 
     private SkyConstellationDistribution currentInformation = null;
 
+    private LinkedList<Line> drawnLines = new LinkedList<>();
+    private Point start, end;
+
     public GuiTelescope(EntityPlayer player, TileTelescope e) {
         super(e, 280, 280);
         this.owningPlayer = player;
@@ -481,9 +484,6 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
             abortDrawing();
         }
     }
-
-    private LinkedList<Line> drawnLines = new LinkedList<>();
-    private Point start, end;
 
     private void tryStartDrawing(int mouseX, int mouseY) {
         if (!canStartDrawing()) return;

@@ -73,6 +73,8 @@ public class PktElytraCapeState implements IMessageHandler<PktElytraCapeState, I
                     pl.setFlag(7, false);
                     break;
                 }
+                default:
+                    break;
             }
         });
         return null;

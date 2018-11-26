@@ -85,6 +85,8 @@ public class ShootingStarExplosion {
                     case 2:
                         lightning.setOverlayColor(Color.WHITE);
                         break;
+                    default:
+                        break;
                 }
             }
 

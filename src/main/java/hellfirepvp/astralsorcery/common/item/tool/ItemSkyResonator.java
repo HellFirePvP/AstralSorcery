@@ -359,6 +359,8 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
                 case STARLIGHT:
                     playStarlightFieldEffect();
                     break;
+                default:
+                    break;
             }
         }
 

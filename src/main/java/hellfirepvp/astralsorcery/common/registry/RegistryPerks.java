@@ -662,6 +662,8 @@ public class RegistryPerks {
                                 modifiers.add(mod);
                             }
                             break;
+                        default:
+                            break;
                     }
                 }
                 return modifiers;

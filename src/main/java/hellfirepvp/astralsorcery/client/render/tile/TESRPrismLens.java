@@ -83,6 +83,8 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
                     GlStateManager.translate(pos.getX() - 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                     GlStateManager.rotate(270, 0, 0, 1);
                     break;
+                default:
+                    break;
             }
 
             GlStateManager.scale(0.0625, 0.0625, 0.0625);

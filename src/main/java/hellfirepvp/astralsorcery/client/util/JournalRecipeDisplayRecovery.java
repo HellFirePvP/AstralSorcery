@@ -112,6 +112,8 @@ public class JournalRecipeDisplayRecovery {
                                             currentRecipe = ((JournalPageTraitRecipe) page).recipe;
                                             outputMatch = currentRecipe.getOutputForMatching();
                                             break;
+                                        default:
+                                            break;
                                     }
                                     if(!outputMatch.isEmpty() && currentRecipe != null) {
                                         List<AbstractAltarRecipe> recipesMatched = AltarRecipeRegistry.getAltarRecipesByOutput(outputMatch, al);
@@ -128,6 +130,8 @@ public class JournalRecipeDisplayRecovery {
                                         }
                                     }
                                 }
+                                break;
+                            default:
                                 break;
                         }
                     }

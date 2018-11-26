@@ -41,6 +41,8 @@ public class AttributeTypeSwimSpeed extends VanillaAttributeType {
                 return SWIM_SPEED_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return SWIM_SPEED_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

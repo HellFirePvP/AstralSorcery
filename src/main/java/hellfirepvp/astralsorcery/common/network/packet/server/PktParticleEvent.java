@@ -228,6 +228,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CapeEffectEvorsio::playAreaDamageParticles;
                 case TIME_FREEZE_EFFECT:
                     return TimeStopEffectHelper::playEntityParticles;
+                default:
+                    break;
             }
             return null;
         }

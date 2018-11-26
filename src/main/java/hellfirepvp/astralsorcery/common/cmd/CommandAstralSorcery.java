@@ -46,6 +46,19 @@ import java.util.List;
  */
 public class CommandAstralSorcery extends CommandBase {
 
+    private static final String[] COMMANDS = new String[]{
+            "help",
+            "constellations",
+            "research",
+            "progress",
+            "reset",
+            "exp",
+            "attune",
+            "build",
+            "maximize",
+            "slnetwork"
+    };
+
     private List<String> cmdAliases = new ArrayList<>();
 
     public CommandAstralSorcery() {
@@ -77,19 +90,6 @@ public class CommandAstralSorcery extends CommandBase {
     public boolean isUsernameIndex(String[] args, int index) {
         return index == 1;
     }
-
-    private static final String[] COMMANDS = new String[]{
-            "help",
-            "constellations",
-            "research",
-            "progress",
-            "reset",
-            "exp",
-            "attune",
-            "build",
-            "maximize",
-            "slnetwork"
-    };
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
@@ -127,11 +127,9 @@ public class CommandAstralSorcery extends CommandBase {
                         }
                         names.add("all");
                         return getListOfStringsMatchingLastWord(args, names);
-
                     }
                     case "progress":
                         return getListOfStringsMatchingLastWord(args, "all");
-
                     case "attune": {
                         List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getMajorConstellations()) {
@@ -139,6 +137,8 @@ public class CommandAstralSorcery extends CommandBase {
                         }
                         return getListOfStringsMatchingLastWord(args, names);
                     }
+                    default:
+                        break;
                 }
 
             }

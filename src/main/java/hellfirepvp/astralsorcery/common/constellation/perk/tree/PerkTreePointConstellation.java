@@ -73,6 +73,8 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
                 case UNLOCKABLE:
                     overlay = new Color(0xC920DD);
                     break;
+                default:
+                    break;
             }
 
             int size = MathHelper.floor(perkSpriteSize * 0.85 * scale);

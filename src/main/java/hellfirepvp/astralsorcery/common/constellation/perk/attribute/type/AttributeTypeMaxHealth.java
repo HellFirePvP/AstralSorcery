@@ -51,6 +51,8 @@ public class AttributeTypeMaxHealth extends VanillaAttributeType {
                 return MAX_HEALTH_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return MAX_HEALTH_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

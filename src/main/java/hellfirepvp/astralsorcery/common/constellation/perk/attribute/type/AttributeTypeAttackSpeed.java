@@ -41,6 +41,8 @@ public class AttributeTypeAttackSpeed extends VanillaAttributeType {
                 return ATTACK_SPEED_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return ATTACK_SPEED_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

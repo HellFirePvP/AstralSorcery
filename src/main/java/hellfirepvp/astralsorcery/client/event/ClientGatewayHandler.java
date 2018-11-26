@@ -48,6 +48,8 @@ public class ClientGatewayHandler {
     private static int screenshotCooldown = 0;
     private static WorldBlockPos lastScreenshotPos = null;
 
+    private float fovPre = 70F;
+
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -128,6 +130,8 @@ public class ClientGatewayHandler {
                         case 2:
                             p.setColor(new Color(0x0078FF));
                             break;
+                        default:
+                            break;
                     }
                 }
             } else {
@@ -156,6 +160,8 @@ public class ClientGatewayHandler {
                         case 2:
                             p.setColor(new Color(0x0078FF));
                             break;
+                        default:
+                            break;
                     }
                 }
                 positions = MiscUtils.getCirclePositions(pos, dir, EffectHandler.STATIC_EFFECT_RAND.nextFloat() * 0.2 + 0.4, EffectHandler.STATIC_EFFECT_RAND.nextInt(6) + 25);
@@ -181,6 +187,8 @@ public class ClientGatewayHandler {
                             break;
                         case 2:
                             p.setColor(new Color(0x0078FF));
+                            break;
+                        default:
                             break;
                     }
                 }
@@ -208,8 +216,6 @@ public class ClientGatewayHandler {
     }
 
     //40 circle, 40 portal, 15 drag
-
-    private float fovPre = 70F;
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)

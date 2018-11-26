@@ -734,11 +734,6 @@ public class ResearchManager {
     }
 
     private static void informCraft(EntityPlayer crafter, ItemStack crafted, Item itemCrafted, @Nullable Block iBlock) {
-
-        if(itemCrafted instanceof ItemHandTelescope) {
-            //FIXME RE-ADD AFTER ADVANCEMENTS
-            //crafter.addStat(RegistryAchievements.achvBuildHandTelescope);
-        }
         if(iBlock != null) {
             if(iBlock instanceof BlockAltar) {
                 giveProgressionIgnoreFail(crafter, ProgressionTier.BASIC_CRAFT);
@@ -762,10 +757,10 @@ public class ResearchManager {
                         giveProgressionIgnoreFail(crafter, ProgressionTier.BRILLIANCE);
                         giveResearchIgnoreFail(crafter, ResearchProgression.BRILLIANCE);
                         break;
+                    default:
+                        break;
                 }
             }
-        } else {
-
         }
     }
 

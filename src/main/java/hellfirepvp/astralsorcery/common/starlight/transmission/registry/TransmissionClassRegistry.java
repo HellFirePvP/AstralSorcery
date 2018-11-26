@@ -33,13 +33,13 @@ public class TransmissionClassRegistry {
 
     public static final TransmissionClassRegistry eventInstance = new TransmissionClassRegistry();
 
+    private static Map<String, TransmissionProvider> providerMap = new HashMap<>();
+
     private TransmissionClassRegistry() {}
 
     public void registerProvider(TransmissionProvider provider) {
         register(provider);
     }
-
-    private static Map<String, TransmissionProvider> providerMap = new HashMap<>();
 
     @Nullable
     public static TransmissionProvider getProvider(String identifier) {

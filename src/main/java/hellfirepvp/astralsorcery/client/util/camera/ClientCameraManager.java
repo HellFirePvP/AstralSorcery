@@ -42,10 +42,10 @@ public class ClientCameraManager implements ITickHandler {
 
     private static final ClientCameraManager instance = new ClientCameraManager();
 
-    private ClientCameraManager() {}
-
     private TreeSet<ICameraTransformer> transformers = new TreeSet<>(Comparator.comparingInt(ICameraTransformer::getPriority));
     private ICameraTransformer lastTransformer = null;
+
+    private ClientCameraManager() {}
 
     public static ClientCameraManager getInstance() {
         return instance;

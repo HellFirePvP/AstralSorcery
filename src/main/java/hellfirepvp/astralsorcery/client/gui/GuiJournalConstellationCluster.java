@@ -81,7 +81,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     public static GuiScreenJournal getConstellationScreen() {
         PlayerProgress client = ResearchManager.clientProgress;
         List<IConstellation> constellations = ConstellationRegistry.resolve(client.getSeenConstellations());
-        return new GuiJournalConstellationCluster(1, "no.title", constellations);
+        return new GuiJournalConstellationCluster(20, "no.title", constellations);
 
         /*if(tiersFound.isEmpty()) {
             return new GuiJournalConstellationCluster(1, false, "gui.journal.c.unmapped", unmapped);

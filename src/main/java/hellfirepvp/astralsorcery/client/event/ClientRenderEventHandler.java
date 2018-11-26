@@ -90,6 +90,10 @@ public class ClientRenderEventHandler {
     private static int chargeTempRevealTicks = 0;
     private static float visibilityTempCharge = 0F;
 
+    private static final WavefrontObject obj;
+    private static final ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/models/texw.png");
+    private static int dList = -1;
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
@@ -431,10 +435,6 @@ public class ClientRenderEventHandler {
         }
         obj = buf;
     }
-
-    private static final WavefrontObject obj;
-    private static final ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/models/texw.png");
-    private static int dList = -1;
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)

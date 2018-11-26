@@ -45,6 +45,8 @@ public class PerkAlcara extends ConstellationPerk {
                             float val = modifier.getValue(player, progress) - 1;
                             val *= 0.5F;
                             return modifier.convertModifier(AttributeTypeRegistry. ATTR_TYPE_INC_PERK_EFFECT, modifier.getMode(), val + 1F);
+                        default:
+                            break;
                     }
                 }
                 return modifier;

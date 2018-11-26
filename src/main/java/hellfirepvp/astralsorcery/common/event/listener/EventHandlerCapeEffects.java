@@ -72,8 +72,6 @@ public class EventHandlerCapeEffects implements ITickHandler {
     private static final Random rand = new Random();
     public static EventHandlerCapeEffects INSTANCE = new EventHandlerCapeEffects();
 
-    private EventHandlerCapeEffects() {}
-
     //Propagate player in tick for octans anti-knockback effect.
     public static EntityPlayer currentPlayerInTick = null;
 
@@ -84,6 +82,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
     //To propagate elytra states
     private static boolean updateElytraBuffer = false;
     public static boolean inElytraCheck = false;
+
+    private EventHandlerCapeEffects() {}
 
     @SubscribeEvent
     public void breakBlock(BlockEvent.BreakEvent event) {
@@ -476,6 +476,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
                         min.playClientHighlightTick(pl);
                     }
                 }
+                break;
+            default:
                 break;
         }
     }

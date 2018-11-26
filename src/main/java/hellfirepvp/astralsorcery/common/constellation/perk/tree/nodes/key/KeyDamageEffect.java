@@ -65,6 +65,8 @@ public class KeyDamageEffect extends KeyPerk {
                             attacked.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1,
                                     false, false));
                             break;
+                        default:
+                            break;
                     }
                 }
             }

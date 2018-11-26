@@ -111,6 +111,8 @@ public class CelestialStrike {
                 case 2:
                     lightning.setOverlayColor(new Color(0x004899));
                     break;
+                default:
+                    break;
             }
         }
 
@@ -143,6 +145,8 @@ public class CelestialStrike {
                     break;
                 case 2:
                     particle.setColor(new Color(0x004899));
+                    break;
+                default:
                     break;
             }
         }
