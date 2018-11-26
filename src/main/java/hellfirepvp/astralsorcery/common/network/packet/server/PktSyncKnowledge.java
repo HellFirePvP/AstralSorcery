@@ -281,6 +281,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
                 case STATE_WIPE:
                     ResearchManager.clientProgress = new PlayerProgress();
                     break;
+                default:
+                    break;
             }
         });
     }

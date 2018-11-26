@@ -231,7 +231,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
 
         GlStateManager.color(f, f1, f2);
         Tessellator tessellator = Tessellator.getInstance();
-        net.minecraft.client.renderer.BufferBuilder vb = tessellator.getBuffer();
+        BufferBuilder vb = tessellator.getBuffer();
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();
         GlStateManager.color(f, f1, f2);

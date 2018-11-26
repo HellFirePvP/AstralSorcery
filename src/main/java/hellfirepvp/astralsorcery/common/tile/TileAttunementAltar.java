@@ -991,7 +991,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         } else {
             activeFound = found;
         }
-        if(prev != activeFound) {
+        if (prev == null ? activeFound != null : !prev.equals(activeFound)) {
             starSprites.clear();
         }
     }

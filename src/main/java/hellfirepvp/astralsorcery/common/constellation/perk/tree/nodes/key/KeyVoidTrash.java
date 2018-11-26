@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -49,7 +50,7 @@ public class KeyVoidTrash extends KeyPerk {
             "minecraft:gravel"
     };
     private static List<Predicate<ItemStack>> dropFilter = Lists.newArrayList();
-    private static float chanceOre = 0.04F;
+    private static float chanceOre = 0.0002F;
 
     public KeyVoidTrash(String name, int x, int y) {
         super(name, x, y);
@@ -94,6 +95,10 @@ public class KeyVoidTrash extends KeyPerk {
         }
 
         EntityPlayer player = ev.getHarvester();
+        if (player == null) {
+            return;
+        }
+
         PlayerProgress prog = ResearchManager.getProgress(player, Side.SERVER);
         if (prog == null || !prog.hasPerkEffect(this)) {
             return;
@@ -115,7 +120,7 @@ public class KeyVoidTrash extends KeyPerk {
                 if (rand.nextFloat() < chance) {
                     ItemStack drop = OreTypes.PERK_VOID_TRASH_REPLACEMENT.getRandomOre(rand);
                     if (!drop.isEmpty()) {
-                        addedDrops.add(drop);
+                        addedDrops.add(ItemUtils.copyStackWithSize(drop, 1));
                     }
                 }
             }

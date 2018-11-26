@@ -14,21 +14,14 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantment;
-import hellfirepvp.astralsorcery.common.enchantment.amulet.EnchantmentUpgradeHelper;
-import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -164,9 +157,6 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
         }
         tag.setTag("amuletEnchantments", enchants);
     }
-
-    @Override
-    public void onWornTick(ItemStack itemstack, EntityLivingBase player) {}
 
     @Override
     public void onEquipped(ItemStack itemstack, EntityLivingBase player) {

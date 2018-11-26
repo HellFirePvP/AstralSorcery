@@ -57,7 +57,7 @@ public class ClientCameraManager implements ITickHandler {
             float pTicks = (float) context[0];
             if(!transformers.isEmpty()) {
                 ICameraTransformer prio = transformers.last();
-                if(prio != lastTransformer) {
+                if(!prio.equals(lastTransformer)) {
                     if(lastTransformer != null) {
                         lastTransformer.onStopTransforming(pTicks);
                     }

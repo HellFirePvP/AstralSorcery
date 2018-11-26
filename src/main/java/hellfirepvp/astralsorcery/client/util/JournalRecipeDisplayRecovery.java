@@ -117,7 +117,7 @@ public class JournalRecipeDisplayRecovery {
                                         List<AbstractAltarRecipe> recipesMatched = AltarRecipeRegistry.getAltarRecipesByOutput(outputMatch, al);
                                         found = false;
                                         for(AbstractAltarRecipe aar : recipesMatched) {
-                                            if(aar == currentRecipe) {
+                                            if(aar.equals(currentRecipe)) {
                                                 found = true;
                                                 break;
                                             }

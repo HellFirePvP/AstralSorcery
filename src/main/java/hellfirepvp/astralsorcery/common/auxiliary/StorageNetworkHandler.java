@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.auxiliary;
 
 import hellfirepvp.astralsorcery.common.tile.TileStorageCore;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import java.util.HashMap;

@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.client.util;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockFluidRenderer;
-import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -27,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.model.pipeline.ForgeBlockModelRenderer;
 
 import javax.annotation.Nullable;
 import java.util.BitSet;

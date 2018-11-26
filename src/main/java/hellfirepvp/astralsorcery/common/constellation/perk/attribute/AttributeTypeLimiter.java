@@ -12,11 +12,9 @@ import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.util.Callable;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 /**

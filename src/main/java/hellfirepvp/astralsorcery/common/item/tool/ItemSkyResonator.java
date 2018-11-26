@@ -99,7 +99,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
 
         ResonatorUpgrade current = getCurrentUpgrade(null, stack);
         for (ResonatorUpgrade upgrade : getUpgrades(stack)) {
-            tooltip.add((upgrade == current ? TextFormatting.AQUA : TextFormatting.BLUE) + I18n.format(upgrade.getUnlocalizedUpgradeName()));
+            tooltip.add((upgrade.equals(current) ? TextFormatting.AQUA : TextFormatting.BLUE) + I18n.format(upgrade.getUnlocalizedUpgradeName()));
         }
     }
 
@@ -216,7 +216,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         if(!isEnhanced(stack)) return false;
         ResonatorUpgrade current = getCurrentUpgrade(player, stack);
         ResonatorUpgrade next = getNextSelectableUpgrade(player, stack);
-        return next != null && next != current && setCurrentUpgrade(player, stack, next);
+        return next != null && !next.equals(current) && setCurrentUpgrade(player, stack, next);
     }
 
     @Nullable
@@ -230,7 +230,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
             test++;
             test %= ResonatorUpgrade.values().length;
             ResonatorUpgrade testUpgrade = ResonatorUpgrade.values()[test];
-            if(testUpgrade.obtainable() && testUpgrade.canSwitchTo(viewing, stack) && testUpgrade != current) {
+            if(testUpgrade.obtainable() && testUpgrade.canSwitchTo(viewing, stack) && !testUpgrade.equals(current)) {
                 return testUpgrade;
             }
         } while (test != currentOrd);

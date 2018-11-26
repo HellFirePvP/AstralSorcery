@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
 import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
@@ -16,7 +17,12 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationCluster;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalKnowledgeIndex;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.gui.journal.bookmark.BookmarkProvider;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.render.entity.*;
 import hellfirepvp.astralsorcery.client.render.tile.*;
@@ -42,6 +48,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
@@ -182,6 +189,21 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new ClientConnectionEventHandler());
         MinecraftForge.EVENT_BUS.register(EffectHandler.getInstance());
         MinecraftForge.EVENT_BUS.register(new ClientGatewayHandler());
+
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.research.name", 10,
+                GuiJournalProgression::getJournalInstance,
+                () -> true));
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.constellations.name", 20,
+                GuiJournalConstellationCluster::getConstellationScreen,
+                () -> !ResearchManager.clientProgress.getSeenConstellations().isEmpty()));
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.perks.name", 30,
+                GuiJournalPerkTree::new,
+                () -> ResearchManager.clientProgress.getAttunedConstellation() != null));
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.perks.name", 30,
+                GuiJournalKnowledgeIndex::new,
+                () -> !((KnowledgeFragmentData) PersistentDataManager.INSTANCE
+                        .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS))
+                        .getAllFragments().isEmpty()));
     }
 
     @Override

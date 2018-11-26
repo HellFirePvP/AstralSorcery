@@ -97,7 +97,7 @@ public class CommandAstralSorcery extends CommandBase {
             return getListOfStringsMatchingLastWord(args, COMMANDS);
         } else {
             String identifier = args[0].toLowerCase();
-            if (identifier.equals("build")) {
+            if ("build".equals(identifier)) {
                 Field[] fields = MultiBlockArrays.class.getDeclaredFields();
                 List<String> names = new ArrayList<>(fields.length);
 
@@ -155,11 +155,11 @@ public class CommandAstralSorcery extends CommandBase {
         }
         if (args.length >= 1) {
             String identifier = args[0];
-            if (identifier.equalsIgnoreCase("help")) {
+            if ("help".equalsIgnoreCase(identifier)) {
                 displayHelp(sender);
-            } else if (identifier.equalsIgnoreCase("slnetwork")) {
+            } else if ("slnetwork".equalsIgnoreCase(identifier)) {
                 tryEnterSLNetworkDebugMode(sender);
-            } else if (identifier.equalsIgnoreCase("constellation") || identifier.equalsIgnoreCase("constellations")) {
+            } else if ("constellation".equalsIgnoreCase(identifier) || "constellations".equalsIgnoreCase(identifier)) {
                 if (args.length == 1) {
                     listConstellations(sender);
                 } else if (args.length == 2) {
@@ -167,35 +167,35 @@ public class CommandAstralSorcery extends CommandBase {
                 } else if (args.length == 3) {
                     addConstellations(server, sender, args[1], args[2]);
                 }
-            } else if(identifier.equalsIgnoreCase("research") || identifier.equalsIgnoreCase("res")) {
+            } else if("research".equalsIgnoreCase(identifier) || "res".equalsIgnoreCase(identifier)) {
                 if(args.length == 3) {
                     modifyResearch(server, sender, args[1], args[2]);
                 }
-            } else if (identifier.equalsIgnoreCase("progress") || identifier.equalsIgnoreCase("prog")) {
+            } else if ("progress".equalsIgnoreCase(identifier) || "prog".equalsIgnoreCase(identifier)) {
                 if(args.length <= 2) {
                     showProgress(server, sender, args.length == 1 ? sender.getName() : args[1]);
                 } else if(args.length == 3) {
                     modifyProgress(server, sender, args[1], args[2]);
                 }
-            } else if (identifier.equalsIgnoreCase("reset")) {
+            } else if ("reset".equalsIgnoreCase(identifier)) {
                 if (args.length == 2) {
                     wipeProgression(server, sender, args[1]);
                 }
-            } else if (identifier.equalsIgnoreCase("charge") || identifier.equalsIgnoreCase("exp")) {
+            } else if ("charge".equalsIgnoreCase(identifier) || "exp".equalsIgnoreCase(identifier)) {
                 if (args.length == 3) {
                     setExp(server, sender, args[1], args[2]);
                 }
-            } else if (identifier.equalsIgnoreCase("attune")) {
+            } else if ("attune".equalsIgnoreCase(identifier)) {
                 if(args.length == 3) {
                     attuneToConstellation(server, sender, args[1], args[2]);
                 }
-            } else if (identifier.equalsIgnoreCase("build")) {
+            } else if ("build".equalsIgnoreCase(identifier)) {
                 if(args.length == 2) {
                     buildStruct(sender, args[1]);
                 } else {
                     RegistryStructures.init(); //Reload
                 }
-            } else if(identifier.equalsIgnoreCase("maximize")) {
+            } else if("maximize".equalsIgnoreCase(identifier)) {
                 if (args.length == 2) {
                     maxAll(server, sender, args[1]);
                 }
@@ -268,7 +268,7 @@ public class CommandAstralSorcery extends CommandBase {
         }
         EntityPlayerMP other = prTuple.key;
 
-        if(research.equalsIgnoreCase("all")) {
+        if("all".equalsIgnoreCase(research)) {
             ResearchManager.forceMaximizeResearch(other);
             sender.sendMessage(new TextComponentString("§aSuccess!"));
         } else {
@@ -356,7 +356,7 @@ public class CommandAstralSorcery extends CommandBase {
             return;
         }
         EntityPlayer other = prTuple.key;
-        if(argument.equalsIgnoreCase("all")) {
+        if("all".equalsIgnoreCase(argument)) {
             if(!ResearchManager.maximizeTier(other)) {
                 sender.sendMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
             } else {
@@ -419,7 +419,7 @@ public class CommandAstralSorcery extends CommandBase {
             return;
         }
         EntityPlayer other = prTuple.key;
-        if (argument.equals("all")) {
+        if ("all".equals(argument)) {
             Collection<IConstellation> constellations = ConstellationRegistry.getAllConstellations();
             if (!ResearchManager.discoverConstellations(constellations, other)) {
                 sender.sendMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));

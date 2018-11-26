@@ -340,7 +340,7 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
 
         @Override
         public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-            return capability == CAPABILITY_CHUNK_FLUID;
+            return capability.equals(CAPABILITY_CHUNK_FLUID);
         }
 
         @Nullable

@@ -33,7 +33,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -422,7 +421,9 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {}
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
+            //No-Op
+        }
 
         @Override
         public TransmissionClassRegistry.TransmissionProvider getProvider() {

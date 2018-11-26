@@ -874,7 +874,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(channeling != null && hasMultiblock) {
-                if(channeling == type) {
+                if(channeling.equals(type)) {
                     collectionChannelBuffer += amount;
                     tryGainMirrorPos(world);
                 }
