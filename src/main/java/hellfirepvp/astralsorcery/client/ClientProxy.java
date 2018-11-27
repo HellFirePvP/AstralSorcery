@@ -248,7 +248,6 @@ public class ClientProxy extends CommonProxy {
 
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCollectorCrystal), new TESRCollectorCrystal());
-        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCrystals), new TESRCelestialCrystals());
 
         if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.registerGeolosysSampleItemRenderer();
@@ -275,7 +274,6 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileAltar.class, new TESRAltar());
         registerTESR(TileRitualPedestal.class, new TESRRitualPedestal());
         registerTESR(TileCollectorCrystal.class, new TESRCollectorCrystal());
-        registerTESR(TileCelestialCrystals.class, new TESRCelestialCrystals());
         registerTESR(TileWell.class, new TESRWell());
         registerTESR(TileGrindstone.class, new TESRGrindstone());
         registerTESR(TileTelescope.class, new TESRTelescope());

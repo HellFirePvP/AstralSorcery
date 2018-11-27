@@ -504,13 +504,13 @@ public class RegistryPerks {
         AttributeModifierPerk perkLife1 = new AttributeModifierPerk("outer_s_inc_life", -17, 22);
         perkLife1.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
         AttributeModifierPerk perkLife2 = new AttributeModifierPerk("outer_s_inc_life_1", -20, 18).setNameOverride(perkLife1);
-        perkLife1.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
-        AttributeModifierPerk perkLife3 = new AttributeModifierPerk("outer_s_inc_life_2", -25, 14).setNameOverride(perkLife1);
         perkLife2.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
-        AttributeModifierPerk perkLife4 = new AttributeModifierPerk("outer_s_inc_life_3", -26, 8).setNameOverride(perkLife1);
+        AttributeModifierPerk perkLife3 = new AttributeModifierPerk("outer_s_inc_life_2", -25, 14).setNameOverride(perkLife1);
         perkLife3.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
-        AttributeModifierPerk perkLife5 = new AttributeModifierPerk("outer_s_inc_life_4", -28, 2).setNameOverride(perkLife1);
+        AttributeModifierPerk perkLife4 = new AttributeModifierPerk("outer_s_inc_life_3", -26, 8).setNameOverride(perkLife1);
         perkLife4.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+        AttributeModifierPerk perkLife5 = new AttributeModifierPerk("outer_s_inc_life_4", -28, 2).setNameOverride(perkLife1);
+        perkLife5.addModifier(addedIncLife, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
 
         PERK_TREE.registerPerk(perkLife1);
         PERK_TREE.registerPerk(perkLife2)
@@ -1325,7 +1325,7 @@ public class RegistryPerks {
         perkHrvReach.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
 
         AttributeModifierPerk perkAddedHrvSpeed = new MajorPerk("med_added_hrv_speed", -14, -14);
-        perkAddedHrvSpeed.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_HARVEST_SPEED);
+        perkAddedHrvSpeed.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_HARVEST_SPEED);
         perkAddedHrvSpeed.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_REACH);
 
         PERK_TREE.registerPerk(perkM1)
