@@ -45,6 +45,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -54,7 +56,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 14.09.2016 / 23:42
  */
-public class BlockCelestialCrystals extends BlockContainer implements IBlockStarlightRecipient {
+public class BlockCelestialCrystals extends BlockContainer implements IBlockStarlightRecipient, BlockCustomName, BlockVariants {
 
     private static final Random rand = new Random();
 
@@ -282,5 +284,24 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileCelestialCrystals();
+    }
+
+    @Override
+    public String getIdentifierForMeta(int meta) {
+        return "stage_" + meta;
+    }
+
+    @Override
+    public List<IBlockState> getValidStates() {
+        List<IBlockState> ret = new LinkedList<>();
+        for (int stage : STAGE.getAllowedValues()) {
+            ret.add(getDefaultState().withProperty(STAGE, stage));
+        }
+        return ret;
+    }
+
+    @Override
+    public String getStateName(IBlockState state) {
+        return "stage_" + state.getValue(STAGE);
     }
 }

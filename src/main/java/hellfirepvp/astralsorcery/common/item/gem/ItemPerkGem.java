@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item.gem;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.GemAttributeModifier;
+import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
@@ -36,10 +37,9 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 18.11.2018 / 09:30
  */
-public class ItemPerkGem extends Item {
+public class ItemPerkGem extends Item implements IItemVariants {
 
     public ItemPerkGem() {
-        setMaxDamage(0);
         setMaxStackSize(1);
         setHasSubtypes(true);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
@@ -93,6 +93,36 @@ public class ItemPerkGem extends Item {
         }
         NBTHelper.getPersistentData(stack).setTag("modifiers", mods);
         return true;
+    }
+
+    @Override
+    public String[] getVariants() {
+        String[] sub = new String[GemType.values().length];
+        GemType[] values = GemType.values();
+        for (int i = 0; i < values.length; i++) {
+            GemType mt = values[i];
+            sub[i] = mt.name().toLowerCase();
+        }
+        return sub;
+    }
+
+    @Override
+    public int[] getVariantMetadatas() {
+        int[] sub = new int[GemType.values().length];
+        GemType[] values = GemType.values();
+        for (int i = 0; i < values.length; i++) {
+            GemType mt = values[i];
+            sub[i] = mt.ordinal();
+        }
+        return sub;
+    }
+
+    public static enum GemType {
+
+        SKY,
+        DAY,
+        NIGHT
+
     }
 
 }

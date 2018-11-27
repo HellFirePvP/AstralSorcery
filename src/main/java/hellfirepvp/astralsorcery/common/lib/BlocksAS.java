@@ -43,6 +43,7 @@ public class BlocksAS {
     public static BlockLens lens;
     public static BlockPrism lensPrism;
     public static BlockCelestialCrystals celestialCrystals;
+    public static BlockGemCrystals gemCrystals;
     public static BlockFakeTree blockFakeTree;
     public static BlockAttunementAltar attunementAltar;
     public static BlockAttunementRelay attunementRelay;

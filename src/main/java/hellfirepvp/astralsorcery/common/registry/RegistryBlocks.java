@@ -147,6 +147,8 @@ public class RegistryBlocks {
 
         celestialCrystals = registerBlock(new BlockCelestialCrystals());
         queueCustomNameItemBlock(celestialCrystals);
+        gemCrystals = registerBlock(new BlockGemCrystals());
+        queueCustomNameItemBlock(gemCrystals);
 
         //Machines&Related
         //stoneMachine = registerBlock(new BlockStoneMachine());
@@ -171,6 +173,9 @@ public class RegistryBlocks {
         registerBlockRender(blockStructural);
         registerBlockRender(blockMachine);
         registerBlockRender(treeBeacon);
+
+        registerBlockRender(celestialCrystals);
+        registerBlockRender(gemCrystals);
     }
 
     //Tiles
@@ -179,6 +184,7 @@ public class RegistryBlocks {
         registerTile(TileRitualPedestal.class);
         registerTile(TileCollectorCrystal.class);
         registerTile(TileCelestialCrystals.class);
+        registerTile(TileGemCrystals.class);
         registerTile(TileWell.class);
         registerTile(TileIlluminator.class);
         registerTile(TileTelescope.class);
