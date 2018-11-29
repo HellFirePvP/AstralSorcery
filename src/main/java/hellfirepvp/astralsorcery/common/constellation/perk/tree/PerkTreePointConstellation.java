@@ -17,8 +17,11 @@ import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -62,6 +65,10 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
     @SideOnly(Side.CLIENT)
     public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y, double scale) {
         if (this.associatedConstellation != null) {
+            PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+            if (prog != null && !prog.getKnownConstellations().contains(this.associatedConstellation.getUnlocalizedName())) {
+                return;
+            }
             Color overlay = Color.WHITE;
             switch (status) {
                 case UNALLOCATED:

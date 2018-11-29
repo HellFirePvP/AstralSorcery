@@ -42,8 +42,6 @@ public class BlocksAS {
     public static BlockCelestialCollectorCrystal celestialCollectorCrystal;
     public static BlockLens lens;
     public static BlockPrism lensPrism;
-    public static BlockCelestialCrystals celestialCrystals;
-    public static BlockGemCrystals gemCrystals;
     public static BlockFakeTree blockFakeTree;
     public static BlockAttunementAltar attunementAltar;
     public static BlockAttunementRelay attunementRelay;
@@ -59,6 +57,18 @@ public class BlocksAS {
     public static BlockBoreHead blockBoreHead;
     public static BlockPortalNode blockPortalNode;
     public static BlockObservatory blockObservatory;
+
+    public static BlockCelestialCrystals celestialCrystalsStage0;
+    public static BlockCelestialCrystals celestialCrystalsStage1;
+    public static BlockCelestialCrystals celestialCrystalsStage2;
+    public static BlockCelestialCrystals celestialCrystalsStage3;
+    public static BlockCelestialCrystals celestialCrystalsStage4;
+
+    public static BlockGemCrystals gemCrystalsStage0;
+    public static BlockGemCrystals gemCrystalsStage1;
+    public static BlockGemCrystals gemCrystalsStage2_sky;
+    public static BlockGemCrystals gemCrystalsStage2_day;
+    public static BlockGemCrystals gemCrystalsStage2_night;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

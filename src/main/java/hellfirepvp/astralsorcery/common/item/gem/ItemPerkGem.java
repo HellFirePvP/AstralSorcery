@@ -14,12 +14,15 @@ import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -50,6 +53,15 @@ public class ItemPerkGem extends Item implements IItemVariants {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         for (GemAttributeModifier mod : getModifiers(stack)) {
             tooltip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC + mod.getLocalizedDisplayString());
+        }
+    }
+
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if(this.isInCreativeTab(tab)) {
+            for (GemType type : GemType.values()) {
+                items.add(new ItemStack(this, 1, type.ordinal()));
+            }
         }
     }
 
@@ -93,6 +105,16 @@ public class ItemPerkGem extends Item implements IItemVariants {
         }
         NBTHelper.getPersistentData(stack).setTag("modifiers", mods);
         return true;
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        Item i = stack.getItem();
+        if(i instanceof ItemPerkGem) {
+            GemType type = GemType.values()[MathHelper.clamp(stack.getItemDamage(), 0, GemType.values().length)];
+            return super.getUnlocalizedName(stack) + "." + type.name().toLowerCase();
+        }
+        return super.getUnlocalizedName(stack);
     }
 
     @Override

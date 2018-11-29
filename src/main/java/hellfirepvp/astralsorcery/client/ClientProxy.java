@@ -202,7 +202,7 @@ public class ClientProxy extends CommonProxy {
         GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.perks.name", 30,
                 GuiJournalPerkTree::new,
                 () -> ResearchManager.clientProgress.getAttunedConstellation() != null));
-        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.perks.name", 40,
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.knowledge.name", 40,
                 GuiJournalKnowledgeIndex::new,
                 () -> !((KnowledgeFragmentData) PersistentDataManager.INSTANCE
                         .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS))

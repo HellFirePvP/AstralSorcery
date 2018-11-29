@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -93,7 +94,7 @@ public class SyncDataHolder implements ITickHandler {
 
     public static void syncAllDataTo(EntityPlayer player) {
         PktSyncData dataSync = new PktSyncData(serverData, true);
-        PacketChannel.CHANNEL.sendTo(dataSync, (net.minecraft.entity.player.EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendTo(dataSync, (EntityPlayerMP) player);
     }
 
     public static void receiveServerPacket(Map<String, AbstractData> data) {

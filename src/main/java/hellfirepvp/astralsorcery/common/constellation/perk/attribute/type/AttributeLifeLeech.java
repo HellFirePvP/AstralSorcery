@@ -10,7 +10,9 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.modifier.AttributeModifierLifeLeech;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +21,8 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,6 +35,12 @@ public class AttributeLifeLeech extends PerkAttributeType {
 
     public AttributeLifeLeech() {
         super(AttributeTypeRegistry.ATTR_TYPE_ATTACK_LIFE_LEECH);
+    }
+
+    @Nonnull
+    @Override
+    public PerkAttributeModifier createModifier(float modifier, PerkAttributeModifier.Mode mode) {
+        return new AttributeModifierLifeLeech(getTypeString(), mode, modifier);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

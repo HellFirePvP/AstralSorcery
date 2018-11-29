@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -46,13 +47,13 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.11.2016 / 22:30
  */
-public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
+public class CEffectDiscidia extends CEffectEntityCollect<EntityMob> {
 
     public static double potencyMultiplier = 1;
     public static float damage = 6.5F;
 
     public CEffectDiscidia(@Nullable ILocatable origin) {
-        super(origin, Constellations.discidia, "discidia", 16D, EntityLivingBase.class, (entity) -> !entity.isDead && !(entity instanceof EntityPlayer) && !(entity instanceof EntityTechnicalAmbient));
+        super(origin, Constellations.discidia, "discidia", 16D, EntityMob.class, (entity) -> !entity.isDead && !(entity instanceof EntityTechnicalAmbient));
     }
 
     @Override
@@ -78,7 +79,7 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
         }
         boolean did = false;
         float actDamageDealt = percStrength * damage;
-        List<EntityLivingBase> entities = collectEntities(world, pos, modified);
+        List<EntityMob> entities = collectEntities(world, pos, modified);
         if(!entities.isEmpty()) {
             EntityPlayer owner = getOwningPlayerInWorld(world, pos);
             DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSourceUtil.withEntityDirect(CommonProxy.dmgSourceStellar, owner);
@@ -86,13 +87,11 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
                 DamageUtil.attackEntityFrom(owner, CommonProxy.dmgSourceStellar, 1.2F * percStrength);
                 did = true;
             }
-            for (EntityLivingBase entity : entities) {
+            for (EntityMob entity : entities) {
                 if(modified.isCorrupted()) {
-                    if(!(entity instanceof EntityPlayer)) {
-                        entity.heal(actDamageDealt);
-                        entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, 2));
-                        did = true;
-                    }
+                    entity.heal(actDamageDealt);
+                    entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, 2));
+                    did = true;
                 } else {
                     int hrTime = entity.hurtResistantTime;
                     entity.hurtResistantTime = 0;

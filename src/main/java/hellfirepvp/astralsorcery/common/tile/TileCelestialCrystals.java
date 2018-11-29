@@ -25,9 +25,11 @@ import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Random;
@@ -44,10 +46,16 @@ public class TileCelestialCrystals extends TileSkybound {
 
     private static final Random rand = new Random();
 
-    public int getGrowth() {
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return oldState.getBlock() != newSate.getBlock();
+    }
+
+    @Nullable
+    public BlockCelestialCrystals getGrowth() {
         IBlockState state = world.getBlockState(getPos());
-        if(!(state.getBlock() instanceof BlockCelestialCrystals)) return 0;
-        return state.getValue(BlockCelestialCrystals.STAGE);
+        if(!(state.getBlock() instanceof BlockCelestialCrystals)) return null;
+        return ((BlockCelestialCrystals) state.getBlock());
     }
 
     @Override
@@ -72,8 +80,8 @@ public class TileCelestialCrystals extends TileSkybound {
                     downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 playStarmetalOreParticles();
             }
-            int stage = getGrowth();
-            if(stage == 4) {
+            BlockCelestialCrystals stage = getGrowth();
+            if(stage != null && stage.getNextStage() == null) {
                 playHarvestEffects();
             }
         }
@@ -118,16 +126,15 @@ public class TileCelestialCrystals extends TileSkybound {
     protected void onFirstTick() {}
 
     public void grow() {
-        IBlockState current = world.getBlockState(getPos());
-        int stage = current.getValue(BlockCelestialCrystals.STAGE);
-        if(stage < 4) {
-            IBlockState next = BlocksAS.celestialCrystals.getStateFromMeta(stage + 1);
+        BlockCelestialCrystals growth = getGrowth();
+        IBlockState next;
+        if (growth != null && (next = growth.getNextStage()) != null) {
             world.setBlockState(getPos(), next);
         }
     }
 
     public void tryGrowth(double mul) {
-        int r = 24000;
+        int r = 32000;
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
         if(doesSeeSky() && handle != null) {
             double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
@@ -135,7 +142,7 @@ public class TileCelestialCrystals extends TileSkybound {
                 Collection<IConstellation> activeConstellations =
                         ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations(world.provider.getDimension());
                 if(activeConstellations != null) {
-                    r = 9500; //If this dim has sky handling active.
+                    r = 13000; //If this dim has sky handling active.
                 }
                 r *= (0.5 + ((1 - dstr) * 0.5));
             }

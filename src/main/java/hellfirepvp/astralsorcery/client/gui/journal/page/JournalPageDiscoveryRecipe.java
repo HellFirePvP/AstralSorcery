@@ -185,7 +185,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
 
         public void addStackTooltip(float mouseX, float mouseY, List<String> tooltip) {
             for (Rectangle rect : thisFrameStackFrames.keySet()) {
-                if(rect.contains(mouseX, mouseY)) {
+                if(rect.contains(mouseX, mouseY) && (outputStackPos == null || !outputStackPos.getKey().equals(rect))) {
                     ItemStack stack = thisFrameStackFrames.get(rect);
                     try {
                         tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));

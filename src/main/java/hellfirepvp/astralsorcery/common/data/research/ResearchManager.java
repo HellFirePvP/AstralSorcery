@@ -224,6 +224,7 @@ public class ResearchManager {
 
         for (IConstellation c : csts) {
             progress.discoverConstellation(c.getUnlocalizedName());
+            AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
         }
 
         //FIXME RE-ADD AFTER ADVANCEMENTS
@@ -287,7 +288,11 @@ public class ResearchManager {
 
     public static boolean setAttunedConstellation(EntityPlayer player, @Nullable IMajorConstellation constellation) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if (progress == null) return false;
+
+        if (constellation != null && !progress.getKnownConstellations().contains(constellation.getUnlocalizedName())) {
+            return false;
+        }
 
         Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
         for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {

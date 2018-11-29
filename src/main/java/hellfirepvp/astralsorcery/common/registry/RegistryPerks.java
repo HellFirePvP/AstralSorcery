@@ -1694,6 +1694,10 @@ public class RegistryPerks {
         PointConnector ctHarvest2 = PERK_TREE.registerPerk(breakRoot2);
         PointConnector ctMajorHarvest = PERK_TREE.registerPerk(perkRootMajorHarvest);
 
+        breakRoot1.setRequireDiscoveredConstellation(Constellations.evorsio);
+        breakRoot2.setRequireDiscoveredConstellation(Constellations.evorsio);
+        perkRootMajorHarvest.setRequireDiscoveredConstellation(Constellations.evorsio);
+
         ctHarvest1.connect(PERK_TREE.getRootPerk(Constellations.evorsio));
         ctHarvest2.connect(ctHarvest1);
         ctMajorHarvest.connect(ctHarvest2);
@@ -1713,6 +1717,10 @@ public class RegistryPerks {
         PointConnector ctDamage2 = PERK_TREE.registerPerk(dmgRoot2);
         PointConnector ctMajorDamage = PERK_TREE.registerPerk(perkRootMajorDamage);
 
+        dmgRoot1.setRequireDiscoveredConstellation(Constellations.discidia);
+        dmgRoot2.setRequireDiscoveredConstellation(Constellations.discidia);
+        perkRootMajorDamage.setRequireDiscoveredConstellation(Constellations.discidia);
+
         ctDamage1.connect(PERK_TREE.getRootPerk(Constellations.discidia));
         ctDamage2.connect(ctDamage1);
         ctMajorDamage.connect(ctDamage2);
@@ -1729,6 +1737,10 @@ public class RegistryPerks {
         PointConnector ctArmor1 = PERK_TREE.registerPerk(armorRoot1);
         PointConnector ctArmor2 = PERK_TREE.registerPerk(armorRoot2);
         PointConnector ctMajorArmor = PERK_TREE.registerPerk(perkRootMajorArmor);
+
+        armorRoot1.setRequireDiscoveredConstellation(Constellations.armara);
+        armorRoot2.setRequireDiscoveredConstellation(Constellations.armara);
+        perkRootMajorArmor.setRequireDiscoveredConstellation(Constellations.armara);
 
         ctArmor1.connect(PERK_TREE.getRootPerk(Constellations.armara));
         ctArmor2.connect(ctArmor1);
@@ -1748,6 +1760,10 @@ public class RegistryPerks {
         PointConnector ctMove2 = PERK_TREE.registerPerk(moveRoot2);
         PointConnector ctMajorMobility = PERK_TREE.registerPerk(perkRootMajorMovespeed);
 
+        moveRoot1.setRequireDiscoveredConstellation(Constellations.vicio);
+        moveRoot2.setRequireDiscoveredConstellation(Constellations.vicio);
+        perkRootMajorMovespeed.setRequireDiscoveredConstellation(Constellations.vicio);
+
         ctMove1.connect(PERK_TREE.getRootPerk(Constellations.vicio));
         ctMove2.connect(ctMove1);
         ctMajorMobility.connect(ctMove2);
@@ -1760,6 +1776,10 @@ public class RegistryPerks {
         lifeRoot2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
         perkRootMajorHealth = new MajorPerk("major_inc_life", -12, 6);
         perkRootMajorHealth.addModifier(1.15F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
+
+        lifeRoot1.setRequireDiscoveredConstellation(Constellations.aevitas);
+        lifeRoot2.setRequireDiscoveredConstellation(Constellations.aevitas);
+        perkRootMajorHealth.setRequireDiscoveredConstellation(Constellations.aevitas);
 
         PointConnector ctLife1 = PERK_TREE.registerPerk(lifeRoot1);
         PointConnector ctLife2 = PERK_TREE.registerPerk(lifeRoot2);

@@ -83,7 +83,7 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
     }
 
     private void buildCelestialCrystals() {
-        if (world.setBlockState(getPosition(), BlocksAS.celestialCrystals.getDefaultState())) {
+        if (world.setBlockState(getPosition(), BlocksAS.celestialCrystalsStage0.getDefaultState())) {
             PacketChannel.CHANNEL.sendToAllAround(new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_FORM, posX, posY, posZ),
                     PacketChannel.pointFromPos(world, getPosition(), 64));
 

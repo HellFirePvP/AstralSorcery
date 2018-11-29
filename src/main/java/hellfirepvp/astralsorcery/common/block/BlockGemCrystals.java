@@ -37,6 +37,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -47,11 +48,11 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 27.11.2018 / 18:57
  */
-public class BlockGemCrystals extends BlockContainer implements BlockCustomName, BlockVariants {
+public class BlockGemCrystals extends BlockContainer implements BlockDynamicName {
 
-    public static final PropertyEnum<GrowthStageType> STAGE = PropertyEnum.create("stage", GrowthStageType.class);
+    private final GrowthStageType stage;
 
-    public BlockGemCrystals() {
+    public BlockGemCrystals(GrowthStageType growthStage) {
         super(Material.ROCK, MapColor.QUARTZ);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 2);
@@ -59,7 +60,12 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
         setLightLevel(0.3F);
         setSoundType(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(STAGE, GrowthStageType.STAGE_0));
+
+        this.stage = growthStage;
+    }
+
+    public GrowthStageType getGrwothStage() {
+        return stage;
     }
 
     @Override
@@ -72,13 +78,6 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     @SideOnly(Side.CLIENT)
     public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
         return true;
-    }
-
-    @Override
-    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-        for (GrowthStageType stageType : GrowthStageType.values()) {
-            list.add(new ItemStack(this, 1, stageType.ordinal()));
-        }
     }
 
     @Override
@@ -98,11 +97,6 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player);
-    }
-
-    @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
@@ -110,28 +104,6 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     @Override
     public boolean causesSuffocation(IBlockState state) {
         return false;
-    }
-
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        state.withProperty(STAGE, GrowthStageType.values()[
-                MathHelper.clamp(stack.getItemDamage(), 0, GrowthStageType.values().length)]);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(STAGE).ordinal();
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(STAGE, GrowthStageType.values()[
-                MathHelper.clamp(meta, 0, GrowthStageType.values().length)]);
-    }
-
-    @Override
-    public int damageDropped(IBlockState state) {
-        return getMetaFromState(state);
     }
 
     @Override
@@ -161,11 +133,6 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, STAGE);
-    }
-
-    @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
@@ -192,20 +159,10 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
         return new TileGemCrystals();
     }
 
+    @Nonnull
     @Override
-    public String getIdentifierForMeta(int meta) {
-        GrowthStageType type = getStateFromMeta(meta).getValue(STAGE);
-        return type.getName();
-    }
-
-    @Override
-    public List<IBlockState> getValidStates() {
-        return singleEnumPropertyStates(getDefaultState(), STAGE, GrowthStageType.values());
-    }
-
-    @Override
-    public String getStateName(IBlockState state) {
-        return state.getValue(STAGE).getName();
+    public String getChangedName(String currentName) {
+        return currentName + "_" + stage.getName();
     }
 
     public static enum GrowthStageType implements IStringSerializable {

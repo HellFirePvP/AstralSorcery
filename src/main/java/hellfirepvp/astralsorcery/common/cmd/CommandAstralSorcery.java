@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -32,10 +33,7 @@ import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -129,7 +127,10 @@ public class CommandAstralSorcery extends CommandBase {
                         return getListOfStringsMatchingLastWord(args, names);
                     }
                     case "progress":
-                        return getListOfStringsMatchingLastWord(args, "all");
+                        List<String> progressNames = new ArrayList<>();
+                        progressNames.add("all");
+                        progressNames.add("next");
+                        return getListOfStringsMatchingLastWord(args, progressNames);
                     case "attune": {
                         List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getMajorConstellations()) {
@@ -235,7 +236,7 @@ public class CommandAstralSorcery extends CommandBase {
         if(ResearchManager.setAttunedConstellation(other, cst)) {
             sender.sendMessage(new TextComponentString("§aSuccess! Player has been attuned to " + cst.getUnlocalizedName()));
         } else {
-            sender.sendMessage(new TextComponentString("§cFailed! Player specified doesn't seem to have a research progress!"));
+            sender.sendMessage(new TextComponentString("§cFailed! Player specified doesn't seem to have the research progress necessary!"));
         }
     }
 
@@ -355,6 +356,7 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
+        PlayerProgress prog = prTuple.value;
         EntityPlayer other = prTuple.key;
         if("all".equalsIgnoreCase(argument)) {
             if(!ResearchManager.maximizeTier(other)) {
@@ -362,18 +364,16 @@ public class CommandAstralSorcery extends CommandBase {
             } else {
                 sender.sendMessage(new TextComponentString("§aMaximized ProgressionTier for " + otherPlayerName + " !"));
             }
-        }/* else {
-            Optional<ProgressionTier> did = ResearchManager.stepTier(other);
-            if(!did.isPresent()) {
-                sender.addChatMessage(new TextComponentString("§cCould not step Progress for " + otherPlayerName + " ! (Is already at max)"));
+        } else if ("next".equalsIgnoreCase(argument)) {
+            ProgressionTier tier = prog.getTierReached();
+            if (!tier.hasNextTier()) {
+                sender.sendMessage(new TextComponentString("§aPlayer " + otherPlayerName + " has already reached the highest tier!"));
             } else {
-                if(did.get() != null) {
-                    sender.addChatMessage(new TextComponentString("§aPlayer " + otherPlayerName + " advanced to Tier " + did.get().name() + "!"));
-                } else {
-                    sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
-                }
+                ProgressionTier next = tier.next();
+                ResearchManager.giveProgressionIgnoreFail(other, next);
+                sender.sendMessage(new TextComponentString("§aPlayer " + otherPlayerName + " advanced to Tier " + next.name() + "!"));
             }
-        }*/
+        }
     }
 
     private void showProgress(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
