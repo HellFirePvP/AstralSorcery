@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.block.BlockDynamicName;
 import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
@@ -177,19 +176,11 @@ public class RegistryItems {
     }
 
     private static <T extends Block> void registerCustomNameItemBlock(T block) {
-        String name = block.getClass().getSimpleName().toLowerCase();
-        if (block instanceof BlockDynamicName) {
-            name = ((BlockDynamicName) block).getChangedName(name).toLowerCase();
-        }
-        registerItem(new ItemBlockCustomName(block), name);
+        registerItem(new ItemBlockCustomName(block), block.getClass().getSimpleName().toLowerCase());
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block) {
-        String name = block.getClass().getSimpleName().toLowerCase();
-        if (block instanceof BlockDynamicName) {
-            name = ((BlockDynamicName) block).getChangedName(name).toLowerCase();
-        }
-        registerDefaultItemBlock(block, name);
+        registerDefaultItemBlock(block, block.getClass().getSimpleName().toLowerCase());
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block, String name) {

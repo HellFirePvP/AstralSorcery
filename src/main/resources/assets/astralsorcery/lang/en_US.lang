@@ -614,11 +614,7 @@ tile.blockmarblestairs.name=Marble Stairs
 tile.blockmarbleslab.bricks.name=Marble Slab
 tile.blockprism.name=PrismLens
 tile.blocklens.name=Lens
-tile.blockcelestialcrystals_stage_0.name=Celestial Crystal Cluster
-tile.blockcelestialcrystals_stage_1.name=Celestial Crystal Cluster
-tile.blockcelestialcrystals_stage_2.name=Celestial Crystal Cluster
-tile.blockcelestialcrystals_stage_3.name=Celestial Crystal Cluster
-tile.blockcelestialcrystals_stage_4.name=Celestial Crystal Cluster
+tile.blockcelestialcrystals.name=Celestial Crystal Cluster
 tile.blockwell.name=Lightwell
 tile.blockmachine.telescope.name=Telescope
 tile.blockmachine.grindstone.name=Grindstone
@@ -638,11 +634,7 @@ tile.blockborehead.ore.name=Petromantic Prime
 tile.blockborehead.vortex.name=Fysallidic Prime
 tile.blockportalnode.name=
 tile.blockobservatory.name=Observatory
-tile.blockgemcrystals_stage_0.name=Gem Crystal Cluster
-tile.blockgemcrystals_stage_1.name=Gem Crystal Cluster
-tile.blockgemcrystals_stage_2_sky.name=Gem Crystal Cluster
-tile.blockgemcrystals_stage_2_day.name=Gem Crystal Cluster
-tile.blockgemcrystals_stage_2_night.name=Gem Crystal Cluster
+tile.blockgemcrystals.name=Gem Crystal Cluster
 
 tile.blockgeolosyssamplecluster.name=Rock Crystal Sample
 

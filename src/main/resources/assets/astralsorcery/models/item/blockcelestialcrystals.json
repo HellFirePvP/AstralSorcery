@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "change:me"
+        "all": "astralsorcery:misc/blank"
     }
 }

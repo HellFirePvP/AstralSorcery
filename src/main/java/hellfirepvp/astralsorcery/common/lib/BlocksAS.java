@@ -58,17 +58,8 @@ public class BlocksAS {
     public static BlockPortalNode blockPortalNode;
     public static BlockObservatory blockObservatory;
 
-    public static BlockCelestialCrystals celestialCrystalsStage0;
-    public static BlockCelestialCrystals celestialCrystalsStage1;
-    public static BlockCelestialCrystals celestialCrystalsStage2;
-    public static BlockCelestialCrystals celestialCrystalsStage3;
-    public static BlockCelestialCrystals celestialCrystalsStage4;
-
-    public static BlockGemCrystals gemCrystalsStage0;
-    public static BlockGemCrystals gemCrystalsStage1;
-    public static BlockGemCrystals gemCrystalsStage2_sky;
-    public static BlockGemCrystals gemCrystalsStage2_day;
-    public static BlockGemCrystals gemCrystalsStage2_night;
+    public static BlockCelestialCrystals celestialCrystals;
+    public static BlockGemCrystals gemCrystals;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

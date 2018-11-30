@@ -253,7 +253,7 @@ public class RegistryResearch {
         resEnhancedCollCrystal.addPage(getTextPage("ENHANCED_COLLECTOR.1"));
         resEnhancedCollCrystal.addPage(new JournalPageStructure(MultiBlockArrays.patternCollectorEnhancement, null, new Vector3(0, -36, 0)));
 
-        ResearchNode resCelCrystalCluster = new ResearchNode(new ItemStack(BlocksAS.celestialCrystalsStage2), "CEL_CRYSTAL_GROW", 0, 2);
+        ResearchNode resCelCrystalCluster = new ResearchNode(new ItemStack(BlocksAS.celestialCrystals, 1, 3), "CEL_CRYSTAL_GROW", 0, 2);
         resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.1"));
         resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.2"));
 
@@ -286,31 +286,27 @@ public class RegistryResearch {
         resEnchantmentAmulet.addPage(getTextPage("ENCHANTMENT_AMULET.3"));
         resEnchantmentAmulet.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rEnchAmuletReroll));
 
-        registerItemLookup(new ItemStack(ItemsAS.celestialCrystal, 1, OreDictionary.WILDCARD_VALUE),            resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.celestialCrystalsStage0, 1, OreDictionary.WILDCARD_VALUE),    resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.celestialCrystalsStage1, 1, OreDictionary.WILDCARD_VALUE),    resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.celestialCrystalsStage2, 1, OreDictionary.WILDCARD_VALUE),    resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.celestialCrystalsStage3, 1, OreDictionary.WILDCARD_VALUE),    resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.celestialCrystalsStage4, 1, OreDictionary.WILDCARD_VALUE),    resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.collectorCrystal, 1, OreDictionary.WILDCARD_VALUE),           resCollCrystal,       0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.lensPrism, 1, OreDictionary.WILDCARD_VALUE),                  resPrism,             0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(ItemColoredLens.ColorType.FIRE.asStack(),                                                    resColoredLenses,     0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(ItemColoredLens.ColorType.BREAK.asStack(),                                                   resColoredLenses,     0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(ItemColoredLens.ColorType.GROW.asStack(),                                                    resColoredLenses,     0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(ItemColoredLens.ColorType.DAMAGE.asStack(),                                                  resColoredLenses,     0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(ItemColoredLens.ColorType.REGEN.asStack(),                                                   resColoredLenses,     0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(ItemColoredLens.ColorType.PUSH.asStack(),                                                    resColoredLenses,     0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(ItemColoredLens.ColorType.SPECTRAL.asStack(),                                                resSpectralLens,      0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(ItemsAS.illuminationWand, 1, OreDictionary.WILDCARD_VALUE),            resIllWand,           0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.starlightInfuser, 1, OreDictionary.WILDCARD_VALUE),           resInfuser,           1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.treeBeacon, 1, OreDictionary.WILDCARD_VALUE),                 resTreeBeacon,        1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.ritualLink, 1, OreDictionary.WILDCARD_VALUE),                 resRitualLink,        1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                                           resInfuser,           1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(BlockInfusedWood.WoodType.INFUSED.asStack(),                                                 resInfuser,           1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.drawingTable, 1, OreDictionary.WILDCARD_VALUE),               resDrawing,           1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()),       resTraitUpgrade,      1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(ItemsAS.enchantmentAmulet),                                                    resEnchantmentAmulet, 1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(ItemsAS.infusedGlass),                                                         resDrawing,           4, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(ItemsAS.celestialCrystal, 1, OreDictionary.WILDCARD_VALUE),      resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.celestialCrystals, 1, OreDictionary.WILDCARD_VALUE),    resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.collectorCrystal, 1, OreDictionary.WILDCARD_VALUE),     resCollCrystal,       0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.lensPrism, 1, OreDictionary.WILDCARD_VALUE),            resPrism,             0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.FIRE.asStack(),                                              resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.BREAK.asStack(),                                             resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.GROW.asStack(),                                              resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.DAMAGE.asStack(),                                            resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.REGEN.asStack(),                                             resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.PUSH.asStack(),                                              resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.SPECTRAL.asStack(),                                          resSpectralLens,      0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(ItemsAS.illuminationWand, 1, OreDictionary.WILDCARD_VALUE),      resIllWand,           0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.starlightInfuser, 1, OreDictionary.WILDCARD_VALUE),     resInfuser,           1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.treeBeacon, 1, OreDictionary.WILDCARD_VALUE),           resTreeBeacon,        1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.ritualLink, 1, OreDictionary.WILDCARD_VALUE),           resRitualLink,        1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                                     resInfuser,           1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(BlockInfusedWood.WoodType.INFUSED.asStack(),                                           resInfuser,           1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.drawingTable, 1, OreDictionary.WILDCARD_VALUE),         resDrawing,           1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), resTraitUpgrade,      1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(ItemsAS.enchantmentAmulet),                                              resEnchantmentAmulet, 1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(ItemsAS.infusedGlass),                                                   resDrawing,           4, ResearchProgression.CONSTELLATION);
 
         resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
         resPrism.addSourceConnectionFrom(resInfuser);

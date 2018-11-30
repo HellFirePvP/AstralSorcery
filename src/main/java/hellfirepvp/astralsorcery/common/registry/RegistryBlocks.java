@@ -145,33 +145,10 @@ public class RegistryBlocks {
         queueDefaultItemBlock(lens);
         queueDefaultItemBlock(lensPrism);
 
-        celestialCrystalsStage0 = registerBlock(new BlockCelestialCrystals(
-                "stage_0", BlockCelestialCrystals.bbStage0, () -> celestialCrystalsStage1.getDefaultState()));
-        queueDefaultItemBlock(celestialCrystalsStage0);
-        celestialCrystalsStage1 = registerBlock(new BlockCelestialCrystals(
-                "stage_1", BlockCelestialCrystals.bbStage1, () -> celestialCrystalsStage2.getDefaultState()));
-        queueDefaultItemBlock(celestialCrystalsStage1);
-        celestialCrystalsStage2 = registerBlock(new BlockCelestialCrystals(
-                "stage_2", BlockCelestialCrystals.bbStage2, () -> celestialCrystalsStage3.getDefaultState()));
-        queueDefaultItemBlock(celestialCrystalsStage2);
-        celestialCrystalsStage3 = registerBlock(new BlockCelestialCrystals(
-                "stage_3", BlockCelestialCrystals.bbStage3, () -> celestialCrystalsStage4.getDefaultState()));
-        queueDefaultItemBlock(celestialCrystalsStage3);
-        celestialCrystalsStage4 = registerBlock(new BlockCelestialCrystals(
-                "stage_4", BlockCelestialCrystals.bbStage4, () -> null)
-                .setStageDropCrystals());
-        queueDefaultItemBlock(celestialCrystalsStage4);
-
-        gemCrystalsStage0 = registerBlock(new BlockGemCrystals(BlockGemCrystals.GrowthStageType.STAGE_0));
-        queueDefaultItemBlock(gemCrystalsStage0);
-        gemCrystalsStage1 = registerBlock(new BlockGemCrystals(BlockGemCrystals.GrowthStageType.STAGE_1));
-        queueDefaultItemBlock(gemCrystalsStage1);
-        gemCrystalsStage2_sky = registerBlock(new BlockGemCrystals(BlockGemCrystals.GrowthStageType.STAGE_2_SKY));
-        queueDefaultItemBlock(gemCrystalsStage2_sky);
-        gemCrystalsStage2_day = registerBlock(new BlockGemCrystals(BlockGemCrystals.GrowthStageType.STAGE_2_DAY));
-        queueDefaultItemBlock(gemCrystalsStage2_day);
-        gemCrystalsStage2_night = registerBlock(new BlockGemCrystals(BlockGemCrystals.GrowthStageType.STAGE_2_NIGHT));
-        queueDefaultItemBlock(gemCrystalsStage2_night);
+        celestialCrystals = registerBlock(new BlockCelestialCrystals());
+        queueCustomNameItemBlock(celestialCrystals);
+        gemCrystals = registerBlock(new BlockGemCrystals());
+        queueCustomNameItemBlock(gemCrystals);
 
         //Machines&Related
         //stoneMachine = registerBlock(new BlockStoneMachine());
@@ -196,6 +173,9 @@ public class RegistryBlocks {
         registerBlockRender(blockStructural);
         registerBlockRender(blockMachine);
         registerBlockRender(treeBeacon);
+
+        registerBlockRender(celestialCrystals);
+        registerBlockRender(gemCrystals);
     }
 
     //Tiles
@@ -248,11 +228,7 @@ public class RegistryBlocks {
     }
 
     public static <T extends Block> T registerBlock(T block) {
-        String name = block.getClass().getSimpleName().toLowerCase();
-        if (block instanceof BlockDynamicName) {
-            name = ((BlockDynamicName) block).getChangedName(name).toLowerCase();
-        }
-        return registerBlock(block, name);
+        return registerBlock(block, block.getClass().getSimpleName().toLowerCase());
     }
 
     private static void registerBlockRender(Block block) {

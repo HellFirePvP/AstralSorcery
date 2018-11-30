@@ -18,7 +18,6 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.Provider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -46,8 +45,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -59,14 +56,9 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 14.09.2016 / 23:42
  */
-public class BlockCelestialCrystals extends BlockContainer implements IBlockStarlightRecipient, BlockDynamicName {
+public class BlockCelestialCrystals extends BlockContainer implements IBlockStarlightRecipient, BlockCustomName, BlockVariants {
 
     private static final Random rand = new Random();
-
-    private final String addedName;
-    private final AxisAlignedBB boundingBox;
-    private final Provider<IBlockState> nextStage;
-    private boolean stageDropCrystals = false;
 
     public static AxisAlignedBB bbStage0 = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.3, 0.9);
     public static AxisAlignedBB bbStage1 = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.4, 0.9);
@@ -74,7 +66,9 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     public static AxisAlignedBB bbStage3 = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.6, 0.9);
     public static AxisAlignedBB bbStage4 = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.7, 0.9);
 
-    public BlockCelestialCrystals(String subName, AxisAlignedBB box, Provider<IBlockState> nextStage) {
+    public static PropertyInteger STAGE = PropertyInteger.create("stage", 0, 4);
+
+    public BlockCelestialCrystals() {
         super(Material.ROCK, MapColor.QUARTZ);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 2);
@@ -82,20 +76,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
         setLightLevel(0.4F);
         setSoundType(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-
-        this.addedName = subName;
-        this.boundingBox = box;
-        this.nextStage = nextStage;
-    }
-
-    public BlockCelestialCrystals setStageDropCrystals() {
-        this.stageDropCrystals = true;
-        return this;
-    }
-
-    @Nullable
-    public IBlockState getNextStage() {
-        return nextStage.provide();
+        setDefaultState(this.blockState.getBaseState().withProperty(STAGE, 0));
     }
 
     @Override
@@ -105,7 +86,21 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return this.boundingBox;
+        switch (state.getValue(STAGE)) {
+            case 0:
+                return bbStage0;
+            case 1:
+                return bbStage1;
+            case 2:
+                return bbStage2;
+            case 3:
+                return bbStage3;
+            case 4:
+                return bbStage4;
+            default:
+                break;
+        }
+        return super.getBoundingBox(state, source, pos);
     }
 
     @Override
@@ -118,6 +113,13 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @SideOnly(Side.CLIENT)
     public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
         return true;
+    }
+
+    @Override
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+        for (int i = 0; i < 5; i++) {
+            list.add(new ItemStack(this, 1, i));
+        }
     }
 
     @Override
@@ -137,6 +139,11 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
+    }
+
+    @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
@@ -144,34 +151,39 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
-        if (stageDropCrystals) {
-            if(world != null && world instanceof World && checkSafety((World) world, pos)) {
-                if(fortune > 0 || rand.nextInt(2) == 0) {
-                    drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
-                }
-                IBlockState down = world.getBlockState(pos.down());
-                boolean hasStarmetal = down.getBlock() instanceof BlockCustomOre &&
-                        down.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.STARMETAL);
+        int stage = state.getValue(STAGE);
+        switch (stage) {
+            case 4:
+                if(world != null && world instanceof World && checkSafety((World) world, pos)) {
+                    if(fortune > 0 || rand.nextInt(2) == 0) {
+                        drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
+                    }
+                    IBlockState down = world.getBlockState(pos.down());
+                    boolean hasStarmetal = down.getBlock() instanceof BlockCustomOre &&
+                            down.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.STARMETAL);
 
-                ItemStack celCrystal = ItemRockCrystalBase.createRandomCelestialCrystal();
-                if(hasStarmetal) {
-                    CrystalProperties prop = CrystalProperties.getCrystalProperties(celCrystal);
-                    int missing = 100 - prop.getPurity();
-                    if(missing > 0) {
-                        prop = new CrystalProperties(
-                                prop.getSize(),
-                                MathHelper.clamp(prop.getPurity() + rand.nextInt(missing) + 1, 0, 100),
-                                prop.getCollectiveCapability(),
-                                prop.getFracturation(),
-                                prop.getSizeOverride());
-                        CrystalProperties.applyCrystalProperties(celCrystal, prop);
+                    ItemStack celCrystal = ItemRockCrystalBase.createRandomCelestialCrystal();
+                    if(hasStarmetal) {
+                        CrystalProperties prop = CrystalProperties.getCrystalProperties(celCrystal);
+                        int missing = 100 - prop.getPurity();
+                        if(missing > 0) {
+                            prop = new CrystalProperties(
+                                    prop.getSize(),
+                                    MathHelper.clamp(prop.getPurity() + rand.nextInt(missing) + 1, 0, 100),
+                                    prop.getCollectiveCapability(),
+                                    prop.getFracturation(),
+                                    prop.getSizeOverride());
+                            CrystalProperties.applyCrystalProperties(celCrystal, prop);
+                        }
+                    }
+                    drops.add(celCrystal);
+                    if(hasStarmetal && rand.nextInt(3) == 0) {
+                        drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); //Lucky~~
                     }
                 }
-                drops.add(celCrystal);
-                if(hasStarmetal && rand.nextInt(3) == 0) {
-                    drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); //Lucky~~
-                }
-            }
+                break;
+            default:
+                break;
         }
     }
 
@@ -190,6 +202,26 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                 tile.tryGrowth(0.3);
             }
         }
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        state.withProperty(STAGE, stack.getItemDamage());
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(STAGE);
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(STAGE, meta);
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
     }
 
     @Override
@@ -230,6 +262,11 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, STAGE);
+    }
+
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
@@ -249,9 +286,22 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
         return new TileCelestialCrystals();
     }
 
-    @Nonnull
     @Override
-    public String getChangedName(String currentName) {
-        return currentName + "_" + addedName;
+    public String getIdentifierForMeta(int meta) {
+        return "stage_" + meta;
+    }
+
+    @Override
+    public List<IBlockState> getValidStates() {
+        List<IBlockState> ret = new LinkedList<>();
+        for (int stage : STAGE.getAllowedValues()) {
+            ret.add(getDefaultState().withProperty(STAGE, stage));
+        }
+        return ret;
+    }
+
+    @Override
+    public String getStateName(IBlockState state) {
+        return "stage_" + state.getValue(STAGE);
     }
 }
