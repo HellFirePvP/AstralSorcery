@@ -68,7 +68,7 @@ public class ClientGatewayHandler {
             TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, true);
             if(gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
                 if(lastScreenshotPos != null) {
-                    WorldBlockPos currentPos = new WorldBlockPos(gate);
+                    WorldBlockPos currentPos = WorldBlockPos.wrap(gate);
                     if(!lastScreenshotPos.equals(currentPos)) {
                         lastScreenshotPos = null;
                         screenshotCooldown = 0;
@@ -209,7 +209,7 @@ public class ClientGatewayHandler {
         if(gatewayScreenshot == null && Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.rotationPitch <= 0 &&
                 Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().renderGlobal.getRenderedChunks() > 200) {
             screenshotCooldown = 10;
-            lastScreenshotPos = new WorldBlockPos(gate);
+            lastScreenshotPos = WorldBlockPos.wrap(gate);
 
             ClientScreenshotCache.takeViewScreenshotFor(gate.getWorld().provider.getDimension(), gate.getPos());
         }

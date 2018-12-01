@@ -175,6 +175,18 @@ public class PatreonEffectHelper {
         effectMap.put( //MineForFish / MineForFish
                 UUID.fromString("42270669-9ae8-4d0e-a7a0-a32f3467d01d"),
                 new PatreonEffect(FlareColor.WATER));
+
+        effectMap.put( //Choco / chocopufs
+                UUID.fromString("00c760f0-cfaf-4943-9f90-8cc91159c52f"),
+                new PatreonEffect(FlareColor.ELDRITCH));
+
+        effectMap.put( // Dayyer1 / Dayyer1
+                UUID.fromString("b4650227-6f4a-4e4c-9333-d1a552203967"),
+                new PatreonEffect(FlareColor.GOLD));
+
+        effectMap.put( // KirinDave / ⛈9
+                UUID.fromString("99a814a0-bff4-4526-bee6-4af5c74a6824"),
+                new PatreonEffect(FlareColor.WATER));
     }
 
     @Nullable

@@ -198,7 +198,6 @@ public class RegistryBlocks {
         registerTile(TileTranslucent.class);
         registerTile(TileAttunementRelay.class);
         registerTile(TileMapDrawingTable.class);
-        //registerTile(TileCelestialOrrery.class);
         registerTile(TileCelestialGateway.class);
         registerTile(TileOreGenerator.class);
         registerTile(TileVanishing.class);
@@ -246,7 +245,7 @@ public class RegistryBlocks {
     }
 
     private static void registerTile(Class<? extends TileEntity> tile, String name) {
-        GameRegistry.registerTileEntity(tile, new ResourceLocation(AstralSorcery.MODID, name).toString());
+        GameRegistry.registerTileEntity(tile, new ResourceLocation(AstralSorcery.MODID, name));
 
         MappingMigrationHandler.listenTileMigration(name);
     }

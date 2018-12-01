@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -237,5 +238,24 @@ public class NBTHelper {
                 compound.getDouble("vecPosX"),
                 compound.getDouble("vecPosY"),
                 compound.getDouble("vecPosZ"));
+    }
+
+    public static void writeBoundingBox(AxisAlignedBB box, NBTTagCompound tag) {
+        tag.setDouble("boxMinX", box.minX);
+        tag.setDouble("boxMinY", box.minY);
+        tag.setDouble("boxMinZ", box.minZ);
+        tag.setDouble("boxMaxX", box.maxX);
+        tag.setDouble("boxMaxY", box.maxY);
+        tag.setDouble("boxMaxZ", box.maxZ);
+    }
+
+    public static AxisAlignedBB readBoundingBox(NBTTagCompound tag) {
+        return new AxisAlignedBB(
+                tag.getDouble("boxMinX"),
+                tag.getDouble("boxMinY"),
+                tag.getDouble("boxMinZ"),
+                tag.getDouble("boxMaxX"),
+                tag.getDouble("boxMaxY"),
+                tag.getDouble("boxMaxZ"));
     }
 }

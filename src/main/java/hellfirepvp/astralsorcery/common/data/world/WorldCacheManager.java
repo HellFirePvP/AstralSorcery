@@ -261,8 +261,8 @@ public class WorldCacheManager implements ITickHandler {
         LIGHT_NETWORK("lightnetwork", LightNetworkBuffer::new),
         CHUNK_VERSIONING("chunkversions", ChunkVersionBuffer::new),
         GATEWAY_DATA("gateway", GatewayCache::new),
-        STRUCTURE_GEN("structures", StructureGenBuffer::new);
-        //STORAGE_BUFFER("storagenetwork", StructureGenBuffer::new);
+        STRUCTURE_GEN("structures", StructureGenBuffer::new),
+        STORAGE_BUFFER("storagenetwork", StructureGenBuffer::new);
 
         private final String identifier;
         private final DataProvider<CachedWorldData> instanceProvider;

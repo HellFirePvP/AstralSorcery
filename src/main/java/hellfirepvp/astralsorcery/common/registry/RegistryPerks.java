@@ -424,6 +424,40 @@ public class RegistryPerks {
                 .connect(perkIncMs2);
         PERK_TREE.registerPerk(keyCull)
                 .connect(perkIncCrit);
+
+        AttributeModifierPerk perkCrJ1 = new AttributeModifierPerk("crit_inc_chance_proj", 2, -25);
+        perkCrJ1.addModifier(2F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrJ1.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkCrJ2 = new AttributeModifierPerk("crit_inc_chance_proj_1", 1, -24).setNameOverride(perkCrJ1);
+        perkCrJ2.addModifier(2F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrJ2.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        MajorPerk perkProjMul = new MajorPerk("major_crit_proj", 2, -23);
+        perkProjMul.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
+        perkProjMul.addModifier(0.3F , PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+
+        PERK_TREE.registerPerk(perkCrJ1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_dmg_1"));
+        PERK_TREE.registerPerk(perkCrJ2)
+                .connect(perkCrJ1);
+        PERK_TREE.registerPerk(perkProjMul)
+                .connect(perkCrJ2);
+
+        AttributeModifierPerk perkCrM1 = new AttributeModifierPerk("crit_inc_chance_melee", 25, -18);
+        perkCrM1.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrM1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        AttributeModifierPerk perkCrM2 = new AttributeModifierPerk("crit_inc_chance_melee_1", 26, -19).setNameOverride(perkCrM1);
+        perkCrM2.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrM2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        MajorPerk perkMeleeMul = new MajorPerk("major_crit_melee", 27, -18);
+        perkMeleeMul.addModifier(0.25F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
+        perkMeleeMul.addModifier(0.2F , PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+
+        PERK_TREE.registerPerk(perkCrM1)
+                .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_dmg_4"));
+        PERK_TREE.registerPerk(perkCrM2)
+                .connect(perkCrM1);
+        PERK_TREE.registerPerk(perkMeleeMul)
+                .connect(perkCrM2);
     }
 
     private static void initializeOuterEvorsioPerks() {
