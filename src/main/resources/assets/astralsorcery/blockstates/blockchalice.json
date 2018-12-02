@@ -4,13 +4,13 @@
         {
             "when": {"active": true},
             "apply": [
-                { "model": "astralsorcery:blockchalice" }
+                { "model": "astralsorcery:chalice" }
             ]
         },
         {
             "when": {"active": false},
             "apply": [
-                { "model": "astralsorcery:blockmodel_nothing" }
+                { "model": "astralsorcery:model_nothing" }
             ]
         }
     ]

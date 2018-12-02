@@ -1,6 +1,6 @@
 {
     "variants": {
-        "half=bottom,marbletype=bricks": { "model": "astralsorcery:blockmarbleslab_bricks_bottom" },
-        "half=top,marbletype=bricks": { "model": "astralsorcery:blockmarbleslab_bricks_top" }
+        "half=bottom,marbletype=bricks": { "model": "astralsorcery:marble_slab_bricks_bottom" },
+        "half=top,marbletype=bricks": { "model": "astralsorcery:marble_slab_bricks_top" }
     }
 }

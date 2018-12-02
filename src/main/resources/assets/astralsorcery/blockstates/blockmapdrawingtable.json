@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model":"astralsorcery:blockmapdrawingtable" }
+        "normal": { "model":"astralsorcery:starmapping_table" }
     }
 }

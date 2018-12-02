@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model":"astralsorcery:blockstarlightinfuser" }
+        "normal": { "model":"astralsorcery:starlight_infuser" }
     }
 }

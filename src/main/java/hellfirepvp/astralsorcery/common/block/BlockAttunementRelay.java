@@ -55,7 +55,7 @@ public class BlockAttunementRelay extends BlockContainer {
         setHardness(0.5F);
         setHarvestLevel("pickaxe", 0);
         setResistance(1.0F);
-        setLightLevel(0.8F);
+        setLightLevel(0.25F);
         setSoundType(SoundType.GLASS);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
@@ -202,11 +202,6 @@ public class BlockAttunementRelay extends BlockContainer {
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
-    }
-
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override

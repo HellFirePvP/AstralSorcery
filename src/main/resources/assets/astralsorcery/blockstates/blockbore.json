@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model":"astralsorcery:blockbore" }
+        "normal": { "model":"astralsorcery:bore" }
     }
 }

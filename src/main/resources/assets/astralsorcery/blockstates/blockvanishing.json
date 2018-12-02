@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model":"astralsorcery:blockvanishing" }
+        "normal": { "model":"astralsorcery:vanishing_block" }
     }
 }

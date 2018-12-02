@@ -178,9 +178,4 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         return EnumBlockRenderType.MODEL;
     }
 
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
-    }
-
 }

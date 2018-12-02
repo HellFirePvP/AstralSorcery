@@ -1,13 +1,13 @@
 {
     "variants": {
-        "marbletype=raw": { "model":"astralsorcery:blockmarble_raw" },
-        "marbletype=bricks": { "model":"astralsorcery:blockmarble_bricks" },
-        "marbletype=pillar": { "model":"astralsorcery:blockmarble_pillar" },
-        "marbletype=pillar_top": { "model":"astralsorcery:blockmarble_pillar_top" },
-        "marbletype=pillar_bottom": { "model":"astralsorcery:blockmarble_pillar_bottom" },
-        "marbletype=arch": { "model":"astralsorcery:blockmarble_arch" },
-        "marbletype=chiseled": { "model":"astralsorcery:blockmarble_chiseled" },
-        "marbletype=engraved": { "model":"astralsorcery:blockmarble_engraved" },
-        "marbletype=runed": { "model":"astralsorcery:blockmarble_runed" }
+        "marbletype=raw": { "model":"astralsorcery:marble_raw" },
+        "marbletype=bricks": { "model":"astralsorcery:marble_bricks" },
+        "marbletype=pillar": { "model":"astralsorcery:marble_pillar" },
+        "marbletype=pillar_top": { "model":"astralsorcery:marble_pillar_top" },
+        "marbletype=pillar_bottom": { "model":"astralsorcery:marble_pillar_bottom" },
+        "marbletype=arch": { "model":"astralsorcery:marble_arch" },
+        "marbletype=chiseled": { "model":"astralsorcery:marble_chiseled" },
+        "marbletype=engraved": { "model":"astralsorcery:marble_engraved" },
+        "marbletype=runed": { "model":"astralsorcery:marble_runed" }
     }
 }
