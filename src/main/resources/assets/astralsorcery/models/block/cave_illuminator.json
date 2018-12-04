@@ -1,4 +1,5 @@
 {
+	"comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
     "ambientocclusion": false,
 	"parent": "block/block",
     "textures": {
