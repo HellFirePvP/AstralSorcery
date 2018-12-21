@@ -47,6 +47,10 @@ public class SpriteLibrary {
     private static final BindableResource texFlare2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare2");
     private static final BindableResource texCharge = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "charge");
     private static final BindableResource texHook = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "hook");
+    private static final BindableResource texGemExplodeBlue = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "g_explode_blue");
+    private static final BindableResource texGemExplodeGray = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "g_explode_gray");
+    private static final BindableResource texGemExplodeRed = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "g_explode_red");
+    private static final BindableResource texGemExplodeWhite = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "g_explode_white");
     private static final BindableResource texSpriteStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store");
     private static final BindableResource texLiquidStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "fluid/starlight_still");
 
@@ -60,6 +64,10 @@ public class SpriteLibrary {
     public static final SpriteSheetResource spriteHalo4 = texHalo4.asSpriteSheet(4, 8);
     public static final SpriteSheetResource spriteHalo5 = texHalo5.asSpriteSheet(4, 8);
     public static final SpriteSheetResource spriteHalo6 = texHalo6.asSpriteSheet(4, 8);
+    public static final SpriteSheetResource spriteGemExplodeBlue = texGemExplodeBlue.asSpriteSheet(5, 8);
+    public static final SpriteSheetResource spriteGemExplodeGray = texGemExplodeGray.asSpriteSheet(5, 8);
+    public static final SpriteSheetResource spriteGemExplodeRed = texGemExplodeRed.asSpriteSheet(5, 8);
+    public static final SpriteSheetResource spriteGemExplodeWhite = texGemExplodeWhite.asSpriteSheet(5, 8);
     public static final SpriteSheetResource spriteStar1 = texStar1.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spriteStar2 = texStar2.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spritePerkInactive     = flareInactive    .asSpriteSheet(5, 8);

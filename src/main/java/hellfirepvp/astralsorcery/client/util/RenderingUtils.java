@@ -927,10 +927,10 @@ public class RenderingUtils {
         Tessellator t = Tessellator.getInstance();
         BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ).tex(u,              v + vLength).color(cR, cG, cB, cA).endVertex();
-        vb.pos(px + v2.getX() - iPX, py + v2.getY() - iPY, pz + v2.getZ() - iPZ).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
-        vb.pos(px + v3.getX() - iPX, py + v3.getY() - iPY, pz + v3.getZ() - iPZ).tex(u + uLength, v          ).color(cR, cG, cB, cA).endVertex();
-        vb.pos(px + v4.getX() - iPX, py + v4.getY() - iPY, pz + v4.getZ() - iPZ).tex(u,              v          ).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v2.getX() - iPX, py + v2.getY() - iPY, pz + v2.getZ() - iPZ).tex(u + uLength, v          ).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v3.getX() - iPX, py + v3.getY() - iPY, pz + v3.getZ() - iPZ).tex(u,               v          ).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v4.getX() - iPX, py + v4.getY() - iPY, pz + v4.getZ() - iPZ).tex(u,            v + vLength).color(cR, cG, cB, cA).endVertex();
         t.draw();
     }
 

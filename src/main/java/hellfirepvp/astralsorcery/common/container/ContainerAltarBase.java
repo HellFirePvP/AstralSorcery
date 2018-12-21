@@ -29,11 +29,13 @@ public abstract class ContainerAltarBase extends Container {
     public final InventoryPlayer playerInv;
     public final TileAltar tileAltar;
     public final ItemStackHandler invHandler;
+    public final int altarGridSlotSize;
 
-    public ContainerAltarBase(InventoryPlayer playerInv, TileAltar tileAltar) {
+    public ContainerAltarBase(InventoryPlayer playerInv, TileAltar tileAltar, int altarGridSlotSize) {
         this.playerInv = playerInv;
         this.tileAltar = tileAltar;
         this.invHandler = tileAltar.getInventoryHandler();
+        this.altarGridSlotSize = altarGridSlotSize;
 
         bindPlayerInventory();
         bindAltarInventory();

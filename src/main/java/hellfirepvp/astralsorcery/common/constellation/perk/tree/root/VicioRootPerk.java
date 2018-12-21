@@ -87,7 +87,7 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             }
             if (flown > lastFly) {
                 added += (flown - lastFly) * 0.4F;
-                this.moveTrackMap.get(StatList.SPRINT_ONE_CM).put(uuid, sprint);
+                this.moveTrackMap.get(StatList.FLY_ONE_CM).put(uuid, flown);
             }
 
             if (!PlayerActivityManager.INSTANCE.isPlayerActiveServer(player)) {

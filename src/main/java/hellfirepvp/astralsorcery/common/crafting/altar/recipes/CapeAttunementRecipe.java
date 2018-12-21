@@ -57,13 +57,13 @@ public class CapeAttunementRecipe extends TraitRecipe {
     @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
-        ItemStack cPaper = new ItemStack(ItemsAS.armorImbuedCape);
+        ItemStack cape = new ItemStack(ItemsAS.armorImbuedCape);
         ItemStack center = altar.getInventoryHandler().getStackInSlot(ShapedRecipeSlot.CENTER.getSlotID());
         if(!center.isEmpty() && center.getItem() instanceof ItemCape) {
-            cPaper = ItemUtils.copyStackWithSize(center, center.getCount());
+            cape = ItemUtils.copyStackWithSize(center, center.getCount());
         }
-        ItemCape.setAttunedConstellation(cPaper, constellation);
-        return cPaper;
+        ItemCape.setAttunedConstellation(cape, constellation);
+        return cape;
     }
 
 }

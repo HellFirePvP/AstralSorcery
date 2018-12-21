@@ -22,15 +22,23 @@ import net.minecraftforge.items.SlotItemHandler;
  */
 public class ContainerAltarAttunement extends ContainerAltarBase {
 
+    protected ContainerAltarAttunement(InventoryPlayer playerInv, TileAltar tileAltar, int altarGridSlotSize) {
+        super(playerInv, tileAltar, altarGridSlotSize);
+    }
+
     public ContainerAltarAttunement(InventoryPlayer playerInv, TileAltar tileAltar) {
-        super(playerInv, tileAltar);
+        super(playerInv, tileAltar, 133);
     }
 
     @Override
     void bindAltarInventory() {
         for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler,     xx, 102 + xx * 18, 29));
+        }
+        for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler, 3 + xx, 102 + xx * 18, 47));
+        }
+        for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler, 6 + xx, 102 + xx * 18, 65));
         }
         addSlotToContainer(new SlotItemHandler(invHandler,  9, 84,  11));

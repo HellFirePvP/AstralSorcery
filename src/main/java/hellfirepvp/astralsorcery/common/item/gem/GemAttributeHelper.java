@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttribu
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.config.Configuration;
 
 import javax.annotation.Nullable;
@@ -82,7 +83,12 @@ public class GemAttributeHelper {
         if (!ItemPerkGem.getModifiers(gem).isEmpty()) {
             return false;
         }
-        int rolls = getPotentialMods(random);
+        ItemPerkGem.GemType gemType = ItemPerkGem.getGemType(gem);
+        if (gemType == null) {
+            return false;
+        }
+
+        int rolls = getPotentialMods(random, gemType.countModifier);
         List<GemAttributeModifier> mods = new ArrayList<>();
         for (int i = 0; i < rolls; i++) {
             String type = null;
@@ -122,7 +128,7 @@ public class GemAttributeHelper {
             if (lower > higher) {
                 value = lower;
             } else {
-                value = lower + (random.nextFloat() * (higher - lower));
+                value = lower + (MathHelper.clamp(random.nextFloat() * gemType.amplifierModifier, 0F, 1F) * (higher - lower));
             }
 
             PerkAttributeModifier.Mode mode = isMultiplicative ? PerkAttributeModifier.Mode.STACKING_MULTIPLY : PerkAttributeModifier.Mode.ADDED_MULTIPLY;
@@ -167,11 +173,11 @@ public class GemAttributeHelper {
         return result;
     }
 
-    private static int getPotentialMods(Random random) {
+    private static int getPotentialMods(Random random, float countModifier) {
         int mods = 2;
-        if (random.nextFloat() < chance3Modifiers) {
+        if (random.nextFloat() < (chance3Modifiers * countModifier)) {
             mods++;
-            if (random.nextFloat() < chance4Modifiers) {
+            if (random.nextFloat() < (chance4Modifiers * countModifier)) {
                 mods++;
             }
         }

@@ -23,14 +23,18 @@ import net.minecraftforge.items.SlotItemHandler;
 public class ContainerAltarDiscovery extends ContainerAltarBase {
 
     public ContainerAltarDiscovery(InventoryPlayer playerInv, TileAltar tileAltar) {
-        super(playerInv, tileAltar);
+        super(playerInv, tileAltar, 9);
     }
 
     @Override
     void bindAltarInventory() {
         for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler,     xx, 62 + xx * 18, 11));
+        }
+        for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler, 3 + xx, 62 + xx * 18, 29));
+        }
+        for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler, 6 + xx, 62 + xx * 18, 47));
         }
     }

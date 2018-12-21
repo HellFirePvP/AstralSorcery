@@ -27,9 +27,4 @@ public interface IWeakConstellation extends IConstellation {
     @Nullable
     public ConstellationEffect getRitualEffect(ILocatable origin);
 
-    @Override
-    default boolean canDiscover(PlayerProgress progress) {
-        return progress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) && progress.wasOnceAttuned();
-    }
-
 }

@@ -187,6 +187,10 @@ public class PatreonEffectHelper {
         effectMap.put( // KirinDave / ⛈9
                 UUID.fromString("99a814a0-bff4-4526-bee6-4af5c74a6824"),
                 new PatreonEffect(FlareColor.WATER));
+
+        effectMap.put( //Lt1489 / Lt1489
+                UUID.fromString("3feaa8f8-d33a-4cd8-9a8a-61688521ad83"),
+                new PatreonEffect(FlareColor.STANDARD));
     }
 
     @Nullable

@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -108,7 +109,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IConstellation c = getConstellation(stack);
-        if (c != null) {
+        if (c != null && c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
             tooltip.add(TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
         } else {
             tooltip.add(TextFormatting.GRAY + I18n.format("constellation.noInformation"));
@@ -137,7 +138,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
             if (progress != null) {
                 List<IConstellation> constellations = new ArrayList<>();
                 for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
-                    if(c.canDiscover(progress)) {
+                    if(c.canDiscover((EntityPlayer) entityIn, progress)) {
                         constellations.add(c);
                     }
                 }

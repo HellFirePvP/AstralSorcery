@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.item.gem;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.GemAttributeModifier;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
@@ -107,6 +108,18 @@ public class ItemPerkGem extends Item implements IItemVariants {
         return true;
     }
 
+    @Nullable
+    public static GemType getGemType(ItemStack gem) {
+        if (gem.isEmpty() || !(gem.getItem() instanceof ItemPerkGem)) {
+            return null;
+        }
+        int meta = gem.getMetadata();
+        if (meta < 0 || meta >= GemType.values().length) {
+            return null;
+        }
+        return GemType.values()[meta];
+    }
+
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         Item i = stack.getItem();
@@ -141,10 +154,21 @@ public class ItemPerkGem extends Item implements IItemVariants {
 
     public static enum GemType {
 
-        SKY,
-        DAY,
-        NIGHT
+        SKY  (1.0F, 1.0F),
+        DAY  (1.5F, 0.5F),
+        NIGHT(0.5F, 1.5F);
 
+        public final float countModifier;
+        public final float amplifierModifier;
+
+        GemType(float countModifier, float amplifierModifier) {
+            this.countModifier = countModifier;
+            this.amplifierModifier = amplifierModifier;
+        }
+
+        public ItemStack asStack() {
+            return new ItemStack(ItemsAS.perkGem, 1, ordinal());
+        }
     }
 
 }

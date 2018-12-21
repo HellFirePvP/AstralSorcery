@@ -104,18 +104,6 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        return true;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
-        return true;
-    }
-
-    @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (int i = 0; i < 5; i++) {
             list.add(new ItemStack(this, 1, i));

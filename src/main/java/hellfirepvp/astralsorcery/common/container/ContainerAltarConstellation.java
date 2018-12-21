@@ -21,8 +21,12 @@ import net.minecraftforge.items.SlotItemHandler;
  */
 public class ContainerAltarConstellation extends ContainerAltarAttunement {
 
+    protected ContainerAltarConstellation(InventoryPlayer playerInv, TileAltar tileAltar, int altarGridSlotSize) {
+        super(playerInv, tileAltar, altarGridSlotSize);
+    }
+
     public ContainerAltarConstellation(InventoryPlayer playerInv, TileAltar tileAltar) {
-        super(playerInv, tileAltar);
+        super(playerInv, tileAltar, 21);
     }
 
     @Override

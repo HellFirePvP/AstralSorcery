@@ -683,7 +683,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
 
             List<StarConnection> sc = c.getStarConnections();
             if (sc.size() != drawnLines.size()) continue; //Can't match otherwise anyway.
-            if (!c.canDiscover(ResearchManager.clientProgress)) continue;
+            if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) continue;
 
             Map<StarLocation, Rectangle> stars = info.getValue();
 

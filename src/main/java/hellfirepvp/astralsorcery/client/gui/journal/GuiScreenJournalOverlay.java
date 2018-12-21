@@ -32,6 +32,13 @@ public class GuiScreenJournalOverlay extends GuiWHScreen {
     }
 
     @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height) {
+        super.setWorldAndResolution(mc, width, height);
+
+        origin.setWorldAndResolution(mc, width, height);
+    }
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 

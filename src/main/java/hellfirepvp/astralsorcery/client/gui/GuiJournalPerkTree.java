@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.ClientProxy;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.journal.*;
 import hellfirepvp.astralsorcery.client.gui.perk.BatchPerkContext;
@@ -1068,6 +1070,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                         if (((GemSlotPerk) perk).hasItem(Minecraft.getMinecraft().player, Side.CLIENT)) {
                             PktPerkGemModification pkt = PktPerkGemModification.dropItem(perk);
                             PacketChannel.CHANNEL.sendToServer(pkt);
+                            AstralSorcery.proxy.scheduleClientside(() -> {
+                                if (Minecraft.getMinecraft().currentScreen == this) { //Only if user hasn't closed
+                                    updateSearchHighlight();
+                                }
+                            }, 10);
                             SoundHelper.playSoundClient(SoundEvents.BLOCK_GLASS_PLACE, .35F, 9f);
                             return;
                         } else {

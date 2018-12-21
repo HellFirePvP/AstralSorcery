@@ -102,7 +102,8 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         if(handle != null) {
             List<IWeakConstellation> weakConstellations = new LinkedList<>();
             for (IConstellation c : handle.getActiveConstellations()) {
-                if(c instanceof IWeakConstellation && c.canDiscover(ResearchManager.clientProgress)) {
+                if(c instanceof IWeakConstellation &&
+                        c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
                     weakConstellations.add((IWeakConstellation) c);
                 }
             }
@@ -573,7 +574,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
 
             List<StarConnection> sc = c.getStarConnections();
             if (sc.size() != drawnLines.size()) continue; //Can't match otherwise anyway.
-            if (!c.canDiscover(ResearchManager.clientProgress)) continue;
+            if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) continue;
 
             Map<StarLocation, Rectangle> stars = info.starRectangles;
 

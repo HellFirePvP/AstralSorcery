@@ -75,6 +75,10 @@ public abstract class TileEntitySynchronized extends TileEntity {
         return compound;
     }
 
+    public IBlockState getBlockState() {
+        return this.world.getBlockState(this.pos);
+    }
+
     public final void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet) {
         super.onDataPacket(manager, packet);
         readCustomNBT(packet.getNbtCompound());

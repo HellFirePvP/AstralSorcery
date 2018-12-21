@@ -62,6 +62,11 @@ repositories {
         url 'https://maven.mcmoddev.com'
     }
 
+    maven {
+        // CTM
+        url 'https://maven.tterrag.com'
+    }
+
 }
 
 dependencies {
@@ -76,9 +81,14 @@ dependencies {
     def ct_mc_version = "MC1120"
     def ct_version = "4.1.8.9"
 
+    def ctm_mc_version = "MC1.12.2"
+    def ctm_version = "0.3.3.22"
+
     deobfCompile("CraftTweaker2:CraftTweaker2-${ct_mc_version}-Main:${mc_version}-${ct_version}")
 
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
+
+    deobfCompile "team.chisel.ctm:CTM:${ctm_mc_version}-${ctm_version}"
 
     compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
 

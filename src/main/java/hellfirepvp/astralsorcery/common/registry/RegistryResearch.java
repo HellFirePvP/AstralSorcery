@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
@@ -390,6 +391,14 @@ public class RegistryResearch {
         resAttPerks.addPage(getTextPage("ATT_PERKS.2"));
         resAttPerks.addPage(getTextPage("ATT_PERKS.3"));
 
+        ResearchNode resGems = new ResearchNode(new ItemStack[] {
+                ItemPerkGem.GemType.DAY.asStack(),
+                ItemPerkGem.GemType.NIGHT.asStack(),
+                ItemPerkGem.GemType.SKY.asStack()
+        }, "ATT_PERK_GEMS", 7, 3);
+        resGems.addPage(getTextPage("ATT_PERK_GEMS.1"));
+        resGems.addPage(getTextPage("ATT_PERK_GEMS.2"));
+
         ResearchNode resAttPerkSeal = new ResearchNode(new ItemStack(ItemsAS.perkSeal), "ATT_PERKS_SEAL", 7, 2);
         resAttPerkSeal.addPage(getTextPage("ATT_PERKS_SEAL.1"));
         resAttPerkSeal.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rPerkSeal));
@@ -483,6 +492,7 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(ItemsAS.grapplingWand, 1, OreDictionary.WILDCARD_VALUE),         resToolGrapple,          0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.knowledgeShare, 1, OreDictionary.WILDCARD_VALUE),        resKnowledgeShare,       0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.perkSeal,       1, OreDictionary.WILDCARD_VALUE),        resAttPerkSeal,          0, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(ItemsAS.perkGem,       1, OreDictionary.WILDCARD_VALUE),         resGems,                 0, ResearchProgression.ATTUNEMENT);
 
         regAttunement.register(resLens);
         regAttunement.register(resLinkTool);
@@ -506,6 +516,7 @@ public class RegistryResearch {
         regAttunement.register(resResonatorStructure);
         regAttunement.register(resAttPerkSeal);
         regAttunement.register(resShootingStars);
+        regAttunement.register(resGems);
 
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);
@@ -525,6 +536,7 @@ public class RegistryResearch {
         resToolGrapple.addSourceConnectionFrom(resQuickCharge);
         resResonatorStructure.addSourceConnectionFrom(resStarResult);
         resAttPerkSeal.addSourceConnectionFrom(resAttPerks);
+        resGems.addSourceConnectionFrom(resAttPerks);
     }
 
     private static void initCrafting() {

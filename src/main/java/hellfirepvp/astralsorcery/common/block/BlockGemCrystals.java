@@ -8,8 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileGemCrystals;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -29,6 +34,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -38,6 +44,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -51,27 +58,26 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
 
     public static final PropertyEnum<GrowthStageType> STAGE = PropertyEnum.create("stage", GrowthStageType.class);
 
+    private static final AxisAlignedBB boxStage0 = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.375, 0.75);
+    private static final AxisAlignedBB boxStage1 = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.5, 0.75);
+    private static final AxisAlignedBB boxStage2Night = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.5, 0.75);
+    private static final AxisAlignedBB boxStage2Sky = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.5625, 0.75);
+    private static final AxisAlignedBB boxStage2Day = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.5625, 0.75);
+
     public BlockGemCrystals() {
         super(Material.ROCK, MapColor.QUARTZ);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 2);
         setResistance(20.0F);
         setLightLevel(0.3F);
-        setSoundType(SoundType.STONE);
+        setSoundType(SoundType.GLASS);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(this.blockState.getBaseState().withProperty(STAGE, GrowthStageType.STAGE_0));
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        return true;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
-        return true;
     }
 
     @Override
@@ -90,6 +96,23 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
                 replaceable = false;
         }
         return replaceable;
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        switch (state.getValue(STAGE)) {
+            case STAGE_0:
+                return boxStage0;
+            case STAGE_1:
+                return boxStage1;
+            case STAGE_2_SKY:
+                return boxStage2Sky;
+            case STAGE_2_DAY:
+                return boxStage2Day;
+            case STAGE_2_NIGHT:
+                return boxStage2Night;
+        }
+        return super.getBoundingBox(state, source, pos);
     }
 
     @Override
@@ -135,6 +158,25 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     }
 
     @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        ItemStack gem = ItemStack.EMPTY;
+        switch (state.getValue(STAGE)) {
+            case STAGE_2_SKY:
+                gem = ItemPerkGem.GemType.SKY.asStack();
+                break;
+            case STAGE_2_DAY:
+                gem = ItemPerkGem.GemType.DAY.asStack();
+                break;
+            case STAGE_2_NIGHT:
+                gem = ItemPerkGem.GemType.NIGHT.asStack();
+                break;
+        }
+        if (!gem.isEmpty()) {
+            drops.add(gem);
+        }
+    }
+
+    @Override
     public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
@@ -148,6 +190,18 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);
         }
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileGemCrystals te = MiscUtils.getTileAt(worldIn, pos, TileGemCrystals.class, true);
+        if(te != null && !worldIn.isRemote) {
+            PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.GEM_CRYSTAL_BURST,
+                    pos.getX(), pos.getY(), pos.getZ());
+            event.setAdditionalDataLong(state.getValue(STAGE).ordinal());
+            PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override
@@ -210,11 +264,27 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
 
     public static enum GrowthStageType implements IStringSerializable {
 
-        STAGE_0,
-        STAGE_1,
-        STAGE_2_SKY,
-        STAGE_2_DAY,
-        STAGE_2_NIGHT;
+        STAGE_0(0, Color.WHITE),
+        STAGE_1(1, Color.WHITE),
+        STAGE_2_SKY(2, new Color(0x2561B5)),
+        STAGE_2_DAY(2, new Color(0xE04C02)),
+        STAGE_2_NIGHT(2, new Color(0x808080));
+
+        private final int growthStage;
+        private final Color displayColor;
+
+        GrowthStageType(int growthStage, Color displayColor) {
+            this.growthStage = growthStage;
+            this.displayColor = displayColor;
+        }
+
+        public Color getDisplayColor() {
+            return displayColor;
+        }
+
+        public int getGrowthStage() {
+            return growthStage;
+        }
 
         @Override
         public String getName() {

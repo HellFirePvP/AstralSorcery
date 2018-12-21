@@ -622,20 +622,24 @@ public class RegistryRecipes {
         }
         rChalice.setPassiveStarlightRequirement(5500);
 
-        AccessibleRecipeAdapater shapedPaper = newShapedRecipe("internal/altar/constellationpaper", ItemsAS.constellationPaper)
-                .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),
-                        ShapedRecipeSlot.CENTER)
-                .addPart(Items.FEATHER,
-                        ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(OreDictAlias.getDyeOreDict(EnumDyeColor.BLACK),
-                        ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(OreDictAlias.ITEM_STARMETAL_DUST,
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT)
-                .unregisteredAccessibleShapedRecipe();
+
         for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
             List<ItemHandle> signature = c.getConstellationSignatureItems();
             if(!signature.isEmpty()) {
+                AccessibleRecipeAdapater shapedPaper = newShapedRecipe(
+                        "internal/altar/constellationpaper/" + c.getSimpleName().toLowerCase(),
+                        ItemsAS.constellationPaper)
+                        .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),
+                                ShapedRecipeSlot.CENTER)
+                        .addPart(Items.FEATHER,
+                                ShapedRecipeSlot.UPPER_CENTER)
+                        .addPart(OreDictAlias.getDyeOreDict(EnumDyeColor.BLACK),
+                                ShapedRecipeSlot.LOWER_CENTER)
+                        .addPart(OreDictAlias.ITEM_STARMETAL_DUST,
+                                ShapedRecipeSlot.LEFT,
+                                ShapedRecipeSlot.RIGHT)
+                        .unregisteredAccessibleShapedRecipe();
+
                 ConstellationPaperRecipe recipe = new ConstellationPaperRecipe(shapedPaper, c);
                 ItemHandle first = Iterables.getFirst(signature, null); //Never null.
                 recipe.setInnerTraitItem(first, TraitRecipe.TraitRecipeSlot.values());

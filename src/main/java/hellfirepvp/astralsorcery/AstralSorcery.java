@@ -45,7 +45,7 @@ import org.apache.logging.log4j.Logger;
  * Date: 07.05.2016 / 00:20
  */
 @Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION,
-        dependencies = "required-after:forge@[14.23.4.2748,);required-after:baubles;after:crafttweaker",
+        dependencies = "required-after:forge@[14.23.5.2781,);required-after:baubles;after:crafttweaker",
         guiFactory = "hellfirepvp.astralsorcery.common.data.config.ingame.ConfigGuiFactory",
         certificateFingerprint = "a0f0b759d895c15ceb3e3bcb5f3c2db7c582edf0",
         acceptedMinecraftVersions = "[1.12.2]")

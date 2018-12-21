@@ -8,15 +8,22 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.GameStageTweaks;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
+import net.darkhax.gamestages.GameStageHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -85,6 +92,27 @@ public abstract class ConstellationBase implements IConstellation {
     @Override
     public List<ItemHandle> getConstellationSignatureItems() {
         return Collections.unmodifiableList(this.signatureItems);
+    }
+
+    public boolean canDiscover(EntityPlayer player, PlayerProgress progress) {
+        if (Mods.GAMESTAGES.isPresent()) {
+            return player != null && canDiscoverGameStages(player, progress);
+        }
+        return true;
+    }
+
+    //Guess we can only config one at a time...
+    @Optional.Method(modid = "gamestages")
+    private boolean canDiscoverGameStages(EntityPlayer player, PlayerProgress progress) {
+        if (Mods.CRAFTTWEAKER.isPresent()) {
+            return canDiscoverGameStagesCraftTweaker(player, progress);
+        }
+        return true;
+    }
+
+    @Optional.Method(modid = "crafttweaker")
+    private boolean canDiscoverGameStagesCraftTweaker(EntityPlayer player, PlayerProgress progress) {
+        return GameStageTweaks.canDiscover(GameStageHelper.getPlayerData(player).getStages(), name);
     }
 
     @Override
@@ -157,6 +185,13 @@ public abstract class ConstellationBase implements IConstellation {
         public ConstellationEffect getRitualEffect(ILocatable origin) {
             return ConstellationEffectRegistry.getEffect(this, origin);
         }
+
+        @Override
+        public boolean canDiscover(EntityPlayer player, PlayerProgress progress) {
+            return super.canDiscover(player, progress) &&
+                    progress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) &&
+                    progress.wasOnceAttuned();
+        }
     }
 
     public static abstract class WeakSpecial extends Weak implements IConstellationSpecialShowup {
@@ -213,6 +248,12 @@ public abstract class ConstellationBase implements IConstellation {
             return shifted;
         }
 
+        @Override
+        public boolean canDiscover(EntityPlayer player, PlayerProgress progress) {
+            return super.canDiscover(player, progress) &&
+                    progress.wasOnceAttuned() &&
+                    progress.getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT);
+        }
     }
 
 }

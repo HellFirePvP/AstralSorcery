@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -164,6 +166,11 @@ public class ClientConstellationGenerator {
                 return sc;
             }
             return null;
+        }
+
+        @Override
+        public boolean canDiscover(EntityPlayer player, PlayerProgress progress) {
+            return true;
         }
 
         @Override
