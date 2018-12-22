@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.*;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.util.JEISessionHandler;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.util.TieredAltarRecipeTransferHandler;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -37,11 +38,11 @@ import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.*;
-import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import mezz.jei.startup.StackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -107,6 +108,8 @@ public class ModIntegrationJEI implements IModPlugin {
     public void register(IModRegistry registry) {
         jeiHelpers = registry.getJeiHelpers();
         stackHelper = jeiHelpers.getStackHelper();
+
+        MinecraftForge.EVENT_BUS.register(JEISessionHandler.getInstance());
 
         hideItems(registry.getJeiHelpers().getIngredientBlacklist());
 

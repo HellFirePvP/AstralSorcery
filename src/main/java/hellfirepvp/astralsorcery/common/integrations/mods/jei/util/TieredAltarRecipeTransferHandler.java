@@ -18,7 +18,6 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
-import mezz.jei.config.SessionData;
 import mezz.jei.network.packets.PacketRecipeTransfer;
 import mezz.jei.startup.StackHelper;
 import mezz.jei.util.Log;
@@ -69,7 +68,7 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
     @Nullable
     @Override
     public IRecipeTransferError transferRecipe(C container, IRecipeLayout recipeLayout, EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
-        if (!SessionData.isJeiOnServer()) {
+        if (!JEISessionHandler.getInstance().isJeiOnServer()) {
             String tooltipMessage = Translator.translateToLocal("jei.tooltip.error.recipe.transfer.no.server");
             return handlerHelper.createUserErrorWithTooltip(tooltipMessage);
         }

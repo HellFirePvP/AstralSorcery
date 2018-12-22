@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.base.ShootingStarHandler;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
@@ -24,18 +25,23 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.util.JEISessionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.util.PlayerActivityManager;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -95,6 +101,23 @@ public class AstralSorcery {
     public void postInit(FMLPostInitializationEvent event) {
         Config.loadConfigRegistries(ConfigDataAdapter.LoadPhase.POST_INIT);
         proxy.postInit();
+    }
+
+    @NetworkCheckHandler
+    public boolean checkModLists(Map<String, String> modList, Side side) {
+        if (side == Side.SERVER) {
+            boolean jeiFound = modList.containsKey(Mods.JEI.modid);
+            if (Mods.JEI.isPresent()) {
+                notifyServerConnection(jeiFound);
+            }
+        }
+        return true;
+    }
+
+    @Optional.Method(modid = "jei")
+    private void notifyServerConnection(boolean jeiFound) {
+        AstralSorcery.proxy.scheduleClientside(() ->
+                JEISessionHandler.getInstance().setJeiOnServer(jeiFound));
     }
 
     @Mod.EventHandler
