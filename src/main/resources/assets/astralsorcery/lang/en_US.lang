@@ -446,9 +446,9 @@ astralsorcery.journal.ATT_PERKS_SEAL.1.text=While the Irradiant Star is a major 
 research.KNOWLEDGE_FRAGMENT.name=Shooting Stars
 astralsorcery.journal.KNOWLEDGE_FRAGMENT.1.text=Occasionally, shooting stars can be seen falling from above. Recovering whatever is left after impact might be of value to a scholar of the stars.
 
-research.ATT_PERK_GEMS.name=Gems
-astralsorcery.journal.ATT_PERK_GEMS.1.text=
-astralsorcery.journal.ATT_PERK_GEMS.2.text=
+research.ATT_PERK_GEMS.name=Dynamism Gems
+astralsorcery.journal.ATT_PERK_GEMS.1.text=The problem with trying to store starlight power in a crystal is that it rapidly drains away as light. By doping the crystal with the proper catalyst, storing starlight is possible in a way. Growing a Rock Crystal with glowstone powder in liquid starlight results in a crystal cluster that internally retains the energy gathered during the growth process.<NL>For the same reason that the energy is able to be stored, it is equally difficult to directly access.
+astralsorcery.journal.ATT_PERK_GEMS.2.text=The starlight captured can still influence nearby sympathetic frequencies, proving to be the key to access the stored power.<NL>Meditating on one of these gems while pressed to flesh results in it joining the existing magical circuits formed from the energies of personal attunement, further enhancing the natural abilities of the attuned. While in such a circuit, the gem is bound to the flesh.
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
@@ -1146,9 +1146,9 @@ knowledge.astralsorcery.fragment.attunement.attunement.name=Personal Attunement
 knowledge.astralsorcery.fragment.attunement.attunement.bookmark=Personal
 knowledge.astralsorcery.fragment.attunement.attunement.description=While many objects can be attuned to Bright or Dim constellations, people can only be attuned to Brights.
 
-knowledge.astralsorcery.fragment.perk_gems.name=
-knowledge.astralsorcery.fragment.perk_gems.bookmark=
-knowledge.astralsorcery.fragment.perk_gems.description=
+knowledge.astralsorcery.fragment.perk_gems.name=Influencing Through Harvest
+knowledge.astralsorcery.fragment.perk_gems.bookmark=Dynamic Differences
+knowledge.astralsorcery.fragment.perk_gems.description=The time of day the cluster is harvested impacts the power of the resulting Gem, whether during the Day, at Night, or during Dusk and Dawn.<NL>The less sunlight in the sky when harvested, the more powerful the enhancements, though fewer. More sunlight during harvest results in weaker, but more numerous, enhancements. Gem enhancements vary from 2 to 4 in number.
 
 knowledge.astralsorcery.fragment.attunement.ritualpedestal.name=Starlight Limits
 knowledge.astralsorcery.fragment.attunement.ritualpedestal.bookmark=Limits
