@@ -111,6 +111,7 @@ public class ResearchManager {
     }
 
     public static void wipeKnowledge(EntityPlayerMP p) {
+        resetPerks(p);
         wipeFile(p);
         playerProgressServer.remove(p.getUniqueID());
         PktProgressionUpdate pkt = new PktProgressionUpdate();

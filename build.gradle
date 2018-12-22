@@ -71,24 +71,22 @@ repositories {
 
 dependencies {
 
-    def jei_mc_version = "1.12.2"
-    def jei_version = "4.8.5.151"
-
-    ////JEI stuff
-    deobfCompile "mezz.jei:jei_${jei_mc_version}:${jei_version}"
-
     def mc_version = "1.12"
-    def ct_mc_version = "MC1120"
-    def ct_version = "4.1.8.9"
-
+    def jei_mc_version = "1.12.2"
     def ctm_mc_version = "MC1.12.2"
+    def ct_mc_version = "MC1120"
+
+    def jei_version = "4.8.5.151"
+    def ct_version = "4.1.8.9"
     def ctm_version = "0.3.3.22"
+
+    deobfCompile "mezz.jei:jei_${jei_mc_version}:${jei_version}"
 
     deobfCompile("CraftTweaker2:CraftTweaker2-${ct_mc_version}-Main:${mc_version}-${ct_version}")
 
-    deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
-
     deobfCompile "team.chisel.ctm:CTM:${ctm_mc_version}-${ctm_version}"
+
+    deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
 
     compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
 
