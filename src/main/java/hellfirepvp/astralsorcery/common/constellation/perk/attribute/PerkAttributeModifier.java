@@ -66,7 +66,11 @@ public class PerkAttributeModifier {
 
     void multiplyValue(double multiplier) {
         this.ctMultiplier = multiplier;
-        this.value *= multiplier;
+        if (mode == Mode.STACKING_MULTIPLY) {
+            this.value = ((this.value - 1F) * ((float) multiplier)) + 1F;
+        } else {
+            this.value *= multiplier;
+        }
     }
 
     /**
