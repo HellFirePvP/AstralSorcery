@@ -288,6 +288,7 @@ public abstract class AbstractPerk {
     }
 
     // Return true to prevent further, other interactions when left-clicking this perk
+    @SideOnly(Side.CLIENT)
     public boolean handleMouseClick(GuiJournalPerkTree gui, int mouseX, int mouseY) {
         return false;
     }
