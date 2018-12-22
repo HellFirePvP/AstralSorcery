@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.event.listener;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.base.Plants;
@@ -55,9 +56,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -71,6 +70,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
     private static final Random rand = new Random();
     public static EventHandlerCapeEffects INSTANCE = new EventHandlerCapeEffects();
+
+    private static List<UUID> vicioMantleFlightPlayers = Lists.newArrayList();
 
     //Propagate player in tick for octans anti-knockback effect.
     public static EntityPlayer currentPlayerInTick = null;
@@ -390,18 +391,37 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
         PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
         if (prog == null || !prog.hasPerkEffect(p -> p instanceof KeyMantleFlight)) {
+            if (vicioMantleFlightPlayers.contains(pl.getUniqueID())) {
+                if (pl.isCreative()) {
+                    pl.capabilities.allowFlying = true;
+                } else {
+                    pl.capabilities.allowFlying = false;
+                    pl.capabilities.isFlying = false;
+                }
+                pl.sendPlayerAbilities();
+                vicioMantleFlightPlayers.remove(pl.getUniqueID());
+            }
             return;
         }
 
         CapeEffectVicio ceo = ItemCape.getCapeEffect(pl, Constellations.vicio);
         if (ceo != null) {
+            if (!vicioMantleFlightPlayers.contains(pl.getUniqueID())) {
+                vicioMantleFlightPlayers.add(pl.getUniqueID());
+            }
             if (!pl.capabilities.allowFlying) {
                 pl.capabilities.allowFlying = true;
                 pl.sendPlayerAbilities();
             }
-        } else {
-            pl.capabilities.allowFlying = false;
+        } else if (vicioMantleFlightPlayers.contains(pl.getUniqueID())) {
+            if (pl.isCreative()) {
+                pl.capabilities.allowFlying = true;
+            } else {
+                pl.capabilities.allowFlying = false;
+                pl.capabilities.isFlying = false;
+            }
             pl.sendPlayerAbilities();
+            vicioMantleFlightPlayers.remove(pl.getUniqueID());
         }
     }
 

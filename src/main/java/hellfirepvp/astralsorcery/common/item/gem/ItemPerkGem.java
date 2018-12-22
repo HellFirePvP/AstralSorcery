@@ -163,8 +163,8 @@ public class ItemPerkGem extends Item implements IItemVariants {
     public static enum GemType {
 
         SKY  (1.0F, 1.0F),
-        DAY  (1.5F, 0.5F),
-        NIGHT(0.5F, 1.5F);
+        DAY  (2.0F, 0.2F),
+        NIGHT(0.2F, 2.0F);
 
         public final float countModifier;
         public final float amplifierModifier;

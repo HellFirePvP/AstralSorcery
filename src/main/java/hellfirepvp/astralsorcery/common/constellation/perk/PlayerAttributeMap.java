@@ -175,7 +175,7 @@ public class PlayerAttributeMap {
         }
         if (applicableModes.contains(PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
             for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
-                mod *= (modifier.getValue(player, progress) * perkEffectModifier);
+                mod *= (((modifier.getValue(player, progress) - 1F) * perkEffectModifier) + 1);
             }
         }
         return mod;
