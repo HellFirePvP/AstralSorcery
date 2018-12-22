@@ -76,7 +76,7 @@ dependencies {
     def ctm_mc_version = "MC1.12.2"
     def ct_mc_version = "MC1120"
 
-    def jei_version = "4.14.3.238"
+    def jei_version = "4.8.5.151"
     def ct_version = "4.1.8.9"
     def ctm_version = "0.3.3.22"
 
