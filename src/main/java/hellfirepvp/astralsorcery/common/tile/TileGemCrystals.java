@@ -73,12 +73,12 @@ public class TileGemCrystals extends TileSkybound {
     }
 
     private void tryGrow() {
-        int r = 14000;
+        int r = 50000;
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
         if(doesSeeSky() && handle != null) {
             double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
             if(dstr > 0) {
-                r *= (0.8 + ((1 - dstr) * 0.2));
+                r *= (0.7 + ((1 - dstr) * 0.3));
             }
         }
 
@@ -100,19 +100,22 @@ public class TileGemCrystals extends TileSkybound {
                 next = BlockGemCrystals.GrowthStageType.STAGE_1;
                 break;
             case STAGE_1:
-                if (ConstellationSkyHandler.getInstance().isDay(world)) {
+                if (ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) <= 0.1) {
                     next = BlockGemCrystals.GrowthStageType.STAGE_2_DAY;
-                } else if (ConstellationSkyHandler.getInstance().isNight(world)) {
+                } else if (ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) >= 0.8) {
                     next = BlockGemCrystals.GrowthStageType.STAGE_2_NIGHT;
                 } else {
                     next = BlockGemCrystals.GrowthStageType.STAGE_2_SKY;
                 }
                 break;
             case STAGE_2_SKY:
+                next = BlockGemCrystals.GrowthStageType.STAGE_1;
                 break;
             case STAGE_2_DAY:
+                next = BlockGemCrystals.GrowthStageType.STAGE_1;
                 break;
             case STAGE_2_NIGHT:
+                next = BlockGemCrystals.GrowthStageType.STAGE_1;
                 break;
         }
         if (next != null) {

@@ -48,6 +48,8 @@ public class Config {
     public static boolean doesMobSpawnDenyDenyEverything = false;
     public static boolean rockCrystalOreSilkTouchHarvestable = false;
 
+    public static boolean disableFestiveMapper = false;
+
     public static float capeChaosResistance = 0.8F;
 
     //Attuned wands configs
@@ -242,6 +244,7 @@ public class Config {
         maxEffectRenderDistanceSq = maxEffectRenderDistance * maxEffectRenderDistance;
         clientPreloadTextures = latestConfig.getBoolean("preloadTextures", "rendering", true, "If set to 'true' the mod will preload most of the bigger textures during postInit. This provides a more fluent gameplay experience (as it doesn't need to load the textures when they're first needed), but increases loadtime.");
         particleAmount = latestConfig.getInt("particleAmount", "rendering", 2, 0, 2, "Sets the amount of particles/effects: 0 = minimal (only necessary particles will appear), 1 = lowered (most unnecessary particles will be filtered), 2 = all particles are visible");
+        disableFestiveMapper = latestConfig.getBoolean("disableFestiveBlockTextures", "rendering", false, "Set to true to disable the festive textures/block models.");
 
         marbleAmount = latestConfig.getInt("generateMarbleAmount", "worldgen", 4, 0, 32, "Defines how many marble veins are generated per chunk. 0 = disabled");
         marbleVeinSize = latestConfig.getInt("generateMarbleVeinSize", "worldgen", 20, 1, 32, "Defines how big generated marble veins are.");

@@ -122,6 +122,8 @@ public class RegistryKnowledgeFragments {
                 return journalGui instanceof GuiJournalPerkTree;
             }
         }).setCanSeeTest(prog -> prog.getAttunedConstellation() != null);
+        mgr.register(onResearchNodes("fragment.perk_gems",
+                findNode("ATT_PERK_GEMS")));
     }
 
     private static void registerConstellationFragment(IConstellation cst) {

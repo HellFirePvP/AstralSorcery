@@ -10,10 +10,13 @@ package hellfirepvp.astralsorcery.common.item.gem;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.GemAttributeModifier;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -52,8 +55,13 @@ public class ItemPerkGem extends Item implements IItemVariants {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        for (GemAttributeModifier mod : getModifiers(stack)) {
-            tooltip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC + mod.getLocalizedDisplayString());
+        PlayerProgress prog = ResearchManager.clientProgress;
+        if (prog.wasOnceAttuned()) {
+            for (GemAttributeModifier mod : getModifiers(stack)) {
+                tooltip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC + mod.getLocalizedDisplayString());
+            }
+        } else {
+            tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
         }
     }
 
