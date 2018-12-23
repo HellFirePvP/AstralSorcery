@@ -95,19 +95,15 @@ public abstract class ConstellationBase implements IConstellation {
     }
 
     public boolean canDiscover(EntityPlayer player, PlayerProgress progress) {
-        if (Mods.GAMESTAGES.isPresent()) {
-            return player != null && canDiscoverGameStages(player, progress);
-        }
-        return true;
+        return !Mods.GAMESTAGES.isPresent() ||
+                (player != null && canDiscoverGameStages(player, progress));
     }
 
     //Guess we can only config one at a time...
     @Optional.Method(modid = "gamestages")
-    private boolean canDiscoverGameStages(EntityPlayer player, PlayerProgress progress) {
-        if (Mods.CRAFTTWEAKER.isPresent()) {
-            return canDiscoverGameStagesCraftTweaker(player, progress);
-        }
-        return true;
+    final boolean canDiscoverGameStages(EntityPlayer player, PlayerProgress progress) {
+        return !Mods.CRAFTTWEAKER.isPresent() ||
+                canDiscoverGameStagesCraftTweaker(player, progress);
     }
 
     @Optional.Method(modid = "crafttweaker")
@@ -168,6 +164,11 @@ public abstract class ConstellationBase implements IConstellation {
             super(name, color);
         }
 
+        @Override
+        public boolean canDiscover(EntityPlayer player, PlayerProgress progress) {
+            return !Mods.GAMESTAGES.isPresent() ||
+                    (player != null && canDiscoverGameStages(player, progress));
+        }
     }
 
     public static class Weak extends ConstellationBase implements IWeakConstellation {
