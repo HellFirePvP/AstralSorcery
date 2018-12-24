@@ -108,6 +108,9 @@ public abstract class ConstellationBase implements IConstellation {
 
     @Optional.Method(modid = "crafttweaker")
     private boolean canDiscoverGameStagesCraftTweaker(EntityPlayer player, PlayerProgress progress) {
+        if (player == null) {
+            return false;
+        }
         return GameStageTweaks.canDiscover(GameStageHelper.getPlayerData(player).getStages(), name);
     }
 
