@@ -168,6 +168,8 @@ public class CommonProxy implements IGuiHandler {
         } else {
             AstralSorcery.log.info("Crafttweaker not found!");
         }
+        
+        MinecraftForge.EVENT_BUS.register(PlayerAmuletHandler.INSTANCE); //AttachCapabilitiesEvent handler for ItemStacks should be registered in preInit, otherwise this will cause NBT mistmatch with ItemStacks from recipes
     }
 
     private void registerCapabilities() {
@@ -262,7 +264,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(PlayerAmuletHandler.INSTANCE);
+        //MinecraftForge.EVENT_BUS.register(PlayerAmuletHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PerkEffectHelper.EVENT_INSTANCE);
         MinecraftForge.EVENT_BUS.register(AttributeTypeLimiter.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PlayerActivityManager.INSTANCE);
