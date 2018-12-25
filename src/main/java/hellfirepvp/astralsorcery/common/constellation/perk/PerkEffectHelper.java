@@ -29,6 +29,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -230,6 +231,13 @@ public class PerkEffectHelper implements ITickHandler {
     }
 
     private synchronized void batchApplyConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyAdd) {
+        Thread tr = Thread.currentThread();
+        if (!"Client thread".equalsIgnoreCase(tr.getName()) &&
+                !"Server thread".equalsIgnoreCase(tr.getName())) {
+            AstralSorcery.log.error("Called perk modification outside synced thread!");
+            new Exception().printStackTrace();
+        }
+
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
@@ -250,6 +258,13 @@ public class PerkEffectHelper implements ITickHandler {
     }
 
     private synchronized void batchRemoveConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyRemove) {
+        Thread tr = Thread.currentThread();
+        if (!"Client thread".equalsIgnoreCase(tr.getName()) &&
+                !"Server thread".equalsIgnoreCase(tr.getName())) {
+            AstralSorcery.log.error("Called perk modification outside synced thread!");
+            new Exception().printStackTrace();
+        }
+
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
