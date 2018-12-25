@@ -517,12 +517,12 @@ item.itemcelestialcrystal.name=天体水晶石
 item.itemlinkingtool.name=链接器
 item.itemjournal.name=星芒宝典
 item.itemwand.name=共鸣星杖
-item.itemcrystalpickaxe.name=水晶石十字镐
-item.itemcrystalshovel.name=水晶石铲
+item.itemcrystalpickaxe.name=水晶石镐
+item.itemcrystalshovel.name=水晶石锹
 item.itemcrystalaxe.name=水晶石斧
 item.itemcrystalsword.name=水晶石剑
-item.itemchargedcrystalpickaxe.name=充能水晶石十字镐
-item.itemchargedcrystalshovel.name=充能水晶石铲
+item.itemchargedcrystalpickaxe.name=充能水晶石镐
+item.itemchargedcrystalshovel.name=充能水晶石锹
 item.itemchargedcrystalaxe.name=充能水晶石斧
 item.itemchargedcrystalsword.name=充能水晶石剑
 item.itemcoloredlens.name=彩色透镜
@@ -1000,8 +1000,8 @@ perk.astralsorcery.key_lastbreath.name=回光返照
 perk.astralsorcery.key_lastbreath.desc.1=当你失去大部分生命时
 perk.astralsorcery.key_lastbreath.desc.2=能获得更大的伤害和挖掘速度
 perk.astralsorcery.key_digtypes.name=上帝视角
-perk.astralsorcery.key_digtypes.desc.1=可以用十字镐来代替
-perk.astralsorcery.key_digtypes.desc.2=斧头或者铲子
+perk.astralsorcery.key_digtypes.desc.1=可以用镐来代替
+perk.astralsorcery.key_digtypes.desc.2=斧或者锹
 perk.astralsorcery.key_disarm.name=无懈可击
 perk.astralsorcery.key_disarm.desc=攻击时有几率破防
 perk.astralsorcery.key_lightning_arc.name=闪电弧光链
@@ -1088,7 +1088,7 @@ knowledge.astralsorcery.fragment.discovery.ancientshrine.description=含有聚�
 
 knowledge.astralsorcery.fragment.discovery.resowand.name=共振定位
 knowledge.astralsorcery.fragment.discovery.resowand.bookmark=水晶定位
-knowledge.astralsorcery.fragment.discovery.resowand.description=虽然指示痕迹仅在地面上可见，但水晶石矿石在最深的地方（基岩）附近生成。或许偶尔能在几步内发现另一块，但它在数十道数百米范围的矿石镍的确非常少见。任意一只手拿着共鸣星杖时，会在附近矿石内将其高亮以便于挖掘。
+knowledge.astralsorcery.fragment.discovery.resowand.description=虽然指示痕迹仅在地面上可见，但水晶石矿石在最深的地方（基岩）附近生成。或许偶尔能在几步内发现另一块，但它在数十到数百米范围的内的确非常少见。任意一只手拿着共鸣星杖时，会在附近矿石内将其高亮以便于挖掘。
 
 knowledge.astralsorcery.fragment.misc.altar.name=祭坛的特色合成
 knowledge.astralsorcery.fragment.misc.altar.bookmark=特色合成
@@ -1112,7 +1112,7 @@ knowledge.astralsorcery.fragment.exploration.crystalgrowth.description=如果将
 
 knowledge.astralsorcery.fragment.exploration.crystaltools.name=工具的统计
 knowledge.astralsorcery.fragment.exploration.crystaltools.bookmark=详细内容
-knowledge.astralsorcery.fragment.exploration.crystaltools.description=基于构造上的差异，水晶石工具与普通工具相比有着不同的使用方式，其性能受3大要素影响。<NL>纯度：高纯度的工具在磨制时将损失更少的尺寸。<NL>尺寸：工具的耐久值。在砂轮上磨制时损失，可通过浸泡在星能液中恢复。当工具的尺寸属性为0时，工具将别销毁。<NL>抛光：决定着工具的效率，可通过磨制恢复。就像小刀一样，当刀具十分锋利时，将比已经变钝的更快地变钝。耐久附魔将显著降低钝速。
+knowledge.astralsorcery.fragment.exploration.crystaltools.description=基于构造上的差异，水晶石工具与普通工具相比有着不同的使用方式，其性能受3大要素影响。<NL>纯度：高纯度的工具在磨制时将损失更少的尺寸。<NL>尺寸：工具的耐久值。在砂轮上磨制时损失，可通过浸泡在星能液中恢复。当工具的尺寸属性为0时，工具将被销毁。<NL>抛光：决定着工具的效率，可通过磨制恢复。就像小刀一样，当刀具十分锋利时，将比已经变钝的更快地变钝。耐久附魔将显著降低钝速。
 
 knowledge.astralsorcery.fragment.exploration.grindstone.name=武器与矿石
 knowledge.astralsorcery.fragment.exploration.grindstone.bookmark=其他用途
@@ -1120,7 +1120,7 @@ knowledge.astralsorcery.fragment.exploration.grindstone.description=除了用来
 
 knowledge.astralsorcery.fragment.misc.cannibalism.name=同类相食与触手可及
 knowledge.astralsorcery.fragment.misc.cannibalism.bookmark=同类相食
-knowledge.astralsorcery.fragment.misc.cannibalism.description=任意星能聚集设备都将以自身为中心半价为8的范围内收集星能。就像集雨器会互相重叠一样，同一范围内的设备获得的星能会更少，毕竟僧多粥少。将任意的星能聚集设备分隔至16格远可以阻止它们互相争夺星能。
+knowledge.astralsorcery.fragment.misc.cannibalism.description=任意星能聚集设备都将以自身为中心半径为8的范围内收集星能。就像集雨器会互相重叠一样，同一范围内的设备获得的星能会更少，毕竟僧多粥少。将任意的星能聚集设备分隔至16格远可以阻止它们互相争夺星能。
 
 knowledge.astralsorcery.fragment.exploration.caveillumplace.name=照明器的放置
 knowledge.astralsorcery.fragment.exploration.caveillumplace.bookmark=放置
@@ -1172,7 +1172,7 @@ knowledge.astralsorcery.fragment.constellation.treebeaconboost.description=烽�
 
 knowledge.astralsorcery.fragment.constellation.inftool.name=充能工具的能力
 knowledge.astralsorcery.fragment.constellation.inftool.bookmark=功能
-knowledge.astralsorcery.fragment.constellation.inftool.description=斧：直接砍倒一整颗树。<NL>剑：给予目标特殊的爆炸伤害。<NL>镐：右键时显示附近的矿石位置。<NL>铲：在水平方向上挖一个大洞。
+knowledge.astralsorcery.fragment.constellation.inftool.description=斧：直接砍倒一整棵树。<NL>剑：给予目标特殊的爆炸伤害。<NL>镐：右键时显示附近的矿石位置。<NL>锹：在水平方向上挖一个大洞。
 
 knowledge.astralsorcery.fragment.constellation.illumwand.name=光亮方块强度
 knowledge.astralsorcery.fragment.constellation.illumwand.bookmark=不可破坏程度的能力
@@ -1196,7 +1196,7 @@ knowledge.astralsorcery.fragment.constellation.ec3.description=除了防止因�
 
 knowledge.astralsorcery.fragment.radiance.fysallidic.name=神话生物的影响
 knowledge.astralsorcery.fragment.radiance.fysallidic.bookmark=神话
-knowledge.astralsorcery.fragment.radiance.fysallidic.description=由于万象泉的内部液体缓存是有限的，因大量神话生物而剧烈消耗的星能液很可能无法束缚住它们。不过末影人通常不可能是元凶，除非它们被困住，但像凋零或末影龙这样的生物会在被困住时尝试逃离。以神话生物的强大程度，为了遏制它们的力量束缚的时间将更为短暂。
+knowledge.astralsorcery.fragment.radiance.fysallidic.description=由于万象泉的内部液体缓存是有限的，因大量神话生物而剧烈消耗的星能液很可能无法束缚住它们。不过末影人通常不可能是元凶，除非它们被困住，但像凋灵或末影龙这样的生物会在被困住时尝试逃离。以神话生物的强大程度，为了遏制它们的力量束缚的时间将更为短暂。
 
 knowledge.astralsorcery.fragment.misc.perks.name=在增益上的区别
 knowledge.astralsorcery.fragment.misc.perks.bookmark=增益
