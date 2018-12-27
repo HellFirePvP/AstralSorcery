@@ -48,7 +48,7 @@ public class GameStageTweaks extends BaseTweaker {
 
     public static boolean canDiscover(Collection<String> gameStages, String constellationName) {
         Collection<String> stages = constellationStages.getOrDefault(constellationName, Lists.newArrayList());
-        if (stages.isEmpty()) {
+        if (gameStages == null || stages.isEmpty()) {
             return true;
         }
         for (String gameStage : gameStages) {

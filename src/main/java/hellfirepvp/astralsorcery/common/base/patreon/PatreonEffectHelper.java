@@ -11,8 +11,10 @@ package hellfirepvp.astralsorcery.common.base.patreon;
 import hellfirepvp.astralsorcery.client.util.resource.*;
 import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFixedSprite;
 import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFloatingCrystal;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFloatingFlareCrystal;
 import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
 import hellfirepvp.astralsorcery.common.base.patreon.entity.PartialEntityFlare;
+import hellfirepvp.astralsorcery.common.base.patreon.entity.PartialEntityFlareCrystal;
 import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -44,6 +46,10 @@ public class PatreonEffectHelper {
         effectMap.put( //i, myself, hellfire :thonk:
                 UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
                 new PatreonEffect(FlareColor.WATER));
+
+        effectMap.put( // Kittenplays01 / Kittenplays01
+                UUID.fromString("ac71a42e-fa17-4d54-a1ae-57928fdbead0"),
+                new PatreonEffect(FlareColor.STANDARD));
 
         effectMap.put( //ChosenArchitect
                 UUID.fromString("e3298bd7-61bf-427f-af89-4e418a20bf57"),
@@ -160,10 +166,6 @@ public class PatreonEffectHelper {
                         .setDrainColor(0xFFFF0000)
                         .setTreeColor(0xFFC30711));
 
-        effectMap.put( // Kittenplays01 / Kittenplays01
-                UUID.fromString("ac71a42e-fa17-4d54-a1ae-57928fdbead0"),
-                new PatreonEffect(FlareColor.STANDARD));
-
         effectMap.put( //Peteparker_ / ???
                 UUID.fromString("1268d40d-ce09-4f1f-80f3-1856d1df27e9"),
                 new PatreonEffect(FlareColor.BLUE));
@@ -191,6 +193,13 @@ public class PatreonEffectHelper {
         effectMap.put( //Lt1489 / Lt1489
                 UUID.fromString("3feaa8f8-d33a-4cd8-9a8a-61688521ad83"),
                 new PatreonEffect(FlareColor.STANDARD));
+
+        effectMap.put(
+                UUID.fromString("888a05af-a088-4cbf-9b2a-8c68b2d72d85"),
+                new PtEffectFloatingFlareCrystal(
+                        new Color(0xb711a9),
+                        FlareColor.ELDRITCH,
+                        new TextureQuery(AssetLoader.TextureLocation.MODELS, "crystal_big_magenta")));
     }
 
     @Nullable

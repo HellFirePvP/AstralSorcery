@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.GameStageTweaks;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import net.darkhax.gamestages.GameStageHelper;
+import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Loader;
@@ -108,7 +109,14 @@ public abstract class ConstellationBase implements IConstellation {
 
     @Optional.Method(modid = "crafttweaker")
     private boolean canDiscoverGameStagesCraftTweaker(EntityPlayer player, PlayerProgress progress) {
-        return player != null && GameStageTweaks.canDiscover(GameStageHelper.getPlayerData(player).getStages(), name);
+        if (player == null) {
+            return false;
+        }
+        IStageData data = GameStageHelper.getPlayerData(player);
+        if (data == null) {
+            return false;
+        }
+        return GameStageTweaks.canDiscover(data.getStages(), name);
     }
 
     @Override

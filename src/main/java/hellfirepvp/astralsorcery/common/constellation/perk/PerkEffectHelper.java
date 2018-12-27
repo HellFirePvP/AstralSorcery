@@ -66,7 +66,7 @@ public class PerkEffectHelper implements ITickHandler {
     @SubscribeEvent(priority = EventPriority.HIGH)
     @SideOnly(Side.CLIENT)
     public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        handlePerkModification(Minecraft.getMinecraft().player, Side.CLIENT, true);
+        AstralSorcery.proxy.scheduleClientside(() -> handlePerkModification(Minecraft.getMinecraft().player, Side.CLIENT, true));
     }
 
     @SubscribeEvent
@@ -235,7 +235,7 @@ public class PerkEffectHelper implements ITickHandler {
         if (!"Client thread".equalsIgnoreCase(tr.getName()) &&
                 !"Server thread".equalsIgnoreCase(tr.getName())) {
             AstralSorcery.log.error("Called perk modification outside synced thread!");
-            new Exception().printStackTrace();
+            throw new RuntimeException("Debug - Modified perks outside the main thread(s)");
         }
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);
@@ -262,7 +262,7 @@ public class PerkEffectHelper implements ITickHandler {
         if (!"Client thread".equalsIgnoreCase(tr.getName()) &&
                 !"Server thread".equalsIgnoreCase(tr.getName())) {
             AstralSorcery.log.error("Called perk modification outside synced thread!");
-            new Exception().printStackTrace();
+            throw new RuntimeException("Debug - Modified perks outside the main thread(s)");
         }
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);

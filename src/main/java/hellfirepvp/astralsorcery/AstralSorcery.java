@@ -116,8 +116,7 @@ public class AstralSorcery {
 
     @Optional.Method(modid = "jei")
     private void notifyServerConnection(boolean jeiFound) {
-        AstralSorcery.proxy.scheduleClientside(() ->
-                JEISessionHandler.getInstance().setJeiOnServer(jeiFound));
+        JEISessionHandler.getInstance().setJeiOnServer(jeiFound);
     }
 
     @Mod.EventHandler

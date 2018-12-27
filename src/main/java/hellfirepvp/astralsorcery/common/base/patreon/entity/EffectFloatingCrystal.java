@@ -95,15 +95,18 @@ public class EffectFloatingCrystal extends EntityComplexFX {
 
     @Override
     public void render(float pTicks) {
-        RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
+        Vector3 tr = RenderingUtils.getStandartTranslationRemovalVector(pTicks);
 
         double iX = RenderingUtils.interpolate(prevX, x, pTicks);
         double iY = RenderingUtils.interpolate(prevY, y, pTicks);
         double iZ = RenderingUtils.interpolate(prevZ, z, pTicks);
         long seed = 0x515F1EB654AB915EL;
-        RenderingUtils.renderLightRayEffects(iX, iY + 0.2, iZ, this.colorTheme, seed, ClientScheduler.getClientTick(), 10, 1.4F, 50, 25);
+        RenderingUtils.renderLightRayEffects(iX + tr.getX(), iY + 0.2 + tr.getY(), iZ + tr.getZ(),
+                this.colorTheme, seed, ClientScheduler.getClientTick(),
+                10, 1.4F, 50, 25);
 
         GlStateManager.pushMatrix();
+        RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
         GlStateManager.disableAlpha();
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
@@ -115,7 +118,8 @@ public class EffectFloatingCrystal extends EntityComplexFX {
         GlStateManager.translate(iX, iY, iZ);
         renderTile(texCrystal);
 
-        RenderHelper.enableStandardItemLighting();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        RenderHelper.disableStandardItemLighting();
         GlStateManager.disableBlend();
         Blending.DEFAULT.applyStateManager();
         GlStateManager.enableAlpha();
