@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting;
 
+import hellfirepvp.astralsorcery.common.crafting.helper.FluidIngredient;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -187,7 +188,7 @@ public final class ItemHandle {
             case OREDICT:
                 return new OreIngredient(this.oreDictName);
             case FLUID:
-                return Ingredient.fromStacks(FluidUtil.getFilledBucket(new FluidStack(fluidTypeAndAmount.getFluid(), 1000)));
+                return new FluidIngredient(new FluidStack(fluidTypeAndAmount.getFluid(), 1000));
             case STACK:
             default:
                 List<Ingredient> ingredients = new ArrayList<>();
