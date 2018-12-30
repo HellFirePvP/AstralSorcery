@@ -36,7 +36,7 @@ public class AltarRecipeInstance extends AbstractCriterionInstance {
     public static AltarRecipeInstance deserialize(ResourceLocation id, JsonObject json) {
         AltarRecipeInstance i = new AltarRecipeInstance(id);
         for (JsonElement je : JsonUtils.getJsonArray(json, "recipes")) {
-            if (!je.isJsonPrimitive() || je.getAsJsonPrimitive().isString()) {
+            if (!je.isJsonPrimitive() || !je.getAsJsonPrimitive().isString()) {
                 continue;
             }
             i.recipeNames.add(new ResourceLocation(je.getAsString()));
