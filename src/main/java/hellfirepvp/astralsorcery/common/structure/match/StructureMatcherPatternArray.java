@@ -70,7 +70,8 @@ public class StructureMatcherPatternArray extends StructureMatcher {
     @Override
     public boolean notifyChange(IBlockAccess world, BlockPos centre, BlockStateChangeSet changeSet) {
         for (BlockStateChangeSet.StateChange change : changeSet.getChanges()) {
-            if (!this.structure.matchSingleBlockState(change.pos, change.newState)) {
+            if (this.structure.hasBlockAt(change.pos) &&
+                    !this.structure.matchSingleBlockState(change.pos, change.newState)) {
                 if (!this.mismatches.contains(change.pos)) {
                     this.mismatches.add(change.pos);
                 }
