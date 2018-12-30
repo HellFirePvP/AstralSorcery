@@ -15,12 +15,13 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomName;
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.structure.BlockStructureObserver;
 import hellfirepvp.astralsorcery.common.tile.IVariantTileProvider;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -54,7 +55,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 20:52
  */
-public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName, BlockVariants {
+public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName, BlockVariants, BlockStructureObserver {
 
     public static PropertyBool RENDER_FULLY = PropertyBool.create("render");
     public static PropertyEnum<AltarType> ALTAR_TYPE = PropertyEnum.create("altartype", AltarType.class);

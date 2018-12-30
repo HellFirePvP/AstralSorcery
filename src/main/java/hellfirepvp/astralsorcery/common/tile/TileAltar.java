@@ -28,6 +28,8 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.item.base.ItemConstellationFocus;
@@ -40,13 +42,12 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
-import hellfirepvp.astralsorcery.common.util.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,6 +59,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -82,10 +84,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private ActiveCraftingTask craftingTask = null;
     private Object clientCraftSound = null;
 
-    private ItemStack focusItem = ItemStack.EMPTY;
     private AltarLevel level = AltarLevel.DISCOVERY;
+    private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
+    private boolean multiblockMatches = false;
+
+    private ItemStack focusItem = ItemStack.EMPTY;
     private boolean doesSeeSky = false;
-    private boolean mbState = false;
     private int starlightStored = 0;
 
     public TileAltar() {
@@ -130,12 +134,11 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             updateSkyState(world.canSeeSky(getPos()));
         }
 
-        if((ticksExisted & 15) == 0) {
-            if(matchLevel(false)) markForUpdate();
-        }
 
         if(!world.isRemote) {
             boolean needUpdate = false;
+
+            matchStructure();
 
             needUpdate = starlightPassive(needUpdate);
             needUpdate = doTryCraft(needUpdate);
@@ -207,7 +210,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         super.onBreak();
 
         if (!world.isRemote && !focusItem.isEmpty()) {
-            ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, focusItem);
+            ItemUtils.dropItemNaturally(world,
+                    pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                    focusItem);
             this.focusItem = ItemStack.EMPTY;
         }
     }
@@ -224,17 +229,23 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     @SideOnly(Side.CLIENT)
     private void doCraftEffects() {
-        craftingTask.getRecipeToCraft().onCraftClientTick(this, craftingTask.getState(), ClientScheduler.getClientTick(), rand);
+        craftingTask.getRecipeToCraft().onCraftClientTick(this,
+                craftingTask.getState(), ClientScheduler.getClientTick(), rand);
     }
 
-    private boolean matchLevel(boolean needUpdate) {
-        AltarLevel al = getAltarLevel();
-        boolean matches = al.getMatcher().mbAllowsForCrafting(this);
-        if(matches != mbState) {
-            mbState = matches;
-            needUpdate = true;
+    private void matchStructure() {
+        PatternBlockArray structure = this.getRequiredStructure();
+        if (structure != null) {
+            if (this.structureMatch == null) {
+                this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), structure);
+            }
         }
-        return needUpdate;
+
+        boolean matches = structure == null || this.structureMatch.matches(this.getWorld());
+        if (matches != this.multiblockMatches) {
+            this.multiblockMatches = matches;
+            this.markForUpdate();
+        }
     }
 
 
@@ -254,7 +265,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             return true;
         }
         if((ticksExisted % 5) == 0) {
-            if(!matchDownMultiblocks(altarRecipe.getNeededLevel())) {
+            if(matchDownMultiblocks(altarRecipe.getNeededLevel()) == null) {
                 abortCrafting();
                 return true;
             }
@@ -269,7 +280,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
         ActiveCraftingTask.CraftingState prev = craftingTask.getState();
         craftingTask.setState(ActiveCraftingTask.CraftingState.ACTIVE);
-        craftingTask.getRecipeToCraft().onCraftServerTick(this, ActiveCraftingTask.CraftingState.ACTIVE, craftingTask.getTicksCrafting(), craftingTask.getTotalCraftingTime(), rand);
+        craftingTask.getRecipeToCraft().onCraftServerTick(
+                this,
+                ActiveCraftingTask.CraftingState.ACTIVE,
+                craftingTask.getTicksCrafting(),
+                craftingTask.getTotalCraftingTime(),
+                rand);
         return (prev != craftingTask.getState()) || needUpdate;
     }
 
@@ -283,7 +299,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             out = ItemUtils.copyStackWithSize(out, out.getCount());
         }
 
+        ForgeHooks.setCraftingPlayer(craftingTask.tryGetCraftingPlayerServer());
         recipe.handleInputConsumption(this, craftingTask, getInventoryHandler());
+        ForgeHooks.setCraftingPlayer(null);
 
         if(!out.isEmpty() && !(out.getItem() instanceof ItemBlockAltar)) {
             if(out.getCount() > 0) {
@@ -293,7 +311,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired());
 
-        if (!recipe.allowsForChaining() || !doesRecipeMatch(recipe, false) || !matchDownMultiblocks(recipe.getNeededLevel())) {
+        if (!recipe.allowsForChaining() || !doesRecipeMatch(recipe, false) ||
+                matchDownMultiblocks(recipe.getNeededLevel()) == null) {
             if(getAltarLevel().ordinal() >= AltarLevel.CONSTELLATION_CRAFT.ordinal()) {
                 Vector3 pos = new Vector3(getPos()).add(0.5, 0, 0.5);
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CRAFT_FINISH_BURST, pos.getX(), pos.getY() + 0.05, pos.getZ());
@@ -339,8 +358,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     private boolean levelUnsafe(AltarLevel to) {
-        level = to;
-        mbState = false;
+        this.level = to;
+        this.multiblockMatches = false;
+        this.structureMatch = null;
         return world.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
     }
 
@@ -392,13 +412,13 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     public boolean getMultiblockState() {
-        return mbState;
+        return this.multiblockMatches;
     }
 
     @Override
+    @Nullable
     public PatternBlockArray getRequiredStructure() {
-        AltarLevel al = getAltarLevel();
-        return al.getMatcher() instanceof PatternAltarMatcher ? ((PatternAltarMatcher) al.getMatcher()).getPattern().getPattern() : null;
+        return getAltarLevel().getPattern();
     }
 
     @Nonnull
@@ -438,7 +458,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(!world.isRemote) {
             if(getActiveCraftingTask() != null) {
                 AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
-                if(!matchDownMultiblocks(altarRecipe.getNeededLevel()) || !doesRecipeMatch(altarRecipe, false)) {
+                if(matchDownMultiblocks(altarRecipe.getNeededLevel()) == null ||
+                        !doesRecipeMatch(altarRecipe, false)) {
                     abortCrafting();
                     return;
                 }
@@ -448,12 +469,16 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
     }
 
-    private boolean matchDownMultiblocks(AltarLevel levelDownTo) {
+    @Nullable
+    public AltarLevel matchDownMultiblocks(AltarLevel levelDownTo) {
         for (int i = getAltarLevel().ordinal(); i >= levelDownTo.ordinal(); i--) {
             AltarLevel al = AltarLevel.values()[i];
-            if(al.getMatcher().mbAllowsForCrafting(this)) return true;
+            PatternBlockArray pattern = al.getPattern();
+            if (pattern == null || pattern.matches(this.getWorld(), this.getPos())) {
+                return al;
+            }
         }
-        return false;
+        return null;
     }
 
     private void findRecipe(EntityPlayer crafter) {
@@ -501,7 +526,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         this.level = AltarLevel.values()[compound.getInteger("level")];
         this.starlightStored = compound.getInteger("starlight");
-        this.mbState = compound.getBoolean("mbState");
+        this.multiblockMatches = compound.getBoolean("multiblockMatches");
 
         if(compound.hasKey("craftingTask")) {
             this.craftingTask = ActiveCraftingTask.deserialize(compound.getCompoundTag("craftingTask"), this.craftingTask);
@@ -521,7 +546,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         compound.setInteger("level", level.ordinal());
         compound.setInteger("starlight", starlightStored);
-        compound.setBoolean("mbState", mbState);
+        compound.setBoolean("multiblockMatches", multiblockMatches);
 
         if(!focusItem.isEmpty()) {
             NBTTagCompound focusTag = new NBTTagCompound();
@@ -558,18 +583,18 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     public static enum AltarLevel {
 
-        DISCOVERY          (9, (ta) -> true       ),
-        ATTUNEMENT         (13, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarAttunement)),
-        CONSTELLATION_CRAFT(21, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarConstellation)),
-        TRAIT_CRAFT        (25, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarTrait)),
-        BRILLIANCE         (25, (ta) -> true       );
+        DISCOVERY          (9,  () -> null),
+        ATTUNEMENT         (13, () -> MultiBlockArrays.patternAltarAttunement),
+        CONSTELLATION_CRAFT(21, () -> MultiBlockArrays.patternAltarConstellation),
+        TRAIT_CRAFT        (25, () -> MultiBlockArrays.patternAltarTrait),
+        BRILLIANCE         (25, () -> null);
 
         private final int maxStarlightStorage;
         private final int accessibleInventorySize;
-        private final IAltarMatcher matcher;
+        private final Provider<PatternBlockArray> patternProvider;
 
-        AltarLevel(int invSize, IAltarMatcher matcher) {
-            this.matcher = matcher;
+        AltarLevel(int invSize, Provider<PatternBlockArray> patternProvider) {
+            this.patternProvider = patternProvider;
             this.accessibleInventorySize = invSize;
             this.maxStarlightStorage = (int) (1000 * Math.pow(2, ordinal()));
         }
@@ -578,8 +603,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             return BlockAltar.AltarType.values()[ordinal()];
         }
 
-        public IAltarMatcher getMatcher() {
-            return matcher;
+        @Nullable
+        public PatternBlockArray getPattern() {
+            return patternProvider.provide();
         }
 
         public int getStarlightMaxStorage() {
@@ -635,36 +661,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         public String getIdentifier() {
             return AstralSorcery.MODID + ":TransmissionReceiverAltar";
         }
-
-    }
-
-    public static class PatternAltarMatcher implements IAltarMatcher {
-
-        private final PatternQuery pba;
-
-        public PatternAltarMatcher(PatternQuery pba) {
-            this.pba = pba;
-        }
-
-        public PatternQuery getPattern() {
-            return pba;
-        }
-
-        @Override
-        public boolean mbAllowsForCrafting(TileAltar ta) {
-            return pba.getPattern().matches(ta.getWorld(), ta.getPos());
-        }
-    }
-
-    public static interface PatternQuery {
-
-        public PatternBlockArray getPattern();
-
-    }
-
-    public static interface IAltarMatcher {
-
-        public boolean mbAllowsForCrafting(TileAltar ta);
 
     }
 

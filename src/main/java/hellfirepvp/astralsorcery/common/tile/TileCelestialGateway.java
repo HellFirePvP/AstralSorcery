@@ -17,9 +17,12 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
+import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -43,6 +46,7 @@ import java.util.UUID;
  */
 public class TileCelestialGateway extends TileEntityTick implements IMultiblockDependantTile, IWorldNameable {
 
+    private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private boolean hasMultiblock = false;
     private boolean doesSeeSky = false;
 
@@ -63,9 +67,7 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
                 updateSkyState(world.provider.isNether() || world.canSeeSky(getPos().up()));
             }
 
-            if((ticksExisted & 15) == 0) {
-                updateMultiblockState(MultiBlockArrays.patternCelestialGateway.matches(world, pos));
-            }
+            updateMultiblockState();
 
             if(gatewayRegistered) {
                 if(!hasMultiblock() || !doesSeeSky()) {
@@ -126,18 +128,22 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         return placedBy;
     }
 
-    private void updateMultiblockState(boolean matches) {
-        boolean update = hasMultiblock != matches;
-        this.hasMultiblock = matches;
-        if(update) {
+    private void updateMultiblockState() {
+        if (structureMatch == null) {
+            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
+        }
+        boolean matches = this.structureMatch.matches(getWorld());
+        boolean update = this.hasMultiblock != matches;
+        if (update) {
+            this.hasMultiblock = matches;
             markForUpdate();
         }
     }
 
     private void updateSkyState(boolean seeSky) {
         boolean update = doesSeeSky != seeSky;
-        this.doesSeeSky = seeSky;
-        if(update) {
+        if (update) {
+            this.doesSeeSky = seeSky;
             markForUpdate();
         }
     }

@@ -246,13 +246,9 @@ public class AltarRecipeRegistry {
 
     @Nullable
     public static AbstractAltarRecipe findMatchingRecipe(TileAltar ta, boolean ignoreStarlightRequirement) {
-        TileAltar.AltarLevel lowestAllowed = TileAltar.AltarLevel.DISCOVERY;
-        for (int i = ta.getAltarLevel().ordinal(); i >= 0; i--) {
-            TileAltar.AltarLevel lvl = TileAltar.AltarLevel.values()[i];
-            if(lvl.getMatcher().mbAllowsForCrafting(ta)) {
-                lowestAllowed = lvl;
-                break;
-            }
+        TileAltar.AltarLevel lowestAllowed = ta.matchDownMultiblocks(TileAltar.AltarLevel.DISCOVERY);
+        if (lowestAllowed == null) {
+            lowestAllowed = TileAltar.AltarLevel.DISCOVERY;
         }
         for (int i = lowestAllowed.ordinal(); i >= 0; i--) {
             TileAltar.AltarLevel lvl = TileAltar.AltarLevel.values()[i];

@@ -17,7 +17,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

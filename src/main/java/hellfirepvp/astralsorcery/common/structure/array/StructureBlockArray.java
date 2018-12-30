@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.struct;
+package hellfirepvp.astralsorcery.common.structure.array;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;

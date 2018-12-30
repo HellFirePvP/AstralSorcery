@@ -206,7 +206,7 @@ public class TileIlluminator extends TileEntityTick {
         recalculate();
     }
 
-    public static class LightCheck implements BlockStateCheck {
+    public static class LightCheck implements BlockStateCheck.WorldSpecific {
 
         @Override
         public boolean isStateValid(World world, BlockPos pos, IBlockState state) {

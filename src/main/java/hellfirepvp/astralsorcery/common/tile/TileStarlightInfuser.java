@@ -31,12 +31,15 @@ import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -87,6 +90,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     private Object clientOrbitalCraftingMirror = null;
 
     private ItemStack stack = ItemStack.EMPTY;
+    private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private boolean hasMultiblock = false, doesSeeSky = false;
 
     @Override
@@ -97,11 +101,9 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             updateSkyState();
         }
 
-        if((ticksExisted & 31) == 0) {
-            updateMultiblockState();
-        }
-
         if(!world.isRemote) {
+            updateMultiblockState();
+
             if(doTryCraft()) {
                 markForUpdate();
             }
@@ -225,10 +227,13 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     }
 
     private void updateMultiblockState() {
-        boolean found = MultiBlockArrays.patternStarlightInfuser.matches(world, getPos());
-        boolean update = hasMultiblock != found;
-        this.hasMultiblock = found;
-        if(update) {
+        if (this.structureMatch == null) {
+            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
+        }
+        boolean found = this.structureMatch.matches(getWorld());
+        boolean update = this.hasMultiblock != found;
+        if (update) {
+            this.hasMultiblock = found;
             markForUpdate();
         }
     }
@@ -237,7 +242,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         boolean seesSky = world.canSeeSky(getPos());
         boolean update = doesSeeSky != seesSky;
         this.doesSeeSky = seesSky;
-        if(update) {
+        if (update) {
             markForUpdate();
         }
     }

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.util;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import scala.actors.threadpool.Arrays;
 
@@ -27,7 +28,17 @@ import java.util.List;
  */
 public interface BlockStateCheck {
 
-    public boolean isStateValid(World world, BlockPos pos, IBlockState state);
+    public boolean isStateValid(IBlockState state);
+
+    public static interface WorldSpecific {
+
+        public boolean isStateValid(World world, BlockPos pos, IBlockState state);
+
+        public static WorldSpecific wrap(BlockStateCheck check) {
+            return (world, pos, state) -> check.isStateValid(state);
+        }
+
+    }
 
     public static class Block implements BlockStateCheck {
 
@@ -38,8 +49,8 @@ public interface BlockStateCheck {
         }
 
         @Override
-        public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
-            return toCheck.contains(world.getBlockState(pos).getBlock());
+        public boolean isStateValid(IBlockState state) {
+            return toCheck.contains(state.getBlock());
         }
     }
 
@@ -62,7 +73,7 @@ public interface BlockStateCheck {
         }
 
         @Override
-        public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
+        public boolean isStateValid(IBlockState state) {
             return state.getBlock().equals(block) && state.getBlock().getMetaFromState(state) == toCheck;
         }
     }
@@ -103,7 +114,7 @@ public interface BlockStateCheck {
         }
 
         @Override
-        public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
+        public boolean isStateValid(IBlockState state) {
             return state.getBlock().equals(block) && passableMetadataValues.contains(state.getBlock().getMetaFromState(state));
         }
     }

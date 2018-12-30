@@ -19,7 +19,7 @@ import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

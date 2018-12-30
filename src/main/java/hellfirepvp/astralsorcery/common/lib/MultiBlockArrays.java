@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
-import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.StructureBlockArray;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -217,7 +217,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                                 isTreeBlock = true;
                             } else {
                                 TreeTypes tt = TreeTypes.getTree(world, at, current);
-                                if(tt != null && tt.getLogCheck().isStateValid(world, at, current)) {
+                                if(tt != null && tt.getLogCheck().isStateValid(current)) {
                                     isTreeBlock = true;
                                 }
                             }

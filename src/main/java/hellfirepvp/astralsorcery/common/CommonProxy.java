@@ -57,6 +57,7 @@ import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import hellfirepvp.astralsorcery.common.structure.change.StructureIntegrityObserver;
 import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -266,6 +267,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(PerkEffectHelper.EVENT_INSTANCE);
         MinecraftForge.EVENT_BUS.register(AttributeTypeLimiter.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PlayerActivityManager.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(StructureIntegrityObserver.INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {

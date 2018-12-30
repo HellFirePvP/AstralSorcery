@@ -80,7 +80,7 @@ public class KeyStoneEnrichment extends KeyPerk implements IPlayerTickPerk {
                         (rand.nextFloat() * enrRad * 2) - enrRad,
                         (rand.nextFloat() * enrRad * 2) - enrRad);
                 BlockPos pos = vec.toBlockPos();
-                if(stoneCheck.isStateValid(player.getEntityWorld(), pos, player.getEntityWorld().getBlockState(pos))) {
+                if(stoneCheck.isStateValid(player.getEntityWorld().getBlockState(pos))) {
                     ItemStack blockStack = OreTypes.AEVITAS_ORE_PERK.getRandomOre(rand);
                     if(!blockStack.isEmpty()) {
                         IBlockState state = ItemUtils.createBlockState(blockStack);
@@ -96,7 +96,7 @@ public class KeyStoneEnrichment extends KeyPerk implements IPlayerTickPerk {
     private static class CleanStoneCheck implements BlockStateCheck {
 
         @Override
-        public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
+        public boolean isStateValid(IBlockState state) {
             return state.getBlock() == Blocks.STONE && state.getValue(BlockStone.VARIANT).equals(BlockStone.EnumType.STONE);
         }
 

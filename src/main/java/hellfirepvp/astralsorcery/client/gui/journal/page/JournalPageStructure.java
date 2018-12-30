@@ -18,7 +18,7 @@ import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;

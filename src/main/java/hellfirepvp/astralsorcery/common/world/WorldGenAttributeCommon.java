@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.WorldGenEntry;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
-import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.StructureBlockArray;
 import hellfirepvp.astralsorcery.common.world.structure.WorldGenAttributeStructure;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

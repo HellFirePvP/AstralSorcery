@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.struct;
 
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockOre;

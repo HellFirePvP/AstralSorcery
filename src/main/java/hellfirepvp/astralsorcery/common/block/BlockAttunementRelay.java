@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAttunementRelay;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;

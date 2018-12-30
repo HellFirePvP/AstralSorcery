@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;

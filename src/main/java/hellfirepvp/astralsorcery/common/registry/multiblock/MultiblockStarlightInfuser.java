@@ -8,11 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.registry.multiblock;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,6 +26,7 @@ import net.minecraft.init.Blocks;
 public class MultiblockStarlightInfuser extends PatternBlockArray {
 
     public MultiblockStarlightInfuser() {
+        super(new ResourceLocation(AstralSorcery.MODID, "pattern_starlight_infuser"));
         load();
     }
 

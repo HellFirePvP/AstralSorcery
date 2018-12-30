@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.struct;
+package hellfirepvp.astralsorcery.common.structure.array;
 
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.item.base.render.ISpecialStackDescriptor;
@@ -137,6 +137,10 @@ public class BlockArray {
 
     public Map<BlockPos, BlockInformation> getPattern() {
         return pattern;
+    }
+
+    public int getBlockSize() {
+        return this.getPattern().size();
     }
 
     public Map<BlockPos, TileEntityCallback> getTileCallbacks() {

@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.LootTableUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.StructureBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;

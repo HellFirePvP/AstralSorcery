@@ -8,13 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.registry.multiblock;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 
 import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 
@@ -28,6 +30,7 @@ import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 public class MultiblockAltarConstellation extends PatternBlockArray {
 
     public MultiblockAltarConstellation() {
+        super(new ResourceLocation(AstralSorcery.MODID, "pattern_altar_t3"));
         load();
     }
 

@@ -228,6 +228,9 @@ public class WorldCacheManager implements ITickHandler {
                 if(data.needsSaving()) {
                     try {
                         saveDataToFile(world, data);
+                        if (AstralSorcery.isRunningInDevEnvironment()) {
+                            AstralSorcery.log.info("Saved world cache for " + key.identifier);
+                        }
                     } catch (IOException e) {
                         AstralSorcery.log.warn("Unable to save WorldData!");
                         AstralSorcery.log.warn("Affected data: Dim=" + dimId + " key=" + key.identifier);
@@ -262,7 +265,8 @@ public class WorldCacheManager implements ITickHandler {
         CHUNK_VERSIONING("chunkversions", ChunkVersionBuffer::new),
         GATEWAY_DATA("gateway", GatewayCache::new),
         STRUCTURE_GEN("structures", StructureGenBuffer::new),
-        STORAGE_BUFFER("storagenetwork", StructureGenBuffer::new);
+        STORAGE_BUFFER("storagenetwork", StructureGenBuffer::new),
+        STRUCTURE_MATCH("structurematcher", StructureMatchingBuffer::new);
 
         private final String identifier;
         private final DataProvider<CachedWorldData> instanceProvider;
