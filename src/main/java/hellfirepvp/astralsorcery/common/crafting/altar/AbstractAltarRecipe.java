@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -115,6 +116,15 @@ public abstract class AbstractAltarRecipe {
             if(!ConstellationSkyHandler.getInstance().isNight(altar.getWorld())) return false;
         }
 
+        int slotsContainRecipe = this.getNeededLevel().getAccessibleInventorySize();
+        for (int slotId = 0; slotId < invHandler.getSlots(); slotId++) {
+            if (slotId < slotsContainRecipe) continue;
+
+            if (!invHandler.getStackInSlot(slotId).isEmpty()) {
+                return false; // ItemStacks outside of the required slots for the recipe must be empty.
+            }
+        }
+
         ItemStack[] altarInv = new ItemStack[9];
         for (int i = 0; i < 9; i++) {
             altarInv[i] = invHandler.getStackInSlot(i);
@@ -166,45 +176,35 @@ public abstract class AbstractAltarRecipe {
 
     //Return false and the item in the slot is not consumed.
     public boolean mayDecrement(TileAltar ta, ShapedRecipeSlot slot) {
-        ItemHandle handle = recipe.getExpectedStackHandle(slot);
-        if(handle == null || handle.getFluidTypeAndAmount() == null) {
-            return true;
-        }
-        ItemStack current = ta.getInventoryHandler().getStackInSlot(slot.getSlotID());
-        return current.isEmpty() || ForgeHooks.getContainerItem(current).isEmpty();
+        return !requiresSpecialConsumption(recipe.getExpectedStackHandle(slot),
+                ta.getInventoryHandler().getStackInSlot(slot.getSlotID()));
     }
 
     public boolean mayDecrement(TileAltar ta, AttunementRecipe.AttunementAltarSlot slot) {
         if(!(this instanceof AttunementRecipe)) return true;
         AttunementRecipe thisRecipe = (AttunementRecipe) this;
-        ItemHandle handle = thisRecipe.getAttItemHandle(slot);
-        if(handle == null || handle.getFluidTypeAndAmount() == null) {
-            return true;
-        }
-        ItemStack current = ta.getInventoryHandler().getStackInSlot(slot.getSlotId());
-        return current.isEmpty() || ForgeHooks.getContainerItem(current).isEmpty();
+        return !requiresSpecialConsumption(thisRecipe.getAttItemHandle(slot),
+                ta.getInventoryHandler().getStackInSlot(slot.getSlotId()));
     }
 
     public boolean mayDecrement(TileAltar ta, ConstellationRecipe.ConstellationAtlarSlot slot) {
         if(!(this instanceof ConstellationRecipe)) return true;
         ConstellationRecipe thisRecipe = (ConstellationRecipe) this;
-        ItemHandle handle = thisRecipe.getCstItemHandle(slot);
-        if(handle == null || handle.getFluidTypeAndAmount() == null) {
-            return true;
-        }
-        ItemStack current = ta.getInventoryHandler().getStackInSlot(slot.getSlotId());
-        return current.isEmpty() || ForgeHooks.getContainerItem(current).isEmpty();
+        return !requiresSpecialConsumption(thisRecipe.getCstItemHandle(slot),
+                ta.getInventoryHandler().getStackInSlot(slot.getSlotId()));
     }
 
     public boolean mayDecrement(TileAltar ta, TraitRecipe.TraitRecipeSlot slot) {
         if(!(this instanceof TraitRecipe)) return true;
         TraitRecipe thisRecipe = (TraitRecipe) this;
-        ItemHandle handle = thisRecipe.getInnerTraitItemHandle(slot);
-        if(handle == null || handle.getFluidTypeAndAmount() == null) {
-            return true;
-        }
-        ItemStack current = ta.getInventoryHandler().getStackInSlot(slot.getSlotId());
-        return current.isEmpty() || ForgeHooks.getContainerItem(current).isEmpty();
+        return !requiresSpecialConsumption(thisRecipe.getInnerTraitItemHandle(slot),
+                ta.getInventoryHandler().getStackInSlot(slot.getSlotId()));
+    }
+
+    protected boolean requiresSpecialConsumption(ItemHandle handle, ItemStack stack) {
+        return handle != null && !stack.isEmpty() &&
+                (!ForgeHooks.getContainerItem(stack).isEmpty() ||
+                        (handle.handleType == ItemHandle.Type.FLUID && FluidUtil.getFluidContained(stack) != null));
     }
 
     //Called if the respective method above returns 'false' to allow for proper decrement-handling.
@@ -212,19 +212,7 @@ public abstract class AbstractAltarRecipe {
         ItemHandle handle = recipe.getExpectedStackHandle(slot);
         if(handle == null) return;
 
-        TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
-        ItemStack stack = inventory.getStackInSlot(slot.getSlotID());
-        if(!stack.isEmpty()) {
-            FluidStack fs = FluidUtil.getFluidContained(stack);
-            if(fs != null) {
-                FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
-                if(fas.isSuccess()) {
-                    inventory.setStackInSlot(slot.getSlotID(), fas.getResult());
-                }
-            } else {
-                inventory.setStackInSlot(slot.getSlotID(), ForgeHooks.getContainerItem(stack));
-            }
-        }
+        consumeAndSetResult(ta.getInventoryHandler(), slot.getSlotID(), handle);
     }
 
     public void handleItemConsumption(TileAltar ta, AttunementRecipe.AttunementAltarSlot slot) {
@@ -233,19 +221,7 @@ public abstract class AbstractAltarRecipe {
         ItemHandle handle = thisRecipe.getAttItemHandle(slot);
         if(handle == null) return;
 
-        TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
-        ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
-        if(!stack.isEmpty()) {
-            FluidStack fs = FluidUtil.getFluidContained(stack);
-            if(fs != null) {
-                FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
-                if(fas.isSuccess()) {
-                    inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
-                }
-            } else {
-                inventory.setStackInSlot(slot.getSlotId(), ForgeHooks.getContainerItem(stack));
-            }
-        }
+        consumeAndSetResult(ta.getInventoryHandler(), slot.getSlotId(), handle);
     }
 
     public void handleItemConsumption(TileAltar ta, ConstellationRecipe.ConstellationAtlarSlot slot) {
@@ -254,19 +230,7 @@ public abstract class AbstractAltarRecipe {
         ItemHandle handle = thisRecipe.getCstItemHandle(slot);
         if(handle == null) return;
 
-        TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
-        ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
-        if(!stack.isEmpty()) {
-            FluidStack fs = FluidUtil.getFluidContained(stack);
-            if(fs != null) {
-                FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
-                if(fas.isSuccess()) {
-                    inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
-                }
-            } else {
-                inventory.setStackInSlot(slot.getSlotId(), ForgeHooks.getContainerItem(stack));
-            }
-        }
+        consumeAndSetResult(ta.getInventoryHandler(), slot.getSlotId(), handle);
     }
 
     public void handleItemConsumption(TileAltar ta, TraitRecipe.TraitRecipeSlot slot) {
@@ -275,17 +239,20 @@ public abstract class AbstractAltarRecipe {
         ItemHandle handle = thisRecipe.getInnerTraitItemHandle(slot);
         if(handle == null) return;
 
-        TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
-        ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
+        consumeAndSetResult(ta.getInventoryHandler(), slot.getSlotId(), handle);
+    }
+
+    protected void consumeAndSetResult(IItemHandlerModifiable inv, int slot, ItemHandle handle) {
+        ItemStack stack = inv.getStackInSlot(slot);
         if(!stack.isEmpty()) {
             FluidStack fs = FluidUtil.getFluidContained(stack);
-            if(fs != null) {
+            if(fs != null && handle.handleType == ItemHandle.Type.FLUID) {
                 FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
                 if(fas.isSuccess()) {
-                    inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
+                    inv.setStackInSlot(slot, fas.getResult());
                 }
             } else {
-                inventory.setStackInSlot(slot.getSlotId(), ForgeHooks.getContainerItem(stack));
+                inv.setStackInSlot(slot, ForgeHooks.getContainerItem(stack));
             }
         }
     }
