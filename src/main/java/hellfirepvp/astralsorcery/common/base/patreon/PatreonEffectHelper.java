@@ -194,12 +194,16 @@ public class PatreonEffectHelper {
                 UUID.fromString("3feaa8f8-d33a-4cd8-9a8a-61688521ad83"),
                 new PatreonEffect(FlareColor.STANDARD));
 
-        effectMap.put(
+        effectMap.put( // Tech_Fusion / Tech_Fusion
                 UUID.fromString("888a05af-a088-4cbf-9b2a-8c68b2d72d85"),
                 new PtEffectFloatingFlareCrystal(
                         new Color(0xb711a9),
                         FlareColor.ELDRITCH,
                         new TextureQuery(AssetLoader.TextureLocation.MODELS, "crystal_big_magenta")));
+
+        effectMap.put( // Jomeaga / Jomeaga
+                UUID.fromString("d5bd69b8-e261-4d97-8232-da714c94b6d9"),
+                new PatreonEffect(FlareColor.EARTH));
     }
 
     @Nullable

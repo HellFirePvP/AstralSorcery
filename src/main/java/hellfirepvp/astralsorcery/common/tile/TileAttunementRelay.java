@@ -71,12 +71,10 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
             updateSkyState();
         }
 
-        if((ticksExisted & 31) == 0) {
-            updateMultiblockState();
-        }
-
         ItemStack slotted = getInventoryHandler().getStackInSlot(0);
         if(!world.isRemote) {
+            updateMultiblockState();
+
             if(!slotted.isEmpty()) {
                 if(!world.isAirBlock(pos.up())) {
                     ItemStack in = getInventoryHandler().getStackInSlot(0);

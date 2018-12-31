@@ -66,7 +66,8 @@ public class PerkEffectHelper implements ITickHandler {
     @SubscribeEvent(priority = EventPriority.HIGH)
     @SideOnly(Side.CLIENT)
     public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        AstralSorcery.proxy.scheduleClientside(() -> handlePerkModification(Minecraft.getMinecraft().player, Side.CLIENT, true));
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        AstralSorcery.proxy.scheduleClientside(() -> handlePerkModification(player, Side.CLIENT, true));
     }
 
     @SubscribeEvent
