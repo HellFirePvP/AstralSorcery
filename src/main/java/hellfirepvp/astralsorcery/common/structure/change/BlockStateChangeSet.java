@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.structure.change;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -64,8 +65,10 @@ public final class BlockStateChangeSet {
             NBTTagCompound changeTag = changeList.getCompoundTagAt(i);
 
             BlockPos pos = NBTHelper.readBlockPosFromNBT(changeTag);
-            IBlockState oldState = NBTHelper.getBlockStateFromTag(changeTag.getCompoundTag("oldState"));
-            IBlockState newState = NBTHelper.getBlockStateFromTag(changeTag.getCompoundTag("newState"));
+            IBlockState oldState = NBTHelper.getBlockStateFromTag(changeTag.getCompoundTag("oldState"),
+                    Blocks.AIR.getDefaultState());
+            IBlockState newState = NBTHelper.getBlockStateFromTag(changeTag.getCompoundTag("newState"),
+                    Blocks.AIR.getDefaultState());
             this.changes.put(pos, new StateChange(pos, oldState, newState));
         }
     }

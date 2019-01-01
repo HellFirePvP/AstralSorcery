@@ -108,9 +108,11 @@ public class NBTHelper {
         return getBlockStateFromTag(cmp.getCompoundTag(key));
     }
 
-    @Nullable
+    @Nonnull
     public static NBTTagCompound getBlockStateNBTTag(IBlockState state) {
-        if(state.getBlock().getRegistryName() == null) return null;
+        if(state.getBlock().getRegistryName() == null) {
+            state = Blocks.AIR.getDefaultState();
+        }
         NBTTagCompound tag = new NBTTagCompound();
         tag.setString("registryName", state.getBlock().getRegistryName().toString());
         NBTTagList properties = new NBTTagList();
@@ -130,9 +132,14 @@ public class NBTHelper {
 
     @Nullable
     public static <T extends Comparable<T>> IBlockState getBlockStateFromTag(NBTTagCompound cmp) {
+        return getBlockStateFromTag(cmp, null);
+    }
+
+    @Nullable
+    public static <T extends Comparable<T>> IBlockState getBlockStateFromTag(NBTTagCompound cmp, IBlockState _default) {
         ResourceLocation key = new ResourceLocation(cmp.getString("registryName"));
         Block block = ForgeRegistries.BLOCKS.getValue(key);
-        if(block == null || block == Blocks.AIR) return null;
+        if(block == null || block == Blocks.AIR) return _default;
         IBlockState state = block.getDefaultState();
         Collection<IProperty<?>> properties = state.getPropertyKeys();
         NBTTagList list = cmp.getTagList("properties", Constants.NBT.TAG_COMPOUND);
