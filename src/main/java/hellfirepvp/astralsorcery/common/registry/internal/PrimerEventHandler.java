@@ -46,8 +46,8 @@ public class PrimerEventHandler {
     public void registerItems(RegistryEvent.Register<Item> event) {
         registry.wipe(event.getClass());
         RegistryItems.init();
-        AstralSorcery.proxy.registerOreDictEntries();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+        AstralSorcery.proxy.registerOreDictEntries();
         RegistryConstellations.initConstellationSignatures();
     }
 
