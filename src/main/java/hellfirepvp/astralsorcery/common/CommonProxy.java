@@ -200,7 +200,7 @@ public class CommonProxy implements IGuiHandler {
         }, new AmuletHolderCapability.Factory());
     }
 
-    private void registerOreDictEntries() {
+    public void registerOreDictEntries() {
         OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.RAW.asStack());
         OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.BRICKS.asStack());
         OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.PILLAR.asStack());
@@ -226,7 +226,6 @@ public class CommonProxy implements IGuiHandler {
 
     public void init() {
         RegistryStructures.init();
-        registerOreDictEntries();
         RegistryResearch.init();
         RegistryRecipes.initGrindstoneOreRecipes();
         SextantFinder.initialize();

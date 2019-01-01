@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry.internal;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
@@ -45,6 +46,7 @@ public class PrimerEventHandler {
     public void registerItems(RegistryEvent.Register<Item> event) {
         registry.wipe(event.getClass());
         RegistryItems.init();
+        AstralSorcery.proxy.registerOreDictEntries();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
         RegistryConstellations.initConstellationSignatures();
     }
