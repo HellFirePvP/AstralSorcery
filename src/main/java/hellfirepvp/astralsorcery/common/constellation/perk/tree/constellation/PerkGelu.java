@@ -57,7 +57,7 @@ public class PerkGelu extends ConstellationPerk {
                 if (modifier.getAttributeType().equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT) &&
                         owningPerk != null &&
                         !owningPerk.equals(PerkGelu.this)) {
-                    return modifier.convertModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, PerkAttributeModifier.Mode.STACKING_MULTIPLY, 0F);
+                    return modifier.convertModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, PerkAttributeModifier.Mode.STACKING_MULTIPLY, 1F);
                 }
                 return modifier;
             }
