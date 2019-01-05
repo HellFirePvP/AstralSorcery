@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.base.patreon.entity;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
@@ -47,6 +48,14 @@ public class PartialEntityFlare extends PatreonPartialEntity {
     protected void spawnEffects() {
         super.spawnEffects();
 
+        if (clientSprite != null) {
+            EntityFXFacingSprite p = (EntityFXFacingSprite) clientSprite;
+            if(!p.isRemoved() && Config.enablePatreonEffects) {
+                Color c = Color.getHSBColor(ClientScheduler.getClientTick() % 360 / 360F, 1, 1);
+                p.setOverlayColor(c);
+            }
+        }
+
         if (rand.nextBoolean() || !Config.enablePatreonEffects) return;
 
         int age = 30 + rand.nextInt(15);
@@ -57,7 +66,7 @@ public class PartialEntityFlare extends PatreonPartialEntity {
                 rand.nextFloat() * 0.08 * (rand.nextBoolean() ? 1 : -1));
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(at);
         particle.scale(scale).gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-        particle.setColor(rand.nextInt(3) == 0 ? this.flareColor.color2 : this.flareColor.color1);
+        particle.setColor(getColor());
         particle.setMaxAge(age);
 
         if (rand.nextBoolean()) {
@@ -69,7 +78,12 @@ public class PartialEntityFlare extends PatreonPartialEntity {
     }
 
     @SideOnly(Side.CLIENT)
-    private SpriteSheetResource getSprite() {
+    protected Color getColor() {
+        return rand.nextInt(3) == 0 ? this.flareColor.color2 : this.flareColor.color1;
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected SpriteSheetResource getSprite() {
         return RowSpriteSheetResource.crop(this.flareColor.getTexture(), this.flareColor.spriteRowIndex());
     }
 

@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.common.base.patreon;
 
 import hellfirepvp.astralsorcery.client.util.resource.*;
-import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFixedSprite;
-import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFloatingCrystal;
-import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFloatingFlareCrystal;
-import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
+import hellfirepvp.astralsorcery.common.base.patreon.base.*;
 import hellfirepvp.astralsorcery.common.base.patreon.entity.PartialEntityFlare;
 import hellfirepvp.astralsorcery.common.base.patreon.entity.PartialEntityFlareCrystal;
 import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
@@ -107,9 +104,9 @@ public class PatreonEffectHelper {
                 UUID.fromString("c6857827-1b26-497a-bf66-1ff0fae06499"),
                 new PatreonEffect(FlareColor.MAGENTA));
 
-        effectMap.put( //Beariserious
-                UUID.fromString("4a175294-0b50-4a56-88aa-e6adf8c25c50"),
-                new PtEffectFloatingCrystal(new Color(0x9C1D15), new TextureQuery(AssetLoader.TextureLocation.MODELS, "crystal_big_red")));
+        //effectMap.put( //Beariserious
+        //        UUID.fromString("4a175294-0b50-4a56-88aa-e6adf8c25c50"),
+        //        new PtEffectFloatingCrystal(new Color(0x9C1D15), new TextureQuery(AssetLoader.TextureLocation.MODELS, "crystal_big_red")));
 
         effectMap.put( //Febilian
                 UUID.fromString("dce1900d-0761-4471-9a09-48b575c03457"),
@@ -200,6 +197,11 @@ public class PatreonEffectHelper {
                         new Color(0xb711a9),
                         FlareColor.ELDRITCH,
                         new TextureQuery(AssetLoader.TextureLocation.MODELS, "crystal_big_magenta")));
+
+        effectMap.put( // FryoKnight / FryoKnight
+                UUID.fromString("9f3af5de-97fe-4bad-b98a-5fb47e248360"),
+                new PtEffectDynColorFlare(() ->
+                        Color.getHSBColor(PtEffectDynColorFlare.getClientTick() % 360 / 360F, 1F, 1F)));
 
         effectMap.put( // Jomeaga / Jomeaga
                 UUID.fromString("d5bd69b8-e261-4d97-8232-da714c94b6d9"),
