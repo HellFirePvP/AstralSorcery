@@ -1100,11 +1100,11 @@ knowledge.astralsorcery.fragment.discovery.startable.description=虽然只有自
 
 knowledge.astralsorcery.fragment.exploration.lightwellprod.name=生产效率
 knowledge.astralsorcery.fragment.exploration.lightwellprod.bookmark=效率
-knowledge.astralsorcery.fragment.exploration.lightwellprod.description=虽然催化剂的持续时间受世界的影响是个玄学问题，但在这期间星能液的生成速率将大大增加。将聚星缸放置在高星能场或链接到星能网络将显著提高效率。<NL>各类催化剂的耐用性排列如下海蓝宝石、共振宝石、水晶石、天体水晶石、共鸣水晶石、共鸣天体水晶石。
+knowledge.astralsorcery.fragment.exploration.lightwellprod.description=虽然催化剂的持续时间受世界的影响是个玄学问题，但在这期间星能液的生成速率将大大增加。将聚星缸放置在高星能场或链接到星能网络将显著提高效率。<NL>各类催化剂的耐用性排列如下：海蓝宝石、共振宝石、水晶石、天体水晶石、共鸣水晶石、共鸣天体水晶石。
 
 knowledge.astralsorcery.fragment.exploration.lightwelluses.name=其他用途
 knowledge.astralsorcery.fragment.exploration.lightwelluses.bookmark=替代用途
-knowledge.astralsorcery.fragment.exploration.lightwelluses.description=聚星缸不仅仅能生成星能液。还能通过雪或冰块获得水。同样也能利用地狱岩和岩浆块来获得熔岩。提高生成的效率的方式与星能液相同。
+knowledge.astralsorcery.fragment.exploration.lightwelluses.description=聚星缸不仅仅能生成星能液，还能通过雪或冰块获得水。同样也能利用地狱岩和岩浆块来获得熔岩，提高生成的效率的方式与星能液相同。
 
 knowledge.astralsorcery.fragment.exploration.crystalgrowth.name=晶体分裂
 knowledge.astralsorcery.fragment.exploration.crystalgrowth.bookmark=分裂
@@ -1184,7 +1184,7 @@ knowledge.astralsorcery.fragment.constellation.prism.description=每个璀璨棱
 
 knowledge.astralsorcery.fragment.constellation.clusterbonus.name=晶体产量提升
 knowledge.astralsorcery.fragment.constellation.clusterbonus.bookmark=生长量
-knowledge.astralsorcery.fragment.constellation.clusterbonus.description=测验表面，水晶簇不仅生长的更快，而且若是种植在星辉矿石上时有几率获得更多的水晶石、初步结果表面，这种方法获得的水晶石的纯度极高。
+knowledge.astralsorcery.fragment.constellation.clusterbonus.description=测试表明，水晶簇不仅生长得更快，而且若是种植在星辉矿石上时有几率获得更多的水晶石。初步结果表明，这种方法获得的水晶石的纯度极高。
 
 knowledge.astralsorcery.fragment.constellation.clusterspeed.name=提高生长速度
 knowledge.astralsorcery.fragment.constellation.clusterspeed.bookmark=生长率
