@@ -42,15 +42,17 @@ public enum Mods {
     UNIVERSALREMOTE("universalremote");
 
     public final String modid;
+    private final boolean loaded;
 
     private static Class<?> gcPlayerClass, urPlayerClass;
 
     private Mods(String modName) {
         this.modid = modName;
+        this.loaded = Loader.isModLoaded(this.modid);
     }
 
     public boolean isPresent() {
-        return Loader.isModLoaded(modid);
+        return loaded;
     }
 
     public void sendIMC(String message, NBTTagCompound value) {
