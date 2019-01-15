@@ -551,16 +551,24 @@ public class ResearchManager {
 
     private static void wipeFile(EntityPlayerMP player) {
         getPlayerFile(player).delete();
+        ResearchIOThread.cancelSave(player.getUniqueID());
     }
 
     public static void savePlayerKnowledge(EntityPlayerMP p) {
         if(!MiscUtils.isPlayerFakeMP(p)) {
-            savePlayerKnowledge(p.getUniqueID());
+            savePlayerKnowledge(p.getUniqueID(), false);
         }
     }
 
-    private static void savePlayerKnowledge(UUID pUUID) {
+    private static void savePlayerKnowledge(UUID pUUID, boolean force) {
         if (playerProgressServer.get(pUUID) == null) return;
+        PlayerProgress progress = playerProgressServer.get(pUUID);
+        if (force) {
+            ResearchIOThread.saveNow(pUUID, progress);
+        } else {
+            ResearchIOThread.saveProgress(pUUID, progress.copy());
+        }
+
         File playerFile = getPlayerFile(pUUID);
         try {
             Files.copy(playerFile, getPlayerBackupFile(pUUID));
@@ -617,7 +625,7 @@ public class ResearchManager {
                 informPlayersAboutProgressionLoss(pUUID);
 
                 load_unsafeFromNBT(pUUID, null);
-                savePlayerKnowledge(pUUID);
+                savePlayerKnowledge(pUUID, true);
             }
         }
     }
@@ -679,14 +687,9 @@ public class ResearchManager {
     }
 
     public static void saveAndClearServerCache() {
-        playerProgressServer.keySet().forEach(ResearchManager::savePlayerKnowledge);
+        ResearchIOThread.saveAllPending();
         playerProgressServer.clear();
     }
-
-    /*public static void logoutResetClient(EntityPlayer player) {
-        PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
-        PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) player);
-    }*/
 
     @SideOnly(Side.CLIENT)
     public static void recieveProgressFromServer(PktSyncKnowledge message, EntityPlayer player) {

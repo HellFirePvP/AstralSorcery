@@ -527,6 +527,14 @@ public class PlayerProgress {
         this.perkExp = message.perkExp;
     }
 
+    protected PlayerProgress copy() {
+        PlayerProgress copy = new PlayerProgress();
+        NBTTagCompound saveData = new NBTTagCompound();
+        this.store(saveData);
+        copy.load(saveData);
+        return copy;
+    }
+
     public void acceptMergeFrom(PlayerProgress toMergeFrom) {
         for (String seen : toMergeFrom.seenConstellations) {
             memorizeConstellation(seen);

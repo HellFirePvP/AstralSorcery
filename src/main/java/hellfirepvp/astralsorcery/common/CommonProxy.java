@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletHolderCapability;
@@ -316,6 +317,7 @@ public class CommonProxy implements IGuiHandler {
         AstralSorcery.log.info("Post compile recipes");
 
         CraftingAccessManager.compile();
+        ResearchIOThread.startIOThread();
     }
 
     public void clientFinishedLoading() {
