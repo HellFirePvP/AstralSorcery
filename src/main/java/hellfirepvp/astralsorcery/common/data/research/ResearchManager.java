@@ -568,19 +568,6 @@ public class ResearchManager {
         } else {
             ResearchIOThread.saveProgress(pUUID, progress.copy());
         }
-
-        File playerFile = getPlayerFile(pUUID);
-        try {
-            Files.copy(playerFile, getPlayerBackupFile(pUUID));
-        } catch (IOException exc) {
-            AstralSorcery.log.warn("Failed copying progress file contents to backup file!");
-            exc.printStackTrace();
-        }
-        try {
-            NBTTagCompound cmp = new NBTTagCompound();
-            playerProgressServer.get(pUUID).store(cmp);
-            CompressedStreamTools.write(cmp, playerFile);
-        } catch (IOException e) {}
     }
 
     public static void loadPlayerKnowledge(EntityPlayerMP p) {
