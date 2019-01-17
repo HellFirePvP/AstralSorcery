@@ -785,10 +785,10 @@ perk.modifier.format.lifeleech=%%1$s%%3$s
 ###
 perk.modifier.addition.add= 增加
 perk.modifier.addition.sub= 到
-perk.modifier.added_multiply.add=增加 %%
-perk.modifier.added_multiply.sub=减少 %%
-perk.modifier.stacking_multiply.add=比原来多 %%
-perk.modifier.stacking_multiply.sub=比原来少 %%
+perk.modifier.added_multiply.add= %% 额外叠加的
+perk.modifier.added_multiply.sub= %% 扣除的
+perk.modifier.stacking_multiply.add= %% 额外增加的
+perk.modifier.stacking_multiply.sub= %% 额外减少的
 
 perk.attribute.astralsorcery.meleeattackdamage.name=近战伤害
 perk.attribute.astralsorcery.projectileattackdamage.name=抛射物伤害
@@ -814,8 +814,8 @@ perk.attribute.astralsorcery.critmulti.name=暴击伤害倍数
 perk.attribute.astralsorcery.allres.name=元素抗性
 perk.attribute.astralsorcery.expgain.name=技能经验获取
 perk.attribute.astralsorcery.dodge.name=躲避几率
-perk.attribute.astralsorcery.thorns.name=反弹 %% 的近战伤害
-perk.attribute.astralsorcery.lifeleech.name=将 %% 的伤害转化生命值
+perk.attribute.astralsorcery.thorns.name= %% 近战伤害反弹率
+perk.attribute.astralsorcery.lifeleech.name= %% 的伤害输出转换为生命值
 
 perk.attribute.astralsorcery.compat.thaumcraft.runicshield.name=符文护盾
 
