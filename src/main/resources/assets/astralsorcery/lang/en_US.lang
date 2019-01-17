@@ -774,6 +774,14 @@ perk.category.focus.name=Focus Perk
 perk.astralsorcery.compat.thaumcraft=Astral Sorcery: Thaumcraft Compat
 
 ###
+# Note: 1 = name of type, 2 = value, 3 = limit-description or empty string if not present.
+###
+perk.reader.display.default=%%1$s: %%2$s%%3$s
+perk.reader.display.percentage=%%1$s: %%2$s%%%%3$s
+perk.reader.limit.default= (limited to %s)
+perk.reader.limit.default.percent= (limited to %s%%)
+
+###
 # Note: Different modifiers may have different formats.
 ###
 perk.modifier.format=%%1$s%%2$s %%3$s

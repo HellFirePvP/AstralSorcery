@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -28,6 +29,7 @@ public class AttributeTypeLimiter {
 
     public static final AttributeTypeLimiter INSTANCE = new AttributeTypeLimiter();
 
+    private static final Tuple<Float, Float> NONE = new Tuple<>(null, null);
     private static final Tuple<Float, Float> ANY = new Tuple<>(Float.MIN_VALUE, Float.MAX_VALUE);
     private static Map<PerkAttributeType, Tuple<Float, Float>> perkTypeLimits = Maps.newHashMap();
 
@@ -35,6 +37,11 @@ public class AttributeTypeLimiter {
 
     void putLimit(PerkAttributeType type, float lower, float upper) {
         perkTypeLimits.put(type, new Tuple<>(lower, upper));
+    }
+
+    @Nullable
+    public Float getMaxLimit(PerkAttributeType type) {
+        return perkTypeLimits.getOrDefault(type, NONE).value;
     }
 
     @SubscribeEvent

@@ -42,6 +42,8 @@ import java.util.List;
  */
 public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMultiblockDependantTile {
 
+    private static PatternBlockArray previewPatternCopy = null;
+
     private BlockPos linkedTo = null;
 
     @Override
@@ -102,7 +104,14 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMu
     @Nullable
     @Override
     public PatternBlockArray getRequiredStructure() {
-        return MultiBlockArrays.patternRitualPedestalWithLink;
+        if (previewPatternCopy == null) {
+            previewPatternCopy = new PatternBlockArray(MultiBlockArrays.patternRitualPedestalWithLink.getRegistryName());
+            MultiBlockArrays.patternRitualPedestalWithLink.getPattern()
+                    .forEach((pos, info) -> previewPatternCopy.addBlock(pos.down(5), info.state, info.matcher));
+            MultiBlockArrays.patternRitualPedestalWithLink.getTileCallbacks()
+                    .forEach((pos, callback) -> previewPatternCopy.addTileCallback(pos.down(5), callback));
+        }
+        return previewPatternCopy;
     }
 
     @Nonnull

@@ -48,14 +48,6 @@ public class PartialEntityFlare extends PatreonPartialEntity {
     protected void spawnEffects() {
         super.spawnEffects();
 
-        if (clientSprite != null) {
-            EntityFXFacingSprite p = (EntityFXFacingSprite) clientSprite;
-            if(!p.isRemoved() && Config.enablePatreonEffects) {
-                Color c = Color.getHSBColor(ClientScheduler.getClientTick() % 360 / 360F, 1, 1);
-                p.setOverlayColor(c);
-            }
-        }
-
         if (rand.nextBoolean() || !Config.enablePatreonEffects) return;
 
         int age = 30 + rand.nextInt(15);

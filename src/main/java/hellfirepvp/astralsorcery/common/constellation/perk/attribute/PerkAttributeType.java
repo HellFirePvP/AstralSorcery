@@ -10,10 +10,13 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import hellfirepvp.astralsorcery.common.constellation.perk.reader.AttributeReader;
+import hellfirepvp.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -40,7 +43,16 @@ public class PerkAttributeType {
         return type;
     }
 
+    public String getUnlocalizedName() {
+        return String.format("perk.attribute.%s.name", getTypeString());
+    }
+
     protected void init() {}
+
+    @Nullable
+    public AttributeReader getReader() {
+        return AttributeReaderRegistry.getReader(this.getTypeString());
+    }
 
     @Nonnull
     public PerkAttributeModifier createModifier(float modifier, PerkAttributeModifier.Mode mode) {

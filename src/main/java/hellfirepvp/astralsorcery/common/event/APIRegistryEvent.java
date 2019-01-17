@@ -16,6 +16,8 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.constellation.perk.reader.AttributeReader;
+import hellfirepvp.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,6 +67,11 @@ public class APIRegistryEvent {
 
         public void registerAttribute(PerkAttributeType type) {
             AttributeTypeRegistry.registerPerkType(type);
+        }
+
+        // To be called AFTER registerAttribute
+        public void registerAttributeReader(PerkAttributeType type, AttributeReader reader) {
+            AttributeReaderRegistry.registerTypeReader(type.getTypeString(), reader);
         }
 
         public void setAttributeLimit(PerkAttributeType type, float lowerBound, float upperBound) {

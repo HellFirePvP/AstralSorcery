@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeMo
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.*;
+import hellfirepvp.astralsorcery.common.constellation.perk.reader.VanillaAttributeReader;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.PointConnector;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
@@ -29,6 +30,8 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.*;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,6 +44,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.*;
+import static hellfirepvp.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry.*;
 import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.PERK_TREE;
 
 /**
@@ -60,6 +64,7 @@ public class RegistryPerks {
 
     public static void initPerkTree() {
         initializeAttributeTypes();
+        initializeAttributeInterpreters();
 
         initializeRoot();
 
@@ -1884,6 +1889,19 @@ public class RegistryPerks {
         limitPerkType(ATTR_TYPE_ATTACK_LIFE_LEECH, 0F, 0.25F);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkAttributeTypeRegister());
+    }
+
+    private static void initializeAttributeInterpreters() {
+        registerTypeReader(ATTR_TYPE_MELEE_DAMAGE,    new VanillaAttributeReader(SharedMonsterAttributes.ATTACK_DAMAGE));
+        registerTypeReader(ATTR_TYPE_HEALTH,          new VanillaAttributeReader(SharedMonsterAttributes.MAX_HEALTH));
+        registerTypeReader(ATTR_TYPE_MOVESPEED,       new VanillaAttributeReader(SharedMonsterAttributes.MOVEMENT_SPEED).formatAsDecimal());
+        registerTypeReader(ATTR_TYPE_SWIMSPEED,       new VanillaAttributeReader(EntityLivingBase.SWIM_SPEED).formatAsDecimal());
+        registerTypeReader(ATTR_TYPE_ARMOR,           new VanillaAttributeReader(SharedMonsterAttributes.ARMOR));
+        registerTypeReader(ATTR_TYPE_ARMOR_TOUGHNESS, new VanillaAttributeReader(SharedMonsterAttributes.ARMOR_TOUGHNESS));
+        registerTypeReader(ATTR_TYPE_ATTACK_SPEED,    new VanillaAttributeReader(SharedMonsterAttributes.ATTACK_SPEED).formatAsDecimal());
+        registerTypeReader(ATTR_TYPE_REACH,           new VanillaAttributeReader(EntityPlayer.REACH_DISTANCE).formatAsDecimal());
+
+
     }
 
 }

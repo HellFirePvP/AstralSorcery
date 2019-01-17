@@ -133,13 +133,26 @@ public class PerkAttributeModifier {
         return attributeType;
     }
 
-    public String getUnlocalizedAttributeName() {
-        return String.format("perk.attribute.%s.name", getAttributeType());
+    @Nullable
+    public PerkAttributeType resolveType() {
+        return AttributeTypeRegistry.getType(attributeType);
+    }
+
+    protected String getUnlocalizedAttributeName() {
+        PerkAttributeType type;
+        if ((type = resolveType()) != null) {
+            return type.getUnlocalizedName();
+        }
+        return "???";
     }
 
     @SideOnly(Side.CLIENT)
     public boolean hasDisplayString() {
-        return I18n.hasKey(getUnlocalizedAttributeName());
+        PerkAttributeType type;
+        if ((type = resolveType()) != null) {
+            return I18n.hasKey(type.getUnlocalizedName());
+        }
+        return false;
     }
 
     @SideOnly(Side.CLIENT)
