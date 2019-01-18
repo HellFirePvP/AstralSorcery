@@ -1083,70 +1083,70 @@ perk.astralsorcery.armara.desc=Ottieni esperienza prendendo danno
 
 constellation.noInformation=Non c'è niennte qui.
 
-knowledge.astralsorcery.fragment.discovery.ancientshrine.name=Ancient Shrine Locations
-knowledge.astralsorcery.fragment.discovery.ancientshrine.bookmark=Locations
-knowledge.astralsorcery.fragment.discovery.ancientshrine.description=Ancient temples containing Collector Crystals are normally located in very cold, very hot, or very mountainous areas, but only if enough level ground exists to build a temple upon. The crystals will always be attuned to one of the five Bright constellations.
+knowledge.astralsorcery.fragment.discovery.ancientshrine.name=I luoghi degli Antichi Santuari
+knowledge.astralsorcery.fragment.discovery.ancientshrine.bookmark=Luoghi
+knowledge.astralsorcery.fragment.discovery.ancientshrine.description=Gli antichi templi che contengono Cristalli Collettori sono normalmente locati in posti molto freddi, molto caldi o molto montuosi, ma solo se esiste abbastanza terra livellata da poter costruirci sopra un tempio. I cristalli sarano sempre sintonizzati a una delle 5 costellazioni Luminose.
 
-knowledge.astralsorcery.fragment.discovery.resowand.name=Resonation Locations
-knowledge.astralsorcery.fragment.discovery.resowand.bookmark=Crystal loc.
-knowledge.astralsorcery.fragment.discovery.resowand.description=While indicator plumes are only visible above ground, Rock Crystal Ore spawns at the lowest depths: at bedrock. While occassional groupings may be within several steps of each other, it is rare and often will have tens or hundreds of meters between rock crystal ores. If holding a Resonating Wand in either hand, sparkles will show through the stone surrounding the ore when within a few strides to aid in locating it.
+knowledge.astralsorcery.fragment.discovery.resowand.name=Luoghi di Risonanza
+knowledge.astralsorcery.fragment.discovery.resowand.bookmark=Luoghi dei Cristalli
+knowledge.astralsorcery.fragment.discovery.resowand.description=Mentre i pennacchi indicatori sono solo visibili sopra alla terra, I cristalli di roccia vengono generati alle profondità più alte: alla roccia di fondo. Mentre occasionalmente stando in gruppo potrbbero essercene alcuni ad alcuni passi di distanza da l'un l'altro, è raro e spesso ci sono decine o centinaria di metri tra i minerali di cristalli di roccia. Tenendo una bacchetta risonante in mano è possibile che appaiano delle sccintille nel mondo che mostrano il posto in cui si trovano dei minerali di cristalli rocciosi.
 
-knowledge.astralsorcery.fragment.misc.altar.name=Altar Multicrafting
-knowledge.astralsorcery.fragment.misc.altar.bookmark=Multicrafting
-knowledge.astralsorcery.fragment.misc.altar.description=All altars have the ability to craft multiple copies of the same item, as long as all the ingredients are stacked up in the table at once, and it has sufficient starlight and time to complete the crafting operation. This is more valuable with higher tier altars, due to increased crafting speed and starlight reservoir size.
+knowledge.astralsorcery.fragment.misc.altar.name=Craft Multiplo dell'Altare
+knowledge.astralsorcery.fragment.misc.altar.bookmark=Craft Multiplo
+knowledge.astralsorcery.fragment.misc.altar.description=Tutti gli altari hanno l'abilità di creare più copie dello stesso oggetto, finché gli ingredienti per crearlo nell'altare sono abbastanza, e a patto che abbia luce stellare sufficiente per completare l'operazione di costruzione. Questo è più di valore con livelli più alti di altari, a causa dell'aumento della velocità di costruzione e del serbatoio della luce stellare.
 
-knowledge.astralsorcery.fragment.discovery.startable.name=Starlight Network
-knowledge.astralsorcery.fragment.discovery.startable.bookmark=Network links
-knowledge.astralsorcery.fragment.discovery.startable.description=While only crystals generated with the world will automatically link to crafting tables placed near them, any collector crystal can be linked to a table using a Linking Tool to achieve the same effect. Collectors (or lenses carrying collector starlight) can also be linked into a network to provide starlight to any consumer of starlight, no matter if table, altar, or device.
+knowledge.astralsorcery.fragment.discovery.startable.name=Rete di Luce Stellar
+knowledge.astralsorcery.fragment.discovery.startable.bookmark=Collegamenti di Rete
+knowledge.astralsorcery.fragment.discovery.startable.description=Mentre solo i cristalli generati nel mondo si connetteranno automaticamente alle crafting table piazzate vicino, qualsiasi altro cristallo collettore può essere collegato ad un tavolo utilizzando un Attrezzo di Collegamento per ottenere qualche effetto. I collettori (o le lenti che portano luce dai collettori) possono anche essere likati in una rete per provvedere luce stellare a un qualsiasi consumatore di luce stellare, senza differenza per quale sia il dispositivo.
 
-knowledge.astralsorcery.fragment.exploration.lightwellprod.name=Production Efficiency
-knowledge.astralsorcery.fragment.exploration.lightwellprod.bookmark=Efficiency
-knowledge.astralsorcery.fragment.exploration.lightwellprod.description=While catalyst duration is subject to the whims of the world, the distillation rate of Liquid Starlight can be vastly increased within that time. Placing a Lightwell in areas of high starlight concentration will increase efficiency, as will linking one to a starlight network.<NL>Durability of catalyst lifespan increases as follows: Aquamarine, Resonating Aquamarine, Rock Crystal, Celestial Crystal, Attuned Rock Crystal, Attuned Celestial Crystal.
+knowledge.astralsorcery.fragment.exploration.lightwellprod.name=Efficienza di Produzione
+knowledge.astralsorcery.fragment.exploration.lightwellprod.bookmark=Efficienza
+knowledge.astralsorcery.fragment.exploration.lightwellprod.description=Mentre la durata del catalizzatore è soggetta ai capricci del mondo, il rateo di distillazione di Luce stellare Liquida può essere aumentato molto con quel tempo. Piazzando un Pozzo di Luce nelle aree di alta concentrazione di luce stellare aumenterà la sua efficienza, allo stesso modo collegandolo con una rete di luce stellare.<NL>la durevolezza del catalizzatore aumenta in questa successione: Acquamarina, Acquamarina Risonante, Cristallo Roccioso, Cristallo Celestiale, Cristallo Roccioso Sintonizzato, Cristallo Celestiale Sintonizzato.
 
-knowledge.astralsorcery.fragment.exploration.lightwelluses.name=Other Uses
-knowledge.astralsorcery.fragment.exploration.lightwelluses.bookmark=Alternate uses
-knowledge.astralsorcery.fragment.exploration.lightwelluses.description=Lightwells are not limited in creating only Liquid Starlight. By using snow or ice blocks, a Lightwell can distill water. Distillation of lava can also be achieved by using netherrack or magma blocks, as well. The same principles apply for production efficiency as for Liquid Starlight.
+knowledge.astralsorcery.fragment.exploration.lightwelluses.name=Altri usi
+knowledge.astralsorcery.fragment.exploration.lightwelluses.bookmark=Usi Alternativi
+knowledge.astralsorcery.fragment.exploration.lightwelluses.description=I pozzi di luce non sono limitati nel creare solo luce stellare liquida. Utilizzando blocchi di neve o ghiaccio, un Pozzo di luce può distillare acqua. La distillazione della lava può essere raggiunta utilizzando la pietra del nether o i blocchi di magma. Gli stessi principi della luce stellare si applicano all'efficienza di produzione.
 
-knowledge.astralsorcery.fragment.exploration.crystalgrowth.name=Splitting Crystals
-knowledge.astralsorcery.fragment.exploration.crystalgrowth.bookmark=Splitting
-knowledge.astralsorcery.fragment.exploration.crystalgrowth.description=If a crystal with maximum size is continuously placed into Liquid Starlight, there is a 25%% chance that the crystal will destabilize from the starlight exposure, undergoing spontaneous division and "birthing" an additional crystal. While both crystals will see an impact to their size and facet cuts during this division, the emerging "child" crystal will often see fewer impurities over its parent, by an almost 10%% purity increase in some cases. This process can be continued with each new generation of crystal until no impurities remain.
+knowledge.astralsorcery.fragment.exploration.crystalgrowth.name=Cristalli Scissi
+knowledge.astralsorcery.fragment.exploration.crystalgrowth.bookmark=Scissione
+knowledge.astralsorcery.fragment.exploration.crystalgrowth.description=Se il cristallo con la grandezza massima è piazzato continuamente dentro la luce stellare liquida, c'è la possibilità del 25%% che il cristallo si destabilizzi dall'esposizione alla luce stellare, andando in una fase di spontanea divisione e di nascita di un nuovo cristallo aggiuntivo. Mentre entrambi i cristalli vedranno un impatto alla loro grandezza e affilatezza durante la divisione, i cristalli figli emergenti vedranno spesso avere meno impurità rispetto al genitore, quasi per un 10%% di aumento di purezza in certi casi. Questo processo può essere continuato con ogni nuova generazione del cristallo finche esso non conserverà più impurità
 
-knowledge.astralsorcery.fragment.exploration.crystaltools.name=Tool Stats
-knowledge.astralsorcery.fragment.exploration.crystaltools.bookmark=Finer details
-knowledge.astralsorcery.fragment.exploration.crystaltools.description=Crystal tools operate differently than most normal tools due to their construction, with three stats governing their performance.<NL>Purity - Higher purity tools lose less size when grinding.<NL>Size - Durability of the tool. Lost when sharpened, and recovered by soaking in Liquid Starlight. When the size of a tool is 0, the tool is destroyed.<NL>Cutting - Determines a tool's efficiency, and can be recovered via sharpening. Much like a knife, the tool will dull more quickly when very sharp than when already somewhat dulled. The "Unbreaking" enchantment slows cutting losses.
+knowledge.astralsorcery.fragment.exploration.crystaltools.name=Statistiche degli Attrezzi
+knowledge.astralsorcery.fragment.exploration.crystaltools.bookmark=Dettagli Fini
+knowledge.astralsorcery.fragment.exploration.crystaltools.description=Gli attrezzi di cristallo operano differentemente dagli attrezzi normali a causa della loro costruzione, con 3 statistiche che governano la loro performance.<NL>Purezza - Attrezzi più puri perderanno meno grandezza quando affilati.<NL>Grandezza - Durabilità dell'attrezzo. Persa quando viene affilato, e recuperata immergendolo nella luce stellare liquida. Quando la Grandezza dell'attrezzo giunge a 0, esso è distrutto.<NL>Affilatezza - Determina l'efficienza di un attrezzo, e può essere recuperata affilandolo. Un po come un coltello, l'attrezzo diventerà meno affilato più velocemente se parte da una situazione di affilatezza alta, che se partisse da una situazione di affilatezza media. L'incantamento di infrangibilità permette di rallentare la perdita di affilatezza.
 
-knowledge.astralsorcery.fragment.exploration.grindstone.name=Weapons and Ores
-knowledge.astralsorcery.fragment.exploration.grindstone.bookmark=Additional use
-knowledge.astralsorcery.fragment.exploration.grindstone.description=In addition to shaping crystals, a Grindstone used to grind up an ore may sometimes generate more dust than is needed for a single ingot smelting.<NL>Swords can also be sharpened on a Grindstone, increasing the damage. The increase is higher for swords that are naturally more damaging, though some worlds may see the degree of improvement to be higher than others.
+knowledge.astralsorcery.fragment.exploration.grindstone.name=Armi e Minerali
+knowledge.astralsorcery.fragment.exploration.grindstone.bookmark=Uso Aggiuntivo
+knowledge.astralsorcery.fragment.exploration.grindstone.description=In aggiunta a formare i cristalli, una mola che è utilizzata per macinare un minerale potrebbe generare più di una polvere di quella che server per creare un singolo lingotto.<NL>Le spade possono anche essere affilate su una mola, aumentando il danno. L'aumento è più alto per le spade che sono naturalmente più dannose, tuttavia alcuni mondi potrebbero vedere un grado di miglioramento più alto rispetto agli altri.
 
-knowledge.astralsorcery.fragment.misc.cannibalism.name=Cannibalism and Reach
-knowledge.astralsorcery.fragment.misc.cannibalism.bookmark=Cannibalism
-knowledge.astralsorcery.fragment.misc.cannibalism.description=Any device that collects starlight gathers it from within 8 blocks radius of the device itself. Much like rain-collecting barrels overlapping each other, devices sharing circular gathering areas will see diminished returns as each can only gather the same starlight once. Spreading out any devices that collect starlight, regardless of device type, so they are 16 paces apart will prevent them from cannibalising the starlight gathered from each other.
+knowledge.astralsorcery.fragment.misc.cannibalism.name=Cannibalismo e Raggio
+knowledge.astralsorcery.fragment.misc.cannibalism.bookmark=Cannibalismo
+knowledge.astralsorcery.fragment.misc.cannibalism.description=Qualsiasi dispositivo che collezioni luce stellare ottenuta da 8 blocchi di raggio dal dispositivo stesso. Un po come i barili di collezionamento della pioggia si sovrappongono l'un l'altro, i dispositivi che condividono un'area circolare di raccolta vedranno una diminuizione nella quantità di luce stellare ottenuta. Distribuendo dispositivo che collezionano luce stellare, senza guardare il tipo di dispositovo, cosicché ci siano 16 passi di distanza prevenirà loro dal cannibalizzarsi la luce stellare ottenuta da ciascuno.
 
-knowledge.astralsorcery.fragment.exploration.caveillumplace.name=Illuminator Deployment
-knowledge.astralsorcery.fragment.exploration.caveillumplace.bookmark=Placement
-knowledge.astralsorcery.fragment.exploration.caveillumplace.description=When active, a Cave Illuminator attempts to fill in dark areas, placing lights in a spiralling pattern from a center marked by the Illuminator itself, out to its maximum range. It maintains a vertical distance approximately 8 meters apart for light "layers" when performing these placements.
+knowledge.astralsorcery.fragment.exploration.caveillumplace.name=Disposizione di Luminarie
+knowledge.astralsorcery.fragment.exploration.caveillumplace.bookmark=Piazzamento
+knowledge.astralsorcery.fragment.exploration.caveillumplace.description=Quando attivo, un illuminatore di Grotte prova a riempire le aree nel buio piazzando luci in un pattern a spirale da un centro individuato dall'illuminatore stesso, fino al suo raggio massimo. Mantiene la distanza verticale approssimativa di 8 metri per ogni luce posizionata.
 
-knowledge.astralsorcery.fragment.exploration.caveillumwand.name=Colors and Operation
-knowledge.astralsorcery.fragment.exploration.caveillumwand.bookmark=Function
-knowledge.astralsorcery.fragment.exploration.caveillumwand.description=When without sky access, or if it is not nighttime, a Cave Illuminator can be powered by an Illumination Wand for 10 seconds at a time when right-clicked.<NL>Additionally, the color of a Cave Illuminator's spawned lights will change to match the color the Illumination Wand has been dyed.
+knowledge.astralsorcery.fragment.exploration.caveillumwand.name=Colori e Operazioni
+knowledge.astralsorcery.fragment.exploration.caveillumwand.bookmark=Funzione
+knowledge.astralsorcery.fragment.exploration.caveillumwand.description=Quando senza accesso al cielo, o se non è notte, un Illuminatore di Grotte può essere potenziato da una bacchetta dell'illuminazione per dieci secondi alla volta quando ci si fa tasto-destro.<NL>In aggiunta, il colore delle luci posizionate da un illuminatore di Grotte cambiera per combaciare il colore di com'è stata pitturata la bacchetta di illuminazione.
 
-knowledge.astralsorcery.fragment.exploration.nocturnal.name=Spawn Types and Rarity
-knowledge.astralsorcery.fragment.exploration.nocturnal.bookmark=Spawning
-knowledge.astralsorcery.fragment.exploration.nocturnal.description=The powder draws from the monsters that innately spawn where it is located. Natural rarity of the monsters in that is ignored, so all possibilities have an equal spawning chance.
+knowledge.astralsorcery.fragment.exploration.nocturnal.name=Tipi di Generazione e Rarità
+knowledge.astralsorcery.fragment.exploration.nocturnal.bookmark=Generazione
+knowledge.astralsorcery.fragment.exploration.nocturnal.description=La potenza viene trascinata dai mostri che vengono generati innatamente nei luoghi. La rarità naturale dei mostri in quello è ignorata, quindi tutte le possibilità hanno una probabilità uguale di accadere.
 
-knowledge.astralsorcery.fragment.attunement.starlightchunks.name=Starlight Persistence
-knowledge.astralsorcery.fragment.attunement.starlightchunks.bookmark=Persistence
-knowledge.astralsorcery.fragment.attunement.starlightchunks.description=The issue with all things, is that when not being watched, the world seems to stand still for them. Lenses, and other Starlight Network transmission pieces, are kept active by the starlight itself, and so do not stop working when not observed, no matter how far away the nearest person is. The same cannot be said for the blocks they are acting upon.
+knowledge.astralsorcery.fragment.attunement.starlightchunks.name=La Persistenza della luce stellare
+knowledge.astralsorcery.fragment.attunement.starlightchunks.bookmark=Persistenza
+knowledge.astralsorcery.fragment.attunement.starlightchunks.description=Il problema con tutte le cose, è che quando non viene guardato, il mondo sembra fermo per loro. Lenti e altri pezzi di trasmissione della Rete di luce Stellare, sono conservati attivi dalla luce stellare stessa, e così non smettono di funzionare quando non sono osservati, senza pensare a quanto lontano la persona più vicina sia. La stessa cosa non può essere detta per i blocchi su cui agiscono.
 
-knowledge.astralsorcery.fragment.attunement.alignmentcharge.name=Alignment Charge Rate
-knowledge.astralsorcery.fragment.attunement.alignmentcharge.bookmark=Charging
-knowledge.astralsorcery.fragment.attunement.alignmentcharge.description=The absorbed energy used by various focusing tools will recover slowly when left on its own. When under the open sky, or during the night, it will recover much more quickly.
+knowledge.astralsorcery.fragment.attunement.alignmentcharge.name=Rateo di Carica dell'Allineamento
+knowledge.astralsorcery.fragment.attunement.alignmentcharge.bookmark=Caricamnento
+knowledge.astralsorcery.fragment.attunement.alignmentcharge.description=L'energia assorbita utilizzata dai vari attrezzi di focalizzazione si recupererà lentamente quando lasciata da sola. Quando sotto il cielo aperto, o durante la notte, recupererà più velocemente.
 
-knowledge.astralsorcery.fragment.attunement.attunement.name=Personal Attunement
-knowledge.astralsorcery.fragment.attunement.attunement.bookmark=Personal
-knowledge.astralsorcery.fragment.attunement.attunement.description=While many objects can be attuned to Bright or Dim constellations, people can only be attuned to Brights.
-
+knowledge.astralsorcery.fragment.attunement.attunement.name=Sintonizzazione Personale
+knowledge.astralsorcery.fragment.attunement.attunement.bookmark=Personale
+knowledge.astralsorcery.fragment.attunement.attunement.description=Mentre molti oggetti possono essere sintonizzati con costellazioni Luminose e Difettive, le persone possono essere solo sintonizzate con quelle Luminose.
+#---------------------------------------------------------------------------------------------------------TODO
 knowledge.astralsorcery.fragment.perk_gems.name=Influencing Through Harvest
 knowledge.astralsorcery.fragment.perk_gems.bookmark=Dynamic Differences
 knowledge.astralsorcery.fragment.perk_gems.description=The time of day the cluster is harvested impacts the power of the resulting Gem, whether during the Day, at Night, or during Dusk and Dawn.<NL>The less sunlight in the sky when harvested, the more powerful the enhancements, though fewer. More sunlight during harvest results in weaker, but more numerous, enhancements. Gem enhancements vary from 2 to 4 in number.
