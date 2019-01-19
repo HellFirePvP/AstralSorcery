@@ -27,6 +27,11 @@ public class AttributeModifierThorns extends PerkAttributeModifier {
     }
 
     @Override
+    protected String getUnlocalizedAttributeName() {
+        return "perk.attribute.astralsorcery.thorns.modifier.name";
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public String getAttributeDisplayFormat() {
         return I18n.format("perk.modifier.format.thorns");

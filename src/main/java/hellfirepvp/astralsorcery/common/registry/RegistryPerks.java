@@ -16,7 +16,8 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeMo
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.*;
-import hellfirepvp.astralsorcery.common.constellation.perk.reader.VanillaAttributeReader;
+import hellfirepvp.astralsorcery.common.constellation.perk.reader.AttributeReader;
+import hellfirepvp.astralsorcery.common.constellation.perk.reader.impl.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.PointConnector;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
@@ -41,6 +42,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.*;
@@ -1861,7 +1863,7 @@ public class RegistryPerks {
         registerPerkType(new AttributeDodge());
         registerPerkType(new AttributeProjectileAttackDamage());
         registerPerkType(new AttributeArrowSpeed());
-        registerPerkType(new PerkAttributeType(ATTR_TYPE_INC_PERK_EXP));
+        registerPerkType(new PerkAttributeType(ATTR_TYPE_INC_PERK_EXP, true));
         registerPerkType(new AttributeLifeRecovery());
         registerPerkType(new AttributePotionDuration());
         registerPerkType(new PerkAttributeType(ATTR_TYPE_ARC_CHAINS));
@@ -1885,14 +1887,14 @@ public class RegistryPerks {
         registerPerkType(new AttributeTypeMaxReach());
 
         limitPerkType(ATTR_TYPE_INC_DODGE, 0F, 0.75F);
-        limitPerkType(ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST, 0F, 0.75F);
-        limitPerkType(ATTR_TYPE_ATTACK_LIFE_LEECH, 0F, 0.25F);
+        limitPerkType(ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST, 0F, 0.6F);
+        limitPerkType(ATTR_TYPE_ATTACK_LIFE_LEECH, 0F, 0.1F);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkAttributeTypeRegister());
     }
 
     private static void initializeAttributeInterpreters() {
-        registerTypeReader(ATTR_TYPE_MELEE_DAMAGE,    new VanillaAttributeReader(SharedMonsterAttributes.ATTACK_DAMAGE));
+        registerTypeReader(ATTR_TYPE_MELEE_DAMAGE,    new VanillaAttributeReader(SharedMonsterAttributes.ATTACK_DAMAGE).formatAsDecimal());
         registerTypeReader(ATTR_TYPE_HEALTH,          new VanillaAttributeReader(SharedMonsterAttributes.MAX_HEALTH));
         registerTypeReader(ATTR_TYPE_MOVESPEED,       new VanillaAttributeReader(SharedMonsterAttributes.MOVEMENT_SPEED).formatAsDecimal());
         registerTypeReader(ATTR_TYPE_SWIMSPEED,       new VanillaAttributeReader(EntityLivingBase.SWIM_SPEED).formatAsDecimal());
@@ -1901,7 +1903,39 @@ public class RegistryPerks {
         registerTypeReader(ATTR_TYPE_ATTACK_SPEED,    new VanillaAttributeReader(SharedMonsterAttributes.ATTACK_SPEED).formatAsDecimal());
         registerTypeReader(ATTR_TYPE_REACH,           new VanillaAttributeReader(EntityPlayer.REACH_DISTANCE).formatAsDecimal());
 
+        registerDefaultReader(ATTR_TYPE_INC_PERK_EFFECT);
+        registerDefaultReader(ATTR_TYPE_INC_PERK_EXP);
+        registerDefaultReader(ATTR_TYPE_INC_CRIT_MULTIPLIER);
+        registerDefaultReader(ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        registerDefaultReader(ATTR_TYPE_PROJ_DAMAGE);
+        registerDefaultReader(ATTR_TYPE_PROJ_SPEED);
+        registerDefaultReader(ATTR_TYPE_LIFE_RECOVERY);
+        registerDefaultReader(ATTR_TYPE_POTION_DURATION);
+        registerDefaultReader(ATTR_TYPE_INC_ENCH_EFFECT);
+        registerDefaultReader(ATTR_TYPE_INC_DODGE);
+        registerDefaultReader(ATTR_TYPE_INC_CRIT_CHANCE);
+        registerDefaultReader(ATTR_TYPE_ATTACK_LIFE_LEECH);
+        registerDefaultReader(ATTR_TYPE_INC_THORNS);
 
+        registerReader(ATTR_TYPE_INC_HARVEST_SPEED, BreakSpeedAttributeReader::new);
+    }
+
+    private static void registerDefaultReader(String typeStr) {
+        PerkAttributeType type = getType(typeStr);
+        if (type != null) {
+            if (type.isMultiplicative()) {
+                registerReader(typeStr, PercentageAttributeReader::new);
+            } else {
+                registerReader(typeStr, AddedPercentageAttributeReader::new);
+            }
+        }
+    }
+
+    private static void registerReader(String typeStr, Function<PerkAttributeType, AttributeReader> fct) {
+        PerkAttributeType type = getType(typeStr);
+        if (type != null) {
+            registerTypeReader(typeStr, fct.apply(type));
+        }
     }
 
 }

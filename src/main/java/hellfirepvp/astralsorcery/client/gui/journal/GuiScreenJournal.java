@@ -213,6 +213,9 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
     private boolean handleFragmentClick(Point mouse) {
         for (Rectangle r : this.pageFragments.keySet()) {
             if (r.contains(mouse)) {
+                if (this instanceof GuiJournalProgression) {
+                    ((GuiJournalProgression) this).expectReinit = true;
+                }
                 KnowledgeFragment frag = this.pageFragments.get(r);
                 Minecraft.getMinecraft().displayGuiScreen(new GuiJournalOverlayKnowledge(this, frag));
                 SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);

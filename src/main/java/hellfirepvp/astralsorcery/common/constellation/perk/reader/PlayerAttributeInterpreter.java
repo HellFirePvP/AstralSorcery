@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -25,37 +26,36 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 05.01.2019 / 13:37
  */
+@SideOnly(Side.CLIENT)
 public class PlayerAttributeInterpreter {
 
     private Map<String, AttributeReader> attributeReaderOverrides = Maps.newHashMap();
 
     private PlayerAttributeMap attributeMap;
     private EntityPlayer player;
-    private Side side;
 
-    private PlayerAttributeInterpreter(PlayerAttributeMap attributeMap, EntityPlayer player, Side side) {
+    private PlayerAttributeInterpreter(PlayerAttributeMap attributeMap, EntityPlayer player) {
         this.attributeMap = attributeMap;
         this.player = player;
-        this.side = side;
     }
 
-    public static PlayerAttributeInterpreter defaultInterpreter(EntityPlayer player, Side side) {
-        return new Builder(player, side).build();
+    public static PlayerAttributeInterpreter defaultInterpreter(EntityPlayer player) {
+        return new Builder(player).build();
     }
 
     @Nullable
-    public String getValue(PerkAttributeType type) {
+    public PerkStatistic getValue(PerkAttributeType type) {
         return getValue(type.getTypeString());
     }
 
     @Nullable
-    public String getValue(String typeString) {
+    public PerkStatistic getValue(String typeString) {
         if (attributeReaderOverrides.containsKey(typeString)) {
-            return attributeReaderOverrides.get(typeString).getStatString(attributeMap, player, side);
+            return attributeReaderOverrides.get(typeString).getStatistics(attributeMap, player);
         } else {
             AttributeReader reader = AttributeReaderRegistry.getReader(typeString);
             if (reader != null) {
-                return reader.getStatString(attributeMap, player, side);
+                return reader.getStatistics(attributeMap, player);
             }
         }
         return null;
@@ -65,12 +65,12 @@ public class PlayerAttributeInterpreter {
 
         private PlayerAttributeInterpreter reader;
 
-        private Builder(EntityPlayer player, Side side) {
-            this.reader = new PlayerAttributeInterpreter(null, player, side);
+        private Builder(EntityPlayer player) {
+            this.reader = new PlayerAttributeInterpreter(null, player);
         }
 
-        public static Builder newBuilder(EntityPlayer player, Side side) {
-            return new Builder(player, side);
+        public static Builder newBuilder(EntityPlayer player) {
+            return new Builder(player);
         }
 
         public Builder overrideAttributeMap(PlayerAttributeMap map) {
@@ -84,8 +84,8 @@ public class PlayerAttributeInterpreter {
         }
 
         public PlayerAttributeInterpreter build() {
-            if (this.reader.attributeMap != null) {
-                this.reader.attributeMap = PerkAttributeHelper.getOrCreateMap(this.reader.player, this.reader.side);
+            if (this.reader.attributeMap == null) {
+                this.reader.attributeMap = PerkAttributeHelper.getOrCreateMap(this.reader.player, Side.CLIENT);
             }
             return this.reader;
         }

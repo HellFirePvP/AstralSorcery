@@ -175,7 +175,7 @@ public class PlayerAttributeMap {
         }
         if (applicableModes.contains(PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
             for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
-                mod *= (((modifier.getValue(player, progress) - 1F) * perkEffectModifier) + 1);
+                mod *= ((modifier.getValue(player, progress) - 1F) * perkEffectModifier) + 1;
             }
         }
         return mod;
@@ -198,7 +198,7 @@ public class PlayerAttributeMap {
             value += multiply * (mod.getValue(player, progress) * perkEffectModifier);
         }
         for (PerkAttributeModifier mod : getModifiersByType(attributeType, PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
-            value *= (mod.getValue(player, progress) * perkEffectModifier);
+            value *= ((mod.getValue(player, progress) - 1F) * perkEffectModifier) + 1F;
         }
         return value;
     }

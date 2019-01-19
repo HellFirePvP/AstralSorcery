@@ -106,19 +106,24 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             updateMultiblockState();
 
             if(dirty || !getInventoryHandler().getStackInSlot(0).isEmpty()) {
-                dirty = false;
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
                     recNode.updateSkyState(doesSeeSky);
                     recNode.updateMultiblockState(hasMultiblock);
                     recNode.updateLink(world, ritualLink);
 
-                    recNode.markDirty(world);
+                    boolean updated = dirty;
 
                     if(!getInventoryHandler().getStackInSlot(0).isEmpty() && recNode.getCrystal().isEmpty()) {
                         recNode.setChannelingCrystal(getInventoryHandler().getStackInSlot(0), this.world);
+                        updated = true;
+                    }
+
+                    if (updated) {
+                        recNode.markDirty(world);
                     }
                 }
+                dirty = false;
                 markForUpdate();
             }
         }
@@ -1046,15 +1051,20 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         public void updateCrystalProperties(World world, CrystalProperties properties, IWeakConstellation channeling, IMinorConstellation trait) {
-            IWeakConstellation prev = this.channeling;
+            IWeakConstellation prevChannel = this.channeling;
+            CrystalProperties prevProp = this.properties;
+            IMinorConstellation prevTrait = this.trait;
             this.properties = properties;
             this.channeling = channeling;
             this.trait = trait;
-            if(this.channeling != prev) {
+            if(this.channeling != prevChannel) {
                 this.clearAllMirrorPositions(world);
             }
 
-            markDirty(world);
+            if (this.channeling != prevChannel || this.trait != prevTrait ||
+                    (!Objects.equals(this.properties, prevProp))) {
+                markDirty(world);
+            }
         }
 
         public void updateLink(@Nonnull World world, @Nullable BlockPos ritualLink) {

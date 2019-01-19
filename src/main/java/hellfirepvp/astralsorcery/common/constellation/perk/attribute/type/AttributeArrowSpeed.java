@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeArrowSpeed extends PerkAttributeType {
 
     public AttributeArrowSpeed() {
-        super(AttributeTypeRegistry.ATTR_TYPE_PROJ_SPEED);
+        super(AttributeTypeRegistry.ATTR_TYPE_PROJ_SPEED, true);
     }
 
     @SubscribeEvent

@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeAllElementalResist extends PerkAttributeType {
 
     public AttributeAllElementalResist() {
-        super(AttributeTypeRegistry.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        super(AttributeTypeRegistry.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST, true);
     }
 
     @SubscribeEvent
@@ -65,7 +65,7 @@ public class AttributeAllElementalResist extends PerkAttributeType {
         }
         key = key.toLowerCase();
         return key.contains("fire") || key.contains("heat") || key.contains("lightning") ||
-                key.contains("cold") || key.contains("freeze") ||
+                key.contains("cold") || key.contains("freez") || key.contains("discharg") ||
                 key.contains("electr") || key.contains("froze") || key.contains("ice");
     }
 

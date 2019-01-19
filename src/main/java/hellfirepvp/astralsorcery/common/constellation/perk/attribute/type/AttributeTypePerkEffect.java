@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeTypePerkEffect extends PerkAttributeType {
 
     public AttributeTypePerkEffect() {
-        super(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+        super(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, true);
     }
 
     @Override

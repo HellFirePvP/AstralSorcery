@@ -28,12 +28,18 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class AttributeBreakSpeed extends PerkAttributeType {
 
+    public static boolean evaluateBreakSpeedWithoutPerks = false;
+
     public AttributeBreakSpeed() {
         super(AttributeTypeRegistry.ATTR_TYPE_INC_HARVEST_SPEED);
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+        if (evaluateBreakSpeedWithoutPerks) {
+            return;
+        }
+
         EntityPlayer player = event.getEntityPlayer();
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         if (!hasTypeApplied(player, side)) {

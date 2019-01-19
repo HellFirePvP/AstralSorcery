@@ -45,6 +45,7 @@ public class DynamicPlayerAttributeModifier extends AttributeModifier {
     @Override
     public double getAmount() {
         PerkAttributeModifier.Mode mode = PerkAttributeModifier.Mode.fromVanillaAttributeOperation(getOperation());
-        return PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, ResearchManager.getProgress(player, side), type, mode) - 1;
+        return PerkAttributeHelper.getOrCreateMap(player, side)
+                .getModifier(player, ResearchManager.getProgress(player, side), type, mode) - 1;
     }
 }

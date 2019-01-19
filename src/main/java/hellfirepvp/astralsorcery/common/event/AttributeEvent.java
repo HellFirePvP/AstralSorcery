@@ -36,11 +36,17 @@ public class AttributeEvent {
     public static class PostProcessVanilla extends Event {
 
         private final ModifiableAttributeInstance instance;
+        private final double originalValue;
         private double value;
 
         public PostProcessVanilla(ModifiableAttributeInstance instance, double value) {
             this.instance = instance;
+            this.originalValue = value;
             this.value = value;
+        }
+
+        public double getOriginalValue() {
+            return originalValue;
         }
 
         public double getValue() {
@@ -84,12 +90,18 @@ public class AttributeEvent {
 
         private final EntityPlayer player;
         private final PerkAttributeType type;
+        private final double originalValue;
         private double value;
 
         public PostProcessModded(double value, PerkAttributeType type, EntityPlayer player) {
-            this.value = value;
-            this.type = type;
             this.player = player;
+            this.type = type;
+            this.originalValue = value;
+            this.value = value;
+        }
+
+        public double getOriginalValue() {
+            return originalValue;
         }
 
         public double getValue() {

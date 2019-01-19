@@ -29,7 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeEnchantmentEffectiveness extends PerkAttributeType {
 
     public AttributeEnchantmentEffectiveness() {
-        super(AttributeTypeRegistry.ATTR_TYPE_INC_ENCH_EFFECT);
+        super(AttributeTypeRegistry.ATTR_TYPE_INC_ENCH_EFFECT, true);
     }
 
     @SubscribeEvent

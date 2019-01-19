@@ -78,6 +78,11 @@ public class ReAttunementStarRecipe extends TraitRecipe implements ISpecialCraft
     }
 
     @Override
+    public boolean needsStrictMatching() {
+        return true;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
         super.onCraftClientTick(altar, state, tick, rand);

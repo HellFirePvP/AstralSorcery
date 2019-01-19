@@ -34,13 +34,23 @@ public class PerkAttributeType {
     private Map<Side, List<UUID>> applicationCache = Maps.newHashMap();
 
     private final String type;
+    private final boolean isOnlyMultiplicative;
 
     public PerkAttributeType(String type) {
+        this(type, false);
+    }
+
+    public PerkAttributeType(String type, boolean isOnlyMultiplicative) {
         this.type = type;
+        this.isOnlyMultiplicative = isOnlyMultiplicative;
     }
 
     public String getTypeString() {
         return type;
+    }
+
+    public boolean isMultiplicative() {
+        return isOnlyMultiplicative;
     }
 
     public String getUnlocalizedName() {
@@ -56,6 +66,9 @@ public class PerkAttributeType {
 
     @Nonnull
     public PerkAttributeModifier createModifier(float modifier, PerkAttributeModifier.Mode mode) {
+        if (isMultiplicative() && mode == PerkAttributeModifier.Mode.ADDITION) {
+            throw new IllegalArgumentException("Tried creating addition-modifier for a multiplicative-only modifier!");
+        }
         return new PerkAttributeModifier(getTypeString(), mode, modifier);
     }
 
@@ -76,7 +89,7 @@ public class PerkAttributeType {
 
     public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side, boolean removedCompletely) {}
 
-    protected boolean hasTypeApplied(EntityPlayer player, Side side) {
+    public boolean hasTypeApplied(EntityPlayer player, Side side) {
         return applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).contains(player.getUniqueID());
     }
 

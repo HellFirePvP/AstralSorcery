@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -47,7 +48,7 @@ public class PerkAttributeModifier {
     //Cached in case the value of the modifier actually is supposed to change down the road.
     protected double ctMultiplier = 1.0D;
 
-    private Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> cachedConverters = new HashMap<>();
+    private Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> cachedConverters = Maps.newHashMap();
 
     public PerkAttributeModifier(String type, Mode mode, float value) {
         this.id = counter;

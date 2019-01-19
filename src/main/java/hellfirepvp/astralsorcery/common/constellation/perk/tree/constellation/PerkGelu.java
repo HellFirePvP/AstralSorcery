@@ -42,7 +42,7 @@ public class PerkGelu extends ConstellationPerk {
 
             @Override
             public float getValue(EntityPlayer player, PlayerProgress progress) {
-                return getFlatValue() * progress.getAvailablePerkPoints(player);
+                return getFlatValue() * progress.getAppliedPerks().size();
             }
 
             @Override

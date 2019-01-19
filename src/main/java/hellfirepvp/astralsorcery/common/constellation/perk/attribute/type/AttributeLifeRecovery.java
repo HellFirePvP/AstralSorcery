@@ -29,7 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeLifeRecovery extends PerkAttributeType {
 
     public AttributeLifeRecovery() {
-        super(AttributeTypeRegistry.ATTR_TYPE_LIFE_RECOVERY);
+        super(AttributeTypeRegistry.ATTR_TYPE_LIFE_RECOVERY, true);
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)

@@ -229,9 +229,11 @@ public class AltarRecipeRegistry {
         if(ar == null || ar instanceof ISpecialCraftingEffects) return null;
         ItemStack match = ar.getOutputForMatching();
         if(match.isEmpty()) return null;
-        for (ItemStack i : effectRecoveryMap.keySet()) {
-            if(ItemUtils.matchStackLoosely(match, i)) {
-                return effectRecoveryMap.get(i);
+        for (Map.Entry<ItemStack, ISpecialCraftingEffects> effectEntry : effectRecoveryMap.entrySet()) {
+            if(effectEntry.getValue().needsStrictMatching() ?
+                    ItemUtils.matchStacksStrict(match, effectEntry.getKey()) :
+                    ItemUtils.matchStackLoosely(match, effectEntry.getKey())) {
+                return effectEntry.getValue();
             }
         }
         return null;

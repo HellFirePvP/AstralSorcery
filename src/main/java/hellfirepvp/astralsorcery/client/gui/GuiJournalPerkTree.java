@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientProxy;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.journal.*;
+import hellfirepvp.astralsorcery.client.gui.journal.overlay.GuiJournalOverlayPerkStats;
 import hellfirepvp.astralsorcery.client.gui.perk.BatchPerkContext;
 import hellfirepvp.astralsorcery.client.gui.perk.DynamicPerkRender;
 import hellfirepvp.astralsorcery.client.gui.perk.PerkRenderGroup;
@@ -162,13 +163,13 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     public void initGui() {
         super.initGui();
 
-        this.guiOffsetX = guiLeft + 10;
-        this.guiOffsetY = guiTop + 10;
-
         if (this.expectReinit) {
             this.expectReinit = false;
             return;
         }
+
+        this.guiOffsetX = guiLeft + 10;
+        this.guiOffsetY = guiTop + 10;
 
         boolean shifted = false;
         PlayerProgress progress = ResearchManager.clientProgress;
@@ -378,6 +379,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         if (!this.foundSeals.isEmpty()) {
             this.itemRender.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, this.foundSeals, guiLeft + rectSealBox.x, guiTop + rectSealBox.y);
             this.itemRender.renderItemOverlayIntoGUI(this.fontRenderer, this.foundSeals, guiLeft + rectSealBox.x, guiTop + rectSealBox.y, null);
+            GlStateManager.disableLighting();
         }
     }
 
@@ -1049,7 +1051,9 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
             if (rectSealBox.contains(mouseX - guiLeft, mouseY - guiTop)) {
                 if (!this.foundSeals.isEmpty()) {
-                    this.mouseSealStack = new ItemStack(ItemsAS.perkSeal);
+                    this.expectReinit = true;
+                    Minecraft.getMinecraft().displayGuiScreen(new GuiJournalOverlayPerkStats(this));
+                    //this.mouseSealStack = new ItemStack(ItemsAS.perkSeal);
                 }
                 return;
             }

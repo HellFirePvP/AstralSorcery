@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeProjectileAttackDamage extends PerkAttributeType {
 
     public AttributeProjectileAttackDamage() {
-        super(AttributeTypeRegistry.ATTR_TYPE_PROJ_DAMAGE);
+        super(AttributeTypeRegistry.ATTR_TYPE_PROJ_DAMAGE, true);
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)

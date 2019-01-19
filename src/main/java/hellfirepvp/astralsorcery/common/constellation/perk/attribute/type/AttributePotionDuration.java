@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributePotionDuration extends PerkAttributeType {
 
     public AttributePotionDuration() {
-        super(AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION);
+        super(AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION, true);
     }
 
     @SubscribeEvent

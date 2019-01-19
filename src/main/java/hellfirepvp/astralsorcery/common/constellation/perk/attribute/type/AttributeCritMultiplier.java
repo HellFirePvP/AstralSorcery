@@ -32,7 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeCritMultiplier extends PerkAttributeType {
 
     public AttributeCritMultiplier() {
-        super(AttributeTypeRegistry.ATTR_TYPE_INC_CRIT_MULTIPLIER);
+        super(AttributeTypeRegistry.ATTR_TYPE_INC_CRIT_MULTIPLIER, true);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
