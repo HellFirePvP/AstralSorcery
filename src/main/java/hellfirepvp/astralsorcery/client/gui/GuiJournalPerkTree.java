@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.ClientProxy;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.journal.*;
 import hellfirepvp.astralsorcery.client.gui.journal.overlay.GuiJournalOverlayPerkStats;
+import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
 import hellfirepvp.astralsorcery.client.gui.perk.BatchPerkContext;
 import hellfirepvp.astralsorcery.client.gui.perk.DynamicPerkRender;
 import hellfirepvp.astralsorcery.client.gui.perk.PerkRenderGroup;
@@ -60,6 +61,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -121,6 +123,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private GemSlotPerk socketMenu = null;
     private Rectangle rSocketMenu = null;
     private Map<Rectangle, Integer> slotsSocketMenu = Maps.newHashMap();
+    private Rectangle rStatStar = null;
 
     private ItemStack mouseSealStack = ItemStack.EMPTY;
     private ItemStack foundSeals = ItemStack.EMPTY;
@@ -228,7 +231,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         drawSearchBox();
-        drawMiscInfo();
+        drawMiscInfo(mouseX, mouseY, partialTicks);
         drawSocketContextMenu();
         drawSealBox();
         drawHoverTooltips(mouseX, mouseY);
@@ -383,7 +386,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
     }
 
-    private void drawMiscInfo() {
+    private void drawMiscInfo(int mouseX, int mouseY, float pTicks) {
         PlayerProgress prog = ResearchManager.clientProgress;
         EntityPlayer player = Minecraft.getMinecraft().player;
 
@@ -403,6 +406,25 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             GlStateManager.enableAlpha();
             GlStateManager.enableDepth();
         }
+
+        rStatStar = IGuiRenderablePage.GUI_INTERFACE.
+                drawInfoStar(guiLeft + 288, guiTop + 20, zLevel + 100, 16, pTicks);
+        if (rStatStar.contains(mouseX, mouseY)) {
+            GlStateManager.disableDepth();
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(rStatStar.x + rStatStar.width / 2F, rStatStar.y + rStatStar.height, 0);
+            RenderingUtils.renderBlueTooltip(0, 0,
+                    Lists.newArrayList(I18n.format("perk.reader.infostar")), fontRenderer);
+
+            GlStateManager.color(1F, 1F, 1F, 1F);
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            TextureHelper.refreshTextureBindState();
+            GlStateManager.popMatrix();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            GL11.glEnable(GL11.GL_BLEND);
+            GlStateManager.enableDepth();
+        }
     }
 
     private void drawSearchBox() {
@@ -420,7 +442,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         int length = fontRenderer.getStringWidth(text);
         boolean addDots = length > 75;
         while (length > 75) {
-            text = text.substring(1, text.length());
+            text = text.substring(1);
             length = fontRenderer.getStringWidth("..." + text);
         }
         if (addDots) {
@@ -1051,10 +1073,15 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
             if (rectSealBox.contains(mouseX - guiLeft, mouseY - guiTop)) {
                 if (!this.foundSeals.isEmpty()) {
-                    this.expectReinit = true;
-                    Minecraft.getMinecraft().displayGuiScreen(new GuiJournalOverlayPerkStats(this));
-                    //this.mouseSealStack = new ItemStack(ItemsAS.perkSeal);
+                    this.mouseSealStack = new ItemStack(ItemsAS.perkSeal);
                 }
+                return;
+            }
+
+            if (rStatStar.contains(mouseX, mouseY)) {
+                this.expectReinit = true;
+                Minecraft.getMinecraft().displayGuiScreen(new GuiJournalOverlayPerkStats(this));
+
                 return;
             }
         }

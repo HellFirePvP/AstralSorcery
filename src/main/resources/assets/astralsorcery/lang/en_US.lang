@@ -773,6 +773,7 @@ perk.category.focus.name=Focus Perk
 
 perk.astralsorcery.compat.thaumcraft=Astral Sorcery: Thaumcraft Compat
 
+perk.reader.infostar=Statistics
 perk.reader.gui=Perk Statistics
 perk.reader.limit.default=(limited to %s)
 perk.reader.limit.percent=(limited to %s%%)
