@@ -78,15 +78,23 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             float added = 0;
 
             if (walked > lastWalked) {
-                added += (walked - lastWalked);
+                added += Math.min(walked - lastWalked, 500F);
+                if (added >= 500F) {
+                    added = 500F;
+                }
                 this.moveTrackMap.get(StatList.WALK_ONE_CM).put(uuid, walked);
             }
             if (sprint > lastSprint) {
-                added += (sprint - lastSprint) * 1.2F;
+                added += Math.min(sprint - lastSprint, 500F);
+                if (added >= 500F) {
+                    added = 500F;
+                }
+                added *= 1.2F;
                 this.moveTrackMap.get(StatList.SPRINT_ONE_CM).put(uuid, sprint);
             }
             if (flown > lastFly) {
-                added += (flown - lastFly) * 0.4F;
+                added += Math.min(flown - lastFly, 500F);
+                added *= 0.4F;
                 this.moveTrackMap.get(StatList.FLY_ONE_CM).put(uuid, flown);
             }
 
@@ -98,7 +106,7 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
                 PlayerProgress prog = ResearchManager.getProgress(player, side);
 
 
-                added *= 0.004F;
+                added *= 0.01F;
                 added *= expMultiplier;
                 added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, added);
                 added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);

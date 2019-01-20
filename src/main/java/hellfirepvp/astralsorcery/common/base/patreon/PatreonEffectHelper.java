@@ -206,6 +206,10 @@ public class PatreonEffectHelper {
         effectMap.put( // Jomeaga / Jomeaga
                 UUID.fromString("d5bd69b8-e261-4d97-8232-da714c94b6d9"),
                 new PatreonEffect(FlareColor.EARTH));
+
+        effectMap.put( // Powderedsnaek / ?
+                UUID.fromString("03c4b331-5fb6-4911-b95a-8cde87563f4a"),
+                new PatreonEffect(FlareColor.MAGENTA));
     }
 
     @Nullable
