@@ -765,7 +765,6 @@ perk.info.gem.content.item=Gemma incastonata: %s
 perk.info.gem.content.empty=Tasto-Destro per scegliere una gemma dal tuo inventario.
 perk.info.gem.content.empty.none=Non hai gemme nel tuo inventario!
 
-
 perk.category.root.name=Benefici Iniziali
 perk.category.major.name=Beneficio Maggiore
 perk.category.key.name=Beneficio Chiave
@@ -1146,67 +1145,67 @@ knowledge.astralsorcery.fragment.attunement.alignmentcharge.description=L'energi
 knowledge.astralsorcery.fragment.attunement.attunement.name=Sintonizzazione Personale
 knowledge.astralsorcery.fragment.attunement.attunement.bookmark=Personale
 knowledge.astralsorcery.fragment.attunement.attunement.description=Mentre molti oggetti possono essere sintonizzati con costellazioni Luminose e Difettive, le persone possono essere solo sintonizzate con quelle Luminose.
-#---------------------------------------------------------------------------------------------------------TODO
-knowledge.astralsorcery.fragment.perk_gems.name=Influencing Through Harvest
-knowledge.astralsorcery.fragment.perk_gems.bookmark=Dynamic Differences
-knowledge.astralsorcery.fragment.perk_gems.description=The time of day the cluster is harvested impacts the power of the resulting Gem, whether during the Day, at Night, or during Dusk and Dawn.<NL>The less sunlight in the sky when harvested, the more powerful the enhancements, though fewer. More sunlight during harvest results in weaker, but more numerous, enhancements. Gem enhancements vary from 2 to 4 in number.
 
-knowledge.astralsorcery.fragment.attunement.ritualpedestal.name=Starlight Limits
-knowledge.astralsorcery.fragment.attunement.ritualpedestal.bookmark=Limits
-knowledge.astralsorcery.fragment.attunement.ritualpedestal.description=Extensive testing has shown there is no limit to the amount of starlight that may be channeled into a ritual, which means there is no limit to how frequently a ritual will function. However, the faster a ritual is forced to operate, the more likely that stresses on the crystal in the ritual pedestal will begin to fracture apart, eventually leading to its destruction if not allowed to repair in liquid starlight.
+knowledge.astralsorcery.fragment.perk_gems.name=influenzando tramite il raccolto
+knowledge.astralsorcery.fragment.perk_gems.bookmark=Differenze Dinamiche
+knowledge.astralsorcery.fragment.perk_gems.description=nel momento del giorno in cui il grappolo è raccolto impatta con la potenza della gemma risultante, sia durante la notte che il giorno, o anche durante l'alba o il tramonto.<NL>Meno luce solare c'è nel cielo quando raccolto tuttavia più potenti si fanno gli incantamenti. Più luce solare durante il raccolto risulterà in incantamenti più deboli ma più numerosi. Gli incantamenti delle gemme possono variare da 2 a 4.
 
-knowledge.astralsorcery.fragment.constellation.colorlens.name=Lens Function
-knowledge.astralsorcery.fragment.constellation.colorlens.bookmark=Function
-knowledge.astralsorcery.fragment.constellation.colorlens.description=Ignition: Sets things on fire, and can smelt items dropped into its beam or blocks placed in the beam like a furnace.<NL>Growth: Functions like bonemeal, unless the plant doesn't like bonemeal, in which case it just makes it grow quickly.<NL>Break: Has no harvest level, unlike a pick, it just breaks things that are breakable.<NL>Damage: Deals a set amount of damage, with frequency based on amount of starlight being channeled.
+knowledge.astralsorcery.fragment.attunement.ritualpedestal.name=I Limiti della Luce Stellare
+knowledge.astralsorcery.fragment.attunement.ritualpedestal.bookmark=Limiti
+knowledge.astralsorcery.fragment.attunement.ritualpedestal.description=Prove estese hanno mostrato che non c'è limite alla quantità di luce stellare che può essere incanalata in un rituale, il che significa che non c'è limite per quanto frequentemente un rituale funzionera. Tuttavia, più il rituale è forzato ad operare veloce, più diventa alta la possibilità che il cristallo presenti delle fratture a causa dello stress, le quali lo porteranno alla sua distruzione se non gli viene concessa una riparazione nella luce stellare liquida.
 
-knowledge.astralsorcery.fragment.constellation.refractiontable.name=Table Optimizations
-knowledge.astralsorcery.fragment.constellation.refractiontable.bookmark=Optimizations
-knowledge.astralsorcery.fragment.constellation.refractiontable.description=While up to three constellations can be placed at a time, duplicates provide no bonus. Perfect placement involves minimizing overlap of the constellations drawn.<NL>Using this table as close to midnight as possible will minimize the risk of fire, and directly enchanting objects while using it can result in enchanted items with combinations conventional enchanting cannot match.
+knowledge.astralsorcery.fragment.constellation.colorlens.name=La funzione delle lenti
+knowledge.astralsorcery.fragment.constellation.colorlens.bookmark=Funzione
+knowledge.astralsorcery.fragment.constellation.colorlens.description=Accensione: Manda le cose a fuoco, e cuoce gli oggetti droppati sopra il suo raggio o i blocchi piazzati nel raggio, come una fornace.<NL>Crescita: Funziona come la farina di ossa, a meno che alla pianta non piaccia la farina d'ossa, nel quale caso non fa altro che farlo crescere velocemente.<NL>Rottura: Non ha livello di raccolta, a differenza di un piccone, non fa altro che rompere le cose che si possono rompere.<NL>Danno: Assesta una certa quantità di danno, con una frequenza basata sulla quantità di luce stellare incanalata.
 
-knowledge.astralsorcery.fragment.constellation.treebeaconuse.name=Beacon Usage
-knowledge.astralsorcery.fragment.constellation.treebeaconuse.bookmark=Usage
-knowledge.astralsorcery.fragment.constellation.treebeaconuse.description=Placing a sapling within reach and causing it to grow will generate the ghostly starlight version of the tree. Resonant echoes of this ghost will be used by the Beacon to fabricate far more items than harvesting the tree would normally provide on its own. It also has the benefit of performing this on multiple trees with reach, without the hassle of waiting for constant growth of more saplings, or diminished tool durability.
+knowledge.astralsorcery.fragment.constellation.refractiontable.name=Ottimizzazioni del Tavolo
+knowledge.astralsorcery.fragment.constellation.refractiontable.bookmark=Ottimizzazioni
+knowledge.astralsorcery.fragment.constellation.refractiontable.description=Mentre le tre costellazioni possono essere piazzata in una volta, i duplicati non danno bonus. Il piazzamento perfetto involve minimizzare le costellazioni che si sovrappongono nel disegno.<NL>Usando questo tavolo più vicino possibile a mezzanotte il rischio di fuoco verra minimizzato, e gli oggetti vengono direttamente incantati il che può risultare in combinazioni di incantamenti.
 
-knowledge.astralsorcery.fragment.constellation.treebeaconboost.name=Beacon Boosts
-knowledge.astralsorcery.fragment.constellation.treebeaconboost.bookmark=Boosting
-knowledge.astralsorcery.fragment.constellation.treebeaconboost.description=While a Tree Beacon operates much more effectively during the night, it is possible to accelerate it to mind-boggling rates using channeled starlight, much like a ritual. Linking starlight to a Tree Beacon will increase the rate at which it fabricates tree parts, with the light of Aevitas providing the biggest increase.<NL>A Tree Beacon is less likely to fabricate foliage than logs.
+knowledge.astralsorcery.fragment.constellation.treebeaconuse.name=Utilizzo del Faro
+knowledge.astralsorcery.fragment.constellation.treebeaconuse.bookmark=Utilizzo
+knowledge.astralsorcery.fragment.constellation.treebeaconuse.description=Piazzando un alberello nel raggio e facendolo crescere permetterà di generare la versione stellare fantasma dell'albero. Gli echi risonanti di questo fantasma verranno utilizzati dal faro per fabbricare molti più oggetti di quanti se ne otterrebbero tagliando un albero normalmente. Può anche beneficiare della possibilità di farlo con più alberi contemporaneamente, senza i problemi dell'aspettare per la crescità costante di più alberelli.
 
-knowledge.astralsorcery.fragment.constellation.inftool.name=Infused Tool Powers
-knowledge.astralsorcery.fragment.constellation.inftool.bookmark=Function
-knowledge.astralsorcery.fragment.constellation.inftool.description=Axe: Harvests the entire tree at once when used on a log.<NL>Sword: Deals a magical burst of damage around the target.<NL>Pickaxe: Indicates what ores are nearby, and their direction, when right-clicked.<NL>Shovel: Digs a large hole in a horizontal orientation.
+knowledge.astralsorcery.fragment.constellation.treebeaconboost.name=Gli stivali del faro
+knowledge.astralsorcery.fragment.constellation.treebeaconboost.bookmark=Impulso
+knowledge.astralsorcery.fragment.constellation.treebeaconboost.description=Mentre un Faro degli Alberi opera molto più efficientemente durante la notte, è possibile accelerarlo a velocità da capogiro utilizzando luce stellare incanalata, un po' come i rituali. Collegando la luce stellare ad un Faro degli Alberi aumenterà il rapporto al quale fabrica i pezzi dell'albero, con la luce di Aevitas viene provvisto dell'aumento più importante.<NL>Un Faro degli Alberi fabbrica meno foglie che tronchi.
 
-knowledge.astralsorcery.fragment.constellation.illumwand.name=Illuminated Block Strength
-knowledge.astralsorcery.fragment.constellation.illumwand.bookmark=Unreakability
-knowledge.astralsorcery.fragment.constellation.illumwand.description=Blocks converted to their Illuminated state are unbreakable.
+knowledge.astralsorcery.fragment.constellation.inftool.name=I Poteri degli Attrezzi Infusi
+knowledge.astralsorcery.fragment.constellation.inftool.bookmark=Funzione
+knowledge.astralsorcery.fragment.constellation.inftool.description=Ascia: Raccoglie l'albero intero in una volta quando usato su un tronco.<NL>Spada: Infligge uno scoppio di danno magico intorno all'obbiettivo.<NL>Piccone: Indica quali minerali si trovano nlle vicinanze, e nella direzione, quando ci si fa tasto destro.<NL>Pala: Scava un crosso buco in una direzione orizzontale.
 
-knowledge.astralsorcery.fragment.constellation.prism.name=Enchantment Improvements
-knowledge.astralsorcery.fragment.constellation.prism.bookmark=Enchantments
-knowledge.astralsorcery.fragment.constellation.prism.description=Each Resplendent Prims has three modifiers for changing enchantments, with each modifier providing up to a +3 bonus to one or more enchantments. Any combination of boosting existing enchantments or adding new enchantments is possible. However, any modifier that increases all existing enchantments will occupy two of these modifier slots.<NL>The color of the Prism is random, with white being far more rare than all the others.
+knowledge.astralsorcery.fragment.constellation.illumwand.name=La forza dei blocchi illuminati
+knowledge.astralsorcery.fragment.constellation.illumwand.bookmark=Infrangibilità
+knowledge.astralsorcery.fragment.constellation.illumwand.description=I blocchi convertiti nel loro stato illuminato sono infrangibili.
 
-knowledge.astralsorcery.fragment.constellation.clusterbonus.name=Boosting Crystal Yield
-knowledge.astralsorcery.fragment.constellation.clusterbonus.bookmark=Growth yield
-knowledge.astralsorcery.fragment.constellation.clusterbonus.description=Testing has confirmed that clusters not only grow more quickly, but have a chance to provide more than one usable crystal if grown and harvested while on top of starmetal ore. Preliminary testing has also shown that the crystals harvested tend to be of higher purity.
+knowledge.astralsorcery.fragment.constellation.prism.name=Miglioramenti degli incantamenti
+knowledge.astralsorcery.fragment.constellation.prism.bookmark=Incantamenti
+knowledge.astralsorcery.fragment.constellation.prism.description=Ogni prisma risplendente ha tre modificatori per cambiare incantamenti, ogni modificatore provvede ad un +3 di bonus ad uno o più incantamenti. Qualsiasi combinazione di potenziamento degli incantamenti esistenti o di nuovi è possibile. Tuttavia, Qualsiasi modificatore che aumenta tutti gli incantamenti occuperà due di questi slot per modificatore.<NL> Il colore del prisma è randomico, con una versione bianca molto più rara di tutte le altre.
 
-knowledge.astralsorcery.fragment.constellation.clusterspeed.name=Boosting Growing Speed
-knowledge.astralsorcery.fragment.constellation.clusterspeed.bookmark=Growth rate
-knowledge.astralsorcery.fragment.constellation.clusterspeed.description=If provided with starlight from a Starlight Network, or simply access to the night sky, crystal clusters will grow more quickly.
+knowledge.astralsorcery.fragment.constellation.clusterbonus.name=Potenziare la Precedenza dei cristalli
+knowledge.astralsorcery.fragment.constellation.clusterbonus.bookmark=La precedenza di crescità
+knowledge.astralsorcery.fragment.constellation.clusterbonus.description=Le prove hanno confermato che i grappoli non solo crescono più velocemente, ma hanno anche una possiblità di creare più di un cristallo utilizzabile se cresciuti completamente e raccolti mentre si trovano sulla cima di un blocco di minerale grezzo di metallo stellare. Prove preliminari hanno anche mostrato che i cristalli raccolti tendono ad essere più puri.
 
-knowledge.astralsorcery.fragment.constellation.ec3.name=Collector Structure
-knowledge.astralsorcery.fragment.constellation.ec3.bookmark=Structure gains
-knowledge.astralsorcery.fragment.constellation.ec3.description=In addition to preventing starlight losses due to daytime, or the constellation not being in the sky, the structure aids in gathering efficiency, with 10%% gains.
+knowledge.astralsorcery.fragment.constellation.clusterspeed.name=Potenziare la velocità di crescita
+knowledge.astralsorcery.fragment.constellation.clusterspeed.bookmark=Il rapporto di Crescita
+knowledge.astralsorcery.fragment.constellation.clusterspeed.description=Se provvisto con la luce stellare da una rete di luce stellare, o semplicemente con accesso al cielo notturno, i grappoli di cristalli cresceranno più velocemente.
 
-knowledge.astralsorcery.fragment.radiance.fysallidic.name=Impact of Mythical Creatures
-knowledge.astralsorcery.fragment.radiance.fysallidic.bookmark=Mythicals
-knowledge.astralsorcery.fragment.radiance.fysallidic.description=As the internal reservoir of an Evershifting Fountain is finite, the increased rate of Liquid Starlight consumption caused by more mythical creatures can result in early release. Endermen don't often trigger this unless left trapped for a bit, but something like a Wither or Ender Dragon can leave a much more short window wherein they are held trapped. Beings beyond even their power should be expected to be held for even less time, should they exist.
+knowledge.astralsorcery.fragment.constellation.ec3.name=Struttura del collezionatore
+knowledge.astralsorcery.fragment.constellation.ec3.bookmark=Struttura utile
+knowledge.astralsorcery.fragment.constellation.ec3.description=In aggiunta a prevenire le perdite di luce stellare durante il giorno, o a prevenire l'assenza di una costellazione nel ciel, la struttura aiuta a guadagnare efficienza, con 10%% di utile.
 
-knowledge.astralsorcery.fragment.misc.perks.name=Difference Within Bonuses.
-knowledge.astralsorcery.fragment.misc.perks.bookmark=Bonuses
-knowledge.astralsorcery.fragment.misc.perks.description=There are three magnitudes of bonuses provided by internal starlight.<NL>Added/Subtracted - Adds a flat value to the base amount.<NL>Increased/Decreased - All of thse are added together, then applied as a percentage change after all Added/Subtracted values are applied.<NL>More/Less - Applied individually as a percentage change following Increase/Decrease changes, not summed and then applied.
+knowledge.astralsorcery.fragment.radiance.fysallidic.name=L'impatto delle creature mitiche
+knowledge.astralsorcery.fragment.radiance.fysallidic.bookmark=Miti
+knowledge.astralsorcery.fragment.radiance.fysallidic.description=Così come il serbatoio interno di una fontana in constante cambiamento è finito, il rapporto del consumo della luce stellare liquida  causato dalle creature mitiche può risultare in un rilascio prematuro. Gli endermen non innescano solitamente questo dispositivo a meno che non rimangano intrappolati per un po, ma qualcosa come il Wither o Il drago dell'End possoono lasciare ben meno finestra disponibile quando intrappolati.
 
-knowledge.astralsorcery.fragment.constellation.discidia.potions.name=Potion Effects
-knowledge.astralsorcery.fragment.constellation.discidia.potions.bookmark=Potions
-knowledge.astralsorcery.fragment.constellation.discidia.potions.description=Grants increased Strength, potentially double that of conventional potions.
+knowledge.astralsorcery.fragment.misc.perks.name=Differenza con i Bonus
+knowledge.astralsorcery.fragment.misc.perks.bookmark=Bonus
+knowledge.astralsorcery.fragment.misc.perks.description=Ci sono 3 magnitudo di bonus provvisti dalla luce stellare interna.<NL>Aggiunto/Sottratto - Aggiunge un falore piatto alla quantità base.<NL>Incrementato/Diminuito - Tutti questi sono aggiunti insieme e poi applicati come cambio in percentuale dopo che tutti i valori Aggiunti/Sottratti sono applicati.<NL>Più/Meno - Applicato individualemente come un cambio in pecentuale che segue i cambiamenti di Aumento/Diminuzione, non sommato e poi applicato.
 
+knowledge.astralsorcery.fragment.constellation.discidia.potions.name=Effetti delle Pozioni
+knowledge.astralsorcery.fragment.constellation.discidia.potions.bookmark=Pozioni
+knowledge.astralsorcery.fragment.constellation.discidia.potions.description=Conferiscono Forza aumentata, che viene potenzialmente raddoppiata rispetto alle pozioni convenzionali.
+#-------------------------------------------------------------------------------TODO
 knowledge.astralsorcery.fragment.constellation.discidia.enchantments.name=Enchanting
 knowledge.astralsorcery.fragment.constellation.discidia.enchantments.bookmark=Enchantment
 knowledge.astralsorcery.fragment.constellation.discidia.enchantments.description=Grants increased Power and Sharpness to weapons. The strength will never be as weak as low-level conventional enchantments, and could potentially be stronger.
