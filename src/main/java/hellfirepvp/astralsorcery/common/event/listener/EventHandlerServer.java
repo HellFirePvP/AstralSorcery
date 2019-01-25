@@ -239,7 +239,8 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
-        if (event.getWorld().isRemote) return;
+        if (event.getWorld().isRemote ||
+                !event.getChunk().isTerrainPopulated()) return;
         if (!Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
             return; //Thanks BuildCraft.
         }
