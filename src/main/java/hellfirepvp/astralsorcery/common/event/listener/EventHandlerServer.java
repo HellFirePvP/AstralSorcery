@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
+import hellfirepvp.astralsorcery.common.world.util.WorldEventNotifier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.state.IBlockState;
@@ -61,6 +62,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
@@ -238,6 +240,11 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
+    public void onLoad(WorldEvent.Load event) {
+        event.getWorld().addEventListener(new WorldEventNotifier());
+    }
+
+    @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
         if (event.getWorld().isRemote ||
                 !event.getChunk().isTerrainPopulated()) return;
@@ -248,22 +255,22 @@ public class EventHandlerServer {
         WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(at);
         if (event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
             if (!event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).attemptAutoLinkTo(at);
             }
         }
         if (event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
             if (!event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).removeAutoLinkTo(at);
             }
         }
         if (event.getNewBlock().equals(BlocksAS.blockAltar)) {
             if (!event.getOldBlock().equals(BlocksAS.blockAltar)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).attemptAutoLinkTo(at);
             }
         }
         if (event.getOldBlock().equals(BlocksAS.blockAltar)) {
             if (!event.getNewBlock().equals(BlocksAS.blockAltar)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).removeAutoLinkTo(at);
             }
         }
         if (event.getOldBlock().equals(BlocksAS.customOre)) {
@@ -275,25 +282,9 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onPlace(BlockEvent.PlaceEvent event) {
-        if (event.getWorld().isRemote) return;
-        BlockPos at = event.getPos();
-
-        if (event.getPlacedBlock().getBlock().equals(Blocks.CRAFTING_TABLE)) {
-            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onBreak(BlockEvent.BreakEvent event) {
         if (event.getWorld().isRemote) return;
         BlockPos at = event.getPos();
-        IBlockState broken = event.getState();
-
-        if (broken.getBlock().equals(Blocks.CRAFTING_TABLE)) {
-            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
-        }
-
 
         Tuple<EnumHand, ItemStack> heldStack =
                 MiscUtils.getMainOrOffHand(event.getPlayer(), ItemsAS.wand,stack -> ItemWand.getAugment(stack) != null);
