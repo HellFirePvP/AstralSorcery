@@ -210,6 +210,10 @@ public class PatreonEffectHelper {
         effectMap.put( // Powderedsnaek / ?
                 UUID.fromString("03c4b331-5fb6-4911-b95a-8cde87563f4a"),
                 new PatreonEffect(FlareColor.MAGENTA));
+
+        effectMap.put( // YuriYumite / Юлия Белинская
+                UUID.fromString("82e53ab2-d2b4-4d5b-829d-548caff15d0e"),
+                new PatreonEffect(FlareColor.MAGENTA));
     }
 
     @Nullable
