@@ -59,6 +59,7 @@ import java.util.UUID;
  */
 public class ItemCape extends ItemArmor implements ItemDynamicColor {
 
+    private static final UUID OCTANS_UNWAVERING = UUID.fromString("845DB25C-C624-495F-8C9F-60210A958B6B");
     private Object objASCape = null;
 
     public ItemCape() {
@@ -125,7 +126,8 @@ public class ItemCape extends ItemArmor implements ItemDynamicColor {
                 if(ceo != null) {
                     EntityPlayer potentialCurrent = EventHandlerCapeEffects.currentPlayerInTick;
                     if(potentialCurrent != null && potentialCurrent.isInWater()) {
-                        out.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(UUID.fromString("845DB25C-C624-495F-8C9F-60210A958B6B").toString(), 500, 0));
+                        out.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(),
+                                new AttributeModifier(OCTANS_UNWAVERING, OCTANS_UNWAVERING.toString(), 500, 0).setSaved(false));
                     }
                 }
             }
