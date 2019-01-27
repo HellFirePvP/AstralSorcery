@@ -23,6 +23,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -185,22 +186,23 @@ public class EnchantmentUpgradeHelper {
     public static boolean isItemBlacklisted(ItemStack stack) {
         if(!stack.isEmpty()) {
             if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                return true; //We're not gonna apply enchantments to items used for querying matches
+                return true; // We're not gonna apply enchantments to items used for querying matches
             }
 
             if (stack.getMaxStackSize() > 1) {
-                return true; //Only swords & armor and stuff that isn't stackable
+                return true; // Only swords & armor and stuff that isn't stackable
             }
-            if (stack.getItem() instanceof ItemPotion) {
-                return true; //We're not gonna apply enchantments to potions
+            if (stack.getItem() instanceof ItemPotion ||
+                stack.getItem() instanceof ItemEnchantedBook) {
+                return true; // Not gonna apply enchantments to potions or books
             }
 
             ResourceLocation rl = stack.getItem().getRegistryName();
             if(rl == null) return true; //Yea... no questions asked i guess.
 
             if(rl.getResourceDomain().equalsIgnoreCase("draconicevolution")) {
-                //Exploit with DE's item-GUI being able to draw item's enchantments while having it equipped
-                //causes infinite feedback loop stacking enchantments higher and higher.
+                // Exploit with DE's item-GUI being able to draw item's enchantments while having it equipped
+                // causes infinite feedback loop stacking enchantments higher and higher.
                 return true;
             }
             return false;

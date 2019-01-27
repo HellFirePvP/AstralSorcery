@@ -249,7 +249,6 @@ public class CommonProxy implements IGuiHandler {
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerNetwork());
         MinecraftForge.EVENT_BUS.register(new EventHandlerServer());
-        MinecraftForge.EVENT_BUS.register(new EventHandlerAchievements());
         MinecraftForge.EVENT_BUS.register(new EventHandlerMisc());
         MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
         MinecraftForge.EVENT_BUS.register(new EventHandlerIO());

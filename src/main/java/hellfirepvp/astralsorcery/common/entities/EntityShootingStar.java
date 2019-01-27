@@ -106,7 +106,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         super.onUpdate();
 
         if (!world.isRemote) {
-            if ((removalPending || !ConstellationSkyHandler.getInstance().isNight(world)) ||
+            if (removalPending || !ConstellationSkyHandler.getInstance().isNight(world) ||
                     world.getTotalWorldTime() - lastTrackedTick >= 20) {
                 setDead();
                 return;

@@ -214,6 +214,10 @@ public class PatreonEffectHelper {
         effectMap.put( // YuriYumite / Юлия Белинская
                 UUID.fromString("82e53ab2-d2b4-4d5b-829d-548caff15d0e"),
                 new PatreonEffect(FlareColor.MAGENTA));
+
+        effectMap.put(
+                UUID.fromString("7ff223d6-3878-4cd2-ac7d-32828ec829a8"),
+                new PatreonEffect(FlareColor.BLUE));
     }
 
     @Nullable

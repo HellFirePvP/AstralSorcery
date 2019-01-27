@@ -213,15 +213,6 @@ public class EventHandlerServer {
     public void onCraft(PlayerEvent.ItemCraftedEvent event) {
         if (event.player.getServer() != null) {
             ResearchManager.informCraftingGridCompletion(event.player, event.crafting);
-
-            Item crafted = event.crafting.getItem();
-            Block blockCrafted = Block.getBlockFromItem(crafted);
-            if (blockCrafted != Blocks.AIR && blockCrafted instanceof BlockMachine) {
-                if (event.crafting.getItemDamage() == BlockMachine.MachineType.TELESCOPE.getMeta()) {
-                    //FIXME RE-ADD AFTER ADVANCEMENTS
-                    //event.player.addStat(RegistryAchievements.achvBuildActTelescope);
-                }
-            }
         }
     }
 

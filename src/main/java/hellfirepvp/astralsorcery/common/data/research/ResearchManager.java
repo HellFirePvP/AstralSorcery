@@ -228,9 +228,6 @@ public class ResearchManager {
             AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
         }
 
-        //FIXME RE-ADD AFTER ADVANCEMENTS
-        //player.addStat(RegistryAchievements.achvDiscoverConstellation);
-
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
         return true;
@@ -241,9 +238,6 @@ public class ResearchManager {
         if(progress == null) return false;
 
         progress.discoverConstellation(c.getUnlocalizedName());
-
-        //FIXME RE-ADD AFTER ADVANCEMENTS
-        //player.addStat(RegistryAchievements.achvDiscoverConstellation);
 
         AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
 
@@ -316,9 +310,6 @@ public class ResearchManager {
         }
 
         AdvancementTriggers.ATTUNE_SELF.trigger((EntityPlayerMP) player, constellation);
-
-        //FIXME RE-ADD AFTER ADVANCEMENTS
-        //player.addStat(RegistryAchievements.achvPlayerAttunement);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
