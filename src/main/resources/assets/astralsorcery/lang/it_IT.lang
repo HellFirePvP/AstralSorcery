@@ -1304,71 +1304,71 @@ knowledge.astralsorcery.fragment.constellation.evorsio.mantle.description=Romper
 
 knowledge.astralsorcery.fragment.constellation.mineralis.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.mineralis.potions.bookmark=Pozioni
-#-------------------------------------------------------------------------------TODO knowledge.astralsorcery.fragment.constellation.mineralis.potions.description=Mining and Attack speed is increased by these potions. Attack speed could potentially be increased by nearly half, and mining speed by more than three-quarters.
+knowledge.astralsorcery.fragment.constellation.mineralis.potions.description=La velocità di Attacci è aumentata da queste pozioni. La velocità d'attacco può aumentare circa della metà, e la velocità di scavo più di tre quarti.
 
 knowledge.astralsorcery.fragment.constellation.mineralis.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.mineralis.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.mineralis.enchantments.description=Increases the wielder's good Fortune when harvesting blocks.
+knowledge.astralsorcery.fragment.constellation.mineralis.enchantments.description=Aumenta la fortuna del portatore quando raccoglie i blocchi
 
 knowledge.astralsorcery.fragment.constellation.mineralis.ritual.name=Effetti dei Rituali 
 knowledge.astralsorcery.fragment.constellation.mineralis.ritual.bookmark=Rituale
-knowledge.astralsorcery.fragment.constellation.mineralis.ritual.description=Feeding additional starlight into this ritual affects how often it converts stone, the maximum reach stays the same.
+knowledge.astralsorcery.fragment.constellation.mineralis.ritual.description=Dando in pasto luce stellare aggiuntiva al rituale aumenta quanto spesso converte la pietra, il massimo raggio rimane lo stesso.
 
 knowledge.astralsorcery.fragment.constellation.mineralis.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.mineralis.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.mineralis.ritual.corrupted.description=Instead of converting stone to ores of value, the ritual now creates chunks of stone where there is none, but only beneath those within reach.
+knowledge.astralsorcery.fragment.constellation.mineralis.ritual.corrupted.description=Invece di convertire la pietra in minerali di valore, il rituale ora crea pezzi di pietra dove non ce n'è, ma solo sotto quelli nel raggio.
 
 knowledge.astralsorcery.fragment.constellation.mineralis.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.mineralis.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.mineralis.mantle.description=The held block will be displayed if within roughly 20 paces, and even works if in the off-hand.
+knowledge.astralsorcery.fragment.constellation.mineralis.mantle.description=Il blocco tenuto in mano verrà evidenziato se in un raggio di venti passi dal giocatore, funziona anche nella mano secondaria.
 
 knowledge.astralsorcery.fragment.constellation.lucerna.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.lucerna.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.lucerna.potions.description=Grants the ability to see in the dark.
+knowledge.astralsorcery.fragment.constellation.lucerna.potions.description=Permette di vedere al buio.
 
 knowledge.astralsorcery.fragment.constellation.lucerna.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.lucerna.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.lucerna.enchantments.description=Provides for the ability to see in the dark.
+knowledge.astralsorcery.fragment.constellation.lucerna.enchantments.description=Conferisce l'abilità di vedere nel buio.
 
 knowledge.astralsorcery.fragment.constellation.lucerna.ritual.name=Effetti dei Rituali 
 knowledge.astralsorcery.fragment.constellation.lucerna.ritual.bookmark=Rituale
-knowledge.astralsorcery.fragment.constellation.lucerna.ritual.description=Unlike most other rituals, there is a cap to the effectiveness of this ritual based on total lenses reflecting light back to the pedestal. Additional starlight beyond what is needed to fuel five lenses has no impact, as the ritual range will not increase beyond that point.
+knowledge.astralsorcery.fragment.constellation.lucerna.ritual.description=Al contrario della maggior parte dei rituali, non c'è un limite all'efficienza di questo rituale basato sulle lenti totali che riflettono la luce indietro al piedistallo. La luce stellare aggiuntiva oltre a quella utilizzata non ha impatto, così come il raggio del rituale non aumenterà oltre a quel punto.
 
 knowledge.astralsorcery.fragment.constellation.lucerna.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.lucerna.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.lucerna.ritual.corrupted.description=While the sun is down, starlight reigns while the rest of the world seems to slow.
+knowledge.astralsorcery.fragment.constellation.lucerna.ritual.corrupted.description=Mentre il sole è giu, la luce stellare regna mentre il resto del mondo sembra rallentare.
 
 knowledge.astralsorcery.fragment.constellation.lucerna.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.lucerna.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.lucerna.mantle.description=The visibility range for mobs and spawners illuminated by this mantle is roughly three dozen paces.
+knowledge.astralsorcery.fragment.constellation.lucerna.mantle.description=Il raggio di visibilità dei mob e degli spawner evidenziati da questo mantello è di circa tre dozzine di passi.
 
-knowledge.astralsorcery.fragment.constellation.horologium.showup.name=Appearance Limits
-knowledge.astralsorcery.fragment.constellation.horologium.showup.bookmark=Appearances
-knowledge.astralsorcery.fragment.constellation.horologium.showup.description=While the initial appearance of this constellation could be anytime between the third and fifth weeks of any given world, subsequent appearances will always be 36 days apart.
+knowledge.astralsorcery.fragment.constellation.horologium.showup.name=I Limiti delle Apparizioni
+knowledge.astralsorcery.fragment.constellation.horologium.showup.bookmark=Appaizioni
+knowledge.astralsorcery.fragment.constellation.horologium.showup.description=Mentre l'apparizione iniziale di una costellazione può avvenire in qualsiasi momento tra le 3 e 5 settimane per ogni mondo, le apparizioni successive saranno sempre a 36 giorni di distanza l'una dall'altra.
 
 knowledge.astralsorcery.fragment.constellation.horologium.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.horologium.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.horologium.potions.description=The power of this constellation grants not only increased Speed, but faster movements by more than twice.
+knowledge.astralsorcery.fragment.constellation.horologium.potions.description=Il potere di questa costellazione permette non solo Velocità aumentata, ma anche movimenti più veloci del doppio.
 
 knowledge.astralsorcery.fragment.constellation.horologium.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.horologium.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.horologium.enchantments.description=Good Fortune and Luck overflow for the wielder of these enchantments, with even the weakest versions being as strong or stronger than conventional enchanting, and the strongest being twice that of a conventional enchantment.
+knowledge.astralsorcery.fragment.constellation.horologium.enchantments.description=Buona Sorte e Fortuna dilagano per il portatore di questi incantamenti, quando anche le versioni più deboli sono uguali o più forti degli incantamenti convenzionali, e i più forti sono il doppio di un incantamento convenzionale.
 
 knowledge.astralsorcery.fragment.constellation.horologium.ritual.name=Effetti dei Rituali 
 knowledge.astralsorcery.fragment.constellation.horologium.ritual.bookmark=Rituale
-knowledge.astralsorcery.fragment.constellation.horologium.ritual.description=While there is no maximum to the rate of acceleration of affected blocks, world instability could increase the faster this accelerates. Boosting this ritual should be done with care in highly populated worlds.
+knowledge.astralsorcery.fragment.constellation.horologium.ritual.description=Mentre non c'è un massimo del ratio di accelerazione dei blocchi influenzati, l'instabilità del mondo potrebbe aumentare più veloce diventano i blocchi. Il potenziamento di questo rituale dovrebbe essere fatto con cautela nei mondi molto popolati.
 
 knowledge.astralsorcery.fragment.constellation.horologium.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.horologium.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.horologium.ritual.corrupted.description=Creatures are removed from the flow of time in the localized area.
+knowledge.astralsorcery.fragment.constellation.horologium.ritual.corrupted.description=Le creature sono rimosse dallo scorrere del tempo nell'area localizzata.
 
 knowledge.astralsorcery.fragment.constellation.horologium.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.horologium.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.horologium.mantle.description=Affects all mobs within 20 paces for roughly 9 seconds when triggered. Can be triggered roughly once per minute, though it is not guaranteed for any given hit against the wearer.
+knowledge.astralsorcery.fragment.constellation.horologium.mantle.description=Influenza tutti i mob entro 20 passi per 9 secondi circa da quando viene attivato. Può essere attivato circa una volta al minuto, tuttavia non è garantito per ogni colpo dato contro all'indossatore.
 
 knowledge.astralsorcery.fragment.constellation.octans.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.octans.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.octans.potions.description=Mild improvement to visibility underwater, and water breathing.
+#-------------------------------------------------------------------------------TODO knowledge.astralsorcery.fragment.constellation.octans.potions.description=Mild improvement to visibility underwater, and water breathing.
 
 knowledge.astralsorcery.fragment.constellation.octans.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.octans.enchantments.bookmark=Incantamento
