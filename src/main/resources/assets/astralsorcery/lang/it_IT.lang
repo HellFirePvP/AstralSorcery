@@ -773,6 +773,20 @@ perk.category.focus.name=Beneficio Focalizzato
 
 perk.astralsorcery.compat.thaumcraft=Compatibilità della Stregoneria Astrale con la Thaumcraft
 
+perk.reader.infostar=Statistiche
+perk.reader.gui=Statistiche dei Benefici
+perk.reader.limit.default=(limitato a %s)
+perk.reader.limit.percent=(limitato a %s%%)
+perk.reader.postprocess.default=Forzato a %s
+
+##
+# Note: B = 'Base Value', A = 'Added Multipliers', I = 'Increase/Decrease Multipliers', M = 'More/Less Multipliers'
+##
+perk.reader.description.head=B %s
+perk.reader.description.addition=A + %s
+perk.reader.description.increase=I   * %s
+perk.reader.description.moreless=M     * %s
+
 ###
 # Note: Different modifiers may have different formats.
 ###
@@ -790,6 +804,9 @@ perk.modifier.added_multiply.sub=%% diminuito
 perk.modifier.stacking_multiply.add=%% in più
 perk.modifier.stacking_multiply.sub=%% in meno
 
+perk.attribute.astralsorcery.thorns.modifier.name=%% del danno da mischia riflesso
+perk.attribute.astralsorcery.lifeleech.modifier.name=%% del danno applicato guadagnato come vita
+
 perk.attribute.astralsorcery.meleeattackdamage.name=Attacco da Mischia
 perk.attribute.astralsorcery.projectileattackdamage.name=Danno da Proiettile
 perk.attribute.astralsorcery.projectilespeed.name=Velocità del Proiettile
@@ -800,6 +817,7 @@ perk.attribute.astralsorcery.armor.name=Armatura
 perk.attribute.astralsorcery.armortoughness.name=Durezza dell'Armatura
 perk.attribute.astralsorcery.attackspeed.name=Velocità d'Attacco
 perk.attribute.astralsorcery.reach.name=Raggio d'Attacco
+perk.attribute.astralsorcery.dynenchantmenteffect.name=Incantamenti degli Amuleti
 
 perk.attribute.astralsorcery.liferecovery.name=Recupero di Vita
 perk.attribute.astralsorcery.potionduration.name=Durata dell'effetto della pozione
@@ -814,8 +832,8 @@ perk.attribute.astralsorcery.critmulti.name=Moltiplicatore di Danno Critico
 perk.attribute.astralsorcery.allres.name=Resistenza Elementale
 perk.attribute.astralsorcery.expgain.name=Esperienza sui Benefici ottenuta
 perk.attribute.astralsorcery.dodge.name=Probabilità di Schivare
-perk.attribute.astralsorcery.thorns.name=%% del danno da mischia subito è riflesso
-perk.attribute.astralsorcery.lifeleech.name=%% del danno provocato è ottenuto come vita
+perk.attribute.astralsorcery.thorns.name=Danno Riflesso
+perk.attribute.astralsorcery.lifeleech.name=Sanguisuga della Vita
 
 perk.attribute.astralsorcery.compat.thaumcraft.runicshield.name=Schermatura Runica
 
@@ -1031,7 +1049,7 @@ perk.astralsorcery.key_armor_life_conversion.desc.2=Non hai armatura.
 perk.astralsorcery.key_cheat_death.name=La benedizione della Fenice
 perk.astralsorcery.key_cheat_death.desc=Ti può salvare dalla morte in situazioni pericolose.
 perk.astralsorcery.key_no_armor.name=Pelle di diamante
-perk.astralsorcery.key_no_armor.desc.1=Danno ridotto quando indossi
+perk.astralsorcery.key_no_armor.desc.1=30% in meno di danno quando indossata.
 perk.astralsorcery.key_no_armor.desc.2=meno di 2 pezzi di armatura.
 perk.astralsorcery.key_swim_conversion.name=Pinne Aggiuntive
 perk.astralsorcery.key_swim_conversion.desc.1=Aumentano e diminuiscono la Velocità di Movimento e
