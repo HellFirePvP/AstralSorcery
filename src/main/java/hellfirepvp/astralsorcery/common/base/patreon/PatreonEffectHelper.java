@@ -44,6 +44,10 @@ public class PatreonEffectHelper {
                 UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
                 new PatreonEffect(FlareColor.WATER));
 
+        effectMap.put( // DWX / DWX - PERMANENT
+                UUID.fromString("4fc5e24a-920f-41b1-a912-e4964e88b977"),
+                new PatreonEffect(FlareColor.DAWN));
+
         effectMap.put( // Kittenplays01 / Kittenplays01
                 UUID.fromString("ac71a42e-fa17-4d54-a1ae-57928fdbead0"),
                 new PatreonEffect(FlareColor.STANDARD));
