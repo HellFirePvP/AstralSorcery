@@ -77,6 +77,9 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
 
     private SkyConstellationDistribution currentInformation = null;
 
+    private LinkedList<Line> drawnLines = new LinkedList<>();
+    private Point start, end;
+
     public GuiTelescope(EntityPlayer player, TileTelescope e) {
         super(e, 280, 280);
         this.owningPlayer = player;
@@ -99,7 +102,8 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         if(handle != null) {
             List<IWeakConstellation> weakConstellations = new LinkedList<>();
             for (IConstellation c : handle.getActiveConstellations()) {
-                if(c instanceof IWeakConstellation && c.canDiscover(ResearchManager.clientProgress)) {
+                if(c instanceof IWeakConstellation &&
+                        c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
                     weakConstellations.add((IWeakConstellation) c);
                 }
             }
@@ -482,9 +486,6 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         }
     }
 
-    private LinkedList<Line> drawnLines = new LinkedList<>();
-    private Point start, end;
-
     private void tryStartDrawing(int mouseX, int mouseY) {
         if (!canStartDrawing()) return;
 
@@ -573,7 +574,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
 
             List<StarConnection> sc = c.getStarConnections();
             if (sc.size() != drawnLines.size()) continue; //Can't match otherwise anyway.
-            if (!c.canDiscover(ResearchManager.clientProgress)) continue;
+            if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) continue;
 
             Map<StarLocation, Rectangle> stars = info.starRectangles;
 

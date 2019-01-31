@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 
@@ -26,7 +27,7 @@ public class MajorPerk extends AttributeModifierPerk {
     }
 
     @Override
-    public PerkTreePoint getPoint() {
-        return new PerkTreeMajor(this, this.getOffset());
+    protected PerkTreePoint<? extends MajorPerk> initPerkTreePoint() {
+        return new PerkTreeMajor<>(this, this.getOffset());
     }
 }

@@ -1,6 +1,6 @@
 {
     "variants": {
-        "type=liquid": { "model":"astralsorcery:blockborehead_liquid" },
-        "type=vortex": { "model":"astralsorcery:blockborehead_bubble" }
+        "type=liquid": { "model":"astralsorcery:bore_head_liquid" },
+        "type=vortex": { "model":"astralsorcery:bore_head_vortex" }
     }
 }

@@ -22,11 +22,7 @@ public class OBJModelLibrary {
 
     public static final WavefrontObject bigCrystal = load("crystal_big");
 
-    public static final WavefrontObject crystalsStage0 = load("c_crystal0");
     public static final WavefrontObject crystalsStage1 = load("c_crystal1");
-    public static final WavefrontObject crystalsStage2 = load("c_crystal2");
-    public static final WavefrontObject crystalsStage3 = load("c_crystal3");
-    public static final WavefrontObject crystalsStage4 = load("c_crystal4");
 
     private static WavefrontObject load(String name) {
         return AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, name);

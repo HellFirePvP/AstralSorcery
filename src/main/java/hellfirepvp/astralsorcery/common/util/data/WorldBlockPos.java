@@ -32,8 +32,8 @@ public class WorldBlockPos extends BlockPos {
         this.world = world;
     }
 
-    public WorldBlockPos(TileEntity te) {
-        this(te.getWorld(), te.getPos());
+    public static WorldBlockPos wrap(TileEntity te) {
+        return new WorldBlockPos(te.getWorld(), te.getPos());
     }
 
     public static WorldBlockPos wrap(World world, BlockPos pos) {

@@ -13,7 +13,9 @@ import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod

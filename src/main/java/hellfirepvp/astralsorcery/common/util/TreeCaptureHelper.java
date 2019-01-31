@@ -36,12 +36,12 @@ public class TreeCaptureHelper {
 
     public static TreeCaptureHelper eventInstance = new TreeCaptureHelper();
 
-    private TreeCaptureHelper() {}
-
     public static List<WorldBlockPos> oneTimeCatches = Lists.newLinkedList();
 
     private static List<WeakReference<TreeWatcher>> watchers = Lists.newLinkedList();
     private static Map<WeakReference<TreeWatcher>, List<WorldBlockPos>> cachedEntries = Maps.newHashMap();
+
+    private TreeCaptureHelper() {}
 
     @SubscribeEvent
     public void onTreeGrowth(SaplingGrowTreeEvent event) {

@@ -77,6 +77,9 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
 
     private boolean grabCursor = false;
 
+    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
+    private Point start, end;
+
     public GuiHandTelescope() {
         super(216, 216);
 
@@ -100,7 +103,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         if (handle != null) {
             IMajorConstellation bestGuess = (IMajorConstellation) handle.getHighestDistributionConstellation(rand, (c) -> c instanceof IMajorConstellation);
             if (bestGuess != null && handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F &&
-                    bestGuess.canDiscover(ResearchManager.clientProgress)) {
+                    bestGuess.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
                 topFound = bestGuess;
                 selectedYaw = (rand.nextFloat() * 360F) - 180F;
                 selectedPitch = -90F + rand.nextFloat() * 25F;
@@ -504,9 +507,6 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         }
     }
 
-    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
-    private Point start, end;
-
     private void tryStartDrawing(int mouseX, int mouseY) {
         if (!canStartDrawing()) return;
 
@@ -579,7 +579,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
 
         List<StarConnection> sc = c.getStarConnections();
         if (sc.size() != drawnLines.size()) return; //Can't match otherwise anyway.
-        if (!c.canDiscover(ResearchManager.clientProgress)) return;
+        if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) return;
 
         for (StarConnection connection : sc) {
             Rectangle fromRect = drawnStars.get(connection.from);

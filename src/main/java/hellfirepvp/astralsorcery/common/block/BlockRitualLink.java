@@ -91,9 +91,4 @@ public class BlockRitualLink extends BlockContainer {
         return BlockFaceShape.UNDEFINED;
     }
 
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
-    }
-
 }

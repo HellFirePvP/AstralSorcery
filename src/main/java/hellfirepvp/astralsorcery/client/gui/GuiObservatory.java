@@ -31,7 +31,6 @@ import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
@@ -84,6 +83,9 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
     private Map<IConstellation, Map<StarLocation, Rectangle>> drawnStars = null;
 
     private boolean grabCursor = false;
+
+    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
+    private Point start, end;
 
     public GuiObservatory(EntityPlayer owningPlayer, TileObservatory te) {
         super(te,
@@ -190,7 +192,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         zLevel += 10;
-        drawFrame(partialTicks);
+        drawFrame();
         zLevel -= 10;
     }
 
@@ -463,7 +465,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         return false;
     }
 
-    private void drawFrame(float pticks) {
+    private void drawFrame() {
         texPartFrame.bindTexture();
         GlStateManager.color(1F, 1F, 1F, 1F);
 
@@ -627,9 +629,6 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         }
     }
 
-    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
-    private Point start, end;
-
     private void tryStartDrawing(int mouseX, int mouseY) {
         if (!canStartDrawing()) return;
 
@@ -684,7 +683,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
 
             List<StarConnection> sc = c.getStarConnections();
             if (sc.size() != drawnLines.size()) continue; //Can't match otherwise anyway.
-            if (!c.canDiscover(ResearchManager.clientProgress)) continue;
+            if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) continue;
 
             Map<StarLocation, Rectangle> stars = info.getValue();
 

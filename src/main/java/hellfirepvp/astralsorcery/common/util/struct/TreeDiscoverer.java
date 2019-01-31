@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util.struct;
 
 import hellfirepvp.astralsorcery.common.base.TreeTypes;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.block.BlockLeaves;
@@ -69,13 +70,13 @@ public class TreeDiscoverer {
                 leafCheck = atChecks.value;
             }
             if (logCheck != null) {
-                if (logCheck.isStateValid(world, offset, atState)) {
+                if (logCheck.isStateValid(atState)) {
                     out.addBlock(offset, atState);
                     successful = true;
                 }
             }
             if (leafCheck != null) {
-                if (leafCheck.isStateValid(world, offset, atState)) {
+                if (leafCheck.isStateValid(atState)) {
                     out.addBlock(offset, atState);
                     successful = true;
                 }
@@ -119,10 +120,10 @@ public class TreeDiscoverer {
 
         TreeTypes t = TreeTypes.getTree(world, pos);
         if(t != null) {
-            if(t.getLogCheck().isStateValid(world, pos, world.getBlockState(pos))) {
+            if(t.getLogCheck().isStateValid(world.getBlockState(pos))) {
                 logCheck = t.getLogCheck();
             }
-            if(t.getLeavesCheck().isStateValid(world, pos, world.getBlockState(pos))) {
+            if(t.getLeavesCheck().isStateValid(world.getBlockState(pos))) {
                 leafCheck = t.getLeavesCheck();
             }
         } else {

@@ -38,6 +38,8 @@ public class EntityFXCrystalBurst extends EntityFXFacingSprite implements ICompl
                 return SpriteLibrary.spriteCelestialBurst2;
             case 2:
                 return SpriteLibrary.spriteCelestialBurst3;
+            default:
+                break;
         }
         return SpriteLibrary.spriteCelestialBurst1;
     }

@@ -24,9 +24,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
-import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -35,8 +33,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.*;
 import java.io.IOException;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -55,7 +53,8 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
 
     private static final int entriesLeft = 15;
     private static final int entriesRight = 14;
-    private static final Random rand = new Random();
+    
+    private static Rectangle rectSearchTextEntry = new Rectangle(300, 20, 88, 15);
 
     private Rectangle rectNext, rectPrev;
     private KnowledgeFragment lastRenderHover = null;
@@ -69,7 +68,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
     private GuiTextEntry searchTextEntry = new GuiTextEntry();
 
     public GuiJournalKnowledgeIndex() {
-        super(3);
+        super(40);
         this.closeWithInventoryKey = false;
 
         KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
@@ -139,7 +138,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
 
         drawDefault(textureResBlank, mouse);
 
-        drawFragmentIndices(mouseX, mouseY, partialTicks);
+        drawFragmentIndices(mouseX, mouseY);
         drawSearchBox();
 
         zLevel += 150;
@@ -147,7 +146,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
         zLevel -= 150;
     }
 
-    private void drawFragmentIndices(int mouseX, int mouseY, float pTicks) {
+    private void drawFragmentIndices(int mouseX, int mouseY) {
         GL11.glColor4f(0.86F, 0.86F, 0.86F, 1F);
         GlStateManager.color(0.86F, 0.86F, 0.86F, 1F);
         GlStateManager.disableDepth();
@@ -242,6 +241,15 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
         GlStateManager.color(1F, 1F, 1F, 1F);
 
         TextureHelper.refreshTextureBindState();
+    }
+
+    @Override
+    protected boolean handleRightClickClose(int mouseX, int mouseY) {
+        if (rectSearchTextEntry.contains(mouseX - guiLeft, mouseY - guiTop)) {
+            searchTextEntry.setText("");
+            return true;
+        }
+        return false;
     }
 
     @Override

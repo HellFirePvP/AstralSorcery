@@ -29,9 +29,11 @@ import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
+import hellfirepvp.astralsorcery.common.world.util.WorldEventNotifier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.state.IBlockState;
@@ -50,8 +52,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -60,6 +62,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
@@ -210,15 +213,6 @@ public class EventHandlerServer {
     public void onCraft(PlayerEvent.ItemCraftedEvent event) {
         if (event.player.getServer() != null) {
             ResearchManager.informCraftingGridCompletion(event.player, event.crafting);
-
-            Item crafted = event.crafting.getItem();
-            Block blockCrafted = Block.getBlockFromItem(crafted);
-            if (blockCrafted != Blocks.AIR && blockCrafted instanceof BlockMachine) {
-                if (event.crafting.getItemDamage() == BlockMachine.MachineType.TELESCOPE.getMeta()) {
-                    //FIXME RE-ADD AFTER ADVANCEMENTS
-                    //event.player.addStat(RegistryAchievements.achvBuildActTelescope);
-                }
-            }
         }
     }
 
@@ -237,8 +231,14 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
+    public void onLoad(WorldEvent.Load event) {
+        event.getWorld().addEventListener(new WorldEventNotifier());
+    }
+
+    @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
-        if (event.getWorld().isRemote) return;
+        if (event.getWorld().isRemote ||
+                !event.getChunk().isTerrainPopulated()) return;
         if (!Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
             return; //Thanks BuildCraft.
         }
@@ -246,22 +246,22 @@ public class EventHandlerServer {
         WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(at);
         if (event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
             if (!event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).attemptAutoLinkTo(at);
             }
         }
         if (event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
             if (!event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).removeAutoLinkTo(at);
             }
         }
         if (event.getNewBlock().equals(BlocksAS.blockAltar)) {
             if (!event.getOldBlock().equals(BlocksAS.blockAltar)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).attemptAutoLinkTo(at);
             }
         }
         if (event.getOldBlock().equals(BlocksAS.blockAltar)) {
             if (!event.getNewBlock().equals(BlocksAS.blockAltar)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).removeAutoLinkTo(at);
             }
         }
         if (event.getOldBlock().equals(BlocksAS.customOre)) {
@@ -273,35 +273,13 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onPlace(BlockEvent.PlaceEvent event) {
-        if (event.getWorld().isRemote) return;
-        BlockPos at = event.getPos();
-
-        if (event.getPlacedBlock().getBlock().equals(Blocks.CRAFTING_TABLE)) {
-            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onBreak(BlockEvent.BreakEvent event) {
         if (event.getWorld().isRemote) return;
         BlockPos at = event.getPos();
-        IBlockState broken = event.getState();
 
-        if (broken.getBlock().equals(Blocks.CRAFTING_TABLE)) {
-            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
-        }
-
-        ItemStack active = event.getPlayer().getHeldItemMainhand();
-        WandAugment found = null;
-        if(!active.isEmpty() && active.getItem() instanceof ItemWand) {
-            found = ItemWand.getAugment(active);
-        }
-        active = event.getPlayer().getHeldItemOffhand();
-        if(found == null && !active.isEmpty() && active.getItem() instanceof ItemWand) {
-            found = ItemWand.getAugment(active);
-        }
-        if(found != null && found.equals(WandAugment.EVORSIO)) {
+        Tuple<EnumHand, ItemStack> heldStack =
+                MiscUtils.getMainOrOffHand(event.getPlayer(), ItemsAS.wand,stack -> ItemWand.getAugment(stack) != null);
+        if(heldStack != null && ItemWand.getAugment(heldStack.value) == WandAugment.EVORSIO) {
             if(rand.nextFloat() < Config.evorsioEffectChance) {
                 World w = event.getWorld();
                 IBlockState stateAt = w.getBlockState(at);
@@ -323,6 +301,9 @@ public class EventHandlerServer {
                             w.setBlockState(pos, atState);
                         }
                     }
+                }
+                if (foundBlocks.getPattern().containsKey(at)) {
+                    event.setCanceled(true);
                 }
             }
         }

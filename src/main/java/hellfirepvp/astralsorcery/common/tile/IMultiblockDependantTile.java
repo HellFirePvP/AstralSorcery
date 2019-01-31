@@ -9,10 +9,8 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.util.ILocatable;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
-import net.minecraft.util.math.BlockPos;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**

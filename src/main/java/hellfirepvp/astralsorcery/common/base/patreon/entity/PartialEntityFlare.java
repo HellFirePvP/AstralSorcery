@@ -8,31 +8,22 @@
 
 package hellfirepvp.astralsorcery.common.base.patreon.entity;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingSprite;
-import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.RowSpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -67,7 +58,7 @@ public class PartialEntityFlare extends PatreonPartialEntity {
                 rand.nextFloat() * 0.08 * (rand.nextBoolean() ? 1 : -1));
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(at);
         particle.scale(scale).gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-        particle.setColor(rand.nextInt(3) == 0 ? this.flareColor.color2 : this.flareColor.color1);
+        particle.setColor(getColor());
         particle.setMaxAge(age);
 
         if (rand.nextBoolean()) {
@@ -79,7 +70,12 @@ public class PartialEntityFlare extends PatreonPartialEntity {
     }
 
     @SideOnly(Side.CLIENT)
-    private SpriteSheetResource getSprite() {
+    protected Color getColor() {
+        return rand.nextInt(3) == 0 ? this.flareColor.color2 : this.flareColor.color1;
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected SpriteSheetResource getSprite() {
         return RowSpriteSheetResource.crop(this.flareColor.getTexture(), this.flareColor.spriteRowIndex());
     }
 

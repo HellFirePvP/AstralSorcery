@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.EntityLivingBase;
@@ -74,7 +75,7 @@ public class CelestialStrike {
             dstPerc = 1F - MathHelper.clamp(dstPerc, 0F, 1F);
             float dmgDealt = dstPerc * dmg;
             if(dmgDealt > 0.5) {
-                living.attackEntityFrom(ds, dmgDealt);
+                DamageUtil.attackEntityFrom(living, ds, dmgDealt);
             }
         }
         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CEL_STRIKE, displayPosition);
@@ -110,6 +111,8 @@ public class CelestialStrike {
                 case 2:
                     lightning.setOverlayColor(new Color(0x004899));
                     break;
+                default:
+                    break;
             }
         }
 
@@ -142,6 +145,8 @@ public class CelestialStrike {
                     break;
                 case 2:
                     particle.setColor(new Color(0x004899));
+                    break;
+                default:
                     break;
             }
         }

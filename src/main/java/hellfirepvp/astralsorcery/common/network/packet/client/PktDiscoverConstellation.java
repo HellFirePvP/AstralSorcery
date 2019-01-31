@@ -18,6 +18,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -53,20 +54,22 @@ public class PktDiscoverConstellation implements IMessage, IMessageHandler<PktDi
 
     @Override
     public IMessage onMessage(PktDiscoverConstellation message, MessageContext ctx) {
-        IConstellation received = ConstellationRegistry.getConstellationByName(message.discoveredConstellation);
-        if (received == null) {
-            AstralSorcery.log.info("Received unknown constellation from client: " + message.discoveredConstellation);
-        } else {
-            PlayerProgress prog = ResearchManager.getProgress(ctx.getServerHandler().player, Side.SERVER);
-            if(prog != null && received.canDiscover(prog)) {
-                ResearchManager.discoverConstellation(received, ctx.getServerHandler().player);
-                ctx.getServerHandler().player.sendMessage(
-                        new TextComponentTranslation("progress.discover.constellation.chat",
-                                new TextComponentTranslation(message.discoveredConstellation)
-                                        .setStyle(new Style().setColor(TextFormatting.GRAY)))
-                                .setStyle(new Style().setColor(TextFormatting.BLUE)));
+        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+            IConstellation received = ConstellationRegistry.getConstellationByName(message.discoveredConstellation);
+            if (received == null) {
+                AstralSorcery.log.info("Received unknown constellation from client: " + message.discoveredConstellation);
+            } else {
+                PlayerProgress prog = ResearchManager.getProgress(ctx.getServerHandler().player, Side.SERVER);
+                if(prog != null && received.canDiscover(ctx.getServerHandler().player, prog)) {
+                    ResearchManager.discoverConstellation(received, ctx.getServerHandler().player);
+                    ctx.getServerHandler().player.sendMessage(
+                            new TextComponentTranslation("progress.discover.constellation.chat",
+                                    new TextComponentTranslation(message.discoveredConstellation)
+                                            .setStyle(new Style().setColor(TextFormatting.GRAY)))
+                                    .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                }
             }
-        }
+        });
         return null;
     }
 

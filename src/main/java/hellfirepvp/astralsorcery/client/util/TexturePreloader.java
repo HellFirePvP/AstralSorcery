@@ -61,6 +61,8 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame_extender")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "observatoryframe")             .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridsextant")                  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiscructpreviewicons")        .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "slotgemcontext")               .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks")           .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")                .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")                .allocateGlId();
@@ -74,6 +76,9 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud3")                       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud4")                       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud5")                       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud6")                       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud7")                       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud8")                       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiconpaper")                  .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar1")                    .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar2")                    .allocateGlId();
@@ -109,6 +114,10 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare2")                    .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "charge")                    .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "vortex1")                   .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "g_explode_blue")            .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "g_explode_gray")            .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "g_explode_red")             .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "g_explode_white")           .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath")           .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_bleed")                .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_full")                   .allocateGlId();

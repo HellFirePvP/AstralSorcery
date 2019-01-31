@@ -8,16 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.enchantment.amulet;
 
-import baubles.api.BaubleType;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
 import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.registry.RegistryEnchantments;
-import hellfirepvp.astralsorcery.common.util.BaublesHelper;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -52,12 +51,12 @@ public class PlayerAmuletHandler implements ITickHandler {
         if(linkedAmulet == null || linkedAmulet.key.isEmpty() || linkedAmulet.value == null) return;
 
         event.getEnchantmentsToApply().addAll(ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet.key));
-        event.setResolvedPlayer(linkedAmulet.value);
     }
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         EntityPlayer player = (EntityPlayer) context[0];
+        applyAmuletTags(player);
         clearAmuletTags(player);
 
         boolean client = player.getEntityWorld().isRemote;
@@ -69,14 +68,17 @@ public class PlayerAmuletHandler implements ITickHandler {
         }
     }
 
-    public void clearAmuletTags(EntityPlayer player) {
-        boolean hasAmulet = false;
-        for (ItemStack bauble : BaublesHelper.getWornBaublesForType(player, BaubleType.AMULET)) {
-            if(!bauble.isEmpty() && (bauble.getItem() instanceof ItemEnchantmentAmulet)) {
-                hasAmulet = true;
+    private void applyAmuletTags(EntityPlayer player) {
+        for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+            ItemStack stack = player.getItemStackFromSlot(slot);
+            if (!stack.isEmpty() && !EnchantmentUpgradeHelper.isItemBlacklisted(stack)) {
+                EnchantmentUpgradeHelper.applyAmuletOwner(player.getItemStackFromSlot(slot), player);
             }
         }
-        EnchantmentUpgradeHelper.removeAmuletTagsAndCleanup(player, hasAmulet);
+    }
+
+    private void clearAmuletTags(EntityPlayer player) {
+        EnchantmentUpgradeHelper.removeAmuletTagsAndCleanup(player, true);
     }
 
     @Override

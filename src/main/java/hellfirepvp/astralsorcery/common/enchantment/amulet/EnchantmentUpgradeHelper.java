@@ -23,6 +23,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -85,12 +86,12 @@ public class EnchantmentUpgradeHelper {
             Enchantment target = mod.getEnchantment();
             switch (mod.getType()) {
                 case ADD_TO_SPECIFIC:
-                    if(enchantment == target) {
+                    if(enchantment.equals(target)) {
                         current += mod.getLevelAddition();
                     }
                     break;
                 case ADD_TO_EXISTING_SPECIFIC:
-                    if(enchantment == target && current > 0) {
+                    if(enchantment.equals(target) && current > 0) {
                         current += mod.getLevelAddition();
                     }
                     break;
@@ -98,6 +99,8 @@ public class EnchantmentUpgradeHelper {
                     if(current > 0) {
                         current += mod.getLevelAddition();
                     }
+                    break;
+                default:
                     break;
             }
         }
@@ -183,22 +186,23 @@ public class EnchantmentUpgradeHelper {
     public static boolean isItemBlacklisted(ItemStack stack) {
         if(!stack.isEmpty()) {
             if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                return true; //We're not gonna apply enchantments to items used for querying matches
+                return true; // We're not gonna apply enchantments to items used for querying matches
             }
 
             if (stack.getMaxStackSize() > 1) {
-                return true; //Only swords & armor and stuff that isn't stackable
+                return true; // Only swords & armor and stuff that isn't stackable
             }
-            if (stack.getItem() instanceof ItemPotion) {
-                return true; //We're not gonna apply enchantments to potions
+            if (stack.getItem() instanceof ItemPotion ||
+                stack.getItem() instanceof ItemEnchantedBook) {
+                return true; // Not gonna apply enchantments to potions or books
             }
 
             ResourceLocation rl = stack.getItem().getRegistryName();
             if(rl == null) return true; //Yea... no questions asked i guess.
 
             if(rl.getResourceDomain().equalsIgnoreCase("draconicevolution")) {
-                //Exploit with DE's item-GUI being able to draw item's enchantments while having it equipped
-                //causes infinite feedback loop stacking enchantments higher and higher.
+                // Exploit with DE's item-GUI being able to draw item's enchantments while having it equipped
+                // causes infinite feedback loop stacking enchantments higher and higher.
                 return true;
             }
             return false;
@@ -212,7 +216,7 @@ public class EnchantmentUpgradeHelper {
 
     //This is more or less just a map to say whatever we add upon.
     private static List<DynamicEnchantment> fireEnchantmentGatheringEvent(ItemStack tool) {
-        DynamicEnchantmentEvent.Add addEvent = new DynamicEnchantmentEvent.Add(tool);
+        DynamicEnchantmentEvent.Add addEvent = new DynamicEnchantmentEvent.Add(tool, getPlayerHavingTool(tool));
         MinecraftForge.EVENT_BUS.post(addEvent);
         DynamicEnchantmentEvent.Modify modifyEvent = new DynamicEnchantmentEvent.Modify(tool, addEvent.getEnchantmentsToApply(), addEvent.getResolvedPlayer());
         MinecraftForge.EVENT_BUS.post(modifyEvent);
@@ -264,8 +268,7 @@ public class EnchantmentUpgradeHelper {
     }
 
     @Nullable
-    static Tuple<ItemStack, EntityPlayer> getWornAmulet(ItemStack anyTool) {
-        //Check if the player is online and exists & is set properly
+    static EntityPlayer getPlayerHavingTool(ItemStack anyTool) {
         UUID plUUID = getWornPlayerUUID(anyTool);
         if(plUUID == null) return null;
         EntityPlayer player;
@@ -288,6 +291,14 @@ public class EnchantmentUpgradeHelper {
             }
         }
         if(!foundTool) return null;
+
+        return player;
+    }
+
+    @Nullable
+    static Tuple<ItemStack, EntityPlayer> getWornAmulet(ItemStack anyTool) {
+        EntityPlayer player = getPlayerHavingTool(anyTool);
+        if (player == null) return null;
 
         //Check if the player wears an amulet and return that one then..
         if(BaublesHelper.doesPlayerWearBauble(player, BaubleType.AMULET, (stack) -> !stack.isEmpty() && stack.getItem() instanceof ItemEnchantmentAmulet)) {

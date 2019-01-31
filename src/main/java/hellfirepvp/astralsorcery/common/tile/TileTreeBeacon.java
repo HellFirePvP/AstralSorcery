@@ -27,10 +27,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionRece
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
-import hellfirepvp.astralsorcery.common.util.WRItemObject;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.NonDuplicateCappedWeightedList;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
@@ -111,8 +108,10 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                                 changed = true;
                             }
                         }
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, actPos);
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, actPos, 32));
+                        if (ParticleEffectWatcher.INSTANCE.mayFire(world, actPos)) {
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, actPos);
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, actPos, 32));
+                        }
                     } else {
                         if(treePositions.removeElement(randPos)) {
                             changed = true;
@@ -129,14 +128,19 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
 
     private boolean tryHarvestBlock(World world, BlockPos out, BlockPos treeBlockPos, IBlockState fakedState) {
         if(rand.nextInt(ConfigEntryTreeBeacon.dropsChance) == 0) {
-            Block b = fakedState.getBlock();
-            List<ItemStack> drops = b.getDrops(world, treeBlockPos, fakedState, 2);
-            for (ItemStack i : drops) {
-                if(i.isEmpty()) continue;
-                ItemUtils.dropItemNaturally(world,
-                        out.getX() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1),
-                        out.getY() + rand.nextFloat() * 3,
-                        out.getZ() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1), i);
+            if (MiscUtils.canEntityTickAt(world, pos)) {
+                Block b = fakedState.getBlock();
+                List<ItemStack> drops = b.getDrops(world, treeBlockPos, fakedState, 2);
+                for (ItemStack i : drops) {
+                    if(i.isEmpty()) continue;
+                    ItemUtils.dropItemNaturally(world,
+                            out.getX() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1),
+                            out.getY() + rand.nextFloat() * 3,
+                            out.getZ() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1), i);
+                }
+            } else {
+                //Don't break the block then. We do nothing.
+                return false;
             }
         }
         return rand.nextInt(ConfigEntryTreeBeacon.breakChance) == 0;
@@ -213,7 +217,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                                 isTreeBlock = true;
                             } else {
                                 TreeTypes tt = TreeTypes.getTree(world, at, current);
-                                if(tt != null && tt.getLogCheck().isStateValid(world, at, current)) {
+                                if(tt != null && tt.getLogCheck().isStateValid(current)) {
                                     isTreeBlock = true;
                                 }
                             }

@@ -36,11 +36,13 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionRece
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -77,6 +79,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
     private List<BlockPos> offsetMirrorPositions = new LinkedList<>();
 
+    private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private boolean dirty = false;
     private boolean doesSeeSky = false, hasMultiblock = false;
     private BlockPos ritualLink = null;
@@ -100,24 +103,27 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 updateLinkTile();
             }
 
-            if((ticksExisted & 31) == 0) {
-                updateMultiblockState();
-            }
+            updateMultiblockState();
 
             if(dirty || !getInventoryHandler().getStackInSlot(0).isEmpty()) {
-                dirty = false;
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
                     recNode.updateSkyState(doesSeeSky);
                     recNode.updateMultiblockState(hasMultiblock);
                     recNode.updateLink(world, ritualLink);
 
-                    recNode.markDirty(world);
+                    boolean updated = dirty;
 
                     if(!getInventoryHandler().getStackInSlot(0).isEmpty() && recNode.getCrystal().isEmpty()) {
                         recNode.setChannelingCrystal(getInventoryHandler().getStackInSlot(0), this.world);
+                        updated = true;
+                    }
+
+                    if (updated) {
+                        recNode.markDirty(world);
                     }
                 }
+                dirty = false;
                 markForUpdate();
             }
         }
@@ -341,56 +347,16 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
     }
 
     private void updateMultiblockState() {
-        boolean found = MultiBlockArrays.patternRitualPedestal.matches(world, getPos());
-        if(found && !checkAirBox(-2, 0, -2, 2, 2, 2)) found = false;
-        if(found && !checkAirBox(-3, 0, -1, 3, 2, 1)) found = false;
-        if(found && !checkAirBox(-1, 0, -3, 1, 2, 3)) found = false;
-
-        boolean update = hasMultiblock != found;
-        this.hasMultiblock = found;
-        if(update) {
+        if (this.structureMatch == null) {
+            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
+        }
+        boolean found = this.structureMatch.matches(getWorld());
+        boolean update = this.hasMultiblock != found;
+        if (update) {
+            this.hasMultiblock = found;
             markForUpdate();
             flagDirty();
         }
-    }
-
-    private boolean checkAirBox(int ox, int oy, int oz, int tx, int ty, int tz) {
-        int lx, ly, lz;
-        int hx, hy, hz;
-        if(ox < tx) {
-            lx = ox;
-            hx = tx;
-        } else {
-            lx = tx;
-            hx = ox;
-        }
-        if(oy < ty) {
-            ly = oy;
-            hy = ty;
-        } else {
-            ly = ty;
-            hy = oy;
-        }
-        if(oz < tz) {
-            lz = oz;
-            hz = tz;
-        } else {
-            lz = tz;
-            hz = oz;
-        }
-
-        for (int xx = lx; xx <= hx; xx++) {
-            for (int zz = lz; zz <= hz; zz++) {
-                for (int yy = ly; yy <= hy; yy++) {
-                    if(xx == 0 && yy == 0 && zz == 0) continue;
-                    BlockPos at = new BlockPos(xx, yy, zz).add(getPos());
-                    if(!getWorld().isAirBlock(at)) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
     }
 
     //Affects only client, i'll keep the method here for misc reasons tho.
@@ -874,7 +840,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(channeling != null && hasMultiblock) {
-                if(channeling == type) {
+                if(channeling.equals(type)) {
                     collectionChannelBuffer += amount;
                     tryGainMirrorPos(world);
                 }
@@ -1085,15 +1051,20 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         public void updateCrystalProperties(World world, CrystalProperties properties, IWeakConstellation channeling, IMinorConstellation trait) {
-            IWeakConstellation prev = this.channeling;
+            IWeakConstellation prevChannel = this.channeling;
+            CrystalProperties prevProp = this.properties;
+            IMinorConstellation prevTrait = this.trait;
             this.properties = properties;
             this.channeling = channeling;
             this.trait = trait;
-            if(this.channeling != prev) {
+            if(this.channeling != prevChannel) {
                 this.clearAllMirrorPositions(world);
             }
 
-            markDirty(world);
+            if (this.channeling != prevChannel || this.trait != prevTrait ||
+                    (!Objects.equals(this.properties, prevProp))) {
+                markDirty(world);
+            }
         }
 
         public void updateLink(@Nonnull World world, @Nullable BlockPos ritualLink) {

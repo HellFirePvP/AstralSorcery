@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
@@ -20,6 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -50,6 +51,14 @@ public class KeyBleed extends KeyPerk {
         });
     }
 
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.bleedDuration = MathHelper.ceil(this.bleedDuration * multiplier);
+        this.bleedChance *= multiplier;
+    }
+
     @SubscribeEvent
     public void onAttack(LivingHurtEvent event) {
         DamageSource source = event.getSource();
@@ -57,21 +66,19 @@ public class KeyBleed extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 EntityLivingBase target = event.getEntityLiving();
 
                 float chance = bleedChance;
                 chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(AttributeTypeRegistry.ATTR_TYPE_BLEED_CHANCE, chance);
-                chance *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_CHANCE, chance);
                 if (rand.nextFloat() < chance) {
                     int stackCap = 3; //So the "real" stackcap is 'amplifier = 3' that means we always have to be lower than this value.
                     stackCap = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(AttributeTypeRegistry.ATTR_TYPE_BLEED_STACKS, stackCap));
+                            .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_STACKS, stackCap));
                     int duration = bleedDuration;
                     duration = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION, duration));
-                    duration *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                            .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION, duration));
 
                     int setAmplifier = 0;
                     if (target.isPotionActive(RegistryPotions.potionBleed)) {

@@ -25,7 +25,6 @@ import java.awt.*;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +35,6 @@ import java.util.Random;
  */
 public class ClientLightbeamHandler implements ITickHandler {
 
-    private static final Random rand = new Random();
     private int ticksExisted = 0;
 
     @Override

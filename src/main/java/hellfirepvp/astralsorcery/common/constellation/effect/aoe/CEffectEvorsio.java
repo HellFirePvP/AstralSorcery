@@ -22,7 +22,7 @@ import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -121,6 +121,8 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                         break;
                     case 2:
                         p.setColor(Constellations.armara.getConstellationColor());
+                        break;
+                    default:
                         break;
                 }
             }
@@ -227,6 +229,8 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                     break;
                 case 2:
                     p.setColor(Constellations.armara.getConstellationColor());
+                    break;
+                default:
                     break;
             }
         }

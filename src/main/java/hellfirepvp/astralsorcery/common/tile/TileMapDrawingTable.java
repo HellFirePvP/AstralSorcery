@@ -194,6 +194,8 @@ public class TileMapDrawingTable extends TileSkybound {
                     case 2:
                         c = new Color(0x0028FF);
                         break;
+                    default:
+                        break;
                 }
                 offset = new Vector3(this).add(rand.nextFloat(), 1, rand.nextFloat());
                 EffectHandler.getInstance().lightbeam(offset.clone().addY(1 + rand.nextFloat() * 0.4), offset, 0.5F).setColorOverlay(c);

@@ -8,10 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.multiblock.*;
 import hellfirepvp.astralsorcery.common.registry.structures.*;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.StructureMatcherRegistry;
+import hellfirepvp.astralsorcery.common.structure.StructureRegistry;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
+import net.minecraft.util.ResourceLocation;
 
 import static hellfirepvp.astralsorcery.common.lib.MultiBlockArrays.*;
 
@@ -31,22 +36,32 @@ public class RegistryStructures {
         treasureShrine = new StructureTreasureShrine();
         smallRuin = new StructureSmallRuin();
 
-        patternRitualPedestal = new MultiblockRitualPedestal();
-        patternAltarAttunement = new MultiblockAltarAttunement();
-        patternAltarConstellation = new MultiblockAltarConstellation();
-        patternAltarTrait = new MultiblockAltarTrait();
-        patternAttunementFrame = new MultiblockAttunementFrame();
-        patternStarlightInfuser = new MultiblockStarlightInfuser();
-        patternCollectorRelay = new MultiblockStarlightRelay();
-        patternCelestialGateway = new MultiblockGateway();
-        patternCollectorEnhancement = new MultiblockCrystalEnhancement();
-        patternFountain = new MultiblockFountain();
+        patternRitualPedestal       = registerPattern(new MultiblockRitualPedestal());
+        patternAltarAttunement      = registerPattern(new MultiblockAltarAttunement());
+        patternAltarConstellation   = registerPattern(new MultiblockAltarConstellation());
+        patternAltarTrait           = registerPattern(new MultiblockAltarTrait());
+        patternAttunementFrame      = registerPattern(new MultiblockAttunementFrame());
+        patternStarlightInfuser     = registerPattern(new MultiblockStarlightInfuser());
+        patternCollectorRelay       = registerPattern(new MultiblockStarlightRelay());
+        patternCelestialGateway     = registerPattern(new MultiblockGateway());
+        patternCollectorEnhancement = registerPattern(new MultiblockCrystalEnhancement());
+        patternFountain             = registerPattern(new MultiblockFountain());
 
-        patternSmallRuin = new PatternBlockArray();
+        patternSmallRuin = new PatternBlockArray(
+                new ResourceLocation(AstralSorcery.MODID,"pattern_small_ruin"));
         patternSmallRuin.addAll(smallRuin);
+        registerPattern(patternSmallRuin);
 
-        patternRitualPedestalWithLink = new MultiblockRitualPedestal();
+        patternRitualPedestalWithLink = new MultiblockRitualPedestal(
+                new ResourceLocation(AstralSorcery.MODID,"pattern_ritual_pedestal_link"));
         patternRitualPedestalWithLink.addBlock(0, 5, 0, BlocksAS.ritualLink.getDefaultState());
+        registerPattern(patternRitualPedestalWithLink);
+    }
+
+    private static <T extends PatternBlockArray> T registerPattern(T pattern) {
+        StructureRegistry.INSTANCE.register(pattern);
+        StructureMatcherRegistry.INSTANCE.register(() -> new StructureMatcherPatternArray(pattern.getRegistryName()));
+        return pattern;
     }
 
 }

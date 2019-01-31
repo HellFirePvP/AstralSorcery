@@ -10,11 +10,13 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -24,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,8 +42,8 @@ public class KeyStoneEnrichment extends KeyPerk implements IPlayerTickPerk {
 
     private static final BlockStateCheck stoneCheck = new CleanStoneCheck();
 
-    private static int enrichmentRadius = 3;
-    private static int chanceToEnrich = 70;
+    private int enrichmentRadius = 3;
+    private int chanceToEnrich = 70;
 
     public KeyStoneEnrichment(String name, int x, int y) {
         super(name, x, y);
@@ -56,19 +59,28 @@ public class KeyStoneEnrichment extends KeyPerk implements IPlayerTickPerk {
     }
 
     @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.enrichmentRadius = MathHelper.ceil(this.enrichmentRadius * multiplier);
+        this.chanceToEnrich = MathHelper.ceil(this.chanceToEnrich * multiplier);
+    }
+
+    @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
         if (side == Side.SERVER) {
+            PlayerProgress prog = ResearchManager.getProgress(player, side);
             float modChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToEnrich);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToEnrich);
             if(rand.nextInt(Math.round(Math.max(modChance, 1))) == 0) {
                 float enrRad = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, enrichmentRadius);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, enrichmentRadius);
                 Vector3 vec = Vector3.atEntityCenter(player).add(
                         (rand.nextFloat() * enrRad * 2) - enrRad,
                         (rand.nextFloat() * enrRad * 2) - enrRad,
                         (rand.nextFloat() * enrRad * 2) - enrRad);
                 BlockPos pos = vec.toBlockPos();
-                if(stoneCheck.isStateValid(player.getEntityWorld(), pos, player.getEntityWorld().getBlockState(pos))) {
+                if(stoneCheck.isStateValid(player.getEntityWorld().getBlockState(pos))) {
                     ItemStack blockStack = OreTypes.AEVITAS_ORE_PERK.getRandomOre(rand);
                     if(!blockStack.isEmpty()) {
                         IBlockState state = ItemUtils.createBlockState(blockStack);
@@ -84,7 +96,7 @@ public class KeyStoneEnrichment extends KeyPerk implements IPlayerTickPerk {
     private static class CleanStoneCheck implements BlockStateCheck {
 
         @Override
-        public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
+        public boolean isStateValid(IBlockState state) {
             return state.getBlock() == Blocks.STONE && state.getValue(BlockStone.VARIANT).equals(BlockStone.EnumType.STONE);
         }
 

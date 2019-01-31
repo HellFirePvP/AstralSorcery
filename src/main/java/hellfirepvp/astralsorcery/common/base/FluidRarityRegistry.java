@@ -50,9 +50,9 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
     @CapabilityInject(ChunkFluidEntry.class)
     private static Capability<ChunkFluidEntry> CAPABILITY_CHUNK_FLUID = null;
 
-    private FluidRarityRegistry() {}
-
     private static List<FluidRarityEntry> rarityList = new LinkedList<>();
+
+    private FluidRarityRegistry() {}
 
     @Override
     public Iterable<FluidRarityRegistry.FluidRarityEntry> getDefaultDataSets() {
@@ -340,7 +340,7 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
 
         @Override
         public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-            return capability == CAPABILITY_CHUNK_FLUID;
+            return capability.equals(CAPABILITY_CHUNK_FLUID);
         }
 
         @Nullable

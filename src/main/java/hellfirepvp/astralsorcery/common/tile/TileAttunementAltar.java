@@ -27,6 +27,8 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
@@ -40,14 +42,13 @@ import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktAttuneConstellation;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktAttunementAltarState;
+import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
-import hellfirepvp.astralsorcery.common.util.EntityUtils;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -105,6 +106,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     private static final int TICKS_CRYSTAL_ATTUNEMENT = 500;
 
     private IConstellation activeFound = null;
+    private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private boolean doesSeeSky = false, hasMultiblock = false;
 
     //Attunement related
@@ -157,14 +159,13 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 updateSkyState();
             }
 
-            if((ticksExisted & 31) == 0) {
-                updateMultiblockState();
-            }
+            updateMultiblockState();
+
             if(activeFound == null && getTicksExisted() % 10 == 0 && hasMultiblock) {
                 searchForConstellation();
             }
 
-            if(activeFound != null) {
+            if(activeFound != null && hasMultiblock) {
                 if(mode != 0 && activeEntity == null) {
                     activeEntity = world.getEntityByID(entityIdActive);
                     if(activeEntity == null) return;
@@ -350,10 +351,14 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     }
 
     private void updateMultiblockState() {
-        boolean found = MultiBlockArrays.patternAttunementFrame.matches(world, getPos());
-        boolean update = hasMultiblock != found;
-        this.hasMultiblock = found;
-        if(update) {
+        if (structureMatch == null) {
+            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(),
+                    getRequiredStructure());
+        }
+        boolean found = this.structureMatch.matches(this.getWorld());
+        boolean update = this.hasMultiblock != found;
+        if (update) {
+            this.hasMultiblock = found;
             markForUpdate();
         }
     }
@@ -459,6 +464,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             case 2:
                 this.entityIdActive = trigger.getEntityId();
                 this.activeEntity = trigger;
+                break;
+            default:
                 break;
         }
         markForUpdate();
@@ -590,7 +597,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         } else {
             if(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) > 0) {
                 if(activeSound == null || ((PositionedLoopSound) activeSound).hasStoppedPlaying()) {
-                    activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.4F, 0.8F,
+                    activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.2F, 0.8F,
                             () -> isInvalid() ||
                                     activeFound == null ||
                                     !ConstellationSkyHandler.getInstance().isNight(world) ||
@@ -991,7 +998,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         } else {
             activeFound = found;
         }
-        if(prev != activeFound) {
+        if (prev == null ? activeFound != null : !prev.equals(activeFound)) {
             starSprites.clear();
         }
     }

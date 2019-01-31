@@ -32,6 +32,23 @@ public class GuiScreenJournalOverlay extends GuiWHScreen {
     }
 
     @Override
+    public void initGui() {
+        super.initGui();
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return origin.doesGuiPauseGame();
+    }
+
+    @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height) {
+        super.setWorldAndResolution(mc, width, height);
+
+        origin.setWorldAndResolution(mc, width, height);
+    }
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -40,14 +57,20 @@ public class GuiScreenJournalOverlay extends GuiWHScreen {
 
     @Override
     protected boolean handleRightClickClose(int mouseX, int mouseY) {
+        Minecraft.getMinecraft().displayGuiScreen(origin);
+        return true;
+    }
+
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+
         if (origin instanceof GuiJournalProgression) {
             ((GuiJournalProgression) origin).expectReinit = true;
         }
         if (origin instanceof GuiJournalPerkTree) {
             ((GuiJournalPerkTree) origin).expectReinit = true;
         }
-        Minecraft.getMinecraft().displayGuiScreen(origin);
-        return true;
     }
 
     @Override

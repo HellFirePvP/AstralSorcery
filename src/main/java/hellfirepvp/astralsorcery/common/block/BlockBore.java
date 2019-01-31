@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.structure.BlockStructureObserver;
 import hellfirepvp.astralsorcery.common.tile.TileBore;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
@@ -38,7 +39,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 03.11.2017 / 14:49
  */
-public class BlockBore extends BlockContainer {
+public class BlockBore extends BlockContainer implements BlockStructureObserver {
 
     public BlockBore() {
         super(Material.WOOD, MapColor.GOLD);

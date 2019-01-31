@@ -8,14 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.registry.multiblock;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 
 import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 
@@ -29,6 +30,7 @@ import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 public class MultiblockAltarConstellation extends PatternBlockArray {
 
     public MultiblockAltarConstellation() {
+        super(new ResourceLocation(AstralSorcery.MODID, "pattern_altar_t3"));
         load();
     }
 
@@ -40,7 +42,6 @@ public class MultiblockAltarConstellation extends PatternBlockArray {
         IBlockState mru = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.RUNED);
         IBlockState mpl = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.PILLAR);
         IBlockState bml = BlocksAS.blockBlackMarble.getDefaultState().withProperty(BlockBlackMarble.BLACK_MARBLE_TYPE, BlockBlackMarble.BlackMarbleBlockType.RAW);
-        IBlockState air = Blocks.AIR.getDefaultState();
 
         //addBlockCube(air, -4,  0, -4,  4,  3,  4);
         addBlockCube(mbr, -4, -1, -4,  4, -1,  4);

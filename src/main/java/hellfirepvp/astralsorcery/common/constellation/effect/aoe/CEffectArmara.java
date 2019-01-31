@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalPropertiesRitualArmara;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
@@ -25,7 +26,6 @@ import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.monster.EntityMob;
@@ -52,7 +52,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 03.01.2017 / 14:49
  */
-public class CEffectArmara extends ConstellationEffect {
+public class CEffectArmara extends CEffectEntityCollect<EntityMob> {
 
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;
@@ -62,7 +62,7 @@ public class CEffectArmara extends ConstellationEffect {
     public static int potionAmplifier = 0;
 
     public CEffectArmara(@Nullable ILocatable origin) {
-        super(origin, Constellations.armara, "armara");
+        super(origin, Constellations.armara, "armara", protectionRange, EntityMob.class, (entity) -> !entity.isDead && !(entity instanceof EntityTechnicalAmbient));
     }
 
     @Override
@@ -142,7 +142,7 @@ public class CEffectArmara extends ConstellationEffect {
                             e.motionX -= xRatio / f * 0.4;
                             e.motionZ -= zRatio / f * 0.4;
                             ((IProjectile) e).shoot(e.motionX, e.motionY, e.motionZ, 1F, 0F);
-                        } else if(e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
+                        } else if(e instanceof EntityMob) {
                             ((EntityLivingBase) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.posX, (pos.getZ() + 0.5) - e.posZ);
                         }
                         foundEntity = true;

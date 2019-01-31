@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.client.util;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockFluidRenderer;
-import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -27,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.model.pipeline.ForgeBlockModelRenderer;
 
 import javax.annotation.Nullable;
 import java.util.BitSet;
@@ -43,7 +41,6 @@ import java.util.List;
 public class BlockModelRenderHelper {
 
     private static BlockFluidRenderer bfr;
-    private static BlockModelRenderer bmr;
 
     private static BlockFluidRenderer getFluidRenderer() {
         if (bfr == null) {
@@ -52,21 +49,13 @@ public class BlockModelRenderHelper {
         return bfr;
     }
 
-    private static BlockModelRenderer getModelRenderer() {
-        if (bmr == null) {
-            bmr = new ForgeBlockModelRenderer(new BlockColorsOverride(Minecraft.getMinecraft().getBlockColors()));
-        }
-        return bmr;
-    }
-
     public static void renderBlockModelWithColor(IBlockAccess world, BlockPos pos, IBlockState state, BufferBuilder vb, int color) {
         try {
             EnumBlockRenderType type = state.getRenderType();
             if (type == EnumBlockRenderType.INVISIBLE) return;
             state = state.getActualState(world, pos);
 
-            switch (type)
-            {
+            switch (type) {
                 case MODEL:
                     IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
                     state = state.getBlock().getExtendedState(state, world, pos);
@@ -76,6 +65,8 @@ public class BlockModelRenderHelper {
                     BlockColorsOverride.override = color;
                     getFluidRenderer().renderFluid(world, state, pos, vb);
                     BlockColorsOverride.override = -1;
+                    break;
+                default:
                     break;
             }
         } catch (Throwable throwable) {
@@ -127,7 +118,6 @@ public class BlockModelRenderHelper {
                 color = TextureUtil.anaglyphColor(color);
             }
 
-            float alpha = (float) (color >> 24  & 255) / 255F;
             float red   = (float) (color >> 16  & 255) / 255F;
             float green = (float) (color >> 8   & 255) / 255F;
             float blue  = (float) (color        & 255) / 255F;
@@ -207,6 +197,8 @@ public class BlockModelRenderHelper {
             case EAST:
                 boundsFlags.set(1, f1 >= 1.0E-4F || f2 >= 1.0E-4F || f4 <= 0.9999F || f5 <= 0.9999F);
                 boundsFlags.set(0, (f3 > 0.9999F || stateIn.isFullCube()) && f == f3);
+            default:
+                break;
         }
     }
 

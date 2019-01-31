@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.client.gui.journal;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.awt.geom.Point2D;
 
 /**
  * This class is part of the Astral Sorcery Mod

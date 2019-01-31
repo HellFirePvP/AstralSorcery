@@ -151,6 +151,8 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
                     nocSpark.shoot(rotation.getFrontOffsetX(), rotation.getFrontOffsetY() + 0.1F, rotation.getFrontOffsetZ(), 0.7F, 0.9F);
                     source.getWorld().spawnEntity(nocSpark);
                     return true;
+                default:
+                    break;
             }
             return false;
         }
@@ -162,6 +164,8 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
                     break;
                 case NOCTURNAL:
                     worldIn.spawnEntity(new EntityNocturnalSpark(worldIn, player));
+                    break;
+                default:
                     break;
             }
         }
@@ -193,6 +197,8 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
                     if(!playerIn.isCreative()) {
                         dustStack.shrink(1);
                     }
+                    break;
+                default:
                     break;
             }
         }

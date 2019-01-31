@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
@@ -39,6 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -166,14 +168,14 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
             float damage = entityLiving.getMaxHealth() * percDamageAppliedNearby;
 
             float r = rangeDeathAOE;
-            java.util.List<EntityLivingBase> eList = entityLiving.world.getEntitiesWithinAABB(
+            List<EntityLivingBase> eList = entityLiving.world.getEntitiesWithinAABB(
                     EntityLivingBase.class,
                     new AxisAlignedBB(-r, -r, -r, r, r, r).offset(entityLiving.getPosition()),
                     e -> e != null && !e.isDead && e.getHealth() > 0 && e.isCreatureType(EnumCreatureType.MONSTER, false));
             for (EntityLivingBase el : eList) {
                 int preTime = el.hurtResistantTime;
                 el.hurtResistantTime = 0;
-                el.attackEntityFrom(ds, damage);
+                DamageUtil.attackEntityFrom(el, ds, damage);
                 el.hurtResistantTime = Math.max(preTime, el.hurtResistantTime);
             }
 

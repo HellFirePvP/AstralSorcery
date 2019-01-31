@@ -9,11 +9,12 @@
 package hellfirepvp.astralsorcery.common.base.patreon;
 
 import hellfirepvp.astralsorcery.client.util.resource.*;
-import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFloatingCrystal;
-import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
+import hellfirepvp.astralsorcery.common.base.patreon.base.*;
 import hellfirepvp.astralsorcery.common.base.patreon.entity.PartialEntityFlare;
+import hellfirepvp.astralsorcery.common.base.patreon.entity.PartialEntityFlareCrystal;
 import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,6 +44,10 @@ public class PatreonEffectHelper {
                 UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
                 new PatreonEffect(FlareColor.WATER));
 
+        effectMap.put( // Kittenplays01 / Kittenplays01
+                UUID.fromString("ac71a42e-fa17-4d54-a1ae-57928fdbead0"),
+                new PatreonEffect(FlareColor.STANDARD));
+
         effectMap.put( //ChosenArchitect
                 UUID.fromString("e3298bd7-61bf-427f-af89-4e418a20bf57"),
                 new PatreonEffect(FlareColor.STANDARD));
@@ -63,9 +68,9 @@ public class PatreonEffectHelper {
                 UUID.fromString("4cc70f18-d873-4768-9828-4704f44d4813"),
                 new PatreonEffect(FlareColor.DARK_GREEN));
 
-        effectMap.put( // Hunterprime_
-                UUID.fromString("4d6677bb-03b1-4e9b-b32a-2fc2326a8761"),
-                new PatreonEffect(FlareColor.GOLD));
+        //effectMap.put( // Hunterprime_
+        //        UUID.fromString("4d6677bb-03b1-4e9b-b32a-2fc2326a8761"),
+        //        new PatreonEffect(FlareColor.GOLD));
 
         effectMap.put( //Saereth
                 UUID.fromString("4ecf6284-b1e8-45bb-b2b3-151c95c3b10f"),
@@ -73,7 +78,11 @@ public class PatreonEffectHelper {
 
         effectMap.put( //Alchimous
                 UUID.fromString("b2327e92-0a3c-4a8e-9cc0-fba3b101c268"),
-                new PatreonEffect(FlareColor.STANDARD));
+                new PtEffectFixedSprite(
+                        FlareColor.STANDARD,
+                        new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo3", 4, 8)
+                ).setPositionFunction(player ->
+                        Vector3.atEntityCenter(player).setY((player.posY + 48 < 256) ? player.posY + 48 : 256)));
 
         effectMap.put( //Superfrogman98
                 UUID.fromString("34b89066-05d7-467f-b439-8f037699713d"),
@@ -83,9 +92,9 @@ public class PatreonEffectHelper {
                 UUID.fromString("f833e145-d6bb-4fc6-889f-7d6aaf70e5a6"),
                 new PatreonEffect(FlareColor.ELDRITCH));
 
-        effectMap.put( //Corsaka
-                UUID.fromString("edc5008d-17e0-413d-ad82-3e57ae088cd7"),
-                new PatreonEffect(FlareColor.ELDRITCH));
+        //effectMap.put( //Corsaka
+        //        UUID.fromString("edc5008d-17e0-413d-ad82-3e57ae088cd7"),
+        //        new PatreonEffect(FlareColor.ELDRITCH));
 
         effectMap.put( //Mekle
                 UUID.fromString("12d35783-db25-49cb-8ede-4530ea256864"),
@@ -95,9 +104,9 @@ public class PatreonEffectHelper {
                 UUID.fromString("c6857827-1b26-497a-bf66-1ff0fae06499"),
                 new PatreonEffect(FlareColor.MAGENTA));
 
-        effectMap.put( //Beariserious
-                UUID.fromString("4a175294-0b50-4a56-88aa-e6adf8c25c50"),
-                new PtEffectFloatingCrystal(new Color(0x9C1D15), new TextureQuery(AssetLoader.TextureLocation.MODELS, "crystal_big_red")));
+        //effectMap.put( //Beariserious
+        //        UUID.fromString("4a175294-0b50-4a56-88aa-e6adf8c25c50"),
+        //        new PtEffectFloatingCrystal(new Color(0x9C1D15), new TextureQuery(AssetLoader.TextureLocation.MODELS, "crystal_big_red")));
 
         effectMap.put( //Febilian
                 UUID.fromString("dce1900d-0761-4471-9a09-48b575c03457"),
@@ -107,9 +116,9 @@ public class PatreonEffectHelper {
                 UUID.fromString("cd3f01ee-8930-49f3-b3e6-05348338b359"),
                 new PatreonEffect(FlareColor.STANDARD));
 
-        effectMap.put( //Flashwar
-                UUID.fromString("e3ec1c24-817a-4879-880a-edce0d980699"),
-                new PatreonEffect(FlareColor.YELLOW));
+        //effectMap.put( //Flashwar
+        //        UUID.fromString("e3ec1c24-817a-4879-880a-edce0d980699"),
+        //        new PatreonEffect(FlareColor.YELLOW));
 
         effectMap.put( //Symphonized
                 UUID.fromString("9bfa115e-192b-4c0b-9877-09cae57c8432"),
@@ -119,17 +128,17 @@ public class PatreonEffectHelper {
                 UUID.fromString("f09e0917-486d-4d4d-9687-32f1b3908edd"),
                 new PatreonEffect(FlareColor.ELDRITCH));
 
-        effectMap.put( //Psyvana
-                UUID.fromString("82cd3eeb-e987-4187-afba-c8017416af5e"),
-                new PatreonEffect(FlareColor.BLUE));
+        //effectMap.put( //Psyvana
+        //        UUID.fromString("82cd3eeb-e987-4187-afba-c8017416af5e"),
+        //        new PatreonEffect(FlareColor.BLUE));
 
-        effectMap.put( //NikoLoki
-                UUID.fromString("b166b8f4-4900-4e4e-b1d6-3496df86f247"),
-                new PatreonEffect(FlareColor.WHITE));
+        //effectMap.put( //NikoLoki
+        //        UUID.fromString("b166b8f4-4900-4e4e-b1d6-3496df86f247"),
+        //        new PatreonEffect(FlareColor.WHITE));
 
-        effectMap.put( //Gyrhunt
-                UUID.fromString("65e97a7c-87c1-412c-b173-76d4aeefbfcd"),
-                new PatreonEffect(FlareColor.EARTH));
+        //effectMap.put( //Gyrhunt
+        //        UUID.fromString("65e97a7c-87c1-412c-b173-76d4aeefbfcd"),
+        //        new PatreonEffect(FlareColor.EARTH));
 
         effectMap.put( //VallenFrostweavr
                 UUID.fromString("564267c7-2ad2-4059-866a-6ca980b32777"),
@@ -154,9 +163,61 @@ public class PatreonEffectHelper {
                         .setDrainColor(0xFFFF0000)
                         .setTreeColor(0xFFC30711));
 
-        effectMap.put( // Kittenplays01 / Kittenplays01
-                UUID.fromString("ac71a42e-fa17-4d54-a1ae-57928fdbead0"),
+        effectMap.put( //Peteparker_ / ???
+                UUID.fromString("1268d40d-ce09-4f1f-80f3-1856d1df27e9"),
+                new PatreonEffect(FlareColor.BLUE));
+
+        effectMap.put( //Justfines / Justfines
+                UUID.fromString("f3c927d4-c55d-4c36-881e-8ddd3d07c961"),
+                new PatreonEffect(FlareColor.FIRE));
+
+        effectMap.put( //MineForFish / MineForFish
+                UUID.fromString("42270669-9ae8-4d0e-a7a0-a32f3467d01d"),
+                new PatreonEffect(FlareColor.WATER));
+
+        effectMap.put( //Choco / chocopufs
+                UUID.fromString("00c760f0-cfaf-4943-9f90-8cc91159c52f"),
+                new PatreonEffect(FlareColor.ELDRITCH));
+
+        effectMap.put( // Dayyer1 / Dayyer1
+                UUID.fromString("b4650227-6f4a-4e4c-9333-d1a552203967"),
+                new PatreonEffect(FlareColor.GOLD));
+
+        effectMap.put( // KirinDave / ⛈9
+                UUID.fromString("99a814a0-bff4-4526-bee6-4af5c74a6824"),
+                new PatreonEffect(FlareColor.WATER));
+
+        effectMap.put( //Lt1489 / Lt1489
+                UUID.fromString("3feaa8f8-d33a-4cd8-9a8a-61688521ad83"),
                 new PatreonEffect(FlareColor.STANDARD));
+
+        effectMap.put( // Tech_Fusion / Tech_Fusion
+                UUID.fromString("888a05af-a088-4cbf-9b2a-8c68b2d72d85"),
+                new PtEffectFloatingFlareCrystal(
+                        new Color(0xb711a9),
+                        FlareColor.ELDRITCH,
+                        new TextureQuery(AssetLoader.TextureLocation.MODELS, "crystal_big_magenta")));
+
+        effectMap.put( // FryoKnight / FryoKnight
+                UUID.fromString("9f3af5de-97fe-4bad-b98a-5fb47e248360"),
+                new PtEffectDynColorFlare(() ->
+                        Color.getHSBColor(PtEffectDynColorFlare.getClientTick() % 360 / 360F, 1F, 1F)));
+
+        effectMap.put( // Jomeaga / Jomeaga
+                UUID.fromString("d5bd69b8-e261-4d97-8232-da714c94b6d9"),
+                new PatreonEffect(FlareColor.EARTH));
+
+        effectMap.put( // Powderedsnaek / ?
+                UUID.fromString("03c4b331-5fb6-4911-b95a-8cde87563f4a"),
+                new PatreonEffect(FlareColor.MAGENTA));
+
+        effectMap.put( // YuriYumite / Юлия Белинская
+                UUID.fromString("82e53ab2-d2b4-4d5b-829d-548caff15d0e"),
+                new PatreonEffect(FlareColor.MAGENTA));
+
+        effectMap.put(
+                UUID.fromString("7ff223d6-3878-4cd2-ac7d-32828ec829a8"),
+                new PatreonEffect(FlareColor.BLUE));
     }
 
     @Nullable
@@ -196,7 +257,7 @@ public class PatreonEffectHelper {
         @Nullable
         public PatreonPartialEntity createEntity(UUID playerUUID) {
             if (hasPartialEntity()) {
-                return new PartialEntityFlare(this.chosenColor, playerUUID);
+                return new PartialEntityFlare(getChosenColor(), playerUUID);
             }
             return null;
         }

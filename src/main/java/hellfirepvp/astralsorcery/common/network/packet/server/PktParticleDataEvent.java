@@ -98,7 +98,8 @@ public class PktParticleDataEvent implements IMessage, IMessageHandler<PktPartic
         @SideOnly(Side.CLIENT)
         private static EventAction getClientTrigger(ParticleType type) {
             switch (type) {
-
+                default:
+                    break;
             }
             return null;
         }

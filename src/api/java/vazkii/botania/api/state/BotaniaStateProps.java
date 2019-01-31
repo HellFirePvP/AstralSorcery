@@ -10,7 +10,6 @@ package vazkii.botania.api.state;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailPowered;
 import net.minecraft.block.BlockRotatedPillar;
@@ -22,24 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import vazkii.botania.api.item.IFloatingFlower;
-import vazkii.botania.api.state.enums.AlfPortalState;
-import vazkii.botania.api.state.enums.AltGrassVariant;
-import vazkii.botania.api.state.enums.AltarVariant;
-import vazkii.botania.api.state.enums.BiomeBrickVariant;
-import vazkii.botania.api.state.enums.BiomeStoneVariant;
-import vazkii.botania.api.state.enums.CratePattern;
-import vazkii.botania.api.state.enums.CrateVariant;
-import vazkii.botania.api.state.enums.CustomBrickVariant;
-import vazkii.botania.api.state.enums.DrumVariant;
-import vazkii.botania.api.state.enums.LivingRockVariant;
-import vazkii.botania.api.state.enums.LivingWoodVariant;
-import vazkii.botania.api.state.enums.LuminizerVariant;
-import vazkii.botania.api.state.enums.PlatformVariant;
-import vazkii.botania.api.state.enums.PoolVariant;
-import vazkii.botania.api.state.enums.PylonVariant;
-import vazkii.botania.api.state.enums.QuartzVariant;
-import vazkii.botania.api.state.enums.SpreaderVariant;
-import vazkii.botania.api.state.enums.StorageVariant;
+import vazkii.botania.api.state.enums.*;
 
 /**
  * Holds all Botania block state properties. Use these to set botania blockstates

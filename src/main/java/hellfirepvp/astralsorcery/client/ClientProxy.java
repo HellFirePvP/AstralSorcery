@@ -9,25 +9,31 @@
 package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationCluster;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalKnowledgeIndex;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.gui.journal.bookmark.BookmarkProvider;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.render.entity.*;
 import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.JournalRecipeDisplayRecovery;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
-import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
 import hellfirepvp.astralsorcery.client.util.item.ItemRendererFilteredTESR;
 import hellfirepvp.astralsorcery.client.util.mappings.ClientJournalMapping;
-import hellfirepvp.astralsorcery.client.util.mappings.ClientPerkTextureMapping;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.word.RandomWordGenerator;
 import hellfirepvp.astralsorcery.common.CommonProxy;
@@ -42,6 +48,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
@@ -101,6 +108,9 @@ public class ClientProxy extends CommonProxy {
     public static boolean connected = false;
     private final ClientScheduler scheduler = new ClientScheduler();
 
+    private static List<RenderInfoBlock> blockRegister = new ArrayList<>();
+    private static List<RenderInfoItem> itemRegister = new ArrayList<>();
+
     @Override
     public void setupConfiguration() {
         super.setupConfiguration();
@@ -124,7 +134,6 @@ public class ClientProxy extends CommonProxy {
 
         RandomWordGenerator.init();
         CraftingAccessManager.ignoreJEI = false;
-        PersistentDataManager.INSTANCE.init(FileStorageUtil.getGeneralSubDirectory("astralsorcery_persistent"));
     }
 
     @SubscribeEvent
@@ -172,6 +181,10 @@ public class ClientProxy extends CommonProxy {
     public void init() {
         super.init();
 
+        PersistentDataManager.INSTANCE.init(FileStorageUtil.getGeneralSubDirectory("astralsorcery_persistent"));
+
+        GuiJournalPerkTree.initializeDrawBuffer();
+
         registerPendingIBlockColorBlocks();
         registerPendingIItemColorItems();
 
@@ -179,6 +192,21 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new ClientConnectionEventHandler());
         MinecraftForge.EVENT_BUS.register(EffectHandler.getInstance());
         MinecraftForge.EVENT_BUS.register(new ClientGatewayHandler());
+
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.research.name", 10,
+                GuiJournalProgression::getJournalInstance,
+                () -> true));
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.constellations.name", 20,
+                GuiJournalConstellationCluster::getConstellationScreen,
+                () -> !ResearchManager.clientProgress.getSeenConstellations().isEmpty()));
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.perks.name", 30,
+                GuiJournalPerkTree::new,
+                () -> ResearchManager.clientProgress.getAttunedConstellation() != null));
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.knowledge.name", 40,
+                GuiJournalKnowledgeIndex::new,
+                () -> !((KnowledgeFragmentData) PersistentDataManager.INSTANCE
+                        .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS))
+                        .getAllFragments().isEmpty()));
     }
 
     @Override
@@ -190,7 +218,6 @@ public class ClientProxy extends CommonProxy {
         //TexturePreloader.doPreloadRoutine();
 
         ClientJournalMapping.init();
-        ClientPerkTextureMapping.init();
         OBJModelLibrary.init();
 
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ItemColorizationHelper.instance);
@@ -221,7 +248,6 @@ public class ClientProxy extends CommonProxy {
 
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCollectorCrystal), new TESRCollectorCrystal());
-        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCrystals), new TESRCelestialCrystals());
 
         if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.registerGeolosysSampleItemRenderer();
@@ -248,7 +274,6 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileAltar.class, new TESRAltar());
         registerTESR(TileRitualPedestal.class, new TESRRitualPedestal());
         registerTESR(TileCollectorCrystal.class, new TESRCollectorCrystal());
-        registerTESR(TileCelestialCrystals.class, new TESRCelestialCrystals());
         registerTESR(TileWell.class, new TESRWell());
         registerTESR(TileGrindstone.class, new TESRGrindstone());
         registerTESR(TileTelescope.class, new TESRTelescope());
@@ -388,9 +413,6 @@ public class ClientProxy extends CommonProxy {
     public void registerItemRender(Item item, int metadata, String name, boolean variant) {
         itemRegister.add(new RenderInfoItem(item, metadata, name, variant));
     }
-
-    private static List<RenderInfoBlock> blockRegister = new ArrayList<>();
-    private static List<RenderInfoItem> itemRegister = new ArrayList<>();
 
     private static class RenderInfoBlock {
 

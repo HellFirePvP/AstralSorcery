@@ -41,7 +41,7 @@ public class ConstellationInstance extends AbstractCriterionInstance {
         if (constellationMajor && !(discovered instanceof IMajorConstellation)) {
             return false;
         }
-        if (constellationWeak && !(discovered instanceof IWeakConstellation)) {
+        if (constellationWeak && (!(discovered instanceof IWeakConstellation) || discovered instanceof IMajorConstellation)) {
             return false;
         }
         if (constellationMinor && !(discovered instanceof IMinorConstellation)) {

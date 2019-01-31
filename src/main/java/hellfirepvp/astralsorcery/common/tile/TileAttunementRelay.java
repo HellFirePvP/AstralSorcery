@@ -14,9 +14,13 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.item.ItemStack;
@@ -34,13 +38,14 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 27.03.2017 / 17:53
  */
-public class TileAttunementRelay extends TileInventoryBase {
+public class TileAttunementRelay extends TileInventoryBase implements IMultiblockDependantTile {
 
     private static final float MAX_DST = (float) (Math.sqrt(Math.sqrt(2.0D) + 1) * 16.0D);
 
     private BlockPos linked = null;
     private float collectionMultiplier = 1F;
 
+    private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private boolean canSeeSky = false, hasMultiblock = false;
 
     public TileAttunementRelay() {
@@ -66,12 +71,10 @@ public class TileAttunementRelay extends TileInventoryBase {
             updateSkyState();
         }
 
-        if((ticksExisted & 31) == 0) {
-            updateMultiblockState();
-        }
-
         ItemStack slotted = getInventoryHandler().getStackInSlot(0);
         if(!world.isRemote) {
+            updateMultiblockState();
+
             if(!slotted.isEmpty()) {
                 if(!world.isAirBlock(pos.up())) {
                     ItemStack in = getInventoryHandler().getStackInSlot(0);
@@ -142,10 +145,13 @@ public class TileAttunementRelay extends TileInventoryBase {
     }
 
     private void updateMultiblockState() {
-        boolean found = MultiBlockArrays.patternCollectorRelay.matches(world, getPos());
-        boolean update = hasMultiblock != found;
+        if (this.structureMatch == null) {
+            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
+        }
+        boolean found = this.structureMatch.matches(getWorld());
+        boolean update = this.hasMultiblock != found;
         this.hasMultiblock = found;
-        if(update) {
+        if (update) {
             markForUpdate();
         }
     }
@@ -154,7 +160,7 @@ public class TileAttunementRelay extends TileInventoryBase {
         boolean seesSky = world.canSeeSky(getPos());
         boolean update = canSeeSky != seesSky;
         this.canSeeSky = seesSky;
-        if(update) {
+        if (update) {
             markForUpdate();
         }
     }
@@ -189,6 +195,17 @@ public class TileAttunementRelay extends TileInventoryBase {
         } else {
             linked = null;
         }
+    }
+
+    @Nullable
+    @Override
+    public PatternBlockArray getRequiredStructure() {
+        return MultiBlockArrays.patternCollectorRelay;
+    }
+
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
     }
 
 }

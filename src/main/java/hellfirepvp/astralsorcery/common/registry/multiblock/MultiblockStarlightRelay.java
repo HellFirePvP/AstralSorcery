@@ -8,12 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.registry.multiblock;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,6 +27,7 @@ import net.minecraft.block.state.IBlockState;
 public class MultiblockStarlightRelay extends PatternBlockArray {
 
     public MultiblockStarlightRelay() {
+        super(new ResourceLocation(AstralSorcery.MODID, "pattern_starlight_relay"));
         load();
     }
 

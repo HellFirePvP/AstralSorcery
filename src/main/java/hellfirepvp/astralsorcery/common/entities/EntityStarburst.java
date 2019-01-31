@@ -16,13 +16,11 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.effect.CelestialStrike;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -122,6 +120,8 @@ public class EntityStarburst extends EntityThrowable {
                 case 2:
                     particle.setColor(new Color(0x0078FF));
                     break;
+                default:
+                    break;
             }
         }
         if(ticksExisted % 12 == 0) {
@@ -145,6 +145,8 @@ public class EntityStarburst extends EntityThrowable {
                     case 2:
                         particle.setColor(new Color(0x3A4ABD));
                         break;
+                    default:
+                        break;
                 }
             }
         }
@@ -160,6 +162,8 @@ public class EntityStarburst extends EntityThrowable {
             case 2:
                 particle.setColor(new Color(0x0078FF));
                 break;
+            default:
+                break;
         }
         particle = EffectHelper.genericFlareParticle(posX + motionX / 2F, posY + motionY / 2F, posZ + motionZ / 2F);
         particle.scale(0.6F);
@@ -172,6 +176,8 @@ public class EntityStarburst extends EntityThrowable {
                 break;
             case 2:
                 particle.setColor(new Color(0x0078FF));
+                break;
+            default:
                 break;
         }
     }

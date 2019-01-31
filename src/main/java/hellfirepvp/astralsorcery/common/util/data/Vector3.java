@@ -11,10 +11,7 @@ package hellfirepvp.astralsorcery.common.util.data;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.*;
 
 import java.util.Random;
 
@@ -82,6 +79,14 @@ public class Vector3 {
     public static Vector3 atEntityCenter(Entity entity) {
         Vector3 offset = atEntityCorner(entity);
         return offset.add(entity.width / 2, entity.height / 2, entity.width / 2);
+    }
+
+    public static Vector3 getMin(AxisAlignedBB box) {
+        return new Vector3(box.minX, box.minY, box.minZ);
+    }
+
+    public static Vector3 getMax(AxisAlignedBB box) {
+        return new Vector3(box.maxX, box.maxY, box.maxZ);
     }
 
     public Vector3 add(Vec3i vec) {
@@ -417,6 +422,10 @@ public class Vector3 {
 
     public BlockPos toBlockPos() {
         return new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
+    }
+
+    public ChunkPos toChunkPos() {
+        return new ChunkPos(MathHelper.floor(x) >> 4, MathHelper.floor(z) >> 4);
     }
 
     public Vector3 vectorFromHereTo(Vector3 target) {

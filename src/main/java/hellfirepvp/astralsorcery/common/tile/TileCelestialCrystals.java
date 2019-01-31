@@ -22,10 +22,10 @@ import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -44,9 +44,11 @@ public class TileCelestialCrystals extends TileSkybound {
     //Just in case you wonder. i do have a reason to control growth in the TileEntity other than just in the block itself.
 
     private static final Random rand = new Random();
-    private static Vector3[] crystalEffectPositions = new Vector3[] {
-            new Vector3(0.5, 0.5, 0.5)
-    };
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return oldState.getBlock() != newSate.getBlock();
+    }
 
     public int getGrowth() {
         IBlockState state = world.getBlockState(getPos());

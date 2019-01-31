@@ -23,19 +23,20 @@ import hellfirepvp.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
 import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.block.BlockBoreHead;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
+import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
-import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
-import hellfirepvp.astralsorcery.common.util.EntityUtils;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.VerticalConeBlockDiscoverer;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -75,8 +76,10 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     private static int SEGMENT_STARTUP = 60,
                         SEGMENT_PREPARATION = 200;
 
-    private SimpleSingleFluidCapabilityTank tank;
+    private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private boolean hasMultiblock = false;
+
+    private SimpleSingleFluidCapabilityTank tank;
     private int operationTicks = 0;
     private int mbStarlight = 0;
 
@@ -110,11 +113,9 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     public void update() {
         super.update();
 
-        if((ticksExisted & 31) == 0) {
-            updateMultiblockState();
-        }
-
         if(!world.isRemote) {
+            updateMultiblockState();
+
             if(mbStarlight <= 12000 && getCurrentBoreType() != null) {
                 TileChalice tc = MiscUtils.getTileAt(world, getPos().up(), TileChalice.class, false);
                 if(tc != null) {
@@ -171,6 +172,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                             }
                         }
                         break;
+                    default:
+                        break;
                 }
             }
         } else {
@@ -211,6 +214,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                     vortexExplosion();
                                 }
                                 break;
+                            default:
+                                break;
                         }
                         break;
                     case PRE_RUN:
@@ -224,8 +229,12 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                 playLowVortex();
                                 updateNoisePlane();
                                 break;
+                            default:
+                                break;
                         }
                         playArcs(1);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -684,7 +693,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<BlockPos> out = pos.stream().filter((p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null &&
                 world.getBlockState(p).getBlockHardness(world, p) >= 0).collect(Collectors.toList());
         if(!out.isEmpty() && world instanceof WorldServer) {
-            //TODO check drops again
+
             BlockDropCaptureAssist.startCapturing();
             try {
                 for (BlockPos p : out) {
@@ -742,41 +751,16 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     private void updateMultiblockState() {
-        boolean found = getRequiredStructure().matches(world, getPos());
-        if(found) {
-            found = doEmptyCheck();
+        if (this.structureMatch == null) {
+            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
         }
+
+        boolean found = this.structureMatch.matches(this.getWorld());
         boolean update = hasMultiblock != found;
         this.hasMultiblock = found;
         if(update) {
             markForUpdate();
         }
-    }
-
-    private boolean doEmptyCheck() {
-        for (int yy = -2; yy <= 2; yy++) {
-            for (int xx = -3; xx <= 3; xx++) {
-                for (int zz = -3; zz <= 3; zz++) {
-                    if(Math.abs(xx) == 3 && Math.abs(zz) == 3) continue; //corners
-                    BlockPos at = getPos().add(xx, yy, zz);
-                    if(xx == 0 && zz == 0) {
-                        switch (yy) {
-                            case -2: {
-                                if(!world.isAirBlock(at)) {
-                                    return false;
-                                }
-                                break;
-                            }
-                        }
-                    } else {
-                        if(!world.isAirBlock(at)) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        return true;
     }
 
     @SideOnly(Side.CLIENT)

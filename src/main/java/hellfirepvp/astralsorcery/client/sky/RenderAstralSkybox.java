@@ -124,6 +124,8 @@ public class RenderAstralSkybox extends IRenderHandler {
                 case 3:
                     l.resource = TEX_STAR_4;
                     break;
+                default:
+                    break;
             }
             GlStateManager.glNewList(l.glList, GL11.GL_COMPILE);
             l.resource.bind();
@@ -254,9 +256,6 @@ public class RenderAstralSkybox extends IRenderHandler {
             f1 = f4;
             f2 = f5;
         }
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vb = tessellator.getBuffer();
 
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();

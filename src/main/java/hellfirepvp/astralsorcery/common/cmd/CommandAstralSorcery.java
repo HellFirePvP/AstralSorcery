@@ -11,15 +11,15 @@ package hellfirepvp.astralsorcery.common.cmd;
 import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -28,7 +28,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 
@@ -44,6 +43,19 @@ import java.util.*;
  * Date: 07.05.2016 / 13:39
  */
 public class CommandAstralSorcery extends CommandBase {
+
+    private static final String[] COMMANDS = new String[]{
+            "help",
+            "constellations",
+            "research",
+            "progress",
+            "reset",
+            "exp",
+            "attune",
+            "build",
+            "maximize",
+            "slnetwork"
+    };
 
     private List<String> cmdAliases = new ArrayList<>();
 
@@ -77,26 +89,13 @@ public class CommandAstralSorcery extends CommandBase {
         return index == 1;
     }
 
-    private static final String[] COMMANDS = new String[]{
-            "help",
-            "constellations",
-            "research",
-            "progress",
-            "reset",
-            "exp",
-            "attune",
-            "build",
-            "maximize",
-            "slnetwork"
-    };
-
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, COMMANDS);
         } else {
             String identifier = args[0].toLowerCase();
-            if (identifier.equals("build")) {
+            if ("build".equals(identifier)) {
                 Field[] fields = MultiBlockArrays.class.getDeclaredFields();
                 List<String> names = new ArrayList<>(fields.length);
 
@@ -112,7 +111,7 @@ public class CommandAstralSorcery extends CommandBase {
             } else if (args.length == 3) {
                 switch (identifier) {
                     case "constellations": {
-                        List<String> names = new ArrayList<String>();
+                        List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
                             names.add(c.getUnlocalizedName());
                         }
@@ -120,24 +119,27 @@ public class CommandAstralSorcery extends CommandBase {
                         return getListOfStringsMatchingLastWord(args, names);
                     }
                     case "research": {
-                        List<String> names = new ArrayList<String>();
+                        List<String> names = new ArrayList<>();
                         for (ResearchProgression r : ResearchProgression.values()) {
                             names.add(r.name());
                         }
                         names.add("all");
                         return getListOfStringsMatchingLastWord(args, names);
-
                     }
                     case "progress":
-                        return getListOfStringsMatchingLastWord(args, "all");
-
+                        List<String> progressNames = new ArrayList<>();
+                        progressNames.add("all");
+                        progressNames.add("next");
+                        return getListOfStringsMatchingLastWord(args, progressNames);
                     case "attune": {
-                        List<String> names = new ArrayList<String>();
+                        List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getMajorConstellations()) {
                             names.add(c.getUnlocalizedName());
                         }
                         return getListOfStringsMatchingLastWord(args, names);
                     }
+                    default:
+                        break;
                 }
 
             }
@@ -154,11 +156,11 @@ public class CommandAstralSorcery extends CommandBase {
         }
         if (args.length >= 1) {
             String identifier = args[0];
-            if (identifier.equalsIgnoreCase("help")) {
+            if ("help".equalsIgnoreCase(identifier)) {
                 displayHelp(sender);
-            } else if (identifier.equalsIgnoreCase("slnetwork")) {
-                tryEnterSLNetworkDebugMode(server, sender);
-            } else if (identifier.equalsIgnoreCase("constellation") || identifier.equalsIgnoreCase("constellations")) {
+            } else if ("slnetwork".equalsIgnoreCase(identifier)) {
+                tryEnterSLNetworkDebugMode(sender);
+            } else if ("constellation".equalsIgnoreCase(identifier) || "constellations".equalsIgnoreCase(identifier)) {
                 if (args.length == 1) {
                     listConstellations(sender);
                 } else if (args.length == 2) {
@@ -166,35 +168,35 @@ public class CommandAstralSorcery extends CommandBase {
                 } else if (args.length == 3) {
                     addConstellations(server, sender, args[1], args[2]);
                 }
-            } else if(identifier.equalsIgnoreCase("research") || identifier.equalsIgnoreCase("res")) {
+            } else if("research".equalsIgnoreCase(identifier) || "res".equalsIgnoreCase(identifier)) {
                 if(args.length == 3) {
                     modifyResearch(server, sender, args[1], args[2]);
                 }
-            } else if (identifier.equalsIgnoreCase("progress") || identifier.equalsIgnoreCase("prog")) {
+            } else if ("progress".equalsIgnoreCase(identifier) || "prog".equalsIgnoreCase(identifier)) {
                 if(args.length <= 2) {
                     showProgress(server, sender, args.length == 1 ? sender.getName() : args[1]);
                 } else if(args.length == 3) {
                     modifyProgress(server, sender, args[1], args[2]);
                 }
-            } else if (identifier.equalsIgnoreCase("reset")) {
+            } else if ("reset".equalsIgnoreCase(identifier)) {
                 if (args.length == 2) {
                     wipeProgression(server, sender, args[1]);
                 }
-            } else if (identifier.equalsIgnoreCase("charge") || identifier.equalsIgnoreCase("exp")) {
+            } else if ("charge".equalsIgnoreCase(identifier) || "exp".equalsIgnoreCase(identifier)) {
                 if (args.length == 3) {
                     setExp(server, sender, args[1], args[2]);
                 }
-            } else if (identifier.equalsIgnoreCase("attune")) {
+            } else if ("attune".equalsIgnoreCase(identifier)) {
                 if(args.length == 3) {
                     attuneToConstellation(server, sender, args[1], args[2]);
                 }
-            } else if (identifier.equalsIgnoreCase("build")) {
+            } else if ("build".equalsIgnoreCase(identifier)) {
                 if(args.length == 2) {
-                    buildStruct(server, sender, args[1]);
+                    buildStruct(sender, args[1]);
                 } else {
                     RegistryStructures.init(); //Reload
                 }
-            } else if(identifier.equalsIgnoreCase("maximize")) {
+            } else if("maximize".equalsIgnoreCase(identifier)) {
                 if (args.length == 2) {
                     maxAll(server, sender, args[1]);
                 }
@@ -202,7 +204,7 @@ public class CommandAstralSorcery extends CommandBase {
         }
     }
 
-    private void tryEnterSLNetworkDebugMode(MinecraftServer server, ICommandSender sender) {
+    private void tryEnterSLNetworkDebugMode(ICommandSender sender) {
         if(!(sender instanceof EntityPlayer)) {
             sender.sendMessage(new TextComponentString("This command can only be executed by a player!"));
             return;
@@ -222,7 +224,6 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
 
         IMajorConstellation cst = ConstellationRegistry.getMajorConstellationByName(majorConstellationStr);
@@ -235,7 +236,7 @@ public class CommandAstralSorcery extends CommandBase {
         if(ResearchManager.setAttunedConstellation(other, cst)) {
             sender.sendMessage(new TextComponentString("§aSuccess! Player has been attuned to " + cst.getUnlocalizedName()));
         } else {
-            sender.sendMessage(new TextComponentString("§cFailed! Player specified doesn't seem to have a research progress!"));
+            sender.sendMessage(new TextComponentString("§cFailed! Player specified doesn't seem to have the research progress necessary!"));
         }
     }
 
@@ -244,12 +245,11 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
 
-        int chargeToSet;
+        long chargeToSet;
         try {
-            chargeToSet = Integer.parseInt(strCharge);
+            chargeToSet = Long.parseLong(strCharge);
         } catch (NumberFormatException exc) {
             sender.sendMessage(new TextComponentString("§cFailed! Alignment charge to set should be a number! " + strCharge));
             return;
@@ -267,10 +267,9 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayerMP other = prTuple.key;
 
-        if(research.equalsIgnoreCase("all")) {
+        if("all".equalsIgnoreCase(research)) {
             ResearchManager.forceMaximizeResearch(other);
             sender.sendMessage(new TextComponentString("§aSuccess!"));
         } else {
@@ -291,14 +290,13 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
 
         ResearchManager.forceMaximizeAll(other);
         sender.sendMessage(new TextComponentString("§aSuccess!"));
     }
 
-    private void buildStruct(MinecraftServer server, ICommandSender sender, String name) {
+    private void buildStruct(ICommandSender sender, String name) {
         BlockArray array;
         try {
             Field f = MultiBlockArrays.class.getDeclaredField(name);
@@ -347,7 +345,6 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayerMP other = prTuple.key;
 
         ResearchManager.wipeKnowledge(other);
@@ -359,26 +356,24 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
+        PlayerProgress prog = prTuple.value;
         EntityPlayer other = prTuple.key;
-        if(argument.equalsIgnoreCase("all")) {
+        if("all".equalsIgnoreCase(argument)) {
             if(!ResearchManager.maximizeTier(other)) {
                 sender.sendMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
             } else {
                 sender.sendMessage(new TextComponentString("§aMaximized ProgressionTier for " + otherPlayerName + " !"));
             }
-        }/* else {
-            Optional<ProgressionTier> did = ResearchManager.stepTier(other);
-            if(!did.isPresent()) {
-                sender.addChatMessage(new TextComponentString("§cCould not step Progress for " + otherPlayerName + " ! (Is already at max)"));
+        } else if ("next".equalsIgnoreCase(argument)) {
+            ProgressionTier tier = prog.getTierReached();
+            if (!tier.hasNextTier()) {
+                sender.sendMessage(new TextComponentString("§aPlayer " + otherPlayerName + " has already reached the highest tier!"));
             } else {
-                if(did.get() != null) {
-                    sender.addChatMessage(new TextComponentString("§aPlayer " + otherPlayerName + " advanced to Tier " + did.get().name() + "!"));
-                } else {
-                    sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
-                }
+                ProgressionTier next = tier.next();
+                ResearchManager.giveProgressionIgnoreFail(other, next);
+                sender.sendMessage(new TextComponentString("§aPlayer " + otherPlayerName + " advanced to Tier " + next.name() + "!"));
             }
-        }*/
+        }
     }
 
     private void showProgress(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
@@ -393,7 +388,7 @@ public class CommandAstralSorcery extends CommandBase {
 
         sender.sendMessage(new TextComponentString("§aProgression tier: " + progress.getTierReached().name()));
         sender.sendMessage(new TextComponentString("§aAttuned to: " + (progress.getAttunedConstellation() == null ? "<none>" : progress.getAttunedConstellation().getUnlocalizedName())));
-        sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(progress.getPerkExp()))));
+        sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + progress.getPerkLevel(other)));
         sender.sendMessage(new TextComponentString("§aUnlocked perks + unlock-level:"));
         for (AbstractPerk perk : progress.getAppliedPerks()) {
             sender.sendMessage(new TextComponentString("§7" + (perk.getUnlocalizedName() + ".name")));
@@ -423,9 +418,8 @@ public class CommandAstralSorcery extends CommandBase {
         if (prTuple == null) {
             return;
         }
-        PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
-        if (argument.equals("all")) {
+        if ("all".equals(argument)) {
             Collection<IConstellation> constellations = ConstellationRegistry.getAllConstellations();
             if (!ResearchManager.discoverConstellations(constellations, other)) {
                 sender.sendMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
@@ -454,7 +448,6 @@ public class CommandAstralSorcery extends CommandBase {
             return;
         }
         PlayerProgress progress = prTuple.value;
-        EntityPlayer other = prTuple.key;
         sender.sendMessage(new TextComponentString("§c" + otherPlayerName + " has discovered the constellations:"));
         if (progress.getKnownConstellations().size() == 0) {
             sender.sendMessage(new TextComponentString("§c NONE"));

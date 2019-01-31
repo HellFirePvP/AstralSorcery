@@ -16,7 +16,6 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
@@ -39,7 +38,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -78,15 +76,14 @@ public class ResearchManager {
         return progress;
     }
 
-    @Nullable
-    //Nonnull for server.
+    @Nonnull
     public static PlayerProgress getProgress(EntityPlayer player, Side side) {
         if(side == Side.CLIENT) {
             return clientProgress;
         } else if(player instanceof EntityPlayerMP) {
             return getProgress((EntityPlayerMP) player);
         } else {
-            return null;
+            throw new IllegalStateException("Called getProgress on neither server or client - what are you?");
         }
     }
 
@@ -114,6 +111,7 @@ public class ResearchManager {
     }
 
     public static void wipeKnowledge(EntityPlayerMP p) {
+        resetPerks(p);
         wipeFile(p);
         playerProgressServer.remove(p.getUniqueID());
         PktProgressionUpdate pkt = new PktProgressionUpdate();
@@ -227,10 +225,8 @@ public class ResearchManager {
 
         for (IConstellation c : csts) {
             progress.discoverConstellation(c.getUnlocalizedName());
+            AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
         }
-
-        //FIXME RE-ADD AFTER ADVANCEMENTS
-        //player.addStat(RegistryAchievements.achvDiscoverConstellation);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -242,9 +238,6 @@ public class ResearchManager {
         if(progress == null) return false;
 
         progress.discoverConstellation(c.getUnlocalizedName());
-
-        //FIXME RE-ADD AFTER ADVANCEMENTS
-        //player.addStat(RegistryAchievements.achvDiscoverConstellation);
 
         AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
 
@@ -290,7 +283,11 @@ public class ResearchManager {
 
     public static boolean setAttunedConstellation(EntityPlayer player, @Nullable IMajorConstellation constellation) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if (progress == null) return false;
+
+        if (constellation != null && !progress.getKnownConstellations().contains(constellation.getUnlocalizedName())) {
+            return false;
+        }
 
         Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
         for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
@@ -307,15 +304,28 @@ public class ResearchManager {
         if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
             NBTTagCompound data = new NBTTagCompound();
             root.onUnlockPerkServer(player, progress, data);
-            progress.putPerk(root, data);
+            progress.setPerkData(root, data);
             PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, root, false);
             PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(root, true), (EntityPlayerMP) player);
         }
 
         AdvancementTriggers.ATTUNE_SELF.trigger((EntityPlayerMP) player, constellation);
 
-        //FIXME RE-ADD AFTER ADVANCEMENTS
-        //player.addStat(RegistryAchievements.achvPlayerAttunement);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean setPerkData(EntityPlayer player, @Nonnull AbstractPerk perk, NBTTagCompound prevoiusData, NBTTagCompound newData) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+        if (!progress.hasPerkEffect(perk)) return false;
+
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
+        progress.setPerkData(perk, newData);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, prevoiusData, newData), (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -325,12 +335,12 @@ public class ResearchManager {
     public static boolean applyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
-        if (!progress.hasFreeAllocationPoint()) return false;
+        if (!progress.hasFreeAllocationPoint(player)) return false;
         if (progress.hasPerkUnlocked(perk)) return false;
 
         NBTTagCompound data = new NBTTagCompound();
         perk.onUnlockPerkServer(player, progress, data);
-        progress.putPerk(perk, data);
+        progress.setPerkData(perk, data);
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
@@ -413,7 +423,7 @@ public class ResearchManager {
 
         NBTTagCompound data = new NBTTagCompound();
         perk.onUnlockPerkServer(player, progress, data);
-        progress.putPerk(perk, data);
+        progress.setPerkData(perk, data);
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
@@ -460,7 +470,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean setExp(EntityPlayer player, int exp) {
+    public static boolean setExp(EntityPlayer player, long exp) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
 
@@ -477,7 +487,7 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
-        progress.modifyExp(exp);
+        progress.modifyExp(exp, player);
 
         AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
 
@@ -532,28 +542,23 @@ public class ResearchManager {
 
     private static void wipeFile(EntityPlayerMP player) {
         getPlayerFile(player).delete();
+        ResearchIOThread.cancelSave(player.getUniqueID());
     }
 
     public static void savePlayerKnowledge(EntityPlayerMP p) {
         if(!MiscUtils.isPlayerFakeMP(p)) {
-            savePlayerKnowledge(p.getUniqueID());
+            savePlayerKnowledge(p.getUniqueID(), false);
         }
     }
 
-    private static void savePlayerKnowledge(UUID pUUID) {
+    private static void savePlayerKnowledge(UUID pUUID, boolean force) {
         if (playerProgressServer.get(pUUID) == null) return;
-        File playerFile = getPlayerFile(pUUID);
-        try {
-            Files.copy(playerFile, getPlayerBackupFile(pUUID));
-        } catch (IOException exc) {
-            AstralSorcery.log.warn("Failed copying progress file contents to backup file!");
-            exc.printStackTrace();
+        PlayerProgress progress = playerProgressServer.get(pUUID);
+        if (force) {
+            ResearchIOThread.saveNow(pUUID, progress);
+        } else {
+            ResearchIOThread.saveProgress(pUUID, progress.copy());
         }
-        try {
-            NBTTagCompound cmp = new NBTTagCompound();
-            playerProgressServer.get(pUUID).store(cmp);
-            CompressedStreamTools.write(cmp, playerFile);
-        } catch (IOException e) {}
     }
 
     public static void loadPlayerKnowledge(EntityPlayerMP p) {
@@ -598,7 +603,7 @@ public class ResearchManager {
                 informPlayersAboutProgressionLoss(pUUID);
 
                 load_unsafeFromNBT(pUUID, null);
-                savePlayerKnowledge(pUUID);
+                savePlayerKnowledge(pUUID, true);
             }
         }
     }
@@ -660,21 +665,17 @@ public class ResearchManager {
     }
 
     public static void saveAndClearServerCache() {
-        playerProgressServer.keySet().forEach(ResearchManager::savePlayerKnowledge);
+        ResearchIOThread.saveAllPending();
         playerProgressServer.clear();
     }
 
-    /*public static void logoutResetClient(EntityPlayer player) {
-        PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
-        PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) player);
-    }*/
-
-    public static void recieveProgressFromServer(PktSyncKnowledge message) {
-        int currentLvl = clientProgress == null ? 0 : PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp()));
+    @SideOnly(Side.CLIENT)
+    public static void recieveProgressFromServer(PktSyncKnowledge message, EntityPlayer player) {
+        int currentLvl = clientProgress == null ? 0 : clientProgress.getPerkLevel(player);
         clientProgress = new PlayerProgress();
         clientProgress.receive(message);
         clientInitialized = true;
-        if(PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp())) > currentLvl) {
+        if (clientProgress.getPerkLevel(player) > currentLvl) {
             showBar();
         }
     }
@@ -720,11 +721,6 @@ public class ResearchManager {
     }
 
     private static void informCraft(EntityPlayer crafter, ItemStack crafted, Item itemCrafted, @Nullable Block iBlock) {
-
-        if(itemCrafted instanceof ItemHandTelescope) {
-            //FIXME RE-ADD AFTER ADVANCEMENTS
-            //crafter.addStat(RegistryAchievements.achvBuildHandTelescope);
-        }
         if(iBlock != null) {
             if(iBlock instanceof BlockAltar) {
                 giveProgressionIgnoreFail(crafter, ProgressionTier.BASIC_CRAFT);
@@ -744,12 +740,14 @@ public class ResearchManager {
                         giveProgressionIgnoreFail(crafter, ProgressionTier.TRAIT_CRAFT);
                         giveResearchIgnoreFail(crafter, ResearchProgression.RADIANCE);
                         break;
-                    case ENDGAME:
+                    case BRILLIANCE:
+                        giveProgressionIgnoreFail(crafter, ProgressionTier.BRILLIANCE);
+                        giveResearchIgnoreFail(crafter, ResearchProgression.BRILLIANCE);
+                        break;
+                    default:
                         break;
                 }
             }
-        } else {
-
         }
     }
 

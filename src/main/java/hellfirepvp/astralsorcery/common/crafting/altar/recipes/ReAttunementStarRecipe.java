@@ -17,10 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
-import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
-import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -78,6 +75,11 @@ public class ReAttunementStarRecipe extends TraitRecipe implements ISpecialCraft
     @Override
     public AbstractAltarRecipe copyNewEffectInstance() {
         return new ReAttunementStarRecipe(this.attuneCst);
+    }
+
+    @Override
+    public boolean needsStrictMatching() {
+        return true;
     }
 
     @Override

@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;

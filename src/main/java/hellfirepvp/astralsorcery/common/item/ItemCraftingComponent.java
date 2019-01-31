@@ -53,6 +53,8 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
         switch (type) {
             case STARDUST:
                 return true;
+            default:
+                break;
         }
         return super.hasCustomEntity(stack);
     }
@@ -73,6 +75,8 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
                     stardust.setOwner(((EntityItem) location).getOwner());
                 }
                 return stardust;
+            default:
+                break;
         }
         return null;
     }

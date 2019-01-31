@@ -219,6 +219,8 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     }
                 }
                 return rRec;
+            default:
+                break;
         }
         return null;
     }

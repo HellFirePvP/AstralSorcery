@@ -214,13 +214,6 @@ public class AltarRecipe extends BaseTweaker {
         addTraitAltarRecipe("ct/null", output, starlightRequired, craftingTickTime, inputs, iRequiredConstellationFocusName);
     }
 
-    private static boolean isEmpty(IIngredient[] inputs) {
-        for (IIngredient i : inputs) {
-            if(i != null) return false;
-        }
-        return true;
-    }
-
     private static boolean matchNeededSlots(IIngredient[] inputs, TileAltar.AltarLevel altarLevel) {
         int reqSlots;
         switch (altarLevel) {

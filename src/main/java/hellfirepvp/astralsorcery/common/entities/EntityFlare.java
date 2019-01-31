@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
@@ -144,7 +145,7 @@ public class EntityFlare extends EntityFlying {
                 if(Config.flareKillsBats && entityAge % 70 == 0 && rand.nextBoolean()) {
                     Entity closest = world.findNearestEntityWithinAABB(EntityBat.class, getEntityBoundingBox().grow(10), this);
                     if(closest != null && closest instanceof EntityBat && ((EntityBat) closest).getHealth() > 0 && !closest.isDead) {
-                        closest.attackEntityFrom(CommonProxy.dmgSourceStellar, 40F);
+                        DamageUtil.attackEntityFrom(closest, CommonProxy.dmgSourceStellar, 40F);
                         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.FLARE_PROC, new Vector3(posX, posY + this.height / 2, posZ));
                         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPosition(), 16));
                         AstralSorcery.proxy.fireLightning(world, Vector3.atEntityCenter(this), Vector3.atEntityCenter(closest), new Color(0, 0, 216));
@@ -189,7 +190,7 @@ public class EntityFlare extends EntityFlying {
                 }
 
                 if(getAttackTarget() != null && !getAttackTarget().isDead && getAttackTarget().getDistance(this) < 10 && rand.nextInt(40) == 0) {
-                    getAttackTarget().attackEntityFrom(CommonProxy.dmgSourceStellar, 5.5F);
+                    DamageUtil.attackEntityFrom(getAttackTarget(), CommonProxy.dmgSourceStellar, 5.5F);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.FLARE_PROC, new Vector3(posX, posY + this.height / 2, posZ));
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPosition(), 16));
                     AstralSorcery.proxy.fireLightning(world, Vector3.atEntityCenter(this), Vector3.atEntityCenter(getAttackTarget()), new Color(0, 0, 216));
@@ -268,18 +269,6 @@ public class EntityFlare extends EntityFlying {
         super.readEntityFromNBT(compound);
         this.entityAge = compound.getInteger("as_entityAge");
         this.isAmbient = compound.getBoolean("isSpawnedAmbient");
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void deathEffectsOngoing() {
-        for (int i = 0; i < 3; i++) {
-            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
-            particle.motion(-0.05 + rand.nextFloat() * 0.1, -0.05 + rand.nextFloat() * 0.1, -0.05 + rand.nextFloat() * 0.1);
-            particle.scale(0.1F + rand.nextFloat() * 0.2F).gravity(-0.02);
-            if(rand.nextBoolean()) {
-                particle.setColor(Color.WHITE);
-            }
-        }
     }
 
     @SideOnly(Side.CLIENT)

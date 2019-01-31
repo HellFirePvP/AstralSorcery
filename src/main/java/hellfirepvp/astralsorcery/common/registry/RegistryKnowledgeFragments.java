@@ -20,8 +20,8 @@ import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import net.minecraft.util.ResourceLocation;
 
-import static hellfirepvp.astralsorcery.common.data.research.ResearchProgression.findNode;
 import static hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment.*;
+import static hellfirepvp.astralsorcery.common.data.research.ResearchProgression.findNode;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -122,6 +122,8 @@ public class RegistryKnowledgeFragments {
                 return journalGui instanceof GuiJournalPerkTree;
             }
         }).setCanSeeTest(prog -> prog.getAttunedConstellation() != null);
+        mgr.register(onResearchNodes("fragment.perk_gems",
+                findNode("ATT_PERK_GEMS")));
     }
 
     private static void registerConstellationFragment(IConstellation cst) {

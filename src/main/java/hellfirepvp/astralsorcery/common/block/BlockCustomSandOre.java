@@ -87,6 +87,8 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
                     drops.add(ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
                 }
                 break;
+            default:
+                break;
         }
     }
 

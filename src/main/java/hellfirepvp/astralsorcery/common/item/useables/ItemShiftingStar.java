@@ -22,7 +22,6 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -154,7 +153,7 @@ public class ItemShiftingStar extends Item implements INBTModel {
                 }
                 double exp = prog.getPerkExp();
                 if (ResearchManager.setAttunedConstellation(pl, cst)) {
-                    ResearchManager.setExp(pl, (int) Math.floor(exp));
+                    ResearchManager.setExp(pl, MathHelper.lfloor(exp));
                     pl.sendMessage(new TextComponentTranslation("progress.switch.attunement").setStyle(new Style().setColor(TextFormatting.BLUE)));
                     SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldIn, entityLiving.getPosition(), 1F, 1F);
                 } else {

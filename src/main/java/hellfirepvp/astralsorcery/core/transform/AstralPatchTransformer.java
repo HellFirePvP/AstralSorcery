@@ -71,7 +71,6 @@ public class AstralPatchTransformer implements SubClassTransformer {
         if(load == 0) {
             AstralCore.log.info("[AstralTransformer] Found 0 Transformers! Trying to recover with direct references...");
             String[] references = new String[] {
-                    "hellfirepvp.astralsorcery.core.patch.helper.PatchBlockModify",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchApplyPotionEffectEvent",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchUpdateElytra",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevels",
@@ -81,7 +80,12 @@ public class AstralPatchTransformer implements SubClassTransformer {
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchSunBrightnessWorldCommon",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchEntityRendererExtendedEntityReach",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchServerExtendEntityInteractReach",
-                    "hellfirepvp.astralsorcery.core.patch.helper.PatchEntityLivingBaseWaterSlowDown"
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchEntityLivingBaseWaterSlowDown",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchPostProcessAttributes",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchAddPlayerAttribute",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchSetPlayerAttribute",
+
+                    "hellfirepvp.astralsorcery.core.patch.hook.PatchRunicShieldingHook"
             };
             for (String str : references) {
                 try {

@@ -73,7 +73,7 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
         AstralSorcery.proxy.scheduleClientside(() -> {
             if(message.isPresent) {
                 if(message.isProg) {
-                    addProgressChatMessage(message.tier);
+                    addProgressChatMessage();
                 } else {
                     addResearchChatMessage(message.tier);
                 }
@@ -105,7 +105,7 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
     }
 
     @SideOnly(Side.CLIENT)
-    private void addProgressChatMessage(int progId) {
+    private void addProgressChatMessage() {
         String out = TextFormatting.BLUE + I18n.format("progress.gain.progress.chat");
         Minecraft.getMinecraft().player.sendMessage(new TextComponentString(out));
     }

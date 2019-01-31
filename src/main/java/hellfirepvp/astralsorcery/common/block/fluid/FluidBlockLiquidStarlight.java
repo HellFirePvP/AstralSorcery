@@ -81,17 +81,17 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
     public void neighborChanged(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Block neighborBlock, @Nonnull BlockPos neighbourPos) {
         super.neighborChanged(state, world, pos, neighborBlock, neighbourPos);
 
-        interactWithAdjacent(world, pos, state);
+        interactWithAdjacent(world, pos);
     }
 
     @Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
         super.onBlockAdded(world, pos, state);
 
-        interactWithAdjacent(world, pos, state);
+        interactWithAdjacent(world, pos);
     }
 
-    private void interactWithAdjacent(World world, BlockPos pos, IBlockState thisState) {
+    private void interactWithAdjacent(World world, BlockPos pos) {
         boolean shouldCreateBlock = false;
         boolean isCold = true;
 

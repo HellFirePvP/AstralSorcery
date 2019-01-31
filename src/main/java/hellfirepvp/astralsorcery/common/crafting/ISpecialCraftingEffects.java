@@ -22,4 +22,8 @@ public interface ISpecialCraftingEffects {
 
     public AbstractAltarRecipe copyNewEffectInstance();
 
+    default public boolean needsStrictMatching() {
+        return false;
+    }
+
 }

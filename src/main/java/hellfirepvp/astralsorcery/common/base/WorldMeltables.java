@@ -54,7 +54,7 @@ public enum WorldMeltables implements MeltInteraction {
 
     @Override
     public boolean isMeltable(World world, BlockPos pos, IBlockState worldState) {
-        return meltableCheck.isStateValid(world, pos, worldState);
+        return meltableCheck.isStateValid(worldState);
     }
 
     @Override
@@ -120,7 +120,7 @@ public enum WorldMeltables implements MeltInteraction {
 
         @Override
         public boolean isMeltable(World world, BlockPos pos, IBlockState state) {
-            return matchInState.isStateValid(world, pos, state);
+            return matchInState.isStateValid(state);
         }
 
         @Nullable

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -40,6 +41,8 @@ public class AttributeTypeAttackSpeed extends VanillaAttributeType {
                 return ATTACK_SPEED_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return ATTACK_SPEED_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

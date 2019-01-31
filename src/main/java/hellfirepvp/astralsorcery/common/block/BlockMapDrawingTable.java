@@ -115,6 +115,8 @@ public class BlockMapDrawingTable extends BlockContainer {
                 case 11:
                     p.setColor(new Color(0xf0007B));
                     break;
+                default:
+                    break;
             }
         }
     }

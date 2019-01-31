@@ -95,6 +95,8 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                     TextureHelper.refreshTextureBindState();
                 }
                 break;
+            default:
+                break;
         }
 
         ActiveCraftingTask task = te.getActiveCraftingTask();

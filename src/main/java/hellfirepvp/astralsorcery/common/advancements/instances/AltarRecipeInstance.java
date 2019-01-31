@@ -12,7 +12,6 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
@@ -37,7 +36,7 @@ public class AltarRecipeInstance extends AbstractCriterionInstance {
     public static AltarRecipeInstance deserialize(ResourceLocation id, JsonObject json) {
         AltarRecipeInstance i = new AltarRecipeInstance(id);
         for (JsonElement je : JsonUtils.getJsonArray(json, "recipes")) {
-            if (!je.isJsonPrimitive() || je.getAsJsonPrimitive().isString()) {
+            if (!je.isJsonPrimitive() || !je.getAsJsonPrimitive().isString()) {
                 continue;
             }
             i.recipeNames.add(new ResourceLocation(je.getAsString()));

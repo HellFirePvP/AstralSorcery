@@ -30,7 +30,6 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,8 +39,6 @@ import java.util.Random;
  * Date: 01.08.2016 / 13:42
  */
 public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollectorCrystal> implements IItemRenderer {
-
-    private static final Random rand = new Random();
 
     private static final BindableResource texWhite = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_white");
     private static final BindableResource texBlue = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_blue");
@@ -121,6 +118,8 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
                 break;
             case CELESTIAL_CRYSTAL:
                 renderTile(texBlue);
+                break;
+            default:
                 break;
         }
         GlStateManager.popMatrix();

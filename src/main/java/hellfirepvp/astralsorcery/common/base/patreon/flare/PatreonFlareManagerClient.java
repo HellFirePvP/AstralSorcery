@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.base.patreon.flare;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFixedSprite;
 import hellfirepvp.astralsorcery.common.data.DataPatreonFlares;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -49,6 +51,13 @@ public class PatreonFlareManagerClient implements ITickHandler {
                 flare.tickInRenderDistance();
             }
             flare.update(clWorld);
+        }
+
+        for (EntityPlayer pl : clWorld.playerEntities) {
+            PatreonEffectHelper.PatreonEffect eff = PatreonEffectHelper.getEffect(Side.CLIENT, pl.getUniqueID());
+            if (eff != null && eff instanceof PtEffectFixedSprite) {
+                ((PtEffectFixedSprite) eff).doEffect(pl);
+            }
         }
     }
 

@@ -8,13 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary;
 
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.StorageNetworkBuffer;
 import hellfirepvp.astralsorcery.common.tile.TileStorageCore;
-import net.minecraft.util.math.AxisAlignedBB;
+import hellfirepvp.astralsorcery.common.tile.storage.StorageNetwork;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,11 +28,11 @@ import java.util.Map;
  */
 public class StorageNetworkHandler {
 
-    private static final AxisAlignedBB box = new AxisAlignedBB(-3, 0, -3, 3, 0, 3);
-    private static Map<Integer, MappingHandler> storageClusters = new HashMap<>();
+    //private static final AxisAlignedBB box = new AxisAlignedBB(-3, 0, -3, 3, 0, 3);
+    private static Map<Integer, NetworkHelper> mappingHelpers = new HashMap<>();
 
-    public static MappingHandler getHandler(World world) {
-        return storageClusters.computeIfAbsent(world.provider.getDimension(), id -> new MappingHandler());
+    public static NetworkHelper getHandler(World world) {
+        return mappingHelpers.computeIfAbsent(world.provider.getDimension(), id -> new NetworkHelper(world));
     }
 
     public static void clearHandler(World world) {
@@ -38,42 +40,33 @@ public class StorageNetworkHandler {
     }
 
     public static void clearHandler(int dimId) {
-        storageClusters.remove(dimId);
+        mappingHelpers.remove(dimId);
     }
 
-    public static class MappingHandler {
+    public static class NetworkHelper {
 
-        private List<StorageNetwork> clusters = new LinkedList<>();
+        private StorageNetworkBuffer buffer;
+
+        private NetworkHelper(World world) {
+            this.buffer = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STORAGE_BUFFER);
+        }
+
+        @Nullable
+        public StorageNetwork getNetwork(BlockPos networkMaster) {
+            return buffer.getNetwork(networkMaster);
+        }
 
         public void addCore(TileStorageCore core) {
-            //StorageNetworkBuffer net = WorldCacheManager.getOrLoadData(core.getWorld(),
-            //        WorldCacheManager.SaveKey.STORAGE_BUFFER);
-            //net.add(core);
-
             //TODO fusion logic
         }
 
         public void removeCore(TileStorageCore core) {
-            //StorageNetworkBuffer net = WorldCacheManager.getOrLoadData(core.getWorld(),
-            //        WorldCacheManager.SaveKey.STORAGE_BUFFER);
-            //net.remove(core);
-
             //TODO division logic
         }
 
     }
 
     public static class MappingChange {
-
-        public List<TileStorageCore> previousCores = new LinkedList<>();
-        public Map<TileStorageCore.StorageKey, TileStorageCore.StorageCache> contents = new HashMap<>();
-
-    }
-
-    public static class StorageNetwork {
-
-        private TileStorageCore master = null;
-        private List<TileStorageCore> cores = new LinkedList<>();
 
     }
 

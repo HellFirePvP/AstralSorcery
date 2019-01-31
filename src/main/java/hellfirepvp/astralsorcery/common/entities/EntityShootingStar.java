@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.entities;
 
-import com.google.common.collect.Iterables;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -107,7 +106,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         super.onUpdate();
 
         if (!world.isRemote) {
-            if ((removalPending || ConstellationSkyHandler.getInstance().isDay(world)) ||
+            if (removalPending || !ConstellationSkyHandler.getInstance().isNight(world) ||
                     world.getTotalWorldTime() - lastTrackedTick >= 20) {
                 setDead();
                 return;

@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
 import java.util.Random;
@@ -29,13 +28,9 @@ public class OrbitalEffectCollector implements OrbitalEffectController.OrbitPers
 
     private static final Random rand = new Random();
 
-    private final BlockPos thisPos;
-    private final int dim;
     private final Color colorOverride;
 
     public OrbitalEffectCollector(TileCollectorCrystal tile) {
-        this.thisPos = tile.getPos();
-        this.dim = tile.getWorld().provider.getDimension();
         this.colorOverride = tile.getConstellation().getConstellationColor();
     }
 

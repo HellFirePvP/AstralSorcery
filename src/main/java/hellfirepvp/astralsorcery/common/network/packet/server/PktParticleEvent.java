@@ -130,6 +130,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
 
         //DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
         COLLECTOR_BURST,
+        GEM_CRYSTAL_BURST,
         CELESTIAL_CRYSTAL_BURST,
         CELESTIAL_CRYSTAL_FORM,
         CRAFT_FINISH_BURST,
@@ -228,6 +229,10 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CapeEffectEvorsio::playAreaDamageParticles;
                 case TIME_FREEZE_EFFECT:
                     return TimeStopEffectHelper::playEntityParticles;
+                case GEM_CRYSTAL_BURST:
+                    return TileGemCrystals::playBreakParticles;
+                default:
+                    break;
             }
             return null;
         }

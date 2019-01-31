@@ -17,7 +17,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,6 +41,8 @@ import java.util.List;
  * Date: 05.01.2017 / 16:53
  */
 public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMultiblockDependantTile {
+
+    private static PatternBlockArray previewPatternCopy = null;
 
     private BlockPos linkedTo = null;
 
@@ -102,7 +104,14 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMu
     @Nullable
     @Override
     public PatternBlockArray getRequiredStructure() {
-        return MultiBlockArrays.patternRitualPedestalWithLink;
+        if (previewPatternCopy == null) {
+            previewPatternCopy = new PatternBlockArray(MultiBlockArrays.patternRitualPedestalWithLink.getRegistryName());
+            MultiBlockArrays.patternRitualPedestalWithLink.getPattern()
+                    .forEach((pos, info) -> previewPatternCopy.addBlock(pos.down(5), info.state, info.matcher));
+            MultiBlockArrays.patternRitualPedestalWithLink.getTileCallbacks()
+                    .forEach((pos, callback) -> previewPatternCopy.addTileCallback(pos.down(5), callback));
+        }
+        return previewPatternCopy;
     }
 
     @Nonnull

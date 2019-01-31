@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
-import hellfirepvp.astralsorcery.client.util.*;
+import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
+import hellfirepvp.astralsorcery.client.util.RenderConstellation;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -28,7 +31,6 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,7 +74,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
 
         drawHeader();
 
-        drawConstellation(partialTicks);
+        drawConstellation();
 
         drawPhaseInformation();
         GL11.glPopMatrix();
@@ -95,7 +97,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
         GL11.glColor4f(1, 1, 1, 1);
     }
 
-    private void drawConstellation(float parTicks) {
+    private void drawConstellation() {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderConstellation.renderConstellationIntoGUI(

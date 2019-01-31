@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAttunementRelay;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -55,7 +55,7 @@ public class BlockAttunementRelay extends BlockContainer {
         setHardness(0.5F);
         setHarvestLevel("pickaxe", 0);
         setResistance(1.0F);
-        setLightLevel(0.8F);
+        setLightLevel(0.25F);
         setSoundType(SoundType.GLASS);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
@@ -202,11 +202,6 @@ public class BlockAttunementRelay extends BlockContainer {
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
-    }
-
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override

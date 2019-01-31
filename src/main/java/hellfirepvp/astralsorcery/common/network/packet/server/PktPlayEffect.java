@@ -83,6 +83,8 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
                     return TileGrindstone::playWheelAnimation;
                 case BEAM_BREAK:
                     return BlockBreakAssist::blockBreakAnimation;
+                default:
+                    break;
             }
             return null;
         }

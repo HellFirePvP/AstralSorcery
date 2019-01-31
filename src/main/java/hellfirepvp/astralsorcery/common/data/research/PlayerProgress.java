@@ -19,17 +19,18 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -128,6 +129,13 @@ public class PlayerProgress {
                     }
                 }
             }
+
+            if (compound.hasKey("pointTokens")) {
+                NBTTagList list = compound.getTagList("pointTokens", Constants.NBT.TAG_STRING);
+                for (int i = 0; i < list.tagCount(); i++) {
+                    this.freePointTokens.add(list.getStringTagAt(i));
+                }
+            }
         }
 
         if (compound.hasKey("tierReached")) {
@@ -153,13 +161,6 @@ public class PlayerProgress {
                 if (to != null && !this.usedTargets.contains(to)) {
                     this.usedTargets.add(to);
                 }
-            }
-        }
-
-        if (compound.hasKey("pointTokens")) {
-            NBTTagList list = compound.getTagList("pointTokens", Constants.NBT.TAG_STRING);
-            for (int i = 0; i < list.tagCount(); i++) {
-                this.freePointTokens.add(list.getStringTagAt(i));
             }
         }
 
@@ -238,14 +239,9 @@ public class PlayerProgress {
         for (SextantFinder.TargetObject to : usedTargets) {
             listTargets.appendTag(new NBTTagString(to.getRegistryName()));
         }
-        NBTTagList listTokens = new NBTTagList();
-        for (String s : freePointTokens) {
-            listTokens.appendTag(new NBTTagString(s));
-        }
         cmp.setTag("constellations", list);
         cmp.setTag("seenConstellations", l);
         cmp.setTag("sextanttargets", listTargets);
-        cmp.setTag("pointTokens", listTokens);
         cmp.setInteger("tierReached", tierReached.ordinal());
         cmp.setBoolean("wasAttuned", wasOnceAttuned);
         int[] researchArray = new int[researchProgression.size()];
@@ -347,8 +343,18 @@ public class PlayerProgress {
     }
 
     @Nullable
-    protected NBTTagCompound getPerkData(AbstractPerk perk) {
-        return unlockedPerks.get(perk);
+    public NBTTagCompound getPerkData(AbstractPerk perk) {
+        NBTTagCompound tag = unlockedPerks.get(perk);
+        return tag == null ? null : tag.copy();
+    }
+
+    public void setPerkData(AbstractPerk perk, NBTTagCompound data) {
+        this.unlockedPerks.put(perk, data);
+    }
+
+    public boolean hasPerkEffect(Predicate<AbstractPerk> perkMatch) {
+        AbstractPerk perk = MiscUtils.iterativeSearch(unlockedPerks.keySet(), perkMatch);
+        return perk != null && hasPerkEffect(perk);
     }
 
     public boolean hasPerkEffect(AbstractPerk perk) {
@@ -361,10 +367,6 @@ public class PlayerProgress {
 
     public boolean isPerkSealed(AbstractPerk perk) {
         return sealedPerks.contains(perk);
-    }
-
-    public void putPerk(AbstractPerk perk, NBTTagCompound data) {
-        this.unlockedPerks.put(perk, data);
     }
 
     protected boolean removePerk(AbstractPerk perk) {
@@ -433,28 +435,36 @@ public class PlayerProgress {
         return Collections.unmodifiableList(freePointTokens);
     }
 
-    public int getAvailablePerkPoints() {
+    public int getAvailablePerkPoints(EntityPlayer player) {
         int allocatedPerks = this.unlockedPerks.size() - 1; //Root perk doesn't count
-        int allocationLevels = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(getPerkExp()));
+        int allocationLevels = PerkLevelManager.INSTANCE.getLevel(getPerkExp(), player);
         return (allocationLevels + this.freePointTokens.size()) - allocatedPerks;
     }
 
-    public boolean hasFreeAllocationPoint() {
-        return getAvailablePerkPoints() > 0;
+    public boolean hasFreeAllocationPoint(EntityPlayer player) {
+        return getAvailablePerkPoints(player) > 0;
     }
 
     public double getPerkExp() {
         return perkExp;
     }
 
-    protected void modifyExp(double exp) {
-        int currLevel = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(getPerkExp()));
-        if (exp >= 0 && currLevel >= PerkLevelManager.INSTANCE.getLevelCap()) {
+    public int getPerkLevel(EntityPlayer player) {
+        return PerkLevelManager.INSTANCE.getLevel(getPerkExp(), player);
+    }
+
+    public float getPercentToNextLevel(EntityPlayer player) {
+        return PerkLevelManager.INSTANCE.getNextLevelPercent(getPerkExp(), player);
+    }
+
+    protected void modifyExp(double exp, EntityPlayer player) {
+        int currLevel = PerkLevelManager.INSTANCE.getLevel(getPerkExp(), player);
+        if (exp >= 0 && currLevel >= PerkLevelManager.getLevelCapFor(player)) {
             return;
         }
-        int expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel);
-        int expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel + 1);
-        int cap = MathHelper.floor(((float) (expNextLevel - expThisLevel)) * 0.08F);
+        long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel, player);
+        long expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel + 1, player);
+        long cap = MathHelper.lfloor(((float) (expNextLevel - expThisLevel)) * 0.08F);
         if (exp > cap) {
             exp = cap;
         }
@@ -515,6 +525,14 @@ public class PlayerProgress {
         this.unlockedPerks = message.usedPerks;
         this.sealedPerks = message.sealedPerks;
         this.perkExp = message.perkExp;
+    }
+
+    protected PlayerProgress copy() {
+        PlayerProgress copy = new PlayerProgress();
+        NBTTagCompound saveData = new NBTTagCompound();
+        this.store(saveData);
+        copy.load(saveData);
+        return copy;
     }
 
     public void acceptMergeFrom(PlayerProgress toMergeFrom) {

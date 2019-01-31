@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.structure.BlockStructureObserver;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -39,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Created by HellFirePvP
  * Date: 28.11.2016 / 10:20
  */
-public class BlockAttunementAltar extends BlockContainer {
+public class BlockAttunementAltar extends BlockContainer implements BlockStructureObserver {
 
     public static final AxisAlignedBB boxAttunementAlar = new AxisAlignedBB(-2D / 16D, 0, -2D / 16D, 18D / 16D, 6D / 16D, 18D / 16D);
 

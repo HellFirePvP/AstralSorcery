@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -41,9 +41,9 @@ public class KeyProjectileDistance extends KeyPerk {
                 EntityPlayer player = (EntityPlayer) source.getTrueSource();
                 Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
                 PlayerProgress prog = ResearchManager.getProgress(player, side);
-                if (prog != null && prog.hasPerkEffect(this)) {
+                if (prog.hasPerkEffect(this)) {
                     float added = 0.75F;
-                    added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                    added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
 
                     float capDstSq = 6400; //80 * 80
                     float mul = ((float) (player.getDistanceSq(event.getEntityLiving()))) / capDstSq;

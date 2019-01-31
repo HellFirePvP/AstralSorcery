@@ -15,13 +15,16 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -94,15 +97,6 @@ public class ClientConstellationGenerator {
         return isIntersecting(sc1, sc2.from.asPoint()) || isIntersecting(sc1, sc2.to.asPoint());
     }
 
-    private static boolean isTouching(StarConnection part, Point p) {
-        StarConnection originPart = new StarConnection(
-                new StarLocation(0, 0),
-                new StarLocation(part.to.x - part.from.x, part.to.y - part.from.y));
-        Point originOffset = new Point(p.x - part.from.x, p.y - part.from.y);
-        int cr = cross(originPart.to.asPoint(), originOffset);
-        return Math.abs(cr) < 10;
-    }
-
     private static boolean isIntersecting(StarConnection part, Point p) {
         StarConnection originPart = new StarConnection(
                 new StarLocation(0, 0),
@@ -172,6 +166,11 @@ public class ClientConstellationGenerator {
                 return sc;
             }
             return null;
+        }
+
+        @Override
+        public boolean canDiscover(EntityPlayer player, PlayerProgress progress) {
+            return true;
         }
 
         @Override

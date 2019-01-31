@@ -70,7 +70,7 @@ public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> 
 
         @Override
         public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-            return capability == CAPABILITY_AMULET_HOLDER;
+            return capability.equals(CAPABILITY_AMULET_HOLDER);
         }
 
         @Nullable

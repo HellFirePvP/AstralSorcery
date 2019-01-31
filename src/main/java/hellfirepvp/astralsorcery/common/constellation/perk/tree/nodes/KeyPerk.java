@@ -8,10 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.AttributeModifierPerk;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -19,16 +15,11 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.AttributeM
  * Created by HellFirePvP
  * Date: 17.07.2018 / 18:24
  */
-public class KeyPerk extends AttributeModifierPerk {
+public class KeyPerk extends MajorPerk {
     
     public KeyPerk(String name, int x, int y) {
         super(name, x, y);
         setCategory(CATEGORY_KEY);
-    }
-
-    @Override
-    public PerkTreePoint getPoint() {
-        return new PerkTreeMajor(this, this.getOffset());
     }
 
 }

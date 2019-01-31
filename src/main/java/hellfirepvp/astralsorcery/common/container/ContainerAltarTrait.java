@@ -24,7 +24,7 @@ public class ContainerAltarTrait extends ContainerAltarConstellation {
     protected ConstellationFocusSlot focusSlot;
 
     public ContainerAltarTrait(InventoryPlayer playerInv, TileAltar tileAltar) {
-        super(playerInv, tileAltar);
+        super(playerInv, tileAltar, 25);
     }
 
     @Override

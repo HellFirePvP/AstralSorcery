@@ -8,25 +8,27 @@
 
 package hellfirepvp.astralsorcery.client.gui.journal;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationCluster;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalKnowledgeIndex;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
+import hellfirepvp.astralsorcery.client.gui.journal.bookmark.BookmarkProvider;
 import hellfirepvp.astralsorcery.client.gui.journal.overlay.GuiJournalOverlayKnowledge;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
-import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
-import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
-import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -38,9 +40,8 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,20 +55,26 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
     public static final BindableResource textureResBlank      = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijblankbook");
     public static final BindableResource textureResShell      = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspacebook");
     public static final BindableResource textureResShellCst   = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspaceconstellation");
-    public static final BindableResource textureBookmark      = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmark");
-    public static final BindableResource textureBookmarkStr   = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmarkstretched");
     public static final BindableResource textureKnBookmark    = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiknowledgebookmark");
     public static final BindableResource textureKnBookmarkStr = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiknowledgebookmarkstretched");
 
     protected final int bookmarkIndex;
 
-    protected Rectangle rectResearchBookmark, rectConstellationBookmark, rectPerkMapBookmark, rectKnowledgeBookmark;
+    protected static List<BookmarkProvider> bookmarks = Lists.newLinkedList();
+
+    protected Map<Rectangle, BookmarkProvider> drawnBookmarks = Maps.newHashMap();
     protected Collection<KnowledgeFragment> fragmentList = null;
     protected Map<Rectangle, KnowledgeFragment> pageFragments = Maps.newHashMap();
 
     public GuiScreenJournal(int bookmarkIndex) {
         super(270, 420);
         this.bookmarkIndex = bookmarkIndex;
+    }
+
+    public static boolean addBookmark(BookmarkProvider bookmarkProvider) {
+        int index = bookmarkProvider.getIndex();
+        return !MiscUtils.contains(bookmarks, bm -> bm.getIndex() == index) &&
+                bookmarks.add(bookmarkProvider);
     }
 
     private void resolveFragments() {
@@ -92,10 +99,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         if (fragmentList == null) {
             resolveFragments();
         }
-        rectResearchBookmark = null;
-        rectConstellationBookmark = null;
-        rectPerkMapBookmark = null;
-        rectKnowledgeBookmark = null;
+        drawnBookmarks.clear();
 
         GL11.glPushMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -109,44 +113,19 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         double offsetX = guiLeft + guiWidth - 17.25;
         double offsetY = guiTop  + 20;
 
-        rectResearchBookmark = drawBookmark(
-                offsetX, offsetY,
-                bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 0 ? 0 : 5),
-                zLevel,
-                "gui.journal.bm.research.name", 0xDDDDDDDD,
-                mousePoint, textureBookmark, textureBookmarkStr);
+        bookmarks.sort(Comparator.comparing(BookmarkProvider::getIndex));
 
-        if(!ResearchManager.clientProgress.getSeenConstellations().isEmpty()) {
-            offsetY += bookmarkGap;
-            rectConstellationBookmark = drawBookmark(
-                    offsetX, offsetY,
-                    bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 1 ? 0 : 5),
-                    zLevel,
-                    "gui.journal.bm.constellations.name", 0xDDDDDDDD,
-                    mousePoint, textureBookmark, textureBookmarkStr);
-        }
-
-        //TODO ? if(ResearchManager.clientProgress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT))
-        IMajorConstellation attuned = ResearchManager.clientProgress.getAttunedConstellation();
-        if(attuned != null) {
-            offsetY += bookmarkGap;
-            rectPerkMapBookmark = drawBookmark(
-                    offsetX, offsetY,
-                    bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 2 ? 0 : 5),
-                    zLevel,
-                    "gui.journal.bm.perks.name", 0xDDDDDDDD,
-                    mousePoint, textureBookmark, textureBookmarkStr);
-        }
-
-        KnowledgeFragmentData data = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
-        if (!data.getAllFragments().isEmpty()) {
-            offsetY += bookmarkGap;
-            rectKnowledgeBookmark = drawBookmark(
-                    offsetX, offsetY,
-                    bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 3 ? 0 : 5),
-                    zLevel,
-                    "gui.journal.bm.knowledge.name", 0xDDDDDDDD,
-                    mousePoint, textureBookmark, textureBookmarkStr);
+        for (BookmarkProvider bookmarkProvider : bookmarks) {
+            if (bookmarkProvider.canSee()) {
+                Rectangle r = drawBookmark(
+                        offsetX, offsetY,
+                        bookmarkWidth, bookmarkHeight,
+                        bookmarkWidth + (bookmarkIndex == bookmarkProvider.getIndex() ? 0 : 5),
+                        zLevel, bookmarkProvider.getUnlocalizedName(), 0xDDDDDDDD, mousePoint,
+                        bookmarkProvider.getTextureBookmark(), bookmarkProvider.getTextureBookmarkStretched());
+                drawnBookmarks.put(r, bookmarkProvider);
+                offsetY += bookmarkGap;
+            }
         }
 
         offsetY += bookmarkGap / 2;
@@ -219,25 +198,14 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
     }
 
     private boolean handleJournalNavigationBookmarkClick(Point p) {
-        if(bookmarkIndex != 0 && rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
-            GuiJournalProgression.resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
-            return true;
-        }
-        if(bookmarkIndex != 1 && rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-            GuiJournalProgression.resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
-            return true;
-        }
-        if(bookmarkIndex != 2 && rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-            GuiJournalProgression.resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
-            return true;
-        }
-        if(bookmarkIndex != 3 && rectKnowledgeBookmark != null && rectKnowledgeBookmark.contains(p)) {
-            GuiJournalProgression.resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalKnowledgeIndex());
-            return true;
+        for (Rectangle bookmarkRectangle : drawnBookmarks.keySet()) {
+            BookmarkProvider provider = drawnBookmarks.get(bookmarkRectangle);
+            if (bookmarkIndex != provider.getIndex() &&
+                    bookmarkRectangle.contains(p)) {
+                GuiJournalProgression.resetJournal();
+                Minecraft.getMinecraft().displayGuiScreen(provider.getGuiScreen());
+                return true;
+            }
         }
         return false;
     }
@@ -245,6 +213,9 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
     private boolean handleFragmentClick(Point mouse) {
         for (Rectangle r : this.pageFragments.keySet()) {
             if (r.contains(mouse)) {
+                if (this instanceof GuiJournalProgression) {
+                    ((GuiJournalProgression) this).expectReinit = true;
+                }
                 KnowledgeFragment frag = this.pageFragments.get(r);
                 Minecraft.getMinecraft().displayGuiScreen(new GuiJournalOverlayKnowledge(this, frag));
                 SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);

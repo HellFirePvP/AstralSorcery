@@ -9,9 +9,10 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
@@ -67,7 +68,7 @@ public class AevitasRootPerk extends RootPerk {
         if (side != Side.SERVER) return;
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog == null || !prog.hasPerkEffect(this)) {
+        if (!prog.hasPerkEffect(this)) {
             return;
         }
 
@@ -85,7 +86,7 @@ public class AevitasRootPerk extends RootPerk {
         if (dim.size() <= 0) {
             same = 1F;
         } else {
-            same = 0.15F + (1F - (used / trackLength)) * 0.85F;
+            same = 0.4F + (1F - (used / trackLength)) * 0.6F;
         }
         dim.addFirst(event.getPlacedBlock());
 
@@ -97,7 +98,9 @@ public class AevitasRootPerk extends RootPerk {
             float xp = Math.max(event.getPlacedBlock().getBlockHardness(event.getWorld(), event.getPos()) / 20F, 1);
             xp *= expMultiplier;
             xp *= same;
-            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
+            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, xp);
+            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
+            xp = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
             ResearchManager.modifyExp(player, xp);
         }
 
