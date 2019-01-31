@@ -887,14 +887,14 @@ perk.astralsorcery.crit_inc_chance_melee.name=Aumentato il danno da mischia e da
 perk.astralsorcery.crit_inc_ch_mul.name=Aumentata la possibilità di fare colpo critico e il moltiplicatore
 perk.astralsorcery.key_rampage_path_node_crit.name=Aggiunge la possibilità di fare colpo critico
 perk.astralsorcery.key_rampage_path_node_dmg.name=Danno Aumentato
-perk.astralsorcery.key_chain_mining_length.name=Aggiunta lunghezza di scavaggio concatenato
-perk.astralsorcery.key_chain_mining_length.desc=+1 aggiunto alla lunghezza di scavaggio contatenato
-perk.astralsorcery.key_chain_mining_length_greater.name=Maggiore aggiunta lunghezza di scavaggio concatenato
-perk.astralsorcery.key_chain_mining_length_greater.desc=+3 aggiunto alla lunghezza di scavaggio concatenato
+perk.astralsorcery.key_chain_mining_length.name=Aggiunta lunghezza di scavo concatenato
+perk.astralsorcery.key_chain_mining_length.desc=+1 aggiunto alla lunghezza di scavo contatenato
+perk.astralsorcery.key_chain_mining_length_greater.name=Maggiore aggiunta lunghezza di scavo concatenato
+perk.astralsorcery.key_chain_mining_length_greater.desc=+3 aggiunto alla lunghezza di scavo concatenato
 perk.astralsorcery.key_chain_mining_chance.name=Aggiunta la possibilità di minare in modo contatenato
 perk.astralsorcery.key_chain_mining_chance.desc=+15%% aggiunta la possibilità di minare concatenatamente
 perk.astralsorcery.key_chain_mining_chance_greater.name=Aumentata la possibilità di minare in modo contatenato
-perk.astralsorcery.key_chain_mining_chance_greater.desc=+100%% di possibilità di minare contatenatamente
+perk.astralsorcery.key_chain_mining_chance_greater.desc=+100%% di possibilità di minare in concatenato
 perk.astralsorcery.inc_leech_vamp.name=Aggiunta una sanguisuga vitale
 perk.astralsorcery.key_alc_inc_armor.name=Aumentata l'armatura
 perk.astralsorcery.thorns_inc_dmg.name=Aumentato l'effetto di spine
@@ -990,7 +990,7 @@ perk.astralsorcery.major_inc_encheffect.desc.1=Incantamenti ottenuti dal Prisma 
 perk.astralsorcery.major_inc_encheffect.desc.2=ha il 15%% di livelli aumentati.
 
 perk.astralsorcery.core.name=Singolarità
-perk.astralsorcery.core.desc.1=Altre radici dell'albero potrbbero essere sbloccate senza
+perk.astralsorcery.core.desc.1=Altre radici dell'albero potrebbero essere sbloccate senza
 perk.astralsorcery.core.desc.2=necessitare di una connessione ai benefici esistenti
 perk.astralsorcery.core.desc.3=
 perk.astralsorcery.core.desc.4=Conferisce 3 Punti Beneficio addizionali
@@ -1098,15 +1098,15 @@ perk.astralsorcery.discidia.desc=Ottieni esperienza facendo danno
 perk.astralsorcery.armara.name=Radice: Armara
 perk.astralsorcery.armara.desc=Ottieni esperienza prendendo danno
 
-constellation.noInformation=Non c'è niennte qui.
+constellation.noInformation=Non c'è niente qui.
 
 knowledge.astralsorcery.fragment.discovery.ancientshrine.name=I luoghi degli Antichi Santuari
 knowledge.astralsorcery.fragment.discovery.ancientshrine.bookmark=Luoghi
-knowledge.astralsorcery.fragment.discovery.ancientshrine.description=Gli antichi templi che contengono Cristalli Collettori sono normalmente locati in posti molto freddi, molto caldi o molto montuosi, ma solo se esiste abbastanza terra livellata da poter costruirci sopra un tempio. I cristalli sarano sempre sintonizzati a una delle 5 costellazioni Luminose.
+knowledge.astralsorcery.fragment.discovery.ancientshrine.description=Gli antichi templi che contengono Cristalli Collettori sono normalmente locati in posti molto freddi, molto caldi o molto montuosi, ma solo se esiste abbastanza terra livellata da poter costruirci sopra un tempio. I cristalli saranno sempre sintonizzati a una delle 5 costellazioni Luminose.
 
 knowledge.astralsorcery.fragment.discovery.resowand.name=Luoghi di Risonanza
 knowledge.astralsorcery.fragment.discovery.resowand.bookmark=Luoghi dei Cristalli
-knowledge.astralsorcery.fragment.discovery.resowand.description=Mentre i pennacchi indicatori sono solo visibili sopra alla terra, I cristalli di roccia vengono generati alle profondità più alte: alla roccia di fondo. Mentre occasionalmente stando in gruppo potrbbero essercene alcuni ad alcuni passi di distanza da l'un l'altro, è raro e spesso ci sono decine o centinaria di metri tra i minerali di cristalli di roccia. Tenendo una bacchetta risonante in mano è possibile che appaiano delle sccintille nel mondo che mostrano il posto in cui si trovano dei minerali di cristalli rocciosi.
+knowledge.astralsorcery.fragment.discovery.resowand.description=Mentre i pennacchi indicatori sono solo visibili sopra alla terra, I cristalli di roccia vengono generati alle profondità più alte: alla roccia di fondo. Mentre occasionalmente stando in gruppo potrebbero essercene alcuni ad alcuni passi di distanza da l'un l'altro, è raro e spesso ci sono decine o centinaia di metri tra i minerali di cristalli di roccia. Tenendo una bacchetta risonante in mano è possibile che appaiano delle scintille nel mondo che mostrano il posto in cui si trovano dei minerali di cristalli rocciosi.
 
 knowledge.astralsorcery.fragment.misc.altar.name=Craft Multiplo dell'Altare
 knowledge.astralsorcery.fragment.misc.altar.bookmark=Craft Multiplo
@@ -1114,7 +1114,7 @@ knowledge.astralsorcery.fragment.misc.altar.description=Tutti gli altari hanno l
 
 knowledge.astralsorcery.fragment.discovery.startable.name=Rete di Luce Stellar
 knowledge.astralsorcery.fragment.discovery.startable.bookmark=Collegamenti di Rete
-knowledge.astralsorcery.fragment.discovery.startable.description=Mentre solo i cristalli generati nel mondo si connetteranno automaticamente alle crafting table piazzate vicino, qualsiasi altro cristallo collettore può essere collegato ad un tavolo utilizzando un Attrezzo di Collegamento per ottenere qualche effetto. I collettori (o le lenti che portano luce dai collettori) possono anche essere likati in una rete per provvedere luce stellare a un qualsiasi consumatore di luce stellare, senza differenza per quale sia il dispositivo.
+knowledge.astralsorcery.fragment.discovery.startable.description=Mentre solo i cristalli generati nel mondo si connetteranno automaticamente alle crafting table piazzate vicino, qualsiasi altro cristallo collettore può essere collegato ad un tavolo utilizzando un Attrezzo di Collegamento per ottenere qualche effetto. I collettori (o le lenti che portano luce dai collettori) possono anche essere collegati in una rete per provvedere luce stellare a un qualsiasi consumatore di luce stellare, senza differenza per quale sia il dispositivo.
 
 knowledge.astralsorcery.fragment.exploration.lightwellprod.name=Efficienza di Produzione
 knowledge.astralsorcery.fragment.exploration.lightwellprod.bookmark=Efficienza
@@ -1130,7 +1130,7 @@ knowledge.astralsorcery.fragment.exploration.crystalgrowth.description=Se il cri
 
 knowledge.astralsorcery.fragment.exploration.crystaltools.name=Statistiche degli Attrezzi
 knowledge.astralsorcery.fragment.exploration.crystaltools.bookmark=Dettagli Fini
-knowledge.astralsorcery.fragment.exploration.crystaltools.description=Gli attrezzi di cristallo operano differentemente dagli attrezzi normali a causa della loro costruzione, con 3 statistiche che governano la loro performance.<NL>Purezza - Attrezzi più puri perderanno meno grandezza quando affilati.<NL>Grandezza - Durabilità dell'attrezzo. Persa quando viene affilato, e recuperata immergendolo nella luce stellare liquida. Quando la Grandezza dell'attrezzo giunge a 0, esso è distrutto.<NL>Affilatezza - Determina l'efficienza di un attrezzo, e può essere recuperata affilandolo. Un po come un coltello, l'attrezzo diventerà meno affilato più velocemente se parte da una situazione di affilatezza alta, che se partisse da una situazione di affilatezza media. L'incantamento di infrangibilità permette di rallentare la perdita di affilatezza.
+knowledge.astralsorcery.fragment.exploration.crystaltools.description=Gli attrezzi di cristallo operano differentemente dagli attrezzi normali a causa della loro costruzione, con 3 statistiche che governano la loro performance.<NL>Purezza - Attrezzi più puri perderanno meno grandezza quando affilati.<NL>Grandezza - Durabilità dell'attrezzo. Persa quando viene affilato, e recuperata immergendolo nella luce stellare liquida. Quando la Grandezza dell'attrezzo giunge a 0, esso è distrutto.<NL>Affilatezza - Determina l'efficienza di un attrezzo, e può essere recuperata affilandolo. Un po’ come un coltello, l'attrezzo diventerà meno affilato più velocemente se parte da una situazione di affilatezza alta, che se partisse da una situazione di affilatezza media. L'incantamento di infrangibilità permette di rallentare la perdita di affilatezza.
 
 knowledge.astralsorcery.fragment.exploration.grindstone.name=Armi e Minerali
 knowledge.astralsorcery.fragment.exploration.grindstone.bookmark=Uso Aggiuntivo
@@ -1138,7 +1138,7 @@ knowledge.astralsorcery.fragment.exploration.grindstone.description=In aggiunta 
 
 knowledge.astralsorcery.fragment.misc.cannibalism.name=Cannibalismo e Raggio
 knowledge.astralsorcery.fragment.misc.cannibalism.bookmark=Cannibalismo
-knowledge.astralsorcery.fragment.misc.cannibalism.description=Qualsiasi dispositivo che collezioni luce stellare ottenuta da 8 blocchi di raggio dal dispositivo stesso. Un po come i barili di collezionamento della pioggia si sovrappongono l'un l'altro, i dispositivi che condividono un'area circolare di raccolta vedranno una diminuizione nella quantità di luce stellare ottenuta. Distribuendo dispositivo che collezionano luce stellare, senza guardare il tipo di dispositovo, cosicché ci siano 16 passi di distanza prevenirà loro dal cannibalizzarsi la luce stellare ottenuta da ciascuno.
+knowledge.astralsorcery.fragment.misc.cannibalism.description=Qualsiasi dispositivo che collezioni luce stellare ottenuta da 8 blocchi di raggio dal dispositivo stesso. Un po’ come i barili di collezione della pioggia si sovrappongono l'un l'altro, i dispositivi che condividono un'area circolare di raccolta vedranno una diminuzione nella quantità di luce stellare ottenuta. Distribuendo dispositivo che collezionano luce stellare, senza guardare il tipo di dispositivo, cosicché ci siano 16 passi di distanza prevenirà loro dal cannibalizzarsi la luce stellare ottenuta da ciascuno.
 
 knowledge.astralsorcery.fragment.exploration.caveillumplace.name=Disposizione di Luminarie
 knowledge.astralsorcery.fragment.exploration.caveillumplace.bookmark=Piazzamento
@@ -1146,7 +1146,7 @@ knowledge.astralsorcery.fragment.exploration.caveillumplace.description=Quando a
 
 knowledge.astralsorcery.fragment.exploration.caveillumwand.name=Colori e Operazioni
 knowledge.astralsorcery.fragment.exploration.caveillumwand.bookmark=Funzione
-knowledge.astralsorcery.fragment.exploration.caveillumwand.description=Quando senza accesso al cielo, o se non è notte, un Illuminatore di Grotte può essere potenziato da una bacchetta dell'illuminazione per dieci secondi alla volta quando ci si fa tasto-destro.<NL>In aggiunta, il colore delle luci posizionate da un illuminatore di Grotte cambiera per combaciare il colore di com'è stata pitturata la bacchetta di illuminazione.
+knowledge.astralsorcery.fragment.exploration.caveillumwand.description=Quando senza accesso al cielo, o se non è notte, un Illuminatore di Grotte può essere potenziato da una bacchetta dell'illuminazione per dieci secondi alla volta quando ci si fa tasto-destro.<NL>In aggiunta, il colore delle luci posizionate da un illuminatore di Grotte cambierà per combaciare il colore di com'è stata pitturata la bacchetta di illuminazione.
 
 knowledge.astralsorcery.fragment.exploration.nocturnal.name=Tipi di Generazione e Rarità
 knowledge.astralsorcery.fragment.exploration.nocturnal.bookmark=Generazione
@@ -1170,7 +1170,7 @@ knowledge.astralsorcery.fragment.perk_gems.description=nel momento del giorno in
 
 knowledge.astralsorcery.fragment.attunement.ritualpedestal.name=I Limiti della Luce Stellare
 knowledge.astralsorcery.fragment.attunement.ritualpedestal.bookmark=Limiti
-knowledge.astralsorcery.fragment.attunement.ritualpedestal.description=Prove estese hanno mostrato che non c'è limite alla quantità di luce stellare che può essere incanalata in un rituale, il che significa che non c'è limite per quanto frequentemente un rituale funzionera. Tuttavia, più il rituale è forzato ad operare veloce, più diventa alta la possibilità che il cristallo presenti delle fratture a causa dello stress, le quali lo porteranno alla sua distruzione se non gli viene concessa una riparazione nella luce stellare liquida.
+knowledge.astralsorcery.fragment.attunement.ritualpedestal.description=Prove estese hanno mostrato che non c'è limite alla quantità di luce stellare che può essere incanalata in un rituale, il che significa che non c'è limite per quanto frequentemente un rituale funzionerà. Tuttavia, più il rituale è forzato ad operare veloce, più diventa alta la possibilità che il cristallo presenti delle fratture a causa dello stress, le quali lo porteranno alla sua distruzione se non gli viene concessa una riparazione nella luce stellare liquida.
 
 knowledge.astralsorcery.fragment.constellation.colorlens.name=La funzione delle lenti
 knowledge.astralsorcery.fragment.constellation.colorlens.bookmark=Funzione
@@ -1178,19 +1178,19 @@ knowledge.astralsorcery.fragment.constellation.colorlens.description=Accensione:
 
 knowledge.astralsorcery.fragment.constellation.refractiontable.name=Ottimizzazioni del Tavolo
 knowledge.astralsorcery.fragment.constellation.refractiontable.bookmark=Ottimizzazioni
-knowledge.astralsorcery.fragment.constellation.refractiontable.description=Mentre le tre costellazioni possono essere piazzata in una volta, i duplicati non danno bonus. Il piazzamento perfetto involve minimizzare le costellazioni che si sovrappongono nel disegno.<NL>Usando questo tavolo più vicino possibile a mezzanotte il rischio di fuoco verra minimizzato, e gli oggetti vengono direttamente incantati il che può risultare in combinazioni di incantamenti.
+knowledge.astralsorcery.fragment.constellation.refractiontable.description=Mentre le tre costellazioni possono essere piazzata in una volta, i duplicati non danno bonus. Il piazzamento perfetto involve minimizzare le costellazioni che si sovrappongono nel disegno.<NL>Usando questo tavolo più vicino possibile a mezzanotte il rischio di fuoco verrà minimizzato, e gli oggetti vengono direttamente incantati il che può risultare in combinazioni di incantamenti.
 
 knowledge.astralsorcery.fragment.constellation.treebeaconuse.name=Utilizzo del Faro
 knowledge.astralsorcery.fragment.constellation.treebeaconuse.bookmark=Utilizzo
-knowledge.astralsorcery.fragment.constellation.treebeaconuse.description=Piazzando un alberello nel raggio e facendolo crescere permetterà di generare la versione stellare fantasma dell'albero. Gli echi risonanti di questo fantasma verranno utilizzati dal faro per fabbricare molti più oggetti di quanti se ne otterrebbero tagliando un albero normalmente. Può anche beneficiare della possibilità di farlo con più alberi contemporaneamente, senza i problemi dell'aspettare per la crescità costante di più alberelli.
+knowledge.astralsorcery.fragment.constellation.treebeaconuse.description=Piazzando un alberello nel raggio e facendolo crescere permetterà di generare la versione stellare fantasma dell'albero. Gli echi risonanti di questo fantasma verranno utilizzati dal faro per fabbricare molti più oggetti di quanti se ne otterrebbero tagliando un albero normalmente. Può anche beneficiare della possibilità di farlo con più alberi contemporaneamente, senza i problemi dell'aspettare per la crescita costante di più alberelli.
 
 knowledge.astralsorcery.fragment.constellation.treebeaconboost.name=Gli stivali del faro
 knowledge.astralsorcery.fragment.constellation.treebeaconboost.bookmark=Impulso
-knowledge.astralsorcery.fragment.constellation.treebeaconboost.description=Mentre un Faro degli Alberi opera molto più efficientemente durante la notte, è possibile accelerarlo a velocità da capogiro utilizzando luce stellare incanalata, un po' come i rituali. Collegando la luce stellare ad un Faro degli Alberi aumenterà il rapporto al quale fabrica i pezzi dell'albero, con la luce di Aevitas viene provvisto dell'aumento più importante.<NL>Un Faro degli Alberi fabbrica meno foglie che tronchi.
+knowledge.astralsorcery.fragment.constellation.treebeaconboost.description=Mentre un Faro degli Alberi opera molto più efficientemente durante la notte, è possibile accelerarlo a velocità da capogiro utilizzando luce stellare incanalata, un po' come i rituali. Collegando la luce stellare ad un Faro degli Alberi aumenterà il rapporto al quale fabbrica i pezzi dell'albero, con la luce di Aevitas viene provvisto dell'aumento più importante.<NL>Un Faro degli Alberi fabbrica meno foglie che tronchi.
 
 knowledge.astralsorcery.fragment.constellation.inftool.name=I Poteri degli Attrezzi Infusi
 knowledge.astralsorcery.fragment.constellation.inftool.bookmark=Funzione
-knowledge.astralsorcery.fragment.constellation.inftool.description=Ascia: Raccoglie l'albero intero in una volta quando usato su un tronco.<NL>Spada: Infligge uno scoppio di danno magico intorno all'obbiettivo.<NL>Piccone: Indica quali minerali si trovano nlle vicinanze, e nella direzione, quando ci si fa tasto destro.<NL>Pala: Scava un crosso buco in una direzione orizzontale.
+knowledge.astralsorcery.fragment.constellation.inftool.description=Ascia: Raccoglie l'albero intero in una volta quando usato su un tronco.<NL>Spada: Infligge uno scoppio di danno magico intorno all'obbiettivo.<NL>Piccone: Indica quali minerali si trovano nelle vicinanze, e nella direzione, quando ci si fa tasto destro.<NL>Pala: Scava un crosso buco in una direzione orizzontale.
 
 knowledge.astralsorcery.fragment.constellation.illumwand.name=La forza dei blocchi illuminati
 knowledge.astralsorcery.fragment.constellation.illumwand.bookmark=Infrangibilità
@@ -1201,8 +1201,8 @@ knowledge.astralsorcery.fragment.constellation.prism.bookmark=Incantamenti
 knowledge.astralsorcery.fragment.constellation.prism.description=Ogni prisma risplendente ha tre modificatori per cambiare incantamenti, ogni modificatore provvede ad un +3 di bonus ad uno o più incantamenti. Qualsiasi combinazione di potenziamento degli incantamenti esistenti o di nuovi è possibile. Tuttavia, Qualsiasi modificatore che aumenta tutti gli incantamenti occuperà due di questi slot per modificatore.<NL> Il colore del prisma è randomico, con una versione bianca molto più rara di tutte le altre.
 
 knowledge.astralsorcery.fragment.constellation.clusterbonus.name=Potenziare la Precedenza dei cristalli
-knowledge.astralsorcery.fragment.constellation.clusterbonus.bookmark=La precedenza di crescità
-knowledge.astralsorcery.fragment.constellation.clusterbonus.description=Le prove hanno confermato che i grappoli non solo crescono più velocemente, ma hanno anche una possiblità di creare più di un cristallo utilizzabile se cresciuti completamente e raccolti mentre si trovano sulla cima di un blocco di minerale grezzo di metallo stellare. Prove preliminari hanno anche mostrato che i cristalli raccolti tendono ad essere più puri.
+knowledge.astralsorcery.fragment.constellation.clusterbonus.bookmark=La precedenza di crescita
+knowledge.astralsorcery.fragment.constellation.clusterbonus.description=Le prove hanno confermato che i grappoli non solo crescono più velocemente, ma hanno anche una possibilità di creare più di un cristallo utilizzabile se cresciuti completamente e raccolti mentre si trovano sulla cima di un blocco di minerale grezzo di metallo stellare. Prove preliminari hanno anche mostrato che i cristalli raccolti tendono ad essere più puri.
 
 knowledge.astralsorcery.fragment.constellation.clusterspeed.name=Potenziare la velocità di crescita
 knowledge.astralsorcery.fragment.constellation.clusterspeed.bookmark=Il rapporto di Crescita
@@ -1214,11 +1214,11 @@ knowledge.astralsorcery.fragment.constellation.ec3.description=In aggiunta a pre
 
 knowledge.astralsorcery.fragment.radiance.fysallidic.name=L'impatto delle creature mitiche
 knowledge.astralsorcery.fragment.radiance.fysallidic.bookmark=Miti
-knowledge.astralsorcery.fragment.radiance.fysallidic.description=Così come il serbatoio interno di una fontana in constante cambiamento è finito, il rapporto del consumo della luce stellare liquida  causato dalle creature mitiche può risultare in un rilascio prematuro. Gli endermen non innescano solitamente questo dispositivo a meno che non rimangano intrappolati per un po, ma qualcosa come il Wither o Il drago dell'End possoono lasciare ben meno finestra disponibile quando intrappolati.
+knowledge.astralsorcery.fragment.radiance.fysallidic.description=Così come il serbatoio interno di una fontana in constante cambiamento è finito, il rapporto del consumo della luce stellare liquida  causato dalle creature mitiche può risultare in un rilascio prematuro. Gli endermen non innescano solitamente questo dispositivo a meno che non rimangano intrappolati per un po’, ma qualcosa come il Wither o Il drago dell'End possono lasciare ben meno finestra disponibile quando intrappolati.
 
 knowledge.astralsorcery.fragment.misc.perks.name=Differenza con i Bonus
 knowledge.astralsorcery.fragment.misc.perks.bookmark=Bonus
-knowledge.astralsorcery.fragment.misc.perks.description=Ci sono 3 magnitudo di bonus provvisti dalla luce stellare interna.<NL>Aggiunto/Sottratto - Aggiunge un falore piatto alla quantità base.<NL>Incrementato/Diminuito - Tutti questi sono aggiunti insieme e poi applicati come cambio in percentuale dopo che tutti i valori Aggiunti/Sottratti sono applicati.<NL>Più/Meno - Applicato individualemente come un cambio in pecentuale che segue i cambiamenti di Aumento/Diminuzione, non sommato e poi applicato.
+knowledge.astralsorcery.fragment.misc.perks.description=Ci sono 3 magnitudo di bonus provvisti dalla luce stellare interna.<NL>Aggiunto/Sottratto - Aggiunge un fattore piatto alla quantità base.<NL>Incrementato/Diminuito - Tutti questi sono aggiunti insieme e poi applicati come cambio in percentuale dopo che tutti i valori Aggiunti/Sottratti sono applicati.<NL>Più/Meno - Applicato individualmente come un cambio in percentuale che segue i cambiamenti di Aumento/Diminuzione, non sommato e poi applicato.
 
 knowledge.astralsorcery.fragment.constellation.discidia.potions.name=Effetti delle Pozioni
 knowledge.astralsorcery.fragment.constellation.discidia.potions.bookmark=Pozioni
@@ -1238,7 +1238,7 @@ knowledge.astralsorcery.fragment.constellation.discidia.ritual.corrupted.descrip
 
 knowledge.astralsorcery.fragment.constellation.discidia.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.discidia.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.discidia.mantle.description=Si stima che 1/3 della potenza dell'ultimo danno fatto contro l'indossatore sia incanalata indetro ai nemici dagli attacchi dell'indossatore.
+knowledge.astralsorcery.fragment.constellation.discidia.mantle.description=Si stima che 1/3 della potenza dell'ultimo danno fatto contro l'indossatore sia incanalata indietro ai nemici dagli attacchi dell'indossatore.
 
 knowledge.astralsorcery.fragment.constellation.armara.potions.name=Gli Effetti delle Pozioni
 knowledge.astralsorcery.fragment.constellation.armara.potions.bookmark=Pozioni
@@ -1278,11 +1278,11 @@ knowledge.astralsorcery.fragment.constellation.vicio.ritual.corrupted.descriptio
 
 knowledge.astralsorcery.fragment.constellation.vicio.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.vicio.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.vicio.mantle.description=Al contrario di una normale elytra, questo mantallo non decade dall'utilizzo delle sue abilità di volo, ed è più veloce.
+knowledge.astralsorcery.fragment.constellation.vicio.mantle.description=Al contrario di una normale elytra, questo mantello non decade dall'utilizzo delle sue abilità di volo, ed è più veloce.
 
 knowledge.astralsorcery.fragment.constellation.aevitas.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.aevitas.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.aevitas.potions.description=Conferisce una rigenerazione acceleratata della vita, ad un massimo del doppio delle pozioni convenzionali.
+knowledge.astralsorcery.fragment.constellation.aevitas.potions.description=Conferisce una rigenerazione accelerata della vita, ad un massimo del doppio delle pozioni convenzionali.
 
 knowledge.astralsorcery.fragment.constellation.aevitas.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.aevitas.enchantments.bookmark=Incantamento
@@ -1314,7 +1314,7 @@ knowledge.astralsorcery.fragment.constellation.evorsio.ritual.description=Questo
 
 knowledge.astralsorcery.fragment.constellation.evorsio.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.evorsio.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.evorsio.ritual.corrupted.description=La dustruzione diventa creazione, come la terra e la pietra vicine diventano minerali di valore più alto in modo randomico.
+knowledge.astralsorcery.fragment.constellation.evorsio.ritual.corrupted.description=La distruzione diventa creazione, come la terra e la pietra vicine diventano minerali di valore più alto in modo randomico.
 
 knowledge.astralsorcery.fragment.constellation.evorsio.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.evorsio.mantle.bookmark=Mantello
@@ -1322,7 +1322,7 @@ knowledge.astralsorcery.fragment.constellation.evorsio.mantle.description=Romper
 
 knowledge.astralsorcery.fragment.constellation.mineralis.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.mineralis.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.mineralis.potions.description=La velocità di Attacci è aumentata da queste pozioni. La velocità d'attacco può aumentare circa della metà, e la velocità di scavo più di tre quarti.
+knowledge.astralsorcery.fragment.constellation.mineralis.potions.description=La velocità di Attacco è aumentata da queste pozioni. La velocità d'attacco può aumentare circa della metà, e la velocità di scavo più di tre quarti.
 
 knowledge.astralsorcery.fragment.constellation.mineralis.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.mineralis.enchantments.bookmark=Incantamento
@@ -1354,7 +1354,7 @@ knowledge.astralsorcery.fragment.constellation.lucerna.ritual.description=Al con
 
 knowledge.astralsorcery.fragment.constellation.lucerna.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.lucerna.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.lucerna.ritual.corrupted.description=Mentre il sole è giu, la luce stellare regna mentre il resto del mondo sembra rallentare.
+knowledge.astralsorcery.fragment.constellation.lucerna.ritual.corrupted.description=Mentre il sole è giù, la luce stellare regna mentre il resto del mondo sembra rallentare.
 
 knowledge.astralsorcery.fragment.constellation.lucerna.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.lucerna.mantle.bookmark=Mantello
@@ -1458,15 +1458,15 @@ knowledge.astralsorcery.fragment.constellation.pelotrio.enchantments.description
 
 knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.name=Effetti dei Rituali 
 knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.bookmark=Rituale
-knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.description=Questo rituale continuera a evocare creature irrilevanti della presenza del rituale di Lucerna.
+knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.description=Questo rituale continuerà a evocare creature irrilevanti della presenza del rituale di Lucerna.
 
 knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.corrupted.description=L'oscurità dentro le creature è chiamata via, contorcendosi irrevocabilmente in una forma più oscura. Le creature in questo modo cambiano e sono riempite di oggetti di valore che scoppiano via quendo le creature sono abbattute.
+knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.corrupted.description=L'oscurità dentro le creature è chiamata via, contorcendosi irrevocabilmente in una forma più oscura. Le creature in questo modo cambiano e sono riempite di oggetti di valore che scoppiano via quando le creature sono abbattute.
 
 knowledge.astralsorcery.fragment.constellation.pelotrio.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.pelotrio.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.pelotrio.mantle.description=Gli attrezzi o le armi spettrali spawneranno solo se l'attrezzo approppiato è tenuto nella mano principale.
+knowledge.astralsorcery.fragment.constellation.pelotrio.mantle.description=Gli attrezzi o le armi spettrali spawneranno solo se l'attrezzo appropriato è tenuto nella mano principale.
 
 knowledge.astralsorcery.fragment.constellation.gelu.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.gelu.potions.bookmark=Pozioni
@@ -1490,7 +1490,7 @@ knowledge.astralsorcery.fragment.constellation.ulteria.enchantments.description=
 
 knowledge.astralsorcery.fragment.constellation.ulteria.trait.name=Effetti del Tratto
 knowledge.astralsorcery.fragment.constellation.ulteria.trait.bookmark=Tratti
-knowledge.astralsorcery.fragment.constellation.ulteria.trait.description=Il potere del rituale è aumentato di quatro volte il normale, ma l'area del rituale sono rdotti a 1/5 del normale.
+knowledge.astralsorcery.fragment.constellation.ulteria.trait.description=Il potere del rituale è aumentato di quattro volte il normale, ma l'area del rituale sono ridotti a 1/5 del normale.
 
 knowledge.astralsorcery.fragment.constellation.horologium.showup.name=I limiti delle Apparizioni
 knowledge.astralsorcery.fragment.constellation.horologium.showup.bookmark=Apparizione
@@ -1502,7 +1502,7 @@ knowledge.astralsorcery.fragment.constellation.alcara.potions.description=Entram
 
 knowledge.astralsorcery.fragment.constellation.alcara.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.alcara.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.alcara.enchantments.description=Le canne da pesca mandano fuori delle sottili vibrazioni, che aumentano notevolmente la frequenza dei pesci, mentre quelle stesse vibrazioni sembrano migliorare la raccolta di blocchi delicati. Le spade incantate hanno una risonanza distruttiva, distribuendo i loro fendenti tra gli altri neimici nei pressi.
+knowledge.astralsorcery.fragment.constellation.alcara.enchantments.description=Le canne da pesca mandano fuori delle sottili vibrazioni, che aumentano notevolmente la frequenza dei pesci, mentre quelle stesse vibrazioni sembrano migliorare la raccolta di blocchi delicati. Le spade incantate hanno una risonanza distruttiva, distribuendo i loro fendenti tra gli altri nemici nei pressi.
 
 knowledge.astralsorcery.fragment.constellation.alcara.trait.name=Effetti del Tratto
 knowledge.astralsorcery.fragment.constellation.alcara.trait.bookmark=Tratti
@@ -1510,11 +1510,11 @@ knowledge.astralsorcery.fragment.constellation.alcara.trait.description=I Ritual
 
 knowledge.astralsorcery.fragment.constellation.vorux.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.vorux.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.vorux.potions.description=In cambio per instillare il letargo con gli attrezzi questo distillato aiuta a combattare contro ferite leggere e aumenta notevolmente il danno dai fendenti di spada.
+knowledge.astralsorcery.fragment.constellation.vorux.potions.description=In cambio per instillare il letargo con gli attrezzi questo distillato aiuta a combattere contro ferite leggere e aumenta notevolmente il danno dai fendenti di spada.
 
 knowledge.astralsorcery.fragment.constellation.vorux.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.vorux.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.vorux.enchantments.description=Tutti i nemici possono trovarsi alla pietà delle tue armi, che colpira molto più forte del normale.
+knowledge.astralsorcery.fragment.constellation.vorux.enchantments.description=Tutti i nemici possono trovarsi alla pietà delle tue armi, che colpirà molto più forte del normale.
 
 knowledge.astralsorcery.fragment.constellation.vorux.trait.name=Effetti del Tratto
 knowledge.astralsorcery.fragment.constellation.vorux.trait.bookmark=Tratti
