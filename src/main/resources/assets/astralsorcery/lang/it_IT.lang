@@ -1368,202 +1368,136 @@ knowledge.astralsorcery.fragment.constellation.horologium.mantle.description=Inf
 
 knowledge.astralsorcery.fragment.constellation.octans.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.octans.potions.bookmark=Pozioni
-#-------------------------------------------------------------------------------TODO knowledge.astralsorcery.fragment.constellation.octans.potions.description=Mild improvement to visibility underwater, and water breathing.
+knowledge.astralsorcery.fragment.constellation.octans.potions.description=Leggero miglioramento della visibilità sott'acqua e di respirazione subacquea.
 
 knowledge.astralsorcery.fragment.constellation.octans.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.octans.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.octans.enchantments.description=Extends the length of time breath can be held while underwater, and lengthens the amount of time needed to drown once out of breath.
+knowledge.astralsorcery.fragment.constellation.octans.enchantments.description=Estende la lunghezza del periodo nel quale il respiro può essere trattenuto sott'acqua, e allunga la quantità di tempo necessaria per affogare una volta senza respiro.
 
 knowledge.astralsorcery.fragment.constellation.octans.ritual.name=Effetti dei Rituali 
 knowledge.astralsorcery.fragment.constellation.octans.ritual.bookmark=Rituale
-knowledge.astralsorcery.fragment.constellation.octans.ritual.description=Any fishable item could be retrieved by this ritual into the nearby waters.
+knowledge.astralsorcery.fragment.constellation.octans.ritual.description=Qualsiasi oggetto pescabile può essere raccolto da questo rituale nelle acque nelle vicinanze.
 
 knowledge.astralsorcery.fragment.constellation.octans.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.octans.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.octans.ritual.corrupted.description=The oceans and the land invert, with water replacing air, fish spawning from nothing, and some liquids drying to sand.
+knowledge.astralsorcery.fragment.constellation.octans.ritual.corrupted.description=Gli oceani e la terra si invertono, con l'acqua che rimpiazza l'aria, pesci che spawnano dal nulla, e alcuni liquidi asciugano alla sabbia.
 
 knowledge.astralsorcery.fragment.constellation.octans.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.octans.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.octans.mantle.description=The normal penalties for moving and attempting to use tools underwater are negated, and other methods of underwater breathing aren't required.
+knowledge.astralsorcery.fragment.constellation.octans.mantle.description=Le penalità normali per muoversi e cercare di usare di usare attrezzi sott'acqua sono negate, e gli altri metodi di respirazione subacquea non sono necessari.
 
 knowledge.astralsorcery.fragment.constellation.bootes.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.bootes.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.bootes.potions.description=These potions replenish hunger and saturation both.
+knowledge.astralsorcery.fragment.constellation.bootes.potions.description=Queste pozioni riforniscono la fame e la saturazione.
 
 knowledge.astralsorcery.fragment.constellation.bootes.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.bootes.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.bootes.enchantments.description=Delicate items can be picked up without breaking, as though touched by silk.
+knowledge.astralsorcery.fragment.constellation.bootes.enchantments.description=Oggetti delicati che possono essere raccolti senza essere rotti, come se toccati da del velluto
 
 knowledge.astralsorcery.fragment.constellation.bootes.ritual.name=Effetti dei Rituali 
 knowledge.astralsorcery.fragment.constellation.bootes.ritual.bookmark=Rituale
-knowledge.astralsorcery.fragment.constellation.bootes.ritual.description=Increasing starlight provided to this ritual will not increase the number of resources per animal, but it will increase how often these resources may be shed.
+knowledge.astralsorcery.fragment.constellation.bootes.ritual.description=Un aumento nella luce stellare conferita a questo rituale non aumenta il numero di risorse per animale, ma aumenta quanto spesso queste risorse vengono raccolte.
 
 knowledge.astralsorcery.fragment.constellation.bootes.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.bootes.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.bootes.ritual.corrupted.description=Damaged creatures of the field are slaughtered, though with an overabundance of resources from their corpses.
+knowledge.astralsorcery.fragment.constellation.bootes.ritual.corrupted.description=Le creature entro il campo del rituale vengono danneggiate e macellate, tuttavia con una sovrabbondanza di risorse dai loro corpi morti.
 
 knowledge.astralsorcery.fragment.constellation.bootes.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.bootes.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.bootes.mantle.description=Flares will only attack those who have hit the player, and will attack the most recent attacker.
+knowledge.astralsorcery.fragment.constellation.bootes.mantle.description=I Bagliori attaccheranno solo coloro che hanno colpito il giocatore, e attaccheranno il nemico più recente.
 
 knowledge.astralsorcery.fragment.constellation.fornax.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.fornax.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.fornax.potions.description=Immunity to Fire damage.
+knowledge.astralsorcery.fragment.constellation.fornax.potions.description=Immunità al danno da fuoco.
 
 knowledge.astralsorcery.fragment.constellation.fornax.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.fornax.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.fornax.enchantments.description=Enchantments deal fire damage, set enemies on fire, and automatically smelt harvested blocks.
+knowledge.astralsorcery.fragment.constellation.fornax.enchantments.description=Gli incantamenti fanno danno da fuoco, mandano i nemici a fuoco, e cuociono automaticamente i blocchi raccolti.
 
 knowledge.astralsorcery.fragment.constellation.fornax.ritual.name=Effetti dei Rituali 
 knowledge.astralsorcery.fragment.constellation.fornax.ritual.bookmark=Rituale
-knowledge.astralsorcery.fragment.constellation.fornax.ritual.description=Due to the nature of the ritual, blocks with exceptionally high melting points such as ores will not be melted, only those that melt into lava or water.
+knowledge.astralsorcery.fragment.constellation.fornax.ritual.description=A causa della natura del rituale, i blocchi con punti di fusione eccezionalmente alti come i minerali non saranno in grado di essere fusi, solo coloro che vengono fusi in lava o acqua.
 
 knowledge.astralsorcery.fragment.constellation.fornax.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.fornax.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.fornax.ritual.corrupted.description=Liquids are chilled, fires drained of heat, and the very moisture in the air turned to ice.
+knowledge.astralsorcery.fragment.constellation.fornax.ritual.corrupted.description=I liquidi sono congelati, i fuochi vengono privati del calore, e l'umidità nell'aria diventa ghiaccio.
 
 knowledge.astralsorcery.fragment.constellation.fornax.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.fornax.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.fornax.mantle.description=While the default healing won't result in a net gain of health, effects that boost the healing will result in a net gain.
+knowledge.astralsorcery.fragment.constellation.fornax.mantle.description=Mentre le cure di default non risulteranno in un guadagno netto di salute, gli effetti che potenziano la cura risulteranno in un guadagno netto.
 
-knowledge.astralsorcery.fragment.constellation.pelotrio.showup.name=Appearance Limits
-knowledge.astralsorcery.fragment.constellation.pelotrio.showup.bookmark=Appearances
-knowledge.astralsorcery.fragment.constellation.pelotrio.showup.description=This constellation only appears when the moon is in the Full or New phases.
+knowledge.astralsorcery.fragment.constellation.pelotrio.showup.name=I limiti delle Apparizioni
+knowledge.astralsorcery.fragment.constellation.pelotrio.showup.bookmark=Apparizioni
+knowledge.astralsorcery.fragment.constellation.pelotrio.showup.description=Questa costellazione appare solo quando la luna è in una fase piena o nuova.
 
 knowledge.astralsorcery.fragment.constellation.pelotrio.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.pelotrio.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.pelotrio.potions.description=These potions provide superior health recovery, potentially higher than conventional potions. They also can provide magical damage Absorption.
+knowledge.astralsorcery.fragment.constellation.pelotrio.potions.description=Queste pozioni provvedono recupero di vita superiore, potenzialmente più alto delle pozioni convenzionali. Forniscono anche assorbimento dell danno magico.
 
 knowledge.astralsorcery.fragment.constellation.pelotrio.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.pelotrio.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.pelotrio.enchantments.description=Superior fishing rods and bows that never run out of ammunition can be enchantable.
+knowledge.astralsorcery.fragment.constellation.pelotrio.enchantments.description=Canne da pesca e archi superiori che non finiscono mai munizioni
 
 knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.name=Effetti dei Rituali 
 knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.bookmark=Rituale
-knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.description=This ritual will continue to summon creatures irrelevant of presence of a Lucerna ritual.
+knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.description=Questo rituale continuera a evocare creature irrilevanti della presenza del rituale di Lucerna.
 
 knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.corrupted.name=Rituale Corrotto
 knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.corrupted.bookmark=Corruzioni
-knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.corrupted.description=The darkness inside creatures is called forth, irrevocably twisting them into a darker form. Creatures so changed are filled with valuable items that burst forth when they are slain.
+knowledge.astralsorcery.fragment.constellation.pelotrio.ritual.corrupted.description=L'oscurità dentro le creature è chiamata via, contorcendosi irrevocabilmente in una forma più oscura. Le creature in questo modo cambiano e sono riempite di oggetti di valore che scoppiano via quendo le creature sono abbattute.
 
 knowledge.astralsorcery.fragment.constellation.pelotrio.mantle.name=I Poteri del Mantello
 knowledge.astralsorcery.fragment.constellation.pelotrio.mantle.bookmark=Mantello
-knowledge.astralsorcery.fragment.constellation.pelotrio.mantle.description=Spectral tools or weapons will only spawn if the proper tool is held in the main hand.
+knowledge.astralsorcery.fragment.constellation.pelotrio.mantle.description=Gli attrezzi o le armi spettrali spawneranno solo se l'attrezzo approppiato è tenuto nella mano principale.
 
 knowledge.astralsorcery.fragment.constellation.gelu.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.gelu.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.gelu.potions.description=The chill of these brewed potions extends fire resistance, resistance to damage, and causes slowness of speed.
+knowledge.astralsorcery.fragment.constellation.gelu.potions.description=La freschezza di queste pozioni distillate estende la resistenza al fuoco, la resistenza al danno, e causa lentezza.
 
 knowledge.astralsorcery.fragment.constellation.gelu.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.gelu.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.gelu.enchantments.description=Converting water that is walked on into a solid surface of ice, reducing damage from speedy falls, and solidifying tools and armor to reduce breakage are all within the realm of these enchants.
+knowledge.astralsorcery.fragment.constellation.gelu.enchantments.description=Converte l'acqua sopra a cui si cammina in una superficie solida di ghiaccio, riduce il danno delle cadute, e solidificando gli attrezzi e l'armatura per ridurre l'usura.
 
-knowledge.astralsorcery.fragment.constellation.gelu.trait.name=Trait Effects
-knowledge.astralsorcery.fragment.constellation.gelu.trait.bookmark=Traits
-knowledge.astralsorcery.fragment.constellation.gelu.trait.description=While expanding the reach of the ritual nearly 4 times over, it also decreases the power of the ritual to nearly 1/6th of the previous strength.
+knowledge.astralsorcery.fragment.constellation.gelu.trait.name=Effetti del Tratto
+knowledge.astralsorcery.fragment.constellation.gelu.trait.bookmark=Tratti
+knowledge.astralsorcery.fragment.constellation.gelu.trait.description=Espandere il raggio del rituale oltre a 4 volte il normale diminuisce anche la potenza del rituale a circa 1/6 della forza precedente
 
 knowledge.astralsorcery.fragment.constellation.ulteria.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.ulteria.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.ulteria.potions.description=While increasing natural health regeneration and instantly healing some damage as it is taken, these brewed potions also reduce the damage that can be dealt in return.
+knowledge.astralsorcery.fragment.constellation.ulteria.potions.description=Mentre aumentare la rigenerazione della vita normale e curare istantaneamente del danno provocato, questo pozioni distillate diminuiscono anche il danno che può essere fatto in ritorno.
 
 knowledge.astralsorcery.fragment.constellation.ulteria.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.ulteria.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.ulteria.enchantments.description=Normal protective enchantments conflict with each other, preventing armor from channeling the energies of more than one. Enchantments from the light of this constellation have no such restriction.
+knowledge.astralsorcery.fragment.constellation.ulteria.enchantments.description=I normali incantamenti di protezione vanno in conflitto l'uno con l'altro, prevenendo all'armatura di incanalare le energie più di una volta. Gli incantamenti dalla luce di questa costellazione non hanno quella restrizione 
 
-knowledge.astralsorcery.fragment.constellation.ulteria.trait.name=Trait Effects
-knowledge.astralsorcery.fragment.constellation.ulteria.trait.bookmark=Traits
-knowledge.astralsorcery.fragment.constellation.ulteria.trait.description=Ritual power is increased to four times normal, but the area of the ritual is reduced to 1/5th normal.
+knowledge.astralsorcery.fragment.constellation.ulteria.trait.name=Effetti del Tratto
+knowledge.astralsorcery.fragment.constellation.ulteria.trait.bookmark=Tratti
+knowledge.astralsorcery.fragment.constellation.ulteria.trait.description=Il potere del rituale è aumentato di quatro volte il normale, ma l'area del rituale sono rdotti a 1/5 del normale.
 
-knowledge.astralsorcery.fragment.constellation.horologium.showup.name=Appearance Limits
-knowledge.astralsorcery.fragment.constellation.horologium.showup.bookmark=Appearances
-knowledge.astralsorcery.fragment.constellation.horologium.showup.description=Like a pendulum swinging between two extremes, the constellation is only visible when the moon is in the First Quarter or Third Quarter phases.
+knowledge.astralsorcery.fragment.constellation.horologium.showup.name=I limiti delle Apparizioni
+knowledge.astralsorcery.fragment.constellation.horologium.showup.bookmark=Apparizione
+knowledge.astralsorcery.fragment.constellation.horologium.showup.description=Come un pendolo che dondola tra i due estremi, la costellazione è visibile solo quando la luna è nella fase del Primo Quarto o del Terzo Quarto.
 
 knowledge.astralsorcery.fragment.constellation.alcara.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.alcara.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.alcara.potions.description=Both harmonious and destructive resonance stem from the distillations of this constellation, increasing a drinker's Luck and removing them from view, while also increasing their hunger.
+knowledge.astralsorcery.fragment.constellation.alcara.potions.description=Entrambe le risonanze armoniose e distruttive arginano le distillazioni di questa costellazione, aumentando la fortuna di colui che beve e rimuovendoli dalla vista, mentre anche aumentando la loro fame.
 
 knowledge.astralsorcery.fragment.constellation.alcara.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.alcara.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.alcara.enchantments.description=Fishing rods send out subtle vibrations, greatly increasing fishing yields, while those same vibrations improve harvesting delicate blocks. Swords enchanted have a destructive resonance, spreading their cuts to other nearby enemies.
+knowledge.astralsorcery.fragment.constellation.alcara.enchantments.description=Le canne da pesca mandano fuori delle sottili vibrazioni, che aumentano notevolmente la frequenza dei pesci, mentre quelle stesse vibrazioni sembrano migliorare la raccolta di blocchi delicati. Le spade incantate hanno una risonanza distruttiva, distribuendo i loro fendenti tra gli altri neimici nei pressi.
 
-knowledge.astralsorcery.fragment.constellation.alcara.trait.name=Trait Effects
-knowledge.astralsorcery.fragment.constellation.alcara.trait.bookmark=Traits
-knowledge.astralsorcery.fragment.constellation.alcara.trait.description=Rituals are corrupted, and the strain of that causes the ritual crystal to fracture like a house of cards in a strong breeze when any starlight is received by the crystal.
+knowledge.astralsorcery.fragment.constellation.alcara.trait.name=Effetti del Tratto
+knowledge.astralsorcery.fragment.constellation.alcara.trait.bookmark=Tratti
+knowledge.astralsorcery.fragment.constellation.alcara.trait.description=I Rituali sono corrotti,  e lo sforzo di ciò causa il cristallo di fratturarsi come un castello di carte in una forte brezza di vento mentre qualsiasi luce stellare è ricevuta dal cristallo.
 
 knowledge.astralsorcery.fragment.constellation.vorux.potions.name=Gli effetti delle pozioni
 knowledge.astralsorcery.fragment.constellation.vorux.potions.bookmark=Pozioni
-knowledge.astralsorcery.fragment.constellation.vorux.potions.description=In exchange for instilling lethargy with tools this brew helps fight through lesser injuries and greatly increases damage from weapon swings.
+knowledge.astralsorcery.fragment.constellation.vorux.potions.description=In cambio per instillare il letargo con gli attrezzi questo distillato aiuta a combattare contro ferite leggere e aumenta notevolmente il danno dai fendenti di spada.
 
 knowledge.astralsorcery.fragment.constellation.vorux.enchantments.name=Incantamento
 knowledge.astralsorcery.fragment.constellation.vorux.enchantments.bookmark=Incantamento
-knowledge.astralsorcery.fragment.constellation.vorux.enchantments.description=All foes will find themselves at the mercy of your weapons, which will strike far harder than normal.
+knowledge.astralsorcery.fragment.constellation.vorux.enchantments.description=Tutti i nemici possono trovarsi alla pietà delle tue armi, che colpira molto più forte del normale.
 
-knowledge.astralsorcery.fragment.constellation.vorux.trait.name=Trait Effects
-knowledge.astralsorcery.fragment.constellation.vorux.trait.bookmark=Traits
-knowledge.astralsorcery.fragment.constellation.vorux.trait.description=This constellation doubles ritual power and increases the reach of a ritual by three-quarters, but at the cost of increased fracturation of the ritual crystal.
-
-
-perk.DMG_KILL=Frenesia da uccisione
-perk.DMG_KILL.info=Danno aumentato dopo aver ucciso un mob
-perk.DMG_DST=Cecchino sul tetto
-perk.DMG_DST.info=Danno aumentato ai mob distanti
-perk.DMG_PERM=Frenetico
-perk.DMG_PERM.info=Danno generale aumentato leggermente
-perk.DMG_KNOCK=Colpi pesanti
-perk.DMG_KNOCK.info=Danno aumentato ai mob che subiscono un contraccolpo
-perk.DMG_BLEED=Ferite Dolorose
-perk.DMG_BLEED.info=Applica un effetto di sanguinamento quando colpisci qualcuno
-perk.DMG_REFLECT=Aura spinosa
-perk.DMG_REFLECT.info=Il danno fatto a te verrà occasionalmente riflettuto
-
-perk.CRE_GROWTH=Pollice verde
-perk.CRE_GROWTH.info=Le piante intorno a te crescono un pochino più veloce
-perk.CRE_BREEDING=Fertilità aumentata
-perk.CRE_BREEDING.info=Gli animali intorno a te sentono il bisogno di replicarsi
-perk.CRE_ORES=Arricchimento dei minerali
-perk.CRE_ORES.info=La pietra vicino a te inizia a diventare pietra di maggior valore
-perk.CRE_REACH=Raggio esteso
-perk.CRE_REACH.info=Il tuo raggio aumenta di un po'
-perk.CRE_MEND=Riparazione passiva
-perk.CRE_MEND.info=Occasionalmente la tua armatura si ripara un po'
-perk.CRE_FLARES=Scintille animate
-perk.CRE_FLARES.info=Crea dei bagliori occasionali per difenderti
-
-perk.DEF_DMGREDUCTION=Pelle dura
-perk.DEF_DMGREDUCTION.info=Riduce in generale il danno ricevuto
-perk.DEF_DODGE=Alta destrezza
-perk.DEF_DODGE.info=Ti concede una possibilità di schivare un danno che sta per arrivare
-perk.DEF_NOARMOR=Niente armatura è più armatura
-perk.DEF_NOARMOR.info=Resistenza e cura quando si indossa meno di 3 pezzi di armatura
-perk.DEF_ELEMENTAL=Scudo elementale
-perk.DEF_ELEMENTAL.info=Ricevi meno danno elementale
-perk.DEF_FALLRED=Piume aggiuntive
-perk.DEF_FALLRED.info=Prendi meno danno da caduta
-perk.DEF_CHEATDEATH=Benedizione della fenice
-perk.DEF_CHEATDEATH.info=Può salvarti dalla morte in certe situazioni
-
-perk.TRV_MOVESPEED=Frettoloso
-perk.TRV_MOVESPEED.info=Garantisce movimenti più veloci
-perk.TRV_WATERMOV=Chi ha bisogno di pinne?
-perk.TRV_WATERMOV.info=Consente una velocità di nuoto aumentata
-perk.TRV_FOODREDUCTION=Grande stomaco
-perk.TRV_FOODREDUCTION.info=Riduce il bisogno generale di cibo
-perk.TRV_LIGHT=Diletto dello scavatore
-perk.TRV_LIGHT.info=Piazza sorgenti di luce vicino a te nelle caverne
-perk.TRV_LPROT=Scavare dritto in basso
-perk.TRV_LPROT.info=Ti protegge dalla lava per un breve periodo di tempo
-perk.TRV_STEPASSIST=Stivali da escursione
-perk.TRV_STEPASSIST.info=Salire di un singolo blocco sembra più facile
-
-perk.DTR_BREAKSPEED=Prospettore
-perk.DTR_BREAKSPEED.info=Garantisce una velocità aumentata nello scavare
-perk.DTR_DAMAGEARC=Carica statica
-perk.DTR_DAMAGEARC.info=Possibilità di danneggiare un altra entità vicina durante un attacco
-perk.DTR_BREAKTYPE=Angolazioni diverse 
-perk.DTR_BREAKTYPE.info=Usare il tuo piccone come una pala o come un ascia
-perk.DTR_LOW_HEALTH=Ultimo respiro
-perk.DTR_LOW_HEALTH.info=Attacco più potente e minare più rapido quando si ha poca vita
-perk.DTR_ARMORBREAK=Colpi precisi
-perk.DTR_ARMORBREAK.info=Attacchi hanno la possibilità di disarmare il target
-perk.DTR_STACK=Distruzione accatastata
-perk.DTR_STACK.info=Danno d'attacco più alto e velocita nello scavare più alta nel tempo
+knowledge.astralsorcery.fragment.constellation.vorux.trait.name=Effetti del Tratto
+knowledge.astralsorcery.fragment.constellation.vorux.trait.bookmark=Tratti
+knowledge.astralsorcery.fragment.constellation.vorux.trait.description=Questa costellazione duplica il potere del rituale e aumenta il raggio del rituale di 3/4, ma al costo di fratture aumentate del cristallo del rituale.
