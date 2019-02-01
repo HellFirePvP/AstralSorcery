@@ -172,7 +172,7 @@ public class EntityFlare extends EntityFlying {
                             setAttackTarget(null);
                         }
                         if(getAttackTarget() == null) {
-                            moveTarget = Vector3.atEntityCenter(getFollowingEntity()).addY(-1 + rand.nextFloat() * 2.5).toBlockPos();
+                            moveTarget = Vector3.atEntityCenter(getFollowingEntity()).addY(2).toBlockPos();
                         }
                     }
                 } else if(getAttackTarget() != null) {
