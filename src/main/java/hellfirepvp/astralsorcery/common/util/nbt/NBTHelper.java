@@ -154,7 +154,7 @@ public class NBTHelper {
                     if(opt.isPresent()) {
                         state = state.withProperty(match, opt.get());
                     }
-                } catch (Exception exc) {}
+                } catch (Throwable tr) {} // Thanks Exu2
             }
         }
         return state;
