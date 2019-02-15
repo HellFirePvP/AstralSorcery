@@ -86,8 +86,8 @@ public class TileWell extends TileReceiverBaseInventory {
     public void update() {
         super.update();
 
-        if(!world.isRemote) {
-            if(world.canSeeSky(getPos())) {
+        if (!world.isRemote) {
+            if (MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, false)) {
                 double sbDayDistribution = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
                 sbDayDistribution = 0.3 + (0.7 * sbDayDistribution);
                 int yLevel = getPos().getY();

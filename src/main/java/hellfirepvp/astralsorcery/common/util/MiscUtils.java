@@ -67,6 +67,7 @@ import java.util.stream.Collectors;
  */
 public class MiscUtils {
 
+    public static final String GAMERULE_SKIP_SKYLIGHT_CHECK = "astralSorceryIgnoreSkyCheck";
     private static Map<EnumDyeColor, Color> prettierColorMapping = new HashMap<>();
 
     @Nullable
@@ -116,6 +117,17 @@ public class MiscUtils {
             }
         }
         return max;
+    }
+
+    public static boolean canSeeSky(World world, BlockPos at, boolean loadChunk, boolean defaultValue) {
+        if (world.getGameRules().getBoolean(GAMERULE_SKIP_SKYLIGHT_CHECK)) {
+            return true;
+        }
+
+        if (!isChunkLoaded(world, at) && !loadChunk) {
+            return defaultValue;
+        }
+        return world.canSeeSky(at);
     }
 
     public static <K, V, N> Map<K, N> remap(Map<K, V> map, Function<V, N> remapFct) {

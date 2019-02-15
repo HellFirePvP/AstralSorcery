@@ -34,6 +34,7 @@ import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -598,12 +599,12 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
             for (int zz = -1; zz <= 1; zz++) {
                 if(xx == 0 && zz == 0) continue;
                 BlockPos other = pos.add(xx, 0, zz);
-                if (!renderWorld.canSeeSky(other)) {
+                if (!MiscUtils.canSeeSky(renderWorld, other, true, false)) {
                     return false;
                 }
             }
         }
-        return renderWorld.canSeeSky(pos.up());
+        return MiscUtils.canSeeSky(renderWorld, pos.up(), true, false);
     }
 
     @Override

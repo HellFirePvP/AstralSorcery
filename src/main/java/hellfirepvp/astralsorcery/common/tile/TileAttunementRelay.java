@@ -157,7 +157,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
     }
 
     private void updateSkyState() {
-        boolean seesSky = world.canSeeSky(getPos());
+        boolean seesSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.canSeeSky);
         boolean update = canSeeSky != seesSky;
         this.canSeeSky = seesSky;
         if (update) {

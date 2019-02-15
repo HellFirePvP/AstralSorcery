@@ -56,6 +56,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -233,6 +234,11 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onLoad(WorldEvent.Load event) {
         event.getWorld().addEventListener(new WorldEventNotifier());
+
+        GameRules rules = event.getWorld().getGameRules();
+        if (!rules.hasRule(MiscUtils.GAMERULE_SKIP_SKYLIGHT_CHECK)) {
+            rules.addGameRule(MiscUtils.GAMERULE_SKIP_SKYLIGHT_CHECK, "false", GameRules.ValueType.BOOLEAN_VALUE);
+        }
     }
 
     @SubscribeEvent

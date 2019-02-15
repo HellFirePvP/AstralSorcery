@@ -131,7 +131,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         super.update();
 
         if((ticksExisted & 15) == 0) {
-            updateSkyState(world.canSeeSky(getPos()));
+            updateSkyState(MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
         }
 
 

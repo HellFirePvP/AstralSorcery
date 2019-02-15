@@ -98,7 +98,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
         if(!world.isRemote) {
             if((ticksExisted & 15) == 0) {
-                updateSkyState(world.canSeeSky(getPos()));
+                updateSkyState(MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
 
                 updateLinkTile();
             }

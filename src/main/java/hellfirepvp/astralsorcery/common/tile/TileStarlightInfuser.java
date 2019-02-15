@@ -35,6 +35,7 @@ import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
 import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -239,7 +240,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     }
 
     private void updateSkyState() {
-        boolean seesSky = world.canSeeSky(getPos());
+        boolean seesSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky);
         boolean update = doesSeeSky != seesSky;
         this.doesSeeSky = seesSky;
         if (update) {

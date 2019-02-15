@@ -322,7 +322,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             for (int zz = -7; zz <= 7; zz++) {
                 BlockPos other = at.add(xx, 0, zz);
                 if(MiscUtils.isChunkLoaded(world, new ChunkPos(other))) {
-                    boolean see = world.canSeeSky(other);
+                    boolean see = MiscUtils.canSeeSky(this.getWorld(), other, true, false);
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;
@@ -334,7 +334,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                         break lbl;
                     }
                 } else {
-                    boolean see = world.canSeeSky(other);
+                    boolean see = MiscUtils.canSeeSky(this.getWorld(), other, true, false);
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;

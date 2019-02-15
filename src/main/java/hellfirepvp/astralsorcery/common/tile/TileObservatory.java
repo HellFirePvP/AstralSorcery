@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.entities.EntityObservatoryHelper;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -70,12 +71,12 @@ public class TileObservatory extends TileEntityTick {
                     continue;
                 }
                 BlockPos other = pos.add(xx, 0, zz);
-                if (!world.canSeeSky(other)) {
+                if (!MiscUtils.canSeeSky(this.getWorld(), other, false, true)) {
                     return false;
                 }
             }
         }
-        return world.canSeeSky(pos.up());
+        return MiscUtils.canSeeSky(this.getWorld(), this.getPos().up(), true, false);
     }
 
     private Entity createNewObservatoryEntity() {

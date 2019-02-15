@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -26,7 +27,7 @@ public abstract class TileNetworkSkybound extends TileNetwork {
         super.update();
 
         if((ticksExisted & 15) == 0) {
-            updateSkyState(world.canSeeSky(getPos()));
+            updateSkyState(MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
         }
     }
 

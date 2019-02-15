@@ -212,7 +212,10 @@ public class TileIlluminator extends TileEntityTick {
 
         @Override
         public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
-            return world.isAirBlock(pos) && !world.canSeeSky(pos) && world.getLight(pos) < 8 && world.getLightFor(EnumSkyBlock.SKY, pos) < 6;
+            return world.isAirBlock(pos) &&
+                    !MiscUtils.canSeeSky(world, pos, false, false) &&
+                    world.getLight(pos) < 8 &&
+                    world.getLightFor(EnumSkyBlock.SKY, pos) < 6;
         }
 
     }

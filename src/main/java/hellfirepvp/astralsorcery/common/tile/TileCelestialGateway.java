@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
 import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
@@ -64,7 +65,8 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
             playEffects();
         } else {
             if((ticksExisted & 15) == 0) {
-                updateSkyState(world.provider.isNether() || world.canSeeSky(getPos().up()));
+                updateSkyState(world.provider.isNether() ||
+                        MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
             }
 
             updateMultiblockState();
