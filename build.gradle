@@ -3,7 +3,7 @@ buildscript {
         jcenter()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://files.minecraftforge.net/maven"
         }
     }
     dependencies {
@@ -18,7 +18,7 @@ group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
 minecraft {
-    version = "14.23.5.2781"
+    version = "1.12.2-14.23.5.2781"
     runDir = "run"
     useDepAts = true
 
@@ -41,20 +41,21 @@ compileApiJava {
 repositories {
 
     maven {
-        // location of the maven that hosts JEI files
+        // JEI files
+        // https when
         url = "http://dvs1.progwml6.com/files/maven"
     }
 
     maven {
         // CraftTweaker
         name 'jared maven'
-        url "http://maven.blamejared.com/"
+        url "https://maven.blamejared.com/"
     }
 
     maven {
         //Baubles
         name 'thiakil'
-        url 'http://maven.thiakil.com'
+        url 'https://maven.thiakil.com'
     }
 
     maven {
