@@ -1,4 +1,4 @@
-[![Build Status](http://176.9.2.48:8080/job/AstralSorcery/job/master/badge/icon)](http://176.9.2.48:8080/job/AstralSorcery/job/master/)
+[![Build Status](https://jenkins.hellfiredev.net/job/AstralSorcery/job/master/badge/icon)](https://jenkins.hellfiredev.net/job/AstralSorcery/job/master/)
 
 # Astral Sorcery
 
