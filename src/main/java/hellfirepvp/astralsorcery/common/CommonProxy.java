@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.*;
-import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonDataManager;
 import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonFlareManager;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
@@ -230,8 +230,8 @@ public class CommonProxy implements IGuiHandler {
         RegistryResearch.init();
         RegistryRecipes.initGrindstoneOreRecipes();
         SextantFinder.initialize();
-        PatreonEffectHelper.init();
         RegistryKnowledgeFragments.init();
+        PatreonDataManager.loadPatreonEffects();
 
         RegistryConstellations.initMapEffects();
 
