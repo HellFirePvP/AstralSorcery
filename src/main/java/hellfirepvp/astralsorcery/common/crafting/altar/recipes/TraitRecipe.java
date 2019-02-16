@@ -224,6 +224,10 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         }
 
         int required = additionallyRequiredStacks.size();
+        if (required <= 0) {
+            return true; //No additional items, huh.
+        }
+
         int part = totalCraftingTime / 2;
         int offset = totalCraftingTime / 10;
         int cttPart = part / required;
