@@ -76,14 +76,13 @@ public class ResearchManager {
         return progress;
     }
 
-    @Nonnull
     public static PlayerProgress getProgress(EntityPlayer player, Side side) {
         if(side == Side.CLIENT) {
             return clientProgress;
         } else if(player instanceof EntityPlayerMP) {
             return getProgress((EntityPlayerMP) player);
         } else {
-            throw new IllegalStateException("Called getProgress on neither server or client - what are you?");
+            return null;
         }
     }
 
