@@ -24,7 +24,7 @@ find . ! -name \'*.jar\' -delete'''
         branch 'master'
       }
       steps {
-        sh ./gradlew publish
+        sh '''./gradlew publish'''
       }
     }
     stage('Notify') {
