@@ -8,15 +8,7 @@ pipeline {
       steps {
         sh '''cp -a /var/lib/jenkins/buildMetadata/AstralSorcery/. .
 rm -rf AS-Example.zs perkMapDraft.pdn README.html README.md AstralSorcery
-./gradlew build
-cp -a ./build/libs/. .
-rm -rf build gradle .gradle
-find . ! -name \'*.jar\' -delete'''
-      }
-    }
-    stage('Archive') {
-      steps {
-        archiveArtifacts '*.jar'
+./gradlew build'''
       }
     }
     stage('Publish') {
@@ -25,6 +17,19 @@ find . ! -name \'*.jar\' -delete'''
       }
       steps {
         sh '''./gradlew publish'''
+      }
+    }
+    stage('Prepare Archiving') {
+      steps {
+        sh '''cp -a ./build/libs/. .
+rm -rf build gradle .gradle
+find . ! -name \'*.jar\' -delete'''
+      }
+    }
+    }
+    stage('Archive') {
+      steps {
+        archiveArtifacts '*.jar'
       }
     }
     stage('Notify') {
