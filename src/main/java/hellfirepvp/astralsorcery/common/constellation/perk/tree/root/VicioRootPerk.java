@@ -105,8 +105,7 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             if (added > 0) {
                 PlayerProgress prog = ResearchManager.getProgress(player, side);
 
-
-                added *= 0.01F;
+                added *= 0.025F;
                 added *= expMultiplier;
                 added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, added);
                 added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);

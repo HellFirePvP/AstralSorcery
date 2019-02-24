@@ -43,7 +43,7 @@ public class KeyDigTypes extends KeyPerk {
         EntityPlayer player = event.getEntityPlayer();
         Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null && prog.hasPerkEffect(this)) {
+        if (prog.hasPerkEffect(this)) {
             ItemStack heldMainHand = player.getHeldItemMainhand();
             if(!heldMainHand.isEmpty() && heldMainHand.getItem().getToolClasses(heldMainHand).contains("pickaxe")) {
                 IBlockState tryHarvest = event.getTargetBlock();
@@ -62,7 +62,7 @@ public class KeyDigTypes extends KeyPerk {
         EntityPlayer player = event.getEntityPlayer();
         Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null && prog.hasPerkEffect(this)) {
+        if (prog.hasPerkEffect(this)) {
             IBlockState broken = event.getState();
             ItemStack playerMainHand = player.getHeldItemMainhand();
             if(!playerMainHand.isEmpty()) {

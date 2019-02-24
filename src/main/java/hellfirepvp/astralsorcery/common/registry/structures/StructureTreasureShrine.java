@@ -43,7 +43,7 @@ public class StructureTreasureShrine extends StructureBlockArray {
         IBlockState mbr = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
 
         addBlockCube(mrw, -4, 0, -4, 4, 8, 4);
-        addBlockCube(Blocks.AIR.getDefaultState(), -3, 2, -3, 3, 7, 3);
+        addAirCube(-3, 2, -3, 3, 7, 3);
 
         addBlock(0, 1, 0, mru);
         addBlock(0, 2, 0, mpl);

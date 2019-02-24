@@ -119,7 +119,7 @@ public class PerkEffectHelper implements ITickHandler {
 
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null) {
+            if (prog.isValid()) {
                 long exp = MathHelper.lfloor(prog.getPerkExp());
                 int level = prog.getPerkLevel(player);
                 long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(level - 1, player);
@@ -140,7 +140,7 @@ public class PerkEffectHelper implements ITickHandler {
 
     private void handlePerkModification(EntityPlayer player, Side side, boolean remove) {
         PlayerProgress progress = ResearchManager.getProgress(player, side);
-        if (progress != null) {
+        if (progress.isValid()) {
             for (AbstractPerk perk : progress.getAppliedPerks()) {
                 if (remove) {
                     handlePerkRemoval(perk, player, side);
@@ -153,7 +153,7 @@ public class PerkEffectHelper implements ITickHandler {
 
     public void notifyPerkChange(EntityPlayer player, Side side, AbstractPerk perk, boolean remove) {
         PlayerProgress progress = ResearchManager.getProgress(player, side);
-        if (progress != null) {
+        if (progress.isValid()) {
             if (remove) {
                 handlePerkRemoval(perk, player, side);
             } else {
@@ -236,11 +236,11 @@ public class PerkEffectHelper implements ITickHandler {
         if (!"Client thread".equalsIgnoreCase(tr.getName()) &&
                 !"Server thread".equalsIgnoreCase(tr.getName())) {
             AstralSorcery.log.error("Called perk modification outside synced thread!");
-            throw new RuntimeException("Debug - Modified perks outside the main thread(s)");
+            throw new RuntimeException("Modified perks outside the main thread(s)");
         }
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null) {
+        if (prog.isValid()) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
             List<AbstractPerk> perks = new LinkedList<>(prog.getAppliedPerks());
             perks = perks.stream().filter(attributeMap::isPerkApplied).collect(Collectors.toList());
@@ -263,11 +263,11 @@ public class PerkEffectHelper implements ITickHandler {
         if (!"Client thread".equalsIgnoreCase(tr.getName()) &&
                 !"Server thread".equalsIgnoreCase(tr.getName())) {
             AstralSorcery.log.error("Called perk modification outside synced thread!");
-            throw new RuntimeException("Debug - Modified perks outside the main thread(s)");
+            throw new RuntimeException("Modified perks outside the main thread(s)");
         }
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null) {
+        if (prog.isValid()) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
             List<AbstractPerk> perks = new LinkedList<>(attributeMap.getCacheAppliedPerks());
             perks.forEach(perk -> perk.removePerk(player, side));
@@ -328,7 +328,7 @@ public class PerkEffectHelper implements ITickHandler {
         EntityPlayer ticked = (EntityPlayer) context[0];
         Side side = (Side) context[1];
         PlayerProgress prog = ResearchManager.getProgress(ticked, side);
-        if(prog != null) {
+        if(prog.isValid()) {
             for (AbstractPerk perk : prog.getAppliedPerks()) {
                 if (perk instanceof IPlayerTickPerk && prog.hasPerkEffect(perk)) {
                     ((IPlayerTickPerk) perk).onPlayerTick(ticked, side);

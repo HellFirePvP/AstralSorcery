@@ -75,7 +75,7 @@ public class KeyMagnetDrops extends KeyPerk {
             return;
         }
         PlayerProgress prog = ResearchManager.getProgress(player, Side.SERVER);
-        if (prog == null || !prog.hasPerkEffect(this)) {
+        if (!prog.hasPerkEffect(this)) {
             return;
         }
 

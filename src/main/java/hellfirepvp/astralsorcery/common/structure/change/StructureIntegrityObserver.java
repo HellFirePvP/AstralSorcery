@@ -36,8 +36,7 @@ public class StructureIntegrityObserver {
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
         World world = event.getWorld();
-        if (world.isRemote ||
-                !event.getChunk().isTerrainPopulated()) {
+        if (world.isRemote || !event.getChunk().isTerrainPopulated()) {
             return;
         }
 

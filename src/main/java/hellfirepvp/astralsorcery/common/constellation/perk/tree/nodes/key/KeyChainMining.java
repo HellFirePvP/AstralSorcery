@@ -129,9 +129,9 @@ public class KeyChainMining extends KeyPerk {
                         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, atState, fp);
                         MinecraftForge.EVENT_BUS.post(event);
                         exp = event.getExpToDrop();
-                        if(event.isCanceled()) return false;
+                        if(event.isCanceled()) continue;
                     } catch (Exception exc) {
-                        return false;
+                        continue;
                     }
                     boolean capturing = false;
                     try {

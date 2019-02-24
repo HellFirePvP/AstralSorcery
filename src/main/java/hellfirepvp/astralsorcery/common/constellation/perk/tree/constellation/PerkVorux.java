@@ -57,7 +57,7 @@ public class PerkVorux extends ConstellationPerk {
             EntityPlayer player = ev.getPlayer();
             Side side = player.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 ev.setValue(0);
             }
         }

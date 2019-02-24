@@ -32,8 +32,10 @@ public class WorldEventNotifier implements IWorldEventListener {
 
     @Override
     public void notifyBlockUpdate(World world, BlockPos pos, IBlockState oldState, IBlockState newState, int flags) {
-        MinecraftForge.EVENT_BUS.post(new BlockModifyEvent(world, world.getChunkFromBlockCoords(pos),
-                pos, oldState, newState));
+        if (!oldState.equals(newState)) {
+            MinecraftForge.EVENT_BUS.post(new BlockModifyEvent(world, world.getChunkFromBlockCoords(pos),
+                    pos, oldState, newState));
+        }
     }
 
     @Override

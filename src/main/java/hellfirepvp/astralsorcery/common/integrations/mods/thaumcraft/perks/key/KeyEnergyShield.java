@@ -35,11 +35,11 @@ public class KeyEnergyShield extends KeyPerkThaumcraft {
 
     @SubscribeEvent
     public void on(AttributeEvent.PostProcessVanilla event) {
-        EntityLivingBase owner = event.getPlayer();
+        EntityPlayer owner = event.getPlayer();
         if (owner != null && event.getAttribute().equals(SharedMonsterAttributes.MAX_HEALTH)) {
             Side side = owner.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER;
-            PlayerProgress prog = ResearchManager.getProgress((EntityPlayer) owner, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            PlayerProgress prog = ResearchManager.getProgress(owner, side);
+            if (prog.hasPerkEffect(this)) {
                 event.setValue(1);
             }
         }

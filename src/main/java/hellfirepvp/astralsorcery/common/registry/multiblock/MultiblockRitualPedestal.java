@@ -41,9 +41,9 @@ public class MultiblockRitualPedestal extends PatternBlockArray {
     private void load() {
         Block marble = BlocksAS.blockMarble;
 
-        addBlockCube(Blocks.AIR.getDefaultState(), -2, 0, -2, 2, 2, 2);
-        addBlockCube(Blocks.AIR.getDefaultState(), -3, 0, -1, 3, 2, 1);
-        addBlockCube(Blocks.AIR.getDefaultState(), -1, 0, -3, 1, 2, 3);
+        addAirCube(-2, 0, -2, 2, 2, 2);
+        addAirCube(-3, 0, -1, 3, 2, 1);
+        addAirCube(-1, 0, -3, 1, 2, 3);
 
         addBlock(0, 0, 0, BlocksAS.ritualPedestal.getDefaultState());
 

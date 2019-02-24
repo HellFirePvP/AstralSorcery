@@ -317,6 +317,10 @@ public class PlayerProgress {
         this.wasOnceAttuned = compound.getBoolean("wasAttuned");
     }
 
+    public boolean isValid() {
+        return true;
+    }
+
     protected boolean forceGainResearch(ResearchProgression progression) {
         if(!researchProgression.contains(progression)) {
             researchProgression.add(progression);

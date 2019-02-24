@@ -66,7 +66,7 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
     public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y, double scale) {
         if (this.associatedConstellation != null) {
             PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
-            if (prog != null && !prog.getKnownConstellations().contains(this.associatedConstellation.getUnlocalizedName())) {
+            if (!prog.getKnownConstellations().contains(this.associatedConstellation.getUnlocalizedName())) {
                 return;
             }
             Color overlay = Color.WHITE;

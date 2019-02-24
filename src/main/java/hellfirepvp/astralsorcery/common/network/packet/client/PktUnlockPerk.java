@@ -71,16 +71,14 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
             MinecraftServer ms = FMLCommonHandler.instance().getMinecraftServerInstance();
             if (ms != null) {
                 ms.addScheduledTask(() -> {
-                    EntityPlayer pl = ctx.getServerHandler().player;
+                    EntityPlayerMP pl = ctx.getServerHandler().player;
                     if(pl != null) {
                         if(message.perk != null) {
                             AbstractPerk perk = message.perk;
                             PlayerProgress prog = ResearchManager.getProgress(pl, ctx.side);
-                            if(prog != null) {
-                                if(!prog.hasPerkUnlocked(perk)) {
-                                    if(perk.mayUnlockPerk(prog, pl) && ResearchManager.applyPerk(pl, message.perk)) {
-                                        PacketChannel.CHANNEL.sendTo(new PktUnlockPerk(true, message.perk), (EntityPlayerMP) pl);
-                                    }
+                            if (!prog.hasPerkUnlocked(perk) && prog.isValid()) {
+                                if (perk.mayUnlockPerk(prog, pl) && ResearchManager.applyPerk(pl, message.perk)) {
+                                    PacketChannel.CHANNEL.sendTo(new PktUnlockPerk(true, message.perk), pl);
                                 }
                             }
                         }
@@ -95,10 +93,10 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
 
     @SideOnly(Side.CLIENT)
     private void recUnlockResultClient(PktUnlockPerk message) {
-        if(message.serverAccept) {
+        if (message.serverAccept) {
             AbstractPerk perk = message.perk;
             GuiScreen current = Minecraft.getMinecraft().currentScreen;
-            if(current != null && current instanceof GuiJournalPerkTree) {
+            if (current instanceof GuiJournalPerkTree) {
                 Minecraft.getMinecraft().addScheduledTask(() -> ((GuiJournalPerkTree) current).playUnlockAnimation(perk));
             }
         }

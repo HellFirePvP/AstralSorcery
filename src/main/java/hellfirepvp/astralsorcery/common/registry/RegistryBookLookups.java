@@ -42,10 +42,8 @@ public class RegistryBookLookups {
             if(ItemUtils.stackEqualsNonNBT(search, compare)) {
                 LookupInfo info = lookupMap.get(compare);
                 PlayerProgress prog = ResearchManager.getProgress(querying, side);
-                if(prog != null) {
-                    if(prog.getResearchProgression().contains(info.neededKnowledge) && info.node.canSee(prog)) {
-                        return info;
-                    }
+                if(prog.getResearchProgression().contains(info.neededKnowledge) && info.node.canSee(prog)) {
+                    return info;
                 }
             }
         }

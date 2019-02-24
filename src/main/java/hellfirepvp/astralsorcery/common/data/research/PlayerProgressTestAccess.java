@@ -8,12 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.data.research;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,18 +28,23 @@ import java.util.List;
 public class PlayerProgressTestAccess extends PlayerProgress {
 
     @Override
+    public boolean isValid() {
+        return false;
+    }
+
+    @Override
     public List<ResearchProgression> getResearchProgression() {
-        return Lists.newArrayList();
+        return Collections.emptyList();
     }
 
     @Override
     public List<String> getSeenConstellations() {
-        return Lists.newArrayList();
+        return Collections.emptyList();
     }
 
     @Override
     public List<String> getKnownConstellations() {
-        return Lists.newArrayList();
+        return Collections.emptyList();
     }
 
     @Override
@@ -67,17 +74,23 @@ public class PlayerProgressTestAccess extends PlayerProgress {
 
     @Override
     public List<AbstractPerk> getAppliedPerks() {
-        return Lists.newArrayList();
+        return Collections.emptyList();
     }
 
     @Override
     public List<AbstractPerk> getSealedPerks() {
-        return Lists.newArrayList();
+        return Collections.emptyList();
+    }
+
+    @Nullable
+    @Override
+    public NBTTagCompound getPerkData(AbstractPerk perk) {
+        return null;
     }
 
     @Override
     public List<SextantFinder.TargetObject> getUsedTargets() {
-        return Lists.newArrayList();
+        return Collections.emptyList();
     }
 
     @Override
@@ -95,7 +108,7 @@ public class PlayerProgressTestAccess extends PlayerProgress {
 
     @Override
     public List<String> getFreePointTokens() {
-        return Lists.newArrayList();
+        return Collections.emptyList();
     }
 
     @Override

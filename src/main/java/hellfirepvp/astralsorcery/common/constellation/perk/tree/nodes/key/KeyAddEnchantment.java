@@ -52,7 +52,7 @@ public class KeyAddEnchantment extends KeyPerk {
         if (player != null) {
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 List<DynamicEnchantment> listedEnchantments = event.getEnchantmentsToApply();
                 for (DynamicEnchantment ench : this.enchantments) {
                     DynamicEnchantment added = MiscUtils.iterativeSearch(listedEnchantments, e ->

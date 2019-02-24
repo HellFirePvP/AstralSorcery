@@ -55,7 +55,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if(isInCreativeTab(tab)) {
+        if (isInCreativeTab(tab)) {
             items.add(new ItemStack(this));
 
             ItemStack creative = new ItemStack(this);
@@ -67,11 +67,11 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if(isCreative(stack)) {
+        if (isCreative(stack)) {
             tooltip.add(TextFormatting.LIGHT_PURPLE + I18n.format("misc.knowledge.inscribed.creative"));
             return;
         }
-        if(getKnowledge(stack) == null) {
+        if (getKnowledge(stack) == null) {
             tooltip.add(I18n.format("misc.knowledge.missing"));
         } else {
             String name = getKnowledgeOwnerName(stack);
@@ -83,7 +83,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
 
     @Override
     public ModelResourceLocation getModelLocation(ItemStack stack, ModelResourceLocation suggestedDefaultLocation) {
-        if(isCreative(stack) || getKnowledgeOwnerName(stack) != null) {
+        if (isCreative(stack) || getKnowledgeOwnerName(stack) != null) {
             return new ModelResourceLocation(new ResourceLocation(suggestedDefaultLocation.getResourceDomain(),
                     suggestedDefaultLocation.getResourcePath() + "_written"),
                     suggestedDefaultLocation.getVariant());
@@ -105,7 +105,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
         if (stack.isEmpty() || worldIn.isRemote) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         }
-        if(!isCreative(stack) && (playerIn.isSneaking() || getKnowledge(stack) == null)) {
+        if (!isCreative(stack) && (playerIn.isSneaking() || getKnowledge(stack) == null)) {
             tryInscribeKnowledge(stack, playerIn);
         } else {
             tryGiveKnowledge(stack, playerIn);
@@ -119,7 +119,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
         if (stack.isEmpty() || worldIn.isRemote) {
             return EnumActionResult.SUCCESS;
         }
-        if(!isCreative(stack) && (player.isSneaking() || getKnowledge(stack) == null)) {
+        if (!isCreative(stack) && (player.isSneaking() || getKnowledge(stack) == null)) {
             tryInscribeKnowledge(stack, player);
         } else {
             tryGiveKnowledge(stack, player);
@@ -132,31 +132,31 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
             return;
         }
 
-        if(isCreative(stack)) {
+        if (isCreative(stack)) {
             ResearchManager.forceMaximizeAll(player);
             return;
         }
-        if(canInscribeKnowledge(stack, player)) return; //Means it's either empty or the player that has incsribed the knowledge is trying to use it.
+        if (canInscribeKnowledge(stack, player)) return; //Means it's either empty or the player that has incsribed the knowledge is trying to use it.
         PlayerProgress progress = getKnowledge(stack);
-        if(progress == null) return;
+        if (progress == null) return;
         ProgressionTier prev = progress.getTierReached();
-        if(ResearchManager.mergeApplyPlayerprogress(progress, player) && progress.getTierReached().isThisLater(prev)) {
+        if (ResearchManager.mergeApplyPlayerprogress(progress, player) && progress.getTierReached().isThisLater(prev)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(progress.getTierReached());
             PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
         }
     }
 
     private void tryInscribeKnowledge(ItemStack stack, EntityPlayer player) {
-        if(canInscribeKnowledge(stack, player)) {
+        if (canInscribeKnowledge(stack, player)) {
             setKnowledge(stack, player, ResearchManager.getProgress(player, Side.SERVER));
         }
     }
 
     @Nullable
     public EntityPlayer getKnowledgeOwner(ItemStack stack, MinecraftServer server) {
-        if(isCreative(stack)) return null;
+        if (isCreative(stack)) return null;
         NBTTagCompound compound = NBTHelper.getPersistentData(stack);
-        if(!compound.hasUniqueId("knowledgeOwnerUUID")) {
+        if (!compound.hasUniqueId("knowledgeOwnerUUID")) {
             return null;
         }
         UUID owner = compound.getUniqueId("knowledgeOwnerUUID");
@@ -165,9 +165,9 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
 
     @Nullable
     public String getKnowledgeOwnerName(ItemStack stack) {
-        if(isCreative(stack)) return null;
+        if (isCreative(stack)) return null;
         NBTTagCompound compound = NBTHelper.getPersistentData(stack);
-        if(!compound.hasKey("knowledgeOwnerName")) {
+        if (!compound.hasKey("knowledgeOwnerName")) {
             return null;
         }
         return compound.getString("knowledgeOwnerName");
@@ -175,9 +175,9 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
 
     @Nullable
     public PlayerProgress getKnowledge(ItemStack stack) {
-        if(isCreative(stack)) return null;
+        if (isCreative(stack)) return null;
         NBTTagCompound compound = NBTHelper.getPersistentData(stack);
-        if(!compound.hasKey("knowledgeTag")) {
+        if (!compound.hasKey("knowledgeTag")) {
             return null;
         }
         NBTTagCompound tag = compound.getCompoundTag("knowledgeTag");
@@ -191,9 +191,9 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     }
 
     public boolean canInscribeKnowledge(ItemStack stack, EntityPlayer player) {
-        if(isCreative(stack)) return false;
+        if (isCreative(stack)) return false;
         NBTTagCompound compound = NBTHelper.getPersistentData(stack);
-        if(!compound.hasUniqueId("knowledgeOwnerUUID")) {
+        if (!compound.hasUniqueId("knowledgeOwnerUUID")) {
             return true;
         }
         UUID owner = compound.getUniqueId("knowledgeOwnerUUID");
@@ -201,7 +201,8 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     }
 
     public void setKnowledge(ItemStack stack, EntityPlayer player, PlayerProgress progress) {
-        if(isCreative(stack)) return;
+        if (isCreative(stack) || !progress.isValid()) return;
+
         NBTTagCompound knowledge = new NBTTagCompound();
         progress.storeKnowledge(knowledge);
         NBTTagCompound compound = NBTHelper.getPersistentData(stack);
@@ -212,7 +213,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
 
     public boolean isCreative(ItemStack stack) {
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
-        if(!cmp.hasKey("creativeKnowledge")) {
+        if (!cmp.hasKey("creativeKnowledge")) {
             return false;
         }
         return cmp.getBoolean("creativeKnowledge");

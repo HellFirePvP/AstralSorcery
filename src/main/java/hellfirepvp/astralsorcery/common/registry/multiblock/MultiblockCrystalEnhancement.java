@@ -53,12 +53,12 @@ public class MultiblockCrystalEnhancement extends PatternBlockArray {
             addBlock(offset, BlocksAS.blockLiquidStarlight.getDefaultState(),
                     (state) -> state.getBlock().equals(BlocksAS.blockLiquidStarlight) && state.getValue(BlockFluidBase.LEVEL) == 0);
         }
-        addBlockCube(Blocks.AIR.getDefaultState(), 1, 1, 1, -1, -1, -1);
+        addAirCube(1, 1, 1, -1, -1, -1);
         addBlock(0, 0, 0, BlocksAS.celestialCollectorCrystal.getDefaultState());
         addTileCallback(BlockPos.ORIGIN, new TileEntityCallback() {
             @Override
             public boolean isApplicable(TileEntity te) {
-                return te != null && te instanceof TileCollectorCrystal;
+                return te instanceof TileCollectorCrystal;
             }
 
             @Override

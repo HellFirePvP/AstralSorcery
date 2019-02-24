@@ -285,7 +285,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 EntityPlayerMP pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
                 if (pl != null && !MiscUtils.isPlayerFakeMP(pl) && !pl.isSneaking()) {
                     PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
-                    if (prog != null && prog.getAttunedConstellation() == null &&
+                    if (prog.isValid() &&
+                            prog.getAttunedConstellation() == null &&
                             prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
                             prog.getKnownConstellations().contains(activeFound.getUnlocalizedName())) {
 
@@ -436,7 +437,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     public void askForAttunement(EntityPlayerMP playerEntity, IMajorConstellation cst) {
         if(mode == 1 && playerAttunementWaitTick > 0 && activeEntity != null && playerEntity.equals(activeEntity)) {
             PlayerProgress prog = ResearchManager.getProgress(playerEntity, Side.SERVER);
-            if(prog != null && prog.getAttunedConstellation() == null &&
+            if(prog.isValid() &&
+                    prog.getAttunedConstellation() == null &&
                     prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
                     prog.getKnownConstellations().contains(cst.getUnlocalizedName())) {
                 ResearchManager.setAttunedConstellation(playerEntity, cst);

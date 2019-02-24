@@ -45,7 +45,7 @@ public class KeyDamageArmor extends KeyPerk {
             EntityPlayer player = (EntityPlayer) attacked;
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 int armorPieces = 0;
                 for (ItemStack armor : player.getArmorInventoryList()) {
                     if (!armor.isEmpty()) {

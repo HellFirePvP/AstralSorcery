@@ -16,6 +16,8 @@ import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -40,6 +42,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -60,6 +63,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -131,6 +135,24 @@ public class EventHandlerServer {
     }*/
 
     @SubscribeEvent
+    public void onPickup(EntityItemPickupEvent event) {
+        EntityItem ei = event.getItem();
+        if (ei.getItem().getItem() instanceof ItemFragmentCapsule ||
+                ei.getItem().getItem() instanceof ItemKnowledgeFragment) {
+            EntityPlayer pickingUp = event.getEntityPlayer();
+            if (!pickingUp.getEntityWorld().isRemote) {
+                String playerName = ei.getOwner();
+                if (playerName == null) {
+                    playerName = ei.getThrower();
+                }
+                if (playerName != null && !playerName.equals(pickingUp.getName())) {
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onContainerOpen(PlayerContainerEvent.Open event) {
         if(event.getContainer() instanceof ContainerWorkbench && !event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP) {
             PacketChannel.CHANNEL.sendTo(new PktCraftingTableFix(((ContainerWorkbench) event.getContainer()).pos), (EntityPlayerMP) event.getEntityPlayer());
@@ -158,7 +180,7 @@ public class EventHandlerServer {
     }
 
     private void phoenixEffects(EntityLivingBase entity, int level) {
-        entity.setHealth(6 + level * 2);
+        entity.setHealth(Math.min(entity.getMaxHealth(), 6 + level * 2));
         entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 2, false, false));
         entity.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 500, 1, false, false));
         List<EntityLivingBase> others = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(3), (e) -> !e.isDead && e != entity);
@@ -324,7 +346,7 @@ public class EventHandlerServer {
                     int fortuneLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, main);
                     NonNullList<ItemStack> drops = NonNullList.create();
                     event.getDrops().clear();
-                    event.getState().getBlock().getDrops(drops, event.getWorld(), event.getPos(), event.getState(), 0);
+                    event.getState().getBlock().getDrops(drops, event.getWorld(), event.getPos(), event.getState(), fortuneLvl);
                     for (ItemStack stack : drops) {
                         ItemStack out = FurnaceRecipes.instance().getSmeltingResult(stack);
                         if(!out.isEmpty()) {

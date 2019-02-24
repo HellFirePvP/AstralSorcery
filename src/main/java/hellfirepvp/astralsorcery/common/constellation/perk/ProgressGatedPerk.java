@@ -86,7 +86,7 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     public final boolean canSee(EntityPlayer player, Side side) {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null) {
+        if (prog.isValid()) {
             return canSee(player, prog);
         }
         return false;

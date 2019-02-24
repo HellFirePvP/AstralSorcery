@@ -97,7 +97,7 @@ dependencies {
 
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
 
-    compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
+    deobfCompile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
 
 }
 

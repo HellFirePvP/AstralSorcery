@@ -100,7 +100,7 @@ public class KeyVoidTrash extends KeyPerk {
         }
 
         PlayerProgress prog = ResearchManager.getProgress(player, Side.SERVER);
-        if (prog == null || !prog.hasPerkEffect(this)) {
+        if (!prog.hasPerkEffect(this)) {
             return;
         }
 

@@ -54,7 +54,7 @@ public interface GemSlotPerk {
             throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
         }
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog == null || !prog.hasPerkUnlocked((AbstractPerk) this)) {
+        if (!prog.hasPerkUnlocked((AbstractPerk) this)) {
             return ItemStack.EMPTY;
         }
         NBTTagCompound data = dataOvr != null ? dataOvr : ((AbstractPerk) this).getPerkData(player, side);
@@ -74,7 +74,7 @@ public interface GemSlotPerk {
             throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
         }
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog == null || !prog.hasPerkUnlocked((AbstractPerk) this)) {
+        if (!prog.hasPerkUnlocked((AbstractPerk) this)) {
             return false;
         }
         boolean updateData = dataOvr == null;
@@ -137,7 +137,7 @@ public interface GemSlotPerk {
             return;
         }
         PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
-        if (prog == null) {
+        if (!prog.isValid()) {
             return;
         }
         ItemStack contained = getContainedItem(Minecraft.getMinecraft().player, Side.CLIENT);

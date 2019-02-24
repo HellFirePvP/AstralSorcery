@@ -236,6 +236,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
                 generated.motionZ = m.getZ();
                 generated.setDefaultPickupDelay();
                 generated.setThrower(player.getName());
+                generated.setOwner(player.getName());
                 world.spawnEntity(generated);
 
                 LootTable table = world.getLootTableManager().getLootTableFromLocation(LootTableUtil.LOOT_TABLE_SHOOTING_STAR);

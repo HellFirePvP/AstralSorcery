@@ -13,7 +13,9 @@ import hellfirepvp.astralsorcery.common.item.base.render.ISpecialStackDescriptor
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -46,6 +48,10 @@ public class BlockArray {
     protected Map<BlockPos, TileEntityCallback> tileCallbacks = new HashMap<>();
     protected Map<BlockPos, BlockInformation> pattern = new HashMap<>();
     private Vec3i min = new Vec3i(0, 0, 0), max = new Vec3i(0, 0, 0), size = new Vec3i(0, 0, 0);
+
+    public void addAir(int x, int y, int z) {
+        addBlock(x, y, z, Blocks.AIR.getDefaultState(), state -> state.getMaterial() == Material.AIR);
+    }
 
     public void addBlock(int x, int y, int z, @Nonnull IBlockState state) {
         addBlock(new BlockPos(x, y, z), state);
@@ -145,6 +151,10 @@ public class BlockArray {
 
     public Map<BlockPos, TileEntityCallback> getTileCallbacks() {
         return tileCallbacks;
+    }
+
+    public void addAirCube(int ox, int oy, int oz, int tx, int ty, int tz) {
+        addBlockCube(Blocks.AIR.getDefaultState(), state -> state.getMaterial() == Material.AIR, ox, oy, oz, tx, ty, tz);
     }
 
     public void addBlockCube(@Nonnull IBlockState state, int ox, int oy, int oz, int tx, int ty, int tz) {

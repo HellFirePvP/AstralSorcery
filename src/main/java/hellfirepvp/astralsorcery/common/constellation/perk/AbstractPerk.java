@@ -178,7 +178,7 @@ public abstract class AbstractPerk {
             return PerkTreePoint.AllocationStatus.UNALLOCATED;
         }
         PlayerProgress progress = ResearchManager.getProgress(player, side);
-        if (progress == null) {
+        if (!progress.isValid()) {
             return PerkTreePoint.AllocationStatus.UNALLOCATED;
         }
         if (progress.hasPerkUnlocked(this)) {

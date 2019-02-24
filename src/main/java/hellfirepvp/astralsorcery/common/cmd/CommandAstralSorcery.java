@@ -467,7 +467,7 @@ public class CommandAstralSorcery extends CommandBase {
             return null;
         }
         PlayerProgress progress = ResearchManager.getProgress(other);
-        if (progress == null) {
+        if (!progress.isValid()) {
             sender.sendMessage(new TextComponentString("§cCould not get Progress for (" + otherPlayerName + ") !"));
             return null;
         }
