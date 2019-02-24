@@ -19,6 +19,14 @@ find . ! -name \'*.jar\' -delete'''
         archiveArtifacts '*.jar'
       }
     }
+    stage('Publish') {
+      when{
+        branch 'master'
+      }
+      steps {
+        sh ./gradlew publish
+      }
+    }
     stage('Notify') {
       when{
         branch 'master'

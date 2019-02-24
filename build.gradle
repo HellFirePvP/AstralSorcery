@@ -1,6 +1,8 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
+
         maven {
             name = "forge"
             url = "https://files.minecraftforge.net/maven"
@@ -11,11 +13,19 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: "java"
+apply plugin: 'maven-publish'
+apply plugin: 'java'
 
 version = "1.12.2-1.10.12"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
+build_version = version
+
+// Most likely inside Jenkins. Or homebrew environment.
+// I hope you know what you do if it's the latter.
+if (System.getenv('BUILD_NUMBER') != null) {
+    build_version += "-"+ System.getenv('BUILD_NUMBER')
+}
 
 minecraft {
     version = "1.12.2-14.23.5.2781"
@@ -25,17 +35,17 @@ minecraft {
     mappings = "snapshot_20180415"
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 compileJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 compileApiJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 repositories {
@@ -121,8 +131,37 @@ jar {
     }
 }
 
-processResources
-{
+task deobfJar(type: Jar) {
+    from(sourceSets.main.output)
+    archiveName = "${baseName}-${version}-deobf.${extension}"
+}
+
+artifacts {
+    archives deobfJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version build_version
+            from components.java
+
+            artifact deobfJar {
+                classifier 'deobf'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url "file://" + System.getenv("LOCAL_MAVEN")
+        }
+    }
+}
+
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
