@@ -26,7 +26,6 @@ rm -rf build gradle .gradle
 find . ! -name \'*.jar\' -delete'''
       }
     }
-    }
     stage('Archive') {
       steps {
         archiveArtifacts '*.jar'
