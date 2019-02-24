@@ -22,7 +22,7 @@ String build_version = ""
 // Most likely inside Jenkins. Or homebrew environment.
 // I hope you know what you do if it's the latter.
 if (System.getenv("BUILD_NUMBER") != null) {
-    build_version = version + "-" + System.getenv("BUILD_NUMBER")
+    build_version = version + "-v" + System.getenv("BUILD_NUMBER")
 }
 
 minecraft {
