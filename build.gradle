@@ -16,6 +16,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
 
+String build_version
+
 version = "1.12.2-1.10.12"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
@@ -24,7 +26,7 @@ build_version = version
 // Most likely inside Jenkins. Or homebrew environment.
 // I hope you know what you do if it's the latter.
 if (System.getenv('BUILD_NUMBER') != null) {
-    build_version += "-"+ System.getenv('BUILD_NUMBER')
+    build_version += "-" + System.getenv('BUILD_NUMBER')
 }
 
 minecraft {
