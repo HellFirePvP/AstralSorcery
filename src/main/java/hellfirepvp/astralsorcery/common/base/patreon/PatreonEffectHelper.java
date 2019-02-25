@@ -77,6 +77,10 @@ public class PatreonEffectHelper {
             return chosenColor;
         }
 
+        public boolean hasEvents() {
+            return false;
+        }
+
         public boolean hasPartialEntity() {
             return this.chosenColor != null;
         }
