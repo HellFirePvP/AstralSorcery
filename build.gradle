@@ -134,8 +134,14 @@ task deobfJar(type: Jar) {
     archiveName = "${baseName}-${version}-deobf.${extension}"
 }
 
+task srcJar(type: Jar) {
+    from(sourceSets.main.java)
+    classifier = 'sources'
+    archiveName = "${baseName} ${version}-sources.${extension}"
+}
+
 artifacts {
-    archives deobfJar
+    archives deobfJar, srcJar
 }
 
 publishing {
