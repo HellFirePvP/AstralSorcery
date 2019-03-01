@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.ClientReplyPacket;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -18,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -62,14 +64,17 @@ public class PktRotateTelescope implements IMessage, IMessageHandler<PktRotateTe
     @Override
     public PktRotateTelescope onMessage(PktRotateTelescope message, MessageContext ctx) {
         if(ctx.side == Side.SERVER) {
-            if(DimensionManager.isDimensionRegistered(message.dimId)) {
-                WorldServer ws = DimensionManager.getWorld(message.dimId);
-                TileTelescope tt = MiscUtils.getTileAt(ws, message.pos, TileTelescope.class, false);
-                if(tt != null) {
-                    tt.setRotation(message.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
-                    return new PktRotateTelescope(message.isClockwise, message.dimId, message.pos);
+            FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+                if(DimensionManager.isDimensionRegistered(message.dimId)) {
+                    WorldServer ws = DimensionManager.getWorld(message.dimId);
+                    TileTelescope tt = MiscUtils.getTileAt(ws, message.pos, TileTelescope.class, false);
+                    if(tt != null) {
+                        tt.setRotation(message.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
+                        PktRotateTelescope pkt =  new PktRotateTelescope(message.isClockwise, message.dimId, message.pos);
+                        PacketChannel.CHANNEL.sendTo(pkt, ctx.getServerHandler().player);
+                    }
                 }
-            }
+            });
         } else {
             applyRotation(message);
         }
