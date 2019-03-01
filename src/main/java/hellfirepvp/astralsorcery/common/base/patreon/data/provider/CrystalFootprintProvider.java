@@ -8,10 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.base.patreon.data.provider;
 
-import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
-import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFloatingFlareCrystal;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectCrystalFootprint;
 import hellfirepvp.astralsorcery.common.base.patreon.data.EffectProvider;
 
 import java.awt.*;
@@ -21,25 +19,21 @@ import java.util.UUID;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: FloatingFlareCrystalProvider
+ * Class: CrystalFootprintProvider
  * Created by HellFirePvP
- * Date: 16.02.2019 / 18:38
+ * Date: 01.03.2019 / 17:37
  */
-public class FloatingFlareCrystalProvider implements EffectProvider<PtEffectFloatingFlareCrystal> {
+public class CrystalFootprintProvider implements EffectProvider<PtEffectCrystalFootprint> {
 
     @Override
-    public PtEffectFloatingFlareCrystal buildEffect(UUID uuid, List<String> effectParameters) throws Exception {
+    public PtEffectCrystalFootprint buildEffect(UUID uuid, List<String> effectParameters) throws Exception {
         UUID uniqueId = UUID.fromString(effectParameters.get(0));
         PatreonEffectHelper.FlareColor fc = null;
         if (!"null".equals(effectParameters.get(1))) {
             fc = PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(1));
         }
-        int colorTheme = Integer.parseInt(effectParameters.get(2));
-        String modelTexture = effectParameters.get(3);
-        return new PtEffectFloatingFlareCrystal(
-                uniqueId,
-                new Color(colorTheme), fc,
-                new TextureQuery(AssetLoader.TextureLocation.MODELS, modelTexture));
+        Color color = new Color(Integer.parseInt(effectParameters.get(2)));
+        return new PtEffectCrystalFootprint(uniqueId, fc, uuid, color);
     }
 
 }

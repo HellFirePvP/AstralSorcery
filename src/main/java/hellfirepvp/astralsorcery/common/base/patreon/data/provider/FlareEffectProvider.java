@@ -25,7 +25,12 @@ public class FlareEffectProvider implements EffectProvider<PatreonEffectHelper.P
 
     @Override
     public PatreonEffectHelper.PatreonEffect buildEffect(UUID uuid, List<String> effectParameters) throws Exception {
-        return new PatreonEffectHelper.PatreonEffect(PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(0)));
+        UUID uniqueId = UUID.fromString(effectParameters.get(0));
+        PatreonEffectHelper.FlareColor fc = null;
+        if (!"null".equals(effectParameters.get(1))) {
+            fc = PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(1));
+        }
+        return new PatreonEffectHelper.PatreonEffect(uniqueId, fc);
     }
 
 }

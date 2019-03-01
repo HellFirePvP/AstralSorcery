@@ -243,7 +243,8 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
     private void playEffects() {
         int color = 0xFF3FFF3F;
         PatreonEffectHelper.PatreonEffect pe;
-        if (getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(Side.CLIENT, getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
+        if (getPlacedBy() != null && (pe = PatreonEffectHelper.getPatreonEffects(Side.CLIENT, getPlacedBy())
+                .stream().filter(p -> p instanceof PtEffectTreeBeacon).findFirst().orElse(null)) != null) {
             color = ((PtEffectTreeBeacon) pe).getColorTreeEffects();
         }
         Color col = new Color(color);
@@ -279,7 +280,8 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
             if (ttb != null) {
                 int color = 0xFF00FF00; //Green
                 PatreonEffectHelper.PatreonEffect pe;
-                if (ttb.getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(Side.CLIENT, ttb.getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
+                if (ttb.getPlacedBy() != null && (pe = PatreonEffectHelper.getPatreonEffects(Side.CLIENT, ttb.getPlacedBy())
+                        .stream().filter(p -> p instanceof PtEffectTreeBeacon).findFirst().orElse(null)) != null) {
                     color = ((PtEffectTreeBeacon) pe).getColorTreeDrainEffects();
                 }
                 Vector3 to = new Vector3(tft.getReference()).add(0.5, 0.5, 0.5);

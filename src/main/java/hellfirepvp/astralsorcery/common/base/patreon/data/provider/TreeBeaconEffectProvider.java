@@ -26,11 +26,12 @@ public class TreeBeaconEffectProvider implements EffectProvider<PtEffectTreeBeac
 
     @Override
     public PtEffectTreeBeacon buildEffect(UUID uuid, List<String> effectParameters) throws Exception {
-        PatreonEffectHelper.FlareColor flareColor = PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(0));
-        int overlay = Integer.parseInt(effectParameters.get(1));
-        int drain = Integer.parseInt(effectParameters.get(2));
-        int tree = Integer.parseInt(effectParameters.get(3));
-        return new PtEffectTreeBeacon(flareColor)
+        UUID uniqueId = UUID.fromString(effectParameters.get(0));
+        PatreonEffectHelper.FlareColor flareColor = PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(1));
+        int overlay = Integer.parseInt(effectParameters.get(2));
+        int drain = Integer.parseInt(effectParameters.get(3));
+        int tree = Integer.parseInt(effectParameters.get(4));
+        return new PtEffectTreeBeacon(uniqueId, flareColor)
                         .setOverlayColor(overlay)
                         .setDrainColor(drain)
                         .setTreeColor(tree);

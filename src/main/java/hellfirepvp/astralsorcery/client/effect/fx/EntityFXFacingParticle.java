@@ -197,16 +197,17 @@ public class EntityFXFacingParticle extends EntityComplexFX {
         alpha *= alphaMultiplier;
         GlStateManager.color(colorRed, colorGreen, colorBlue, alpha);
         staticFlareTex.bind();
-        RenderingUtils.renderFacingQuad(interpolate(oldX, x, pTicks), interpolate(oldY, y, pTicks), interpolate(oldZ, z, pTicks), pTicks, scale, 0, 0, 0, 1, 1);
+        RenderingUtils.renderFacingQuad(
+                RenderingUtils.interpolate(oldX, x, pTicks),
+                RenderingUtils.interpolate(oldY, y, pTicks),
+                RenderingUtils.interpolate(oldZ, z, pTicks),
+                pTicks, scale, 0,
+                0, 0, 1, 1);
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.depthMask(true);
         GlStateManager.enableCull();
-    }
-
-    private double interpolate(double oldP, double newP, float partial) {
-        return oldP + ((newP - oldP) * partial);
     }
 
     public static class Gateway extends EntityFXFacingParticle {

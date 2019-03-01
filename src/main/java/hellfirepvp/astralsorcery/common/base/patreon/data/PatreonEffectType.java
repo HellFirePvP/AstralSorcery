@@ -23,6 +23,7 @@ public enum PatreonEffectType {
     FLARE_DYNAMIC_COLOR(new DynFlareEffectProvider()),
     FLARE_CRYSTAL(new FloatingFlareCrystalProvider()),
     TREE_BEACON_COLOR(new TreeBeaconEffectProvider()),
+    CRYSTAL_FOOTPRINTS(new CrystalFootprintProvider()),
 
     FLOATING_HALO(new SpecificPatreonHaloEffectProvider());
 

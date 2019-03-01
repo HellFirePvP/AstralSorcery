@@ -26,8 +26,9 @@ public class DynFlareEffectProvider implements EffectProvider<PtEffectDynColorFl
 
     @Override
     public PtEffectDynColorFlare buildEffect(UUID uuid, List<String> effectParameters) throws Exception {
-        return new PtEffectDynColorFlare(() ->
-                Color.getHSBColor(PtEffectDynColorFlare.getClientTick() % 360 / 360F, 1F, 1F));
+        UUID uniqueId = UUID.fromString(effectParameters.get(0));
+        return new PtEffectDynColorFlare(uniqueId,
+                () -> Color.getHSBColor(PtEffectDynColorFlare.getClientTick() % 360 / 360F, 1F, 1F));
     }
 
 }

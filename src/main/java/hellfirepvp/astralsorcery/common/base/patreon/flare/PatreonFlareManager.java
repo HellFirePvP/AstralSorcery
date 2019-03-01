@@ -19,9 +19,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,17 +38,22 @@ public class PatreonFlareManager implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         if (server == null) return;
+
         DataPatreonFlares dataFlares = SyncDataHolder.getDataServer(SyncDataHolder.DATA_PATREON_FLARES);
-        for (Map.Entry<UUID, PatreonEffectHelper.PatreonEffect> effect : PatreonEffectHelper.getEntityPatrons(server.getPlayerList().getPlayers()).entrySet()) {
+        List<UUID> ownerDiff = new ArrayList<>(dataFlares.getOwners(Side.SERVER));
+
+        for (Map.Entry<UUID, List<PatreonEffectHelper.PatreonEffect>> effect : PatreonEffectHelper.getPatreonEffects(server.getPlayerList().getPlayers()).entrySet()) {
             EntityPlayerMP owner = server.getPlayerList().getPlayerByUUID(effect.getKey());
-            PatreonPartialEntity entity = dataFlares.getEntity(Side.SERVER, effect.getKey());
-            if (owner == null) {
-                if (entity != null) {
-                    dataFlares.destroyEntity(entity);
-                }
-            } else {
+            Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity> knownEntities =
+                    dataFlares.getEntities(Side.SERVER, owner.getUniqueID());
+            ownerDiff.remove(owner.getUniqueID());
+
+            for (PatreonEffectHelper.PatreonEffect pe : effect.getValue()) {
+                if (!pe.hasPartialEntity()) continue;
+
+                PatreonPartialEntity entity = knownEntities.get(pe);
                 if (entity == null) {
-                    entity = dataFlares.createEntity(owner, effect.getValue());
+                    entity = dataFlares.createEntity(owner, pe);
                 }
 
                 World plWorld = owner.getEntityWorld();
@@ -61,6 +64,15 @@ public class PatreonFlareManager implements ITickHandler {
                 if(entity.update(plWorld)) {
                     dataFlares.updateEntity(entity);
                 }
+            }
+        }
+
+        for (UUID removedOwner : ownerDiff) {
+            Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity> knownEntities =
+                    dataFlares.getEntities(Side.SERVER, removedOwner);
+
+            for (PatreonPartialEntity entity : knownEntities.values()) {
+                dataFlares.destroyEntity(entity);
             }
         }
     }

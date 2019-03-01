@@ -31,8 +31,8 @@ public class PtEffectDynColorFlare extends PatreonEffectHelper.PatreonEffect {
 
     private Provider<Color> colorProvider;
 
-    public PtEffectDynColorFlare(Provider<Color> colorProvider) {
-        super(null);
+    public PtEffectDynColorFlare(UUID uniqueId, Provider<Color> colorProvider) {
+        super(uniqueId, null);
         this.colorProvider = colorProvider;
     }
 

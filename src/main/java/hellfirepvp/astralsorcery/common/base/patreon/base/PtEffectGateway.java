@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.base.patreon.base;
 
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
 
+import java.util.UUID;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -19,8 +21,8 @@ import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
  */
 public class PtEffectGateway extends PatreonEffectHelper.PatreonEffect {
 
-    public PtEffectGateway(PatreonEffectHelper.FlareColor chosenColor) {
-        super(chosenColor);
+    public PtEffectGateway(UUID uniqueId, PatreonEffectHelper.FlareColor chosenColor) {
+        super(uniqueId, chosenColor);
     }
 
 }

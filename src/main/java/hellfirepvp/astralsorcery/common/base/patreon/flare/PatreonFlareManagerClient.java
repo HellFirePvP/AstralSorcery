@@ -21,7 +21,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,18 +47,21 @@ public class PatreonFlareManagerClient implements ITickHandler {
         Vector3 thisPlayerPos = Vector3.atEntityCenter(thisPlayer);
 
         DataPatreonFlares dataFlares = SyncDataHolder.getDataClient(SyncDataHolder.DATA_PATREON_FLARES);
-        for (PatreonPartialEntity flare : dataFlares.getEntities(Side.CLIENT)) {
-            if (flare.getLastTickedDim() == null || clDim != flare.getLastTickedDim()) continue;
-            if (flare.getPos().distanceSquared(thisPlayerPos) <= Config.maxEffectRenderDistanceSq) {
-                flare.tickInRenderDistance();
+        for (Collection<PatreonPartialEntity> playerFlares : dataFlares.getEntities(Side.CLIENT)) {
+            for (PatreonPartialEntity flare : playerFlares) {
+                if (flare.getLastTickedDim() == null || clDim != flare.getLastTickedDim()) continue;
+                if (flare.getPos().distanceSquared(thisPlayerPos) <= Config.maxEffectRenderDistanceSq) {
+                    flare.tickInRenderDistance();
+                }
+                flare.update(clWorld);
             }
-            flare.update(clWorld);
         }
 
         for (EntityPlayer pl : clWorld.playerEntities) {
-            PatreonEffectHelper.PatreonEffect eff = PatreonEffectHelper.getEffect(Side.CLIENT, pl.getUniqueID());
-            if (eff != null && eff instanceof PtEffectFixedSprite) {
-                ((PtEffectFixedSprite) eff).doEffect(pl);
+            for (PatreonEffectHelper.PatreonEffect eff : PatreonEffectHelper.getPatreonEffects(Side.CLIENT, pl.getUniqueID())) {
+                if (eff instanceof PtEffectFixedSprite) {
+                    ((PtEffectFixedSprite) eff).doEffect(pl);
+                }
             }
         }
     }

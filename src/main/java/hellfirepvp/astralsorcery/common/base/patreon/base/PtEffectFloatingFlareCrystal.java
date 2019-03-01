@@ -30,10 +30,10 @@ public class PtEffectFloatingFlareCrystal extends PatreonEffectHelper.PatreonEff
     private PatreonEffectHelper.FlareColor flareColor;
     private TextureQuery crystalTexture;
 
-    public PtEffectFloatingFlareCrystal(Color colorTheme,
+    public PtEffectFloatingFlareCrystal(UUID uniqueId, Color colorTheme,
                                         PatreonEffectHelper.FlareColor flareColor,
                                         TextureQuery crystalTexture) {
-        super(null);
+        super(uniqueId, null);
         this.colorTheme = colorTheme;
         this.flareColor = flareColor;
         this.crystalTexture = crystalTexture;

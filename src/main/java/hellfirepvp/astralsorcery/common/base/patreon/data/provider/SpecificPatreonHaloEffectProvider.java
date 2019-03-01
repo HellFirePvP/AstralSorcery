@@ -29,8 +29,14 @@ public class SpecificPatreonHaloEffectProvider implements EffectProvider<PtEffec
 
     @Override
     public PtEffectFixedSprite buildEffect(UUID uuid, List<String> effectParameters) throws Exception {
+        UUID uniqueId = UUID.fromString(effectParameters.get(0));
+        PatreonEffectHelper.FlareColor fc = null;
+        if (!"null".equals(effectParameters.get(1))) {
+            fc = PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(1));
+        }
         return new PtEffectFixedSprite(
-                PatreonEffectHelper.FlareColor.STANDARD,
+                uniqueId,
+                fc,
                 new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo3", 4, 8)
         ).setPositionFunction(player ->
                 Vector3.atEntityCenter(player).setY((player.posY + 48 < 256) ? player.posY + 48 : 256));

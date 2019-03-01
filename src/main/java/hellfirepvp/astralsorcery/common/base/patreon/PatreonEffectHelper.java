@@ -10,23 +10,19 @@ package hellfirepvp.astralsorcery.common.base.patreon;
 
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.util.resource.*;
-import hellfirepvp.astralsorcery.common.base.patreon.base.*;
 import hellfirepvp.astralsorcery.common.base.patreon.entity.PartialEntityFlare;
-import hellfirepvp.astralsorcery.common.base.patreon.entity.PartialEntityFlareCrystal;
 import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -39,37 +35,39 @@ import java.util.stream.Collectors;
 public class PatreonEffectHelper {
 
     static boolean loadingFinished = false;
-    static Map<UUID, PatreonEffect> effectMap = new HashMap<>();
+    static Map<UUID, List<PatreonEffect>> effectMap = new HashMap<>();
 
-    @Nullable
-    public static PatreonEffect getEffect(Side side, UUID uuid) {
+    @Nonnull
+    public static List<PatreonEffect> getPatreonEffects(Side side, UUID uuid) {
         if (side == Side.CLIENT && !Config.enablePatreonEffects) {
-            return null; //That config is to be applied clientside
+            return Collections.emptyList(); //That config is to be applied clientside
         }
         if (!loadingFinished) {
-            return null;
+            return Collections.emptyList();
         }
         return effectMap.get(uuid);
     }
 
-    public static <T extends EntityPlayer> Map<UUID, PatreonEffect> getEntityPatrons(Collection<T> players) {
+    public static <T extends EntityPlayer> Map<UUID, List<PatreonEffect>> getPatreonEffects(Collection<T> players) {
         if (!loadingFinished) {
             return Maps.newHashMap();
         }
         Collection<UUID> playerUUIDs = players.stream().map(Entity::getUniqueID).collect(Collectors.toList());
         return effectMap.entrySet()
                 .stream()
-                .filter(e -> e.getValue().hasPartialEntity())
                 .filter(e -> playerUUIDs.contains(e.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static class PatreonEffect {
 
+        protected static Random rand = new Random();
         private final FlareColor chosenColor;
+        private final UUID sessionEffectId;
 
-        public PatreonEffect(FlareColor chosenColor) {
+        public PatreonEffect(UUID sessionEffectId, FlareColor chosenColor) {
             this.chosenColor = chosenColor;
+            this.sessionEffectId = sessionEffectId;
         }
 
         @Nullable
@@ -81,6 +79,12 @@ public class PatreonEffectHelper {
             return this.chosenColor != null;
         }
 
+        public UUID getId() {
+            return sessionEffectId;
+        }
+
+        public void initialize() {}
+
         @Nullable
         public PatreonPartialEntity createEntity(UUID playerUUID) {
             if (hasPartialEntity()) {
@@ -89,6 +93,18 @@ public class PatreonEffectHelper {
             return null;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            PatreonEffect that = (PatreonEffect) o;
+            return Objects.equals(sessionEffectId, that.sessionEffectId);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(sessionEffectId);
+        }
     }
 
     public static enum FlareColor {
