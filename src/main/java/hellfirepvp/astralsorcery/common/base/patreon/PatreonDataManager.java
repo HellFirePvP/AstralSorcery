@@ -89,13 +89,13 @@ public class PatreonDataManager {
             }
             AstralSorcery.log.info("Patreon effect loading finished.");
 
-            UUID hellfire = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1");
-            PatreonEffectHelper.PatreonEffect pe =
-                    new PtEffectCrystalFootprint(UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
-                            PatreonEffectHelper.FlareColor.WATER, hellfire,
-                            new Color(Integer.parseInt("14287086")));
-            pe.initialize();
-            PatreonEffectHelper.effectMap.put(hellfire, Lists.newArrayList(pe));
+            //UUID hellfire = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1");
+            //PatreonEffectHelper.PatreonEffect pe =
+            //        new PtEffectCrystalFootprint(UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
+            //                PatreonEffectHelper.FlareColor.WATER, hellfire,
+            //                new Color(Integer.parseInt("14287086")));
+            //pe.initialize();
+            //PatreonEffectHelper.effectMap.get(hellfire).add(pe);
 
             PatreonEffectHelper.loadingFinished = true;
         });

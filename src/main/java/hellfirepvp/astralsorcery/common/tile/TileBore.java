@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
 import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.block.BlockBoreHead;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
@@ -53,6 +54,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -73,8 +75,7 @@ import java.util.stream.Collectors;
  */
 public class TileBore extends TileInventoryBase implements IMultiblockDependantTile, ILiquidStarlightPowered {
 
-    private static int SEGMENT_STARTUP = 60,
-                        SEGMENT_PREPARATION = 200;
+    private static int SEGMENT_STARTUP = 60, SEGMENT_PREPARATION = 200;
 
     private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private boolean hasMultiblock = false;
@@ -92,6 +93,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
     private Object spritePlane = null, facingVortexPlane = null;
     private List ctrlEffectNoise = null;
+
+    private int vortexOffset = CfgEntry.vortexOffset;
 
     public TileBore() {
         super(1, EnumFacing.UP);
@@ -242,7 +245,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     private void playBoreVortexEffect() {
-        AxisAlignedBB boxVortex = new AxisAlignedBB(-3, -7, -3, 3, -3, 3).offset(getPos());
+        AxisAlignedBB boxVortex = new AxisAlignedBB(-3, this.vortexOffset - 3, -3, 3, Math.min(-3, this.vortexOffset + 3), 3).offset(getPos());
         AxisAlignedBB drawBox = boxVortex.grow(16);
 
         double boxSizeX = boxVortex.maxX - boxVortex.minX;
@@ -255,10 +258,10 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         for (EntityLivingBase e : entities) {
             if(e == null || e.isDead || e instanceof EntityPlayer || e instanceof EntityTechnicalAmbient) continue;
             if(e.width * e.width * e.height >= boxSizeX * boxSizeY * boxSizeZ) {
-                if(e.getPositionVector().distanceTo(new Vec3d(getPos().getX() + 0.5, getPos().getY() - 5.5, getPos().getZ() + 0.5)) >= 0.1) {
+                if(e.getPositionVector().distanceTo(new Vec3d(getPos().getX() + 0.5, getPos().getY() + 0.5 + this.vortexOffset, getPos().getZ() + 0.5)) >= 0.1) {
                     e.setPositionAndUpdate(
                             getPos().getX() + 0.5,
-                            getPos().getY() - 5.5,
+                            getPos().getY() + 0.5 + this.vortexOffset,
                             getPos().getZ() + 0.5
                     );
                     //To move all the dragon-pieces along...
@@ -300,14 +303,14 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                     e.motionZ += v.getZ();
                 }
                 return null;
-            }, new Vector3(this).addY(-4.5), 48, 3);
+            }, new Vector3(this).addY(0.5).addY(this.vortexOffset), 48, 3);
 
-            if(e.getDistanceSq(getPos().add(0, -5, 0)) <= (25)) { // 5 * 5
+            if(e.getDistanceSq(getPos().add(0, this.vortexOffset - 1, 0)) <= (25)) { // 5 * 5
                 Vector3 randomBuffer = new Vector3(
                         Math.max(0, (boxSizeX - e.width ) / 2D),
                         Math.max(0, (boxSizeY - e.height) / 2D),
                         Math.max(0, (boxSizeZ - e.width ) / 2D));
-                Vector3 randPos = new Vector3(this).addY(-4.5)
+                Vector3 randPos = new Vector3(this).addY(0.5).addY(this.vortexOffset)
                         .add(
                                 randomBuffer.getX() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1),
                                 randomBuffer.getY() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1),
@@ -378,11 +381,11 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
         for (int i = 0; i < 3; i++) {
             Vector3 particlePos = new Vector3(
-                    pos.getX() - 4  + rand.nextFloat() * 9,
-                    pos.getY() - 6  + rand.nextFloat() * 9,
-                    pos.getZ() - 4  + rand.nextFloat() * 9
+                    pos.getX() - 4                     + rand.nextFloat() * 9,
+                    pos.getY() - 2 + this.vortexOffset + rand.nextFloat() * 9,
+                    pos.getZ() - 4                     + rand.nextFloat() * 9
             );
-            Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() - 3.5, pos.getZ() + 0.5).normalize().divide(-30);
+            Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() + 0.5 + this.vortexOffset, pos.getZ() + 0.5).normalize().divide(-30);
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
             p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
             p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
@@ -395,7 +398,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         if((spr == null || spr.canRemove() || spr.isRemoved()) &&
                 this.operationTicks > 0) {
             spr = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar2,
-                    getPos().getX() + 0.5, getPos().getY() - 3.5F, getPos().getZ() + 0.5, 2F, 2);
+                    getPos().getX() + 0.5, getPos().getY() + 0.5 + this.vortexOffset, getPos().getZ() + 0.5, 2F, 2);
             spr.setRefreshFunc(() -> {
                 if(isInvalid() || getCurrentBoreType() == null || this.operationTicks <= 0) {
                     return false;
@@ -420,7 +423,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         for (Object ctrl : ctrlEffectNoise) {
             for (int i = 0; i < 3; i++) {
                 EntityFXFacingParticle p = ((ControllerNoisePlane) ctrl).setupParticle();
-                p.updatePosition(getPos().getX() + 0.5, getPos().getY() - 3.5, getPos().getZ() + 0.5)
+                p.updatePosition(getPos().getX() + 0.5, getPos().getY() + 0.5 + this.vortexOffset, getPos().getZ() + 0.5)
                 .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
                 .motion(rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1),
                         rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1),
@@ -435,9 +438,9 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     private void vortexExplosion() {
         for (int i = 0; i < 140; i++) {
             Vector3 particlePos = new Vector3(
-                    pos.getX() + 0.5 - 0.1F + rand.nextFloat() * 0.2,
-                    pos.getY() - 3.5 - 0.1F + rand.nextFloat() * 0.2,
-                    pos.getZ() + 0.5 - 0.1F + rand.nextFloat() * 0.2
+                    pos.getX() + 0.5                     - 0.1F + rand.nextFloat() * 0.2,
+                    pos.getY() + 0.5 + this.vortexOffset - 0.1F + rand.nextFloat() * 0.2,
+                    pos.getZ() + 0.5                     - 0.1F + rand.nextFloat() * 0.2
             );
             Vector3 dir = new Vector3(
                     rand.nextFloat() * 0.15 * (rand.nextBoolean() ? 1 : -1),
@@ -452,7 +455,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
     @SideOnly(Side.CLIENT)
     private void playVortexCore(float prepChance) {
-        float yOffset = -0.5F - (3.0F * Math.min(1, prepChance * 2F));
+        float yOffset = -0.5F + (((float) (this.vortexOffset + 1)) * Math.min(1, prepChance * 2F));
         for (int i = 0; i < 15; i++) {
             Vector3 particlePos = new Vector3(
                     pos.getX() + 0.5     - 0.1F + rand.nextFloat() * 0.2,
@@ -656,7 +659,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<BlockPos> pos = Lists.newLinkedList();
         for (int xx = -3; xx <= 3; xx++) {
             for (int zz = -3; zz <= 3; zz++) {
-                for (int yy = -3; yy >= -7; yy--) {
+                for (int yy = -3; yy >= this.vortexOffset - 3; yy--) {
                     pos.add(getPos().add(xx, yy, zz));
                 }
             }
@@ -884,6 +887,22 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
             return new ItemStack(BlocksAS.blockBoreHead, 1, ordinal());
         }
 
+    }
+
+    public static class CfgEntry extends ConfigEntry {
+
+        public static final CfgEntry instance = new CfgEntry();
+
+        private static int vortexOffset = -4;
+
+        private CfgEntry() {
+            super(Section.MACHINERY, "fountain");
+        }
+
+        @Override
+        public void loadFromConfig(Configuration cfg) {
+            vortexOffset = cfg.getInt("VortexOffset", getConfigurationSection(), vortexOffset, -64, -4, "Sets the offset where the vortex-point for the vortex-prime is at relative to the fountain block.");
+        }
     }
 
 }
