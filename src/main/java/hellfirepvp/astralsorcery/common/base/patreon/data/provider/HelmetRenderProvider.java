@@ -29,16 +29,17 @@ public class HelmetRenderProvider implements EffectProvider<PtEffectHelmetRender
 
     @Override
     public PtEffectHelmetRender buildEffect(UUID uuid, List<String> effectParameters) throws Exception {
-        String[] itemInfo = effectParameters.get(0).split(";");
+        UUID effectUniqueId = UUID.fromString(effectParameters.get(0));
+        String[] itemInfo = effectParameters.get(1).split(";");
         Item item = Item.getByNameOrId(itemInfo[0]);
         if (item == null) {
             throw new IllegalArgumentException("Unknown item: " + itemInfo[0]);
         }
         int data = Integer.parseInt(itemInfo[1]);
         ItemStack stack = new ItemStack(item, 1, data);
-        PatreonEffectHelper.FlareColor flColor = effectParameters.size() > 1 ?
-                PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(0)) : null;
-        return new PtEffectHelmetRender(flColor, uuid, stack);
+        PatreonEffectHelper.FlareColor flColor = effectParameters.size() > 2 ?
+                PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(2)) : null;
+        return new PtEffectHelmetRender(effectUniqueId, flColor, uuid, stack);
     }
 
 }

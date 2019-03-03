@@ -33,10 +33,11 @@ public class PtEffectHelmetRender extends PatreonEffectHelper.PatreonEffect {
     private final ItemStack dummyHeadItem;
     private boolean addedHelmet = false;
 
-    public PtEffectHelmetRender(PatreonEffectHelper.FlareColor chosenColor,
+    public PtEffectHelmetRender(UUID uniqueId,
+                                PatreonEffectHelper.FlareColor chosenColor,
                                 UUID plUUID,
                                 ItemStack headStack) {
-        super(chosenColor);
+        super(uniqueId, chosenColor);
         this.playerUUID = plUUID;
         this.dummyHeadItem = headStack;
     }
