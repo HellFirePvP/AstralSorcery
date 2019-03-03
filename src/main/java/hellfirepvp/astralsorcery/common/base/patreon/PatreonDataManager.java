@@ -31,7 +31,7 @@ import java.util.UUID;
  */
 public class PatreonDataManager {
 
-    private static final String PATREON_EFFECT_URL = "https://hellfiredev.net/patreon.json";
+    private static final String PATREON_EFFECT_URL = "http://hellfiredev.net/patreon.json";
     private static final Gson GSON = new GsonBuilder().create();
 
     public static void loadPatreonEffects() {
