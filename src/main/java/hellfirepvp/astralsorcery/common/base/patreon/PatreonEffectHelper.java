@@ -45,7 +45,7 @@ public class PatreonEffectHelper {
         if (!loadingFinished) {
             return Collections.emptyList();
         }
-        return effectMap.get(uuid);
+        return effectMap.getOrDefault(uuid, Collections.emptyList());
     }
 
     public static <T extends EntityPlayer> Map<UUID, List<PatreonEffect>> getPatreonEffects(Collection<T> players) {
@@ -73,10 +73,6 @@ public class PatreonEffectHelper {
         @Nullable
         public FlareColor getChosenColor() {
             return chosenColor;
-        }
-
-        public boolean hasEvents() {
-            return false;
         }
 
         public boolean hasPartialEntity() {
