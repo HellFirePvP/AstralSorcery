@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -35,8 +36,8 @@ public class PtEffectFixedSprite extends PatreonEffectHelper.PatreonEffect {
     private SpriteQuery spriteQuery;
     private Function<EntityPlayer, Vector3> positionFunction = Vector3::atEntityCenter;
 
-    public PtEffectFixedSprite(PatreonEffectHelper.FlareColor chosenColor, SpriteQuery spriteQuery) {
-        super(chosenColor);
+    public PtEffectFixedSprite(UUID uniqueId, PatreonEffectHelper.FlareColor chosenColor, SpriteQuery spriteQuery) {
+        super(uniqueId, chosenColor);
         this.spriteQuery = spriteQuery;
     }
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.base.patreon.base;
 
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,8 +23,8 @@ public class PtEffectTreeBeacon extends PatreonEffectHelper.PatreonEffect {
 
     private int overlay = 0xFFFFFFFF, tree = 0xFFFFFFFF, drain = 0xFFFFFFFF;
 
-    public PtEffectTreeBeacon(PatreonEffectHelper.FlareColor chosenColor) {
-        super(chosenColor);
+    public PtEffectTreeBeacon(UUID uniqueId, PatreonEffectHelper.FlareColor chosenColor) {
+        super(uniqueId, chosenColor);
     }
 
     public PtEffectTreeBeacon setOverlayColor(int overlay) {

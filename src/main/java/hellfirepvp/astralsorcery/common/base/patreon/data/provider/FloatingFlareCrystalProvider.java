@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -29,11 +29,16 @@ public class FloatingFlareCrystalProvider implements EffectProvider<PtEffectFloa
 
     @Override
     public PtEffectFloatingFlareCrystal buildEffect(UUID uuid, List<String> effectParameters) throws Exception {
-        PatreonEffectHelper.FlareColor flareColor = PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(0));
-        int colorTheme = Integer.parseInt(effectParameters.get(1));
-        String modelTexture = effectParameters.get(2);
+        UUID uniqueId = UUID.fromString(effectParameters.get(0));
+        PatreonEffectHelper.FlareColor fc = null;
+        if (!"null".equals(effectParameters.get(1))) {
+            fc = PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(1));
+        }
+        int colorTheme = Integer.parseInt(effectParameters.get(2));
+        String modelTexture = effectParameters.get(3);
         return new PtEffectFloatingFlareCrystal(
-                new Color(colorTheme), flareColor,
+                uniqueId,
+                new Color(colorTheme), fc,
                 new TextureQuery(AssetLoader.TextureLocation.MODELS, modelTexture));
     }
 

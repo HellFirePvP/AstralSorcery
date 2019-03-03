@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -117,6 +117,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(TileTreeBeacon.ConfigEntryTreeBeacon.instance);
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
+        Config.addDynamicEntry(TileBore.CfgEntry.instance);
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
         Config.addDynamicEntry(new GemAttributeHelper.CfgEntry());
         Config.addDynamicEntry(new TileAccelerationBlacklist.TileAccelBlacklistEntry());

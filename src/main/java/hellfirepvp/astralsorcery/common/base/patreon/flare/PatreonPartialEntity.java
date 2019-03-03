@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -34,6 +34,7 @@ public abstract class PatreonPartialEntity {
     private static int counter = 0;
 
     private final UUID ownerUUID;
+    private UUID partialEntityUUID;
     private int id;
 
     protected Vector3 pos = new Vector3(), prevPos = new Vector3();
@@ -46,6 +47,7 @@ public abstract class PatreonPartialEntity {
         this.id = counter;
         counter++;
         this.ownerUUID = ownerUUID;
+        this.partialEntityUUID = UUID.randomUUID();
     }
 
     public UUID getOwnerUUID() {
@@ -61,6 +63,10 @@ public abstract class PatreonPartialEntity {
         this.prevPos = this.pos.clone();
         this.motion = new Vector3();
         this.updatePos = true;
+    }
+
+    public UUID getUniqueId() {
+        return partialEntityUUID;
     }
 
     @Nullable
@@ -159,6 +165,7 @@ public abstract class PatreonPartialEntity {
     public void readFromNBT(NBTTagCompound cmp) {
         this.id = cmp.getInteger("flareID");
         this.lastTickedDim = cmp.getInteger("lastTickedDim");
+        this.partialEntityUUID = cmp.getUniqueId("uniqueId");
         if (cmp.hasKey("pos") && cmp.hasKey("prevPos")) {
             this.pos = NBTHelper.readVector3(cmp.getCompoundTag("pos"));
             this.prevPos = NBTHelper.readVector3(cmp.getCompoundTag("prevPos"));
@@ -168,6 +175,7 @@ public abstract class PatreonPartialEntity {
     public void writeToNBT(NBTTagCompound cmp) {
         cmp.setInteger("flareID", this.id);
         cmp.setInteger("lastTickedDim", this.lastTickedDim == null ? 0 : this.lastTickedDim);
+        cmp.setUniqueId("uniqueId", this.partialEntityUUID);
         if (updatePos) {
             cmp.setTag("pos", NBTHelper.writeVector3(this.pos));
             cmp.setTag("prevPos", NBTHelper.writeVector3(this.prevPos));

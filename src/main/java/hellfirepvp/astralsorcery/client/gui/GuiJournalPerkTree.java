@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -26,7 +26,9 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.constellation.perk.ProgressGatedPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeConverterPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.GemSlotPerk;
@@ -776,8 +778,9 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         double scale = this.sizeHandler.getScalingFactor();
         PerkTreePoint.AllocationStatus status = perkPoint.getPerk().getPerkStatus(Minecraft.getMinecraft().player, Side.CLIENT);
 
-        Rectangle.Double drawSize = perkPoint.renderPerkAtBatch(ctx,
-                status, effectTick, pTicks, offset.x, offset.y, scale);
+        Rectangle.Double drawSize = perkPoint.renderPerkAtBatch(ctx, status, effectTick, pTicks, offset.x, offset.y, scale);
+
+
         if (perkPoint instanceof DynamicPerkRender) {
             outRenderDynamic.add(() ->
                     ((DynamicPerkRender) perkPoint).renderAt(status, effectTick, pTicks, offset.x, offset.y, scale));
@@ -793,6 +796,17 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         if (this.searchMatches.contains(perkPoint.getPerk())) {
             drawSearchMarkHalo(ctx, drawSize, offset.x, offset.y);
+        }
+
+        double mapDrawSize = 28;
+        if (perkPoint.getPerk() instanceof AttributeConverterPerk) {
+            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk()).getConverters()) {
+                if (converter instanceof PerkConverter.Radius) {
+                    double radius = ((PerkConverter.Radius) converter).getRadius();
+
+                    drawSearchHalo(ctx, mapDrawSize * radius * scale, offset.x, offset.y);
+                }
+            }
         }
 
         return new Rectangle.Double(offset.x - (drawSize.width / 2), offset.y - (drawSize.height / 2),
@@ -829,13 +843,14 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     }
 
     private void drawSearchMarkHalo(BatchPerkContext ctx, Rectangle.Double draw, double x, double y) {
-        double size = draw.width;
+        drawSearchHalo(ctx, draw.width, x, y);
+    }
 
+    private void drawSearchHalo(BatchPerkContext ctx, double size, double x, double y) {
         BufferBatch batch = ctx.getContext(searchContext);
         BufferBuilder vb = batch.getBuffer();
 
         Vector3 starVec = new Vector3(x - size, y - size, 0);
-        textureSearchMark.bindTexture();
         double uLength = textureSearchMark.getUWidth();
         double vLength = textureSearchMark.getVWidth();
         Point.Double frameUV = textureSearchMark.getUVOffset();

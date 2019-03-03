@@ -24,6 +24,7 @@ public enum PatreonEffectType {
     FLARE_CRYSTAL(new FloatingFlareCrystalProvider()),
     TREE_BEACON_COLOR(new TreeBeaconEffectProvider()),
     HELMET(new HelmetRenderProvider()),
+    CRYSTAL_FOOTPRINTS(new CrystalFootprintProvider()),
 
     FLOATING_HALO(new SpecificPatreonHaloEffectProvider());
 

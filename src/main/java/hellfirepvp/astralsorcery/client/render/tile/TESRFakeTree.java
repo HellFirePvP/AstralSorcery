@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -33,8 +33,9 @@ public class TESRFakeTree extends TileEntitySpecialRenderer<TileFakeTree> {
         if(x * x + y * y + z * z >= 64 * 64) return;
         Color effect = null;
         if (te.getPlayerEffectRef() != null) {
-            PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getEffect(Side.CLIENT, te.getPlayerEffectRef());
-            if (pe != null && pe instanceof PtEffectTreeBeacon) {
+            PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getPatreonEffects(Side.CLIENT, te.getPlayerEffectRef())
+                    .stream().filter(p -> p instanceof PtEffectTreeBeacon).findFirst().orElse(null);
+            if (pe instanceof PtEffectTreeBeacon) {
                 effect = new Color(((PtEffectTreeBeacon) pe).getColorTranslucentOverlay(), true);
             }
         }
