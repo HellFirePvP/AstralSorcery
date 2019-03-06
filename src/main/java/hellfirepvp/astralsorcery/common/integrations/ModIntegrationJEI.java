@@ -272,19 +272,13 @@ public class ModIntegrationJEI implements IModPlugin {
         }
         recipePrimer.clear();
 
-        Iterator<Tuple<Object, ModificationAction>> iterator = unresolvedRecipes.iterator();
-        while (iterator.hasNext()) {
-            Tuple<Object, ModificationAction> action = iterator.next();
+        for (Tuple<Object, ModificationAction> action : unresolvedRecipes) {
             switch (action.value) {
                 case ADDITION:
-                    if (addRecipe(action.key)) {
-                        iterator.remove();
-                    }
+                    addRecipe(action.key);
                     break;
                 case REMOVAL:
-                    if (removeRecipe(action.key)) {
-                        iterator.remove();
-                    }
+                    removeRecipe(action.key);
                     break;
                 default:
                     break;
