@@ -26,6 +26,8 @@ config.astralsorcery.category.fluid_rarities=流体：纳耳狂曼喷口
 config.astralsorcery.category.fluid_rarities.tooltip=定义了喷口能找到的流体。
 config.astralsorcery.category.herdable_animals_blacklist=黑名单：可聚集动物
 config.astralsorcery.category.herdable_animals_blacklist.tooltip=定义了不受牧夫座效应影响的动物。
+config.astralsorcery.category.perk_void_trash_replacement=“变废为宝”的过滤名单
+config.astralsorcery.category.perk_void_trash_replacement.tooltip=定义“变废为宝”在随机生成贵重物品时的权重与矿物辞典。
 
 advancements.astralsorcery.attune_crystal.title=开始共振
 advancements.astralsorcery.attune_crystal.desc=将一个水晶石与星座进行共鸣。
@@ -643,7 +645,7 @@ tile.blockborehead.vortex.name=费萨利德喷口
 tile.blockportalnode.name=
 tile.blockobservatory.name=瞭望台
 tile.blockgemcrystals.stage_0.name==宝石水晶簇
-tile.blockgemcrystals.stage_1.name==宝石水晶簇
+tile.blockgemcrystals.stage_1.name=宝石水晶簇
 tile.blockgemcrystals.stage_2_sky.name=宝石水晶簇
 tile.blockgemcrystals.stage_2_day.name=宝石水晶簇
 tile.blockgemcrystals.stage_2_night.name=宝石水晶簇
@@ -773,6 +775,20 @@ perk.category.focus.name=固有技能
 
 perk.astralsorcery.compat.thaumcraft=星芒宝典：神秘时代兼容
 
+perk.reader.infostar=统计数据
+perk.reader.gui=技能统计数据
+perk.reader.limit.default=(限制为 %s)
+perk.reader.limit.percent=(限制为 %s%%)
+perk.reader.postprocess.default=强制为 %s
+
+##
+# Note: B = 'Base Value', A = 'Added Multipliers', I = 'Increase/Decrease Multipliers', M = 'More/Less Multipliers'
+##
+perk.reader.description.head=B %s
+perk.reader.description.addition=A + %s
+perk.reader.description.increase=I   * %s
+perk.reader.description.moreless=M     * %s
+
 ###
 # Note: Different modifiers may have different formats.
 ###
@@ -790,6 +806,9 @@ perk.modifier.added_multiply.sub= %% 扣除的
 perk.modifier.stacking_multiply.add= %% 额外增加的
 perk.modifier.stacking_multiply.sub= %% 额外减少的
 
+perk.attribute.astralsorcery.thorns.modifier.name= %% 近战伤害反弹率
+perk.attribute.astralsorcery.lifeleech.modifier.name= %% 的伤害输出转换为生命值
+
 perk.attribute.astralsorcery.meleeattackdamage.name=近战伤害
 perk.attribute.astralsorcery.projectileattackdamage.name=抛射物伤害
 perk.attribute.astralsorcery.projectilespeed.name=弹药速度
@@ -800,6 +819,7 @@ perk.attribute.astralsorcery.armor.name=护甲
 perk.attribute.astralsorcery.armortoughness.name=护甲韧性
 perk.attribute.astralsorcery.attackspeed.name=攻击速度
 perk.attribute.astralsorcery.reach.name=范围
+perk.attribute.astralsorcery.dynenchantmenteffect.name=护身加持术
 
 perk.attribute.astralsorcery.liferecovery.name=生命回复
 perk.attribute.astralsorcery.potionduration.name=药水效果的持续时间
@@ -814,8 +834,8 @@ perk.attribute.astralsorcery.critmulti.name=暴击伤害倍数
 perk.attribute.astralsorcery.allres.name=元素抗性
 perk.attribute.astralsorcery.expgain.name=技能经验获取
 perk.attribute.astralsorcery.dodge.name=躲避几率
-perk.attribute.astralsorcery.thorns.name= %% 近战伤害反弹率
-perk.attribute.astralsorcery.lifeleech.name= %% 的伤害输出转换为生命值
+perk.attribute.astralsorcery.thorns.name=伤害反弹
+perk.attribute.astralsorcery.lifeleech.name=生命窃取
 
 perk.attribute.astralsorcery.compat.thaumcraft.runicshield.name=符文护盾
 
@@ -917,8 +937,8 @@ perk.astralsorcery.inc_mine_perk.name=提高挖掘速度
 perk.astralsorcery.inc_life_rec.name=增加生命回复
 
 perk.astralsorcery.cst_gelu.name=定向：寒冰座
-perk.astralsorcery.cst_gelu.desc.1=获得技能经验时额外+3%%。
-perk.astralsorcery.cst_gelu.desc.2=其他对技能经验的修改将无效。
+perk.astralsorcery.cst_gelu.desc.1=每个技能额外+3%%的技能效果。
+perk.astralsorcery.cst_gelu.desc.2=其他对技能效果的修改将无效化。
 perk.astralsorcery.cst_gelu.desc.3=
 perk.astralsorcery.cst_gelu.desc.4=你只能拥有一个固有技能。
 perk.astralsorcery.cst_ulteria.name=定向：避役座
@@ -1032,7 +1052,7 @@ perk.astralsorcery.key_cheat_death.name=凤凰守护
 perk.astralsorcery.key_cheat_death.desc=给你一次涅槃重生的机会。
 perk.astralsorcery.key_no_armor.name=皮糙肉厚
 perk.astralsorcery.key_no_armor.desc.1=当所穿的护甲低于
-perk.astralsorcery.key_no_armor.desc.2=2件时减少伤害。
+perk.astralsorcery.key_no_armor.desc.2=2件时减少至少30%伤害。
 perk.astralsorcery.key_swim_conversion.name=额外的鳍
 perk.astralsorcery.key_swim_conversion.desc.1=在水中的移动速度也相应的
 perk.astralsorcery.key_swim_conversion.desc.2=在原来的基础上增减50%%。
