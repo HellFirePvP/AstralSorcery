@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -98,7 +98,8 @@ public class PktParticleDataEvent implements IMessage, IMessageHandler<PktPartic
         @SideOnly(Side.CLIENT)
         private static EventAction getClientTrigger(ParticleType type) {
             switch (type) {
-
+                default:
+                    break;
             }
             return null;
         }

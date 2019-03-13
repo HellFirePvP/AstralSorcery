@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -33,12 +33,15 @@ public class EventHandlerNetwork {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
-        AstralSorcery.log.info("Synchronizing baseline information to " + p.getName());
-        ResearchManager.sendInitClientKnowledge(p);
-        CelestialGatewaySystem.instance.syncTo(p);
-        SyncDataHolder.syncAllDataTo(p);
+        AstralSorcery.log.info("[Astral Sorcery] Waiting for server synchronization on login for " + p.getName() + "...");
+        AstralSorcery.proxy.scheduleDelayed(() -> {
+            AstralSorcery.log.info("[Astral Sorcery] Synchronizing baseline information to " + p.getName());
+            ResearchManager.sendInitClientKnowledge(p);
+            CelestialGatewaySystem.instance.syncTo(p);
+            SyncDataHolder.syncAllDataTo(p);
 
-        PacketChannel.CHANNEL.sendTo(new PktFinalizeLogin(), p);
+            PacketChannel.CHANNEL.sendTo(new PktFinalizeLogin(), p);
+        });
     }
 
     @SubscribeEvent

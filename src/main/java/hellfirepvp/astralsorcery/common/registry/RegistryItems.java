@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
@@ -22,6 +21,9 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
@@ -35,7 +37,6 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
@@ -64,7 +65,6 @@ public class RegistryItems {
 
     public static Item.ToolMaterial crystalToolMaterial;
     public static EnumRarity rarityCelestial, rarityRelic;
-    public static Material materialTransparentReplaceable;
     public static ItemArmor.ArmorMaterial imbuedLeatherMaterial;
 
     public static CreativeTabs creativeTabAstralSorcery,
@@ -75,19 +75,19 @@ public class RegistryItems {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
             @Override
             public ItemStack getTabIconItem() {
-                return new ItemStack(ItemsAS.journal);
+                return new ItemStack(journal);
             }
         };
         creativeTabAstralSorceryPapers = new CreativeTabs(AstralSorcery.MODID + ".papers") {
             @Override
             public ItemStack getTabIconItem() {
-                return new ItemStack(ItemsAS.constellationPaper);
+                return new ItemStack(constellationPaper);
             }
         };
         creativeTabAstralSorceryTunedCrystals = new CreativeTabs(AstralSorcery.MODID + ".crystals") {
             @Override
             public ItemStack getTabIconItem() {
-                return new ItemStack(ItemsAS.tunedRockCrystal);
+                return new ItemStack(tunedRockCrystal);
             }
         };
 
@@ -96,7 +96,6 @@ public class RegistryItems {
 
         rarityCelestial = EnumHelper.addRarity("CELESTIAL", TextFormatting.BLUE, "Celestial");
         rarityRelic = EnumHelper.addRarity("AS_RELIC", TextFormatting.GOLD, "Relic");
-        materialTransparentReplaceable = new MaterialAirish();
 
         imbuedLeatherMaterial = EnumHelper.addArmorMaterial("AS_IMBUEDLEATHER",
                 "as.imbuedleather", 26, new int[] { 0, 0, 7, 0}, 30, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 2);
@@ -139,7 +138,9 @@ public class RegistryItems {
         useableDust = registerItem(new ItemUsableDust());
         knowledgeShare = registerItem(new ItemKnowledgeShare());
         perkSeal = registerItem(new ItemPerkSeal());
-        knowledgeShard = registerItem(new ItemKnowledgeShard());
+        knowledgeFragment = registerItem(new ItemKnowledgeFragment());
+        fragmentCapsule = registerItem(new ItemFragmentCapsule());
+        perkGem = registerItem(new ItemPerkGem());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
+import hellfirepvp.astralsorcery.common.container.*;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
@@ -26,6 +27,8 @@ import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.*;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.util.JEISessionHandler;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.util.TieredAltarRecipeTransferHandler;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
@@ -35,7 +38,11 @@ import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.*;
+import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
+import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
+import mezz.jei.startup.StackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -101,7 +108,12 @@ public class ModIntegrationJEI implements IModPlugin {
     public void register(IModRegistry registry) {
         jeiHelpers = registry.getJeiHelpers();
         stackHelper = jeiHelpers.getStackHelper();
+
+        MinecraftForge.EVENT_BUS.register(JEISessionHandler.getInstance());
+
         hideItems(registry.getJeiHelpers().getIngredientBlacklist());
+
+        IRecipeTransferRegistry rtr = registry.getRecipeTransferRegistry();
 
         registerRecipeHandle(registry, WellLiquefaction.LiquefactionEntry.class,   WellRecipeWrapper::new,               idWell);
         registerRecipeHandle(registry, GrindstoneRecipe.class,                     GrindstoneRecipeWrapper::new,         idGrindstone);
@@ -121,6 +133,8 @@ public class ModIntegrationJEI implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), idAltarAttunement);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), idAltarConstellation);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), idAltarTrait);
+
+        addTransferHandlers(rtr, jeiHelpers.recipeTransferHandlerHelper());
 
         registry.addRecipes(InfusionRecipeRegistry.recipes, idInfuser);
         registry.addRecipes(GrindstoneRecipeRegistry.getValidRecipes(), idGrindstone);
@@ -154,8 +168,44 @@ public class ModIntegrationJEI implements IModPlugin {
         jeiRegistrationPhase = false;
     }
 
+    private void addTransferHandlers(IRecipeTransferRegistry rtr, IRecipeTransferHandlerHelper trHelper) {
+        if (!(stackHelper instanceof StackHelper)) {
+            return;
+        }
+        StackHelper sHelper = (StackHelper) stackHelper;
+
+        // T1 recipes
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarDiscovery.class,
+                sHelper, trHelper, 9), idAltarDiscovery);
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarAttunement.class,
+                sHelper, trHelper, 9), idAltarDiscovery);
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarConstellation.class,
+                sHelper, trHelper, 9), idAltarDiscovery);
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class,
+                sHelper, trHelper, 9), idAltarDiscovery);
+
+        // T2 recipes
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarAttunement.class,
+                sHelper, trHelper, 13), idAltarAttunement);
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarConstellation.class,
+                sHelper, trHelper, 13), idAltarAttunement);
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class,
+                sHelper, trHelper, 13), idAltarAttunement);
+
+        // T3 recipes
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarConstellation.class,
+                sHelper, trHelper, 21), idAltarConstellation);
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class,
+                sHelper, trHelper, 21), idAltarConstellation);
+
+        // T4 recipes
+        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class,
+                sHelper, trHelper, 25), idAltarTrait);
+    }
+
     private void hideItems(IIngredientBlacklist blacklist) {
-        blacklist.addIngredientToBlacklist(new ItemStack(ItemsAS.knowledgeShard));
+        blacklist.addIngredientToBlacklist(new ItemStack(ItemsAS.knowledgeFragment));
+        blacklist.addIngredientToBlacklist(new ItemStack(ItemsAS.fragmentCapsule));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockFakeTree));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.translucentBlock));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockVanishing));
@@ -222,19 +272,15 @@ public class ModIntegrationJEI implements IModPlugin {
         }
         recipePrimer.clear();
 
-        Iterator<Tuple<Object, ModificationAction>> iterator = unresolvedRecipes.iterator();
-        while (iterator.hasNext()) {
-            Tuple<Object, ModificationAction> action = iterator.next();
+        for (Tuple<Object, ModificationAction> action : unresolvedRecipes) {
             switch (action.value) {
                 case ADDITION:
-                    if (addRecipe(action.key)) {
-                        iterator.remove();
-                    }
+                    addRecipe(action.key);
                     break;
                 case REMOVAL:
-                    if (removeRecipe(action.key)) {
-                        iterator.remove();
-                    }
+                    removeRecipe(action.key);
+                    break;
+                default:
                     break;
             }
         }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,6 +9,10 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -25,7 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeLifeRecovery extends PerkAttributeType {
 
     public AttributeLifeRecovery() {
-        super(AttributeTypeRegistry.ATTR_TYPE_LIFE_RECOVERY);
+        super(AttributeTypeRegistry.ATTR_TYPE_LIFE_RECOVERY, true);
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -40,9 +44,10 @@ public class AttributeLifeRecovery extends PerkAttributeType {
             return;
         }
 
-        float healMultiplier = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(getTypeString(), 1F);
-        float val = event.getAmount() * healMultiplier;
+        float heal = PerkAttributeHelper.getOrCreateMap(player, side)
+                .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), event.getAmount());
+        heal = AttributeEvent.postProcessModded(player, this, heal);
+        float val = heal;
         if (val <= 0) {
             event.setCanceled(true);
         } else {

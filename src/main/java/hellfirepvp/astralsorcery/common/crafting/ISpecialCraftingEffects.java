@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -21,5 +21,9 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 public interface ISpecialCraftingEffects {
 
     public AbstractAltarRecipe copyNewEffectInstance();
+
+    default public boolean needsStrictMatching() {
+        return false;
+    }
 
 }

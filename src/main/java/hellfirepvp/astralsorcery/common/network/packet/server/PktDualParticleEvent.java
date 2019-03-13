@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -107,6 +107,8 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
             switch (type) {
                 case CHARGE_HARVEST:
                     return ItemChargedCrystalAxe::playDrainParticles;
+                default:
+                    break;
             }
             return null;
         }

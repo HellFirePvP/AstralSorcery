@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util.struct;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
@@ -29,7 +30,7 @@ import java.util.*;
  */
 public class BlockDiscoverer {
 
-    public static BlockArray discoverBlocksWithSameStateAroundChain(World world, BlockPos origin, IBlockState match, int length, @Nullable EnumFacing originalBreakDirection, BlockStateCheck addCheck) {
+    public static BlockArray discoverBlocksWithSameStateAroundChain(World world, BlockPos origin, IBlockState match, int length, @Nullable EnumFacing originalBreakDirection, BlockStateCheck.WorldSpecific addCheck) {
         BlockArray out = new BlockArray();
 
         BlockPos offset = new BlockPos(origin);
@@ -61,6 +62,10 @@ public class BlockDiscoverer {
     }
 
     public static BlockArray searchForBlocksAround(World world, BlockPos origin, int cubeSize, BlockStateCheck match) {
+        return searchForBlocksAround(world, origin, cubeSize, BlockStateCheck.WorldSpecific.wrap(match));
+    }
+
+    public static BlockArray searchForBlocksAround(World world, BlockPos origin, int cubeSize, BlockStateCheck.WorldSpecific match) {
         BlockArray out = new BlockArray();
 
         BlockPos.PooledMutableBlockPos offset = BlockPos.PooledMutableBlockPos.retain();
@@ -101,7 +106,7 @@ public class BlockDiscoverer {
                                 BlockPos search = offsetPos.add(xx, yy, zz);
                                 if (visited.contains(search)) continue;
                                 if (getCubeDistance(search, origin) > cubeSize) continue;
-                                if (limit != -1 && foundResult.pattern.size() + 1 > limit) continue;
+                                if (limit != -1 && foundResult.getBlockSize() + 1 > limit) continue;
 
                                 visited.add(search);
 
@@ -120,7 +125,7 @@ public class BlockDiscoverer {
                         BlockPos search = offsetPos.offset(face);
                         if (visited.contains(search)) continue;
                         if (getCubeDistance(search, origin) > cubeSize) continue;
-                        if (limit != -1 && foundResult.pattern.size() + 1 > limit) continue;
+                        if (limit != -1 && foundResult.getBlockSize() + 1 > limit) continue;
 
                         visited.add(search);
 
@@ -159,7 +164,7 @@ public class BlockDiscoverer {
                                 BlockPos search = offsetPos.add(xx, yy, zz);
                                 if (visited.contains(search)) continue;
                                 if (getCubeDistance(search, origin) > cubeSize) continue;
-                                if (limit != -1 && foundResult.pattern.size() + 1 > limit) continue;
+                                if (limit != -1 && foundResult.getBlockSize() + 1 > limit) continue;
 
                                 visited.add(search);
 
@@ -178,7 +183,7 @@ public class BlockDiscoverer {
                         BlockPos search = offsetPos.offset(face);
                         if (visited.contains(search)) continue;
                         if (getCubeDistance(search, origin) > cubeSize) continue;
-                        if (limit != -1 && foundResult.pattern.size() + 1 > limit) continue;
+                        if (limit != -1 && foundResult.getBlockSize() + 1 > limit) continue;
 
                         visited.add(search);
 

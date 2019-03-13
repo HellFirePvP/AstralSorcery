@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -107,9 +108,11 @@ public class NBTHelper {
         return getBlockStateFromTag(cmp.getCompoundTag(key));
     }
 
-    @Nullable
+    @Nonnull
     public static NBTTagCompound getBlockStateNBTTag(IBlockState state) {
-        if(state.getBlock().getRegistryName() == null) return null;
+        if(state.getBlock().getRegistryName() == null) {
+            state = Blocks.AIR.getDefaultState();
+        }
         NBTTagCompound tag = new NBTTagCompound();
         tag.setString("registryName", state.getBlock().getRegistryName().toString());
         NBTTagList properties = new NBTTagList();
@@ -129,9 +132,14 @@ public class NBTHelper {
 
     @Nullable
     public static <T extends Comparable<T>> IBlockState getBlockStateFromTag(NBTTagCompound cmp) {
+        return getBlockStateFromTag(cmp, null);
+    }
+
+    @Nullable
+    public static <T extends Comparable<T>> IBlockState getBlockStateFromTag(NBTTagCompound cmp, IBlockState _default) {
         ResourceLocation key = new ResourceLocation(cmp.getString("registryName"));
         Block block = ForgeRegistries.BLOCKS.getValue(key);
-        if(block == null || block == Blocks.AIR) return null;
+        if(block == null || block == Blocks.AIR) return _default;
         IBlockState state = block.getDefaultState();
         Collection<IProperty<?>> properties = state.getPropertyKeys();
         NBTTagList list = cmp.getTagList("properties", Constants.NBT.TAG_COMPOUND);
@@ -146,7 +154,7 @@ public class NBTHelper {
                     if(opt.isPresent()) {
                         state = state.withProperty(match, opt.get());
                     }
-                } catch (Exception exc) {}
+                } catch (Throwable tr) {} // Thanks Exu2
             }
         }
         return state;
@@ -237,5 +245,24 @@ public class NBTHelper {
                 compound.getDouble("vecPosX"),
                 compound.getDouble("vecPosY"),
                 compound.getDouble("vecPosZ"));
+    }
+
+    public static void writeBoundingBox(AxisAlignedBB box, NBTTagCompound tag) {
+        tag.setDouble("boxMinX", box.minX);
+        tag.setDouble("boxMinY", box.minY);
+        tag.setDouble("boxMinZ", box.minZ);
+        tag.setDouble("boxMaxX", box.maxX);
+        tag.setDouble("boxMaxY", box.maxY);
+        tag.setDouble("boxMaxZ", box.maxZ);
+    }
+
+    public static AxisAlignedBB readBoundingBox(NBTTagCompound tag) {
+        return new AxisAlignedBB(
+                tag.getDouble("boxMinX"),
+                tag.getDouble("boxMinY"),
+                tag.getDouble("boxMinZ"),
+                tag.getDouble("boxMaxX"),
+                tag.getDouble("boxMaxY"),
+                tag.getDouble("boxMaxZ"));
     }
 }

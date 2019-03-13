@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -14,13 +14,17 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,16 +36,16 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 public class ClientConstellationGenerator {
 
-    public static IConstellation generateRandom(long seed) {
+    public static ClientConstellation generateRandom(long seed) {
         Random sRandom = new Random(seed);
         int stars = 5 + (sRandom.nextFloat() > 0.6F ? 1 : 0);
         return generateRandom(seed, stars);
     }
 
-    public static IConstellation generateRandom(long seed, int stars) {
+    public static ClientConstellation generateRandom(long seed, int stars) {
         Random sRandom = new Random(seed);
         String name = RandomWordGenerator.getGenerator().generateWord(seed, sRandom.nextFloat() > 0.6F ? 7 : 6);
-        IConstellation cst = new ClientConstellation(name);
+        ClientConstellation cst = new ClientConstellation(name);
         List<StarLocation> tmpStars = Lists.newArrayList();
         List<StarConnection> tmpConnections = Lists.newArrayList();
         for (int i = 0; i < stars; i++) {
@@ -93,15 +97,6 @@ public class ClientConstellationGenerator {
         return isIntersecting(sc1, sc2.from.asPoint()) || isIntersecting(sc1, sc2.to.asPoint());
     }
 
-    private static boolean isTouching(StarConnection part, Point p) {
-        StarConnection originPart = new StarConnection(
-                new StarLocation(0, 0),
-                new StarLocation(part.to.x - part.from.x, part.to.y - part.from.y));
-        Point originOffset = new Point(p.x - part.from.x, p.y - part.from.y);
-        int cr = cross(originPart.to.asPoint(), originOffset);
-        return Math.abs(cr) < 10;
-    }
-
     private static boolean isIntersecting(StarConnection part, Point p) {
         StarConnection originPart = new StarConnection(
                 new StarLocation(0, 0),
@@ -130,16 +125,25 @@ public class ClientConstellationGenerator {
         }
     }
 
-    static class ClientConstellation implements IConstellation {
+    public static class ClientConstellation implements IConstellation {
 
         private List<StarLocation> starLocations = Lists.newArrayList();
         private List<StarConnection> connections = Lists.newArrayList();
+
+        private final String localizedName;
+        private KnowledgeFragment associatedFragment;
 
         private ClientConstellation(String localizedName) {
             this.localizedName = localizedName;
         }
 
-        private final String localizedName;
+        public void setFragment(KnowledgeFragment fragment) {
+            this.associatedFragment = fragment;
+        }
+
+        public KnowledgeFragment getFragment() {
+            return associatedFragment;
+        }
 
         @Override
         public StarLocation addStar(int x, int y) {
@@ -162,6 +166,11 @@ public class ClientConstellationGenerator {
                 return sc;
             }
             return null;
+        }
+
+        @Override
+        public boolean canDiscover(EntityPlayer player, PlayerProgress progress) {
+            return true;
         }
 
         @Override

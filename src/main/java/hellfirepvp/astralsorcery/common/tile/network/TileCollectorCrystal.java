@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -29,11 +29,14 @@ import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionSourceNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
+import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
+import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,10 +77,11 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
 
     private static final Random rand = new Random();
 
+    private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private BlockCollectorCrystalBase.CollectorCrystalType type;
     private CrystalProperties usedCrystalProperties;
     private boolean playerMade;
-    private boolean enhanced = false;
+    private boolean multiBlockPresent = false;
     private IWeakConstellation associatedType;
     private IMinorConstellation associatedTrait;
 
@@ -93,14 +97,17 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
                     return;
                 }
             }
-            if(isEnhanced() && getTicksExisted() % 10 == 0) {
-                checkAdjacentBlocks();
-            }
-            if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL && getTicksExisted() % 40 == 0) {
-                boolean match = usedCrystalProperties != null &&
-                        MultiBlockArrays.patternCollectorEnhancement.matches(world, pos);
-                if (match != enhanced) {
-                    setEnhanced(match);
+            if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+                if (this.structureMatch == null) {
+                    this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(),
+                            getRequiredStructure());
+                }
+                boolean found = this.structureMatch.matches(getWorld());
+                boolean update = this.multiBlockPresent != found;
+                if (update) {
+                    this.multiBlockPresent = found;
+                    setEnhanced(found);
+                    markForUpdate();
                 }
             }
         } else {
@@ -121,22 +128,6 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
             } else {
                 if(isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL && associatedType != null) {
                     playEnhancedEffects();
-                }
-            }
-        }
-    }
-
-    private void checkAdjacentBlocks() {
-        for (int xx = -1; xx <= 1; xx++) {
-            for (int yy = -1; yy <= 1; yy++) {
-                for (int zz = -1; zz <= 1; zz++) {
-                    if(xx == 0 && yy == 0 && zz == 0) continue;
-
-                    BlockPos other = getPos().add(xx, yy, zz);
-                    if(!getWorld().isAirBlock(other)) {
-                        setEnhanced(false);
-                        return;
-                    }
                 }
             }
         }
@@ -276,7 +267,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
 
     public void setEnhanced(boolean enhanced) {
         if(!world.isRemote && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
-            this.enhanced = enhanced;
+            this.multiBlockPresent = enhanced;
             WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(world);
             IIndependentStarlightSource source = handle.getSourceAt(getPos());
             if(source != null && source instanceof IndependentCrystalSource) {
@@ -288,7 +279,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
     }
 
     public boolean isEnhanced() {
-        return enhanced;
+        return multiBlockPresent;
     }
 
     @SideOnly(Side.CLIENT)
@@ -317,7 +308,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
         this.associatedTrait = (IMinorConstellation) IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "trait");
         this.usedCrystalProperties = CrystalProperties.readFromNBT(compound);
         this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
-        this.enhanced = compound.getBoolean("enhanced");
+        this.multiBlockPresent = compound.hasKey("enhanced") ? compound.getBoolean("enhanced") : compound.getBoolean("multiBlockPresent");
     }
 
     @Override
@@ -337,7 +328,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
         if(type != null) {
             compound.setInteger("collectorType", type.ordinal());
         }
-        compound.setBoolean("enhanced", enhanced);
+        compound.setBoolean("multiBlockPresent", multiBlockPresent);
     }
 
     @Override

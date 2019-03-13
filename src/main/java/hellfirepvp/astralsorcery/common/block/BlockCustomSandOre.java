@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -86,6 +86,8 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
                 for (int j = 0; j < (i + 1); j++) {
                     drops.add(ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
                 }
+                break;
+            default:
                 break;
         }
     }

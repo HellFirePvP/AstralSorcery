@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -86,8 +86,8 @@ public class TileWell extends TileReceiverBaseInventory {
     public void update() {
         super.update();
 
-        if(!world.isRemote) {
-            if(world.canSeeSky(getPos())) {
+        if (!world.isRemote) {
+            if (MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, false)) {
                 double sbDayDistribution = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
                 sbDayDistribution = 0.3 + (0.7 * sbDayDistribution);
                 int yLevel = getPos().getY();
@@ -195,7 +195,7 @@ public class TileWell extends TileReceiverBaseInventory {
         }
     }
 
-    private void receiveStarlight(IWeakConstellation type, double amount) {
+    private void receiveStarlight(double amount) {
         this.starlightBuffer += amount;
     }
 
@@ -296,7 +296,7 @@ public class TileWell extends TileReceiverBaseInventory {
             if(isChunkLoaded) {
                 TileWell tw = MiscUtils.getTileAt(world, getLocationPos(), TileWell.class, false);
                 if(tw != null) {
-                    tw.receiveStarlight(type, amount);
+                    tw.receiveStarlight(amount);
                 }
             }
         }

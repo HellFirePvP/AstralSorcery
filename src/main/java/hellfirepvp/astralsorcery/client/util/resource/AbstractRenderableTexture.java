@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -27,6 +27,12 @@ public abstract class AbstractRenderableTexture {
     public abstract double getUWidth();
 
     public abstract double getVWidth();
+
+    @Override
+    public abstract boolean equals(Object obj);
+
+    @Override
+    public abstract int hashCode();
 
     public static abstract class Full extends AbstractRenderableTexture {
 

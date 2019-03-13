@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -34,6 +35,7 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
 
     private AbstractPerk perk;
     private boolean unlock;
+    private NBTTagCompound newData, oldData;
     private Type type = null;
 
     public PktSyncPerkActivity() {}
@@ -45,6 +47,13 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
 
     public PktSyncPerkActivity(Type type) {
         this.type = type;
+    }
+
+    public PktSyncPerkActivity(AbstractPerk perk, NBTTagCompound oldData, NBTTagCompound newData) {
+        this.type = Type.DATACHANGE;
+        this.perk = perk;
+        this.oldData = oldData;
+        this.newData = newData;
     }
 
     @Override
@@ -59,6 +68,12 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
         if (buf.readBoolean()) {
             this.perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(ByteBufUtils.readString(buf)));
         }
+        if (buf.readBoolean()) {
+            this.newData = ByteBufUtils.readNBTTag(buf);
+        }
+        if (buf.readBoolean()) {
+            this.oldData = ByteBufUtils.readNBTTag(buf);
+        }
     }
 
     @Override
@@ -72,6 +87,14 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
         buf.writeBoolean(this.perk != null);
         if (this.perk != null) {
             ByteBufUtils.writeString(buf, this.perk.getRegistryName().toString());
+        }
+        buf.writeBoolean(this.newData != null);
+        if (newData != null) {
+            ByteBufUtils.writeNBTTag(buf, newData);
+        }
+        buf.writeBoolean(this.oldData != null);
+        if (oldData != null) {
+            ByteBufUtils.writeNBTTag(buf, oldData);
         }
     }
 
@@ -93,6 +116,11 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
                         case UNLOCKALL:
                             PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getMinecraft().player);
                             break;
+                        case DATACHANGE:
+                            PerkEffectHelper.EVENT_INSTANCE.notifyPerkDataChangeClient(Minecraft.getMinecraft().player, pkt.perk, pkt.oldData, pkt.newData);
+                            break;
+                        default:
+                            break;
                     }
                 } else if (pkt.perk != null) {
                     PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);
@@ -104,7 +132,8 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
     public static enum Type {
 
         CLEARALL,
-        UNLOCKALL
+        UNLOCKALL,
+        DATACHANGE
 
     }
 }

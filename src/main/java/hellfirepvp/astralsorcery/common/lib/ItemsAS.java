@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -13,6 +13,9 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
@@ -52,7 +55,9 @@ public class ItemsAS {
     public static ItemInfusedGlass infusedGlass;
     public static ItemKnowledgeShare knowledgeShare;
     public static ItemPerkSeal perkSeal;
-    public static ItemKnowledgeShard knowledgeShard;
+    public static ItemKnowledgeFragment knowledgeFragment;
+    public static ItemFragmentCapsule fragmentCapsule;
+    public static ItemPerkGem perkGem;
 
     public static ItemUsableDust useableDust;
 

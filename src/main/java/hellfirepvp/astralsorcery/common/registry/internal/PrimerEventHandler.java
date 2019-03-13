@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry.internal;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
@@ -46,6 +47,7 @@ public class PrimerEventHandler {
         registry.wipe(event.getClass());
         RegistryItems.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+        AstralSorcery.proxy.registerOreDictEntries();
         RegistryConstellations.initConstellationSignatures();
     }
 

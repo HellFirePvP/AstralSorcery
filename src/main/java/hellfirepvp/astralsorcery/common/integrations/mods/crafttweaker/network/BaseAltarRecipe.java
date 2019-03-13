@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -35,11 +35,13 @@ import java.util.List;
  */
 public abstract class BaseAltarRecipe implements SerializeableRecipe {
 
+    protected String name;
     protected ItemHandle[] inputs;
     protected ItemStack output;
     protected int starlightRequired, craftingTickTime;
 
-    public BaseAltarRecipe(ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime) {
+    public BaseAltarRecipe(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime) {
+        this.name = name;
         this.inputs = inputs;
         this.output = output;
         this.starlightRequired = starlightRequired;
@@ -48,6 +50,7 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
 
     @Override
     public void read(ByteBuf buf) {
+        this.name = ByteBufUtils.readString(buf);
         this.starlightRequired = buf.readInt();
         this.craftingTickTime = buf.readInt();
         this.output = ByteBufUtils.readItemStack(buf);
@@ -63,6 +66,7 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
 
     @Override
     public void write(ByteBuf buf) {
+        ByteBufUtils.writeString(buf, this.name);
         buf.writeInt(this.starlightRequired);
         buf.writeInt(this.craftingTickTime);
         ByteBufUtils.writeItemStack(buf, this.output);
@@ -215,12 +219,14 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     }
                 }
                 return rRec;
+            default:
+                break;
         }
         return null;
     }
 
     private AccessibleRecipeAdapater buildNativeRecipe(ItemHandle[] inputs, ItemStack out) {
-        ShapedRecipe.Builder builder = ShapedRecipe.Builder.newShapedRecipe("ct/null", out);
+        ShapedRecipe.Builder builder = ShapedRecipe.Builder.newShapedRecipe(this.name, out);
         for (int i = 0; i < 9; i++) {
             ItemHandle itemHandle = inputs[i];
             if(itemHandle == null) continue;

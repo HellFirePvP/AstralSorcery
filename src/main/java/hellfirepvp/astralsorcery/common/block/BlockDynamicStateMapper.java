@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -48,6 +49,9 @@ public interface BlockDynamicStateMapper {
 
         @Override
         default boolean handleRegisterStateMapper() {
+            if (Config.disableFestiveMapper) {
+                return false;
+            }
             LocalDateTime now = LocalDateTime.now();
             return (now.getMonth() == Month.DECEMBER && now.getDayOfMonth() >= 21 && now.getDayOfMonth() <= 31);
         }

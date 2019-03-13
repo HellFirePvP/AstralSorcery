@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.data.research;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -27,6 +29,7 @@ public enum ResearchProgression {
     ATTUNEMENT(2, ProgressionTier.ATTUNEMENT, BASIC_CRAFT),
     CONSTELLATION(3, ProgressionTier.CONSTELLATION_CRAFT, ATTUNEMENT),
     RADIANCE(4, ProgressionTier.TRAIT_CRAFT, CONSTELLATION),
+    BRILLIANCE(5, ProgressionTier.BRILLIANCE, RADIANCE)
     ;
 
     private final int progressId;
@@ -114,6 +117,17 @@ public enum ResearchProgression {
             }
         }
         return null;
+    }
+
+    @Nonnull
+    public static Collection<ResearchProgression> findProgression(ResearchNode n) {
+        Collection<ResearchProgression> progressions = Lists.newArrayList();
+        for (ResearchProgression prog : values()) {
+            if (prog.getResearchNodes().contains(n)) {
+                progressions.add(prog);
+            }
+        }
+        return progressions;
     }
 
     static {

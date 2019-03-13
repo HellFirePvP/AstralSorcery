@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.common.registry.structures;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileOreGenerator;
-import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.StructureBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -39,12 +39,11 @@ public class StructureTreasureShrine extends StructureBlockArray {
         Block marble = BlocksAS.blockMarble;
         IBlockState mrw = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW);
         IBlockState mru = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.RUNED);
-        IBlockState mar = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.ARCH);
         IBlockState mpl = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.PILLAR);
         IBlockState mbr = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
 
         addBlockCube(mrw, -4, 0, -4, 4, 8, 4);
-        addBlockCube(Blocks.AIR.getDefaultState(), -3, 2, -3, 3, 7, 3);
+        addAirCube(-3, 2, -3, 3, 7, 3);
 
         addBlock(0, 1, 0, mru);
         addBlock(0, 2, 0, mpl);

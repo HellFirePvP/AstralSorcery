@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -23,8 +23,8 @@ import hellfirepvp.astralsorcery.common.util.data.TimeoutListContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -66,7 +66,8 @@ public class PerkEffectHelper implements ITickHandler {
     @SubscribeEvent(priority = EventPriority.HIGH)
     @SideOnly(Side.CLIENT)
     public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        handlePerkModification(Minecraft.getMinecraft().player, Side.CLIENT, true);
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        AstralSorcery.proxy.scheduleClientside(() -> handlePerkModification(player, Side.CLIENT, true));
     }
 
     @SubscribeEvent
@@ -118,11 +119,11 @@ public class PerkEffectHelper implements ITickHandler {
 
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null) {
-                int exp = MathHelper.floor(prog.getPerkExp());
-                int level = PerkLevelManager.INSTANCE.getLevel(exp);
-                int expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(level - 1);
-                int expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(level);
+            if (prog.isValid()) {
+                long exp = MathHelper.lfloor(prog.getPerkExp());
+                int level = prog.getPerkLevel(player);
+                long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(level - 1, player);
+                long expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(level, player);
 
                 float removePerDeath = 0.25F;
                 int remove = MathHelper.floor(((float) (expNextLevel - expThisLevel)) * removePerDeath);
@@ -139,7 +140,7 @@ public class PerkEffectHelper implements ITickHandler {
 
     private void handlePerkModification(EntityPlayer player, Side side, boolean remove) {
         PlayerProgress progress = ResearchManager.getProgress(player, side);
-        if (progress != null) {
+        if (progress.isValid()) {
             for (AbstractPerk perk : progress.getAppliedPerks()) {
                 if (remove) {
                     handlePerkRemoval(perk, player, side);
@@ -152,7 +153,7 @@ public class PerkEffectHelper implements ITickHandler {
 
     public void notifyPerkChange(EntityPlayer player, Side side, AbstractPerk perk, boolean remove) {
         PlayerProgress progress = ResearchManager.getProgress(player, side);
-        if (progress != null) {
+        if (progress.isValid()) {
             if (remove) {
                 handlePerkRemoval(perk, player, side);
             } else {
@@ -178,14 +179,19 @@ public class PerkEffectHelper implements ITickHandler {
     }
 
     @SideOnly(Side.CLIENT)
+    public void notifyPerkDataChangeClient(EntityPlayer player, AbstractPerk perk, NBTTagCompound oldData, NBTTagCompound newData) {
+        ResearchManager.getProgress(player, Side.CLIENT).setPerkData(perk, oldData);
+        notifyPerkChange(player, Side.CLIENT, perk, true);
+        ResearchManager.getProgress(player, Side.CLIENT).setPerkData(perk, newData);
+        notifyPerkChange(player, Side.CLIENT, perk, false);
+    }
+
+    @SideOnly(Side.CLIENT)
     public void clearAllPerksClient(EntityPlayer player) {
-        PlayerProgress prog = ResearchManager.getProgress(player, Side.CLIENT);
-        if (prog != null) {
-            PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, Side.CLIENT);
-            List<AbstractPerk> copyPerks = new ArrayList<>(attr.getCacheAppliedPerks());
-            for (AbstractPerk perk : copyPerks) {
-                handlePerkRemoval(perk, player, Side.CLIENT);
-            }
+        PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, Side.CLIENT);
+        List<AbstractPerk> copyPerks = new ArrayList<>(attr.getCacheAppliedPerks());
+        for (AbstractPerk perk : copyPerks) {
+            handlePerkRemoval(perk, player, Side.CLIENT);
         }
     }
 
@@ -200,6 +206,12 @@ public class PerkEffectHelper implements ITickHandler {
         if (perkCooldownsClient.hasList(container)) {
             perkCooldownsClient.removeList(container);
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void refreshAllPerksClient(EntityPlayer player) {
+        clearAllPerksClient(player);
+        reapplyAllPerksClient(player);
     }
 
     //Know that if you apply global converters, you're also responsible for removing them at the appropriate time...
@@ -220,8 +232,15 @@ public class PerkEffectHelper implements ITickHandler {
     }
 
     private synchronized void batchApplyConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyAdd) {
+        Thread tr = Thread.currentThread();
+        if (!"Client thread".equalsIgnoreCase(tr.getName()) &&
+                !"Server thread".equalsIgnoreCase(tr.getName())) {
+            AstralSorcery.log.error("Called perk modification outside synced thread!");
+            throw new RuntimeException("Modified perks outside the main thread(s)");
+        }
+
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null) {
+        if (prog.isValid()) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
             List<AbstractPerk> perks = new LinkedList<>(prog.getAppliedPerks());
             perks = perks.stream().filter(attributeMap::isPerkApplied).collect(Collectors.toList());
@@ -240,8 +259,15 @@ public class PerkEffectHelper implements ITickHandler {
     }
 
     private synchronized void batchRemoveConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyRemove) {
+        Thread tr = Thread.currentThread();
+        if (!"Client thread".equalsIgnoreCase(tr.getName()) &&
+                !"Server thread".equalsIgnoreCase(tr.getName())) {
+            AstralSorcery.log.error("Called perk modification outside synced thread!");
+            throw new RuntimeException("Modified perks outside the main thread(s)");
+        }
+
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null) {
+        if (prog.isValid()) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
             List<AbstractPerk> perks = new LinkedList<>(attributeMap.getCacheAppliedPerks());
             perks.forEach(perk -> perk.removePerk(player, side));
@@ -302,7 +328,7 @@ public class PerkEffectHelper implements ITickHandler {
         EntityPlayer ticked = (EntityPlayer) context[0];
         Side side = (Side) context[1];
         PlayerProgress prog = ResearchManager.getProgress(ticked, side);
-        if(prog != null) {
+        if(prog.isValid()) {
             for (AbstractPerk perk : prog.getAppliedPerks()) {
                 if (perk instanceof IPlayerTickPerk && prog.hasPerkEffect(perk)) {
                     ((IPlayerTickPerk) perk).onPlayerTick(ticked, side);

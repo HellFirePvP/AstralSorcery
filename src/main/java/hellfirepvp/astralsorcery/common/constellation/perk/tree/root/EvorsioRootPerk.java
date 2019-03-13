@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,16 +9,15 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -46,11 +45,10 @@ public class EvorsioRootPerk extends RootPerk {
         EntityPlayer player = event.getPlayer();
         if (player != null && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog == null || !prog.hasPerkEffect(this)) {
+            if (!prog.hasPerkEffect(this)) {
                 return;
             }
 
-            BlockPos at = event.getPos();
             IBlockState broken = event.getState();
             World world = event.getWorld();
             float gainedExp;
@@ -62,10 +60,12 @@ public class EvorsioRootPerk extends RootPerk {
             if (gainedExp <= 0) {
                 return; //Unbreakable lol. you're not getting exp for that.
             }
-            gainedExp *= 0.4F;
+            gainedExp *= 0.15F;
             gainedExp *= expMultiplier;
-            gainedExp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP);
+            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, gainedExp);
+            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
             gainedExp = (float) Math.sqrt(gainedExp);
+            gainedExp = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
             ResearchManager.modifyExp(player, gainedExp);
         }
     }

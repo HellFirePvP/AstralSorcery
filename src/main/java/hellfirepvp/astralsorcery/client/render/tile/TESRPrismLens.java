@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -82,6 +82,8 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
                 case EAST:
                     GlStateManager.translate(pos.getX() - 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                     GlStateManager.rotate(270, 0, 0, 1);
+                    break;
+                default:
                     break;
             }
 

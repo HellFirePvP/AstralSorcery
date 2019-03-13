@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -88,6 +88,8 @@ public class CelestialGatewayRecipe extends AttunementRecipe implements ISpecial
                         break;
                     case 2:
                         c = new Color(0x0078FF);
+                        break;
+                    default:
                         break;
                 }
                 p.setColor(c);

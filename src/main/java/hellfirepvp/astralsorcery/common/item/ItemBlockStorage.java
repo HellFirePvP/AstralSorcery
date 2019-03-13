@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -44,7 +44,6 @@ public abstract class ItemBlockStorage extends Item {
         if(Item.getItemFromBlock(stateToStore.getBlock()) == Items.AIR) return; //Can't charge the player anyway.
         if(stateToStore.getBlockHardness(w, pos) == -1) return;
         NBTTagCompound stateTag = NBTHelper.getBlockStateNBTTag(stateToStore);
-        if(stateTag == null) return;
 
         NBTTagCompound cmp = NBTHelper.getPersistentData(storeIn);
         NBTTagList list = cmp.getTagList("storedStates", Constants.NBT.TAG_COMPOUND);

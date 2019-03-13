@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
-import net.minecraft.entity.SharedMonsterAttributes;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -74,6 +74,8 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
             case STACKING_MULTIPLY:
                 attr.applyModifier(new DynamicPlayerAttributeModifier(getID(mode), getDescription() + " Stack Add", getTypeString(), mode, player, side));
                 break;
+            default:
+                break;
         }
     }
 
@@ -91,6 +93,8 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
                 break;
             case STACKING_MULTIPLY:
                 attr.removeModifier(getID(mode));
+                break;
+            default:
                 break;
         }
     }

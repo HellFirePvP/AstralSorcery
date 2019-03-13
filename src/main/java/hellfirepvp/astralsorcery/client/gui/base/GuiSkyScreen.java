@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -26,6 +26,14 @@ import java.awt.*;
  */
 public interface GuiSkyScreen {
 
+    static final float THRESHOLD_TO_START = 0.8F;
+    static final float THRESHOLD_TO_SHIFT_BLUEGRAD = 0.5F;
+    static final float THRESHOLD_TO_MAX_BLUEGRAD = 0.2F;
+
+    static final float THRESHOLD_FROM_START = 1.0F;
+    static final float THRESHOLD_FROM_SHIFT_BLUEGRAD = 0.6F;
+    static final float THRESHOLD_FROM_MAX_BLUEGRAD = 0.3F;
+
     public static Tuple<Color, Color> getRBGFromTo(boolean canSeeSky, float angleTransparency, float partialTicks) {
         World renderWorld = Minecraft.getMinecraft().world;
         if (renderWorld.provider.getDimensionType() == DimensionType.THE_END) {
@@ -44,10 +52,6 @@ public interface GuiSkyScreen {
         int alphaMask = 0xFF000000; //100% opacity.
         return new Tuple<>(new Color(alphaMask | rgbFrom, true), new Color(alphaMask | rgbTo, true));
     }
-
-    static final float THRESHOLD_TO_START = 0.8F;
-    static final float THRESHOLD_TO_SHIFT_BLUEGRAD = 0.5F;
-    static final float THRESHOLD_TO_MAX_BLUEGRAD = 0.2F;
 
     static int calcRGBToWithRain(float starBr, float rain) {
         int to = calcRGBTo(starBr);
@@ -88,10 +92,6 @@ public interface GuiSkyScreen {
             return (red << 16) | (green << 8) | 0xFF;
         }
     }
-
-    static final float THRESHOLD_FROM_START = 1.0F;
-    static final float THRESHOLD_FROM_SHIFT_BLUEGRAD = 0.6F;
-    static final float THRESHOLD_FROM_MAX_BLUEGRAD = 0.3F;
 
     static int calcRGBFromWithRain(float starBr, float rain) {
         int to = calcRGBFrom(starBr);

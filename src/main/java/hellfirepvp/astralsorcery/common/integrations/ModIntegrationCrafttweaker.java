@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -38,8 +38,11 @@ public class ModIntegrationCrafttweaker {
         CraftTweakerAPI.registerClass(AltarRecipe.class);
         CraftTweakerAPI.registerClass(WellRecipe.class);
         CraftTweakerAPI.registerClass(LiquidInteraction.class);
+
         CraftTweakerAPI.registerClass(PerkTree.class);
+
         CraftTweakerAPI.registerClass(Utils.class);
+        CraftTweakerAPI.registerClass(GameStageTweaks.class);
 
         //For the perk removal / disabling events
         MinecraftForge.EVENT_BUS.register(new PerkTree());

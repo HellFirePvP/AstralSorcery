@@ -1,0 +1,21 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:itemjournal"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.root.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.root.desc"
+        },
+        "background": "astralsorcery:textures/blocks/black_marble_raw.png",
+        "show_toast": false,
+        "announce_to_chat": false
+    },
+    "criteria": {
+        "astralsorcery_present": {
+            "trigger": "minecraft:tick"
+        }
+    }
+}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -24,10 +24,6 @@ public class OreDictAlias {
             "dyeYellow", "dyeLime", "dyePink", "dyeGray",
             "dyeLightGray", "dyeCyan", "dyePurple", "dyeBlue",
             "dyeBrown", "dyeGreen", "dyeRed", "dyeBlack" };
-
-    public static String getDyeOreDict(EnumDyeColor color) {
-        return DYE_COLORS_BY_META[color.getMetadata()];
-    }
 
     public static String ITEM_ENDERPEARL = "enderpearl";
     public static String ITEM_DIAMOND = "gemDiamond";
@@ -64,5 +60,9 @@ public class OreDictAlias {
     public static String BLOCK_LEAVES = "treeLeaves";
     public static String BLOCK_COBBLESTONE = "cobblestone";
     public static String BLOCK_GLASS_PANE_NOCOLOR = "paneGlassColorless";
+
+    public static String getDyeOreDict(EnumDyeColor color) {
+        return DYE_COLORS_BY_META[color.getMetadata()];
+    }
 
 }

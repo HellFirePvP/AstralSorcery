@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.client.gui.journal;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.awt.geom.Point2D;
 
 /**
  * This class is part of the Astral Sorcery Mod

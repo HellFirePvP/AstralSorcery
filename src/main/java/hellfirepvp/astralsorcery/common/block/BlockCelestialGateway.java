@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.block;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.structure.BlockStructureObserver;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
@@ -40,7 +41,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 16.04.2017 / 18:46
  */
-public class BlockCelestialGateway extends BlockContainer {
+public class BlockCelestialGateway extends BlockContainer implements BlockStructureObserver {
 
     private static final AxisAlignedBB box = new AxisAlignedBB(1D / 16D, 0D / 16D, 1D / 16D, 15D / 16D, 1D / 16D, 10D / 15D);
 
@@ -119,11 +120,6 @@ public class BlockCelestialGateway extends BlockContainer {
     @Override
     public boolean isFullBlock(IBlockState state) {
         return false;
-    }
-
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override

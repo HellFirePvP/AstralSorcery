@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,13 +8,17 @@
 
 package hellfirepvp.astralsorcery.common.registry.multiblock;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 
 import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 
@@ -28,6 +32,7 @@ import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 public class MultiblockFountain extends PatternBlockArray {
 
     public MultiblockFountain() {
+        super(new ResourceLocation(AstralSorcery.MODID, "pattern_fountain"));
         load();
     }
 
@@ -90,6 +95,22 @@ public class MultiblockFountain extends PatternBlockArray {
         addBlock( 3,  0, -3, mru);
         addBlock(-3,  0, -3, mru);
         addBlock(-3,  0,  3, mru);
+
+        for (int yy = -2; yy <= 2; yy++) {
+            for (int xx = -3; xx <= 3; xx++) {
+                for (int zz = -3; zz <= 3; zz++) {
+                    if(Math.abs(xx) == 3 && Math.abs(zz) == 3) continue; //corners
+
+                    if(xx == 0 && zz == 0) {
+                        if (yy == -2) {
+                            addAir(xx, yy, zz);
+                        }
+                    } else {
+                        addAir(xx, yy, zz);
+                    }
+                }
+            }
+        }
     }
 
 }

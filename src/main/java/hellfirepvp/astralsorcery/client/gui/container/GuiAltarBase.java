@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -73,7 +73,9 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
                 return new ContainerAltarConstellation(playerInv, tileAltar);
             case TRAIT_CRAFT:
                 return new ContainerAltarTrait(playerInv, tileAltar);
-            case ENDGAME:
+            case BRILLIANCE:
+                break;
+            default:
                 break;
         }
         return new ContainerAltarDiscovery(playerInv, tileAltar);

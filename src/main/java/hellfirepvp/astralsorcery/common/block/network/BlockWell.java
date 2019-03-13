@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -32,8 +32,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -131,13 +133,9 @@ public class BlockWell extends BlockStarlightNetwork {
                     }
 
                     handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
-                    worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-
-                    if(!MiscUtils.isPlayerFakeMP((EntityPlayerMP) playerIn) && entry.producing instanceof FluidLiquidStarlight) {
-                        //Lets assume it starts collecting right away...
-                        //FIXME RE-ADD AFTER ADVANCEMENTS
-                        //playerIn.addStat(RegistryAchievements.achvLiqStarlight);
-                    }
+                    worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(),
+                            SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,
+                            ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 
                     if(!playerIn.isCreative()) {
                         heldItem.shrink(1);
@@ -147,7 +145,9 @@ public class BlockWell extends BlockStarlightNetwork {
                     }
                 }
 
-                FluidActionResult far = FluidUtil.tryFillContainerAndStow(heldItem, tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN), new InvWrapper(playerIn.inventory), 1000, playerIn);
+                FluidActionResult far = FluidUtil.tryFillContainerAndStow(heldItem,
+                        tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN),
+                        new InvWrapper(playerIn.inventory), Fluid.BUCKET_VOLUME, playerIn, true);
                 if(far.isSuccess()) {
                     playerIn.setHeldItem(hand, far.getResult());
                     SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, worldIn, pos, 1F, 1F);
@@ -186,6 +186,20 @@ public class BlockWell extends BlockStarlightNetwork {
         for (AxisAlignedBB box : collisionBoxes) {
             addCollisionBoxToList(pos, entityBox, collidingBoxes, box);
         }
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+        TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, false);
+        if (tw != null) {
+            return MathHelper.ceil(tw.getPercFilled() * 15F);
+        }
+        return 0;
     }
 
     @Override

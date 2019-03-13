@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -7,9 +7,6 @@
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.constellation;
-
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
 import java.util.List;
 
@@ -23,10 +20,5 @@ import java.util.List;
 public interface IMinorConstellation extends IConstellation {
 
     public List<MoonPhase> getShowupMoonPhases(long rSeed);
-
-    @Override
-    default boolean canDiscover(PlayerProgress progress) {
-        return progress.wasOnceAttuned() && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT);
-    }
 
 }

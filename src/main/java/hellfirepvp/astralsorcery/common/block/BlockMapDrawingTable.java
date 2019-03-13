@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -114,6 +114,8 @@ public class BlockMapDrawingTable extends BlockContainer {
                     break;
                 case 11:
                     p.setColor(new Color(0xf0007B));
+                    break;
+                default:
                     break;
             }
         }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -105,6 +105,8 @@ public abstract class EntityComplexFX implements IComplexEffect {
                 case PYRAMID:
                     float halfAge = maxAge / 2F;
                     return 1F - (Math.abs(halfAge - age) / halfAge);
+                default:
+                    break;
             }
             return 1F;
         }

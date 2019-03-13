@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -21,6 +21,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -107,7 +108,11 @@ public class ItemCrystalSword extends ItemSword implements CrystalPropertyItem {
         newItem.motionX = ei.motionX;
         newItem.motionY = ei.motionY;
         newItem.motionZ = ei.motionZ;
-        newItem.setPickupDelay(40);
+        newItem.setDefaultPickupDelay();
+        if (ei instanceof EntityItem) {
+            newItem.setThrower(((EntityItem) ei).getThrower());
+            newItem.setOwner(((EntityItem) ei).getOwner());
+        }
         return newItem;
     }
 

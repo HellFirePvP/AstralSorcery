@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -27,26 +27,28 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.AdvancementTriggers;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktAttuneConstellation;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktAttunementAltarState;
+import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
+import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
-import hellfirepvp.astralsorcery.common.util.EntityUtils;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -104,6 +106,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     private static final int TICKS_CRYSTAL_ATTUNEMENT = 500;
 
     private IConstellation activeFound = null;
+    private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private boolean doesSeeSky = false, hasMultiblock = false;
 
     //Attunement related
@@ -156,14 +159,13 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 updateSkyState();
             }
 
-            if((ticksExisted & 31) == 0) {
-                updateMultiblockState();
-            }
+            updateMultiblockState();
+
             if(activeFound == null && getTicksExisted() % 10 == 0 && hasMultiblock) {
                 searchForConstellation();
             }
 
-            if(activeFound != null) {
+            if(activeFound != null && hasMultiblock) {
                 if(mode != 0 && activeEntity == null) {
                     activeEntity = world.getEntityByID(entityIdActive);
                     if(activeEntity == null) return;
@@ -224,12 +226,21 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                                 ItemTunedCrystalBase.applyMainConstellation(tunedStack, (IWeakConstellation) activeFound);
                                 CrystalProperties.applyCrystalProperties(tunedStack, CrystalProperties.getCrystalProperties(current));
                             } else if(EntityUtils.selectItemStack(traitAcceptor).apply(activeEntity) && activeFound instanceof IMinorConstellation) {
-                                tunedStack = ItemUtils.copyStackWithSize(((EntityItem) activeEntity).getItem(), 1);
+                                ItemStack current = ((EntityItem) activeEntity).getItem();
+                                tunedStack = ItemUtils.copyStackWithSize(current, 1);
                                 ItemTunedCrystalBase.applyTrait(tunedStack, (IMinorConstellation) activeFound);
                             } else {
                                 activeEntity.setDead();
                                 setAttunementState(0, null);
                                 return;
+                            }
+
+                            String thrower = ((EntityItem) activeEntity).getThrower();
+                            if (thrower != null && !thrower.isEmpty()) {
+                                EntityPlayer player = this.world.getPlayerEntityByName(thrower);
+                                if (player != null && player instanceof EntityPlayerMP) {
+                                    AdvancementTriggers.ATTUNE_CRYSTAL.trigger((EntityPlayerMP) player, activeFound);
+                                }
                             }
 
                             activeEntity.setDead();
@@ -274,7 +285,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 EntityPlayerMP pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
                 if (pl != null && !MiscUtils.isPlayerFakeMP(pl) && !pl.isSneaking()) {
                     PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
-                    if (prog != null && prog.getAttunedConstellation() == null &&
+                    if (prog.isValid() &&
+                            prog.getAttunedConstellation() == null &&
                             prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
                             prog.getKnownConstellations().contains(activeFound.getUnlocalizedName())) {
 
@@ -311,7 +323,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             for (int zz = -7; zz <= 7; zz++) {
                 BlockPos other = at.add(xx, 0, zz);
                 if(MiscUtils.isChunkLoaded(world, new ChunkPos(other))) {
-                    boolean see = world.canSeeSky(other);
+                    boolean see = MiscUtils.canSeeSky(this.getWorld(), other, true, false);
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;
@@ -323,7 +335,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                         break lbl;
                     }
                 } else {
-                    boolean see = world.canSeeSky(other);
+                    boolean see = MiscUtils.canSeeSky(this.getWorld(), other, true, false);
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;
@@ -340,10 +352,14 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     }
 
     private void updateMultiblockState() {
-        boolean found = MultiBlockArrays.patternAttunementFrame.matches(world, getPos());
-        boolean update = hasMultiblock != found;
-        this.hasMultiblock = found;
-        if(update) {
+        if (structureMatch == null) {
+            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(),
+                    getRequiredStructure());
+        }
+        boolean found = this.structureMatch.matches(this.getWorld());
+        boolean update = this.hasMultiblock != found;
+        if (update) {
+            this.hasMultiblock = found;
             markForUpdate();
         }
     }
@@ -421,7 +437,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     public void askForAttunement(EntityPlayerMP playerEntity, IMajorConstellation cst) {
         if(mode == 1 && playerAttunementWaitTick > 0 && activeEntity != null && playerEntity.equals(activeEntity)) {
             PlayerProgress prog = ResearchManager.getProgress(playerEntity, Side.SERVER);
-            if(prog != null && prog.getAttunedConstellation() == null &&
+            if(prog.isValid() &&
+                    prog.getAttunedConstellation() == null &&
                     prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
                     prog.getKnownConstellations().contains(cst.getUnlocalizedName())) {
                 ResearchManager.setAttunedConstellation(playerEntity, cst);
@@ -449,6 +466,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             case 2:
                 this.entityIdActive = trigger.getEntityId();
                 this.activeEntity = trigger;
+                break;
+            default:
                 break;
         }
         markForUpdate();
@@ -580,7 +599,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         } else {
             if(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) > 0) {
                 if(activeSound == null || ((PositionedLoopSound) activeSound).hasStoppedPlaying()) {
-                    activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.4F, 0.8F,
+                    activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.2F, 0.8F,
                             () -> isInvalid() ||
                                     activeFound == null ||
                                     !ConstellationSkyHandler.getInstance().isNight(world) ||
@@ -981,7 +1000,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         } else {
             activeFound = found;
         }
-        if(prev != activeFound) {
+        if (prev == null ? activeFound != null : !prev.equals(activeFound)) {
             starSprites.clear();
         }
     }

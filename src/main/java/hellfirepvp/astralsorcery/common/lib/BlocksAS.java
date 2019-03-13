@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -42,7 +42,6 @@ public class BlocksAS {
     public static BlockCelestialCollectorCrystal celestialCollectorCrystal;
     public static BlockLens lens;
     public static BlockPrism lensPrism;
-    public static BlockCelestialCrystals celestialCrystals;
     public static BlockFakeTree blockFakeTree;
     public static BlockAttunementAltar attunementAltar;
     public static BlockAttunementRelay attunementRelay;
@@ -58,6 +57,9 @@ public class BlocksAS {
     public static BlockBoreHead blockBoreHead;
     public static BlockPortalNode blockPortalNode;
     public static BlockObservatory blockObservatory;
+
+    public static BlockCelestialCrystals celestialCrystals;
+    public static BlockGemCrystals gemCrystals;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

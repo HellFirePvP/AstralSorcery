@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.item.ItemStack;
 
@@ -75,12 +76,14 @@ public class ResonatorStructureRecipe extends AttunementRecipe {
     @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
-        ItemStack resOut = super.getOutput(centralGridMap, altar);
-        if(!resOut.isEmpty() && resOut.getItem() instanceof ItemSkyResonator) {
-            ItemSkyResonator.setEnhanced(resOut);
-            ItemSkyResonator.setUpgradeUnlocked(resOut, ItemSkyResonator.ResonatorUpgrade.AREA_SIZE);
+        ItemStack reso = new ItemStack(ItemsAS.skyResonator);
+        ItemStack center = altar.getInventoryHandler().getStackInSlot(ShapedRecipeSlot.CENTER.getSlotID());
+        if(!center.isEmpty() && center.getItem() instanceof ItemSkyResonator) {
+            reso = ItemUtils.copyStackWithSize(center, center.getCount());
         }
-        return resOut;
+        ItemSkyResonator.setEnhanced(reso);
+        ItemSkyResonator.setUpgradeUnlocked(reso, ItemSkyResonator.ResonatorUpgrade.AREA_SIZE);
+        return reso;
     }
 
 }

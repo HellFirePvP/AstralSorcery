@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -188,6 +188,8 @@ public class LightOreTransmutations {
                     return this.input.getBlock();
                 case BLOCK:
                     return this.inBlock;
+                default:
+                    break;
             }
             return Blocks.AIR;
         }
@@ -198,6 +200,8 @@ public class LightOreTransmutations {
                     return input != null && !input.getBlock().equals(Blocks.AIR);
                 case BLOCK:
                     return inBlock != null && !inBlock.equals(Blocks.AIR);
+                default:
+                    break;
             }
             return false;
         }
@@ -208,6 +212,8 @@ public class LightOreTransmutations {
                     return input.equals(state);
                 case BLOCK:
                     return inBlock.equals(state.getBlock());
+                default:
+                    break;
             }
             return false;
         }
@@ -220,6 +226,8 @@ public class LightOreTransmutations {
                             return input.equals(other.input);
                         case BLOCK:
                             return input.getBlock().equals(other.inBlock);
+                        default:
+                            break;
                     }
                 case BLOCK:
                     switch (other.type) {
@@ -227,7 +235,11 @@ public class LightOreTransmutations {
                             return inBlock.equals(other.input.getBlock());
                         case BLOCK:
                             return inBlock.equals(other.inBlock);
+                        default:
+                            break;
                     }
+                default:
+                    break;
             }
             return false;
         }

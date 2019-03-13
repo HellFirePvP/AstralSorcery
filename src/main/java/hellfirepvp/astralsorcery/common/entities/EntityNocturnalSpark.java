@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -186,14 +186,15 @@ public class EntityNocturnalSpark extends EntityThrowable implements EntityTechn
             case 2:
                 particle.setColor(new Color(0x0C1576));
                 break;
+            default:
+                break;
         }
     }
 
     @Override
     protected void onImpact(RayTraceResult result) {
-        switch (result.typeOfHit) {
-            case ENTITY:
-                return;
+        if (RayTraceResult.Type.ENTITY.equals(result.typeOfHit)) {
+            return;
         }
         Vec3d hit = result.hitVec;
         setSpawning();

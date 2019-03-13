@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -88,17 +88,16 @@ public class PersistentDataManager {
             useLocal = true;
         }
 
-        if (!dataDir.exists()) {
-            if(!dataDir.mkdirs()) {
-                AstralSorcery.log.info("Unable to create folder for persistent data. Are you sure the mod has the permissions to create files there?");
-                return;
-            }
+        if (!dataDir.exists() &&
+                !dataDir.mkdirs()) {
+            AstralSorcery.log.info("Unable to create folder for persistent data. Are you sure the mod has the permissions to create files there?");
+            return;
         }
-        if (dataDir != localDataDirectory && !localDataDirectory.exists()) {
-            if(!localDataDirectory.mkdirs()) {
-                AstralSorcery.log.info("Unable to create folder for persistent data. Are you sure the mod has the permissions to create files there?");
-                return;
-            }
+        if (!dataDir.equals(localDataDirectory) &&
+                !localDataDirectory.exists() &&
+                !localDataDirectory.mkdirs()) {
+            AstralSorcery.log.info("Unable to create folder for persistent data. Are you sure the mod has the permissions to create files there?");
+            return;
         }
         this.selectedPersistentDataFolder = dataDir;
         this.localModPackFolder = localDataDirectory;

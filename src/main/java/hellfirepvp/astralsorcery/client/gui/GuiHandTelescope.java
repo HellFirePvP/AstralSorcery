@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -32,6 +32,7 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -77,6 +78,9 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
 
     private boolean grabCursor = false;
 
+    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
+    private Point start, end;
+
     public GuiHandTelescope() {
         super(216, 216);
 
@@ -100,7 +104,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         if (handle != null) {
             IMajorConstellation bestGuess = (IMajorConstellation) handle.getHighestDistributionConstellation(rand, (c) -> c instanceof IMajorConstellation);
             if (bestGuess != null && handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F &&
-                    bestGuess.canDiscover(ResearchManager.clientProgress)) {
+                    bestGuess.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
                 topFound = bestGuess;
                 selectedYaw = (rand.nextFloat() * 360F) - 180F;
                 selectedPitch = -90F + rand.nextFloat() * 25F;
@@ -473,12 +477,12 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 BlockPos other = pos.add(xx, 0, zz);
-                if (!renderWorld.canSeeSky(other)) {
+                if (!MiscUtils.canSeeSky(renderWorld, other, true, false)) {
                     return false;
                 }
             }
         }
-        return renderWorld.canSeeSky(pos);
+        return MiscUtils.canSeeSky(renderWorld, pos, true, false);
     }
 
     @Override
@@ -503,9 +507,6 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
             informRelease(mouseX, mouseY);
         }
     }
-
-    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
-    private Point start, end;
 
     private void tryStartDrawing(int mouseX, int mouseY) {
         if (!canStartDrawing()) return;
@@ -579,7 +580,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
 
         List<StarConnection> sc = c.getStarConnections();
         if (sc.size() != drawnLines.size()) return; //Can't match otherwise anyway.
-        if (!c.canDiscover(ResearchManager.clientProgress)) return;
+        if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) return;
 
         for (StarConnection connection : sc) {
             Rectangle fromRect = drawnStars.get(connection.from);

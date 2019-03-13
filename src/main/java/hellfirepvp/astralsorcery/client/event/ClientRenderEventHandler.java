@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
@@ -19,7 +20,6 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
-import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -27,7 +27,6 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.block.BlockObservatory;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
-import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -48,11 +47,11 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
@@ -82,7 +81,6 @@ public class ClientRenderEventHandler {
 
     private static final Map<ItemHudRender, ItemStackHudRenderInstance> ongoingItemRenders = new HashMap<>();
 
-    private static final Random rand = new Random();
     private static final int fadeTicks = 15;
     private static final float visibilityChange = 1F / ((float) fadeTicks);
 
@@ -92,13 +90,17 @@ public class ClientRenderEventHandler {
     private static int chargeTempRevealTicks = 0;
     private static float visibilityTempCharge = 0F;
 
+    private static final WavefrontObject obj;
+    private static final ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/models/texw.png");
+    private static int dList = -1;
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
         World world = Minecraft.getMinecraft().world;
         if(Config.constellationSkyDimWhitelist.contains(world.provider.getDimension())) {
             if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
-                world.provider.setSkyRenderer(new RenderSkybox(world, world.provider.getSkyRenderer()));
+                world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
             }
         }
 
@@ -307,7 +309,7 @@ public class ClientRenderEventHandler {
             }
 
             if(visibilityPermCharge > 0) {
-                renderAlignmentChargeOverlay(event.getPartialTicks());
+                renderAlignmentChargeOverlay();
             }
             if(!ongoingItemRenders.isEmpty()) {
                 for (Map.Entry<ItemHudRender, ItemStackHudRenderInstance> entry : new HashSet<>(ongoingItemRenders.entrySet())) {
@@ -346,7 +348,9 @@ public class ClientRenderEventHandler {
     }
 
     @SideOnly(Side.CLIENT)
-    private void renderAlignmentChargeOverlay(float partialTicks) {
+    private void renderAlignmentChargeOverlay() {
+        EntityPlayer player = Minecraft.getMinecraft().player;
+
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -372,7 +376,7 @@ public class ClientRenderEventHandler {
         tes.draw();
 
         //Draw charge
-        float filled = PerkLevelManager.INSTANCE.getNextLevelPercent(ResearchManager.clientProgress.getPerkExp());
+        float filled = ResearchManager.clientProgress.getPercentToNextLevel(player);
         height = 78F;
         offsetY = 27.5F + (1F - filled) * height;
         GL11.glColor4f(255F / 255F, 230F / 255F, 0F / 255F, visibilityPermCharge * 0.9F);
@@ -389,7 +393,7 @@ public class ClientRenderEventHandler {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         TextureHelper.refreshTextureBindState();
         //Draw level
-        int level = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(ResearchManager.clientProgress.getPerkExp()));
+        int level = ResearchManager.clientProgress.getPerkLevel(player);
         String strLevel = String.valueOf(level);
         int strLength = Minecraft.getMinecraft().fontRenderer.getStringWidth(strLevel);
         GL11.glColor4f(0.86F, 0.86F, 0.86F, visibilityPermCharge);
@@ -431,10 +435,6 @@ public class ClientRenderEventHandler {
         }
         obj = buf;
     }
-
-    private static final WavefrontObject obj;
-    private static final ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/models/texw.png");
-    private static int dList = -1;
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)

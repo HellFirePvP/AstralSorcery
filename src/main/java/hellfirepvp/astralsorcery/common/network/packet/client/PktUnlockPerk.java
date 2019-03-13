@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -29,9 +29,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -74,16 +71,14 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
             MinecraftServer ms = FMLCommonHandler.instance().getMinecraftServerInstance();
             if (ms != null) {
                 ms.addScheduledTask(() -> {
-                    EntityPlayer pl = ctx.getServerHandler().player;
+                    EntityPlayerMP pl = ctx.getServerHandler().player;
                     if(pl != null) {
                         if(message.perk != null) {
                             AbstractPerk perk = message.perk;
                             PlayerProgress prog = ResearchManager.getProgress(pl, ctx.side);
-                            if(prog != null) {
-                                if(!prog.hasPerkUnlocked(perk)) {
-                                    if(perk.mayUnlockPerk(prog) && ResearchManager.applyPerk(pl, message.perk)) {
-                                        PacketChannel.CHANNEL.sendTo(new PktUnlockPerk(true, message.perk), (EntityPlayerMP) pl);
-                                    }
+                            if (!prog.hasPerkUnlocked(perk) && prog.isValid()) {
+                                if (perk.mayUnlockPerk(prog, pl) && ResearchManager.applyPerk(pl, message.perk)) {
+                                    PacketChannel.CHANNEL.sendTo(new PktUnlockPerk(true, message.perk), pl);
                                 }
                             }
                         }
@@ -98,10 +93,10 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
 
     @SideOnly(Side.CLIENT)
     private void recUnlockResultClient(PktUnlockPerk message) {
-        if(message.serverAccept) {
+        if (message.serverAccept) {
             AbstractPerk perk = message.perk;
             GuiScreen current = Minecraft.getMinecraft().currentScreen;
-            if(current != null && current instanceof GuiJournalPerkTree) {
+            if (current instanceof GuiJournalPerkTree) {
                 Minecraft.getMinecraft().addScheduledTask(() -> ((GuiJournalPerkTree) current).playUnlockAnimation(perk));
             }
         }

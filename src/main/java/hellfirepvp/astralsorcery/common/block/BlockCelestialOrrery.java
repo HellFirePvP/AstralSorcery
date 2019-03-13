@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.structure.BlockStructureObserver;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialOrrery;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -28,7 +29,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 15.02.2017 / 22:42
  */
-public class BlockCelestialOrrery extends BlockStarlightNetwork {
+public class BlockCelestialOrrery extends BlockStarlightNetwork implements BlockStructureObserver {
 
     public BlockCelestialOrrery() {
         super(Material.ROCK, MapColor.QUARTZ);

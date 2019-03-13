@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -249,5 +250,21 @@ public class CrystalProperties {
     @Override
     public String toString() {
         return "CrystalProperties={Size=" + size + ", Purity=" + purity + ",Cutting=" + collectiveCapability + ",Fractured=" + fractured + ",SizeOverride=" + sizeOverride + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CrystalProperties that = (CrystalProperties) o;
+        return size == that.size &&
+                purity == that.purity &&
+                collectiveCapability == that.collectiveCapability &&
+                fractured == that.fractured;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(size, purity, collectiveCapability, fractured);
     }
 }

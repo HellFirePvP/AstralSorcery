@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -66,13 +66,13 @@ public class TESRObservatory extends TileEntitySpecialRenderer<TileObservatory> 
 
         RenderHelper.disableStandardItemLighting();
 
-        renderModel(te, partialTicks, iYaw, iPitch);
+        renderModel(iYaw, iPitch);
         GlStateManager.popMatrix();
 
         TextureHelper.refreshTextureBindState();
     }
 
-    private void renderModel(TileObservatory te, float partialTicks, float iYaw, float iPitch) {
+    private void renderModel(float iYaw, float iPitch) {
         texTelescope.bind();
         GlStateManager.disableCull();
         GlStateManager.enableBlend();

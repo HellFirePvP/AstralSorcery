@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -22,12 +22,13 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -97,6 +98,10 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
         ei.motionX = entity.motionX;
         ei.motionY = entity.motionY;
         ei.motionZ = entity.motionZ;
+        if (entity instanceof EntityItem) {
+            ei.setThrower(((EntityItem) entity).getThrower());
+            ei.setOwner(((EntityItem) entity).getOwner());
+        }
         return ei;
     }
 
@@ -104,7 +109,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IConstellation c = getConstellation(stack);
-        if (c != null) {
+        if (c != null && c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
             tooltip.add(TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
         } else {
             tooltip.add(TextFormatting.GRAY + I18n.format("constellation.noInformation"));
@@ -130,79 +135,57 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
 
         if(cst == null) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn, Side.SERVER);
-            if (progress != null) {
-                List<IConstellation> constellations = new ArrayList<>();
-                for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
-                    if(c.canDiscover(progress)) {
-                        constellations.add(c);
-                    }
-                }
 
-                for (String strConstellation : progress.getKnownConstellations()) {
-                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                    if(c != null) {
-                        constellations.remove(c);
-                    }
+            List<IConstellation> constellations = new ArrayList<>();
+            for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+                if(c.canDiscover((EntityPlayer) entityIn, progress)) {
+                    constellations.add(c);
                 }
-                for (String strConstellation : progress.getSeenConstellations()) {
-                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                    if(c != null) {
-                        constellations.remove(c);
-                    }
-                }
+            }
 
-                if (!constellations.isEmpty()) {
-                    List<WRItemObject<IConstellation>> wrp = buildWeightedRandomList(constellations);
-                    WRItemObject<IConstellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
-                    setConstellation(stack, result.getValue());
+            for (String strConstellation : progress.getKnownConstellations()) {
+                IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                if(c != null) {
+                    constellations.remove(c);
                 }
+            }
+            for (String strConstellation : progress.getSeenConstellations()) {
+                IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                if(c != null) {
+                    constellations.remove(c);
+                }
+            }
+
+            if (!constellations.isEmpty()) {
+                List<WRItemObject<IConstellation>> wrp = buildWeightedRandomList(constellations);
+                WRItemObject<IConstellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
+                setConstellation(stack, result.getValue());
             }
         }
 
         cst = getConstellation(stack);
         if(cst != null) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn, Side.SERVER);
-            if(progress != null) {
-                boolean has = false;
-                for (String strConstellation : progress.getSeenConstellations()) {
-                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                    if(c != null && c.equals(cst)) {
-                        has = true;
-                        break;
-                    }
-                }
-                if(!has) {
-                    if(ResearchManager.memorizeConstellation(cst, (EntityPlayer) entityIn)) {
-                        entityIn.sendMessage(
-                                new TextComponentTranslation("progress.seen.constellation.chat",
-                                        new TextComponentTranslation(cst.getUnlocalizedName())
-                                                .setStyle(new Style().setColor(TextFormatting.GRAY)))
-                                        .setStyle(new Style().setColor(TextFormatting.BLUE)));
-                        if(ResearchManager.clientProgress.getSeenConstellations().size() == 1) {
-                            entityIn.sendMessage(
-                                    new TextComponentTranslation("progress.seen.constellation.first.chat")
-                                            .setStyle(new Style().setColor(TextFormatting.BLUE)));
-                        }
-                    }
-                }
-            }
-        }
-    }
 
-    private void removeInventoryConstellations(InventoryPlayer inventory, List<IConstellation> constellations) {
-        if (inventory == null) return;
-        for (ItemStack stack : inventory.mainInventory) {
-            if (stack.isEmpty()) continue;
-            if (stack.getItem() instanceof ItemConstellationPaper) {
-                IConstellation c = getConstellation(stack);
-                if (c != null) {
-                    constellations.remove(c);
+            boolean has = false;
+            for (String strConstellation : progress.getSeenConstellations()) {
+                IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                if(c != null && c.equals(cst)) {
+                    has = true;
+                    break;
                 }
             }
-            if (stack.getItem() instanceof ItemJournal) {
-                for(IConstellation c : ItemJournal.getStoredConstellations(stack)) {
-                    if(c != null) {
-                        constellations.remove(c);
+            if(!has) {
+                if(ResearchManager.memorizeConstellation(cst, (EntityPlayer) entityIn)) {
+                    entityIn.sendMessage(
+                            new TextComponentTranslation("progress.seen.constellation.chat",
+                                    new TextComponentTranslation(cst.getUnlocalizedName())
+                                            .setStyle(new Style().setColor(TextFormatting.GRAY)))
+                                    .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                    if(ResearchManager.clientProgress.getSeenConstellations().size() == 1) {
+                        entityIn.sendMessage(
+                                new TextComponentTranslation("progress.seen.constellation.first.chat")
+                                        .setStyle(new Style().setColor(TextFormatting.BLUE)));
                     }
                 }
             }

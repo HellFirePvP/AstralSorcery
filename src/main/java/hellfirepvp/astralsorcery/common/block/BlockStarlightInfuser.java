@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.structure.BlockStructureObserver;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -35,7 +36,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 11.12.2016 / 17:05
  */
-public class BlockStarlightInfuser extends BlockStarlightNetwork{
+public class BlockStarlightInfuser extends BlockStarlightNetwork implements BlockStructureObserver {
 
     private static final AxisAlignedBB box = new AxisAlignedBB(0D, 0D, 0D, 1D, 12D / 16D, 1D);
 

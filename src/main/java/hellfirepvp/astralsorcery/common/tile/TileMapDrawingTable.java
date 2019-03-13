@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -193,6 +193,8 @@ public class TileMapDrawingTable extends TileSkybound {
                         break;
                     case 2:
                         c = new Color(0x0028FF);
+                        break;
+                    default:
                         break;
                 }
                 offset = new Vector3(this).add(rand.nextFloat(), 1, rand.nextFloat());

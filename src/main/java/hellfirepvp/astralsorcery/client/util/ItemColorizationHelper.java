@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -95,7 +95,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
                 }
             }
         }
-        for (AbstractAltarRecipe ar : AltarRecipeRegistry.getRecipesForLevel(TileAltar.AltarLevel.ENDGAME)) {
+        for (AbstractAltarRecipe ar : AltarRecipeRegistry.getRecipesForLevel(TileAltar.AltarLevel.BRILLIANCE)) {
             if(ar instanceof TraitRecipe) {
                 TraitRecipe tr = (TraitRecipe) ar;
                 toPrepare.add(tr.getOutputForRender());

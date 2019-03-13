@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -22,13 +22,13 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
@@ -143,17 +143,17 @@ public class ItemShiftingStar extends Item implements INBTModel {
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-        if(!worldIn.isRemote && entityLiving instanceof EntityPlayer) {
+        if(!worldIn.isRemote && entityLiving instanceof EntityPlayerMP) {
             EntityPlayer pl = (EntityPlayer) entityLiving;
             IMajorConstellation cst;
             if ((cst = getAttunement(stack)) != null) {
                 PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
-                if (prog == null || !prog.wasOnceAttuned() || !prog.hasConstellationDiscovered(cst.getUnlocalizedName())) {
+                if (!prog.isValid() || !prog.wasOnceAttuned() || !prog.hasConstellationDiscovered(cst.getUnlocalizedName())) {
                     return stack;
                 }
                 double exp = prog.getPerkExp();
                 if (ResearchManager.setAttunedConstellation(pl, cst)) {
-                    ResearchManager.setExp(pl, (int) Math.floor(exp));
+                    ResearchManager.setExp(pl, MathHelper.lfloor(exp));
                     pl.sendMessage(new TextComponentTranslation("progress.switch.attunement").setStyle(new Style().setColor(TextFormatting.BLUE)));
                     SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldIn, entityLiving.getPosition(), 1F, 1F);
                 } else {

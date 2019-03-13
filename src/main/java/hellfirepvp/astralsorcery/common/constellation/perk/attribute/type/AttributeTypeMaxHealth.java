@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,12 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.UUID;
 
@@ -53,6 +51,8 @@ public class AttributeTypeMaxHealth extends VanillaAttributeType {
                 return MAX_HEALTH_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return MAX_HEALTH_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

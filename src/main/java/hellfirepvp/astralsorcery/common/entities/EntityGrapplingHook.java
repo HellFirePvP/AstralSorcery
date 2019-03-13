@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -315,6 +315,8 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
                 }
                 setPulling(true, (result.entityHit instanceof EntityLivingBase) ? (EntityLivingBase) result.entityHit : null);
                 hit = new Vec3d(hit.x, hit.y + result.entityHit.height * 3 / 4, hit.z);
+                break;
+            default:
                 break;
         }
         this.motionX = 0;

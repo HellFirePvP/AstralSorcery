@@ -1,0 +1,27 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:itemrockcrystalsimple"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.rock_crystals.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.rock_crystals.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:root",
+    "criteria": {
+        "rock_crystal_in_inventory": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "astralsorcery:itemrockcrystalsimple"
+                    }
+                ]
+            }
+        }
+    }
+}

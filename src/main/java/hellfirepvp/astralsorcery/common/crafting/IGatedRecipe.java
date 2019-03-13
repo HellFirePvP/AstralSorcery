@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -37,8 +37,8 @@ public interface IGatedRecipe {
         ResearchProgression getRequiredProgression();
 
         default public boolean hasProgressionServer(EntityPlayer player) {
-            PlayerProgress progress = ResearchManager.getProgress(player, Side.SERVER);
-            return progress != null && progress.getResearchProgression().contains(getRequiredProgression());
+            return ResearchManager.getProgress(player, Side.SERVER)
+                    .getResearchProgression().contains(getRequiredProgression());
         }
 
         @SideOnly(Side.CLIENT)

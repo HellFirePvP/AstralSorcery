@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.base;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
-import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.entities.EntityShootingStar;
@@ -67,7 +66,7 @@ public class ShootingStarHandler implements ITickHandler {
                     int day = (int) (player.getEntityWorld().getWorldTime() / Config.dayLength);
                     if (!handledDays.contains(day)) {
                         Vector3 movement = Vector3.positiveYRandom().setY(0).normalize().multiply(0.2);
-                        EntityShootingStar star = new EntityShootingStar(player.getEntityWorld(), player.posX, 560, player.posZ, movement);
+                        EntityShootingStar star = new EntityShootingStar(player.getEntityWorld(), player.posX, 560, player.posZ, movement, player);
                         player.getEntityWorld().spawnEntity(star);
                         handledDays.add(day);
                         fleetingServerCache.put(player.getUniqueID(), handledDays);
@@ -99,7 +98,7 @@ public class ShootingStarHandler implements ITickHandler {
     public static class StarConfigEntry extends ConfigEntry {
 
         public static boolean enabled = true;
-        public static boolean doExplosion = false;
+        public static boolean doExplosion = true;
 
         public StarConfigEntry() {
             super(Section.GENERAL, "shooting_stars");

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -26,10 +26,5 @@ public interface IWeakConstellation extends IConstellation {
 
     @Nullable
     public ConstellationEffect getRitualEffect(ILocatable origin);
-
-    @Override
-    default boolean canDiscover(PlayerProgress progress) {
-        return progress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) && progress.wasOnceAttuned();
-    }
 
 }

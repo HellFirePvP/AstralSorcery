@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -56,7 +56,7 @@ public class StructureGenBuffer extends CachedWorldData {
         if (type.needsDistanceToAnyStructure()) {
             for (StructureType tt : StructureType.values()) {
                 if (!tt.needsDistanceToAnyStructure() ||
-                        tt == type) {
+                        tt.equals(type)) {
                     continue;
                 }
                 for (BlockPos position : generatedStructures.get(type)) {

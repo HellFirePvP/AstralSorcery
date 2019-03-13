@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -30,11 +30,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class LootTableUtil {
 
     public static final ResourceLocation LOOT_TABLE_SHRINE = new ResourceLocation(AstralSorcery.MODID.toLowerCase(), "chest_shrine");
+    public static final ResourceLocation LOOT_TABLE_SHOOTING_STAR = new ResourceLocation(AstralSorcery.MODID.toLowerCase(), "shooting_star");
 
     private static final ImmutableSet<ResourceLocation> constellationPaperTables = ImmutableSet.of(LootTableList.CHESTS_STRONGHOLD_LIBRARY, LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_JUNGLE_TEMPLE, LootTableList.CHESTS_DESERT_PYRAMID, LootTableList.CHESTS_IGLOO_CHEST);
 
     public static void initLootTable() {
         LootTableList.register(LOOT_TABLE_SHRINE);
+        LootTableList.register(LOOT_TABLE_SHOOTING_STAR);
     }
 
     @SubscribeEvent

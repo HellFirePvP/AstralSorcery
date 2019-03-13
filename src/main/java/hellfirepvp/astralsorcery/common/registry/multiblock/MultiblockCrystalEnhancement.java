@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry.multiblock;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
@@ -15,10 +16,11 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -35,6 +37,7 @@ import java.util.Random;
 public class MultiblockCrystalEnhancement extends PatternBlockArray {
 
     public MultiblockCrystalEnhancement() {
+        super(new ResourceLocation(AstralSorcery.MODID, "pattern_collector_crystal_enhanced"));
         load();
     }
 
@@ -48,14 +51,14 @@ public class MultiblockCrystalEnhancement extends PatternBlockArray {
         addBlockCube(mrw, -1, -5, -1, 1, -5, 1);
         for (BlockPos offset : TileCollectorCrystal.offsetsLiquidStarlight) {
             addBlock(offset, BlocksAS.blockLiquidStarlight.getDefaultState(),
-                    (world, pos, state) -> state.getBlock().equals(BlocksAS.blockLiquidStarlight) && state.getValue(BlockFluidBase.LEVEL) == 0);
+                    (state) -> state.getBlock().equals(BlocksAS.blockLiquidStarlight) && state.getValue(BlockFluidBase.LEVEL) == 0);
         }
-        addBlockCube(Blocks.AIR.getDefaultState(), 1, 1, 1, -1, -1, -1);
+        addAirCube(1, 1, 1, -1, -1, -1);
         addBlock(0, 0, 0, BlocksAS.celestialCollectorCrystal.getDefaultState());
         addTileCallback(BlockPos.ORIGIN, new TileEntityCallback() {
             @Override
             public boolean isApplicable(TileEntity te) {
-                return te != null && te instanceof TileCollectorCrystal;
+                return te instanceof TileCollectorCrystal;
             }
 
             @Override

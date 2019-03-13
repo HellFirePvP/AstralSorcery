@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -159,7 +159,7 @@ public class JournalPageRecipe implements IJournalPage {
             GL11.glColor4f(1F, 1F, 1F, 1F);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-            java.util.List<String> out = Lists.newLinkedList();
+            List<String> out = Lists.newLinkedList();
             addStackTooltip(mouseX, mouseY, out);
             if(!out.isEmpty()) {
                 RenderingUtils.renderBlueTooltip((int) (mouseX), (int) (mouseY),

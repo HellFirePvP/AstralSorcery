@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -174,6 +174,8 @@ public class RenderingUtils {
                                 state = state.getBlock().getExtendedState(state, world, offset);
                             } catch (Exception ignored) {}
                             brd.getBlockModelRenderer().renderModel(world, model, state, offset, vb, true);
+                        default:
+                            break;
                     }
                 }
             }
@@ -687,6 +689,33 @@ public class RenderingUtils {
         GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
+    public static void renderBlueTooltipBox(int x, int y, int width, int height) {
+        renderTooltipBox(x, y, width, height, new Color(0x000027), new Color(0x000044));
+    }
+
+    public static void renderTooltipBox(int x, int y, int width, int height, Color color, Color colorFade) {
+        int pX = x + 12;
+        int pY = y - 12;
+        float z = 300F;
+
+        drawGradientRect(pX - 3,           pY - 4,           z, pX + width + 3, pY - 3,         color, colorFade);
+        drawGradientRect(pX - 3,           pY + height + 3,  z, pX + width + 3, pY + height + 4, color, colorFade);
+        drawGradientRect(pX - 3,           pY - 3,           z, pX + width + 3, pY + height + 3, color, colorFade);
+        drawGradientRect(pX - 4,           pY - 3,           z, pX - 3,         pY + height + 3, color, colorFade);
+        drawGradientRect(pX + width + 3,   pY - 3,           z, pX + width + 4, pY + height + 3, color, colorFade);
+
+        int rgb = color.getRGB();
+        int col = (rgb & 0x00FFFFFF) | rgb & 0xFF000000;
+        Color colOp = new Color(col);
+        drawGradientRect(pX - 3,           pY - 3 + 1,      z, pX - 3 + 1,     pY + height + 3 - 1, color, colOp);
+        drawGradientRect(pX + width + 2,   pY - 3 + 1,      z, pX + width + 3, pY + height + 3 - 1, color, colOp);
+        drawGradientRect(pX - 3,           pY - 3,          z, pX + width + 3, pY - 3 + 1,          colOp, colOp);
+        drawGradientRect(pX - 3,           pY + height + 2, z, pX + width + 3, pY + height + 3,     color, color);
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+    }
+
     public static void removeStandartTranslationFromTESRMatrix(float partialTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
         if(rView == null) rView = Minecraft.getMinecraft().player;
@@ -898,10 +927,10 @@ public class RenderingUtils {
         Tessellator t = Tessellator.getInstance();
         BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ).tex(u,              v + vLength).color(cR, cG, cB, cA).endVertex();
-        vb.pos(px + v2.getX() - iPX, py + v2.getY() - iPY, pz + v2.getZ() - iPZ).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
-        vb.pos(px + v3.getX() - iPX, py + v3.getY() - iPY, pz + v3.getZ() - iPZ).tex(u + uLength, v          ).color(cR, cG, cB, cA).endVertex();
-        vb.pos(px + v4.getX() - iPX, py + v4.getY() - iPY, pz + v4.getZ() - iPZ).tex(u,              v          ).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v2.getX() - iPX, py + v2.getY() - iPY, pz + v2.getZ() - iPZ).tex(u + uLength, v          ).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v3.getX() - iPX, py + v3.getY() - iPY, pz + v3.getZ() - iPZ).tex(u,               v          ).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v4.getX() - iPX, py + v4.getY() - iPY, pz + v4.getZ() - iPZ).tex(u,            v + vLength).color(cR, cG, cB, cA).endVertex();
         t.draw();
     }
 

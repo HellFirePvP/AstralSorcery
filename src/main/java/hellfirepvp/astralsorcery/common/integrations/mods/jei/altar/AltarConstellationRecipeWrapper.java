@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -61,6 +61,10 @@ public class AltarConstellationRecipeWrapper extends JEIBaseWrapper {
         ingredients.setInputLists(ItemStack.class, stackList);
 
         ingredients.setOutput(ItemStack.class, recipe.getOutputForRender());
+    }
+
+    public ConstellationRecipe getRecipe() {
+        return recipe;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -19,10 +19,13 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.DamageSourceUtil;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -44,13 +47,13 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.11.2016 / 22:30
  */
-public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
+public class CEffectDiscidia extends CEffectEntityCollect<EntityMob> {
 
     public static double potencyMultiplier = 1;
     public static float damage = 6.5F;
 
     public CEffectDiscidia(@Nullable ILocatable origin) {
-        super(origin, Constellations.discidia, "discidia", 16D, EntityLivingBase.class, (entity) -> !entity.isDead && !(entity instanceof EntityPlayer) && !(entity instanceof EntityTechnicalAmbient));
+        super(origin, Constellations.discidia, "discidia", 16D, EntityMob.class, (entity) -> !entity.isDead && !(entity instanceof EntityTechnicalAmbient));
     }
 
     @Override
@@ -76,26 +79,24 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
         }
         boolean did = false;
         float actDamageDealt = percStrength * damage;
-        List<EntityLivingBase> entities = collectEntities(world, pos, modified);
+        List<EntityMob> entities = collectEntities(world, pos, modified);
         if(!entities.isEmpty()) {
             EntityPlayer owner = getOwningPlayerInWorld(world, pos);
-            DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSource.causePlayerDamage(owner);
+            DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSourceUtil.withEntityDirect(CommonProxy.dmgSourceStellar, owner);
             if(modified.isCorrupted() && owner != null && owner.getDistanceSq(pos) <= (modified.getSize() * modified.getSize())) {
-                owner.attackEntityFrom(CommonProxy.dmgSourceStellar, 1.2F * percStrength);
+                DamageUtil.attackEntityFrom(owner, CommonProxy.dmgSourceStellar, 1.2F * percStrength);
                 did = true;
             }
-            for (EntityLivingBase entity : entities) {
+            for (EntityMob entity : entities) {
                 if(modified.isCorrupted()) {
-                    if(!(entity instanceof EntityPlayer)) {
-                        entity.heal(actDamageDealt);
-                        entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, 2));
-                        did = true;
-                    }
+                    entity.heal(actDamageDealt);
+                    entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, 2));
+                    did = true;
                 } else {
                     int hrTime = entity.hurtResistantTime;
                     entity.hurtResistantTime = 0;
                     try {
-                        if(entity.attackEntityFrom(dmgSource, actDamageDealt)) {
+                        if(DamageUtil.attackEntityFrom(entity, dmgSource, actDamageDealt)) {
                             PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_DMG_ENTITY, entity.posX, entity.posY + entity.height / 2, entity.posZ);
                             PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 16));
                         }

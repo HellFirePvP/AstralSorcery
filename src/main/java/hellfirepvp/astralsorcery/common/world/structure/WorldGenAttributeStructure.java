@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -12,10 +12,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
-import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
-import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.StructureBlockArray;
 import hellfirepvp.astralsorcery.common.world.WorldGenAttributeCommon;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;

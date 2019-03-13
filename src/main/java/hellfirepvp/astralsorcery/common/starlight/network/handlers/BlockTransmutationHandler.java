@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
+import hellfirepvp.astralsorcery.common.util.ParticleEffectWatcher;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -81,8 +82,10 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         node.accCharge += amount;
         node.lastMSrec = ms;
 
-        PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.TRANSMUTATION_CHARGE, pos.getX(), pos.getY(), pos.getZ());
-        PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
+        if (ParticleEffectWatcher.INSTANCE.mayFire(world, pos)) {
+            PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.TRANSMUTATION_CHARGE, pos.getX(), pos.getY(), pos.getZ());
+            PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
+        }
 
         if(node.accCharge >= node.runningTransmutation.getCost()) {
             if (!world.setBlockState(pos, node.runningTransmutation.getOutput())) {

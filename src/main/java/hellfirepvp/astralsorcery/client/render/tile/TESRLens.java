@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -221,6 +221,8 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                     renderColoredLens(pitch);
                     GlStateManager.color(1F, 1F, 1F, 1F);
                 }
+                break;
+            default:
                 break;
         }
 

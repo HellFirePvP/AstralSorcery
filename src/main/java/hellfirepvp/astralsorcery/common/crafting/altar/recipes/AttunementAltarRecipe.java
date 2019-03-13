@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -102,7 +102,9 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
                         break;
                     case TRAIT_CRAFT:
                         break;
-                    case ENDGAME:
+                    case BRILLIANCE:
+                        break;
+                    default:
                         break;
                 }
             }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -67,7 +67,6 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
 
     private static final Rectangle.Float partFrame = new Rectangle.Float(0, 0, 280F / 312F, 1F);
     private static final Rectangle.Float partSelectFrame = new Rectangle.Float(280F / 312F, 110F / 280F, 30F / 312F, 30F / 280F);
-    private static final Rectangle.Float partIconSize = new Rectangle2D.Float(0F, 0F, 16F / 312F, 16F / 140F);
     private static final Rectangle.Float partArrowDown = new Rectangle2D.Float(280F / 312F, 80F / 280F, 12F / 312F, 8F / 280F);
     private static final Rectangle.Float partArrowUp = new Rectangle2D.Float(280F / 312F, 88F / 280F, 12F / 312F, 8F / 280F);
 
@@ -288,7 +287,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             int offsetX = guiLeft;
             int offsetZ = guiTop;
             zLevel += 1;
-            drawCellEffect(offsetX, offsetZ, getGuiWidth(), getGuiHeight(), partialTicks, transparency);
+            drawCellEffect(offsetX, offsetZ, partialTicks, transparency);
             zLevel -= 1;
         }
 
@@ -382,7 +381,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         return targets;
     }
 
-    private void drawCellEffect(int offsetX, int offsetY, int guiWidth, int guiHeight, float partialTicks, float transparency) {
+    private void drawCellEffect(int offsetX, int offsetY, float partialTicks, float transparency) {
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Random r = new Random();
@@ -524,12 +523,12 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 BlockPos other = playerPos.add(xx, 0, zz);
-                if (!renderWorld.canSeeSky(other)) {
+                if (!MiscUtils.canSeeSky(renderWorld, other, true, false)) {
                     return false;
                 }
             }
         }
-        return renderWorld.canSeeSky(playerPos.up());
+        return MiscUtils.canSeeSky(renderWorld, playerPos.up(), true, false);
     }
 
     private void handleMouseMovement(float pticks) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -14,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
@@ -29,15 +28,12 @@ public class RenderSkybox extends IRenderHandler {
 
     private static boolean inRender = false;
 
-    private static final RenderDefaultSkybox defaultSky = new RenderDefaultSkybox();
     private static final RenderAstralSkybox astralSky = new RenderAstralSkybox();
 
     private final IRenderHandler otherSkyRenderer;
-    private final World world;
 
-    public RenderSkybox(World world, IRenderHandler skyRenderer) {
+    public RenderSkybox(IRenderHandler skyRenderer) {
         this.otherSkyRenderer = skyRenderer;
-        this.world = world;
     }
 
     @Override

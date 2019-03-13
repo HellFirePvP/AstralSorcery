@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.structure.BlockStructureObserver;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -62,7 +63,8 @@ import java.util.Optional;
  * Created by HellFirePvP
  * Date: 15.09.2016 / 19:03
  */
-public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork implements ISpecialStackDescriptor, CrystalPropertyItem {
+public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
+        implements ISpecialStackDescriptor, CrystalPropertyItem, BlockStructureObserver {
 
     private static AxisAlignedBB boxCrystal = new AxisAlignedBB(0.3, 0, 0.3, 0.7, 1, 0.7);
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -45,6 +45,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -54,7 +56,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 14.09.2016 / 23:42
  */
-public class BlockCelestialCrystals extends BlockContainer implements IBlockStarlightRecipient {
+public class BlockCelestialCrystals extends BlockContainer implements IBlockStarlightRecipient, BlockCustomName, BlockVariants {
 
     private static final Random rand = new Random();
 
@@ -95,20 +97,10 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                 return bbStage3;
             case 4:
                 return bbStage4;
+            default:
+                break;
         }
         return super.getBoundingBox(state, source, pos);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        return true;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
-        return true;
     }
 
     @Override
@@ -177,6 +169,8 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                         drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); //Lucky~~
                     }
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -262,7 +256,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
@@ -278,5 +272,24 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileCelestialCrystals();
+    }
+
+    @Override
+    public String getIdentifierForMeta(int meta) {
+        return "stage_" + meta;
+    }
+
+    @Override
+    public List<IBlockState> getValidStates() {
+        List<IBlockState> ret = new LinkedList<>();
+        for (int stage : STAGE.getAllowedValues()) {
+            ret.add(getDefaultState().withProperty(STAGE, stage));
+        }
+        return ret;
+    }
+
+    @Override
+    public String getStateName(IBlockState state) {
+        return "stage_" + state.getValue(STAGE);
     }
 }

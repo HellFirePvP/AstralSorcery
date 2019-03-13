@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,9 +10,8 @@ package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -75,8 +74,8 @@ public class StructureMatchPreview {
         BlockPos center = ((TileEntity) tile).getPos();
         for (BlockPos key : pba.getPattern().keySet()) {
             if(key.equals(BlockPos.ORIGIN)) continue;
-            Optional<Boolean> match = pba.matchSingleBlock(Minecraft.getMinecraft().world, center, key);
-            if(match.isPresent() && !match.get()) {
+            boolean match = pba.matchSingleBlock(Minecraft.getMinecraft().world, center, key);
+            if(!match) {
                 TESRTranslucentBlock.addForRender(null, pba.getPattern().get(key).state, center.add(key));
             }
         }

@@ -1,22 +1,5 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "forge:multi-layer",
-        "custom": {
-            "base": "astralsorcery:blockattunementrelay#base",
-            "Solid": "astralsorcery:blockattunementrelay#base",
-            "Translucent": "astralsorcery:blockattunementrelay#trans"
-        },
-        "transform": "forge:default-block"
-    },
     "variants": {
-        "normal": [{}],
-        "inventory": [{}],
-        "base": [{
-            "model": "astralsorcery:blockattunementrelay"
-        }],
-        "trans": [{
-            "model": "astralsorcery:blockattunementrelayglass"
-        }]
+        "normal": { "model":"astralsorcery:attunement_relay" }
     }
 }

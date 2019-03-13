@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -81,6 +81,8 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
                 break;
             case 2:
                 particle.setColor(new Color(0xFFE539));
+                break;
+            default:
                 break;
         }
     }

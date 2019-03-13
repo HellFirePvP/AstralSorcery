@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -16,7 +16,6 @@ import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.migration.MappingMigrationHandler;
 import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
@@ -75,7 +74,7 @@ public class RegistryBlocks {
                 .setRegistryName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase()));
         fluidLiquidStarlight.setBlock(blockLiquidStarlight);
 
-        FluidRegistry.addBucketForFluid(BlocksAS.fluidLiquidStarlight);
+        FluidRegistry.addBucketForFluid(fluidLiquidStarlight);
     }
 
     //Blocks
@@ -148,6 +147,8 @@ public class RegistryBlocks {
 
         celestialCrystals = registerBlock(new BlockCelestialCrystals());
         queueCustomNameItemBlock(celestialCrystals);
+        gemCrystals = registerBlock(new BlockGemCrystals());
+        queueCustomNameItemBlock(gemCrystals);
 
         //Machines&Related
         //stoneMachine = registerBlock(new BlockStoneMachine());
@@ -172,6 +173,9 @@ public class RegistryBlocks {
         registerBlockRender(blockStructural);
         registerBlockRender(blockMachine);
         registerBlockRender(treeBeacon);
+
+        registerBlockRender(celestialCrystals);
+        registerBlockRender(gemCrystals);
     }
 
     //Tiles
@@ -180,6 +184,7 @@ public class RegistryBlocks {
         registerTile(TileRitualPedestal.class);
         registerTile(TileCollectorCrystal.class);
         registerTile(TileCelestialCrystals.class);
+        registerTile(TileGemCrystals.class);
         registerTile(TileWell.class);
         registerTile(TileIlluminator.class);
         registerTile(TileTelescope.class);
@@ -193,7 +198,6 @@ public class RegistryBlocks {
         registerTile(TileTranslucent.class);
         registerTile(TileAttunementRelay.class);
         registerTile(TileMapDrawingTable.class);
-        //registerTile(TileCelestialOrrery.class);
         registerTile(TileCelestialGateway.class);
         registerTile(TileOreGenerator.class);
         registerTile(TileVanishing.class);
@@ -241,7 +245,7 @@ public class RegistryBlocks {
     }
 
     private static void registerTile(Class<? extends TileEntity> tile, String name) {
-        GameRegistry.registerTileEntity(tile, new ResourceLocation(AstralSorcery.MODID, name).toString());
+        GameRegistry.registerTileEntity(tile, new ResourceLocation(AstralSorcery.MODID, name));
 
         MappingMigrationHandler.listenTileMigration(name);
     }

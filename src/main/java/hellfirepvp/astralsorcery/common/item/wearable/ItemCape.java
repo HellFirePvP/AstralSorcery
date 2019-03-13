@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -59,6 +59,7 @@ import java.util.UUID;
  */
 public class ItemCape extends ItemArmor implements ItemDynamicColor {
 
+    private static final UUID OCTANS_UNWAVERING = UUID.fromString("845DB25C-C624-495F-8C9F-60210A958B6B");
     private Object objASCape = null;
 
     public ItemCape() {
@@ -120,12 +121,13 @@ public class ItemCape extends ItemArmor implements ItemDynamicColor {
         Multimap<String, AttributeModifier> out = super.getAttributeModifiers(slot, stack);
         if(slot == EntityEquipmentSlot.CHEST) {
             IConstellation cst = getAttunedConstellation(stack);
-            if(cst != null && cst == Constellations.octans) {
+            if(cst != null && cst.equals(Constellations.octans)) {
                 CapeEffectOctans ceo = getCapeEffect(stack);
                 if(ceo != null) {
                     EntityPlayer potentialCurrent = EventHandlerCapeEffects.currentPlayerInTick;
                     if(potentialCurrent != null && potentialCurrent.isInWater()) {
-                        out.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(UUID.fromString("845DB25C-C624-495F-8C9F-60210A958B6B").toString(), 500, 0));
+                        out.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(),
+                                new AttributeModifier(OCTANS_UNWAVERING, OCTANS_UNWAVERING.toString(), 500, 0).setSaved(false));
                     }
                 }
             }
@@ -185,7 +187,7 @@ public class ItemCape extends ItemArmor implements ItemDynamicColor {
         if(entity == null) return null;
         ItemStack stack = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
         IConstellation cst = getAttunedConstellation(stack);
-        if(cst == null || cst != expectedConstellation) {
+        if(cst == null || !cst.equals(expectedConstellation)) {
             return null;
         }
         return getCapeEffect(stack);

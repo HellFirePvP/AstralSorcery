@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -191,14 +191,14 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
                 if(wa == WandAugment.VICIO) {
                     playVicioEffect(stack, player, count);
                 } else if(wa == WandAugment.ARMARA) {
-                    playArmaraEffect(stack, player, count);
+                    playArmaraEffect(player);
                 }
             }
         }
     }
 
     @SideOnly(Side.CLIENT)
-    private void playArmaraEffect(ItemStack stack, EntityLivingBase player, int count) {
+    private void playArmaraEffect(EntityLivingBase player) {
         if(player.ticksExisted % 2 == 0) {
             Collection<Vector3> positions = MiscUtils.getCirclePositions(
                     Vector3.atEntityCorner(player).addY(player.height / 2),
@@ -256,6 +256,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
                 case EVORSIO:
                 case AEVITAS:
                 case DISCIDIA:
+                default:
                     break;
             }
         }

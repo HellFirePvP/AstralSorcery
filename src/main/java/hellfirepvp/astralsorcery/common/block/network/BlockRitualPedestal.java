@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -142,6 +142,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
                 TileReceiverBaseInventory.ItemHandlerTile handle = te.getInventoryHandler();
                 ItemUtils.dropInventory(te.getInventoryHandler(), worldIn, pos);
                 handle.clearInventory();
+                te.placeCrystalIntoPedestal(ItemStack.EMPTY);
                 te.markForUpdate();
             }
         }
@@ -175,11 +176,6 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
-    }
-
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
 
 }

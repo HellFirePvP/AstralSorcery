@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -21,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeTypePerkEffect extends PerkAttributeType {
 
     public AttributeTypePerkEffect() {
-        super(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+        super(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, true);
     }
 
     @Override

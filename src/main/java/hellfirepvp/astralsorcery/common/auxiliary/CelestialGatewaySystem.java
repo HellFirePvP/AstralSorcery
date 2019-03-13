@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -188,7 +188,7 @@ public class CelestialGatewaySystem {
             try {
                 NBTTagCompound tag = CompressedStreamTools.read(this.gatewayCacheFile);
                 NBTTagList list = tag.getTagList("list", Constants.NBT.TAG_INT);
-                cache = Lists.newArrayList(0);
+                cache = Lists.newArrayList();
                 for (int i = 0; i < list.tagCount(); i++) {
                     Integer id = list.getIntAt(i);
                     if(!cache.contains(id)) {
@@ -196,7 +196,7 @@ public class CelestialGatewaySystem {
                     }
                 }
             } catch (IOException ignored) {
-                cache = Lists.newArrayList(0);
+                cache = Lists.newArrayList();
             }
         }
 

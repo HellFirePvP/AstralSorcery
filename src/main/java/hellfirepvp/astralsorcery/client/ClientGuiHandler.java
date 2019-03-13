@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -14,7 +14,9 @@ import hellfirepvp.astralsorcery.client.gui.container.*;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
@@ -30,6 +32,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -82,11 +86,17 @@ public class ClientGuiHandler {
                     }
                 }
             case OBSERVATORY:
-                return new GuiObservatory((TileObservatory) t);
+                return new GuiObservatory(player, (TileObservatory) t);
             case SEXTANT:
                 Tuple<EnumHand, ItemStack> heldSextant = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant);
                 if (heldSextant != null) {
                     return new GuiSextantSelector(heldSextant.value, heldSextant.key);
+                }
+            case KNOWLEDGE_CONSTELLATION:
+                Tuple<EnumHand, ItemStack> handFragment = MiscUtils.getMainOrOffHand(player, ItemsAS.knowledgeFragment);
+                Tuple<IConstellation, List<MoonPhase>> cstInfo = ItemKnowledgeFragment.getConstellationInformation(handFragment.value);
+                if (cstInfo != null) {
+                    return new GuiKnowledgeFragment(cstInfo.key, cstInfo.value);
                 }
             default:
                 return null;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -31,6 +32,12 @@ public class CoreRootPerk extends KeyPerk {
 
     public CoreRootPerk() {
         super("core", 0, 0);
+
+        setRequireDiscoveredConstellation(Constellations.aevitas);
+        setRequireDiscoveredConstellation(Constellations.discidia);
+        setRequireDiscoveredConstellation(Constellations.vicio);
+        setRequireDiscoveredConstellation(Constellations.evorsio);
+        setRequireDiscoveredConstellation(Constellations.armara);
     }
 
     @Override

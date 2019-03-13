@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nullable;
@@ -75,14 +77,7 @@ public interface IConstellation {
         return weak;
     }
 
-    //@Nullable
-    //default public ISpellEffect getSpellEffect() {
-    //    return SpellEffectRegistry.getSpellEffect(this);
-    //}
-
-    default public boolean canDiscover(PlayerProgress progress) {
-        return true;
-    }
+    boolean canDiscover(EntityPlayer player, PlayerProgress progress);
 
     default public void writeToNBT(NBTTagCompound compound) {
         writeToNBT(compound, getDefaultSaveKey());

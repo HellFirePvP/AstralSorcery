@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -49,6 +49,8 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
                 case SOLID_COLOR_SPHERE:
                     vb.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
                     break;
+                default:
+                    break;
             }
         }
 
@@ -61,6 +63,8 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
                     GlStateManager.disableTexture2D();
                     GlStateManager.depthMask(false);
                     break;
+                default:
+                    break;
             }
         }
 
@@ -71,6 +75,8 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
                     GlStateManager.depthMask(true);
                     GlStateManager.disableBlend();
                     GlStateManager.enableTexture2D();
+                    break;
+                default:
                     break;
             }
         }

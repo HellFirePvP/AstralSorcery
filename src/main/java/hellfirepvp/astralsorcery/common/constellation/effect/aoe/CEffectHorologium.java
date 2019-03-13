@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.ParticleEffectWatcher;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopController;
 import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopZone;
@@ -84,8 +85,10 @@ public class CEffectHorologium extends CEffectPositionList {
             if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
                 TileEntity te = world.getTileEntity(sel);
                 if(TileAccelerationBlacklist.canAccelerate(te)) { //Does != null && instanceof ITickable check.
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_ACCEL_TILE, sel.getX(), sel.getY(), sel.getZ());
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, sel, 16));
+                    if (ParticleEffectWatcher.INSTANCE.mayFire(world, sel)) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_ACCEL_TILE, sel.getX(), sel.getY(), sel.getZ());
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, sel, 16));
+                    }
                     try {
                         long startNs = System.nanoTime();
                         int times = 5 + rand.nextInt(3);

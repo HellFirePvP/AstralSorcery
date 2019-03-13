@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -105,6 +105,16 @@ public abstract class ClassPatch {
                 return ain;
         }
         throw new ASMTransformationException("Couldn't find Instruction with opcode " + opCode);
+    }
+
+    @Nonnull
+    public static AbstractInsnNode findFirstInstructionAfter(MethodNode mn, int startIndex, Predicate<AbstractInsnNode> check) {
+        for (int i = startIndex; i < mn.instructions.size(); i++) {
+            AbstractInsnNode ain = mn.instructions.get(i);
+            if (check.test(ain))
+                return ain;
+        }
+        throw new ASMTransformationException("Couldn't find Instruction with opcode with custom matching...");
     }
 
     public static int peekFirstInstructionAfter(MethodNode mn, int startingIndex, int opCode) {

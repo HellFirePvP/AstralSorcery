@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -34,12 +34,12 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeyCheatDeath extends KeyPerk {
 
-    public static float thresholdApplyPerkHealth = 4F;
-    public static float thresholdApplyPerkDamage = 6F;
-    public static int cooldownPotionApplication = 1000;
+    public float thresholdApplyPerkHealth = 4F;
+    public float thresholdApplyPerkDamage = 6F;
+    public int cooldownPotionApplication = 1000;
 
-    public static int potionDuration = 600;
-    public static int potionAmplifier = 0;
+    public int potionDuration = 600;
+    public int potionAmplifier = 0;
 
     public KeyCheatDeath(String name, int x, int y) {
         super(name, x, y);
@@ -61,6 +61,14 @@ public class KeyCheatDeath extends KeyPerk {
         });
     }
 
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.potionDuration = MathHelper.ceil(this.potionDuration * multiplier);
+        this.potionAmplifier = MathHelper.ceil(this.potionAmplifier * multiplier);
+    }
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onAttack(LivingHurtEvent event) {
         DamageSource source = event.getSource();
@@ -68,7 +76,7 @@ public class KeyCheatDeath extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && side == Side.SERVER && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this) && side == Side.SERVER) {
                 if(player.getHealth() <= thresholdApplyPerkHealth ||
                         event.getAmount() >= thresholdApplyPerkDamage) {
                     if(!PerkEffectHelper.EVENT_INSTANCE.isCooldownActiveForPlayer(player, this)) {

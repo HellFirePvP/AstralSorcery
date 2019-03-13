@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncCharge;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.MathHelper;
@@ -50,7 +51,7 @@ public class PlayerChargeHandler implements ITickHandler {
                     float chargeGain = 0.01F;
                     float dayMult = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(pl.getEntityWorld());
                     chargeGain *= (0.5F + dayMult * 0.5F);
-                    if(pl.getEntityWorld().canSeeSky(pl.getPosition().up())) {
+                    if (MiscUtils.canSeeSky(pl.getEntityWorld(), pl.getPosition().up(), false, false)) {
                         chargeGain *= 6F;
                     }
                     charge = MathHelper.clamp(charge + chargeGain, 0F, 1F);

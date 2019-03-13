@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -11,8 +11,6 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,9 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -32,24 +28,20 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 15.07.2018 / 17:29
  */
-public class PerkTreeConnector extends AttributeModifierPerk {
+public class PerkTreeConnector extends MajorPerk {
 
     private static List<PerkTreeConnector> connectorCache = Lists.newArrayList();
 
     public PerkTreeConnector(String name, int x, int y) {
         super(name, x, y);
-        setCategory(CATEGORY_KEY);
+        setCategory(CATEGORY_EPIPHANY);
         connectorCache.add(this);
     }
 
     @Override
-    public PerkTreePoint getPoint() {
-        return new PerkTreeMajor(this, this.getOffset());
-    }
-
-    @Override
-    public boolean mayUnlockPerk(PlayerProgress progress) {
-        if (!progress.hasFreeAllocationPoint()) return false;
+    public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
+        if (!progress.hasFreeAllocationPoint(player) ||
+                !canSee(player, progress)) return false;
 
         boolean hasAllAdjacent = true;
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {

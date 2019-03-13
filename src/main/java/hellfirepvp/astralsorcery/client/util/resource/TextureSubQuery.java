@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -58,6 +58,16 @@ public class TextureSubQuery extends TextureQuery {
             @Override
             public double getVWidth() {
                 return vLength;
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return res.equals(obj);
+            }
+
+            @Override
+            public int hashCode() {
+                return res.hashCode();
             }
         };
     }

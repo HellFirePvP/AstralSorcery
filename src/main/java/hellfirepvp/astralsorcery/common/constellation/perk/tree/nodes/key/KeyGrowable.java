@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,11 +9,13 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
@@ -36,8 +38,8 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeyGrowable extends KeyPerk implements IPlayerTickPerk {
 
-    private static int chanceToBonemeal = 3;
-    private static int radius = 3;
+    private int chanceToBonemeal = 3;
+    private int radius = 3;
 
     public KeyGrowable(String name, int x, int y) {
         super(name, x, y);
@@ -53,16 +55,25 @@ public class KeyGrowable extends KeyPerk implements IPlayerTickPerk {
     }
 
     @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.chanceToBonemeal = MathHelper.ceil(this.chanceToBonemeal * multiplier);
+        this.radius = MathHelper.ceil(this.radius * multiplier);
+    }
+
+    @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
         if (side != Side.SERVER) {
             return;
         }
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
         float cChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToBonemeal);
+                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, chanceToBonemeal);
         int chance = Math.max(MathHelper.floor(cChance), 1);
         if(rand.nextInt(chance) == 0) {
             float fRadius = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, radius);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, radius);
             int rRadius = Math.max(MathHelper.floor(fRadius), 1);
 
             BlockPos pos = player.getPosition().add(

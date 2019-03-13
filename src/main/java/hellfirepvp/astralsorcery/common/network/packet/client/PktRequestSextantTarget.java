@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -86,10 +86,10 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
     }
 
     @Override
-    public IMessage onMessage(PktRequestSextantTarget message, MessageContext ctx) {
+    public IMessage onMessage(PktRequestSextantTarget pkt, MessageContext ctx) {
         if (ctx.side == Side.SERVER) {
             FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
-                SextantFinder.TargetObject to = SextantFinder.getByName(message.regNameExpected);
+                SextantFinder.TargetObject to = SextantFinder.getByName(pkt.regNameExpected);
                 if (to == null) return;
                 EntityPlayerMP player = ctx.getServerHandler().player;
                 if (!MiscUtils.isPlayerFakeMP(player)) {
@@ -110,13 +110,13 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
                 }
             });
         } else {
-            handlePacketClient(message, ctx);
+            handlePacketClient(pkt);
         }
         return null;
     }
 
     @SideOnly(Side.CLIENT)
-    private void handlePacketClient(PktRequestSextantTarget pkt, MessageContext ctx) {
+    private void handlePacketClient(PktRequestSextantTarget pkt) {
         Minecraft.getMinecraft().addScheduledTask(() -> {
             if (Minecraft.getMinecraft().player == null ||
                     Minecraft.getMinecraft().world == null) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.LootTableUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.StructureBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -213,13 +213,10 @@ public class StructureDesertShrine extends StructureBlockArray {
     private void load() {
         Block marble = BlocksAS.blockMarble;
 
-        IBlockState mch = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.CHISELED);
         IBlockState mbr = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
         IBlockState mrw = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW);
         IBlockState mar = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.ARCH);
         IBlockState mpl = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.PILLAR);
-        IBlockState air = Blocks.AIR.getDefaultState();
-        IBlockState sand = Blocks.SAND.getDefaultState();
 
         addBlockCube(mrw, -4, 0, -3, 4, -7, 3);
         addBlockCube(mrw, -3, 0, -4, 3, -7, 4);
@@ -232,7 +229,7 @@ public class StructureDesertShrine extends StructureBlockArray {
         addBlockCube(mbr, -3, 0, -3,  3, 0,  3);
         addBlockCube(mrw, -2, 0, -2,  2, 0,  2);
 
-        addBlockCube(air, -2, -2, -2,  2, -5,  2);
+        addAirCube(-2, -2, -2,  2, -5,  2);
 
         addBlockCube(mpl, -3, -2, -1, -3, -5, -1);
         addBlockCube(mpl, -3, -2,  1, -3, -5,  1);
@@ -244,8 +241,8 @@ public class StructureDesertShrine extends StructureBlockArray {
         addBlockCube(mpl,  1, -2,  3,  1, -5,  3);
 
         addBlockCube(mar, -2, -6, -2, 2, -6, 2);
-        addBlockCube(air, -2, -6,  0, 2, -6, 0);
-        addBlockCube(air,  0, -6, -2, 0, -6, 2);
+        addAirCube(-2, -6,  0, 2, -6, 0);
+        addAirCube(0, -6, -2, 0, -6, 2);
         addBlock(-2, -6, -2, mrw);
         addBlock(-2, -6, 2, mrw);
         addBlock(2, -6, -2, mrw);
@@ -259,7 +256,7 @@ public class StructureDesertShrine extends StructureBlockArray {
         TileEntityCallback lootCallback = new TileEntityCallback() {
             @Override
             public boolean isApplicable(TileEntity te) {
-                return te != null && te instanceof TileEntityChest;
+                return te instanceof TileEntityChest;
             }
 
             @Override
@@ -277,7 +274,7 @@ public class StructureDesertShrine extends StructureBlockArray {
         addTileCallback(new BlockPos(0, -3, 0), new TileEntityCallback() {
             @Override
             public boolean isApplicable(TileEntity te) {
-                return te != null && te instanceof TileCollectorCrystal;
+                return te instanceof TileCollectorCrystal;
             }
 
             @Override

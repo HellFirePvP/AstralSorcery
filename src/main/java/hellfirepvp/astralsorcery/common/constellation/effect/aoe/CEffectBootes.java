@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -15,8 +15,10 @@ import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollec
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -61,10 +63,10 @@ public class CEffectBootes extends CEffectEntityCollect<EntityLivingBase> {
                     did = true;
                     e.hurtResistantTime = 0;
                     e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 4000, 5));
-                    e.attackEntityFrom(CommonProxy.dmgSourceStellar, 5000);
+                    DamageUtil.attackEntityFrom(e, CommonProxy.dmgSourceStellar, 5000.0F);
                     continue;
                 }
-                if(rand.nextFloat() < herdChance) {
+                if(rand.nextFloat() < herdChance && MiscUtils.canEntityTickAt(world, e.getPosition())) {
                     List<ItemStack> drops = herd.getHerdingDropsTick(e, world, rand, herdingLuck);
                     for (ItemStack stack : drops) {
                         if(rand.nextFloat() < dropChance) {

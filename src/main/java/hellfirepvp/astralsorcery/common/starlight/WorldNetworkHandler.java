@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -70,7 +70,7 @@ public class WorldNetworkHandler {
         }
     }
 
-    public void informTablePlacement(BlockPos at) {
+    public void attemptAutoLinkTo(BlockPos at) {
         TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
         for (Tuple<BlockPos, IIndependentStarlightSource> source : getAllSources()) {
             if(!source.value.providesAutoLink()) continue;
@@ -99,7 +99,7 @@ public class WorldNetworkHandler {
         }
     }
 
-    public void informTableRemoval(BlockPos at) {
+    public void removeAutoLinkTo(BlockPos at) {
         TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
         for (Tuple<BlockPos, IIndependentStarlightSource> source : getAllSources()) {
             if(!source.value.providesAutoLink()) continue;

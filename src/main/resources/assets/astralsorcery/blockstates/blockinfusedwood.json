@@ -1,13 +1,13 @@
 {
     "variants": {
-        "woodtype=raw": { "model":"astralsorcery:blockwood_raw" },
-        "woodtype=planks": { "model":"astralsorcery:blockwood_planks" },
-        "woodtype=column": { "model":"astralsorcery:blockwood_column" },
-        "woodtype=column_top": { "model":"astralsorcery:blockwood_column_top" },
-        "woodtype=column_bottom": { "model":"astralsorcery:blockwood_column_bottom" },
-        "woodtype=arch": { "model":"astralsorcery:blockwood_arch" },
-        "woodtype=engraved": { "model":"astralsorcery:blockwood_engraved" },
-        "woodtype=enriched": { "model":"astralsorcery:blockwood_enriched" },
-        "woodtype=infused": { "model":"astralsorcery:blockwood_infused" }
+        "woodtype=raw": { "model":"astralsorcery:infused_wood_raw" },
+        "woodtype=planks": { "model":"astralsorcery:infused_wood_planks" },
+        "woodtype=column": { "model":"astralsorcery:infused_wood_column" },
+        "woodtype=column_top": { "model":"astralsorcery:infused_wood_column_top" },
+        "woodtype=column_bottom": { "model":"astralsorcery:infused_wood_column_bottom" },
+        "woodtype=arch": { "model":"astralsorcery:infused_wood_arch" },
+        "woodtype=engraved": { "model":"astralsorcery:infused_wood_engraved" },
+        "woodtype=enriched": { "model":"astralsorcery:infused_wood_enriched" },
+        "woodtype=infused": { "model":"astralsorcery:infused_wood_infused" }
     }
 }

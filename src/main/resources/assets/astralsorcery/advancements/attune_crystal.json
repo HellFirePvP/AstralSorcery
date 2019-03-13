@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "astralsorcery:blockritualpedestal"
+        },
+        "title": {
+            "translate": "advancements.astralsorcery.attune_crystal.title"
+        },
+        "description": {
+            "translate": "advancements.astralsorcery.attune_crystal.desc"
+        },
+        "announce_to_chat": false
+    },
+    "parent": "astralsorcery:attune_self",
+    "criteria": {
+        "attune_crystal_major_weak": {
+            "trigger": "astralsorcery:attune_crystal",
+            "conditions": {
+                "weak": true
+            }
+        }
+    }
+}

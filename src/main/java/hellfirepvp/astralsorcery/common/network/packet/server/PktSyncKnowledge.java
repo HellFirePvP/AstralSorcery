@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -30,7 +30,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -263,20 +266,22 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     }
 
     @Override
-    public PktSyncKnowledge onMessage(PktSyncKnowledge message, MessageContext ctx) {
-        receiveMessageClient(message, ctx);
+    public PktSyncKnowledge onMessage(PktSyncKnowledge pkt, MessageContext ctx) {
+        receiveMessageClient(pkt);
         return null;
     }
 
     @SideOnly(Side.CLIENT)
-    private void receiveMessageClient(PktSyncKnowledge message, MessageContext ctx) {
+    private void receiveMessageClient(PktSyncKnowledge pkt) {
         AstralSorcery.proxy.scheduleClientside(() -> {
-            switch (message.state) {
+            switch (pkt.state) {
                 case STATE_ADD:
-                    ResearchManager.recieveProgressFromServer(message);
+                    ResearchManager.recieveProgressFromServer(pkt, Minecraft.getMinecraft().player);
                     break;
                 case STATE_WIPE:
                     ResearchManager.clientProgress = new PlayerProgress();
+                    break;
+                default:
                     break;
             }
         });

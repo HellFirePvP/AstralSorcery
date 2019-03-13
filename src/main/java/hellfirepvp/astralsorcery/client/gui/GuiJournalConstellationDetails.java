@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -58,7 +58,6 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     private static final BindableResource texBlack   = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
     private static final BindableResource texBg      = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst");
-    private static final BindableResource texBgBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijblankbook");
     private static final BindableResource texArrow   = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
 
     private IConstellation constellation;
@@ -239,6 +238,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             case 2:
                 drawDefault(textureResBlank, mouse);
                 break;
+            default:
+                break;
         }
         TextureHelper.refreshTextureBindState();
 
@@ -256,6 +257,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
                 break;
             case 2:
                 drawCapeInformationPages(partialTicks, mouseX, mouseY);
+                break;
+            default:
                 break;
         }
         zLevel -= 150;

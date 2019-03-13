@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -24,7 +24,7 @@ public class ContainerAltarTrait extends ContainerAltarConstellation {
     protected ConstellationFocusSlot focusSlot;
 
     public ContainerAltarTrait(InventoryPlayer playerInv, TileAltar tileAltar) {
-        super(playerInv, tileAltar);
+        super(playerInv, tileAltar, 25);
     }
 
     @Override

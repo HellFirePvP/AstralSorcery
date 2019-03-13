@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -37,6 +37,7 @@ public class OreTypes implements ConfigDataAdapter<OreEntry> {
     public static final OreTypes RITUAL_MINERALIS = new OreTypes("mineralis_ritual");
     public static final OreTypes AEVITAS_ORE_PERK = new OreTypes("aevitas_ore_perk");
     public static final OreTypes TREASURE_SHRINE_GEN = new OreTypes("treasure_shrine");
+    public static final OreTypes PERK_VOID_TRASH_REPLACEMENT = new OreTypes("perk_void_trash_replacement");
 
     private List<OreEntry> oreDictWeights = new LinkedList<>();
     private double totalWeight = 0D;

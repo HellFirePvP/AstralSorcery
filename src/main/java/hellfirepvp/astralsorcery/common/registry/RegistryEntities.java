@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -44,6 +44,7 @@ public class RegistryEntities {
         registerEntity(EntityObservatoryHelper.class, "EntityObservatoryHelper", modEid++, 64, 1, true);
         //registerEntity(SpellProjectile.class, "EntitySpellProjectile", modEid++, 128, 1, true);
         registerEntity(EntityShootingStar.class, "EntityShootingStar", modEid++, 128, 1, true);
+        registerEntity(EntityItemExplosionResistant.class, "EntityItemDamageResistant", modEid++, 64, 1, true);
     }
 
     // trackingRange refers x/z distance, not y.

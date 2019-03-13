@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -50,6 +51,8 @@ public class AttributeTypeArmorToughness extends VanillaAttributeType {
                 return ARMOR_TOUGHNESS_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
                 return ARMOR_TOUGHNESS_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

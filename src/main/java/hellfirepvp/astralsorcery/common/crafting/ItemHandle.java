@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting;
 
+import hellfirepvp.astralsorcery.common.crafting.helper.FluidIngredient;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -187,7 +188,7 @@ public final class ItemHandle {
             case OREDICT:
                 return new OreIngredient(this.oreDictName);
             case FLUID:
-                return Ingredient.fromStacks(FluidUtil.getFilledBucket(new FluidStack(fluidTypeAndAmount.getFluid(), 1000)));
+                return new FluidIngredient(new FluidStack(fluidTypeAndAmount.getFluid(), 1000));
             case STACK:
             default:
                 List<Ingredient> ingredients = new ArrayList<>();
@@ -239,6 +240,8 @@ public final class ItemHandle {
                     return false;
                 }
                 return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false).isSuccess();
+            default:
+                break;
         }
         return false;
     }
@@ -258,6 +261,8 @@ public final class ItemHandle {
             case FLUID:
                 ByteBufUtils.writeFluidStack(byteBuf, this.fluidTypeAndAmount);
                 break;
+            default:
+                break;
         }
     }
 
@@ -276,6 +281,8 @@ public final class ItemHandle {
                 break;
             case FLUID:
                 handle.fluidTypeAndAmount = ByteBufUtils.readFluidStack(byteBuf);
+                break;
+            default:
                 break;
         }
         return handle;

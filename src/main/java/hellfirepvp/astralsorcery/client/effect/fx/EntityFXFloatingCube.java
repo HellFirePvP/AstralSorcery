@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
-import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -322,11 +321,6 @@ public class EntityFXFloatingCube extends EntityComplexFX {
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.popMatrix();
         TextureHelper.refreshTextureBindState();
-    }
-
-    private int getLight() {
-        BlockPos blockpos = this.position.toBlockPos();
-        return Minecraft.getMinecraft().world.isBlockLoaded(blockpos) ? Minecraft.getMinecraft().world.getCombinedLight(blockpos, 0) : 0;
     }
 
 }

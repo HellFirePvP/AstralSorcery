@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -22,7 +22,7 @@ public enum ProgressionTier {
     ATTUNEMENT,
     CONSTELLATION_CRAFT,
     TRAIT_CRAFT,
-    ENDGAME;
+    BRILLIANCE;
 
     public boolean hasNextTier() {
         return ordinal() < ProgressionTier.values().length - 1;

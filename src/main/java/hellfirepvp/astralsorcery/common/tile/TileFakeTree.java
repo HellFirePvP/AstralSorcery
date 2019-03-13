@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -222,11 +222,13 @@ public class TileFakeTree extends TileEntityTick {
                 harvestAndAppend(tft, out);
                 Vector3 plPos = Vector3.atEntityCenter(player);
                 for (ItemStack stack : out) {
-                    ItemUtils.dropItemNaturally(player.getEntityWorld(),
-                            plPos.getX() + rand.nextFloat() - rand.nextFloat(),
-                            plPos.getY() + rand.nextFloat(),
-                            plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
-                            stack);
+                    if (!player.addItemStackToInventory(stack)) {
+                        ItemUtils.dropItemNaturally(player.getEntityWorld(),
+                                plPos.getX() + rand.nextFloat() - rand.nextFloat(),
+                                plPos.getY() + rand.nextFloat(),
+                                plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
+                                stack);
+                    }
                 }
                 PktDualParticleEvent ev = new PktDualParticleEvent(PktDualParticleEvent.DualParticleEventType.CHARGE_HARVEST, new Vector3(tft), Vector3.atEntityCenter(player));
                 if(usedTool != null && (usedTool.isEmpty() || !(usedTool.getItem() instanceof ItemChargedCrystalAxe))) {

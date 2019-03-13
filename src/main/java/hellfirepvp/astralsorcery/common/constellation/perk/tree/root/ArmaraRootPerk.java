@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,10 +9,12 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.util.PlayerActivityManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -34,8 +36,8 @@ public class ArmaraRootPerk extends RootPerk {
         super("armara", Constellations.armara, x, y);
     }
 
-    //Measure outcome and actual damage taken
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    //Measure firstmost incoming damage
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHurt(LivingHurtEvent event) {
         Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
         if (side != Side.SERVER) return;
@@ -43,9 +45,14 @@ public class ArmaraRootPerk extends RootPerk {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+
+            if (!PlayerActivityManager.INSTANCE.isPlayerActiveServer(player)) {
+                return;
+            }
+
+            if (prog.hasPerkEffect(this)) {
                 float expGain = event.getAmount();
-                expGain *= 2.5F;
+                expGain *= 3F;
                 if (event.getSource().isFireDamage()) {
                     if (player.isInLava()) {
                         expGain *= 0.01F;
@@ -66,7 +73,9 @@ public class ArmaraRootPerk extends RootPerk {
                     expGain *= 1.3F;
                 }
                 expGain *= expMultiplier;
-                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
+                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, expGain);
+                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
+                expGain = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
                 ResearchManager.modifyExp(player, expGain);
             }
         }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,10 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.registry.multiblock;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 
 import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 import static hellfirepvp.astralsorcery.common.block.BlockMarble.MarbleBlockType;
@@ -26,11 +29,21 @@ import static hellfirepvp.astralsorcery.common.block.BlockMarble.MarbleBlockType
 public class MultiblockRitualPedestal extends PatternBlockArray {
 
     public MultiblockRitualPedestal() {
+        super(new ResourceLocation(AstralSorcery.MODID, "pattern_ritual_pedestal"));
+        load();
+    }
+
+    public MultiblockRitualPedestal(ResourceLocation name) {
+        super(name);
         load();
     }
 
     private void load() {
         Block marble = BlocksAS.blockMarble;
+
+        addAirCube(-2, 0, -2, 2, 2, 2);
+        addAirCube(-3, 0, -1, 3, 2, 1);
+        addAirCube(-1, 0, -3, 1, 2, 3);
 
         addBlock(0, 0, 0, BlocksAS.ritualPedestal.getDefaultState());
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -123,6 +123,8 @@ public class RenderAstralSkybox extends IRenderHandler {
                     break;
                 case 3:
                     l.resource = TEX_STAR_4;
+                    break;
+                default:
                     break;
             }
             GlStateManager.glNewList(l.glList, GL11.GL_COMPILE);
@@ -254,9 +256,6 @@ public class RenderAstralSkybox extends IRenderHandler {
             f1 = f4;
             f2 = f5;
         }
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vb = tessellator.getBuffer();
 
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();

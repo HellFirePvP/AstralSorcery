@@ -10,8 +10,6 @@
  */
 package vazkii.botania.api.internal;
 
-import java.util.List;
-
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
@@ -31,12 +29,10 @@ import vazkii.botania.api.corporea.IWrappedInventory;
 import vazkii.botania.api.corporea.InvWithLocation;
 import vazkii.botania.api.lexicon.LexiconPage;
 import vazkii.botania.api.lexicon.multiblock.MultiblockSet;
-import vazkii.botania.api.recipe.RecipeBrew;
-import vazkii.botania.api.recipe.RecipeElvenTrade;
-import vazkii.botania.api.recipe.RecipeManaInfusion;
-import vazkii.botania.api.recipe.RecipePetals;
-import vazkii.botania.api.recipe.RecipeRuneAltar;
+import vazkii.botania.api.recipe.*;
 import vazkii.botania.api.subtile.SubTileEntity;
+
+import java.util.List;
 
 public class DummyMethodHandler implements IInternalMethodHandler {
 

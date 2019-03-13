@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -12,6 +12,9 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -23,7 +26,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,6 +63,7 @@ public class KnowledgeFragmentData extends CachedPersistentData {
         super.clearCreativeCaches();
 
         cacheCreativeFragments.clear();
+        mergedCache = null;
     }
 
     public List<KnowledgeFragment> getAllFragments() {
@@ -72,8 +75,17 @@ public class KnowledgeFragmentData extends CachedPersistentData {
         return mergedCache;
     }
 
+    public List<KnowledgeFragment> getDiscoverableFragments() {
+        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        List<KnowledgeFragment> frag = KnowledgeFragmentManager.getInstance().getAllFragments();
+        frag.removeAll(flattenedFragments);
+        frag.removeIf(f -> !f.canDiscover(prog));
+        return frag;
+    }
+
     public Collection<KnowledgeFragment> getFragmentsFor(GuiScreenJournal journal) {
-        return getAllFragments().stream().filter(f -> f.isVisible(journal)).collect(Collectors.toList());
+        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        return getAllFragments().stream().filter(f -> f.isVisible(journal) && f.canSee(prog) && f.isFullyPresent()).collect(Collectors.toList());
     }
 
     public boolean addFragment(KnowledgeFragment fragment) {

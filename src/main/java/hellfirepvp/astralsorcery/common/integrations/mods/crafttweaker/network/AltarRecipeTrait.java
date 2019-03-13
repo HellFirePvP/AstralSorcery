@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -34,12 +34,12 @@ public class AltarRecipeTrait extends BaseAltarRecipe {
     private IConstellation focusRequiredConstellation;
 
     AltarRecipeTrait() {
-        super(null, null, 0, 0);
+        super(null, null, null, 0, 0);
         this.focusRequiredConstellation = null;
     }
 
-    public AltarRecipeTrait(ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime, @Nullable IConstellation focus) {
-        super(inputs, output, starlightRequired, craftingTickTime);
+    public AltarRecipeTrait(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime, @Nullable IConstellation focus) {
+        super(name, inputs, output, starlightRequired, craftingTickTime);
         this.focusRequiredConstellation = focus;
     }
 

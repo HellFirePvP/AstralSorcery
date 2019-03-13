@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.util.data.NonDuplicateArrayList;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
@@ -24,10 +25,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -53,8 +54,8 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -66,6 +67,7 @@ import java.util.stream.Collectors;
  */
 public class MiscUtils {
 
+    public static final String GAMERULE_SKIP_SKYLIGHT_CHECK = "astralSorceryIgnoreSkyCheck";
     private static Map<EnumDyeColor, Color> prettierColorMapping = new HashMap<>();
 
     @Nullable
@@ -80,10 +82,30 @@ public class MiscUtils {
         return null;
     }
 
+    public static boolean canEntityTickAt(World world, BlockPos pos) {
+        if (!isChunkLoaded(world, pos)) {
+            return false;
+        }
+        BlockPos test = new BlockPos(pos.getX(), 0, pos.getZ());
+        boolean isForced = world.getPersistentChunks().containsKey(new ChunkPos(test));
+        int range = isForced ? 0 : 32;
+        return world.isAreaLoaded(test.add(-range, 0, -range), test.add(range, 0, range), true);
+    }
+
     @Nullable
     public static <T> T getRandomEntry(List<T> list, Random rand) {
         if(list == null || list.isEmpty()) return null;
         return list.get(rand.nextInt(list.size()));
+    }
+
+    @Nullable
+    public static <T> T getWeightedRandomEntry(Collection<T> list, Random rand, Function<T, Integer> getWeightFunction) {
+        List<WRItemObject<T>> weightedItems = new ArrayList<>(list.size());
+        for (T e : list) {
+            weightedItems.add(new WRItemObject<>(getWeightFunction.apply(e), e));
+        }
+        WRItemObject<T> item = WeightedRandom.getRandomItem(rand, weightedItems);
+        return item != null ? item.getValue() : null;
     }
 
     public static <T, V extends Comparable<V>> V getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {
@@ -97,6 +119,17 @@ public class MiscUtils {
         return max;
     }
 
+    public static boolean canSeeSky(World world, BlockPos at, boolean loadChunk, boolean defaultValue) {
+        if (world.getGameRules().getBoolean(GAMERULE_SKIP_SKYLIGHT_CHECK)) {
+            return true;
+        }
+
+        if (!isChunkLoaded(world, at) && !loadChunk) {
+            return defaultValue;
+        }
+        return world.canSeeSky(at);
+    }
+
     public static <K, V, N> Map<K, N> remap(Map<K, V> map, Function<V, N> remapFct) {
         return map.entrySet()
                 .stream()
@@ -108,6 +141,18 @@ public class MiscUtils {
                 .stream()
                 .map((entry) -> flatFunction.apply(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
+    }
+
+    public static <T> List<T> flatList(Collection<List<T>> listCollection) {
+        return listCollection.stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    public static <T> List<T> flatNonDuplicateList(Collection<List<T>> listCollection) {
+        return listCollection.stream()
+                .flatMap(Collection::stream)
+                .collect(mergeNonDuplicateList());
     }
 
     public static <K, V, L> Map<K, V> splitMap(Collection<L> col, Function<L, Tuple<K, V>> split) {
@@ -136,16 +181,16 @@ public class MiscUtils {
     }
 
     @Nullable
-    public static <T> T iterativeSearch(Collection<T> collection, Function<T, Boolean> matchingFct) {
+    public static <T> T iterativeSearch(Collection<T> collection, Predicate<T> matchingFct) {
         for (T element : collection) {
-            if(matchingFct.apply(element)) {
+            if(matchingFct.test(element)) {
                 return element;
             }
         }
         return null;
     }
 
-    public static <T> boolean contains(Collection<T> collection, Function<T, Boolean> matchingFct) {
+    public static <T> boolean contains(Collection<T> collection, Predicate<T>  matchingFct) {
         return iterativeSearch(collection, matchingFct) != null;
     }
 
@@ -157,6 +202,15 @@ public class MiscUtils {
             }
         }
         return null;
+    }
+
+    public static <T> boolean matchesAny(T element, Collection<Predicate<T>> tests) {
+        for (Predicate<T> test : tests) {
+            if (test.test(element)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean matchStateExact(@Nullable IBlockState state, @Nullable IBlockState stateToTest) {
@@ -532,6 +586,11 @@ public class MiscUtils {
 
     @Nullable
     public static BlockPos searchAreaForFirst(World world, BlockPos center, int radius, @Nullable Vector3 offsetFrom, BlockStateCheck acceptor) {
+        return searchAreaForFirst(world, center, radius, offsetFrom, BlockStateCheck.WorldSpecific.wrap(acceptor));
+    }
+
+    @Nullable
+    public static BlockPos searchAreaForFirst(World world, BlockPos center, int radius, @Nullable Vector3 offsetFrom, BlockStateCheck.WorldSpecific acceptor) {
         for (int r = 0; r <= radius; r++) {
             List<BlockPos> posList = new LinkedList<>();
             for (int xx = -r; xx <= r; xx++) {
@@ -587,6 +646,13 @@ public class MiscUtils {
         return found;
     }
 
+    private static <T> Collector<T, ?, List<T>> mergeNonDuplicateList() {
+        return new ListCollector<>(
+                (Supplier<NonDuplicateArrayList<T>>) NonDuplicateArrayList::new,
+                NonDuplicateArrayList::add,
+                (left, right) -> { left.addAll(right); return left; });
+    }
+
     static {
         prettierColorMapping.put(EnumDyeColor.WHITE, new Color(0xFFFFFF));
         prettierColorMapping.put(EnumDyeColor.ORANGE, new Color(0xFF8C1D));
@@ -604,6 +670,44 @@ public class MiscUtils {
         prettierColorMapping.put(EnumDyeColor.GREEN, new Color(0x00AA00));
         prettierColorMapping.put(EnumDyeColor.RED, new Color(0xFF0000));
         prettierColorMapping.put(EnumDyeColor.BLACK, new Color(0x000000));
+    }
+
+    private static class ListCollector<T, A, R> implements Collector<T, A, R> {
+
+        private final Supplier<A> supplier;
+        private final BiConsumer<A, T> accumulator;
+        private final BinaryOperator<A> combiner;
+
+        public ListCollector(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner) {
+            this.supplier = supplier;
+            this.accumulator = accumulator;
+            this.combiner = combiner;
+        }
+
+        @Override
+        public Supplier<A> supplier() {
+            return supplier;
+        }
+
+        @Override
+        public BiConsumer<A, T> accumulator() {
+            return accumulator;
+        }
+
+        @Override
+        public BinaryOperator<A> combiner() {
+            return combiner;
+        }
+
+        @Override
+        public Function<A, R> finisher() {
+            return element -> (R) element;
+        }
+
+        @Override
+        public Set<Characteristics> characteristics() {
+            return Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+        }
     }
 
 }

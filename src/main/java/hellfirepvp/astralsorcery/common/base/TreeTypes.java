@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -168,7 +168,7 @@ public enum TreeTypes {
     @Nullable
     public static TreeTypes getTree(World world, BlockPos pos, IBlockState blockToTest) {
         for (TreeTypes type : values()) {
-            if (type.exists() && (type.logCheck.isStateValid(world, pos, blockToTest) || type.leavesCheck.isStateValid(world, pos, blockToTest))) {
+            if (type.exists() && (type.logCheck.isStateValid(blockToTest) || type.leavesCheck.isStateValid(blockToTest))) {
                 return type;
             }
         }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -37,8 +37,9 @@ public class PerkTree {
     public static final PerkTree PERK_TREE = new PerkTree();
 
     private static Map<ResourceLocation, AbstractPerk> perkMap = new HashMap<>();
+    private boolean frozen = false;
 
-    private List<PerkTreePoint> treePoints = new LinkedList<>();
+    private List<PerkTreePoint<?>> treePoints = new LinkedList<>();
     private Map<AbstractPerk, Collection<AbstractPerk>> doubleConnections = new HashMap<>();
     private List<Tuple<AbstractPerk, AbstractPerk>> connections = new LinkedList<>();
 
@@ -47,6 +48,9 @@ public class PerkTree {
     private PerkTree() {}
 
     public PointConnector registerRootPerk(RootPerk perk) {
+        if (frozen) {
+            throw new IllegalStateException("Cannot register perk: PerkTree-State already frozen!");
+        }
         perkMap.put(perk.getRegistryName(), perk);
         rootPerks.put(perk.getConstellation(), perk);
         MinecraftForge.EVENT_BUS.register(perk);
@@ -54,6 +58,9 @@ public class PerkTree {
     }
 
     public PointConnector registerPerk(AbstractPerk perk) {
+        if (frozen) {
+            throw new IllegalStateException("Cannot register perk: PerkTree-State already frozen!");
+        }
         perkMap.put(perk.getRegistryName(), perk);
         MinecraftForge.EVENT_BUS.register(perk);
         return PERK_TREE.setPoint(perk);
@@ -76,7 +83,7 @@ public class PerkTree {
 
     @Nonnull
     private PointConnector setPoint(AbstractPerk perk) throws IllegalArgumentException {
-        PerkTreePoint offsetPoint = perk.getPoint();
+        PerkTreePoint<?> offsetPoint = perk.getPoint();
         if (this.treePoints.contains(offsetPoint)) {
             throw new IllegalArgumentException("Tried to register perk-point at already placed position: " + offsetPoint.getOffset().toString());
         }
@@ -97,7 +104,7 @@ public class PerkTree {
         return doubleConnections.getOrDefault(perk, Lists.newArrayList());
     }
 
-    public Collection<PerkTreePoint> getPerkPoints() {
+    public Collection<PerkTreePoint<?>> getPerkPoints() {
         return ImmutableList.copyOf(this.treePoints);
     }
 
@@ -112,14 +119,21 @@ public class PerkTree {
     }
 
     public void removePerk(AbstractPerk perk) {
+        if (frozen) {
+            throw new IllegalStateException("Cannot remove perk: PerkTree-State already frozen!");
+        }
         if (perk instanceof RootPerk) {
             rootPerks.remove(((RootPerk) perk).getConstellation());
         }
         perkMap.remove(perk.getRegistryName());
         MinecraftForge.EVENT_BUS.unregister(perk);
-        PerkTreePoint point = perk.getPoint();
+        PerkTreePoint<?> point = perk.getPoint();
         this.treePoints.remove(point);
         new PointConnector(perk).disconnectAll();
+    }
+
+    public void freeze() {
+        this.frozen = true;
     }
 
     public class PointConnector {

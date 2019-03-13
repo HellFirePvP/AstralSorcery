@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -37,7 +37,7 @@ public class PerkTreeSizeHandler extends SizeHandler {
         int upperMost = 0;
         int lowerMost = 0;
 
-        for (PerkTreePoint point : PerkTree.PERK_TREE.getPerkPoints()) {
+        for (PerkTreePoint<?> point : PerkTree.PERK_TREE.getPerkPoints()) {
             Point offset = point.getOffset();
             int x = offset.x;
             int y = offset.y;

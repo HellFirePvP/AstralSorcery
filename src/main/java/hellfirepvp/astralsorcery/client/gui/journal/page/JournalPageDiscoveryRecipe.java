@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -26,13 +26,16 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryBookLookups;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
@@ -71,6 +74,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
         protected BindableResource gridTexture;
 
         private Map<Rectangle, ItemStack> thisFrameStackFrames = new HashMap<>();
+        private Tuple<Rectangle, ItemStack> outputStackPos = null;
 
         public Render(DiscoveryRecipe recipe, TileAltar.AltarLevel correspondingAltarLevel) {
             this.recipe = recipe;
@@ -80,6 +84,13 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
 
         @Override
         public boolean propagateMouseClick(int mouseX, int mouseZ) {
+            if (Minecraft.getMinecraft().gameSettings.showDebugInfo && GuiScreen.isCtrlKeyDown() &&
+                    outputStackPos != null && outputStackPos.getKey().contains(mouseX, mouseZ)) {
+                String recipeName = recipe.getNativeRecipe().getRegistryName().toString();
+                GuiScreen.setClipboardString(recipeName);
+                Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("misc.ctrlcopy.copied", recipeName));
+                return true;
+            }
             for (Rectangle r : thisFrameStackFrames.keySet()) {
                 if(r.contains(mouseX, mouseZ)) {
                     ItemStack stack = thisFrameStackFrames.get(r);
@@ -109,6 +120,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             GL11.glScaled(1.4, 1.4, 1.4);
             Rectangle r = drawItemStack(out, 0, 0, 0);
             r = new Rectangle((int) offsetX + 78, (int) offsetY + 25, (int) (r.getWidth() * 1.4), (int) (r.getHeight() * 1.4));
+            this.outputStackPos = new Tuple<>(r, out);
             addRenderedStackRectangle(r, out);
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
@@ -173,7 +185,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
 
         public void addStackTooltip(float mouseX, float mouseY, List<String> tooltip) {
             for (Rectangle rect : thisFrameStackFrames.keySet()) {
-                if(rect.contains(mouseX, mouseY)) {
+                if(rect.contains(mouseX, mouseY) && (outputStackPos == null || !outputStackPos.getKey().equals(rect))) {
                     ItemStack stack = thisFrameStackFrames.get(rect);
                     try {
                         tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
@@ -187,6 +199,24 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                     }
                 }
             }
+            if (this.outputStackPos != null && this.outputStackPos.getKey().contains(mouseX, mouseY)) {
+                ItemStack stack = recipe.getOutputForRender();
+                try {
+                    tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
+                } catch (Throwable tr) {
+                    tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
+                }
+                RegistryBookLookups.LookupInfo lookup = RegistryBookLookups.tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                if(lookup != null) {
+                    tooltip.add("");
+                    tooltip.add(I18n.format("misc.craftInformation"));
+                }
+                if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.recipename", recipe.getNativeRecipe().getRegistryName().toString()));
+                    tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.ctrlcopy"));
+                }
+            }
         }
 
         protected void addRenderedStackRectangle(Rectangle r, ItemStack rendered) {
@@ -196,6 +226,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
         @Override
         public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
             thisFrameStackFrames.clear();
+            outputStackPos = null;
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glColor4f(1F, 1F, 1F, 1F);
 

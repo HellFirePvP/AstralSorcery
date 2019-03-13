@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -28,7 +28,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
@@ -112,7 +111,7 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
         boolean changed = false;
         GenListEntries.CounterMaxListEntry entry = getRandomElementByChance(rand);
         if(entry != null) {
-            if(MiscUtils.isChunkLoaded(world, new ChunkPos(entry.getPos()))) {
+            if(MiscUtils.canEntityTickAt(world, entry.getPos())) {
                 if(!verifier.isValid(world, entry.getPos())) {
                     removeElement(entry);
                     changed = true;

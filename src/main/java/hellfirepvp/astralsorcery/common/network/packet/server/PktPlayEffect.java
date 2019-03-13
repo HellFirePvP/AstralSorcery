@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -83,6 +83,8 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
                     return TileGrindstone::playWheelAnimation;
                 case BEAM_BREAK:
                     return BlockBreakAssist::blockBreakAnimation;
+                default:
+                    break;
             }
             return null;
         }

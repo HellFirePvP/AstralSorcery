@@ -17,5 +17,12 @@
 			0,
 			0
 		]
-	}
+	},
+	"ctm": {
+    "ctm_version": 1,
+    "layer": "TRANSLUCENT",
+    "extra": {
+      "light": 11
+    }
+  }
 }

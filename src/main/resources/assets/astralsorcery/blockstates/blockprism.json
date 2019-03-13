@@ -1,28 +1,28 @@
 {
     "variants": {
         "against=up": {
-            "model":"astralsorcery:blockprism",
+            "model":"astralsorcery:prism",
             "x": 180
         },
         "against=down": {
-            "model":"astralsorcery:blockprism"
+            "model":"astralsorcery:prism"
         },
         "against=north": {
-            "model":"astralsorcery:blockprism",
+            "model":"astralsorcery:prism",
             "x": 90,
             "y": 180
         },
         "against=south": {
-            "model":"astralsorcery:blockprism",
+            "model":"astralsorcery:prism",
             "x": 90
         },
         "against=east": {
-            "model":"astralsorcery:blockprism",
+            "model":"astralsorcery:prism",
             "x": 90,
             "y": 270
         },
         "against=west": {
-            "model":"astralsorcery:blockprism",
+            "model":"astralsorcery:prism",
             "x": 90,
             "y": 90
         }

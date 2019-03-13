@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,11 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.event.listener;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.base.Plants;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.*;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key.KeyMantleFlight;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -20,6 +24,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktElytraCapeState;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
+import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.core.ASMCallHook;
@@ -51,9 +56,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -68,7 +71,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
     private static final Random rand = new Random();
     public static EventHandlerCapeEffects INSTANCE = new EventHandlerCapeEffects();
 
-    private EventHandlerCapeEffects() {}
+    private static List<UUID> vicioMantleFlightPlayers = Lists.newArrayList();
 
     //Propagate player in tick for octans anti-knockback effect.
     public static EntityPlayer currentPlayerInTick = null;
@@ -80,6 +83,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
     //To propagate elytra states
     private static boolean updateElytraBuffer = false;
     public static boolean inElytraCheck = false;
+
+    private EventHandlerCapeEffects() {}
 
     @SubscribeEvent
     public void breakBlock(BlockEvent.BreakEvent event) {
@@ -232,8 +237,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
                 discidiaChainingAttack = true;
                 try {
-                    event.getEntityLiving().attackEntityFrom(CommonProxy.dmgSourceStellar, (float) (added / 2));
-                    event.getEntityLiving().attackEntityFrom(DamageSource.causePlayerDamage(attacker), (float) (added / 2));
+                    DamageUtil.attackEntityFrom(event.getEntityLiving(), CommonProxy.dmgSourceStellar, (float) (added / 2.0F));
+                    DamageUtil.attackEntityFrom(event.getEntityLiving(), DamageSource.causePlayerDamage(attacker), (float) (added / 2.0F));
                 } finally {
                     discidiaChainingAttack = false;
                 }
@@ -339,14 +344,16 @@ public class EventHandlerCapeEffects implements ITickHandler {
     private void tickVicioClientEffect(EntityPlayer player) {
         if(player instanceof EntityPlayerSP) {
             EntityPlayerSP spl = (EntityPlayerSP) player;
-            if(spl.movementInput.jump && !spl.onGround && spl.motionY < -0.5 && !spl.capabilities.isFlying && !spl.isInWater() && !spl.isInLava()) {
+            boolean hasFlightPerk = ResearchManager.getProgress(spl, Side.CLIENT)
+                    .hasPerkEffect(p -> p instanceof KeyMantleFlight);
+            if(spl.movementInput.jump && !hasFlightPerk && !spl.onGround && spl.motionY < -0.5 && !spl.capabilities.isFlying && !spl.isInWater() && !spl.isInLava()) {
                 PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
                 if(!spl.isElytraFlying()) {
                     PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.setFlying());
                 }
             } else if(spl.isElytraFlying()) {
                 PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
-                if(spl.capabilities.isFlying || spl.onGround || spl.isInWater() || spl.isInLava()) {
+                if(spl.capabilities.isFlying || hasFlightPerk || spl.onGround || spl.isInWater() || spl.isInLava()) {
                     PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFlying());
                 } else {
                     Vector3 mov = new Vector3(((EntityPlayerSP) player).motionX, 0, ((EntityPlayerSP) player).motionZ);
@@ -372,6 +379,46 @@ public class EventHandlerCapeEffects implements ITickHandler {
         CapeEffectBootes ceo = ItemCape.getCapeEffect(pl, Constellations.bootes);
         if(ceo != null) {
             ceo.onPlayerTick(pl);
+        }
+    }
+
+    private void tickVicioEffect(EntityPlayer pl) {
+        if (!(pl instanceof EntityPlayerMP)) {
+            return;
+        }
+        PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
+        if (!prog.hasPerkEffect(p -> p instanceof KeyMantleFlight)) {
+            if (vicioMantleFlightPlayers.contains(pl.getUniqueID())) {
+                if (pl.isCreative()) {
+                    pl.capabilities.allowFlying = true;
+                } else {
+                    pl.capabilities.allowFlying = false;
+                    pl.capabilities.isFlying = false;
+                }
+                pl.sendPlayerAbilities();
+                vicioMantleFlightPlayers.remove(pl.getUniqueID());
+            }
+            return;
+        }
+
+        CapeEffectVicio ceo = ItemCape.getCapeEffect(pl, Constellations.vicio);
+        if (ceo != null) {
+            if (!vicioMantleFlightPlayers.contains(pl.getUniqueID())) {
+                vicioMantleFlightPlayers.add(pl.getUniqueID());
+            }
+            if (!pl.capabilities.allowFlying) {
+                pl.capabilities.allowFlying = true;
+                pl.sendPlayerAbilities();
+            }
+        } else if (vicioMantleFlightPlayers.contains(pl.getUniqueID())) {
+            if (pl.isCreative()) {
+                pl.capabilities.allowFlying = true;
+            } else {
+                pl.capabilities.allowFlying = false;
+                pl.capabilities.isFlying = false;
+            }
+            pl.sendPlayerAbilities();
+            vicioMantleFlightPlayers.remove(pl.getUniqueID());
         }
     }
 
@@ -415,8 +462,6 @@ public class EventHandlerCapeEffects implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         switch (type) {
-            case WORLD:
-                break;
             case PLAYER:
                 EntityPlayer pl = (EntityPlayer) context[0];
                 Side side = (Side) context[1];
@@ -429,6 +474,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     tickArmaraWornEffect(pl);
                     tickOctansEffect(pl);
                     tickBootesEffect(pl);
+                    tickVicioEffect(pl);
                 } else if(side == Side.CLIENT) {
                     CapeArmorEffect cae = ItemCape.getCapeEffect(pl);
                     if(cae != null) {
@@ -448,11 +494,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     }
                 }
                 break;
-            case CLIENT:
-                break;
-            case SERVER:
-                break;
-            case RENDER:
+            default:
                 break;
         }
     }

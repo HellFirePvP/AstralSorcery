@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -30,6 +30,7 @@ public enum Mods {
     TICONSTRUCT("tconstruct"),
     CRAFTTWEAKER("crafttweaker"),
     JEI("jei"),
+    THAUMCRAFT("thaumcraft"),
     BLOODMAGIC("bloodmagic"),
     BOTANIA("botania"),
     CHISEL("chisel"),
@@ -41,15 +42,17 @@ public enum Mods {
     UNIVERSALREMOTE("universalremote");
 
     public final String modid;
+    private final boolean loaded;
 
     private static Class<?> gcPlayerClass, urPlayerClass;
 
     private Mods(String modName) {
         this.modid = modName;
+        this.loaded = Loader.isModLoaded(this.modid);
     }
 
     public boolean isPresent() {
-        return Loader.isModLoaded(modid);
+        return loaded;
     }
 
     public void sendIMC(String message, NBTTagCompound value) {
@@ -95,6 +98,8 @@ public enum Mods {
                     } catch (Exception ignored) {}
                 }
                 return urPlayerClass;
+            default:
+                break;
         }
         return null;
     }

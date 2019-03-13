@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -46,7 +46,7 @@ public class CapeEffectVicio extends CapeArmorEffect {
     @Override
     @SideOnly(Side.CLIENT)
     public void playActiveParticleTick(EntityPlayer pl) {
-        if(pl.isElytraFlying()) {
+        if(pl.isElytraFlying() || (!pl.isCreative() && pl.capabilities.isFlying)) {
             playVicioElytraSparkles(pl, 1F);
             playVicioElytraSparkles(pl, 0.8F);
         } else {

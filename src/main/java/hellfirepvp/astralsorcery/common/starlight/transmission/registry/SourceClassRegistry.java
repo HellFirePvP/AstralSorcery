@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -28,13 +28,13 @@ public class SourceClassRegistry {
 
     public static final SourceClassRegistry eventInstance = new SourceClassRegistry();
 
+    private static Map<String, SourceProvider> providerMap = new HashMap<>();
+
     private SourceClassRegistry() {}
 
     public void registerProvider(SourceProvider provider) {
         register(provider);
     }
-
-    private static Map<String, SourceProvider> providerMap = new HashMap<>();
 
     @Nullable
     public static SourceProvider getProvider(String identifier) {

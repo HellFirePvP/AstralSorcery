@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,12 +8,14 @@
 
 package hellfirepvp.astralsorcery.client.gui;
 
+import com.google.common.collect.BoundType;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Range;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
 import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
-import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
 import hellfirepvp.astralsorcery.client.gui.journal.overlay.GuiJournalOverlayKnowledge;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.GuiTextEntry;
@@ -21,22 +23,19 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
-import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.io.IOException;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,9 +49,12 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
     private static final AbstractRenderableTexture texArrow   = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
     private static final AbstractRenderableTexture textureSearchTextBG = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijtextarea");
 
-    private static final int entriesLeft = 16;
+    public static final int DEFAULT_WIDTH = 170;
+
+    private static final int entriesLeft = 15;
     private static final int entriesRight = 14;
-    private static final Random rand = new Random();
+    
+    private static Rectangle rectSearchTextEntry = new Rectangle(300, 20, 88, 15);
 
     private Rectangle rectNext, rectPrev;
     private KnowledgeFragment lastRenderHover = null;
@@ -61,16 +63,17 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
     private List<KnowledgeFragment> searchResult;
 
     private int doublePageID = 0;
-    private int doublePageCount = 0;
+    private Map<Integer, List<KnowledgeFragment>> indexedPages = Maps.newHashMap();
 
     private GuiTextEntry searchTextEntry = new GuiTextEntry();
 
     public GuiJournalKnowledgeIndex() {
-        super(3);
+        super(40);
         this.closeWithInventoryKey = false;
 
         KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
         List<KnowledgeFragment> known = Lists.newArrayList(dat.getAllFragments());
+        known.removeIf(f -> !f.isFullyPresent());
         known.sort(Comparator.comparing(KnowledgeFragment::getLocalizedIndexName));
         this.allFragments = known;
         this.searchResult = Lists.newArrayList(this.allFragments);
@@ -92,12 +95,38 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
     }
 
     private void updatePages() {
-        int results = this.searchResult.size();
-        this.doublePageCount = (results / (entriesLeft + entriesRight));
-        if (results > 0 && results % (entriesLeft + entriesRight) == 0) {
-            this.doublePageCount--;
+        this.indexedPages.clear();
+
+        FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+        int index = 0;
+        NavigableMap<Integer, KnowledgeFragment> results = Maps.newTreeMap();
+        for (KnowledgeFragment frag : this.searchResult) {
+            int lines = fr.listFormattedStringToWidth(frag.getLocalizedIndexName(), DEFAULT_WIDTH).size();
+            for (int i = 0; i < lines; i++) {
+                results.put(index, frag);
+                index++;
+            }
         }
-        while (this.doublePageID > 0 && this.doublePageID >= this.doublePageCount) {
+
+        int pageIndex = 0;
+        List<KnowledgeFragment> currentDoublePage = new LinkedList<>();
+
+        do {
+            int startIndex = pageIndex * (entriesLeft + entriesRight);
+            int endIndex = Math.min(startIndex + (entriesLeft + entriesRight), results.size());
+            Map<Integer, KnowledgeFragment> pageMap = Maps.subMap(results,
+                    Range.range(startIndex, BoundType.CLOSED, endIndex, BoundType.OPEN));
+            for (KnowledgeFragment frag : pageMap.values()) {
+                if (!currentDoublePage.contains(frag)) {
+                    currentDoublePage.add(frag);
+                }
+            }
+            this.indexedPages.put(pageIndex, currentDoublePage);
+            pageIndex++;
+            currentDoublePage = new LinkedList<>();
+        } while (results.containsKey(pageIndex * (entriesLeft + entriesRight)));
+
+        while (this.doublePageID > 0 && this.doublePageID >= this.indexedPages.size()) {
             this.doublePageID--;
         }
     }
@@ -109,7 +138,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
 
         drawDefault(textureResBlank, mouse);
 
-        drawFragmentIndices(mouseX, mouseY, partialTicks);
+        drawFragmentIndices(mouseX, mouseY);
         drawSearchBox();
 
         zLevel += 150;
@@ -117,7 +146,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
         zLevel -= 150;
     }
 
-    private void drawFragmentIndices(int mouseX, int mouseY, float pTicks) {
+    private void drawFragmentIndices(int mouseX, int mouseY) {
         GL11.glColor4f(0.86F, 0.86F, 0.86F, 1F);
         GlStateManager.color(0.86F, 0.86F, 0.86F, 1F);
         GlStateManager.disableDepth();
@@ -128,60 +157,99 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
         TextureHelper.setActiveTextureToAtlasSprite();
 
         int offsetX = guiLeft + 35;
-        int offsetY = guiTop + 20;
+        int offsetY = guiTop + 26;
 
-        int start = this.doublePageID * (entriesLeft + entriesRight);
-        int index = start;
+        List<KnowledgeFragment> pageFragments = this.indexedPages.get(this.doublePageID);
+        if (pageFragments != null) {
 
-        boolean drewHover = false; //To avoid double-handling range checks
-        double effectPart = (Math.sin(Math.toRadians(((ClientScheduler.getClientTick()) * 5D) % 360D)) + 1D) / 2D;
-        int br = Math.round((0.45F + 0.1F * ((float) effectPart)) * 255F);
-        int c = Math.round((0.7F + 0.2F * ((float) effectPart)) * 255F);
-        Color boxColor = new Color(c, c, c, br);
+            int start = 0;
+            int idx = 0;
+            int drawIndex = 0;
 
-        for (;index < Math.min(this.searchResult.size(), start + entriesLeft); index++) {
-            int offset = index - start;
-            int y = offsetY + (offset * 13);
-            KnowledgeFragment frag = this.searchResult.get(index);
-            String line = frag.getLocalizedIndexName();
-            int length = fontRenderer.drawString(line, offsetX, y, 0x00D0D0D0, false);
+            boolean drewHover = false; //To avoid double-handling range checks
+            double effectPart = (Math.sin(Math.toRadians(((ClientScheduler.getClientTick()) * 5D) % 360D)) + 1D) / 2D;
+            int br = Math.round((0.45F + 0.1F * ((float) effectPart)) * 255F);
+            int c = Math.round((0.7F + 0.2F * ((float) effectPart)) * 255F);
+            Color boxColor = new Color(c, c, c, br);
 
-            Rectangle rctString = new Rectangle(offsetX - 2, y - 2, length + 4, 7 + 4);
-            if (!drewHover && rctString.contains(mouseX, mouseY)) {
-                drawRect(rctString.x, rctString.y,
-                        rctString.x + rctString.width, rctString.y + rctString.height,
-                        boxColor.getRGB());
-                lastRenderHover = frag;
-                drewHover = true;
+            for (;idx < Math.min(pageFragments.size(), start + entriesLeft) && drawIndex < entriesLeft; idx++) {
+                int step = 12;
+
+                int y = offsetY + (drawIndex * step);
+                int iOffsetY = y;
+
+                KnowledgeFragment frag = pageFragments.get(idx);
+                List<String> lines = fontRenderer.listFormattedStringToWidth(frag.getLocalizedIndexName(), DEFAULT_WIDTH);
+                drawIndex += lines.size();
+                int maxLength = 0;
+
+                for (String line : lines) {
+                    int length = fontRenderer.drawString(line, offsetX, iOffsetY, 0x00D0D0D0, false) - offsetX;
+                    if (length > maxLength) {
+                        maxLength = length;
+                    }
+                    iOffsetY += step;
+                }
+
+                Rectangle rctString = new Rectangle(offsetX - 2, y - 2, maxLength + 4, iOffsetY - y);
+                if (!drewHover && rctString.contains(mouseX, mouseY)) {
+                    drawRect(rctString.x, rctString.y,
+                            rctString.x + rctString.width, rctString.y + rctString.height,
+                            boxColor.getRGB());
+                    lastRenderHover = frag;
+                    drewHover = true;
+                }
+            }
+
+            offsetX = guiLeft + 225;
+            offsetY = guiTop + 39;
+            start += idx;
+            drawIndex = 0;
+
+            for (;idx < Math.min(pageFragments.size(), start + entriesRight); idx++) {
+                int step = 12;
+
+                int y = offsetY + (drawIndex * step);
+                int iOffsetY = y;
+
+                KnowledgeFragment frag = pageFragments.get(idx);
+                List<String> lines = fontRenderer.listFormattedStringToWidth(frag.getLocalizedIndexName(), DEFAULT_WIDTH);
+                drawIndex += lines.size();
+                int maxLength = 0;
+
+                for (String line : lines) {
+                    int length = fontRenderer.drawString(line, offsetX, iOffsetY, 0x00D0D0D0, false) - offsetX;
+                    if (length > maxLength) {
+                        maxLength = length;
+                    }
+                    iOffsetY += step;
+                }
+
+                Rectangle rctString = new Rectangle(offsetX - 2, y - 2, maxLength + 4, iOffsetY - y);
+                if (!drewHover && rctString.contains(mouseX, mouseY)) {
+                    drawRect(rctString.x, rctString.y,
+                            rctString.x + rctString.width, rctString.y + rctString.height,
+                            boxColor.getRGB());
+                    lastRenderHover = frag;
+                    drewHover = true;
+                }
             }
         }
 
-        offsetX = guiLeft + 225;
-        offsetY = guiTop + 46;
-        start += entriesLeft;
-        index = start;
-
-        for (;index < Math.min(this.searchResult.size(), start + entriesRight); index++) {
-            int offset = index - start;
-            int y = offsetY + (offset * 13);
-            KnowledgeFragment frag = this.searchResult.get(index);
-            String line = frag.getLocalizedIndexName();
-            int length = fontRenderer.drawString(line, offsetX, y, 0x00D0D0D0, false);
-
-            Rectangle rctString = new Rectangle(offsetX - 2, y - 2, length + 4, 7 + 4);
-            if (!drewHover && rctString.contains(mouseX, mouseY)) {
-                drawRect(rctString.x, rctString.y,
-                        rctString.x + rctString.width, rctString.y + rctString.height,
-                        boxColor.getRGB());
-                lastRenderHover = frag;
-                drewHover = true;
-            }
-        }
 
         GlStateManager.enableDepth();
         GlStateManager.color(1F, 1F, 1F, 1F);
 
         TextureHelper.refreshTextureBindState();
+    }
+
+    @Override
+    protected boolean handleRightClickClose(int mouseX, int mouseY) {
+        if (rectSearchTextEntry.contains(mouseX - guiLeft, mouseY - guiTop)) {
+            searchTextEntry.setText("");
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -203,7 +271,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
             return;
         }
         if(rectNext != null && rectNext.contains(p)) {
-            if(doublePageID <= doublePageCount - 1) {
+            if(doublePageID <= this.indexedPages.size() - 1) {
                 this.doublePageID++;
             }
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
@@ -282,7 +350,7 @@ public class GuiJournalKnowledgeIndex extends GuiScreenJournal {
             drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
             GlStateManager.popMatrix();
         }
-        if(doublePageID + 1 <= doublePageCount) {
+        if(doublePageID + 1 < this.indexedPages.size()) {
             int width = 30;
             int height = 15;
             rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);

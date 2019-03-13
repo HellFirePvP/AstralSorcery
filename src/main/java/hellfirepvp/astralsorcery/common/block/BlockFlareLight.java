@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -53,7 +54,7 @@ public class BlockFlareLight extends Block {
     public static final PropertyEnum<EnumDyeColor> COLOR = PropertyEnum.<EnumDyeColor>create("color", EnumDyeColor.class);
 
     public BlockFlareLight() {
-        super(RegistryItems.materialTransparentReplaceable, MapColor.QUARTZ);
+        super(Material.AIR, MapColor.QUARTZ);
         setLightLevel(1F);
         setBlockUnbreakable();
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);

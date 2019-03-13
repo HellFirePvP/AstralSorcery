@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -61,7 +61,7 @@ public class Utils extends BaseTweaker {
                 ItemStack internal = getItemStack(item);
                 ItemStack thisInternal = (ItemStack) getInternal();
                 if(thisInternal.hasTagCompound()) {
-                    return matchesExact(item);
+                    return super.matchesExact(item);
                 }
                 return !internal.isEmpty() && !thisInternal.isEmpty() && internal.getItem() == thisInternal.getItem() && (internal.getCount() >= thisInternal.getCount()) && (thisInternal.getItemDamage() == OreDictionary.WILDCARD_VALUE || thisInternal.getItemDamage() == internal.getItemDamage() || (!thisInternal.getHasSubtypes() && !thisInternal.getItem().isDamageable()));
             }

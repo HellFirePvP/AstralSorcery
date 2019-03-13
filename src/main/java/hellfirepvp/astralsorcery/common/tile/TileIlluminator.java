@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
+import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.DirectionalLayerBlockDiscoverer;
@@ -39,7 +39,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 01.11.2016 / 16:01
  */
-public class TileIlluminator extends TileSkybound {
+public class TileIlluminator extends TileEntityTick {
 
     private static final Random rand = new Random();
     public static final LightCheck illuminatorCheck = new LightCheck();
@@ -52,7 +52,7 @@ public class TileIlluminator extends TileSkybound {
     private int ticksUntilNext = 180;
     private boolean playerPlaced = false;
 
-    private int skyLightIgnoreTimeout = 0;
+    private int boost = 0;
     private EnumDyeColor chosenColor = EnumDyeColor.YELLOW;
 
     @Override
@@ -61,15 +61,15 @@ public class TileIlluminator extends TileSkybound {
 
         if (!playerPlaced) return;
 
-        if (!world.isRemote && (skyLightIgnoreTimeout > 0 || doesSeeSky())) {
+        if (!world.isRemote) {
             if(validPositions == null) recalculate();
             if(rand.nextInt(3) == 0 && placeFlares()) {
                 recalcRequested = true;
             }
-            skyLightIgnoreTimeout--;
+            boost--;
             ticksUntilNext--;
             if(ticksUntilNext <= 0) {
-                ticksUntilNext = skyLightIgnoreTimeout > 0 ? 30 : 180;
+                ticksUntilNext = boost > 0 ? 30 : 180;
                 if(recalcRequested) {
                     recalcRequested = false;
                     recalculate();
@@ -87,7 +87,7 @@ public class TileIlluminator extends TileSkybound {
     }
 
     public void onWandUsed(EnumDyeColor color) {
-        this.skyLightIgnoreTimeout = 10 * 60 * 20;
+        this.boost = 10 * 60 * 20;
         this.chosenColor = color;
         this.markForUpdate();
     }
@@ -119,6 +119,8 @@ public class TileIlluminator extends TileSkybound {
                 case 2:
                     p.setColor(col);
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -134,7 +136,10 @@ public class TileIlluminator extends TileSkybound {
             BlockPos at = list.remove(index);
             if(!needsRecalc && list.isEmpty()) needsRecalc = true;
             at = at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
-            if(world.isBlockLoaded(at) && illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
+            if(world.isBlockLoaded(at) &&
+                    at.getY() >= 0 &&
+                    at.getY() <= 255 &&
+                    illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
                 EnumDyeColor color = EnumDyeColor.YELLOW;
                 if (this.chosenColor != null) {
                     color = this.chosenColor;
@@ -151,17 +156,16 @@ public class TileIlluminator extends TileSkybound {
     }
 
     private void recalculate() {
-        int parts = yPartsFromHeight();
+        int parts = Math.max(0, getPos().getY() - 7);
         validPositions = new LinkedList[parts];
         for (int i = 1; i <= parts; i++) {
-            int yLevel = (int) (((float) getPos().getY()) * (((float) i) / ((float) parts)));
-            LinkedList<BlockPos> calcPositions = new DirectionalLayerBlockDiscoverer(world, new BlockPos(getPos().getX(), yLevel, getPos().getZ()), SEARCH_RADIUS, STEP_WIDTH).discoverApplicableBlocks();
+            float yPart = ((float) i) / ((float) parts);
+            int yLevel = Math.round(yPart * (getPos().getY() - 7));
+            LinkedList<BlockPos> calcPositions = new DirectionalLayerBlockDiscoverer(
+                    new BlockPos(getPos().getX(), yLevel, getPos().getZ()), SEARCH_RADIUS, STEP_WIDTH)
+                    .discoverApplicableBlocks();
             validPositions[i - 1] = repeatList(calcPositions);
         }
-    }
-
-    private int yPartsFromHeight() {
-        return Math.max(2, getPos().getY() / 8);
     }
 
     private LinkedList<BlockPos> repeatList(LinkedList<BlockPos> list) {
@@ -177,7 +181,7 @@ public class TileIlluminator extends TileSkybound {
         super.writeCustomNBT(compound);
 
         compound.setBoolean("playerPlaced", this.playerPlaced);
-        compound.setInteger("boostTimeout", this.skyLightIgnoreTimeout);
+        compound.setInteger("boostTimeout", this.boost);
         if (chosenColor != null) {
             compound.setInteger("wandColor", this.chosenColor.getMetadata());
         } else {
@@ -190,7 +194,7 @@ public class TileIlluminator extends TileSkybound {
         super.readCustomNBT(compound);
 
         this.playerPlaced = compound.getBoolean("playerPlaced");
-        this.skyLightIgnoreTimeout = compound.getInteger("boostTimeout");
+        this.boost = compound.getInteger("boostTimeout");
         if (compound.hasKey("wandColor")) {
             this.chosenColor = EnumDyeColor.byMetadata(compound.getInteger("wandColor"));
         }
@@ -204,11 +208,14 @@ public class TileIlluminator extends TileSkybound {
         recalculate();
     }
 
-    public static class LightCheck implements BlockStateCheck {
+    public static class LightCheck implements BlockStateCheck.WorldSpecific {
 
         @Override
         public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
-            return world.isAirBlock(pos) && !world.canSeeSky(pos) && world.getLight(pos) < 8 && world.getLightFor(EnumSkyBlock.SKY, pos) < 6;
+            return world.isAirBlock(pos) &&
+                    !MiscUtils.canSeeSky(world, pos, false, false) &&
+                    world.getLight(pos) < 8 &&
+                    world.getLightFor(EnumSkyBlock.SKY, pos) < 6;
         }
 
     }

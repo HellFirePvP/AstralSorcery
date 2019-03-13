@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,38 +10,45 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.data.KnowledgeFragmentData;
+import hellfirepvp.astralsorcery.client.data.PersistentDataManager;
 import hellfirepvp.astralsorcery.client.gui.base.GuiSkyScreen;
 import hellfirepvp.astralsorcery.client.gui.base.GuiTileBase;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderConstellation;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRotateTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
@@ -71,6 +78,9 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
 
     private SkyConstellationDistribution currentInformation = null;
 
+    private LinkedList<Line> drawnLines = new LinkedList<>();
+    private Point start, end;
+
     public GuiTelescope(EntityPlayer player, TileTelescope e) {
         super(e, 280, 280);
         this.owningPlayer = player;
@@ -91,10 +101,10 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
             currentInformation.informationMap.put(rot, new RotationConstellationInformation());
         }
         if(handle != null) {
-            List<IConstellation> constellations = handle.getActiveConstellations();
             List<IWeakConstellation> weakConstellations = new LinkedList<>();
-            for (IConstellation c : constellations) {
-                if(c instanceof IWeakConstellation && c.canDiscover(ResearchManager.clientProgress)) {
+            for (IConstellation c : handle.getActiveConstellations()) {
+                if(c instanceof IWeakConstellation &&
+                        c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
                     weakConstellations.add((IWeakConstellation) c);
                 }
             }
@@ -105,6 +115,30 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
                     foundPoint = findEmptyPlace(r);
                 } while (foundPoint == null);
                 currentInformation.informationMap.get(foundPoint.value).constellations.put(foundPoint.key, cst);
+            }
+
+            List<ItemStack> fragmentStacks = ItemKnowledgeFragment.gatherFragments(owningPlayer);
+            List<KnowledgeFragment> fragList = new LinkedList<>();
+            for (ItemStack item : fragmentStacks) {
+                KnowledgeFragment frag = ItemKnowledgeFragment.resolveFragment(item);
+                Optional<Long> seedOpt = ItemKnowledgeFragment.getSeed(item);
+                if (seedOpt.isPresent() && frag != null && !fragList.contains(frag)) {
+                    fragList.add(frag);
+
+                    IConstellation cst = frag.getDiscoverConstellation(seedOpt.get());
+                    List<MoonPhase> phases = frag.getShowupPhases(seedOpt.get());
+                    if (cst != null && phases.contains(handle.getCurrentMoonPhase())) {
+                        int attempts = 100;
+                        Tuple<Point, TileTelescope.TelescopeRotation> foundPoint;
+                        do {
+                            foundPoint = findEmptyPlace(r);
+                            attempts--;
+                        } while (foundPoint == null && attempts > 0);
+                        if (foundPoint != null) {
+                            currentInformation.informationMap.get(foundPoint.value).constellations.put(foundPoint.key, cst);
+                        }
+                    }
+                }
             }
         }
     }
@@ -392,12 +426,12 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 BlockPos other = pos.add(xx, 0, zz);
-                if (!renderWorld.canSeeSky(other)) {
+                if (!MiscUtils.canSeeSky(renderWorld, other, true, false)) {
                     return false;
                 }
             }
         }
-        return renderWorld.canSeeSky(pos.up());
+        return MiscUtils.canSeeSky(renderWorld, pos.up(), true, false);
     }
 
     @Override
@@ -452,9 +486,6 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
             abortDrawing();
         }
     }
-
-    private LinkedList<Line> drawnLines = new LinkedList<>();
-    private Point start, end;
 
     private void tryStartDrawing(int mouseX, int mouseY) {
         if (!canStartDrawing()) return;
@@ -531,7 +562,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
             PlayerProgress client = ResearchManager.clientProgress;
             if (client == null) return;
 
-            boolean has = false;
+            boolean has = c instanceof ClientConstellationGenerator.ClientConstellation;
             for (String strConstellation : client.getSeenConstellations()) {
                 IConstellation ce = ConstellationRegistry.getConstellationByName(strConstellation);
                 if(ce != null && ce.equals(c)) {
@@ -544,7 +575,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
 
             List<StarConnection> sc = c.getStarConnections();
             if (sc.size() != drawnLines.size()) continue; //Can't match otherwise anyway.
-            if (!c.canDiscover(ResearchManager.clientProgress)) continue;
+            if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) continue;
 
             Map<StarLocation, Rectangle> stars = info.starRectangles;
 
@@ -564,8 +595,33 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
                 }
             }
 
-            //We found a match. horray.
-            PacketChannel.CHANNEL.sendToServer(new PktDiscoverConstellation(c.getUnlocalizedName()));
+            //Don't sync mock constellations to server.
+            if (c instanceof ClientConstellationGenerator.ClientConstellation) {
+                KnowledgeFragment frag = ((ClientConstellationGenerator.ClientConstellation) c).getFragment();
+                if (frag != null) {
+                    ItemKnowledgeFragment.clearFragment(owningPlayer, frag);
+                    KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
+                    if (dat.addFragment(frag)) {
+                        String cName = c.getUnlocalizedName();
+                        cName = cName.isEmpty() ? "" : Character.toUpperCase(cName.charAt(0)) + cName.substring(1);
+                        owningPlayer.sendMessage(new TextComponentString(
+                                TextFormatting.GREEN +
+                                        I18n.format("misc.fragment.added.cst", cName)));
+                        owningPlayer.sendMessage(new TextComponentString(
+                                TextFormatting.GREEN +
+                                        I18n.format("misc.fragment.added", frag.getLocalizedIndexName())));
+                    }
+
+                    for (Map.Entry<Point, IConstellation> cstInfos : infos.constellations.entrySet()) {
+                        if (cstInfos.getValue().equals(c)) {
+                            infos.constellations.remove(cstInfos.getKey());
+                        }
+                    }
+                }
+            } else {
+                //We found a match. horray.
+                PacketChannel.CHANNEL.sendToServer(new PktDiscoverConstellation(c.getUnlocalizedName()));
+            }
             clearLines();
             abortDrawing();
             return;

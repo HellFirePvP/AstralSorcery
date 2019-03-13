@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,6 +9,10 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -26,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class AttributeProjectileAttackDamage extends PerkAttributeType {
 
     public AttributeProjectileAttackDamage() {
-        super(AttributeTypeRegistry.ATTR_TYPE_PROJ_DAMAGE);
+        super(AttributeTypeRegistry.ATTR_TYPE_PROJ_DAMAGE, true);
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -40,10 +44,9 @@ public class AttributeProjectileAttackDamage extends PerkAttributeType {
                     return;
                 }
 
-                float amt = event.getAmount();
-                amt = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(getTypeString(), amt);
-                amt *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                float amt = PerkAttributeHelper.getOrCreateMap(player, side)
+                        .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), event.getAmount());
+                amt = AttributeEvent.postProcessModded(player, this, amt);
                 event.setAmount(amt);
             }
         }

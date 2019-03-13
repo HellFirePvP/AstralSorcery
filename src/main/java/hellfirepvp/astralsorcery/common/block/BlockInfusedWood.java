@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -25,9 +24,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fluids.BlockFluidBase;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -86,6 +85,26 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
             }
         }
         return super.getActualState(state, worldIn, pos);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        IBlockState actual = state.getActualState(source, pos);
+        switch (actual.getValue(WOOD_TYPE)) {
+            case COLUMN:
+                return new AxisAlignedBB(0.25, 0, 0.25,
+                        0.75, 1, 0.75);
+            case COLUMN_TOP:
+            case COLUMN_BOTTOM:
+                return new AxisAlignedBB(0.125, 0, 0.125,
+                        0.875, 1, 0.875);
+        }
+        return super.getBoundingBox(state, source, pos);
+    }
+
+    @Override
+    public boolean causesSuffocation(IBlockState state) {
+        return state.getValue(WOOD_TYPE) != WoodType.COLUMN && super.causesSuffocation(state);
     }
 
     @Override

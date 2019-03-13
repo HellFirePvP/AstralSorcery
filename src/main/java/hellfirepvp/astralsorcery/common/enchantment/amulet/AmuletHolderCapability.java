@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -70,7 +70,7 @@ public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> 
 
         @Override
         public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-            return capability == CAPABILITY_AMULET_HOLDER;
+            return capability.equals(CAPABILITY_AMULET_HOLDER);
         }
 
         @Nullable

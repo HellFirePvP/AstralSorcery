@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -48,12 +48,16 @@ public class Config {
     public static boolean doesMobSpawnDenyDenyEverything = false;
     public static boolean rockCrystalOreSilkTouchHarvestable = false;
 
+    public static boolean disableFestiveMapper = false;
+
     public static float capeChaosResistance = 0.8F;
 
     //Attuned wands configs
     public static float evorsioEffectChance = 0.8F;
     public static int discidiaStackCap = 10;
     public static float discidiaStackMultiplier = 1F;
+
+    public static boolean grindstoneAddDustRecipes = true;
 
     public static boolean craftingLiqCrystalGrowth = true;
     public static boolean craftingLiqCrystalToolGrowth = true;
@@ -188,7 +192,7 @@ public class Config {
     }
 
     private static void loadData() {
-        giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal if he joins the server for the first time.");
+        giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal when they join the server for the first time.");
         doesMobSpawnDenyDenyEverything = latestConfig.getBoolean("doesMobSpawnDenyAllTypes", "general", false, "If set to 'true' anything that prevents mobspawning by this mod, will also prevent EVERY natural mobspawning of any mobtype. When set to 'false' it'll only stop monsters from spawning.");
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
         rockCrystalOreSilkTouchHarvestable = latestConfig.getBoolean("isRockCrystalOreSilkHarvestable", "general", rockCrystalOreSilkTouchHarvestable, "If this is set to true, Rock-Crystal-Ore may be silk-touch harvested by a player.");
@@ -221,6 +225,8 @@ public class Config {
         discidiaStackCap = latestConfig.getInt("discidiaDamageStackCap", "tools", discidiaStackCap, 1, 200, "Defines the amount of stacks you have to get against the same mob until you reach 100% of the damage multiplier.");
         discidiaStackMultiplier = latestConfig.getFloat("discidiaDamageStackMultipler", "tools", discidiaStackMultiplier, 0F, 200F, "Defines the additional damage multiplier gradually increased by gaining attack-stacks against a mob. (Applied multiplier = damage * 1 + (thisConfigOption * (currentStacks / maxStacks)) )");
 
+        grindstoneAddDustRecipes = latestConfig.getBoolean("grindstoneAddOreToDustRecipes", "crafting", true, "Set this to false to prevent the lookup and registration of oreblock -> ore dust recipes on the grindstone.");
+
         craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");
         craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");
         craftingLiqCrystalToolGrowth = latestConfig.getBoolean("liquidStarlightCrystalToolGrowth", "crafting", craftingLiqCrystalToolGrowth, "Set this to false to disable Crystal Tool growth in liquid starlight");
@@ -238,6 +244,7 @@ public class Config {
         maxEffectRenderDistanceSq = maxEffectRenderDistance * maxEffectRenderDistance;
         clientPreloadTextures = latestConfig.getBoolean("preloadTextures", "rendering", true, "If set to 'true' the mod will preload most of the bigger textures during postInit. This provides a more fluent gameplay experience (as it doesn't need to load the textures when they're first needed), but increases loadtime.");
         particleAmount = latestConfig.getInt("particleAmount", "rendering", 2, 0, 2, "Sets the amount of particles/effects: 0 = minimal (only necessary particles will appear), 1 = lowered (most unnecessary particles will be filtered), 2 = all particles are visible");
+        disableFestiveMapper = latestConfig.getBoolean("disableFestiveBlockTextures", "rendering", false, "Set to true to disable the festive textures/block models.");
 
         marbleAmount = latestConfig.getInt("generateMarbleAmount", "worldgen", 4, 0, 32, "Defines how many marble veins are generated per chunk. 0 = disabled");
         marbleVeinSize = latestConfig.getInt("generateMarbleVeinSize", "worldgen", 20, 1, 32, "Defines how big generated marble veins are.");

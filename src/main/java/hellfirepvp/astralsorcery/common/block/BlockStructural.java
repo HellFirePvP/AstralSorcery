@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -64,6 +64,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
             case TELESCOPE_STRUCT:
                 IBlockState downState = world.getBlockState(pos.down());
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getSoundType(downState, world, pos, entity);
+            default:
+                break;
         }
         return super.getSoundType(state, world, pos, entity);
     }
@@ -84,6 +86,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
                 Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos.down(), world.getBlockState(pos.down()));
                 effectLoop = false;
                 return true;
+            default:
+                break;
         }
         effectLoop = false;
         return false;
@@ -100,6 +104,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return new AxisAlignedBB(0, -1, 0, 1, 1, 1);
+            default:
+                break;
         }
         return FULL_BLOCK_AABB;
     }
@@ -117,6 +123,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().onBlockActivated(worldIn, pos.down(), BlockType.TELESCOPE_STRUCT.getSupportedState(), playerIn, hand, facing, hitX, hitY, hitZ);
+            default:
+                break;
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
@@ -127,6 +135,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
             case TELESCOPE_STRUCT:
                 drops.add(BlockMachine.MachineType.TELESCOPE.asStack());
                 break;
+            default:
+                break;
         }
     }
 
@@ -135,6 +145,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (blockState.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlockHardness(worldIn, pos.down());
+            default:
+                break;
         }
         return super.getBlockHardness(blockState, worldIn, pos);
     }
@@ -145,6 +157,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getExplosionResistance(world, pos.down(), exploder, explosion);
+            default:
+                break;
         }
         return super.getExplosionResistance(world, pos, exploder, explosion);
     }
@@ -155,6 +169,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getPickBlock(BlockType.TELESCOPE_STRUCT.getSupportedState(), target, world, pos.down(), player);
+            default:
+                break;
         }
         return super.getPickBlock(state, target, world, pos, player);
     }
@@ -166,6 +182,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
                 if(world.isAirBlock(pos.down())) {
                     world.setBlockToAir(pos);
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -182,6 +200,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
                 if(world.isAirBlock(pos.down())) {
                     ((World) world).setBlockToAir(pos);
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -228,6 +248,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().isNormalCube();
+            default:
+                break;
         }
         return super.isNormalCube(state);
     }
@@ -237,6 +259,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         switch (base_state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState().isSideSolid(world, pos.down(), side);
+            default:
+                break;
         }
         return super.isSideSolid(base_state, world, pos, side);
     }

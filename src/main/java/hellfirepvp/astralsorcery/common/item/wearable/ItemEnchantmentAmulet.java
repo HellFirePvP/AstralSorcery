@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -14,22 +14,14 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantment;
-import hellfirepvp.astralsorcery.common.enchantment.amulet.EnchantmentUpgradeHelper;
-import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -87,7 +79,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
             freezeAmuletColor(stack);
         }
         if(!worldIn.isRemote && getAmuletEnchantments(stack).isEmpty()) {
-            AmuletEnchantHelper.rollAmulet(stack, 0);
+            AmuletEnchantHelper.rollAmulet(stack);
         }
     }
 
@@ -167,66 +159,6 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
     }
 
     @Override
-    public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
-        if(itemstack != null && itemstack.getItem() instanceof ItemEnchantmentAmulet && player instanceof EntityPlayer) {
-            List<AmuletEnchantment> enchList = getAmuletEnchantments(itemstack);
-            for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-                ItemStack stack = player.getItemStackFromSlot(slot);
-                if (canBeAffected(stack, enchList)) {
-                    EnchantmentUpgradeHelper.applyAmuletOwner(player.getItemStackFromSlot(slot), (EntityPlayer) player);
-                }
-            }
-        }
-    }
-
-    public static boolean canBeAffected(ItemStack stack, Collection<AmuletEnchantment> enchantments) {
-        if (EnchantmentUpgradeHelper.isItemBlacklisted(stack) || stack.isEmpty()) return false;
-
-        for (AmuletEnchantment ench : enchantments) {
-            if (canInfluenceType(ench.getType(), stack, enchantments)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean canInfluenceType(AmuletEnchantment.Type type, ItemStack stack, Collection<AmuletEnchantment> enchantments) {
-        for (AmuletEnchantment ench : enchantments) {
-            Enchantment e = ench.getEnchantment();
-            if (ench.getType() != type) continue;
-
-            switch (type) {
-                case ADD_TO_SPECIFIC:
-                    if (e.type != null && e.type.canEnchantItem(stack.getItem())) {
-                        return true;
-                    }
-                    break;
-                case ADD_TO_EXISTING_SPECIFIC:
-                    if (EnchantmentHelper.getEnchantmentLevel(e, stack) > 0 || hasAddedEnchant(enchantments, stack, e)) {
-                        return true;
-                    }
-                    break;
-                case ADD_TO_EXISTING_ALL:
-                    if (!EnchantmentHelper.getEnchantments(stack).isEmpty() || hasAddedEnchant(enchantments, stack, null)) {
-                        return true;
-                    }
-                    break;
-            }
-        }
-        return false;
-    }
-
-    private static boolean hasAddedEnchant(Collection<AmuletEnchantment> enchantments, ItemStack stack, @Nullable Enchantment e) {
-        for (AmuletEnchantment enchantment : enchantments) {
-            if(enchantment.getType() != AmuletEnchantment.Type.ADD_TO_SPECIFIC) continue;
-            if(e == null || (enchantment.getEnchantment().equals(e) && e.type.canEnchantItem(stack.getItem()))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
         player.playSound(SoundEvents.BLOCK_GLASS_PLACE, .65F, 6.4f);
     }
@@ -234,9 +166,6 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
     @Override
     public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
         player.playSound(SoundEvents.BLOCK_GLASS_PLACE, .65F, 6.4f);
-        if (player instanceof EntityPlayerMP) {
-            PlayerAmuletHandler.INSTANCE.clearAmuletTags(((EntityPlayerMP) player));
-        }
     }
 
     @Override

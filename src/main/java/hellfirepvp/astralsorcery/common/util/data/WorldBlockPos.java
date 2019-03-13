@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -32,8 +32,8 @@ public class WorldBlockPos extends BlockPos {
         this.world = world;
     }
 
-    public WorldBlockPos(TileEntity te) {
-        this(te.getWorld(), te.getPos());
+    public static WorldBlockPos wrap(TileEntity te) {
+        return new WorldBlockPos(te.getWorld(), te.getPos());
     }
 
     public static WorldBlockPos wrap(World world, BlockPos pos) {

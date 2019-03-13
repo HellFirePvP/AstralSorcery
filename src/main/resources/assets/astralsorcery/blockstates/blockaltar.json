@@ -4,37 +4,37 @@
         {
             "when": {"render": false},
             "apply": [
-                { "model": "astralsorcery:blockaltar1" }
+                { "model": "astralsorcery:crafting_altar_tier_1" }
             ]
         },
         {
             "when": {"AND": [{"render": true}, {"altartype": "altar_1"}]},
             "apply": [
-                { "model": "astralsorcery:blockaltar1" }
+                { "model": "astralsorcery:crafting_altar_tier_1" }
             ]
         },
         {
             "when": {"AND": [{"render": true}, {"altartype": "altar_2"}]},
             "apply": [
-                { "model": "astralsorcery:blockaltar2" }
+                { "model": "astralsorcery:crafting_altar_tier_2" }
             ]
         },
         {
             "when": {"AND": [{"render": true}, {"altartype": "altar_3"}]},
             "apply": [
-                { "model": "astralsorcery:blockaltar3" }
+                { "model": "astralsorcery:crafting_altar_tier_3" }
             ]
         },
         {
             "when": {"AND": [{"render": true}, {"altartype": "altar_4"}]},
             "apply": [
-                { "model": "astralsorcery:blockaltar4" }
+                { "model": "astralsorcery:crafting_altar_tier_4" }
             ]
         },
         {
             "when": {"AND": [{"render": true}, {"altartype": "altar_5"}]},
             "apply": [
-                { "model": "astralsorcery:blockmodel_nothing" }
+                { "model": "astralsorcery:model_nothing" }
             ]
         }
     ]

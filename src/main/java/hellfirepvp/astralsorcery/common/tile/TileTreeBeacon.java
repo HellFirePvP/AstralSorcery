@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -27,10 +27,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionRece
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
-import hellfirepvp.astralsorcery.common.util.WRItemObject;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.NonDuplicateCappedWeightedList;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
@@ -111,8 +108,10 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                                 changed = true;
                             }
                         }
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, actPos);
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, actPos, 32));
+                        if (ParticleEffectWatcher.INSTANCE.mayFire(world, actPos)) {
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, actPos);
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, actPos, 32));
+                        }
                     } else {
                         if(treePositions.removeElement(randPos)) {
                             changed = true;
@@ -129,14 +128,19 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
 
     private boolean tryHarvestBlock(World world, BlockPos out, BlockPos treeBlockPos, IBlockState fakedState) {
         if(rand.nextInt(ConfigEntryTreeBeacon.dropsChance) == 0) {
-            Block b = fakedState.getBlock();
-            List<ItemStack> drops = b.getDrops(world, treeBlockPos, fakedState, 2);
-            for (ItemStack i : drops) {
-                if(i.isEmpty()) continue;
-                ItemUtils.dropItemNaturally(world,
-                        out.getX() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1),
-                        out.getY() + rand.nextFloat() * 3,
-                        out.getZ() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1), i);
+            if (MiscUtils.canEntityTickAt(world, pos)) {
+                Block b = fakedState.getBlock();
+                List<ItemStack> drops = b.getDrops(world, treeBlockPos, fakedState, 2);
+                for (ItemStack i : drops) {
+                    if(i.isEmpty()) continue;
+                    ItemUtils.dropItemNaturally(world,
+                            out.getX() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1),
+                            out.getY() + rand.nextFloat() * 3,
+                            out.getZ() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1), i);
+                }
+            } else {
+                //Don't break the block then. We do nothing.
+                return false;
             }
         }
         return rand.nextInt(ConfigEntryTreeBeacon.breakChance) == 0;
@@ -213,7 +217,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                                 isTreeBlock = true;
                             } else {
                                 TreeTypes tt = TreeTypes.getTree(world, at, current);
-                                if(tt != null && tt.getLogCheck().isStateValid(world, at, current)) {
+                                if(tt != null && tt.getLogCheck().isStateValid(current)) {
                                     isTreeBlock = true;
                                 }
                             }
@@ -239,7 +243,8 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
     private void playEffects() {
         int color = 0xFF3FFF3F;
         PatreonEffectHelper.PatreonEffect pe;
-        if (getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(Side.CLIENT, getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
+        if (getPlacedBy() != null && (pe = PatreonEffectHelper.getPatreonEffects(Side.CLIENT, getPlacedBy())
+                .stream().filter(p -> p instanceof PtEffectTreeBeacon).findFirst().orElse(null)) != null) {
             color = ((PtEffectTreeBeacon) pe).getColorTreeEffects();
         }
         Color col = new Color(color);
@@ -275,7 +280,8 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
             if (ttb != null) {
                 int color = 0xFF00FF00; //Green
                 PatreonEffectHelper.PatreonEffect pe;
-                if (ttb.getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(Side.CLIENT, ttb.getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
+                if (ttb.getPlacedBy() != null && (pe = PatreonEffectHelper.getPatreonEffects(Side.CLIENT, ttb.getPlacedBy())
+                        .stream().filter(p -> p instanceof PtEffectTreeBeacon).findFirst().orElse(null)) != null) {
                     color = ((PtEffectTreeBeacon) pe).getColorTreeDrainEffects();
                 }
                 Vector3 to = new Vector3(tft.getReference()).add(0.5, 0.5, 0.5);
@@ -446,7 +452,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
         public static double treeBeaconRange = 16D;
         public static int maxCount = 600;
         public static int dropsChance = 4;
-        public static int breakChance = 350;
+        public static int breakChance = 1400;
         public static float speedLimiter = 1;
 
         private ConfigEntryTreeBeacon() {

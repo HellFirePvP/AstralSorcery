@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -31,18 +31,15 @@ public class DynamicEnchantmentEvent {
 
         private List<DynamicEnchantment> enchantmentsToApply = new LinkedList<>();
         private final ItemStack itemStack;
-        private EntityPlayer resolvedPlayer = null; //If the player could be resolved through this event, pass it down to modify
+        private final EntityPlayer resolvedPlayer; //If the player could be resolved through this event, pass it down to modify
 
-        public Add(ItemStack itemStack) {
+        public Add(ItemStack itemStack, @Nullable EntityPlayer player) {
             this.itemStack = itemStack;
+            this.resolvedPlayer = player;
         }
 
         public ItemStack getEnchantedItemStack() {
             return itemStack;
-        }
-
-        public void setResolvedPlayer(EntityPlayer resolvedPlayer) {
-            this.resolvedPlayer = resolvedPlayer;
         }
 
         @Nullable
@@ -71,10 +68,6 @@ public class DynamicEnchantmentEvent {
         @Nullable
         public EntityPlayer getResolvedPlayer() {
             return resolvedPlayer;
-        }
-
-        public void setResolvedPlayer(EntityPlayer resolvedPlayer) {
-            this.resolvedPlayer = resolvedPlayer;
         }
 
         public ItemStack getEnchantedItemStack() {

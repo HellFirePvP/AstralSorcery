@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeyDisarm extends KeyPerk {
 
-    private static float dropChance = 0.05F;
+    private float dropChance = 0.05F;
 
     public KeyDisarm(String name, int x, int y) {
         super(name, x, y);
@@ -49,6 +49,13 @@ public class KeyDisarm extends KeyPerk {
         });
     }
 
+    @Override
+    protected void applyEffectMultiplier(double multiplier) {
+        super.applyEffectMultiplier(multiplier);
+
+        this.dropChance *= multiplier;
+    }
+
     @SubscribeEvent
     public void onAttack(LivingHurtEvent event) {
         DamageSource source = event.getSource();
@@ -56,9 +63,9 @@ public class KeyDisarm extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dropChance);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dropChance);
                 float currentChance = MathHelper.clamp(chance, 0F, 1F);
                 for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
                     if(slot.getSlotType() != EntityEquipmentSlot.Type.ARMOR) continue;

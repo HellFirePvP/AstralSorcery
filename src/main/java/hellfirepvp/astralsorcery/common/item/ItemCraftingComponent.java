@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -52,6 +53,8 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
         switch (type) {
             case STARDUST:
                 return true;
+            default:
+                break;
         }
         return super.hasCustomEntity(stack);
     }
@@ -67,7 +70,13 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
                 stardust.motionX = location.motionX;
                 stardust.motionY = location.motionY;
                 stardust.motionZ = location.motionZ;
+                if (location instanceof EntityItem) {
+                    stardust.setThrower(((EntityItem) location).getThrower());
+                    stardust.setOwner(((EntityItem) location).getOwner());
+                }
                 return stardust;
+            default:
+                break;
         }
         return null;
     }

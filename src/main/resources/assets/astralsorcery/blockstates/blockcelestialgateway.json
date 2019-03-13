@@ -1,22 +1,5 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "forge:multi-layer",
-        "custom": {
-			"base": "astralsorcery:blockcelestialgateway#base",
-            "Solid": "astralsorcery:blockcelestialgateway#base",
-            "Translucent": "astralsorcery:blockcelestialgateway#trans"
-        },
-        "transform": "forge:default-block"
-    },
     "variants": {
-        "normal": [{}],
-        "inventory": [{}],
-        "base": [{
-            "model": "astralsorcery:blockcelestialgateway"
-        }],
-        "trans": [{
-            "model": "astralsorcery:blockcelestialgatewayorb"
-        }]
+        "normal": { "model":"astralsorcery:celestial_gateway" }
     }
 }
