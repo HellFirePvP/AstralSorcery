@@ -69,7 +69,7 @@ public class RenderingUtils {
     private static final Random rand = new Random();
     private static ParticleDigging.Factory diggingFactory = new ParticleDigging.Factory();
 
-    private static Field itemPhysics_fieldSkipRenderHook = null;
+    public static Field itemPhysics_fieldSkipRenderHook = null;
 
     public static void playBlockBreakParticles(BlockPos pos, IBlockState state) {
         ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
