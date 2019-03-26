@@ -121,7 +121,7 @@ public class NBTHelper {
             try {
                 propTag.setString("value", property.getName(state.getValue(property)));
             } catch (Exception exc) {
-                return null;
+                continue;
             }
             propTag.setString("property", property.getName());
             properties.appendTag(propTag);
