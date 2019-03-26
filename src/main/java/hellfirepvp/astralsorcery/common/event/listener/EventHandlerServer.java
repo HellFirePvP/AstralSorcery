@@ -243,7 +243,7 @@ public class EventHandlerServer {
     public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (Config.giveJournalFirst) {
             EntityPlayer pl = event.player;
-            if (!ResearchManager.doesPlayerFileExist(pl)) {
+            if (!ResearchManager.getProgress(pl).didReceiveTome()) {
                 pl.inventory.addItemStackToInventory(new ItemStack(ItemsAS.journal));
             }
         }

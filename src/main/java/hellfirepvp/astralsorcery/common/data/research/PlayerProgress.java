@@ -52,6 +52,7 @@ public class PlayerProgress {
     private Map<AbstractPerk, NBTTagCompound> unlockedPerks = new HashMap<>();
     private List<AbstractPerk> sealedPerks = new ArrayList<>();
     private double perkExp = 0;
+    private boolean tomeReceived = false;
 
     //Loading from flat-file, persistent data
     public void load(NBTTagCompound compound) {
@@ -66,6 +67,7 @@ public class PlayerProgress {
         sealedPerks.clear();
         freePointTokens.clear();
         perkExp = 0;
+        tomeReceived = false;
 
         if (compound.hasKey("seenConstellations")) {
             NBTTagList list = compound.getTagList("seenConstellations", 8);
@@ -169,6 +171,12 @@ public class PlayerProgress {
         if (compound.hasKey("perkExp")) {
             this.perkExp = compound.getDouble("perkExp");
         }
+
+        if (!compound.hasKey("bookReceived")) {
+            this.tomeReceived = true; //Legacy support for player progress files that do not have the tag yet.
+        } else {
+            this.tomeReceived = compound.getBoolean("bookReceived");
+        }
     }
 
     //For file saving, persistent saving.
@@ -223,6 +231,7 @@ public class PlayerProgress {
         cmp.setTag("sextanttargets", list);
 
         cmp.setDouble("perkExp", perkExp);
+        cmp.setBoolean("bookReceived", tomeReceived);
     }
 
     //For knowledge sharing; some information is not important to be shared.
@@ -264,6 +273,7 @@ public class PlayerProgress {
         sealedPerks.clear();
         freePointTokens.clear();
         perkExp = 0;
+        tomeReceived = false;
 
         if (compound.hasKey("seenConstellations")) {
             NBTTagList list = compound.getTagList("seenConstellations", 8);
@@ -421,6 +431,14 @@ public class PlayerProgress {
 
     protected void setAttunedBefore(boolean attuned) {
         this.wasOnceAttuned = attuned;
+    }
+
+    public boolean didReceiveTome() {
+        return tomeReceived;
+    }
+
+    protected void setTomeReceived() {
+        this.tomeReceived = true;
     }
 
     protected boolean grantFreeAllocationPoint(String freePointToken) {

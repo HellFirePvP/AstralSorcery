@@ -466,6 +466,17 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean setTomeReceived(EntityPlayer player) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (!progress.isValid()) return false;
+
+        progress.setTomeReceived();
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
     public static boolean setExp(EntityPlayer player, long exp) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (!progress.isValid()) return false;
