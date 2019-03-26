@@ -196,7 +196,7 @@ public class ClientGatewayHandler {
 
             if(focusTicks > 95) { //Time explained below
                 Minecraft.getMinecraft().player.setSneaking(false);
-                PacketChannel.CHANNEL.sendToServer(new PktRequestTeleport(focusingEntry.originalDimId, focusingEntry.originalBlockPos.up()));
+                PacketChannel.CHANNEL.sendToServer(new PktRequestTeleport(focusingEntry.originalDimId, focusingEntry.originalBlockPos));
                 focusTicks = 0;
                 focusingEntry = null;
             }
