@@ -69,7 +69,7 @@ public class RenderingUtils {
     private static final Random rand = new Random();
     private static ParticleDigging.Factory diggingFactory = new ParticleDigging.Factory();
 
-    private static Field itemPhysics_fieldSkipRenderHook = null;
+    public static Field itemPhysics_fieldSkipRenderHook = null;
 
     public static void playBlockBreakParticles(BlockPos pos, IBlockState state) {
         ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
@@ -98,7 +98,7 @@ public class RenderingUtils {
         ei.hoverStart = 0;
         if (itemPhysics_fieldSkipRenderHook != null) {
             try {
-                itemPhysics_fieldSkipRenderHook.set(stack, true);
+                itemPhysics_fieldSkipRenderHook.set(ei, true);
             } catch (Exception ignored) {}
         }
         Minecraft.getMinecraft().getRenderManager().renderEntity(ei, x + 0.5, y + 0.6, z + 0.5, 0, pTicks, true);
