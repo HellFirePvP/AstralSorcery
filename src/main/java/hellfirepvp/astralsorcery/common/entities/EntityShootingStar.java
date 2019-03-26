@@ -55,12 +55,11 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
 
     private static final DataParameter<Vector3> SHOOT_CONSTANT = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.VECTOR);
     private static final DataParameter<Long> EFFECT_SEED = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.LONG);
+    private static final DataParameter<Long> LAST_UPDATE = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.LONG);
     private static final DataParameter<String> PLAYER = EntityDataManager.createKey(EntityShootingStar.class, DataSerializers.STRING);
 
     //Not saved or synced value to deny 'capturing' one.
     private boolean removalPending = true;
-    //Make sure to despawn if idle for too long
-    private long lastTrackedTick;
 
     public EntityShootingStar(World worldIn) {
         super(worldIn);
@@ -73,7 +72,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         this.dataManager.set(SHOOT_CONSTANT, shot);
         this.dataManager.set(EFFECT_SEED, rand.nextLong());
         this.dataManager.set(PLAYER, reason.getName());
-        this.lastTrackedTick = worldIn.getTotalWorldTime();
+        this.dataManager.set(LAST_UPDATE, worldIn.getTotalWorldTime());
         correctMovement();
     }
 
@@ -84,6 +83,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         this.dataManager.register(SHOOT_CONSTANT, new Vector3());
         this.dataManager.register(EFFECT_SEED, 0L);
         this.dataManager.register(PLAYER, "");
+        this.dataManager.register(LAST_UPDATE, 0L);
     }
 
     private void correctMovement() {
@@ -105,13 +105,16 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
     public void onUpdate() {
         super.onUpdate();
 
+        long lastTrackedTick = this.dataManager.get(LAST_UPDATE);
+
         if (!world.isRemote) {
             if (removalPending || !ConstellationSkyHandler.getInstance().isNight(world) ||
                     world.getTotalWorldTime() - lastTrackedTick >= 20) {
                 setDead();
                 return;
             }
-            lastTrackedTick = world.getTotalWorldTime();
+
+            this.dataManager.set(LAST_UPDATE, world.getTotalWorldTime());
 
             if (isInWater() || isInLava()) {
                 RayTraceResult rtr = new RayTraceResult(new Vec3d(0, 0, 0), EnumFacing.UP, this.getPosition());
@@ -124,6 +127,12 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         correctMovement();
 
         if (world.isRemote) {
+            if (!ConstellationSkyHandler.getInstance().isNight(world) ||
+                    world.getTotalWorldTime() - lastTrackedTick >= 20) {
+                setDead();
+                return;
+            }
+
             spawnEffects();
         }
     }
