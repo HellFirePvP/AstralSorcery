@@ -765,17 +765,15 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
             executeTimes = MathHelper.floor(executeTimes * prop.getEffectAmplifier());
             for (int i = 0; i <= executeTimes; i++) {
-                float perc;
                 if(collectionChannelBuffer >= maxDrain) {
                     collectionChannelBuffer -= maxDrain;
-                    perc = 1F;
                 } else {
-                    continue;
+                    collectionChannelBuffer = 0F;
                 }
 
                 BlockPos to = getLocationPos();
                 if(ritualLinkTo != null) to = ritualLinkTo;
-                if(ce.playEffect(world, to, perc, prop, trait)) {
+                if(ce.playEffect(world, to, 1F, prop, trait)) {
                     if(rand.nextFloat() < (addFractureChance * prop.getEffectAmplifier() / part)) {
                         fractureCrystal(world);
                     }
@@ -789,7 +787,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 CrystalProperties prop = CrystalProperties.getCrystalProperties(this.crystal);
                 if(prop != null) {
                     prop = new CrystalProperties(prop.getSize(), prop.getPurity(), prop.getCollectiveCapability(), prop.getFracturation() + 1, prop.getSizeOverride());
-                    System.out.println(prop.getFracturation());
                     if(prop.getFracturation() >= 100) {
                         SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, world, getLocationPos(), 7.5F, 1.4F);
                         Vector3 at = new Vector3(getLocationPos()).add(0.5, 1.5, 0.5);
