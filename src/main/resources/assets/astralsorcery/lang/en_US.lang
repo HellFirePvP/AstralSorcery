@@ -1200,7 +1200,7 @@ knowledge.astralsorcery.fragment.constellation.illumwand.description=Blocks conv
 
 knowledge.astralsorcery.fragment.constellation.prism.name=Enchantment Improvements
 knowledge.astralsorcery.fragment.constellation.prism.bookmark=Enchantments
-knowledge.astralsorcery.fragment.constellation.prism.description=Each Resplendent Prims has three modifiers for changing enchantments, with each modifier providing up to a +3 bonus to one or more enchantments. Any combination of boosting existing enchantments or adding new enchantments is possible. However, any modifier that increases all existing enchantments will occupy two of these modifier slots.<NL>The color of the Prism is random, with white being far more rare than all the others.
+knowledge.astralsorcery.fragment.constellation.prism.description=Each Resplendent Prism has three modifiers for changing enchantments, with each modifier providing up to a +3 bonus to one or more enchantments. Any combination of boosting existing enchantments or adding new enchantments is possible. However, any modifier that increases all existing enchantments will occupy two of these modifier slots.<NL>The color of the Prism is random, with white being far more rare than all the others.
 
 knowledge.astralsorcery.fragment.constellation.clusterbonus.name=Boosting Crystal Yield
 knowledge.astralsorcery.fragment.constellation.clusterbonus.bookmark=Growth yield
