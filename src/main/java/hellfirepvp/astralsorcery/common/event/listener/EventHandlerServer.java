@@ -243,8 +243,9 @@ public class EventHandlerServer {
     public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (Config.giveJournalFirst) {
             EntityPlayer pl = event.player;
-            if (!ResearchManager.getProgress(pl).didReceiveTome()) {
-                pl.inventory.addItemStackToInventory(new ItemStack(ItemsAS.journal));
+            if (!ResearchManager.getProgress(pl).didReceiveTome() &&
+                    pl.inventory.addItemStackToInventory(new ItemStack(ItemsAS.journal))) {
+                ResearchManager.setTomeReceived(pl);
             }
         }
         if(event.player instanceof EntityPlayerMP) {
