@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import java.util.Set;
 
 /**
- * This class is part of the ObserverLib Mod
+ * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
  * Class: ItemComparator
  * Created by HellFirePvP
