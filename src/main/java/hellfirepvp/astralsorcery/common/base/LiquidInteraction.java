@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileChalice;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -215,7 +216,7 @@ public class LiquidInteraction {
             if((li.component1.getFluid().equals(comp1) && li.component2.getFluid().equals(comp2)) ||
                     (li.component2.getFluid().equals(comp1) && li.component1.getFluid().equals(comp2))) {
                 if(output != null && !output.isEmpty()) {
-                    if(!ItemUtils.matchStackLoosely(output, li.action.getOutputForMatching())) {
+                    if(!ItemComparator.compare(output, li.action.getOutputForMatching(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                         continue;
                     }
                 }

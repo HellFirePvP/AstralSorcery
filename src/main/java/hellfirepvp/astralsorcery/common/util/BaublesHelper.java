@@ -37,15 +37,6 @@ public class BaublesHelper {
         return false;
     }
 
-    public static boolean doesPlayerWearBauble(EntityPlayer player, BaubleType inType, ItemStack expected, boolean strict) {
-        for (ItemStack worn : getWornBaublesForType(player, inType)) {
-            if (strict ? ItemUtils.matchStacks(worn, expected) : ItemUtils.matchStackLoosely(worn, expected)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static Iterable<ItemStack> getWornBaublesForType(EntityPlayer player, BaubleType type) {
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
         List<ItemStack> worn = NonNullList.create();

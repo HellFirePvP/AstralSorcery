@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.BasicInfusionRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.LowConsumptionInfusionRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -84,7 +84,7 @@ public class InfusionRecipeRegistry {
         while (iterator.hasNext()) {
             AbstractInfusionRecipe recipe = iterator.next();
             ItemStack out = recipe.getOutputForMatching();
-            if (!out.isEmpty() && ItemUtils.matchStackLoosely(recipe.getOutputForMatching(), output)) {
+            if (!out.isEmpty() && ItemComparator.compare(recipe.getOutputForMatching(), output, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 iterator.remove();
                 return recipe;
             }
@@ -93,7 +93,7 @@ public class InfusionRecipeRegistry {
         while (iterator.hasNext()) {
             AbstractInfusionRecipe recipe = iterator.next();
             ItemStack out = recipe.getOutputForMatching();
-            if (!out.isEmpty() && ItemUtils.matchStackLoosely(recipe.getOutputForMatching(), output)) {
+            if (!out.isEmpty() && ItemComparator.compare(recipe.getOutputForMatching(), output, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 iterator.remove();
                 return recipe;
             }

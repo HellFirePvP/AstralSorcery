@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.FluidIngredient;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
@@ -155,6 +156,7 @@ public final class ItemHandle {
         }
     }
 
+    @Deprecated
     public Object getObjectForRecipe() {
         if(oreDictName != null) {
             return oreDictName;
@@ -193,9 +195,11 @@ public final class ItemHandle {
             default:
                 List<Ingredient> ingredients = new ArrayList<>();
                 for (ItemStack stack : this.applicableItems) {
-                    Ingredient i = Ingredient.fromStacks(stack);
-                    if(i != Ingredient.EMPTY) {
-                        ingredients.add(i);
+                    if (!stack.isEmpty()) {
+                        Ingredient i = new HandleIngredient(stack);
+                        if(i != Ingredient.EMPTY) {
+                            ingredients.add(i);
+                        }
                     }
                 }
                 try {
@@ -229,7 +233,7 @@ public final class ItemHandle {
                 return false;
             case STACK:
                 for (ItemStack applicable : applicableItems) {
-                    if(ItemUtils.stackEqualsNonNBT(applicable, stack)) {
+                    if (ItemComparator.compare(applicable, stack, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_WILDCARD, ItemComparator.Clause.NBT_LEAST)) {
                         return true;
                     }
                 }
@@ -297,6 +301,30 @@ public final class ItemHandle {
         }
         ctor.setAccessible(true);
         COMPOUND_CTOR = ctor;
+    }
+
+    public static class HandleIngredient extends Ingredient {
+
+        private HandleIngredient(ItemStack stack) {
+            super(stack);
+        }
+
+        @Override
+        public boolean apply(@Nullable ItemStack other) {
+            if (other == null) {
+                return false;
+            }
+
+            for (ItemStack thisStack : this.matchingStacks) {
+                if (ItemComparator.compare(thisStack, other,
+                        ItemComparator.Clause.ITEM,
+                        ItemComparator.Clause.META_WILDCARD,
+                        ItemComparator.Clause.NBT_LEAST)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     public static enum Type {

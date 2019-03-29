@@ -29,7 +29,7 @@ public class CraftingRecipeHelper {
     public static List<IRecipe> findRecipesWithOutput(ItemStack stack) {
         List<IRecipe> ir = new LinkedList<>();
         for (IRecipe rec : ForgeRegistries.RECIPES) {
-            if(ItemUtils.matchStackLoosely(stack, rec.getRecipeOutput())) {
+            if (ItemComparator.compare(stack, rec.getRecipeOutput(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 ir.add(rec);
             }
         }

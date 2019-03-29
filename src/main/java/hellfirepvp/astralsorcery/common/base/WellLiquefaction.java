@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -70,7 +71,7 @@ public class WellLiquefaction {
 
     public static void registerLiquefaction(ItemStack catalystIn, Fluid producedIn, float productionMultiplier, float shatterMultiplier, Color color) {
         for (ItemStack i : registeredLiquefactions.keySet()) {
-            if(i.isItemEqual(catalystIn)) {
+            if (ItemComparator.compare(i, catalystIn, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 AstralSorcery.log.warn("Tried to register Lightwell Liquefaction that has the same input as an already existing one.");
                 return;
             }
@@ -82,12 +83,12 @@ public class WellLiquefaction {
     @Nullable
     public static LiquefactionEntry getLiquefactionEntry(ItemStack suggestedCatalyst) {
         for (ItemStack i : registeredLiquefactions.keySet()) {
-            if(i.isItemEqual(suggestedCatalyst)) {
+            if(ItemComparator.compare(i, suggestedCatalyst, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 return registeredLiquefactions.get(i);
             }
         }
         for (ItemStack i : mtLiquefactions.keySet()) {
-            if(i.isItemEqual(suggestedCatalyst)) {
+            if(ItemComparator.compare(i, suggestedCatalyst, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 return mtLiquefactions.get(i);
             }
         }
@@ -97,7 +98,7 @@ public class WellLiquefaction {
     @Nullable
     public static LiquefactionEntry tryRemoveLiquefaction(ItemStack stack, @Nullable Fluid fluid) {
         for (ItemStack i : registeredLiquefactions.keySet()) {
-            if(i.isItemEqual(stack)) {
+            if(ItemComparator.compare(i, stack, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 LiquefactionEntry le = registeredLiquefactions.get(i);
                 if(fluid == null || le.producing.equals(fluid)) {
                     registeredLiquefactions.remove(i);

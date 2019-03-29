@@ -39,6 +39,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
+import static hellfirepvp.astralsorcery.common.util.ItemComparator.Clause.*;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -117,7 +119,9 @@ public class ItemUtils {
         List<ItemStack> stacksOut = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if (strict ? matchStacks(s, match) : matchStackLoosely(s, match)) {
+            if (strict ?
+                    ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE) :
+                    ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 stacksOut.add(copyStackWithSize(s, s.getCount()));
             }
         }
@@ -129,7 +133,10 @@ public class ItemUtils {
     }
 
     public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, ItemStack match, boolean strict) {
-        return findItemsIndexedInInventory(handler, (s) -> strict ? matchStacks(s, match) : matchStackLoosely(s, match));
+        return findItemsIndexedInInventory(handler,
+                (s) -> strict ?
+                        ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE) :
+                        ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT));
     }
 
     public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, Predicate<ItemStack> match) {
@@ -240,7 +247,8 @@ public class ItemUtils {
                 handler.insertItem(i, copyStackWithSize(stack, added), false);
                 return true;
             } else {
-                if (stackEqualsNonNBT(stack, in) && matchTags(stack, in)) {
+                if (ItemComparator.compare(stack, in, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE)) {
+
                     int space = max - in.getCount();
                     int added = Math.min(stack.getCount(), space);
                     stack.setCount(stack.getCount() - added);
@@ -261,30 +269,14 @@ public class ItemUtils {
             if (in.isEmpty()) {
                 size -= max;
             } else {
-                if (stackEqualsNonNBT(stack, in) && matchTags(stack, in)) {
+                if (ItemComparator.compare(stack, in, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE)) {
+
                     int space = max - in.getCount();
                     size -= space;
                 }
             }
         }
         return size <= 0;
-    }
-
-    public static boolean stackEqualsNonNBT(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
-        if (stack.isEmpty() && other.isEmpty())
-            return true;
-        if (stack.isEmpty() || other.isEmpty())
-            return false;
-        Item sItem = stack.getItem();
-        Item oItem = other.getItem();
-        if (sItem.getHasSubtypes() || oItem.getHasSubtypes()) {
-            return sItem.equals(other.getItem()) &&
-                    (stack.getItemDamage() == other.getItemDamage() ||
-                            stack.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
-                            other.getItemDamage() == OreDictionary.WILDCARD_VALUE);
-        } else {
-            return sItem.equals(other.getItem());
-        }
     }
 
     public static ItemStack copyStackWithSize(@Nonnull ItemStack stack, int amount) {
@@ -318,34 +310,6 @@ public class ItemUtils {
             out.add(OreDictionary.getOreName(id).toLowerCase());
         }
         return out;
-    }
-
-    public static boolean matchTags(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
-        return ItemStack.areItemStackTagsEqual(stack, other);
-    }
-
-    public static boolean matchStacksStrict(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
-        return ItemStack.areItemStacksEqual(stack, other);
-    }
-
-    public static boolean matchStacks(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
-        if (!ItemStack.areItemsEqual(stack, other)) return false;
-        return ItemStack.areItemStackTagsEqual(stack, other);
-    }
-
-    public static boolean matchStackLoosely(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
-        if (stack.isEmpty()) return other.isEmpty();
-        return stack.isItemEqual(other);
-    }
-
-    public static boolean matchesOreDict(String oreDictKey, @Nonnull  ItemStack other) {
-        NonNullList<ItemStack> stacks = OreDictionary.getOres(oreDictKey);
-        for (ItemStack stack : stacks) {
-            if (stack.isEmpty()) continue;
-            if (matchStackLoosely(stack, other))
-                return true;
-        }
-        return false;
     }
 
     private static class FluidHandlerVoid implements IFluidHandler {

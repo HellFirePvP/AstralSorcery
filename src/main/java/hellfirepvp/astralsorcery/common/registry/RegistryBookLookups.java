@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,7 +39,7 @@ public class RegistryBookLookups {
     @Nullable
     public static LookupInfo tryGetPage(EntityPlayer querying, Side side, ItemStack search) {
         for (ItemStack compare : lookupMap.keySet()) {
-            if(ItemUtils.stackEqualsNonNBT(search, compare)) {
+            if (ItemComparator.compare(search, compare, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_WILDCARD)) {
                 LookupInfo info = lookupMap.get(compare);
                 PlayerProgress prog = ResearchManager.getProgress(querying, side);
                 if(prog.getResearchProgression().contains(info.neededKnowledge) && info.node.canSee(prog)) {

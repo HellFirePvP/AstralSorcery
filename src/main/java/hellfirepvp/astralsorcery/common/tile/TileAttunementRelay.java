@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import hellfirepvp.astralsorcery.common.structure.change.ChangeSubscriber;
 import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
@@ -83,7 +84,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
                     getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
                 }
 
-                if(ItemUtils.matchStackLoosely(slotted, ItemCraftingComponent.MetaType.GLASS_LENS.asStack())) {
+                if (ItemComparator.compare(slotted, ItemCraftingComponent.MetaType.GLASS_LENS.asStack(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                     if(linked != null) {
                         TileAltar ta = MiscUtils.getTileAt(world, linked, TileAltar.class, true);
                         if(ta == null) {
@@ -113,7 +114,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
             }
         } else {
             if(!slotted.isEmpty() && hasMultiblock) {
-                if(ItemUtils.matchStackLoosely(slotted, ItemCraftingComponent.MetaType.GLASS_LENS.asStack())) {
+                if (ItemComparator.compare(slotted, ItemCraftingComponent.MetaType.GLASS_LENS.asStack(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                     if(rand.nextInt(3) == 0) {
                         Vector3 at = new Vector3(this);
                         at.add(rand.nextFloat() * 2.6 - 0.8, 0, rand.nextFloat() * 2.6 - 0.8);
