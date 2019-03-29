@@ -241,16 +241,16 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if(event.player instanceof EntityPlayerMP) {
+            ResearchManager.loadPlayerKnowledge((EntityPlayerMP) event.player);
+            ResearchManager.savePlayerKnowledge((EntityPlayerMP) event.player);
+        }
         if (Config.giveJournalFirst) {
             EntityPlayer pl = event.player;
             if (!ResearchManager.getProgress(pl).didReceiveTome() &&
                     pl.inventory.addItemStackToInventory(new ItemStack(ItemsAS.journal))) {
                 ResearchManager.setTomeReceived(pl);
             }
-        }
-        if(event.player instanceof EntityPlayerMP) {
-            ResearchManager.loadPlayerKnowledge((EntityPlayerMP) event.player);
-            ResearchManager.savePlayerKnowledge((EntityPlayerMP) event.player);
         }
     }
 
