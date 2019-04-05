@@ -12,13 +12,12 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.base.RockCrystalHandler;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
@@ -300,13 +299,12 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
                     double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldIn);
                     if(dstr <= 1E-4) return;
 
-                    RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
                     ChunkPos pos = new ChunkPos(entityIn.getPosition());
-                    List<BlockPos> posList = buf.collectPositions(pos, 4);
+                    List<BlockPos> posList = RockCrystalHandler.INSTANCE.collectPositions(worldIn, pos, 4);
                     for (BlockPos rPos : posList) {
                         IBlockState state = worldIn.getBlockState(rPos);
                         if (!(state.getBlock() instanceof BlockCustomOre) || state.getValue(BlockCustomOre.ORE_TYPE) != BlockCustomOre.OreType.ROCK_CRYSTAL) {
-                            buf.removeOre(rPos);
+                            RockCrystalHandler.INSTANCE.removeOre(worldIn, rPos, true);
                             continue;
                         }
                         BlockPos p = rPos.up();

@@ -188,6 +188,7 @@ public class CommonProxy implements IGuiHandler {
             }
         }, new FluidRarityRegistry.ChunkFluidEntryFactory());
 
+        //Item data storage to find player + item combinations
         CapabilityManager.INSTANCE.register(AmuletHolderCapability.class, new Capability.IStorage<AmuletHolderCapability>() {
             @Nullable
             @Override
@@ -200,6 +201,20 @@ public class CommonProxy implements IGuiHandler {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
         }, new AmuletHolderCapability.Factory());
+
+        //Chunk rock crystal storage for rock crystal generation
+        CapabilityManager.INSTANCE.register(RockCrystalHandler.RockCrystalPositions.class, new Capability.IStorage<RockCrystalHandler.RockCrystalPositions>() {
+            @Nullable
+            @Override
+            public NBTBase writeNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability, RockCrystalHandler.RockCrystalPositions instance, EnumFacing side) {
+                return instance.serializeNBT();
+            }
+
+            @Override
+            public void readNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability, RockCrystalHandler.RockCrystalPositions instance, EnumFacing side, NBTBase nbt) {
+                instance.deserializeNBT((NBTTagCompound) nbt);
+            }
+        }, new RockCrystalHandler.ChunkFluidEntryFactory());
     }
 
     public void registerOreDictEntries() {
@@ -263,6 +278,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(RockCrystalHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PlayerAmuletHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PerkEffectHelper.EVENT_INSTANCE);
         MinecraftForge.EVENT_BUS.register(AttributeTypeLimiter.INSTANCE);

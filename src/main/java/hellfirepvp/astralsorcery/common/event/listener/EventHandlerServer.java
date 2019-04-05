@@ -8,12 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.event.listener;
 
+import hellfirepvp.astralsorcery.common.base.RockCrystalHandler;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
@@ -36,7 +35,6 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
 import hellfirepvp.astralsorcery.common.world.util.WorldEventNotifier;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -49,7 +47,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.ContainerWorkbench;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -296,7 +293,7 @@ public class EventHandlerServer {
         if (event.getOldBlock().equals(BlocksAS.customOre)) {
             IBlockState oldState = event.getOldState();
             if (oldState.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.ROCK_CRYSTAL)) {
-                ((RockCrystalBuffer) WorldCacheManager.getOrLoadData(event.getWorld(), WorldCacheManager.SaveKey.ROCK_CRYSTAL)).removeOre(event.getPos());
+                RockCrystalHandler.INSTANCE.removeOre(event.getWorld(), event.getPos(), true);
             }
         }
     }

@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 02.08.2016 / 23:30
  */
+@Deprecated
 public class RockCrystalBuffer extends CachedWorldData {
 
     private Map<ChunkPos, List<BlockPos>> crystalPositions = new HashMap<>();
@@ -40,6 +42,11 @@ public class RockCrystalBuffer extends CachedWorldData {
 
     @Override
     public void updateTick(World world) {}
+
+    @Nonnull
+    public Map<ChunkPos, List<BlockPos>> getCrystalPositions() {
+        return crystalPositions;
+    }
 
     public List<BlockPos> collectPositions(ChunkPos center, int rad) {
         List<BlockPos> out = new LinkedList<>();
