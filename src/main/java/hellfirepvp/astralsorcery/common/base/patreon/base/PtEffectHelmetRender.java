@@ -56,7 +56,7 @@ public class PtEffectHelmetRender extends PatreonEffectHelper.PatreonEffect {
         EntityPlayer player = ev.getEntityPlayer();
         if (player.getUniqueID().equals(playerUUID) &&
                 player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty()) {
-            player.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemUtils.copyStackWithSize(dummyHeadItem, 1));
+            player.inventory.armorInventory.set(EntityEquipmentSlot.HEAD.getIndex(), ItemUtils.copyStackWithSize(dummyHeadItem, 1));
             addedHelmet = true;
         }
     }
@@ -66,7 +66,7 @@ public class PtEffectHelmetRender extends PatreonEffectHelper.PatreonEffect {
     public void onRenderPost(RenderPlayerEvent.Post ev) {
         EntityPlayer player = ev.getEntityPlayer();
         if (player.getUniqueID().equals(playerUUID) && addedHelmet) {
-            player.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
+            player.inventory.armorInventory.set(EntityEquipmentSlot.HEAD.getIndex(), ItemStack.EMPTY);
             addedHelmet = false;
         }
     }
