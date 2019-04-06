@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.base.patreon;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectBlockRing;
 import hellfirepvp.astralsorcery.common.base.patreon.data.PatreonEffectData;
 import hellfirepvp.astralsorcery.common.base.patreon.data.PatreonEffectType;
 
@@ -20,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -91,6 +93,15 @@ public class PatreonDataManager {
             //        new PtEffectCrystalFootprint(UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
             //                PatreonEffectHelper.FlareColor.WATER, hellfire,
             //                new Color(Integer.parseInt("14287086")));
+            //PatreonEffectHelper.PatreonEffect pe =
+            //        new PtEffectBlockRing(UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
+            //                PatreonEffectHelper.FlareColor.WATER,
+            //                hellfire,
+            //                4,
+            //                7.5F,
+            //                8,
+            //                5000,
+            //                new HashMap<>());
             //pe.initialize();
             //PatreonEffectHelper.effectMap.get(hellfire).add(pe);
 

@@ -131,6 +131,14 @@ public class RenderingUtils {
         }
     }
 
+    @Nullable
+    public static TextureAtlasSprite tryGetTextureOfBlockState(IBlockState state) {
+        if (state.getBlock().isAir(state, null, BlockPos.ORIGIN)) {
+            return null;
+        }
+        return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+    }
+
     public static Particle spawnBlockBreakParticle(Vector3 pos, TextureAtlasSprite tas) {
         Particle digging = diggingFactory.createParticle(0, Minecraft.getMinecraft().world,
                 pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0);

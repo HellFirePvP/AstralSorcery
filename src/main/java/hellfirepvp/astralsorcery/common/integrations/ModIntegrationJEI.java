@@ -272,20 +272,25 @@ public class ModIntegrationJEI implements IModPlugin {
         }
         recipePrimer.clear();
 
+        int assignedRecipes = 0;
         for (Tuple<Object, ModificationAction> action : unresolvedRecipes) {
             switch (action.value) {
                 case ADDITION:
-                    addRecipe(action.key);
+                    if (addRecipe(action.key)) {
+                        assignedRecipes++;
+                    }
                     break;
                 case REMOVAL:
-                    removeRecipe(action.key);
+                    if (removeRecipe(action.key)) {
+                        assignedRecipes++;
+                    }
                     break;
                 default:
                     break;
             }
         }
-        if(unresolvedRecipes.size() > 0) {
-            AstralSorcery.log.warn("JEI Initialization Ended up with " + unresolvedRecipes.size() + " unresolvable crafttweaker recipes!");
+        if((unresolvedRecipes.size() - assignedRecipes) > 0) {
+            AstralSorcery.log.warn("JEI Initialization Ended up with " + (unresolvedRecipes.size() - assignedRecipes) + " unresolvable crafttweaker recipes!");
         }
     }
 
