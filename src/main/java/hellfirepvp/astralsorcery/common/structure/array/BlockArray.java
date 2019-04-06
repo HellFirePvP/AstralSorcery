@@ -145,6 +145,16 @@ public class BlockArray {
         return pattern;
     }
 
+    public Map<BlockPos, BlockInformation> getPatternSlice(int slice) {
+        Map<BlockPos, BlockInformation> copy = new HashMap<>();
+        for (BlockPos pos : pattern.keySet()) {
+            if(pos.getY() == slice) {
+                copy.put(pos, pattern.get(pos));
+            }
+        }
+        return copy;
+    }
+
     public int getBlockSize() {
         return this.getPattern().size();
     }

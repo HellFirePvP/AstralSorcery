@@ -53,6 +53,18 @@ public class PatternBlockArray extends BlockArray implements MatchableStructure 
         return true;
     }
 
+    public boolean matchesSlice(World world, BlockPos center, int slice) {
+        for (Map.Entry<BlockPos, BlockInformation> entry : this.getPatternSlice(slice).entrySet()) {
+            BlockInformation info = entry.getValue();
+            BlockPos at = center.add(entry.getKey());
+            IBlockState state = world.getBlockState(at);
+            if(!info.matcher.isStateValid(state)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean matchSingleBlockState(BlockPos offset, IBlockState state) {
         if(!pattern.containsKey(offset)) return false;
         BlockInformation info = pattern.get(offset);

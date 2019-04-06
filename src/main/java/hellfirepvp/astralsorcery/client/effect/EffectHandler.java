@@ -167,7 +167,7 @@ public final class EffectHandler {
         float pTicks = event.getPartialTicks();
         acceptsNewParticles = false;
         if(structurePreview != null) {
-            structurePreview.appendPreviewBlocks();
+            structurePreview.renderPreview(pTicks);
         }
         UISextantTarget.renderTargets(pTicks);
         GlStateManager.disableDepth();
