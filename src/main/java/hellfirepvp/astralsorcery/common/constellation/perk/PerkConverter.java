@@ -46,6 +46,10 @@ public abstract class PerkConverter {
         }
     };
 
+    public int getId() {
+        return id;
+    }
+
     /**
      * Use {@link PerkAttributeModifier#convertModifier(String, PerkAttributeModifier.Mode, float)} to convert the given modifier
      */

@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
@@ -109,6 +110,7 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
         AstralSorcery.proxy.scheduleClientside(() -> {
             if (Minecraft.getMinecraft().player != null) {
                 if (pkt.type != null) {
+                    LogCategory.PERKS.info(() -> "Received perk activity packet on clientside: " + pkt.type);
                     switch (pkt.type) {
                         case CLEARALL:
                             PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getMinecraft().player);
@@ -123,6 +125,7 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
                             break;
                     }
                 } else if (pkt.perk != null) {
+                    LogCategory.PERKS.info(() -> "Received perk modification packet on clientside: " + pkt.perk.getRegistryName() + " " + (pkt.unlock ? "Application" : "Removal"));
                     PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);
                 }
             }

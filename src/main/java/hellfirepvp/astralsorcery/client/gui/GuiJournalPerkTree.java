@@ -559,7 +559,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         BufferBuilder connBuffer = drawBufferConnections.getBuffer();
         connBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         texturePerkConnection.bindTexture();
-        PlayerProgress progress = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        PlayerProgress progress = ResearchManager.getProgress(player, Side.CLIENT);
 
         for (Tuple<AbstractPerk, AbstractPerk> perkConnection : PerkTree.PERK_TREE.getConnections()) {
             PerkTreePoint.AllocationStatus status;
@@ -800,10 +800,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         double mapDrawSize = 28;
         if (perkPoint.getPerk() instanceof AttributeConverterPerk) {
-            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk()).getConverters()) {
+            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk()).provideConverters(Minecraft.getMinecraft().player, Side.CLIENT)) {
                 if (converter instanceof PerkConverter.Radius) {
                     double radius = ((PerkConverter.Radius) converter).getRadius();
 
+                    //TODO rework design/visuals
                     drawSearchHalo(ctx, mapDrawSize * radius * scale, offset.x, offset.y);
                 }
             }

@@ -13,12 +13,14 @@ import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -63,7 +65,7 @@ public class PerkTreeConnector extends MajorPerk {
     }
 
     @Override
-    public void onUnlockPerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {
+    public void onUnlockPerkServer(@Nullable EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {
         super.onUnlockPerkServer(player, progress, dataStorage);
 
         NBTTagList listTokens = new NBTTagList();
@@ -72,6 +74,8 @@ public class PerkTreeConnector extends MajorPerk {
                 String token = "connector-tk-" + otherPerk.getRegistryName().toString();
                 if(ResearchManager.grantFreePerkPoint(player, token)) {
                     listTokens.appendTag(new NBTTagString(token));
+
+                    LogCategory.PERKS.info(() -> "Granted perk point " + token + " to " + player.getName());
                 }
             }
         }
@@ -85,7 +89,9 @@ public class PerkTreeConnector extends MajorPerk {
         NBTTagList list = dataStorage.getTagList("pointtokens", Constants.NBT.TAG_STRING);
         for (int i = 0; i < list.tagCount(); i++) {
             String token = list.getStringTagAt(i);
-            ResearchManager.revokeFreePoint(player, token);
+            if (ResearchManager.revokeFreePoint(player, token)){
+                LogCategory.PERKS.info(() -> "Revoked perk point " + token + " of " + player.getName());
+            }
         }
     }
 

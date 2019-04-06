@@ -101,7 +101,7 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
             if (pl.rotationPitch >= 35F) {
                 alpha = Math.max(0, (55F - pl.rotationPitch) / 20F);
             }
-            renderRingAt(new Vector3(0, 0.2, 0), alpha);
+            renderRingAt(new Vector3(0, 0.2, 0), alpha, event.getPartialTicks());
         }
     }
 
@@ -113,16 +113,16 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
             return;
         }
 
-        renderRingAt(new Vector3(ev.getX(), ev.getY(), ev.getZ()), 1F);
+        renderRingAt(new Vector3(ev.getX(), ev.getY(), ev.getZ()), 1F, ev.getPartialRenderTick());
     }
 
     @SideOnly(Side.CLIENT)
-    private void renderRingAt(Vector3 vec, float alphaMultiplier) {
+    private void renderRingAt(Vector3 vec, float alphaMultiplier, float pTicks) {
         float addedRotationAngle = 0;
         TextureHelper.setActiveTextureToAtlasSprite();
 
         if (rotationSpeed > 1) {
-            int rot = (int) (ClientScheduler.getClientTick() % rotationSpeed);
+            float rot = ClientScheduler.getClientTick() % (rotationSpeed + pTicks);
             addedRotationAngle = (rot / ((float) (rotationSpeed))) * 360F;
         }
 

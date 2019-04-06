@@ -63,6 +63,7 @@ import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopController;
+import hellfirepvp.astralsorcery.common.util.log.LogUtil;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import hellfirepvp.astralsorcery.common.world.retrogen.ChunkVersionController;
 import hellfirepvp.astralsorcery.common.world.retrogen.RetroGenController;
@@ -123,6 +124,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(new TileAccelerationBlacklist.TileAccelBlacklistEntry());
         Config.addDynamicEntry(new ShootingStarHandler.StarConfigEntry());
         Config.addDynamicEntry(PerkLevelManager.INSTANCE);
+        Config.addDynamicEntry(new LogUtil.CfgEntry());
     }
 
     public void registerConfigDataRegistries() {

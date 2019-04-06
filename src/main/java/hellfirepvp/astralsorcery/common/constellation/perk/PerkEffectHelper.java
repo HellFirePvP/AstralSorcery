@@ -20,6 +20,8 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.util.data.TimeoutListContainer;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
+import hellfirepvp.astralsorcery.common.util.log.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -60,6 +62,7 @@ public class PerkEffectHelper implements ITickHandler {
 
     @SubscribeEvent
     public void onDisconnect(FMLNetworkEvent.ServerDisconnectionFromClientEvent event) {
+        LogCategory.PERKS.info(() -> ((NetHandlerPlayServer) event.getHandler()).player.getName() + " disconnected from server on side SERVER");
         AstralSorcery.proxy.scheduleDelayed(() -> handlePerkModification(((NetHandlerPlayServer) event.getHandler()).player, Side.SERVER, true));
     }
 
@@ -67,17 +70,20 @@ public class PerkEffectHelper implements ITickHandler {
     @SideOnly(Side.CLIENT)
     public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         EntityPlayer player = Minecraft.getMinecraft().player;
-        AstralSorcery.proxy.scheduleClientside(() -> handlePerkModification(player, Side.CLIENT, true));
+        LogCategory.PERKS.info(() -> "Disconnected from server on side CLIENT");
+        AstralSorcery.proxy.scheduleClientside(() -> clearAllPerksClient(player));
     }
 
     @SubscribeEvent
     public void onConnect(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
+        LogCategory.PERKS.info(() -> ((NetHandlerPlayServer) event.getHandler()).player.getName() + " connected to server on side SERVER");
         AstralSorcery.proxy.scheduleDelayed(() -> handlePerkModification(((NetHandlerPlayServer) event.getHandler()).player, Side.SERVER, false));
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        LogCategory.PERKS.info(() -> "Connected to server on side CLIENT");
         AstralSorcery.proxy.scheduleClientside(new Runnable() {
             @Override
             public void run() {
@@ -141,6 +147,7 @@ public class PerkEffectHelper implements ITickHandler {
     private void handlePerkModification(EntityPlayer player, Side side, boolean remove) {
         PlayerProgress progress = ResearchManager.getProgress(player, side);
         if (progress.isValid()) {
+            LogCategory.PERKS.info(() -> (remove ? "Remove" : "Apply") + " ALL perks for " + player.getName() + " on side " + side.name());
             for (AbstractPerk perk : progress.getAppliedPerks()) {
                 if (remove) {
                     handlePerkRemoval(perk, player, side);
@@ -167,6 +174,7 @@ public class PerkEffectHelper implements ITickHandler {
         if (perk instanceof IConverterProvider) {
             converters = ((IConverterProvider) perk).provideConverters(player, side);
         }
+        LogCategory.PERKS.info(() -> "Apply perk " + perk.getRegistryName() + " for player " + player.getName() + " on side " + side.name());
         batchApplyConverters(player, side, converters, perk);
     }
 
@@ -175,11 +183,13 @@ public class PerkEffectHelper implements ITickHandler {
         if (perk instanceof IConverterProvider) {
             converters = ((IConverterProvider) perk).provideConverters(player, side);
         }
+        LogCategory.PERKS.info(() -> "Remove perk " + perk.getRegistryName() + " for player " + player.getName() + " on side " + side.name());
         batchRemoveConverters(player, side, converters, perk);
     }
 
     @SideOnly(Side.CLIENT)
     public void notifyPerkDataChangeClient(EntityPlayer player, AbstractPerk perk, NBTTagCompound oldData, NBTTagCompound newData) {
+        LogCategory.PERKS.info(() -> "Updating data for perk " + perk.getRegistryName() + " on CLIENT");
         ResearchManager.getProgress(player, Side.CLIENT).setPerkData(perk, oldData);
         notifyPerkChange(player, Side.CLIENT, perk, true);
         ResearchManager.getProgress(player, Side.CLIENT).setPerkData(perk, newData);
@@ -189,6 +199,7 @@ public class PerkEffectHelper implements ITickHandler {
     @SideOnly(Side.CLIENT)
     public void clearAllPerksClient(EntityPlayer player) {
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, Side.CLIENT);
+        LogCategory.PERKS.info(() -> "Remove ALL CACHED perks on CLIENT");
         List<AbstractPerk> copyPerks = new ArrayList<>(attr.getCacheAppliedPerks());
         for (AbstractPerk perk : copyPerks) {
             handlePerkRemoval(perk, player, Side.CLIENT);
@@ -197,6 +208,7 @@ public class PerkEffectHelper implements ITickHandler {
 
     @SideOnly(Side.CLIENT)
     public void reapplyAllPerksClient(EntityPlayer player) {
+        LogCategory.PERKS.info(() -> "Apply ALL perks from KNOWLEDGE DATA on CLIENT");
         handlePerkModification(player, Side.CLIENT, false);
 
         PlayerWrapperContainer container = new PlayerWrapperContainer(player);
@@ -245,6 +257,9 @@ public class PerkEffectHelper implements ITickHandler {
             List<AbstractPerk> perks = new LinkedList<>(prog.getAppliedPerks());
             perks = perks.stream().filter(attributeMap::isPerkApplied).collect(Collectors.toList());
 
+            List<AbstractPerk> logPerks1 = perks;
+            LogCategory.PERKS.info(() -> "Removing " + logPerks1.size() + " APPLIED perks on " + side.name() + " based on KNOWLEDGE DATA (filtered down to applied perks based on CACHE)");
+
             perks.forEach(perk -> perk.removePerk(player, side));
 
             if (onlyAdd == null || !prog.isPerkSealed(onlyAdd)) {
@@ -252,8 +267,13 @@ public class PerkEffectHelper implements ITickHandler {
             }
 
             if (onlyAdd != null && !prog.isPerkSealed(onlyAdd) && !perks.contains(onlyAdd)) {
+                LogCategory.PERKS.info(() -> "Adding " + onlyAdd.getRegistryName() + " to perks on " + side.name());
                 perks.add(onlyAdd);
             }
+
+            List<AbstractPerk> logPerks2 = perks;
+            LogCategory.PERKS.info(() -> "Applying " + logPerks2.size() + " perks on " + side.name());
+
             perks.forEach(perk -> perk.applyPerk(player, side));
         }
     }
@@ -269,14 +289,21 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.isValid()) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
-            List<AbstractPerk> perks = new LinkedList<>(attributeMap.getCacheAppliedPerks());
+            List<AbstractPerk> perks = new ArrayList<>(attributeMap.getCacheAppliedPerks());
+
+            LogCategory.PERKS.info(() -> "Removing " + perks.size() + " APPLIED perks on " + side.name() + " based on APPLICATION CACHE");
+
             perks.forEach(perk -> perk.removePerk(player, side));
 
             converters.forEach((c) -> attributeMap.removeConverter(player, c));
 
             if (onlyRemove != null) {
+                LogCategory.PERKS.info(() -> "Removing " + onlyRemove.getRegistryName() + " from perks on " + side.name());
                 perks.remove(onlyRemove);
             }
+
+            LogCategory.PERKS.info(() -> "Applying " + perks.size() + " perks on " + side.name());
+
             perks.forEach(perk -> perk.applyPerk(player, side));
         }
     }
@@ -294,6 +321,8 @@ public class PerkEffectHelper implements ITickHandler {
     public final void setCooldownActiveForPlayer(EntityPlayer player, AbstractPerk perk, int cooldownTicks) {
         if (!(perk instanceof ICooldownPerk)) return;
 
+        LogCategory.PERKS.info(() -> "Set perk cooldown on " + perk.getRegistryName() + " for " + player.getName() + " on " + (player.getEntityWorld().isRemote ? "CLIENT" : "SERVER"));
+
         TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = player.getEntityWorld().isRemote ?
                 perkCooldownsClient : perkCooldowns;
         PlayerWrapperContainer ct = new PlayerWrapperContainer(player);
@@ -302,6 +331,8 @@ public class PerkEffectHelper implements ITickHandler {
 
     public final void forceSetCooldownForPlayer(EntityPlayer player, AbstractPerk perk, int cooldownTicks) {
         if (!(perk instanceof ICooldownPerk)) return;
+
+        LogCategory.PERKS.info(() -> "Force update perk cooldown on " + perk.getRegistryName() + " for " + player.getName() + " on " + (player.getEntityWorld().isRemote ? "CLIENT" : "SERVER"));
 
         TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = player.getEntityWorld().isRemote ?
                 perkCooldownsClient : perkCooldowns;
@@ -357,7 +388,9 @@ public class PerkEffectHelper implements ITickHandler {
         @Override
         public void onContainerTimeout(PlayerWrapperContainer plWrapper, ResourceLocation key) {
             AbstractPerk perk = PerkTree.PERK_TREE.getPerk(key);
-            if(perk != null && perk instanceof ICooldownPerk) {
+            if(perk instanceof ICooldownPerk) {
+                LogCategory.PERKS.info(() -> "Perk cooldown has finished on " + perk.getRegistryName() + " for " + plWrapper.player.getName() + " on " + (plWrapper.player.getEntityWorld().isRemote ? "CLIENT" : "SERVER"));
+
                 ((ICooldownPerk) perk).handleCooldownTimeout(plWrapper.player);
             }
         }

@@ -56,11 +56,7 @@ public abstract class AttributeConverterPerk extends ProgressGatedPerk implement
             return Collections.emptyList();
         }
 
-        return ImmutableList.copyOf(converters);
-    }
-
-    public List<PerkConverter> getConverters() {
-        return Collections.unmodifiableList(this.converters);
+        return Collections.unmodifiableList(converters);
     }
 
     @Override

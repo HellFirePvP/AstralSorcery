@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -79,6 +80,8 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     public void applyPerkLogic(EntityPlayer player, Side side) {
         super.applyPerkLogic(player, side);
 
+        LogCategory.PERKS.info(() -> "Applying modifiers of " + this.getRegistryName() + " on " + side.name());
+
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
         for (PerkAttributeModifier modifier : getModifiers(player, side)) {
@@ -86,10 +89,16 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
             modify.add(modifier);
             modify.addAll(attr.gainModifiers(player, prog, modifier, this));
             for (PerkAttributeModifier mod : modify) {
+
+                PerkAttributeModifier preMod = mod;
+                LogCategory.PERKS.info(() -> "Applying unique modifier " + preMod.getId());
+
                 mod = attr.convertModifier(player, prog, mod, this);
+
+                PerkAttributeModifier postMod = mod;
+                LogCategory.PERKS.info(() -> "Applying converted modifier " + postMod.getId());
                 if(!attr.applyModifier(player, mod.getAttributeType(), mod)) {
-                    //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
-                    //System.out.println("FAILED TO ADD MODIFIER! ALREADY PRESENT!");
+                    LogCategory.PERKS.warn(() -> "Could not apply modifier " + postMod.getId() + " - already applied!");
                 }
             }
         }
@@ -99,6 +108,8 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     public void removePerkLogic(EntityPlayer player, Side side) {
         super.removePerkLogic(player, side);
 
+        LogCategory.PERKS.info(() -> "Removing modifiers of " + this.getRegistryName() + " on " + side.name());
+
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
         for (PerkAttributeModifier modifier : getModifiers(player, side)) {
@@ -106,10 +117,16 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
             modify.add(modifier);
             modify.addAll(attr.gainModifiers(player, prog, modifier, this));
             for (PerkAttributeModifier mod : modify) {
+
+                PerkAttributeModifier preMod = mod;
+                LogCategory.PERKS.info(() -> "Removing unique modifier " + preMod.getId());
+
                 mod = attr.convertModifier(player, prog, mod, this);
+
+                PerkAttributeModifier postMod = mod;
+                LogCategory.PERKS.info(() -> "Removing converted modifier " + postMod.getId());
                 if(!attr.removeModifier(player, mod.getAttributeType(), mod)) {
-                    //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
-                    //System.out.println("FAILED TO REMOVE MODIFIER! NOT FOUND!");
+                    LogCategory.PERKS.warn(() -> "Could not remove modifier " + postMod.getId() + " - not applied!");
                 }
             }
         }

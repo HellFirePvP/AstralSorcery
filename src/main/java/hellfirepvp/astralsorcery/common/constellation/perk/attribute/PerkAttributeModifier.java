@@ -59,6 +59,10 @@ public class PerkAttributeModifier {
         initModifier();
     }
 
+    public long getId() {
+        return id;
+    }
+
     protected void initModifier() {}
 
     protected void setAbsolute() {

@@ -32,7 +32,7 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
 
     public GemSlotMajorPerk(String name, int x, int y) {
         super(name, x, y);
-        disableToltipCaching();
+        disableTooltipCaching();
     }
 
     @Override

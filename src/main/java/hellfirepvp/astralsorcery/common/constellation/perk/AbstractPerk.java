@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -119,7 +120,9 @@ public abstract class AbstractPerk {
         }
 
         this.applyPerkLogic(player, side);
-        PerkAttributeHelper.getOrCreateMap(player, side).markPerkApplied(this);
+        if (PerkAttributeHelper.getOrCreateMap(player, side).markPerkApplied(this)) {
+            LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " applied!");
+        }
     }
 
     final void removePerk(EntityPlayer player, Side side) {
@@ -128,7 +131,9 @@ public abstract class AbstractPerk {
         }
 
         this.removePerkLogic(player, side);
-        PerkAttributeHelper.getOrCreateMap(player, side).markPerkRemoved(this);
+        if (PerkAttributeHelper.getOrCreateMap(player, side).markPerkRemoved(this)) {
+            LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " removed!");
+        }
     }
 
     protected abstract void applyPerkLogic(EntityPlayer player, Side side);
@@ -206,7 +211,7 @@ public abstract class AbstractPerk {
         return "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath();
     }
 
-    protected void disableToltipCaching() {
+    protected void disableTooltipCaching() {
         this.cacheTooltip = false;
         this.tooltipCache = null;
     }

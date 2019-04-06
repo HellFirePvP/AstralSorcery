@@ -58,7 +58,7 @@ public class ProgressGatedPerk extends AbstractPerk {
     public void addResearchPreRequisite(BiFunction<EntityPlayer, PlayerProgress, Boolean> unlockFunction) {
         BiFunction<EntityPlayer, PlayerProgress, Boolean> prev = this.unlockFunction;
         this.unlockFunction = (player, progress) -> prev.apply(player, progress) && unlockFunction.apply(player, progress);
-        disableToltipCaching(); //Cannot cache as it may change.
+        disableTooltipCaching(); //Cannot cache as it may change.
     }
 
     @Override
