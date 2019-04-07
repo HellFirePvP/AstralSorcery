@@ -41,11 +41,6 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
     public void generate(BlockPos pos, World world, Random rand) {
         generateAsSubmergedStructure(world, pos);
         getBuffer(world).markStructureGeneration(pos, getStructureType());
-
-        //Should be the case...
-        //if (world instanceof WorldServer) {
-        //    AstralSorcery.proxy.scheduleDelayed(new StructureRuinTask((WorldServer) world, pos, rand));
-        //}
     }
 
     @Override
@@ -86,8 +81,8 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
     private boolean canSpawnPosition(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
         if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold) {
-            IBlockState at = world.getBlockState(new BlockPos(pos.getX(), dY, pos.getZ()));
-            return !at.getMaterial().isLiquid() && isApplicableBiome(world, pos);
+            IBlockState at = world.getBlockState(new BlockPos(pos.getX(), dY - 1, pos.getZ()));
+            return !at.getMaterial().isLiquid() && at.getMaterial().isOpaque() && isApplicableBiome(world, pos);
         }
         return false;
     }
