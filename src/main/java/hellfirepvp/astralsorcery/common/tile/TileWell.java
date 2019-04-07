@@ -71,7 +71,7 @@ public class TileWell extends TileReceiverBaseInventory {
     private float posDistribution = -1;
 
     public TileWell() {
-        super(1, EnumFacing.UP);
+        super(1, EnumFacing.DOWN);
         this.tank = new PrecisionSingleFluidCapabilityTank(MAX_CAPACITY, EnumFacing.DOWN);
         this.tank.setAllowInput(false);
         this.tank.setOnUpdate(this::markForUpdate);

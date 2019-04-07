@@ -29,7 +29,7 @@ public class InternalRegistryPrimer {
     public <V extends IForgeRegistryEntry<V>> V register(V entry) {
         Class<V> type = entry.getRegistryType();
         List<IForgeRegistryEntry<?>> entries = primed.get(type);
-        if(entries == null) {
+        if (entries == null) {
             entries = Lists.newLinkedList();
             primed.put(type, entries);
         }
