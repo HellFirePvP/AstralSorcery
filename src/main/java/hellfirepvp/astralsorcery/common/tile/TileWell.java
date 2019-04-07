@@ -257,13 +257,23 @@ public class TileWell extends TileReceiverBaseInventory {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank.hasCapability(facing);
+        return (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank.hasCapability(facing)) ||
+                super.hasCapability(capability, facing);
     }
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability != CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || !hasCapability(capability, facing)) return null;
-        return (T) tank.getCapability(facing);
+        if (!this.hasCapability(capability, facing)) {
+            return null;
+        }
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return (T) tank.getCapability(facing);
+        }
+        T cap;
+        if ((cap = super.getCapability(capability, facing)) != null) {
+            return cap;
+        }
+        return null;
     }
 
     public static class CatalystItemHandler extends ItemHandlerTileFiltered {
@@ -283,6 +293,11 @@ public class TileWell extends TileReceiverBaseInventory {
             return WellLiquefaction.getLiquefactionEntry(toAdd) != null && existing.isEmpty();
         }
 
+        @Nonnull
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            return ItemStack.EMPTY;
+        }
     }
 
     public static class TransmissionReceiverWell extends SimpleTransmissionReceiver {

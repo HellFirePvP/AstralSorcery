@@ -304,14 +304,14 @@ public class MiscUtils {
     }
 
     @Nullable
-    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search, @Nullable Function<ItemStack, Boolean> acceptorFnc) {
+    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search, @Nullable Predicate<ItemStack> acceptorFnc) {
         EnumHand hand = EnumHand.MAIN_HAND;
         ItemStack held = entity.getHeldItem(hand);
-        if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.apply(held))) {
+        if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.test(held))) {
             hand = EnumHand.OFF_HAND;
             held = entity.getHeldItem(hand);
         }
-        if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.apply(held))) {
+        if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.test(held))) {
             return null;
         }
         return new Tuple<>(hand, held);
