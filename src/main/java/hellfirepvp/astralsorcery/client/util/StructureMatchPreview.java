@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -29,6 +30,7 @@ import net.minecraft.world.WorldType;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Map;
 
 /**
@@ -109,16 +111,15 @@ public class StructureMatchPreview {
         BlockPos center = tile.getLocationPos();
 
         IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, WorldType.DEBUG_ALL_BLOCK_STATES);
-
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
 
         TextureHelper.setActiveTextureToAtlasSprite();
         GlStateManager.disableAlpha();
         GlStateManager.disableDepth();
-        GlStateManager.color(0.5F, 0.5F, 0.5F, 0.5F);
+        GlStateManager.color(0.5F, 0.5F, 0.5F, 1F);
         GlStateManager.enableBlend();
-        Blending.ADDITIVE_ALPHA.applyStateManager();
+        Blending.CONSTANT_ALPHA.applyStateManager();
         GlStateManager.pushMatrix();
         RenderingUtils.removeStandartTranslationFromTESRMatrix(partialTicks);
         GlStateManager.translate(center.getX(), center.getY(), center.getZ());
@@ -126,9 +127,12 @@ public class StructureMatchPreview {
         for (Map.Entry<BlockPos, BlockArray.BlockInformation> patternEntry : pba.getPatternSlice(slice).entrySet()) {
             BlockPos offset = patternEntry.getKey();
             BlockArray.BlockInformation info = patternEntry.getValue();
+
             if (offset.equals(BlockPos.ORIGIN) || pba.matchSingleBlock(world, center, offset)) {
                 continue;
             }
+
+            IBlockState state = world.getBlockState(center.add(offset));
 
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             GlStateManager.pushMatrix();
@@ -136,7 +140,11 @@ public class StructureMatchPreview {
             GlStateManager.translate(0.125, 0.125, 0.125);
             GlStateManager.scale(0.75, 0.75, 0.75);
 
-            RenderingUtils.renderBlockSafely(airWorld, BlockPos.ORIGIN, info.state, vb);
+            if (state.getBlock().isAir(state, world, center.add(offset))) {
+                RenderingUtils.renderBlockSafely(airWorld, BlockPos.ORIGIN, info.state, vb);
+            } else {
+                RenderingUtils.renderBlockSafelyWithOptionalColor(airWorld, BlockPos.ORIGIN, info.state, vb, 16711680);
+            }
 
             tes.draw();
             GlStateManager.popMatrix();

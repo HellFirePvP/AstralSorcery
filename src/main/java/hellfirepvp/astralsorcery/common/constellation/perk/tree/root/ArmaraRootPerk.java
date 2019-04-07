@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.util.PlayerActivityManager;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -76,7 +77,11 @@ public class ArmaraRootPerk extends RootPerk {
                 expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, expGain);
                 expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
                 expGain = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
-                ResearchManager.modifyExp(player, expGain);
+
+                float xpGain = expGain;
+                LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getName() + " (Armara)");
+
+                ResearchManager.modifyExp(player, xpGain);
             }
         }
     }
