@@ -18,6 +18,8 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
@@ -59,10 +61,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -299,8 +299,11 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
                     double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldIn);
                     if(dstr <= 1E-4) return;
 
+                    RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+
                     ChunkPos pos = new ChunkPos(entityIn.getPosition());
-                    List<BlockPos> posList = RockCrystalHandler.INSTANCE.collectPositions(worldIn, pos, 4);
+                    Set<BlockPos> posList = new HashSet<>(buf.collectPositions(pos, 4));
+                    posList.addAll(RockCrystalHandler.INSTANCE.collectPositions(worldIn, pos, 4));
                     for (BlockPos rPos : posList) {
                         IBlockState state = worldIn.getBlockState(rPos);
                         if (!(state.getBlock() instanceof BlockCustomOre) || state.getValue(BlockCustomOre.ORE_TYPE) != BlockCustomOre.OreType.ROCK_CRYSTAL) {
