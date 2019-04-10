@@ -41,6 +41,8 @@ public class LegacyDataMigration {
                 msgOut.accept("Migrating rock crystal data for dimension " + world.provider.getDimension());
                 msgOut.accept(totalChunkCount + " chunks of crystals found!");
 
+                boolean keepingLoaded = DimensionManager.keepDimensionLoaded(world.provider.getDimension(), true);
+
                 int chunkCount = 0;
                 int migrated = 0;
                 int failed = 0;
@@ -62,9 +64,18 @@ public class LegacyDataMigration {
                         iterator.remove();
                     }
 
-                    if (chunkCount % 500 == 0) {
+                    if (chunkCount % 200 == 0) {
                         msgOut.accept("Migrated " + chunkCount + "/" + totalChunkCount + " chunks...");
                     }
+
+                    if (chunkCount % 100 == 0) {
+                        world.getChunkProvider().queueUnloadAll();
+                        world.getChunkProvider().tick();
+                    }
+                }
+                
+                if (keepingLoaded) {
+                    DimensionManager.keepDimensionLoaded(world.provider.getDimension(), false);
                 }
 
                 msgOut.accept("Migrated " + migrated + " entries successfully. " + failed + " entries failed to be transferred!");
