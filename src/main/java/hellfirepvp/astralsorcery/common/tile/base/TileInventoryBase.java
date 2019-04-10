@@ -112,13 +112,26 @@ public class TileInventoryBase extends TileEntityTick {
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            if(!canInsertItem(slot, stack, getStackInSlot(slot))) {
+            if (!canInsertItem(slot, stack, getStackInSlot(slot))) {
                 return stack;
             }
             return super.insertItem(slot, stack, simulate);
         }
 
+        @Nonnull
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            if (!canExtractItem(slot, amount, getStackInSlot(slot))) {
+                return ItemStack.EMPTY;
+            }
+            return super.extractItem(slot, amount, simulate);
+        }
+
         public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
+            return true;
+        }
+
+        public boolean canExtractItem(int slot, int amount, @Nonnull ItemStack existing) {
             return true;
         }
 

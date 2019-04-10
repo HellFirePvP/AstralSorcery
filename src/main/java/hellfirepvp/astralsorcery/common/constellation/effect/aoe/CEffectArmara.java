@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectC
 import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalPropertiesRitualArmara;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollect;
-import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
@@ -76,7 +75,7 @@ public class CEffectArmara extends CEffectEntityCollect<EntityMob> {
             ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS);
             ctrl.setTicksPerRotation(20 + rand.nextInt(20));
         }
-        ItemStack socket = pedestal.getInventoryHandler().getStackInSlot(0);
+        ItemStack socket = pedestal.getCatalystCache();
         if(!socket.isEmpty() && socket.getItem() instanceof ItemTunedCrystalBase) {
             IMinorConstellation trait = ItemTunedCrystalBase.getTrait(socket);
             ConstellationEffectProperties prop = provideProperties(0);
