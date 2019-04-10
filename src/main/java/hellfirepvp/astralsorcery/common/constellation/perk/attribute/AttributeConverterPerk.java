@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.constellation.perk.ProgressGatedPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IConverterProvider;
@@ -17,7 +18,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +30,7 @@ import java.util.List;
  */
 public abstract class AttributeConverterPerk extends ProgressGatedPerk implements IConverterProvider {
 
-    private List<PerkConverter> converters = new ArrayList<>();
+    private List<PerkConverter> converters = Lists.newArrayList();
 
     public AttributeConverterPerk(String name, int x, int y) {
         super(name, x, y);
@@ -56,7 +56,7 @@ public abstract class AttributeConverterPerk extends ProgressGatedPerk implement
             return Collections.emptyList();
         }
 
-        return ImmutableList.copyOf(converters);
+        return Collections.unmodifiableList(converters);
     }
 
     @Override

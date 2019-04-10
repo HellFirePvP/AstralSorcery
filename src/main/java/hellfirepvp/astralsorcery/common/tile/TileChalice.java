@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -149,10 +149,10 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
         ChunkPos chMin = new ChunkPos(min), chMax = new ChunkPos(max);
         List<TileChalice> out = new LinkedList<>();
         for (int xx = chMin.x; xx <= chMax.x; xx++) {
-            for (int zz = chMin.z; zz < chMax.z; zz++) {
-                if(world.isBlockLoaded(new BlockPos((xx) << 4, 0, (zz) << 4))) {
-                    Chunk loaded = world.getChunkFromChunkCoords(xx, zz);
-                    for (TileEntity te : loaded.getTileEntityMap().values()) {
+            for (int zz = chMin.z; zz <= chMax.z; zz++) {
+                if (MiscUtils.isChunkLoaded(world, new ChunkPos(xx, zz))) {
+                    Chunk lChunk = world.getChunkFromChunkCoords(xx, zz);
+                    for (TileEntity te : lChunk.getTileEntityMap().values()) {
                         if(te instanceof TileChalice && !te.isInvalid()) {
                             out.add((TileChalice) te);
                         }

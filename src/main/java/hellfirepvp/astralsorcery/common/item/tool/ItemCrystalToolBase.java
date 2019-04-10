@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -29,6 +30,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +45,11 @@ public abstract class ItemCrystalToolBase extends ItemTool implements CrystalPro
     private final int crystalCount;
 
     public ItemCrystalToolBase(int crystalCount) {
-        super(0, 0, RegistryItems.crystalToolMaterial, Collections.emptySet());
+        this(crystalCount, Collections.emptySet());
+    }
+
+    public ItemCrystalToolBase(int crystalCount, Set<Block> effectiveBlocksIn) {
+        super(0, 0, RegistryItems.crystalToolMaterial, effectiveBlocksIn);
         setMaxDamage(0);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         this.crystalCount = crystalCount;

@@ -4,12 +4,33 @@ pipeline {
     WEBHOOKURL = credentials('JenkinsDiscordWebhook')
   }
   stages {
-    stage('Build') {
+    stage('Prepare Build') {
       steps {
         sh '''cp -a /var/lib/jenkins/buildMetadata/AstralSorcery/. .
-rm -rf AS-Example.zs perkMapDraft.pdn README.html README.md AstralSorcery
-./gradlew build
-cp -a ./build/libs/. .
+rm -rf AS-Example.zs perkMapDraft.pdn README.html README.md AstralSorcery'''
+      }
+    }
+    stage('Build only') {
+      when {
+        not {
+          branch 'master'
+        }
+      }
+      steps {
+        sh '''./gradlew build'''
+      }
+    }
+    stage('Build and Publish') {
+      when{
+        branch 'master'
+      }
+      steps {
+        sh '''./gradlew build publish'''
+      }
+    }
+    stage('Prepare Archive') {
+      steps {
+        sh '''cp -a ./build/libs/. .
 rm -rf build gradle .gradle
 find . ! -name \'*.jar\' -delete'''
       }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.grindstone;
 
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -53,7 +53,7 @@ public class GrindstoneRecipeRegistry {
 
     public static GrindstoneRecipe tryRemoveGrindstoneRecipe(ItemStack matchOut) {
         for (GrindstoneRecipe gr : recipes) {
-            if(gr.isValid() && ItemUtils.matchStackLoosely(gr.getOutputForMatching(), matchOut)) {
+            if (gr.isValid() && ItemComparator.compare(gr.getOutputForMatching(), matchOut, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 recipes.remove(gr);
                 return gr;
             }

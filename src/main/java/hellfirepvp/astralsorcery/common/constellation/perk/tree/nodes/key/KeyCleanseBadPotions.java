@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -55,7 +55,7 @@ public class KeyCleanseBadPotions extends KeyPerk {
             }
             PotionEffect effect = badEffects.get(rand.nextInt(badEffects.size()));
             PlayerProgress prog = ResearchManager.getProgress(player, Side.SERVER);
-            if (prog != null && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this)) {
                 float inclChance = 0.1F;
                 inclChance = PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
                         .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, inclChance);

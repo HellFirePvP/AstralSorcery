@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -17,7 +17,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -121,13 +121,13 @@ public class AltarRecipeRegistry {
         List<AbstractAltarRecipe> list = new LinkedList<>();
         for (AbstractAltarRecipe recipe : recipes.get(altarLevel)) {
             ItemStack out = recipe.getOutputForMatching();
-            if(!out.isEmpty() && ItemUtils.matchStacksStrict(out, output)) {
+            if (!out.isEmpty() && ItemComparator.compare(out, output, ItemComparator.Clause.Sets.ITEMSTACK_STRICT)) {
                 list.add(recipe);
             }
         }
         for (AbstractAltarRecipe recipe : mtRecipes.get(altarLevel)) {
             ItemStack out = recipe.getOutputForMatching();
-            if(!out.isEmpty() && ItemUtils.matchStacksStrict(out, output)) {
+            if (!out.isEmpty() && ItemComparator.compare(out, output, ItemComparator.Clause.Sets.ITEMSTACK_STRICT)) {
                 list.add(recipe);
             }
         }
@@ -138,12 +138,13 @@ public class AltarRecipeRegistry {
      * Returns the Recipe that was removed if successful.
      */
     @Nullable
+    @Deprecated
     public static AbstractAltarRecipe removeFindRecipeByOutputAndLevel(ItemStack output, TileAltar.AltarLevel altarLevel) {
         Iterator<AbstractAltarRecipe> iterator = recipes.get(altarLevel).iterator();
         while (iterator.hasNext()) {
             AbstractAltarRecipe rec = iterator.next();
             ItemStack out = rec.getOutputForMatching();
-            if (!out.isEmpty() && ItemUtils.matchStackLoosely(rec.getOutputForMatching(), output)) {
+            if (!out.isEmpty() && ItemComparator.compare(rec.getOutputForMatching(), output, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 iterator.remove();
                 return rec;
             }
@@ -214,7 +215,7 @@ public class AltarRecipeRegistry {
 
         boolean has = false;
         for (ItemStack i : effectRecoveryMap.keySet()) {
-            if(ItemUtils.matchStackLoosely(out, i)) {
+            if (ItemComparator.compare(out, i, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 has = true;
             }
         }
@@ -231,8 +232,8 @@ public class AltarRecipeRegistry {
         if(match.isEmpty()) return null;
         for (Map.Entry<ItemStack, ISpecialCraftingEffects> effectEntry : effectRecoveryMap.entrySet()) {
             if(effectEntry.getValue().needsStrictMatching() ?
-                    ItemUtils.matchStacksStrict(match, effectEntry.getKey()) :
-                    ItemUtils.matchStackLoosely(match, effectEntry.getKey())) {
+                    ItemComparator.compare(match, effectEntry.getKey(), ItemComparator.Clause.Sets.ITEMSTACK_STRICT) :
+                    ItemComparator.compare(match, effectEntry.getKey(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 return effectEntry.getValue();
             }
         }

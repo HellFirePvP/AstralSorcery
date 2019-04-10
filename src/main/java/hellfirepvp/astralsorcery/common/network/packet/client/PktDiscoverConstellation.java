@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -60,7 +60,7 @@ public class PktDiscoverConstellation implements IMessage, IMessageHandler<PktDi
                 AstralSorcery.log.info("Received unknown constellation from client: " + message.discoveredConstellation);
             } else {
                 PlayerProgress prog = ResearchManager.getProgress(ctx.getServerHandler().player, Side.SERVER);
-                if(prog != null && received.canDiscover(ctx.getServerHandler().player, prog)) {
+                if (prog.isValid() && received.canDiscover(ctx.getServerHandler().player, prog)) {
                     ResearchManager.discoverConstellation(received, ctx.getServerHandler().player);
                     ctx.getServerHandler().player.sendMessage(
                             new TextComponentTranslation("progress.discover.constellation.chat",

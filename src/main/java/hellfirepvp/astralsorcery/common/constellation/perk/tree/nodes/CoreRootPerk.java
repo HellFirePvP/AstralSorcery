@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -49,6 +50,8 @@ public class CoreRootPerk extends KeyPerk {
             String token = "core-root-tk-" + i;
             if (ResearchManager.grantFreePerkPoint(player, token)) {
                 listTokens.appendTag(new NBTTagString(token));
+
+                LogCategory.PERKS.info(() -> "Granted perk point " + token + " to " + player.getName());
             }
         }
         dataStorage.setTag("tokens", listTokens);
@@ -61,7 +64,9 @@ public class CoreRootPerk extends KeyPerk {
         NBTTagList listTokens = dataStorage.getTagList("tokens", Constants.NBT.TAG_STRING);
         for (int i = 0; i < listTokens.tagCount(); i++) {
             String tk = listTokens.getStringTagAt(i);
-            ResearchManager.revokeFreePoint(player, tk);
+            if (ResearchManager.revokeFreePoint(player, tk)) {
+                LogCategory.PERKS.info(() -> "Revoked perk point " + tk + " of " + player.getName());
+            }
         }
     }
 

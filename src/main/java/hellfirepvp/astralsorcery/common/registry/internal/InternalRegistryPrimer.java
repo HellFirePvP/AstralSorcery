@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -29,7 +29,7 @@ public class InternalRegistryPrimer {
     public <V extends IForgeRegistryEntry<V>> V register(V entry) {
         Class<V> type = entry.getRegistryType();
         List<IForgeRegistryEntry<?>> entries = primed.get(type);
-        if(entries == null) {
+        if (entries == null) {
             entries = Lists.newLinkedList();
             primed.put(type, entries);
         }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -39,12 +39,11 @@ public class StructureSmallShrine extends StructureBlockArray {
         IBlockState mBrick = m.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
         IBlockState mChisel = m.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.CHISELED);
         IBlockState mPillar = m.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.PILLAR);
-        IBlockState air = Blocks.AIR.getDefaultState();
 
         addBlockCube(mRaw,   -4, 0, -4, 4, 0, 4);
-        addBlockCube(air,    -4, 1, -4, 4, 5, 4);
+        addAirCube(-4, 1, -4, 4, 5, 4);
         addBlockCube(mBrick, -3, 1, -3, 3, 1, 3);
-        addBlockCube(air,    -1, 1, -1, 1, 1, 1);
+        addAirCube(-1, 1, -1, 1, 1, 1);
 
         addBlock(0, 1, 0, mPillar);
         addBlock(0, 2, 0, mPillar);
@@ -74,7 +73,7 @@ public class StructureSmallShrine extends StructureBlockArray {
         TileEntityCallback lootCallback = new TileEntityCallback() {
             @Override
             public boolean isApplicable(TileEntity te) {
-                return te != null && te instanceof TileEntityChest;
+                return te instanceof TileEntityChest;
             }
 
             @Override

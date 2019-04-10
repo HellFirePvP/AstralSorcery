@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -523,12 +523,12 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 BlockPos other = playerPos.add(xx, 0, zz);
-                if (!renderWorld.canSeeSky(other)) {
+                if (!MiscUtils.canSeeSky(renderWorld, other, true, false)) {
                     return false;
                 }
             }
         }
-        return renderWorld.canSeeSky(playerPos.up());
+        return MiscUtils.canSeeSky(renderWorld, playerPos.up(), true, false);
     }
 
     private void handleMouseMovement(float pticks) {

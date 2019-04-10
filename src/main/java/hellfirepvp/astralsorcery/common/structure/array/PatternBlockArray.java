@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -43,6 +43,18 @@ public class PatternBlockArray extends BlockArray implements MatchableStructure 
 
     public boolean matches(World world, BlockPos center) {
         for (Map.Entry<BlockPos, BlockInformation> entry : pattern.entrySet()) {
+            BlockInformation info = entry.getValue();
+            BlockPos at = center.add(entry.getKey());
+            IBlockState state = world.getBlockState(at);
+            if(!info.matcher.isStateValid(state)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean matchesSlice(World world, BlockPos center, int slice) {
+        for (Map.Entry<BlockPos, BlockInformation> entry : this.getPatternSlice(slice).entrySet()) {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
             IBlockState state = world.getBlockState(at);

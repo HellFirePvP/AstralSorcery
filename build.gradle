@@ -3,7 +3,7 @@ buildscript {
         jcenter()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://files.minecraftforge.net/maven"
         }
     }
     dependencies {
@@ -11,14 +11,22 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven-publish'
 apply plugin: "java"
 
-version = "1.12.2-1.10.11"
+version = "1.12.2-1.10.13"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
+String build_version = ""
+
+// Most likely inside Jenkins. Or homebrew environment.
+// I hope you know what you do if it's the latter.
+if (System.getenv("BUILD_NUMBER") != null) {
+    build_version = version + "-v" + System.getenv("BUILD_NUMBER")
+}
 
 minecraft {
-    version = "14.23.5.2781"
+    version = "1.12.2-14.23.5.2781"
     runDir = "run"
     useDepAts = true
 
@@ -41,20 +49,21 @@ compileApiJava {
 repositories {
 
     maven {
-        // location of the maven that hosts JEI files
+        // JEI files
+        // https when
         url = "http://dvs1.progwml6.com/files/maven"
     }
 
     maven {
         // CraftTweaker
         name 'jared maven'
-        url "http://maven.blamejared.com/"
+        url "https://maven.blamejared.com/"
     }
 
     maven {
         //Baubles
         name 'thiakil'
-        url 'http://maven.thiakil.com'
+        url 'https://maven.thiakil.com'
     }
 
     maven {
@@ -88,7 +97,7 @@ dependencies {
 
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
 
-    compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
+    deobfCompile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
 
 }
 
@@ -120,8 +129,46 @@ jar {
     }
 }
 
-processResources
-{
+task deobfJar(type: Jar) {
+    from(sourceSets.main.output)
+    archiveName = "${baseName}-${version}-deobf.${extension}"
+}
+
+task srcJar(type: Jar) {
+    from(sourceSets.main.java)
+    classifier = 'sources'
+    archiveName = "${baseName}-${version}-sources.${extension}"
+}
+
+artifacts {
+    archives deobfJar, srcJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version build_version
+            from components.java
+
+            artifact deobfJar {
+                classifier 'deobf'
+            }
+            artifact srcJar {
+                classifier 'sources'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url "file://" + System.getenv("LOCAL_MAVEN")
+        }
+    }
+}
+
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version

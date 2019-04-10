@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -15,6 +15,7 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -58,7 +59,7 @@ public class DamageSourceUtil {
     }
 
     @Nullable
-    public static DamageSource changeAttribute(@Nonnull DamageSource src, Callable<DamageSource> update) {
+    public static DamageSource changeAttribute(@Nonnull DamageSource src, Consumer<DamageSource> update) {
         return overrideWithChanges(src, update);
     }
 
@@ -69,10 +70,10 @@ public class DamageSourceUtil {
     }
 
     @Nullable
-    private static DamageSource overrideWithChanges(@Nonnull DamageSource source, Callable<DamageSource> run) {
+    private static DamageSource overrideWithChanges(@Nonnull DamageSource source, Consumer<DamageSource> run) {
         DamageSource dst = override(source, null, null);
         if (dst != null) {
-            run.call(dst);
+            run.accept(dst);
         }
         return dst;
     }

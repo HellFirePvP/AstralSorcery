@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -38,10 +38,7 @@ public class AssetLibrary implements IResourceManagerReloadListener {
         if(name.endsWith(".png")) {
             throw new IllegalArgumentException("Tried to loadTexture with appended .png from the AssetLibrary!");
         }
-        if(!loadedTextures.containsKey(location)) {
-            loadedTextures.put(location, new HashMap<>());
-        }
-        Map<String, BindableResource> resources = loadedTextures.get(location);
+        Map<String, BindableResource> resources = loadedTextures.computeIfAbsent(location, l -> new HashMap<>());
         if(resources.containsKey(name)) {
             return resources.get(name);
         }

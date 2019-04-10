@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -285,7 +285,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 EntityPlayerMP pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
                 if (pl != null && !MiscUtils.isPlayerFakeMP(pl) && !pl.isSneaking()) {
                     PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
-                    if (prog != null && prog.getAttunedConstellation() == null &&
+                    if (prog.isValid() &&
+                            prog.getAttunedConstellation() == null &&
                             prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
                             prog.getKnownConstellations().contains(activeFound.getUnlocalizedName())) {
 
@@ -322,7 +323,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             for (int zz = -7; zz <= 7; zz++) {
                 BlockPos other = at.add(xx, 0, zz);
                 if(MiscUtils.isChunkLoaded(world, new ChunkPos(other))) {
-                    boolean see = world.canSeeSky(other);
+                    boolean see = MiscUtils.canSeeSky(this.getWorld(), other, true, false);
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;
@@ -334,7 +335,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                         break lbl;
                     }
                 } else {
-                    boolean see = world.canSeeSky(other);
+                    boolean see = MiscUtils.canSeeSky(this.getWorld(), other, true, false);
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;
@@ -436,7 +437,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     public void askForAttunement(EntityPlayerMP playerEntity, IMajorConstellation cst) {
         if(mode == 1 && playerAttunementWaitTick > 0 && activeEntity != null && playerEntity.equals(activeEntity)) {
             PlayerProgress prog = ResearchManager.getProgress(playerEntity, Side.SERVER);
-            if(prog != null && prog.getAttunedConstellation() == null &&
+            if(prog.isValid() &&
+                    prog.getAttunedConstellation() == null &&
                     prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
                     prog.getKnownConstellations().contains(cst.getUnlocalizedName())) {
                 ResearchManager.setAttunedConstellation(playerEntity, cst);

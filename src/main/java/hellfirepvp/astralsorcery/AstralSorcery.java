@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -59,7 +59,7 @@ public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";
     public static final String NAME = "Astral Sorcery";
-    public static final String VERSION = "1.10.11";
+    public static final String VERSION = "1.10.13";
     public static final String CLIENT_PROXY = "hellfirepvp.astralsorcery.client.ClientProxy";
     public static final String COMMON_PROXY = "hellfirepvp.astralsorcery.common.CommonProxy";
 

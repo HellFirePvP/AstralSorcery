@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -71,7 +71,7 @@ public class TileWell extends TileReceiverBaseInventory {
     private float posDistribution = -1;
 
     public TileWell() {
-        super(1, EnumFacing.UP);
+        super(1, EnumFacing.DOWN);
         this.tank = new PrecisionSingleFluidCapabilityTank(MAX_CAPACITY, EnumFacing.DOWN);
         this.tank.setAllowInput(false);
         this.tank.setOnUpdate(this::markForUpdate);
@@ -86,8 +86,8 @@ public class TileWell extends TileReceiverBaseInventory {
     public void update() {
         super.update();
 
-        if(!world.isRemote) {
-            if(world.canSeeSky(getPos())) {
+        if (!world.isRemote) {
+            if (MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, false)) {
                 double sbDayDistribution = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
                 sbDayDistribution = 0.3 + (0.7 * sbDayDistribution);
                 int yLevel = getPos().getY();
@@ -257,13 +257,23 @@ public class TileWell extends TileReceiverBaseInventory {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank.hasCapability(facing);
+        return (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank.hasCapability(facing)) ||
+                super.hasCapability(capability, facing);
     }
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability != CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || !hasCapability(capability, facing)) return null;
-        return (T) tank.getCapability(facing);
+        if (!this.hasCapability(capability, facing)) {
+            return null;
+        }
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return (T) tank.getCapability(facing);
+        }
+        T cap;
+        if ((cap = super.getCapability(capability, facing)) != null) {
+            return cap;
+        }
+        return null;
     }
 
     public static class CatalystItemHandler extends ItemHandlerTileFiltered {
@@ -283,6 +293,11 @@ public class TileWell extends TileReceiverBaseInventory {
             return WellLiquefaction.getLiquefactionEntry(toAdd) != null && existing.isEmpty();
         }
 
+        @Nonnull
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            return ItemStack.EMPTY;
+        }
     }
 
     public static class TransmissionReceiverWell extends SimpleTransmissionReceiver {

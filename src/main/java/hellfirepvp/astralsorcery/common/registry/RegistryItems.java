@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
@@ -66,7 +65,6 @@ public class RegistryItems {
 
     public static Item.ToolMaterial crystalToolMaterial;
     public static EnumRarity rarityCelestial, rarityRelic;
-    public static Material materialTransparentReplaceable;
     public static ItemArmor.ArmorMaterial imbuedLeatherMaterial;
 
     public static CreativeTabs creativeTabAstralSorcery,
@@ -98,7 +96,6 @@ public class RegistryItems {
 
         rarityCelestial = EnumHelper.addRarity("CELESTIAL", TextFormatting.BLUE, "Celestial");
         rarityRelic = EnumHelper.addRarity("AS_RELIC", TextFormatting.GOLD, "Relic");
-        materialTransparentReplaceable = new MaterialAirish();
 
         imbuedLeatherMaterial = EnumHelper.addArmorMaterial("AS_IMBUEDLEATHER",
                 "as.imbuedleather", 26, new int[] { 0, 0, 7, 0}, 30, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 2);

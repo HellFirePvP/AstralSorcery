@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,13 +10,13 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
-import hellfirepvp.astralsorcery.common.util.Callable;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,9 +57,9 @@ public class AttributeTypeLimiter {
         checkValue(ev.getType(), (float) ev.getValue(), ev::setValue);
     }
 
-    private void checkValue(PerkAttributeType type, float value, Callable<Float> setValue) {
+    private void checkValue(PerkAttributeType type, float value, Consumer<Float> setValue) {
         Tuple<Float, Float> limit = perkTypeLimits.getOrDefault(type, ANY);
-        setValue.call(MathHelper.clamp(value, limit.key, limit.value));
+        setValue.accept(MathHelper.clamp(value, limit.key, limit.value));
     }
 
 }

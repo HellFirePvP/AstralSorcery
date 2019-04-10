@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -20,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -31,8 +32,10 @@ import java.util.Set;
  */
 public class ItemCrystalPickaxe extends ItemCrystalToolBase {
 
+    private static final Set<Block> EFFECTIVE_SET = Sets.newHashSet(Blocks.REDSTONE_ORE, Blocks.LIT_REDSTONE_ORE, Blocks.OBSIDIAN);
+
     public ItemCrystalPickaxe() {
-        super(3);
+        super(3, EFFECTIVE_SET);
         setDamageVsEntity(5F);
         setAttackSpeed(-1F);
         setHarvestLevel("pickaxe", 3);
@@ -98,6 +101,7 @@ public class ItemCrystalPickaxe extends ItemCrystalToolBase {
         if(m != Material.ROCK && m != Material.ANVIL && m != Material.IRON && m != Material.PISTON) {
             str /= this.efficiency;
         }
+        System.out.println("" + str + state.getBlock().getRegistryName().toString());
         return str;
     }
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -32,7 +32,7 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
 
     public GemSlotMajorPerk(String name, int x, int y) {
         super(name, x, y);
-        disableToltipCaching();
+        disableTooltipCaching();
     }
 
     @Override

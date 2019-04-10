@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,11 +10,10 @@ package hellfirepvp.astralsorcery.common.world.attributes;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.base.RockCrystalHandler;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
-import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.world.WorldGenAttribute;
@@ -157,15 +156,15 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                 if (!world.setBlockState(pos, newState)) {
                     return;
                 }
-                RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
-                buf.addOre(pos);
+
+                RockCrystalHandler.INSTANCE.addOre(world, pos, true);
 
                 if(random.nextInt(4) == 0) {
                     pos = pos.add(random.nextInt(2), random.nextInt(2), random.nextInt(2));
                     state = world.getBlockState(pos);
                     if (MiscUtils.getMatchingState(replaceableStates, state) != null) {
                         if (world.setBlockState(pos, newState)) {
-                            buf.addOre(pos);
+                            RockCrystalHandler.INSTANCE.addOre(world, pos, true);
                         }
                     }
                 }

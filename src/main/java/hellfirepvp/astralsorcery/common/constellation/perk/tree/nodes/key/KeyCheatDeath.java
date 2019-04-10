@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -76,7 +76,7 @@ public class KeyCheatDeath extends KeyPerk {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
-            if (prog != null && side == Side.SERVER && prog.hasPerkEffect(this)) {
+            if (prog.hasPerkEffect(this) && side == Side.SERVER) {
                 if(player.getHealth() <= thresholdApplyPerkHealth ||
                         event.getAmount() >= thresholdApplyPerkDamage) {
                     if(!PerkEffectHelper.EVENT_INSTANCE.isCooldownActiveForPlayer(player, this)) {

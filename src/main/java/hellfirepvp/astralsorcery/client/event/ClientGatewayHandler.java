@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -196,7 +196,7 @@ public class ClientGatewayHandler {
 
             if(focusTicks > 95) { //Time explained below
                 Minecraft.getMinecraft().player.setSneaking(false);
-                PacketChannel.CHANNEL.sendToServer(new PktRequestTeleport(focusingEntry.originalDimId, focusingEntry.originalBlockPos.up()));
+                PacketChannel.CHANNEL.sendToServer(new PktRequestTeleport(focusingEntry.originalDimId, focusingEntry.originalBlockPos));
                 focusTicks = 0;
                 focusingEntry = null;
             }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -36,8 +36,7 @@ public class StructureIntegrityObserver {
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
         World world = event.getWorld();
-        if (world.isRemote ||
-                !event.getChunk().isTerrainPopulated()) {
+        if (world.isRemote || !event.getChunk().isTerrainPopulated()) {
             return;
         }
 

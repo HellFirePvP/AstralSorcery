@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -31,8 +31,8 @@ public class PtEffectDynColorFlare extends PatreonEffectHelper.PatreonEffect {
 
     private Provider<Color> colorProvider;
 
-    public PtEffectDynColorFlare(Provider<Color> colorProvider) {
-        super(null);
+    public PtEffectDynColorFlare(UUID uniqueId, Provider<Color> colorProvider) {
+        super(uniqueId, null);
         this.colorProvider = colorProvider;
     }
 

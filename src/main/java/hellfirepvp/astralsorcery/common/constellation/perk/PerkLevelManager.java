@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.GameStageTweaks;
 import net.darkhax.gamestages.GameStageHelper;
+import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.config.Configuration;
@@ -107,7 +108,12 @@ public class PerkLevelManager extends ConfigEntry {
             return LEVEL_CAP;
         }
         int highestFound = -1;
-        for (String stage : GameStageHelper.getPlayerData(player).getStages()) {
+
+        IStageData data = GameStageHelper.getPlayerData(player);
+        if (data == null) {
+            return LEVEL_CAP;
+        }
+        for (String stage : data.getStages()) {
             int cap = GameStageTweaks.getMaxCap(stage);
             if (cap > highestFound) {
                 highestFound = cap;

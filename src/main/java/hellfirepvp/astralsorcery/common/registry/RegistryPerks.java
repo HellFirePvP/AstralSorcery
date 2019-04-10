@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -234,17 +234,13 @@ public class RegistryPerks {
                 .connect(PERK_TREE.getAstralSorceryPerk("outer_s_inc_life"));
 
         AttributeModifierPerk lssArmorLife1 = new AttributeModifierPerk("flight_life_armor", 4, 30);
-        lssArmorLife1.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
-        lssArmorLife1.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
+        lssArmorLife1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
         AttributeModifierPerk lssArmorLife2 = new AttributeModifierPerk("flight_life_armor_1", 5, 31).setNameOverride(lssArmorLife1);
-        lssArmorLife2.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
-        lssArmorLife2.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
+        lssArmorLife2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
         AttributeModifierPerk lssArmorLife3 = new AttributeModifierPerk("flight_life_armor_2", 4, 32).setNameOverride(lssArmorLife1);
-        lssArmorLife3.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
-        lssArmorLife3.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
+        lssArmorLife3.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
         AttributeModifierPerk lssDodgeMs = new AttributeModifierPerk("flight_ms_dodge", 5, 33);
-        lssDodgeMs.addModifier(0.7F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_DODGE);
-        lssDodgeMs.addModifier(0.7F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        lssDodgeMs.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE);
         KeyMantleFlight mantleFlight = new KeyMantleFlight("key_mantle_flight", 4, 34);
 
         PERK_TREE.registerPerk(lssArmorLife1)
@@ -525,9 +521,9 @@ public class RegistryPerks {
                 .connect(perkReach3);
 
         AttributeModifierPerk perkLessMine1 = new AttributeModifierPerk("less_hrv_speed", -31, -4);
-        perkLessMine1.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        perkLessMine1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         AttributeModifierPerk perkLessMine2 = new AttributeModifierPerk("less_hrv_speed_1", -32, -5).setNameOverride(perkLessMine1);
-        perkLessMine2.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        perkLessMine2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         KeyAddEnchantment addLuck = new KeyAddEnchantment("key_add_fortune", -31, -6)
                 .addEnchantment(Enchantments.FORTUNE, 1);
 

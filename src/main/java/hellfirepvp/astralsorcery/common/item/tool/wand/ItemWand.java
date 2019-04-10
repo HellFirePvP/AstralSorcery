@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.base.RockCrystalHandler;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
@@ -60,10 +61,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -301,12 +300,14 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
                     if(dstr <= 1E-4) return;
 
                     RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+
                     ChunkPos pos = new ChunkPos(entityIn.getPosition());
-                    List<BlockPos> posList = buf.collectPositions(pos, 4);
+                    Set<BlockPos> posList = new HashSet<>(buf.collectPositions(pos, 4));
+                    posList.addAll(RockCrystalHandler.INSTANCE.collectPositions(worldIn, pos, 4));
                     for (BlockPos rPos : posList) {
                         IBlockState state = worldIn.getBlockState(rPos);
                         if (!(state.getBlock() instanceof BlockCustomOre) || state.getValue(BlockCustomOre.ORE_TYPE) != BlockCustomOre.OreType.ROCK_CRYSTAL) {
-                            buf.removeOre(rPos);
+                            RockCrystalHandler.INSTANCE.removeOre(worldIn, rPos, true);
                             continue;
                         }
                         BlockPos p = rPos.up();

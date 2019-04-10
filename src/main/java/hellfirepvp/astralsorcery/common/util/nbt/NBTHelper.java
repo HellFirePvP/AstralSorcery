@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -121,7 +121,7 @@ public class NBTHelper {
             try {
                 propTag.setString("value", property.getName(state.getValue(property)));
             } catch (Exception exc) {
-                return null;
+                continue;
             }
             propTag.setString("property", property.getName());
             properties.appendTag(propTag);
@@ -154,7 +154,7 @@ public class NBTHelper {
                     if(opt.isPresent()) {
                         state = state.withProperty(match, opt.get());
                     }
-                } catch (Exception exc) {}
+                } catch (Throwable tr) {} // Thanks Exu2
             }
         }
         return state;

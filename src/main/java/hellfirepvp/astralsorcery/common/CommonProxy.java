@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.*;
-import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonDataManager;
 import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonFlareManager;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
@@ -63,6 +63,7 @@ import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopController;
+import hellfirepvp.astralsorcery.common.util.log.LogUtil;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import hellfirepvp.astralsorcery.common.world.retrogen.ChunkVersionController;
 import hellfirepvp.astralsorcery.common.world.retrogen.RetroGenController;
@@ -117,11 +118,13 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(TileTreeBeacon.ConfigEntryTreeBeacon.instance);
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
+        Config.addDynamicEntry(TileBore.CfgEntry.instance);
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
         Config.addDynamicEntry(new GemAttributeHelper.CfgEntry());
         Config.addDynamicEntry(new TileAccelerationBlacklist.TileAccelBlacklistEntry());
         Config.addDynamicEntry(new ShootingStarHandler.StarConfigEntry());
         Config.addDynamicEntry(PerkLevelManager.INSTANCE);
+        Config.addDynamicEntry(new LogUtil.CfgEntry());
     }
 
     public void registerConfigDataRegistries() {
@@ -187,6 +190,7 @@ public class CommonProxy implements IGuiHandler {
             }
         }, new FluidRarityRegistry.ChunkFluidEntryFactory());
 
+        //Item data storage to find player + item combinations
         CapabilityManager.INSTANCE.register(AmuletHolderCapability.class, new Capability.IStorage<AmuletHolderCapability>() {
             @Nullable
             @Override
@@ -199,6 +203,20 @@ public class CommonProxy implements IGuiHandler {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
         }, new AmuletHolderCapability.Factory());
+
+        //Chunk rock crystal storage for rock crystal generation
+        CapabilityManager.INSTANCE.register(RockCrystalHandler.RockCrystalPositions.class, new Capability.IStorage<RockCrystalHandler.RockCrystalPositions>() {
+            @Nullable
+            @Override
+            public NBTBase writeNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability, RockCrystalHandler.RockCrystalPositions instance, EnumFacing side) {
+                return instance.serializeNBT();
+            }
+
+            @Override
+            public void readNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability, RockCrystalHandler.RockCrystalPositions instance, EnumFacing side, NBTBase nbt) {
+                instance.deserializeNBT((NBTTagCompound) nbt);
+            }
+        }, new RockCrystalHandler.ChunkFluidEntryFactory());
     }
 
     public void registerOreDictEntries() {
@@ -230,8 +248,8 @@ public class CommonProxy implements IGuiHandler {
         RegistryResearch.init();
         RegistryRecipes.initGrindstoneOreRecipes();
         SextantFinder.initialize();
-        PatreonEffectHelper.init();
         RegistryKnowledgeFragments.init();
+        PatreonDataManager.loadPatreonEffects();
 
         RegistryConstellations.initMapEffects();
 
@@ -262,6 +280,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(RockCrystalHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PlayerAmuletHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PerkEffectHelper.EVENT_INSTANCE);
         MinecraftForge.EVENT_BUS.register(AttributeTypeLimiter.INSTANCE);

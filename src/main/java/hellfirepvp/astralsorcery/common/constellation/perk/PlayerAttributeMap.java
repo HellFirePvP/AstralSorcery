@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTy
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 public class PlayerAttributeMap {
 
     private Side side;
-    private List<AbstractPerk> cacheAppliedPerks = new LinkedList<>();
+    private Set<AbstractPerk> cacheAppliedPerks = new HashSet<>();
     private Map<PerkAttributeType, List<PerkAttributeModifier>> attributes = new HashMap<>();
     private List<PerkConverter> converters = new ArrayList<>();
 
@@ -100,18 +101,22 @@ public class PlayerAttributeMap {
         return cacheAppliedPerks.contains(perk);
     }
 
-    List<AbstractPerk> getCacheAppliedPerks() {
+    Set<AbstractPerk> getCacheAppliedPerks() {
         return cacheAppliedPerks;
     }
 
     boolean applyConverter(EntityPlayer player, PerkConverter converter) {
         assertConvertersModifiable();
 
+        LogCategory.PERKS.info(() -> "Try adding converter " + converter.getId() + " on " + this.side.name());
+
         if (converters.contains(converter)) {
             return false;
         }
         if (converters.add(converter)) {
             converter.onApply(player, side);
+
+            LogCategory.PERKS.info(() -> "Added converter " + converter.getId());
             return true;
         }
         return false;
@@ -120,8 +125,12 @@ public class PlayerAttributeMap {
     boolean removeConverter(EntityPlayer player, PerkConverter converter) {
         assertConvertersModifiable();
 
+        LogCategory.PERKS.info(() -> "Try removing converter " + converter.getId() + " on " + this.side.name());
+
         if (converters.remove(converter)) {
             converter.onRemove(player, side);
+
+            LogCategory.PERKS.info(() -> "Removed converter " + converter.getId());
             return true;
         }
         return false;
@@ -133,6 +142,14 @@ public class PlayerAttributeMap {
             appliedModifiers += modifiers.size();
         }
         if (appliedModifiers > 0) {
+
+            LogCategory.PERKS.warn(() -> "Following modifiers are still applied on " + side.name() + " while trying to modify converters:");
+            for (List<PerkAttributeModifier> modifiers : this.attributes.values()) {
+                for (PerkAttributeModifier modifier : modifiers) {
+                    LogCategory.PERKS.warn(() -> "Modifier: " + modifier.getId());
+                }
+            }
+
             throw new IllegalStateException("Trying to modify PerkConverters while modifiers are applied!");
         }
     }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -78,7 +79,7 @@ public class LightOreTransmutations {
             }
         }
         for (Transmutation tr : registeredTransmutations) {
-            if(!tr.outStack.isEmpty() && ItemUtils.matchStackLoosely(tr.outStack, outRemove)) {
+            if (!tr.outStack.isEmpty() && ItemComparator.compare(tr.outStack, outRemove, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 registeredTransmutations.remove(tr);
                 return tr;
             }

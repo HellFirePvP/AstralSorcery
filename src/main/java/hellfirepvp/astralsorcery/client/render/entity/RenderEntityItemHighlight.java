@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -46,7 +46,11 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
             EntityItem ei = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack);
             ei.age = entity.getAge();
             ei.hoverStart = entity.hoverStart;
-
+            if (RenderingUtils.itemPhysics_fieldSkipRenderHook != null) {
+                try {
+                    RenderingUtils.itemPhysics_fieldSkipRenderHook.set(ei, true);
+                } catch (Exception ignored) {}
+            }
             renderItem.doRender(ei, x, y, z, entityYaw, partialTicks);
         }
         GlStateManager.popMatrix();

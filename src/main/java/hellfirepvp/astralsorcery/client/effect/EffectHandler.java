@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRMapDrawingTable;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.client.util.StructureMatchPreview;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.UIGateway;
 import hellfirepvp.astralsorcery.client.util.UISextantTarget;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
@@ -166,7 +167,7 @@ public final class EffectHandler {
         float pTicks = event.getPartialTicks();
         acceptsNewParticles = false;
         if(structurePreview != null) {
-            structurePreview.appendPreviewBlocks();
+            structurePreview.renderPreview(pTicks);
         }
         UISextantTarget.renderTargets(pTicks);
         GlStateManager.disableDepth();
@@ -181,6 +182,7 @@ public final class EffectHandler {
                 effect.render(pTicks);
             }
         }
+        TextureHelper.refreshTextureBindState();
         TESRTranslucentBlock.renderTranslucentBlocks();
         TESRMapDrawingTable.renderRemainingGlasses(pTicks);
         for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {

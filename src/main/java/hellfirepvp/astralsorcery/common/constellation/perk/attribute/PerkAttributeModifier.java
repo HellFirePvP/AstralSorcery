@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -57,6 +57,10 @@ public class PerkAttributeModifier {
         this.mode = mode;
         this.value = value;
         initModifier();
+    }
+
+    public long getId() {
+        return id;
     }
 
     protected void initModifier() {}

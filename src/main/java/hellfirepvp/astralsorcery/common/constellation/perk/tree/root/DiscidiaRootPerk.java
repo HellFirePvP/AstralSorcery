@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -59,7 +60,12 @@ public class DiscidiaRootPerk extends RootPerk {
                 dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dmgDealt);
                 dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, dmgDealt);
                 dmgDealt = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, dmgDealt);
-                ResearchManager.modifyExp(player, dmgDealt);
+
+                float expGain = dmgDealt;
+                EntityPlayer logPlayer = player;
+                LogCategory.PERKS.info(() -> "Grant " + expGain + " exp to " + logPlayer.getName() + " (Discidia)");
+
+                ResearchManager.modifyExp(player, expGain);
             }
         }
     }

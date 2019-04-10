@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.ItemComparator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
@@ -41,7 +41,7 @@ public class OreDictUniqueStackList extends NonNullList<ItemStack> {
             if(!(o instanceof ItemStack)) return false;
             ItemStack stack = (ItemStack) o;
             while (it.hasNext()) {
-                if(ItemUtils.matchStackLoosely(it.next(), stack)) {
+                if (ItemComparator.compare(it.next(), stack, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                     return true;
                 }
             }

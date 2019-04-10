@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.world.structure;
 
 import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -62,7 +63,11 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        return dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold && isDesertBiome(world, pos);
+        if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold && isDesertBiome(world, pos)) {
+            IBlockState state = world.getBlockState(new BlockPos(pos.getX(), dY - 1, pos.getZ()));
+            return !state.getMaterial().isLiquid() && state.getMaterial().isOpaque();
+        }
+        return false;
     }
 
     private boolean isApplicableWorld(World world) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -103,10 +103,10 @@ public class MultiblockFountain extends PatternBlockArray {
 
                     if(xx == 0 && zz == 0) {
                         if (yy == -2) {
-                            addBlock(xx, yy, zz, Blocks.AIR.getDefaultState());
+                            addAir(xx, yy, zz);
                         }
                     } else {
-                        addBlock(xx, yy, zz, Blocks.AIR.getDefaultState());
+                        addAir(xx, yy, zz);
                     }
                 }
             }

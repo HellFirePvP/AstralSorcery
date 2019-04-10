@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -272,26 +272,25 @@ public class ModIntegrationJEI implements IModPlugin {
         }
         recipePrimer.clear();
 
-        Iterator<Tuple<Object, ModificationAction>> iterator = unresolvedRecipes.iterator();
-        while (iterator.hasNext()) {
-            Tuple<Object, ModificationAction> action = iterator.next();
+        int assignedRecipes = 0;
+        for (Tuple<Object, ModificationAction> action : unresolvedRecipes) {
             switch (action.value) {
                 case ADDITION:
                     if (addRecipe(action.key)) {
-                        iterator.remove();
+                        assignedRecipes++;
                     }
                     break;
                 case REMOVAL:
                     if (removeRecipe(action.key)) {
-                        iterator.remove();
+                        assignedRecipes++;
                     }
                     break;
                 default:
                     break;
             }
         }
-        if(unresolvedRecipes.size() > 0) {
-            AstralSorcery.log.warn("JEI Initialization Ended up with " + unresolvedRecipes.size() + " unresolvable crafttweaker recipes!");
+        if((unresolvedRecipes.size() - assignedRecipes) > 0) {
+            AstralSorcery.log.warn("JEI Initialization Ended up with " + (unresolvedRecipes.size() - assignedRecipes) + " unresolvable crafttweaker recipes!");
         }
     }
 

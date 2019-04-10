@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -57,7 +57,7 @@ public class KeyStepAssist extends KeyPerk implements IPlayerTickPerk, ICooldown
             player.stepHeight = 0.6F;
         }
 
-        if(MiscUtils.isConnectionEstablished((EntityPlayerMP) player)) {
+        if(player instanceof EntityPlayerMP && MiscUtils.isConnectionEstablished((EntityPlayerMP) player)) {
             PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
             PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
         }

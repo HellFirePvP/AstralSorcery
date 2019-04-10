@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -7,6 +7,8 @@
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.tile.base;
+
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,7 +26,7 @@ public abstract class TileSkybound extends TileEntityTick {
         super.update();
 
         if((ticksExisted & 15) == 0) {
-            updateSkyState(world.canSeeSky(getPos()));
+            updateSkyState(MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
         }
     }
 

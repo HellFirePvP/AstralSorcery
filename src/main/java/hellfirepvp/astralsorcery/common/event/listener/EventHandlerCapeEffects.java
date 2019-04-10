@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -344,11 +344,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
     private void tickVicioClientEffect(EntityPlayer player) {
         if(player instanceof EntityPlayerSP) {
             EntityPlayerSP spl = (EntityPlayerSP) player;
-            boolean hasFlightPerk = false;
-            PlayerProgress prog = ResearchManager.getProgress(spl, Side.CLIENT);
-            if (prog != null) {
-                hasFlightPerk = prog.hasPerkEffect(p -> p instanceof KeyMantleFlight);
-            }
+            boolean hasFlightPerk = ResearchManager.getProgress(spl, Side.CLIENT)
+                    .hasPerkEffect(p -> p instanceof KeyMantleFlight);
             if(spl.movementInput.jump && !hasFlightPerk && !spl.onGround && spl.motionY < -0.5 && !spl.capabilities.isFlying && !spl.isInWater() && !spl.isInLava()) {
                 PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
                 if(!spl.isElytraFlying()) {
@@ -390,7 +387,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
             return;
         }
         PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
-        if (prog == null || !prog.hasPerkEffect(p -> p instanceof KeyMantleFlight)) {
+        if (!prog.hasPerkEffect(p -> p instanceof KeyMantleFlight)) {
             if (vicioMantleFlightPlayers.contains(pl.getUniqueID())) {
                 if (pl.isCreative()) {
                     pl.capabilities.allowFlying = true;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -301,8 +301,8 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     public static enum ResonatorUpgrade {
 
         STARLIGHT("starlight", (p, s) -> true),
-        FLUID_FIELDS("liquid", (p, s) -> ResearchManager.getProgressTestAccess(p).getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT)),
-        AREA_SIZE("structure", (p, s) -> ResearchManager.getProgressTestAccess(p).getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT));
+        FLUID_FIELDS("liquid", (p, s) -> ResearchManager.getProgress(p).getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT)),
+        AREA_SIZE("structure", (p, s) -> ResearchManager.getProgress(p).getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT));
 
         private final ResonatorUpgradeCheck check;
         private final String appendixUpgrade;

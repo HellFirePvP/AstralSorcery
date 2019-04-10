@@ -1,26 +1,32 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.base.patreon.base;
+package hellfirepvp.astralsorcery.common.util.log;
 
-import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.util.Provider;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: PtEffectGateway
+ * Class: LogCategory
  * Created by HellFirePvP
- * Date: 20.06.2018 / 20:07
+ * Date: 06.04.2019 / 13:19
  */
-public class PtEffectGateway extends PatreonEffectHelper.PatreonEffect {
+public enum LogCategory {
 
-    public PtEffectGateway(PatreonEffectHelper.FlareColor chosenColor) {
-        super(chosenColor);
+    PERKS;
+
+    public void info(Provider<String> message) {
+        LogUtil.info(this, message);
+    }
+
+    public void warn(Provider<String> message) {
+        LogUtil.warn(this, message);
     }
 
 }

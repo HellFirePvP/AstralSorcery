@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -66,7 +67,11 @@ public class EvorsioRootPerk extends RootPerk {
             gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
             gainedExp = (float) Math.sqrt(gainedExp);
             gainedExp = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
-            ResearchManager.modifyExp(player, gainedExp);
+
+            float xpGain = gainedExp;
+            LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getName() + " (Evorsio)");
+
+            ResearchManager.modifyExp(player, xpGain);
         }
     }
 

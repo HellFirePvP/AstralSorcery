@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.cmd;
 
+import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
@@ -16,6 +18,7 @@ import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.migration.LegacyDataMigration;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -54,7 +57,8 @@ public class CommandAstralSorcery extends CommandBase {
             "attune",
             "build",
             "maximize",
-            "slnetwork"
+            "slnetwork",
+            "migrate-data"
     };
 
     private List<String> cmdAliases = new ArrayList<>();
@@ -158,6 +162,8 @@ public class CommandAstralSorcery extends CommandBase {
             String identifier = args[0];
             if ("help".equalsIgnoreCase(identifier)) {
                 displayHelp(sender);
+            } else if ("migrate-data".equalsIgnoreCase(identifier)) {
+                migrateAllLegacyData(sender);
             } else if ("slnetwork".equalsIgnoreCase(identifier)) {
                 tryEnterSLNetworkDebugMode(sender);
             } else if ("constellation".equalsIgnoreCase(identifier) || "constellations".equalsIgnoreCase(identifier)) {
@@ -202,6 +208,12 @@ public class CommandAstralSorcery extends CommandBase {
                 }
             }
         }
+    }
+
+    private void migrateAllLegacyData(ICommandSender sender) {
+        LegacyDataMigration.migrateRockCrystalData(s -> sender.sendMessage(new TextComponentString(s)));
+
+        sender.sendMessage(new TextComponentString("Data migration finished."));
     }
 
     private void tryEnterSLNetworkDebugMode(ICommandSender sender) {
@@ -467,7 +479,7 @@ public class CommandAstralSorcery extends CommandBase {
             return null;
         }
         PlayerProgress progress = ResearchManager.getProgress(other);
-        if (progress == null) {
+        if (!progress.isValid()) {
             sender.sendMessage(new TextComponentString("§cCould not get Progress for (" + otherPlayerName + ") !"));
             return null;
         }

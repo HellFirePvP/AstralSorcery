@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -84,11 +84,9 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        TileRitualPedestal pedestal = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
-        if(pedestal != null && !worldIn.isRemote) {
-            TileReceiverBaseInventory.ItemHandlerTile handle = pedestal.getInventoryHandler();
-            ItemUtils.dropInventory(handle, worldIn, pos);
-            handle.clearInventory();
+        TileRitualPedestal ped = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
+        if(ped != null && !worldIn.isRemote) {
+            ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, ItemUtils.copyStackWithSize(ped.getCatalystCache(), ped.getCatalystCache().getCount()));
         }
 
         super.breakBlock(worldIn, pos, state);
@@ -115,17 +113,17 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         if(pedestal == null) {
             return false;
         }
-        if(worldIn.isRemote) {
+        if (worldIn.isRemote) {
             return true;
         }
         ItemStack heldItem = playerIn.getHeldItem(hand);
 
         ItemStack in = pedestal.getCurrentPedestalCrystal();
-        if(!heldItem.isEmpty() && in.isEmpty() && ItemTunedCrystalBase.getMainConstellation(heldItem) != null) {
+        if (!heldItem.isEmpty() && in.isEmpty() && ItemTunedCrystalBase.getMainConstellation(heldItem) != null) {
             playerIn.setHeldItem(hand, pedestal.placeCrystalIntoPedestal(heldItem));
             return true;
         }
-        if(!in.isEmpty() && playerIn.isSneaking()) {
+        if (!in.isEmpty() && playerIn.isSneaking()) {
             pedestal.placeCrystalIntoPedestal(ItemStack.EMPTY);
             playerIn.inventory.placeItemBackInInventory(worldIn, in);
         }
@@ -135,13 +133,11 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         TileRitualPedestal te = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
-        if(te != null && !worldIn.isRemote) {
+        if (te != null && !worldIn.isRemote) {
             BlockPos toCheck = pos.up();
             IBlockState other = worldIn.getBlockState(toCheck);
-            if(other.isSideSolid(worldIn, toCheck, EnumFacing.DOWN)) {
-                TileReceiverBaseInventory.ItemHandlerTile handle = te.getInventoryHandler();
-                ItemUtils.dropInventory(te.getInventoryHandler(), worldIn, pos);
-                handle.clearInventory();
+            if (other.isSideSolid(worldIn, toCheck, EnumFacing.DOWN)) {
+                ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, ItemUtils.copyStackWithSize(te.getCatalystCache(), te.getCatalystCache().getCount()));
                 te.placeCrystalIntoPedestal(ItemStack.EMPTY);
                 te.markForUpdate();
             }
@@ -152,7 +148,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileRitualPedestal te = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
         if(te != null && !worldIn.isRemote) {
-            if(placer != null && placer instanceof EntityPlayer) {
+            if (placer instanceof EntityPlayer) {
                 te.setOwner(placer.getUniqueID());
             }
         }

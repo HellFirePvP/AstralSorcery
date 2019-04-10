@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -58,7 +58,7 @@ public class ProgressGatedPerk extends AbstractPerk {
     public void addResearchPreRequisite(BiFunction<EntityPlayer, PlayerProgress, Boolean> unlockFunction) {
         BiFunction<EntityPlayer, PlayerProgress, Boolean> prev = this.unlockFunction;
         this.unlockFunction = (player, progress) -> prev.apply(player, progress) && unlockFunction.apply(player, progress);
-        disableToltipCaching(); //Cannot cache as it may change.
+        disableTooltipCaching(); //Cannot cache as it may change.
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     public final boolean canSee(EntityPlayer player, Side side) {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null) {
+        if (prog.isValid()) {
             return canSee(player, prog);
         }
         return false;

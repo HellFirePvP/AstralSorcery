@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -30,10 +30,10 @@ public class PtEffectFloatingFlareCrystal extends PatreonEffectHelper.PatreonEff
     private PatreonEffectHelper.FlareColor flareColor;
     private TextureQuery crystalTexture;
 
-    public PtEffectFloatingFlareCrystal(Color colorTheme,
+    public PtEffectFloatingFlareCrystal(UUID uniqueId, Color colorTheme,
                                         PatreonEffectHelper.FlareColor flareColor,
                                         TextureQuery crystalTexture) {
-        super(null);
+        super(uniqueId, null);
         this.colorTheme = colorTheme;
         this.flareColor = flareColor;
         this.crystalTexture = crystalTexture;

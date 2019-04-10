@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -66,14 +66,9 @@ public class ResearchManager {
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
-    //Used to see if a player actually has progress and then getting safe testing-access
     @Nonnull
-    public static PlayerProgress getProgressTestAccess(EntityPlayer player) {
-        PlayerProgress progress = getProgress(player, player.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER);
-        if(progress == null) {
-            return new PlayerProgressTestAccess();
-        }
-        return progress;
+    public static PlayerProgress getProgress(EntityPlayer player) {
+        return getProgress(player, player.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER);
     }
 
     @Nonnull
@@ -81,14 +76,14 @@ public class ResearchManager {
         if(side == Side.CLIENT) {
             return clientProgress;
         } else if(player instanceof EntityPlayerMP) {
-            return getProgress((EntityPlayerMP) player);
+            return getProgressServer((EntityPlayerMP) player);
         } else {
-            throw new IllegalStateException("Called getProgress on neither server or client - what are you?");
+            return new PlayerProgressTestAccess();
         }
     }
 
     @Nonnull
-    public static PlayerProgress getProgress(EntityPlayerMP player) {
+    private static PlayerProgress getProgressServer(EntityPlayerMP player) {
         if(MiscUtils.isPlayerFakeMP(player)) {
             return new PlayerProgressTestAccess();
         }
@@ -137,7 +132,7 @@ public class ResearchManager {
 
     public static void unsafeForceGiveResearch(EntityPlayerMP player, ResearchProgression prog) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return;
+        if(!progress.isValid()) return;
 
         ProgressionTier reqTier = prog.getRequiredProgress();
         if(!progress.getTierReached().isThisLaterOrEqual(reqTier)) {
@@ -163,7 +158,7 @@ public class ResearchManager {
 
     public static void giveResearchIgnoreFail(EntityPlayer player, ResearchProgression prog) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return;
+        if(!progress.isValid()) return;
 
         ProgressionTier tier = prog.getRequiredProgress();
         if(!progress.getTierReached().isThisLaterOrEqual(tier)) return;
@@ -182,7 +177,7 @@ public class ResearchManager {
 
     public static void giveProgressionIgnoreFail(EntityPlayer player, ProgressionTier tier) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return;
+        if(!progress.isValid()) return;
 
         ProgressionTier t = progress.getTierReached();
         if(!t.hasNextTier()) return; //No higher tier available anyway.
@@ -199,7 +194,7 @@ public class ResearchManager {
 
     public static boolean mergeApplyPlayerprogress(PlayerProgress toMergeFrom, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if(!progress.isValid()) return false;
 
         progress.acceptMergeFrom(toMergeFrom);
 
@@ -210,7 +205,7 @@ public class ResearchManager {
 
     public static boolean useSextantTarget(SextantFinder.TargetObject to, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if(!progress.isValid()) return false;
 
         progress.useTarget(to);
 
@@ -221,7 +216,7 @@ public class ResearchManager {
 
     public static boolean discoverConstellations(Collection<IConstellation> csts, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if(!progress.isValid()) return false;
 
         for (IConstellation c : csts) {
             progress.discoverConstellation(c.getUnlocalizedName());
@@ -235,7 +230,7 @@ public class ResearchManager {
 
     public static boolean discoverConstellation(IConstellation c, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if(!progress.isValid()) return false;
 
         progress.discoverConstellation(c.getUnlocalizedName());
 
@@ -248,7 +243,7 @@ public class ResearchManager {
 
     public static boolean memorizeConstellation(IConstellation c, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if(!progress.isValid()) return false;
 
         progress.memorizeConstellation(c.getUnlocalizedName());
 
@@ -259,7 +254,8 @@ public class ResearchManager {
 
     public static boolean maximizeTier(EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if(!progress.isValid()) return false;
+
         progress.setTierReached(ProgressionTier.values()[ProgressionTier.values().length - 1]);
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
@@ -272,7 +268,7 @@ public class ResearchManager {
 
     public static boolean setAttunedBefore(EntityPlayer player, boolean wasAttunedBefore) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if(!progress.isValid()) return false;
 
         progress.setAttunedBefore(wasAttunedBefore);
 
@@ -283,7 +279,7 @@ public class ResearchManager {
 
     public static boolean setAttunedConstellation(EntityPlayer player, @Nullable IMajorConstellation constellation) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if(!progress.isValid()) return false;
 
         if (constellation != null && !progress.getKnownConstellations().contains(constellation.getUnlocalizedName())) {
             return false;
@@ -318,7 +314,7 @@ public class ResearchManager {
 
     public static boolean setPerkData(EntityPlayer player, @Nonnull AbstractPerk perk, NBTTagCompound prevoiusData, NBTTagCompound newData) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
         if (!progress.hasPerkEffect(perk)) return false;
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
@@ -334,7 +330,7 @@ public class ResearchManager {
 
     public static boolean applyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
         if (!progress.hasFreeAllocationPoint(player)) return false;
         if (progress.hasPerkUnlocked(perk)) return false;
 
@@ -352,7 +348,7 @@ public class ResearchManager {
 
     public static boolean applyPerkSeal(EntityPlayer player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
         if (!progress.hasPerkUnlocked(perk)) return false;
         if (progress.isPerkSealed(perk)) return false;
 
@@ -370,7 +366,7 @@ public class ResearchManager {
 
     public static boolean breakPerkSeal(EntityPlayer player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
         if (!progress.hasPerkUnlocked(perk)) return false;
         if (!progress.isPerkSealed(perk)) return false;
 
@@ -392,7 +388,7 @@ public class ResearchManager {
 
     public static boolean grantFreePerkPoint(EntityPlayer player, String token) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
 
         if (!progress.grantFreeAllocationPoint(token)) {
             return false;
@@ -405,7 +401,7 @@ public class ResearchManager {
 
     public static boolean revokeFreePoint(EntityPlayer player, String token) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
 
         if (!progress.tryRevokeAllocationPoint(token)) {
             return false;
@@ -418,7 +414,7 @@ public class ResearchManager {
 
     public static boolean forceApplyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
         if (progress.hasPerkUnlocked(perk)) return false;
 
         NBTTagCompound data = new NBTTagCompound();
@@ -435,7 +431,7 @@ public class ResearchManager {
 
     public static boolean removePerk(EntityPlayer player, AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
 
         NBTTagCompound data = progress.getPerkData(perk);
         if (data == null) {
@@ -454,7 +450,7 @@ public class ResearchManager {
 
     public static boolean resetPerks(EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
 
         Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
         for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
@@ -470,9 +466,20 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean setTomeReceived(EntityPlayer player) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (!progress.isValid()) return false;
+
+        progress.setTomeReceived();
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
     public static boolean setExp(EntityPlayer player, long exp) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if (progress == null) return false;
+        if (!progress.isValid()) return false;
 
         progress.setExp(exp);
 
@@ -485,7 +492,7 @@ public class ResearchManager {
 
     public static boolean modifyExp(EntityPlayer player, double exp) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if (!progress.isValid()) return false;
 
         progress.modifyExp(exp, player);
 
@@ -498,7 +505,7 @@ public class ResearchManager {
 
     public static void forceMaximizeAll(EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return;
+        if (!progress.isValid()) return;
         ProgressionTier before = progress.getTierReached();
 
         ResearchManager.discoverConstellations(ConstellationRegistry.getAllConstellations(), player);
@@ -520,7 +527,7 @@ public class ResearchManager {
 
     public static boolean forceMaximizeResearch(EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if (!progress.isValid()) return false;
         for (ResearchProgression progression : ResearchProgression.values()) {
             progress.forceGainResearch(progression);
         }
@@ -615,7 +622,7 @@ public class ResearchManager {
 
     private static void load_unsafeFromNBT(UUID pUUID, @Nullable NBTTagCompound compound) {
         PlayerProgress progress = new PlayerProgress();
-        if (compound != null) {
+        if (compound != null && !compound.hasNoTags()) {
             progress.load(compound);
         }
         progress.forceGainResearch(ResearchProgression.DISCOVERY);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -135,59 +135,57 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
 
         if(cst == null) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn, Side.SERVER);
-            if (progress != null) {
-                List<IConstellation> constellations = new ArrayList<>();
-                for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
-                    if(c.canDiscover((EntityPlayer) entityIn, progress)) {
-                        constellations.add(c);
-                    }
-                }
 
-                for (String strConstellation : progress.getKnownConstellations()) {
-                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                    if(c != null) {
-                        constellations.remove(c);
-                    }
+            List<IConstellation> constellations = new ArrayList<>();
+            for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+                if(c.canDiscover((EntityPlayer) entityIn, progress)) {
+                    constellations.add(c);
                 }
-                for (String strConstellation : progress.getSeenConstellations()) {
-                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                    if(c != null) {
-                        constellations.remove(c);
-                    }
-                }
+            }
 
-                if (!constellations.isEmpty()) {
-                    List<WRItemObject<IConstellation>> wrp = buildWeightedRandomList(constellations);
-                    WRItemObject<IConstellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
-                    setConstellation(stack, result.getValue());
+            for (String strConstellation : progress.getKnownConstellations()) {
+                IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                if(c != null) {
+                    constellations.remove(c);
                 }
+            }
+            for (String strConstellation : progress.getSeenConstellations()) {
+                IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                if(c != null) {
+                    constellations.remove(c);
+                }
+            }
+
+            if (!constellations.isEmpty()) {
+                List<WRItemObject<IConstellation>> wrp = buildWeightedRandomList(constellations);
+                WRItemObject<IConstellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
+                setConstellation(stack, result.getValue());
             }
         }
 
         cst = getConstellation(stack);
         if(cst != null) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn, Side.SERVER);
-            if(progress != null) {
-                boolean has = false;
-                for (String strConstellation : progress.getSeenConstellations()) {
-                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                    if(c != null && c.equals(cst)) {
-                        has = true;
-                        break;
-                    }
+
+            boolean has = false;
+            for (String strConstellation : progress.getSeenConstellations()) {
+                IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                if(c != null && c.equals(cst)) {
+                    has = true;
+                    break;
                 }
-                if(!has) {
-                    if(ResearchManager.memorizeConstellation(cst, (EntityPlayer) entityIn)) {
+            }
+            if(!has) {
+                if(ResearchManager.memorizeConstellation(cst, (EntityPlayer) entityIn)) {
+                    entityIn.sendMessage(
+                            new TextComponentTranslation("progress.seen.constellation.chat",
+                                    new TextComponentTranslation(cst.getUnlocalizedName())
+                                            .setStyle(new Style().setColor(TextFormatting.GRAY)))
+                                    .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                    if(ResearchManager.clientProgress.getSeenConstellations().size() == 1) {
                         entityIn.sendMessage(
-                                new TextComponentTranslation("progress.seen.constellation.chat",
-                                        new TextComponentTranslation(cst.getUnlocalizedName())
-                                                .setStyle(new Style().setColor(TextFormatting.GRAY)))
+                                new TextComponentTranslation("progress.seen.constellation.first.chat")
                                         .setStyle(new Style().setColor(TextFormatting.BLUE)));
-                        if(ResearchManager.clientProgress.getSeenConstellations().size() == 1) {
-                            entityIn.sendMessage(
-                                    new TextComponentTranslation("progress.seen.constellation.first.chat")
-                                            .setStyle(new Style().setColor(TextFormatting.BLUE)));
-                        }
                     }
                 }
             }

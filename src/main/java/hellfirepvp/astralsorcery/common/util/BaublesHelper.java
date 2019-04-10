@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -31,15 +31,6 @@ public class BaublesHelper {
     public static boolean doesPlayerWearBauble(EntityPlayer player, BaubleType inType, Predicate<ItemStack> predicate) {
         for (ItemStack worn : getWornBaublesForType(player, inType)) {
             if (predicate.test(worn)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean doesPlayerWearBauble(EntityPlayer player, BaubleType inType, ItemStack expected, boolean strict) {
-        for (ItemStack worn : getWornBaublesForType(player, inType)) {
-            if (strict ? ItemUtils.matchStacks(worn, expected) : ItemUtils.matchStackLoosely(worn, expected)) {
                 return true;
             }
         }

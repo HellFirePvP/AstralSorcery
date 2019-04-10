@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -136,7 +136,10 @@ public class TileIlluminator extends TileEntityTick {
             BlockPos at = list.remove(index);
             if(!needsRecalc && list.isEmpty()) needsRecalc = true;
             at = at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
-            if(world.isBlockLoaded(at) && illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
+            if(world.isBlockLoaded(at) &&
+                    at.getY() >= 0 &&
+                    at.getY() <= 255 &&
+                    illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
                 EnumDyeColor color = EnumDyeColor.YELLOW;
                 if (this.chosenColor != null) {
                     color = this.chosenColor;
@@ -153,17 +156,16 @@ public class TileIlluminator extends TileEntityTick {
     }
 
     private void recalculate() {
-        int parts = yPartsFromHeight();
+        int parts = Math.max(0, getPos().getY() - 7);
         validPositions = new LinkedList[parts];
         for (int i = 1; i <= parts; i++) {
-            int yLevel = (int) (((float) getPos().getY()) * (((float) i) / ((float) parts)));
-            LinkedList<BlockPos> calcPositions = new DirectionalLayerBlockDiscoverer(new BlockPos(getPos().getX(), yLevel, getPos().getZ()), SEARCH_RADIUS, STEP_WIDTH).discoverApplicableBlocks();
+            float yPart = ((float) i) / ((float) parts);
+            int yLevel = Math.round(yPart * (getPos().getY() - 7));
+            LinkedList<BlockPos> calcPositions = new DirectionalLayerBlockDiscoverer(
+                    new BlockPos(getPos().getX(), yLevel, getPos().getZ()), SEARCH_RADIUS, STEP_WIDTH)
+                    .discoverApplicableBlocks();
             validPositions[i - 1] = repeatList(calcPositions);
         }
-    }
-
-    private int yPartsFromHeight() {
-        return Math.max(2, getPos().getY() / 8);
     }
 
     private LinkedList<BlockPos> repeatList(LinkedList<BlockPos> list) {
@@ -210,7 +212,10 @@ public class TileIlluminator extends TileEntityTick {
 
         @Override
         public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
-            return world.isAirBlock(pos) && !world.canSeeSky(pos) && world.getLight(pos) < 8 && world.getLightFor(EnumSkyBlock.SKY, pos) < 6;
+            return world.isAirBlock(pos) &&
+                    !MiscUtils.canSeeSky(world, pos, false, false) &&
+                    world.getLight(pos) < 8 &&
+                    world.getLightFor(EnumSkyBlock.SKY, pos) < 6;
         }
 
     }

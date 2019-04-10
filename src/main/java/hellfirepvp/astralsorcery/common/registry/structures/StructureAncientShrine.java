@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -47,22 +47,21 @@ public class StructureAncientShrine extends StructureBlockArray {
         IBlockState mArch = m.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.ARCH);
         IBlockState mRuned = m.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RUNED);
         IBlockState mEngraved = m.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.ENGRAVED);
-        IBlockState air = Blocks.AIR.getDefaultState();
 
         addBlockCube(mRaw, -7, 0, -7, 7, 0, 7);
-        addBlockCube(air, -7, 1, -7, 7, 11, 7);
+        addAirCube(-7, 1, -7, 7, 11, 7);
 
         addBlockCube(mRaw, -9, 0, -9, -5, 0, -5);
         addBlockCube(mRaw, 9, 0, 9, 5, 0, 5);
         addBlockCube(mRaw, -9, 0, 9, -5, 0, 5);
         addBlockCube(mRaw, 9, 0, -9, 5, 0, -5);
-        addBlockCube(air, -9, 1, -9, -5, 6, -5);
-        addBlockCube(air, 9, 1, 9, 5, 6, 5);
-        addBlockCube(air, -9, 1, 9, -5, 6, 5);
-        addBlockCube(air, 9, 1, -9, 5, 6, -5);
+        addAirCube(-9, 1, -9, -5, 6, -5);
+        addAirCube(9, 1, 9, 5, 6, 5);
+        addAirCube(-9, 1, 9, -5, 6, 5);
+        addAirCube(9, 1, -9, 5, 6, -5);
 
         addBlockCube(mRaw, -6, -1, -6, 6, -7, 6);
-        addBlockCube(air, -4, -1, -4, 4, -5, 4);
+        addAirCube(-4, -1, -4, 4, -5, 4);
 
         addBlockCube(mBrick, -6, 1, -6, 6, 1, 6);
         addBlockCube(mBrick, -8, 1, -8, -6, 1, -6);
@@ -70,14 +69,14 @@ public class StructureAncientShrine extends StructureBlockArray {
         addBlockCube(mBrick, 8, 1, -8, 6, 1, -6);
         addBlockCube(mBrick, 8, 1, 8, 6, 1, 6);
 
-        addBlockCube(air, -2, 1, -2, 2, 1, 2);
+        addAirCube(-2, 1, -2, 2, 1, 2);
 
-        addBlockCube(air, -3, 1, 1, -3, 1, -1);
-        addBlockCube(air, 3, 1, 1, 3, 1, -1);
-        addBlockCube(air, 1, 1, -3, -1, 1, -3);
-        addBlockCube(air, 1, 1, 3, -1, 1, 3);
+        addAirCube(-3, 1, 1, -3, 1, -1);
+        addAirCube(3, 1, 1, 3, 1, -1);
+        addAirCube(1, 1, -3, -1, 1, -3);
+        addAirCube(1, 1, 3, -1, 1, 3);
 
-        addBlockCube(air, -1, -6, -1, 1, -6, 1);
+        addAirCube(-1, -6, -1, 1, -6, 1);
 
         addBlockCube(mBrick, -2, 10, -2, 2, 10, 2);
 
@@ -92,18 +91,18 @@ public class StructureAncientShrine extends StructureBlockArray {
         addBlock( 0, -2, -5, Blocks.WATER.getDefaultState());
         addBlock( 0, -2,  5, Blocks.WATER.getDefaultState());
 
-        addBlock( 2, -6,  0, air);
-        addBlock( 3, -6,  0, air);
-        addBlock( 4, -6,  0, air);
-        addBlock(-2, -6,  0, air);
-        addBlock(-3, -6,  0, air);
-        addBlock(-4, -6,  0, air);
-        addBlock( 0, -6,  2, air);
-        addBlock( 0, -6,  3, air);
-        addBlock( 0, -6,  4, air);
-        addBlock( 0, -6, -2, air);
-        addBlock( 0, -6, -3, air);
-        addBlock( 0, -6, -4, air);
+        addAir( 2, -6,  0);
+        addAir( 3, -6,  0);
+        addAir( 4, -6,  0);
+        addAir(-2, -6,  0);
+        addAir(-3, -6,  0);
+        addAir(-4, -6,  0);
+        addAir( 0, -6,  2);
+        addAir( 0, -6,  3);
+        addAir( 0, -6,  4);
+        addAir( 0, -6, -2);
+        addAir( 0, -6, -3);
+        addAir( 0, -6, -4);
 
         addBlock( 5, -6,  0, mArch);
         addBlock(-5, -6,  0, mArch);
@@ -360,10 +359,10 @@ public class StructureAncientShrine extends StructureBlockArray {
         addBlock(-3, 9,  0, mBrick);
         addBlock(-3, 9, -1, mBrick);
 
-        addBlock( 2, 10,  2, air);
-        addBlock(-2, 10,  2, air);
-        addBlock( 2, 10, -2, air);
-        addBlock(-2, 10, -2, air);
+        addAir( 2, 10,  2);
+        addAir(-2, 10,  2);
+        addAir( 2, 10, -2);
+        addAir(-2, 10, -2);
 
         addBlock( 0, 1,  0, mPillar);
         addBlock( 0, 2,  0, mPillar);
@@ -374,7 +373,7 @@ public class StructureAncientShrine extends StructureBlockArray {
         TileEntityCallback lootCallback = new TileEntityCallback() {
             @Override
             public boolean isApplicable(TileEntity te) {
-                return te != null && te instanceof TileEntityChest;
+                return te instanceof TileEntityChest;
             }
 
             @Override
@@ -395,7 +394,7 @@ public class StructureAncientShrine extends StructureBlockArray {
         addTileCallback(new BlockPos(0, -3, 0), new TileEntityCallback() {
             @Override
             public boolean isApplicable(TileEntity te) {
-                return te != null && te instanceof TileCollectorCrystal;
+                return te instanceof TileCollectorCrystal;
             }
 
             @Override

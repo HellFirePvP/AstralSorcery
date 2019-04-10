@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2018
+ * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -45,6 +45,10 @@ public abstract class PerkConverter {
             return perkAttributeModifier;
         }
     };
+
+    public int getId() {
+        return id;
+    }
 
     /**
      * Use {@link PerkAttributeModifier#convertModifier(String, PerkAttributeModifier.Mode, float)} to convert the given modifier
