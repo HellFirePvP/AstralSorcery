@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -41,6 +42,11 @@ public class PerkAttributeHelper {
 
     public static PlayerAttributeMap getMockInstance(Side side) {
         return new PlayerAttributeMap(side);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void clearClient() {
+        playerPerkAttributesClient.clear();
     }
 
     public static void clearServer() {
