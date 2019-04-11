@@ -25,6 +25,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.charset.Charset;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,6 +36,21 @@ import java.util.UUID;
  * Date: 07.05.2016 / 01:13
  */
 public class ByteBufUtils {
+
+    @Nullable
+    public static <T> T readOptional(ByteBuf buf, Function<ByteBuf, T> readFct) {
+        if (buf.readBoolean()) {
+            return readFct.apply(buf);
+        }
+        return null;
+    }
+
+    public static <T> void writeOptional(ByteBuf buf, @Nullable T object, BiConsumer<ByteBuf, T> applyFct) {
+        buf.writeBoolean(object != null);
+        if (object != null) {
+            applyFct.accept(buf, object);
+        }
+    }
 
     public static void writeUUID(ByteBuf buf, UUID uuid) {
         buf.writeLong(uuid.getMostSignificantBits());
