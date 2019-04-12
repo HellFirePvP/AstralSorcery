@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -85,6 +86,25 @@ public class ByteBufUtils {
         byte[] strBytes = new byte[length];
         buf.readBytes(strBytes, 0, length);
         return new String(strBytes, Charset.forName("UTF-8"));
+    }
+
+    public static void writeResourceLocation(ByteBuf buf, ResourceLocation key) {
+        writeString(buf, key.toString());
+    }
+
+    public static ResourceLocation readResourceLocation(ByteBuf buf) {
+        return new ResourceLocation(readString(buf));
+    }
+
+    public static <T extends Enum<T>> void writeEnumValue(ByteBuf buf, T value) {
+        buf.writeInt(value.ordinal());
+    }
+
+    public static <T extends Enum<T>> T readEnumValue(ByteBuf buf, Class<T> enumClazz) {
+        if (!enumClazz.isEnum()) {
+            throw new IllegalArgumentException("Passed class is not an enum!");
+        }
+        return enumClazz.getEnumConstants()[buf.readInt()];
     }
 
     public static void writePos(ByteBuf buf, BlockPos pos) {

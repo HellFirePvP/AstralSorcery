@@ -131,7 +131,7 @@ public class NBTHelper {
     }
 
     @Nullable
-    public static <T extends Comparable<T>> IBlockState getBlockStateFromTag(NBTTagCompound cmp) {
+    public static IBlockState getBlockStateFromTag(NBTTagCompound cmp) {
         return getBlockStateFromTag(cmp, null);
     }
 

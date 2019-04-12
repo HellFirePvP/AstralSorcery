@@ -59,19 +59,14 @@ public class PktPerkGemModification implements IMessageHandler<PktPerkGemModific
     public void fromBytes(ByteBuf buf) {
         this.action = buf.readInt();
         this.slotId = buf.readInt();
-        if (buf.readBoolean()) {
-            this.perkKey = new ResourceLocation(ByteBufUtils.readString(buf));
-        }
+        this.perkKey = ByteBufUtils.readOptional(buf, ByteBufUtils::readResourceLocation);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(this.action);
         buf.writeInt(this.slotId);
-        buf.writeBoolean(this.perkKey != null);
-        if (this.perkKey != null) {
-            ByteBufUtils.writeString(buf, this.perkKey.toString());
-        }
+        ByteBufUtils.writeOptional(buf, this.perkKey, ByteBufUtils::writeResourceLocation);
     }
 
     @Override
