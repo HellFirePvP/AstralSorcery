@@ -24,6 +24,7 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -83,6 +84,8 @@ public class StructureMatcherPatternArray extends StructureMatcher {
                 this.mismatches.remove(change.pos);
             }
         }
+
+        this.mismatches.removeIf(mismatchPos -> !this.structure.hasBlockAt(mismatchPos));
 
         int mismatchesPost = this.mismatches.size();
         LogCategory.STRUCTURE_MATCH.info(() -> "Updated structure integrity with " + mismatchesPre + " mismatches before and " + mismatchesPost + " mismatches afterwards.");
