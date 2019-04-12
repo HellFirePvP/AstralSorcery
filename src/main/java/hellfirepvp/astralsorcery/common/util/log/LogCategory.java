@@ -19,7 +19,8 @@ import hellfirepvp.astralsorcery.common.util.Provider;
  */
 public enum LogCategory {
 
-    PERKS;
+    PERKS,
+    STRUCTURE_MATCH;
 
     public void info(Provider<String> message) {
         LogUtil.info(this, message);

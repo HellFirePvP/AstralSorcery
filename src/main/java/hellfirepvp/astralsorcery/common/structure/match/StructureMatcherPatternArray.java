@@ -11,17 +11,21 @@ package hellfirepvp.astralsorcery.common.structure.match;
 import hellfirepvp.astralsorcery.common.structure.*;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import hellfirepvp.astralsorcery.common.structure.change.BlockStateChangeSet;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -58,6 +62,7 @@ public class StructureMatcherPatternArray extends StructureMatcher {
                 this.mismatches.add(offset);
             }
         }
+        LogCategory.STRUCTURE_MATCH.info(() -> "Structure matcher initialized at " + center + " with " + this.mismatches.size() + " initial mismatches!");
     }
 
     @Override
@@ -67,6 +72,8 @@ public class StructureMatcherPatternArray extends StructureMatcher {
 
     @Override
     public boolean notifyChange(IBlockAccess world, BlockPos centre, BlockStateChangeSet changeSet) {
+        int mismatchesPre = this.mismatches.size();
+
         for (BlockStateChangeSet.StateChange change : changeSet.getChanges()) {
             if (this.structure.hasBlockAt(change.pos) &&
                     !this.structure.matchSingleBlockState(change.pos, change.newState)) {
@@ -76,7 +83,16 @@ public class StructureMatcherPatternArray extends StructureMatcher {
                 this.mismatches.remove(change.pos);
             }
         }
-        return this.mismatches.size() <= 0;
+
+        int mismatchesPost = this.mismatches.size();
+        LogCategory.STRUCTURE_MATCH.info(() -> "Updated structure integrity with " + mismatchesPre + " mismatches before and " + mismatchesPost + " mismatches afterwards.");
+        if (mismatchesPost > 0) {
+            LogCategory.STRUCTURE_MATCH.info(() -> "Found mismatches at (relative to center): " +
+                    this.mismatches.stream()
+                            .map(Vec3i::toString)
+                            .collect(Collectors.joining(", ")));
+        }
+        return mismatchesPost <= 0;
     }
 
     @Override
