@@ -751,7 +751,7 @@ public class TileRitualPedestal extends TileReceiverBase implements IMultiblockD
             double addFractureChance = CrystalCalculations.getFractureChance(executeTimes, freeCap) * CrystalCalculations.getCstFractureModifier(this.channeling) * prop.getFracturationRate();
             int part = Math.max(1, executeTimes - freeCap);
 
-            if(ce instanceof ConstellationEffectStatus && executeTimes > 0) {
+            if(ce instanceof ConstellationEffectStatus && collectionChannelBuffer > 0) {
                 collectionChannelBuffer = 0;
                 BlockPos to = getLocationPos();
                 if(ritualLinkTo != null) to = ritualLinkTo;
