@@ -9,9 +9,11 @@
 package hellfirepvp.astralsorcery.common.world.retrogen;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,69 +33,61 @@ import java.util.Map;
 public class RetroGenController {
 
     private static boolean inPopulation = false;
-
-    private static Map<Integer, LinkedList<ChunkPos>> queuedPopulation = new HashMap<>();
-
-    @SubscribeEvent
-    public void onWorldUnload(WorldEvent.Unload event) {
-        queuedPopulation.remove(event.getWorld().provider.getDimension());
-    }
-
-    //Clean up the mess we create.
-    @SubscribeEvent
-    public void onChunkUnload(ChunkEvent.Unload event) {
-        World w = event.getWorld();
-        if(w.isRemote) return;
-        ChunkPos pos = event.getChunk().getPos();
-        int dimId = w.provider.getDimension();
-
-        List<ChunkPos> queue = queuedPopulation.computeIfAbsent(dimId, (id) -> new LinkedList<>());
-        queue.add(pos);
-    }
+    private static boolean inCascade = false;
 
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
         World w = event.getWorld();
-        if(w.isRemote) return;
-        ChunkPos pos = event.getChunk().getPos();
-        int dimId = w.provider.getDimension();
+        if (w.isRemote) return;
+        Chunk ch = event.getChunk();
 
-        if(!event.getChunk().isTerrainPopulated()) {
-            visitChunkPopulation(w);
+        if (!event.getChunk().isTerrainPopulated()) {
             return;
         }
 
-        List<ChunkPos> queue = queuedPopulation.computeIfAbsent(dimId, (id) -> new LinkedList<>());
-        queue.add(pos);
-        visitChunkPopulation(w);
+        visitChunkPopulation(ch.getWorld(), ch.getPos());
     }
 
-    private void visitChunkPopulation(World w) {
-        if(inPopulation) return;
-        int dimId = w.provider.getDimension();
-        LinkedList<ChunkPos> queue = queuedPopulation.computeIfAbsent(dimId, (id) -> new LinkedList<>());
-        while (!queue.isEmpty()) {
-            ChunkPos pos = queue.getFirst();
-            int chX = pos.x;
-            int chZ = pos.z;
+    private void visitChunkPopulation(World w, ChunkPos pos) {
+        if (inPopulation) return;
+        int chX = pos.x;
+        int chZ = pos.z;
 
-            if(w.isChunkGeneratedAt(chX + 1, chZ) &&
-                    w.isChunkGeneratedAt(chX, chZ + 1) &&
-                    w.isChunkGeneratedAt(chX + 1, chZ + 1)) {
-                Integer chunkVersion = -1;
-                if(((WorldServer) w).getChunkProvider().chunkLoader.isChunkGeneratedAt(pos.x, pos.z)) {
-                    chunkVersion = ChunkVersionController.instance.getGenerationVersion(pos);
-                    if(chunkVersion == null) {
-                        return;
-                    }
+        if (w.isChunkGeneratedAt(chX + 1, chZ) &&
+                w.isChunkGeneratedAt(chX, chZ + 1) &&
+                w.isChunkGeneratedAt(chX + 1, chZ + 1)) {
+
+            Integer chunkVersion = -1;
+            if (((WorldServer) w).getChunkProvider().chunkLoader.isChunkGeneratedAt(chX, chZ)) {
+                chunkVersion = ChunkVersionController.instance.getGenerationVersion(pos);
+                if (chunkVersion == null) {
+                    return;
                 }
-                inPopulation = true;
-                CommonProxy.worldGenerator.handleRetroGen(w, pos, chunkVersion);
-                inPopulation = false;
-
-                queue.removeFirst();
             }
+
+            if (chunkVersion >= AstralWorldGenerator.CURRENT_WORLD_GENERATOR_VERSION) {
+                return;
+            }
+
+            inPopulation = true;
+            CommonProxy.worldGenerator.handleRetroGen(w, pos, chunkVersion);
+            inPopulation = false;
         }
+
+        if (inCascade) {
+            return;
+        }
+        inCascade = true;
+        if (w.isChunkGeneratedAt(chX - 1, chZ)) {
+            visitChunkPopulation(w, new ChunkPos(chX - 1, chZ));
+        }
+        if (w.isChunkGeneratedAt(chX, chZ - 1)) {
+            visitChunkPopulation(w, new ChunkPos(chX, chZ - 1));
+        }
+        if (w.isChunkGeneratedAt(chX - 1, chZ - 1)) {
+            visitChunkPopulation(w, new ChunkPos(chX - 1, chZ - 1));
+        }
+        inCascade = false;
     }
 
 }
