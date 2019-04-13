@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -135,8 +136,10 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
             this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
         }
         boolean matches = this.structureMatch.matches(getWorld());
-        boolean update = this.hasMultiblock != matches;
-        if (update) {
+        if (matches != this.hasMultiblock) {
+            LogCategory.STRUCTURE_MATCH.info(() ->
+                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                            " (" + this.hasMultiblock + " -> " + matches + ")");
             this.hasMultiblock = matches;
             markForUpdate();
         }

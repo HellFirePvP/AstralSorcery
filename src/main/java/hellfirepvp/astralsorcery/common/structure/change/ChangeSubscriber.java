@@ -101,13 +101,8 @@ public class ChangeSubscriber<T extends StructureMatcher> {
     }
 
     public void writeToNBT(NBTTagCompound tag) {
-        NBTTagCompound areaData = new NBTTagCompound();
-        this.matcher.writeToNBT(areaData);
-        tag.setTag("matchData", areaData);
-
-        NBTTagCompound changeData = new NBTTagCompound();
-        this.changeSet.writeToNBT(changeData);
-        tag.setTag("changeData", changeData);
+        NBTHelper.setAsSubTag(tag, "matchData", this.matcher::writeToNBT);
+        NBTHelper.setAsSubTag(tag, "changeData", this.changeSet::writeToNBT);
 
         NBTHelper.writeBlockPosToNBT(this.requester, tag);
         if (this.isMatching != null) {

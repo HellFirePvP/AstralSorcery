@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -150,9 +151,11 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
             this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
         }
         boolean found = this.structureMatch.matches(getWorld());
-        boolean update = this.hasMultiblock != found;
-        this.hasMultiblock = found;
-        if (update) {
+        if (found != this.hasMultiblock) {
+            LogCategory.STRUCTURE_MATCH.info(() ->
+                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                            " (" + this.hasMultiblock + " -> " + found + ")");
+            this.hasMultiblock = found;
             markForUpdate();
         }
     }
@@ -177,10 +180,8 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
         compound.setBoolean("seesSky", this.canSeeSky);
         compound.setBoolean("mbState", this.hasMultiblock);
         compound.setFloat("colMultiplier", this.collectionMultiplier);
-        if(linked != null) {
-            NBTTagCompound pos = new NBTTagCompound();
-            NBTHelper.writeBlockPosToNBT(linked, pos);
-            compound.setTag("linked", pos);
+        if (this.linked != null) {
+            NBTHelper.setAsSubTag(compound, "linked", nbt -> NBTHelper.writeBlockPosToNBT(this.linked, nbt));
         }
     }
 

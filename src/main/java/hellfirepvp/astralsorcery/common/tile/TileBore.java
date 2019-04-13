@@ -38,6 +38,7 @@ import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTa
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.VerticalConeBlockDiscoverer;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -759,9 +760,11 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         }
 
         boolean found = this.structureMatch.matches(this.getWorld());
-        boolean update = hasMultiblock != found;
-        this.hasMultiblock = found;
-        if(update) {
+        if(found != this.hasMultiblock) {
+            LogCategory.STRUCTURE_MATCH.info(() ->
+                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                            " (" + this.hasMultiblock + " -> " + found + ")");
+            this.hasMultiblock = found;
             markForUpdate();
         }
     }

@@ -41,6 +41,7 @@ import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternA
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.client.Minecraft;
@@ -348,8 +349,10 @@ public class TileRitualPedestal extends TileReceiverBase implements IMultiblockD
             this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
         }
         boolean found = this.structureMatch.matches(getWorld());
-        boolean update = this.hasMultiblock != found;
-        if (update) {
+        if (found != this.hasMultiblock) {
+            LogCategory.STRUCTURE_MATCH.info(() ->
+                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                            " (" + this.hasMultiblock + " -> " + found + ")");
             this.hasMultiblock = found;
             markForUpdate();
             flagDirty();
@@ -1012,22 +1015,16 @@ public class TileRitualPedestal extends TileReceiverBase implements IMultiblockD
                 channeling.writeToNBT(compound, IConstellation.getDefaultSaveKey() + "Normal");
             }
             if(!crystal.isEmpty()) {
-                NBTTagCompound cmp = new NBTTagCompound();
-                this.crystal.writeToNBT(cmp);
-                compound.setTag("crystal", cmp);
+                NBTHelper.setAsSubTag(compound, "crystal", this.crystal::writeToNBT);
             }
             if(trait != null) {
                 trait.writeToNBT(compound, IConstellation.getDefaultSaveKey() + "Trait");
             }
             if(ritualLinkTo != null) {
-                NBTTagCompound tag = new NBTTagCompound();
-                NBTHelper.writeBlockPosToNBT(ritualLinkTo, tag);
-                compound.setTag("ritualLinkPos", tag);
+                NBTHelper.setAsSubTag(compound, "ritualLinkPos", nbt -> NBTHelper.writeBlockPosToNBT(ritualLinkTo, nbt));
             }
             if(ce != null) {
-                NBTTagCompound tag = new NBTTagCompound();
-                ce.writeToNBT(tag);
-                compound.setTag("effect", tag);
+                NBTHelper.setAsSubTag(compound, "effect", this.ce::writeToNBT);
             }
         }
 

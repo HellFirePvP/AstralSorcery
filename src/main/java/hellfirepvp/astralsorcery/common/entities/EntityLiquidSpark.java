@@ -264,9 +264,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super.writeEntityToNBT(compound);
 
         if(this.tileTarget != null) {
-            NBTTagCompound cmp = new NBTTagCompound();
-            NBTHelper.writeBlockPosToNBT(this.tileTarget.getPos(), cmp);
-            compound.setTag("tileTarget", cmp);
+            NBTHelper.setAsSubTag(compound, "tileTarget", tag -> NBTHelper.writeBlockPosToNBT(this.tileTarget.getPos(), tag));
         }
     }
 

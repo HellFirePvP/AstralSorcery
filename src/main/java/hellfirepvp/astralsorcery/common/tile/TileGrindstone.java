@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -101,9 +102,7 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        NBTTagCompound itemTag = new NBTTagCompound();
-        grindingItem.writeToNBT(itemTag);
-        compound.setTag("item", itemTag);
+        NBTHelper.setAsSubTag(compound, "item", this.grindingItem::writeToNBT);
     }
 
 }

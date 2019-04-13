@@ -136,9 +136,7 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMu
         super.writeCustomNBT(compound);
 
         if(this.linkedTo != null) {
-            NBTTagCompound tag = new NBTTagCompound();
-            NBTHelper.writeBlockPosToNBT(this.linkedTo, tag);
-            compound.setTag("posLink", tag);
+            NBTHelper.setAsSubTag(compound, "posLink", nbt -> NBTHelper.writeBlockPosToNBT(this.linkedTo, nbt));
         }
     }
 

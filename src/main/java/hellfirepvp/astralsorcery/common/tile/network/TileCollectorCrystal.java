@@ -37,6 +37,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -103,8 +104,10 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
                             getRequiredStructure());
                 }
                 boolean found = this.structureMatch.matches(getWorld());
-                boolean update = this.multiBlockPresent != found;
-                if (update) {
+                if (found != this.multiBlockPresent) {
+                    LogCategory.STRUCTURE_MATCH.info(() ->
+                            "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                                    " (" + this.multiBlockPresent + " -> " + found + ")");
                     this.multiBlockPresent = found;
                     setEnhanced(found);
                     markForUpdate();
@@ -270,7 +273,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
             this.multiBlockPresent = enhanced;
             WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(world);
             IIndependentStarlightSource source = handle.getSourceAt(getPos());
-            if(source != null && source instanceof IndependentCrystalSource) {
+            if (source instanceof IndependentCrystalSource) {
                 ((IndependentCrystalSource) source).setEnhanced(enhanced);
                 handle.markDirty();
             }

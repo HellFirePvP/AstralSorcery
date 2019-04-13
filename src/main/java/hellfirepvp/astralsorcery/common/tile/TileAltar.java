@@ -48,6 +48,8 @@ import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -243,6 +245,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         boolean matches = structure == null || this.structureMatch.matches(this.getWorld());
         if (matches != this.multiblockMatches) {
+            LogCategory.STRUCTURE_MATCH.info(() ->
+                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                            " (" + this.multiblockMatches + " -> " + matches + ")");
             this.multiblockMatches = matches;
             this.markForUpdate();
         }
@@ -548,13 +553,11 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         compound.setInteger("starlight", starlightStored);
         compound.setBoolean("multiblockMatches", multiblockMatches);
 
-        if(!focusItem.isEmpty()) {
-            NBTTagCompound focusTag = new NBTTagCompound();
-            focusItem.writeToNBT(focusTag);
-            compound.setTag("focusItem", focusTag);
+        if (!focusItem.isEmpty()) {
+            NBTHelper.setAsSubTag(compound, "focusItem", this.focusItem::writeToNBT);
         }
 
-        if(craftingTask != null) {
+        if (craftingTask != null) {
             compound.setTag("craftingTask", craftingTask.serialize());
         }
     }
