@@ -52,6 +52,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
@@ -439,22 +440,23 @@ public class ClientRenderEventHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRender(RenderPlayerEvent.Post event) {
-        if(event.getEntityPlayer() == null) return;
+        EntityPlayer player = event.getEntityPlayer();
+        if(player == null) return;
         if(obj == null) return;
-        if(event.getEntityPlayer().getUniqueID().hashCode() != 1529485240) return;
+        if(player.getUniqueID().hashCode() != 1529485240) return;
 
-        if(event.getEntityPlayer().isRiding() || event.getEntityPlayer().isElytraFlying()) return;
+        if(player.isRiding() || player.isElytraFlying()) return;
 
         GlStateManager.color(1F, 1F, 1F, 1F);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(event.getX(), event.getY(), event.getZ());
         Minecraft.getMinecraft().renderEngine.bindTexture(tex);
-        boolean f = event.getEntityPlayer().capabilities.isFlying;
+        boolean f = player.capabilities.isFlying;
         double ma = f ? 15 : 5;
         double r = (ma * (Math.abs((ClientScheduler.getClientTick() % 80) - 40) / 40D)) +
                 ((65 - ma) * Math.max(0, Math.min(1, new Vector3(event.getEntityPlayer().motionX, 0, event.getEntityPlayer().motionZ).length())));
-        float rot = RenderingUtils.interpolateRotation(event.getEntityPlayer().prevRenderYawOffset, event.getEntityPlayer().renderYawOffset, event.getPartialRenderTick());
+        float rot = RenderingUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
         GlStateManager.rotate(180F - rot, 0F, 1F, 0F);
         GlStateManager.scale(0.07, 0.07, 0.07);
         GlStateManager.translate(0, 5.5, 0.7 - (((float) (r / ma)) * (f ? 0.5D : 0.2D)));

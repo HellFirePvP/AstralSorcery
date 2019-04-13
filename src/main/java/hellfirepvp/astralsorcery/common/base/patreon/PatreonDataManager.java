@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectBlockRing;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectCelestialWings;
 import hellfirepvp.astralsorcery.common.base.patreon.data.PatreonEffectData;
 import hellfirepvp.astralsorcery.common.base.patreon.data.PatreonEffectType;
 

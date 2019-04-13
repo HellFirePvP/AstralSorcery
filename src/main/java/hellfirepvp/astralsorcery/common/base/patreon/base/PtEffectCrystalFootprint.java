@@ -62,8 +62,7 @@ public class PtEffectCrystalFootprint extends PatreonEffectHelper.PatreonEffect 
 
             //spawnDust(player);
 
-            if (player.ticksExisted % 1 == 0 &&
-                    rand.nextBoolean()) {
+            if (rand.nextBoolean()) {
                 spawnFootprint(player);
             }
         }
