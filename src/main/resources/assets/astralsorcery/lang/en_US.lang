@@ -11,6 +11,8 @@ jei.category.altar.attunement=Starlight Crafting Altar
 jei.category.altar.constellation=Celestial Altar
 jei.category.altar.trait=Iridescent Altar
 
+jei.additional_info.starlight=+ starlight
+
 astralsorcery.config.title.overview=Astral Sorcery Configuration
 config.astralsorcery.category.astralsorcery=AstralSorcery
 config.astralsorcery.category.astralsorcery.tooltip=General Configuration
