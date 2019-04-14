@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.integrations;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.Mods;
@@ -16,6 +15,7 @@ import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.container.*;
+import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.helper.RecipeHelper;
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
@@ -31,7 +32,6 @@ import hellfirepvp.astralsorcery.common.integrations.mods.jei.util.JEISessionHan
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.util.TieredAltarRecipeTransferHandler;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import mezz.jei.api.*;
@@ -146,24 +146,9 @@ public class ModIntegrationJEI implements IModPlugin {
         registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.CONSTELLATION_CRAFT), idAltarConstellation);
         registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.TRAIT_CRAFT), idAltarTrait);
 
-        registry.addRecipes(Lists.newArrayList(
-                RecipesAS.rCCParchment        ,
-                RecipesAS.rRJournal           ,
-                RecipesAS.rBlackMarbleRaw     ,
-                RecipesAS.rBlackMarbleArch    ,
-                RecipesAS.rBlackMarbleBricks  ,
-                RecipesAS.rBlackMarbleChiseled,
-                RecipesAS.rBlackMarbleEngraved,
-                RecipesAS.rBlackMarblePillar  ,
-                RecipesAS.rBlackMarbleRuned   ,
-                RecipesAS.rMarbleArch         ,
-                RecipesAS.rMarbleBricks       ,
-                RecipesAS.rMarbleChiseled     ,
-                RecipesAS.rMarbleEngraved     ,
-                RecipesAS.rMarblePillar       ,
-                RecipesAS.rMarbleRuned        ,
-                RecipesAS.rMarbleStairs       ,
-                RecipesAS.rMarbleSlab         ), VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(RecipeHelper.ShapedIngredientRecipe.class, ASRecipeWrapper.ShapedRecipe::new, VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(RecipeHelper.ShapelessIngredientRecipe.class, ASRecipeWrapper::new, VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(ShapedLightProximityRecipe.class, ASRecipeWrapper.LightRecipe::new, VanillaRecipeCategoryUid.CRAFTING);
 
         jeiRegistrationPhase = false;
     }
