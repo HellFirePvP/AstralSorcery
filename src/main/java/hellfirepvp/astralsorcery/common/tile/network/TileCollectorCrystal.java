@@ -55,6 +55,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -65,6 +66,7 @@ import java.util.Random;
  */
 public class TileCollectorCrystal extends TileSourceBase implements IMultiblockDependantTile, IStructureAreaOfInfluence {
 
+    private static final UUID DUMMY_UUID = UUID.fromString("0cd550cc-8341-4b96-8d1e-d4a12deb8ca3");
     public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
             new BlockPos(-1, -4, -1),
             new BlockPos( 0, -4, -1),
@@ -81,7 +83,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
     private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private BlockCollectorCrystalBase.CollectorCrystalType type;
     private CrystalProperties usedCrystalProperties;
-    private boolean playerMade;
+    private UUID playerRef;
     private boolean multiBlockPresent = false;
     private IWeakConstellation associatedType;
     private IMinorConstellation associatedTrait;
@@ -242,7 +244,11 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
     }
 
     public boolean isPlayerMade() {
-        return playerMade;
+        return playerRef != null;
+    }
+
+    public UUID getPlayerReference() {
+        return playerRef;
     }
 
     public CrystalProperties getCrystalProperties() {
@@ -257,10 +263,10 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
         return associatedTrait;
     }
 
-    public void onPlace(IWeakConstellation constellation, @Nullable IMinorConstellation trait, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public void onPlace(IWeakConstellation constellation, @Nullable IMinorConstellation trait, CrystalProperties properties, @Nullable UUID player, BlockCollectorCrystalBase.CollectorCrystalType type) {
         this.associatedType = constellation;
         this.associatedTrait = trait;
-        this.playerMade = player;
+        this.playerRef = player;
         this.usedCrystalProperties = properties;
         this.type = type;
 
@@ -299,14 +305,20 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
 
     @Override
     public boolean hasBeenLinked() {
-        return !playerMade;
+        return playerRef == null;
     }
 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        this.playerMade = compound.getBoolean("player");
+        if (compound.hasKey("playerRef")) {
+            this.playerRef = compound.getUniqueId("playerRef");
+        } else if (compound.hasKey("player") && compound.getBoolean("player")) {
+            this.playerRef = DUMMY_UUID; //Legacy data conversion..
+        } else {
+            this.playerRef = null;
+        }
         this.associatedType = (IWeakConstellation) IConstellation.readFromNBT(compound);
         this.associatedTrait = (IMinorConstellation) IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "trait");
         this.usedCrystalProperties = CrystalProperties.readFromNBT(compound);
@@ -318,7 +330,9 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        compound.setBoolean("player", playerMade);
+        if (this.playerRef != null) {
+            compound.setUniqueId("playerRef", this.playerRef);
+        }
         if (associatedType != null) {
             associatedType.writeToNBT(compound);
         }
