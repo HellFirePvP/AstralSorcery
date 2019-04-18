@@ -663,8 +663,9 @@ public class ResearchManager {
     }
 
     private static File getPlayerDirectory() {
-        File wDir = DimensionManager.getWorld(0).getSaveHandler().getWorldDirectory();
-        File pDir = new File(wDir, "playerdata");
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        File worldDir = new File(server.anvilFile, server.getFolderName());
+        File pDir = new File(worldDir, "playerdata");
         if (!pDir.exists()) {
             pDir.mkdirs();
         }
