@@ -55,13 +55,13 @@ public class TransmissionWorldHandler {
     private List<BlockPos> sourcePosBuilding = new LinkedList<>();
 
     private final Object accessLock = new Object();
-    private final World world;
+    private final int dimId;
 
-    public TransmissionWorldHandler(World world) {
-        this.world = world;
+    public TransmissionWorldHandler(int dimId) {
+        this.dimId = dimId;
     }
 
-    public void tick() {
+    public void tick(World world) {
         WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(world);
 
         for (Tuple<BlockPos, IIndependentStarlightSource> sourceTuple : handler.getAllSources()) {
@@ -72,7 +72,7 @@ public class TransmissionWorldHandler {
                 if(!cachedSourceChain.containsKey(source)) {
                     if(!sourcePosBuilding.contains(at)) {
                         sourcePosBuilding.add(at);
-                        buildSourceNetworkThreaded(source, handler, at);
+                        buildSourceNetworkThreaded(world, source, handler, at);
                     }
                 }
 
@@ -129,11 +129,11 @@ public class TransmissionWorldHandler {
         }
     }
 
-    private void buildSourceNetworkThreaded(IIndependentStarlightSource source, WorldNetworkHandler handler, BlockPos sourcePos) {
-        TransmissionChain.threadedBuildTransmissionChain(this, source, handler, sourcePos);
+    private void buildSourceNetworkThreaded(World world, IIndependentStarlightSource source, WorldNetworkHandler handler, BlockPos sourcePos) {
+        TransmissionChain.threadedBuildTransmissionChain(world, this, source, handler, sourcePos);
     }
 
-    void threadTransmissionChainCallback(TransmissionChain chain, IIndependentStarlightSource source, WorldNetworkHandler handle, BlockPos sourcePos) {
+    void threadTransmissionChainCallback(World world, TransmissionChain chain, IIndependentStarlightSource source, WorldNetworkHandler handle, BlockPos sourcePos) {
         synchronized (accessLock) {
             sourcePosBuilding.remove(sourcePos);
 
@@ -215,12 +215,12 @@ public class TransmissionWorldHandler {
                 }
                 Thread tr = new Thread(() -> {
                     DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
-                    connections.removeOldConnectionsThreaded(world.provider.getDimension(), knownChain.getFoundConnections());
+                    connections.removeOldConnectionsThreaded(dimId, knownChain.getFoundConnections());
                 });
                 tr.start();
                 Thread t = new Thread(() -> {
                     DataLightBlockEndpoints connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
-                    connections.removeEndpoints(world.provider.getDimension(), knownChain.getResolvedNormalBlockPositions());
+                    connections.removeEndpoints(dimId, knownChain.getResolvedNormalBlockPositions());
                 });
                 t.start();
             }
