@@ -90,7 +90,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                     }
                     GlStateManager.translate(0, 0.15, 0);
                     GlStateManager.scale(0.7, 0.7, 0.7);
-                    TESRCollectorCrystal.renderCrystal(true, true);
+                    TESRCollectorCrystal.renderCrystal(null, true, true);
                     GlStateManager.popMatrix();
                     TextureHelper.refreshTextureBindState();
                 }

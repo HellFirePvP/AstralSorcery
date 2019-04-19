@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectBlockRing;
 import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectCelestialWings;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectCorruptedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.base.patreon.data.PatreonEffectData;
 import hellfirepvp.astralsorcery.common.base.patreon.data.PatreonEffectType;
 
@@ -89,7 +90,10 @@ public class PatreonDataManager {
             }
             AstralSorcery.log.info("Patreon effect loading finished.");
 
-            //UUID hellfire = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1");
+            UUID hellfire = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1");
+            PatreonEffectHelper.PatreonEffect pe = new PtEffectCorruptedCelestialCrystal(
+                    UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e44d1"),
+                    PatreonEffectHelper.FlareColor.FIRE);
             //PatreonEffectHelper.PatreonEffect pe =
             //        new PtEffectCrystalFootprint(UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
             //                PatreonEffectHelper.FlareColor.WATER, hellfire,
@@ -103,8 +107,8 @@ public class PatreonDataManager {
             //                8,
             //                5000,
             //                new HashMap<>());
-            //pe.initialize();
-            //PatreonEffectHelper.effectMap.get(hellfire).add(pe);
+            pe.initialize();
+            PatreonEffectHelper.effectMap.get(hellfire).add(pe);
 
             PatreonEffectHelper.loadingFinished = true;
         });

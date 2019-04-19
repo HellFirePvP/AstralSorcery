@@ -17,6 +17,8 @@ import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectC
 import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectCorruptedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
@@ -34,6 +36,7 @@ import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternA
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
@@ -116,7 +119,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
                 }
             }
         } else {
-            if(!doesSeeSky()) {
+            if (!doesSeeSky()) {
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                         getPos().getX() + 0.5,
                         getPos().getY() + 0.5,
@@ -125,11 +128,16 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
                          (rand.nextFloat() * 0.04F) * (rand.nextBoolean() ? 1 : -1),
                          (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
                 p.scale(0.2F).setMaxAge(35);
+                Color c = Color.WHITE;
                 if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
-                    p.setColor(Color.CYAN);
-                } else {
-                    p.setColor(Color.WHITE);
+                    if (playerRef != null &&
+                            MiscUtils.contains(PatreonEffectHelper.getPatreonEffects(Side.CLIENT, playerRef), pe -> pe instanceof PtEffectCorruptedCelestialCrystal)) {
+                        c = Color.RED;
+                    } else {
+                        c = Color.CYAN;
+                    }
                 }
+                p.setColor(c);
             } else {
                 if(isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL && associatedType != null) {
                     playEnhancedEffects();
@@ -163,7 +171,14 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
             p.motion((rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
                      (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
                      (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.25F).setColor(Color.CYAN).setMaxAge(25);
+            p.scale(0.25F).setMaxAge(25);
+
+            Color c = Color.CYAN;
+            if (playerRef != null &&
+                    MiscUtils.contains(PatreonEffectHelper.getPatreonEffects(Side.CLIENT, playerRef), pe -> pe instanceof PtEffectCorruptedCelestialCrystal)) {
+                c = Color.RED;
+            }
+            p.setColor(c);
         }
 
         for (int i = 0; i < orbitals.length; i++) {
@@ -312,7 +327,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        if (compound.hasKey("playerRef")) {
+        if (compound.hasUniqueId("playerRef")) {
             this.playerRef = compound.getUniqueId("playerRef");
         } else if (compound.hasKey("player") && compound.getBoolean("player")) {
             this.playerRef = DUMMY_UUID; //Legacy data conversion..

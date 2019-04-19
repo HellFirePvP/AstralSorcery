@@ -106,7 +106,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
                 GL11.glScaled(0.6, 0.6, 0.6);
                 GL11.glEnable(GL11.GL_BLEND);
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                TESRCollectorCrystal.renderCrystal(celestial, true);
+                TESRCollectorCrystal.renderCrystal(null, celestial, true);
 
                 GL11.glPopMatrix();
                 GL11.glPopAttrib();

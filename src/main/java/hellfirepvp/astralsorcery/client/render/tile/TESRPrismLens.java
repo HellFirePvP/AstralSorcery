@@ -118,7 +118,7 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
         GlStateManager.scale(0.6, 0.6, 0.6);
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
-        TESRCollectorCrystal.renderCrystal(false, true);
+        TESRCollectorCrystal.renderCrystal(null, false, true);
         RenderHelper.disableStandardItemLighting();
         if(te.getLensColor() != null) {
             coloredPositions.add(te);
