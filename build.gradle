@@ -1,22 +1,30 @@
 buildscript {
+
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven {
-            name = "forge"
-            url = "https://files.minecraftforge.net/maven"
+        mavenCentral()
+    }
+
+    // TODO remove after FG becomes more stable and dev slows down... :P
+    configurations.classpath {
+        resolutionStrategy {
+            cacheDynamicVersionsFor 10, "seconds"
+            cacheChangingModulesFor 0, "seconds"
         }
     }
+
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: "java"
 
-version = "1.12.2-1.10.15"
-group= "hellfirepvp.astralsorcery"
-archivesBaseName = "astralsorcery"
+version = '1.13.2-1.11.0'
+group = 'hellfirepvp.astralsorcery'
+archivesBaseName = 'astralsorcery'
 String build_version = ""
 
 // Most likely inside Jenkins. Or homebrew environment.
@@ -25,79 +33,54 @@ if (System.getenv("BUILD_NUMBER") != null) {
     build_version = version + "-v" + System.getenv("BUILD_NUMBER")
 }
 
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
 minecraft {
-    version = "1.12.2-14.23.5.2781"
-    runDir = "run"
-    useDepAts = true
 
-    mappings = "snapshot_20180415"
-}
+    mappings channel: 'snapshot', version: '20180921-1.13'
+    
+    // accessTransformer = file('build/resources/main/META-INF/accesstransformer.cfg')
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
 
-compileJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-}
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-compileApiJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-}
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
 
-repositories {
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
 
-    maven {
-        // JEI files
-        // https when
-        url = "http://dvs1.progwml6.com/files/maven"
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
     }
-
-    maven {
-        // CraftTweaker
-        name 'jared maven'
-        url "https://maven.blamejared.com/"
-    }
-
-    maven {
-        //Baubles
-        name 'thiakil'
-        url 'https://maven.thiakil.com'
-    }
-
-    maven {
-        // Gamestages stuff
-        url 'https://maven.mcmoddev.com'
-    }
-
-    maven {
-        // CTM
-        url 'https://maven.tterrag.com'
-    }
-
 }
 
 dependencies {
 
-    def mc_version = "1.12"
-    def jei_mc_version = "1.12.2"
-    def ctm_mc_version = "MC1.12.2"
-    def ct_mc_version = "MC1120"
-
-    def jei_version = "4.8.5.151"
-    def ct_version = "4.1.8.9"
-    def ctm_version = "0.3.3.22"
-
-    deobfCompile "mezz.jei:jei_${jei_mc_version}:${jei_version}"
-
-    deobfCompile("CraftTweaker2:CraftTweaker2-${ct_mc_version}-Main:${mc_version}-${ct_version}")
-
-    deobfCompile "team.chisel.ctm:CTM:${ctm_mc_version}-${ctm_version}"
-
-    deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
-
-    deobfCompile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
+    minecraft "net.minecraftforge:forge:1.13.2-25.0.146"
 
 }
 
@@ -105,28 +88,30 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-//Sign jar from flatfile if present - local build
-task signMainJarFile(type: SignJar, dependsOn: reobfJar) {
-    onlyIf { // Skip the task if our secret data isn't available
-        project.hasProperty('keyStore')
-    }
-    if (project.hasProperty('keyStore')) { // This needs to be a path to the keystore file
-        keyStore = project.keyStore
-        alias = project.alias
-        storePass = project.storePass
-        keyPass = project.keyPass
-        inputFile = jar.archivePath
-        outputFile = jar.archivePath
-    }
-}
-build.dependsOn signMainJarFile
-
+// Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
-        attributes 'FMLAT': 'astralsorcery_at.cfg'
-        attributes 'FMLCorePlugin': "hellfirepvp.astralsorcery.core.AstralCore"
-        attributes 'FMLCorePluginContainsFMLMod': 'true'
+        attributes([
+            "Specification-Title": "astralsorcery",
+            "Specification-Vendor": "hellfirepvp",
+            "Specification-Version": "${version}",
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" : "hellfirepvp",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
+}
+
+// Example configuration to allow publishing using the maven-publish task
+// we define a custom artifact that is sourced from the reobfJar output task
+// and then declare that to be published
+// Note you'll need to add a repository here
+def reobfFile = file("$buildDir/reobfJar/output.jar")
+
+def reobfArtifact = artifacts.add('default', reobfFile) {
+    type 'jar'
+    builtBy 'reobfJar'
 }
 
 task deobfJar(type: Jar) {
@@ -165,24 +150,5 @@ publishing {
         maven {
             url "file://" + System.getenv("LOCAL_MAVEN")
         }
-    }
-}
-
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-                
-        // replace version and mcversion
-        expand "version": project.version, "mcversion": "1.12"
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
     }
 }

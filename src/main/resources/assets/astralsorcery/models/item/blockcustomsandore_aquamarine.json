@@ -1,7 +1,0 @@
-{
-    "parent": "astralsorcery:block/ore",
-    "textures": {
-        "base": "blocks/sand",
-        "ore": "astralsorcery:blocks/ore_aquamarine"
-    }
-}

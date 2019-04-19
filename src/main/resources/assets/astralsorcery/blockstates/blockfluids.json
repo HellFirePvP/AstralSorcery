@@ -1,9 +1,0 @@
-{
-     "forge_marker": 1,
-     "variants": {
-         "astralsorcery.liquidstarlight": {
-             "model": "forge:fluid",
-             "custom": { "fluid": "astralsorcery.liquidstarlight" }
-         }
-     }
- }

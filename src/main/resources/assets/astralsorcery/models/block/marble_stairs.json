@@ -1,8 +1,0 @@
-{
-    "parent": "block/stairs",
-    "textures": {
-        "bottom": "astralsorcery:blocks/marble_bricks",
-        "top": "astralsorcery:blocks/marble_bricks",
-        "side": "astralsorcery:blocks/marble_bricks"
-    }
-}

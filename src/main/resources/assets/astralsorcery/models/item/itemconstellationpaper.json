@@ -1,7 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "astralsorcery:items/scroll_constellation",
-        "layer1": "astralsorcery:items/scroll_constellation_overlay"
-    }
-}

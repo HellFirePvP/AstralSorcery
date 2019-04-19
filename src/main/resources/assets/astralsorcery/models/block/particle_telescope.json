@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "particle": "astralsorcery:models/telescope/telescope_particle",
-        "all": "astralsorcery:misc/blank"
-    }
-}

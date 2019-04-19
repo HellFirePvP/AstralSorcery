@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "astralsorcery:blocks/black_marble_chiseled"
-    }
-}
