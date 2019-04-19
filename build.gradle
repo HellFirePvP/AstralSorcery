@@ -88,6 +88,27 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
+/*
+TODO start signing jars again once that's around again.
+//Sign jar from flatfile if present
+task signMainJarFile(type: SignJar, dependsOn: reobfJar) {
+    onlyIf {
+        project.hasProperty('keyStore')
+    }
+    if (project.hasProperty('keyStore')) {
+        keyStore = project.keyStore
+        alias = project.alias
+        storePass = project.storePass
+        keyPass = project.keyPass
+        inputFile = jar.archivePath
+        outputFile = jar.archivePath
+    }
+}
+
+build.dependsOn signMainJarFile
+
+*/
+
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
