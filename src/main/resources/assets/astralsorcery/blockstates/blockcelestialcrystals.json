@@ -1,9 +1,0 @@
-{
-    "variants": {
-        "stage=0": { "model":"astralsorcery:celestial_cluster_stage_1" },
-        "stage=1": { "model":"astralsorcery:celestial_cluster_stage_2" },
-        "stage=2": { "model":"astralsorcery:celestial_cluster_stage_3" },
-        "stage=3": { "model":"astralsorcery:celestial_cluster_stage_4" },
-        "stage=4": { "model":"astralsorcery:celestial_cluster_stage_5" }
-    }
-}

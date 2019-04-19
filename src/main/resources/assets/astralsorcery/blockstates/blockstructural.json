@@ -1,5 +1,0 @@
-{
-    "variants": {
-        "blocktype=telescope_struct": { "model":"astralsorcery:particle_telescope" }
-    }
-}

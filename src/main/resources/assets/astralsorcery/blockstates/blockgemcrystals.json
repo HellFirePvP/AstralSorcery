@@ -1,9 +1,0 @@
-{
-    "variants": {
-        "stage=stage_0":       { "model":"astralsorcery:gem_stage_1" },
-        "stage=stage_1":       { "model":"astralsorcery:gem_stage_2" },
-        "stage=stage_2_sky":   { "model":"astralsorcery:gem_stage_3_earth" },
-        "stage=stage_2_day":   { "model":"astralsorcery:gem_stage_3_sun" },
-        "stage=stage_2_night": { "model":"astralsorcery:gem_stage_3_moon" }
-    }
-}
