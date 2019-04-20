@@ -17,8 +17,6 @@ modId="astralsorcery" #mandatory
 version="${file.jarVersion}" #mandatory
  # A display name for the mod
 displayName="Astral Sorcery" #mandatory
-# A URL to query for updates for this mod. See the JSON update specification <here> - nice <here> folks.
-updateJSONURL="http://myurl.me/" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://minecraft.curseforge.com/projects/astral-sorcery" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
@@ -28,11 +26,9 @@ credits="HellFirePvP (code), wiiv (models & textures)" #optional
 # A text field displayed in the mod UI
 authors="HellFirePvP, wiiv" #optional
 # The description text for the mod (multi line!) (#mandatory)
-description='''
-Magic mod that draws power from stars and their constellations
-'''
+description='''Magic mod that draws power from stars and their constellations'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.examplemod]] #optional
+[[dependencies.astralsorcery]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -44,7 +40,7 @@ Magic mod that draws power from stars and their constellations
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.examplemod]]
+[[dependencies.astralsorcery]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.13.2]"
