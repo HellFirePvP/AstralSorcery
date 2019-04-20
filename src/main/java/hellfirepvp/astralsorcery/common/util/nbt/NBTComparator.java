@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.nbt;
 
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -26,13 +26,13 @@ import java.util.List;
 public class NBTComparator {
 
     public static boolean contains(@Nonnull NBTTagCompound thisCompound, @Nonnull NBTTagCompound otherCompound) {
-        for (String key : thisCompound.getKeySet()) {
-            if (!otherCompound.hasKey(key, thisCompound.getTagId(key))) {
+        for (String key : thisCompound.keySet()) {
+            if (!otherCompound.hasKey(key)) {
                 return false;
             }
 
-            NBTBase thisNBT = thisCompound.getTag(key);
-            NBTBase otherNBT = otherCompound.getTag(key);
+            INBTBase thisNBT = thisCompound.getTag(key);
+            INBTBase otherNBT = otherCompound.getTag(key);
             if (!compare(thisNBT, otherNBT)) {
                 return false;
             }
@@ -41,19 +41,17 @@ public class NBTComparator {
     }
 
     private static boolean containList(NBTTagList base, NBTTagList other) {
-        if (base.tagCount() > other.tagCount()) {
+        if (base.size() > other.size()) {
             return false;
         }
 
         List<Integer> matched = new ArrayList<>();
         lblMatching:
-        for (int index = 0; index < base.tagCount(); index++) {
-            NBTBase thisNbt = base.get(index);
+        for (INBTBase thisNbt : base) {
+            for (int matchIndex = 0; matchIndex < other.size(); matchIndex++) {
+                INBTBase matchNBT = other.get(matchIndex);
 
-            for (int matchIndex = 0; matchIndex < other.tagCount(); matchIndex++) {
-                NBTBase matchNBT = other.get(matchIndex);
-
-                if (!matched.contains(matchIndex)){
+                if (!matched.contains(matchIndex)) {
                     if (compare(thisNbt, matchNBT)) {
                         matched.add(matchIndex);
                         continue lblMatching;
@@ -67,7 +65,7 @@ public class NBTComparator {
         return true;
     }
 
-    private static boolean compare(NBTBase thisEntry, NBTBase thatEntry) {
+    private static boolean compare(INBTBase thisEntry, INBTBase thatEntry) {
         if (thisEntry instanceof NBTTagCompound && thatEntry instanceof NBTTagCompound) {
             return contains((NBTTagCompound) thisEntry, (NBTTagCompound) thatEntry);
         } else if (thisEntry instanceof NBTTagList && thatEntry instanceof NBTTagList) {
