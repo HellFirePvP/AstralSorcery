@@ -71,9 +71,8 @@ public class KeyCheatDeath extends KeyPerk {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onAttack(LivingHurtEvent event) {
-        DamageSource source = event.getSource();
-        if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) source.getTrueSource();
+        if (event.getEntityLiving() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this) && side == Side.SERVER) {
