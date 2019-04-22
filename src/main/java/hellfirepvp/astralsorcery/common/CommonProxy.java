@@ -9,27 +9,39 @@
 package hellfirepvp.astralsorcery.common;
 
 import com.mojang.authlib.GameProfile;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
+import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigRegistries;
 import hellfirepvp.astralsorcery.common.data.config.entry.*;
 import hellfirepvp.astralsorcery.common.data.config.CommonConfig;
 import hellfirepvp.astralsorcery.common.data.config.entry.common.CommonGeneralConfig;
 import hellfirepvp.astralsorcery.common.data.config.registry.FluidRarityRegistry;
+import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
+import hellfirepvp.astralsorcery.common.util.data.ASDataSerializers;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
+import java.io.File;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,6 +56,7 @@ public class CommonProxy {
 
     private InternalRegistryPrimer registryPrimer;
     private PrimerEventHandler registryEventHandler;
+    private CommonScheduler commonScheduler;
 
     private CommonConfig commonConfig;
     private ServerConfig serverConfig;
@@ -51,6 +64,7 @@ public class CommonProxy {
     public void initialize() {
         this.registryPrimer = new InternalRegistryPrimer();
         this.registryEventHandler = new PrimerEventHandler(this.registryPrimer);
+        this.commonScheduler = new CommonScheduler();
 
         this.commonConfig = new CommonConfig();
         this.serverConfig = new ServerConfig();
@@ -60,23 +74,32 @@ public class CommonProxy {
         ConfigRegistries.getRegistries().buildRegistries();
         this.commonConfig.buildConfiguration();
         this.serverConfig.buildConfiguration();
+
+        ASDataSerializers.registerSerializers();
     }
 
     public void attachLifecycle(IEventBus modEventBus) {
         modEventBus.addListener(this::onCommonSetup);
-
-        modEventBus.addListener(this::onServerStop);
-        modEventBus.addListener(this::onServerStopping);
-        modEventBus.addListener(this::onServerStarting);
-        modEventBus.addListener(this::onServerStarted);
     }
 
     public void attachEventHandlers(IEventBus eventBus) {
         eventBus.addListener(this::onClientInitialized);
 
+        eventBus.addListener(this::onServerStop);
+        eventBus.addListener(this::onServerStopping);
+        eventBus.addListener(this::onServerStarting);
+        eventBus.addListener(this::onServerStarted);
+
         eventBus.addListener(BlockDropCaptureAssist.INSTANCE::onDrop);
 
+        TickManager.INSTANCE.attachListeners(eventBus);
+        TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);
+
         registryEventHandler.attachEventHandlers(eventBus);
+    }
+
+    public void attachTickListeners(Consumer<ITickHandler> registrar) {
+        registrar.accept(this.commonScheduler);
     }
 
     protected void initializeConfigurations() {
@@ -88,6 +111,7 @@ public class CommonProxy {
         this.serverConfig.addConfigEntry(CraftingConfig.CONFIG);
         this.serverConfig.addConfigEntry(LightNetworkConfig.CONFIG);
         this.serverConfig.addConfigEntry(WorldGenConfig.CONFIG);
+        this.serverConfig.addConfigEntry(LogConfig.CONFIG);
 
         this.commonConfig.addConfigEntry(CommonGeneralConfig.CONFIG);
     }
@@ -98,9 +122,27 @@ public class CommonProxy {
         return FakePlayerFactory.get(world, new GameProfile(FAKEPLAYER_UUID, "AS-FakePlayer"));
     }
 
-    // After registry events
+    public File getASServerDataDirectory() {
+        MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+        if (server == null) {
+            return null;
+        }
+        File asDataDir = server.getActiveAnvilConverter().getFile(server.getFolderName(), AstralSorcery.MODID);
+        if (!asDataDir.exists()) {
+            asDataDir.mkdirs();
+        }
+        return asDataDir;
+    }
+
+    // Mod events
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
+        ResearchIOThread.startIOThread();
+    }
+
+    // Generic events
+
+    private void onClientInitialized(ClientInitializedEvent event) {
 
     }
 
@@ -109,11 +151,7 @@ public class CommonProxy {
     }
 
     private void onServerStarting(FMLServerStartingEvent event) {
-
-    }
-
-    private void onClientInitialized(ClientInitializedEvent event) {
-
+        CommandAstralSorcery.register(event.getCommandDispatcher());
     }
 
     private void onServerStopping(FMLServerStoppingEvent event) {
