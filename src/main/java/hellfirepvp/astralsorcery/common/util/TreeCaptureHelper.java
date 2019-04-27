@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -45,8 +46,10 @@ public class TreeCaptureHelper {
 
     @SubscribeEvent
     public void onTreeGrowth(SaplingGrowTreeEvent event) {
+        LogCategory.TREE_BEACON.info(() -> "Captured tree growth at " + event.getPos() + " in dim " + event.getWorld().provider.getDimension());
         WorldBlockPos pos = new WorldBlockPos(event.getWorld(), event.getPos());
         if(oneTimeCatches.contains(pos)) {
+            LogCategory.TREE_BEACON.info(() -> "Expected growth at " + pos + " - skipping!");
             oneTimeCatches.remove(pos);
             return;
         }
@@ -57,10 +60,13 @@ public class TreeCaptureHelper {
             WeakReference<TreeWatcher> watch = iterator.next();
             TreeWatcher watcher = watch.get();
             if (watcher == null) {
+                LogCategory.TREE_BEACON.info(() -> "A TreeWatcher timed out (no additional information)");
                 iterator.remove();
                 continue;
             }
             if (watcher.watches(pos)) {
+                LogCategory.TREE_BEACON.info(() -> "TreeWatcher at " + watcher.center + " watches " + pos +
+                        " - with squared radius: " + watcher.watchRadiusSq + " (real: " + Math.sqrt(watcher.watchRadiusSq) + ")");
                 addWatch(watch, pos);
                 event.setResult(Event.Result.DENY);
             }
@@ -78,6 +84,7 @@ public class TreeCaptureHelper {
             }
             if(other.equals(watcher)) return;
         }
+        LogCategory.TREE_BEACON.info(() -> "New watcher offered and added at " + watcher.center);
         watchers.add(new WeakReference<>(watcher));
     }
 
@@ -90,12 +97,14 @@ public class TreeCaptureHelper {
             WeakReference<TreeWatcher> itW = iterator.next();
             TreeWatcher watch = itW.get();
             if (watch == null) {
+                LogCategory.TREE_BEACON.info(() -> "A TreeWatcher timed out (no additional information)");
                 iterator.remove();
                 continue;
             }
             if(watcher.equals(watch)) {
                 List<WorldBlockPos> pos = cachedEntries.get(itW);
                 cachedEntries.remove(itW);
+                LogCategory.TREE_BEACON.info(() -> "Fetched " + (pos == null ? 0 : pos.size()) + " cached, captured positions for watcher at " + watcher.center);
                 return pos == null ? Lists.newArrayList() : pos;
             }
         }
@@ -103,16 +112,16 @@ public class TreeCaptureHelper {
     }
 
     private void addWatch(WeakReference<TreeWatcher> watch, WorldBlockPos pos) {
-        List<WorldBlockPos> entries = cachedEntries.get(watch);
-        if(entries == null) {
-            entries = Lists.newLinkedList();
-            cachedEntries.put(watch, entries);
-        }
+        List<WorldBlockPos> entries = cachedEntries.computeIfAbsent(watch, k -> Lists.newLinkedList());
         entries.add(pos);
+
+        LogCategory.TREE_BEACON.info(() -> "Captured " + pos + " - TreeWatcher in total watches " + entries.size());
+
         Iterator<WeakReference<TreeWatcher>> iterator = cachedEntries.keySet().iterator();
         while (iterator.hasNext()) {
             WeakReference<TreeWatcher> wrT = iterator.next();
             if(wrT.get() == null) {
+                LogCategory.TREE_BEACON.info(() -> "An empty TreeWatcher was removed from the entry cache");
                 iterator.remove();
             }
         }

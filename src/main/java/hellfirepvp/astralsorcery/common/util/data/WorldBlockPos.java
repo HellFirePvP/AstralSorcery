@@ -16,6 +16,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+import java.util.Objects;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -77,7 +79,7 @@ public class WorldBlockPos extends BlockPos {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         WorldBlockPos that = (WorldBlockPos) o;
-        return !(world != null ? !world.equals(that.world) : that.world != null);
+        return Objects.equals(world, that.world);
     }
 
     @Override
