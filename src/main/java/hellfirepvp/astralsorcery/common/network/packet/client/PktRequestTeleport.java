@@ -59,22 +59,25 @@ public class PktRequestTeleport implements IMessage, IMessageHandler<PktRequestT
 
     @Override
     public IMessage onMessage(PktRequestTeleport message, MessageContext ctx) {
-        EntityPlayer request = ctx.getServerHandler().player;
-        TileCelestialGateway gate = MiscUtils.getTileAt(request.world, Vector3.atEntityCorner(request).toBlockPos(), TileCelestialGateway.class, false);
-        if(gate != null &&
-                gate.hasMultiblock() &&
-                gate.doesSeeSky()) {
-            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-            if (server != null) {
-                World to = server.getWorld(message.dimId);
-                if (to != null) {
-                    GatewayCache data = WorldCacheManager.getOrLoadData(to, WorldCacheManager.SaveKey.GATEWAY_DATA);
-                    if (MiscUtils.contains(data.getGatewayPositions(), gatewayNode -> gatewayNode.equals(message.pos))) {
-                        AstralSorcery.proxy.scheduleDelayed(() -> MiscUtils.transferEntityTo(request, message.dimId, message.pos));
+
+        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+            EntityPlayer request = ctx.getServerHandler().player;
+            TileCelestialGateway gate = MiscUtils.getTileAt(request.world, Vector3.atEntityCorner(request).toBlockPos(), TileCelestialGateway.class, false);
+            if(gate != null &&
+                    gate.hasMultiblock() &&
+                    gate.doesSeeSky()) {
+                MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+                if (server != null) {
+                    World to = server.getWorld(message.dimId);
+                    if (to != null) {
+                        GatewayCache data = WorldCacheManager.getOrLoadData(to, WorldCacheManager.SaveKey.GATEWAY_DATA);
+                        if (MiscUtils.contains(data.getGatewayPositions(), gatewayNode -> gatewayNode.equals(message.pos))) {
+                            AstralSorcery.proxy.scheduleDelayed(() -> MiscUtils.transferEntityTo(request, message.dimId, message.pos));
+                        }
                     }
                 }
             }
-        }
+        });
         return null;
     }
 }
