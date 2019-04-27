@@ -39,20 +39,20 @@ public class PotionApplyEvent {
 
     public static class Changed extends LivingEvent {
 
-        private final PotionEffect oldEffect, newEffect;
+        private final PotionEffect addedEffect, newCombinedEffect;
 
-        public Changed(EntityLivingBase entity, PotionEffect oldEffect, PotionEffect newEffect) {
+        public Changed(EntityLivingBase entity, PotionEffect newlyAddedEffect, PotionEffect newCombinedEffect) {
             super(entity);
-            this.oldEffect = oldEffect;
-            this.newEffect = newEffect;
+            this.addedEffect = newlyAddedEffect;
+            this.newCombinedEffect = newCombinedEffect;
         }
 
-        public PotionEffect getOldEffect() {
-            return oldEffect;
+        public PotionEffect getAddedEffect() {
+            return addedEffect;
         }
 
-        public PotionEffect getNewEffect() {
-            return newEffect;
+        public PotionEffect getNewCombinedEffect() {
+            return newCombinedEffect;
         }
     }
 

@@ -36,26 +36,30 @@ public class AttributePotionDuration extends PerkAttributeType {
     @SubscribeEvent
     public void onPotionDurationNew(PotionApplyEvent.New event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
-            modifyPotionDuration((EntityPlayer) event.getEntityLiving(), event.getPotionEffect());
+            modifyPotionDuration((EntityPlayer) event.getEntityLiving(), event.getPotionEffect(), event.getPotionEffect());
         }
     }
 
     @SubscribeEvent
     public void onPotionDurationChanged(PotionApplyEvent.Changed event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
-            modifyPotionDuration((EntityPlayer) event.getEntityLiving(), event.getNewEffect());
+            modifyPotionDuration((EntityPlayer) event.getEntityLiving(), event.getNewCombinedEffect(), event.getAddedEffect());
         }
     }
 
-    private void modifyPotionDuration(EntityPlayer player, PotionEffect effect) {
+    private void modifyPotionDuration(EntityPlayer player, PotionEffect newSetEffect, PotionEffect addedEffect) {
         if (player.world.isRemote) {
             return;
         }
 
-        float newDur = PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
-                .modifyValue(player, ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION, effect.getDuration());
-        newDur = AttributeEvent.postProcessModded(player, this, newDur);
-        effect.duration = MathHelper.floor(newDur);
+        float newDuration = addedEffect.getDuration();
+        newDuration = PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
+                .modifyValue(player, ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION, newDuration);
+        newDuration = AttributeEvent.postProcessModded(player, this, newDuration);
+
+        if (newSetEffect.getDuration() < newDuration) {
+            newSetEffect.duration = MathHelper.floor(newDuration);
+        }
     }
 
 }
