@@ -51,6 +51,7 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
             this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
             this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
         }
     }
 
@@ -71,10 +72,12 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             int walked = manager.readStat(StatList.WALK_ONE_CM);
             int sprint = manager.readStat(StatList.SPRINT_ONE_CM);
             int flown = manager.readStat(StatList.FLY_ONE_CM);
+            int elytra = manager.readStat(StatList.AVIATE_ONE_CM);
 
             int lastWalked = this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> walked);
             int lastSprint = this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> sprint);
             int lastFly = this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> flown);
+            int lastElytra = this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> elytra);
 
             float added = 0;
 
@@ -97,6 +100,11 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
                 added += Math.min(flown - lastFly, 500F);
                 added *= 0.4F;
                 this.moveTrackMap.get(StatList.FLY_ONE_CM).put(uuid, flown);
+            }
+            if (elytra > lastElytra) {
+                added += Math.min(elytra - lastElytra, 500F);
+                added *= 0.8F;
+                this.moveTrackMap.get(StatList.AVIATE_ONE_CM).put(uuid, flown);
             }
 
             if (!PlayerActivityManager.INSTANCE.isPlayerActiveServer(player)) {
