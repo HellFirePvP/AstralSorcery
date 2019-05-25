@@ -21,7 +21,6 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.util.data.TimeoutListContainer;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
-import hellfirepvp.astralsorcery.common.util.log.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -31,7 +30,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -189,9 +187,9 @@ public class PerkEffectHelper implements ITickHandler {
     @SideOnly(Side.CLIENT)
     public void notifyPerkDataChangeClient(EntityPlayer player, AbstractPerk perk, NBTTagCompound oldData, NBTTagCompound newData) {
         LogCategory.PERKS.info(() -> "Updating data for perk " + perk.getRegistryName() + " on CLIENT");
-        ResearchManager.getProgress(player, Side.CLIENT).setPerkData(perk, oldData);
+        ResearchManager.getProgress(player, Side.CLIENT).applyPerk(perk, oldData);
         notifyPerkChange(player, Side.CLIENT, perk, true);
-        ResearchManager.getProgress(player, Side.CLIENT).setPerkData(perk, newData);
+        ResearchManager.getProgress(player, Side.CLIENT).applyPerk(perk, newData);
         notifyPerkChange(player, Side.CLIENT, perk, false);
     }
 

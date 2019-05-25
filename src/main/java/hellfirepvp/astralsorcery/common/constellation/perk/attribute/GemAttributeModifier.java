@@ -8,13 +8,20 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Table;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -29,6 +36,8 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     private final UUID uuid;
     private PerkAttributeModifier actualModifier = null;
 
+    private static Map<UUID, Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>>> gemConverterCache = Maps.newHashMap();
+
     public GemAttributeModifier(UUID uniqueId, String type, Mode mode, float value) {
         super(type, mode, value);
         this.uuid = uniqueId;
@@ -39,6 +48,29 @@ public class GemAttributeModifier extends PerkAttributeModifier {
         super.initModifier();
 
         this.setAbsolute();
+    }
+
+    @Nonnull
+    @Override
+    public PerkAttributeModifier convertModifier(String attributeType, Mode mode, float value) {
+        PerkAttributeModifier mod = super.convertModifier(attributeType, mode, value);
+        GemAttributeModifier gemMod = new GemAttributeModifier(this.getUniqueId(), mod.getAttributeType(), mod.getMode(), mod.getFlatValue());
+        gemMod.setId(mod.getId());
+        return gemMod;
+    }
+
+    @Override
+    protected PerkAttributeModifier getCachedAttributeModifier(PerkConverter converter, String attributeType, Mode mode) {
+        Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> modifierCache = gemConverterCache.computeIfAbsent(this.getUniqueId(), (u) -> new HashMap<>());
+        Table<String, Mode, PerkAttributeModifier> cachedModifiers = modifierCache.computeIfAbsent(converter, (c) -> HashBasedTable.create());
+        return cachedModifiers.get(attributeType, mode);
+    }
+
+    @Override
+    protected void addModifierToCache(PerkConverter converter, String attributeType, Mode mode, PerkAttributeModifier modifier) {
+        Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> modifierCache = gemConverterCache.computeIfAbsent(this.getUniqueId(), (u) -> new HashMap<>());
+        Table<String, Mode, PerkAttributeModifier> cachedModifiers = modifierCache.computeIfAbsent(converter, (c) -> HashBasedTable.create());
+        cachedModifiers.put(attributeType, mode, modifier);
     }
 
     private boolean resolveModifier() {
@@ -137,6 +169,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
         tag.setString("type", getAttributeType());
         tag.setInteger("mode", getMode().getVanillaAttributeOperation());
         tag.setFloat("baseValue", this.value);
+        tag.setLong("mId", this.getId());
         return tag;
     }
 
@@ -145,7 +178,10 @@ public class GemAttributeModifier extends PerkAttributeModifier {
         String type = tag.getString("type");
         Mode mode = Mode.fromVanillaAttributeOperation(tag.getInteger("mode"));
         float val = tag.getFloat("baseValue");
-        return new GemAttributeModifier(id, type, mode, val);
+        long mId = tag.getLong("mId");
+        GemAttributeModifier mod = new GemAttributeModifier(id, type, mode, val);
+        mod.setId(mId);
+        return mod;
     }
 
     @Override

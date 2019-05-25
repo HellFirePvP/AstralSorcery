@@ -63,6 +63,10 @@ public class PerkAttributeModifier {
         return id;
     }
 
+    protected void setId(long id) {
+        this.id = id;
+    }
+
     protected void initModifier() {}
 
     protected void setAbsolute() {
@@ -82,36 +86,47 @@ public class PerkAttributeModifier {
      * Use this method for PerkConverters returning a new PerkAttributeModifier!
      */
     @Nonnull
-    public final PerkAttributeModifier convertModifier(String attributeType, Mode mode, float value) {
+    public PerkAttributeModifier convertModifier(String attributeType, Mode mode, float value) {
         if (absolute) {
             return this;
         }
-        PerkAttributeModifier mod;
         PerkAttributeType type = AttributeTypeRegistry.getType(attributeType);
-        if (type != null) {
-            mod = type.createModifier(value, mode);
-        } else {
-            mod = new PerkAttributeModifier(attributeType, mode, value);
-        }
-        mod.id = this.id;
+        PerkAttributeModifier mod = this.createModifier(type, attributeType, mode, value);
+        mod.setId(this.id);
         return mod;
     }
 
     /**
      * Use this method for creating extra Modifiers depending on a given modifier.
      */
-    @Nullable
-    public final PerkAttributeModifier gainAsExtraModifier(PerkConverter converter, String attributeType, Mode mode, float value) {
-        Table<String, Mode, PerkAttributeModifier> cachedModifiers = cachedConverters.computeIfAbsent(converter, (c) -> HashBasedTable.create());
-        PerkAttributeModifier modifier;
-        PerkAttributeType attrType;
-        if ((modifier = cachedModifiers.get(attributeType, mode)) == null &&
-                (attrType = AttributeTypeRegistry.getType(attributeType)) != null) {
-            modifier = attrType.createModifier(value, mode);
+    @Nonnull
+    public PerkAttributeModifier gainAsExtraModifier(PerkConverter converter, String attributeType, Mode mode, float value) {
+        PerkAttributeModifier modifier = getCachedAttributeModifier(converter, attributeType, mode);
+        if (modifier == null) {
+            modifier = this.createModifier(AttributeTypeRegistry.getType(attributeType), attributeType, mode, value);
             modifier.setAbsolute();
-            cachedModifiers.put(attributeType, mode, modifier);
+            addModifierToCache(converter, attributeType, mode, modifier);
         }
         return modifier;
+    }
+
+    protected PerkAttributeModifier getCachedAttributeModifier(PerkConverter converter, String attributeType, Mode mode) {
+        Table<String, Mode, PerkAttributeModifier> cachedModifiers = cachedConverters.computeIfAbsent(converter, (c) -> HashBasedTable.create());
+        return cachedModifiers.get(attributeType, mode);
+    }
+
+    protected void addModifierToCache(PerkConverter converter, String attributeType, Mode mode, PerkAttributeModifier modifier) {
+        Table<String, Mode, PerkAttributeModifier> cachedModifiers = cachedConverters.computeIfAbsent(converter, (c) -> HashBasedTable.create());
+        cachedModifiers.put(attributeType, mode, modifier);
+    }
+
+    @Nonnull
+    protected PerkAttributeModifier createModifier(@Nullable PerkAttributeType type, String attributeType, Mode mode, float value) {
+        if (type != null) {
+            return type.createModifier(value, mode);
+        } else {
+            return new PerkAttributeModifier(attributeType, mode, value);
+        }
     }
 
     // Should not be accessed directly unless for internal calculation purposes.

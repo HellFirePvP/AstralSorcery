@@ -53,10 +53,6 @@ public interface GemSlotPerk {
         if (!(this instanceof AbstractPerk)) {
             throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
         }
-        PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (!prog.hasPerkUnlocked((AbstractPerk) this)) {
-            return ItemStack.EMPTY;
-        }
         NBTTagCompound data = dataOvr != null ? dataOvr : ((AbstractPerk) this).getPerkData(player, side);
         if (data == null) {
             return ItemStack.EMPTY;
