@@ -47,8 +47,6 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
             ItemStack contained = getContainedItem(player, side);
             if (!contained.isEmpty() && contained.getItem() instanceof ItemPerkGem) {
                 mods.addAll(ItemPerkGem.getModifiers(contained));
-            } else {
-                System.out.println("empty");
             }
         }
         return mods;
