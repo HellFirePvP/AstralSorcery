@@ -97,25 +97,15 @@ public class EntityFlare extends EntityFlying {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
-    }
-
-    @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-    }
-
-    @Override
     public void applyEntityCollision(Entity entityIn) {
-        if(entityIn != null && entityIn instanceof EntityFlare) {
+        if(entityIn != null && !(entityIn instanceof EntityPlayer)) {
             super.applyEntityCollision(entityIn);
         }
     }
 
     @Override
     protected void collideWithEntity(Entity entityIn) {
-        if(entityIn != null && entityIn instanceof EntityFlare) {
+        if(entityIn != null && !(entityIn instanceof EntityPlayer)) {
             super.collideWithEntity(entityIn);
         }
     }
@@ -213,11 +203,6 @@ public class EntityFlare extends EntityFlying {
             return null;
         }
         return (EntityPlayer) e;
-    }
-
-    @Override
-    protected boolean canDespawn() {
-        return false;
     }
 
     @Override
