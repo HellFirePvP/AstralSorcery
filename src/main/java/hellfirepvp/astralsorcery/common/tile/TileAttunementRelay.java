@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
@@ -85,7 +87,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
                     getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
                 }
 
-                if (ItemComparator.compare(slotted, ItemCraftingComponent.MetaType.GLASS_LENS.asStack(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
+                if (hasGlassLens()) {
                     if(linked != null) {
                         TileAltar ta = MiscUtils.getTileAt(world, linked, TileAltar.class, true);
                         if(ta == null) {
@@ -115,7 +117,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
             }
         } else {
             if(!slotted.isEmpty() && hasMultiblock) {
-                if (ItemComparator.compare(slotted, ItemCraftingComponent.MetaType.GLASS_LENS.asStack(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
+                if (hasGlassLens()) {
                     if(rand.nextInt(3) == 0) {
                         Vector3 at = new Vector3(this);
                         at.add(rand.nextFloat() * 2.6 - 0.8, 0, rand.nextFloat() * 2.6 - 0.8);
@@ -147,6 +149,16 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
     }
 
     private void updateMultiblockState() {
+        if (!hasGlassLens()) {
+            StructureMatchingBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_MATCH);
+            if(buf.removeSubscriber(this.pos)) {
+                buf.markDirty();
+            }
+            if (this.structureMatch != null) {
+                this.structureMatch = null;
+            }
+            return;
+        }
         if (this.structureMatch == null) {
             this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
         }
@@ -167,6 +179,11 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
         if (update) {
             markForUpdate();
         }
+    }
+
+    private boolean hasGlassLens() {
+        ItemStack slotted = getInventoryHandler().getStackInSlot(0);
+        return ItemComparator.compare(slotted, ItemCraftingComponent.MetaType.GLASS_LENS.asStack(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT);
     }
 
     public boolean doesSeeSky() {
