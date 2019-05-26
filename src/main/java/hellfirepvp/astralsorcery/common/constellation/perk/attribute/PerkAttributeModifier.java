@@ -110,6 +110,7 @@ public class PerkAttributeModifier {
         return modifier;
     }
 
+    @Nullable
     protected PerkAttributeModifier getCachedAttributeModifier(PerkConverter converter, String attributeType, Mode mode) {
         Table<String, Mode, PerkAttributeModifier> cachedModifiers = cachedConverters.computeIfAbsent(converter, (c) -> HashBasedTable.create());
         return cachedModifiers.get(attributeType, mode);

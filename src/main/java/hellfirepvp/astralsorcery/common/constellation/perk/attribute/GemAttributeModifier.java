@@ -60,6 +60,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     }
 
     @Override
+    @Nullable
     protected PerkAttributeModifier getCachedAttributeModifier(PerkConverter converter, String attributeType, Mode mode) {
         Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> modifierCache = gemConverterCache.computeIfAbsent(this.getUniqueId(), (u) -> new HashMap<>());
         Table<String, Mode, PerkAttributeModifier> cachedModifiers = modifierCache.computeIfAbsent(converter, (c) -> HashBasedTable.create());
