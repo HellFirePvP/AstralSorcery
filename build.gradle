@@ -78,9 +78,21 @@ minecraft {
     }
 }
 
+repositories {
+
+    maven {
+        // My own
+        name 'hellfirepvp maven'
+        url 'https://maven.hellfiredev.net/'
+    }
+
+}
+
 dependencies {
 
     minecraft "net.minecraftforge:forge:1.13.2-25.0.146"
+
+    compile 'hellfirepvp.observerlib:observerlib:1.13.2-1.0.0-v5'
 
 }
 
