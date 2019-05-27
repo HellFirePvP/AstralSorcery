@@ -122,7 +122,7 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
         TextureHelper.setActiveTextureToAtlasSprite();
 
         if (rotationSpeed > 1) {
-            float rot = ClientScheduler.getClientTick() % (rotationSpeed + pTicks);
+            float rot = ClientScheduler.getIndependentClientTick() % (rotationSpeed + pTicks);
             addedRotationAngle = (rot / ((float) (rotationSpeed))) * 360F;
         }
 
