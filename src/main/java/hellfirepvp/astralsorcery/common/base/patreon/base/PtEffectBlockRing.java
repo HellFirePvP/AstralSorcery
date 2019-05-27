@@ -59,6 +59,7 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
     private final float rotationAngle;
     private final int repetition;
     private final int rotationSpeed;
+    private final float rotationPart;
     private final Map<BlockPos, IBlockState> pattern;
 
     /*
@@ -80,6 +81,7 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
         this.rotationAngle = rotationAngle;
         this.repetition = repeats;
         this.rotationSpeed = tickRotationSpeed;
+        this.rotationPart = 360F / rotationSpeed;
         this.pattern = pattern;
     }
 
@@ -122,8 +124,8 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
         TextureHelper.setActiveTextureToAtlasSprite();
 
         if (rotationSpeed > 1) {
-            float rot = ClientScheduler.getIndependentClientTick() % (rotationSpeed + pTicks);
-            addedRotationAngle = (rot / ((float) (rotationSpeed))) * 360F;
+            float rot = ClientScheduler.getIndependentClientTick() % rotationSpeed;
+            addedRotationAngle = (rot / ((float) (rotationSpeed))) * 360F + this.rotationPart * pTicks;
         }
 
         GlStateManager.disableAlpha();
