@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.types.ICooldownPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -32,7 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
  * Created by HellFirePvP
  * Date: 08.08.2018 / 22:55
  */
-public class KeyCheatDeath extends KeyPerk {
+public class KeyCheatDeath extends KeyPerk implements ICooldownPerk {
 
     public float thresholdApplyPerkHealth = 4F;
     public float thresholdApplyPerkDamage = 6F;
@@ -86,5 +87,8 @@ public class KeyCheatDeath extends KeyPerk {
             }
         }
     }
+
+    @Override
+    public void handleCooldownTimeout(EntityPlayer player) {}
 
 }

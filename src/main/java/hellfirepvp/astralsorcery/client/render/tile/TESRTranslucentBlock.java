@@ -49,7 +49,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
         TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
         GlStateManager.pushMatrix();
-        RenderingUtils.removeStandartTranslationFromTESRMatrix(Minecraft.getMinecraft().getRenderPartialTicks());
+        RenderingUtils.removeStandartTranslationFromTESRMatrix(RenderingUtils.getCurrentRenderPartialTicks());
         GlStateManager.color(1F, 1F, 1F,1F);
         GL11.glColor4f(1F, 1F, 1F, 1F);
 

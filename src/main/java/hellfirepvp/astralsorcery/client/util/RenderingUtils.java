@@ -154,6 +154,10 @@ public class RenderingUtils {
         return cube;
     }
 
+    public static float getCurrentRenderPartialTicks() {
+        return Minecraft.getMinecraft().isGamePaused() ? 0 : Minecraft.getMinecraft().getRenderPartialTicks();
+    }
+
     public static void renderBlockSafelyWithOptionalColor(IBlockAccess world, BlockPos offset, IBlockState state, BufferBuilder vb, int color) {
         if (color == -1) {
             renderBlockSafely(world, offset, state, vb);

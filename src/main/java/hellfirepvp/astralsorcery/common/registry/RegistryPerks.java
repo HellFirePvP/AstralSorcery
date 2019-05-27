@@ -687,17 +687,13 @@ public class RegistryPerks {
                         case ADDITION:
                         case ADDED_MULTIPLY:
                             mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_SWIMSPEED, modifier.getMode(), modifier.getValue(player, progress) / 2F);
-                            if (mod != null) {
-                                modifiers.add(mod);
-                            }
+                            modifiers.add(mod);
                             break;
                         case STACKING_MULTIPLY:
                             float val = modifier.getValue(player, progress) - 1;
                             val /= 2F; //Halve the actual value
                             mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_SWIMSPEED, modifier.getMode(), val + 1);
-                            if (mod != null) {
-                                modifiers.add(mod);
-                            }
+                            modifiers.add(mod);
                             break;
                         default:
                             break;
@@ -802,13 +798,9 @@ public class RegistryPerks {
                 if (modifier.getAttributeType().equals(ATTR_TYPE_ARMOR)) {
                     PerkAttributeModifier mod;
                     mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_ARMOR, PerkAttributeModifier.Mode.STACKING_MULTIPLY, 0F);
-                    if (mod != null) {
-                        modifiers.add(mod);
-                    }
+                    modifiers.add(mod);
                     mod = modifier.gainAsExtraModifier(this, ATTR_TYPE_ARMOR_TOUGHNESS, PerkAttributeModifier.Mode.STACKING_MULTIPLY, 0F);
-                    if (mod != null) {
-                        modifiers.add(mod);
-                    }
+                    modifiers.add(mod);
                 }
                 return modifiers;
             }
