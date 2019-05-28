@@ -23,10 +23,16 @@ public abstract class TileNetwork extends TileEntityTick {
 
     protected static final Random rand = new Random();
 
+    public void update() {
+        if(world.isRemote) return;
+        if(!TransmissionNetworkHelper.isTileInNetwork(this)) {
+            TransmissionNetworkHelper.informNetworkTilePlacement(this);
+        }
+    }
+
     @Override
     protected void onFirstTick() {
-        if(world.isRemote) return;
-        TransmissionNetworkHelper.informNetworkTilePlacement(this);
+
     }
 
     public void onBreak() {
