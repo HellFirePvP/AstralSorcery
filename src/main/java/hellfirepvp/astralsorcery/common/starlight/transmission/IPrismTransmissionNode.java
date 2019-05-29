@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission;
 
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
@@ -99,7 +100,8 @@ public interface IPrismTransmissionNode extends ILocatable {
     //which causes it to be recalculated and saved
     //whenever the world saves the next time.
     default public void markDirty(World world) {
-        WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.LIGHT_NETWORK).markDirty();
+        LightNetworkBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.LIGHT_NETWORK);
+        buf.markDirty(this.getLocationPos());
     }
 
     //Get the provider of the node. Used to recreate the class at NBT read.

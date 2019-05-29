@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -50,13 +51,16 @@ public class WorldCacheManager implements ITickHandler {
 
     public static <T extends CachedWorldData> T getOrLoadData(World world, SaveKey key) {
         CachedWorldData data = getFromCache(world, key);
-        if(data != null) return (T) data;
-        return (T) loadAndCache(world, key);
+        if(data == null) {
+            data = loadAndCache(world, key);
+        }
+        return (T) data;
     }
 
-    private synchronized static DataFileSet getDataFile(World world, String key) {
+    private synchronized static DirectorySet getDirectorySet(World world, SaveKey key) {
         if(world.isRemote)
             throw new IllegalArgumentException("Tried to access data structure on clientside. This is a severe implementation error!");
+
         if(saveDir == null) {
             saveDir = new File(world.getSaveHandler().getWorldDirectory(), "AstralSorceryData");
             if(!saveDir.exists()) {
@@ -65,13 +69,14 @@ public class WorldCacheManager implements ITickHandler {
                 ensureFolder(saveDir);
             }
         }
+
         File worldDir = new File(saveDir, "DIM_" + world.getDimension().getType().getId());
         if(!worldDir.exists()) {
             worldDir.mkdirs();
         } else {
             ensureFolder(worldDir);
         }
-        return new DataFileSet(new File(worldDir, key + ".dat"));
+        return new DirectorySet(new File(worldDir, key.getIdentifier()));
     }
 
     private static void ensureFolder(File f) {
@@ -102,7 +107,7 @@ public class WorldCacheManager implements ITickHandler {
         Map<SaveKey, CachedWorldData> dataMap = cachedData.get(dimId);
         if(dataMap.containsKey(key)) {
             AstralSorcery.log.warn("Duplicate loading of the same WorldData! Discarding old data.");
-            AstralSorcery.log.warn("Affected data: Dim=" + dimId + " key=" + key.identifier);
+            AstralSorcery.log.warn("Affected data: Dim=" + dimId + " key=" + key.getIdentifier());
             dataMap.remove(key);
         }
         dataMap.put(key, loaded);
@@ -111,97 +116,66 @@ public class WorldCacheManager implements ITickHandler {
     }
 
     private static CachedWorldData loadDataFromFile(World world, SaveKey key) {
-        DataFileSet f = getDataFile(world, key.identifier);
-        if (!f.actualFile.exists() && !f.backupFile.exists()) {
+        DirectorySet f = getDirectorySet(world, key);
+        if (!f.getActualDirectory().exists() && !f.getBackupDirectory().exists()) {
             return key.getNewInstance();
         }
-        AstralSorcery.log.info("Load CachedWorldData '" + key.identifier + "' for world " + world.getDimension().getType().getId());
+        AstralSorcery.log.info("Load CachedWorldData '" + key.getIdentifier() + "' for world " + world.getDimension().getType().getId());
         boolean errored = false;
         CachedWorldData data = null;
         try {
-            if(f.actualFile.exists()) {
-                data = attemptLoad(key, f.actualFile);
+            if (f.getActualDirectory().exists()) {
+                data = attemptLoad(key, f.getActualDirectory());
             }
         } catch (Exception exc) {
-            AstralSorcery.log.info("Loading worlddata '" + key.identifier + "' failed for its actual save file. Attempting load from backup file.");
+            AstralSorcery.log.info("Loading worlddata '" + key.getIdentifier() + "' failed for its actual save. Attempting load from backup.");
             errored = true;
         }
         if(data == null) {
             try {
-                if(f.backupFile.exists()) {
-                    data = attemptLoad(key, f.backupFile);
+                if (f.getBackupDirectory().exists()) {
+                    data = attemptLoad(key, f.getBackupDirectory());
                 }
             } catch (Exception exc) {
-                AstralSorcery.log.info("Loading worlddata '" + key.identifier + "' failed for its backup save file. Creating empty one for current runtime and copying erroneous files to error files.");
+                AstralSorcery.log.info("Loading worlddata '" + key.getIdentifier() + "' failed for its backup save. Creating empty one for current runtime and copying erroneous files to error directory.");
                 errored = true;
             }
         }
         if(data == null && errored) {
-            DataFileSet errorSet = f.getErrorFileSet();
+            DirectorySet errorSet = f.getErrorDirectories();
             try {
-                if(f.actualFile.exists()) {
-                    Files.copy(f.actualFile, errorSet.actualFile);
-                    f.actualFile.delete();
+                if(f.getActualDirectory().exists()) {
+                    Files.copy(f.getActualDirectory(), errorSet.getActualDirectory());
+                    FileUtils.deleteDirectory(f.getActualDirectory());
                 }
-                if(f.backupFile.exists()) {
-                    Files.copy(f.backupFile, errorSet.backupFile);
-                    f.backupFile.delete();
+                if(f.getBackupDirectory().exists()) {
+                    Files.copy(f.getBackupDirectory(), errorSet.getBackupDirectory());
+                    FileUtils.deleteDirectory(f.getBackupDirectory());
                 }
             } catch (Exception e) {
-                AstralSorcery.log.info("Attempting to copy erroneous worlddata '" + key.identifier + "' to its error files failed.");
+                AstralSorcery.log.info("Attempting to copy erroneous worlddata '" + key.identifier + "' to its error files directory failed.");
                 e.printStackTrace();
             }
         }
-        if(data == null) {
-            if(errored) {
-                DataFileSet errorSet = f.getErrorFileSet();
-                try {
-                    if(f.actualFile.exists()) {
-                        Files.copy(f.actualFile, errorSet.actualFile);
-                        f.actualFile.delete();
-                    }
-                    if(f.backupFile.exists()) {
-                        Files.copy(f.backupFile, errorSet.backupFile);
-                        f.backupFile.delete();
-                    }
-                } catch (Exception e) {
-                    AstralSorcery.log.info("Attempting to copy erroneous worlddata '" + key.identifier + "' to its error files failed.");
-                    e.printStackTrace();
-                }
-            }
+        if (data == null) {
             data = key.getNewInstance();
         }
-        AstralSorcery.log.info("Loading of '" + key.identifier + "' for world " + world.getDimension().getType().getId() + " finished.");
+        AstralSorcery.log.info("Loading of '" + key.getIdentifier() + "' for world " + world.getDimension().getType().getId() + " finished.");
         return data;
     }
 
-    private static CachedWorldData attemptLoad(SaveKey key, File f) throws IOException {
+    private static CachedWorldData attemptLoad(SaveKey key, File baseDirectory) throws IOException {
         CachedWorldData data = key.getNewInstance();
-        NBTTagCompound cmp = CompressedStreamTools.read(f);
-        data.readFromNBT(cmp);
+        data.readData(baseDirectory);
         return data;
     }
 
     private static void saveDataToFile(World world, CachedWorldData data) throws IOException {
-        SaveKey key = data.getSaveKey();
-        DataFileSet f = getDataFile(world, key.identifier);
-        if(!f.actualFile.getParentFile().exists()) {
-            f.actualFile.getParentFile().mkdirs();
+        DirectorySet f = getDirectorySet(world, data.getSaveKey());
+        if (!f.getParentDirectory().exists()) {
+            f.getParentDirectory().mkdirs();
         }
-        if(f.actualFile.exists()) {
-            try {
-                Files.copy(f.actualFile, f.backupFile);
-            } catch (Exception exc) {
-                AstralSorcery.log.info("Copying '" + key.identifier + "' 's actual file to its backup file failed!");
-                exc.printStackTrace();
-            }
-        }
-        if (!f.actualFile.exists()) {
-            f.actualFile.createNewFile();
-        }
-        NBTTagCompound tag = new NBTTagCompound();
-        data.writeToNBT(tag);
-        CompressedStreamTools.write(tag, f.actualFile);
+        data.writeData(f.getActualDirectory(), f.getBackupDirectory());
     }
 
     @Override
@@ -235,7 +209,7 @@ public class WorldCacheManager implements ITickHandler {
                         AstralSorcery.log.warn("Printing StackTrace details...");
                         e.printStackTrace();
                     }
-                    data.clearDirtyFlag();
+                    data.markSaved();
                 }
             }
         }
@@ -289,18 +263,34 @@ public class WorldCacheManager implements ITickHandler {
 
     }
 
-    private static class DataFileSet {
+    private static class DirectorySet {
 
-        private final File actualFile;
-        private final File backupFile;
+        private final File actualDirectory;
+        private final File backupDirectory;
 
-        private DataFileSet(File actualFile) {
-            this.actualFile = actualFile;
-            this.backupFile = new File(actualFile.getParent(), actualFile.getName() + ".back");
+        private DirectorySet(File worldDirectory) {
+            this.actualDirectory = worldDirectory;
+            this.backupDirectory = new File(worldDirectory.getParent(), worldDirectory.getName() + "-Backup");
         }
 
-        private DataFileSet getErrorFileSet() {
-            return new DataFileSet(new File(actualFile.getParent(), actualFile.getName() + ".error"));
+        public File getParentDirectory() {
+            return getActualDirectory().getParentFile();
+        }
+
+        public File getActualDirectory() {
+            return actualDirectory;
+        }
+
+        public File getBackupDirectory() {
+            return backupDirectory;
+        }
+
+        public DirectorySet getErrorDirectories() {
+            File errorDirectory = new File(actualDirectory.getParent(), actualDirectory.getName() + "-Error");
+            if (!errorDirectory.exists()) {
+                errorDirectory.mkdirs();
+            }
+            return new DirectorySet(errorDirectory);
         }
 
     }
