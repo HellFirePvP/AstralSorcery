@@ -19,24 +19,15 @@ import net.minecraft.world.World;
  */
 public abstract class CachedWorldData implements IWorldRelatedData {
 
-    private boolean dirty = false;
     private final WorldCacheManager.SaveKey key;
 
-    public CachedWorldData(WorldCacheManager.SaveKey key) {
+    protected CachedWorldData(WorldCacheManager.SaveKey key) {
         this.key = key;
     }
 
-    public final void markDirty() {
-        this.dirty = true;
-    }
+    public abstract boolean needsSaving();
 
-    public final boolean needsSaving() {
-        return this.dirty;
-    }
-
-    public final void clearDirtyFlag() {
-        this.dirty = false;
-    }
+    public abstract void markSaved();
 
     public abstract void updateTick(World world);
 
@@ -45,16 +36,5 @@ public abstract class CachedWorldData implements IWorldRelatedData {
     }
 
     public void onLoad(World world) {}
-
-    /*
-    public final <T extends CachedWorldData> T initializeAndGet(World world) {
-        String id = getSaveKey().getIdentifier();
-        CachedWorldData data = (CachedWorldData) world.getPerWorldStorage().getOrLoadData(getClass(), id);
-        if (data == null) {
-            data = constructNewData();
-            world.getPerWorldStorage().setData(id, data);
-        }
-        return (T) data;
-    }*/
 
 }

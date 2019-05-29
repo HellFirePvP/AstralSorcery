@@ -10,8 +10,9 @@ package hellfirepvp.astralsorcery.common.data.world.data;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.entry.LightNetworkConfig;
-import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
+import hellfirepvp.astralsorcery.common.data.world.base.SectionWorldData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.base.WorldSection;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
@@ -47,20 +48,24 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 03.08.2016 / 00:10
  */
-public class LightNetworkBuffer extends CachedWorldData {
+public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.ChunkNetworkData> {
 
-    private Map<ChunkPos, ChunkNetworkData> chunkSortedData = new HashMap<>();
     private Map<BlockPos, IIndependentStarlightSource> starlightSources = new HashMap<>();
     private Collection<Tuple<BlockPos, IIndependentStarlightSource>> cachedSourceTuples = null;
 
-    private List<ChunkPos> queueRemoval = new LinkedList<>();
+    private Set<BlockPos> queueRemoval = new HashSet<>();
 
     public LightNetworkBuffer() {
-        super(WorldCacheManager.SaveKey.LIGHT_NETWORK);
+        super(WorldCacheManager.SaveKey.LIGHT_NETWORK, SectionWorldData.PRECISION_CHUNK);
     }
 
     public WorldNetworkHandler getNetworkHandler(World world) {
         return new WorldNetworkHandler(this, world);
+    }
+
+    @Override
+    protected ChunkNetworkData createNewSection(int sectionX, int sectionZ) {
+        return new ChunkNetworkData(sectionX, sectionZ);
     }
 
     @Override
@@ -94,7 +99,7 @@ public class LightNetworkBuffer extends CachedWorldData {
                         AstralSorcery.log.warn("Block that gets purged: " + BlockStateHelper.serialize(actual));
                         iterator.remove();
                         if (world.setBlockState(pos, actual.getFluidState().getBlockState())) {
-                            ChunkNetworkData data = getChunkData(chPos);
+                            ChunkNetworkData data = getSection(pos);
                             if(data != null) {
                                 data.removeSourceTile(pos);
                             }
@@ -112,7 +117,7 @@ public class LightNetworkBuffer extends CachedWorldData {
             AstralSorcery.log.info("[LightNetworkIntegrityCheck] Performing StarlightNetwork integrity check for world " + world.getDimension().getType().getId());
             List<IPrismTransmissionNode> invalidRemoval = new LinkedList<>();
 
-            for (ChunkNetworkData data : chunkSortedData.values()) {
+            for (ChunkNetworkData data : getSections()) {
                 for (ChunkSectionNetworkData secData : data.sections.values()) {
                     for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
                         TileEntity te = world.getTileEntity(node.getLocationPos());
@@ -142,7 +147,7 @@ public class LightNetworkBuffer extends CachedWorldData {
             AstralSorcery.log.info("[LightNetworkIntegrityCheck] Removed invalid transmission nodes from the network.");
 
         } else {
-            for (ChunkNetworkData data : chunkSortedData.values()) {
+            for (ChunkNetworkData data : getSections()) {
                 for (ChunkSectionNetworkData secData : data.sections.values()) {
                     for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
                         if(node.needsUpdate()) {
@@ -156,30 +161,20 @@ public class LightNetworkBuffer extends CachedWorldData {
     }
 
     private void cleanupQueuedChunks() {
-        for (ChunkPos pos : queueRemoval) {
-            ChunkNetworkData data = getChunkData(pos);
+        for (BlockPos pos : queueRemoval) {
+            ChunkNetworkData data = getSection(pos);
             if(data != null && data.isEmpty()) {
-                chunkSortedData.remove(pos);
+                this.removeSection(data);
             }
         }
         queueRemoval.clear();
     }
 
     @Nullable
-    private ChunkNetworkData getChunkData(ChunkPos pos) {
-        return chunkSortedData.get(pos);
-    }
-
-    @Nullable
     public ChunkSectionNetworkData getSectionData(BlockPos pos) {
-        return getSectionData(new ChunkPos(pos), (pos.getY() & 255) >> 4);
-    }
-
-    @Nullable
-    public ChunkSectionNetworkData getSectionData(ChunkPos chPos, int yLevel) {
-        ChunkNetworkData data = chunkSortedData.get(chPos);
+        ChunkNetworkData data = getSection(pos);
         if(data == null) return null;
-        return data.getSection(yLevel);
+        return data.getSection(pos.getY() >> 4);
     }
 
     @Nullable
@@ -198,27 +193,10 @@ public class LightNetworkBuffer extends CachedWorldData {
         return cachedSourceTuples;
     }
 
-    public void createNewChunkData(@Nonnull ChunkPos pos) {
-        chunkSortedData.put(pos, new ChunkNetworkData());
-    }
-
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         starlightSources.clear();
-        chunkSortedData.clear();
         cachedSourceTuples = null;
-
-        if(nbt.hasKey("chunkSortedData")) {
-            NBTTagList list = nbt.getList("chunkSortedData", Constants.NBT.TAG_COMPOUND);
-            for (int i = 0; i < list.size(); i++) {
-                NBTTagCompound posTag = list.getCompound(i);
-                int chX = posTag.getInt("chX");
-                int chZ = posTag.getInt("chZ");
-                ChunkPos pos = new ChunkPos(chX, chZ);
-                ChunkNetworkData data = ChunkNetworkData.loadFromNBT(posTag.getList("netData", Constants.NBT.TAG_COMPOUND));
-                chunkSortedData.put(pos, data);
-            }
-        }
 
         if(nbt.hasKey("sources")) {
             NBTTagList list = nbt.getList("sources", Constants.NBT.TAG_COMPOUND);
@@ -257,19 +235,6 @@ public class LightNetworkBuffer extends CachedWorldData {
     public void writeToNBT(NBTTagCompound nbt) {
         cleanupQueuedChunks();
 
-        NBTTagList list = new NBTTagList();
-        for (ChunkPos pos : chunkSortedData.keySet()) {
-            ChunkNetworkData data = chunkSortedData.get(pos);
-            NBTTagCompound posTag = new NBTTagCompound();
-            posTag.setInt("chX", pos.x);
-            posTag.setInt("chZ", pos.z);
-            NBTTagList netData = new NBTTagList();
-            data.writeToNBT(netData);
-            posTag.setTag("netData", netData);
-            list.add(posTag);
-        }
-        nbt.setTag("chunkSortedData", list);
-
         NBTTagList sourceList = new NBTTagList();
         for (BlockPos pos : starlightSources.keySet()) {
             NBTTagCompound sourceTag = new NBTTagCompound();
@@ -292,12 +257,7 @@ public class LightNetworkBuffer extends CachedWorldData {
 
     //Network changing
     public void addSource(IStarlightSource source, BlockPos pos) {
-        ChunkPos chPos = new ChunkPos(pos);
-        ChunkNetworkData data = getChunkData(chPos);
-        if(data == null) {
-            createNewChunkData(chPos);
-            data = getChunkData(chPos);
-        }
+        ChunkNetworkData data = getOrCreateSection(pos);
         data.addSourceTile(pos, source);
 
         IIndependentStarlightSource newSource = addIndependentSource(pos, source);
@@ -308,7 +268,7 @@ public class LightNetworkBuffer extends CachedWorldData {
             tr.start();
         }
 
-        markDirty();
+        markDirty(data);
     }
 
     private void threadedUpdateSourceProximity(Map<BlockPos, IIndependentStarlightSource> copyTr) {
@@ -323,20 +283,14 @@ public class LightNetworkBuffer extends CachedWorldData {
     }
 
     public void addTransmission(IStarlightTransmission transmission, BlockPos pos) {
-        ChunkPos chPos = new ChunkPos(pos);
-        ChunkNetworkData data = getChunkData(chPos);
-        if(data == null) {
-            createNewChunkData(chPos);
-            data = getChunkData(chPos);
-        }
+        ChunkNetworkData data = getOrCreateSection(pos);
         data.addTransmissionTile(pos, transmission);
 
-        markDirty();
+        markDirty(data);
     }
 
     public void removeSource(BlockPos pos) {
-        ChunkPos chPos = new ChunkPos(pos);
-        ChunkNetworkData data = getChunkData(chPos);
+        ChunkNetworkData data = getSection(pos);
         if(data == null) return; //Uuuuhm. what happened here.
         data.removeSourceTile(pos);
 
@@ -347,28 +301,27 @@ public class LightNetworkBuffer extends CachedWorldData {
         tr.setName("StarlightNetwork-UpdateThread");
         tr.start();
 
-        checkIntegrity(chPos);
-        markDirty();
+        checkIntegrity(pos);
+        markDirty(data);
     }
 
     public void removeTransmission(BlockPos pos) {
-        ChunkPos chPos = new ChunkPos(pos);
-        ChunkNetworkData data = getChunkData(chPos);
+        ChunkNetworkData data = getSection(pos);
         if(data == null) return; //Not that i'm sad, it's just... uhm..
         data.removeTransmissionTile(pos);
 
-        checkIntegrity(chPos);
-        markDirty();
+        checkIntegrity(pos);
+        markDirty(data);
     }
 
-    private void checkIntegrity(ChunkPos chPos) {
-        ChunkNetworkData data = getChunkData(chPos);
+    private void checkIntegrity(BlockPos actualPos) {
+        ChunkNetworkData data = getSection(actualPos);
         if(data == null) return;
 
         data.checkIntegrity(); //Integrity of sections
 
         if(data.isEmpty()) {
-            queueRemoval.add(chPos);
+            queueRemoval.add(actualPos);
         }
     }
 
@@ -390,32 +343,36 @@ public class LightNetworkBuffer extends CachedWorldData {
         this.cachedSourceTuples = null;
     }
 
-    public static class ChunkNetworkData {
+    public static class ChunkNetworkData extends WorldSection {
 
         private Map<Integer, ChunkSectionNetworkData> sections = new HashMap<>();
 
-        private static ChunkNetworkData loadFromNBT(NBTTagList netData) {
-            ChunkNetworkData data = new ChunkNetworkData();
-            for (int i = 0; i < netData.size(); i++) {
-                NBTTagCompound section = netData.getCompound(i);
-                int yLevel = section.getInt("yLevel");
-                NBTTagList sectionData = section.getList("sectionData", Constants.NBT.TAG_COMPOUND);
-                ChunkSectionNetworkData networkData = ChunkSectionNetworkData.loadFromNBT(sectionData);
-                data.sections.put(yLevel, networkData);
-            }
-            return data;
+        ChunkNetworkData(int sX, int sZ) {
+            super(sX, sZ);
         }
 
-        private void writeToNBT(NBTTagList netData) {
+        @Override
+        public void readFromNBT(NBTTagCompound tag) {
+            for (String key : tag.keySet()) {
+                int yLevel;
+                try {
+                    yLevel = Integer.parseInt(key);
+                } catch (NumberFormatException exc) {
+                    continue;
+                }
+                NBTTagList yData = tag.getList(key, Constants.NBT.TAG_COMPOUND);
+                ChunkSectionNetworkData sectionNetData = ChunkSectionNetworkData.loadFromNBT(yData);
+                this.sections.put(yLevel, sectionNetData);
+            }
+        }
+
+        @Override
+        public void writeToNBT(NBTTagCompound data) {
             for (Integer yLevel : sections.keySet()) {
                 ChunkSectionNetworkData sectionData = sections.get(yLevel);
                 NBTTagList sectionTag = new NBTTagList();
                 sectionData.writeToNBT(sectionTag);
-
-                NBTTagCompound section = new NBTTagCompound();
-                section.setInt("yLevel", yLevel);
-                section.setTag("sectionData", sectionTag);
-                netData.add(section);
+                data.setTag(String.valueOf(yLevel), sectionTag);
             }
         }
 

@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -90,7 +91,8 @@ public class WorldNetworkHandler {
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
                 if(sourceNode.getLocationPos().getY() <= at.getY()) continue;
                 sourceNode.notifyLink(getWorld(), at);
-                markDirty();
+
+                markDirty(at, source.getA());
 
                 if(handle != null) {
                     handle.notifyTransmissionNodeChange(sourceNode);
@@ -118,7 +120,8 @@ public class WorldNetworkHandler {
                 }
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
                 if(sourceNode.notifyUnlink(getWorld(), at)) {
-                    markDirty();
+                    markDirty(at, source.getA());
+
                     if(handle != null) {
                         handle.notifyTransmissionNodeChange(sourceNode);
                     }
@@ -137,8 +140,10 @@ public class WorldNetworkHandler {
         return null;
     }
 
-    public void markDirty() {
-        buffer.markDirty();
+    public void markDirty(Vec3i... positions) {
+        for (Vec3i pos : positions) {
+            buffer.markDirty(pos);
+        }
     }
 
     @Nullable
@@ -261,15 +266,16 @@ public class WorldNetworkHandler {
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 for (int yy = -1; yy <= 1; yy++) {
-                    queryData(new ChunkPos(central.x + xx, central.z + zz), posYLevel + yy, dataList);
+                    BlockPos pos = new BlockPos(central.x + xx, posYLevel + yy, central.z + zz);
+                    queryData(pos, dataList);
                 }
             }
         }
         return dataList;
     }
 
-    private void queryData(ChunkPos pos, int yLevel, List<LightNetworkBuffer.ChunkSectionNetworkData> out) {
-        LightNetworkBuffer.ChunkSectionNetworkData data = buffer.getSectionData(pos, yLevel);
+    private void queryData(BlockPos pos, List<LightNetworkBuffer.ChunkSectionNetworkData> out) {
+        LightNetworkBuffer.ChunkSectionNetworkData data = buffer.getSectionData(pos);
         if(data != null && !data.isEmpty()) out.add(data);
     }
 

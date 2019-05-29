@@ -8,7 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.data.world;
 
-import net.minecraft.nbt.NBTTagCompound;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,8 +20,8 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public interface IWorldRelatedData {
 
-    public void readFromNBT(NBTTagCompound compound);
+    public void writeData(File baseDirectory, File backupDirectory) throws IOException;
 
-    public void writeToNBT(NBTTagCompound compound);
+    public void readData(File baseDirectory) throws IOException;
 
 }
