@@ -11,6 +11,8 @@ jei.category.altar.attunement=星辉祭坛
 jei.category.altar.constellation=天辉祭坛
 jei.category.altar.trait=五彩祭坛
 
+jei.additional_info.starlight=+ starlight
+
 astralsorcery.config.title.overview=星辉魔法配置
 config.astralsorcery.category.astralsorcery=星辉魔法
 config.astralsorcery.category.astralsorcery.tooltip=常规配置
@@ -417,7 +419,7 @@ astralsorcery.journal.BORE_HEAD_VORTEX.4.text=即使是神话生物也会被这�
 
 research.ENCHANTMENT_AMULET.name=璀璨棱镜
 astralsorcery.journal.ENCHANTMENT_AMULET.1.text=关于星能的实验表明，更替之星会对星座产生奇怪的反应，在受到特殊的星辉照射后将停止发射其内的混沌魔能。<NL>随着散发的能量不断变化，或许比把能量集中更有益。<NL>将这些能量注入末影之眼后，会使它们向外发射轻微的短距辐射并再往外弥散一段距离，而不会对环境造成破坏。
-astralsorcery.journal.ENCHANTMENT_AMULET.3.text=在佩戴时，这种棱镜会给佩戴者身上的其他装备增加或赋予特殊的魔法效果。<NL>所获得的效果是完全随机的，这些效果完全基于锁定下界之星时的奇特频率。<NL>将其他频率的星辉照射在这个棱镜上会改变其与原先星体间的锁定频率并更换星体，最终由更替之星内那不可控制的混沌方式来决定获得的神奇效果。
+astralsorcery.journal.ENCHANTMENT_AMULET.3.text=在佩戴时，这种棱镜会给佩戴者身上的其他装备增加或赋予特殊的魔法效果。<NL>所获得的效果是完全随机的，这些效果完全基于锁定更替之星时的奇特频率。<NL>将其他频率的星辉照射在这个棱镜上会改变其与原先星体间的锁定频率并更换星体，最终由更替之星内那不可控制的混沌方式来决定获得的神奇效果。
 
 research.SEXTANT.name=六分仪
 astralsorcery.journal.SEXTANT.1.text=由于控制星能所需要的高度精密结构，一旦结构错误，检查结构的过程令人抓狂。<NL>通过与神奇的星能共振来对六分仪的导航方式进行修正，最终的成品不仅能用导航寻找特殊结构还能对现有结构进行检测纠正。
@@ -644,11 +646,12 @@ tile.blockborehead.ore.name=佩特曼喷口
 tile.blockborehead.vortex.name=费萨利德喷口
 tile.blockportalnode.name=
 tile.blockobservatory.name=瞭望台
-tile.blockgemcrystals.stage_0.name==宝石水晶簇
+tile.blockgemcrystals.stage_0.name=宝石水晶簇
 tile.blockgemcrystals.stage_1.name=宝石水晶簇
 tile.blockgemcrystals.stage_2_sky.name=宝石水晶簇
 tile.blockgemcrystals.stage_2_day.name=宝石水晶簇
 tile.blockgemcrystals.stage_2_night.name=宝石水晶簇
+tile.fluidblockliquidstarlight.name=星能液
 
 tile.blockgeolosyssamplecluster.name=水晶石样本
 
@@ -923,15 +926,15 @@ perk.astralsorcery.gelu_inc_perkexp.name=增加技能经验
 perk.astralsorcery.ulteria_more_perkexp.name=更多技能经验
 perk.astralsorcery.vorux_inc_perkeff.name=增加技能效果
 perk.astralsorcery.alcara_more_perkeff.name=更多技能效果
-perk.astralsorcery.less_hrv_speed.name=减慢挖掘速度
+perk.astralsorcery.less_hrv_speed.name=加快挖掘速度
 perk.astralsorcery.inc_reach_sweep.name=增加范围
 perk.astralsorcery.inc_ats_ailm.name=增加攻击速度
 perk.astralsorcery.inc_cull_ms.name=增加移动速度
 perk.astralsorcery.inc_cull_crit.name=增加暴击几率
 perk.astralsorcery.bol_red_inc_armor.name=增加护甲值
 perk.astralsorcery.unwav_life_armor.name=增加最大生命值并减少护甲值
-perk.astralsorcery.flight_life_armor.name=减少最大生命值与护甲值
-perk.astralsorcery.flight_ms_dodge.name=减少移动速度与闪避几率
+perk.astralsorcery.flight_life_armor.name=增加移动速度
+perk.astralsorcery.flight_ms_dodge.name=增加闪避机率
 perk.astralsorcery.magnet_ats_reach.name=增加攻击速度与范围
 perk.astralsorcery.inc_mine_perk.name=提高挖掘速度
 perk.astralsorcery.inc_life_rec.name=增加生命回复
