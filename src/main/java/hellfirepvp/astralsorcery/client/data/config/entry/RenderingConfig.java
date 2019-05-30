@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,9 +74,23 @@ public class RenderingConfig extends ConfigEntry {
 
     public static enum ParticleAmount {
 
-        MINIMAL,
-        LOWERED,
-        ALL
+        MINIMAL(40),
+        LOWERED(8),
+        ALL(1);
+
+        private final int rChance;
+
+        ParticleAmount(int rChance) {
+            this.rChance = rChance;
+        }
+
+        public boolean shouldSpawn(Random r) {
+            return r.nextInt(this.rChance) == 0;
+        }
+
+        public ParticleAmount less() {
+            return values()[Math.max(this.ordinal() - 1, 0)];
+        }
 
     }
 

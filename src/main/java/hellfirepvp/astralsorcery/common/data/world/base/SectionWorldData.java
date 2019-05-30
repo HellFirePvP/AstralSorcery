@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,6 +32,7 @@ import java.util.*;
  */
 public abstract class SectionWorldData<T extends WorldSection> extends CachedWorldData {
 
+    public static final int PRECISION_REGION = 9;
     public static final int PRECISION_SECTION = 5;
     public static final int PRECISION_CHUNK = 4;
 
@@ -60,8 +62,38 @@ public abstract class SectionWorldData<T extends WorldSection> extends CachedWor
     protected abstract T createNewSection(int sectionX, int sectionZ);
 
     @Nonnull
+    public Collection<T> getSections(Vec3i absoluteMin, Vec3i absoluteMax) {
+        return resolveSections(absoluteMin, absoluteMax, this::getSection);
+    }
+
+    @Nonnull
+    public Collection<T> getOrCreateSections(Vec3i absoluteMin, Vec3i absoluteMax) {
+        return resolveSections(absoluteMin, absoluteMax, this::getOrCreateSection);
+    }
+
+    @Nonnull
+    private Collection<T> resolveSections(Vec3i absoluteMin, Vec3i absoluteMax, Function<SectionKey, T> sectionFct) {
+        SectionKey lower = SectionKey.resolve(absoluteMin, this.precision);
+        SectionKey higher = SectionKey.resolve(absoluteMax, this.precision);
+        Collection<T> out = new HashSet<>();
+        for (int xx = lower.x; xx <= higher.x; xx++) {
+            for (int zz = lower.z; zz <= higher.z; zz++) {
+                T section = sectionFct.apply(new SectionKey(xx, zz));
+                if (section != null) {
+                    out.add(section);
+                }
+            }
+        }
+        return out;
+    }
+
+    @Nonnull
     public T getOrCreateSection(Vec3i absolute) {
-        SectionKey key = SectionKey.resolve(absolute, this.precision);
+        return getOrCreateSection(SectionKey.resolve(absolute, this.precision));
+    }
+
+    @Nonnull
+    private T getOrCreateSection(SectionKey key) {
         return this.sections.computeIfAbsent(key, sectionKey -> createNewSection(sectionKey.x, sectionKey.z));
     }
 

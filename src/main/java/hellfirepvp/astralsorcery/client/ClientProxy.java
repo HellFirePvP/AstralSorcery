@@ -11,6 +11,9 @@ package hellfirepvp.astralsorcery.client;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.data.config.ClientConfig;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectUpdater;
+import hellfirepvp.astralsorcery.client.event.ConnectionEventHandler;
+import hellfirepvp.astralsorcery.client.event.ContextRenderHandler;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
@@ -75,6 +78,9 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void attachEventHandlers(IEventBus eventBus) {
         super.attachEventHandlers(eventBus);
+
+        ContextRenderHandler.getInstance().attachEventListeners(eventBus);
+        ConnectionEventHandler.getInstance().attachEventListeners(eventBus);
     }
 
     @Override
@@ -82,6 +88,11 @@ public class ClientProxy extends CommonProxy {
         super.attachTickListeners(registrar);
 
         registrar.accept(this.clientScheduler);
+        registrar.accept(EffectUpdater.getInstance());
     }
 
+    @Override
+    public void scheduleClientside(Runnable r, int tickDelay) {
+        this.clientScheduler.addRunnable(r, tickDelay);
+    }
 }

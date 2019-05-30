@@ -43,6 +43,4 @@ public interface IComplexEffect {
 
     }
 
-    public static interface PreventRemoval {}
-
 }

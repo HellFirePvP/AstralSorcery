@@ -91,8 +91,9 @@ public class ItemComparator {
 
         public static class Sets {
 
-            public static final Clause[] ITEMSTACK_STRICT =
-                    { Clause.ITEM, Clause.AMOUNT_EXACT, NBT_STRICT, CAPABILITIES_COMPATIBLE };
+            public static final Clause[] ITEMSTACK_STRICT = { ITEM, AMOUNT_EXACT, NBT_STRICT, CAPABILITIES_COMPATIBLE };
+
+            public static final Clause[] ITEMSTACK_STRICT_NOAMOUNT = { ITEM, NBT_STRICT, CAPABILITIES_COMPATIBLE };
 
         }
 

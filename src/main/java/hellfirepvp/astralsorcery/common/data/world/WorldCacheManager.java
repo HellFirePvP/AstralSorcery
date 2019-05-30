@@ -11,7 +11,10 @@ package hellfirepvp.astralsorcery.common.data.world;
 import com.google.common.io.Files;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
+import hellfirepvp.astralsorcery.common.data.world.data.StorageNetworkBuffer;
+import hellfirepvp.astralsorcery.common.data.world.data.StructureGenerationBuffer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -232,11 +235,10 @@ public class WorldCacheManager implements ITickHandler {
 
     public static enum SaveKey {
 
-        LIGHT_NETWORK("lightnetwork", LightNetworkBuffer::new);
-        //CHUNK_VERSIONING("chunkversions", ChunkVersionBuffer::new),
-        //GATEWAY_DATA("gateway", GatewayCache::new),
-        //STRUCTURE_GEN("structures", StructureGenBuffer::new),
-        //STORAGE_BUFFER("storagenetwork", StructureGenBuffer::new),
+        LIGHT_NETWORK("lightnetwork", LightNetworkBuffer::new),
+        GATEWAY_DATA("gateway", GatewayCache::new),
+        STORAGE_BUFFER("storagenetwork", StorageNetworkBuffer::new),
+        STRUCTURE_GEN("structures", StructureGenerationBuffer::new);
         //STRUCTURE_MATCH("structurematcher", StructureMatchingBuffer::new);
 
         private final String identifier;
