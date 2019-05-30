@@ -6,25 +6,24 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.effect.function;
+package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
-
-import javax.annotation.Nonnull;
+import hellfirepvp.astralsorcery.common.structure.StructureType;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: VFXRenderOffsetController
+ * Class: StructureTypesAS
  * Created by HellFirePvP
- * Date: 27.05.2019 / 22:33
+ * Date: 30.05.2019 / 15:08
  */
-public interface VFXRenderOffsetController<T extends EntityVisualFX> {
+public class StructureTypesAS {
 
-    VFXRenderOffsetController<?> IDENTITY = (fx, pTicks) -> fx.getPosition();
+    private StructureTypesAS() {}
 
-    @Nonnull
-    public Vector3 changeRenderPosition(@Nonnull T fx, float pTicks);
+    public static StructureType MOUNTAIN;
+    public static StructureType DESERT;
+    public static StructureType SMALL;
+    public static StructureType TREASURE;
 
 }

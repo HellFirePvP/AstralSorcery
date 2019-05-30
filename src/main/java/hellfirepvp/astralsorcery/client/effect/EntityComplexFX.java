@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.client.effect;
 
 import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
 
+import java.util.Objects;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -51,12 +53,8 @@ public abstract class EntityComplexFX implements IComplexEffect {
         return age;
     }
 
-    public void setRefreshFunction(RefreshFunction refreshFunction) {
+    public void setRefreshFunction(RefreshFunction<?> refreshFunction) {
         this.refreshFunction = refreshFunction;
-    }
-
-    public RefreshFunction getRefreshFunction() {
-        return refreshFunction;
     }
 
     @Override
@@ -99,4 +97,16 @@ public abstract class EntityComplexFX implements IComplexEffect {
         this.flagRemoved = false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntityComplexFX that = (EntityComplexFX) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

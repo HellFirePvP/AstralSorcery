@@ -46,3 +46,9 @@ description='''Magic mod that draws power from stars and their constellations'''
     versionRange="[1.13.2]"
     ordering="NONE"
     side="BOTH"
+[[dependencies.astralsorcery]]
+    modId="observerlib"
+    mandatory=true
+    versionRange="[1.13.2]"
+    ordering="NONE"
+    side="BOTH"

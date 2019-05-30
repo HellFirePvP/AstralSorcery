@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.data.world;
 
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -19,6 +21,7 @@ import net.minecraft.world.World;
  */
 public abstract class CachedWorldData implements IWorldRelatedData {
 
+    protected final Random rand = new Random();
     private final WorldCacheManager.SaveKey key;
 
     protected CachedWorldData(WorldCacheManager.SaveKey key) {

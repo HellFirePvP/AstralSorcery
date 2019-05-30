@@ -56,7 +56,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
     private Set<BlockPos> queueRemoval = new HashSet<>();
 
     public LightNetworkBuffer() {
-        super(WorldCacheManager.SaveKey.LIGHT_NETWORK, SectionWorldData.PRECISION_CHUNK);
+        super(WorldCacheManager.SaveKey.LIGHT_NETWORK, PRECISION_CHUNK);
     }
 
     public WorldNetworkHandler getNetworkHandler(World world) {

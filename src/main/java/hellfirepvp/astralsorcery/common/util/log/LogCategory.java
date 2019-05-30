@@ -20,7 +20,8 @@ import java.util.function.Supplier;
 public enum LogCategory {
 
     PERKS,
-    STRUCTURE_MATCH;
+    STRUCTURE_MATCH,
+    GATEWAY_CACHE;
 
     public void info(Supplier<String> message) {
         LogUtil.info(this, message);

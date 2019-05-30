@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 public class AssetLibrary implements ISelectiveResourceReloadListener {
 
     public static AssetLibrary INSTANCE = new AssetLibrary();
-    public static boolean reloading = false;
+    private static boolean reloading = false;
 
     private static Map<AssetLoader.SubLocation, Map<String, BindableResource>> loadedTextures = new HashMap<>();
 
@@ -47,9 +47,13 @@ public class AssetLibrary implements ISelectiveResourceReloadListener {
         return res;
     }
 
+    public static boolean isReloading() {
+        return reloading;
+    }
+
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-        if(reloading || resourcePredicate.test(VanillaResourceType.TEXTURES)) {
+        if(reloading || !resourcePredicate.test(VanillaResourceType.TEXTURES)) {
             return;
         }
         reloading = true;

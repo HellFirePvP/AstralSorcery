@@ -134,6 +134,20 @@ public class CommonProxy {
         return asDataDir;
     }
 
+    public void scheduleClientside(Runnable r, int tickDelay) {}
+
+    public void scheduleClientside(Runnable r) {
+        this.scheduleClientside(r, 0);
+    }
+
+    public void scheduleDelayed(Runnable r, int tickDelay) {
+        this.commonScheduler.addRunnable(r, tickDelay);
+    }
+
+    public void scheduleDelayed(Runnable r) {
+        this.scheduleDelayed(r, 0);
+    }
+
     // Mod events
 
     private void onCommonSetup(FMLCommonSetupEvent event) {

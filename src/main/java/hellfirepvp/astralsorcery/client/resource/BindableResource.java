@@ -62,7 +62,7 @@ public class BindableResource extends AbstractRenderableTexture.Full {
     }
 
     private void allocateGlId() {
-        if (resource != null || AssetLibrary.reloading) return;
+        if (resource != null || AssetLibrary.isReloading()) return;
         resource = new SimpleTexture(new ResourceLocation(path));
         try {
             resource.loadTexture(Minecraft.getInstance().getResourceManager());
@@ -76,7 +76,7 @@ public class BindableResource extends AbstractRenderableTexture.Full {
 
     @Override
     public void bindTexture() {
-        if (AssetLibrary.reloading) {
+        if (AssetLibrary.isReloading()) {
             return; //we do nothing but wait.
         }
         if (resource == null) {

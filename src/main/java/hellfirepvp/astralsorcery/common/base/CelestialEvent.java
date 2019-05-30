@@ -6,25 +6,18 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.effect.function;
-
-import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
-
-import javax.annotation.Nonnull;
+package hellfirepvp.astralsorcery.common.base;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: VFXRenderOffsetController
+ * Class: CelestialEvent
  * Created by HellFirePvP
- * Date: 27.05.2019 / 22:33
+ * Date: 30.05.2019 / 00:04
  */
-public interface VFXRenderOffsetController<T extends EntityVisualFX> {
+public enum CelestialEvent {
 
-    VFXRenderOffsetController<?> IDENTITY = (fx, pTicks) -> fx.getPosition();
-
-    @Nonnull
-    public Vector3 changeRenderPosition(@Nonnull T fx, float pTicks);
+    SOLAR_ECLIPSE,
+    LUNAR_ECLIPSE
 
 }

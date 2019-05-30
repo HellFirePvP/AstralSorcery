@@ -96,11 +96,11 @@ public abstract class EntityVisualFX extends EntityComplexFX {
     }
 
     public float getScale(float pTicks) {
-        return this.scaleFunction.getScale(this, pTicks, this.getScaleMultiplier());
+        return this.scaleFunction.getScale(this, this.getScaleMultiplier(), pTicks);
     }
 
     public Vector3 getRenderPosition(float pTicks) {
-        return this.renderOffsetController.changeRenderPosition(this, this.getPosition(), this.getMotion(), pTicks);
+        return this.renderOffsetController.changeRenderPosition(this, pTicks);
     }
 
     public void setAlphaFunction(VFXAlphaFunction<?> alphaFunction) {

@@ -8,27 +8,20 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCommandBlock;
-import net.minecraft.block.BlockStructure;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Fluids;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.state.IProperty;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
@@ -41,7 +34,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.GameType;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -50,13 +42,10 @@ import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -66,7 +55,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -203,16 +191,6 @@ public class MiscUtils {
         return iterativeSearch(collection, matchingFct) != null;
     }
 
-    @Nullable
-    public static IBlockState getMatchingState(Collection<IBlockState> applicableStates, @Nullable IBlockState test) {
-        for (IBlockState state : applicableStates) {
-            if(matchStateExact(state, test)) {
-                return state;
-            }
-        }
-        return null;
-    }
-
     public static <T> boolean matchesAny(T element, Collection<Predicate<T>> tests) {
         for (Predicate<T> test : tests) {
             if (test.test(element)) {
@@ -220,31 +198,6 @@ public class MiscUtils {
             }
         }
         return false;
-    }
-
-    public static boolean matchStateExact(@Nullable IBlockState state, @Nullable IBlockState stateToTest) {
-        if(state == null) {
-            return stateToTest == null;
-        } else if (stateToTest == null) {
-            return false;
-        }
-
-        if(!state.getBlock().getRegistryName().equals(stateToTest.getBlock().getRegistryName())) {
-            return false;
-        }
-
-        for (IProperty<?> prop : state.getProperties()) {
-            Comparable<?> original = state.get(prop);
-            try {
-                Comparable<?> test = stateToTest.get(prop);
-                if(!original.equals(test)) {
-                    return false;
-                }
-            } catch (Exception exc) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public static boolean canPlayerAttackServer(@Nullable EntityLivingBase source, @Nonnull EntityLivingBase target) {
@@ -379,136 +332,7 @@ public class MiscUtils {
         if (str == null || str.isEmpty()) {
             return str;
         }
-        return String.valueOf(Character.toTitleCase(str.charAt(0))) + str.substring(1);
-    }
-
-    public static boolean canToolBreakBlockWithoutPlayer(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull ItemStack stack) {
-        if (state.getBlockHardness(world, pos) == -1) {
-            return false;
-        }
-        if (state.getMaterial().isToolNotRequired()) {
-            return true;
-        }
-
-        ToolType tool = state.getHarvestTool();
-        if (stack.isEmpty() || tool == null) {
-            return state.getMaterial().isToolNotRequired() || stack.canHarvestBlock(state);
-        }
-
-        int toolLevel = stack.getItem().getHarvestLevel(stack, tool, null, state);
-        if (toolLevel < 0) {
-            return state.getMaterial().isToolNotRequired() || stack.canHarvestBlock(state);
-        }
-
-        return toolLevel >= state.getHarvestLevel();
-    }
-
-    public static boolean breakBlockWithPlayer(BlockPos pos, EntityPlayerMP playerMP) {
-        return playerMP.interactionManager.tryHarvestBlock(pos);
-    }
-
-    //Copied from ForgeHooks.onBlockBreak & PlayerInteractionManager.tryHarvestBlock
-    //Duplicate break functionality without a active player.
-    //Emulates a FakePlayer - attempts without a player as harvester in case a fakeplayer leads to issues.
-    public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos) {
-        return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), ItemStack.EMPTY, true, false, true);
-    }
-
-    public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos, IBlockState stateBroken, ItemStack heldItem, boolean breakBlock, boolean ignoreHarvestRestrictions, boolean playEffects) {
-        FakePlayer fakePlayer = AstralSorcery.getProxy().getASFakePlayerServer(world);
-        int xp;
-        try {
-            xp = net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(world, GameType.SURVIVAL, fakePlayer, pos);
-        } catch (Exception exc) {
-            return false;
-        }
-        if (xp == -1) {
-            return false;
-        }
-
-        TileEntity tileentity = world.getTileEntity(pos);
-
-        if (heldItem.onBlockStartBreak(pos, fakePlayer)) {
-            return false;
-        }
-
-        boolean harvestable = true;
-        try {
-            if (!ignoreHarvestRestrictions) {
-                harvestable = stateBroken.canHarvestBlock(world, pos, fakePlayer);
-            }
-        } catch (Exception exc) {
-            return false;
-        }
-
-        ItemStack heldCopy = heldItem.isEmpty() ? ItemStack.EMPTY : heldItem.copy();
-        try {
-            heldCopy.onBlockDestroyed(world, stateBroken, pos, fakePlayer);
-        } catch (Exception exc) {
-            return false;
-        }
-
-        if(playEffects) {
-            world.playEvent(null, 2001, pos, Block.getStateId(stateBroken));
-        }
-
-        boolean wasCapturingStates = world.captureBlockSnapshots;
-        List<BlockSnapshot> previousCapturedStates = new ArrayList<>(world.capturedBlockSnapshots);
-
-        world.captureBlockSnapshots = true;
-        try {
-            if (breakBlock) {
-                if (!stateBroken.removedByPlayer(world, pos, fakePlayer, harvestable, Fluids.EMPTY.getDefaultState())) {
-                    restoreWorldState(world, wasCapturingStates, previousCapturedStates);
-                    return false;
-                }
-            } else {
-                stateBroken.getBlock().onBlockHarvested(world, pos, stateBroken, fakePlayer);
-            }
-        } catch (Exception exc) {
-            restoreWorldState(world, wasCapturingStates, previousCapturedStates);
-            return false;
-        }
-
-        stateBroken.getBlock().onPlayerDestroy(world, pos, stateBroken);
-
-        if (harvestable) {
-            try {
-                ItemStack harvestStack = heldCopy.isEmpty() ? ItemStack.EMPTY : heldCopy.copy();
-                stateBroken.getBlock().harvestBlock(world, fakePlayer, pos, stateBroken, tileentity, harvestStack);
-            } catch (Exception exc) {
-                restoreWorldState(world, wasCapturingStates, previousCapturedStates);
-                return false;
-            }
-        }
-
-        if (xp > 0) {
-            stateBroken.getBlock().dropXpOnBlockBreak(world, pos, xp);
-        }
-        BlockDropCaptureAssist.startCapturing();
-        try {
-            //Capturing block snapshots is aids. don't try that at home kids.
-            world.captureBlockSnapshots = false;
-            world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
-            world.capturedBlockSnapshots.forEach((s) -> world.setBlockState(s.getPos(), Blocks.AIR.getDefaultState()));
-        } finally {
-            BlockDropCaptureAssist.getCapturedStacksAndStop(); //Discard
-
-            //Restore previous state
-            world.capturedBlockSnapshots.clear();
-            world.captureBlockSnapshots = wasCapturingStates;
-            world.capturedBlockSnapshots.addAll(previousCapturedStates);
-        }
-        return true;
-    }
-
-    private static void restoreWorldState(World world, boolean prevCaptureFlag, List<BlockSnapshot> prevSnapshots) {
-        world.captureBlockSnapshots = false;
-        world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
-        world.capturedBlockSnapshots.clear();
-
-        world.captureBlockSnapshots = prevCaptureFlag;
-        world.capturedBlockSnapshots.addAll(prevSnapshots);
+        return Character.toTitleCase(str.charAt(0)) + str.substring(1);
     }
 
     public static void transferEntityTo(Entity entity, DimensionType target, BlockPos targetPos) {
