@@ -119,6 +119,11 @@ public class TransmissionNetworkHelper {
         }
     }
 
+    public static boolean isTileInNetwork(TileNetwork tileNetwork) {
+        WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(tileNetwork.getWorld());
+        return handler.getTransmissionNode(tileNetwork.getPos()) != null;
+    }
+
     public static void informNetworkTilePlacement(TileNetwork tileNetwork) {
         WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(tileNetwork.getWorld());
         if(tileNetwork instanceof IStarlightSource) {

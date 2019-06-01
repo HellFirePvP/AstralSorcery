@@ -35,7 +35,6 @@ public class ResearchNode {
     private final RenderType renderType;
     public final int renderPosX, renderPosZ;
     private String unlocName;
-    //private boolean special = false;
 
     private ItemStack[] renderItemStacks;
     private TextureQuery renderTextureQuery;
@@ -75,11 +74,6 @@ public class ResearchNode {
         this.renderSpriteQuery = query;
     }
 
-    /*public ResearchNode(BindableResource textureResource, String unlocName, int renderPosX, int renderPosZ) {
-        this(RenderType.TEXTURE, unlocName, renderPosX, renderPosZ);
-        this.texture = textureResource;
-    }*/
-
     public ResearchNode addSourceConnectionFrom(ResearchNode node) {
         this.connectionsTo.add(node);
         return this;
@@ -106,15 +100,6 @@ public class ResearchNode {
     public boolean canSee(@Nullable PlayerProgress progress) {
         return true;
     }
-
-    /*public ResearchNode setSpecial() {
-        this.special = true;
-        return this;
-    }
-
-    public boolean isSpecial() {
-        return special;
-    }*/
 
     public ResearchNode setTextureColorHintWithAlpha(Color textureColorHint) {
         this.textureColorHint = textureColorHint;

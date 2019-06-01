@@ -18,8 +18,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -37,6 +39,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static hellfirepvp.astralsorcery.common.util.item.ItemComparator.Clause.*;
 
@@ -88,6 +91,17 @@ public class ItemUtils {
         Block b = Block.getBlockFromItem(stack.getItem());
         if (b == null || b == Blocks.AIR) return null;
         return b.getDefaultState();
+    }
+
+    @Nonnull
+    public static List<ItemStack> getItemsOfTag(ResourceLocation key) {
+        Tag<Item> tag = ItemTags.getCollection().get(key);
+        return tag == null ? Collections.emptyList() : getItemsOfTag(tag);
+    }
+
+    @Nonnull
+    public static List<ItemStack> getItemsOfTag(Tag<Item> itemTag) {
+        return itemTag.getAllElements().stream().map(ItemStack::new).collect(Collectors.toList());
     }
 
     public static Collection<ItemStack> scanInventoryFor(IItemHandler handler, Item i) {

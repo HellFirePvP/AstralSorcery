@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.base.MoonPhase;
+
 import java.util.List;
 
 /**

@@ -95,6 +95,8 @@ public class ItemComparator {
 
             public static final Clause[] ITEMSTACK_STRICT_NOAMOUNT = { ITEM, NBT_STRICT, CAPABILITIES_COMPATIBLE };
 
+            public static final Clause[] ITEMSTACK_CRAFTING = { ITEM, NBT_LEAST };
+
         }
 
     }

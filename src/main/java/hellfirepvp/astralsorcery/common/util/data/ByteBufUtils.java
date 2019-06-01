@@ -38,26 +38,26 @@ import java.util.function.Function;
 public class ByteBufUtils {
 
     @Nullable
-    public static <T> T readOptional(ByteBuf buf, Function<ByteBuf, T> readFct) {
+    public static <T> T readOptional(PacketBuffer buf, Function<PacketBuffer, T> readFct) {
         if (buf.readBoolean()) {
             return readFct.apply(buf);
         }
         return null;
     }
 
-    public static <T> void writeOptional(ByteBuf buf, @Nullable T object, BiConsumer<ByteBuf, T> applyFct) {
+    public static <T> void writeOptional(PacketBuffer buf, @Nullable T object, BiConsumer<PacketBuffer, T> applyFct) {
         buf.writeBoolean(object != null);
         if (object != null) {
             applyFct.accept(buf, object);
         }
     }
 
-    public static void writeUUID(ByteBuf buf, UUID uuid) {
+    public static void writeUUID(PacketBuffer buf, UUID uuid) {
         buf.writeLong(uuid.getMostSignificantBits());
         buf.writeLong(uuid.getLeastSignificantBits());
     }
 
-    public static UUID readUUID(ByteBuf buf) {
+    public static UUID readUUID(PacketBuffer buf) {
         return new UUID(buf.readLong(), buf.readLong());
     }
 
@@ -87,52 +87,52 @@ public class ByteBufUtils {
         return new String(strBytes, Charset.forName("UTF-8"));
     }
 
-    public static void writeResourceLocation(ByteBuf buf, ResourceLocation key) {
+    public static void writeResourceLocation(PacketBuffer buf, ResourceLocation key) {
         writeString(buf, key.toString());
     }
 
-    public static ResourceLocation readResourceLocation(ByteBuf buf) {
+    public static ResourceLocation readResourceLocation(PacketBuffer buf) {
         return new ResourceLocation(readString(buf));
     }
 
-    public static <T extends Enum<T>> void writeEnumValue(ByteBuf buf, T value) {
+    public static <T extends Enum<T>> void writeEnumValue(PacketBuffer buf, T value) {
         buf.writeInt(value.ordinal());
     }
 
-    public static <T extends Enum<T>> T readEnumValue(ByteBuf buf, Class<T> enumClazz) {
+    public static <T extends Enum<T>> T readEnumValue(PacketBuffer buf, Class<T> enumClazz) {
         if (!enumClazz.isEnum()) {
             throw new IllegalArgumentException("Passed class is not an enum!");
         }
         return enumClazz.getEnumConstants()[buf.readInt()];
     }
 
-    public static void writePos(ByteBuf buf, BlockPos pos) {
+    public static void writePos(PacketBuffer buf, BlockPos pos) {
         buf.writeInt(pos.getX());
         buf.writeInt(pos.getY());
         buf.writeInt(pos.getZ());
     }
 
-    public static BlockPos readPos(ByteBuf buf) {
+    public static BlockPos readPos(PacketBuffer buf) {
         int x = buf.readInt();
         int y = buf.readInt();
         int z = buf.readInt();
         return new BlockPos(x, y, z);
     }
 
-    public static void writeVector(ByteBuf buf, Vector3 vec) {
+    public static void writeVector(PacketBuffer buf, Vector3 vec) {
         buf.writeDouble(vec.getX());
         buf.writeDouble(vec.getY());
         buf.writeDouble(vec.getZ());
     }
 
-    public static Vector3 readVector(ByteBuf buf) {
+    public static Vector3 readVector(PacketBuffer buf) {
         double x = buf.readDouble();
         double y = buf.readDouble();
         double z = buf.readDouble();
         return new Vector3(x, y, z);
     }
 
-    public static void writeItemStack(ByteBuf byteBuf, @Nonnull ItemStack stack) {
+    public static void writeItemStack(PacketBuffer byteBuf, @Nonnull ItemStack stack) {
         boolean defined = !stack.isEmpty();
         byteBuf.writeBoolean(defined);
         if(defined) {
@@ -143,7 +143,7 @@ public class ByteBufUtils {
     }
 
     @Nonnull
-    public static ItemStack readItemStack(ByteBuf byteBuf) {
+    public static ItemStack readItemStack(PacketBuffer byteBuf) {
         boolean defined = byteBuf.readBoolean();
         if(defined) {
             return ItemStack.read(readNBTTag(byteBuf));
@@ -162,11 +162,31 @@ public class ByteBufUtils {
         }
     }
 
+    public static void writeFluidStack(PacketBuffer pktBuf, @Nullable FluidStack stack) {
+        boolean defined = stack != null;
+        pktBuf.writeBoolean(defined);
+        if(defined) {
+            NBTTagCompound tag = new NBTTagCompound();
+            stack.writeToNBT(tag);
+            writeNBTTag(pktBuf, tag);
+        }
+    }
+
     @Nullable
     public static FluidStack readFluidStack(ByteBuf byteBuf) {
         boolean defined = byteBuf.readBoolean();
         if(defined) {
             return FluidStack.loadFluidStackFromNBT(readNBTTag(byteBuf));
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable
+    public static FluidStack readFluidStack(PacketBuffer pktBuf) {
+        boolean defined = pktBuf.readBoolean();
+        if(defined) {
+            return FluidStack.loadFluidStackFromNBT(readNBTTag(pktBuf));
         } else {
             return null;
         }

@@ -20,7 +20,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
  * Created by HellFirePvP
  * Date: 21.04.2019 / 19:44
  */
-public class BufferedReplyChannel extends SimpleChannel {
+public class BufferedReplyChannel extends SimpleSendChannel {
 
     public BufferedReplyChannel(NetworkInstance instance) {
         super(instance);

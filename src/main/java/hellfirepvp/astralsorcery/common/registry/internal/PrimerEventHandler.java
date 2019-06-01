@@ -8,10 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.registry.internal;
 
+import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
+import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.registry.RegistryTileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
@@ -39,6 +44,7 @@ public class PrimerEventHandler {
     public void attachEventHandlers(IEventBus eventBus) {
         eventBus.addGenericListener(Item.class, this::registerItems);
         eventBus.addGenericListener(Block.class, this::registerBlocks);
+        eventBus.addGenericListener(TileEntityType.class, this::registerTiles);
         eventBus.addGenericListener(Biome.class, this::registerBiomes);
         eventBus.addGenericListener(Potion.class, this::registerPotions);
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
@@ -47,16 +53,22 @@ public class PrimerEventHandler {
 
     private void registerItems(RegistryEvent.Register<Item> event) {
         registry.wipe(event.getClass());
-        //RegistryItems.init();
+        RegistryItems.registerItems();
+        RegistryItems.registerItemBlocks();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
-        //AstralSorcery.proxy.registerOreDictEntries();
-        //RegistryConstellations.initConstellationSignatures();
+        RegistryConstellations.initConstellationSignatures();
     }
 
     private void registerBlocks(RegistryEvent.Register<Block> event) {
         registry.wipe(event.getClass());
-        //RegistryBlocks.init();
+        RegistryBlocks.registerBlocks();
         //RegistryBlocks.initRenderRegistry();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
+        registry.wipe(event.getClass());
+        RegistryTileEntities.registerTiles();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

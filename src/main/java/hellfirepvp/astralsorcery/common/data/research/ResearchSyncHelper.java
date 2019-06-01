@@ -23,19 +23,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 public class ResearchSyncHelper {
 
-    public static void pushProgressToClientUnsafe(PlayerProgress progress, EntityPlayerMP p) {
+    public static void pushProgressToClientUnsafe(PlayerProgress progress, EntityPlayer p) {
         PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_ADD);
         pkt.load(progress);
-        PacketChannel.CHANNEL.sendTo(pkt, p);
+        PacketChannel.CHANNEL.sendToPlayer(p, pkt);
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void recieveProgressFromServer(PktSyncKnowledge message, EntityPlayer player) {
-        int currentLvl = ResearchHelper.clientProgress == null ? 0 : ResearchHelper.clientProgress.getPerkLevel(player);
-        ResearchHelper.clientProgress = new PlayerProgress();
-        ResearchHelper.clientProgress.receive(message);
-        ResearchHelper.clientInitialized = true;
-        if (ResearchHelper.clientProgress.getPerkLevel(player) > currentLvl) {
+        int currentLvl = ResearchHelper.getClientProgress().getPerkLevel(player);
+        ResearchHelper.updateClientResearch(message);
+        if (ResearchHelper.getClientProgress().getPerkLevel(player) > currentLvl) {
             ClientRenderEventHandler.requestPermChargeReveal(160);
         }
     }

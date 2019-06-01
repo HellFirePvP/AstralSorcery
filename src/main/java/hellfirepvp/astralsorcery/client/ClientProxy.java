@@ -17,10 +17,11 @@ import hellfirepvp.astralsorcery.client.event.ContextRenderHandler;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraftforge.client.model.obj.OBJLoader;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ExtensionPoint;
 
@@ -81,6 +82,9 @@ public class ClientProxy extends CommonProxy {
 
         ContextRenderHandler.getInstance().attachEventListeners(eventBus);
         ConnectionEventHandler.getInstance().attachEventListeners(eventBus);
+
+        eventBus.addListener(RegistryItems::registerColors);
+        eventBus.addListener(RegistryBlocks::registerColors);
     }
 
     @Override

@@ -48,6 +48,8 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModLoadingContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -96,6 +98,11 @@ public class MiscUtils {
     public static <T> T getRandomEntry(List<T> list, Random rand) {
         if(list == null || list.isEmpty()) return null;
         return list.get(rand.nextInt(list.size()));
+    }
+
+    @Nullable
+    public static ModContainer getCurrentlyActiveMod() {
+        return ModLoadingContext.get().getActiveContainer();
     }
 
     @Nullable
@@ -254,8 +261,7 @@ public class MiscUtils {
 
     public static boolean canPlayerPlaceBlockPos(EntityPlayer player, EnumHand withHand, IBlockState tryPlace, BlockPos pos, EnumFacing againstSide) {
         BlockSnapshot snapshot = new BlockSnapshot(player.getEntityWorld(), pos, tryPlace);
-        BlockEvent.PlaceEvent ev = ForgeEventFactory.onPlayerBlockPlace(player, snapshot, againstSide, withHand);
-        return !ev.isCanceled();
+        return !ForgeEventFactory.onBlockPlace(player, snapshot, againstSide);
     }
 
     public static boolean isConnectionEstablished(EntityPlayerMP player) {
