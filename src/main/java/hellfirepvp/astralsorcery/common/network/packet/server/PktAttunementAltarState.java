@@ -88,41 +88,40 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
     @Nonnull
     @Override
     public Handler<PktAttunementAltarState> handler() {
-        return (packet, ctx, side) -> {
-            if (side == LogicalSide.CLIENT) {
-                ctx.enqueueWork(() -> {
-                    packet.handleClient(ctx);
-                });
-            } else {
-                ctx.enqueueWork(() -> {
+        return new Handler<PktAttunementAltarState>() {
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public void handleClient(PktAttunementAltarState packet, NetworkEvent.Context context) {
+                World mcWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
+                if (mcWorld.getDimension().getType().equals(packet.type)) {
+                    EntityPlayer player = Minecraft.getInstance().player;
+                    if (player != null && player.getEntityId() == packet.entityId) {
+                        TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, packet.at, TileAttunementAltar.class, true);
+                        if (ta != null) {
+                            if(ta.tryStartCameraFlight()) {
+                                replyWith(new PktAttunementAltarState(true, packet.type, packet.at), context);
+                            }
+                        }
+                    }
+                }
+                context.setPacketHandled(true);
+            }
+
+            @Override
+            public void handle(PktAttunementAltarState packet, NetworkEvent.Context context, LogicalSide side) {
+                context.enqueueWork(() -> {
                     if (packet.started) {
                         MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(side);
                         World w = DimensionManager.getWorld(srv, packet.type, true, true);
                         TileAttunementAltar ta = MiscUtils.getTileAt(w, packet.at, TileAttunementAltar.class, true);
                         if(ta != null) {
-                            EntityPlayer pl = ctx.getSender();
+                            EntityPlayer pl = context.getSender();
                             ta.markPlayerStartCameraFlight(pl);
                         }
                     }
                 });
+                context.setPacketHandled(true);
             }
-            ctx.setPacketHandled(true);
         };
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void handleClient(NetworkEvent.Context ctx) {
-        World mcWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
-        if (mcWorld.getDimension().getType().equals(this.type)) {
-            EntityPlayer player = Minecraft.getInstance().player;
-            if (player != null && player.getEntityId() == this.entityId) {
-                TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, this.at, TileAttunementAltar.class, true);
-                if (ta != null) {
-                    if(ta.tryStartCameraFlight()) {
-                        replyWith(new PktAttunementAltarState(true, this.type, this.at), ctx);
-                    }
-                }
-            }
-        }
     }
 }
