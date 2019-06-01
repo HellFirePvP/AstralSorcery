@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.network.base;
 
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -45,10 +47,26 @@ public abstract class ASPacket<T extends ASPacket<T>> {
         @Override
         default void accept(T t, Supplier<NetworkEvent.Context> contextSupplier) {
             NetworkEvent.Context ctx = contextSupplier.get();
-            this.handle(t, ctx, ctx.getDirection().getReceptionSide());
+            switch (ctx.getDirection().getReceptionSide()) {
+                case CLIENT:
+                    this.handleClient(t, ctx);
+                    break;
+                case SERVER:
+                    this.handleServer(t, ctx);
+                    break;
+            }
         }
 
-        void handle(T packet, NetworkEvent.Context context, LogicalSide recipientSide);
+        @OnlyIn(Dist.CLIENT)
+        default void handleClient(T packet, NetworkEvent.Context context) {
+            this.handle(packet, context, LogicalSide.CLIENT);
+        }
+
+        default void handleServer(T packet, NetworkEvent.Context context) {
+            this.handle(packet, context, LogicalSide.SERVER);
+        }
+
+        void handle(T packet, NetworkEvent.Context context, LogicalSide side);
 
     }
 
