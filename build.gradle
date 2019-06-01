@@ -90,7 +90,7 @@ repositories {
 
 dependencies {
 
-    minecraft "net.minecraftforge:forge:1.13.2-25.0.146"
+    minecraft "net.minecraftforge:forge:1.13.2-25.0.216"
 
     compile 'hellfirepvp.observerlib:observerlib:1.13.2-1.0.0-v5'
 

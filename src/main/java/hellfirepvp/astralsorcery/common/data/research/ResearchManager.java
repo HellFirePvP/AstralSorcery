@@ -9,8 +9,10 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -56,10 +58,10 @@ public class ResearchManager {
         }
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, player);
+        PacketChannel.CHANNEL.sendToPlayer(player, pkt);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
     }
 
     public static void giveResearchIgnoreFail(EntityPlayer player, ResearchProgression prog) {
@@ -74,11 +76,11 @@ public class ResearchManager {
 
         if(progress.forceGainResearch(prog)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(prog);
-            PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+            PacketChannel.CHANNEL.sendToPlayer(player, pkt);
         }
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
     }
 
     public static void giveProgressionIgnoreFail(EntityPlayer player, ProgressionTier tier) {
@@ -92,10 +94,11 @@ public class ResearchManager {
 
         progress.setTierReached(next);
         PktProgressionUpdate pkt = new PktProgressionUpdate(next);
-        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendToPlayer(player, pkt);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
     }
 
     public static boolean useSextantTarget(SextantFinder.TargetObject to, EntityPlayer player) {
@@ -104,8 +107,8 @@ public class ResearchManager {
 
         progress.useTarget(to);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -118,8 +121,8 @@ public class ResearchManager {
             AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
         }
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -131,8 +134,8 @@ public class ResearchManager {
 
         AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -142,8 +145,8 @@ public class ResearchManager {
 
         progress.memorizeConstellation(c.getUnlocalizedName());
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -154,10 +157,10 @@ public class ResearchManager {
         progress.setTierReached(ProgressionTier.values()[ProgressionTier.values().length - 1]);
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendToPlayer(player, pkt);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -167,8 +170,8 @@ public class ResearchManager {
 
         progress.setAttunedBefore(wasAttunedBefore);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -182,12 +185,10 @@ public class ResearchManager {
 
         Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
         for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
-            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
-            progress.removePerk(perkEntry.getKey());
-            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
+            dropPerk(progress, player, Dist.DEDICATED_SERVER, perkEntry.getKey(), perkEntry.getValue());
         }
 
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL));
 
         progress.setExp(0);
         progress.setAttunedConstellation(constellation);
@@ -195,15 +196,15 @@ public class ResearchManager {
         if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
             NBTTagCompound data = new NBTTagCompound();
             root.onUnlockPerkServer(player, progress, data);
-            progress.setPerkData(root, data);
-            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, root, false);
-            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(root, true), (EntityPlayerMP) player);
+            progress.applyPerk(root, data);
+            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, root, false);
+            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(root, true));
         }
 
         AdvancementTriggers.ATTUNE_SELF.trigger((EntityPlayerMP) player, constellation);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -212,14 +213,14 @@ public class ResearchManager {
         if (!progress.isValid()) return false;
         if (!progress.hasPerkEffect(perk)) return false;
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
-        progress.setPerkData(perk, newData);
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, true);
+        progress.applyPerk(perk, newData);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
 
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, prevoiusData, newData), (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, prevoiusData, newData));
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -231,13 +232,13 @@ public class ResearchManager {
 
         NBTTagCompound data = new NBTTagCompound();
         perk.onUnlockPerkServer(player, progress, data);
-        progress.setPerkData(perk, data);
+        progress.applyPerk(perk, data);
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, true));
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -251,11 +252,11 @@ public class ResearchManager {
             return false;
         }
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, false), (EntityPlayerMP) player);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, true);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, false));
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -269,14 +270,14 @@ public class ResearchManager {
             return false;
         }
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
 
         //Send way after research sync...
-        AstralSorcery.proxy.scheduleDelayed(() -> {
-            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+        AstralSorcery.getProxy().scheduleDelayed(() -> {
+            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, true));
         });
         return true;
     }
@@ -289,8 +290,8 @@ public class ResearchManager {
             return false;
         }
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -302,8 +303,8 @@ public class ResearchManager {
             return false;
         }
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -314,13 +315,13 @@ public class ResearchManager {
 
         NBTTagCompound data = new NBTTagCompound();
         perk.onUnlockPerkServer(player, progress, data);
-        progress.setPerkData(perk, data);
+        progress.applyPerk(perk, data);
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, true));
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -332,14 +333,12 @@ public class ResearchManager {
         if (data == null) {
             return false;
         }
-        perk.onRemovePerkServer(player, progress, data);
-        progress.removePerk(perk);
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
+        dropPerk(progress, player, Dist.DEDICATED_SERVER, perk, data);
 
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, false), (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, false));
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -349,16 +348,21 @@ public class ResearchManager {
 
         Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
         for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
-            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
-            progress.removePerk(perkEntry.getKey());
-            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
+            dropPerk(progress, player, Dist.DEDICATED_SERVER, perkEntry.getKey(), perkEntry.getValue());
         }
 
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL));
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
+    }
+
+    private static void dropPerk(PlayerProgress progress, EntityPlayer player, Dist side, AbstractPerk perk, NBTTagCompound data) {
+        progress.removePerk(perk);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, side, perk, true);
+        perk.onRemovePerkServer(player, progress, data);
+        progress.removePerkData(perk);
     }
 
     public static boolean setTomeReceived(EntityPlayer player) {
@@ -367,8 +371,8 @@ public class ResearchManager {
 
         progress.setTomeReceived();
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -380,8 +384,8 @@ public class ResearchManager {
 
         AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -393,8 +397,8 @@ public class ResearchManager {
 
         AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
@@ -416,8 +420,8 @@ public class ResearchManager {
             PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
         }
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
     }
 
     public static boolean forceMaximizeResearch(EntityPlayer player) {
@@ -428,10 +432,10 @@ public class ResearchManager {
         }
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendToPlayer(player, pkt);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 

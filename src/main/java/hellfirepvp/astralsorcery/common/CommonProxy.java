@@ -116,6 +116,10 @@ public class CommonProxy {
         this.commonConfig.addConfigEntry(CommonGeneralConfig.CONFIG);
     }
 
+    public InternalRegistryPrimer getRegistryPrimer() {
+        return registryPrimer;
+    }
+
     // Utils
 
     public FakePlayer getASFakePlayerServer(WorldServer world) {

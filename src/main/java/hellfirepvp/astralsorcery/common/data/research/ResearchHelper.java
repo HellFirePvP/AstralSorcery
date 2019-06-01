@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.data.research;
 
 import com.google.common.io.Files;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,6 +21,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -40,20 +42,29 @@ import java.util.UUID;
  */
 public class ResearchHelper {
 
-    public static PlayerProgress clientProgress = new PlayerProgress();
-    public static boolean clientInitialized = false;
+    private static PlayerProgress clientProgress = new PlayerProgress();
+    private static boolean clientInitialized = false;
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
     @Nonnull
     public static PlayerProgress getProgress(EntityPlayer player, Dist dist) {
         if (dist.isClient()) {
-            return clientProgress;
+            return getClientProgress();
         } else if (player instanceof EntityPlayerMP) {
             return getProgressServer((EntityPlayerMP) player);
         } else {
             return new PlayerProgressTestAccess();
         }
+    }
+
+    @Nonnull
+    public static PlayerProgress getClientProgress() {
+        return clientProgress;
+    }
+
+    public static boolean isClientInitialized() {
+        return clientInitialized;
     }
 
     @Nonnull
@@ -75,6 +86,15 @@ public class ResearchHelper {
             progress = new PlayerProgress(); //WELL we already try recovering.. so wtf.
         }
         return progress;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void updateClientResearch(@Nullable PktSyncKnowledge pkt) {
+        ResearchHelper.clientProgress = new PlayerProgress();
+        if (pkt != null) {
+            ResearchHelper.clientProgress.receive(pkt);
+        }
+        ResearchHelper.clientInitialized = pkt != null;
     }
 
     public static void loadPlayerKnowledge(EntityPlayerMP p) {
@@ -168,15 +188,15 @@ public class ResearchHelper {
     }
 
     public static void wipeKnowledge(EntityPlayerMP p) {
-        resetPerks(p);
+        ResearchManager.resetPerks(p);
         wipeFile(p);
         playerProgressServer.remove(p.getUniqueID());
         PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, p);
+        PacketChannel.CHANNEL.sendToPlayer(pkt, p);
         PktSyncKnowledge pk = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
-        PacketChannel.CHANNEL.sendTo(pk, p);
+        PacketChannel.CHANNEL.sendToPlayer(pk, p);
         loadPlayerKnowledge(p);
-        ResearchSyncHelper.pushProgressToClientUnsafe(p);
+        ResearchSyncHelper.pushProgressToClientUnsafe(getProgressServer(p), p);
     }
 
     private static void wipeFile(EntityPlayerMP player) {
@@ -184,8 +204,8 @@ public class ResearchHelper {
         ResearchIOThread.cancelSave(player.getUniqueID());
     }
 
-    public static void savePlayerKnowledge(EntityPlayerMP p) {
-        if(!MiscUtils.isPlayerFakeMP(p)) {
+    public static void savePlayerKnowledge(EntityPlayer p) {
+        if (p instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP(p)) {
             savePlayerKnowledge(p.getUniqueID(), false);
         }
     }

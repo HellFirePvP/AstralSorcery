@@ -23,20 +23,28 @@ import java.util.Random;
 public abstract class TileNetwork extends TileEntityTick {
 
     protected static final Random rand = new Random();
+    private boolean isNetworkInformed = false;
 
     protected TileNetwork(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
     }
 
     @Override
-    protected void onFirstTick() {
-        if(world.isRemote) return;
-        TransmissionNetworkHelper.informNetworkTilePlacement(this);
+    public void tick() {
+        super.tick();
+
+        if (!this.world.isRemote() && !this.isNetworkInformed) {
+            if (!TransmissionNetworkHelper.isTileInNetwork(this)) {
+                TransmissionNetworkHelper.informNetworkTilePlacement(this);
+            }
+            this.isNetworkInformed = true;
+        }
     }
 
     public void onBreak() {
-        if(world.isRemote) return;
+        if (this.world.isRemote()) return;
         TransmissionNetworkHelper.informNetworkTileRemoval(this);
+        this.isNetworkInformed = false;
     }
 
 }

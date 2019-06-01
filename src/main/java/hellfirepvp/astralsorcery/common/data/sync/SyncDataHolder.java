@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.*;
 
@@ -93,7 +94,7 @@ public class SyncDataHolder implements ITickHandler {
 
     public static void syncAllDataTo(EntityPlayer player) {
         PktSyncData dataSync = new PktSyncData(serverData, true);
-        PacketChannel.CHANNEL.sendTo(dataSync, (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendToPlayer(player, dataSync);
     }
 
     public static void receiveServerPacket(Map<String, AbstractData> data) {
