@@ -41,7 +41,7 @@ public class ConfigRegistries {
         dataRegistries.add(dataAdapter);
     }
 
-    public void buildRegistries() {
+    public void buildDataRegistries() {
         for (ConfigDataAdapter<?> dataRegistry : this.dataRegistries) {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 

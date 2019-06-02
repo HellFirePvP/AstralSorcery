@@ -16,6 +16,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -28,6 +29,8 @@ import java.util.function.Supplier;
  * Date: 01.06.2019 / 17:57
  */
 public abstract class ASPacket<T extends ASPacket<T>> {
+
+    protected static Random rand = new Random();
 
     @Nonnull
     public abstract Encoder<T> encoder();
@@ -55,6 +58,7 @@ public abstract class ASPacket<T extends ASPacket<T>> {
                     this.handleServer(t, ctx);
                     break;
             }
+            ctx.setPacketHandled(true);
         }
 
         @OnlyIn(Dist.CLIENT)

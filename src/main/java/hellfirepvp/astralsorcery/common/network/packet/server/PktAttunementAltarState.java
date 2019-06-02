@@ -68,7 +68,7 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
         return (pktAttunementAltarState, buffer) -> {
             buffer.writeInt(entityId);
             buffer.writeBoolean(started);
-            ByteBufUtils.writeResourceLocation(buffer, type.getRegistryName());
+            ByteBufUtils.writeRegistryEntry(buffer, type);
             ByteBufUtils.writePos(buffer, at);
         };
     }
@@ -79,7 +79,7 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
         return buffer -> {
             int entityId = buffer.readInt();
             boolean started = buffer.readBoolean();
-            DimensionType type = DimensionType.byName(ByteBufUtils.readResourceLocation(buffer));
+            DimensionType type = ByteBufUtils.readRegistryEntry(buffer);
             BlockPos at = ByteBufUtils.readPos(buffer);
             return new PktAttunementAltarState(entityId, type, at, started);
         };
@@ -99,12 +99,11 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
                         TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, packet.at, TileAttunementAltar.class, true);
                         if (ta != null) {
                             if(ta.tryStartCameraFlight()) {
-                                replyWith(new PktAttunementAltarState(true, packet.type, packet.at), context);
+                                packet.replyWith(new PktAttunementAltarState(true, packet.type, packet.at), context);
                             }
                         }
                     }
                 }
-                context.setPacketHandled(true);
             }
 
             @Override
@@ -112,7 +111,7 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
                 context.enqueueWork(() -> {
                     if (packet.started) {
                         MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(side);
-                        World w = DimensionManager.getWorld(srv, packet.type, true, true);
+                        World w = srv.getWorld(packet.type);
                         TileAttunementAltar ta = MiscUtils.getTileAt(w, packet.at, TileAttunementAltar.class, true);
                         if(ta != null) {
                             EntityPlayer pl = context.getSender();
@@ -120,7 +119,6 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
                         }
                     }
                 });
-                context.setPacketHandled(true);
             }
         };
     }

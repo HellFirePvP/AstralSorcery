@@ -13,7 +13,8 @@ import hellfirepvp.astralsorcery.client.ClientProxy;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.network.channel.BufferedReplyChannel;
 import hellfirepvp.astralsorcery.common.network.channel.SimpleSendChannel;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
+import hellfirepvp.astralsorcery.common.network.packet.client.*;
+import hellfirepvp.astralsorcery.common.network.packet.server.*;
 import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
@@ -45,10 +46,39 @@ public class PacketChannel {
 
     public static void registerPackets() {
         // DEDICATED_SERVER -> CLIENT
+        registerMessage(PktAttunementAltarState::new);
         registerMessage(PktCraftingTableFix::new);
-
+        registerMessage(PktFinalizeLogin::new);
+        registerMessage(PktPlayLiquidFountain::new);
+        registerMessage(PktOreScan::new);
+        registerMessage(PktPlayEffect::new);
+        registerMessage(PktPlayLiquidInteraction::new);
+        registerMessage(PktProgressionUpdate::new);
+        registerMessage(PktShootEntity::new);
+        registerMessage(PktSyncCharge::new);
+        registerMessage(PktSyncData::new);
+        registerMessage(PktSyncKnowledge::new);
+        registerMessage(PktSyncPerkActivity::new);
+        registerMessage(PktSyncStepAssist::new);
+        registerMessage(PktUpdateGateways::new);
 
         // CLIENT -> DEDICATED_SERVER
+        registerMessage(PktAttuneConstellation::new);
+        registerMessage(PktBurnParchment::new);
+        registerMessage(PktClearBlockStorageStack::new);
+        registerMessage(PktDiscoverConstellation::new);
+        registerMessage(PktElytraCapeState::new);
+        registerMessage(PktEngraveGlass::new);
+        registerMessage(PktPerkGemModification::new);
+        registerMessage(PktPlayerStatus::new);
+        registerMessage(PktRemoveKnowledgeFragment::new);
+        registerMessage(PktRequestPerkSealAction::new);
+        registerMessage(PktRequestSeed::new);
+        registerMessage(PktRequestSextantTarget::new);
+        registerMessage(PktRequestTeleport::new);
+        registerMessage(PktRotateTelescope::new);
+        registerMessage(PktSetSextantTarget::new);
+        registerMessage(PktUnlockPerk::new);
     }
 
     private static <T extends ASPacket<T>> void registerMessage(Supplier<T> pktSupplier) {

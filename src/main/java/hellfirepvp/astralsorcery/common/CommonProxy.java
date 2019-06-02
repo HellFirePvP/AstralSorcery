@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigRegistries;
 import hellfirepvp.astralsorcery.common.data.config.entry.*;
@@ -21,6 +22,8 @@ import hellfirepvp.astralsorcery.common.data.config.entry.common.CommonGeneralCo
 import hellfirepvp.astralsorcery.common.data.config.registry.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.registry.RegistryRegistries;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
@@ -71,11 +74,16 @@ public class CommonProxy {
 
         this.initializeConfigurations();
 
-        ConfigRegistries.getRegistries().buildRegistries();
+        ConfigRegistries.getRegistries().buildDataRegistries();
         this.commonConfig.buildConfiguration();
         this.serverConfig.buildConfiguration();
 
+        RegistryRegistries.setupRegistries();
+        PacketChannel.registerPackets();
         ASDataSerializers.registerSerializers();
+
+
+
     }
 
     public void attachLifecycle(IEventBus modEventBus) {
@@ -112,6 +120,7 @@ public class CommonProxy {
         this.serverConfig.addConfigEntry(LightNetworkConfig.CONFIG);
         this.serverConfig.addConfigEntry(WorldGenConfig.CONFIG);
         this.serverConfig.addConfigEntry(LogConfig.CONFIG);
+        this.serverConfig.addConfigEntry(PerkConfig.CONFIG);
 
         this.commonConfig.addConfigEntry(CommonGeneralConfig.CONFIG);
     }
