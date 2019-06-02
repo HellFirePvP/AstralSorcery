@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
-import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
@@ -18,15 +18,15 @@ import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.OnlyIns;
 import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -36,7 +36,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 01.06.2019 / 15:59
  */
-public abstract class ConstellationBase implements IConstellation {
+public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellation> implements IConstellation {
 
     private List<StarLocation> starLocations = new ArrayList<>(); //31x31 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
@@ -50,11 +50,13 @@ public abstract class ConstellationBase implements IConstellation {
     }
 
     public ConstellationBase(String name, Color color) {
-        this.simpleName = name;
+        this.simpleName = name.toLowerCase();
         ModContainer mod = MiscUtils.getCurrentlyActiveMod();
         if(mod != null) {
+            this.setRegistryName(new ResourceLocation(mod.getModId(), name));
             this.name = mod.getModId() + ".constellation." + name;
         } else {
+            this.setRegistryName(new ResourceLocation(AstralSorcery.MODID, name));
             this.name = "unknown.constellation." + name;
         }
         this.color = color;
@@ -152,12 +154,12 @@ public abstract class ConstellationBase implements IConstellation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConstellationBase that = (ConstellationBase) o;
-        return name.equals(that.name);
+        return Objects.equals(getRegistryName(), that.getRegistryName());
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return Objects.hash(getRegistryName());
     }
 
     public static class Major extends Weak implements IMajorConstellation {

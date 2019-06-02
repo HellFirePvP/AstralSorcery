@@ -14,7 +14,13 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.sextant.SextantFinder;
+import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -41,7 +47,7 @@ public class PlayerProgress {
     private IMajorConstellation attunedConstellation = null;
     private boolean wasOnceAttuned = false;
     private List<ResearchProgression> researchProgression = new LinkedList<>();
-    private List<SextantFinder.TargetObject> usedTargets = new LinkedList<>();
+    private List<TargetObject> usedTargets = new LinkedList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
     private List<String> freePointTokens = Lists.newArrayList();
     private Set<AbstractPerk> appliedPerks = new HashSet<>();
@@ -85,7 +91,7 @@ public class PlayerProgress {
 
         if (compound.hasKey("attuned")) {
             String cst = compound.getString("attuned");
-            IConstellation c = ConstellationRegistry.getConstellationByName(cst);
+            IConstellation c = ConstellationRegistry.getConstellation(new ResourceLocation(cst));
             if(c == null || !(c instanceof IMajorConstellation)) {
                 AstralSorcery.log.warn("Failed to load attuned Constellation: " + cst + " - constellation doesn't exist or isn't major.");
             } else {
@@ -158,7 +164,7 @@ public class PlayerProgress {
             NBTTagList list = compound.getList("sextanttargets", Constants.NBT.TAG_STRING);
             for (int i = 0; i < list.size(); i++) {
                 String strTarget = list.getString(i);
-                SextantFinder.TargetObject to = SextantFinder.getByName(strTarget);
+                TargetObject to = SextantFinder.getByName(new ResourceLocation(strTarget));
                 if (to != null && !this.usedTargets.contains(to)) {
                     this.usedTargets.add(to);
                 }
@@ -224,8 +230,8 @@ public class PlayerProgress {
         cmp.setInt("perkTreeVersion", PerkTree.PERK_TREE_VERSION);
 
         list = new NBTTagList();
-        for (SextantFinder.TargetObject to : usedTargets) {
-            list.add(new NBTTagString(to.getRegistryName()));
+        for (TargetObject to : usedTargets) {
+            list.add(new NBTTagString(to.getRegistryName().toString()));
         }
         cmp.setTag("sextanttargets", list);
 
@@ -244,8 +250,8 @@ public class PlayerProgress {
             l.add(new NBTTagString(s));
         }
         NBTTagList listTargets = new NBTTagList();
-        for (SextantFinder.TargetObject to : usedTargets) {
-            listTargets.add(new NBTTagString(to.getRegistryName()));
+        for (TargetObject to : usedTargets) {
+            listTargets.add(new NBTTagString(to.getRegistryName().toString()));
         }
         cmp.setTag("constellations", list);
         cmp.setTag("seenConstellations", l);
@@ -311,7 +317,7 @@ public class PlayerProgress {
             NBTTagList list = compound.getList("sextanttargets", Constants.NBT.TAG_STRING);
             for (int i = 0; i < list.size(); i++) {
                 String strTarget = list.getString(i);
-                SextantFinder.TargetObject to = SextantFinder.getByName(strTarget);
+                TargetObject to = SextantFinder.getByName(new ResourceLocation(strTarget));
                 if (to != null && !this.usedTargets.contains(to)) {
                     this.usedTargets.add(to);
                 }
@@ -411,11 +417,11 @@ public class PlayerProgress {
         return Lists.newLinkedList(researchProgression);
     }
 
-    public List<SextantFinder.TargetObject> getUsedTargets() {
+    public List<TargetObject> getUsedTargets() {
         return usedTargets;
     }
 
-    public void useTarget(SextantFinder.TargetObject target) {
+    public void useTarget(TargetObject target) {
         if (!this.usedTargets.contains(target)) {
             this.usedTargets.add(target);
         }
@@ -463,7 +469,7 @@ public class PlayerProgress {
 
     public int getAvailablePerkPoints(EntityPlayer player) {
         int allocatedPerks = this.appliedPerks.size() - 1; //Root perk doesn't count
-        int allocationLevels = PerkLevelManager.INSTANCE.getLevel(getPerkExp(), player);
+        int allocationLevels = PerkLevelManager.getInstance().getLevel(getPerkExp(), player);
         return (allocationLevels + this.freePointTokens.size()) - allocatedPerks;
     }
 
@@ -476,20 +482,20 @@ public class PlayerProgress {
     }
 
     public int getPerkLevel(EntityPlayer player) {
-        return PerkLevelManager.INSTANCE.getLevel(getPerkExp(), player);
+        return PerkLevelManager.getInstance().getLevel(getPerkExp(), player);
     }
 
     public float getPercentToNextLevel(EntityPlayer player) {
-        return PerkLevelManager.INSTANCE.getNextLevelPercent(getPerkExp(), player);
+        return PerkLevelManager.getInstance().getNextLevelPercent(getPerkExp(), player);
     }
 
     protected void modifyExp(double exp, EntityPlayer player) {
-        int currLevel = PerkLevelManager.INSTANCE.getLevel(getPerkExp(), player);
+        int currLevel = PerkLevelManager.getInstance().getLevel(getPerkExp(), player);
         if (exp >= 0 && currLevel >= PerkLevelManager.getLevelCapFor(player)) {
             return;
         }
-        long expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel, player);
-        long expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel + 1, player);
+        long expThisLevel = PerkLevelManager.getInstance().getExpForLevel(currLevel, player);
+        long expNextLevel = PerkLevelManager.getInstance().getExpForLevel(currLevel + 1, player);
         long cap = MathHelper.lfloor(((float) (expNextLevel - expThisLevel)) * 0.08F);
         if (exp > cap) {
             exp = cap;
@@ -578,7 +584,7 @@ public class PlayerProgress {
         for (ResearchProgression prog : toMergeFrom.researchProgression) {
             this.forceGainResearch(prog);
         }
-        for (SextantFinder.TargetObject target : toMergeFrom.usedTargets) {
+        for (TargetObject target : toMergeFrom.usedTargets) {
             this.useTarget(target);
         }
     }

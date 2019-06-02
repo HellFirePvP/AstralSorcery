@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -26,7 +28,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 16.11.2016 / 23:04
  */
-public interface IConstellation {
+public interface IConstellation extends IForgeRegistryEntry<IConstellation> {
 
     public static final int STAR_GRID_SIZE = 31;
 
@@ -83,7 +85,7 @@ public interface IConstellation {
     }
 
     default public void writeToNBT(NBTTagCompound compound, String key) {
-        compound.setString(key, getUnlocalizedName());
+        compound.setString(key, getRegistryName().toString());
     }
 
     @Nullable
@@ -93,7 +95,12 @@ public interface IConstellation {
 
     @Nullable
     public static IConstellation readFromNBT(NBTTagCompound compound, String key) {
-        return ConstellationRegistry.getConstellationByName(compound.getString(key));
+        return ConstellationRegistry.getConstellation(new ResourceLocation(compound.getString(key)));
+    }
+
+    @Override
+    default Class<IConstellation> getRegistryType() {
+        return IConstellation.class;
     }
 
 }

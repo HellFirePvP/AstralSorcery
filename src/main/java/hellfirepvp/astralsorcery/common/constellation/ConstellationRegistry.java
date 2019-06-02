@@ -9,11 +9,11 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,14 +24,12 @@ import java.util.List;
  */
 public class ConstellationRegistry {
 
-    private static List<IMajorConstellation> majorConstellations = new LinkedList<>();
-    private static List<IWeakConstellation> weakConstellations = new LinkedList<>();
-    private static List<IMinorConstellation> minorConstellations = new LinkedList<>();
-    private static List<IConstellationSpecialShowup> specialShowupConstellations = new LinkedList<>();
+    private static Set<IMajorConstellation> majorConstellations = new HashSet<>();
+    private static Set<IWeakConstellation> weakConstellations = new HashSet<>();
+    private static Set<IMinorConstellation> minorConstellations = new HashSet<>();
+    private static Set<IConstellationSpecialShowup> specialShowupConstellations = new HashSet<>();
 
-    private static List<IConstellation> generalConstellationList = new LinkedList<>();
-
-    public static <T extends IConstellation> void registerConstellation(T constellation) {
+    public static <T extends IConstellation> void addConstellation(T constellation) {
         if(constellation instanceof IWeakConstellation) {
             if(constellation instanceof IMajorConstellation) {
                 majorConstellations.add((IMajorConstellation) constellation);
@@ -47,72 +45,40 @@ public class ConstellationRegistry {
         if(constellation instanceof IConstellationSpecialShowup) {
             specialShowupConstellations.add((IConstellationSpecialShowup) constellation);
         }
-        generalConstellationList.add(constellation);
     }
 
     @Nullable
-    public static IConstellation getConstellationByName(String name) {
-        if(name == null) return null;
-
-        for(IConstellation c : majorConstellations) {
-            if(c.getUnlocalizedName().equals(name)) return c;
-        }
-        for(IConstellation c : weakConstellations) {
-            if(c.getUnlocalizedName().equals(name)) return c;
-        }
-        for(IConstellation c : minorConstellations) {
-            if(c.getUnlocalizedName().equals(name)) return c;
-        }
-        return null;
+    public static IConstellation getConstellation(ResourceLocation name) {
+        return RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(name);
     }
 
-    @Nullable
-    public static IMajorConstellation getMajorConstellationByName(String name) {
-        if(name == null) return null;
-
-        for(IMajorConstellation c : majorConstellations) {
-            if(c.getUnlocalizedName().equals(name)) return c;
-        }
-        return null;
-    }
-
-    public static List<IConstellation> resolve(List<String> constellationsAsStrings) {
+    public static List<IConstellation> resolve(List<ResourceLocation> constellationsAsStrings) {
         List<IConstellation> resolved = new LinkedList<>();
-        for (String s : constellationsAsStrings) {
-            IConstellation c = getConstellationByName(s);
+        for (ResourceLocation s : constellationsAsStrings) {
+            IConstellation c = getConstellation(s);
             if(c != null) resolved.add(c);
         }
         return resolved;
     }
 
-    public static List<IConstellationSpecialShowup> getSpecialShowupConstellations() {
-        return Collections.unmodifiableList(specialShowupConstellations);
+    public static Collection<IConstellationSpecialShowup> getSpecialShowupConstellations() {
+        return Collections.unmodifiableCollection(specialShowupConstellations);
     }
 
-    public static List<IWeakConstellation> getWeakConstellations() {
-        return Collections.unmodifiableList(weakConstellations);
+    public static Collection<IWeakConstellation> getWeakConstellations() {
+        return Collections.unmodifiableCollection(weakConstellations);
     }
 
-    public static List<IMajorConstellation> getMajorConstellations() {
-        return Collections.unmodifiableList(majorConstellations);
+    public static Collection<IMajorConstellation> getMajorConstellations() {
+        return Collections.unmodifiableCollection(majorConstellations);
     }
 
-    public static List<IMinorConstellation> getMinorConstellations() {
-        return Collections.unmodifiableList(minorConstellations);
+    public static Collection<IMinorConstellation> getMinorConstellations() {
+        return Collections.unmodifiableCollection(minorConstellations);
     }
 
-    public static List<IConstellation> getAllConstellations() {
-        return Collections.unmodifiableList(generalConstellationList);
-    }
-
-    public static int getConstellationId(IConstellation c) {
-        List<IConstellation> allConstellations = getAllConstellations();
-        return allConstellations.indexOf(c);
-    }
-
-    public static IConstellation getConstellationById(int id) {
-        List<IConstellation> allConstellations = getAllConstellations();
-        return allConstellations.get(id);
+    public static Collection<IConstellation> getAllConstellations() {
+        return RegistriesAS.REGISTRY_CONSTELLATIONS.getValues();
     }
 
 }

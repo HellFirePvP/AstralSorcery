@@ -12,7 +12,13 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
+import hellfirepvp.astralsorcery.common.util.sextant.SextantFinder;
+import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -101,7 +107,7 @@ public class ResearchManager {
         ResearchHelper.savePlayerKnowledge(player);
     }
 
-    public static boolean useSextantTarget(SextantFinder.TargetObject to, EntityPlayer player) {
+    public static boolean useSextantTarget(TargetObject to, EntityPlayer player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
@@ -411,13 +417,13 @@ public class ResearchManager {
         ResearchManager.maximizeTier(player);
         ResearchManager.forceMaximizeResearch(player);
         ResearchManager.setAttunedBefore(player, true);
-        for (SextantFinder.TargetObject to : SextantFinder.getSelectableTargets()) {
+        for (TargetObject to : SextantFinder.getSelectableTargets()) {
             progress.useTarget(to);
         }
 
         if(progress.getTierReached().isThisLater(before)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(progress.getTierReached());
-            PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+            PacketChannel.CHANNEL.sendToPlayer(player, pkt);
         }
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);

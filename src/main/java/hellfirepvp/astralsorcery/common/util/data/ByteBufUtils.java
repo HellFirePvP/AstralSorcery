@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import net.minecraft.item.ItemStack;
@@ -18,13 +17,16 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegistryManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.charset.Charset;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -61,13 +63,59 @@ public class ByteBufUtils {
         return new UUID(buf.readLong(), buf.readLong());
     }
 
-    public static void writeString(PacketBuffer buf, String toWrite) {
-        byte[] str = toWrite.getBytes(Charset.forName("UTF-8"));
-        buf.writeInt(str.length);
-        buf.writeBytes(str);
+    public static <T> void writeList(PacketBuffer buf, @Nullable List<T> list, BiConsumer<PacketBuffer, T> iterationFct) {
+        if (list != null) {
+            buf.writeInt(list.size());
+            list.forEach(e -> iterationFct.accept(buf, e));
+        } else {
+            buf.writeInt(-1);
+        }
     }
 
-    public static void writeString(ByteBuf buf, String toWrite) {
+    @Nullable
+    public static <T> List<T> readList(PacketBuffer buf, Function<PacketBuffer, T> readFct) {
+        int size = buf.readInt();
+        if (size == -1) {
+            return null;
+        }
+        List<T> list = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            list.add(readFct.apply(buf));
+        }
+        return list;
+    }
+
+    public static <K, V> void writeMap(PacketBuffer buf,
+                                       @Nullable Map<K, V> map,
+                                       BiConsumer<PacketBuffer, K> keySerializer,
+                                       BiConsumer<PacketBuffer, V> valueSerializer) {
+        if (map != null) {
+            buf.writeInt(map.size());
+            for (Map.Entry<K, V> entry : map.entrySet()) {
+                keySerializer.accept(buf, entry.getKey());
+                valueSerializer.accept(buf, entry.getValue());
+            }
+        } else {
+            buf.writeInt(-1);
+        }
+    }
+
+    @Nullable
+    public static <K, V> Map<K, V> readMap(PacketBuffer buf,
+                                           Function<PacketBuffer, K> readKey,
+                                           Function<PacketBuffer, V> readValue) {
+        int size = buf.readInt();
+        if (size == -1) {
+            return null;
+        }
+        Map<K, V> map = new HashMap<>(size);
+        for (int i = 0; i < size; i++) {
+            map.put(readKey.apply(buf), readValue.apply(buf));
+        }
+        return map;
+    }
+
+    public static void writeString(PacketBuffer buf, String toWrite) {
         byte[] str = toWrite.getBytes(Charset.forName("UTF-8"));
         buf.writeInt(str.length);
         buf.writeBytes(str);
@@ -80,11 +128,15 @@ public class ByteBufUtils {
         return new String(strBytes, Charset.forName("UTF-8"));
     }
 
-    public static String readString(ByteBuf buf) {
-        int length = buf.readInt();
-        byte[] strBytes = new byte[length];
-        buf.readBytes(strBytes, 0, length);
-        return new String(strBytes, Charset.forName("UTF-8"));
+    public static <T> void writeRegistryEntry(PacketBuffer buf, IForgeRegistryEntry<T> entry) {
+        writeResourceLocation(buf, RegistryManager.ACTIVE.getRegistry(entry.getRegistryType()).getRegistryName());
+        writeResourceLocation(buf, entry.getRegistryName());
+    }
+
+    public static <T> T readRegistryEntry(PacketBuffer buf) {
+        ResourceLocation registryName = readResourceLocation(buf);
+        ResourceLocation entryName = readResourceLocation(buf);
+        return (T) RegistryManager.ACTIVE.getRegistry(registryName).getValue(entryName);
     }
 
     public static void writeResourceLocation(PacketBuffer buf, ResourceLocation key) {
@@ -93,6 +145,20 @@ public class ByteBufUtils {
 
     public static ResourceLocation readResourceLocation(PacketBuffer buf) {
         return new ResourceLocation(readString(buf));
+    }
+
+    public static void writeNumber(PacketBuffer buf, Number nbr) {
+        long sNumber = nbr.longValue();
+        if (nbr instanceof Float) {
+            sNumber = Float.floatToRawIntBits(nbr.floatValue());
+        } else if (nbr instanceof Double) {
+            sNumber = Double.doubleToRawLongBits(nbr.doubleValue());
+        }
+        buf.writeLong(sNumber);
+    }
+
+    public static long readNumber(PacketBuffer buf) {
+        return buf.readLong();
     }
 
     public static <T extends Enum<T>> void writeEnumValue(PacketBuffer buf, T value) {
@@ -152,54 +218,33 @@ public class ByteBufUtils {
         }
     }
 
-    public static void writeFluidStack(ByteBuf byteBuf, @Nullable FluidStack stack) {
+    public static void writeFluidStack(PacketBuffer byteBuf, @Nullable FluidStack stack) {
         boolean defined = stack != null;
         byteBuf.writeBoolean(defined);
-        if(defined) {
+        if (defined) {
             NBTTagCompound tag = new NBTTagCompound();
             stack.writeToNBT(tag);
             writeNBTTag(byteBuf, tag);
         }
     }
 
-    public static void writeFluidStack(PacketBuffer pktBuf, @Nullable FluidStack stack) {
-        boolean defined = stack != null;
-        pktBuf.writeBoolean(defined);
-        if(defined) {
-            NBTTagCompound tag = new NBTTagCompound();
-            stack.writeToNBT(tag);
-            writeNBTTag(pktBuf, tag);
-        }
-    }
-
     @Nullable
-    public static FluidStack readFluidStack(ByteBuf byteBuf) {
-        boolean defined = byteBuf.readBoolean();
-        if(defined) {
+    public static FluidStack readFluidStack(PacketBuffer byteBuf) {
+        if (byteBuf.readBoolean()) {
             return FluidStack.loadFluidStackFromNBT(readNBTTag(byteBuf));
         } else {
             return null;
         }
     }
 
-    @Nullable
-    public static FluidStack readFluidStack(PacketBuffer pktBuf) {
-        boolean defined = pktBuf.readBoolean();
-        if(defined) {
-            return FluidStack.loadFluidStackFromNBT(readNBTTag(pktBuf));
-        } else {
-            return null;
-        }
-    }
-
-    public static void writeNBTTag(ByteBuf byteBuf, @Nonnull NBTTagCompound tag) {
+    public static void writeNBTTag(PacketBuffer byteBuf, @Nonnull NBTTagCompound tag) {
         try (DataOutputStream dos = new DataOutputStream(new ByteBufOutputStream(byteBuf))) {
             CompressedStreamTools.write(tag, dos);
         } catch (Exception exc) {}
     }
 
     @Nonnull
-    public static NBTTagCompound readNBTTag(ByteBuf byteBuf) {
+    public static NBTTagCompound readNBTTag(PacketBuffer byteBuf) {
         try (DataInputStream dis = new DataInputStream(new ByteBufInputStream(byteBuf))) {
             return CompressedStreamTools.read(dis);
         } catch (Exception exc) {}

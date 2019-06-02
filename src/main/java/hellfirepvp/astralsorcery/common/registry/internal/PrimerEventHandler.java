@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry.internal;
 
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -49,6 +50,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(Potion.class, this::registerPotions);
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
         eventBus.addGenericListener(SoundEvent.class, this::registerSounds);
+        eventBus.addGenericListener(IConstellation.class, this::registerConstellations);
     }
 
     private void registerItems(RegistryEvent.Register<Item> event) {
@@ -87,6 +89,12 @@ public class PrimerEventHandler {
     private void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
         registry.wipe(event.getClass());
         //RegistryEnchantments.init();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerConstellations(RegistryEvent.Register<IConstellation> event) {
+        registry.wipe(event.getClass());
+        RegistryConstellations.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

@@ -46,9 +46,7 @@ public class PktCraftingTableFix extends ASPacket<PktCraftingTableFix> {
     @Override
     @Nonnull
     public Decoder<PktCraftingTableFix> decoder() {
-        return buffer -> {
-            return new PktCraftingTableFix(ByteBufUtils.readPos(buffer));
-        };
+        return buffer -> new PktCraftingTableFix(ByteBufUtils.readPos(buffer));
     }
 
     @Override

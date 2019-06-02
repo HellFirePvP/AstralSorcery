@@ -16,8 +16,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Stack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,15 +29,14 @@ public class BlockDropCaptureAssist {
 
     public static BlockDropCaptureAssist INSTANCE = new BlockDropCaptureAssist();
 
-    private static Map<Integer, NonNullList<ItemStack>> capturedStacks = new HashMap<>();
-    private static int stack = -1;
+    private static Stack<NonNullList<ItemStack>> capturing = new Stack<>();
 
     private BlockDropCaptureAssist() {}
 
     public void onDrop(EntityJoinWorldEvent event) {
         if (event.getWorld() instanceof WorldServer && event.getEntity() instanceof EntityItem) {
             ItemStack itemStack = ((EntityItem) event.getEntity()).getItem();
-            if (stack > -1) {
+            if (!capturing.isEmpty()) {
                 event.setCanceled(true);
                 if(!itemStack.isEmpty()) {
                     if(itemStack.getItem() instanceof ItemBlock &&
@@ -47,8 +45,8 @@ public class BlockDropCaptureAssist {
                         return;
                     }
                     //Apparently concurrency sometimes gets us here...
-                    if (stack > -1) {
-                        capturedStacks.computeIfAbsent(stack, st -> NonNullList.create()).add(itemStack);
+                    if (!capturing.isEmpty()) {
+                        capturing.peek().add(itemStack);
                     }
                 }
                 event.getEntity().remove();
@@ -57,15 +55,11 @@ public class BlockDropCaptureAssist {
     }
 
     public static void startCapturing() {
-        stack++;
-        capturedStacks.put(stack, NonNullList.create());
+        capturing.push(NonNullList.create());
     }
 
     public static NonNullList<ItemStack> getCapturedStacksAndStop() {
-        NonNullList<ItemStack> pop = capturedStacks.get(stack);
-        capturedStacks.remove(stack);
-        stack = Math.max(-1, stack - 1);
-        return pop == null ? NonNullList.create() : pop;
+        return capturing.pop();
     }
 
 }

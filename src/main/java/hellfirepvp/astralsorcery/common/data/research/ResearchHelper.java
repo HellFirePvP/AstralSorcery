@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.data.research;
 import com.google.common.io.Files;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -182,8 +184,8 @@ public class ResearchHelper {
 
         progress.acceptMergeFrom(toMergeFrom);
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        savePlayerKnowledge(player);
         return true;
     }
 
@@ -192,9 +194,9 @@ public class ResearchHelper {
         wipeFile(p);
         playerProgressServer.remove(p.getUniqueID());
         PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendToPlayer(pkt, p);
+        PacketChannel.CHANNEL.sendToPlayer(p, pkt);
         PktSyncKnowledge pk = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
-        PacketChannel.CHANNEL.sendToPlayer(pk, p);
+        PacketChannel.CHANNEL.sendToPlayer(p, pk);
         loadPlayerKnowledge(p);
         ResearchSyncHelper.pushProgressToClientUnsafe(getProgressServer(p), p);
     }
@@ -205,7 +207,7 @@ public class ResearchHelper {
     }
 
     public static void savePlayerKnowledge(EntityPlayer p) {
-        if (p instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP(p)) {
+        if (p instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) p)) {
             savePlayerKnowledge(p.getUniqueID(), false);
         }
     }

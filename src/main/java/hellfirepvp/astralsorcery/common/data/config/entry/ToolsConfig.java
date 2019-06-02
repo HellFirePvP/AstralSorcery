@@ -40,6 +40,8 @@ public class ToolsConfig extends ConfigEntry {
     public ForgeConfigSpec.IntValue chargedToolsRevertStart;
     public ForgeConfigSpec.IntValue chargedToolsRevertChance;
 
+    public ForgeConfigSpec.IntValue sextantSearchRadius;
+
     private ToolsConfig() {
         super("tools");
 
@@ -77,6 +79,11 @@ public class ToolsConfig extends ConfigEntry {
                 .comment("After 'chargedCrystalToolsRevertStart' uses, it will random.nextInt(chance) == 0 try and see if the tool gets reverted to its inert crystal tool.")
                 .translation(translationKey("chargedToolsRevertChance"))
                 .defineInRange("chargedToolsRevertChance", 80, 1, Integer.MAX_VALUE >> 1);
+
+        sextantSearchRadius = cfgBuilder
+                .comment("Defines the maximum radius the sextant will look for its targets")
+                .translation(translationKey("sextantSearchRadius"))
+                .defineInRange("sextantSearchRadius", 2048, 128, 65536);
     }
 
     private class WandsConfig extends ConfigEntry {
