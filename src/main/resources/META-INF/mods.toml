@@ -38,17 +38,17 @@ description='''Magic mod that draws power from stars and their constellations'''
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
-    dist="BOTH"
+    side="BOTH"
 # Here's another dependency
 [[dependencies.astralsorcery]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.13.2]"
     ordering="NONE"
-    dist="BOTH"
+    side="BOTH"
 [[dependencies.astralsorcery]]
     modId="observerlib"
     mandatory=true
     versionRange="[1.13.2]"
     ordering="NONE"
-    dist="BOTH"
+    side="BOTH"
