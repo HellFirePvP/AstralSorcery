@@ -10,13 +10,11 @@ package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -125,7 +123,7 @@ public class RaytraceAssist {
         return entities;
     }
 
-    private boolean isAllowed(World world, BlockPos at, IBlockState state) {
+    private boolean isAllowed(World world, BlockPos at, BlockState state) {
         return MiscUtils.contains(passable, predicate -> predicate.test(world, at, state));
     }
 

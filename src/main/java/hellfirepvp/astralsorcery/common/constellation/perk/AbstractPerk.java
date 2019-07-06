@@ -19,8 +19,8 @@ import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -102,14 +102,14 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     protected void applyEffectMultiplier(double multiplier) {}
 
     //Return true to display that the perk's modifiers got disabled by pack's configurations
-    public boolean modifiersDisabled(EntityPlayer player, Dist dist) {
+    public boolean modifiersDisabled(PlayerEntity player, Dist dist) {
         ASRegistryEvents.PerkDisable event = new ASRegistryEvents.PerkDisable(this, player, dist);
         MinecraftForge.EVENT_BUS.post(event);
         return event.isPerkDisabled();
     }
 
     //Reserving application/removal methods to delegate for later pre-application logic
-    final void applyPerk(EntityPlayer player, Dist dist) {
+    final void applyPerk(PlayerEntity player, Dist dist) {
         if (modifiersDisabled(player, dist)) {
             return;
         }
@@ -120,7 +120,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         }
     }
 
-    final void removePerk(EntityPlayer player, Dist dist) {
+    final void removePerk(PlayerEntity player, Dist dist) {
         if (modifiersDisabled(player, dist)) {
             return;
         }
@@ -131,12 +131,12 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         }
     }
 
-    protected abstract void applyPerkLogic(EntityPlayer player, Dist dist);
+    protected abstract void applyPerkLogic(PlayerEntity player, Dist dist);
 
-    protected abstract void removePerkLogic(EntityPlayer player, Dist dist);
+    protected abstract void removePerkLogic(PlayerEntity player, Dist dist);
 
     @Nullable
-    public NBTTagCompound getPerkData(EntityPlayer player, Dist dist) {
+    public CompoundNBT getPerkData(PlayerEntity player, Dist dist) {
         return ResearchHelper.getProgress(player, dist).getPerkData(this);
     }
 
@@ -144,21 +144,21 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
      * Called when the perk is in any way modified in regards to its 'contents' for a specific player e.g. gems
      * Called AFTER the perk has been re-applied with the new data.
      */
-    public void modifyPerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
+    public void modifyPerkServer(PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {}
 
     /**
      * Called ONCE when the perk is unlocked
-     * You may use the NBTTagCompound to save data to remove it again later
+     * You may use the CompoundNBT to save data to remove it again later
      * The player might be null for root perks on occasion.
      */
-    public void onUnlockPerkServer(@Nullable EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
+    public void onUnlockPerkServer(@Nullable PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {}
 
     /**
      * Clean up and remove the perk from that single player.
      * Data in the dataStorage is filled with the data set in onUnlockPerkServer
      * Called after the perk is already removed from the player
      */
-    public void onRemovePerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
+    public void onRemovePerkServer(PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {}
 
     public <T> T setNameOverride(AbstractPerk other) {
         return setNameOverride(other.getUnlocalizedName());
@@ -174,7 +174,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         return category;
     }
 
-    public PerkTreePoint.AllocationStatus getPerkStatus(@Nullable EntityPlayer player, Dist dist) {
+    public PerkTreePoint.AllocationStatus getPerkStatus(@Nullable PlayerEntity player, Dist dist) {
         if (player == null) {
             return PerkTreePoint.AllocationStatus.UNALLOCATED;
         }
@@ -189,7 +189,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         return mayUnlockPerk(progress, player) ? PerkTreePoint.AllocationStatus.UNLOCKABLE : PerkTreePoint.AllocationStatus.UNALLOCATED;
     }
 
-    public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
+    public boolean mayUnlockPerk(PlayerProgress progress, PlayerEntity player) {
         if (!progress.hasFreeAllocationPoint(player)) return false;
 
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {

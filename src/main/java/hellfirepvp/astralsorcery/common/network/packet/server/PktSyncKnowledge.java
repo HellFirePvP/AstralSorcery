@@ -17,7 +17,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -45,7 +45,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
     public List<ResearchProgression> researchProgression = new ArrayList<>();
     public List<TargetObject> usedTargets = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
-    public Map<AbstractPerk, NBTTagCompound> usedPerks = new HashMap<>();
+    public Map<AbstractPerk, CompoundNBT> usedPerks = new HashMap<>();
     public List<String> freePointTokens = Lists.newArrayList();
     public List<AbstractPerk> sealedPerks = Lists.newArrayList();
     public boolean wasOnceAttuned = false;

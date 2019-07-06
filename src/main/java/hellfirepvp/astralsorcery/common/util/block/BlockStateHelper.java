@@ -11,8 +11,8 @@ package hellfirepvp.astralsorcery.common.util.block;
 import com.google.common.base.Splitter;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,7 +20,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +36,7 @@ public class BlockStateHelper {
     private static final Splitter PROP_ELEMENT_SPLITTER = Splitter.on('=');
 
     @Nonnull
-    public static String serialize(@Nonnull IBlockState state) {
+    public static String serialize(@Nonnull BlockState state) {
         StringBuilder name = new StringBuilder(state.getBlock().getRegistryName().toString());
         List<IProperty<?>> props = new ArrayList<>(state.getProperties());
         if (!props.isEmpty()) {
@@ -57,7 +56,7 @@ public class BlockStateHelper {
     }
 
     @Nullable
-    public static <T extends Comparable<T>, V> IBlockState deserialize(@Nonnull String serialized) {
+    public static <T extends Comparable<T>, V> BlockState deserialize(@Nonnull String serialized) {
         int propIndex = serialized.indexOf('[');
         boolean hasProperties = propIndex != -1;
         ResourceLocation key;
@@ -67,7 +66,7 @@ public class BlockStateHelper {
             key = new ResourceLocation(serialized.substring(0, propIndex).toLowerCase());
         }
         Block block = ForgeRegistries.BLOCKS.getValue(key);
-        IBlockState state = block.getDefaultState();
+        BlockState state = block.getDefaultState();
         if (!block.equals(Blocks.AIR) && hasProperties) {
             List<String> strProps = PROP_SPLITTER.splitToList(serialized.substring(propIndex, serialized.length() - 1));
             for (String serializedProperty : strProps) {

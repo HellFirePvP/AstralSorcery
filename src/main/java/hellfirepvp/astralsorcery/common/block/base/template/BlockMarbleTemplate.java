@@ -12,11 +12,14 @@ import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.ToolType;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,8 +32,19 @@ public class BlockMarbleTemplate extends Block implements CustomItemBlock {
 
     public BlockMarbleTemplate() {
         super(Properties.create(MaterialsAS.MARBLE)
-                .hardnessAndResistance(1F, 3F)
+                .hardnessAndResistance(3F, 25F)
                 .sound(SoundType.STONE));
+    }
+
+    @Override
+    public int getHarvestLevel(BlockState state) {
+        return 2;
+    }
+
+    @Nullable
+    @Override
+    public ToolType getHarvestTool(BlockState state) {
+        return ToolType.PICKAXE;
     }
 
 }

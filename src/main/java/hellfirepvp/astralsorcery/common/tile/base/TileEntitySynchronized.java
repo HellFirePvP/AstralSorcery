@@ -8,10 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 
@@ -33,23 +33,23 @@ public abstract class TileEntitySynchronized extends TileEntity {
     }
 
     @Override
-    public void read(NBTTagCompound compound) {
+    public void read(CompoundNBT compound) {
         super.read(compound);
         readCustomNBT(compound);
         readSaveNBT(compound);
     }
 
     //Both Network & Chunk-saving
-    public void readCustomNBT(NBTTagCompound compound) {}
+    public void readCustomNBT(CompoundNBT compound) {}
 
     //Only Network-read
-    public void readNetNBT(NBTTagCompound compound) {}
+    public void readNetNBT(CompoundNBT compound) {}
 
     //Only Chunk-read
-    public void readSaveNBT(NBTTagCompound compound) {}
+    public void readSaveNBT(CompoundNBT compound) {}
 
     @Override
-    public NBTTagCompound write(NBTTagCompound compound) {
+    public CompoundNBT write(CompoundNBT compound) {
         compound = super.write(compound);
         writeCustomNBT(compound);
         writeSaveNBT(compound);
@@ -57,43 +57,39 @@ public abstract class TileEntitySynchronized extends TileEntity {
     }
 
     //Both Network & Chunk-saving
-    public void writeCustomNBT(NBTTagCompound compound) {}
+    public void writeCustomNBT(CompoundNBT compound) {}
 
     //Only Network-write
-    public void writeNetNBT(NBTTagCompound compound) {}
+    public void writeNetNBT(CompoundNBT compound) {}
 
     //Only Chunk-write
-    public void writeSaveNBT(NBTTagCompound compound) {}
+    public void writeSaveNBT(CompoundNBT compound) {}
 
     @Override
-    public final SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound compound = new NBTTagCompound();
+    public final SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT compound = new CompoundNBT();
         super.write(compound);
         writeCustomNBT(compound);
         writeNetNBT(compound);
-        return new SPacketUpdateTileEntity(getPos(), 255, compound);
+        return new SUpdateTileEntityPacket(getPos(), 255, compound);
     }
 
     @Override
-    public NBTTagCompound getUpdateTag() {
-        NBTTagCompound compound = new NBTTagCompound();
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT compound = new CompoundNBT();
         super.write(compound);
         writeCustomNBT(compound);
         return compound;
     }
 
-    public IBlockState getBlockState() {
-        return this.world.getBlockState(this.pos);
-    }
-
-    public final void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet) {
+    public final void onDataPacket(NetworkManager manager, SUpdateTileEntityPacket packet) {
         super.onDataPacket(manager, packet);
         readCustomNBT(packet.getNbtCompound());
         readNetNBT(packet.getNbtCompound());
     }
 
     public void markForUpdate() {
-        IBlockState thisState = world.getBlockState(pos);
+        BlockState thisState = this.getBlockState();
         world.notifyBlockUpdate(pos, thisState, thisState, 3);
         markDirty();
     }

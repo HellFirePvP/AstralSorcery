@@ -10,9 +10,14 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.registries.*;
 
 import javax.annotation.Nullable;
@@ -32,6 +37,15 @@ public class RegistryRegistries {
     private RegistryRegistries() {}
 
     public static void setupRegistries() {
+        REGISTRY_CONSTELLATION_EFFECT = new RegistryBuilder<ConstellationEffectProvider>()
+                .setName(REGISTRY_NAME_CONSTELLATION_EFFECTS)
+                .setType(ConstellationEffectProvider.class)
+                .add((IForgeRegistry.AddCallback<ConstellationEffectProvider>) (owner, stage, id, obj, oldObj) -> {
+                    DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ConstellationEffectRegistry.createClientInstance(obj));
+                })
+                .disableSaving()
+                .disableOverrides()
+                .create();
 
         REGISTRY_CONSTELLATIONS = new RegistryBuilder<IConstellation>()
                 .setName(REGISTRY_NAME_CONSTELLATIONS)

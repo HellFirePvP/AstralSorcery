@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.starlight.network.handlers;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -33,12 +33,12 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
 
     @Override
     @Deprecated
-    public boolean isApplicable(World world, BlockPos pos, IBlockState state) {
+    public boolean isApplicable(World world, BlockPos pos, BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isApplicable(World world, BlockPos pos, IBlockState state, @Nullable IWeakConstellation starlightType) {
+    public boolean isApplicable(World world, BlockPos pos, BlockState state, @Nullable IWeakConstellation starlightType) {
         return LightOreTransmutations.searchForTransmutation(state) != null;
     }
 
@@ -47,7 +47,7 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         long ms = System.currentTimeMillis();
 
         if(!runningTransmutations.containsKey(pos)) {
-            IBlockState tryStateIn = world.getBlockState(pos);
+            BlockState tryStateIn = world.getBlockState(pos);
             LightOreTransmutations.Transmutation tr = LightOreTransmutations.searchForTransmutation(tryStateIn);
             if(tr != null && (tr.getRequiredType() == null || tr.getRequiredType().equals(starlightType))) {
                 ActiveTransmutation atr = new ActiveTransmutation();

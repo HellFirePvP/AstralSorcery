@@ -21,7 +21,8 @@ import hellfirepvp.astralsorcery.common.util.StructureFinder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
@@ -50,7 +51,7 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
     public abstract int getColorTheme();
 
     @Nullable
-    public abstract BlockPos searchFor(WorldServer world, BlockPos searchPos);
+    public abstract BlockPos searchFor(ServerWorld world, BlockPos searchPos);
 
     public int getSearchRadius() {
         return ToolsConfig.CONFIG.sextantSearchRadius.get();
@@ -130,30 +131,30 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
 
         @Nullable
         @Override
-        public BlockPos searchFor(WorldServer world, BlockPos searchPos) {
+        public BlockPos searchFor(ServerWorld world, BlockPos searchPos) {
             return StructureFinder.tryFindClosestAstralSorceryStructure(world, searchPos, structureType, this.getSearchRadius());
         }
     }
 
-    public static class Structure extends ASTargetObject {
+    public static class VanillaStructure extends ASTargetObject {
 
-        private final String structureName;
+        private final Structure<?> structure;
 
-        public Structure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, String structureName) {
-            super(texLocation, iconName, targetName, advanced, color);
-            this.structureName = structureName;
+        public VanillaStructure(AssetLoader.TextureLocation texLocation, String iconName, Structure<?> structure, int color, boolean advanced, String structureName) {
+            super(texLocation, iconName, structureName, advanced, color);
+            this.structure = structure;
         }
 
-        public Structure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, String structureName,
+        public VanillaStructure(AssetLoader.TextureLocation texLocation, String iconName, Structure<?> structure, int color, boolean advanced, String structureName,
                          double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
-            super(texLocation, iconName, targetName, advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
-            this.structureName = structureName;
+            super(texLocation, iconName, structureName, advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
+            this.structure = structure;
         }
 
         @Nullable
         @Override
-        public BlockPos searchFor(WorldServer world, BlockPos searchPos) {
-            return StructureFinder.tryFindClosestVanillaStructure(world, searchPos, structureName, this.getSearchRadius());
+        public BlockPos searchFor(ServerWorld world, BlockPos searchPos) {
+            return StructureFinder.tryFindClosestVanillaStructure(world, searchPos, structure, this.getSearchRadius());
         }
     }
 
@@ -174,7 +175,7 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
 
         @Nullable
         @Override
-        public BlockPos searchFor(WorldServer world, BlockPos searchPos) {
+        public BlockPos searchFor(ServerWorld world, BlockPos searchPos) {
             return StructureFinder.tryFindClosestBiomeType(world, searchPos, biomeType, this.getSearchRadius());
         }
 

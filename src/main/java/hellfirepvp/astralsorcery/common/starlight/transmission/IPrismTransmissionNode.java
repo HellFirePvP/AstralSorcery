@@ -8,12 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.starlight.transmission;
 
-import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
+import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
-import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -100,17 +99,16 @@ public interface IPrismTransmissionNode extends ILocatable {
     //which causes it to be recalculated and saved
     //whenever the world saves the next time.
     default public void markDirty(World world) {
-        LightNetworkBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.LIGHT_NETWORK);
-        buf.markDirty(this.getLocationPos());
+        DataAS.DOMAIN_AS.getData(world, DataAS.KEY_STARLIGHT_NETWORK).markDirty(this.getLocationPos());
     }
 
     //Get the provider of the node. Used to recreate the class at NBT read.
-    public TransmissionClassRegistry.TransmissionProvider getProvider();
+    public TransmissionProvider getProvider();
 
     //Should recreate the exact state from when it was written.
-    public void readFromNBT(NBTTagCompound compound);
+    public void readFromNBT(CompoundNBT compound);
 
     //Should save all data that's needed to recreate the state accordingly.
-    public void writeToNBT(NBTTagCompound compound);
+    public void writeToNBT(CompoundNBT compound);
 
 }

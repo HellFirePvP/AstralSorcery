@@ -8,9 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
-import net.minecraft.nbt.NBTTagCompound;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ITickable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,7 +20,10 @@ import net.minecraft.util.ITickable;
  * Created by HellFirePvP
  * Date: 02.08.2016 / 17:34
  */
-public abstract class TileEntityTick extends TileEntitySynchronized implements ITickable {
+public abstract class TileEntityTick extends TileEntitySynchronized implements ITickableTileEntity {
+
+    private boolean doesSeeSky = false;
+    private int lastUpdateTick = -1;
 
     protected int ticksExisted = 0;
 
@@ -42,18 +46,36 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
         return ticksExisted;
     }
 
+    public boolean doesSeeSky() {
+        if (lastUpdateTick == -1 || (ticksExisted - lastUpdateTick) >= 20) {
+            lastUpdateTick = ticksExisted;
+
+            boolean prevSky = doesSeeSky;
+            boolean newSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky);
+            if (prevSky != newSky) {
+                notifySkyStateUpdate(prevSky, newSky);
+                doesSeeSky = newSky;
+            }
+        }
+        return doesSeeSky;
+    }
+
+    protected void notifySkyStateUpdate(boolean doesSeeSkyPrev, boolean doesSeeSkyNow) {}
+
     @Override
-    public void readCustomNBT(NBTTagCompound compound) {
+    public void readCustomNBT(CompoundNBT compound) {
         super.readCustomNBT(compound);
         
         ticksExisted = compound.getInt("ticksExisted");
+        doesSeeSky = compound.getBoolean("doesSeeSky");
     }
 
     @Override
-    public void writeCustomNBT(NBTTagCompound compound) {
+    public void writeCustomNBT(CompoundNBT compound) {
         super.writeCustomNBT(compound);
 
-        compound.setInt("ticksExisted", ticksExisted);
+        compound.putInt("ticksExisted", ticksExisted);
+        compound.putBoolean("doesSeeSky", doesSeeSky);
     }
 
 }

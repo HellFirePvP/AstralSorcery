@@ -20,11 +20,11 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncPerkActivit
 import hellfirepvp.astralsorcery.common.util.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -44,7 +44,7 @@ import java.util.*;
  */
 public class ResearchManager {
 
-    public static void unsafeForceGiveResearch(EntityPlayerMP player, ResearchProgression prog) {
+    public static void unsafeForceGiveResearch(ServerPlayerEntity player, ResearchProgression prog) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return;
 
@@ -70,7 +70,7 @@ public class ResearchManager {
         ResearchHelper.savePlayerKnowledge(player);
     }
 
-    public static void giveResearchIgnoreFail(EntityPlayer player, ResearchProgression prog) {
+    public static void giveResearchIgnoreFail(PlayerEntity player, ResearchProgression prog) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return;
 
@@ -89,7 +89,7 @@ public class ResearchManager {
         ResearchHelper.savePlayerKnowledge(player);
     }
 
-    public static void giveProgressionIgnoreFail(EntityPlayer player, ProgressionTier tier) {
+    public static void giveProgressionIgnoreFail(PlayerEntity player, ProgressionTier tier) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return;
 
@@ -107,7 +107,7 @@ public class ResearchManager {
         ResearchHelper.savePlayerKnowledge(player);
     }
 
-    public static boolean useSextantTarget(TargetObject to, EntityPlayer player) {
+    public static boolean useSextantTarget(TargetObject to, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
@@ -118,13 +118,13 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean discoverConstellations(Collection<IConstellation> csts, EntityPlayer player) {
+    public static boolean discoverConstellations(Collection<IConstellation> csts, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
         for (IConstellation c : csts) {
             progress.discoverConstellation(c.getUnlocalizedName());
-            AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
+            AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
         }
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
@@ -132,20 +132,20 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean discoverConstellation(IConstellation c, EntityPlayer player) {
+    public static boolean discoverConstellation(IConstellation c, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
         progress.discoverConstellation(c.getUnlocalizedName());
 
-        AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((EntityPlayerMP) player, c);
+        AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
-    public static boolean memorizeConstellation(IConstellation c, EntityPlayer player) {
+    public static boolean memorizeConstellation(IConstellation c, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
@@ -156,7 +156,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean maximizeTier(EntityPlayer player) {
+    public static boolean maximizeTier(PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
@@ -170,7 +170,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean setAttunedBefore(EntityPlayer player, boolean wasAttunedBefore) {
+    public static boolean setAttunedBefore(PlayerEntity player, boolean wasAttunedBefore) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
@@ -181,7 +181,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean setAttunedConstellation(EntityPlayer player, @Nullable IMajorConstellation constellation) {
+    public static boolean setAttunedConstellation(PlayerEntity player, @Nullable IMajorConstellation constellation) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
@@ -189,8 +189,8 @@ public class ResearchManager {
             return false;
         }
 
-        Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
-        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
+        Map<AbstractPerk, CompoundNBT> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
+        for (Map.Entry<AbstractPerk, CompoundNBT> perkEntry : perkCopy.entrySet()) {
             dropPerk(progress, player, Dist.DEDICATED_SERVER, perkEntry.getKey(), perkEntry.getValue());
         }
 
@@ -200,21 +200,21 @@ public class ResearchManager {
         progress.setAttunedConstellation(constellation);
         AbstractPerk root;
         if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
-            NBTTagCompound data = new NBTTagCompound();
+            CompoundNBT data = new CompoundNBT();
             root.onUnlockPerkServer(player, progress, data);
             progress.applyPerk(root, data);
             PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, root, false);
             PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(root, true));
         }
 
-        AdvancementTriggers.ATTUNE_SELF.trigger((EntityPlayerMP) player, constellation);
+        AdvancementTriggers.ATTUNE_SELF.trigger((ServerPlayerEntity) player, constellation);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
-    public static boolean setPerkData(EntityPlayer player, @Nonnull AbstractPerk perk, NBTTagCompound prevoiusData, NBTTagCompound newData) {
+    public static boolean setPerkData(PlayerEntity player, @Nonnull AbstractPerk perk, CompoundNBT prevoiusData, CompoundNBT newData) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
         if (!progress.hasPerkEffect(perk)) return false;
@@ -230,13 +230,13 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean applyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
+    public static boolean applyPerk(PlayerEntity player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
         if (!progress.hasFreeAllocationPoint(player)) return false;
         if (progress.hasPerkUnlocked(perk)) return false;
 
-        NBTTagCompound data = new NBTTagCompound();
+        CompoundNBT data = new CompoundNBT();
         perk.onUnlockPerkServer(player, progress, data);
         progress.applyPerk(perk, data);
 
@@ -248,7 +248,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean applyPerkSeal(EntityPlayer player, @Nonnull AbstractPerk perk) {
+    public static boolean applyPerkSeal(PlayerEntity player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
         if (!progress.hasPerkUnlocked(perk)) return false;
@@ -266,7 +266,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean breakPerkSeal(EntityPlayer player, @Nonnull AbstractPerk perk) {
+    public static boolean breakPerkSeal(PlayerEntity player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
         if (!progress.hasPerkUnlocked(perk)) return false;
@@ -288,7 +288,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean grantFreePerkPoint(EntityPlayer player, String token) {
+    public static boolean grantFreePerkPoint(PlayerEntity player, String token) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
 
@@ -301,7 +301,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean revokeFreePoint(EntityPlayer player, String token) {
+    public static boolean revokeFreePoint(PlayerEntity player, String token) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
 
@@ -314,12 +314,12 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean forceApplyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
+    public static boolean forceApplyPerk(PlayerEntity player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
         if (progress.hasPerkUnlocked(perk)) return false;
 
-        NBTTagCompound data = new NBTTagCompound();
+        CompoundNBT data = new CompoundNBT();
         perk.onUnlockPerkServer(player, progress, data);
         progress.applyPerk(perk, data);
 
@@ -331,11 +331,11 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean removePerk(EntityPlayer player, AbstractPerk perk) {
+    public static boolean removePerk(PlayerEntity player, AbstractPerk perk) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
 
-        NBTTagCompound data = progress.getPerkData(perk);
+        CompoundNBT data = progress.getPerkData(perk);
         if (data == null) {
             return false;
         }
@@ -348,12 +348,12 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean resetPerks(EntityPlayer player) {
+    public static boolean resetPerks(PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
 
-        Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
-        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
+        Map<AbstractPerk, CompoundNBT> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
+        for (Map.Entry<AbstractPerk, CompoundNBT> perkEntry : perkCopy.entrySet()) {
             dropPerk(progress, player, Dist.DEDICATED_SERVER, perkEntry.getKey(), perkEntry.getValue());
         }
 
@@ -364,14 +364,14 @@ public class ResearchManager {
         return true;
     }
 
-    private static void dropPerk(PlayerProgress progress, EntityPlayer player, Dist side, AbstractPerk perk, NBTTagCompound data) {
+    private static void dropPerk(PlayerProgress progress, PlayerEntity player, Dist side, AbstractPerk perk, CompoundNBT data) {
         progress.removePerk(perk);
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, side, perk, true);
         perk.onRemovePerkServer(player, progress, data);
         progress.removePerkData(perk);
     }
 
-    public static boolean setTomeReceived(EntityPlayer player) {
+    public static boolean setTomeReceived(PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
 
@@ -382,33 +382,33 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean setExp(EntityPlayer player, long exp) {
+    public static boolean setExp(PlayerEntity player, long exp) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
 
         progress.setExp(exp);
 
-        AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
+        AdvancementTriggers.PERK_LEVEL.trigger((ServerPlayerEntity) player);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
-    public static boolean modifyExp(EntityPlayer player, double exp) {
+    public static boolean modifyExp(PlayerEntity player, double exp) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
 
         progress.modifyExp(exp, player);
 
-        AdvancementTriggers.PERK_LEVEL.trigger((EntityPlayerMP) player);
+        AdvancementTriggers.PERK_LEVEL.trigger((ServerPlayerEntity) player);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
-    public static void forceMaximizeAll(EntityPlayer player) {
+    public static void forceMaximizeAll(PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return;
         ProgressionTier before = progress.getTierReached();
@@ -430,7 +430,7 @@ public class ResearchManager {
         ResearchHelper.savePlayerKnowledge(player);
     }
 
-    public static boolean forceMaximizeResearch(EntityPlayer player) {
+    public static boolean forceMaximizeResearch(PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if (!progress.isValid()) return false;
         for (ResearchProgression progression : ResearchProgression.values()) {
@@ -445,13 +445,13 @@ public class ResearchManager {
         return true;
     }
 
-    public static void informCraftingGridCompletion(EntityPlayer player, ItemStack out) {
+    public static void informCraftingGridCompletion(PlayerEntity player, ItemStack out) {
         Item iOut = out.getItem();
         informCraft(player, out, iOut, Block.getBlockFromItem(iOut));
     }
 
     public static void informCraftingInfusionCompletion(TileStarlightInfuser infuser, ActiveInfusionTask recipe) {
-        EntityPlayer crafter = recipe.tryGetCraftingPlayerServer();
+        PlayerEntity crafter = recipe.tryGetCraftingPlayerServer();
         if(crafter == null) {
             AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
             AstralSorcery.log.warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
@@ -465,8 +465,8 @@ public class ResearchManager {
     }
 
     public static void informCraftingAltarCompletion(TileAltar altar, ActiveCraftingTask recipeToCraft) {
-        EntityPlayer crafter = recipeToCraft.tryGetCraftingPlayerServer();
-        if(!(crafter instanceof EntityPlayerMP)) {
+        PlayerEntity crafter = recipeToCraft.tryGetCraftingPlayerServer();
+        if(!(crafter instanceof ServerPlayerEntity)) {
             AstralSorcery.log.warn("Crafting finished, player that initialized crafting could not be found!");
             AstralSorcery.log.warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
             return;
@@ -477,10 +477,10 @@ public class ResearchManager {
 
         informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
 
-        AdvancementTriggers.ALTAR_CRAFT.trigger((EntityPlayerMP) crafter, recipeToCraft.getRecipeToCraft());
+        AdvancementTriggers.ALTAR_CRAFT.trigger((ServerPlayerEntity) crafter, recipeToCraft.getRecipeToCraft());
     }
 
-    private static void informCraft(EntityPlayer crafter, ItemStack crafted, Item itemCrafted, @Nullable Block iBlock) {
+    private static void informCraft(PlayerEntity crafter, ItemStack crafted, Item itemCrafted, @Nullable Block iBlock) {
         if(iBlock != null) {
             if(iBlock instanceof BlockAltar) {
                 giveProgressionIgnoreFail(crafter, ProgressionTier.BASIC_CRAFT);

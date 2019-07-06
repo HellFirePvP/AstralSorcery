@@ -13,11 +13,11 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 
 import javax.annotation.Nonnull;
 
@@ -31,11 +31,11 @@ import javax.annotation.Nonnull;
 public class PktSetSextantTarget extends ASPacket<PktSetSextantTarget> {
 
     private TargetObject target;
-    private EnumHand hand;
+    private Hand hand;
 
     public PktSetSextantTarget() {}
 
-    public PktSetSextantTarget(TargetObject target, EnumHand hand) {
+    public PktSetSextantTarget(TargetObject target, Hand hand) {
         this.target = target;
         this.hand = hand;
     }
@@ -56,7 +56,7 @@ public class PktSetSextantTarget extends ASPacket<PktSetSextantTarget> {
             PktSetSextantTarget pkt = new PktSetSextantTarget();
 
             pkt.target = ByteBufUtils.readRegistryEntry(buffer);
-            pkt.hand = ByteBufUtils.readEnumValue(buffer, EnumHand.class);
+            pkt.hand = ByteBufUtils.readEnumValue(buffer, Hand.class);
 
             return pkt;
         };
@@ -67,14 +67,14 @@ public class PktSetSextantTarget extends ASPacket<PktSetSextantTarget> {
     public Handler<PktSetSextantTarget> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
-                EntityPlayer player = context.getSender();
+                PlayerEntity player = context.getSender();
                 ItemStack held = player.getHeldItem(packet.hand);
                 if(held.isEmpty() || !(held.getItem() instanceof ItemSextant)) {
                     return;
                 }
                 Thread tr = new Thread(() -> {
                     //May be null; In that case, tell that to the client as well so it won't ask the server any longer.
-                    BlockPos result = target.searchFor((WorldServer) player.world, player.getPosition());
+                    BlockPos result = target.searchFor((ServerWorld) player.world, player.getPosition());
                     if (result != null) {
                         context.enqueueWork(() -> {
                             if (ResearchManager.useSextantTarget(target, player)) {

@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -81,7 +81,7 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
             @Override
             public void handle(PktRequestPerkSealAction packet, NetworkEvent.Context context, LogicalSide side) {
                 context.enqueueWork(() -> {
-                    EntityPlayer player = context.getSender();
+                    PlayerEntity player = context.getSender();
                     if (packet.doSealing) {
                         if (ItemPerkSeal.useSeal(player, true) &&
                                 ResearchManager.applyPerkSeal(player, packet.perk)) {

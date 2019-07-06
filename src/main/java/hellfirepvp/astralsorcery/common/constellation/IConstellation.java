@@ -12,8 +12,8 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -78,23 +78,23 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation> {
         return weak;
     }
 
-    boolean canDiscover(EntityPlayer player, PlayerProgress progress);
+    boolean canDiscover(PlayerEntity player, PlayerProgress progress);
 
-    default public void writeToNBT(NBTTagCompound compound) {
+    default public void writeToNBT(CompoundNBT compound) {
         writeToNBT(compound, getDefaultSaveKey());
     }
 
-    default public void writeToNBT(NBTTagCompound compound, String key) {
+    default public void writeToNBT(CompoundNBT compound, String key) {
         compound.setString(key, getRegistryName().toString());
     }
 
     @Nullable
-    public static IConstellation readFromNBT(NBTTagCompound compound) {
+    public static IConstellation readFromNBT(CompoundNBT compound) {
         return readFromNBT(compound, getDefaultSaveKey());
     }
 
     @Nullable
-    public static IConstellation readFromNBT(NBTTagCompound compound, String key) {
+    public static IConstellation readFromNBT(CompoundNBT compound, String key) {
         return ConstellationRegistry.getConstellation(new ResourceLocation(compound.getString(key)));
     }
 

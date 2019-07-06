@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.world.WorldSeedCache;
 import net.minecraft.network.PacketBuffer;
@@ -90,7 +91,7 @@ public class PktRequestSeed extends ASPacket<PktRequestSeed> {
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
                     World w = srv.getWorld(packet.type);
                     PktRequestSeed seedResponse = new PktRequestSeed(packet.session, packet.type);
-                    seedResponse.seed(new Random(w.getSeed()).nextLong());
+                    seedResponse.seed(MiscUtils.getRandomWorldSeed(w));
                     packet.replyWith(seedResponse, context);
                 });
             }

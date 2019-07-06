@@ -52,8 +52,7 @@ public class TransmissionNetworkHelper {
             if(nextNode.getTo().equals(end)) return false;
         }
 
-        double dst = tr.getTrPos().getDistance(end.getX(), end.getY(), end.getZ());
-        return dst <= MAX_TRANSMISSION_DIST;
+        return tr.getTrPos().withinDistance(end, MAX_TRANSMISSION_DIST);
     }
 
     public static boolean createTransmissionLink(IStarlightTransmission tr, BlockPos next) {

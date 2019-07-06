@@ -10,11 +10,11 @@ package hellfirepvp.astralsorcery.client.effect.handler;
 
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
-import hellfirepvp.astralsorcery.client.effect.properties.EffectProperties;
+import hellfirepvp.astralsorcery.client.effect.EffectProperties;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import java.util.LinkedList;
@@ -36,8 +36,6 @@ public final class EffectHandler {
     private static boolean cleanRequested = false;
     static boolean acceptsNewParticles = true;
     static List<PendingEffect> toAddBuffer = new LinkedList<>();
-
-
 
     private EffectHandler() {}
 
@@ -71,7 +69,7 @@ public final class EffectHandler {
             cleanRequested = false;
         }
 
-        EntityPlayer player = Minecraft.getInstance().player;
+        PlayerEntity player = Minecraft.getInstance().player;
         if (player == null) {
             return;
         }
@@ -90,6 +88,7 @@ public final class EffectHandler {
             return;
         }
         IComplexEffect effect = pendingEffect.getEffect();
+        pendingEffect.getProperties().applySpecialEffects(effect);
 
         //TODO effect registering
         //if(effect instanceof EffectLightning) {

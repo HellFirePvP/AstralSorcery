@@ -8,10 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.data.sync;
 
-import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -27,7 +28,7 @@ import java.util.*;
  */
 public class SyncDataHolder implements ITickHandler {
 
-    public static final SyncDataHolder tickInstance = new SyncDataHolder();
+    private static final SyncDataHolder tickInstance = new SyncDataHolder();
 
     public static final String DATA_CONSTELLATIONS = "AstralConstellations";
     public static final String DATA_LIGHT_CONNECTIONS = "StarlightNetworkConnections";
@@ -92,7 +93,7 @@ public class SyncDataHolder implements ITickHandler {
         }
     }
 
-    public static void syncAllDataTo(EntityPlayer player) {
+    public static void syncAllDataTo(PlayerEntity player) {
         PktSyncData dataSync = new PktSyncData(serverData, true);
         PacketChannel.CHANNEL.sendToPlayer(player, dataSync);
     }

@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.block.marble;
 
 import hellfirepvp.astralsorcery.common.block.base.template.BlockMarbleTemplate;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -39,23 +39,23 @@ public class BlockMarblePillar extends BlockMarbleTemplate {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
         builder.add(MARBLE_TYPE);
     }
 
     @Override
-    public IBlockState updatePostPlacement(IBlockState thisState, EnumFacing otherBlockFacing, IBlockState otherBlockState, IWorld world, BlockPos thisPos, BlockPos otherBlockPos) {
+    public BlockState updatePostPlacement(BlockState thisState, EnumFacing otherBlockFacing, BlockState otherBlockState, IWorld world, BlockPos thisPos, BlockPos otherBlockPos) {
         return this.getThisState(world, thisPos);
     }
 
     @Nullable
     @Override
-    public IBlockState getStateForPlacement(BlockItemUseContext ctx) {
+    public BlockState getStateForPlacement(BlockItemUseContext ctx) {
         return this.getThisState(ctx.getWorld(), ctx.getPos());
     }
 
-    private IBlockState getThisState(IBlockReader world, BlockPos pos) {
+    private BlockState getThisState(IBlockReader world, BlockPos pos) {
         boolean hasUp   = world.getBlockState(pos.up()).getBlock()   instanceof BlockMarblePillar;
         boolean hasDown = world.getBlockState(pos.down()).getBlock() instanceof BlockMarblePillar;
         if (hasUp) {

@@ -53,7 +53,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
         return age;
     }
 
-    public void setRefreshFunction(RefreshFunction<?> refreshFunction) {
+    public void refresh(RefreshFunction<?> refreshFunction) {
         this.refreshFunction = refreshFunction;
     }
 

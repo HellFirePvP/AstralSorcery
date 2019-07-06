@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common;
 
-import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -41,7 +41,7 @@ public class CommonScheduler implements ITickHandler {
             while (iterator.hasNext()) {
                 Tuple<Runnable, Counter> r = iterator.next();
                 r.getB().decrement();
-                if(r.getB().value <= 0) {
+                if(r.getB().getValue() <= 0) {
                     r.getA().run();
                     iterator.remove();
                 }

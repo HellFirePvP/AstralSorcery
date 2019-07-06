@@ -10,9 +10,12 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import com.google.common.base.CaseFormat;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.tile.TileWell;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+
+import static hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,10 +29,10 @@ public class RegistryTileEntities {
     private RegistryTileEntities() {}
 
     public static void registerTiles() {
-
+        WELL = registerTile(TileWell.class);
     }
 
-    private static <T extends TileEntity> void registerTile(Class<T> tileClass) {
+    private static <T extends TileEntity> TileEntityType<T> registerTile(Class<T> tileClass) {
         ResourceLocation name = createTileEntityName(tileClass);
         TileEntityType.Builder<T> typeBuilder = TileEntityType.Builder.create(() -> {
             try {
@@ -43,6 +46,7 @@ public class RegistryTileEntities {
         TileEntityType<T> type = typeBuilder.build(null);
         type.setRegistryName(name);
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
+        return type;
     }
 
     private static ResourceLocation createTileEntityName(Class<? extends TileEntity> tileClass) {

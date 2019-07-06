@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import hellfirepvp.astralsorcery.common.data.config.entry.PerkConfig;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.HashMap;
@@ -50,11 +50,11 @@ public class PerkLevelManager {
         }
     }
 
-    public int getLevel(double totalExp, EntityPlayer player) {
+    public int getLevel(double totalExp, PlayerEntity player) {
         return getLevel(MathHelper.lfloor(totalExp), player);
     }
 
-    private int getLevel(long totalExp, EntityPlayer player) {
+    private int getLevel(long totalExp, PlayerEntity player) {
         ensureLevels();
 
         if (totalExp <= 0) {
@@ -71,7 +71,7 @@ public class PerkLevelManager {
         return levelCap;
     }
 
-    public long getExpForLevel(int level, EntityPlayer player) {
+    public long getExpForLevel(int level, PlayerEntity player) {
         ensureLevels();
 
         if (level <= 1) {
@@ -85,7 +85,7 @@ public class PerkLevelManager {
         return totalExpLevelRequired.get(level);
     }
 
-    public float getNextLevelPercent(double totalExp, EntityPlayer player) {
+    public float getNextLevelPercent(double totalExp, PlayerEntity player) {
         ensureLevels();
 
         int level = getLevel(totalExp, player);
@@ -97,7 +97,7 @@ public class PerkLevelManager {
         return ((float) (totalExp - prevLevel)) / ((float) (nextLevel - prevLevel));
     }
 
-    public static int getLevelCapFor(EntityPlayer player) {
+    public static int getLevelCapFor(PlayerEntity player) {
         //if (Mods.GAMESTAGES.isPresent() && Mods.CRAFTTWEAKER.isPresent()) {
         //    return resolveLevelCap(player);
         //}
@@ -105,7 +105,7 @@ public class PerkLevelManager {
     }
 
     //@Optional.Method(modid = "gamestages")
-    //private static int resolveLevelCap(EntityPlayer player) {
+    //private static int resolveLevelCap(PlayerEntity player) {
     //    if (player == null) {
     //        return this.levelCap;
     //    }

@@ -11,8 +11,8 @@ package hellfirepvp.astralsorcery.common.storage;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
@@ -65,15 +65,15 @@ public class StorageNetwork {
         return MiscUtils.flatten(this.cores, CoreArea::new);
     }
 
-    public void writeToNBT(NBTTagCompound tag) {
-        NBTTagList list = new NBTTagList();
+    public void writeToNBT(CompoundNBT tag) {
+        ListNBT list = new ListNBT();
         for (CoreArea coreData : this.getCores()) {
-            NBTTagCompound coreTag = new NBTTagCompound();
+            CompoundNBT coreTag = new CompoundNBT();
             NBTHelper.writeBlockPosToNBT(coreData.getPos(), coreTag);
             NBTHelper.writeBoundingBox(coreData.getOffsetBox(), coreTag);
             list.add(coreTag);
         }
-        tag.setTag("cores", list);
+        tag.put("cores", list);
 
         CoreArea master;
         if ((master = getMaster()) != null) {
@@ -81,12 +81,12 @@ public class StorageNetwork {
         }
     }
 
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(CompoundNBT tag) {
         this.cores.clear();
 
-        NBTTagList list = tag.getList("cores", Constants.NBT.TAG_COMPOUND);
+        ListNBT list = tag.getList("cores", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
-            NBTTagCompound coreTag = list.getCompound(i);
+            CompoundNBT coreTag = list.getCompound(i);
             BlockPos pos = NBTHelper.readBlockPosFromNBT(coreTag);
             AxisAlignedBB box = NBTHelper.readBoundingBox(coreTag);
             this.addCore(pos, box);

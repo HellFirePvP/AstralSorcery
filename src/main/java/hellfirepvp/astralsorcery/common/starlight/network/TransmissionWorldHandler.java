@@ -20,7 +20,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -105,7 +105,7 @@ public class TransmissionWorldHandler {
                 while (iterator.hasNext()) {
                     BlockPos endPointPos = iterator.next();
                     if (MiscUtils.isChunkLoaded(world, endPointPos)) {
-                        IBlockState endState = world.getBlockState(endPointPos);
+                        BlockState endState = world.getBlockState(endPointPos);
                         Block b = endState.getBlock();
                         if (b instanceof BlockStarlightRecipient) {
                             Float multiplier = lossMultipliers.get(endPointPos);

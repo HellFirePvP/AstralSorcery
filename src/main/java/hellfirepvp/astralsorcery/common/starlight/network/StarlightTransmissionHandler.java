@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network;
 
-import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;

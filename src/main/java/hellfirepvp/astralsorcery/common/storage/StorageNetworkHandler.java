@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.storage;
 
-import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.data.world.data.StorageNetworkBuffer;
+import hellfirepvp.astralsorcery.common.data.world.StorageNetworkBuffer;
+import hellfirepvp.astralsorcery.common.lib.DataAS;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -43,10 +43,10 @@ public class StorageNetworkHandler {
 
     public static class NetworkHelper {
 
-        private StorageNetworkBuffer buffer;
+        private final StorageNetworkBuffer buffer;
 
         private NetworkHelper(World world) {
-            this.buffer = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STORAGE_BUFFER);
+            this.buffer = DataAS.DOMAIN_AS.getData(world, DataAS.KEY_STORAGE_NETWORK);
         }
 
         @Nullable

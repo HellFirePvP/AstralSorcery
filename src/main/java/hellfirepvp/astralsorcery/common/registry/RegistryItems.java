@@ -88,6 +88,7 @@ public class RegistryItems {
                 props.setNoRepair();
             }
 
+            props.rarity(((CustomItemBlockProperties) block).getItemRarity());
             props.maxStackSize(((CustomItemBlockProperties) block).getItemMaxStackSize());
             props.defaultMaxDamage(((CustomItemBlockProperties) block).getItemMaxDamage());
             props.containerItem(((CustomItemBlockProperties) block).getContainerItem());

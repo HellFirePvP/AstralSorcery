@@ -9,8 +9,10 @@
 package hellfirepvp.astralsorcery.common.registry.internal;
 
 import com.google.common.collect.Lists;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +35,12 @@ public class InternalRegistryPrimer {
         return entry;
     }
 
-    <T extends IForgeRegistryEntry<T>> List<?> getEntries(Class<T> type) {
-        return primed.get(type);
+    <T extends IForgeRegistryEntry<T>> List<T> getEntries(Class<T> type) {
+        return (List<T>) primed.getOrDefault(type, Collections.emptyList());
     }
 
-    void wipe(Class<?> type) {
-        primed.remove(type);
+    void wipe(RegistryEvent.Register<?> registryEvent) {
+        primed.remove(registryEvent.getRegistry().getRegistrySuperType());
     }
 
 }

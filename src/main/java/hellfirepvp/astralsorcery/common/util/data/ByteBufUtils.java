@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -202,7 +202,7 @@ public class ByteBufUtils {
         boolean defined = !stack.isEmpty();
         byteBuf.writeBoolean(defined);
         if(defined) {
-            NBTTagCompound tag = new NBTTagCompound();
+            CompoundNBT tag = new CompoundNBT();
             stack.write(tag);
             writeNBTTag(byteBuf, tag);
         }
@@ -222,7 +222,7 @@ public class ByteBufUtils {
         boolean defined = stack != null;
         byteBuf.writeBoolean(defined);
         if (defined) {
-            NBTTagCompound tag = new NBTTagCompound();
+            CompoundNBT tag = new CompoundNBT();
             stack.writeToNBT(tag);
             writeNBTTag(byteBuf, tag);
         }
@@ -237,14 +237,14 @@ public class ByteBufUtils {
         }
     }
 
-    public static void writeNBTTag(PacketBuffer byteBuf, @Nonnull NBTTagCompound tag) {
+    public static void writeNBTTag(PacketBuffer byteBuf, @Nonnull CompoundNBT tag) {
         try (DataOutputStream dos = new DataOutputStream(new ByteBufOutputStream(byteBuf))) {
             CompressedStreamTools.write(tag, dos);
         } catch (Exception exc) {}
     }
 
     @Nonnull
-    public static NBTTagCompound readNBTTag(PacketBuffer byteBuf) {
+    public static CompoundNBT readNBTTag(PacketBuffer byteBuf) {
         try (DataInputStream dis = new DataInputStream(new ByteBufInputStream(byteBuf))) {
             return CompressedStreamTools.read(dis);
         } catch (Exception exc) {}

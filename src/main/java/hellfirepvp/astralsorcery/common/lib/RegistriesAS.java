@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +32,9 @@ public class RegistriesAS {
     public static final ResourceLocation REGISTRY_NAME_CONSTELLATIONS = new ResourceLocation(AstralSorcery.MODID, "constellations");
     public static final ResourceLocation REGISTRY_NAME_PERKS = new ResourceLocation(AstralSorcery.MODID, "perks");
     public static final ResourceLocation REGISTRY_NAME_SEXTANT_TARGETS = new ResourceLocation(AstralSorcery.MODID, "sextant_targets");
+    public static final ResourceLocation REGISTRY_NAME_CONSTELLATION_EFFECTS = new ResourceLocation(AstralSorcery.MODID, "constellation_effect");
 
+    public static IForgeRegistry<ConstellationEffectProvider> REGISTRY_CONSTELLATION_EFFECT;
     public static IForgeRegistry<IConstellation> REGISTRY_CONSTELLATIONS;
     public static IForgeRegistryModifiable<AbstractPerk> REGISTRY_PERKS;
     public static IForgeRegistry<TargetObject> REGISTRY_SEXTANT_TARGET;

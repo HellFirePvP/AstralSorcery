@@ -10,12 +10,12 @@ package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
+import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -70,7 +70,7 @@ public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
     public Handler<PktRequestTeleport> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
-                EntityPlayer player = context.getSender();
+                PlayerEntity player = context.getSender();
                 TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, false);
                 if(gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
                     MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);

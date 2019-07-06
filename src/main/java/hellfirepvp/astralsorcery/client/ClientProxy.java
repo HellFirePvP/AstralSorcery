@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.client.event.ConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.ContextRenderHandler;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.client.Minecraft;

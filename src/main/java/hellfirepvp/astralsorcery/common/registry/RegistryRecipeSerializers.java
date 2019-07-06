@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2019
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.registry;
+
+import hellfirepvp.astralsorcery.common.crafting.serializer.WellRecipeSerializer;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.RecipeSerializers;
+
+import static hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS.*;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: RegistryRecipeSerializers
+ * Created by HellFirePvP
+ * Date: 30.06.2019 / 23:32
+ */
+public class RegistryRecipeSerializers {
+
+    private RegistryRecipeSerializers() {}
+
+    public static void init() {
+        WELL_LIQUEFACTION_SERIALIZER = register(new WellRecipeSerializer());
+    }
+
+    private static <R extends IRecipe, T extends IRecipeSerializer<R>> T register(T serializer) {
+        RecipeSerializers.register(serializer);
+        return serializer;
+    }
+
+}

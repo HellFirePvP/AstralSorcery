@@ -8,9 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.util.nbt;
 
-import net.minecraft.nbt.INBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -25,14 +25,14 @@ import java.util.List;
  */
 public class NBTComparator {
 
-    public static boolean contains(@Nonnull NBTTagCompound thisCompound, @Nonnull NBTTagCompound otherCompound) {
+    public static boolean contains(@Nonnull CompoundNBT thisCompound, @Nonnull CompoundNBT otherCompound) {
         for (String key : thisCompound.keySet()) {
-            if (!otherCompound.hasKey(key)) {
+            if (!otherCompound.contains(key)) {
                 return false;
             }
 
-            INBTBase thisNBT = thisCompound.getTag(key);
-            INBTBase otherNBT = otherCompound.getTag(key);
+            INBT thisNBT = thisCompound.get(key);
+            INBT otherNBT = otherCompound.get(key);
             if (!compare(thisNBT, otherNBT)) {
                 return false;
             }
@@ -40,16 +40,16 @@ public class NBTComparator {
         return true;
     }
 
-    private static boolean containList(NBTTagList base, NBTTagList other) {
+    private static boolean containList(ListNBT base, ListNBT other) {
         if (base.size() > other.size()) {
             return false;
         }
 
         List<Integer> matched = new ArrayList<>();
         lblMatching:
-        for (INBTBase thisNbt : base) {
+        for (INBT thisNbt : base) {
             for (int matchIndex = 0; matchIndex < other.size(); matchIndex++) {
-                INBTBase matchNBT = other.get(matchIndex);
+                INBT matchNBT = other.get(matchIndex);
 
                 if (!matched.contains(matchIndex)) {
                     if (compare(thisNbt, matchNBT)) {
@@ -65,11 +65,11 @@ public class NBTComparator {
         return true;
     }
 
-    private static boolean compare(INBTBase thisEntry, INBTBase thatEntry) {
-        if (thisEntry instanceof NBTTagCompound && thatEntry instanceof NBTTagCompound) {
-            return contains((NBTTagCompound) thisEntry, (NBTTagCompound) thatEntry);
-        } else if (thisEntry instanceof NBTTagList && thatEntry instanceof NBTTagList) {
-            return containList((NBTTagList) thisEntry, (NBTTagList) thatEntry);
+    private static boolean compare(INBT thisEntry, INBT thatEntry) {
+        if (thisEntry instanceof CompoundNBT && thatEntry instanceof CompoundNBT) {
+            return contains((CompoundNBT) thisEntry, (CompoundNBT) thatEntry);
+        } else if (thisEntry instanceof ListNBT && thatEntry instanceof ListNBT) {
+            return containList((ListNBT) thisEntry, (ListNBT) thatEntry);
         } else {
             return thisEntry.equals(thatEntry);
         }

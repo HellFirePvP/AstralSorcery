@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.common.data.sync.AbstractData;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -50,7 +50,7 @@ public class PktSyncData extends ASPacket<PktSyncData> {
 
             for (String key : packet.data.keySet()) {
                 AbstractData aData = packet.data.get(key);
-                NBTTagCompound tag = new NBTTagCompound();
+                CompoundNBT tag = new CompoundNBT();
                 if (packet.shouldSyncAll) {
                     aData.writeAllDataToPacket(tag);
                 } else {
@@ -74,7 +74,7 @@ public class PktSyncData extends ASPacket<PktSyncData> {
             for (int i = 0; i < size; i++) {
                 String key = ByteBufUtils.readString(buffer);
                 byte providerId = buffer.readByte();
-                NBTTagCompound tag = ByteBufUtils.readNBTTag(buffer);
+                CompoundNBT tag = ByteBufUtils.readNBTTag(buffer);
 
                 AbstractData.AbstractDataProvider<? extends AbstractData> provider = AbstractData.Registry.getProvider(providerId);
                 if (provider == null) {

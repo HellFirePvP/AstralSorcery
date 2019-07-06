@@ -35,25 +35,26 @@ public class WorldSeedCache {
     //TODO on disconnect
     @OnlyIn(Dist.CLIENT)
     public static void clearCache() {
+        activeSession++;
         cacheSeedLookup.clear();
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void updateSeedCache(DimensionType type, int session, long seed) {
-        if(activeSession == session) {
+        if (activeSession == session) {
             cacheSeedLookup.put(type, seed);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     public static Optional<Long> getSeedIfPresent(World world) {
-        if(world == null) return Optional.empty();
+        if (world == null) return Optional.empty();
         return getSeedIfPresent(world.getDimension().getType());
     }
 
     @OnlyIn(Dist.CLIENT)
     public static Optional<Long> getSeedIfPresent(DimensionType type) {
-        if(!cacheSeedLookup.containsKey(type)) {
+        if (!cacheSeedLookup.containsKey(type)) {
             activeSession++;
             PktRequestSeed req = new PktRequestSeed(activeSession, type);
             PacketChannel.CHANNEL.sendToServer(req);

@@ -45,14 +45,14 @@ public enum Mods {
         //    case GALACTICRAFT_CORE:
         //        if(gcPlayerClass == null) {
         //            try {
-        //                gcPlayerClass = Class.forName("micdoodle8.mods.galacticraft.core.entities.player.GCEntityPlayerMP");
+        //                gcPlayerClass = Class.forName("micdoodle8.mods.galacticraft.core.entities.player.GCServerPlayerEntity");
         //            } catch (Exception ignored) {}
         //        }
         //        return gcPlayerClass;
         //    case UNIVERSALREMOTE:
         //        if(urPlayerClass == null) {
         //            try {
-        //                urPlayerClass = Class.forName("clayborn.universalremote.hooks.entity.HookedEntityPlayerMP");
+        //                urPlayerClass = Class.forName("clayborn.universalremote.hooks.entity.HookedServerPlayerEntity");
         //            } catch (Exception ignored) {}
         //        }
         //        return urPlayerClass;

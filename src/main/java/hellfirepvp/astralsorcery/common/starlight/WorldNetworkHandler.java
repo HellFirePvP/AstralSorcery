@@ -9,8 +9,8 @@
 package hellfirepvp.astralsorcery.common.starlight;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
+import hellfirepvp.astralsorcery.common.data.world.LightNetworkBuffer;
+import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionWorldHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
@@ -49,8 +49,7 @@ public class WorldNetworkHandler {
     }
 
     public static WorldNetworkHandler getNetworkHandler(World world) {
-        LightNetworkBuffer buffer = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.LIGHT_NETWORK);
-        return buffer.getNetworkHandler(world);
+        return DataAS.DOMAIN_AS.getData(world, DataAS.KEY_STARLIGHT_NETWORK).getNetworkHandler(world);
     }
 
     public void informBlockChange(BlockPos at) {

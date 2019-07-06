@@ -9,10 +9,10 @@
 package hellfirepvp.astralsorcery.common.auxiliary;
 
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
 
 import javax.annotation.Nonnull;
 import java.util.LinkedList;
@@ -37,7 +37,7 @@ public class SwordSharpenHelper {
 
     public static void setSwordSharpened(@Nonnull ItemStack stack) {
         if(!isSharpenableItem(stack)) return;
-        NBTHelper.getData(stack).setBoolean("sharp", true);
+        NBTHelper.getData(stack).putBoolean("sharp", true);
     }
 
     public static boolean canBeSharpened(@Nonnull ItemStack stack) {
@@ -56,7 +56,7 @@ public class SwordSharpenHelper {
     }
 
     public static boolean isSharpenableItem(ItemStack stack) {
-        return !stack.isEmpty() && (stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemAxe);
+        return !stack.isEmpty() && (stack.getItem() instanceof SwordItem || stack.getItem() instanceof AxeItem);
     }
 
 }

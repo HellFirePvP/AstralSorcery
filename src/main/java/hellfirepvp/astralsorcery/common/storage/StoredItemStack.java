@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.common.storage;
 import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -74,15 +74,15 @@ public class StoredItemStack {
     }
 
     @Nonnull
-    public NBTTagCompound serialize() {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setTag("item", stack.serializeNBT());
-        tag.setInt("amount", amount);
+    public CompoundNBT serialize() {
+        CompoundNBT tag = new CompoundNBT();
+        tag.put("item", stack.serializeNBT());
+        tag.putInt("amount", amount);
         return tag;
     }
 
     @Nullable
-    public static StoredItemStack deserialize(NBTTagCompound cmp) {
+    public static StoredItemStack deserialize(CompoundNBT cmp) {
         ItemStack stack = ItemStack.read(cmp.getCompound("item"));
         if (stack.isEmpty()) {
             return null;

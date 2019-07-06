@@ -14,11 +14,12 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -50,11 +51,11 @@ public class ResearchHelper {
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
     @Nonnull
-    public static PlayerProgress getProgress(EntityPlayer player, Dist dist) {
+    public static PlayerProgress getProgress(PlayerEntity player, Dist dist) {
         if (dist.isClient()) {
             return getClientProgress();
-        } else if (player instanceof EntityPlayerMP) {
-            return getProgressServer((EntityPlayerMP) player);
+        } else if (player instanceof ServerPlayerEntity) {
+            return getProgressServer((ServerPlayerEntity) player);
         } else {
             return new PlayerProgressTestAccess();
         }
@@ -70,7 +71,7 @@ public class ResearchHelper {
     }
 
     @Nonnull
-    private static PlayerProgress getProgressServer(EntityPlayerMP player) {
+    private static PlayerProgress getProgressServer(ServerPlayerEntity player) {
         if(MiscUtils.isPlayerFakeMP(player)) {
             return new PlayerProgressTestAccess();
         }
@@ -99,7 +100,7 @@ public class ResearchHelper {
         ResearchHelper.clientInitialized = pkt != null;
     }
 
-    public static void loadPlayerKnowledge(EntityPlayerMP p) {
+    public static void loadPlayerKnowledge(ServerPlayerEntity p) {
         if(!MiscUtils.isPlayerFakeMP(p)) {
             loadPlayerKnowledge(p.getUniqueID());
         }
@@ -147,11 +148,11 @@ public class ResearchHelper {
     }
 
     private static void load_unsafe(UUID pUUID, File playerFile) throws Exception {
-        NBTTagCompound compound = CompressedStreamTools.read(playerFile); //IO-Exc thrown only here.
+        CompoundNBT compound = CompressedStreamTools.read(playerFile); //IO-Exc thrown only here.
         load_unsafeFromNBT(pUUID, compound);
     }
 
-    private static void load_unsafeFromNBT(UUID pUUID, @Nullable NBTTagCompound compound) {
+    private static void load_unsafeFromNBT(UUID pUUID, @Nullable CompoundNBT compound) {
         PlayerProgress progress = new PlayerProgress();
         if (compound != null && !compound.isEmpty()) {
             progress.load(compound);
@@ -164,21 +165,21 @@ public class ResearchHelper {
     private static void informPlayersAboutProgressionLoss(UUID pUUID) {
         MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
         if(server != null) {
-            EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(pUUID);
+            ServerPlayerEntity player = server.getPlayerList().getPlayerByUUID(pUUID);
             if(player != null) {
-                player.sendMessage(new TextComponentString("AstralSorcery: Your progression could not be loaded and can't be recovered from backup. Please contact an administrator to lookup what went wrong and/or potentially recover your data from a backup.").setStyle(new Style().setColor(TextFormatting.RED)));
+                player.sendMessage(new StringTextComponent("AstralSorcery: Your progression could not be loaded and can't be recovered from backup. Please contact an administrator to lookup what went wrong and/or potentially recover your data from a backup.").setStyle(new Style().setColor(TextFormatting.RED)));
             }
             String resolvedName = player != null ? player.getGameProfile().getName() : pUUID.toString() + " (Not online)";
             for (String opName : server.getPlayerList().getOppedPlayerNames()) {
-                EntityPlayer pl = server.getPlayerList().getPlayerByUsername(opName);
+                PlayerEntity pl = server.getPlayerList().getPlayerByUsername(opName);
                 if(pl != null) {
-                    pl.sendMessage(new TextComponentString("AstralSorcery: The progression of " + resolvedName + " could not be loaded and can't be recovered from backup. Error files might be created from the unloadable progression files, check the console for additional information!").setStyle(new Style().setColor(TextFormatting.RED)));
+                    pl.sendMessage(new StringTextComponent("AstralSorcery: The progression of " + resolvedName + " could not be loaded and can't be recovered from backup. Error files might be created from the unloadable progression files, check the console for additional information!").setStyle(new Style().setColor(TextFormatting.RED)));
                 }
             }
         }
     }
 
-    public static boolean mergeApplyPlayerprogress(PlayerProgress toMergeFrom, EntityPlayer player) {
+    public static boolean mergeApplyPlayerprogress(PlayerProgress toMergeFrom, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
@@ -189,7 +190,7 @@ public class ResearchHelper {
         return true;
     }
 
-    public static void wipeKnowledge(EntityPlayerMP p) {
+    public static void wipeKnowledge(ServerPlayerEntity p) {
         ResearchManager.resetPerks(p);
         wipeFile(p);
         playerProgressServer.remove(p.getUniqueID());
@@ -201,13 +202,13 @@ public class ResearchHelper {
         ResearchSyncHelper.pushProgressToClientUnsafe(getProgressServer(p), p);
     }
 
-    private static void wipeFile(EntityPlayerMP player) {
+    private static void wipeFile(ServerPlayerEntity player) {
         getPlayerFile(player).delete();
         ResearchIOThread.cancelSave(player.getUniqueID());
     }
 
-    public static void savePlayerKnowledge(EntityPlayer p) {
-        if (p instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) p)) {
+    public static void savePlayerKnowledge(PlayerEntity p) {
+        if (p instanceof ServerPlayerEntity && !MiscUtils.isPlayerFakeMP((ServerPlayerEntity) p)) {
             savePlayerKnowledge(p.getUniqueID(), false);
         }
     }
@@ -223,11 +224,10 @@ public class ResearchHelper {
     }
 
     public static void saveAndClearServerCache() {
-        ResearchIOThread.saveAllPending();
         playerProgressServer.clear();
     }
 
-    public static File getPlayerFile(EntityPlayer player) {
+    public static File getPlayerFile(PlayerEntity player) {
         return getPlayerFile(player.getUniqueID());
     }
 
@@ -235,17 +235,17 @@ public class ResearchHelper {
         File f = new File(getPlayerDirectory(), pUUID.toString() + ".astral");
         if(!f.exists()) {
             try {
-                CompressedStreamTools.write(new NBTTagCompound(), f);
+                CompressedStreamTools.write(new CompoundNBT(), f);
             } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
         }
         return f;
     }
 
-    public static boolean doesPlayerFileExist(EntityPlayer player) {
+    public static boolean doesPlayerFileExist(PlayerEntity player) {
         return new File(getPlayerDirectory(), player.getUniqueID().toString() + ".astral").exists();
     }
 
-    public static File getPlayerBackupFile(EntityPlayer player) {
+    public static File getPlayerBackupFile(PlayerEntity player) {
         return getPlayerBackupFile(player.getUniqueID());
     }
 
@@ -253,7 +253,7 @@ public class ResearchHelper {
         File f = new File(getPlayerDirectory(), pUUID.toString() + ".astralback");
         if(!f.exists()) {
             try {
-                CompressedStreamTools.write(new NBTTagCompound(), f);
+                CompressedStreamTools.write(new CompoundNBT(), f);
             } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
         }
         return f;

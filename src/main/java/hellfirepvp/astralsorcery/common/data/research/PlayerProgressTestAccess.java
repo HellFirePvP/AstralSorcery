@@ -9,8 +9,10 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -51,12 +53,12 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public int getPerkLevel(EntityPlayer player) {
+    public int getPerkLevel(PlayerEntity player) {
         return 0;
     }
 
     @Override
-    public float getPercentToNextLevel(EntityPlayer player) {
+    public float getPercentToNextLevel(PlayerEntity player) {
         return 0F;
     }
 
@@ -82,17 +84,17 @@ public class PlayerProgressTestAccess extends PlayerProgress {
 
     @Nullable
     @Override
-    public NBTTagCompound getPerkData(AbstractPerk perk) {
+    public CompoundNBT getPerkData(AbstractPerk perk) {
         return null;
     }
 
     @Override
-    public List<SextantFinder.TargetObject> getUsedTargets() {
+    public List<TargetObject> getUsedTargets() {
         return Collections.emptyList();
     }
 
     @Override
-    public void useTarget(SextantFinder.TargetObject target) {}
+    public void useTarget(TargetObject target) {}
 
     @Override
     public boolean hasConstellationDiscovered(String constellation) {
@@ -110,12 +112,12 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public int getAvailablePerkPoints(EntityPlayer player) {
+    public int getAvailablePerkPoints(PlayerEntity player) {
         return 0;
     }
 
     @Override
-    public boolean hasFreeAllocationPoint(EntityPlayer player) {
+    public boolean hasFreeAllocationPoint(PlayerEntity player) {
         return false;
     }
 

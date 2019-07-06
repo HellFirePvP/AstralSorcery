@@ -9,10 +9,9 @@
 package hellfirepvp.astralsorcery.common.registry.internal;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
-import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.registry.RegistryTileEntities;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.registry.*;
+import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
@@ -22,6 +21,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -51,10 +51,12 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
         eventBus.addGenericListener(SoundEvent.class, this::registerSounds);
         eventBus.addGenericListener(IConstellation.class, this::registerConstellations);
+        eventBus.addGenericListener(AbstractPerk.class, this::registerPerks);
+        eventBus.addGenericListener(TargetObject.class, this::registerSextantTargets);
     }
 
     private void registerItems(RegistryEvent.Register<Item> event) {
-        registry.wipe(event.getClass());
+        registry.wipe(event);
         RegistryItems.registerItems();
         RegistryItems.registerItemBlocks();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
@@ -62,44 +64,62 @@ public class PrimerEventHandler {
     }
 
     private void registerBlocks(RegistryEvent.Register<Block> event) {
-        registry.wipe(event.getClass());
+        registry.wipe(event);
         RegistryBlocks.registerBlocks();
         //RegistryBlocks.initRenderRegistry();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
-        registry.wipe(event.getClass());
+        registry.wipe(event);
         RegistryTileEntities.registerTiles();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerBiomes(RegistryEvent.Register<Biome> event) {
-        registry.wipe(event.getClass());
+        registry.wipe(event);
         //? maybe. one day.
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerPotions(RegistryEvent.Register<Potion> event) {
-        registry.wipe(event.getClass());
+        registry.wipe(event);
         //RegistryPotions.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
-        registry.wipe(event.getClass());
+        registry.wipe(event);
         //RegistryEnchantments.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerConstellations(RegistryEvent.Register<IConstellation> event) {
-        registry.wipe(event.getClass());
+        registry.wipe(event);
         RegistryConstellations.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
+    private void registerPerks(RegistryEvent.Register<AbstractPerk> event) {
+        registry.wipe(event);
+        //RegistryPerks.init();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerSextantTargets(RegistryEvent.Register<TargetObject> event) {
+        registry.wipe(event);
+        RegistrySextantTargets.init();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerDataSerializers(RegistryEvent.Register<DataSerializerEntry> event) {
+        registry.wipe(event);
+        RegistryDataSerializers.registerSerializers();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
     //private void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-    //    registry.wipe(event.getClass());
+    //    registry.wipe(event);
     //    RegistryRecipes.initVanillaRecipes();
     //    RegistryRecipes.initAstralRecipes();
     //    WellLiquefaction.init();
@@ -109,16 +129,13 @@ public class PrimerEventHandler {
     //}
 
     private void registerSounds(RegistryEvent.Register<SoundEvent> event) {
-        registry.wipe(event.getClass());
+        registry.wipe(event);
         //RegistrySounds.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private <T extends IForgeRegistryEntry<T>> void fillRegistry(Class<T> registrySuperType, IForgeRegistry<T> forgeRegistry) {
-        List<?> entries = registry.getEntries(registrySuperType);
-        if(entries != null) {
-            entries.forEach((e) -> forgeRegistry.register((T) e));
-        }
+        registry.getEntries(registrySuperType).forEach(forgeRegistry::register);
     }
 
 }

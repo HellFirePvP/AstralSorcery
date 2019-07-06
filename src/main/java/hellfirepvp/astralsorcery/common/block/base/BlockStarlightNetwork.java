@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -34,7 +34,7 @@ public abstract class BlockStarlightNetwork extends BlockContainer {
     }
 
     @Override
-    public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         TileNetwork teN = MiscUtils.getTileAt(worldIn, pos, TileNetwork.class, true);
         if(teN != null) {
             teN.onBreak();

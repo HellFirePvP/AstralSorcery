@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.sync;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.api.distmarker.Dist;
 
 import java.util.HashMap;
@@ -40,11 +40,11 @@ public abstract class AbstractData {
         return providerId;
     }
 
-    public abstract void writeAllDataToPacket(NBTTagCompound compound);
+    public abstract void writeAllDataToPacket(CompoundNBT compound);
 
-    public abstract void writeToPacket(NBTTagCompound compound);
+    public abstract void writeToPacket(CompoundNBT compound);
 
-    public abstract void readRawFromPacket(NBTTagCompound compound);
+    public abstract void readRawFromPacket(CompoundNBT compound);
 
     public abstract void handleIncomingData(AbstractData serverData);
 

@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.LogicalSide;
@@ -86,7 +86,7 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
             public void handle(PktUnlockPerk packet, NetworkEvent.Context context, LogicalSide side) {
                 context.enqueueWork(() -> {
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                    EntityPlayer player = context.getSender();
+                    PlayerEntity player = context.getSender();
                     PlayerProgress prog = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
                     if (!prog.hasPerkUnlocked(packet.perk) && prog.isValid()) {
                         if (perk.mayUnlockPerk(prog, player) && ResearchManager.applyPerk(player, packet.perk)) {

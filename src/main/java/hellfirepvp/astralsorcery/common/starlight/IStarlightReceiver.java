@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.starlight;
 
-import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import net.minecraft.util.math.BlockPos;
 
@@ -21,14 +20,14 @@ import javax.annotation.Nonnull;
  * Created by HellFirePvP
  * Date: 05.08.2016 / 13:43
  */
-public interface IStarlightReceiver extends IStarlightTransmission {
+public interface IStarlightReceiver<T extends ITransmissionReceiver> extends IStarlightTransmission {
 
     @Nonnull
-    public ITransmissionReceiver provideEndpoint(BlockPos at);
+    public T provideEndpoint(BlockPos at);
 
     @Override
     @Nonnull
-    default public IPrismTransmissionNode provideTransmissionNode(BlockPos at) {
+    default public T provideTransmissionNode(BlockPos at) {
         return provideEndpoint(at);
     }
 }
