@@ -22,12 +22,12 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 12:25
  */
-public interface IStarlightTransmission {
+public interface IStarlightTransmission<T extends IPrismTransmissionNode> {
 
     @Nullable
-    default public IPrismTransmissionNode getNode() {
+    default public T getNode() {
         WorldNetworkHandler netHandler = WorldNetworkHandler.getNetworkHandler(getTrWorld());
-        return netHandler.getTransmissionNode(getTrPos());
+        return (T) netHandler.getTransmissionNode(getTrPos());
     }
 
     @Nonnull
@@ -37,6 +37,6 @@ public interface IStarlightTransmission {
     public World getTrWorld();
 
     @Nonnull
-    public IPrismTransmissionNode provideTransmissionNode(BlockPos at);
+    public T provideTransmissionNode(BlockPos at);
 
 }

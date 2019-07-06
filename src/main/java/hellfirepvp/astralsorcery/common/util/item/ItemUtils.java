@@ -8,21 +8,18 @@
 
 package hellfirepvp.astralsorcery.common.util.item;
 
-import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.base.Mods;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -55,41 +52,39 @@ public class ItemUtils {
     public static final IItemHandler EMPTY_INVENTORY = new ItemHandlerEmpty();
     private static final Random rand = new Random();
 
-    public static EntityItem dropItem(World world, double x, double y, double z, ItemStack stack) {
+    public static ItemEntity dropItem(World world, double x, double y, double z, ItemStack stack) {
         if (world.isRemote) return null;
-        EntityItem ei = new EntityItem(world, x, y, z, stack);
-        ei.motionX = 0;
-        ei.motionY = 0;
-        ei.motionZ = 0;
-        world.spawnEntity(ei);
+        ItemEntity ei = new ItemEntity(world, x, y, z, stack);
+        ei.setMotion(new Vec3d(0, 0, 0));
+        world.addEntity(ei);
         ei.setDefaultPickupDelay();
         return ei;
     }
 
-    public static EntityItem dropItemNaturally(World world, double x, double y, double z, ItemStack stack) {
+    public static ItemEntity dropItemNaturally(World world, double x, double y, double z, ItemStack stack) {
         if (world.isRemote) return null;
-        EntityItem ei = new EntityItem(world, x, y, z, stack);
+        ItemEntity ei = new ItemEntity(world, x, y, z, stack);
         applyRandomDropOffset(ei);
-        world.spawnEntity(ei);
+        world.addEntity(ei);
         ei.setDefaultPickupDelay();
         return ei;
     }
 
-    private static void applyRandomDropOffset(EntityItem item) {
-        item.motionX = rand.nextFloat() * 0.3F - 0.15D;
-        item.motionY = rand.nextFloat() * 0.3F - 0.15D;
-        item.motionZ = rand.nextFloat() * 0.3F - 0.15D;
+    private static void applyRandomDropOffset(ItemEntity item) {
+        item.setMotion(rand.nextFloat() * 0.3F - 0.15D,
+                rand.nextFloat() * 0.3F - 0.15D,
+                rand.nextFloat() * 0.3F - 0.15D);
     }
 
     @Nonnull
-    public static ItemStack createBlockStack(IBlockState state) {
+    public static ItemStack createBlockStack(BlockState state) {
         return new ItemStack(state.getBlock());
     }
 
     @Nullable
-    public static IBlockState createBlockState(ItemStack stack) {
+    public static BlockState createBlockState(ItemStack stack) {
         Block b = Block.getBlockFromItem(stack.getItem());
-        if (b == null || b == Blocks.AIR) return null;
+        if (b == Blocks.AIR) return null;
         return b.getDefaultState();
     }
 
@@ -118,7 +113,7 @@ public class ItemUtils {
         return findItemsInInventory(handler, match, strict);
     }
 
-    public static Collection<ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match, boolean strict) {
+    public static Collection<ItemStack> findItemsInPlayerInventory(PlayerEntity player, ItemStack match, boolean strict) {
         return findItemsInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(EMPTY_INVENTORY), match, strict);
     }
 
@@ -135,7 +130,7 @@ public class ItemUtils {
         return stacksOut;
     }
 
-    public static Map<Integer, ItemStack> findItemsIndexedInPlayerInventory(EntityPlayer player, Predicate<ItemStack> match) {
+    public static Map<Integer, ItemStack> findItemsIndexedInPlayerInventory(PlayerEntity player, Predicate<ItemStack> match) {
         return findItemsIndexedInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(EMPTY_INVENTORY), match);
     }
 
@@ -157,7 +152,7 @@ public class ItemUtils {
         return stacksOut;
     }
 
-    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack requestingItemStack, ItemStack toConsume, boolean simulate) {
+    public static boolean consumeFromPlayerInventory(PlayerEntity player, ItemStack requestingItemStack, ItemStack toConsume, boolean simulate) {
         int consumed = 0;
         ItemStack tryConsume = copyStackWithSize(toConsume, toConsume.getCount() - consumed);
         return tryConsume.isEmpty() || consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), tryConsume, simulate);

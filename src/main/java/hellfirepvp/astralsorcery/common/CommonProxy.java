@@ -8,29 +8,39 @@
 
 package hellfirepvp.astralsorcery.common;
 
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
-import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
+import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigRegistries;
 import hellfirepvp.astralsorcery.common.data.config.entry.*;
 import hellfirepvp.astralsorcery.common.data.config.CommonConfig;
 import hellfirepvp.astralsorcery.common.data.config.entry.common.CommonGeneralConfig;
 import hellfirepvp.astralsorcery.common.data.config.registry.FluidRarityRegistry;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
+import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
+import hellfirepvp.astralsorcery.common.event.handler.EventHandlerIO;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.registry.RegistryData;
+import hellfirepvp.astralsorcery.common.registry.RegistryDataSerializers;
 import hellfirepvp.astralsorcery.common.registry.RegistryRegistries;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
+import hellfirepvp.astralsorcery.common.util.ServerLifecycleListener;
 import hellfirepvp.astralsorcery.common.util.data.ASDataSerializers;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
+import hellfirepvp.observerlib.common.util.tick.TickManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -43,6 +53,7 @@ import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -60,6 +71,8 @@ public class CommonProxy {
     private InternalRegistryPrimer registryPrimer;
     private PrimerEventHandler registryEventHandler;
     private CommonScheduler commonScheduler;
+    private TickManager tickManager;
+    private List<ServerLifecycleListener> serverLifecycleListeners = Lists.newArrayList();
 
     private CommonConfig commonConfig;
     private ServerConfig serverConfig;
@@ -78,12 +91,15 @@ public class CommonProxy {
         this.commonConfig.buildConfiguration();
         this.serverConfig.buildConfiguration();
 
+        RegistryData.init();
         RegistryRegistries.setupRegistries();
         PacketChannel.registerPackets();
-        ASDataSerializers.registerSerializers();
 
+        this.tickManager = new TickManager();
+        this.attachTickListeners(tickManager::register);
 
-
+        this.serverLifecycleListeners.add(ResearchIOThread.getTask());
+        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(ResearchHelper::saveAndClearServerCache));
     }
 
     public void attachLifecycle(IEventBus modEventBus) {
@@ -100,7 +116,9 @@ public class CommonProxy {
 
         eventBus.addListener(BlockDropCaptureAssist.INSTANCE::onDrop);
 
-        TickManager.INSTANCE.attachListeners(eventBus);
+        EventHandlerIO.init(eventBus);
+
+        tickManager.attachListeners(eventBus);
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);
 
         registryEventHandler.attachEventHandlers(eventBus);
@@ -108,6 +126,10 @@ public class CommonProxy {
 
     public void attachTickListeners(Consumer<ITickHandler> registrar) {
         registrar.accept(this.commonScheduler);
+        registrar.accept(StarlightTransmissionHandler.getInstance());
+        registrar.accept(StarlightUpdateHandler.getInstance());
+        registrar.accept(SyncDataHolder.getTickInstance());
+        registrar.accept(LinkHandler.getInstance());
     }
 
     protected void initializeConfigurations() {
@@ -123,6 +145,8 @@ public class CommonProxy {
         this.serverConfig.addConfigEntry(PerkConfig.CONFIG);
 
         this.commonConfig.addConfigEntry(CommonGeneralConfig.CONFIG);
+
+        ConstellationEffectRegistry.addConfigEntries(this.serverConfig);
     }
 
     public InternalRegistryPrimer getRegistryPrimer() {
@@ -131,7 +155,7 @@ public class CommonProxy {
 
     // Utils
 
-    public FakePlayer getASFakePlayerServer(WorldServer world) {
+    public FakePlayer getASFakePlayerServer(ServerWorld world) {
         return FakePlayerFactory.get(world, new GameProfile(FAKEPLAYER_UUID, "AS-FakePlayer"));
     }
 
@@ -164,7 +188,6 @@ public class CommonProxy {
     // Mod events
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
-        ResearchIOThread.startIOThread();
     }
 
     // Generic events
@@ -174,7 +197,7 @@ public class CommonProxy {
     }
 
     private void onServerStarted(FMLServerStartedEvent event) {
-
+        this.serverLifecycleListeners.forEach(ServerLifecycleListener::onServerStart);
     }
 
     private void onServerStarting(FMLServerStartingEvent event) {
@@ -182,10 +205,9 @@ public class CommonProxy {
     }
 
     private void onServerStopping(FMLServerStoppingEvent event) {
-
+        this.serverLifecycleListeners.forEach(ServerLifecycleListener::onServerStop);
     }
 
     private void onServerStop(FMLServerStoppedEvent event) {
-
     }
 }

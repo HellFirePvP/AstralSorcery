@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 import javax.annotation.Nonnull;
 
@@ -59,7 +59,7 @@ public class PktElytraCapeState extends ASPacket<PktElytraCapeState> {
     public Handler<PktElytraCapeState> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
-                EntityPlayerMP player = context.getSender();
+                ServerPlayerEntity player = context.getSender();
                 switch (packet.type) {
                     case 0: {
                         player.fallDistance = 0F;

@@ -21,13 +21,13 @@ import javax.annotation.Nonnull;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 12:23
  */
-public interface IStarlightSource extends IStarlightTransmission {
+public interface IStarlightSource<T extends IPrismTransmissionNode> extends IStarlightTransmission {
 
     @Nonnull
     public IIndependentStarlightSource provideNewSourceNode();
 
     @Nonnull
-    public ITransmissionSource provideSourceNode(BlockPos at);
+    public T provideSourceNode(BlockPos at);
 
     public boolean needToUpdateStarlightSource();
 
@@ -35,7 +35,7 @@ public interface IStarlightSource extends IStarlightTransmission {
 
     @Override
     @Nonnull
-    default public IPrismTransmissionNode provideTransmissionNode(BlockPos at) {
+    default public T provideTransmissionNode(BlockPos at) {
         return provideSourceNode(at);
     }
 

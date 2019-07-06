@@ -14,8 +14,8 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.LogicalSide;
@@ -34,7 +34,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
 
     private AbstractPerk perk = null;
     private boolean unlock = false;
-    private NBTTagCompound newData = null, oldData = null;
+    private CompoundNBT newData = null, oldData = null;
     private Type type = null;
 
     public PktSyncPerkActivity() {}
@@ -48,7 +48,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
         this.type = type;
     }
 
-    public PktSyncPerkActivity(AbstractPerk perk, NBTTagCompound oldData, NBTTagCompound newData) {
+    public PktSyncPerkActivity(AbstractPerk perk, CompoundNBT oldData, CompoundNBT newData) {
         this.type = Type.DATACHANGE;
         this.perk = perk;
         this.oldData = oldData;
@@ -93,7 +93,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
             @Override
             public void handleClient(PktSyncPerkActivity packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
-                    EntityPlayer player = Minecraft.getInstance().player;
+                    PlayerEntity player = Minecraft.getInstance().player;
                     if (player == null) {
                         return;
                     }

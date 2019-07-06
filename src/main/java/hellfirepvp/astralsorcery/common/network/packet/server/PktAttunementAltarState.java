@@ -12,8 +12,8 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -94,7 +94,7 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
             public void handleClient(PktAttunementAltarState packet, NetworkEvent.Context context) {
                 World mcWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
                 if (mcWorld.getDimension().getType().equals(packet.type)) {
-                    EntityPlayer player = Minecraft.getInstance().player;
+                    PlayerEntity player = Minecraft.getInstance().player;
                     if (player != null && player.getEntityId() == packet.entityId) {
                         TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, packet.at, TileAttunementAltar.class, true);
                         if (ta != null) {
@@ -114,7 +114,7 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
                         World w = srv.getWorld(packet.type);
                         TileAttunementAltar ta = MiscUtils.getTileAt(w, packet.at, TileAttunementAltar.class, true);
                         if(ta != null) {
-                            EntityPlayer pl = context.getSender();
+                            PlayerEntity pl = context.getSender();
                             ta.markPlayerStartCameraFlight(pl);
                         }
                     }

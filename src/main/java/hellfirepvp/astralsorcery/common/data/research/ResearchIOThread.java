@@ -11,8 +11,9 @@ package hellfirepvp.astralsorcery.common.data.research;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.util.ServerLifecycleListener;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,10 +29,10 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 15.01.2019 / 17:42
  */
-public class ResearchIOThread extends TimerTask {
+public class ResearchIOThread extends TimerTask implements ServerLifecycleListener {
 
+    private static final ResearchIOThread saveTask = new ResearchIOThread();
     private static Timer ioThread;
-    private static ResearchIOThread saveTask;
 
     private Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
     private Map<UUID, PlayerProgress> awaitingSaveQueue = Maps.newHashMap();
@@ -39,14 +40,25 @@ public class ResearchIOThread extends TimerTask {
 
     private ResearchIOThread() {}
 
-    public static void startIOThread() {
-        if (ioThread != null && saveTask != null) {
+    public static ResearchIOThread getTask() {
+        return saveTask;
+    }
+
+    @Override
+    public void onServerStart() {
+        if (ioThread != null) {
             return;
         }
-
-        saveTask = new ResearchIOThread();
         ioThread = new Timer("ResearchIOThread", true);
         ioThread.scheduleAtFixedRate(saveTask, 30_000, 30_000);
+    }
+
+    @Override
+    public void onServerStop() {
+        this.flushAndSaveAll();
+
+        ioThread.cancel();
+        ioThread = null;
     }
 
     @Override
@@ -106,12 +118,6 @@ public class ResearchIOThread extends TimerTask {
         }
     }
 
-    static void saveAllPending() {
-        if (saveTask != null) {
-            saveTask.flushAndSaveAll();
-        }
-    }
-
     static void saveNow(UUID playerUUID, PlayerProgress progress) {
         File playerFile = ResearchHelper.getPlayerFile(playerUUID);
         try {
@@ -121,7 +127,7 @@ public class ResearchIOThread extends TimerTask {
             exc.printStackTrace();
         }
         try {
-            NBTTagCompound cmp = new NBTTagCompound();
+            CompoundNBT cmp = new CompoundNBT();
             progress.store(cmp);
             CompressedStreamTools.write(cmp, playerFile);
         } catch (IOException ignored) {}

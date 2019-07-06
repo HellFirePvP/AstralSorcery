@@ -12,12 +12,12 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -41,23 +41,23 @@ import java.util.function.Consumer;
 public class NBTHelper {
 
     @Nonnull
-    public static NBTTagCompound getPersistentData(Entity entity) {
+    public static CompoundNBT getPersistentData(Entity entity) {
         return getPersistentData(entity.getEntityData());
     }
 
     @Nonnull
-    public static NBTTagCompound getPersistentData(ItemStack item) {
+    public static CompoundNBT getPersistentData(ItemStack item) {
         return getPersistentData(getData(item));
     }
 
     @Nonnull
-    public static NBTTagCompound getPersistentData(NBTTagCompound base) {
-        NBTTagCompound compound;
+    public static CompoundNBT getPersistentData(CompoundNBT base) {
+        CompoundNBT compound;
         if (hasPersistentData(base)) {
             compound = base.getCompound(AstralSorcery.MODID);
         } else {
-            compound = new NBTTagCompound();
-            base.setTag(AstralSorcery.MODID, compound);
+            compound = new CompoundNBT();
+            base.put(AstralSorcery.MODID, compound);
         }
         return compound;
     }
@@ -70,8 +70,8 @@ public class NBTHelper {
         return item.hasTag() && hasPersistentData(item.getTag());
     }
 
-    public static boolean hasPersistentData(NBTTagCompound base) {
-        return base.hasKey(AstralSorcery.MODID) && base.getTag(AstralSorcery.MODID) instanceof NBTTagCompound;
+    public static boolean hasPersistentData(CompoundNBT base) {
+        return base.contains(AstralSorcery.MODID) && base.get(AstralSorcery.MODID) instanceof CompoundNBT;
     }
 
 
@@ -85,69 +85,67 @@ public class NBTHelper {
         }
     }
 
-    public static void removePersistentData(NBTTagCompound base) {
-        base.removeTag(AstralSorcery.MODID);
+    public static void removePersistentData(CompoundNBT base) {
+        base.remove(AstralSorcery.MODID);
     }
 
 
-    public static NBTTagCompound getData(ItemStack stack) {
-        NBTTagCompound compound = stack.getTag();
+    public static CompoundNBT getData(ItemStack stack) {
+        CompoundNBT compound = stack.getTag();
         if (compound == null) {
-            compound = new NBTTagCompound();
+            compound = new CompoundNBT();
             stack.setTag(compound);
         }
         return compound;
     }
 
-    public static void setBlockState(NBTTagCompound cmp, String key, IBlockState state) {
-        NBTTagCompound serialized = getBlockStateNBTTag(state);
-        if (serialized != null) {
-            cmp.setTag(key, serialized);
-        }
+    public static void setBlockState(CompoundNBT cmp, String key, BlockState state) {
+        CompoundNBT serialized = getBlockStateNBTTag(state);
+        cmp.put(key, serialized);
     }
 
     @Nullable
-    public static IBlockState getBlockState(NBTTagCompound cmp, String key) {
+    public static BlockState getBlockState(CompoundNBT cmp, String key) {
         return getBlockStateFromTag(cmp.getCompound(key));
     }
 
     @Nonnull
-    public static NBTTagCompound getBlockStateNBTTag(IBlockState state) {
+    public static CompoundNBT getBlockStateNBTTag(BlockState state) {
         if(state.getBlock().getRegistryName() == null) {
             state = Blocks.AIR.getDefaultState();
         }
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("registryName", state.getBlock().getRegistryName().toString());
-        NBTTagList properties = new NBTTagList();
+        CompoundNBT tag = new CompoundNBT();
+        tag.putString("registryName", state.getBlock().getRegistryName().toString());
+        ListNBT properties = new ListNBT();
         for (IProperty property : state.getProperties()) {
-            NBTTagCompound propTag = new NBTTagCompound();
+            CompoundNBT propTag = new CompoundNBT();
             try {
-                propTag.setString("value", property.getName(state.get(property)));
+                propTag.putString("value", property.getName(state.get(property)));
             } catch (Exception exc) {
                 continue;
             }
-            propTag.setString("property", property.getName());
+            propTag.putString("property", property.getName());
             properties.add(propTag);
         }
-        tag.setTag("properties", properties);
+        tag.put("properties", properties);
         return tag;
     }
 
     @Nullable
-    public static IBlockState getBlockStateFromTag(NBTTagCompound cmp) {
+    public static BlockState getBlockStateFromTag(CompoundNBT cmp) {
         return getBlockStateFromTag(cmp, null);
     }
 
     @Nullable
-    public static <T extends Comparable<T>> IBlockState getBlockStateFromTag(NBTTagCompound cmp, IBlockState _default) {
+    public static <T extends Comparable<T>> BlockState getBlockStateFromTag(CompoundNBT cmp, BlockState _default) {
         ResourceLocation key = new ResourceLocation(cmp.getString("registryName"));
         Block block = ForgeRegistries.BLOCKS.getValue(key);
         if(block == null || block == Blocks.AIR) return _default;
-        IBlockState state = block.getDefaultState();
+        BlockState state = block.getDefaultState();
         Collection<IProperty<?>> properties = state.getProperties();
-        NBTTagList list = cmp.getList("properties", Constants.NBT.TAG_COMPOUND);
+        ListNBT list = cmp.getList("properties", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
-            NBTTagCompound propertyTag = list.getCompound(i);
+            CompoundNBT propertyTag = list.getCompound(i);
             String valueStr = propertyTag.getString("value");
             String propertyStr = propertyTag.getString("property");
             IProperty<T> match = (IProperty<T>) MiscUtils.iterativeSearch(properties, prop -> prop.getName().equalsIgnoreCase(propertyStr));
@@ -163,107 +161,107 @@ public class NBTHelper {
         return state;
     }
 
-    public static void setAsSubTag(NBTTagCompound compound, String tag, Consumer<NBTTagCompound> applyFct) {
-        NBTTagCompound newTag = new NBTTagCompound();
+    public static void setAsSubTag(CompoundNBT compound, String tag, Consumer<CompoundNBT> applyFct) {
+        CompoundNBT newTag = new CompoundNBT();
         applyFct.accept(newTag);
-        compound.setTag(tag, newTag);
+        compound.put(tag, newTag);
     }
 
-    public static void setStack(NBTTagCompound compound, String tag, ItemStack stack) {
+    public static void setStack(CompoundNBT compound, String tag, ItemStack stack) {
         setAsSubTag(compound, tag, stack::write);
     }
 
-    public static void removeUUID(NBTTagCompound compound, String key) {
-        compound.removeTag(key + "Most");
-        compound.removeTag(key + "Least");
+    public static void removeUUID(CompoundNBT compound, String key) {
+        compound.remove(key + "Most");
+        compound.remove(key + "Least");
     }
 
-    public static ItemStack getStack(NBTTagCompound compound, String tag) {
+    public static ItemStack getStack(CompoundNBT compound, String tag) {
         return getStack(compound, tag, ItemStack.EMPTY);
     }
 
     //Get tags with default value
-    public static ItemStack getStack(NBTTagCompound compound, String tag, ItemStack defaultValue) {
-        if (compound.hasKey(tag)) {
+    public static ItemStack getStack(CompoundNBT compound, String tag, ItemStack defaultValue) {
+        if (compound.contains(tag)) {
             return ItemStack.read(compound.getCompound(tag));
         }
         return defaultValue;
     }
 
-    public static boolean getBoolean(NBTTagCompound compound, String tag, boolean defaultValue) {
-        return compound.hasKey(tag) ? compound.getBoolean(tag) : defaultValue;
+    public static boolean getBoolean(CompoundNBT compound, String tag, boolean defaultValue) {
+        return compound.contains(tag) ? compound.getBoolean(tag) : defaultValue;
     }
 
-    public static String getString(NBTTagCompound compound, String tag, String defaultValue) {
-        return compound.hasKey(tag) ? compound.getString(tag) : defaultValue;
+    public static String getString(CompoundNBT compound, String tag, String defaultValue) {
+        return compound.contains(tag) ? compound.getString(tag) : defaultValue;
     }
 
-    public static int getInteger(NBTTagCompound compound, String tag, int defaultValue) {
-        return compound.hasKey(tag) ? compound.getInt(tag) : defaultValue;
+    public static int getInteger(CompoundNBT compound, String tag, int defaultValue) {
+        return compound.contains(tag) ? compound.getInt(tag) : defaultValue;
     }
 
-    public static double getDouble(NBTTagCompound compound, String tag, double defaultValue) {
-        return compound.hasKey(tag) ? compound.getDouble(tag) : defaultValue;
+    public static double getDouble(CompoundNBT compound, String tag, double defaultValue) {
+        return compound.contains(tag) ? compound.getDouble(tag) : defaultValue;
     }
 
-    public static float getFloat(NBTTagCompound compound, String tag, float defaultValue) {
-        return compound.hasKey(tag) ? compound.getFloat(tag) : defaultValue;
+    public static float getFloat(CompoundNBT compound, String tag, float defaultValue) {
+        return compound.contains(tag) ? compound.getFloat(tag) : defaultValue;
     }
 
-    public static byte getByte(NBTTagCompound compound, String tag, byte defaultValue) {
-        return compound.hasKey(tag) ? compound.getByte(tag) : defaultValue;
+    public static byte getByte(CompoundNBT compound, String tag, byte defaultValue) {
+        return compound.contains(tag) ? compound.getByte(tag) : defaultValue;
     }
 
-    public static short getShort(NBTTagCompound compound, String tag, short defaultValue) {
-        return compound.hasKey(tag) ? compound.getShort(tag) : defaultValue;
+    public static short getShort(CompoundNBT compound, String tag, short defaultValue) {
+        return compound.contains(tag) ? compound.getShort(tag) : defaultValue;
     }
 
-    public static long getLong(NBTTagCompound compound, String tag, long defaultValue) {
-        return compound.hasKey(tag) ? compound.getLong(tag) : defaultValue;
+    public static long getLong(CompoundNBT compound, String tag, long defaultValue) {
+        return compound.contains(tag) ? compound.getLong(tag) : defaultValue;
     }
 
-    public static void writeBlockPosToNBT(BlockPos pos, NBTTagCompound compound) {
-        compound.setInt("bposX", pos.getX());
-        compound.setInt("bposY", pos.getY());
-        compound.setInt("bposZ", pos.getZ());
+    public static void writeBlockPosToNBT(BlockPos pos, CompoundNBT compound) {
+        compound.putInt("bposX", pos.getX());
+        compound.putInt("bposY", pos.getY());
+        compound.putInt("bposZ", pos.getZ());
     }
 
-    public static BlockPos readBlockPosFromNBT(NBTTagCompound compound) {
+    public static BlockPos readBlockPosFromNBT(CompoundNBT compound) {
         int x = compound.getInt("bposX");
         int y = compound.getInt("bposY");
         int z = compound.getInt("bposZ");
         return new BlockPos(x, y, z);
     }
 
-    public static NBTTagCompound writeVector3(Vector3 v) {
-        NBTTagCompound cmp = new NBTTagCompound();
+    public static CompoundNBT writeVector3(Vector3 v) {
+        CompoundNBT cmp = new CompoundNBT();
         writeVector3(v, cmp);
         return cmp;
     }
 
-    public static void writeVector3(Vector3 v, NBTTagCompound compound) {
-        compound.setDouble("vecPosX", v.getX());
-        compound.setDouble("vecPosY", v.getY());
-        compound.setDouble("vecPosZ", v.getZ());
+    public static void writeVector3(Vector3 v, CompoundNBT compound) {
+        compound.putDouble("vecPosX", v.getX());
+        compound.putDouble("vecPosY", v.getY());
+        compound.putDouble("vecPosZ", v.getZ());
     }
 
-    public static Vector3 readVector3(NBTTagCompound compound) {
+    public static Vector3 readVector3(CompoundNBT compound) {
         return new Vector3(
                 compound.getDouble("vecPosX"),
                 compound.getDouble("vecPosY"),
                 compound.getDouble("vecPosZ"));
     }
 
-    public static void writeBoundingBox(AxisAlignedBB box, NBTTagCompound tag) {
-        tag.setDouble("boxMinX", box.minX);
-        tag.setDouble("boxMinY", box.minY);
-        tag.setDouble("boxMinZ", box.minZ);
-        tag.setDouble("boxMaxX", box.maxX);
-        tag.setDouble("boxMaxY", box.maxY);
-        tag.setDouble("boxMaxZ", box.maxZ);
+    public static void writeBoundingBox(AxisAlignedBB box, CompoundNBT tag) {
+        tag.putDouble("boxMinX", box.minX);
+        tag.putDouble("boxMinY", box.minY);
+        tag.putDouble("boxMinZ", box.minZ);
+        tag.putDouble("boxMaxX", box.maxX);
+        tag.putDouble("boxMaxY", box.maxY);
+        tag.putDouble("boxMaxZ", box.maxZ);
     }
 
-    public static AxisAlignedBB readBoundingBox(NBTTagCompound tag) {
+    public static AxisAlignedBB readBoundingBox(CompoundNBT tag) {
         return new AxisAlignedBB(
                 tag.getDouble("boxMinX"),
                 tag.getDouble("boxMinY"),

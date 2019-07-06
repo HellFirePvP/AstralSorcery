@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
-import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
+import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraftforge.api.distmarker.Dist;

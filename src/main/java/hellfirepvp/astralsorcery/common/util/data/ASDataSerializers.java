@@ -10,22 +10,20 @@ package hellfirepvp.astralsorcery.common.util.data;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.io.IOException;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ASDataSerializers
+ * Class: ASIDataSerializers
  * Created by HellFirePvP
  * Date: 18.07.2017 / 23:46
  */
 public class ASDataSerializers {
 
-    public static DataSerializer<Long> LONG = new DataSerializer<Long>() {
+    public static IDataSerializer<Long> LONG = new IDataSerializer<Long>() {
         @Override
         public void write(PacketBuffer buf, Long value) {
             buf.writeLongLE(value);
@@ -47,7 +45,7 @@ public class ASDataSerializers {
         }
     };
 
-    public static DataSerializer<Vector3> VECTOR = new DataSerializer<Vector3>() {
+    public static IDataSerializer<Vector3> VECTOR = new IDataSerializer<Vector3>() {
         @Override
         public void write(PacketBuffer buf, Vector3 value) {
             buf.writeDouble(value.getX());
@@ -71,7 +69,7 @@ public class ASDataSerializers {
         }
     };
 
-    public static DataSerializer<FluidStack> FLUID = new DataSerializer<FluidStack>() {
+    public static IDataSerializer<FluidStack> FLUID = new IDataSerializer<FluidStack>() {
         @Override
         public void write(PacketBuffer buf, FluidStack value) {
             buf.writeBoolean(value != null);
@@ -95,11 +93,5 @@ public class ASDataSerializers {
             return value == null ? null : value.copy();
         }
     };
-
-    public static void registerSerializers() {
-        DataSerializers.registerSerializer(VECTOR);
-        DataSerializers.registerSerializer(FLUID);
-        DataSerializers.registerSerializer(LONG);
-    }
 
 }

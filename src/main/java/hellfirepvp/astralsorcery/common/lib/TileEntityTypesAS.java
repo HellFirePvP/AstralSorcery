@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.tile.TileWell;
+import net.minecraft.tileentity.TileEntityType;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -18,5 +21,7 @@ package hellfirepvp.astralsorcery.common.lib;
 public class TileEntityTypesAS {
 
     private TileEntityTypesAS() {}
+
+    public static TileEntityType<TileWell> WELL;
 
 }

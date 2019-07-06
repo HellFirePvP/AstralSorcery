@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.util.block;
 
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -46,7 +46,7 @@ public class WorldBlockPos extends BlockPos {
         return world;
     }
 
-    public IBlockState getStateAt() {
+    public BlockState getStateAt() {
         return world.getBlockState(this);
     }
 

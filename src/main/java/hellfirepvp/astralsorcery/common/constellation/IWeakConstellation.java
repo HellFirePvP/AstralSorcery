@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 
 import javax.annotation.Nullable;

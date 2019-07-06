@@ -10,8 +10,8 @@ package hellfirepvp.astralsorcery.common.util;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ITeleporter;
+import net.minecraft.world.ServerWorld;
+import net.minecraft.world.Teleporter;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,16 +20,19 @@ import net.minecraftforge.common.util.ITeleporter;
  * Created by HellFirePvP
  * Date: 19.04.2017 / 14:37
  */
-public class NoOpTeleporter implements ITeleporter {
+public class NoOpTeleporter extends Teleporter {
 
     private final BlockPos targetPos;
 
-    public NoOpTeleporter(BlockPos targetPos) {
+    public NoOpTeleporter(ServerWorld worldIn, BlockPos targetPos) {
+        super(worldIn);
         this.targetPos = targetPos;
     }
 
     @Override
-    public void placeEntity(World world, Entity entity, float yaw) {
+    public boolean func_222268_a(Entity entity, float yaw) {
         entity.moveToBlockPosAndAngles(targetPos, yaw, entity.rotationPitch);
+        return true;
     }
+
 }

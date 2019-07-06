@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.starlight;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -45,8 +45,8 @@ public interface IIndependentStarlightSource {
 
     public SourceClassRegistry.SourceProvider getProvider();
 
-    public void readFromNBT(NBTTagCompound compound);
+    public void readFromNBT(CompoundNBT compound);
 
-    public void writeToNBT(NBTTagCompound compound);
+    public void writeToNBT(CompoundNBT compound);
 
 }

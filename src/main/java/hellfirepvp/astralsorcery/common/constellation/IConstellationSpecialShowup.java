@@ -23,10 +23,10 @@ import java.util.Random;
 public interface IConstellationSpecialShowup extends IConstellation {
 
     //Will be called on either side.
-    public boolean doesShowUp(WorldSkyHandler handle, World world, long day);
+    public boolean doesShowUp(World world, long day);
 
     //Fed directly into the worldSkyHandler's distribution, only use values 0-1.
-    public float getDistribution(WorldSkyHandler handle, World world, long day, boolean showingUp);
+    public float getDistribution(World world, long day, boolean showingUp);
 
     default public boolean isDayOfSolarEclipse(long offsetSeed, long day) {
         Random r = new Random(offsetSeed);

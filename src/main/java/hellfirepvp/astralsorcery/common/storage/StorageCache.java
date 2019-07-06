@@ -11,8 +11,8 @@ package hellfirepvp.astralsorcery.common.storage;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.IItemHandler;
 
@@ -149,35 +149,35 @@ public class StorageCache {
         return change;
     }
 
-    public void writeToNBT(NBTTagCompound tag) {
-        NBTTagList content = new NBTTagList();
+    public void writeToNBT(CompoundNBT tag) {
+        ListNBT content = new ListNBT();
 
         for (StorageKey key : this.content.keySet()) {
-            NBTTagCompound itemStorage = new NBTTagCompound();
-            itemStorage.setTag("storageKey", key.serialize());
+            CompoundNBT itemStorage = new CompoundNBT();
+            itemStorage.put("storageKey", key.serialize());
 
-            NBTTagList items = new NBTTagList();
+            ListNBT items = new ListNBT();
             for (StoredItemStack stack : this.content.get(key)) {
                 items.add(stack.serialize());
             }
-            itemStorage.setTag("items", items);
+            itemStorage.put("items", items);
         }
 
-        tag.setTag("content", content);
+        tag.put("content", content);
     }
 
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(CompoundNBT tag) {
         this.content.clear();
 
-        NBTTagList content = tag.getList("content", Constants.NBT.TAG_COMPOUND);
+        ListNBT content = tag.getList("content", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < content.size(); i++) {
-            NBTTagCompound itemStorage = content.getCompound(i);
+            CompoundNBT itemStorage = content.getCompound(i);
             StorageKey key = StorageKey.deserialize(itemStorage.getCompound("storageKey"));
             if (key == null) {
                 continue;
             }
 
-            NBTTagList items = itemStorage.getList("items", Constants.NBT.TAG_COMPOUND);
+            ListNBT items = itemStorage.getList("items", Constants.NBT.TAG_COMPOUND);
             List<StoredItemStack> stacks = new ArrayList<>(items.size());
             for (int j = 0; j < items.size(); j++) {
                 StoredItemStack stack = StoredItemStack.deserialize(items.getCompound(j));

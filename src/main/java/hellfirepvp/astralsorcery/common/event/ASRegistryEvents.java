@@ -8,11 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.event;
 
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.Event;
 
@@ -33,10 +30,10 @@ public class ASRegistryEvents {
 
         private boolean perkDisabled;
         private final AbstractPerk perk;
-        private final EntityPlayer player;
+        private final PlayerEntity player;
         private final Dist dist;
 
-        public PerkDisable(AbstractPerk perk, EntityPlayer player, Dist dist) {
+        public PerkDisable(AbstractPerk perk, PlayerEntity player, Dist dist) {
             this.perk = perk;
             this.player = player;
             this.dist = dist;
@@ -46,7 +43,7 @@ public class ASRegistryEvents {
             return perk;
         }
 
-        public EntityPlayer getPlayer() {
+        public PlayerEntity getPlayer() {
             return player;
         }
 

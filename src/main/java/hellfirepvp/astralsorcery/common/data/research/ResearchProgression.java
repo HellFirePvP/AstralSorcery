@@ -71,11 +71,11 @@ public enum ResearchProgression {
         return new Registry(this);
     }
 
-    /*public boolean tryStepTo(EntityPlayer player, boolean force) {
+    /*public boolean tryStepTo(PlayerEntity player, boolean force) {
         return (force || canStepTo(player)) && ResearchManager.forceUnsafeResearchStep(player, this);
     }
 
-    public boolean canStepTo(EntityPlayer player) {
+    public boolean canStepTo(PlayerEntity player) {
         PlayerProgress progress = ResearchManager.getProgress(player);
         if(progress == null) return false;
         List<ResearchProgression> playerResearchProgression = progress.getResearchProgression();

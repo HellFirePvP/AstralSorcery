@@ -17,6 +17,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.NonNullList;
@@ -228,41 +229,41 @@ public final class ItemHandle {
         return false;
     }
 
-    public void serialize(ByteBuf byteBuf) {
-        byteBuf.writeInt(handleType.ordinal());
+    public void serialize(PacketBuffer packetBuffer) {
+        packetBuffer.writeInt(handleType.ordinal());
         switch (handleType) {
             case TAG:
-                ByteBufUtils.writeString(byteBuf, this.tag.getId().toString());
+                ByteBufUtils.writeString(packetBuffer, this.tag.getId().toString());
                 break;
             case STACK:
-                byteBuf.writeInt(this.applicableItems.size());
+                packetBuffer.writeInt(this.applicableItems.size());
                 for (ItemStack applicableItem : this.applicableItems) {
-                    ByteBufUtils.writeItemStack(byteBuf, applicableItem);
+                    ByteBufUtils.writeItemStack(packetBuffer, applicableItem);
                 }
                 break;
             case FLUID:
-                ByteBufUtils.writeFluidStack(byteBuf, this.fluidTypeAndAmount);
+                ByteBufUtils.writeFluidStack(packetBuffer, this.fluidTypeAndAmount);
                 break;
             default:
                 break;
         }
     }
 
-    public static ItemHandle deserialize(ByteBuf byteBuf) {
-        Type type = Type.values()[byteBuf.readInt()];
+    public static ItemHandle deserialize(PacketBuffer packetBuffer) {
+        Type type = Type.values()[packetBuffer.readInt()];
         ItemHandle handle = new ItemHandle(type);
         switch (type) {
             case TAG:
-                handle.tag = ItemTags.getCollection().get(new ResourceLocation(ByteBufUtils.readString(byteBuf)));
+                handle.tag = ItemTags.getCollection().get(new ResourceLocation(ByteBufUtils.readString(packetBuffer)));
                 break;
             case STACK:
-                int amt = byteBuf.readInt();
+                int amt = packetBuffer.readInt();
                 for (int i = 0; i < amt; i++) {
-                    handle.applicableItems.add(ByteBufUtils.readItemStack(byteBuf));
+                    handle.applicableItems.add(ByteBufUtils.readItemStack(packetBuffer));
                 }
                 break;
             case FLUID:
-                handle.fluidTypeAndAmount = ByteBufUtils.readFluidStack(byteBuf);
+                handle.fluidTypeAndAmount = ByteBufUtils.readFluidStack(packetBuffer);
                 break;
             default:
                 break;

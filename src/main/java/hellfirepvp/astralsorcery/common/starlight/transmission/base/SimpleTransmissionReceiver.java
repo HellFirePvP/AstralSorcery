@@ -11,8 +11,8 @@ package hellfirepvp.astralsorcery.common.starlight.transmission.base;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -70,27 +70,27 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(CompoundNBT compound) {
         this.thisPos = NBTHelper.readBlockPosFromNBT(compound);
         this.sourcesToThis.clear();
 
-        NBTTagList list = compound.getList("sources", Constants.NBT.TAG_COMPOUND);
+        ListNBT list = compound.getList("sources", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
             sourcesToThis.add(NBTHelper.readBlockPosFromNBT(list.getCompound(i)));
         }
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(CompoundNBT compound) {
         NBTHelper.writeBlockPosToNBT(thisPos, compound);
 
-        NBTTagList sources = new NBTTagList();
+        ListNBT sources = new ListNBT();
         for (BlockPos source : sourcesToThis) {
-            NBTTagCompound comp = new NBTTagCompound();
+            CompoundNBT comp = new CompoundNBT();
             NBTHelper.writeBlockPosToNBT(source, comp);
             sources.add(comp);
         }
-        compound.setTag("sources", sources);
+        compound.put("sources", sources);
     }
 
     @Override

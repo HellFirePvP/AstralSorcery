@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -48,7 +48,7 @@ public class PktRemoveKnowledgeFragment extends ASPacket<PktRemoveKnowledgeFragm
     public Handler<PktRemoveKnowledgeFragment> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
-                EntityPlayer player = context.getSender();
+                PlayerEntity player = context.getSender();
                 ItemStack inInventory = player.inventory.getStackInSlot(packet.invIndex);
                 if (!inInventory.isEmpty() && inInventory.getItem() instanceof ItemKnowledgeFragment) {
                     player.inventory.setInventorySlotContents(packet.invIndex, ItemStack.EMPTY);

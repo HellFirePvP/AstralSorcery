@@ -103,24 +103,29 @@ public abstract class EntityVisualFX extends EntityComplexFX {
         return this.renderOffsetController.changeRenderPosition(this, pTicks);
     }
 
-    public void setAlphaFunction(VFXAlphaFunction<?> alphaFunction) {
+    public <T extends EntityVisualFX> T alpha(VFXAlphaFunction<?> alphaFunction) {
         this.alphaFunction = alphaFunction;
+        return (T) this;
     }
 
-    public void setRenderOffsetController(VFXRenderOffsetController<?> renderOffsetController) {
+    public <T extends EntityVisualFX> T  renderOffset(VFXRenderOffsetController<?> renderOffsetController) {
         this.renderOffsetController = renderOffsetController;
+        return (T) this;
     }
 
-    public void setScaleFunction(VFXScaleFunction<?> scaleFunction) {
+    public <T extends EntityVisualFX> T  scale(VFXScaleFunction<?> scaleFunction) {
         this.scaleFunction = scaleFunction;
+        return (T) this;
     }
 
-    public void setMotionController(VFXMotionController<?> motionController) {
+    public <T extends EntityVisualFX> T  motion(VFXMotionController<?> motionController) {
         this.motionController = motionController;
+        return (T) this;
     }
 
-    public void setPositionController(VFXPositionController<?> positionController) {
+    public <T extends EntityVisualFX> T  position(VFXPositionController<?> positionController) {
         this.positionController = positionController;
+        return (T) this;
     }
 
 }

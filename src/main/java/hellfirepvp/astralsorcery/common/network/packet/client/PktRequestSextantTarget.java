@@ -14,12 +14,12 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -97,9 +97,9 @@ public class PktRequestSextantTarget extends ASPacket<PktRequestSextantTarget> {
             public void handle(PktRequestSextantTarget packet, NetworkEvent.Context context, LogicalSide side) {
                 context.enqueueWork(() -> {
                     TargetObject to = packet.target;
-                    EntityPlayerMP player = context.getSender();
+                    ServerPlayerEntity player = context.getSender();
                     if (!MiscUtils.isPlayerFakeMP(player)) {
-                        Tuple<EnumHand, ItemStack> heldStack = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant,
+                        Tuple<Hand, ItemStack> heldStack = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant,
                                 (st) -> to.isSelectable(st, ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER)));
                         if (heldStack == null) {
                             return;
@@ -109,7 +109,7 @@ public class PktRequestSextantTarget extends ASPacket<PktRequestSextantTarget> {
                         try {
                             exec.invokeAll(Collections.singletonList(
                                     () -> {
-                                        BlockPos result = to.searchFor((WorldServer) player.world, player.getPosition());
+                                        BlockPos result = to.searchFor((ServerWorld) player.world, player.getPosition());
 
                                         PktRequestSextantTarget target = new PktRequestSextantTarget(to, result, player.world.getDimension().getType());
                                         packet.replyWith(target, context);

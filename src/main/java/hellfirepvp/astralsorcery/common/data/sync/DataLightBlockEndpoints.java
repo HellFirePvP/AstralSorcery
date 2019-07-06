@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.data.sync;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -37,7 +37,7 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     private final Object lock = new Object();
 
-    private NBTTagCompound clientReadBuffer = new NBTTagCompound();
+    private CompoundNBT clientReadBuffer = new CompoundNBT();
 
     public void updateNewEndpoint(int dimId, BlockPos pos) {
         synchronized (lock) {
@@ -101,44 +101,44 @@ public class DataLightBlockEndpoints extends AbstractData {
     }
 
     @Override
-    public void writeAllDataToPacket(NBTTagCompound compound) {
+    public void writeAllDataToPacket(CompoundNBT compound) {
         for (int dimId : serverPositions.keySet()) {
             List<BlockPos> dat = serverPositions.get(dimId);
-            NBTTagList dataList = new NBTTagList();
+            ListNBT dataList = new ListNBT();
             for (BlockPos pos : dat) {
-                NBTTagCompound cmp = new NBTTagCompound();
-                cmp.setLong("pos", pos.toLong());
-                cmp.setBoolean("s", true);
+                CompoundNBT cmp = new CompoundNBT();
+                cmp.putLong("pos", pos.toLong());
+                cmp.putBoolean("s", true);
                 dataList.add(cmp);
             }
 
-            compound.setTag("" + dimId, dataList);
+            compound.put("" + dimId, dataList);
         }
     }
 
     @Override
-    public void writeToPacket(NBTTagCompound compound) {
+    public void writeToPacket(CompoundNBT compound) {
         synchronized (lock) {
             for (int dimId : serverChangeBuffer.keySet()) {
                 LinkedList<Tuple<BlockPos, Boolean>> changes = serverChangeBuffer.get(dimId);
                 if(!changes.isEmpty()) {
-                    NBTTagList list = new NBTTagList();
+                    ListNBT list = new ListNBT();
                     for (Tuple<BlockPos, Boolean> tpl : changes) {
                         if(tpl.getA() == null) {
-                            list = new NBTTagList();
-                            NBTTagCompound cm = new NBTTagCompound();
-                            cm.setBoolean("clear", true);
+                            list = new ListNBT();
+                            CompoundNBT cm = new CompoundNBT();
+                            cm.putBoolean("clear", true);
                             list.add(cm);
                             break;
                         }
 
-                        NBTTagCompound cmp = new NBTTagCompound();
-                        cmp.setLong("pos", tpl.getA().toLong());
-                        cmp.setBoolean("s", tpl.getB());
+                        CompoundNBT cmp = new CompoundNBT();
+                        cmp.putLong("pos", tpl.getA().toLong());
+                        cmp.putBoolean("s", tpl.getB());
                         list.add(cmp);
                     }
 
-                    compound.setTag("" + dimId, list);
+                    compound.put("" + dimId, list);
                 }
             }
             serverChangeBuffer.clear();
@@ -146,7 +146,7 @@ public class DataLightBlockEndpoints extends AbstractData {
     }
 
     @Override
-    public void readRawFromPacket(NBTTagCompound compound) {
+    public void readRawFromPacket(CompoundNBT compound) {
         this.clientReadBuffer = compound;
     }
 
@@ -156,11 +156,11 @@ public class DataLightBlockEndpoints extends AbstractData {
 
         for (String dimStr : ((DataLightBlockEndpoints) serverData).clientReadBuffer.keySet()) {
             int dimId = Integer.parseInt(dimStr);
-            NBTTagList list = ((DataLightBlockEndpoints) serverData).clientReadBuffer.getList(dimStr, Constants.NBT.TAG_COMPOUND);
+            ListNBT list = ((DataLightBlockEndpoints) serverData).clientReadBuffer.getList(dimStr, Constants.NBT.TAG_COMPOUND);
             List<BlockPos> positions = clientPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
             for (int i = 0; i < list.size(); i++) {
-                NBTTagCompound connection = list.getCompound(i);
-                if(connection.hasKey("clear")) {
+                CompoundNBT connection = list.getCompound(i);
+                if(connection.contains("clear")) {
                     clientPositions.remove(dimId);
                     break;
                 }

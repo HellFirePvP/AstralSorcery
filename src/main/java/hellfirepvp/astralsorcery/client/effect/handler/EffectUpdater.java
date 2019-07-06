@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.effect.handler;
 
-import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.EnumSet;

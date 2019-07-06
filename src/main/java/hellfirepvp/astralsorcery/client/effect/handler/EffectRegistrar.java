@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.client.effect.handler;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
-import hellfirepvp.astralsorcery.client.effect.properties.EffectProperties;
+import hellfirepvp.astralsorcery.client.effect.EffectProperties;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import net.minecraft.client.Minecraft;
 

@@ -8,12 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 import java.util.Stack;
@@ -34,13 +34,13 @@ public class BlockDropCaptureAssist {
     private BlockDropCaptureAssist() {}
 
     public void onDrop(EntityJoinWorldEvent event) {
-        if (event.getWorld() instanceof WorldServer && event.getEntity() instanceof EntityItem) {
-            ItemStack itemStack = ((EntityItem) event.getEntity()).getItem();
+        if (event.getWorld() instanceof ServerWorld && event.getEntity() instanceof ItemEntity) {
+            ItemStack itemStack = ((ItemEntity) event.getEntity()).getItem();
             if (!capturing.isEmpty()) {
                 event.setCanceled(true);
                 if(!itemStack.isEmpty()) {
-                    if(itemStack.getItem() instanceof ItemBlock &&
-                            ((ItemBlock) itemStack.getItem()).getBlock().equals(Blocks.STONE)) {
+                    if(itemStack.getItem() instanceof BlockItem &&
+                            ((BlockItem) itemStack.getItem()).getBlock().equals(Blocks.STONE)) {
                         event.getEntity().remove();
                         return;
                     }

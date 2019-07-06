@@ -11,17 +11,19 @@ package hellfirepvp.astralsorcery.common.util.block;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Fluids;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
@@ -31,6 +33,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,9 +44,30 @@ import java.util.List;
  */
 public class BlockUtils {
 
+    @Nonnull
+    public static List<ItemStack> getDrops(ServerWorld world, BlockPos pos, int harvestFortune, Random rand) {
+        BlockState state;
+        LootContext.Builder builder = new LootContext.Builder(world)
+                .withParameter(LootParameters.POSITION, pos)
+                .withParameter(LootParameters.BLOCK_STATE, (state = world.getBlockState(pos)))
+                .withNullableParameter(LootParameters.BLOCK_ENTITY, world.getTileEntity(pos))
+                .withRandom(rand)
+                .withLuck(harvestFortune);
+        return state.getDrops(builder);
+    }
+
+    @Nonnull
+    public static BlockPos getWorldTopPos(BlockPos at) {
+        BlockPos it = at;
+        while (!World.isOutsideBuildHeight(it)) {
+            it = it.up();
+        }
+        return it;
+    }
+
     @Nullable
-    public static IBlockState getMatchingState(Collection<IBlockState> applicableStates, @Nullable IBlockState test) {
-        for (IBlockState state : applicableStates) {
+    public static BlockState getMatchingState(Collection<BlockState> applicableStates, @Nullable BlockState test) {
+        for (BlockState state : applicableStates) {
             if(matchStateExact(state, test)) {
                 return state;
             }
@@ -51,7 +75,7 @@ public class BlockUtils {
         return null;
     }
 
-    public static boolean matchStateExact(@Nullable IBlockState state, @Nullable IBlockState stateToTest) {
+    public static boolean matchStateExact(@Nullable BlockState state, @Nullable BlockState stateToTest) {
         if(state == null) {
             return stateToTest == null;
         } else if (stateToTest == null) {
@@ -76,7 +100,7 @@ public class BlockUtils {
         return true;
     }
 
-    public static boolean canToolBreakBlockWithoutPlayer(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull ItemStack stack) {
+    public static boolean canToolBreakBlockWithoutPlayer(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ItemStack stack) {
         if (state.getBlockHardness(world, pos) == -1) {
             return false;
         }
@@ -97,18 +121,18 @@ public class BlockUtils {
         return toolLevel >= state.getHarvestLevel();
     }
 
-    public static boolean breakBlockWithPlayer(BlockPos pos, EntityPlayerMP playerMP) {
+    public static boolean breakBlockWithPlayer(BlockPos pos, ServerPlayerEntity playerMP) {
         return playerMP.interactionManager.tryHarvestBlock(pos);
     }
 
     //Copied from ForgeHooks.onBlockBreak & PlayerInteractionManager.tryHarvestBlock
     //Duplicate break functionality without a active player.
     //Emulates a FakePlayer - attempts without a player as harvester in case a fakeplayer leads to issues.
-    public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos) {
+    public static boolean breakBlockWithoutPlayer(ServerWorld world, BlockPos pos) {
         return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), ItemStack.EMPTY, true, false, true);
     }
 
-    public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos, IBlockState stateBroken, ItemStack heldItem, boolean breakBlock, boolean ignoreHarvestRestrictions, boolean playEffects) {
+    public static boolean breakBlockWithoutPlayer(ServerWorld world, BlockPos pos, BlockState stateBroken, ItemStack heldItem, boolean breakBlock, boolean ignoreHarvestRestrictions, boolean playEffects) {
         FakePlayer fakePlayer = AstralSorcery.getProxy().getASFakePlayerServer(world);
         int xp;
         try {

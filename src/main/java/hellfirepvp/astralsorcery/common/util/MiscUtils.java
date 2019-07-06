@@ -9,35 +9,35 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.lib.GameRulesAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeHooks;
@@ -68,14 +68,13 @@ import java.util.stream.Collectors;
  */
 public class MiscUtils {
 
-    public static final String GAMERULE_SKIP_SKYLIGHT_CHECK = "astralSorceryIgnoreSkyCheck";
-    private static Map<EnumDyeColor, Color> prettierColorMapping = new HashMap<>();
+    private static Map<DyeColor, Color> prettierColorMapping = new HashMap<>();
 
     @Nullable
     public static <T> T getTileAt(IWorldReader world, BlockPos pos, Class<T> tileClass, boolean forceChunkLoad) {
         if(world == null || pos == null) return null; //Duh.
         if(world instanceof World) {
-            if(!world.isBlockLoaded(pos) && !forceChunkLoad) return null;
+            if (!world.isBlockLoaded(pos) && !forceChunkLoad) return null;
         }
         TileEntity te = world.getTileEntity(pos);
         if(te == null) return null;
@@ -88,10 +87,7 @@ public class MiscUtils {
             return false;
         }
         BlockPos test = new BlockPos(pos.getX(), 0, pos.getZ());
-        ChunkPos chTest = new ChunkPos(test);
-        boolean isForced = world.func_212416_f(chTest.x, chTest.z);
-        int range = isForced ? 0 : 32;
-        return world.isAreaLoaded(test.add(-range, 0, -range), test.add(range, 0, range), true);
+        return world.isAreaLoaded(test, 0);
     }
 
     @Nullable
@@ -130,14 +126,14 @@ public class MiscUtils {
     }
 
     public static boolean canSeeSky(World world, BlockPos at, boolean loadChunk, boolean defaultValue) {
-        if (world.getGameRules().getBoolean(GAMERULE_SKIP_SKYLIGHT_CHECK)) {
+        if (world.getGameRules().getBoolean(GameRulesAS.IGNORE_SKYLIGHT_CHECK_RULE)) {
             return true;
         }
 
         if (!isChunkLoaded(world, at) && !loadChunk) {
             return defaultValue;
         }
-        return world.canSeeSky(at);
+        return world.canBlockSeeSky(at);
     }
 
     public static <K, V, N> Map<K, N> remap(Map<K, V> map, Function<V, N> remapFct) {
@@ -184,6 +180,12 @@ public class MiscUtils {
         }
     }
 
+    public static <T> List<T> copyList(List<T> list) {
+        List<T> l = new ArrayList<>(list.size());
+        Collections.copy(l, list);
+        return l;
+    }
+
     @Nullable
     public static <T> T iterativeSearch(Collection<T> collection, Predicate<T> matchingFct) {
         for (T element : collection) {
@@ -207,13 +209,13 @@ public class MiscUtils {
         return false;
     }
 
-    public static boolean canPlayerAttackServer(@Nullable EntityLivingBase source, @Nonnull EntityLivingBase target) {
+    public static boolean canPlayerAttackServer(@Nullable LivingEntity source, @Nonnull LivingEntity target) {
         if (!target.isAlive()) {
             return false;
         }
-        if (target instanceof EntityPlayer) {
-            EntityPlayer plTarget = (EntityPlayer) target;
-            if (target.getEntityWorld() instanceof WorldServer &&
+        if (target instanceof PlayerEntity) {
+            PlayerEntity plTarget = (PlayerEntity) target;
+            if (target.getEntityWorld() instanceof ServerWorld &&
                     target.getEntityWorld().getServer() != null &&
                     target.getEntityWorld().getServer().isPVPEnabled()) {
                 return false;
@@ -221,8 +223,8 @@ public class MiscUtils {
             if (plTarget.isSpectator() || plTarget.isCreative()) {
                 return false;
             }
-            if (source instanceof EntityPlayer &&
-                    !((EntityPlayer) source).canAttackPlayer(plTarget)) {
+            if (source instanceof PlayerEntity &&
+                    !((PlayerEntity) source).canAttackPlayer(plTarget)) {
                 return false;
             }
         }
@@ -231,12 +233,12 @@ public class MiscUtils {
 
     /*
     TODO 1.14
-    public static boolean isFluidBlock(IBlockState state) {
+    public static boolean isFluidBlock(BlockState state) {
         return state.getBlock() instanceof BlockLiquid || state.getBlock() instanceof BlockFluidBase;
     }
 
     @Nullable
-    public static Fluid tryGetFuild(IBlockState state) {
+    public static Fluid tryGetFuild(BlockState state) {
         if (!isFluidBlock(state)) {
             return null;
         }
@@ -253,32 +255,36 @@ public class MiscUtils {
         return null;
     }*/
 
-    public static boolean canPlayerBreakBlockPos(EntityPlayer player, BlockPos tryBreak) {
+    public static boolean canPlayerBreakBlockPos(PlayerEntity player, BlockPos tryBreak) {
         BlockEvent.BreakEvent ev = new BlockEvent.BreakEvent(player.getEntityWorld(), tryBreak, player.getEntityWorld().getBlockState(tryBreak), player);
         MinecraftForge.EVENT_BUS.post(ev);
         return !ev.isCanceled();
     }
 
-    public static boolean canPlayerPlaceBlockPos(EntityPlayer player, EnumHand withHand, IBlockState tryPlace, BlockPos pos, EnumFacing againstSide) {
+    public static boolean canPlayerPlaceBlockPos(PlayerEntity player, Hand withHand, BlockState tryPlace, BlockPos pos, Direction againstSide) {
         BlockSnapshot snapshot = new BlockSnapshot(player.getEntityWorld(), pos, tryPlace);
         return !ForgeEventFactory.onBlockPlace(player, snapshot, againstSide);
     }
 
-    public static boolean isConnectionEstablished(EntityPlayerMP player) {
+    public static boolean isConnectionEstablished(ServerPlayerEntity player) {
         return player.connection != null && player.connection.netManager != null && player.connection.netManager.isChannelOpen();
     }
 
+    public static long getRandomWorldSeed(IWorld world) {
+        return new Random(world.getSeed()).nextLong();
+    }
+
     @Nullable
-    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search) {
+    public static Tuple<Hand, ItemStack> getMainOrOffHand(LivingEntity entity, Item search) {
         return getMainOrOffHand(entity, search, null);
     }
 
     @Nullable
-    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search, @Nullable Predicate<ItemStack> acceptorFnc) {
-        EnumHand hand = EnumHand.MAIN_HAND;
+    public static Tuple<Hand, ItemStack> getMainOrOffHand(LivingEntity entity, Item search, @Nullable Predicate<ItemStack> acceptorFnc) {
+        Hand hand = Hand.MAIN_HAND;
         ItemStack held = entity.getHeldItem(hand);
         if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.test(held))) {
-            hand = EnumHand.OFF_HAND;
+            hand = Hand.OFF_HAND;
             held = entity.getHeldItem(hand);
         }
         if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.test(held))) {
@@ -288,14 +294,14 @@ public class MiscUtils {
     }
 
     @Nonnull
-    public static Color flareColorFromDye(EnumDyeColor color) {
+    public static Color flareColorFromDye(DyeColor color) {
         Color c = prettierColorMapping.get(color);
         if(c == null) c = Color.WHITE;
         return c;
     }
 
     @Nonnull
-    public static TextFormatting textFormattingForDye(EnumDyeColor color) {
+    public static TextFormatting textFormattingForDye(DyeColor color) {
         switch (color) {
             case WHITE:
                 return TextFormatting.WHITE;
@@ -350,12 +356,11 @@ public class MiscUtils {
                 return;
             }
 
-            NoOpTeleporter teleporter = new NoOpTeleporter(targetPos);
-            if(entity instanceof EntityPlayerMP) {
+            if(entity instanceof ServerPlayerEntity) {
                 MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                srv.getPlayerList().changePlayerDimension((EntityPlayerMP) entity, target);
+                srv.getPlayerList().changePlayerDimension((ServerPlayerEntity) entity, target);
             } else {
-                entity.changeDimension(target, teleporter);
+                entity.changeDimension(target);
             }
         }
         entity.setPositionAndUpdate(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
@@ -363,12 +368,12 @@ public class MiscUtils {
 
     @Nullable
     public static BlockPos itDownTopBlock(World world, BlockPos at) {
-        Chunk chunk = world.getChunk(at);
+        IChunk chunk = world.getChunk(at);
         BlockPos downPos = null;
 
         for (BlockPos blockpos = new BlockPos(at.getX(), chunk.getTopFilledSegment() + 16, at.getZ()); blockpos.getY() >= 0; blockpos = downPos) {
             downPos = blockpos.down();
-            IBlockState test = world.getBlockState(downPos);
+            BlockState test = world.getBlockState(downPos);
             IFluidState state = test.getFluidState();
             state.isTagged(FluidTags.LAVA);
             if (!world.isAirBlock(downPos) && !test.isIn(BlockTags.LEAVES) && !test.isFoliage(world, downPos)) {
@@ -391,16 +396,17 @@ public class MiscUtils {
     }
 
     @Nullable
-    public static RayTraceResult rayTraceLook(EntityPlayer player) {
-        return rayTraceLook(player, player.getAttribute(EntityPlayer.REACH_DISTANCE).getValue());
+    public static RayTraceResult rayTraceLook(PlayerEntity player) {
+        return rayTraceLook(player, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
     }
 
     @Nullable
-    public static RayTraceResult rayTraceLook(EntityLivingBase entity, double reachDst) {
+    public static RayTraceResult rayTraceLook(LivingEntity entity, double reachDst) {
         Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d lookVec = entity.getLookVec();
         Vec3d end = pos.add(lookVec.x * reachDst, lookVec.y * reachDst, lookVec.z * reachDst);
-        return entity.world.rayTraceBlocks(pos, end);
+        RayTraceContext ctx = new RayTraceContext(pos, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, entity);
+        return entity.world.rayTraceBlocks(ctx);
     }
 
     public static Color calcRandomConstellationColor(float perc) {
@@ -425,7 +431,7 @@ public class MiscUtils {
         return world.isBlockLoaded(new BlockPos(pos.x * 16, 0, pos.z * 16));
     }
 
-    public static boolean isPlayerFakeMP(EntityPlayerMP player) {
+    public static boolean isPlayerFakeMP(ServerPlayerEntity player) {
         if(player instanceof FakePlayer) return true;
 
         boolean isModdedPlayer = false;
@@ -435,13 +441,13 @@ public class MiscUtils {
             }
             Class<?> specificPlayerClass = mod.getExtendedPlayerClass();
             if(specificPlayerClass != null) {
-                if(player.getClass() != EntityPlayerMP.class && player.getClass() == specificPlayerClass) {
+                if(player.getClass() != ServerPlayerEntity.class && player.getClass() == specificPlayerClass) {
                     isModdedPlayer = true;
                     break;
                 }
             }
         }
-        if(!isModdedPlayer && player.getClass() != EntityPlayerMP.class) {
+        if(!isModdedPlayer && player.getClass() != ServerPlayerEntity.class) {
             return true;
         }
 
@@ -465,7 +471,7 @@ public class MiscUtils {
 
                         BlockPos pos = center.add(xx, yy, zz);
                         if(isChunkLoaded(world, new ChunkPos(pos))) {
-                            IBlockState state = world.getBlockState(pos);
+                            BlockState state = world.getBlockState(pos);
                             if(acceptor.test(world, pos, state)) {
                                 posList.add(pos);
                             }
@@ -493,14 +499,14 @@ public class MiscUtils {
         return null;
     }
 
-    public static List<BlockPos> searchAreaFor(World world, BlockPos center, IBlockState blockToSearch, int radius) {
+    public static List<BlockPos> searchAreaFor(World world, BlockPos center, BlockState blockToSearch, int radius) {
         List<BlockPos> found = new LinkedList<>();
         for (int xx = -radius; xx <= radius; xx++) {
             for (int yy = -radius; yy <= radius; yy++) {
                 for (int zz = -radius; zz <= radius; zz++) {
                     BlockPos pos = center.add(xx, yy, zz);
                     if(isChunkLoaded(world, new ChunkPos(pos))) {
-                        IBlockState state = world.getBlockState(pos);
+                        BlockState state = world.getBlockState(pos);
                         Block b = state.getBlock();
                         if(b.equals(blockToSearch)) {
                             found.add(pos);
@@ -513,22 +519,22 @@ public class MiscUtils {
     }
 
     static {
-        prettierColorMapping.put(EnumDyeColor.WHITE, new Color(0xFFFFFF));
-        prettierColorMapping.put(EnumDyeColor.ORANGE, new Color(0xFF8C1D));
-        prettierColorMapping.put(EnumDyeColor.MAGENTA, new Color(0xEF0EFF));
-        prettierColorMapping.put(EnumDyeColor.LIGHT_BLUE, new Color(0x06E5FF));
-        prettierColorMapping.put(EnumDyeColor.YELLOW, new Color(0xFFEB00));
-        prettierColorMapping.put(EnumDyeColor.LIME, new Color(0x93FF10));
-        prettierColorMapping.put(EnumDyeColor.PINK, new Color(0xFF18D9));
-        prettierColorMapping.put(EnumDyeColor.GRAY, new Color(0x5E5E5E));
-        prettierColorMapping.put(EnumDyeColor.LIGHT_GRAY, new Color(0xBDBDBD));
-        prettierColorMapping.put(EnumDyeColor.CYAN, new Color(0x5498B4));
-        prettierColorMapping.put(EnumDyeColor.PURPLE, new Color(0xB721F7));
-        prettierColorMapping.put(EnumDyeColor.BLUE, new Color(0x3C00FF));
-        prettierColorMapping.put(EnumDyeColor.BROWN, new Color(0xB77109));
-        prettierColorMapping.put(EnumDyeColor.GREEN, new Color(0x00AA00));
-        prettierColorMapping.put(EnumDyeColor.RED, new Color(0xFF0000));
-        prettierColorMapping.put(EnumDyeColor.BLACK, new Color(0x000000));
+        prettierColorMapping.put(DyeColor.WHITE, new Color(0xFFFFFF));
+        prettierColorMapping.put(DyeColor.ORANGE, new Color(0xFF8C1D));
+        prettierColorMapping.put(DyeColor.MAGENTA, new Color(0xEF0EFF));
+        prettierColorMapping.put(DyeColor.LIGHT_BLUE, new Color(0x06E5FF));
+        prettierColorMapping.put(DyeColor.YELLOW, new Color(0xFFEB00));
+        prettierColorMapping.put(DyeColor.LIME, new Color(0x93FF10));
+        prettierColorMapping.put(DyeColor.PINK, new Color(0xFF18D9));
+        prettierColorMapping.put(DyeColor.GRAY, new Color(0x5E5E5E));
+        prettierColorMapping.put(DyeColor.LIGHT_GRAY, new Color(0xBDBDBD));
+        prettierColorMapping.put(DyeColor.CYAN, new Color(0x5498B4));
+        prettierColorMapping.put(DyeColor.PURPLE, new Color(0xB721F7));
+        prettierColorMapping.put(DyeColor.BLUE, new Color(0x3C00FF));
+        prettierColorMapping.put(DyeColor.BROWN, new Color(0xB77109));
+        prettierColorMapping.put(DyeColor.GREEN, new Color(0x00AA00));
+        prettierColorMapping.put(DyeColor.RED, new Color(0xFF0000));
+        prettierColorMapping.put(DyeColor.BLACK, new Color(0x000000));
     }
 
 }

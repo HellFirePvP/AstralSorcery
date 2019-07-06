@@ -6,14 +6,6 @@ buildscript {
         mavenCentral()
     }
 
-    // TODO remove after FG becomes more stable and dev slows down... :P
-    configurations.classpath {
-        resolutionStrategy {
-            cacheDynamicVersionsFor 10, "seconds"
-            cacheChangingModulesFor 0, "seconds"
-        }
-    }
-
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
@@ -22,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.13.2-1.11.0'
+version = '1.14.3-1.11.0'
 group = 'hellfirepvp.astralsorcery'
 archivesBaseName = 'astralsorcery'
 String build_version = ""
@@ -30,14 +22,14 @@ String build_version = ""
 // Most likely inside Jenkins. Or homebrew environment.
 // I hope you know what you do if it's the latter.
 if (System.getenv("BUILD_NUMBER") != null) {
-    build_version = version + "-v" + System.getenv("BUILD_NUMBER")
+    build_version = version + ".v" + System.getenv("BUILD_NUMBER")
 }
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
 
-    mappings channel: 'snapshot', version: '20180921-1.13'
+    mappings channel: 'snapshot', version: '20190704-1.14.3'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -54,7 +46,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                astralsorcery {
                     source sourceSets.main
                 }
             }
@@ -70,7 +62,25 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                astralsorcery {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'astralsorcery', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                astralsorcery {
                     source sourceSets.main
                 }
             }
@@ -90,9 +100,9 @@ repositories {
 
 dependencies {
 
-    minecraft "net.minecraftforge:forge:1.13.2-25.0.216"
+    minecraft "net.minecraftforge:forge:1.14.3-27.0.21"
 
-    compile 'hellfirepvp.observerlib:observerlib:1.13.2-1.0.0-v5'
+    compile 'hellfirepvp.observerlib:observerlib:1.14.3-1.1.0.v11'
 
 }
 

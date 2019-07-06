@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.block;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -21,6 +21,6 @@ import net.minecraft.world.World;
  */
 public interface BlockPredicate {
 
-    public boolean test(World world, BlockPos pos, IBlockState state);
+    public boolean test(World world, BlockPos pos, BlockState state);
 
 }

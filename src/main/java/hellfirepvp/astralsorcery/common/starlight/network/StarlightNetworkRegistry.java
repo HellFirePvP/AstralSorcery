@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -35,7 +35,7 @@ public class StarlightNetworkRegistry {
     private static List<IStarlightBlockHandler> dynamicBlockHandlers = new LinkedList<>();
 
     @Nullable
-    public static IStarlightBlockHandler getStarlightHandler(World world, BlockPos pos, IBlockState state, IWeakConstellation cst) {
+    public static IStarlightBlockHandler getStarlightHandler(World world, BlockPos pos, BlockState state, IWeakConstellation cst) {
         Block b = state.getBlock();
         if(b instanceof BlockStarlightRecipient) return null;
         for (IStarlightBlockHandler handler : dynamicBlockHandlers) {
@@ -56,7 +56,7 @@ public class StarlightNetworkRegistry {
     //This is NOT suggested as "first choice" - please implement BlockStarlightRecipient instead if possible.
     public static interface IStarlightBlockHandler {
 
-        public boolean isApplicable(World world, BlockPos pos, IBlockState state, @Nullable IWeakConstellation starlightType);
+        public boolean isApplicable(World world, BlockPos pos, BlockState state, @Nullable IWeakConstellation starlightType);
 
         public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IWeakConstellation starlightType, double amount);
 

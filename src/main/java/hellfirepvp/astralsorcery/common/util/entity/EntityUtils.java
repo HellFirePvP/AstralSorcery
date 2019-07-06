@@ -9,7 +9,14 @@
 package hellfirepvp.astralsorcery.common.util.entity;
 
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.entity.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.eventbus.api.Event;
 
+import javax.annotation.Nullable;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -35,6 +42,43 @@ public class EntityUtils {
             toAdd.setZ(diffZ / dist * dstFactorSq * 0.15D * multiplier);
             addMotionFunction.apply(toAdd);
         }
+    }
+
+    public static boolean canEntitySpawnHere(World world, BlockPos at, EntityType<? extends Entity> type, SpawnReason spawnReason, @Nullable Consumer<Entity> preCheckEntity) {
+        EntitySpawnPlacementRegistry.PlacementType placementType = EntitySpawnPlacementRegistry.getPlacementType(type);
+        if (!world.getWorldBorder().contains(at) || !placementType.canSpawnAt(world, at, type)) {
+            return false;
+        }
+        if (!EntitySpawnPlacementRegistry.func_223515_a(type, world, spawnReason, at, world.rand)) {
+            return false;
+        }
+        if (!world.areCollisionShapesEmpty(type.func_220328_a(at.getX() + 0.5, at.getY(), at.getZ() + 0.5))) {
+            return false;
+        }
+
+        Entity entity = type.create(world);
+        if(entity == null) {
+            return false;
+        }
+        entity.setLocationAndAngles(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, world.rand.nextFloat() * 360.0F, 0.0F);
+        if (preCheckEntity != null) {
+            preCheckEntity.accept(entity);
+        }
+
+        if(entity instanceof LivingEntity) {
+            if (entity instanceof MobEntity) {
+                MobEntity mobEntity = (MobEntity) entity;
+                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn(mobEntity, world, entity.posX, entity.posY, entity.posZ, null);
+                if (canSpawn == Event.Result.DENY) {
+                    return false;
+                } else if (canSpawn == Event.Result.DEFAULT) {
+                    if (!mobEntity.canSpawn(world, spawnReason) || !mobEntity.isNotColliding(world)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 }
