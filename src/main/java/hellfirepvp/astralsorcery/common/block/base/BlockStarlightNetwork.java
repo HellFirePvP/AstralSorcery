@@ -11,8 +11,9 @@ package hellfirepvp.astralsorcery.common.block.base;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,9 +28,9 @@ import net.minecraftforge.items.IItemHandler;
  * Created by HellFirePvP
  * Date: 03.08.2016 / 21:01
  */
-public abstract class BlockStarlightNetwork extends BlockContainer {
+public abstract class BlockStarlightNetwork extends ContainerBlock {
 
-    protected BlockStarlightNetwork(Properties builder) {
+    protected BlockStarlightNetwork(Block.Properties builder) {
         super(builder);
     }
 

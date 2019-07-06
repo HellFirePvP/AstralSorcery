@@ -85,7 +85,7 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation> {
     }
 
     default public void writeToNBT(CompoundNBT compound, String key) {
-        compound.setString(key, getRegistryName().toString());
+        compound.putString(key, getRegistryName().toString());
     }
 
     @Nullable

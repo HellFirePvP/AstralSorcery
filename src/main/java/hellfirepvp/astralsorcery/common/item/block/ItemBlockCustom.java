@@ -9,8 +9,8 @@
 package hellfirepvp.astralsorcery.common.item.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,7 +19,7 @@ import net.minecraft.item.ItemBlock;
  * Created by HellFirePvP
  * Date: 01.06.2019 / 14:03
  */
-public class ItemBlockCustom extends ItemBlock {
+public class ItemBlockCustom extends BlockItem {
 
     public ItemBlockCustom(Block block, Item.Properties itemProperties) {
         super(block, itemProperties);

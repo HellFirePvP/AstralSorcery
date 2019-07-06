@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.effect.base;
 
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
+import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
 import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -55,16 +56,16 @@ public class ListEntries {
         public void writeToNBT(CompoundNBT nbt) {
             super.writeToNBT(nbt);
 
-            nbt.setString("entity", this.type.getRegistryName().toString());
+            nbt.putString("entity", this.type.getRegistryName().toString());
         }
 
-        public static EntitySpawnEntry createEntry(World world, BlockPos pos) {
+        public static EntitySpawnEntry createEntry(World world, BlockPos pos, SpawnReason reason) {
             Biome b = world.getBiome(pos);
             List<Biome.SpawnListEntry> applicable = new LinkedList<>();
-            if (ConstellationSkyHandler.getInstance().isNight(world)) {
-                applicable.addAll(b.getSpawns(EnumCreatureType.MONSTER));
+            if (DayTimeHelper.isNight(world)) {
+                applicable.addAll(b.getSpawns(EntityClassification.MONSTER));
             } else {
-                applicable.addAll(b.getSpawns(EnumCreatureType.CREATURE));
+                applicable.addAll(b.getSpawns(EntityClassification.CREATURE));
             }
             if(applicable.isEmpty()) {
                 return null; //Duh.
@@ -72,14 +73,14 @@ public class ListEntries {
             Collections.shuffle(applicable);
             Biome.SpawnListEntry entry = applicable.get(world.rand.nextInt(applicable.size()));
             EntityType<?> type = entry.entityType;
-            if (type != null && EntityUtils.canEntitySpawnHere(world, pos, type, true,
+            if (type != null && EntityUtils.canEntitySpawnHere(world, pos, type, reason,
                     (e) -> e.addTag(ConstellationEffectRegistry.LUCERNA_SKIP_ENTITY))) {
                 return new EntitySpawnEntry(pos, type);
             }
             return null;
         }
 
-        public void spawn(World world) {
+        public void spawn(World world, SpawnReason reason) {
             if (this.type == null) {
                 return;
             }
@@ -92,14 +93,14 @@ public class ListEntries {
                         at.getY() + 0.5,
                         at.getZ() + 0.5,
                         world.rand.nextFloat() * 360.0F, 0.0F);
-                if(e instanceof EntityLiving) {
-                    ((EntityLiving) e).onInitialSpawn(world.getDifficultyForLocation(at), null, null);
-                    if(!((EntityLiving) e).isNotColliding()) {
+                if (e instanceof MobEntity) {
+                    ((MobEntity) e).onInitialSpawn(world, world.getDifficultyForLocation(at), reason, null, null);
+                    if (!((MobEntity) e).isNotColliding(world)) {
                         e.remove();
                         return;
                     }
                 }
-                world.spawnEntity(e);
+                world.addEntity(e);
                 world.playEvent(2004, e.getPosition(), 0);
                 world.playEvent(2004, e.getPosition(), 0);
             }
@@ -123,7 +124,7 @@ public class ListEntries {
         public void writeToNBT(CompoundNBT nbt) {
             super.writeToNBT(nbt);
 
-            nbt.setInt("maxCount", this.maxCount);
+            nbt.putInt("maxCount", this.maxCount);
         }
 
         @Override
@@ -146,7 +147,7 @@ public class ListEntries {
         public void writeToNBT(CompoundNBT nbt) {
             super.writeToNBT(nbt);
 
-            nbt.setInt("counter", this.counter);
+            nbt.putInt("counter", this.counter);
         }
 
         @Override

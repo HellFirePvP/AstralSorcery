@@ -15,8 +15,8 @@ import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlockProperties;
 import hellfirepvp.astralsorcery.common.item.render.ItemDynamicColor;
 import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -52,7 +52,7 @@ public class RegistryItems {
     }
 
     private static void registerItemBlock(CustomItemBlock block) {
-        ItemBlock itemBlock = block.createItemBlock(buildItemBlockProperties((Block) block));
+        BlockItem itemBlock = block.createItemBlock(buildItemBlockProperties((Block) block));
         itemBlock.setRegistryName(itemBlock.getBlock().getRegistryName());
         AstralSorcery.getProxy().getRegistryPrimer().register(itemBlock);
     }

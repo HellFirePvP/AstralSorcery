@@ -8,9 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.block.base;
 
-import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.block.material.PushReaction;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +22,7 @@ import net.minecraft.block.material.MaterialColor;
 public class MaterialBuilderAS {
 
     private final MaterialColor color;
-    private EnumPushReaction pushReaction = EnumPushReaction.NORMAL;
+    private PushReaction pushReaction = PushReaction.NORMAL;
     private boolean blocksMovement = true;
     private boolean canBurn = false;
     private boolean requiresNoTool = true;
@@ -71,12 +71,12 @@ public class MaterialBuilderAS {
     }
 
     public MaterialBuilderAS pushDestroys() {
-        this.pushReaction = EnumPushReaction.DESTROY;
+        this.pushReaction = PushReaction.DESTROY;
         return this;
     }
 
     public MaterialBuilderAS pushBlocks() {
-        this.pushReaction = EnumPushReaction.BLOCK;
+        this.pushReaction = PushReaction.BLOCK;
         return this;
     }
 

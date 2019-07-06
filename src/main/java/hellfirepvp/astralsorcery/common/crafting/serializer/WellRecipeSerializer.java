@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.serializer;
 
 import com.google.gson.JsonObject;
+import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
@@ -27,7 +28,11 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 23:29
  */
-public class WellRecipeSerializer implements IRecipeSerializer<WellLiquefaction> {
+public class WellRecipeSerializer extends CustomRecipeSerializer<WellLiquefaction> {
+
+    public WellRecipeSerializer() {
+        super(RecipeSerializersAS.WELL_LIQUEFACTION);
+    }
 
     @Override
     public WellLiquefaction read(ResourceLocation recipeId, JsonObject json) {
@@ -43,26 +48,5 @@ public class WellRecipeSerializer implements IRecipeSerializer<WellLiquefaction>
     public void write(PacketBuffer buffer, WellLiquefaction recipe) {
         recipe.getInput().write(buffer);
         Ingredient.read(buffer);
-    }
-
-    @Override
-    public ResourceLocation getName() {
-        return RecipeSerializersAS.WELL_LIQUEFACTION;
-    }
-
-    @Override
-    public IRecipeSerializer<?> setRegistryName(ResourceLocation name) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getRegistryName() {
-        return null;
-    }
-
-    @Override
-    public Class<IRecipeSerializer<?>> getRegistryType() {
-        return null;
     }
 }

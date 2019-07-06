@@ -53,12 +53,12 @@ public class SoundHelper {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch, PositionedLoopSound.ActivityFunction func) {
+    public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch, PositionedLoopSound.ActivityFunction func, boolean isGlobal) {
         SoundCategory cat = SoundCategory.MASTER;
         if(sound instanceof CategorizedSoundEvent) {
             cat = ((CategorizedSoundEvent) sound).getCategory();
         }
-        PositionedLoopSound posSound = new PositionedLoopSound(sound, cat, volume, pitch, pos);
+        PositionedLoopSound posSound = new PositionedLoopSound(sound, cat, volume, pitch, pos, isGlobal);
         posSound.setRefreshFunction(func);
         Minecraft.getInstance().getSoundHandler().play(posSound);
         return posSound;
