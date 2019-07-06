@@ -11,23 +11,21 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
-import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
 import hellfirepvp.astralsorcery.common.lib.TagsAS;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.Tags;
 
 import java.awt.*;
-import java.util.Optional;
-import java.util.Random;
 
 import static hellfirepvp.astralsorcery.common.lib.ConstellationsAS.*;
 
@@ -391,23 +389,18 @@ public class RegistryConstellations {
 
         horologium = new ConstellationBase.WeakSpecial("horologium", new Color(0x7D16B4)) {
             @Override
-            public boolean doesShowUp(WorldSkyHandler handle, World world, long day) {
+            public boolean doesShowUp(World world, long day) {
                 long rSeed;
-                if(world.isRemote) {
-                    Optional<Long> testSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(world);
-                    if (!testSeed.isPresent()) {
-                        return false;
-                    }
-                    rSeed = testSeed.get();
-                } else {
-                    rSeed = new Random(world.getSeed()).nextLong();
+                WorldContext ctx = SkyHandler.getContext(world, Dist.CLIENT);
+                if (ctx != null) {
+                    return isDayOfSolarEclipse(ctx.getSeed(), day);
                 }
-                return isDayOfSolarEclipse(rSeed, day);
+                return false;
             }
 
             @Override
-            public float getDistribution(WorldSkyHandler handle, World world, long day, boolean showsUp) {
-                return showsUp ? 1F : 0.6F;
+            public float getDistribution(World world, long day, boolean showsUp) {
+                return showsUp ? 1F : 0.4F;
             }
         };
         sl1 = horologium.addStar(7, 6);
@@ -464,18 +457,19 @@ public class RegistryConstellations {
 
         pelotrio = new ConstellationBase.WeakSpecial("pelotrio", new Color(0xEC006B)) {
             @Override
-            public boolean doesShowUp(WorldSkyHandler handle, World world, long day) {
-                return handle.getCurrentMoonPhase() == MoonPhase.NEW || handle.getCurrentMoonPhase() == MoonPhase.FULL;
+            public boolean doesShowUp(World world, long day) {
+                MoonPhase phase = MoonPhase.fromWorld(world);
+                return phase == MoonPhase.NEW || phase == MoonPhase.FULL;
             }
 
             @Override
-            public float getDistribution(WorldSkyHandler handle, World world, long day, boolean showingUp) {
-                if(showingUp) return 1F;
-                MoonPhase current = handle.getCurrentMoonPhase();
+            public float getDistribution(World world, long day, boolean showingUp) {
+                if (showingUp) return 1F;
+                MoonPhase current = MoonPhase.fromWorld(world);
                 if(current == MoonPhase.WANING1_2 || current == MoonPhase.WAXING1_2) {
-                    return 0.5F;
+                    return 0.4F;
                 }
-                return 0.75F;
+                return 0.7F;
             }
         };
         sl1 = pelotrio.addStar(4, 7);

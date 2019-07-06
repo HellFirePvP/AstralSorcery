@@ -8,9 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.resource;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.SimpleTexture;

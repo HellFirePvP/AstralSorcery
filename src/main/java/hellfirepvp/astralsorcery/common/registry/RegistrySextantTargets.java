@@ -7,9 +7,6 @@
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.registry;
-<<<<<<< Updated upstream:src/main/java/hellfirepvp/astralsorcery/common/registry/RegistrySextantTargets.java
-=======
-
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
@@ -19,7 +16,6 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.common.BiomeDictionary;
 
 import static hellfirepvp.astralsorcery.common.lib.SextantTargetsAS.*;
->>>>>>> Stashed changes:src/main/java/hellfirepvp/astralsorcery/common/integrations/mods/jei/base/JEIBaseWrapper.java
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,10 +28,7 @@ public class RegistrySextantTargets {
 
     private RegistrySextantTargets() {}
 
-<<<<<<< Updated upstream:src/main/java/hellfirepvp/astralsorcery/common/registry/RegistrySextantTargets.java
-    public static void init() {
 
-=======
     //TODO desert & jungle pyramids
 
     public static void init() {
@@ -58,10 +51,10 @@ public class RegistrySextantTargets {
         TARGET_VANILLA_DESERT_PYRAMID = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI, "gridsextant", Feature.DESERT_PYRAMID,
                 0xFFC3C3C3, true, StructureFinder.STRUCT_DESERT_PYRAMID,
                 280D / 312D, 0D, 16D / 312D, 16D / 280D));
-        TARGET_VANILLA_JUNGLE_TEMPLE = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI, "gridsextant", Feature.JUNGLE_PYRAMID,
+        TARGET_VANILLA_JUNGLE_TEMPLE = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI, "gridsextant", Feature.JUNGLE_TEMPLE,
                 0xFFC3C3C3, true, StructureFinder.STRUCT_JUNGLE_TEMPLE,
                 280D / 312D, 0D, 16D / 312D, 16D / 280D));
-        TARGET_VANILLA_FORTRESS = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI,"gridsextant", Feature.FORTRESS,
+        TARGET_VANILLA_FORTRESS = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI,"gridsextant", Feature.NETHER_BRIDGE,
                 0xFF9C1D15, true, StructureFinder.STRUCT_FORTRESS,
                 280D / 312D, 32D / 280D, 16D / 312D, 16D / 280D));
         TARGET_VANILLA_ENDCITY = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI, "gridsextant", Feature.END_CITY,
@@ -97,7 +90,6 @@ public class RegistrySextantTargets {
     private static <T extends TargetObject> T register(T target) {
         AstralSorcery.getProxy().getRegistryPrimer().register(target);
         return target;
->>>>>>> Stashed changes:src/main/java/hellfirepvp/astralsorcery/common/integrations/mods/jei/base/JEIBaseWrapper.java
     }
 
 }

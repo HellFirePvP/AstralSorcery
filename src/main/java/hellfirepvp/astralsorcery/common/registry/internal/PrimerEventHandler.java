@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvent;
@@ -53,6 +54,8 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(IConstellation.class, this::registerConstellations);
         eventBus.addGenericListener(AbstractPerk.class, this::registerPerks);
         eventBus.addGenericListener(TargetObject.class, this::registerSextantTargets);
+        eventBus.addGenericListener(DataSerializerEntry.class, this::registerDataSerializers);
+        eventBus.addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
     }
 
     private void registerItems(RegistryEvent.Register<Item> event) {
@@ -115,6 +118,12 @@ public class PrimerEventHandler {
     private void registerDataSerializers(RegistryEvent.Register<DataSerializerEntry> event) {
         registry.wipe(event);
         RegistryDataSerializers.registerSerializers();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+        registry.wipe(event);
+        RegistryRecipeSerializers.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

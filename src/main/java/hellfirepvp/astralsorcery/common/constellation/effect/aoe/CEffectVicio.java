@@ -9,16 +9,16 @@
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -72,13 +72,13 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
                     }
                 }
                 foundPlayer = true;
-                entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 9));
-                entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 200, 9));
+                entity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 200, 9));
+                entity.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 200, 9));
             }
         } else {
             List<ServerPlayerEntity> entities = world.getEntitiesWithinAABB(ServerPlayerEntity.class, BOX.offset(pos).grow(range));
             for (ServerPlayerEntity pl : entities) {
-                if (EventHandlerEntity.ritualFlight.setOrAddTimeout(40, pl)) {
+                if (EventHelperRitualFlight.ritualFlight.setOrAddTimeout(40, pl)) {
                     boolean prev = pl.abilities.allowFlying;
                     pl.abilities.allowFlying = true;
                     foundPlayer = true;

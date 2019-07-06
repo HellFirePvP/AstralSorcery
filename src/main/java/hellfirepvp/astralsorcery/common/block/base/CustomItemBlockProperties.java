@@ -8,12 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.block.base;
 
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
-import net.minecraft.item.EnumRarity;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.item.Rarity;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nonnull;
@@ -51,8 +49,8 @@ public interface CustomItemBlockProperties extends CustomItemBlock {
     }
 
     @Nonnull
-    default EnumRarity getItemRarity() {
-        return EnumRarity.COMMON;
+    default Rarity getItemRarity() {
+        return Rarity.COMMON;
     }
 
     default boolean canItemBeRepaired() {
@@ -65,7 +63,7 @@ public interface CustomItemBlockProperties extends CustomItemBlock {
     }
 
     @Nullable
-    default Supplier<Callable<TileEntityItemStackRenderer>> getItemTEISR() {
+    default Supplier<Callable<ItemStackTileEntityRenderer>> getItemTEISR() {
         return null;
     }
 

@@ -10,8 +10,8 @@ package hellfirepvp.astralsorcery.common.block.base;
 
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustom;
 import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,14 +22,14 @@ import net.minecraft.item.ItemBlock;
  */
 public interface CustomItemBlock {
 
-    default Class<? extends ItemBlock> getItemBlockClass() {
+    default Class<? extends BlockItem> getItemBlockClass() {
         return ItemBlockCustom.class;
     }
 
-    default ItemBlock createItemBlock(Item.Properties properties) {
+    default BlockItem createItemBlock(Item.Properties properties) {
         Class<?> itemBlockClass = getItemBlockClass();
         try {
-            return (ItemBlock) itemBlockClass.getConstructor(Block.class, Item.Properties.class)
+            return (BlockItem) itemBlockClass.getConstructor(Block.class, Item.Properties.class)
                     .newInstance(this, properties);
         } catch (Exception e) {
             throw new IllegalArgumentException("Cannot instantiate ItemBlock!", e);

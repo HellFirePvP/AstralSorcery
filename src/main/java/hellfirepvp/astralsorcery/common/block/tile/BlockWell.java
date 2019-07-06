@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.block.tile;
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
@@ -27,7 +28,7 @@ import javax.annotation.Nullable;
 public class BlockWell extends BlockStarlightNetwork {
 
     public BlockWell() {
-        super(Properties.create(MaterialsAS.MARBLE)
+        super(Block.Properties.create(MaterialsAS.MARBLE)
                 .hardnessAndResistance(1F, 3F)
                 .sound(SoundType.STONE));
     }

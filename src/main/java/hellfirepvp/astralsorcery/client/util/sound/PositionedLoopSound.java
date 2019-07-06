@@ -30,12 +30,12 @@ public class PositionedLoopSound extends SimpleSound implements ITickableSound {
     private ActivityFunction func = null;
     private boolean hasStoppedPlaying = false;
 
-    public PositionedLoopSound(CategorizedSoundEvent sound, float volume, float pitch, Vector3 pos) {
-        this(sound, sound.getCategory(), volume, pitch, pos);
+    public PositionedLoopSound(CategorizedSoundEvent sound, float volume, float pitch, Vector3 pos, boolean isGlobal) {
+        this(sound, sound.getCategory(), volume, pitch, pos, isGlobal);
     }
 
-    public PositionedLoopSound(SoundEvent sound, SoundCategory category, float volume, float pitch, Vector3 pos) {
-        super(sound.getName(), category, volume, pitch, true, 0, AttenuationType.LINEAR, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ());
+    public PositionedLoopSound(SoundEvent sound, SoundCategory category, float volume, float pitch, Vector3 pos, boolean isGlobal) {
+        super(sound.getName(), category, volume, pitch, true, 0, AttenuationType.LINEAR, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ(), isGlobal);
     }
 
     public void setRefreshFunction(ActivityFunction func) {
@@ -49,7 +49,7 @@ public class PositionedLoopSound extends SimpleSound implements ITickableSound {
     }
 
     public boolean hasStoppedPlaying() {
-        return hasStoppedPlaying || !Minecraft.getInstance().getSoundHandler().isPlaying(this);
+        return hasStoppedPlaying || !Minecraft.getInstance().getSoundHandler().func_215294_c(this);
     }
 
     @Override

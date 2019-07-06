@@ -8,10 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.serializer.WellRecipeSerializer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.RecipeSerializers;
 
 import static hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS.*;
 
@@ -30,8 +31,8 @@ public class RegistryRecipeSerializers {
         WELL_LIQUEFACTION_SERIALIZER = register(new WellRecipeSerializer());
     }
 
-    private static <R extends IRecipe, T extends IRecipeSerializer<R>> T register(T serializer) {
-        RecipeSerializers.register(serializer);
+    private static <C extends IInventory, R extends IRecipe<C>, T extends IRecipeSerializer<R>> T register(T serializer) {
+        AstralSorcery.getProxy().getRegistryPrimer().register(serializer);
         return serializer;
     }
 

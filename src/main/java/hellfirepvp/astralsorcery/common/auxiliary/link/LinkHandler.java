@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -73,7 +73,7 @@ public class LinkHandler implements ITickHandler {
                 String name = tile.getUnLocalizedDisplayName();
                 if (tile.onSelect(playerIn)) {
                     if (name != null) {
-                        playerIn.sendMessage(new TextComponentTranslation("misc.link.start", new TextComponentTranslation(name)).setStyle(green));
+                        playerIn.sendMessage(new TranslationTextComponent("misc.link.start", new TranslationTextComponent(name)).setStyle(green));
                     }
                 }
                 break;
@@ -93,7 +93,7 @@ public class LinkHandler implements ITickHandler {
                     }
                     String linkedFrom = tile.getUnLocalizedDisplayName();
                     if (linkedFrom != null) {
-                        playerIn.sendMessage(new TextComponentTranslation("misc.link.link", new TextComponentTranslation(linkedFrom), new TextComponentTranslation(linkedTo)).setStyle(green));
+                        playerIn.sendMessage(new TranslationTextComponent("misc.link.link", new TranslationTextComponent(linkedFrom), new TranslationTextComponent(linkedTo)).setStyle(green));
                     }
                 }
                 break;
@@ -109,7 +109,7 @@ public class LinkHandler implements ITickHandler {
                     }
                     String linkedFrom = tile.getUnLocalizedDisplayName();
                     if (linkedFrom != null) {
-                        playerIn.sendMessage(new TextComponentTranslation("misc.link.unlink", new TextComponentTranslation(linkedFrom), new TextComponentTranslation(linkedTo)).setStyle(green));
+                        playerIn.sendMessage(new TranslationTextComponent("misc.link.unlink", new TranslationTextComponent(linkedFrom), new TranslationTextComponent(linkedTo)).setStyle(green));
                     }
                 }
                 break;
@@ -137,7 +137,7 @@ public class LinkHandler implements ITickHandler {
             if (dimId != pl.dimension.getId()) needsRemoval = true;
             if (needsRemoval) {
                 iterator.remove();
-                pl.sendMessage(new TextComponentTranslation("misc.link.stop").setStyle(new Style().setColor(TextFormatting.RED)));
+                pl.sendMessage(new TranslationTextComponent("misc.link.stop").setStyle(new Style().setColor(TextFormatting.RED)));
             }
         }
     }

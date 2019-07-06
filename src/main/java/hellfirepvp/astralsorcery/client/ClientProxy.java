@@ -46,7 +46,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void initialize() {
         this.guiHandler = new ClientGuiHandler();
-        AstralSorcery.getModContainer().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> this.guiHandler);
+        AstralSorcery.getModContainer().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> this.guiHandler);
         this.clientScheduler = new ClientScheduler();
 
         try {

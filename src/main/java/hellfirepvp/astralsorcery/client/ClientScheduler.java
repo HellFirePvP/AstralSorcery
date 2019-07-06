@@ -44,7 +44,7 @@ public class ClientScheduler implements ITickHandler {
             while (iterator.hasNext()) {
                 Tuple<Runnable, Counter> r = iterator.next();
                 r.getB().decrement();
-                if(r.getB().value <= 0) {
+                if(r.getB().getValue() <= 0) {
                     r.getA().run();
                     iterator.remove();
                 }

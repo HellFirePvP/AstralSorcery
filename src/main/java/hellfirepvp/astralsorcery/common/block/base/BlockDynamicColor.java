@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.block.base;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReaderBase;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,6 +26,6 @@ import javax.annotation.Nullable;
 public interface BlockDynamicColor {
 
     @OnlyIn(Dist.CLIENT)
-    public int getColor(BlockState state, @Nullable IWorldReaderBase world, @Nullable BlockPos pos, int tintIndex);
+    public int getColor(BlockState state, @Nullable IEnviromentBlockReader world, @Nullable BlockPos pos, int tintIndex);
 
 }
