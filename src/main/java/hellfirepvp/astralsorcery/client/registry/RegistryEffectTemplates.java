@@ -6,22 +6,22 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client;
+package hellfirepvp.astralsorcery.client.registry;
 
-import net.minecraft.client.gui.ScreenManager;
+import static hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ClientGuiHandler
+ * Class: RegistryEffectTemplates
  * Created by HellFirePvP
- * Date: 19.04.2019 / 22:22
+ * Date: 07.07.2019 / 11:31
  */
-public class ClientGuiHandler {
+public class RegistryEffectTemplates {
 
-    private ClientGuiHandler() {}
+    private RegistryEffectTemplates() {}
 
-    public static void registerScreens() {
+    public static void registerTemplates() {
 
     }
 

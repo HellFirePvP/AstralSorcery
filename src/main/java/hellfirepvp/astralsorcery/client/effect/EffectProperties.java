@@ -8,8 +8,11 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
 import net.minecraft.util.math.Vec3i;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
@@ -21,29 +24,44 @@ import java.util.UUID;
  */
 public class EffectProperties {
 
-    private UUID owner;
-    private Vec3i position;
-    private boolean ignoreLimit;
+    private final BatchRenderContext ctx;
 
-    public EffectProperties setOwner(UUID owner) {
+    private UUID owner = null;
+    private Vec3i position = Vec3i.NULL_VECTOR;
+    private boolean ignoreLimit = false;
+
+    public EffectProperties(BatchRenderContext ctx) {
+        this.ctx = ctx;
+    }
+
+    // What player this effects belongs to, if any.
+    public EffectProperties setOwner(@Nullable UUID owner) {
         this.owner = owner;
         return this;
     }
 
-    public EffectProperties setPosition(Vec3i position) {
+    // The position the effect originates from, if any.
+    public EffectProperties setPosition(@Nonnull Vec3i position) {
         this.position = position;
         return this;
     }
 
+    // If this effect should ignore the spawn-limit soft cap on particles
     public EffectProperties setIgnoreLimit(boolean ignoreLimit) {
         this.ignoreLimit = ignoreLimit;
         return this;
     }
 
+    public BatchRenderContext getContext() {
+        return ctx;
+    }
+
+    @Nullable
     public UUID getOwner() {
         return owner;
     }
 
+    @Nonnull
     public Vec3i getPosition() {
         return position;
     }

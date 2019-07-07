@@ -42,10 +42,10 @@ public final class EffectRegistrar {
         }
 
         EffectHandler.PendingEffect pendingEffect = new EffectHandler.PendingEffect(effect, properties);
-        if (EffectHandler.acceptsNewParticles) {
+        if (EffectHandler.acceptsNewEffects()) {
             EffectHandler.getInstance().registerUnsafe(pendingEffect);
         } else {
-            EffectHandler.toAddBuffer.add(pendingEffect);
+            EffectHandler.getInstance().toAddBuffer.add(pendingEffect);
         }
     }
 

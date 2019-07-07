@@ -6,22 +6,22 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client;
+package hellfirepvp.astralsorcery.client.registry;
 
-import net.minecraft.client.gui.ScreenManager;
+import static hellfirepvp.astralsorcery.client.lib.SpritesAS.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ClientGuiHandler
+ * Class: RegistrySprites
  * Created by HellFirePvP
- * Date: 19.04.2019 / 22:22
+ * Date: 07.07.2019 / 11:04
  */
-public class ClientGuiHandler {
+public class RegistrySprites {
 
-    private ClientGuiHandler() {}
+    private RegistrySprites() {}
 
-    public static void registerScreens() {
+    public static void loadSprites() {
 
     }
 

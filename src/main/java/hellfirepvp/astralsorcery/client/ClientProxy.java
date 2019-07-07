@@ -13,7 +13,10 @@ import hellfirepvp.astralsorcery.client.data.config.ClientConfig;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectUpdater;
 import hellfirepvp.astralsorcery.client.event.ConnectionEventHandler;
-import hellfirepvp.astralsorcery.client.event.ContextRenderHandler;
+import hellfirepvp.astralsorcery.client.event.EffectRenderEventHandler;
+import hellfirepvp.astralsorcery.client.registry.RegistryEffectTemplates;
+import hellfirepvp.astralsorcery.client.registry.RegistrySprites;
+import hellfirepvp.astralsorcery.client.registry.RegistryTextures;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
@@ -23,7 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.function.Consumer;
 
@@ -38,15 +41,12 @@ public class ClientProxy extends CommonProxy {
 
     public static boolean connected = false;
 
-    private ClientGuiHandler guiHandler;
     private ClientScheduler clientScheduler;
 
     private ClientConfig clientConfig;
 
     @Override
     public void initialize() {
-        this.guiHandler = new ClientGuiHandler();
-        AstralSorcery.getModContainer().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> this.guiHandler);
         this.clientScheduler = new ClientScheduler();
 
         try {
@@ -74,13 +74,15 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void attachLifecycle(IEventBus modEventBus) {
         super.attachLifecycle(modEventBus);
+
+        modEventBus.addListener(this::clientSetup);
     }
 
     @Override
     public void attachEventHandlers(IEventBus eventBus) {
         super.attachEventHandlers(eventBus);
 
-        ContextRenderHandler.getInstance().attachEventListeners(eventBus);
+        EffectRenderEventHandler.getInstance().attachEventListeners(eventBus);
         ConnectionEventHandler.getInstance().attachEventListeners(eventBus);
 
         eventBus.addListener(RegistryItems::registerColors);
@@ -99,4 +101,13 @@ public class ClientProxy extends CommonProxy {
     public void scheduleClientside(Runnable r, int tickDelay) {
         this.clientScheduler.addRunnable(r, tickDelay);
     }
+
+    private void clientSetup(FMLClientSetupEvent event) {
+        ClientGuiHandler.registerScreens();
+
+        RegistryTextures.loadTextures();
+        RegistrySprites.loadSprites();
+        RegistryEffectTemplates.registerTemplates();
+    }
+
 }
