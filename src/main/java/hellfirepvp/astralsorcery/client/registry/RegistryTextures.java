@@ -6,23 +6,26 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client;
+package hellfirepvp.astralsorcery.client.registry;
 
-import net.minecraft.client.gui.ScreenManager;
+import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.resource.AssetLoader;
+
+import static hellfirepvp.astralsorcery.client.lib.TexturesAS.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ClientGuiHandler
+ * Class: RegistryTextures
  * Created by HellFirePvP
- * Date: 19.04.2019 / 22:22
+ * Date: 07.07.2019 / 11:03
  */
-public class ClientGuiHandler {
+public class RegistryTextures {
 
-    private ClientGuiHandler() {}
+    private RegistryTextures() {}
 
-    public static void registerScreens() {
-
+    public static void loadTextures() {
+        BLACK = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
     }
 
 }

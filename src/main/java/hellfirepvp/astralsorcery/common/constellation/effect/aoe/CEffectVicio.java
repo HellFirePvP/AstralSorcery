@@ -78,7 +78,7 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
         } else {
             List<ServerPlayerEntity> entities = world.getEntitiesWithinAABB(ServerPlayerEntity.class, BOX.offset(pos).grow(range));
             for (ServerPlayerEntity pl : entities) {
-                if (EventHelperRitualFlight.ritualFlight.setOrAddTimeout(40, pl)) {
+                if (EventHelperRitualFlight.allowFlight(pl)) {
                     boolean prev = pl.abilities.allowFlying;
                     pl.abilities.allowFlying = true;
                     foundPlayer = true;

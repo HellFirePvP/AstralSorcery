@@ -39,26 +39,10 @@ import java.util.List;
  */
 public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> extends TileNetwork implements IStarlightTransmission<T>, LinkableTileEntity {
 
-    protected boolean singleLink = getClass() == TileCrystalLens.class;
-
     private List<BlockPos> positions = new LinkedList<>();
 
     protected TileTransmissionBase(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
-    }
-
-    @Override
-    public void readCustomNBT(CompoundNBT compound) {
-        super.readCustomNBT(compound);
-        positions.clear();
-
-        if(compound.contains("linked")) {
-            ListNBT list = compound.getList("linked", Constants.NBT.TAG_COMPOUND);
-            for (int i = 0; i < list.size(); i++) {
-                CompoundNBT tag = list.getCompound(i);
-                positions.add(NBTHelper.readBlockPosFromNBT(tag));
-            }
-        }
     }
 
     @Override
@@ -72,6 +56,8 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
         }
         return true;
     }
+
+    public abstract boolean isSingleLink();
 
     @Override
     public World getLinkWorld() {
@@ -97,14 +83,29 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
     }
 
     @Override
+    public void readCustomNBT(CompoundNBT compound) {
+        super.readCustomNBT(compound);
+        positions.clear();
+
+        if(compound.contains("linked")) {
+            ListNBT list = compound.getList("linked", Constants.NBT.TAG_COMPOUND);
+            for (int i = 0; i < list.size(); i++) {
+                CompoundNBT tag = list.getCompound(i);
+                positions.add(NBTHelper.readBlockPosFromNBT(tag));
+            }
+        }
+    }
+
+    @Override
     public void onLinkCreate(PlayerEntity player, BlockPos other) {
         if(other.equals(getPos())) return;
 
         if(TransmissionNetworkHelper.createTransmissionLink(this, other)) {
-            if(singleLink)
+            if (this.isSingleLink()) {
                 this.positions.clear();
+            }
 
-            if(singleLink || !this.positions.contains(other)) {
+            if (this.isSingleLink() || !this.positions.contains(other)) {
                 this.positions.add(other);
                 markForUpdate();
             }

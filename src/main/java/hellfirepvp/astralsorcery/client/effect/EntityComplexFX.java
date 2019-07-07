@@ -71,11 +71,6 @@ public abstract class EntityComplexFX implements IComplexEffect {
     }
 
     @Override
-    public RenderTarget getRenderTarget() {
-        return RenderTarget.RENDERLOOP;
-    }
-
-    @Override
     public boolean canRemove() {
         return this.age >= this.maxAge || removeRequested;
     }

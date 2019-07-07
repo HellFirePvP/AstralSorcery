@@ -17,17 +17,17 @@ import net.minecraftforge.eventbus.api.IEventBus;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ContextRenderHandler
+ * Class: EffectRenderEventHandler
  * Created by HellFirePvP
  * Date: 30.05.2019 / 13:40
  */
-public class ContextRenderHandler {
+public class EffectRenderEventHandler {
 
-    private static ContextRenderHandler INSTANCE = new ContextRenderHandler();
+    private static EffectRenderEventHandler INSTANCE = new EffectRenderEventHandler();
 
-    private ContextRenderHandler() {}
+    private EffectRenderEventHandler() {}
 
-    public static ContextRenderHandler getInstance() {
+    public static EffectRenderEventHandler getInstance() {
         return INSTANCE;
     }
 

@@ -25,22 +25,8 @@ public interface IComplexEffect {
 
     public void clearRemoveFlag();
 
-    public RenderTarget getRenderTarget();
-
     public void render(float pTicks);
 
     public void tick();
-
-    //Valid layers: 0, 1, 2
-    //Lower layers are rendered first.
-    default public int getLayer() {
-        return 0;
-    }
-
-    public static enum RenderTarget {
-
-        RENDERLOOP
-
-    }
 
 }

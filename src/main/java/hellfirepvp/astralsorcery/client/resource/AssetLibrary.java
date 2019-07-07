@@ -42,7 +42,7 @@ public class AssetLibrary implements ISelectiveResourceReloadListener {
         if(resources.containsKey(name)) {
             return resources.get(name);
         }
-        BindableResource res = AssetLoader.load(AssetLoader.AssetLocation.TEXTURES, location, name, ".png");
+        BindableResource res = AssetLoader.loadTexture(location, name);
         resources.put(name, res);
         return res;
     }

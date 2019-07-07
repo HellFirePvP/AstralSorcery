@@ -8,17 +8,20 @@
 
 package hellfirepvp.astralsorcery.client.effect.handler;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
+import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -33,9 +36,10 @@ public final class EffectHandler {
     public static final Random STATIC_EFFECT_RAND = new Random();
     public static final EffectHandler INSTANCE = new EffectHandler();
 
-    private static boolean cleanRequested = false;
-    static boolean acceptsNewParticles = true;
-    static List<PendingEffect> toAddBuffer = new LinkedList<>();
+    private boolean cleanRequested = false;
+    private boolean acceptsNewEffects = true;
+    List<PendingEffect> toAddBuffer = Lists.newLinkedList();
+    Map<BatchRenderContext, List<PendingEffect>> effectMap = Maps.newHashMap();
 
     private EffectHandler() {}
 
@@ -58,9 +62,9 @@ public final class EffectHandler {
 
     public void render(RenderWorldLastEvent event) {
         float pTicks = event.getPartialTicks();
-        acceptsNewParticles = false;
+        acceptsNewEffects = false;
 
-        acceptsNewParticles = true;
+        acceptsNewEffects = true;
     }
 
     void tick() {
@@ -74,11 +78,11 @@ public final class EffectHandler {
             return;
         }
 
-        acceptsNewParticles = false;
+        acceptsNewEffects = false;
 
         Vector3 playerPos = Vector3.atEntityCorner(player);
 
-        acceptsNewParticles = true;
+        acceptsNewEffects = true;
         toAddBuffer.forEach(this::registerUnsafe);
         toAddBuffer.clear();
     }
@@ -88,7 +92,11 @@ public final class EffectHandler {
             return;
         }
         IComplexEffect effect = pendingEffect.getEffect();
+        BatchRenderContext ctx = pendingEffect.getProperties().getContext();
         pendingEffect.getProperties().applySpecialEffects(effect);
+
+        effectMap.computeIfAbsent(ctx, c -> Lists.newLinkedList())
+                .add(pendingEffect);
 
         //TODO effect registering
         //if(effect instanceof EffectLightning) {
@@ -121,8 +129,12 @@ public final class EffectHandler {
         return cfg.shouldSpawn(STATIC_EFFECT_RAND);
     }
 
+    public static boolean acceptsNewEffects() {
+        return getInstance().acceptsNewEffects;
+    }
+
     public static void cleanUp() {
-        cleanRequested = true;
+        getInstance().cleanRequested = true;
     }
 
     static class PendingEffect {

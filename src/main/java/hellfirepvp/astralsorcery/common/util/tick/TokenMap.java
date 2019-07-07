@@ -6,22 +6,22 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client;
+package hellfirepvp.astralsorcery.common.util.tick;
 
-import net.minecraft.client.gui.ScreenManager;
+import java.util.HashMap;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ClientGuiHandler
+ * Class: TokenMap
  * Created by HellFirePvP
- * Date: 19.04.2019 / 22:22
+ * Date: 06.07.2019 / 21:46
  */
-public class ClientGuiHandler {
+public class TokenMap<K, V extends TokenMap.MapToken<?>> extends HashMap<K, V> {
 
-    private ClientGuiHandler() {}
+    public static interface MapToken<V> {
 
-    public static void registerScreens() {
+        public V getValue();
 
     }
 

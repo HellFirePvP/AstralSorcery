@@ -6,23 +6,21 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client;
+package hellfirepvp.astralsorcery.client.lib;
 
-import net.minecraft.client.gui.ScreenManager;
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ClientGuiHandler
+ * Class: TexturesAS
  * Created by HellFirePvP
- * Date: 19.04.2019 / 22:22
+ * Date: 07.07.2019 / 11:03
  */
-public class ClientGuiHandler {
+public class TexturesAS {
 
-    private ClientGuiHandler() {}
+    private TexturesAS() {}
 
-    public static void registerScreens() {
-
-    }
+    public static AbstractRenderableTexture BLACK;
 
 }

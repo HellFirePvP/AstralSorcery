@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerIO;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.registry.RegistryData;
 import hellfirepvp.astralsorcery.common.registry.RegistryDataSerializers;
@@ -100,6 +101,7 @@ public class CommonProxy {
 
         this.serverLifecycleListeners.add(ResearchIOThread.getTask());
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(ResearchHelper::saveAndClearServerCache));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperRitualFlight::clearServer));
     }
 
     public void attachLifecycle(IEventBus modEventBus) {
@@ -130,6 +132,8 @@ public class CommonProxy {
         registrar.accept(StarlightUpdateHandler.getInstance());
         registrar.accept(SyncDataHolder.getTickInstance());
         registrar.accept(LinkHandler.getInstance());
+
+        EventHelperRitualFlight.attachTickListener(registrar);
     }
 
     protected void initializeConfigurations() {
