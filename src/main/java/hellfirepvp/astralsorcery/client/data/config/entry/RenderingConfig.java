@@ -72,6 +72,11 @@ public class RenderingConfig extends ConfigEntry {
                 .defineList("weakSkyRenders", Lists.newArrayList(), Predicates.alwaysTrue());
     }
 
+    public double getMaxEffectRenderDistanceSq() {
+        double val = this.maxEffectRenderDistance.get();
+        return val * val;
+    }
+
     public static enum ParticleAmount {
 
         MINIMAL(40),

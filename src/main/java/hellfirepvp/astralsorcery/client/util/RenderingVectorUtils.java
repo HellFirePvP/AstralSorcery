@@ -28,6 +28,14 @@ public class RenderingVectorUtils {
         );
     }
 
+    public static Vector3 interpolate(Vector3 oldV, Vector3 newV, float partialTicks) {
+        return new Vector3(
+                interpolate(oldV.getX(), newV.getX(), partialTicks),
+                interpolate(oldV.getY(), newV.getY(), partialTicks),
+                interpolate(oldV.getZ(), newV.getZ(), partialTicks)
+        );
+    }
+
     public static double interpolate(double oldP, double newP, float partialTicks) {
         if(oldP == newP) return oldP;
         return oldP + ((newP - oldP) * partialTicks);

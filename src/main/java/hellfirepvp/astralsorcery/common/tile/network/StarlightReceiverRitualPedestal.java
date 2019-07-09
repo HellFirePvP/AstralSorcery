@@ -12,30 +12,25 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: StarlightReceiverWell
+ * Class: StarlightReceiverRitualPedestal
  * Created by HellFirePvP
- * Date: 30.06.2019 / 21:57
+ * Date: 09.07.2019 / 19:26
  */
-public class StarlightReceiverWell extends SimpleTransmissionReceiver {
+public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver {
 
-    public StarlightReceiverWell(BlockPos thisPos) {
+    public StarlightReceiverRitualPedestal(BlockPos thisPos) {
         super(thisPos);
     }
 
     @Override
     public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
-        TileWell well = getTileAtPos(world, TileWell.class);
-        if (well != null) {
-            well.receiveStarlight(amount);
-        }
+
     }
 
     @Override
@@ -47,9 +42,8 @@ public class StarlightReceiverWell extends SimpleTransmissionReceiver {
 
         @Override
         public IPrismTransmissionNode get() {
-            return new StarlightReceiverWell(null);
+            return new StarlightReceiverRitualPedestal(null);
         }
 
     }
-
 }

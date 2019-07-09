@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.client.registry.RegistryEffectTemplates;
 import hellfirepvp.astralsorcery.client.registry.RegistrySprites;
 import hellfirepvp.astralsorcery.client.registry.RegistryTextures;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
@@ -94,6 +95,7 @@ public class ClientProxy extends CommonProxy {
         super.attachTickListeners(registrar);
 
         registrar.accept(this.clientScheduler);
+        registrar.accept(RenderInfo.getInstance());
         registrar.accept(EffectUpdater.getInstance());
     }
 

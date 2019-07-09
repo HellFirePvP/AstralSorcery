@@ -55,11 +55,11 @@ public class StorageNetworkHandler {
         }
 
         //public void addCore(TileStorageCore core) {
-        //    //TODO fusion logic
+        //    //fusion logic
         //}
 
         //public void removeCore(TileStorageCore core) {
-        //    //TODO division logic
+        //    //division logic
         //}
 
     }

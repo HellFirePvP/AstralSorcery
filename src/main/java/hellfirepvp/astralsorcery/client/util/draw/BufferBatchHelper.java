@@ -6,25 +6,23 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.effect.function;
-
-import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
-
-import javax.annotation.Nonnull;
+package hellfirepvp.astralsorcery.client.util.draw;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: VFXRenderOffsetController
+ * Class: BufferBatchHelper
  * Created by HellFirePvP
- * Date: 27.05.2019 / 22:33
+ * Date: 08.07.2019 / 20:39
  */
-public interface VFXRenderOffsetController<T extends EntityVisualFX> {
+public class BufferBatchHelper {
 
-    VFXRenderOffsetController<?> IDENTITY = (fx, pTicks) -> fx.getPosition();
+    public static BufferContext make() {
+        return make(0x200_000);
+    }
 
-    @Nonnull
-    public Vector3 changeRenderPosition(@Nonnull T fx, float pTicks);
+    public static BufferContext make(int size) {
+        return new BufferContext(size);
+    }
 
 }

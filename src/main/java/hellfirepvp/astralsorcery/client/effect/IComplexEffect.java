@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -24,8 +27,6 @@ public interface IComplexEffect {
     public void flagAsRemoved();
 
     public void clearRemoveFlag();
-
-    public void render(float pTicks);
 
     public void tick();
 

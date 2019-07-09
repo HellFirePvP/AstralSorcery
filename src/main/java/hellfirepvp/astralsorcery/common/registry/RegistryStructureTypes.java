@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.structure.StructureType;
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import net.minecraft.util.ResourceLocation;
 
 import static hellfirepvp.astralsorcery.common.lib.StructureTypesAS.*;
@@ -26,10 +26,16 @@ public class RegistryStructureTypes {
     private RegistryStructureTypes() {}
 
     public static void init() {
-        MOUNTAIN = new StructureType(new ResourceLocation(AstralSorcery.MODID, "struct_mountain"), true);
-        DESERT = new StructureType(new ResourceLocation(AstralSorcery.MODID, "struct_desert"), true);
-        SMALL = new StructureType(new ResourceLocation(AstralSorcery.MODID, "struct_small"), true);
-        TREASURE = new StructureType(new ResourceLocation(AstralSorcery.MODID, "struct_treasure"), false);
+        STYPE_MOUNTAIN = register(new ResourceLocation(AstralSorcery.MODID, "struct_mountain"), true);
+        STYPE_DESERT = register(new ResourceLocation(AstralSorcery.MODID, "struct_desert"), true);
+        STYPE_SMALL = register(new ResourceLocation(AstralSorcery.MODID, "struct_small"), true);
+        STYPE_TREASURE = register(new ResourceLocation(AstralSorcery.MODID, "struct_treasure"), false);
+    }
+
+    private static StructureType register(ResourceLocation name, boolean requiresAvgDistance) {
+        StructureType type = new StructureType(name, requiresAvgDistance);
+        AstralSorcery.getProxy().getRegistryPrimer().register(type);
+        return type;
     }
 
 }

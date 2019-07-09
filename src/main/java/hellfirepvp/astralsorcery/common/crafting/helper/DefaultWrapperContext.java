@@ -18,7 +18,7 @@ import net.minecraftforge.items.IItemHandler;
  * Created by HellFirePvP
  * Date: 01.07.2019 / 00:12
  */
-public class DefaultWrapperContext extends RecipeCraftingContext<IHandlerRecipe> {
+public class DefaultWrapperContext extends RecipeCraftingContext<IHandlerRecipe, IItemHandler> {
 
     private final IItemHandler handler;
     private final World world;

@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.client.lib;
 
+import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -18,5 +20,9 @@ package hellfirepvp.astralsorcery.client.lib;
 public class SpritesAS {
 
     private SpritesAS() {}
+
+    public static SpriteSheetResource SPR_CRYSTAL_EFFECT_1;
+    public static SpriteSheetResource SPR_CRYSTAL_EFFECT_2;
+    public static SpriteSheetResource SPR_CRYSTAL_EFFECT_3;
 
 }

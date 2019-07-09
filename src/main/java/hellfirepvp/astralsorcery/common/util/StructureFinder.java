@@ -9,9 +9,8 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.data.world.StructureGenerationBuffer;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
-import hellfirepvp.astralsorcery.common.structure.StructureType;
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.biome.Biome;

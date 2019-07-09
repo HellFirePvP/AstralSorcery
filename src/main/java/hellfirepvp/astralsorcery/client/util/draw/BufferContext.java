@@ -6,24 +6,29 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.lib;
+package hellfirepvp.astralsorcery.client.util.draw;
 
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: TileEntityTypesAS
+ * Class: BufferContext
  * Created by HellFirePvP
- * Date: 01.06.2019 / 13:34
+ * Date: 08.07.2019 / 20:39
  */
-public class TileEntityTypesAS {
+public class BufferContext extends BufferBuilder {
 
-    private TileEntityTypesAS() {}
+    private static final WorldVertexBufferUploader upload = new WorldVertexBufferUploader();
 
-    public static TileEntityType<TileRitualPedestal> RITUAL_PEDESTAL;
-    public static TileEntityType<TileWell> WELL;
+    BufferContext(int size) {
+        super(size);
+    }
+
+    public void draw() {
+        this.finishDrawing();
+        upload.draw(this);
+    }
 
 }

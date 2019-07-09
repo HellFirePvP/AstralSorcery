@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.world;
 
-import hellfirepvp.astralsorcery.common.structure.StructureType;
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.observerlib.common.data.WorldCacheDomain;
 import hellfirepvp.observerlib.common.data.base.SectionWorldData;

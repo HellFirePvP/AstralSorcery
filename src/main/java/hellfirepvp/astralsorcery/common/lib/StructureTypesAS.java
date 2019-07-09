@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.structure.StructureType;
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,9 +21,11 @@ public class StructureTypesAS {
 
     private StructureTypesAS() {}
 
-    public static StructureType MOUNTAIN;
-    public static StructureType DESERT;
-    public static StructureType SMALL;
-    public static StructureType TREASURE;
+    public static StructureType STYPE_MOUNTAIN;
+    public static StructureType STYPE_DESERT;
+    public static StructureType STYPE_SMALL;
+    public static StructureType STYPE_TREASURE;
+
+    public static StructureType PTYPE_RITUAL_PEDESTAL;
 
 }
