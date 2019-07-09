@@ -196,6 +196,14 @@ public class Vector3 {
         return x * x + y * y + z * z;
     }
 
+    public double distance(Entity e) {
+        return Math.sqrt(distanceSquared(e));
+    }
+
+    public double distanceSquared(Entity e) {
+        return distanceSquared(Vector3.atEntityCenter(e));
+    }
+
     public double distance(Vector3 o) {
         return Math.sqrt(distanceSquared(o));
     }

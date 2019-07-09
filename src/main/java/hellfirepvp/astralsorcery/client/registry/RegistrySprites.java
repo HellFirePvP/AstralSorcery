@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.client.registry;
 
+import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
+
 import static hellfirepvp.astralsorcery.client.lib.SpritesAS.*;
+import static hellfirepvp.astralsorcery.client.lib.TexturesAS.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +25,9 @@ public class RegistrySprites {
     private RegistrySprites() {}
 
     public static void loadSprites() {
-
+        SPR_CRYSTAL_EFFECT_1 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_1, 5, 8);
+        SPR_CRYSTAL_EFFECT_2 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_2, 5, 8);
+        SPR_CRYSTAL_EFFECT_3 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_3, 5, 8);
     }
 
 }

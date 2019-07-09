@@ -9,12 +9,15 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -120,22 +123,27 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
     @Nonnull
     @Override
     public Handler<PktPlayEffect> handler() {
-        return (packet, context, side) -> {
-            context.enqueueWork(() -> {
-                DistExecutor.runWhenOn(Dist.CLIENT,
-                        () -> () -> packet.type.runEffect().accept(packet));
-            });
+        return new Handler<PktPlayEffect>() {
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public void handleClient(PktPlayEffect packet, NetworkEvent.Context context) {
+                context.enqueueWork(() -> packet.type.runEffect().accept(packet));
+            }
+
+            @Override
+            public void handle(PktPlayEffect packet, NetworkEvent.Context context, LogicalSide side) {}
         };
     }
 
     public static enum Type {
 
-        ;
+        WELL_CATALYST_BREAK;
 
         @OnlyIn(Dist.CLIENT)
         private Consumer<PktPlayEffect> runEffect() {
             switch (this) {
-
+                case WELL_CATALYST_BREAK:
+                    return TileWell::catalystBurst;
             }
             return (pkt) -> {};
         }

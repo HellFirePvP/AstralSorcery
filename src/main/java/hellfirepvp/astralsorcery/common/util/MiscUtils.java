@@ -348,17 +348,23 @@ public class MiscUtils {
     }
 
     public static void transferEntityTo(Entity entity, DimensionType target, BlockPos targetPos) {
-        if(entity.getEntityWorld().isRemote) return; //No transfers on clientside.
+        if (entity.getEntityWorld().isRemote) return; //No transfers on clientside.
         entity.setSneaking(false);
         Dimension dimFrom = entity.getEntityWorld().getDimension();
-        if(dimFrom.getType() != target) {
-            if(!ForgeHooks.onTravelToDimension(entity, target)) {
+        if (dimFrom.getType() != target) {
+            if (!ForgeHooks.onTravelToDimension(entity, target)) {
                 return;
             }
 
-            if(entity instanceof ServerPlayerEntity) {
+            if (entity instanceof ServerPlayerEntity) {
                 MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                srv.getPlayerList().changePlayerDimension((ServerPlayerEntity) entity, target);
+                ServerWorld targetWorld = srv.getWorld(target);
+                ((ServerPlayerEntity) entity).teleport(targetWorld,
+                        targetPos.getX() + 0.5,
+                        targetPos.getY() + 0.1,
+                        targetPos.getZ() + 0.5,
+                        entity.rotationYaw,
+                        entity.rotationPitch);
             } else {
                 entity.changeDimension(target);
             }
@@ -375,7 +381,6 @@ public class MiscUtils {
             downPos = blockpos.down();
             BlockState test = world.getBlockState(downPos);
             IFluidState state = test.getFluidState();
-            state.isTagged(FluidTags.LAVA);
             if (!world.isAirBlock(downPos) && !test.isIn(BlockTags.LEAVES) && !test.isFoliage(world, downPos)) {
                 break;
             }

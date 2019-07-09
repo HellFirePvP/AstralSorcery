@@ -8,12 +8,15 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
 import net.minecraft.util.math.Vec3i;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,6 +28,7 @@ import java.util.UUID;
 public class EffectProperties {
 
     private final BatchRenderContext ctx;
+    private static List<Consumer<EntityComplexFX>> specialEffects = Lists.newArrayList();
 
     private UUID owner = null;
     private Vec3i position = Vec3i.NULL_VECTOR;
@@ -71,7 +75,12 @@ public class EffectProperties {
     }
 
     // Method in favour of not using the event system to apply special effects.
-    public void applySpecialEffects(IComplexEffect effect) {
-        
+    public void applySpecialEffects(EntityComplexFX effect) {
+        specialEffects.forEach(s -> s.accept(effect));
     }
+
+    public static void addSpecialEffect(Consumer<EntityComplexFX> effect) {
+        specialEffects.add(effect);
+    }
+
 }

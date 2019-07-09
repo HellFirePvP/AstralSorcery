@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.client.effect;
 
 import hellfirepvp.astralsorcery.client.effect.function.*;
+import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,7 +23,6 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
  */
 public abstract class EntityVisualFX extends EntityComplexFX {
 
-    private Vector3 pos;
     private Vector3 oldPos;
     private Vector3 motion = new Vector3();
 
@@ -28,27 +30,26 @@ public abstract class EntityVisualFX extends EntityComplexFX {
     private float scaleMultiplier = 1F;
 
     private VFXAlphaFunction alphaFunction = VFXAlphaFunction.CONSTANT;
-    private VFXRenderOffsetController renderOffsetController = VFXRenderOffsetController.IDENTITY;
+    private VFXRenderOffsetFunction renderOffsetFunction = VFXRenderOffsetFunction.IDENTITY;
     private VFXScaleFunction scaleFunction = VFXScaleFunction.IDENTITY;
+    private VFXColorFunction colorFunction = VFXColorFunction.WHITE;
 
     private VFXMotionController motionController = VFXMotionController.IDENTITY;
     private VFXPositionController positionController = VFXPositionController.CONSTANT;
 
-    public EntityVisualFX(double x, double y, double z) {
-        this(new Vector3(x, y, z));
-    }
-
     public EntityVisualFX(Vector3 pos) {
-        this.pos = pos;
+        super(pos);
         this.oldPos = this.pos.clone();
     }
 
-    public void setAlphaMultiplier(float alphaMultiplier) {
+    public <T extends EntityVisualFX> T setAlphaMultiplier(float alphaMultiplier) {
         this.alphaMultiplier = alphaMultiplier;
+        return (T) this;
     }
 
-    public void setScaleMultiplier(float scaleMultiplier) {
+    public <T extends EntityVisualFX> T setScaleMultiplier(float scaleMultiplier) {
         this.scaleMultiplier = scaleMultiplier;
+        return (T) this;
     }
 
     public float getAlphaMultiplier() {
@@ -59,16 +60,12 @@ public abstract class EntityVisualFX extends EntityComplexFX {
         return scaleMultiplier;
     }
 
-    public Vector3 getPosition() {
-        return pos;
-    }
-
     public Vector3 getOldPosition() {
         return oldPos;
     }
 
     public void setPosition(Vector3 pos) {
-        this.pos = pos.clone();
+        super.setPosition(pos);
         this.oldPos = pos.clone();
     }
 
@@ -99,8 +96,18 @@ public abstract class EntityVisualFX extends EntityComplexFX {
         return this.scaleFunction.getScale(this, this.getScaleMultiplier(), pTicks);
     }
 
+    public Color getColor(float pTicks) {
+        return this.colorFunction.getColor(this, pTicks);
+    }
+
     public Vector3 getRenderPosition(float pTicks) {
-        return this.renderOffsetController.changeRenderPosition(this, pTicks);
+        return this.renderOffsetFunction.changeRenderPosition(this,
+                RenderingVectorUtils.interpolate(this.getOldPosition(), this.getPosition(), pTicks), pTicks);
+    }
+
+    public <T extends EntityVisualFX> T color(VFXColorFunction<?> colorFunction) {
+        this.colorFunction = colorFunction;
+        return (T) this;
     }
 
     public <T extends EntityVisualFX> T alpha(VFXAlphaFunction<?> alphaFunction) {
@@ -108,22 +115,22 @@ public abstract class EntityVisualFX extends EntityComplexFX {
         return (T) this;
     }
 
-    public <T extends EntityVisualFX> T  renderOffset(VFXRenderOffsetController<?> renderOffsetController) {
-        this.renderOffsetController = renderOffsetController;
+    public <T extends EntityVisualFX> T renderOffset(VFXRenderOffsetFunction<?> renderOffsetController) {
+        this.renderOffsetFunction = renderOffsetController;
         return (T) this;
     }
 
-    public <T extends EntityVisualFX> T  scale(VFXScaleFunction<?> scaleFunction) {
+    public <T extends EntityVisualFX> T scale(VFXScaleFunction<?> scaleFunction) {
         this.scaleFunction = scaleFunction;
         return (T) this;
     }
 
-    public <T extends EntityVisualFX> T  motion(VFXMotionController<?> motionController) {
+    public <T extends EntityVisualFX> T motion(VFXMotionController<?> motionController) {
         this.motionController = motionController;
         return (T) this;
     }
 
-    public <T extends EntityVisualFX> T  position(VFXPositionController<?> positionController) {
+    public <T extends EntityVisualFX> T position(VFXPositionController<?> positionController) {
         this.positionController = positionController;
         return (T) this;
     }

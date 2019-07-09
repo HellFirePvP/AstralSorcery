@@ -26,12 +26,12 @@ public final class EffectRegistrar {
 
     private EffectRegistrar() {}
 
-    public static EntityComplexFX registerFX(EntityComplexFX entityComplexFX, EffectProperties properties) {
+    public static <T extends EntityComplexFX> T registerFX(T entityComplexFX, EffectProperties properties) {
         register(entityComplexFX, properties);
         return entityComplexFX;
     }
 
-    private static void register(IComplexEffect effect, EffectProperties properties) {
+    private static void register(EntityComplexFX effect, EffectProperties properties) {
         if(AssetLibrary.isReloading() || effect == null || Minecraft.getInstance().isGamePaused()) {
             return;
         }

@@ -11,9 +11,11 @@ package hellfirepvp.astralsorcery.client.effect.handler;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
 import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -39,7 +41,7 @@ public final class EffectHandler {
     private boolean cleanRequested = false;
     private boolean acceptsNewEffects = true;
     List<PendingEffect> toAddBuffer = Lists.newLinkedList();
-    Map<BatchRenderContext, List<PendingEffect>> effectMap = Maps.newHashMap();
+    Map<BatchRenderContext<?>, List<PendingEffect>> effectMap = Maps.newHashMap();
 
     private EffectHandler() {}
 
@@ -64,11 +66,17 @@ public final class EffectHandler {
         float pTicks = event.getPartialTicks();
         acceptsNewEffects = false;
 
+        for (BatchRenderContext<?> ctx : effectMap.keySet()) {
+            BufferContext buf = ctx.prepare();
+            effectMap.get(ctx).forEach(p -> p.effect.render(ctx, buf, pTicks));
+            ctx.draw();
+        }
+
         acceptsNewEffects = true;
     }
 
     void tick() {
-        if(cleanRequested) {
+        if (cleanRequested) {
             toAddBuffer.clear();
             cleanRequested = false;
         }
@@ -82,6 +90,8 @@ public final class EffectHandler {
 
         Vector3 playerPos = Vector3.atEntityCorner(player);
 
+
+
         acceptsNewEffects = true;
         toAddBuffer.forEach(this::registerUnsafe);
         toAddBuffer.clear();
@@ -91,7 +101,7 @@ public final class EffectHandler {
         if (!mayAcceptParticle(pendingEffect.getProperties())) {
             return;
         }
-        IComplexEffect effect = pendingEffect.getEffect();
+        EntityComplexFX effect = pendingEffect.getEffect();
         BatchRenderContext ctx = pendingEffect.getProperties().getContext();
         pendingEffect.getProperties().applySpecialEffects(effect);
 
@@ -139,10 +149,10 @@ public final class EffectHandler {
 
     static class PendingEffect {
 
-        private final IComplexEffect effect;
+        private final EntityComplexFX effect;
         private final EffectProperties runProperties;
 
-        PendingEffect(IComplexEffect effect, EffectProperties runProperties) {
+        PendingEffect(EntityComplexFX effect, EffectProperties runProperties) {
             this.effect = effect;
             this.runProperties = runProperties;
         }
@@ -151,7 +161,7 @@ public final class EffectHandler {
             return runProperties;
         }
 
-        IComplexEffect getEffect() {
+        EntityComplexFX getEffect() {
             return effect;
         }
     }

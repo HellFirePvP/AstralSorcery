@@ -28,18 +28,15 @@ public class RegistrySextantTargets {
 
     private RegistrySextantTargets() {}
 
-
-    //TODO desert & jungle pyramids
-
     public static void init() {
         TARGET_MOUNTAIN_SHRINE = register(new TargetObject.ASStructure(AssetLoader.TextureLocation.GUI, "gridsextant", "mountain_shrine",
-                0xFF5CE8D6, false, StructureTypesAS.MOUNTAIN,
+                0xFF5CE8D6, false, StructureTypesAS.STYPE_MOUNTAIN,
                 280D / 312D, 64D / 280D, 16D / 312D, 16D / 280D));
         TARGET_MOUNTAIN_SHRINE = register(new TargetObject.ASStructure(AssetLoader.TextureLocation.GUI, "gridsextant", "desert_shrine",
-                0xFFFFC82E, false, StructureTypesAS.DESERT,
+                0xFFFFC82E, false, StructureTypesAS.STYPE_DESERT,
                 296D / 312D, 48D / 280D, 16D / 312D, 16D / 280D));
         TARGET_MOUNTAIN_SHRINE = register(new TargetObject.ASStructure(AssetLoader.TextureLocation.GUI, "gridsextant", "small_shrine",
-                0xFF2ED400, false, StructureTypesAS.SMALL,
+                0xFF2ED400, false, StructureTypesAS.STYPE_SMALL,
                 280D / 312D, 48D / 280D, 16D / 312D, 16D / 280D));
 
         TARGET_VANILLA_VILLAGE = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI, "gridsextant", Feature.VILLAGE,

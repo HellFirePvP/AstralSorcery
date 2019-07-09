@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry.internal;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.registry.*;
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -56,6 +57,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(TargetObject.class, this::registerSextantTargets);
         eventBus.addGenericListener(DataSerializerEntry.class, this::registerDataSerializers);
         eventBus.addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
+        eventBus.addGenericListener(StructureType.class, this::registerStructureTypes);
     }
 
     private void registerItems(RegistryEvent.Register<Item> event) {
@@ -124,6 +126,12 @@ public class PrimerEventHandler {
     private void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
         registry.wipe(event);
         RegistryRecipeSerializers.init();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerStructureTypes(RegistryEvent.Register<StructureType> event) {
+        registry.wipe(event);
+        RegistryStructureTypes.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

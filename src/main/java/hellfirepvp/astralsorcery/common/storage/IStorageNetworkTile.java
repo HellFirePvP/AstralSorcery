@@ -40,7 +40,7 @@ public interface IStorageNetworkTile<T extends IStorageNetworkTile<T>> extends I
 
     }
 
-    //TODO change/redo and get data from network instead.
+    //change/redo and get data from network instead.
     //Can be adjusted to do a different lookup logic.
     default public T resolveMasterCore() {
         T assoc = getAssociatedCore();

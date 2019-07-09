@@ -8,25 +8,42 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
+import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefactionContext;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverWell;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.tile.PrecisionSingleFluidTank;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventoryFiltered;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.Fluid;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -68,11 +85,135 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
     public void tick() {
         super.tick();
 
-        if (!world.isRemote()) {
+        if (!getWorld().isRemote()) {
             if (this.doesSeeSky()) {
                 this.collectStarlight();
             }
+
+            ItemStack stack = this.inventory.getStackInSlot(0);
+            if (!stack.isEmpty()) {
+                if (!getWorld().isAirBlock(getPos().up())) {
+                    breakCatalyst();
+                } else {
+                    if (runningRecipe == null) {
+                        runningRecipe = RecipeTypesAS.TYPE_WELL.findRecipe(Dist.CLIENT, new WellLiquefactionContext(this));
+                    }
+
+                    if (runningRecipe != null) {
+                        double gain = Math.sqrt(starlightBuffer) * runningRecipe.getProductionMultiplier();
+                        if (gain > 0 && tank.getFluidAmount() <= MAX_CAPACITY) {
+                            if (tank.getFluidAmount() <= MAX_CAPACITY) {
+                                markForUpdate();
+                            }
+                            fillAndDiscardRest(runningRecipe, gain);
+                            if (rand.nextInt(1500) == 0) {
+                                // TODO entities
+                                //EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                            }
+                        }
+                        starlightBuffer = 0;
+                        if (rand.nextInt(1 + (int) (1000 * runningRecipe.getShatterMultiplier())) == 0) {
+                            breakCatalyst();
+                            // TODO entities
+                            //EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                        }
+                    } else {
+                        breakCatalyst();
+                    }
+                }
+            }
+            this.starlightBuffer = 0;
+        } else {
+            doClientEffects();
         }
+    }
+
+    private void fillAndDiscardRest(WellLiquefaction recipe, double gain) {
+        Fluid produced = recipe.getFluidOutput().getFluid();
+        if (tank.getFluidAmount() < 10) {
+            tank.setFluid(produced);
+        }
+
+        if (tank.getTankFluid() == null) {
+            tank.setFluid(produced);
+        } else if (!produced.equals(tank.getTankFluid())) {
+            return;
+        }
+        tank.addAmount(gain);
+    }
+
+    public void breakCatalyst() {
+        this.inventory.setStackInSlot(0, ItemStack.EMPTY);
+        this.runningRecipe = null;
+
+        PktPlayEffect effect = new PktPlayEffect(PktPlayEffect.Type.WELL_CATALYST_BREAK)
+                .setPos(new Vector3(this));
+        PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(getWorld(), getPos(), 32));
+        SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, getWorld(), getPos(), 1F, 1F);
+        markForUpdate();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void doClientEffects() {
+        ItemStack stack = this.inventory.getStackInSlot(0);
+        if(!stack.isEmpty()) {
+            runningRecipe = RecipeTypesAS.TYPE_WELL.findRecipe(Dist.CLIENT, new WellLiquefactionContext(this));
+
+            if (runningRecipe != null) {
+                Color color = Color.WHITE;
+                if (runningRecipe.getCatalystColor() != null) {
+                    color = runningRecipe.getCatalystColor();
+                }
+                doCatalystEffect(color);
+            }
+        }
+        // TODO fluids
+        //if(tank.getFluidAmount() > 0 &&
+        //        tank.getTankFluid() instanceof FluidLiquidStarlight) {
+        //    doStarlightEffect();
+        //}
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void doCatalystEffect(Color color) {
+        if (rand.nextInt(6) == 0) {
+            Entity rView = Minecraft.getInstance().getRenderViewEntity();
+            if (rView == null) {
+                rView = Minecraft.getInstance().player;
+            }
+            Vector3 at = new Vector3(this)
+                    .add(0.5, 1.3, 0.5)
+                    .add(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                            rand.nextFloat() * 0.1,
+                            rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+            if (at.distanceSquared(rView) > RenderingConfig.CONFIG.getMaxEffectRenderDistanceSq()) {
+                return;
+            }
+
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(at)
+                    .color(VFXColorFunction.constant(color));
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void catalystBurst(PktPlayEffect event) {
+        BatchRenderContext<? extends FXFacingParticle> ctx;
+        switch (rand.nextInt(3)) {
+            case 2:
+                ctx = EffectTemplatesAS.CRYSTAL_BURST_3;
+                break;
+            case 1:
+                ctx = EffectTemplatesAS.CRYSTAL_BURST_2;
+                break;
+            default:
+            case 0:
+                ctx = EffectTemplatesAS.CRYSTAL_BURST_1;
+                break;
+        }
+        EffectHelper.of(ctx)
+                .spawn(event.getPos().add(0.5, 1.3, 0.5))
+                .setScaleMultiplier(1.5F);
     }
 
     private void collectStarlight() {

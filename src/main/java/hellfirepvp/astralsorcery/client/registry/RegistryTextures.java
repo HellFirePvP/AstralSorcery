@@ -25,7 +25,12 @@ public class RegistryTextures {
     private RegistryTextures() {}
 
     public static void loadTextures() {
-        BLACK = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
+        TEX_BLACK = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
+
+        TEX_STATIC_FLARE = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarestatic");
+        TEX_CRYSTAL_EFFECT_1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1");
+        TEX_CRYSTAL_EFFECT_2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2");
+        TEX_CRYSTAL_EFFECT_3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3");
     }
 
 }

@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.client.resource.query.TextureSubQuery;
 import hellfirepvp.astralsorcery.common.data.config.entry.ToolsConfig;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import hellfirepvp.astralsorcery.common.structure.StructureType;
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.StructureFinder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

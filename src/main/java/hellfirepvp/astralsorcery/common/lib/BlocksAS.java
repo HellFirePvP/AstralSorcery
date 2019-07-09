@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.block.marble.*;
+import hellfirepvp.astralsorcery.common.block.tile.BlockRitualPedestal;
+import hellfirepvp.astralsorcery.common.block.tile.BlockWell;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,5 +30,8 @@ public class BlocksAS {
     public static BlockMarblePillar   MARBLE_PILLAR;
     public static BlockMarbleRaw      MARBLE_RAW;
     public static BlockMarbleRuned    MARBLE_RUNED;
+
+    public static BlockRitualPedestal RITUAL_PEDESTAL;
+    public static BlockWell WELL;
 
 }

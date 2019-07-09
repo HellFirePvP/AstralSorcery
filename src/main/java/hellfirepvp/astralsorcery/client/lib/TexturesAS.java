@@ -21,6 +21,11 @@ public class TexturesAS {
 
     private TexturesAS() {}
 
-    public static AbstractRenderableTexture BLACK;
+    public static AbstractRenderableTexture TEX_BLACK;
+
+    public static AbstractRenderableTexture TEX_STATIC_FLARE;
+    public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_1;
+    public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_2;
+    public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_3;
 
 }
