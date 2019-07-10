@@ -211,7 +211,7 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
         tag.putInt("capacity", this.maxCapacity);
         tag.putBoolean("aIn", this.allowInput);
         tag.putBoolean("aOut", this.allowOutput);
-        if(this.fluid != null) {
+        if (this.fluid != null) {
             tag.putString("fluid", this.fluid.getName());
         }
         int[] sides = new int[accessibleSides.size()];
@@ -228,8 +228,10 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
         this.maxCapacity = tag.getInt("capacity");
         this.allowInput = tag.getBoolean("aIn");
         this.allowOutput = tag.getBoolean("aOut");
-        if(tag.contains("fluid")) {
-            this.fluid = FluidRegistry.getFluid(tag.getString("fluid"));
+        if (tag.contains("fluid")) {
+            this.fluid = null;
+            //TODO fluids
+            //this.fluid = FluidRegistry.getFluid(tag.getString("fluid"));
         } else {
             this.fluid = null;
         }

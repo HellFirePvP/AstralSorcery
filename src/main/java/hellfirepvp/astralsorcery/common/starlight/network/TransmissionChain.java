@@ -106,8 +106,10 @@ public class TransmissionChain {
     private void recBuildChain(IPrismTransmissionNode node, float lossMultiplier, LinkedList<BlockPos> prevPath) {
         if(lossMultiplier <= 0.001F) return; //No. we don't transfer a part less than 0.1% of the starlight.
 
-        CrystalProperties properties = node.getTransmissionProperties();
-        float lossPerc = CrystalCalculations.getThroughputMultiplier(properties);
+        // TODO crystal properties
+        //CrystalProperties properties = node.getTransmissionProperties();
+        //float lossPerc = CrystalCalculations.getThroughputMultiplier(properties);
+        float lossPerc = 1F;
         lossPerc *= node.getAdditionalTransmissionLossMultiplier();
         List<NodeConnection<IPrismTransmissionNode>> next = node.queryNext(handler);
         float nextLoss = (lossMultiplier * lossPerc) / ((float) next.size());

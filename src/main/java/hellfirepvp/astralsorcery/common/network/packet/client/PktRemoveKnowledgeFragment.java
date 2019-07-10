@@ -48,11 +48,12 @@ public class PktRemoveKnowledgeFragment extends ASPacket<PktRemoveKnowledgeFragm
     public Handler<PktRemoveKnowledgeFragment> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
-                PlayerEntity player = context.getSender();
-                ItemStack inInventory = player.inventory.getStackInSlot(packet.invIndex);
-                if (!inInventory.isEmpty() && inInventory.getItem() instanceof ItemKnowledgeFragment) {
-                    player.inventory.setInventorySlotContents(packet.invIndex, ItemStack.EMPTY);
-                }
+                //TODO knowledge fragments
+                //PlayerEntity player = context.getSender();
+                //ItemStack inInventory = player.inventory.getStackInSlot(packet.invIndex);
+                //if (!inInventory.isEmpty() && inInventory.getItem() instanceof ItemKnowledgeFragment) {
+                //    player.inventory.setInventorySlotContents(packet.invIndex, ItemStack.EMPTY);
+                //}
             });
         };
     }

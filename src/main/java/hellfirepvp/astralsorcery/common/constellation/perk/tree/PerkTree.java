@@ -47,9 +47,10 @@ public class PerkTree {
     private PerkTree() {}
 
     public void addPerk(AbstractPerk perk) {
-        if (perk instanceof RootPerk) {
-            rootPerks.put(perk.getConstellation(), perk);
-        }
+        //TODO root perks
+        //if (perk instanceof RootPerk) {
+        //    rootPerks.put(perk.getConstellation(), perk);
+        //}
         MinecraftForge.EVENT_BUS.register(perk);
         setPoint(perk);
     }
@@ -107,9 +108,10 @@ public class PerkTree {
     }
 
     public void removePerk(AbstractPerk perk) {
-        if (perk instanceof RootPerk) {
-            rootPerks.remove(((RootPerk) perk).getConstellation());
-        }
+        //TODO root perks
+        //if (perk instanceof RootPerk) {
+        //    rootPerks.remove(((RootPerk) perk).getConstellation());
+        //}
         RegistriesAS.REGISTRY_PERKS.remove(perk.getRegistryName());
         MinecraftForge.EVENT_BUS.unregister(perk);
         PerkTreePoint<?> point = perk.getPoint();

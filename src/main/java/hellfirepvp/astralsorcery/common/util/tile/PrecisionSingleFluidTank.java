@@ -229,8 +229,10 @@ public class PrecisionSingleFluidTank implements IFluidTank, IFluidTankPropertie
         this.maxCapacity = tag.getInt("capacity");
         this.allowInput = tag.getBoolean("aIn");
         this.allowOutput = tag.getBoolean("aOut");
-        if(tag.contains("fluid")) {
-            this.fluid = FluidRegistry.getFluid(tag.getString("fluid"));
+        if (tag.contains("fluid")) {
+            this.fluid = null;
+            //TODO fluids
+            //this.fluid = FluidRegistry.getFluid(tag.getString("fluid"));
         } else {
             this.fluid = null;
         }

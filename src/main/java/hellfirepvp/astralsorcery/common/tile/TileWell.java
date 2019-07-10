@@ -96,7 +96,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
                     breakCatalyst();
                 } else {
                     if (runningRecipe == null) {
-                        runningRecipe = RecipeTypesAS.TYPE_WELL.findRecipe(Dist.CLIENT, new WellLiquefactionContext(this));
+                        runningRecipe = RecipeTypesAS.TYPE_WELL.findRecipe(Dist.DEDICATED_SERVER, new WellLiquefactionContext(this));
                     }
 
                     if (runningRecipe != null) {

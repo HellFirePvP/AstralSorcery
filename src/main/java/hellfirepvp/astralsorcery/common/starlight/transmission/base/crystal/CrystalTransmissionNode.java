@@ -8,11 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -44,10 +44,11 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
 
     @Override
     public void onTransmissionTick(World world) {
-        TileCrystalLens lens = MiscUtils.getTileAt(world, getLocationPos(), TileCrystalLens.class, false);
-        if(lens != null) {
-            lens.onTransmissionTick();
-        }
+        //TODO lens
+        //TileCrystalLens lens = MiscUtils.getTileAt(world, getLocationPos(), TileCrystalLens.class, false);
+        //if(lens != null) {
+        //    lens.onTransmissionTick();
+        //}
     }
 
     @Override
@@ -67,7 +68,7 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
 
     @Override
     public TransmissionProvider getProvider() {
-        return provide(() -> new CrystalTransmissionNode(null));
+        return new Provider();
     }
 
     @Override
@@ -86,16 +87,11 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
         compound.putFloat("lossMultiplier", this.additionalLoss);
     }
 
-    public static class Provider implements TransmissionProvider {
+    public static class Provider extends TransmissionProvider {
 
         @Override
         public IPrismTransmissionNode get() {
             return new CrystalTransmissionNode(null);
-        }
-
-        @Override
-        public String getIdentifier() {
-            return AstralSorcery.MODID + ":CrystalTransmissionNode";
         }
 
     }

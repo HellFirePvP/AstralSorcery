@@ -8,13 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.block.tile;
 
-import hellfirepvp.astralsorcery.common.block.base.BlockStarlightNetwork;
-import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
-import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
-import net.minecraft.block.Block;
+import hellfirepvp.astralsorcery.common.block.properties.PropertiesGlass;
+import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
@@ -24,19 +21,14 @@ import javax.annotation.Nullable;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockWell
+ * Class: BlockRitualLink
  * Created by HellFirePvP
- * Date: 30.06.2019 / 22:26
+ * Date: 10.07.2019 / 21:01
  */
-public class BlockWell extends BlockStarlightNetwork {
+public class BlockRitualLink extends ContainerBlock {
 
-    public BlockWell() {
-        super(PropertiesMarble.defaultMarble());
-    }
-
-    @Override
-    public int getHarvestLevel(BlockState p_getHarvestLevel_1_) {
-        return 2;
+    public BlockRitualLink() {
+        super(PropertiesGlass.coatedGlass());
     }
 
     @Nullable
@@ -48,7 +40,6 @@ public class BlockWell extends BlockStarlightNetwork {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new TileWell();
+        return new TileRitualLink();
     }
-
 }

@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.constellation.effect;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import net.minecraft.entity.player.PlayerEntity;
@@ -53,7 +55,7 @@ public abstract class ConstellationEffect extends ForgeRegistryEntry<Constellati
     }
 
     @Nullable
-    public TileEntity getPedestal(World world, BlockPos pos) {
+    public TileRitualPedestal getPedestal(World world, BlockPos pos) {
         TileEntity te = MiscUtils.getTileAt(world, pos, TileEntity.class, false);
         if(te instanceof TileRitualLink) {
             TileRitualLink link = (TileRitualLink) te;
@@ -78,8 +80,8 @@ public abstract class ConstellationEffect extends ForgeRegistryEntry<Constellati
     @Nullable
     public PlayerEntity getOwningPlayerInWorld(World world, BlockPos pos) {
         TileRitualPedestal pedestal = getPedestal(world, pos);
-        if(pedestal != null) {
-            return pedestal.getOwningPlayerInWorld(world);
+        if (pedestal != null) {
+            return pedestal.getOwner(world);
         }
         return null;
     }

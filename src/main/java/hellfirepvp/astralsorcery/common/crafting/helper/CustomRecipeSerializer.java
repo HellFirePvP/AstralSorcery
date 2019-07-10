@@ -8,9 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
@@ -21,29 +23,10 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 06.07.2019 / 20:38
  */
-public abstract class CustomRecipeSerializer<T extends IRecipe<?>> implements IRecipeSerializer<T> {
-
-    private final ResourceLocation name;
-    private final Class<IRecipeSerializer<?>> thisClass;
+public abstract class CustomRecipeSerializer<T extends IRecipe<IInventory>> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
 
     public CustomRecipeSerializer(ResourceLocation name) {
-        this.name = name;
-        this.thisClass = (Class<IRecipeSerializer<?>>) this.getClass();
+        this.setRegistryName(name);
     }
 
-    @Override
-    public IRecipeSerializer<T> setRegistryName(ResourceLocation name) {
-        return this;
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getRegistryName() {
-        return this.name;
-    }
-
-    @Override
-    public Class<IRecipeSerializer<?>> getRegistryType() {
-        return this.thisClass;
-    }
 }

@@ -35,7 +35,8 @@ public class ResearchSyncHelper {
         int currentLvl = ResearchHelper.getClientProgress().getPerkLevel(player);
         ResearchHelper.updateClientResearch(message);
         if (ResearchHelper.getClientProgress().getPerkLevel(player) > currentLvl) {
-            ClientRenderEventHandler.requestPermChargeReveal(160);
+            //TODO display client charge
+            //ClientRenderEventHandler.requestPermChargeReveal(160);
         }
     }
 

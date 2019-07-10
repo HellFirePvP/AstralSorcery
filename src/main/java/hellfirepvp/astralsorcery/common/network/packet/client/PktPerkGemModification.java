@@ -79,6 +79,8 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
     public Handler<PktPerkGemModification> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
+                /*
+                TODO gem perks
                 PlayerEntity player = context.getSender();
                 if (!(packet.perk instanceof GemSlotPerk)) { //Exclusively for socketable gem perks.
                     return;
@@ -104,6 +106,7 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
                     default:
                         break;
                 }
+                */
             });
         };
     }

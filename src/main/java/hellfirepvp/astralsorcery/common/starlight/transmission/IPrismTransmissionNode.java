@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
+import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

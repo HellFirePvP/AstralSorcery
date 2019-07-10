@@ -83,10 +83,11 @@ public class PktEngraveGlass extends ASPacket<PktEngraveGlass> {
                 MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
                 World world = srv.getWorld(packet.type);
                 if (world != null) {
-                    TileMapDrawingTable tmt = MiscUtils.getTileAt(world, packet.pos, TileMapDrawingTable.class, false);
-                    if(tmt != null) {
-                        tmt.tryEngraveGlass(packet.constellations);
-                    }
+                    //TODO engraving table
+                    //TileMapDrawingTable tmt = MiscUtils.getTileAt(world, packet.pos, TileMapDrawingTable.class, false);
+                    //if(tmt != null) {
+                    //    tmt.tryEngraveGlass(packet.constellations);
+                    //}
                 }
             });
         };

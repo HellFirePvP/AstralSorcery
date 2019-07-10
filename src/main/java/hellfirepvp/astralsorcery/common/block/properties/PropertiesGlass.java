@@ -6,25 +6,25 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.data.journal;
+package hellfirepvp.astralsorcery.common.block.properties;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: IJournalPage
+ * Class: PropertiesGlass
  * Created by HellFirePvP
- * Date: 29.08.2016 / 18:00
+ * Date: 10.07.2019 / 21:03
  */
-public interface IJournalPage {
+public class PropertiesGlass {
 
-    public static final int DEFAULT_WIDTH = 175;
-    public static final int DEFAULT_HEIGHT = 220;
-
-    //Called when the collection of pages that contains this page is opened.
-    //@OnlyIn(Dist.CLIENT)
-    //public IGuiRenderablePage buildRenderPage();
+    public static Block.Properties coatedGlass() {
+        return Block.Properties.create(Material.GLASS)
+                .hardnessAndResistance(1F, 5F)
+                .sound(SoundType.GLASS);
+    }
 
 }

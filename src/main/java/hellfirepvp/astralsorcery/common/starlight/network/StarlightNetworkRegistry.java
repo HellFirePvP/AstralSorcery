@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightRecipient;
-import hellfirepvp.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +19,6 @@ import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,7 +47,8 @@ public class StarlightNetworkRegistry {
     }
 
     public static void setupRegistry() {
-        registerEndpoint(new BlockTransmutationHandler());
+        //TODO block transmutation
+        //registerEndpoint(new BlockTransmutationHandler());
     }
 
     //1 instance is/should be created for 1 type of block+meta pair

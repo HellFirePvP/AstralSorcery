@@ -35,8 +35,8 @@ public class InternalRegistryPrimer {
         return entry;
     }
 
-    <T extends IForgeRegistryEntry<T>> List<T> getEntries(Class<T> type) {
-        return (List<T>) primed.getOrDefault(type, Collections.emptyList());
+    <T extends IForgeRegistryEntry<T>> List<?> getEntries(Class<T> type) {
+        return primed.getOrDefault(type, Collections.emptyList());
     }
 
     void wipe(RegistryEvent.Register<?> registryEvent) {

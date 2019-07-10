@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
@@ -36,7 +35,7 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
 
     private boolean isClockwise = false;
     private DimensionType type = null;
-    private BlockPos pos = BlockPos.ORIGIN;
+    private BlockPos pos = BlockPos.ZERO;
 
     public PktRotateTelescope() {}
 
@@ -78,13 +77,14 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
             public void handleClient(PktRotateTelescope packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
                     World world = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
-                    TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
-                    if(tt != null) {
-                        tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
-                    }
-                    if (Minecraft.getInstance().currentScreen instanceof GuiTelescope) {
-                        ((GuiTelescope) Minecraft.getInstance().currentScreen).handleRotationChange(packet.isClockwise);
-                    }
+                    //TODO telescope
+                    //TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
+                    //if(tt != null) {
+                    //    tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
+                    //}
+                    //if (Minecraft.getInstance().currentScreen instanceof GuiTelescope) {
+                    //    ((GuiTelescope) Minecraft.getInstance().currentScreen).handleRotationChange(packet.isClockwise);
+                    //}
                 });
             }
 
@@ -93,11 +93,12 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
                 context.enqueueWork(() -> {
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
                     World world = srv.getWorld(packet.type);
-                    TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
-                    if(tt != null) {
-                        tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
-                        packet.replyWith(new PktRotateTelescope(packet.isClockwise, packet.type, packet.pos), context);
-                    }
+                    //TODO telescope
+                    //TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
+                    //if(tt != null) {
+                    //    tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
+                    //    packet.replyWith(new PktRotateTelescope(packet.isClockwise, packet.type, packet.pos), context);
+                    //}
                 });
             }
         };

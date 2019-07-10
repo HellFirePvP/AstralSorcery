@@ -31,7 +31,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 20:54
  */
-public abstract class TileReceiverBase<T extends ITransmissionReceiver> extends TileNetwork implements IStarlightReceiver<T>, LinkableTileEntity {
+public abstract class TileReceiverBase<T extends ITransmissionReceiver> extends TileNetwork<T> implements IStarlightReceiver<T>, LinkableTileEntity {
 
     protected TileReceiverBase(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
@@ -75,15 +75,6 @@ public abstract class TileReceiverBase<T extends ITransmissionReceiver> extends 
     @Override
     public List<BlockPos> getLinkedPositions() {
         return new LinkedList<>();
-    }
-
-    @Nullable
-    public T tryGetNode() {
-        IPrismTransmissionNode node = WorldNetworkHandler.getNetworkHandler(world).getTransmissionNode(getPos());
-        if (!(node instanceof ITransmissionReceiver)) {
-            return null;
-        }
-        return (T) node;
     }
 
 }

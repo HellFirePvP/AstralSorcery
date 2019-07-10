@@ -33,7 +33,7 @@ public abstract class TileEntitySynchronized extends TileEntity {
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public final void read(CompoundNBT compound) {
         super.read(compound);
         readCustomNBT(compound);
         readSaveNBT(compound);
@@ -49,7 +49,7 @@ public abstract class TileEntitySynchronized extends TileEntity {
     public void readSaveNBT(CompoundNBT compound) {}
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public final CompoundNBT write(CompoundNBT compound) {
         compound = super.write(compound);
         writeCustomNBT(compound);
         writeSaveNBT(compound);

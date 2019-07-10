@@ -37,7 +37,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 21:46
  */
-public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> extends TileNetwork implements IStarlightTransmission<T>, LinkableTileEntity {
+public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> extends TileNetwork<T> implements IStarlightTransmission<T>, LinkableTileEntity {
 
     private List<BlockPos> positions = new LinkedList<>();
 

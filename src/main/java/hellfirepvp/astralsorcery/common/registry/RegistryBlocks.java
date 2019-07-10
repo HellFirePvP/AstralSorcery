@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.base.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.marble.*;
+import hellfirepvp.astralsorcery.common.block.tile.BlockRitualLink;
 import hellfirepvp.astralsorcery.common.block.tile.BlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.block.tile.BlockWell;
 import net.minecraft.block.Block;
@@ -50,6 +51,7 @@ public class RegistryBlocks {
         MARBLE_RAW      = registerBlock(new BlockMarbleRaw());
         MARBLE_RUNED    = registerBlock(new BlockMarbleRuned());
 
+        RITUAL_LINK = registerBlock(new BlockRitualLink());
         RITUAL_PEDESTAL = registerBlock(new BlockRitualPedestal());
         WELL = registerBlock(new BlockWell());
     }

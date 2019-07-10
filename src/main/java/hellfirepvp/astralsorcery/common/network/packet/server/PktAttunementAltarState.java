@@ -13,14 +13,12 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -38,7 +36,7 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
 
     private DimensionType type;
     private int entityId = -1;
-    private BlockPos at = BlockPos.ORIGIN;
+    private BlockPos at = BlockPos.ZERO;
     private boolean started = false;
 
     public PktAttunementAltarState() {}
@@ -96,12 +94,13 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
                 if (mcWorld.getDimension().getType().equals(packet.type)) {
                     PlayerEntity player = Minecraft.getInstance().player;
                     if (player != null && player.getEntityId() == packet.entityId) {
-                        TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, packet.at, TileAttunementAltar.class, true);
-                        if (ta != null) {
-                            if(ta.tryStartCameraFlight()) {
-                                packet.replyWith(new PktAttunementAltarState(true, packet.type, packet.at), context);
-                            }
-                        }
+                        // TODO attunement altar
+                        //TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, packet.at, TileAttunementAltar.class, true);
+                        //if (ta != null) {
+                        //    if(ta.tryStartCameraFlight()) {
+                        //        packet.replyWith(new PktAttunementAltarState(true, packet.type, packet.at), context);
+                        //    }
+                        //}
                     }
                 }
             }
@@ -112,11 +111,12 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
                     if (packet.started) {
                         MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(side);
                         World w = srv.getWorld(packet.type);
-                        TileAttunementAltar ta = MiscUtils.getTileAt(w, packet.at, TileAttunementAltar.class, true);
-                        if(ta != null) {
-                            PlayerEntity pl = context.getSender();
-                            ta.markPlayerStartCameraFlight(pl);
-                        }
+                        // TODO attunement altar
+                        //TileAttunementAltar ta = MiscUtils.getTileAt(w, packet.at, TileAttunementAltar.class, true);
+                        //if(ta != null) {
+                        //    PlayerEntity pl = context.getSender();
+                        //    ta.markPlayerStartCameraFlight(pl);
+                        //}
                     }
                 });
             }

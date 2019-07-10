@@ -98,27 +98,28 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
                         return;
                     }
 
-                    if (packet.type != null) {
-                        LogCategory.PERKS.info(() -> "Received perk activity packet on clientside: " + packet.type);
-                        switch (packet.type) {
-                            case CLEARALL:
-                                PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getInstance().player);
-                                break;
-                            case UNLOCKALL:
-                                PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getInstance().player);
-                                break;
-                            case DATACHANGE:
-                                PerkEffectHelper.EVENT_INSTANCE.notifyPerkDataChangeClient(Minecraft.getInstance().player, packet.perk, packet.oldData, packet.newData);
-                                break;
-                            default:
-                                break;
-                        }
-                        return;
-                    }
-                    if (packet.perk != null) {
-                        LogCategory.PERKS.info(() -> "Received perk modification packet on clientside: " + packet.perk.getRegistryName() + " " + (packet.unlock ? "Application" : "Removal"));
-                        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(Minecraft.getInstance().player, Dist.CLIENT, packet.perk, !packet.unlock);
-                    }
+                    //TODO perks
+                    //if (packet.type != null) {
+                    //    LogCategory.PERKS.info(() -> "Received perk activity packet on clientside: " + packet.type);
+                    //    switch (packet.type) {
+                    //        case CLEARALL:
+                    //            PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getInstance().player);
+                    //            break;
+                    //        case UNLOCKALL:
+                    //            PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getInstance().player);
+                    //            break;
+                    //        case DATACHANGE:
+                    //            PerkEffectHelper.EVENT_INSTANCE.notifyPerkDataChangeClient(Minecraft.getInstance().player, packet.perk, packet.oldData, packet.newData);
+                    //            break;
+                    //        default:
+                    //            break;
+                    //    }
+                    //    return;
+                    //}
+                    //if (packet.perk != null) {
+                    //    LogCategory.PERKS.info(() -> "Received perk modification packet on clientside: " + packet.perk.getRegistryName() + " " + (packet.unlock ? "Application" : "Removal"));
+                    //    PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(Minecraft.getInstance().player, Dist.CLIENT, packet.perk, !packet.unlock);
+                    //}
                 });
             }
 

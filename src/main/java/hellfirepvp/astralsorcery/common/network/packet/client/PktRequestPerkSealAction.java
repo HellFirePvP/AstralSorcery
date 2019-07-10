@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -71,10 +71,11 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktRequestPerkSealAction packet, NetworkEvent.Context context) {
                 if (!packet.doSealing) {
-                    GuiScreen current = Minecraft.getInstance().currentScreen;
-                    if(current instanceof GuiJournalPerkTree) {
-                        Minecraft.getInstance().addScheduledTask(() -> ((GuiJournalPerkTree) current).playSealBreakAnimation(packet.perk));
-                    }
+                    Screen current = Minecraft.getInstance().currentScreen;
+                    // TODO perk seals
+                    //if(current instanceof GuiJournalPerkTree) {
+                    //    Minecraft.getInstance().addScheduledTask(() -> ((GuiJournalPerkTree) current).playSealBreakAnimation(packet.perk));
+                    //}
                 }
             }
 
@@ -83,12 +84,13 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
                 context.enqueueWork(() -> {
                     PlayerEntity player = context.getSender();
                     if (packet.doSealing) {
-                        if (ItemPerkSeal.useSeal(player, true) &&
-                                ResearchManager.applyPerkSeal(player, packet.perk)) {
-                            if (!ItemPerkSeal.useSeal(player, false)) {
-                                ResearchManager.breakPerkSeal(player, packet.perk);
-                            }
-                        }
+                        // TODO perk seals
+                        //if (ItemPerkSeal.useSeal(player, true) &&
+                        //        ResearchManager.applyPerkSeal(player, packet.perk)) {
+                        //    if (!ItemPerkSeal.useSeal(player, false)) {
+                        //        ResearchManager.breakPerkSeal(player, packet.perk);
+                        //    }
+                        //}
                     } else {
                         if(ResearchManager.breakPerkSeal(player, packet.perk)) {
                             packet.replyWith(new PktRequestPerkSealAction(packet.perk, false), context);

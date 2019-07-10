@@ -8,10 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.server.MinecraftServer;
@@ -25,8 +28,7 @@ import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.function.BiPredicate;
 
 /**
@@ -74,7 +76,12 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
         if (mgr == null) {
             return Collections.emptyList();
         }
-        return (Collection<T>) mgr.getRecipes(this.type).values();
+        Collection<IRecipe<IInventory>> recipeSet = mgr.getRecipes(this.type).values();
+        List<T> recipes = new ArrayList<>(recipeSet.size());
+        for (IRecipe<IInventory> rec : recipeSet) {
+            recipes.add((T) rec);
+        }
+        return recipes;
     }
 
     public final Class<T> getBaseClass() {
