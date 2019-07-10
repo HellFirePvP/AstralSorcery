@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -59,9 +60,11 @@ public abstract class KnowledgeFragment {
         return new KnowledgeFragment(name, c == null ? "" : c.getUnlocalizedName()) {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public boolean isVisible(GuiScreenJournal journalGui) {
-                return journalGui instanceof GuiJournalConstellationDetails &&
-                        MiscUtils.contains(cst, n -> n.equals(((GuiJournalConstellationDetails) journalGui).getConstellation()));
+            public boolean isVisible(Screen journalGui) {
+                return false;
+                //TODO journal constelltation details
+                //return journalGui instanceof GuiJournalConstellationDetails &&
+                //        MiscUtils.contains(cst, n -> n.equals(((GuiJournalConstellationDetails) journalGui).getConstellation()));
             }
         }
         // Any involved constellation discovered
@@ -85,9 +88,11 @@ public abstract class KnowledgeFragment {
         return new KnowledgeFragment(name, nd == null ? "" : nd.getUnLocalizedName()) {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public boolean isVisible(GuiScreenJournal journalGui) {
-                return journalGui instanceof GuiJournalPages &&
-                        MiscUtils.contains(nds, n -> n.equals(((GuiJournalPages) journalGui).getResearchNode()));
+            public boolean isVisible(Screen journalGui) {
+                return false;
+                //TODO journal
+                //return journalGui instanceof GuiJournalPages &&
+                //        MiscUtils.contains(nds, n -> n.equals(((GuiJournalPages) journalGui).getResearchNode()));
             }
         }
         // Any preconditions visible
@@ -144,16 +149,17 @@ public abstract class KnowledgeFragment {
         return new Random(seed).nextInt(4) == 0;
     }
 
-    @Nullable
-    @OnlyIn(Dist.CLIENT)
-    public IConstellation getDiscoverConstellation(long seed) {
-        if (!isConstellationGated(seed)) {
-            return null;
-        }
-        ClientConstellationGenerator.ClientConstellation cst = ClientConstellationGenerator.generateRandom(seed);
-        cst.setFragment(this);
-        return cst;
-    }
+    //TODO client constellation gen
+    //@Nullable
+    //@OnlyIn(Dist.CLIENT)
+    //public IConstellation getDiscoverConstellation(long seed) {
+    //    if (!isConstellationGated(seed)) {
+    //        return null;
+    //    }
+    //    ClientConstellationGenerator.ClientConstellation cst = ClientConstellationGenerator.generateRandom(seed);
+    //    cst.setFragment(this);
+    //    return cst;
+    //}
 
     @Nonnull
     @OnlyIn(Dist.CLIENT)
@@ -187,8 +193,10 @@ public abstract class KnowledgeFragment {
         return canSeeTest.test(progress) && canDiscoverTest.test(progress);
     }
 
+    //TODO journal
     @OnlyIn(Dist.CLIENT)
-    public abstract boolean isVisible(GuiScreenJournal journalGui);
+    public abstract boolean isVisible(Screen journalGui);
+    //public abstract boolean isVisible(GuiScreenJournal journalGui);
 
     public String getUnlocalizedName() {
         return String.format("%s.name", getLocalizationBaseString());

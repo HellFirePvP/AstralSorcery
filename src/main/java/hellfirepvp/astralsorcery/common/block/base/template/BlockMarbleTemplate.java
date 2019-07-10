@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.block.base.template;
 
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
+import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
 import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -31,9 +32,7 @@ import javax.annotation.Nullable;
 public class BlockMarbleTemplate extends Block implements CustomItemBlock {
 
     public BlockMarbleTemplate() {
-        super(Properties.create(MaterialsAS.MARBLE)
-                .hardnessAndResistance(3F, 25F)
-                .sound(SoundType.STONE));
+        super(PropertiesMarble.defaultMarble());
     }
 
     @Override

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.block.marble.*;
+import hellfirepvp.astralsorcery.common.block.tile.BlockRitualLink;
 import hellfirepvp.astralsorcery.common.block.tile.BlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.block.tile.BlockWell;
 
@@ -31,6 +32,7 @@ public class BlocksAS {
     public static BlockMarbleRaw      MARBLE_RAW;
     public static BlockMarbleRuned    MARBLE_RUNED;
 
+    public static BlockRitualLink RITUAL_LINK;
     public static BlockRitualPedestal RITUAL_PEDESTAL;
     public static BlockWell WELL;
 

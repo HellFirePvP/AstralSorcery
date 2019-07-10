@@ -60,7 +60,8 @@ public class PktPlayerStatus extends ASPacket<PktPlayerStatus> {
     public Handler<PktPlayerStatus> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
-                PlayerActivityManager.INSTANCE.setStatusServer(packet.playerUUID, packet.status);
+                //TODO anti afk cheese
+                //PlayerActivityManager.INSTANCE.setStatusServer(packet.playerUUID, packet.status);
             });
         };
     }

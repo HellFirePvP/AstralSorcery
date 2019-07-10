@@ -92,8 +92,9 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
         @Override
         public boolean isSelectable(ItemStack stack, @Nullable PlayerProgress progress) {
             if (progress == null) return false;
-            return (!advanced && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT)) ||
-                    (ItemSextant.isAdvanced(stack) && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT));
+            return (!advanced && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT));
+            //TODO sextant
+            //|| (ItemSextant.isAdvanced(stack) && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT));
         }
 
         @Nonnull

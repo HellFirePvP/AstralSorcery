@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import net.minecraft.tileentity.TileEntityType;
@@ -23,6 +24,7 @@ public class TileEntityTypesAS {
 
     private TileEntityTypesAS() {}
 
+    public static TileEntityType<TileRitualLink> RITUAL_LINK;
     public static TileEntityType<TileRitualPedestal> RITUAL_PEDESTAL;
     public static TileEntityType<TileWell> WELL;
 

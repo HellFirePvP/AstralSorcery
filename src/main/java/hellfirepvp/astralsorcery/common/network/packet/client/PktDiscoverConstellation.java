@@ -15,10 +15,9 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -66,8 +65,8 @@ public class PktDiscoverConstellation extends ASPacket<PktDiscoverConstellation>
                     if (prog.isValid() &&
                             packet.constellation.canDiscover(player, prog) &&
                             ResearchManager.discoverConstellation(packet.constellation, player)) {
-                        player.sendMessage(new TextComponentTranslation("progress.discover.constellation.chat",
-                                new TextComponentTranslation(packet.constellation.getUnlocalizedName())
+                        player.sendMessage(new TranslationTextComponent("progress.discover.constellation.chat",
+                                new TranslationTextComponent(packet.constellation.getUnlocalizedName())
                                         .setStyle(new Style().setColor(TextFormatting.GRAY)))
                                 .setStyle(new Style().setColor(TextFormatting.BLUE)));
                     }

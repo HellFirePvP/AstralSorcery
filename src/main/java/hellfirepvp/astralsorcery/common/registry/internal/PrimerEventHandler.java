@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
+import hellfirepvp.observerlib.api.structure.MatchableStructure;
+import hellfirepvp.observerlib.api.structure.ObserverProvider;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
@@ -57,7 +59,9 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(TargetObject.class, this::registerSextantTargets);
         eventBus.addGenericListener(DataSerializerEntry.class, this::registerDataSerializers);
         eventBus.addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
+        eventBus.addGenericListener(MatchableStructure.class, this::registerStructures);
         eventBus.addGenericListener(StructureType.class, this::registerStructureTypes);
+        eventBus.addGenericListener(ObserverProvider.class, this::registerStructureProviders);
     }
 
     private void registerItems(RegistryEvent.Register<Item> event) {
@@ -129,6 +133,17 @@ public class PrimerEventHandler {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
+    private void registerStructures(RegistryEvent.Register<MatchableStructure> event) {
+        registry.wipe(event);
+        RegistryStructures.registerStructures();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerStructureProviders(RegistryEvent.Register<ObserverProvider> event) {
+        registry.wipe(event);
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
     private void registerStructureTypes(RegistryEvent.Register<StructureType> event) {
         registry.wipe(event);
         RegistryStructureTypes.init();
@@ -152,7 +167,7 @@ public class PrimerEventHandler {
     }
 
     private <T extends IForgeRegistryEntry<T>> void fillRegistry(Class<T> registrySuperType, IForgeRegistry<T> forgeRegistry) {
-        registry.getEntries(registrySuperType).forEach(forgeRegistry::register);
+        registry.getEntries(registrySuperType).forEach(e -> forgeRegistry.register((T) e));
     }
 
 }

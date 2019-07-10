@@ -128,11 +128,11 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
 
             CompoundNBT dataTag = new CompoundNBT();
             element.writeToNBT(dataTag);
-            tag.setTag("data", dataTag);
+            tag.put("data", dataTag);
 
             list.add(tag);
         }
-        cmp.setTag("elements", list);
+        cmp.put("elements", list);
     }
 
     public static interface ListEntry {

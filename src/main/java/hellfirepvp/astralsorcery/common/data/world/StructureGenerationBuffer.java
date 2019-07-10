@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.world;
 
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.observerlib.common.data.WorldCacheDomain;
@@ -55,7 +56,7 @@ public class StructureGenerationBuffer extends SectionWorldData<StructureGenerat
         Vec3i searchVector = new Vec3i(maxDistance, 0, maxDistance);
 
         if (type.isAverageDistanceRequired()) {
-            for (StructureType tt : StructureType.getAllTypes()) {
+            for (StructureType tt : RegistriesAS.REGISTRY_STRUCTURE_TYPES.getValues()) {
                 if (!tt.isAverageDistanceRequired()) {
                     continue;
                 }
@@ -133,7 +134,7 @@ public class StructureGenerationBuffer extends SectionWorldData<StructureGenerat
                     NBTHelper.writeBlockPosToNBT(pos, tag);
                     list.add(tag);
                 }
-                compound.put(type.getName().toString(), list);
+                compound.put(type.getRegistryName().toString(), list);
             }
         }
 
@@ -141,9 +142,9 @@ public class StructureGenerationBuffer extends SectionWorldData<StructureGenerat
         public void readFromNBT(CompoundNBT compound) {
             generatedStructures.clear();
 
-            for (StructureType type : StructureType.getAllTypes()) {
-                if (compound.contains(type.getName().toString(), Constants.NBT.TAG_LIST)) {
-                    ListNBT list = compound.getList(type.getName().toString(), Constants.NBT.TAG_COMPOUND);
+            for (StructureType type : RegistriesAS.REGISTRY_STRUCTURE_TYPES.getValues()) {
+                if (compound.contains(type.getRegistryName().toString(), Constants.NBT.TAG_LIST)) {
+                    ListNBT list = compound.getList(type.getRegistryName().toString(), Constants.NBT.TAG_COMPOUND);
                     for (int i = 0; i < list.size(); i++) {
                         CompoundNBT cmp = list.getCompound(i);
                         BlockPos pos = NBTHelper.readBlockPosFromNBT(cmp);

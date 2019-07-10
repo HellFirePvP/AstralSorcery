@@ -115,9 +115,10 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         }
 
         this.applyPerkLogic(player, dist);
-        if (PerkAttributeHelper.getOrCreateMap(player, dist).markPerkApplied(this)) {
-            LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " applied!");
-        }
+        // TODO perks
+        //if (PerkAttributeHelper.getOrCreateMap(player, dist).markPerkApplied(this)) {
+        //    LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " applied!");
+        //}
     }
 
     final void removePerk(PlayerEntity player, Dist dist) {
@@ -126,9 +127,10 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         }
 
         this.removePerkLogic(player, dist);
-        if (PerkAttributeHelper.getOrCreateMap(player, dist).markPerkRemoved(this)) {
-            LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " removed!");
-        }
+        // TODO perks
+        //if (PerkAttributeHelper.getOrCreateMap(player, dist).markPerkRemoved(this)) {
+        //    LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " removed!");
+        //}
     }
 
     protected abstract void applyPerkLogic(PlayerEntity player, Dist dist);
@@ -289,10 +291,11 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     }
 
     // Return true to prevent further, other interactions when left-clicking this perk
-    @OnlyIn(Dist.CLIENT)
-    public boolean handleMouseClick(GuiJournalPerkTree gui, int mouseX, int mouseY) {
-        return false;
-    }
+    //TODO perk gui
+    //@OnlyIn(Dist.CLIENT)
+    //public boolean handleMouseClick(GuiJournalPerkTree gui, int mouseX, int mouseY) {
+    //    return false;
+    //}
 
     public static class PerkCategory {
 

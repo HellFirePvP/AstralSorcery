@@ -25,10 +25,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 
 import javax.annotation.Nonnull;
@@ -124,7 +120,8 @@ public class ResearchManager {
 
         for (IConstellation c : csts) {
             progress.discoverConstellation(c.getUnlocalizedName());
-            AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
+            //TODO advancements
+            //AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
         }
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
@@ -138,7 +135,8 @@ public class ResearchManager {
 
         progress.discoverConstellation(c.getUnlocalizedName());
 
-        AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
+        //TODO advancements
+        //AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -203,11 +201,13 @@ public class ResearchManager {
             CompoundNBT data = new CompoundNBT();
             root.onUnlockPerkServer(player, progress, data);
             progress.applyPerk(root, data);
-            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, root, false);
+            //TODO perks
+            //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, root, false);
             PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(root, true));
         }
 
-        AdvancementTriggers.ATTUNE_SELF.trigger((ServerPlayerEntity) player, constellation);
+        //TODO advancements
+        //AdvancementTriggers.ATTUNE_SELF.trigger((ServerPlayerEntity) player, constellation);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -219,9 +219,10 @@ public class ResearchManager {
         if (!progress.isValid()) return false;
         if (!progress.hasPerkEffect(perk)) return false;
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, true);
+        //TODO perks
+        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, true);
         progress.applyPerk(perk, newData);
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
+        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
 
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, prevoiusData, newData));
 
@@ -240,7 +241,8 @@ public class ResearchManager {
         perk.onUnlockPerkServer(player, progress, data);
         progress.applyPerk(perk, data);
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
+        //TODO perks
+        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, true));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
@@ -258,7 +260,8 @@ public class ResearchManager {
             return false;
         }
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, true);
+        //TODO perks
+        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, true);
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, false));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
@@ -276,7 +279,8 @@ public class ResearchManager {
             return false;
         }
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
+        //TODO perks
+        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -323,7 +327,8 @@ public class ResearchManager {
         perk.onUnlockPerkServer(player, progress, data);
         progress.applyPerk(perk, data);
 
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
+        //TODO perks
+        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Dist.DEDICATED_SERVER, perk, false);
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, true));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
@@ -366,7 +371,8 @@ public class ResearchManager {
 
     private static void dropPerk(PlayerProgress progress, PlayerEntity player, Dist side, AbstractPerk perk, CompoundNBT data) {
         progress.removePerk(perk);
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, side, perk, true);
+        //TODO perks
+        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, side, perk, true);
         perk.onRemovePerkServer(player, progress, data);
         progress.removePerkData(perk);
     }
@@ -388,7 +394,8 @@ public class ResearchManager {
 
         progress.setExp(exp);
 
-        AdvancementTriggers.PERK_LEVEL.trigger((ServerPlayerEntity) player);
+        //TODO advancements
+        //AdvancementTriggers.PERK_LEVEL.trigger((ServerPlayerEntity) player);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -401,7 +408,8 @@ public class ResearchManager {
 
         progress.modifyExp(exp, player);
 
-        AdvancementTriggers.PERK_LEVEL.trigger((ServerPlayerEntity) player);
+        //TODO advancements
+        //AdvancementTriggers.PERK_LEVEL.trigger((ServerPlayerEntity) player);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -445,6 +453,8 @@ public class ResearchManager {
         return true;
     }
 
+    //TODO crafting???
+    /*
     public static void informCraftingGridCompletion(PlayerEntity player, ItemStack out) {
         Item iOut = out.getItem();
         informCraft(player, out, iOut, Block.getBlockFromItem(iOut));
@@ -510,5 +520,6 @@ public class ResearchManager {
             }
         }
     }
+    */
 
 }

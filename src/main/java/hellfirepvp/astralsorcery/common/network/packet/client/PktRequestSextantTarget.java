@@ -90,7 +90,8 @@ public class PktRequestSextantTarget extends ASPacket<PktRequestSextantTarget> {
             @Override
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktRequestSextantTarget packet, NetworkEvent.Context context) {
-                context.enqueueWork(() -> UISextantCache.addTarget(packet.target, packet.resultPos, packet.type));
+                //TODO sextant
+                //context.enqueueWork(() -> UISextantCache.addTarget(packet.target, packet.resultPos, packet.type));
             }
 
             @Override
@@ -99,8 +100,10 @@ public class PktRequestSextantTarget extends ASPacket<PktRequestSextantTarget> {
                     TargetObject to = packet.target;
                     ServerPlayerEntity player = context.getSender();
                     if (!MiscUtils.isPlayerFakeMP(player)) {
-                        Tuple<Hand, ItemStack> heldStack = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant,
-                                (st) -> to.isSelectable(st, ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER)));
+                        //TODO sextant
+                        //Tuple<Hand, ItemStack> heldStack = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant,
+                        //        (st) -> to.isSelectable(st, ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER)));
+                        Tuple<Hand, ItemStack> heldStack = null;
                         if (heldStack == null) {
                             return;
                         }

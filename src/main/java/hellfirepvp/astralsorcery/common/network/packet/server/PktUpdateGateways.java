@@ -81,7 +81,8 @@ public class PktUpdateGateways extends ASPacket<PktUpdateGateways> {
             @Override
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktUpdateGateways packet, NetworkEvent.Context context) {
-                context.enqueueWork(() -> CelestialGatewaySystem.instance.updateClientCache(packet.positions));
+                //TODO gateways
+                //context.enqueueWork(() -> CelestialGatewaySystem.instance.updateClientCache(packet.positions));
             }
 
             @Override

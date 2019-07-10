@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import com.google.common.base.CaseFormat;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import net.minecraft.tileentity.TileEntity;
@@ -30,8 +31,9 @@ public class RegistryTileEntities {
     private RegistryTileEntities() {}
 
     public static void registerTiles() {
-        WELL = registerTile(TileWell.class);
+        RITUAL_LINK = registerTile(TileRitualLink.class);
         RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class);
+        WELL = registerTile(TileWell.class);
     }
 
     private static <T extends TileEntity> TileEntityType<T> registerTile(Class<T> tileClass) {

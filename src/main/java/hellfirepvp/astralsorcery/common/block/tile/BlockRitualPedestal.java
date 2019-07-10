@@ -9,12 +9,15 @@
 package hellfirepvp.astralsorcery.common.block.tile;
 
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightNetwork;
+import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
 import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
+import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 
@@ -28,9 +31,18 @@ import javax.annotation.Nullable;
 public class BlockRitualPedestal extends BlockStarlightNetwork {
 
     public BlockRitualPedestal() {
-        super(Block.Properties.create(MaterialsAS.MARBLE)
-                .hardnessAndResistance(1F, 3F)
-                .sound(SoundType.STONE));
+        super(PropertiesMarble.defaultMarble());
+    }
+
+    @Override
+    public int getHarvestLevel(BlockState p_getHarvestLevel_1_) {
+        return 2;
+    }
+
+    @Nullable
+    @Override
+    public ToolType getHarvestTool(BlockState p_getHarvestTool_1_) {
+        return ToolType.PICKAXE;
     }
 
     @Nullable

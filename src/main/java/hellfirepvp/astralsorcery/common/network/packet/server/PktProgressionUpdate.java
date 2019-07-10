@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -78,13 +78,13 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
                 context.enqueueWork(() -> {
                     if (packet.prog != null) {
                         String out = TextFormatting.BLUE + I18n.format("progress.gain.progress.chat");
-                        Minecraft.getInstance().player.sendMessage(new TextComponentString(out));
+                        Minecraft.getInstance().player.sendMessage(new StringTextComponent(out));
                     }
                     if (packet.tier != null) {
                         String tr = I18n.format(packet.prog.getUnlocalizedName());
                         String out = I18n.format("progress.gain.research.chat", tr);
                         out = TextFormatting.AQUA + out;
-                        Minecraft.getInstance().player.sendMessage(new TextComponentString(out));
+                        Minecraft.getInstance().player.sendMessage(new StringTextComponent(out));
                     }
                 });
             }

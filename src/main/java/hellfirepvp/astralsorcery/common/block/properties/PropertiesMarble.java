@@ -6,25 +6,25 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.data.journal;
+package hellfirepvp.astralsorcery.common.block.properties;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: IJournalPage
+ * Class: PropertiesMarble
  * Created by HellFirePvP
- * Date: 29.08.2016 / 18:00
+ * Date: 10.07.2019 / 21:02
  */
-public interface IJournalPage {
+public class PropertiesMarble {
 
-    public static final int DEFAULT_WIDTH = 175;
-    public static final int DEFAULT_HEIGHT = 220;
-
-    //Called when the collection of pages that contains this page is opened.
-    //@OnlyIn(Dist.CLIENT)
-    //public IGuiRenderablePage buildRenderPage();
+    public static Block.Properties defaultMarble() {
+        return Block.Properties.create(MaterialsAS.MARBLE)
+                .hardnessAndResistance(3F, 25F)
+                .sound(SoundType.STONE);
+    }
 
 }

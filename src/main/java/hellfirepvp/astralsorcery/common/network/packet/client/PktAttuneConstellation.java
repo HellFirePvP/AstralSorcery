@@ -32,7 +32,7 @@ public class PktAttuneConstellation extends ASPacket<PktAttuneConstellation> {
 
     private IMajorConstellation attunement = null;
     private DimensionType type = null;
-    private BlockPos at = BlockPos.ORIGIN;
+    private BlockPos at = BlockPos.ZERO;
 
     public PktAttuneConstellation() {}
 
@@ -75,10 +75,11 @@ public class PktAttuneConstellation extends ASPacket<PktAttuneConstellation> {
                 if (cst != null) {
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
                     World world = srv.getWorld(type);
-                    TileAttunementAltar ta = MiscUtils.getTileAt(world, packet.at, TileAttunementAltar.class, false);
-                    if (ta != null) {
-                        ta.askForAttunement(context.getSender(), cst);
-                    }
+                    //TODO attunement altar
+                    //TileAttunementAltar ta = MiscUtils.getTileAt(world, packet.at, TileAttunementAltar.class, false);
+                    //if (ta != null) {
+                    //    ta.askForAttunement(context.getSender(), cst);
+                    //}
                 }
             });
         };

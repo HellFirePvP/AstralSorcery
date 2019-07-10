@@ -69,7 +69,9 @@ public class PktSetSextantTarget extends ASPacket<PktSetSextantTarget> {
             context.enqueueWork(() -> {
                 PlayerEntity player = context.getSender();
                 ItemStack held = player.getHeldItem(packet.hand);
-                if(held.isEmpty() || !(held.getItem() instanceof ItemSextant)) {
+                //TODO sextant
+                if (true) {
+                //if(held.isEmpty() || !(held.getItem() instanceof ItemSextant)) {
                     return;
                 }
                 Thread tr = new Thread(() -> {
@@ -78,8 +80,9 @@ public class PktSetSextantTarget extends ASPacket<PktSetSextantTarget> {
                     if (result != null) {
                         context.enqueueWork(() -> {
                             if (ResearchManager.useSextantTarget(target, player)) {
-                                ItemSextant.setTarget(held, target);
-                                ItemSextant.setCurrentTargetInformation(held, result, player.world.getDimension().getType());
+                                //TODO sextant
+                                //ItemSextant.setTarget(held, target);
+                                //ItemSextant.setCurrentTargetInformation(held, result, player.world.getDimension().getType());
                             } else {
                                 AstralSorcery.log.warn("Could not set used sextant target for player " + player.getDisplayName() + " - missing progress!");
                             }

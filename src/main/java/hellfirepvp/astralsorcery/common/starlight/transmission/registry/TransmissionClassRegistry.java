@@ -63,9 +63,10 @@ public class TransmissionClassRegistry {
 
         register(new StarlightReceiverWell.Provider());
         register(new StarlightReceiverRitualPedestal.Provider());
-        register(new TileAltar.AltarReceiverProvider());
-        register(new TileStarlightInfuser.StarlightInfuserReceiverProvider());
-        register(new TileTreeBeacon.TreeBeaconReceiverProvider());
+        //register(new TileAltar.AltarReceiverProvider());
+        //register(new TileStarlightInfuser.StarlightInfuserReceiverProvider());
+        //register(new TileTreeBeacon.TreeBeaconReceiverProvider());
+        // TODO altar, infuser, tree beacon
 
         MinecraftForge.EVENT_BUS.post(new StarlightNetworkEvent.TransmissionRegister(eventInstance));
     }

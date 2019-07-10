@@ -40,7 +40,8 @@ public class PktClearBlockStorageStack extends ASPacket<PktClearBlockStorageStac
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
                 if (side == LogicalSide.SERVER) {
-                    ItemBlockStorage.tryClearContainerFor(context.getSender());
+                    //TODO storage items
+                    //ItemBlockStorage.tryClearContainerFor(context.getSender());
                 }
             });
         };

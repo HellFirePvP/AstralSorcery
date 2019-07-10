@@ -252,7 +252,8 @@ public class RegistryConstellations {
         alcara.addSignatureItem(new ItemHandle(new ItemStack(Items.COAL)));
 
         vorux.addSignatureItem(new ItemHandle(new ItemStack(Items.BLAZE_POWDER)));
-        vorux.addSignatureItem(new ItemHandle(ItemUsableDust.DustType.NOCTURNAL.asStack()));
+        //TODO special dusts
+        //vorux.addSignatureItem(new ItemHandle(ItemUsableDust.DustType.NOCTURNAL.asStack()));
         vorux.addSignatureItem(new ItemHandle(new ItemStack(Items.GUNPOWDER)));
         vorux.addSignatureItem(new ItemHandle(new ItemStack(Items.NETHER_BRICK)));
     }

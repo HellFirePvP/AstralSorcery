@@ -48,7 +48,9 @@ public class GatewayCache extends GlobalWorldData {
 
     public void offerPosition(World world, BlockPos pos, @Nonnull String display) {
         TileEntity te = world.getTileEntity(pos);
-        if(te == null || !(te instanceof TileCelestialGateway)) {
+        //TODO gateways
+        if (true) {
+        //if(te == null || !(te instanceof TileCelestialGateway)) {
             return;
         }
         GatewayNode node = new GatewayNode(pos, display);
@@ -57,14 +59,16 @@ public class GatewayCache extends GlobalWorldData {
         }
         gatewayPositions.add(node);
         markDirty();
-        CelestialGatewaySystem.instance.addPosition(world, node);
+        //TODO gateways
+        //CelestialGatewaySystem.instance.addPosition(world, node);
         LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Added new gateway node at: dim=" + world.getDimension().getType().getId() + ", " + pos.toString());
     }
 
     public void removePosition(World world, BlockPos pos) {
         if(gatewayPositions.remove(pos)) {
             markDirty();
-            CelestialGatewaySystem.instance.removePosition(world, pos);
+            //TODO gateways
+            //CelestialGatewaySystem.instance.removePosition(world, pos);
             LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Removed gateway node at: dim=" + world.getDimension().getType().getId() + ", " + pos.toString());
         }
     }
@@ -82,13 +86,15 @@ public class GatewayCache extends GlobalWorldData {
         Iterator<GatewayNode> iterator = gatewayPositions.iterator();
         while (iterator.hasNext()) {
             GatewayNode node = iterator.next();
-            TileCelestialGateway gateway;
-            try {
-                gateway = MiscUtils.getTileAt(world, node, TileCelestialGateway.class, true);
-            } catch (Exception loadEx) {
-                LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Failed to check gateway for " + node + " skipping");
-                continue;
-            }
+            TileEntity gateway = null;
+            //TODO gateways
+            //TileCelestialGateway gateway;
+            //try {
+            //    gateway = MiscUtils.getTileAt(world, node, TileCelestialGateway.class, true);
+            //} catch (Exception loadEx) {
+            //    LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Failed to check gateway for " + node + " skipping");
+            //    continue;
+            //}
             if (gateway == null) {
                 iterator.remove();
                 LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Invalid entry: " + node + " - no gateway tileentity found there!");

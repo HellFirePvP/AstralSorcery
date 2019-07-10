@@ -86,11 +86,10 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
                     World world = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
                     Entity entity = world.getEntityByID(packet.entityId);
                     if(entity != null) {
-                        entity.motionX = packet.motionVector.getX();
-                        entity.motionY = packet.motionVector.getY();
-                        entity.motionZ = packet.motionVector.getZ();
+                        entity.setMotion(packet.motionVector.toVec3d());
                         if(packet.hasEffect) {
-                            Vector3 origin = new Vector3(entity.posX + entity.width / 2F, entity.posY + entity.height, entity.posZ + entity.width / 2F);
+                            Vector3 origin = Vector3.atEntityCenter(entity)
+                                    .setY(entity.posY + entity.getHeight());
                             Vector3 look = new Vector3(entity.getLookVec()).normalize().multiply(packet.effectLength * 18);
                             Vector3 motionReverse = look.clone().normalize().multiply(-0.4 * packet.effectLength);
 
@@ -98,21 +97,22 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
                             for (int i = 0; i < 500 + rand.nextInt(80); i++) {
                                 Vector3 at = look.clone().multiply(0.2 + rand.nextFloat() * 2.5).add(perp.clone().rotate(rand.nextFloat() * 360, look).multiply(rand.nextFloat() * 1.6)).add(origin);
 
-                                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
-                                p.scale(0.35F + rand.nextFloat() * 0.2F).setMaxAge(10 + rand.nextInt(10));
-                                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).setAlphaMultiplier(1F);
-                                p.gravity(0.004);
-                                if(rand.nextBoolean()) {
-                                    p.setColor(Color.WHITE);
-                                    p.scale(0.1F + rand.nextFloat() * 0.05F);
-                                } else {
-                                    p.setColor(BlockCollectorCrystal.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
-                                }
-                                if(rand.nextInt(4) != 0) {
-                                    p.motion(motionReverse.getX(), motionReverse.getY(), motionReverse.getZ());
-                                } else {
-                                    p.motion(0, 0, 0);
-                                }
+                                // TODO particles?
+                                //EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
+                                //p.scale(0.35F + rand.nextFloat() * 0.2F).setMaxAge(10 + rand.nextInt(10));
+                                //p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).setAlphaMultiplier(1F);
+                                //p.gravity(0.004);
+                                //if(rand.nextBoolean()) {
+                                //    p.setColor(Color.WHITE);
+                                //    p.scale(0.1F + rand.nextFloat() * 0.05F);
+                                //} else {
+                                //    p.setColor(BlockCollectorCrystal.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
+                                //}
+                                //if(rand.nextInt(4) != 0) {
+                                //    p.motion(motionReverse.getX(), motionReverse.getY(), motionReverse.getZ());
+                                //} else {
+                                //    p.motion(0, 0, 0);
+                                //}
                             }
                         }
                     }

@@ -33,7 +33,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 21:06
  */
-public abstract class TileSourceBase<T extends IPrismTransmissionNode> extends TileNetwork implements IStarlightSource<T>, LinkableTileEntity {
+public abstract class TileSourceBase<T extends IPrismTransmissionNode> extends TileNetwork<T> implements IStarlightSource<T>, LinkableTileEntity {
 
     protected boolean needsUpdate = false;
     private boolean linked = false;

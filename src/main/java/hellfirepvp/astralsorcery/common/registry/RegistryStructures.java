@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.structure.PatternRitualPedestal;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
+import hellfirepvp.observerlib.common.change.ObserverProviderStructure;
 
 import static hellfirepvp.astralsorcery.common.lib.StructuresAS.*;
 import static hellfirepvp.astralsorcery.common.lib.StructureTypesAS.*;
@@ -32,6 +33,8 @@ public class RegistryStructures {
 
     private static <T extends MatchableStructure> T register(T struct) {
         AstralSorcery.getProxy().getRegistryPrimer().register(struct);
+        ObserverProviderStructure structureProvider = new ObserverProviderStructure(struct.getRegistryName());
+        AstralSorcery.getProxy().getRegistryPrimer().register(structureProvider);
         return struct;
     }
 
