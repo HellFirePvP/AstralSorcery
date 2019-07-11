@@ -93,7 +93,6 @@ public class CommonProxy {
         this.serverConfig.buildConfiguration();
 
         RegistryData.init();
-        RegistryRegistries.setupRegistries();
         PacketChannel.registerPackets();
 
         this.tickManager = new TickManager();
@@ -109,6 +108,7 @@ public class CommonProxy {
     }
 
     public void attachEventHandlers(IEventBus eventBus) {
+        eventBus.addListener(RegistryRegistries::buildRegistries);
         eventBus.addListener(this::onClientInitialized);
 
         eventBus.addListener(this::onServerStop);
