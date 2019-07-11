@@ -15,6 +15,7 @@ import net.minecraft.world.GameRules;
 import net.minecraftforge.fml.network.NetworkInstance;
 import net.minecraftforge.fml.network.NetworkRegistry;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.*;
@@ -79,7 +80,9 @@ public class ReflectionHelper {
     private static Function<Object[], Object> resolveConstructor(Class<?> owningClass, Class<?>... parameters) {
         return (invokeParams) -> {
             try {
-                return owningClass.getDeclaredConstructor(parameters).newInstance(invokeParams);
+                Constructor<?> ctor = owningClass.getDeclaredConstructor(parameters);
+                ctor.setAccessible(true);
+                return ctor.newInstance(invokeParams);
             } catch (Exception e) {
                 throw new ReflectionException("Failed to resolve/call Constructor!", e);
             }
@@ -89,7 +92,9 @@ public class ReflectionHelper {
     private static BiFunction<Object, Object[], Object> resolveMethod(Class<?> owningClass, String methodName, Class<?>... parameters) {
         return (owningObject, invokeParams) -> {
             try {
-                return owningClass.getDeclaredMethod(methodName, parameters).invoke(owningObject, invokeParams);
+                Method m = owningClass.getDeclaredMethod(methodName, parameters);
+                m.setAccessible(true);
+                return m.invoke(owningObject, invokeParams);
             } catch (Exception e) {
                 throw new ReflectionException("Failed to resolve/call Method!", e);
             }

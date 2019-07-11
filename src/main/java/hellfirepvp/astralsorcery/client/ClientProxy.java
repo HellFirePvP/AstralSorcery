@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.client.registry.RegistryEffectTemplates;
 import hellfirepvp.astralsorcery.client.registry.RegistrySprites;
 import hellfirepvp.astralsorcery.client.registry.RegistryTextures;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
@@ -50,12 +51,10 @@ public class ClientProxy extends CommonProxy {
     public void initialize() {
         this.clientScheduler = new ClientScheduler();
 
-        try {
-            ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(AssetLibrary.INSTANCE);
-        } catch (Exception exc) {
-            AstralSorcery.log.warn("Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
-            AssetLibrary.INSTANCE.onResourceManagerReload(null);
-        }
+        IReloadableResourceManager resMgr = (IReloadableResourceManager) Minecraft.getInstance().getResourceManager();
+        resMgr.addReloadListener(AssetLibrary.INSTANCE);
+        resMgr.addReloadListener(AssetPreLoader.INSTANCE);
+
         OBJLoader.INSTANCE.addDomain(AstralSorcery.MODID);
 
         this.clientConfig = new ClientConfig();
@@ -106,10 +105,6 @@ public class ClientProxy extends CommonProxy {
 
     private void clientSetup(FMLClientSetupEvent event) {
         ClientGuiHandler.registerScreens();
-
-        RegistryTextures.loadTextures();
-        RegistrySprites.loadSprites();
-        RegistryEffectTemplates.registerTemplates();
     }
 
 }
