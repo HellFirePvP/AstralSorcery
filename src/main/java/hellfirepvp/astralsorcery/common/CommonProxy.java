@@ -27,9 +27,7 @@ import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerIO;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.registry.RegistryData;
-import hellfirepvp.astralsorcery.common.registry.RegistryDataSerializers;
-import hellfirepvp.astralsorcery.common.registry.RegistryRegistries;
+import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
@@ -93,6 +91,8 @@ public class CommonProxy {
         this.serverConfig.buildConfiguration();
 
         RegistryData.init();
+        RegistryMaterials.init();
+        RegistryGameRules.init();
         PacketChannel.registerPackets();
 
         this.tickManager = new TickManager();
@@ -105,6 +105,8 @@ public class CommonProxy {
 
     public void attachLifecycle(IEventBus modEventBus) {
         modEventBus.addListener(this::onCommonSetup);
+
+        registryEventHandler.attachEventHandlers(modEventBus);
     }
 
     public void attachEventHandlers(IEventBus eventBus) {
@@ -122,8 +124,6 @@ public class CommonProxy {
 
         tickManager.attachListeners(eventBus);
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);
-
-        registryEventHandler.attachEventHandlers(eventBus);
     }
 
     public void attachTickListeners(Consumer<ITickHandler> registrar) {
