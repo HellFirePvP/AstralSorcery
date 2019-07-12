@@ -64,12 +64,24 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(ObserverProvider.class, this::registerStructureProviders);
     }
 
+    //This exists because you can't sort registries in any fashion or make one load after another in forge.
+    //So. thanks. this is the result i guess.
+    private void registerRemainingData() {
+        RegistryConstellations.init();
+        RegistryConstellations.initConstellationSignatures();
+
+        RegistryStructureTypes.init();
+        RegistryStructures.registerStructures();
+    }
+
     private void registerItems(RegistryEvent.Register<Item> event) {
         registry.wipe(event);
         RegistryItems.registerItems();
         RegistryItems.registerItemBlocks();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
-        RegistryConstellations.initConstellationSignatures();
+
+        //Item registration happens after block registration. Register misc stuff here.
+        registerRemainingData();
     }
 
     private void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -104,8 +116,6 @@ public class PrimerEventHandler {
     }
 
     private void registerConstellations(RegistryEvent.Register<IConstellation> event) {
-        registry.wipe(event);
-        RegistryConstellations.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
@@ -115,6 +125,10 @@ public class PrimerEventHandler {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
+    /**
+     * has to run after {@link net.minecraft.world.gen.feature.Feature}
+     * currently guaranteed by: F before T
+     */
     private void registerSextantTargets(RegistryEvent.Register<TargetObject> event) {
         registry.wipe(event);
         RegistrySextantTargets.init();
@@ -134,31 +148,16 @@ public class PrimerEventHandler {
     }
 
     private void registerStructures(RegistryEvent.Register<MatchableStructure> event) {
-        registry.wipe(event);
-        RegistryStructures.registerStructures();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerStructureProviders(RegistryEvent.Register<ObserverProvider> event) {
-        registry.wipe(event);
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerStructureTypes(RegistryEvent.Register<StructureType> event) {
-        registry.wipe(event);
-        RegistryStructureTypes.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
-
-    //private void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-    //    registry.wipe(event);
-    //    RegistryRecipes.initVanillaRecipes();
-    //    RegistryRecipes.initAstralRecipes();
-    //    WellLiquefaction.init();
-    //    LiquidInteraction.init();
-    //    LightOreTransmutations.init();
-    //    fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
-    //}
 
     private void registerSounds(RegistryEvent.Register<SoundEvent> event) {
         registry.wipe(event);

@@ -26,10 +26,20 @@ public class RegistryStructureTypes {
     private RegistryStructureTypes() {}
 
     public static void init() {
-        STYPE_MOUNTAIN = register(new ResourceLocation(AstralSorcery.MODID, "struct_mountain"), true);
-        STYPE_DESERT = register(new ResourceLocation(AstralSorcery.MODID, "struct_desert"), true);
-        STYPE_SMALL = register(new ResourceLocation(AstralSorcery.MODID, "struct_small"), true);
-        STYPE_TREASURE = register(new ResourceLocation(AstralSorcery.MODID, "struct_treasure"), false);
+        STYPE_MOUNTAIN = registerAS("struct_mountain", true);
+        STYPE_DESERT = registerAS("struct_desert", true);
+        STYPE_SMALL = registerAS("struct_small", true);
+        STYPE_TREASURE = registerAS("struct_treasure");
+
+        PTYPE_RITUAL_PEDESTAL = registerAS("pattern_ritual_pedestal");
+    }
+
+    private static StructureType registerAS(String name) {
+        return registerAS(name, false);
+    }
+
+    private static StructureType registerAS(String name, boolean requiresAvgDistance) {
+        return register(new ResourceLocation(AstralSorcery.MODID, name), requiresAvgDistance);
     }
 
     private static StructureType register(ResourceLocation name, boolean requiresAvgDistance) {

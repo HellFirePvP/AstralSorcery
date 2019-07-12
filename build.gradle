@@ -29,7 +29,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 minecraft {
 
-    mappings channel: 'snapshot', version: '20190704-1.14.3'
+    mappings channel: 'snapshot', version: '20190711-1.14.3'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -100,9 +100,9 @@ repositories {
 
 dependencies {
 
-    minecraft "net.minecraftforge:forge:1.14.3-27.0.21"
+    minecraft "net.minecraftforge:forge:1.14.3-27.0.50"
 
-    compile 'hellfirepvp.observerlib:observerlib:1.14.3-1.1.0.v11'
+    compileOnly 'hellfirepvp.observerlib:observerlib:1.14.3-1.1.0.v13'
 
 }
 
