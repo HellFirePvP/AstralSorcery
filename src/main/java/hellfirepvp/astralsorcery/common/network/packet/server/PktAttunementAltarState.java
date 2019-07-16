@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -71,32 +74,37 @@ public class PktAttunementAltarState implements IMessage, IMessageHandler<PktAtt
     public PktAttunementAltarState onMessage(PktAttunementAltarState message, MessageContext ctx) {
         if(ctx.side == Side.SERVER) {
             if(message.started) {
-                World w = DimensionManager.getWorld(message.worldId);
-                TileAttunementAltar ta = MiscUtils.getTileAt(w, message.at, TileAttunementAltar.class, true);
-                if(ta != null) {
-                    EntityPlayer pl = ctx.getServerHandler().player;
-                    ta.markPlayerStartCameraFlight(pl);
-                }
+                AstralSorcery.proxy.scheduleDelayed(() -> {
+                    World w = DimensionManager.getWorld(message.worldId);
+                    TileAttunementAltar ta = MiscUtils.getTileAt(w, message.at, TileAttunementAltar.class, true);
+                    if(ta != null) {
+                        EntityPlayer pl = ctx.getServerHandler().player;
+                        ta.markPlayerStartCameraFlight(pl);
+                    }
+                });
             }
         } else {
-            return recClient(message);
+            recClient(message);
         }
         return null;
     }
 
     @SideOnly(Side.CLIENT)
-    private PktAttunementAltarState recClient(PktAttunementAltarState message) {
-        if(Minecraft.getMinecraft().world != null &&
-                Minecraft.getMinecraft().world.provider.getDimension() == message.worldId &&
+    private void recClient(PktAttunementAltarState message) {
+        World mcWorld = Minecraft.getMinecraft().world;
+        if(mcWorld != null && mcWorld.provider.getDimension() == message.worldId &&
                 Minecraft.getMinecraft().player != null &&
                 Minecraft.getMinecraft().player.getEntityId() == message.entityId) {
-            TileAttunementAltar ta = MiscUtils.getTileAt(Minecraft.getMinecraft().world, message.at, TileAttunementAltar.class, true);
-            if (ta != null) {
-                if(ta.tryStartCameraFlight()) {
-                    return new PktAttunementAltarState(true, message.worldId, message.at);
+
+            AstralSorcery.proxy.scheduleClientside(() -> {
+                TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, message.at, TileAttunementAltar.class, true);
+                if (ta != null) {
+                    if(ta.tryStartCameraFlight()) {
+                        PacketChannel.CHANNEL.sendToServer(new PktAttunementAltarState(true, message.worldId, message.at));
+                    }
                 }
-            }
+            });
         }
-        return new PktAttunementAltarState(false, -1, BlockPos.ORIGIN);
+        PacketChannel.CHANNEL.sendToServer(new PktAttunementAltarState(false, -1, BlockPos.ORIGIN));
     }
 }
