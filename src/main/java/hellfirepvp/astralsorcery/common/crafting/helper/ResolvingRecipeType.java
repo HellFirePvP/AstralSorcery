@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;

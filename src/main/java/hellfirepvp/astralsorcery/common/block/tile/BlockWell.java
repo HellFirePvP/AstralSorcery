@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.block.tile;
 
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightNetwork;
+import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
 import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
@@ -28,7 +29,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 22:26
  */
-public class BlockWell extends BlockStarlightNetwork {
+public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock {
 
     public BlockWell() {
         super(PropertiesMarble.defaultMarble());

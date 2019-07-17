@@ -25,7 +25,7 @@ import java.util.UUID;
  */
 public class EffectHelper {
 
-    public static <T extends EntityComplexFX> Builder<T> of(BatchRenderContext<T> ctx) {
+    public static <T extends EntityComplexFX, C extends BatchRenderContext<T>> Builder<T> of(C ctx) {
         return new Builder<>(ctx);
     }
 

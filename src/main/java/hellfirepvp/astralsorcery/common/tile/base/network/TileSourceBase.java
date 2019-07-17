@@ -43,16 +43,6 @@ public abstract class TileSourceBase<T extends IPrismTransmissionNode> extends T
         super(tileEntityTypeIn);
     }
 
-    @Override
-    public World getLinkWorld() {
-        return getTrWorld();
-    }
-
-    @Override
-    public BlockPos getLinkPos() {
-        return getTrPos();
-    }
-
     public boolean hasBeenLinked() {
         return linked;
     }

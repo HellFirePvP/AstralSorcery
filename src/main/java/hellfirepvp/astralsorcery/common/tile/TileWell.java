@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
-import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
@@ -28,8 +27,6 @@ import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.tile.PrecisionSingleFluidTank;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventoryFiltered;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -177,18 +174,11 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
     @OnlyIn(Dist.CLIENT)
     private void doCatalystEffect(Color color) {
         if (rand.nextInt(6) == 0) {
-            Entity rView = Minecraft.getInstance().getRenderViewEntity();
-            if (rView == null) {
-                rView = Minecraft.getInstance().player;
-            }
             Vector3 at = new Vector3(this)
                     .add(0.5, 1.3, 0.5)
                     .add(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
                             rand.nextFloat() * 0.1,
                             rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
-            if (at.distanceSquared(rView) > RenderingConfig.CONFIG.getMaxEffectRenderDistanceSq()) {
-                return;
-            }
 
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(at)
@@ -248,12 +238,6 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
     @Nonnull
     public TileInventoryFiltered getInventory() {
         return inventory;
-    }
-
-    @Nullable
-    @Override
-    public String getUnLocalizedDisplayName() {
-        return "tile.blockwell.name";
     }
 
     @Nonnull

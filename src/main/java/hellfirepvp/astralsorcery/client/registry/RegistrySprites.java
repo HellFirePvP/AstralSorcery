@@ -28,6 +28,9 @@ public class RegistrySprites {
         SPR_CRYSTAL_EFFECT_1 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_1, 5, 8);
         SPR_CRYSTAL_EFFECT_2 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_2, 5, 8);
         SPR_CRYSTAL_EFFECT_3 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_3, 5, 8);
+
+        SPR_COLLECTOR_EFFECT = new SpriteSheetResource(TEX_COLLECTOR_EFFECT, 5, 16);
+        SPR_LIGHTBEAM = new SpriteSheetResource(TEX_LIGHTBEAM, 4, 16);
     }
 
 }

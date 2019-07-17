@@ -9,9 +9,11 @@
 package hellfirepvp.astralsorcery.common.block.tile;
 
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightNetwork;
+import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
 import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.observerlib.api.block.BlockStructureObserver;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -28,7 +30,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 09.07.2019 / 20:03
  */
-public class BlockRitualPedestal extends BlockStarlightNetwork {
+public class BlockRitualPedestal extends BlockStarlightNetwork implements CustomItemBlock, BlockStructureObserver {
 
     public BlockRitualPedestal() {
         super(PropertiesMarble.defaultMarble());

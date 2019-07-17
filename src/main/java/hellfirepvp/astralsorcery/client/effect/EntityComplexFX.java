@@ -10,10 +10,12 @@ package hellfirepvp.astralsorcery.client.effect;
 
 import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
 
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,6 +26,7 @@ import java.util.Objects;
  */
 public abstract class EntityComplexFX implements IComplexEffect {
 
+    protected static final Random rand = new Random();
     private static long counter = 0;
 
     private final long id;
@@ -75,14 +78,14 @@ public abstract class EntityComplexFX implements IComplexEffect {
     public void tick() {
         this.age++;
 
-        if (this.age >= this.maxAge && refreshFunction.shouldRefresh(this)) {
+        if (this.age >= this.maxAge && refreshFunction.shouldRefresh(this) && RenderingUtils.canEffectExist(this)) {
             this.age = 0;
         }
     }
 
     public abstract <T extends EntityComplexFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks);
 
-    protected void resetLifespan() {
+    public void resetLifespan() {
         this.age = 0;
     }
 

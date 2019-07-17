@@ -79,6 +79,12 @@ public class RenderingConfig extends ConfigEntry {
 
     public static enum ParticleAmount {
 
+        NONE(455) {
+            @Override
+            public boolean shouldSpawn(Random r) {
+                return false;
+            }
+        },
         MINIMAL(40),
         LOWERED(8),
         ALL(1);

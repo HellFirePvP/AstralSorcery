@@ -12,16 +12,18 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
-import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
 import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.order.DependencySorter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -35,13 +37,14 @@ import java.util.Random;
  */
 public final class EffectHandler {
 
-    public static final Random STATIC_EFFECT_RAND = new Random();
-    public static final EffectHandler INSTANCE = new EffectHandler();
+    private static final Random STATIC_EFFECT_RAND = new Random();
+    private static final EffectHandler INSTANCE = new EffectHandler();
 
     private boolean cleanRequested = false;
     private boolean acceptsNewEffects = true;
-    List<PendingEffect> toAddBuffer = Lists.newLinkedList();
-    Map<BatchRenderContext<?>, List<PendingEffect>> effectMap = Maps.newHashMap();
+    private List<PendingEffect> toAddBuffer = Lists.newLinkedList();
+    private List<BatchRenderContext<?>> orderedEffects = null;
+    private Map<BatchRenderContext<?>, List<PendingEffect>> effectMap = Maps.newHashMap();
 
     private EffectHandler() {}
 
@@ -63,13 +66,20 @@ public final class EffectHandler {
     }
 
     public void render(RenderWorldLastEvent event) {
+        if (this.orderedEffects == null) {
+            return;
+        }
+
         float pTicks = event.getPartialTicks();
         acceptsNewEffects = false;
 
-        for (BatchRenderContext<?> ctx : effectMap.keySet()) {
-            BufferContext buf = ctx.prepare();
-            effectMap.get(ctx).forEach(p -> p.effect.render(ctx, buf, pTicks));
-            ctx.draw();
+        for (BatchRenderContext<?> ctx : this.orderedEffects) {
+            List<PendingEffect> effects;
+            if ((effects = this.effectMap.get(ctx)) != null && !effects.isEmpty()) {
+                BufferContext buf = ctx.prepare(pTicks);
+                effects.forEach(p -> p.effect.render(ctx, buf, pTicks));
+                ctx.draw(pTicks);
+            }
         }
 
         acceptsNewEffects = true;
@@ -86,6 +96,11 @@ public final class EffectHandler {
             return;
         }
 
+        if (this.orderedEffects == null) {
+            this.orderedEffects = DependencySorter.getSorted(EffectTemplatesAS.LIST_ALL_RENDER_CONTEXT);
+            this.orderedEffects.forEach(ctx -> this.effectMap.put(ctx, new LinkedList<>()));
+        }
+
         acceptsNewEffects = false;
 
         Vector3 playerPos = Vector3.atEntityCorner(player);
@@ -97,7 +112,15 @@ public final class EffectHandler {
         toAddBuffer.clear();
     }
 
-    void registerUnsafe(PendingEffect pendingEffect) {
+    void queueParticle(PendingEffect pendingEffect) {
+        if (this.acceptsNewEffects) {
+            registerUnsafe(pendingEffect);
+        } else {
+            toAddBuffer.add(pendingEffect);
+        }
+    }
+
+    private void registerUnsafe(PendingEffect pendingEffect) {
         if (!mayAcceptParticle(pendingEffect.getProperties())) {
             return;
         }
@@ -105,26 +128,7 @@ public final class EffectHandler {
         BatchRenderContext ctx = pendingEffect.getProperties().getContext();
         pendingEffect.getProperties().applySpecialEffects(effect);
 
-        effectMap.computeIfAbsent(ctx, c -> Lists.newLinkedList())
-                .add(pendingEffect);
-
-        //TODO effect registering
-        //if(effect instanceof EffectLightning) {
-        //    fastRenderLightnings.add((EffectLightning) effect);
-        //} else if(effect instanceof EntityFXFacingParticle.Gateway) {
-        //    fastRenderGatewayParticles.add((EntityFXFacingParticle) effect);
-        //} else if(effect instanceof EntityFXFacingDepthParticle) {
-        //    fastRenderDepthParticles.add((EntityFXFacingDepthParticle) effect);
-        //} else if(effect instanceof EntityFXFacingParticle) {
-        //    fastRenderParticles.add((EntityFXFacingParticle) effect);
-        //} else if(effect instanceof CompoundObjectEffect) {
-        //    CompoundObjectEffect.ObjectGroup group = ((CompoundObjectEffect) effect).getGroup();
-        //    if(!objects.containsKey(group)) objects.put(group, new LinkedList<>());
-        //    objects.get(group).add((CompoundObjectEffect) effect);
-        //} else {
-        //    complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
-        //}
-
+        effectMap.get(ctx).add(pendingEffect);
         effect.clearRemoveFlag();
     }
 
@@ -133,14 +137,10 @@ public final class EffectHandler {
             return true;
         }
         RenderingConfig.ParticleAmount cfg = RenderingConfig.CONFIG.particleAmount.get();
-        if(!Minecraft.isFancyGraphicsEnabled()) {
+        if (!Minecraft.isFancyGraphicsEnabled()) {
             cfg = cfg.less();
         }
         return cfg.shouldSpawn(STATIC_EFFECT_RAND);
-    }
-
-    public static boolean acceptsNewEffects() {
-        return getInstance().acceptsNewEffects;
     }
 
     public static void cleanUp() {

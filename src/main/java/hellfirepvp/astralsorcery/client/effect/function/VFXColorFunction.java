@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,6 +37,17 @@ public interface VFXColorFunction<T extends EntityVisualFX> {
             @Override
             public Color getColor(@Nonnull T fx, float pTicks) {
                 return Color.getHSBColor((ClientScheduler.getClientTick() % tickSpeed) / fTickSpeed, 1F, 1F);
+            }
+        };
+    }
+
+    public static <T extends EntityVisualFX> VFXColorFunction<T> random() {
+        Color c = Color.getHSBColor((new Random().nextFloat() * 360F) / 360F, 1F, 1F);
+        return new VFXColorFunction<T>() {
+            @Nonnull
+            @Override
+            public Color getColor(@Nonnull T fx, float pTicks) {
+                return c;
             }
         };
     }

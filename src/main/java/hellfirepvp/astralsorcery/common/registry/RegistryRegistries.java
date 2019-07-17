@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraftforge.api.distmarker.Dist;
@@ -79,6 +80,13 @@ public class RegistryRegistries {
         REGISTRY_STRUCTURE_TYPES = new RegistryBuilder<StructureType>()
                 .setName(REGISTRY_NAME_STRUCTURE_TYPES)
                 .setType(StructureType.class)
+                .disableSaving()
+                .disableOverrides()
+                .create();
+
+        REGISTRY_KNOWLEDGE_FRAGMENTS = new RegistryBuilder<KnowledgeFragment>()
+                .setName(REGISTRY_NAME_KNOWLEDGE_FRAGMENTS)
+                .setType(KnowledgeFragment.class)
                 .disableSaving()
                 .disableOverrides()
                 .create();

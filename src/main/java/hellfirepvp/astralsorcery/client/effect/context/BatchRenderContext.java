@@ -16,11 +16,12 @@ import hellfirepvp.astralsorcery.client.util.draw.BufferBatchHelper;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.order.OrderSortable;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,7 +30,7 @@ import java.util.function.Supplier;
  * Created by HellFirePvP
  * Date: 07.07.2019 / 10:58
  */
-public class BatchRenderContext<T extends EntityComplexFX> {
+public class BatchRenderContext<T extends EntityComplexFX> extends OrderSortable {
 
     private static BufferContext ctx = BufferBatchHelper.make();
     private static int counter = 0;
@@ -37,23 +38,23 @@ public class BatchRenderContext<T extends EntityComplexFX> {
     private final int id;
     private final SpriteSheetResource sprite;
     private final int renderLayer;
-    private final Consumer<BufferContext> before;
-    private final Runnable after;
+    private final BiConsumer<BufferContext, Float> before;
+    private final Consumer<Float> after;
     private final BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator;
     private RenderTarget renderTarget = RenderTarget.RENDERLOOP;
 
     public BatchRenderContext(AbstractRenderableTexture resource,
                               int renderLayer,
-                              Consumer<BufferContext> before,
-                              Runnable after,
+                              BiConsumer<BufferContext, Float> before,
+                              Consumer<Float> after,
                               BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator) {
         this(new SpriteSheetResource(resource), renderLayer, before, after, particleCreator);
     }
 
     public BatchRenderContext(SpriteSheetResource sprite,
                               int renderLayer,
-                              Consumer<BufferContext> before,
-                              Runnable after,
+                              BiConsumer<BufferContext, Float> before,
+                              Consumer<Float> after,
                               BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator) {
         this.id = counter++;
         this.sprite = sprite;
@@ -80,17 +81,17 @@ public class BatchRenderContext<T extends EntityComplexFX> {
         return sprite;
     }
 
-    public BufferContext prepare() {
+    public BufferContext prepare(float pTicks) {
         sprite.bindTexture();
-        before.accept(ctx);
+        before.accept(ctx, pTicks);
         return ctx;
     }
 
-    public void draw() {
+    public void draw(float pTicks) {
         Vec3d view = RenderInfo.getInstance().getView();
         ctx.sortVertexData((float) view.x, (float) view.y, (float) view.z);
         ctx.draw();
-        after.run();
+        after.accept(pTicks);
     }
 
     //Valid layers: 0, 1, 2

@@ -32,8 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DataLightConnections extends AbstractData {
 
-    private final Object lock = new Object();
-
     public boolean clientReceivingData = false;
     private Map<Integer, Map<BlockPos, List<BlockPos>>> clientPosBuffer = new ConcurrentHashMap<>();
     private Map<Integer, Map<BlockPos, List<BlockPos>>> serverPosBuffer = new HashMap<>();
@@ -86,28 +84,22 @@ public class DataLightConnections extends AbstractData {
     }
 
     private void setDimClearFlag(int dim) {
-        synchronized (lock) {
-            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dim, k -> new LinkedList<>());
-            ch.clear();
-            ch.add(new Tuple<>(null, false)); //null, false -> clear
-        }
+        LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dim, k -> new LinkedList<>());
+        ch.clear();
+        ch.add(new Tuple<>(null, false)); //null, false -> clear
     }
 
     private void notifyConnectionAdd(int dimid, List<TransmissionChain.LightConnection> added) {
-        synchronized (lock) {
-            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dimid, k -> new LinkedList<>());
-            for (TransmissionChain.LightConnection l : added) {
-                ch.add(new Tuple<>(l, true));
-            }
+        LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dimid, k -> new LinkedList<>());
+        for (TransmissionChain.LightConnection l : added) {
+            ch.add(new Tuple<>(l, true));
         }
     }
 
     private void notifyConnectionRemoval(int dimid, List<TransmissionChain.LightConnection> removal) {
-        synchronized (lock) {
-            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dimid, k -> new LinkedList<>());
-            for (TransmissionChain.LightConnection l : removal) {
-                ch.add(new Tuple<>(l, false));
-            }
+        LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dimid, k -> new LinkedList<>());
+        for (TransmissionChain.LightConnection l : removal) {
+            ch.add(new Tuple<>(l, false));
         }
     }
 
@@ -143,32 +135,30 @@ public class DataLightConnections extends AbstractData {
 
     @Override
     public void writeToPacket(CompoundNBT compound) {
-        synchronized (lock) {
-            for (int dimId : serverChangeBuffer.keySet()) {
-                LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> changes = serverChangeBuffer.get(dimId);
-                if(!changes.isEmpty()) {
-                    ListNBT list = new ListNBT();
-                    for (Tuple<TransmissionChain.LightConnection, Boolean> tpl : changes) {
-                        if(tpl.getA() == null) {
-                            list = new ListNBT();
-                            CompoundNBT cm = new CompoundNBT();
-                            cm.putBoolean("clear", true);
-                            list.add(cm);
-                            break;
-                        }
-
-                        CompoundNBT cmp = new CompoundNBT();
-                        cmp.putLong("sta", tpl.getA().getStart().toLong());
-                        cmp.putLong("end", tpl.getA().getEnd().toLong());
-                        cmp.putBoolean("s", tpl.getB());
-                        list.add(cmp);
+        for (int dimId : serverChangeBuffer.keySet()) {
+            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> changes = serverChangeBuffer.get(dimId);
+            if(!changes.isEmpty()) {
+                ListNBT list = new ListNBT();
+                for (Tuple<TransmissionChain.LightConnection, Boolean> tpl : changes) {
+                    if(tpl.getA() == null) {
+                        list = new ListNBT();
+                        CompoundNBT cm = new CompoundNBT();
+                        cm.putBoolean("clear", true);
+                        list.add(cm);
+                        break;
                     }
 
-                    compound.put("" + dimId, list);
+                    CompoundNBT cmp = new CompoundNBT();
+                    cmp.putLong("sta", tpl.getA().getStart().toLong());
+                    cmp.putLong("end", tpl.getA().getEnd().toLong());
+                    cmp.putBoolean("s", tpl.getB());
+                    list.add(cmp);
                 }
+
+                compound.put("" + dimId, list);
             }
-            serverChangeBuffer.clear();
         }
+        serverChangeBuffer.clear();
     }
 
     @Override

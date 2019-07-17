@@ -96,25 +96,9 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
     @Override
     protected void onFirstTick() {}
 
-    @Override
-    public World getLinkWorld() {
-        return getWorld();
-    }
-
-    @Override
-    public BlockPos getLinkPos() {
-        return getPos();
-    }
-
     @Nullable
     public BlockPos getLinkedTo() {
         return linkedTo;
-    }
-
-    @Nullable
-    @Override
-    public String getUnLocalizedDisplayName() {
-        return "tile.blockrituallink.name";
     }
 
     @Override

@@ -8,6 +8,11 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -16,5 +21,16 @@ package hellfirepvp.astralsorcery.client.util;
  * Date: 27.05.2019 / 22:26
  */
 public class RenderingUtils {
+
+    public static boolean canEffectExist(EntityComplexFX fx) {
+        Entity view = Minecraft.getInstance().getRenderViewEntity();
+        if (view == null) {
+            view = Minecraft.getInstance().player;
+        }
+        if (view == null) {
+            return false;
+        }
+        return fx.getPosition().distanceSquared(view) <= RenderingConfig.CONFIG.getMaxEffectRenderDistanceSq();
+    }
 
 }
