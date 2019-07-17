@@ -25,7 +25,12 @@ public abstract class TileNetwork extends TileEntityTick {
     private boolean isNetworkInformed = false;
 
     public void update() {
-        if(world.isRemote) return;
+        super.update();
+
+        if(world.isRemote) {
+            return;
+        }
+
         if(!isNetworkInformed && !TransmissionNetworkHelper.isTileInNetwork(this)) {
             TransmissionNetworkHelper.informNetworkTilePlacement(this);
             isNetworkInformed = true;
