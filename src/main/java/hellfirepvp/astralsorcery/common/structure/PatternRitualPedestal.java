@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.observerlib.common.block.PatternBlockArray;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +37,7 @@ public class PatternRitualPedestal extends PatternBlockArray {
         addBlockCube(air, -3, 0, -1, 3, 2, 1);
         addBlockCube(air, -1, 0, -3, 1, 2, 3);
 
-        addBlock(0, 0, 0, BlocksAS.RITUAL_PEDESTAL.getDefaultState());
+        addBlock(BlockPos.ZERO, BlocksAS.RITUAL_PEDESTAL.getDefaultState());
 
         BlockState chiseled = BlocksAS.MARBLE_CHISELED.getDefaultState();
         BlockState bricks = BlocksAS.MARBLE_BRICKS.getDefaultState();

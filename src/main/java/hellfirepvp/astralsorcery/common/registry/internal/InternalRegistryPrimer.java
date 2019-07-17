@@ -39,8 +39,4 @@ public class InternalRegistryPrimer {
         return primed.getOrDefault(type, Collections.emptyList());
     }
 
-    void wipe(RegistryEvent.Register<?> registryEvent) {
-        primed.remove(registryEvent.getRegistry().getRegistrySuperType());
-    }
-
 }

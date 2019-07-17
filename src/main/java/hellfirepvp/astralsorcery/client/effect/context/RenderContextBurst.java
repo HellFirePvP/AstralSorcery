@@ -18,26 +18,29 @@ import org.lwjgl.opengl.GL11;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RenderContextCrystalBurst
+ * Class: RenderContextBurst
  * Created by HellFirePvP
  * Date: 09.07.2019 / 19:06
  */
-public class RenderContextCrystalBurst extends BatchRenderContext<FXFacingParticle> {
+public class RenderContextBurst extends BatchRenderContext<FXFacingParticle> {
 
-    public RenderContextCrystalBurst(SpriteSheetResource sprite) {
-        super(sprite, 0, (ctx) -> {
-            GlStateManager.disableAlphaTest();
-            GlStateManager.enableBlend();
-            Blending.DEFAULT.applyStateManager();
-            GlStateManager.disableCull();
-            GlStateManager.depthMask(false);
-            ctx.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        }, () -> {
-            GlStateManager.depthMask(true);
-            GlStateManager.enableCull();
-            GlStateManager.disableBlend();
-            GlStateManager.enableAlphaTest();
-        }, (ctx, pos) -> new FXFacingParticle(pos));
+    public RenderContextBurst(SpriteSheetResource sprite) {
+        super(sprite, 0,
+                (ctx, pTicks) -> {
+                    GlStateManager.disableAlphaTest();
+                    GlStateManager.enableBlend();
+                    Blending.DEFAULT.applyStateManager();
+                    GlStateManager.disableCull();
+                    GlStateManager.depthMask(false);
+                    ctx.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+                },
+                (pTicks) -> {
+                    GlStateManager.depthMask(true);
+                    GlStateManager.enableCull();
+                    GlStateManager.disableBlend();
+                    GlStateManager.enableAlphaTest();
+                },
+                (ctx, pos) -> new FXFacingParticle(pos));
     }
 
 }

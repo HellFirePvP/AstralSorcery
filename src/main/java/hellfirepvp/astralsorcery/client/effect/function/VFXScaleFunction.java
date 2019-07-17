@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.client.effect.function;
 
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.client.util.VectorUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 
 import javax.annotation.Nonnull;
 
@@ -27,7 +27,7 @@ public interface VFXScaleFunction<T extends EntityVisualFX> {
     VFXScaleFunction<?> SHRINK = (VFXScaleFunction<EntityVisualFX>) (fx, scaleIn, pTicks) -> {
         float prevAge = Math.max(0F, ((float) fx.getAge() - 1)) / ((float) fx.getMaxAge());
         float currAge = Math.max(0F, ((float) fx.getAge())) / ((float) fx.getMaxAge());
-        return (float) (scaleIn * (1 - (VectorUtils.interpolate(prevAge, currAge, pTicks))));
+        return (float) (scaleIn * (1 - (RenderingVectorUtils.interpolate(prevAge, currAge, pTicks))));
     };
 
     public float getScale(@Nonnull T fx, float scaleIn, float pTicks);

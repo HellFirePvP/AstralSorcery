@@ -49,7 +49,7 @@ public class PositionedLoopSound extends SimpleSound implements ITickableSound {
     }
 
     public boolean hasStoppedPlaying() {
-        return hasStoppedPlaying || !Minecraft.getInstance().getSoundHandler().func_215294_c(this);
+        return hasStoppedPlaying || !Minecraft.getInstance().getSoundHandler().isPlaying(this);
     }
 
     @Override

@@ -23,6 +23,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,17 +37,16 @@ import java.util.function.Predicate;
  * Created by HellFirePvP
  * Date: 22.09.2018 / 17:57
  */
-public abstract class KnowledgeFragment {
+public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFragment> {
 
     private static final Predicate<PlayerProgress> TRUE = (p) -> true;
 
-    private final ResourceLocation name;
     private String unlocPrefix;
     private Predicate<PlayerProgress> canSeeTest = TRUE;
     private Predicate<PlayerProgress> canDiscoverTest = TRUE;
 
     public KnowledgeFragment(ResourceLocation name, String unlocalizedPrefix) {
-        this.name = name;
+        this.setRegistryName(name);
         this.unlocPrefix = unlocalizedPrefix;
     }
 
@@ -211,6 +211,7 @@ public abstract class KnowledgeFragment {
     }
 
     private String getLocalizationBaseString() {
+        ResourceLocation name = this.getRegistryName();
         return String.format("knowledge.%s.%s", name.getNamespace(), name.getPath());
     }
 
@@ -242,20 +243,16 @@ public abstract class KnowledgeFragment {
         return this.unlocPrefix.isEmpty() ? this.getLocalizedName() : String.format("%s: %s", I18n.format(this.unlocPrefix), this.getLocalizedName());
     }
 
-    public ResourceLocation getRegistryName() {
-        return name;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         KnowledgeFragment that = (KnowledgeFragment) o;
-        return Objects.equals(this.name, that.name);
+        return Objects.equals(this.getRegistryName(), that.getRegistryName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.name.toString());
+        return Objects.hash(this.getRegistryName().toString());
     }
 }

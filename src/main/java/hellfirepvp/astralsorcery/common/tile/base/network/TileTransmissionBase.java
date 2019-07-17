@@ -60,16 +60,6 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
     public abstract boolean isSingleLink();
 
     @Override
-    public World getLinkWorld() {
-        return getTrWorld();
-    }
-
-    @Override
-    public BlockPos getLinkPos() {
-        return getTrPos();
-    }
-
-    @Override
     public void writeCustomNBT(CompoundNBT compound) {
         super.writeCustomNBT(compound);
 

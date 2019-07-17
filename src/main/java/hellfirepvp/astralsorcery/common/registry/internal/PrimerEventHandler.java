@@ -10,7 +10,10 @@ package hellfirepvp.astralsorcery.common.registry.internal;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.registry.*;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
@@ -62,6 +65,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(MatchableStructure.class, this::registerStructures);
         eventBus.addGenericListener(StructureType.class, this::registerStructureTypes);
         eventBus.addGenericListener(ObserverProvider.class, this::registerStructureProviders);
+        eventBus.addGenericListener(KnowledgeFragment.class, this::registerKnowledgeFragments);
     }
 
     //This exists because you can't sort registries in any fashion or make one load after another in forge.
@@ -72,10 +76,13 @@ public class PrimerEventHandler {
 
         RegistryStructureTypes.init();
         RegistryStructures.registerStructures();
+        RegistryKnowledgeFragments.init();
+
+        TransmissionClassRegistry.setupRegistry();
+        SourceClassRegistry.setupRegistry();
     }
 
     private void registerItems(RegistryEvent.Register<Item> event) {
-        registry.wipe(event);
         RegistryItems.registerItems();
         RegistryItems.registerItemBlocks();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
@@ -85,32 +92,27 @@ public class PrimerEventHandler {
     }
 
     private void registerBlocks(RegistryEvent.Register<Block> event) {
-        registry.wipe(event);
         RegistryBlocks.registerBlocks();
         //RegistryBlocks.initRenderRegistry();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
-        registry.wipe(event);
         RegistryTileEntities.registerTiles();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerBiomes(RegistryEvent.Register<Biome> event) {
-        registry.wipe(event);
         //? maybe. one day.
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerPotions(RegistryEvent.Register<Potion> event) {
-        registry.wipe(event);
         //RegistryPotions.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
-        registry.wipe(event);
         //RegistryEnchantments.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
@@ -120,7 +122,6 @@ public class PrimerEventHandler {
     }
 
     private void registerPerks(RegistryEvent.Register<AbstractPerk> event) {
-        registry.wipe(event);
         //RegistryPerks.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
@@ -130,19 +131,16 @@ public class PrimerEventHandler {
      * currently guaranteed by: F before T
      */
     private void registerSextantTargets(RegistryEvent.Register<TargetObject> event) {
-        registry.wipe(event);
         RegistrySextantTargets.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerDataSerializers(RegistryEvent.Register<DataSerializerEntry> event) {
-        registry.wipe(event);
         RegistryDataSerializers.registerSerializers();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
-        registry.wipe(event);
         RegistryRecipeSerializers.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
@@ -159,8 +157,11 @@ public class PrimerEventHandler {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
+    private void registerKnowledgeFragments(RegistryEvent.Register<KnowledgeFragment> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
     private void registerSounds(RegistryEvent.Register<SoundEvent> event) {
-        registry.wipe(event);
         //RegistrySounds.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }

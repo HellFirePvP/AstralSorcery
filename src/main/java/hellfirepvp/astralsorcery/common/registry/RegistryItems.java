@@ -15,9 +15,7 @@ import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlockProperties;
 import hellfirepvp.astralsorcery.common.item.render.ItemDynamicColor;
 import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,6 +32,12 @@ import java.util.List;
  */
 public class RegistryItems {
 
+    public static final ItemGroup ITEM_GROUP_AS = new ItemGroup(AstralSorcery.MODID) {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(Items.APPLE);
+        }
+    };
     private static List<ItemDynamicColor> colorItems = Lists.newArrayList();
 
     private RegistryItems() {}
@@ -78,7 +82,7 @@ public class RegistryItems {
 
     private static Item.Properties buildItemBlockProperties(Block block) {
         Item.Properties props = new Item.Properties();
-        props.group(ItemGroup.MISC);
+        props.group(ITEM_GROUP_AS);
         if (block instanceof CustomItemBlockProperties) {
             ItemGroup group = ((CustomItemBlockProperties) block).getItemGroup();
             if (group != null) {

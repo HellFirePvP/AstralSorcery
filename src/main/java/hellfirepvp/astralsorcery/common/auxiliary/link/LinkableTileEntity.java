@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary.link;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -29,19 +31,35 @@ public interface LinkableTileEntity {
      * This tile's world.
      * Links can only be created in the same world as this tile is in.
      */
-    public World getLinkWorld();
+    default public World getLinkWorld() {
+        if (this instanceof TileEntity) {
+            return ((TileEntity) this).getWorld();
+        }
+        throw new IllegalStateException("LinkableTileEntity not implemented on TileEntity: " + this.getClass());
+    }
 
     /**
      * This tile's position
      */
-    public BlockPos getLinkPos();
+    default public BlockPos getLinkPos() {
+        if (this instanceof TileEntity) {
+            return ((TileEntity) this).getPos();
+        }
+        throw new IllegalStateException("LinkableTileEntity not implemented on TileEntity: " + this.getClass());
+    }
 
     /**
      * The unLocalized displayname for this tile.
      * Can be null if no message should be displayed.
      */
     @Nullable
-    public String getUnLocalizedDisplayName();
+    default public String getUnLocalizedDisplayName() {
+        if (this instanceof TileEntity) {
+            BlockState state = ((TileEntity) this).getBlockState();
+            return state.getBlock().getTranslationKey();
+        }
+        throw new IllegalStateException("LinkableTileEntity not implemented on TileEntity: " + this.getClass());
+    }
 
     /**
      * Defines if this Tile does accept other tiles linking to it.

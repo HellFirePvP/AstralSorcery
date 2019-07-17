@@ -6,26 +6,24 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.lib;
-
-import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
+package hellfirepvp.astralsorcery.common.util;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: SpritesAS
+ * Class: ObjectReference
  * Created by HellFirePvP
- * Date: 07.07.2019 / 11:03
+ * Date: 18.07.2019 / 00:02
  */
-public class SpritesAS {
+public class ObjectReference<T> {
 
-    private SpritesAS() {}
+    private T object;
 
-    public static SpriteSheetResource SPR_CRYSTAL_EFFECT_1;
-    public static SpriteSheetResource SPR_CRYSTAL_EFFECT_2;
-    public static SpriteSheetResource SPR_CRYSTAL_EFFECT_3;
+    public T get() {
+        return object;
+    }
 
-    public static SpriteSheetResource SPR_COLLECTOR_EFFECT;
-    public static SpriteSheetResource SPR_LIGHTBEAM;
-
+    public void set(T object) {
+        this.object = object;
+    }
 }

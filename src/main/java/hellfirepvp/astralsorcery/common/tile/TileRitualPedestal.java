@@ -144,12 +144,6 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         return world.getPlayerByUuid(this.ownerUUID);
     }
 
-    @Nullable
-    @Override
-    public String getUnLocalizedDisplayName() {
-        return "tile.blockritualpedestal.name";
-    }
-
     @Nonnull
     @Override
     public StarlightReceiverRitualPedestal provideEndpoint(BlockPos at) {

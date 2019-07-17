@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.sync.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.sync.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
@@ -56,10 +57,12 @@ public class TransmissionChain {
         Thread tr = new Thread(() -> {
             TransmissionChain chain = buildFromSource(netHandler, sourcePos);
             handle.threadTransmissionChainCallback(world, chain, source, netHandler, sourcePos);
-            DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
-            connections.updateNewConnectionsThreaded(netHandler.getWorld().getDimension().getType().getId(), chain.getFoundConnections());
-            DataLightBlockEndpoints endpoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
-            endpoints.updateNewEndpoints(netHandler.getWorld().getDimension().getType().getId(), chain.resolvedNormalBlockPositions);
+            AstralSorcery.getProxy().scheduleDelayed(() -> {
+                DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
+                connections.updateNewConnectionsThreaded(netHandler.getWorld().getDimension().getType().getId(), chain.getFoundConnections());
+                DataLightBlockEndpoints endpoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
+                endpoints.updateNewEndpoints(netHandler.getWorld().getDimension().getType().getId(), chain.resolvedNormalBlockPositions);
+            });
         });
         tr.setName("TrChainCalculationThread");
         tr.start();

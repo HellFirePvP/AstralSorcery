@@ -10,9 +10,11 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import com.google.common.base.CaseFormat;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -31,12 +33,12 @@ public class RegistryTileEntities {
     private RegistryTileEntities() {}
 
     public static void registerTiles() {
-        RITUAL_LINK = registerTile(TileRitualLink.class);
-        RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class);
-        WELL = registerTile(TileWell.class);
+        RITUAL_LINK = registerTile(TileRitualLink.class, BlocksAS.RITUAL_LINK);
+        RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class, BlocksAS.RITUAL_PEDESTAL);
+        WELL = registerTile(TileWell.class, BlocksAS.WELL);
     }
 
-    private static <T extends TileEntity> TileEntityType<T> registerTile(Class<T> tileClass) {
+    private static <T extends TileEntity> TileEntityType<T> registerTile(Class<T> tileClass, Block... validBlocks) {
         ResourceLocation name = createTileEntityName(tileClass);
         TileEntityType.Builder<T> typeBuilder = TileEntityType.Builder.create(() -> {
             try {
@@ -45,7 +47,7 @@ public class RegistryTileEntities {
                 exc.printStackTrace();
             }
             throw new IllegalArgumentException("Unexpected Constructor for class: " + tileClass.getName());
-        });
+        }, validBlocks);
 
         TileEntityType<T> type = typeBuilder.build(null);
         type.setRegistryName(name);

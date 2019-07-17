@@ -35,54 +35,44 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     private Map<Integer, LinkedList<Tuple<BlockPos, Boolean>>> serverChangeBuffer = new HashMap<>();
 
-    private final Object lock = new Object();
-
     private CompoundNBT clientReadBuffer = new CompoundNBT();
 
     public void updateNewEndpoint(int dimId, BlockPos pos) {
-        synchronized (lock) {
-            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
-            list.add(new Tuple<>(pos, true));
+        LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
+        list.add(new Tuple<>(pos, true));
 
-            List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
-            posBuffer.add(pos);
-        }
+        List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
+        posBuffer.add(pos);
         markDirty();
     }
 
     public void updateNewEndpoints(int dimId, List<BlockPos> newPositions) {
-        synchronized (lock) {
-            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
-            for (BlockPos pos : newPositions) {
-                list.add(new Tuple<>(pos, true));
-            }
-
-            List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
-            posBuffer.addAll(newPositions);
+        LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
+        for (BlockPos pos : newPositions) {
+            list.add(new Tuple<>(pos, true));
         }
+
+        List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
+        posBuffer.addAll(newPositions);
         markDirty();
     }
 
     public void removeEndpoints(int dimId, List<BlockPos> positions) {
-        synchronized (lock) {
-            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
-            for (BlockPos pos : positions) {
-                list.add(new Tuple<>(pos, false));
-            }
-
-            List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
-            posBuffer.removeAll(positions);
+        LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
+        for (BlockPos pos : positions) {
+            list.add(new Tuple<>(pos, false));
         }
+
+        List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
+        posBuffer.removeAll(positions);
         markDirty();
     }
 
     public void clearDimensionEndpoints(int dimId) {
         serverPositions.remove(dimId);
-        synchronized (lock) {
-            serverChangeBuffer.remove(dimId);
-            serverChangeBuffer.put(dimId, new LinkedList<>());
-            serverChangeBuffer.get(dimId).add(new Tuple<>(null, false));
-        }
+        serverChangeBuffer.remove(dimId);
+        serverChangeBuffer.put(dimId, new LinkedList<>());
+        serverChangeBuffer.get(dimId).add(new Tuple<>(null, false));
         markDirty();
     }
 
@@ -118,31 +108,29 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     @Override
     public void writeToPacket(CompoundNBT compound) {
-        synchronized (lock) {
-            for (int dimId : serverChangeBuffer.keySet()) {
-                LinkedList<Tuple<BlockPos, Boolean>> changes = serverChangeBuffer.get(dimId);
-                if(!changes.isEmpty()) {
-                    ListNBT list = new ListNBT();
-                    for (Tuple<BlockPos, Boolean> tpl : changes) {
-                        if(tpl.getA() == null) {
-                            list = new ListNBT();
-                            CompoundNBT cm = new CompoundNBT();
-                            cm.putBoolean("clear", true);
-                            list.add(cm);
-                            break;
-                        }
-
-                        CompoundNBT cmp = new CompoundNBT();
-                        cmp.putLong("pos", tpl.getA().toLong());
-                        cmp.putBoolean("s", tpl.getB());
-                        list.add(cmp);
+        for (int dimId : serverChangeBuffer.keySet()) {
+            LinkedList<Tuple<BlockPos, Boolean>> changes = serverChangeBuffer.get(dimId);
+            if(!changes.isEmpty()) {
+                ListNBT list = new ListNBT();
+                for (Tuple<BlockPos, Boolean> tpl : changes) {
+                    if(tpl.getA() == null) {
+                        list = new ListNBT();
+                        CompoundNBT cm = new CompoundNBT();
+                        cm.putBoolean("clear", true);
+                        list.add(cm);
+                        break;
                     }
 
-                    compound.put("" + dimId, list);
+                    CompoundNBT cmp = new CompoundNBT();
+                    cmp.putLong("pos", tpl.getA().toLong());
+                    cmp.putBoolean("s", tpl.getB());
+                    list.add(cmp);
                 }
+
+                compound.put("" + dimId, list);
             }
-            serverChangeBuffer.clear();
         }
+        serverChangeBuffer.clear();
     }
 
     @Override

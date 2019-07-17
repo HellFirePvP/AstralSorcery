@@ -31,6 +31,10 @@ public class RegistryTextures {
         TEX_CRYSTAL_EFFECT_1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1");
         TEX_CRYSTAL_EFFECT_2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2");
         TEX_CRYSTAL_EFFECT_3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3");
+        TEX_COLLECTOR_EFFECT = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2");
+
+        TEX_LIGHTNING_PART = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightningpart");
+        TEX_LIGHTBEAM = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam");
     }
 
 }

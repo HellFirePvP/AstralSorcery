@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.block.tile;
 
+import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesGlass;
 import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import net.minecraft.block.BlockState;
@@ -25,7 +26,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 10.07.2019 / 21:01
  */
-public class BlockRitualLink extends ContainerBlock {
+public class BlockRitualLink extends ContainerBlock implements CustomItemBlock {
 
     public BlockRitualLink() {
         super(PropertiesGlass.coatedGlass());

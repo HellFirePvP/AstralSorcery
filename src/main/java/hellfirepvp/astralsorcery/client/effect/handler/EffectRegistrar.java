@@ -9,11 +9,15 @@
 package hellfirepvp.astralsorcery.client.effect.handler;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +36,11 @@ public final class EffectRegistrar {
     }
 
     private static void register(EntityComplexFX effect, EffectProperties properties) {
-        if(AssetLibrary.isReloading() || effect == null || Minecraft.getInstance().isGamePaused()) {
+        if(AssetLibrary.isReloading() ||
+                effect == null ||
+                Minecraft.getInstance().isGamePaused() ||
+                Minecraft.getInstance().player == null ||
+                !RenderingUtils.canEffectExist(effect)) {
             return;
         }
 
@@ -41,12 +49,7 @@ public final class EffectRegistrar {
             return;
         }
 
-        EffectHandler.PendingEffect pendingEffect = new EffectHandler.PendingEffect(effect, properties);
-        if (EffectHandler.acceptsNewEffects()) {
-            EffectHandler.getInstance().registerUnsafe(pendingEffect);
-        } else {
-            EffectHandler.getInstance().toAddBuffer.add(pendingEffect);
-        }
+        EffectHandler.getInstance().queueParticle(new EffectHandler.PendingEffect(effect, properties));
     }
 
 }
