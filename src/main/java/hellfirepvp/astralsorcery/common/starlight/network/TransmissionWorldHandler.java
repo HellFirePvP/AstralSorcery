@@ -213,16 +213,10 @@ public class TransmissionWorldHandler {
                         }
                     }
                 }
-                Thread tr = new Thread(() -> {
-                    DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
-                    connections.removeOldConnectionsThreaded(dimId, knownChain.getFoundConnections());
-                });
-                tr.start();
-                Thread t = new Thread(() -> {
-                    DataLightBlockEndpoints connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
-                    connections.removeEndpoints(dimId, knownChain.getResolvedNormalBlockPositions());
-                });
-                t.start();
+                DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
+                connections.removeOldConnectionsThreaded(dimId, knownChain.getFoundConnections());
+                DataLightBlockEndpoints endPoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
+                endPoints.removeEndpoints(dimId, knownChain.getResolvedNormalBlockPositions());
             }
             activeChunkMap.remove(source);
             cachedSourceChain.remove(source);
