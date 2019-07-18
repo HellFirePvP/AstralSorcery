@@ -186,6 +186,12 @@ public class MiscUtils {
         return l;
     }
 
+    public static <T> Set<T> copySet(Set<T> set) {
+        Set<T> s = new HashSet<>(set.size());
+        s.addAll(set);
+        return s;
+    }
+
     @Nullable
     public static <T> T iterativeSearch(Collection<T> collection, Predicate<T> matchingFct) {
         for (T element : collection) {
@@ -232,7 +238,7 @@ public class MiscUtils {
     }
 
     /*
-    TODO 1.14
+    TODO fluids
     public static boolean isFluidBlock(BlockState state) {
         return state.getBlock() instanceof BlockLiquid || state.getBlock() instanceof BlockFluidBase;
     }
