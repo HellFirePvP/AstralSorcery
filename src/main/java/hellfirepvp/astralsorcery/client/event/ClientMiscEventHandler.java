@@ -58,7 +58,7 @@ public class ClientMiscEventHandler {
         PlayerEntity player = event.getEntityPlayer();
         if (player == null) return;
         if (obj == null) return;
-        //if (player.getUniqueID().hashCode() != 1529485240) return;
+        if (player.getUniqueID().hashCode() != 1529485240) return;
 
         if(player.isPassenger() || player.isElytraFlying()) return;
 

@@ -16,6 +16,7 @@ import net.minecraft.util.Direction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -48,7 +49,7 @@ public class TileInventoryFiltered extends TileInventory {
     protected TileInventoryFiltered(@Nonnull TileEntitySynchronized tile,
                                  @Nonnull Supplier<Integer> slotCountProvider,
                                  @Nullable Consumer<Integer> changeListener,
-                                 @Nonnull List<Direction> applicableSides) {
+                                 @Nonnull Collection<Direction> applicableSides) {
         super(tile, slotCountProvider, changeListener, applicableSides);
     }
 
@@ -65,7 +66,7 @@ public class TileInventoryFiltered extends TileInventory {
     @Override
     protected TileInventoryFiltered makeNewInstance() {
         TileInventoryFiltered inv = new TileInventoryFiltered(this.tile, this.slotCountProvider,
-                this.changeListener, MiscUtils.copyList(this.applicableSides));
+                this.changeListener, MiscUtils.copySet(this.applicableSides));
         inv.canInsert(this.inputFilter);
         inv.canExtract(this.extractFilter);
         return inv;
