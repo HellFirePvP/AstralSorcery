@@ -6,44 +6,41 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.effect.context;
+package hellfirepvp.astralsorcery.client.effect.context.base;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
-import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
-import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXColorEffectSphere;
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RenderContextGenericDepthParticle
+ * Class: RenderContextColorSphere
  * Created by HellFirePvP
- * Date: 17.07.2019 / 22:24
+ * Date: 18.07.2019 / 21:08
  */
-public class RenderContextGenericDepthParticle extends BatchRenderContext<FXFacingParticle> {
+public class RenderContextColorSphere extends BatchRenderContext<FXColorEffectSphere> {
 
-    public RenderContextGenericDepthParticle() {
-        super(TexturesAS.TEX_STATIC_FLARE,
+    public RenderContextColorSphere() {
+        super(AbstractRenderableTexture.wrap(TextureHelper.getMissingTexture()),
                 (ctx, pTicks) -> {
-                    GlStateManager.disableAlphaTest();
                     GlStateManager.enableBlend();
                     Blending.DEFAULT.applyStateManager();
-                    GlStateManager.disableCull();
-                    GlStateManager.disableDepthTest();
+                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0001F);
+                    GlStateManager.disableTexture();
                     GlStateManager.depthMask(false);
-                    ctx.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+                    ctx.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
                 },
                 (pTicks) -> {
                     GlStateManager.depthMask(true);
-                    GlStateManager.enableDepthTest();
-                    GlStateManager.enableCull();
+                    GlStateManager.enableTexture();
+                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
                     GlStateManager.disableBlend();
-                    GlStateManager.enableAlphaTest();
                 },
-                (ctx, pos) -> new FXFacingParticle(pos).setScaleMultiplier(0.2F));
+                (ctx, pos) -> new FXColorEffectSphere(pos));
     }
-
 }

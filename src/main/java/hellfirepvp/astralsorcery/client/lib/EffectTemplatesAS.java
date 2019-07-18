@@ -8,10 +8,8 @@
 
 package hellfirepvp.astralsorcery.client.lib;
 
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
-import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
-import hellfirepvp.astralsorcery.client.effect.vfx.FXLightbeam;
-import hellfirepvp.astralsorcery.client.effect.vfx.FXLightning;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.vfx.*;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -40,5 +38,14 @@ public class EffectTemplatesAS {
     public static BatchRenderContext<FXFacingParticle> COLLECTOR_BURST;
     public static BatchRenderContext<FXLightning> LIGHTNING;
     public static BatchRenderContext<FXLightbeam> LIGHTBEAM;
+
+    public static BatchRenderContext<FXCube> CUBE_OPAQUE_ATLAS;
+    public static BatchRenderContext<FXCube> CUBE_TRANSLUCENT_ATLAS;
+    public static BatchRenderContext<FXCube> CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH;
+
+    public static BatchRenderContext<FXBlock> BLOCK_TRANSLUCENT;
+    public static BatchRenderContext<FXBlock> BLOCK_TRANSLUCENT_IGNORE_DEPTH;
+
+    public static BatchRenderContext<FXColorEffectSphere> COLOR_SPHERE;
 
 }

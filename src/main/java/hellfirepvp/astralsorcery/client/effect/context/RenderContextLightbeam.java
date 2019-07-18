@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.effect.context;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXLightbeam;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -27,10 +28,10 @@ import org.lwjgl.opengl.GL11;
 public class RenderContextLightbeam extends BatchRenderContext<FXLightbeam> {
 
     public RenderContextLightbeam(ObjectReference<Boolean> lightingRef) {
-        super(SpritesAS.SPR_LIGHTBEAM, 0,
+        super(SpritesAS.SPR_LIGHTBEAM,
                 (ctx, pTicks) -> {
                     GlStateManager.pushMatrix();
-                    RenderingVectorUtils.removeStandartTranslationFromTESRMatrix(pTicks);
+                    RenderingVectorUtils.removeStandardTranslationFromTESRMatrix(pTicks);
                     GlStateManager.enableBlend();
                     GlStateManager.disableCull();
                     GlStateManager.depthMask(false);

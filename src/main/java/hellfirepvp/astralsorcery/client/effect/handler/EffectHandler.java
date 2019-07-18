@@ -11,22 +11,23 @@ package hellfirepvp.astralsorcery.client.effect.handler;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.source.FXSource;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
+import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.order.DependencySorter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,6 +44,9 @@ public final class EffectHandler {
     private boolean cleanRequested = false;
     private boolean acceptsNewEffects = true;
     private List<PendingEffect> toAddBuffer = Lists.newLinkedList();
+    private List<FXSource<?, ?>> toAddSources = Lists.newLinkedList();
+
+    private List<FXSource<?, ?>> activeSources = Lists.newLinkedList();
     private List<BatchRenderContext<?>> orderedEffects = null;
     private Map<BatchRenderContext<?>, List<PendingEffect>> effectMap = Maps.newHashMap();
 
@@ -52,16 +56,9 @@ public final class EffectHandler {
         return INSTANCE;
     }
 
-    public static int getDebugEffectCount() {
+    public int getEffectCount() {
         final Counter c = new Counter(0);
-        //for (Map<Integer, List<IComplexEffect>> effects : complexEffects.values()) {
-        //    for (List<IComplexEffect> eff : effects.values()) {
-        //        c.value += eff.size();
-        //    }
-        //}
-        //c.value += fastRenderParticles.size();
-        //c.value += fastRenderLightnings.size();
-        //objects.values().forEach((l) -> c.value += l.size());
+        this.effectMap.values().stream().flatMap(Collection::stream).forEach(p -> c.increment());
         return c.getValue();
     }
 
@@ -71,28 +68,33 @@ public final class EffectHandler {
         }
 
         float pTicks = event.getPartialTicks();
-        acceptsNewEffects = false;
+        this.acceptsNewEffects = false;
 
         for (BatchRenderContext<?> ctx : this.orderedEffects) {
-            List<PendingEffect> effects;
-            if ((effects = this.effectMap.get(ctx)) != null && !effects.isEmpty()) {
+            List<PendingEffect> effects = this.effectMap.get(ctx);
+            if (!effects.isEmpty()) {
                 BufferContext buf = ctx.prepare(pTicks);
                 effects.forEach(p -> p.effect.render(ctx, buf, pTicks));
                 ctx.draw(pTicks);
             }
         }
+        TextureHelper.refreshTextureBind();
 
-        acceptsNewEffects = true;
+        this.acceptsNewEffects = true;
     }
 
     void tick() {
-        if (cleanRequested) {
-            toAddBuffer.clear();
-            cleanRequested = false;
+        if (this.cleanRequested) {
+            this.toAddBuffer.clear();
+            this.effectMap.values().forEach(List::clear);
+            this.cleanRequested = false;
         }
 
-        PlayerEntity player = Minecraft.getInstance().player;
-        if (player == null) {
+        Entity rView = Minecraft.getInstance().getRenderViewEntity();
+        if (rView == null) {
+            rView = Minecraft.getInstance().player;
+        }
+        if (rView == null) {
             return;
         }
 
@@ -101,22 +103,55 @@ public final class EffectHandler {
             this.orderedEffects.forEach(ctx -> this.effectMap.put(ctx, new LinkedList<>()));
         }
 
-        acceptsNewEffects = false;
+        this.acceptsNewEffects = false;
 
-        Vector3 playerPos = Vector3.atEntityCorner(player);
+        this.effectMap.values().forEach(l -> {
+            Iterator<PendingEffect> iterator = l.iterator();
+            while (iterator.hasNext()) {
+                PendingEffect effect = iterator.next();
+                EntityComplexFX fx = effect.getEffect();
 
+                fx.tick();
+                if (fx.canRemove()) {
+                    iterator.remove();
+                    fx.flagAsRemoved();
+                }
+            }
+        });
 
+        Iterator<FXSource<?, ?>> iterator = this.activeSources.iterator();
+        while (iterator.hasNext()) {
+            FXSource<?, ?> src = iterator.next();
 
-        acceptsNewEffects = true;
-        toAddBuffer.forEach(this::registerUnsafe);
-        toAddBuffer.clear();
+            src.tick();
+            src.tickSpawnFX(new EffectRegistrar(src));
+            if (src.canRemove()) {
+                iterator.remove();
+                src.flagAsRemoved();
+            }
+        }
+
+        this.acceptsNewEffects = true;
+
+        this.activeSources.addAll(this.toAddSources);
+        this.toAddSources.clear();
+        this.toAddBuffer.forEach(this::registerUnsafe);
+        this.toAddBuffer.clear();
+    }
+
+    void queueSource(FXSource<?, ?> source) {
+        if (this.acceptsNewEffects) {
+            this.activeSources.add(source);
+        } else {
+            this.toAddSources.add(source);
+        }
     }
 
     void queueParticle(PendingEffect pendingEffect) {
         if (this.acceptsNewEffects) {
             registerUnsafe(pendingEffect);
         } else {
-            toAddBuffer.add(pendingEffect);
+            this.toAddBuffer.add(pendingEffect);
         }
     }
 
@@ -124,15 +159,14 @@ public final class EffectHandler {
         if (!mayAcceptParticle(pendingEffect.getProperties())) {
             return;
         }
-        EntityComplexFX effect = pendingEffect.getEffect();
+        EntityVisualFX effect = pendingEffect.getEffect();
         BatchRenderContext ctx = pendingEffect.getProperties().getContext();
         pendingEffect.getProperties().applySpecialEffects(effect);
 
-        effectMap.get(ctx).add(pendingEffect);
-        effect.clearRemoveFlag();
+        this.effectMap.get(ctx).add(pendingEffect);
     }
 
-    private boolean mayAcceptParticle(EffectProperties properties) {
+    private boolean mayAcceptParticle(EffectProperties<?> properties) {
         if (properties.ignoresSpawnLimit()) {
             return true;
         }
@@ -147,21 +181,39 @@ public final class EffectHandler {
         getInstance().cleanRequested = true;
     }
 
+    private static class EffectRegistrar<E extends EntityVisualFX> implements Function<Vector3, E> {
+
+        private final FXSource<E, ?> source;
+
+        private EffectRegistrar(FXSource<E, ?> source) {
+            this.source = source;
+        }
+
+        @Override
+        public E apply(Vector3 pos) {
+            EffectHelper.Builder<E> prop = source.generateFX();
+            E  fx = prop.getContext().makeParticle(pos);
+            PendingEffect effect = new PendingEffect(fx, prop);
+            getInstance().registerUnsafe(effect);
+            return fx;
+        }
+    }
+
     static class PendingEffect {
 
-        private final EntityComplexFX effect;
-        private final EffectProperties runProperties;
+        private final EntityVisualFX effect;
+        private final EffectProperties<?> runProperties;
 
-        PendingEffect(EntityComplexFX effect, EffectProperties runProperties) {
+        PendingEffect(EntityVisualFX effect, EffectProperties<?> runProperties) {
             this.effect = effect;
             this.runProperties = runProperties;
         }
 
-        EffectProperties getProperties() {
+        EffectProperties<?> getProperties() {
             return runProperties;
         }
 
-        EntityComplexFX getEffect() {
+        EntityVisualFX getEffect() {
             return effect;
         }
     }

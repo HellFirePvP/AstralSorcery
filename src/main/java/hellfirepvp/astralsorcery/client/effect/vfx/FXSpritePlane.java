@@ -9,9 +9,8 @@
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -40,9 +39,8 @@ public class FXSpritePlane extends EntityVisualFX {
     private int ticksPerFullRot = 100;
     private float fixDegree = 0;
 
-    public FXSpritePlane(Vector3 pos, int maxAge) {
+    public FXSpritePlane(Vector3 pos) {
         super(pos);
-        this.setMaxAge(maxAge);
     }
 
     public FXSpritePlane setAxis(Vector3 axis) {
@@ -72,7 +70,7 @@ public class FXSpritePlane extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityComplexFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
         if (!RenderingUtils.canEffectExist(this)) {
             return;
         }

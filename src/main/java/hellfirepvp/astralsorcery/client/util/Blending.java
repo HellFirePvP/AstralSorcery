@@ -40,10 +40,6 @@ public enum  Blending {
         dfactor = d;
     }
 
-    public void apply() {
-        GL11.glBlendFunc(sfactor, dfactor);
-    }
-
     public void applyStateManager() {
         GlStateManager.blendFunc(sfactor, dfactor);
     }

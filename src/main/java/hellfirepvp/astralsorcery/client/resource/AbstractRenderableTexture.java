@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.resource;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.texture.ITextureObject;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 
@@ -33,6 +36,25 @@ public abstract class AbstractRenderableTexture {
 
     @Override
     public abstract int hashCode();
+
+    public static Full wrap(ITextureObject obj) {
+        return new Full() {
+            @Override
+            public void bindTexture() {
+                GlStateManager.bindTexture(obj.getGlTextureId());
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return false;
+            }
+
+            @Override
+            public int hashCode() {
+                return 0;
+            }
+        };
+    }
 
     public static abstract class Full extends AbstractRenderableTexture {
 

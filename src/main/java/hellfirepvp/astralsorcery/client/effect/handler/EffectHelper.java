@@ -9,12 +9,10 @@
 package hellfirepvp.astralsorcery.client.effect.handler;
 
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.source.FXSource;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.util.math.Vec3i;
-
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,34 +21,24 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 08.07.2019 / 20:54
  */
-public class EffectHelper {
+public final class EffectHelper {
 
-    public static <T extends EntityComplexFX, C extends BatchRenderContext<T>> Builder<T> of(C ctx) {
+    public static <T extends EntityVisualFX, C extends BatchRenderContext<T>> Builder<T> of(C ctx) {
         return new Builder<>(ctx);
     }
 
-    public static class Builder<T extends EntityComplexFX> {
+    public static <E extends EntityVisualFX, T extends BatchRenderContext<E>, S extends FXSource<E, T>> S spawnSource(S src) {
+        return EffectRegistrar.registerSource(src);
+    }
 
-        private BatchRenderContext<T> context;
-        private EffectProperties prop;
+    public static class Builder<T extends EntityVisualFX> extends EffectProperties<T> {
 
         public Builder(BatchRenderContext<T> ctx) {
-            this.context = ctx;
-            this.prop = this.context.makeProperties();
-        }
-
-        public Builder<T> pos(Vec3i position) {
-            this.prop.setPosition(position);
-            return this;
-        }
-
-        public Builder<T> owner(UUID plUUID) {
-            this.prop.setOwner(plUUID);
-            return this;
+            super(ctx);
         }
 
         public T spawn(Vector3 spawnPos) {
-            return EffectRegistrar.registerFX(this.context.makeParticle(spawnPos), this.prop);
+            return EffectRegistrar.registerFX(this.getContext().makeParticle(spawnPos), this);
         }
 
     }

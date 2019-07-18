@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.resource;
 
 import hellfirepvp.astralsorcery.client.registry.RegistryEffectTemplates;
+import hellfirepvp.astralsorcery.client.registry.RegistryEffectTypes;
 import hellfirepvp.astralsorcery.client.registry.RegistrySprites;
 import hellfirepvp.astralsorcery.client.registry.RegistryTextures;
 import net.minecraft.resources.IResourceManager;
@@ -28,15 +29,21 @@ import java.util.function.Predicate;
 public class AssetPreLoader implements ISelectiveResourceReloadListener {
 
     public static final AssetPreLoader INSTANCE = new AssetPreLoader();
+    private static boolean initialized = false;
 
     private AssetPreLoader() {}
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
         if (resourcePredicate.test(VanillaResourceType.TEXTURES)) {
+            if (initialized) {
+                return;
+            }
             RegistryTextures.loadTextures();
             RegistrySprites.loadSprites();
             RegistryEffectTemplates.registerTemplates();
+            RegistryEffectTypes.registerTypes();
+            initialized = true;
         }
     }
 

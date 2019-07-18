@@ -6,10 +6,9 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.effect.context;
+package hellfirepvp.astralsorcery.client.effect.context.base;
 
-import hellfirepvp.astralsorcery.client.effect.EffectProperties;
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.draw.BufferBatchHelper;
@@ -30,51 +29,44 @@ import java.util.function.Consumer;
  * Created by HellFirePvP
  * Date: 07.07.2019 / 10:58
  */
-public class BatchRenderContext<T extends EntityComplexFX> extends OrderSortable {
+public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable {
 
     private static BufferContext ctx = BufferBatchHelper.make();
     private static int counter = 0;
 
     private final int id;
     private final SpriteSheetResource sprite;
-    private final int renderLayer;
-    private final BiConsumer<BufferContext, Float> before;
-    private final Consumer<Float> after;
-    private final BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator;
+    protected BiConsumer<BufferContext, Float> before;
+    protected Consumer<Float> after;
+    protected BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator;
     private RenderTarget renderTarget = RenderTarget.RENDERLOOP;
 
     public BatchRenderContext(AbstractRenderableTexture resource,
-                              int renderLayer,
                               BiConsumer<BufferContext, Float> before,
                               Consumer<Float> after,
                               BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator) {
-        this(new SpriteSheetResource(resource), renderLayer, before, after, particleCreator);
+        this(new SpriteSheetResource(resource), before, after, particleCreator);
     }
 
     public BatchRenderContext(SpriteSheetResource sprite,
-                              int renderLayer,
                               BiConsumer<BufferContext, Float> before,
                               Consumer<Float> after,
                               BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator) {
         this.id = counter++;
         this.sprite = sprite;
-        this.renderLayer = renderLayer;
         this.before = before;
         this.after = after;
-        this.particleCreator = particleCreator;
-    }
-
-    public EffectProperties makeProperties() {
-        return new EffectProperties(this);
+        this.particleCreator = particleCreator.andThen(fx -> {
+            int frames = this.sprite.getFrameCount();
+            if (frames > 1) {
+                fx.setMaxAge(frames);
+            }
+            return fx;
+        });
     }
 
     public T makeParticle(Vector3 pos) {
         return this.particleCreator.apply(this, pos);
-    }
-
-    public BatchRenderContext setRenderTarget(RenderTarget renderTarget) {
-        this.renderTarget = renderTarget;
-        return this;
     }
 
     public SpriteSheetResource getSprite() {
@@ -94,10 +86,9 @@ public class BatchRenderContext<T extends EntityComplexFX> extends OrderSortable
         after.accept(pTicks);
     }
 
-    //Valid layers: 0, 1, 2
-    //Lower layers are rendered first.
-    public int getLayer() {
-        return this.renderLayer;
+    public BatchRenderContext setRenderTarget(RenderTarget renderTarget) {
+        this.renderTarget = renderTarget;
+        return this;
     }
 
     public RenderTarget getRenderTarget() {

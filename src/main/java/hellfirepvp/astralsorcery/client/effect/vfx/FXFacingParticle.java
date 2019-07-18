@@ -8,9 +8,8 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -33,7 +32,7 @@ public class FXFacingParticle extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityComplexFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
         SpriteSheetResource ssr = ctx.getSprite();
         Vector3 vec = this.getRenderPosition(pTicks);
         float alpha = this.getAlpha(pTicks);
