@@ -38,7 +38,7 @@ public class FluidIngredientSerializer implements IIngredientSerializer<FluidIng
 
     @Override
     public FluidIngredient parse(JsonObject json) {
-        return new FluidIngredient(); // TODO NOPE, not now.
+        return new FluidIngredient(); // TODO fluids
     }
 
     @Override

@@ -22,8 +22,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -39,7 +38,7 @@ public class TileInventory extends ItemStackHandler {
     protected final TileEntitySynchronized tile;
     protected final Consumer<Integer> changeListener;
     protected final Supplier<Integer> slotCountProvider;
-    protected List<Direction> applicableSides;
+    protected Set<Direction> applicableSides = new HashSet<>();
 
     public TileInventory(@Nonnull TileEntitySynchronized tile,
                          @Nonnull Supplier<Integer> slotCountProvider,
@@ -57,16 +56,16 @@ public class TileInventory extends ItemStackHandler {
     protected TileInventory(@Nonnull TileEntitySynchronized tile,
                             @Nonnull Supplier<Integer> slotCountProvider,
                             @Nullable Consumer<Integer> changeListener,
-                            @Nonnull List<Direction> applicableSides) {
+                            @Nonnull Collection<Direction> applicableSides) {
         super(slotCountProvider.get());
         this.tile = tile;
         this.changeListener = changeListener;
         this.slotCountProvider = slotCountProvider;
-        this.applicableSides = applicableSides;
+        this.applicableSides.addAll(applicableSides);
     }
 
     protected TileInventory makeNewInstance() {
-        return new TileInventory(this.tile, this.slotCountProvider, this.changeListener, MiscUtils.copyList(this.applicableSides));
+        return new TileInventory(this.tile, this.slotCountProvider, this.changeListener, MiscUtils.copySet(this.applicableSides));
     }
 
     @Nonnull

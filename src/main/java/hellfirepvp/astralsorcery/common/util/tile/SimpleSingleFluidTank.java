@@ -18,9 +18,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,7 +36,7 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
 
     private boolean allowInput = true, allowOutput = true;
 
-    public List<Direction> accessibleSides = new ArrayList<>();
+    public Set<Direction> accessibleSides = new HashSet<>();
 
     private SimpleSingleFluidTank() {}
 
@@ -48,7 +46,7 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
 
     public SimpleSingleFluidTank(int capacity, Direction... accessibleFrom) {
         this.maxCapacity = Math.max(0, capacity);
-        this.accessibleSides = Arrays.asList(accessibleFrom);
+        this.accessibleSides.addAll(Arrays.asList(accessibleFrom));
     }
 
     public void setOnUpdate(Runnable onUpdate) {
@@ -215,8 +213,9 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
             tag.putString("fluid", this.fluid.getName());
         }
         int[] sides = new int[accessibleSides.size()];
-        for (int i = 0; i < accessibleSides.size(); i++) {
-            Direction side = accessibleSides.get(i);
+        Object[] arraySides = this.accessibleSides.toArray();
+        for (int i = 0; i < arraySides.length; i++) {
+            Direction side = (Direction) arraySides[i];
             sides[i] = side.ordinal();
         }
         tag.putIntArray("sides", sides);

@@ -110,7 +110,7 @@ public final class ItemHandle {
         return new ItemHandle(ingredient.getMatchingStacks());
     }
 
-    // TODO re-add after adding crystals
+    // TODO crystals
     /*
     public static ItemHandle getCrystalVariant(boolean hasToBeTuned, boolean hasToBeCelestial) {
         if(hasToBeTuned) {

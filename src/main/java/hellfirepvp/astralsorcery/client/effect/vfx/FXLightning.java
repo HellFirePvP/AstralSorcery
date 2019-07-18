@@ -80,9 +80,9 @@ public class FXLightning extends EntityVisualFX {
         Random lightningSeed = new Random(seed);
 
         List<LightningVertex> rootVertices = Lists.newLinkedList();
-        LightningVertex root = new LightningVertex(source);
-        root.next.add(new LightningVertex(destination));
-        rootVertices.add(root);
+        this.root = new LightningVertex(source);
+        this.root.next.add(new LightningVertex(destination));
+        rootVertices.add(this.root);
 
         double l = directionVector.length();
         int iterations = MathHelper.floor(Math.round(Math.sqrt(l)));

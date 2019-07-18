@@ -75,8 +75,9 @@ public abstract class EntityVisualFX extends EntityComplexFX {
         return motion;
     }
 
-    public void setMotion(Vector3 motion) {
+    public <T extends EntityVisualFX> T setMotion(Vector3 motion) {
         this.motion = motion;
+        return (T) this;
     }
 
     @Override

@@ -42,7 +42,7 @@ public interface VFXColorFunction<T extends EntityVisualFX> {
     }
 
     public static <T extends EntityVisualFX> VFXColorFunction<T> random() {
-        Color c = Color.getHSBColor((new Random().nextFloat() * 360F) / 360F, 1F, 1F);
+        Color c = Color.getHSBColor(new Random().nextFloat(), 1F, 1F);
         return new VFXColorFunction<T>() {
             @Nonnull
             @Override

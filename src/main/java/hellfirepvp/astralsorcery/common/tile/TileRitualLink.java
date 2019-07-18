@@ -9,6 +9,11 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkableTileEntity;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
@@ -67,30 +72,35 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
 
     @OnlyIn(Dist.CLIENT)
     private void playClientEffects() {
-        /*
-        TODO particles
-        if(this.linkedTo != null && Minecraft.getMinecraft().player.getDistanceSq(getPos()) < 1024) { //32 Squared
+        if(this.linkedTo != null) {
             if(ticksExisted % 4 == 0) {
                 Collection<Vector3> positions = MiscUtils.getCirclePositions(
                         new Vector3(this).add(0.5, 0.5, 0.5),
                         Vector3.RotAxis.Y_AXIS, 0.4F - rand.nextFloat() * 0.1F, 10 + rand.nextInt(10));
                 for (Vector3 v : positions) {
-                    EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
-                    particle.gravity(0.004).scale(0.15F);
-                    particle.motion(0, (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.01, 0);
-                    if(rand.nextBoolean()) {
-                        particle.setColor(Color.WHITE);
+                    FXFacingParticle particle = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                            .spawn(v)
+                            .setScaleMultiplier(0.15F)
+                            .alpha(VFXAlphaFunction.PYRAMID)
+                            .setAlphaMultiplier(0.75F)
+                            .setMotion(new Vector3(0, (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.01, 0));
+                    if (rand.nextBoolean()) {
+                        particle.color(VFXColorFunction.WHITE);
+                    } else {
+                        particle.color(VFXColorFunction.constant(new Color(60, 0, 255)));
                     }
                 }
             }
-            Vector3 v = new Vector3(this).add(0.5, 0.5, 0.5);
-            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
-            particle.gravity(0.004).scale(0.3F);
-            particle.motion(0, (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.015, 0);
-            particle.setColor(Color.getHSBColor(rand.nextFloat() * 360F, 1F, 1F));
+
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(new Vector3(this).add(0.5, 0.5, 0.5))
+                    .setScaleMultiplier(0.3F)
+                    .alpha(VFXAlphaFunction.PYRAMID)
+                    .setAlphaMultiplier(0.75F)
+                    .setMotion(new Vector3(0, (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.015, 0))
+                    .color(VFXColorFunction.random());
 
         }
-        */
     }
 
     @Override
