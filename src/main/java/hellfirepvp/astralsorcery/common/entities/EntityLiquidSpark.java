@@ -222,6 +222,11 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         }
     }
 
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
