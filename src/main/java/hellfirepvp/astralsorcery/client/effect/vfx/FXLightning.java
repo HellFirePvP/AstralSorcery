@@ -9,9 +9,8 @@
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -119,7 +118,7 @@ public class FXLightning extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityComplexFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
         if (root == null) {
             return;
         }
@@ -153,13 +152,13 @@ public class FXLightning extends EntityVisualFX {
         Vector3 perpTo = perp.multiply(size);
 
         Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(1, 1).color(r, g, b, 1F).endVertex();
+        vec.drawPos(buf).tex(1, 1).color(r, g, b, 1F).endVertex();
         vec = from.clone().add(perpFrom);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(1, 0).color(r, g, b, 1F).endVertex();
+        vec.drawPos(buf).tex(1, 0).color(r, g, b, 1F).endVertex();
         vec = to.clone().add(perpTo);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(0, 0).color(r, g, b, 1F).endVertex();
+        vec.drawPos(buf).tex(0, 0).color(r, g, b, 1F).endVertex();
         vec = to.clone().add(perpTo.clone().multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(0, 1).color(r, g, b, 1F).endVertex();
+        vec.drawPos(buf).tex(0, 1).color(r, g, b, 1F).endVertex();
     }
 
     @Override

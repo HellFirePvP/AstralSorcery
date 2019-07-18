@@ -22,7 +22,7 @@ import net.minecraft.entity.Entity;
  */
 public class RenderingVectorUtils {
 
-    public static void removeStandartTranslationFromTESRMatrix(float partialTicks) {
+    public static void removeStandardTranslationFromTESRMatrix(float partialTicks) {
         Entity rView = Minecraft.getInstance().getRenderViewEntity();
         if(rView == null) {
             rView = Minecraft.getInstance().player;
@@ -32,6 +32,18 @@ public class RenderingVectorUtils {
         double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
         double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
         GlStateManager.translated(-tx, -ty, -tz);
+    }
+
+    public static Vector3 getStandardTranslationRemovalVector(float partialTicks) {
+        Entity rView = Minecraft.getInstance().getRenderViewEntity();
+        if(rView == null) {
+            rView = Minecraft.getInstance().player;
+        }
+        Entity entity = rView;
+        double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
+        double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
+        double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
+        return new Vector3(-tx, -ty, -tz);
     }
 
     public static Vector3 interpolatePosition(Entity e, float partialTicks) {

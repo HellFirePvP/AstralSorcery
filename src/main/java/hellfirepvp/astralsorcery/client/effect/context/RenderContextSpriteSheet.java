@@ -9,8 +9,8 @@
 package hellfirepvp.astralsorcery.client.effect.context;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXSpritePlane;
-import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -32,10 +32,10 @@ public class RenderContextSpriteSheet extends BatchRenderContext<FXSpritePlane> 
     }
 
     public RenderContextSpriteSheet(SpriteSheetResource ssr) {
-        super(ssr, 0,
+        super(ssr,
                 (ctx, pTicks) -> {
                     GlStateManager.pushMatrix();
-                    RenderingVectorUtils.removeStandartTranslationFromTESRMatrix(pTicks);
+                    RenderingVectorUtils.removeStandardTranslationFromTESRMatrix(pTicks);
                     GlStateManager.disableCull();
                     GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0001F);
                     GlStateManager.enableBlend();
@@ -49,7 +49,7 @@ public class RenderContextSpriteSheet extends BatchRenderContext<FXSpritePlane> 
                     GlStateManager.enableCull();
                     GlStateManager.popMatrix();
                 },
-                (ctx, pos) -> new FXSpritePlane(pos, ctx.getSprite().getFrameCount()));
+                (ctx, pos) -> new FXSpritePlane(pos));
     }
 
 }

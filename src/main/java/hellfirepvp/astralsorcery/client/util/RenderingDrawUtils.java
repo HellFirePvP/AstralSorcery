@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -70,20 +71,101 @@ public class RenderingDrawUtils {
         vb.pos(px + v4.getX() - iPX, py + v4.getY() - iPY, pz + v4.getZ() - iPZ).tex(u,           v + vLength).color(cR, cG, cB, alpha).endVertex();
     }
 
+    public static void renderTexturedCubeCentralColor(BufferContext buf, double size,
+                                                                  double u, double v, double uLength, double vLength,
+                                                                  float cR, float cG, float cB, float cA) {
+        double half = size / 2D;
+
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
+
+        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half, -half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos(-half,  half,  half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos(-half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half,  half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos( half, -half, -half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos(-half, -half,  half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+
+        buf.draw();
+    }
+
+    public static void renderTexturedCubeCentralWithLightAndColor(BufferContext buf, double size,
+                                                                  double u, double v, double uLength, double vLength,
+                                                                  int lX, int lY,
+                                                                  float cR, float cG, float cB, float cA) {
+        double half = size / 2D;
+
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
+
+        buf.pos(-half, -half, -half).tex(u, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half, -half).tex(u + uLength, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half,  half).tex(u + uLength, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half, -half,  half).tex(u, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos(-half,  half,  half).tex(u, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half,  half).tex(u + uLength, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half, -half).tex(u, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos(-half, -half,  half).tex(u + uLength, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half,  half).tex(u + uLength, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half, -half).tex(u, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half, -half, -half).tex(u, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos( half, -half, -half).tex(u + uLength, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half,  half).tex(u, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half,  half).tex(u, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos( half, -half, -half).tex(u, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half, -half).tex(u, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half, -half).tex(u + uLength, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half, -half, -half).tex(u + uLength, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+
+        buf.pos(-half, -half,  half).tex(u, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half,  half).tex(u, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half,  half).tex(u + uLength, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half,  half).tex(u + uLength, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
+
+        buf.draw();
+    }
+
     public static void renderAngleRotatedTexturedRectVB(BufferBuilder buf, Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, float r, float g, float b, float a) {
         Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
 
         Vector3 vec = renderStart.clone().rotate(Math.toRadians(90), axis).normalize().multiply(scale).add(renderOffset);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,           v + vLength).color(r, g, b, a).endVertex();
+        vec.drawPos(buf).tex(u,           v + vLength).color(r, g, b, a).endVertex();
 
         vec = renderStart.clone().multiply(-1).normalize().multiply(scale).add(renderOffset);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uLength, v + vLength).color(r, g, b, a).endVertex();
+        vec.drawPos(buf).tex(u + uLength, v + vLength).color(r, g, b, a).endVertex();
 
         vec = renderStart.clone().rotate(Math.toRadians(270), axis).normalize().multiply(scale).add(renderOffset);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uLength, v          ).color(r, g, b, a).endVertex();
+        vec.drawPos(buf).tex(u + uLength, v          ).color(r, g, b, a).endVertex();
 
         vec = renderStart.clone().normalize().multiply(scale).add(renderOffset);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,           v          ).color(r, g, b, a).endVertex();
+        vec.drawPos(buf).tex(u,           v          ).color(r, g, b, a).endVertex();
     }
 
 }

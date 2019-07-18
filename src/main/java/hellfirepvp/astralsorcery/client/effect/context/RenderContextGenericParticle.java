@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.effect.context;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -25,7 +26,7 @@ import org.lwjgl.opengl.GL11;
 public class RenderContextGenericParticle extends BatchRenderContext<FXFacingParticle> {
 
     public RenderContextGenericParticle() {
-        super(TexturesAS.TEX_STATIC_FLARE, 0,
+        super(TexturesAS.TEX_STATIC_FLARE,
                 (ctx, pTicks) -> {
                     GlStateManager.disableAlphaTest();
                     GlStateManager.enableBlend();

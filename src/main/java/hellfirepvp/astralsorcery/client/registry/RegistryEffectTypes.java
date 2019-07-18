@@ -6,23 +6,27 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.effect;
+package hellfirepvp.astralsorcery.client.registry;
+
+import hellfirepvp.astralsorcery.client.effect.EffectType;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: IComplexEffect
+ * Class: RegistryEffectTypes
  * Created by HellFirePvP
- * Date: 27.05.2019 / 22:15
+ * Date: 18.07.2019 / 13:56
  */
-public interface IComplexEffect {
+public class RegistryEffectTypes {
 
-    public boolean canRemove();
+    private RegistryEffectTypes() {}
 
-    public boolean isRemoved();
+    public static void registerTypes() {
 
-    public void flagAsRemoved();
+    }
 
-    public void tick();
+    private static EffectType makeType() {
+        return new EffectType();
+    }
 
 }

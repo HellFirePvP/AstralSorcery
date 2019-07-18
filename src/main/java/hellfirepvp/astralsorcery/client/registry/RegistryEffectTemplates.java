@@ -9,9 +9,14 @@
 package hellfirepvp.astralsorcery.client.registry;
 
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.*;
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.context.base.RenderContextColorSphere;
 import hellfirepvp.astralsorcery.common.util.ObjectReference;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS.*;
 import static hellfirepvp.astralsorcery.client.lib.SpritesAS.*;
@@ -38,25 +43,50 @@ public class RegistryEffectTemplates {
         COLLECTOR_BURST = register(new RenderContextBurst(SPR_COLLECTOR_EFFECT));
         LIGHTBEAM       = register(new RenderContextLightbeam(new ObjectReference<>()));
 
+        CUBE_OPAQUE_ATLAS = register(new RenderContextOpaqueCube());
+        CUBE_TRANSLUCENT_ATLAS = register(new RenderContextTranslucentCube());
+        CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH = register(new RenderContextTranslucentDepthCube());
+
+        BLOCK_TRANSLUCENT = register(new RenderContextTranslucentBlock());
+        BLOCK_TRANSLUCENT_IGNORE_DEPTH = register(new RenderContextTranslucentDepthBlock());
+
+        COLOR_SPHERE = register(new RenderContextColorSphere());
         GENERIC_GATEWAY_PARTICLE = register(new RenderContextGenericParticle());
 
         setupRenderOrder();
     }
 
+    // Hint: Textures after generalGrp, before cubes
+    //       cubes after textures, before gateway
     private static void setupRenderOrder() {
         GENERIC_PARTICLE.setAfter(GENERIC_DEPTH_PARTICLE);
         LIGHTNING.setAfter(GENERIC_PARTICLE);
 
-        CRYSTAL_BURST_1.setAfter(LIGHTNING);
-        CRYSTAL_BURST_2.setAfter(LIGHTNING);
-        CRYSTAL_BURST_3.setAfter(LIGHTNING);
-        COLLECTOR_BURST.setAfter(LIGHTNING);
-        LIGHTBEAM      .setAfter(LIGHTNING);
+        //L0
+        List<BatchRenderContext<?>> generalGrp = new LinkedList<>();
+        generalGrp.add(CRYSTAL_BURST_1);
+        generalGrp.add(CRYSTAL_BURST_2);
+        generalGrp.add(CRYSTAL_BURST_3);
+        generalGrp.add(COLLECTOR_BURST);
+        generalGrp.add(LIGHTBEAM);
 
-        GENERIC_GATEWAY_PARTICLE.setAfter(COLLECTOR_BURST);
+        generalGrp.forEach(c -> c.setAfter(LIGHTNING));
+
+        //L1
+
+        //L2
+        CUBE_OPAQUE_ATLAS.setAfter(generalGrp);
+        CUBE_TRANSLUCENT_ATLAS.setAfter(CUBE_OPAQUE_ATLAS);
+        CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH.setAfter(CUBE_TRANSLUCENT_ATLAS);
+
+        BLOCK_TRANSLUCENT.setAfter(CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH);
+        BLOCK_TRANSLUCENT_IGNORE_DEPTH.setAfter(BLOCK_TRANSLUCENT);
+
+        COLOR_SPHERE.setAfter(BLOCK_TRANSLUCENT_IGNORE_DEPTH);
+        GENERIC_GATEWAY_PARTICLE.setAfter(COLOR_SPHERE);
     }
 
-    private static <V extends EntityComplexFX, T extends BatchRenderContext<V>> T register(T ctx) {
+    private static <V extends EntityVisualFX, T extends BatchRenderContext<V>> T register(T ctx) {
         LIST_ALL_RENDER_CONTEXT.add(ctx);
         return ctx;
     }

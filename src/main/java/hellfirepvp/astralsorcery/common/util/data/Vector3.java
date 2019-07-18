@@ -9,9 +9,12 @@
 package hellfirepvp.astralsorcery.common.util.data;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.*;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -460,6 +463,12 @@ public class Vector3 {
                 (x == next.x ? x : x + ((next.x - x) * partial)),
                 (y == next.y ? y : y + ((next.y - y) * partial)),
                 (z == next.z ? z : z + ((next.z - z) * partial)));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public BufferBuilder drawPos(BufferBuilder buf) {
+        buf.pos(this.x, this.y, this.z);
+        return buf;
     }
 
     public double getX() {

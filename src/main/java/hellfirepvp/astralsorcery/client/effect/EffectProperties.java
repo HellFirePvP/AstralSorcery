@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.client.effect;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import net.minecraft.util.math.Vec3i;
 
 import javax.annotation.Nonnull;
@@ -25,44 +25,56 @@ import java.util.function.Consumer;
  * Created by HellFirePvP
  * Date: 30.05.2019 / 00:07
  */
-public class EffectProperties {
+public class EffectProperties<T extends EntityVisualFX> {
 
-    private final BatchRenderContext ctx;
-    private static List<Consumer<EntityComplexFX>> specialEffects = Lists.newArrayList();
+    private final BatchRenderContext<T> ctx;
+    private static List<Consumer<EntityVisualFX>> specialEffects = Lists.newArrayList();
 
+    private EffectType type = null;
     private UUID owner = null;
     private Vec3i position = Vec3i.NULL_VECTOR;
     private boolean ignoreLimit = false;
 
-    public EffectProperties(BatchRenderContext ctx) {
+    public EffectProperties(BatchRenderContext<T> ctx) {
         this.ctx = ctx;
     }
 
     // What player this effects belongs to, if any.
-    public EffectProperties setOwner(@Nullable UUID owner) {
+    public EffectProperties<T> setOwner(@Nullable UUID owner) {
         this.owner = owner;
         return this;
     }
 
+    // What type this effect is. As a means of classification/grouping
+    public EffectProperties<T> setType(@Nullable EffectType type) {
+        this.type = type;
+        return this;
+    }
+
     // The position the effect originates from, if any.
-    public EffectProperties setPosition(@Nonnull Vec3i position) {
+    public EffectProperties<T> setPosition(@Nonnull Vec3i position) {
         this.position = position;
         return this;
     }
 
     // If this effect should ignore the spawn-limit soft cap on particles
-    public EffectProperties setIgnoreLimit(boolean ignoreLimit) {
+    public EffectProperties<T> setIgnoreLimit(boolean ignoreLimit) {
         this.ignoreLimit = ignoreLimit;
         return this;
     }
 
-    public BatchRenderContext getContext() {
+    public BatchRenderContext<T> getContext() {
         return ctx;
     }
 
     @Nullable
     public UUID getOwner() {
         return owner;
+    }
+
+    @Nullable
+    public EffectType getType() {
+        return type;
     }
 
     @Nonnull
@@ -75,11 +87,11 @@ public class EffectProperties {
     }
 
     // Method in favour of not using the event system to apply special effects.
-    public void applySpecialEffects(EntityComplexFX effect) {
+    public void applySpecialEffects(EntityVisualFX effect) {
         specialEffects.forEach(s -> s.accept(effect));
     }
 
-    public static void addSpecialEffect(Consumer<EntityComplexFX> effect) {
+    public static void addSpecialEffect(Consumer<EntityVisualFX> effect) {
         specialEffects.add(effect);
     }
 

@@ -8,9 +8,8 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -47,7 +46,7 @@ public class FXLightbeam extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityComplexFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
         Color c = this.getColor(pTicks);
         float r = c.getRed() / 255F;
         float g = c.getGreen() / 255F;
@@ -60,7 +59,7 @@ public class FXLightbeam extends EntityVisualFX {
         renderCurrentTextureAroundAxis(buf, ctx, Math.toRadians(240F), scale, r, g, b, a);
     }
 
-    private <T extends EntityComplexFX> void renderCurrentTextureAroundAxis(BufferBuilder buf, BatchRenderContext<T> ctx, double angle, float scale, float r, float g, float b, float a) {
+    private <T extends EntityVisualFX> void renderCurrentTextureAroundAxis(BufferBuilder buf, BatchRenderContext<T> ctx, double angle, float scale, float r, float g, float b, float a) {
         Vector3 perp = aimPerp.clone().rotate(angle, aim).normalize();
         Vector3 perpFrom = perp.clone().multiply(fromSize * scale);
         Vector3 perpTo = perp.multiply(toSize * scale);
@@ -73,13 +72,13 @@ public class FXLightbeam extends EntityVisualFX {
         double vHeight = ssr.getVLength();
 
         Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight)            .color(r, g, b, a).endVertex();
+        vec.drawPos(buf).tex(u,          v + vHeight)            .color(r, g, b, a).endVertex();
         vec = from.clone().add(perpFrom);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v + vHeight).color(r, g, b, a).endVertex();
+        vec.drawPos(buf).tex(u + uWidth, v + vHeight).color(r, g, b, a).endVertex();
         vec = to.clone().add(perpTo);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v)                      .color(r, g, b, a).endVertex();
+        vec.drawPos(buf).tex(u + uWidth, v)                      .color(r, g, b, a).endVertex();
         vec = to.clone().add(perpTo.clone().multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v)                                  .color(r, g, b, a).endVertex();
+        vec.drawPos(buf).tex(u,          v)                                  .color(r, g, b, a).endVertex();
     }
 
 }

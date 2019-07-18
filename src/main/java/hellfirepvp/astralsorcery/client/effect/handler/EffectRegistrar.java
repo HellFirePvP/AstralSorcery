@@ -9,15 +9,14 @@
 package hellfirepvp.astralsorcery.client.effect.handler;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
+import hellfirepvp.astralsorcery.client.effect.EffectProperties;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
-import hellfirepvp.astralsorcery.client.effect.EffectProperties;
+import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.source.FXSource;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,12 +29,31 @@ public final class EffectRegistrar {
 
     private EffectRegistrar() {}
 
-    public static <T extends EntityComplexFX> T registerFX(T entityComplexFX, EffectProperties properties) {
+    public static <T extends EntityVisualFX> T registerFX(T entityComplexFX, EffectProperties<T> properties) {
         register(entityComplexFX, properties);
         return entityComplexFX;
     }
 
-    private static void register(EntityComplexFX effect, EffectProperties properties) {
+    public static <E extends EntityVisualFX, T extends BatchRenderContext<E>, F extends FXSource<E, T>> F registerSource(F source) {
+        register(source);
+        return source;
+    }
+
+    private static void register(FXSource<?, ?> src) {
+        if(Minecraft.getInstance().isGamePaused() ||
+                Minecraft.getInstance().player == null) {
+            return;
+        }
+
+        if (!Thread.currentThread().getName().contains("Client thread")) {
+            AstralSorcery.getProxy().scheduleClientside(() -> register(src));
+            return;
+        }
+
+        EffectHandler.getInstance().queueSource(src);
+    }
+
+    private static <T extends EntityVisualFX> void register(T effect, EffectProperties<T> properties) {
         if(AssetLibrary.isReloading() ||
                 effect == null ||
                 Minecraft.getInstance().isGamePaused() ||

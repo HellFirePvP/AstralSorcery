@@ -8,11 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
-import hellfirepvp.astralsorcery.client.effect.context.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.BufferBuilder;
 
 import java.util.Objects;
 import java.util.Random;
@@ -78,12 +76,10 @@ public abstract class EntityComplexFX implements IComplexEffect {
     public void tick() {
         this.age++;
 
-        if (this.age >= this.maxAge && refreshFunction.shouldRefresh(this) && RenderingUtils.canEffectExist(this)) {
+        if (this.canRemove() && refreshFunction.shouldRefresh(this) && RenderingUtils.canEffectExist(this)) {
             this.age = 0;
         }
     }
-
-    public abstract <T extends EntityComplexFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks);
 
     public void resetLifespan() {
         this.age = 0;
@@ -105,10 +101,6 @@ public abstract class EntityComplexFX implements IComplexEffect {
     public void flagAsRemoved() {
         this.flagRemoved = true;
         this.removeRequested = false;
-    }
-
-    public void clearRemoveFlag() {
-        this.flagRemoved = false;
     }
 
     @Override
