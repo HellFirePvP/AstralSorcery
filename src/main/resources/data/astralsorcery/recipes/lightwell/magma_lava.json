@@ -1,0 +1,14 @@
+{
+  "type": "astralsorcery:lightwell",
+  "input": {
+    "type": "minecraft:item",
+    "item": "minecraft:magma_block"
+  },
+  "output": {
+    "type": "astralsorcery:fluid",
+    "fluid": "minecraft:lava"
+  },
+  "productionMultiplier": 0.7,
+  "shatterMultiplier": 20,
+  "color": "00FF350C"
+}

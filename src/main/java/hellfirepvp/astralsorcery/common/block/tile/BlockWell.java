@@ -11,14 +11,39 @@ package hellfirepvp.astralsorcery.common.block.tile;
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
+import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefactionContext;
+import hellfirepvp.astralsorcery.common.lib.CapabilitiesAS;
 import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
+import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidActionResult;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidUtil;
+import hellfirepvp.astralsorcery.common.util.fluid.handler.CompatEmptyFluidHandler;
+import hellfirepvp.astralsorcery.common.util.fluid.handler.ICompatFluidHandler;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 
@@ -33,6 +58,86 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
 
     public BlockWell() {
         super(PropertiesMarble.defaultMarble());
+    }
+
+    @Override
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+        if (!world.isRemote()) {
+            ItemStack heldItem = player.getHeldItem(hand);
+            if(!heldItem.isEmpty()) {
+                TileWell tw = MiscUtils.getTileAt(world, pos, TileWell.class, false);
+                if(tw == null) {
+                    return true;
+                }
+
+                WellLiquefaction entry = RecipeTypesAS.TYPE_WELL.findRecipe(Dist.DEDICATED_SERVER, new WellLiquefactionContext(heldItem));
+                if(entry != null) {
+                    ItemStackHandler handle = tw.getInventory();
+                    if (!handle.getStackInSlot(0).isEmpty()) {
+                        return true;
+                    }
+                    if (!world.isAirBlock(pos.up())) {
+                        return true;
+                    }
+
+                    handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
+                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(),
+                            SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,
+                            ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+
+                    if(!player.isCreative()) {
+                        heldItem.shrink(1);
+                    }
+                    if(heldItem.getCount() <= 0) {
+                        player.setHeldItem(hand, ItemStack.EMPTY);
+                    }
+                }
+
+                ICompatFluidHandler handler = tw.getCapability(CapabilitiesAS.FLUID_HANDLER_COMPAT, null).orElse(null);
+                if (handler != null) {
+                    CompatFluidActionResult far = CompatFluidUtil.tryFillContainerAndStow(heldItem,
+                            handler, new InvWrapper(player.inventory), CompatFluidStack.BUCKET_VOLUME, player, true);
+                    if(far.isSuccess()) {
+                        player.setHeldItem(hand, far.getResult());
+                        SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, world, pos, 1F, 1F);
+                        tw.markForUpdate();
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, true);
+        if (tw != null && !worldIn.isRemote) {
+            ItemStack stack = tw.getInventory().getStackInSlot(0);
+            if (!stack.isEmpty()) {
+                tw.breakCatalyst();
+            }
+        }
+
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride(BlockState p_149740_1_) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos) {
+        TileWell tw = MiscUtils.getTileAt(world, pos, TileWell.class, false);
+        if (tw != null) {
+            return MathHelper.ceil(tw.getTank().getPercentageFilled() * 15F);
+        }
+        return 0;
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState p_149645_1_) {
+        return BlockRenderType.MODEL;
     }
 
     @Override

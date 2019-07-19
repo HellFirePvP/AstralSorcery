@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
@@ -51,8 +52,8 @@ public class WellLiquefaction extends CustomMatcherRecipe {
         this.shatterMultiplier = shatterMultiplier;
     }
 
-    public boolean matches(TileWell tile) {
-        return this.input.test(tile.getInventory().getStackInSlot(0));
+    public boolean matches(ItemStack input) {
+        return this.input.test(input);
     }
 
     @Nonnull
@@ -80,7 +81,7 @@ public class WellLiquefaction extends CustomMatcherRecipe {
 
     @Override
     public IRecipeType<?> getType() {
-        return (IRecipeType<?>) RecipeTypesAS.TYPE_WELL;
+        return RecipeTypesAS.TYPE_WELL.getType();
     }
 
     @Override

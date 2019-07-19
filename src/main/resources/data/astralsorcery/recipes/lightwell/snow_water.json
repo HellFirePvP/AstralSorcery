@@ -1,0 +1,14 @@
+{
+  "type": "astralsorcery:lightwell",
+  "input": {
+    "type": "minecraft:item",
+    "item": "minecraft:snow_block"
+  },
+  "output": {
+    "type": "astralsorcery:fluid",
+    "fluid": "minecraft:water"
+  },
+  "productionMultiplier": 1.5,
+  "shatterMultiplier": 14,
+  "color": "005369FF"
+}

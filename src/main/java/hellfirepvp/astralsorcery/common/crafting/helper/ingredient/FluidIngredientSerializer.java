@@ -9,10 +9,15 @@
 package hellfirepvp.astralsorcery.common.crafting.helper.ingredient;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +43,16 @@ public class FluidIngredientSerializer implements IIngredientSerializer<FluidIng
 
     @Override
     public FluidIngredient parse(JsonObject json) {
-        return new FluidIngredient(); // TODO fluids
+        ResourceLocation key = new ResourceLocation(JSONUtils.getString(json, "fluid"));
+        if (!ForgeRegistries.FLUIDS.containsKey(key)) {
+            throw new JsonSyntaxException("Unknown fluid '" + key + "'");
+        }
+        int amount = CompatFluidStack.BUCKET_VOLUME;
+        if (json.has("amount")) {
+            amount = JSONUtils.getInt(json, "amount");
+        }
+        Fluid fluid = ForgeRegistries.FLUIDS.getValue(key);
+        return new FluidIngredient(new CompatFluidStack(fluid, amount));
     }
 
     @Override
