@@ -87,6 +87,10 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
         return baseClass;
     }
 
+    public IRecipeType<T> getType() {
+        return type;
+    }
+
     @Nullable
     public T findRecipe(Dist dist, R context) {
         return MiscUtils.iterativeSearch(this.getAllRecipes(dist), (recipe) -> this.matchFct.test(recipe, context));

@@ -1,0 +1,14 @@
+{
+  "type": "astralsorcery:lightwell",
+  "input": {
+    "type": "minecraft:item",
+    "item": "minecraft:packed_ice"
+  },
+  "output": {
+    "type": "astralsorcery:fluid",
+    "fluid": "minecraft:water"
+  },
+  "productionMultiplier": 0.4,
+  "shatterMultiplier": 60,
+  "color": "005369FF"
+}

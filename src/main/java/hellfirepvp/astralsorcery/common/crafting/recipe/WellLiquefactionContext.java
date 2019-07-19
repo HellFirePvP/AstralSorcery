@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.crafting.recipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 /**
@@ -22,13 +23,17 @@ import net.minecraftforge.items.IItemHandler;
  */
 public class WellLiquefactionContext extends RecipeCraftingContext<WellLiquefaction, IItemHandler> {
 
-    private final TileWell tileWell;
+    private final ItemStack input;
 
-    public WellLiquefactionContext(TileWell tileWell) {
-        this.tileWell = tileWell;
+    public WellLiquefactionContext(TileWell well) {
+        this(well.getCatalyst());
     }
 
-    public TileWell getTileWell() {
-        return tileWell;
+    public WellLiquefactionContext(ItemStack input) {
+        this.input = input;
+    }
+
+    public ItemStack getInput() {
+        return input;
     }
 }

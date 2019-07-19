@@ -74,7 +74,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
                 return true;
             }
             return existing.isEmpty() && RecipeTypesAS.TYPE_WELL
-                    .findRecipe(Dist.DEDICATED_SERVER, new WellLiquefactionContext(this)) != null;
+                    .findRecipe(Dist.DEDICATED_SERVER, new WellLiquefactionContext(toAdd)) != null;
         });
     }
 
@@ -148,6 +148,11 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
         PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(getWorld(), getPos(), 32));
         SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, getWorld(), getPos(), 1F, 1F);
         markForUpdate();
+    }
+
+    @Nonnull
+    public ItemStack getCatalyst() {
+        return this.getInventory().getStackInSlot(0);
     }
 
     @OnlyIn(Dist.CLIENT)

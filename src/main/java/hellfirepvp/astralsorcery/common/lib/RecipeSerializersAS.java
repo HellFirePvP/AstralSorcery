@@ -23,7 +23,7 @@ public class RecipeSerializersAS {
 
     private RecipeSerializersAS() {}
 
-    public static final ResourceLocation WELL_LIQUEFACTION = new ResourceLocation(AstralSorcery.MODID, "well");
+    public static final ResourceLocation WELL_LIQUEFACTION = new ResourceLocation(AstralSorcery.MODID, "lightwell");
 
     public static WellRecipeSerializer WELL_LIQUEFACTION_SERIALIZER;
 

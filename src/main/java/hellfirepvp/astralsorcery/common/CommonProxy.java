@@ -192,6 +192,7 @@ public class CommonProxy {
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
         RegistryCapabilities.initialize();
+        RegistryIngredientTypes.init();
     }
 
     // Generic events

@@ -10,10 +10,7 @@ package hellfirepvp.astralsorcery.common.util.fluid;
 
 import com.google.common.base.Preconditions;
 import hellfirepvp.astralsorcery.common.lib.CapabilitiesAS;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.CompatBlockWrapper;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.CompatFluidBlockWrapper;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.ICompatFluidHandler;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.ICompatFluidHandlerItem;
+import hellfirepvp.astralsorcery.common.util.fluid.handler.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -21,6 +18,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
@@ -85,7 +83,7 @@ public class CompatFluidUtil {
             return CompatFluidActionResult.FAILURE;
         }
 
-        if (player != null && player.abilities.isCreativeMode) {
+        if (player != null && player.isCreative()) {
             CompatFluidActionResult filledReal = tryFillContainer(container, fluidSource, maxAmount, player, doFill);
             if (filledReal.isSuccess()) {
                 return new CompatFluidActionResult(container); // creative mode: item does not change
@@ -241,6 +239,10 @@ public class CompatFluidUtil {
     }
 
     public static LazyOptional<ICompatFluidHandlerItem> getFluidHandler(@Nonnull ItemStack itemStack) {
+        Item i = itemStack.getItem();
+        if (i == Items.BUCKET || i == Items.WATER_BUCKET || i == Items.LAVA_BUCKET) {
+            return new CompatFluidHandlerBucketWrapper(itemStack).getCapability(CapabilitiesAS.FLUID_HANDLER_ITEM_COMPAT);
+        }
         return itemStack.getCapability(CapabilitiesAS.FLUID_HANDLER_ITEM_COMPAT);
     }
 

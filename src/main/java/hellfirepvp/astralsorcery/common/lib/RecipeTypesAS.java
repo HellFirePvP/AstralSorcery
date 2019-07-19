@@ -27,6 +27,6 @@ public class RecipeTypesAS {
 
     public static ResolvingRecipeType<IItemHandler, WellLiquefaction, WellLiquefactionContext> TYPE_WELL =
             new ResolvingRecipeType<>("well", WellLiquefaction.class,
-                    (recipe, context) -> recipe.matches(context.getTileWell()));
+                    (recipe, context) -> recipe.matches(context.getInput()));
 
 }
