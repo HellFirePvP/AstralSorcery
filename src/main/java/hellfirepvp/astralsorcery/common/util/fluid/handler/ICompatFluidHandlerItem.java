@@ -6,25 +6,22 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.lib;
+package hellfirepvp.astralsorcery.common.util.fluid.handler;
 
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
-import net.minecraft.network.datasync.IDataSerializer;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: DataSerializersAS
+ * Class: ICompatFluidHandlerItem
  * Created by HellFirePvP
- * Date: 06.07.2019 / 19:12
+ * Date: 19.07.2019 / 16:21
  */
-public class DataSerializersAS {
+public interface ICompatFluidHandlerItem extends ICompatFluidHandler {
 
-    private DataSerializersAS() {}
-
-    public static IDataSerializer<Long> LONG;
-    public static IDataSerializer<Vector3> VECTOR;
-    public static IDataSerializer<CompatFluidStack> FLUID;
+    @Nonnull
+    ItemStack getContainer();
 
 }

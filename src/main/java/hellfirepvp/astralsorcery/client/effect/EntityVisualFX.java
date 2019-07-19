@@ -66,9 +66,10 @@ public abstract class EntityVisualFX extends EntityComplexFX {
         return oldPos;
     }
 
-    public void setPosition(Vector3 pos) {
+    public <T extends EntityComplexFX> T setPosition(Vector3 pos) {
         super.setPosition(pos);
         this.oldPos = pos.clone();
+        return (T) this;
     }
 
     public Vector3 getMotion() {

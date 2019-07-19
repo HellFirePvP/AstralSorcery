@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.crafting.helper.ingredient;
 
 import hellfirepvp.astralsorcery.common.lib.IngredientSerializersAS;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidUtil;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntComparators;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -17,8 +19,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -34,22 +34,22 @@ import java.util.stream.Stream;
  */
 public class FluidIngredient extends Ingredient {
 
-    private final List<FluidStack> fluids;
+    private final List<CompatFluidStack> fluids;
     private IntList itemIds = null;
     private ItemStack[] itemArray = null;
     private int cacheItemStacks = -1, cacheItemIds = -1;
 
-    public FluidIngredient(List<FluidStack> fluidStacks) {
+    public FluidIngredient(List<CompatFluidStack> fluidStacks) {
         super(Stream.empty());
         this.fluids = fluidStacks;
     }
 
-    public FluidIngredient(FluidStack... fluidStacks) {
+    public FluidIngredient(CompatFluidStack... fluidStacks) {
         super(Stream.empty());
         this.fluids = Arrays.asList(fluidStacks);
     }
 
-    public List<FluidStack> getFluids() {
+    public List<CompatFluidStack> getFluids() {
         return fluids;
     }
 
@@ -58,8 +58,8 @@ public class FluidIngredient extends Ingredient {
         if (itemArray == null || this.cacheItemStacks != this.fluids.size()) {
             NonNullList<ItemStack> lst = NonNullList.create();
 
-            for (FluidStack fluid : this.fluids) {
-                lst.add(FluidUtil.getFilledBucket(fluid));
+            for (CompatFluidStack fluid : this.fluids) {
+                lst.add(CompatFluidUtil.getFilledBucket(fluid));
             }
 
             this.itemArray = lst.toArray(new ItemStack[lst.size()]);
@@ -73,8 +73,8 @@ public class FluidIngredient extends Ingredient {
         if (this.itemIds == null || this.cacheItemIds != fluids.size()) {
             this.itemIds = new IntArrayList(this.fluids.size());
 
-            for (FluidStack fluid : this.fluids) {
-                ItemStack bucketFluid = FluidUtil.getFilledBucket(fluid);
+            for (CompatFluidStack fluid : this.fluids) {
+                ItemStack bucketFluid = CompatFluidUtil.getFilledBucket(fluid);
                 this.itemIds.add(RecipeItemHelper.pack(bucketFluid));
             }
 
@@ -91,12 +91,12 @@ public class FluidIngredient extends Ingredient {
             return false;
         }
 
-        FluidStack contained = FluidUtil.getFluidContained(input).orElse(null);
-        if (contained == null || contained.getFluid() == null || contained.amount <= 0) {
+        CompatFluidStack contained = CompatFluidUtil.getFluidContained(input).orElse(null);
+        if (contained == null || contained.getFluid() == null || contained.getAmount() <= 0) {
             return false;
         }
 
-        for (FluidStack target : this.fluids) {
+        for (CompatFluidStack target : this.fluids) {
             if (contained.containsFluid(target)) {
                 return true;
             }

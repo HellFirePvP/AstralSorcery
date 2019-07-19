@@ -35,7 +35,6 @@ import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.ServerLifecycleListener;
-import hellfirepvp.astralsorcery.common.util.data.ASDataSerializers;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.observerlib.common.util.tick.TickManager;
 import net.minecraft.server.MinecraftServer;
@@ -98,7 +97,7 @@ public class CommonProxy {
         this.tickManager = new TickManager();
         this.attachTickListeners(tickManager::register);
 
-        this.serverLifecycleListeners.add(ResearchIOThread.getTask());
+        this.serverLifecycleListeners.add(ResearchIOThread.startup());
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(ResearchHelper::saveAndClearServerCache));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperRitualFlight::clearServer));
     }
@@ -192,6 +191,7 @@ public class CommonProxy {
     // Mod events
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
+        RegistryCapabilities.initialize();
     }
 
     // Generic events

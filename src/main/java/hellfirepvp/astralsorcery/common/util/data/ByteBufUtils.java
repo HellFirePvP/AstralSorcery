@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import net.minecraft.item.ItemStack;
@@ -16,8 +17,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
 
@@ -218,20 +217,18 @@ public class ByteBufUtils {
         }
     }
 
-    public static void writeFluidStack(PacketBuffer byteBuf, @Nullable FluidStack stack) {
+    public static void writeFluidStack(PacketBuffer byteBuf, @Nullable CompatFluidStack stack) {
         boolean defined = stack != null;
         byteBuf.writeBoolean(defined);
         if (defined) {
-            CompoundNBT tag = new CompoundNBT();
-            stack.writeToNBT(tag);
-            writeNBTTag(byteBuf, tag);
+            writeNBTTag(byteBuf, stack.serialize());
         }
     }
 
     @Nullable
-    public static FluidStack readFluidStack(PacketBuffer byteBuf) {
+    public static CompatFluidStack readFluidStack(PacketBuffer byteBuf) {
         if (byteBuf.readBoolean()) {
-            return FluidStack.loadFluidStackFromNBT(readNBTTag(byteBuf));
+            return CompatFluidStack.deserialize(readNBTTag(byteBuf));
         } else {
             return null;
         }

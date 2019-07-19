@@ -57,6 +57,10 @@ public abstract class FXSourceOrbital<E extends EntityVisualFX, T extends BatchR
         return this;
     }
 
+    public Vector3 getOffset() {
+        return offset;
+    }
+
     @Override
     public void tickSpawnFX(Function<Vector3, E> effectRegistrar) {
         Vector3 point = orbitAxis.clone()

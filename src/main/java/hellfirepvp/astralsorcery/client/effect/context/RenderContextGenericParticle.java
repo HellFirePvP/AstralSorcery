@@ -10,11 +10,15 @@ package hellfirepvp.astralsorcery.client.effect.context;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,6 +28,9 @@ import org.lwjgl.opengl.GL11;
  * Date: 17.07.2019 / 20:32
  */
 public class RenderContextGenericParticle extends BatchRenderContext<FXFacingParticle> {
+
+    private static final VFXColorFunction<FXFacingParticle> defaultColor =
+            VFXColorFunction.constant(new Color(60, 0, 255));
 
     public RenderContextGenericParticle() {
         super(TexturesAS.TEX_STATIC_FLARE,
@@ -41,7 +48,11 @@ public class RenderContextGenericParticle extends BatchRenderContext<FXFacingPar
                     GlStateManager.disableBlend();
                     GlStateManager.enableAlphaTest();
                 },
-                (ctx, pos) -> new FXFacingParticle(pos).setScaleMultiplier(0.2F));
+                (ctx, pos) -> new FXFacingParticle(pos)
+                        .setScaleMultiplier(0.2F)
+                        .setAlphaMultiplier(0.75F)
+                        .alpha(VFXAlphaFunction.PYRAMID)
+                        .color(defaultColor));
     }
 
 }

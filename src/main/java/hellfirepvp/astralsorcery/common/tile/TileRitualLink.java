@@ -81,13 +81,9 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
                     FXFacingParticle particle = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                             .spawn(v)
                             .setScaleMultiplier(0.15F)
-                            .alpha(VFXAlphaFunction.PYRAMID)
-                            .setAlphaMultiplier(0.75F)
                             .setMotion(new Vector3(0, (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.01, 0));
                     if (rand.nextBoolean()) {
                         particle.color(VFXColorFunction.WHITE);
-                    } else {
-                        particle.color(VFXColorFunction.constant(new Color(60, 0, 255)));
                     }
                 }
             }
@@ -95,8 +91,6 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(new Vector3(this).add(0.5, 0.5, 0.5))
                     .setScaleMultiplier(0.3F)
-                    .alpha(VFXAlphaFunction.PYRAMID)
-                    .setAlphaMultiplier(0.75F)
                     .setMotion(new Vector3(0, (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.015, 0))
                     .color(VFXColorFunction.random());
 

@@ -8,11 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.util.item;
 
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidActionResult;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidUtil;
+import hellfirepvp.astralsorcery.common.util.fluid.handler.CompatVoidFluidHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ItemTags;
@@ -21,12 +26,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -190,12 +189,12 @@ public class ItemUtils {
         }
     }
 
-    public static FluidActionResult drainFluidFromItem(ItemStack stack, Fluid fluid, int mbAmount, boolean doDrain) {
-        return drainFluidFromItem(stack, new FluidStack(fluid, mbAmount), doDrain);
+    public static CompatFluidActionResult drainFluidFromItem(ItemStack stack, Fluid fluid, int mbAmount, boolean doDrain) {
+        return drainFluidFromItem(stack, new CompatFluidStack(fluid, mbAmount), doDrain);
     }
 
-    public static FluidActionResult drainFluidFromItem(ItemStack stack, FluidStack fluidStack, boolean doDrain) {
-        return FluidUtil.tryEmptyContainer(stack, FluidHandlerVoid.INSTANCE, fluidStack.amount, null, doDrain);
+    public static CompatFluidActionResult drainFluidFromItem(ItemStack stack, CompatFluidStack fluidStack, boolean doDrain) {
+        return CompatFluidUtil.tryEmptyContainer(stack, CompatVoidFluidHandler.INSTANCE, fluidStack.getAmount(), null, doDrain);
     }
 
     /*public static void decrStackInInventory(ItemStack[] stacks, int slot) {
@@ -271,33 +270,6 @@ public class ItemUtils {
         ItemStack s = stack.copy();
         s.setCount(amount);
         return s;
-    }
-
-    private static class FluidHandlerVoid implements IFluidHandler {
-
-        private static FluidHandlerVoid INSTANCE = new FluidHandlerVoid();
-
-        @Override
-        public IFluidTankProperties[] getTankProperties() {
-            return new IFluidTankProperties[0];
-        }
-
-        @Override
-        public int fill(FluidStack resource, boolean doFill) {
-            return resource.amount;
-        }
-
-        @Nullable
-        @Override
-        public FluidStack drain(FluidStack resource, boolean doDrain) {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public FluidStack drain(int maxDrain, boolean doDrain) {
-            return null;
-        }
     }
 
     private static class ItemHandlerEmpty implements IItemHandler {

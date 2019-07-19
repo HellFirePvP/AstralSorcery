@@ -10,9 +10,9 @@ package hellfirepvp.astralsorcery.common.crafting.helper.ingredient;
 
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class FluidIngredientSerializer implements IIngredientSerializer<FluidIng
     @Override
     public FluidIngredient parse(PacketBuffer buffer) {
         int size = buffer.readInt();
-        List<FluidStack> fluidStacks = new ArrayList<>(size);
+        List<CompatFluidStack> fluidStacks = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             fluidStacks.add(ByteBufUtils.readFluidStack(buffer));
         }
@@ -43,9 +43,9 @@ public class FluidIngredientSerializer implements IIngredientSerializer<FluidIng
 
     @Override
     public void write(PacketBuffer buffer, FluidIngredient ingredient) {
-        List<FluidStack> fluidStacks = ingredient.getFluids();
+        List<CompatFluidStack> fluidStacks = ingredient.getFluids();
         buffer.writeInt(fluidStacks.size());
-        for (FluidStack fluidStack : fluidStacks) {
+        for (CompatFluidStack fluidStack : fluidStacks) {
             ByteBufUtils.writeFluidStack(buffer, fluidStack);
         }
     }

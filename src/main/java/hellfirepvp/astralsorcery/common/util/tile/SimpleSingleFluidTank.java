@@ -8,14 +8,19 @@
 
 package hellfirepvp.astralsorcery.common.util.tile;
 
+import hellfirepvp.astralsorcery.common.lib.CapabilitiesAS;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
+import hellfirepvp.astralsorcery.common.util.fluid.handler.ICompatFluidHandler;
+import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.CompatFluidTankInfo;
+import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.ICompatFluidTank;
+import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.ICompatFluidTankProperties;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.*;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -27,7 +32,7 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 22:31
  */
-public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, IFluidHandler {
+public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTankProperties, ICompatFluidHandler {
 
     private int amount = 0;
     private Fluid fluid = null;
@@ -83,7 +88,7 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
 
     //returns amount drained
     @Nullable
-    public FluidStack drain(int amount) {
+    public CompatFluidStack drain(int amount) {
         if (this.fluid == null) return null;
         int drainable = getMaxDrainable(amount);
         this.amount -= drainable;
@@ -94,14 +99,14 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
         if (Math.abs(drainable) > 0 && this.onUpdate != null) {
             this.onUpdate.run();
         }
-        return new FluidStack(drainedFluid, drainable);
+        return new CompatFluidStack(drainedFluid, drainable);
     }
 
     @Nullable
     @Override
-    public FluidStack getFluid() {
+    public CompatFluidStack getFluid() {
         if (fluid == null) return null;
-        return new FluidStack(fluid, amount);
+        return new CompatFluidStack(fluid, amount);
     }
 
     @Nullable
@@ -128,7 +133,7 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
 
     @Nullable
     @Override
-    public FluidStack getContents() {
+    public CompatFluidStack getContents() {
         return getFluid();
     }
 
@@ -148,13 +153,13 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
     }
 
     @Override
-    public boolean canFillFluidType(FluidStack fluidStack) {
-        return canFill() && (this.fluid == null || fluidStack.getFluid().equals(this.fluid));
+    public boolean canFillFluidType(CompatFluidStack CompatFluidStack) {
+        return canFill() && (this.fluid == null || CompatFluidStack.getFluid().equals(this.fluid));
     }
 
     @Override
-    public boolean canDrainFluidType(FluidStack fluidStack) {
-        return canDrain() && (this.fluid != null && fluidStack.getFluid().equals(this.fluid));
+    public boolean canDrainFluidType(CompatFluidStack CompatFluidStack) {
+        return canDrain() && (this.fluid != null && CompatFluidStack.getFluid().equals(this.fluid));
     }
 
     public float getPercentageFilled() {
@@ -162,19 +167,19 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
     }
 
     @Override
-    public FluidTankInfo getInfo() {
-        return new FluidTankInfo(this);
+    public CompatFluidTankInfo getInfo() {
+        return new CompatFluidTankInfo(this);
     }
 
     @Override
-    public IFluidTankProperties[] getTankProperties() {
-        return new IFluidTankProperties[] { this };
+    public ICompatFluidTankProperties[] getTankProperties() {
+        return new ICompatFluidTankProperties[] { this };
     }
 
     @Override
-    public int fill(FluidStack resource, boolean doFill) {
+    public int fill(CompatFluidStack resource, boolean doFill) {
         if (!canFillFluidType(resource)) return 0;
-        int maxAdded = resource.amount;
+        int maxAdded = resource.getAmount();
         int addable = getMaxAddable(maxAdded);
         if(addable > 0 && this.fluid == null && doFill) {
             setFluid(resource.getFluid());
@@ -187,20 +192,20 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
 
     @Nullable
     @Override
-    public FluidStack drain(FluidStack resource, boolean doDrain) {
+    public CompatFluidStack drain(CompatFluidStack resource, boolean doDrain) {
         if (!canDrainFluidType(resource)) return null;
-        return drain(resource.amount, doDrain);
+        return drain(resource.getAmount(), doDrain);
     }
 
     @Nullable
     @Override
-    public FluidStack drain(int maxDrain, boolean doDrain) {
+    public CompatFluidStack drain(int maxDrain, boolean doDrain) {
         if (!canDrain()) return null;
         int maxDrainable = getMaxDrainable(maxDrain);
         if (doDrain) {
             return drain(maxDrainable);
         }
-        return new FluidStack(this.fluid, maxDrainable);
+        return new CompatFluidStack(this.fluid, maxDrainable);
     }
 
     public CompoundNBT writeNBT() {
@@ -210,7 +215,7 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
         tag.putBoolean("aIn", this.allowInput);
         tag.putBoolean("aOut", this.allowOutput);
         if (this.fluid != null) {
-            tag.putString("fluid", this.fluid.getName());
+            tag.putString("fluid", this.fluid.getRegistryName().toString());
         }
         int[] sides = new int[accessibleSides.size()];
         Object[] arraySides = this.accessibleSides.toArray();
@@ -228,9 +233,7 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
         this.allowInput = tag.getBoolean("aIn");
         this.allowOutput = tag.getBoolean("aOut");
         if (tag.contains("fluid")) {
-            this.fluid = null;
-            //TODO fluids
-            //this.fluid = FluidRegistry.getFluid(tag.getString("fluid"));
+            this.fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(tag.getString("fluid")));
         } else {
             this.fluid = null;
         }
@@ -251,7 +254,7 @@ public class SimpleSingleFluidTank implements IFluidTank, IFluidTankProperties, 
     }
 
     public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-        return hasHandlerForSide(facing) && CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY == capability;
+        return hasHandlerForSide(facing) && CapabilitiesAS.FLUID_HANDLER_COMPAT == capability;
     }
 
     public LazyOptional<SimpleSingleFluidTank> getCapability() {
