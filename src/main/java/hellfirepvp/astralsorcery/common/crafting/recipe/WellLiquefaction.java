@@ -12,11 +12,11 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,16 +33,16 @@ public class WellLiquefaction extends CustomMatcherRecipe {
 
     private final Color catalystColor;
     private final Ingredient input;
-    private final FluidStack output;
+    private final CompatFluidStack output;
 
     private final float productionMultiplier;
     private final float shatterMultiplier;
 
-    public WellLiquefaction(ResourceLocation recipeId, Ingredient input, FluidStack output, float productionMultiplier, float shatterMultiplier) {
+    public WellLiquefaction(ResourceLocation recipeId, Ingredient input, CompatFluidStack output, float productionMultiplier, float shatterMultiplier) {
         this(recipeId, input, output, null, productionMultiplier, shatterMultiplier);
     }
 
-    public WellLiquefaction(ResourceLocation recipeId, Ingredient input, FluidStack output, @Nullable Color catalystColor, float productionMultiplier, float shatterMultiplier) {
+    public WellLiquefaction(ResourceLocation recipeId, Ingredient input, CompatFluidStack output, @Nullable Color catalystColor, float productionMultiplier, float shatterMultiplier) {
         super(recipeId);
         this.input = input;
         this.output = output;
@@ -61,7 +61,7 @@ public class WellLiquefaction extends CustomMatcherRecipe {
     }
 
     @Nonnull
-    public FluidStack getFluidOutput() {
+    public CompatFluidStack getFluidOutput() {
         return output;
     }
 

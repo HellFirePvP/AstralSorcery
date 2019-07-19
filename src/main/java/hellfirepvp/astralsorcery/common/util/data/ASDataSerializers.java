@@ -8,11 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.IDataSerializer;
-import net.minecraftforge.fluids.FluidStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -69,9 +68,9 @@ public class ASDataSerializers {
         }
     };
 
-    public static IDataSerializer<FluidStack> FLUID = new IDataSerializer<FluidStack>() {
+    public static IDataSerializer<CompatFluidStack> FLUID = new IDataSerializer<CompatFluidStack>() {
         @Override
-        public void write(PacketBuffer buf, FluidStack value) {
+        public void write(PacketBuffer buf, CompatFluidStack value) {
             buf.writeBoolean(value != null);
             if (value != null) {
                 ByteBufUtils.writeFluidStack(buf, value);
@@ -79,17 +78,17 @@ public class ASDataSerializers {
         }
 
         @Override
-        public FluidStack read(PacketBuffer buf) {
+        public CompatFluidStack read(PacketBuffer buf) {
             return buf.readBoolean() ? ByteBufUtils.readFluidStack(buf) : null;
         }
 
         @Override
-        public DataParameter<FluidStack> createKey(int id) {
+        public DataParameter<CompatFluidStack> createKey(int id) {
             return new DataParameter<>(id, this);
         }
 
         @Override
-        public FluidStack copyValue(FluidStack value) {
+        public CompatFluidStack copyValue(CompatFluidStack value) {
             return value == null ? null : value.copy();
         }
     };

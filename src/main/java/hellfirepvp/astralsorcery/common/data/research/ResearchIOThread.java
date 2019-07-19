@@ -31,7 +31,7 @@ import java.util.UUID;
  */
 public class ResearchIOThread extends TimerTask implements ServerLifecycleListener {
 
-    private static final ResearchIOThread saveTask = new ResearchIOThread();
+    private static ResearchIOThread saveTask;
     private static Timer ioThread;
 
     private Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
@@ -39,6 +39,13 @@ public class ResearchIOThread extends TimerTask implements ServerLifecycleListen
     private boolean inSave = false, skipTick = false;
 
     private ResearchIOThread() {}
+
+    public static ResearchIOThread startup() {
+        if (saveTask == null) {
+            saveTask = new ResearchIOThread();
+        }
+        return getTask();
+    }
 
     public static ResearchIOThread getTask() {
         return saveTask;
@@ -57,6 +64,8 @@ public class ResearchIOThread extends TimerTask implements ServerLifecycleListen
     public void onServerStop() {
         this.flushAndSaveAll();
 
+        saveTask.cancel();
+        saveTask = null;
         ioThread.cancel();
         ioThread = null;
     }

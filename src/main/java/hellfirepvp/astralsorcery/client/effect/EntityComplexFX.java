@@ -12,8 +12,12 @@ import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,6 +38,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
     protected Vector3 pos;
 
     private RefreshFunction refreshFunction = RefreshFunction.DESPAWN;
+    private Map<String, Object> customData = new HashMap<>();
 
     protected boolean removeRequested = false;
     private boolean flagRemoved = true;
@@ -48,8 +53,9 @@ public abstract class EntityComplexFX implements IComplexEffect {
         return id;
     }
 
-    public void setMaxAge(int maxAge) {
+    public <T extends EntityComplexFX> T setMaxAge(int maxAge) {
         this.maxAge = maxAge;
+        return (T) this;
     }
 
     public int getMaxAge() {
@@ -64,12 +70,27 @@ public abstract class EntityComplexFX implements IComplexEffect {
         return pos;
     }
 
-    public void setPosition(Vector3 pos) {
+    public <T extends EntityComplexFX> T setPosition(Vector3 pos) {
         this.pos = pos.clone();
+        return (T) this;
+    }
+
+    public <T extends EntityComplexFX> T addPosition(Vector3 offset) {
+        this.pos.add(offset);
+        return (T) this;
     }
 
     public void refresh(RefreshFunction<?> refreshFunction) {
         this.refreshFunction = refreshFunction;
+    }
+
+    public <T> T getOrCreateData(String str, Supplier<T> defaultProvider) {
+        return (T) this.customData.computeIfAbsent(str, s -> defaultProvider.get());
+    }
+
+    @Nullable
+    public <T> T getData(String str) {
+        return (T) this.customData.get(str);
     }
 
     @Override

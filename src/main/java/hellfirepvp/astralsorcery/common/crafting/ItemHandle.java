@@ -11,9 +11,12 @@ package hellfirepvp.astralsorcery.common.crafting;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
 import hellfirepvp.astralsorcery.common.item.render.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidUtil;
 import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -25,9 +28,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.CompoundIngredient;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,7 +53,7 @@ public final class ItemHandle {
 
     private List<ItemStack> applicableItems = new LinkedList<>();
     private Tag<Item> tag = null;
-    private FluidStack fluidTypeAndAmount = null;
+    private CompatFluidStack fluidTypeAndAmount = null;
 
     /*
      * PLEASE do not use this without populating the respective fields...
@@ -73,16 +73,16 @@ public final class ItemHandle {
     }
 
     public ItemHandle(Fluid fluid) {
-        this.fluidTypeAndAmount = new FluidStack(fluid, 1000);
+        this.fluidTypeAndAmount = new CompatFluidStack(fluid, 1000);
         this.handleType = Type.FLUID;
     }
 
     public ItemHandle(Fluid fluid, int mbAmount) {
-        this.fluidTypeAndAmount = new FluidStack(fluid, mbAmount);
+        this.fluidTypeAndAmount = new CompatFluidStack(fluid, mbAmount);
         this.handleType = Type.FLUID;
     }
 
-    public ItemHandle(FluidStack compareStack) {
+    public ItemHandle(CompatFluidStack compareStack) {
         this.fluidTypeAndAmount = compareStack.copy();
         this.handleType = Type.FLUID;
     }
@@ -146,7 +146,7 @@ public final class ItemHandle {
                 list.addAll(applicableItems);
                 break;
             case FLUID:
-                list.add(FluidUtil.getFilledBucket(this.fluidTypeAndAmount));
+                list.add(CompatFluidUtil.getFilledBucket(this.fluidTypeAndAmount));
                 break;
         }
         return list;
@@ -175,7 +175,7 @@ public final class ItemHandle {
             case TAG:
                 return Ingredient.fromTag(this.tag);
             case FLUID:
-                return new FluidIngredient(new FluidStack(fluidTypeAndAmount.getFluid(), Fluid.BUCKET_VOLUME));
+                return new FluidIngredient(new CompatFluidStack(fluidTypeAndAmount.getFluid(), CompatFluidStack.BUCKET_VOLUME));
             case STACK:
             default:
                 List<Ingredient> ingredients = new ArrayList<>();
@@ -200,7 +200,7 @@ public final class ItemHandle {
     }
 
     @Nullable
-    public FluidStack getFluidTypeAndAmount() {
+    public CompatFluidStack getFluidTypeAndAmount() {
         return fluidTypeAndAmount;
     }
 
@@ -218,7 +218,7 @@ public final class ItemHandle {
                 }
                 return false;
             case FLUID:
-                FluidStack contained = FluidUtil.getFluidContained(stack).orElse(null);
+                CompatFluidStack contained = CompatFluidUtil.getFluidContained(stack).orElse(null);
                 if (contained == null || contained.getFluid() == null || !contained.getFluid().equals(fluidTypeAndAmount.getFluid())) {
                     return false;
                 }

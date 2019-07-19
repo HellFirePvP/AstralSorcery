@@ -6,25 +6,29 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.lib;
+package hellfirepvp.astralsorcery.common.util.fluid.handler;
 
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
-import net.minecraft.network.datasync.IDataSerializer;
+import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.ICompatFluidTankProperties;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: DataSerializersAS
+ * Class: ICompatFluidHandler
  * Created by HellFirePvP
- * Date: 06.07.2019 / 19:12
+ * Date: 19.07.2019 / 13:07
  */
-public class DataSerializersAS {
+public interface ICompatFluidHandler {
 
-    private DataSerializersAS() {}
+    ICompatFluidTankProperties[] getTankProperties();
 
-    public static IDataSerializer<Long> LONG;
-    public static IDataSerializer<Vector3> VECTOR;
-    public static IDataSerializer<CompatFluidStack> FLUID;
+    int fill(CompatFluidStack resource, boolean doFill);
 
+    @Nullable
+    CompatFluidStack drain(CompatFluidStack resource, boolean doDrain);
+
+    @Nullable
+    CompatFluidStack drain(int maxDrain, boolean doDrain);
 }

@@ -11,9 +11,9 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -28,12 +28,12 @@ import javax.annotation.Nonnull;
  */
 public class PktPlayLiquidFountain extends ASPacket<PktPlayLiquidFountain> {
 
-    private FluidStack fluidStack;
+    private CompatFluidStack fluidStack;
     private Vector3 pos;
 
     public PktPlayLiquidFountain() {}
 
-    public PktPlayLiquidFountain(FluidStack fluidStack, Vector3 pos) {
+    public PktPlayLiquidFountain(CompatFluidStack fluidStack, Vector3 pos) {
         this.fluidStack = fluidStack;
         this.pos = pos;
     }
