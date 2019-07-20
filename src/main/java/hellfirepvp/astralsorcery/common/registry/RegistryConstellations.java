@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
-import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.lib.TagsAS;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
@@ -24,8 +23,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.Tags;
-
-import java.awt.*;
 
 import static hellfirepvp.astralsorcery.common.lib.ColorsAS.*;
 import static hellfirepvp.astralsorcery.common.lib.ConstellationsAS.*;
@@ -175,88 +172,88 @@ public class RegistryConstellations {
     }
 
     private static void registerSignatureItems() {
-        discidia.addSignatureItem(new ItemHandle(new ItemStack(Items.FLINT)));
-        discidia.addSignatureItem(new ItemHandle(Tags.Items.INGOTS_IRON));
-        discidia.addSignatureItem(new ItemHandle(new ItemStack(Items.ARROW)));
-        discidia.addSignatureItem(new ItemHandle(Tags.Items.DUSTS_REDSTONE));
+        discidia.addSignatureItem(new ItemStack(Items.FLINT));
+        discidia.addSignatureItem(Tags.Items.INGOTS_IRON);
+        discidia.addSignatureItem(new ItemStack(Items.ARROW));
+        discidia.addSignatureItem(Tags.Items.DUSTS_REDSTONE);
 
-        armara.addSignatureItem(new ItemHandle(Tags.Items.INGOTS_IRON));
-        armara.addSignatureItem(new ItemHandle(new ItemStack(Items.LEATHER)));
-        armara.addSignatureItem(new ItemHandle(new ItemStack(Items.CLAY_BALL)));
-        armara.addSignatureItem(new ItemHandle(Tags.Items.DUSTS_GLOWSTONE));
+        armara.addSignatureItem(Tags.Items.INGOTS_IRON);
+        armara.addSignatureItem(new ItemStack(Items.LEATHER));
+        armara.addSignatureItem(new ItemStack(Items.CLAY_BALL));
+        armara.addSignatureItem(Tags.Items.DUSTS_GLOWSTONE);
 
-        vicio.addSignatureItem(new ItemHandle(new ItemStack(Items.FEATHER)));
-        vicio.addSignatureItem(new ItemHandle(new ItemStack(Items.SUGAR)));
-        vicio.addSignatureItem(new ItemHandle(new ItemStack(Items.STRING)));
-        vicio.addSignatureItem(new ItemHandle(ItemTags.FISHES));
+        vicio.addSignatureItem(new ItemStack(Items.FEATHER));
+        vicio.addSignatureItem(new ItemStack(Items.SUGAR));
+        vicio.addSignatureItem(new ItemStack(Items.STRING));
+        vicio.addSignatureItem(ItemTags.FISHES);
 
-        aevitas.addSignatureItem(new ItemHandle(ItemTags.SAPLINGS));
-        aevitas.addSignatureItem(new ItemHandle(TagsAS.DUSTS_STARDUST));
-        aevitas.addSignatureItem(new ItemHandle(new ItemStack(Items.WHEAT_SEEDS)));
-        aevitas.addSignatureItem(new ItemHandle(new ItemStack(Blocks.SUGAR_CANE)));
+        aevitas.addSignatureItem(ItemTags.SAPLINGS);
+        aevitas.addSignatureItem(TagsAS.DUSTS_STARDUST);
+        aevitas.addSignatureItem(new ItemStack(Items.WHEAT_SEEDS));
+        aevitas.addSignatureItem(new ItemStack(Blocks.SUGAR_CANE));
 
-        evorsio.addSignatureItem(new ItemHandle(Tags.Items.COBBLESTONE));
-        evorsio.addSignatureItem(new ItemHandle(new ItemStack(Items.FLINT)));
-        evorsio.addSignatureItem(new ItemHandle(new ItemStack(Items.GUNPOWDER)));
-        evorsio.addSignatureItem(new ItemHandle(new ItemStack(Blocks.TNT)));
-
-
-        lucerna.addSignatureItem(new ItemHandle(Tags.Items.DUSTS_GLOWSTONE));
-        lucerna.addSignatureItem(new ItemHandle(new ItemStack(Blocks.TORCH)));
-        lucerna.addSignatureItem(new ItemHandle(Tags.Items.DUSTS_REDSTONE));
-        lucerna.addSignatureItem(new ItemHandle(new ItemStack(Items.COAL)));
-
-        mineralis.addSignatureItem(new ItemHandle(Tags.Items.ORES_IRON));
-        mineralis.addSignatureItem(new ItemHandle(Tags.Items.INGOTS_GOLD));
-        mineralis.addSignatureItem(new ItemHandle(Tags.Items.INGOTS_IRON));
-        mineralis.addSignatureItem(new ItemHandle(Tags.Items.DUSTS_REDSTONE));
-
-        horologium.addSignatureItem(new ItemHandle(TagsAS.DUSTS_STARDUST));
-        horologium.addSignatureItem(new ItemHandle(Tags.Items.GEMS_DIAMOND));
-        horologium.addSignatureItem(new ItemHandle(new ItemStack(Items.ENDER_PEARL)));
-        horologium.addSignatureItem(new ItemHandle(new ItemStack(Items.CLOCK)));
-
-        octans.addSignatureItem(new ItemHandle(ItemTags.FISHES));
-        octans.addSignatureItem(new ItemHandle(new ItemStack(Items.FISHING_ROD)));
-        octans.addSignatureItem(new ItemHandle(Tags.Items.DYES_BLUE));
-        octans.addSignatureItem(new ItemHandle(new ItemStack(Items.CLAY_BALL)));
-
-        bootes.addSignatureItem(new ItemHandle(new ItemStack(Items.WHEAT)));
-        bootes.addSignatureItem(new ItemHandle(new ItemStack(Items.BONE)));
-        bootes.addSignatureItem(new ItemHandle(new ItemStack(Items.APPLE)));
-        bootes.addSignatureItem(new ItemHandle(new ItemStack(Items.LEATHER)));
-
-        fornax.addSignatureItem(new ItemHandle(new ItemStack(Items.COAL)));
-        fornax.addSignatureItem(new ItemHandle(Tags.Items.DUSTS_REDSTONE));
-        fornax.addSignatureItem(new ItemHandle(Tags.Items.INGOTS_IRON));
-        fornax.addSignatureItem(new ItemHandle(new ItemStack(Items.GUNPOWDER)));
-
-        pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.ROTTEN_FLESH)));
-        pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.BLAZE_POWDER)));
-        pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.APPLE)));
-        pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.EGG)));
+        evorsio.addSignatureItem(Tags.Items.COBBLESTONE);
+        evorsio.addSignatureItem(new ItemStack(Items.FLINT));
+        evorsio.addSignatureItem(new ItemStack(Items.GUNPOWDER));
+        evorsio.addSignatureItem(new ItemStack(Blocks.TNT));
 
 
-        gelu.addSignatureItem(new ItemHandle(new ItemStack(Items.SNOWBALL)));
-        gelu.addSignatureItem(new ItemHandle(new ItemStack(Blocks.ICE)));
-        gelu.addSignatureItem(new ItemHandle(Tags.Items.GEMS_QUARTZ));
-        gelu.addSignatureItem(new ItemHandle(new ItemStack(Items.FEATHER)));
+        lucerna.addSignatureItem(Tags.Items.DUSTS_GLOWSTONE);
+        lucerna.addSignatureItem(new ItemStack(Blocks.TORCH));
+        lucerna.addSignatureItem(Tags.Items.DUSTS_REDSTONE);
+        lucerna.addSignatureItem(new ItemStack(Items.COAL));
 
-        ulteria.addSignatureItem(new ItemHandle(TagsAS.INGOTS_STARMETAL));
-        ulteria.addSignatureItem(new ItemHandle(new ItemStack(Items.LEATHER)));
-        ulteria.addSignatureItem(new ItemHandle(Tags.Items.GEMS_DIAMOND));
-        ulteria.addSignatureItem(new ItemHandle(Tags.Items.RODS_BLAZE));
+        mineralis.addSignatureItem(Tags.Items.ORES_IRON);
+        mineralis.addSignatureItem(Tags.Items.INGOTS_GOLD);
+        mineralis.addSignatureItem(Tags.Items.INGOTS_IRON);
+        mineralis.addSignatureItem(Tags.Items.DUSTS_REDSTONE);
 
-        alcara.addSignatureItem(new ItemHandle(new ItemStack(Items.NETHER_WART)));
-        alcara.addSignatureItem(new ItemHandle(new ItemStack(Items.ENDER_PEARL)));
-        alcara.addSignatureItem(new ItemHandle(new ItemStack(Blocks.SOUL_SAND)));
-        alcara.addSignatureItem(new ItemHandle(new ItemStack(Items.COAL)));
+        horologium.addSignatureItem(TagsAS.DUSTS_STARDUST);
+        horologium.addSignatureItem(Tags.Items.GEMS_DIAMOND);
+        horologium.addSignatureItem(new ItemStack(Items.ENDER_PEARL));
+        horologium.addSignatureItem(new ItemStack(Items.CLOCK));
 
-        vorux.addSignatureItem(new ItemHandle(new ItemStack(Items.BLAZE_POWDER)));
+        octans.addSignatureItem(ItemTags.FISHES);
+        octans.addSignatureItem(new ItemStack(Items.FISHING_ROD));
+        octans.addSignatureItem(Tags.Items.DYES_BLUE);
+        octans.addSignatureItem(new ItemStack(Items.CLAY_BALL));
+
+        bootes.addSignatureItem(new ItemStack(Items.WHEAT));
+        bootes.addSignatureItem(new ItemStack(Items.BONE));
+        bootes.addSignatureItem(new ItemStack(Items.APPLE));
+        bootes.addSignatureItem(new ItemStack(Items.LEATHER));
+
+        fornax.addSignatureItem(new ItemStack(Items.COAL));
+        fornax.addSignatureItem(Tags.Items.DUSTS_REDSTONE);
+        fornax.addSignatureItem(Tags.Items.INGOTS_IRON);
+        fornax.addSignatureItem(new ItemStack(Items.GUNPOWDER));
+
+        pelotrio.addSignatureItem(new ItemStack(Items.ROTTEN_FLESH));
+        pelotrio.addSignatureItem(new ItemStack(Items.BLAZE_POWDER));
+        pelotrio.addSignatureItem(new ItemStack(Items.APPLE));
+        pelotrio.addSignatureItem(new ItemStack(Items.EGG));
+
+
+        gelu.addSignatureItem(new ItemStack(Items.SNOWBALL));
+        gelu.addSignatureItem(new ItemStack(Blocks.ICE));
+        gelu.addSignatureItem(Tags.Items.GEMS_QUARTZ);
+        gelu.addSignatureItem(new ItemStack(Items.FEATHER));
+
+        ulteria.addSignatureItem(TagsAS.INGOTS_STARMETAL);
+        ulteria.addSignatureItem(new ItemStack(Items.LEATHER));
+        ulteria.addSignatureItem(Tags.Items.GEMS_DIAMOND);
+        ulteria.addSignatureItem(Tags.Items.RODS_BLAZE);
+
+        alcara.addSignatureItem(new ItemStack(Items.NETHER_WART));
+        alcara.addSignatureItem(new ItemStack(Items.ENDER_PEARL));
+        alcara.addSignatureItem(new ItemStack(Blocks.SOUL_SAND));
+        alcara.addSignatureItem(new ItemStack(Items.COAL));
+
+        vorux.addSignatureItem(new ItemStack(Items.BLAZE_POWDER));
         //TODO special dusts
-        //vorux.addSignatureItem(new ItemHandle(ItemUsableDust.DustType.NOCTURNAL.asStack()));
-        vorux.addSignatureItem(new ItemHandle(new ItemStack(Items.GUNPOWDER)));
-        vorux.addSignatureItem(new ItemHandle(new ItemStack(Items.NETHER_BRICK)));
+        //vorux.addSignatureItem((ItemUsableDust.DustType.NOCTURNAL.asStack()));
+        vorux.addSignatureItem(new ItemStack(Items.GUNPOWDER));
+        vorux.addSignatureItem(new ItemStack(Items.NETHER_BRICK));
     }
 
     private static void buildConstellations() {
@@ -392,17 +389,16 @@ public class RegistryConstellations {
         horologium = new ConstellationBase.WeakSpecial("horologium", CONSTELLATION_HOROLOGIUM) {
             @Override
             public boolean doesShowUp(World world, long day) {
-                long rSeed;
                 WorldContext ctx = SkyHandler.getContext(world, Dist.CLIENT);
                 if (ctx != null) {
-                    return isDayOfSolarEclipse(ctx.getSeed(), day);
+                    return ctx.getCelestialHandler().isDayOfSolarEclipse();
                 }
                 return false;
             }
 
             @Override
             public float getDistribution(World world, long day, boolean showsUp) {
-                return showsUp ? 1F : 0.4F;
+                return showsUp ? 1F : 0.25F;
             }
         };
         sl1 = horologium.addStar(7, 6);
@@ -469,9 +465,9 @@ public class RegistryConstellations {
                 if (showingUp) return 1F;
                 MoonPhase current = MoonPhase.fromWorld(world);
                 if(current == MoonPhase.WANING1_2 || current == MoonPhase.WAXING1_2) {
-                    return 0.4F;
+                    return 0.3F;
                 }
-                return 0.7F;
+                return 0.65F;
             }
         };
         sl1 = pelotrio.addStar(4, 7);

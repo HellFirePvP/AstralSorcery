@@ -29,7 +29,7 @@ public class RegistryTags {
 
     public static void registerTags() {
         DUSTS_STARDUST = makeWrapperTag("stardust");
-        DUSTS_STARDUST = makeWrapperTag("starmetal");
+        INGOTS_STARMETAL = makeWrapperTag("starmetal");
     }
 
     private static Tag<Item> makeWrapperTag(String name) {

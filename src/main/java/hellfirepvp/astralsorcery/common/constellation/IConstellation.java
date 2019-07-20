@@ -10,11 +10,14 @@ package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
-import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -59,9 +62,17 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation> {
         return "constellationName";
     }
 
-    public List<ItemHandle> getConstellationSignatureItems();
+    public List<Ingredient> getConstellationSignatureItems();
 
-    public IConstellation addSignatureItem(ItemHandle item);
+    default public IConstellation addSignatureItem(ItemStack item) {
+        return this.addSignatureItem(Ingredient.fromStacks(item));
+    }
+
+    default public IConstellation addSignatureItem(Tag<Item> tag) {
+        return this.addSignatureItem(Ingredient.fromTag(tag));
+    }
+
+    public IConstellation addSignatureItem(Ingredient item);
 
     public Color getConstellationColor();
 

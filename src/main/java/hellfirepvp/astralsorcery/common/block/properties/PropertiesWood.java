@@ -6,18 +6,25 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.base;
+package hellfirepvp.astralsorcery.common.block.properties;
+
+import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CelestialEvent
+ * Class: PropertiesWood
  * Created by HellFirePvP
- * Date: 30.05.2019 / 00:04
+ * Date: 20.07.2019 / 20:00
  */
-public enum CelestialEvent {
+public class PropertiesWood {
 
-    SOLAR_ECLIPSE,
-    LUNAR_ECLIPSE
+    public static Block.Properties defaultInfusedWood() {
+        return Block.Properties.create(MaterialsAS.INFUSED_WOOD)
+                .hardnessAndResistance(2.5F, 7F)
+                .sound(SoundType.WOOD);
+    }
 
 }

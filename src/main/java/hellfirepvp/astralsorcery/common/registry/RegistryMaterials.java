@@ -28,6 +28,9 @@ public class RegistryMaterials {
         MARBLE = new MaterialBuilderAS(MaterialColor.WHITE_TERRACOTTA)
                 .requiresTool()
                 .build();
+        BLACK_MARBLE = new MaterialBuilderAS(MaterialColor.BLACK)
+                .requiresTool()
+                .build();
 
         INFUSED_WOOD = new MaterialBuilderAS(MaterialColor.BROWN)
                 .flammable()
