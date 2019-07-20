@@ -9,6 +9,12 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -97,22 +103,25 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
                             for (int i = 0; i < 500 + rand.nextInt(80); i++) {
                                 Vector3 at = look.clone().multiply(0.2 + rand.nextFloat() * 2.5).add(perp.clone().rotate(rand.nextFloat() * 360, look).multiply(rand.nextFloat() * 1.6)).add(origin);
 
-                                // TODO particles?
-                                //EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
-                                //p.scale(0.35F + rand.nextFloat() * 0.2F).setMaxAge(10 + rand.nextInt(10));
-                                //p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).setAlphaMultiplier(1F);
-                                //p.gravity(0.004);
-                                //if(rand.nextBoolean()) {
-                                //    p.setColor(Color.WHITE);
-                                //    p.scale(0.1F + rand.nextFloat() * 0.05F);
-                                //} else {
-                                //    p.setColor(BlockCollectorCrystal.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
-                                //}
-                                //if(rand.nextInt(4) != 0) {
-                                //    p.motion(motionReverse.getX(), motionReverse.getY(), motionReverse.getZ());
-                                //} else {
-                                //    p.motion(0, 0, 0);
-                                //}
+                                FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                                        .spawn(at)
+                                        .setGravityStrength(0.004F)
+                                        .alpha(VFXAlphaFunction.FADE_OUT)
+                                        .setAlphaMultiplier(1F)
+                                        .setScaleMultiplier(0.35F + rand.nextFloat() * 0.2F)
+                                        .setMaxAge(10 + rand.nextInt(10));
+
+                                if(rand.nextBoolean()) {
+                                    p.color(VFXColorFunction.WHITE)
+                                            .setScaleMultiplier(0.1F + rand.nextFloat() * 0.05F);
+                                } else {
+                                    p.color(VFXColorFunction.constant(ColorsAS.CELESTIAL_CRYSTAL));
+                                }
+                                if (rand.nextInt(4) != 0) {
+                                    p.setMotion(motionReverse);
+                                } else {
+                                    p.setMotion(new Vector3());
+                                }
                             }
                         }
                     }

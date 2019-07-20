@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.GameRulesAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -236,30 +237,6 @@ public class MiscUtils {
         }
         return true;
     }
-
-    /*
-    TODO fluids
-    public static boolean isFluidBlock(BlockState state) {
-        return state.getBlock() instanceof BlockLiquid || state.getBlock() instanceof BlockFluidBase;
-    }
-
-    @Nullable
-    public static Fluid tryGetFuild(BlockState state) {
-        if (!isFluidBlock(state)) {
-            return null;
-        }
-        if (state.getBlock() instanceof BlockLiquid) {
-            Material mat = state.getMaterial();
-            if (mat == Material.WATER) {
-                return FluidRegistry.WATER;
-            } else if (mat == Material.LAVA) {
-                return FluidRegistry.LAVA;
-            }
-        } else if (state.getBlock() instanceof BlockFluidBase) {
-            return ((BlockFluidBase) state.getBlock()).getFluid();
-        }
-        return null;
-    }*/
 
     public static boolean canPlayerBreakBlockPos(PlayerEntity player, BlockPos tryBreak) {
         BlockEvent.BreakEvent ev = new BlockEvent.BreakEvent(player.getEntityWorld(), tryBreak, player.getEntityWorld().getBlockState(tryBreak), player);
@@ -530,22 +507,22 @@ public class MiscUtils {
     }
 
     static {
-        prettierColorMapping.put(DyeColor.WHITE, new Color(0xFFFFFF));
-        prettierColorMapping.put(DyeColor.ORANGE, new Color(0xFF8C1D));
-        prettierColorMapping.put(DyeColor.MAGENTA, new Color(0xEF0EFF));
-        prettierColorMapping.put(DyeColor.LIGHT_BLUE, new Color(0x06E5FF));
-        prettierColorMapping.put(DyeColor.YELLOW, new Color(0xFFEB00));
-        prettierColorMapping.put(DyeColor.LIME, new Color(0x93FF10));
-        prettierColorMapping.put(DyeColor.PINK, new Color(0xFF18D9));
-        prettierColorMapping.put(DyeColor.GRAY, new Color(0x5E5E5E));
-        prettierColorMapping.put(DyeColor.LIGHT_GRAY, new Color(0xBDBDBD));
-        prettierColorMapping.put(DyeColor.CYAN, new Color(0x5498B4));
-        prettierColorMapping.put(DyeColor.PURPLE, new Color(0xB721F7));
-        prettierColorMapping.put(DyeColor.BLUE, new Color(0x3C00FF));
-        prettierColorMapping.put(DyeColor.BROWN, new Color(0xB77109));
-        prettierColorMapping.put(DyeColor.GREEN, new Color(0x00AA00));
-        prettierColorMapping.put(DyeColor.RED, new Color(0xFF0000));
-        prettierColorMapping.put(DyeColor.BLACK, new Color(0x000000));
+        prettierColorMapping.put(DyeColor.WHITE,      ColorsAS.DYE_WHITE);
+        prettierColorMapping.put(DyeColor.ORANGE,     ColorsAS.DYE_ORANGE);
+        prettierColorMapping.put(DyeColor.MAGENTA,    ColorsAS.DYE_MAGENTA);
+        prettierColorMapping.put(DyeColor.LIGHT_BLUE, ColorsAS.DYE_LIGHT_BLUE);
+        prettierColorMapping.put(DyeColor.YELLOW,     ColorsAS.DYE_YELLOW);
+        prettierColorMapping.put(DyeColor.LIME,       ColorsAS.DYE_LIME);
+        prettierColorMapping.put(DyeColor.PINK,       ColorsAS.DYE_PINK);
+        prettierColorMapping.put(DyeColor.GRAY,       ColorsAS.DYE_GRAY);
+        prettierColorMapping.put(DyeColor.LIGHT_GRAY, ColorsAS.DYE_LIGHT_GRAY);
+        prettierColorMapping.put(DyeColor.CYAN,       ColorsAS.DYE_CYAN);
+        prettierColorMapping.put(DyeColor.PURPLE,     ColorsAS.DYE_PURPLE);
+        prettierColorMapping.put(DyeColor.BLUE,       ColorsAS.DYE_BLUE);
+        prettierColorMapping.put(DyeColor.BROWN,      ColorsAS.DYE_BROWN);
+        prettierColorMapping.put(DyeColor.GREEN,      ColorsAS.DYE_GREEN);
+        prettierColorMapping.put(DyeColor.RED,        ColorsAS.DYE_RED);
+        prettierColorMapping.put(DyeColor.BLACK,      ColorsAS.DYE_BLACK);
     }
 
 }

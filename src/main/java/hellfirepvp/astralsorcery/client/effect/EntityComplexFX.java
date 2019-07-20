@@ -66,8 +66,13 @@ public abstract class EntityComplexFX implements IComplexEffect {
         return age;
     }
 
+    public <T extends EntityComplexFX> T move(Vector3 change) {
+        this.setPosition(this.getPosition().add(change));
+        return (T) this;
+    }
+
     public Vector3 getPosition() {
-        return pos;
+        return pos.clone();
     }
 
     public <T extends EntityComplexFX> T setPosition(Vector3 pos) {

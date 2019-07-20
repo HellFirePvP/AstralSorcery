@@ -27,6 +27,7 @@ public abstract class EntityVisualFX extends EntityComplexFX {
 
     private Vector3 oldPos;
     private Vector3 motion = new Vector3();
+    private float gravityY = 0;
 
     private float alphaMultiplier = 1F;
     private float scaleMultiplier = 1F;
@@ -63,7 +64,7 @@ public abstract class EntityVisualFX extends EntityComplexFX {
     }
 
     public Vector3 getOldPosition() {
-        return oldPos;
+        return oldPos.clone();
     }
 
     public <T extends EntityComplexFX> T setPosition(Vector3 pos) {
@@ -73,11 +74,16 @@ public abstract class EntityVisualFX extends EntityComplexFX {
     }
 
     public Vector3 getMotion() {
-        return motion;
+        return motion.clone();
     }
 
     public <T extends EntityVisualFX> T setMotion(Vector3 motion) {
-        this.motion = motion;
+        this.motion = motion.clone();
+        return (T) this;
+    }
+
+    public <T extends EntityVisualFX> T setGravityStrength(float grav) {
+        this.gravityY = grav;
         return (T) this;
     }
 
@@ -85,9 +91,9 @@ public abstract class EntityVisualFX extends EntityComplexFX {
     public void tick() {
         super.tick();
 
-        this.motion = this.motionController.updateMotion(this, this.getMotion().clone());
+        this.motion = this.motionController.updateMotion(this, this.getMotion().addY(-this.gravityY));
 
-        Vector3 newPos = this.positionController.updatePosition(this, this.getPosition().clone(), this.getMotion().clone());
+        Vector3 newPos = this.positionController.updatePosition(this, this.getPosition(), this.getMotion());
         this.oldPos = this.pos.clone();
         this.pos = newPos;
     }

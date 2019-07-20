@@ -27,6 +27,7 @@ import net.minecraftforge.common.Tags;
 
 import java.awt.*;
 
+import static hellfirepvp.astralsorcery.common.lib.ColorsAS.*;
 import static hellfirepvp.astralsorcery.common.lib.ConstellationsAS.*;
 
 /**
@@ -261,7 +262,7 @@ public class RegistryConstellations {
     private static void buildConstellations() {
         StarLocation sl1, sl2, sl3, sl4, sl5, sl6, sl7, sl8, sl9;
 
-        discidia = new ConstellationBase.Major("discidia", new Color(0xE01903));
+        discidia = new ConstellationBase.Major("discidia", CONSTELLATION_DISCIDIA);
         sl1 = discidia.addStar(7, 2);
         sl2 = discidia.addStar(3, 6);
         sl3 = discidia.addStar(5, 12);
@@ -280,7 +281,7 @@ public class RegistryConstellations {
         discidia.addConnection(sl7, sl8);
         register(discidia);
 
-        armara = new ConstellationBase.Major("armara", new Color(0xB7BBB8));
+        armara = new ConstellationBase.Major("armara", CONSTELLATION_ARMARA);
         sl1 = armara.addStar(8, 4);
         sl2 = armara.addStar(9, 15);
         sl3 = armara.addStar(11, 26);
@@ -301,7 +302,7 @@ public class RegistryConstellations {
         armara.addConnection(sl5, sl7);
         register(armara);
 
-        vicio = new ConstellationBase.Major("vicio", new Color(0x00BDAD));
+        vicio = new ConstellationBase.Major("vicio", CONSTELLATION_VICIO);
         sl1 = vicio.addStar(3,  8);
         sl2 = vicio.addStar(13, 9);
         sl3 = vicio.addStar(6,  23);
@@ -318,7 +319,7 @@ public class RegistryConstellations {
         vicio.addConnection(sl6, sl7);
         register(vicio);
 
-        aevitas = new ConstellationBase.Major("aevitas", new Color(0x2EE400));
+        aevitas = new ConstellationBase.Major("aevitas", CONSTELLATION_AEVITAS);
         sl1 = aevitas.addStar(15, 14);
         sl2 = aevitas.addStar(7, 12);
         sl3 = aevitas.addStar(3, 6);
@@ -339,7 +340,7 @@ public class RegistryConstellations {
         aevitas.addConnection(sl4, sl9);
         register(aevitas);
 
-        evorsio = new ConstellationBase.Major("evorsio", new Color(0xA00100));
+        evorsio = new ConstellationBase.Major("evorsio", CONSTELLATION_EVORSIO);
         sl1 = evorsio.addStar(13, 16);
         sl2 = evorsio.addStar(18, 6);
         sl3 = evorsio.addStar(26, 4);
@@ -356,7 +357,7 @@ public class RegistryConstellations {
         evorsio.addConnection(sl1, sl7);
         register(evorsio);
 
-        lucerna = new ConstellationBase.Weak("lucerna", new Color(0xFFE709));
+        lucerna = new ConstellationBase.Weak("lucerna", CONSTELLATION_LUCERNA);
         sl1 = lucerna.addStar(15, 13);
         sl2 = lucerna.addStar(3, 5);
         sl3 = lucerna.addStar(25, 3);
@@ -371,7 +372,7 @@ public class RegistryConstellations {
         lucerna.addConnection(sl1, sl6);
         register(lucerna);
 
-        mineralis = new ConstellationBase.Weak("mineralis", new Color(0xCB7D0A));
+        mineralis = new ConstellationBase.Weak("mineralis", CONSTELLATION_MINERALIS);
         sl1 = mineralis.addStar(16, 2);
         sl2 = mineralis.addStar(8, 8);
         sl3 = mineralis.addStar(9, 22);
@@ -388,7 +389,7 @@ public class RegistryConstellations {
         mineralis.addConnection(sl1, sl4);
         register(mineralis);
 
-        horologium = new ConstellationBase.WeakSpecial("horologium", new Color(0x7D16B4)) {
+        horologium = new ConstellationBase.WeakSpecial("horologium", CONSTELLATION_HOROLOGIUM) {
             @Override
             public boolean doesShowUp(World world, long day) {
                 long rSeed;
@@ -415,7 +416,7 @@ public class RegistryConstellations {
         horologium.addConnection(sl4, sl1);
         register(horologium);
 
-        octans = new ConstellationBase.Weak("octans", new Color(0x706EFF));
+        octans = new ConstellationBase.Weak("octans", CONSTELLATION_OCTANS);
         sl1 = octans.addStar(3, 6);
         sl2 = octans.addStar(11, 11);
         sl3 = octans.addStar(18, 4);
@@ -427,7 +428,7 @@ public class RegistryConstellations {
         octans.addConnection(sl2, sl4);
         register(octans);
 
-        bootes = new ConstellationBase.Weak("bootes", new Color(0xD41CD6));
+        bootes = new ConstellationBase.Weak("bootes", CONSTELLATION_BOOTES);
         sl1 = bootes.addStar(9, 22);
         sl2 = bootes.addStar(3, 14);
         sl3 = bootes.addStar(22, 27);
@@ -443,7 +444,7 @@ public class RegistryConstellations {
         bootes.addConnection(sl5, sl6);
         register(bootes);
 
-        fornax = new ConstellationBase.Weak("fornax", new Color(0xFF4E1B));
+        fornax = new ConstellationBase.Weak("fornax", CONSTELLATION_FORNAX);
         sl1 = fornax.addStar(4, 25);
         sl2 = fornax.addStar(14, 28);
         sl3 = fornax.addStar(28, 21);
@@ -456,7 +457,7 @@ public class RegistryConstellations {
         fornax.addConnection(sl2, sl5);
         register(fornax);
 
-        pelotrio = new ConstellationBase.WeakSpecial("pelotrio", new Color(0xEC006B)) {
+        pelotrio = new ConstellationBase.WeakSpecial("pelotrio", CONSTELLATION_PELOTRIO) {
             @Override
             public boolean doesShowUp(World world, long day) {
                 MoonPhase phase = MoonPhase.fromWorld(world);
@@ -488,7 +489,7 @@ public class RegistryConstellations {
         pelotrio.addConnection(sl6, sl3);
         register(pelotrio);
 
-        gelu = new ConstellationBase.Minor("gelu", new Color(0x758BA8), MoonPhase.NEW, MoonPhase.WAXING1_4, MoonPhase.WAXING1_2);
+        gelu = new ConstellationBase.Minor("gelu", CONSTELLATION_GELU, MoonPhase.NEW, MoonPhase.WAXING1_4, MoonPhase.WAXING1_2);
         sl1 = gelu.addStar(8, 7);
         sl2 = gelu.addStar(28, 8);
         sl3 = gelu.addStar(23, 21);
@@ -502,7 +503,7 @@ public class RegistryConstellations {
         gelu.addConnection(sl4, sl6);
         register(gelu);
 
-        ulteria = new ConstellationBase.Minor("ulteria", new Color(0x347463), MoonPhase.WANING1_2, MoonPhase.WANING3_4, MoonPhase.NEW);
+        ulteria = new ConstellationBase.Minor("ulteria", CONSTELLATION_ULTERIA, MoonPhase.WANING1_2, MoonPhase.WANING3_4, MoonPhase.NEW);
         sl1 = ulteria.addStar(14, 9);
         sl2 = ulteria.addStar(17, 16);
         sl3 = ulteria.addStar(25, 19);
@@ -514,7 +515,7 @@ public class RegistryConstellations {
         ulteria.addConnection(sl4, sl5);
         register(ulteria);
 
-        alcara = new ConstellationBase.Minor("alcara", new Color(0x802952), MoonPhase.WANING1_2, MoonPhase.WAXING1_2);
+        alcara = new ConstellationBase.Minor("alcara", CONSTELLATION_ALCARA, MoonPhase.WANING1_2, MoonPhase.WAXING1_2);
         sl1 = alcara.addStar(6, 27);
         sl2 = alcara.addStar(14, 20);
         sl3 = alcara.addStar(17, 24);
@@ -529,7 +530,7 @@ public class RegistryConstellations {
         alcara.addConnection(sl4, sl6);
         register(alcara);
 
-        vorux = new ConstellationBase.Minor("vorux", new Color(0xA8881E), MoonPhase.FULL, MoonPhase.WAXING3_4, MoonPhase.WANING3_4);
+        vorux = new ConstellationBase.Minor("vorux", CONSTELLATION_VORUX, MoonPhase.FULL, MoonPhase.WAXING3_4, MoonPhase.WANING3_4);
         sl1 = vorux.addStar(3, 21);
         sl2 = vorux.addStar(7, 7);
         sl3 = vorux.addStar(14, 15);

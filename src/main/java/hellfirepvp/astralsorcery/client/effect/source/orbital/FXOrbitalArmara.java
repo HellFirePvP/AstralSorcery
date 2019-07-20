@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.source.FXSourceOrbital;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
 import java.awt.*;
@@ -29,7 +30,7 @@ import java.util.function.Function;
 public class FXOrbitalArmara extends FXSourceOrbital<FXFacingParticle, BatchRenderContext<FXFacingParticle>> {
 
     private static final VFXColorFunction<FXFacingParticle> armaraPrimary =
-            VFXColorFunction.constant(new Color(201, 30, 0));
+            VFXColorFunction.constant(ColorsAS.RITUAL_CONSTELLATION_ARMARA);
     private static final VFXColorFunction<FXFacingParticle> armaraSecondary =
             VFXColorFunction.constant(new Color(80, 0, 150));
 
@@ -47,7 +48,7 @@ public class FXOrbitalArmara extends FXSourceOrbital<FXFacingParticle, BatchRend
     public void tick() {
         super.tick();
 
-        this.getPosition().addY(0.05);
+        this.move(new Vector3(0, 0.05, 0));
     }
 
     @Override
