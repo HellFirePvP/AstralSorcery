@@ -129,7 +129,7 @@ public class FXLightning extends EntityVisualFX {
     }
 
     private void renderRec(LightningVertex root, BufferBuilder vb, float r, float g, float b) {
-        int allDepth = this.root.followingDepth;
+        int allDepth = root.followingDepth;
         boolean mayRenderNext = 1F - (((float) root.followingDepth) / ((float) allDepth)) <= bufRenderDepth;
         for (LightningVertex next : root.next) {
             drawLine(root.offset, next.offset, vb, r, g, b);

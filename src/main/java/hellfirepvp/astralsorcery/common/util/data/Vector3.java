@@ -99,6 +99,13 @@ public class Vector3 {
         return this;
     }
 
+    public Vector3 add(Vec3d vec) {
+        this.x += vec.getX();
+        this.y += vec.getY();
+        this.z += vec.getZ();
+        return this;
+    }
+
     public Vector3 add(Vector3 vec) {
         this.x += vec.x;
         this.y += vec.y;
@@ -143,6 +150,13 @@ public class Vector3 {
     }
 
     public Vector3 subtract(Vec3i vec) {
+        this.x -= vec.getX();
+        this.y -= vec.getY();
+        this.z -= vec.getZ();
+        return this;
+    }
+
+    public Vector3 subtract(Vec3d vec) {
         this.x -= vec.getX();
         this.y -= vec.getY();
         this.z -= vec.getZ();
