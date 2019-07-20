@@ -43,7 +43,9 @@ public interface VFXMotionController<T extends EntityVisualFX> {
         @Override
         @Nonnull
         public Vector3 updateMotion(@Nonnull T fx, @Nonnull Vector3 motion) {
-            if (!target.isAlive()) return motion;
+            if (!target.isAlive()) {
+                return motion;
+            }
             EntityUtils.applyVortexMotion((v) -> positionFunction.apply(fx), motion::add, Vector3.atEntityCorner(target), 256, 1);
             return motion.multiply(0.9);
         }

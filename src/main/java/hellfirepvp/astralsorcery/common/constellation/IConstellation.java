@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -31,10 +32,6 @@ import java.util.List;
 public interface IConstellation extends IForgeRegistryEntry<IConstellation> {
 
     public static final int STAR_GRID_SIZE = 31;
-
-    static final Color major = new Color(40, 67, 204);
-    static final Color weak  = new Color(67, 44, 176);
-    static final Color minor = new Color(93, 25, 127);
 
     /**
      * Should only be called before registering the Constellation.
@@ -70,12 +67,12 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation> {
 
     default public Color getTierRenderColor() {
         if(this instanceof IMinorConstellation) {
-            return minor;
+            return ColorsAS.CONSTELLATION_TYPE_MINOR;
         }
         if(this instanceof IMajorConstellation) {
-            return major;
+            return ColorsAS.CONSTELLATION_TYPE_MAJOR;
         }
-        return weak;
+        return ColorsAS.CONSTELLATION_TYPE_WEAK;
     }
 
     boolean canDiscover(PlayerEntity player, PlayerProgress progress);

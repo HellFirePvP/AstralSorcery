@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.source.FXSourceOrbital;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
 import javax.annotation.Nonnull;
@@ -33,7 +34,7 @@ import java.util.function.Function;
 public class FXOrbitalLucerna extends FXSourceOrbital<FXFacingParticle, BatchRenderContext<FXFacingParticle>> {
 
     private static final VFXColorFunction<FXFacingParticle> lucernaColor =
-            VFXColorFunction.constant(new Color(255, 255, 127));
+            VFXColorFunction.constant(ColorsAS.RITUAL_CONSTELLATION_LUCERNA);
 
     private int count = 2 + rand.nextInt(2);
 

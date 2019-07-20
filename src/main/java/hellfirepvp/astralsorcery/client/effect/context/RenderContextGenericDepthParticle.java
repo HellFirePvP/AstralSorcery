@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
@@ -30,7 +31,7 @@ import java.awt.*;
 public class RenderContextGenericDepthParticle extends BatchRenderContext<FXFacingParticle> {
 
     private static final VFXColorFunction<FXFacingParticle> defaultColor =
-            VFXColorFunction.constant(new Color(60, 0, 255));
+            VFXColorFunction.constant(ColorsAS.DEFAULT_GENERIC_PARTICLE);
 
     public RenderContextGenericDepthParticle() {
         super(TexturesAS.TEX_STATIC_FLARE,

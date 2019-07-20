@@ -13,6 +13,7 @@ import com.mojang.authlib.GameProfile;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigRegistries;
@@ -131,6 +132,7 @@ public class CommonProxy {
         registrar.accept(StarlightUpdateHandler.getInstance());
         registrar.accept(SyncDataHolder.getTickInstance());
         registrar.accept(LinkHandler.getInstance());
+        registrar.accept(SkyHandler.getInstance());
 
         EventHelperRitualFlight.attachTickListener(registrar);
     }

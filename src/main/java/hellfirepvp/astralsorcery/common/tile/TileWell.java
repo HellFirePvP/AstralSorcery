@@ -169,7 +169,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
                 doCatalystEffect(color);
             }
         }
-        // TODO fluids
+        // TODO fluids / liquid starlight
         //if(tank.getFluidAmount() > 0 &&
         //        tank.getTankFluid() instanceof FluidLiquidStarlight) {
         //    doStarlightEffect();
