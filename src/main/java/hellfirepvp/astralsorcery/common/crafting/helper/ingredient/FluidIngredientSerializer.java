@@ -32,16 +32,6 @@ import java.util.List;
 public class FluidIngredientSerializer implements IIngredientSerializer<FluidIngredient> {
 
     @Override
-    public FluidIngredient parse(PacketBuffer buffer) {
-        int size = buffer.readInt();
-        List<CompatFluidStack> fluidStacks = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            fluidStacks.add(ByteBufUtils.readFluidStack(buffer));
-        }
-        return new FluidIngredient(fluidStacks);
-    }
-
-    @Override
     public FluidIngredient parse(JsonObject json) {
         ResourceLocation key = new ResourceLocation(JSONUtils.getString(json, "fluid"));
         if (!ForgeRegistries.FLUIDS.containsKey(key)) {
@@ -56,12 +46,13 @@ public class FluidIngredientSerializer implements IIngredientSerializer<FluidIng
     }
 
     @Override
+    public FluidIngredient parse(PacketBuffer buffer) {
+        return new FluidIngredient(ByteBufUtils.readList(buffer, ByteBufUtils::readFluidStack));
+    }
+
+    @Override
     public void write(PacketBuffer buffer, FluidIngredient ingredient) {
-        List<CompatFluidStack> fluidStacks = ingredient.getFluids();
-        buffer.writeInt(fluidStacks.size());
-        for (CompatFluidStack fluidStack : fluidStacks) {
-            ByteBufUtils.writeFluidStack(buffer, fluidStack);
-        }
+        ByteBufUtils.writeList(buffer, ingredient.getFluids(), ByteBufUtils::writeFluidStack);
     }
 
 }

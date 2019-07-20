@@ -12,11 +12,13 @@ import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -33,42 +35,60 @@ public class RenderingDrawUtils {
     }
 
     public static void renderFacingQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, double u, double v, double uLength, double vLength, int r, int g, int b, float alpha) {
+        Vector3 pos = new Vector3(px, py, pz);
+
         RenderInfo ri = RenderInfo.getInstance();
+        ActiveRenderInfo ari = ri.getARI();
+
         float arX =  ri.getRotationX();
         float arZ =  ri.getRotationZ();
         float arYZ = ri.getRotationYZ();
         float arXY = ri.getRotationXY();
         float arXZ = ri.getRotationXZ();
+
+        Vec3d view = ari.getProjectedView();
+        Vec3d look = ari.getLookDirection();
+
         float cR = MathHelper.clamp(r / 255F, 0F, 1F);
         float cG = MathHelper.clamp(g / 255F, 0F, 1F);
         float cB = MathHelper.clamp(b / 255F, 0F, 1F);
 
-        Entity e = Minecraft.getInstance().getRenderViewEntity();
-        if(e == null) {
-            e = Minecraft.getInstance().player;
-        }
-        double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
-        double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;
-        double iPZ = e.prevPosZ + (e.posZ - e.prevPosZ) * partialTicks;
-
+        Vector3 iPos = new Vector3(view);
         Vector3 v1 = new Vector3(-arX * scale - arYZ * scale, -arXZ * scale, -arZ * scale - arXY * scale);
         Vector3 v2 = new Vector3(-arX * scale + arYZ * scale,  arXZ * scale, -arZ * scale + arXY * scale);
         Vector3 v3 = new Vector3( arX * scale + arYZ * scale,  arXZ * scale,  arZ * scale + arXY * scale);
         Vector3 v4 = new Vector3( arX * scale - arYZ * scale, -arXZ * scale,  arZ * scale - arXY * scale);
         if (angle != 0.0F) {
-            Vector3 pvec = new Vector3(iPX, iPY, iPZ);
-            Vector3 tvec = new Vector3(px, py, pz);
-            Vector3 qvec = pvec.subtract(tvec).normalize();
-            Vector3.Quat q = Vector3.Quat.buildQuatFrom3DVector(qvec, angle);
-            q.rotateWithMagnitude(v1);
-            q.rotateWithMagnitude(v2);
-            q.rotateWithMagnitude(v3);
-            q.rotateWithMagnitude(v4);
+            float cAngle = MathHelper.cos(angle * 0.5F);
+            float cAngleSq = cAngle * cAngle;
+
+            Vector3 vAngle = new Vector3(
+                    MathHelper.sin(angle * 0.5F) * look.x,
+                    MathHelper.sin(angle * 0.5F) * look.y,
+                    MathHelper.sin(angle * 0.5F) * look.z);
+
+            v1 = vAngle.clone()
+                    .multiply(2 * v1.dot(vAngle))
+                    .add(v1.clone().multiply(cAngleSq - vAngle.dot(vAngle)))
+                    .add(vAngle.clone().crossProduct(v1.clone().multiply(2 * cAngle)));
+            v2 = vAngle.clone()
+                    .multiply(2 * v2.dot(vAngle))
+                    .add(v2.clone().multiply(cAngleSq - vAngle.dot(vAngle)))
+                    .add(vAngle.clone().crossProduct(v2.clone().multiply(2 * cAngle)));
+            v3 = vAngle.clone()
+                    .multiply(2 * v3.dot(vAngle))
+                    .add(v3.clone().multiply(cAngleSq - vAngle.dot(vAngle)))
+                    .add(vAngle.clone().crossProduct(v3.clone().multiply(2 * cAngle)));
+            v4 = vAngle.clone()
+                    .multiply(2 * v4.dot(vAngle))
+                    .add(v4.clone().multiply(cAngleSq - vAngle.dot(vAngle)))
+                    .add(vAngle.clone().crossProduct(v4.clone().multiply(2 * cAngle)));
         }
-        vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ).tex(u + uLength,           v + vLength).color(cR, cG, cB, alpha).endVertex();
-        vb.pos(px + v2.getX() - iPX, py + v2.getY() - iPY, pz + v2.getZ() - iPZ).tex(u + uLength, v).color(cR, cG, cB, alpha).endVertex();
-        vb.pos(px + v3.getX() - iPX, py + v3.getY() - iPY, pz + v3.getZ() - iPZ).tex(u, v          ).color(cR, cG, cB, alpha).endVertex();
-        vb.pos(px + v4.getX() - iPX, py + v4.getY() - iPY, pz + v4.getZ() - iPZ).tex(u,           v + vLength).color(cR, cG, cB, alpha).endVertex();
+
+        pos.clone().add(v1).subtract(iPos).drawPos(vb).tex(u + uLength,           v + vLength).color(cR, cG, cB, alpha).endVertex();
+        pos.clone().add(v2).subtract(iPos).drawPos(vb).tex(u + uLength, v).color(cR, cG, cB, alpha).endVertex();
+        pos.clone().add(v3).subtract(iPos).drawPos(vb).tex(u, v          ).color(cR, cG, cB, alpha).endVertex();
+        pos.clone().add(v4).subtract(iPos).drawPos(vb).tex(u,           v + vLength).color(cR, cG, cB, alpha).endVertex();
     }
 
     public static void renderTexturedCubeCentralColor(BufferContext buf, double size,

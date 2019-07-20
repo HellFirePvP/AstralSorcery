@@ -16,6 +16,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 /**
@@ -50,17 +51,13 @@ public class RenderInfo implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        GameRenderer gr = Minecraft.getInstance().gameRenderer;
-        if (gr != null) {
-            ActiveRenderInfo info = gr.getActiveRenderInfo();
-
+        ActiveRenderInfo info = this.getARI();
+        if (info != null) {
             this.rotationX = MathHelper.cos(info.getYaw() * ((float)Math.PI / 180F));
             this.rotationZ = MathHelper.sin(info.getYaw() * ((float)Math.PI / 180F));
             this.rotationYZ = -this.rotationZ * MathHelper.sin(info.getPitch() * ((float)Math.PI / 180F));
             this.rotationXY = this.rotationX * MathHelper.sin(info.getPitch() * ((float)Math.PI / 180F));
             this.rotationXZ = MathHelper.cos(info.getPitch() * ((float)Math.PI / 180F));
-
-            this.view = info.getProjectedView();
         }
     }
 
@@ -84,8 +81,13 @@ public class RenderInfo implements ITickHandler {
         return rotationXY;
     }
 
-    public Vec3d getView() {
-        return view;
+    @Nullable
+    public ActiveRenderInfo getARI() {
+        GameRenderer gr = Minecraft.getInstance().gameRenderer;
+        if (gr != null) {
+            return gr.getActiveRenderInfo();
+        }
+        return null;
     }
 
     @Override

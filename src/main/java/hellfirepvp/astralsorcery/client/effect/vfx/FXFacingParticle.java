@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.Tuple;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,7 +43,7 @@ public class FXFacingParticle extends EntityVisualFX {
 
         RenderingDrawUtils.renderFacingQuadVB(buf,
                 vec.getX(), vec.getY(), vec.getZ(),
-                pTicks, fScale, 0,
+                pTicks, fScale, 0F,
                 uvOffset.getA(), uvOffset.getB(), ssr.getULength(), ssr.getVLength(),
                 col.getRed(), col.getGreen(), col.getBlue(), alpha);
     }

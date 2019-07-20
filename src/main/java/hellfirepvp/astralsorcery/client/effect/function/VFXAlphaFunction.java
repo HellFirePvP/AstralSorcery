@@ -21,11 +21,11 @@ public interface VFXAlphaFunction<T extends EntityVisualFX> {
 
     VFXAlphaFunction CONSTANT = (fx, alphaIn, pTicks) -> alphaIn;
 
-    VFXAlphaFunction FADE_OUT = (fx, alphaIn, pTicks) -> alphaIn - (((float) fx.getAge()) / ((float) fx.getMaxAge())) * alphaIn;
+    VFXAlphaFunction FADE_OUT = (fx, alphaIn, pTicks) -> (1F - (((float) fx.getAge()) / ((float) fx.getMaxAge()))) * alphaIn;
 
     VFXAlphaFunction PYRAMID = (fx, alphaIn, pTicks) -> {
         float halfAge = fx.getMaxAge() / 2F;
-        return alphaIn - (Math.abs(halfAge - fx.getAge()) / fx.getMaxAge()) * alphaIn;
+        return (1F - (Math.abs(halfAge - fx.getAge()) / halfAge)) * alphaIn;
     };
 
     public float getAlpha(T fx, float alphaIn, float pTicks);

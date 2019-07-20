@@ -9,9 +9,10 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,34 +24,20 @@ import net.minecraft.entity.Entity;
 public class RenderingVectorUtils {
 
     public static void removeStandardTranslationFromTESRMatrix(float partialTicks) {
-        Entity rView = Minecraft.getInstance().getRenderViewEntity();
-        if(rView == null) {
-            rView = Minecraft.getInstance().player;
-        }
-        Entity entity = rView;
-        double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
-        double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
-        double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
-        GlStateManager.translated(-tx, -ty, -tz);
+        Vector3 v = getStandardTranslationRemovalVector(partialTicks);
+        GlStateManager.translated(-v.getX(), -v.getY(), -v.getZ());
     }
 
     public static Vector3 getStandardTranslationRemovalVector(float partialTicks) {
-        Entity rView = Minecraft.getInstance().getRenderViewEntity();
-        if(rView == null) {
-            rView = Minecraft.getInstance().player;
-        }
-        Entity entity = rView;
-        double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
-        double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
-        double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
-        return new Vector3(-tx, -ty, -tz);
+        Vec3d view = RenderInfo.getInstance().getARI().getProjectedView();
+        return new Vector3(view);
     }
 
     public static Vector3 interpolatePosition(Entity e, float partialTicks) {
         return new Vector3(
-                interpolate(e.lastTickPosX, e.posX, partialTicks),
-                interpolate(e.lastTickPosY, e.posY, partialTicks),
-                interpolate(e.lastTickPosZ, e.posZ, partialTicks)
+                interpolate(e.prevPosX, e.posX, partialTicks),
+                interpolate(e.prevPosY, e.posY, partialTicks),
+                interpolate(e.prevPosZ, e.posZ, partialTicks)
         );
     }
 

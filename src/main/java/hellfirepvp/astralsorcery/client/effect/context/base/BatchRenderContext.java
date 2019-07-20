@@ -80,7 +80,7 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
     }
 
     public void draw(float pTicks) {
-        Vec3d view = RenderInfo.getInstance().getView();
+        Vec3d view = RenderInfo.getInstance().getARI().getProjectedView();
         ctx.sortVertexData((float) view.x, (float) view.y, (float) view.z);
         ctx.draw();
         after.accept(pTicks);
