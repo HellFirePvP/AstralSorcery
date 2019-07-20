@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "astralsorcery:block/marble_runed",
+        "up": "astralsorcery:block/marble_pillar_updown",
+        "down": "astralsorcery:block/marble_pillar_updown",
+        "east": "astralsorcery:block/marble_runed",
+        "west": "astralsorcery:block/marble_runed",
+        "north": "astralsorcery:block/marble_runed",
+        "south": "astralsorcery:block/marble_runed"
+    }
+}

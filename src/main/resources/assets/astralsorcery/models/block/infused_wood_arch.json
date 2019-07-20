@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "astralsorcery:block/wood_arch",
+        "up": "astralsorcery:block/wood_raw",
+        "down": "astralsorcery:block/wood_raw",
+        "east": "astralsorcery:block/wood_arch",
+        "west": "astralsorcery:block/wood_arch",
+        "north": "astralsorcery:block/wood_arch",
+        "south": "astralsorcery:block/wood_arch"
+    }
+}

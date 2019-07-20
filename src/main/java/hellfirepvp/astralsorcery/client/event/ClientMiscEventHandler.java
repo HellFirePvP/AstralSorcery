@@ -42,7 +42,7 @@ public class ClientMiscEventHandler {
     private ClientMiscEventHandler() {}
 
     static {
-        ResourceLocation mod = new ResourceLocation(AstralSorcery.MODID + ":models/obj/modelassec.obj");
+        ResourceLocation mod = new ResourceLocation(AstralSorcery.MODID + ":model/obj/modelassec.obj");
         WavefrontObject buf;
         try {
             buf = new WavefrontObject("astralSorcery:wingsrender", new GZIPInputStream(Minecraft.getInstance().getResourceManager().getResource(mod).getInputStream()));

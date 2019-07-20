@@ -32,16 +32,6 @@ import java.util.Random;
  */
 public class StructureFinder {
 
-    public static final String STRUCT_VILLAGE = "village";
-    public static final String STRUCT_STRONGHOLD = "stronghold";
-    public static final String STRUCT_MASNION = "mansion";
-    public static final String STRUCT_MONUMENT = "monument";
-    public static final String STRUCT_MINESHAFT = "mineshaft";
-    public static final String STRUCT_DESERT_PYRAMID = "desert_pyramid";
-    public static final String STRUCT_JUNGLE_TEMPLE = "jungle_temple";
-    public static final String STRUCT_ENDCITY = "endCity";
-    public static final String STRUCT_FORTRESS = "fortress";
-
     private StructureFinder() {}
 
     @Nullable

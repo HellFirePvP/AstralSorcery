@@ -28,7 +28,6 @@ public class RenderingConfig extends ConfigEntry {
     public static final RenderingConfig CONFIG = new RenderingConfig();
 
     public ForgeConfigSpec.DoubleValue maxEffectRenderDistance;
-    public ForgeConfigSpec.BooleanValue clientPreloadTextures;
     public ForgeConfigSpec.EnumValue<ParticleAmount> particleAmount;
     public ForgeConfigSpec.BooleanValue patreonEffects;
 
@@ -45,11 +44,6 @@ public class RenderingConfig extends ConfigEntry {
                 .comment("Defines how close to the position of a particle/floating texture you have to be in order for it to render.")
                 .translation(translationKey("maxEffectRenderDistance"))
                 .defineInRange("maxEffectRenderDistance", 64.0, 1, 512);
-
-        clientPreloadTextures = cfgBuilder
-                .comment("If set to 'true' the mod will preload most of the bigger textures during postInit. This provides a more fluent gameplay experience (as it doesn't need to load the textures when they're first needed), but increases loadtime.")
-                .translation(translationKey("clientPreloadTextures"))
-                .define("clientPreloadTextures", true);
 
         particleAmount = cfgBuilder
                 .comment("Sets the amount of particles/effects: MINIMAL, LOWERED, ALL")

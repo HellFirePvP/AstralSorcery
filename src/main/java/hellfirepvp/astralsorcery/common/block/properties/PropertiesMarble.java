@@ -27,4 +27,10 @@ public class PropertiesMarble {
                 .sound(SoundType.STONE);
     }
 
+    public static Block.Properties defaultBlackMarble() {
+        return Block.Properties.create(MaterialsAS.MARBLE)
+                .hardnessAndResistance(3F, 25F)
+                .sound(SoundType.STONE);
+    }
+
 }

@@ -56,6 +56,9 @@ public class ResearchIOThread extends TimerTask implements ServerLifecycleListen
         if (ioThread != null) {
             return;
         }
+        if (saveTask == null) {
+            saveTask = new ResearchIOThread();
+        }
         ioThread = new Timer("ResearchIOThread", true);
         ioThread.scheduleAtFixedRate(saveTask, 30_000, 30_000);
     }

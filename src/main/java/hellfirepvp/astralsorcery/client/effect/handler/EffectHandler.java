@@ -42,7 +42,7 @@ public final class EffectHandler {
     private static final EffectHandler INSTANCE = new EffectHandler();
 
     private boolean cleanRequested = false;
-    private boolean acceptsNewEffects = true;
+    private boolean acceptsNewEffects = false; //Wait for 1st tick to finish.
     private List<PendingEffect> toAddBuffer = Lists.newLinkedList();
     private List<FXSource<?, ?>> toAddSources = Lists.newLinkedList();
 

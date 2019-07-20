@@ -141,14 +141,14 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
 
         private final Structure<?> structure;
 
-        public VanillaStructure(AssetLoader.TextureLocation texLocation, String iconName, Structure<?> structure, int color, boolean advanced, String structureName) {
-            super(texLocation, iconName, structureName, advanced, color);
+        public VanillaStructure(AssetLoader.TextureLocation texLocation, String iconName, Structure<?> structure, int color, boolean advanced) {
+            super(texLocation, iconName, structure.getRegistryName().getPath(), advanced, color);
             this.structure = structure;
         }
 
-        public VanillaStructure(AssetLoader.TextureLocation texLocation, String iconName, Structure<?> structure, int color, boolean advanced, String structureName,
+        public VanillaStructure(AssetLoader.TextureLocation texLocation, String iconName, Structure<?> structure, int color, boolean advanced,
                          double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
-            super(texLocation, iconName, structureName, advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
+            super(texLocation, iconName, structure.getRegistryName().getPath(), advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
             this.structure = structure;
         }
 

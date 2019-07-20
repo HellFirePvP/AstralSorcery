@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.base;
 import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,6 +36,12 @@ public enum Mods {
 
     public boolean isPresent() {
         return loaded;
+    }
+
+    public void executeIfPresent(Supplier<Runnable> execSupplier) {
+        if (this.isPresent()) {
+            execSupplier.get().run();
+        }
     }
 
     @Nullable

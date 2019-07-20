@@ -14,19 +14,18 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
-import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
@@ -43,19 +42,19 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
 
     private List<StarLocation> starLocations = new ArrayList<>(); //31x31 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
-    private List<ItemHandle> signatureItems = new LinkedList<>();
+    private List<Ingredient> signatureItems = new LinkedList<>();
 
     private final String name, simpleName;
     private final Color color;
 
     public ConstellationBase(String name) {
-        this(name, IConstellation.major);
+        this(name, ColorsAS.CONSTELLATION_TYPE_MAJOR);
     }
 
     public ConstellationBase(String name, Color color) {
         this.simpleName = name.toLowerCase();
         ModContainer mod = MiscUtils.getCurrentlyActiveMod();
-        if(mod != null) {
+        if (mod != null) {
             this.setRegistryName(new ResourceLocation(mod.getModId(), name));
             this.name = mod.getModId() + ".constellation." + name;
         } else {
@@ -86,13 +85,13 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
         return null;
     }
 
-    public ConstellationBase addSignatureItem(ItemHandle handle) {
+    public ConstellationBase addSignatureItem(Ingredient handle) {
         this.signatureItems.add(handle);
         return this;
     }
 
     @Override
-    public List<ItemHandle> getConstellationSignatureItems() {
+    public List<Ingredient> getConstellationSignatureItems() {
         return Collections.unmodifiableList(this.signatureItems);
     }
 

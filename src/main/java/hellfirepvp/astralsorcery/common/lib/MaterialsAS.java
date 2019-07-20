@@ -22,6 +22,7 @@ public class MaterialsAS {
     private MaterialsAS() {}
 
     public static Material MARBLE;
+    public static Material BLACK_MARBLE;
     public static Material INFUSED_WOOD;
 
 }

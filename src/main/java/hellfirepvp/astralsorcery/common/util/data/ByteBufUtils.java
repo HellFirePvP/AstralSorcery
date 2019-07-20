@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
 
@@ -128,14 +129,25 @@ public class ByteBufUtils {
     }
 
     public static <T> void writeRegistryEntry(PacketBuffer buf, IForgeRegistryEntry<T> entry) {
-        writeResourceLocation(buf, RegistryManager.ACTIVE.getRegistry(entry.getRegistryType()).getRegistryName());
-        writeResourceLocation(buf, entry.getRegistryName());
+        if (entry instanceof DimensionType) {
+            writeResourceLocation(buf, DimensionType.getKey((DimensionType) entry));
+            buf.writeInt(1);
+        } else {
+            buf.writeInt(0);
+            writeResourceLocation(buf, entry.getRegistryName());
+            writeResourceLocation(buf, RegistryManager.ACTIVE.getRegistry(entry.getRegistryType()).getRegistryName());
+        }
     }
 
     public static <T> T readRegistryEntry(PacketBuffer buf) {
-        ResourceLocation registryName = readResourceLocation(buf);
         ResourceLocation entryName = readResourceLocation(buf);
-        return (T) RegistryManager.ACTIVE.getRegistry(registryName).getValue(entryName);
+        int type = buf.readInt();
+        if (type == 1) {
+            return (T) DimensionType.byName(entryName);
+        } else {
+            ResourceLocation registryName = readResourceLocation(buf);
+            return (T) RegistryManager.ACTIVE.getRegistry(registryName).getValue(entryName);
+        }
     }
 
     public static void writeResourceLocation(PacketBuffer buf, ResourceLocation key) {

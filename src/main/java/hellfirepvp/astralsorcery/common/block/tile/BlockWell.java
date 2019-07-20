@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.VoxelUtils;
 import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidActionResult;
 import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
 import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidUtil;
@@ -32,13 +33,19 @@ import net.minecraft.block.SoundType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.IBooleanFunction;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ToolType;
@@ -56,8 +63,29 @@ import javax.annotation.Nullable;
  */
 public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock {
 
+    private final VoxelShape shape;
+
     public BlockWell() {
         super(PropertiesMarble.defaultMarble());
+        this.shape = createShape();
+    }
+
+    protected VoxelShape createShape() {
+        VoxelShape footing = Block.makeCuboidShape(1, 0, 1, 15, 2, 15);
+        VoxelShape floor = Block.makeCuboidShape(3, 2, 3, 13, 4, 13);
+        VoxelShape basinFloor = Block.makeCuboidShape(1, 4, 1, 15, 5, 15);
+        VoxelShape w1 = Block.makeCuboidShape(1, 5, 1, 2, 16, 14);
+        VoxelShape w2 = Block.makeCuboidShape(2, 5, 1, 15, 16, 2);
+        VoxelShape w3 = Block.makeCuboidShape(14, 5, 2, 15, 16, 15);
+        VoxelShape w4 = Block.makeCuboidShape(1, 5, 14, 14, 16, 15);
+
+        return VoxelUtils.combineAll(IBooleanFunction.OR,
+                footing, floor, basinFloor, w1, w2, w3, w4);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+        return this.shape;
     }
 
     @Override

@@ -40,22 +40,22 @@ public class RegistrySextantTargets {
                 280D / 312D, 48D / 280D, 16D / 312D, 16D / 280D));
 
         TARGET_VANILLA_VILLAGE = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI, "gridsextant", Feature.VILLAGE,
-                0xFFC39909, true, StructureFinder.STRUCT_VILLAGE,
+                0xFFC39909, true,
                 296D / 312D, 32D / 280D, 16D / 312D, 16D / 280D));
         TARGET_VANILLA_MONUMENT = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI,"gridsextant", Feature.OCEAN_MONUMENT,
-                0xFF8F38E6, true, StructureFinder.STRUCT_MONUMENT,
+                0xFF8F38E6, true,
                 296D / 312D, 16D / 280D, 16D / 312D, 16D / 280D));
         TARGET_VANILLA_DESERT_PYRAMID = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI, "gridsextant", Feature.DESERT_PYRAMID,
-                0xFFC3C3C3, true, StructureFinder.STRUCT_DESERT_PYRAMID,
+                0xFFC3C3C3, true,
                 280D / 312D, 0D, 16D / 312D, 16D / 280D));
         TARGET_VANILLA_JUNGLE_TEMPLE = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI, "gridsextant", Feature.JUNGLE_TEMPLE,
-                0xFFC3C3C3, true, StructureFinder.STRUCT_JUNGLE_TEMPLE,
+                0xFFC3C3C3, true,
                 280D / 312D, 0D, 16D / 312D, 16D / 280D));
         TARGET_VANILLA_FORTRESS = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI,"gridsextant", Feature.NETHER_BRIDGE,
-                0xFF9C1D15, true, StructureFinder.STRUCT_FORTRESS,
+                0xFF9C1D15, true,
                 280D / 312D, 32D / 280D, 16D / 312D, 16D / 280D));
         TARGET_VANILLA_ENDCITY = register(new TargetObject.VanillaStructure(AssetLoader.TextureLocation.GUI, "gridsextant", Feature.END_CITY,
-                0xFF96066F, true, StructureFinder.STRUCT_ENDCITY,
+                0xFF96066F, true,
                 280D / 312D, 16D / 280D, 16D / 312D, 16D / 280D));
 
         TARGET_BIOME_PLAINS = register(new TargetObject.Biome(AssetLoader.TextureLocation.GUI, "gridsextant", "biome_plains",

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.block.marble;
 
 import hellfirepvp.astralsorcery.common.block.base.template.BlockMarbleTemplate;
+import hellfirepvp.astralsorcery.common.util.VoxelUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
@@ -16,7 +17,11 @@ import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.IBooleanFunction;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 
@@ -31,16 +36,54 @@ import javax.annotation.Nullable;
  */
 public class BlockMarblePillar extends BlockMarbleTemplate {
 
-    public static EnumProperty<PillarType> MARBLE_TYPE = EnumProperty.create("marbletype", PillarType.class);
+    public static final EnumProperty<PillarType> PILLAR_TYPE = EnumProperty.create("pillartype", PillarType.class);
+
+    private final VoxelShape middleShape, bottomShape, topShape;
 
     public BlockMarblePillar() {
-        this.setDefaultState(this.getStateContainer().getBaseState().with(MARBLE_TYPE, PillarType.MIDDLE));
+        this.setDefaultState(this.getStateContainer().getBaseState().with(PILLAR_TYPE, PillarType.MIDDLE));
+        this.middleShape = createPillarShape();
+        this.topShape    = createPillarTopShape();
+        this.bottomShape = createPillarBottomShape();
+    }
+
+    protected VoxelShape createPillarShape() {
+        return Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
+    }
+
+    protected VoxelShape createPillarTopShape() {
+        VoxelShape column = Block.makeCuboidShape(2, 0, 2, 14, 12, 14);
+        VoxelShape top = Block.makeCuboidShape(0, 12, 0, 16, 16, 16);
+
+        return VoxelUtils.combineAll(IBooleanFunction.OR,
+                column, top);
+    }
+
+    protected VoxelShape createPillarBottomShape() {
+        VoxelShape column = Block.makeCuboidShape(2, 4, 2, 14, 16, 14);
+        VoxelShape bottom = Block.makeCuboidShape(0, 0, 0, 16, 4, 16);
+
+        return VoxelUtils.combineAll(IBooleanFunction.OR,
+                column, bottom);
     }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
-        builder.add(MARBLE_TYPE);
+        builder.add(PILLAR_TYPE);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx) {
+        switch (state.get(PILLAR_TYPE)) {
+            case TOP:
+                return this.topShape;
+            case BOTTOM:
+                return this.bottomShape;
+            default:
+            case MIDDLE:
+                return this.middleShape;
+        }
     }
 
     @Override
@@ -59,13 +102,13 @@ public class BlockMarblePillar extends BlockMarbleTemplate {
         boolean hasDown = world.getBlockState(pos.down()).getBlock() instanceof BlockMarblePillar;
         if (hasUp) {
             if (hasDown) {
-                return this.getDefaultState().with(MARBLE_TYPE, PillarType.MIDDLE);
+                return this.getDefaultState().with(PILLAR_TYPE, PillarType.MIDDLE);
             }
-            return this.getDefaultState().with(MARBLE_TYPE, PillarType.BOTTOM);
+            return this.getDefaultState().with(PILLAR_TYPE, PillarType.BOTTOM);
         } else if (hasDown) {
-            return this.getDefaultState().with(MARBLE_TYPE, PillarType.TOP);
+            return this.getDefaultState().with(PILLAR_TYPE, PillarType.TOP);
         }
-        return this.getDefaultState().with(MARBLE_TYPE, PillarType.MIDDLE);
+        return this.getDefaultState().with(PILLAR_TYPE, PillarType.MIDDLE);
     }
 
     public static enum PillarType implements IStringSerializable {
@@ -73,10 +116,6 @@ public class BlockMarblePillar extends BlockMarbleTemplate {
         TOP,
         MIDDLE,
         BOTTOM;
-
-        public boolean obtainableInCreative() {
-            return this != TOP && this != BOTTOM;
-        }
 
         @Override
         public String getName() {

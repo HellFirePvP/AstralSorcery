@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "astralsorcery:block/marble_arch",
+        "up": "astralsorcery:block/marble_raw",
+        "down": "astralsorcery:block/marble_raw",
+        "east": "astralsorcery:block/marble_arch",
+        "west": "astralsorcery:block/marble_arch",
+        "north": "astralsorcery:block/marble_arch",
+        "south": "astralsorcery:block/marble_arch"
+    }
+}

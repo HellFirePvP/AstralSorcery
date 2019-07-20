@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "astralsorcery:block/black_marble_bricks"
+    }
+}

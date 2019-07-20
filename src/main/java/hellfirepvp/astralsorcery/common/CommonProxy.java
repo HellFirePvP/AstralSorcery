@@ -93,6 +93,7 @@ public class CommonProxy {
         RegistryData.init();
         RegistryMaterials.init();
         RegistryGameRules.init();
+        RegistryTags.registerTags();
         PacketChannel.registerPackets();
 
         this.tickManager = new TickManager();
@@ -106,11 +107,11 @@ public class CommonProxy {
     public void attachLifecycle(IEventBus modEventBus) {
         modEventBus.addListener(this::onCommonSetup);
 
+        modEventBus.addListener(RegistryRegistries::buildRegistries);
         registryEventHandler.attachEventHandlers(modEventBus);
     }
 
     public void attachEventHandlers(IEventBus eventBus) {
-        eventBus.addListener(RegistryRegistries::buildRegistries);
         eventBus.addListener(this::onClientInitialized);
 
         eventBus.addListener(this::onServerStop);

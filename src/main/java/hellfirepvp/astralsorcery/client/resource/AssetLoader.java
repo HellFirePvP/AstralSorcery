@@ -80,11 +80,11 @@ public class AssetLoader {
 
     public static enum TextureLocation implements SubLocation {
 
-        ITEMS("items"),
-        BLOCKS("blocks"),
+        ITEMS("item"),
+        BLOCKS("block"),
         GUI("gui"),
         MISC("misc"),
-        MODELS("models"),
+        MODELS("model"),
         EFFECT("effect"),
         ENVIRONMENT("environment");
 
