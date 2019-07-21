@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=bottom": { "model": "astralsorcery:block/black_marble_slab" },
+        "type=top": { "model": "astralsorcery:block/black_marble_slab_top" },
+        "type=double": { "model": "astralsorcery:block/black_marble_bricks" }
+    }
+}

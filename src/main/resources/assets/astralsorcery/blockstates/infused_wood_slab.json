@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=bottom": { "model": "astralsorcery:block/infused_wood_slab" },
+        "type=top": { "model": "astralsorcery:block/infused_wood_slab_top" },
+        "type=double": { "model": "astralsorcery:block/infused_wood_planks" }
+    }
+}

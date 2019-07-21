@@ -1,0 +1,8 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "bottom": "astralsorcery:block/black_marble_bricks",
+        "top": "astralsorcery:block/black_marble_bricks",
+        "side": "astralsorcery:block/black_marble_bricks"
+    }
+}
