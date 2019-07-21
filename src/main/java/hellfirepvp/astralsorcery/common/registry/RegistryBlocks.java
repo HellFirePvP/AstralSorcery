@@ -96,7 +96,7 @@ public class RegistryBlocks {
     }
 
     private static BlockSlabTemplate makeSlab(BlockState base, String name) {
-        BlockSlabTemplate slabs = new BlockSlabTemplate(Block.Properties.from(base.getBlock()));
+        BlockSlabTemplate slabs = new BlockSlabTemplate(base, Block.Properties.from(base.getBlock()));
         ResourceLocation slabsName = base.getBlock().getRegistryName();
         slabsName = new ResourceLocation(slabsName.getNamespace(), name);
         return registerBlock(slabs, slabsName);

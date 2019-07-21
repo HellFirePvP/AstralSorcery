@@ -40,18 +40,22 @@ import java.util.List;
  */
 public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellation> implements IConstellation {
 
+    private static int counter = 0;
+
     private List<StarLocation> starLocations = new ArrayList<>(); //31x31 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
     private List<Ingredient> signatureItems = new LinkedList<>();
 
     private final String name, simpleName;
     private final Color color;
+    private final int id;
 
     public ConstellationBase(String name) {
         this(name, ColorsAS.CONSTELLATION_TYPE_MAJOR);
     }
 
     public ConstellationBase(String name, Color color) {
+        this.id = counter++;
         this.simpleName = name.toLowerCase();
         ModContainer mod = MiscUtils.getCurrentlyActiveMod();
         if (mod != null) {
@@ -122,6 +126,11 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
     */
 
     @Override
+    public int getSortingId() {
+        return this.id;
+    }
+
+    @Override
     public Color getConstellationColor() {
         return color;
     }
@@ -164,6 +173,11 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
         return Objects.hash(getRegistryName());
     }
 
+    @Override
+    public int compareTo(IConstellation o) {
+        return Integer.compare(this.getSortingId(), o.getSortingId());
+    }
+
     public static class Major extends Weak implements IMajorConstellation {
 
         public Major(String name) {
@@ -172,6 +186,11 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
 
         public Major(String name, Color color) {
             super(name, color);
+        }
+
+        @Override
+        public boolean canDiscover(PlayerEntity player, PlayerProgress progress) {
+            return true;
         }
 
         //@Override

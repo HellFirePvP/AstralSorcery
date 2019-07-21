@@ -130,8 +130,8 @@ public class ByteBufUtils {
 
     public static <T> void writeRegistryEntry(PacketBuffer buf, IForgeRegistryEntry<T> entry) {
         if (entry instanceof DimensionType) {
-            writeResourceLocation(buf, DimensionType.getKey((DimensionType) entry));
             buf.writeInt(1);
+            writeResourceLocation(buf, DimensionType.getKey((DimensionType) entry));
         } else {
             buf.writeInt(0);
             writeResourceLocation(buf, entry.getRegistryName());
@@ -140,11 +140,12 @@ public class ByteBufUtils {
     }
 
     public static <T> T readRegistryEntry(PacketBuffer buf) {
-        ResourceLocation entryName = readResourceLocation(buf);
         int type = buf.readInt();
         if (type == 1) {
+            ResourceLocation entryName = readResourceLocation(buf);
             return (T) DimensionType.byName(entryName);
         } else {
+            ResourceLocation entryName = readResourceLocation(buf);
             ResourceLocation registryName = readResourceLocation(buf);
             return (T) RegistryManager.ACTIVE.getRegistry(registryName).getValue(entryName);
         }

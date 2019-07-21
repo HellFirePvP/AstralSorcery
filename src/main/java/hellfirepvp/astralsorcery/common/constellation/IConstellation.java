@@ -32,7 +32,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 16.11.2016 / 23:04
  */
-public interface IConstellation extends IForgeRegistryEntry<IConstellation> {
+public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Comparable<IConstellation> {
 
     public static final int STAR_GRID_SIZE = 31;
 
@@ -45,6 +45,8 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation> {
      * Should only be called before registering the Constellation.
      */
     public StarConnection addConnection(StarLocation star1, StarLocation star2);
+
+    public int getSortingId();
 
     public List<StarLocation> getStars();
 
@@ -77,10 +79,10 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation> {
     public Color getConstellationColor();
 
     default public Color getTierRenderColor() {
-        if(this instanceof IMinorConstellation) {
+        if (this instanceof IMinorConstellation) {
             return ColorsAS.CONSTELLATION_TYPE_MINOR;
         }
-        if(this instanceof IMajorConstellation) {
+        if (this instanceof IMajorConstellation) {
             return ColorsAS.CONSTELLATION_TYPE_MAJOR;
         }
         return ColorsAS.CONSTELLATION_TYPE_WEAK;

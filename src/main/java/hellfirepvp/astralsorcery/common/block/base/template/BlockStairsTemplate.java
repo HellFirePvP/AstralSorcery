@@ -11,6 +11,9 @@ package hellfirepvp.astralsorcery.common.block.base.template;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;
+import net.minecraftforge.common.ToolType;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,7 +24,21 @@ import net.minecraft.block.StairsBlock;
  */
 public class BlockStairsTemplate extends StairsBlock implements CustomItemBlock {
 
-    public BlockStairsTemplate(BlockState state, Properties properties) {
-        super(state, properties);
+    private final BlockState baseState;
+
+    public BlockStairsTemplate(BlockState baseState, Properties properties) {
+        super(baseState, properties);
+        this.baseState = baseState;
+    }
+
+    @Nullable
+    @Override
+    public ToolType getHarvestTool(BlockState tool) {
+        return this.baseState.getHarvestTool();
+    }
+
+    @Override
+    public int getHarvestLevel(BlockState state) {
+        return this.baseState.getHarvestLevel();
     }
 }

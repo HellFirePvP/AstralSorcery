@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -40,8 +41,8 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
     public static final byte STATE_WIPE = 1;
 
     private byte state;
-    public List<String> knownConstellations = new ArrayList<>();
-    public List<String> seenConstellations = new ArrayList<>();
+    public List<ResourceLocation> knownConstellations = new ArrayList<>();
+    public List<ResourceLocation> seenConstellations = new ArrayList<>();
     public List<ResearchProgression> researchProgression = new ArrayList<>();
     public List<TargetObject> usedTargets = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
@@ -78,8 +79,8 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         return (packet, buffer) -> {
             buffer.writeByte(packet.state);
 
-            ByteBufUtils.writeList(buffer, packet.knownConstellations, ByteBufUtils::writeString);
-            ByteBufUtils.writeList(buffer, packet.seenConstellations, ByteBufUtils::writeString);
+            ByteBufUtils.writeList(buffer, packet.knownConstellations, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeList(buffer, packet.seenConstellations, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeList(buffer, packet.researchProgression, (buf, prog) -> buf.writeInt(prog.getProgressId()));
             ByteBufUtils.writeOptional(buffer, packet.attunedConstellation, ByteBufUtils::writeRegistryEntry);
             ByteBufUtils.writeMap(buffer, packet.usedPerks, ByteBufUtils::writeRegistryEntry, ByteBufUtils::writeNBTTag);
@@ -98,10 +99,10 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         return buffer -> {
             PktSyncKnowledge pkt = new PktSyncKnowledge(buffer.readByte());
 
-            pkt.knownConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readString);
-            pkt.seenConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readString);
+            pkt.knownConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
+            pkt.seenConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.researchProgression = ByteBufUtils.readList(buffer, buf -> ResearchProgression.getById(buf.readInt()));
-            pkt.attunedConstellation = ByteBufUtils.readRegistryEntry(buffer);
+            pkt.attunedConstellation = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
             pkt.usedPerks = ByteBufUtils.readMap(buffer, ByteBufUtils::readRegistryEntry, ByteBufUtils::readNBTTag);
             pkt.sealedPerks = ByteBufUtils.readList(buffer, ByteBufUtils::readRegistryEntry);
             pkt.usedTargets = ByteBufUtils.readList(buffer, ByteBufUtils::readRegistryEntry);

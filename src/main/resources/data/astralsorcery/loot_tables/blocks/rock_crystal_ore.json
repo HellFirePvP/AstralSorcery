@@ -16,8 +16,7 @@
               }
             },
             {
-              "function": "astralsorcery:random_crystal_property",
-              "celestial": false
+              "function": "astralsorcery:random_crystal_property"
             },
             {
               "function": "minecraft:explosion_decay"

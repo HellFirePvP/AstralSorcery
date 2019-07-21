@@ -64,8 +64,8 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
     public Decoder<PktProgressionUpdate> decoder() {
         return buffer ->
                 new PktProgressionUpdate(
-                        ByteBufUtils.readEnumValue(buffer, ProgressionTier.class),
-                        ByteBufUtils.readEnumValue(buffer, ResearchProgression.class));
+                        ByteBufUtils.readOptional(buffer, buf -> ByteBufUtils.readEnumValue(buf, ProgressionTier.class)),
+                        ByteBufUtils.readOptional(buffer, buf -> ByteBufUtils.readEnumValue(buf, ResearchProgression.class)));
     }
 
     @Nonnull

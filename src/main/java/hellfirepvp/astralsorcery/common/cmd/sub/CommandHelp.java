@@ -26,6 +26,8 @@ public class CommandHelp implements Command<CommandSource> {
 
     private static final CommandHelp CMD = new CommandHelp();
 
+    private CommandHelp() {}
+
     public static ArgumentBuilder<CommandSource, ?> register() {
         return Commands.literal("help")
                 .requires(cs -> cs.hasPermissionLevel(0))

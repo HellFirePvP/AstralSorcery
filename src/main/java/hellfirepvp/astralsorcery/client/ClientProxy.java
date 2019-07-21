@@ -76,6 +76,9 @@ public class ClientProxy extends CommonProxy {
         super.attachLifecycle(modEventBus);
 
         modEventBus.addListener(this::clientSetup);
+
+        modEventBus.addListener(RegistryItems::registerColors);
+        modEventBus.addListener(RegistryBlocks::registerColors);
     }
 
     @Override
@@ -84,9 +87,6 @@ public class ClientProxy extends CommonProxy {
 
         EffectRenderEventHandler.getInstance().attachEventListeners(eventBus);
         ConnectionEventHandler.getInstance().attachEventListeners(eventBus);
-
-        eventBus.addListener(RegistryItems::registerColors);
-        eventBus.addListener(RegistryBlocks::registerColors);
     }
 
     @Override

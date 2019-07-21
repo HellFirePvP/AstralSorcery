@@ -119,7 +119,7 @@ public class ResearchManager {
         if(!progress.isValid()) return false;
 
         for (IConstellation c : csts) {
-            progress.discoverConstellation(c.getUnlocalizedName());
+            progress.discoverConstellation(c.getRegistryName());
             //TODO advancements
             //AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
         }
@@ -133,7 +133,7 @@ public class ResearchManager {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
-        progress.discoverConstellation(c.getUnlocalizedName());
+        progress.discoverConstellation(c.getRegistryName());
 
         //TODO advancements
         //AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
@@ -147,7 +147,7 @@ public class ResearchManager {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
-        progress.memorizeConstellation(c.getUnlocalizedName());
+        progress.memorizeConstellation(c.getRegistryName());
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -183,7 +183,7 @@ public class ResearchManager {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
-        if (constellation != null && !progress.getKnownConstellations().contains(constellation.getUnlocalizedName())) {
+        if (constellation != null && !progress.getKnownConstellations().contains(constellation.getRegistryName().toString())) {
             return false;
         }
 
@@ -416,9 +416,9 @@ public class ResearchManager {
         return true;
     }
 
-    public static void forceMaximizeAll(PlayerEntity player) {
+    public static boolean forceMaximizeAll(PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
-        if (!progress.isValid()) return;
+        if (!progress.isValid()) return false;
         ProgressionTier before = progress.getTierReached();
 
         ResearchManager.discoverConstellations(ConstellationRegistry.getAllConstellations(), player);
@@ -436,6 +436,7 @@ public class ResearchManager {
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
+        return true;
     }
 
     public static boolean forceMaximizeResearch(PlayerEntity player) {
