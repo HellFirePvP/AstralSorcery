@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -38,12 +39,12 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public List<String> getSeenConstellations() {
+    public List<ResourceLocation> getSeenConstellations() {
         return Collections.emptyList();
     }
 
     @Override
-    public List<String> getKnownConstellations() {
+    public List<ResourceLocation> getKnownConstellations() {
         return Collections.emptyList();
     }
 
@@ -97,7 +98,7 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     public void useTarget(TargetObject target) {}
 
     @Override
-    public boolean hasConstellationDiscovered(String constellation) {
+    public boolean hasConstellationDiscovered(ResourceLocation constellation) {
         return false;
     }
 

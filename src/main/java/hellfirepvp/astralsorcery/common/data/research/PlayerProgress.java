@@ -43,8 +43,8 @@ import java.util.function.Predicate;
  */
 public class PlayerProgress {
 
-    private List<String> knownConstellations = new ArrayList<>();
-    private List<String> seenConstellations = new ArrayList<>();
+    private List<ResourceLocation> knownConstellations = new ArrayList<>();
+    private List<ResourceLocation> seenConstellations = new ArrayList<>();
     private IMajorConstellation attunedConstellation = null;
     private boolean wasOnceAttuned = false;
     private List<ResearchProgression> researchProgression = new LinkedList<>();
@@ -76,13 +76,13 @@ public class PlayerProgress {
         if (compound.contains("seenConstellations")) {
             ListNBT list = compound.getList("seenConstellations", Constants.NBT.TAG_STRING);
             for (int i = 0; i < list.size(); i++) {
-                seenConstellations.add(list.getString(i));
+                seenConstellations.add(new ResourceLocation(list.getString(i)));
             }
         }
         if (compound.contains("constellations")) {
             ListNBT list = compound.getList("constellations", 8);
             for (int i = 0; i < list.size(); i++) {
-                String s = list.getString(i);
+                ResourceLocation s = new ResourceLocation(list.getString(i));
                 knownConstellations.add(s);
                 if (!seenConstellations.contains(s)) {
                     seenConstellations.add(s);
@@ -188,12 +188,12 @@ public class PlayerProgress {
     //For file saving, persistent saving.
     public void store(CompoundNBT cmp) {
         ListNBT list = new ListNBT();
-        for (String s : knownConstellations) {
-            list.add(new StringNBT(s));
+        for (ResourceLocation s : knownConstellations) {
+            list.add(new StringNBT(s.toString()));
         }
         ListNBT l = new ListNBT();
-        for (String s : seenConstellations) {
-            l.add(new StringNBT(s));
+        for (ResourceLocation s : seenConstellations) {
+            l.add(new StringNBT(s.toString()));
         }
         cmp.put("constellations", list);
         cmp.put("seenConstellations", l);
@@ -211,7 +211,7 @@ public class PlayerProgress {
         }
         cmp.putIntArray("research", researchArray);
         if(attunedConstellation != null) {
-            cmp.putString("attuned", attunedConstellation.getUnlocalizedName());
+            cmp.putString("attuned", attunedConstellation.getRegistryName().toString());
         }
         list = new ListNBT();
         for (Map.Entry<AbstractPerk, CompoundNBT> entry : appliedPerkData.entrySet()) {
@@ -243,12 +243,12 @@ public class PlayerProgress {
     //For knowledge sharing; some information is not important to be shared.
     public void storeKnowledge(CompoundNBT cmp) {
         ListNBT list = new ListNBT();
-        for (String s : knownConstellations) {
-            list.add(new StringNBT(s));
+        for (ResourceLocation s : knownConstellations) {
+            list.add(new StringNBT(s.toString()));
         }
         ListNBT l = new ListNBT();
-        for (String s : seenConstellations) {
-            l.add(new StringNBT(s));
+        for (ResourceLocation s : seenConstellations) {
+            l.add(new StringNBT(s.toString()));
         }
         ListNBT listTargets = new ListNBT();
         for (TargetObject to : usedTargets) {
@@ -285,13 +285,14 @@ public class PlayerProgress {
         if (compound.contains("seenConstellations")) {
             ListNBT list = compound.getList("seenConstellations", Constants.NBT.TAG_STRING);
             for (int i = 0; i < list.size(); i++) {
-                seenConstellations.add(list.getString(i));
+                seenConstellations.add(new ResourceLocation(list.getString(i)));
             }
         }
         if (compound.contains("constellations")) {
             ListNBT list = compound.getList("constellations", Constants.NBT.TAG_STRING);
             for (int i = 0; i < list.size(); i++) {
-                String s = list.getString(i);
+                ResourceLocation s = new ResourceLocation(list.getString(i));
+
                 knownConstellations.add(s);
                 if (!seenConstellations.contains(s)) {
                     seenConstellations.add(s);
@@ -521,28 +522,28 @@ public class PlayerProgress {
         this.tierReached = tier;
     }
 
-    public List<String> getKnownConstellations() {
+    public List<ResourceLocation> getKnownConstellations() {
         return knownConstellations;
     }
 
-    public List<String> getSeenConstellations() {
+    public List<ResourceLocation> getSeenConstellations() {
         return seenConstellations;
     }
 
     public boolean hasConstellationDiscovered(IConstellation constellation) {
-        return hasConstellationDiscovered(constellation.getUnlocalizedName());
+        return hasConstellationDiscovered(constellation.getRegistryName());
     }
 
-    public boolean hasConstellationDiscovered(String constellation) {
+    public boolean hasConstellationDiscovered(ResourceLocation constellation) {
         return knownConstellations.contains(constellation);
     }
 
-    protected void discoverConstellation(String name) {
+    protected void discoverConstellation(ResourceLocation name) {
         memorizeConstellation(name);
         if (!knownConstellations.contains(name)) knownConstellations.add(name);
     }
 
-    protected void memorizeConstellation(String name) {
+    protected void memorizeConstellation(ResourceLocation name) {
         if (!seenConstellations.contains(name)) seenConstellations.add(name);
     }
 
@@ -570,10 +571,10 @@ public class PlayerProgress {
     }
 
     public void acceptMergeFrom(PlayerProgress toMergeFrom) {
-        for (String seen : toMergeFrom.seenConstellations) {
+        for (ResourceLocation seen : toMergeFrom.seenConstellations) {
             memorizeConstellation(seen);
         }
-        for (String known : toMergeFrom.knownConstellations) {
+        for (ResourceLocation known : toMergeFrom.knownConstellations) {
             discoverConstellation(known);
         }
         if(toMergeFrom.wasOnceAttuned) {

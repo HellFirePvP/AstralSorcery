@@ -41,7 +41,7 @@ public class BlocksAS {
     public static BlockMarbleRaw           MARBLE_RAW;
     public static BlockMarbleRuned         MARBLE_RUNED;
     public static BlockStairsTemplate      MARBLE_STAIRS;
-    public static BlockSlabTemplate MARBLE_SLAB;
+    public static BlockSlabTemplate        MARBLE_SLAB;
     public static BlockBlackMarbleArch     BLACK_MARBLE_ARCH;
     public static BlockBlackMarbleBricks   BLACK_MARBLE_BRICKS;
     public static BlockBlackMarbleChiseled BLACK_MARBLE_CHISELED;
@@ -50,7 +50,7 @@ public class BlocksAS {
     public static BlockBlackMarbleRaw      BLACK_MARBLE_RAW;
     public static BlockBlackMarbleRuned    BLACK_MARBLE_RUNED;
     public static BlockStairsTemplate      BLACK_MARBLE_STAIRS;
-    public static BlockSlabTemplate BLACK_MARBLE_SLAB;
+    public static BlockSlabTemplate        BLACK_MARBLE_SLAB;
     public static BlockInfusedWood         INFUSED_WOOD;
     public static BlockInfusedWoodArch     INFUSED_WOOD_ARCH;
     public static BlockInfusedWoodColumn   INFUSED_WOOD_COLUMN;
@@ -59,15 +59,15 @@ public class BlocksAS {
     public static BlockInfusedWoodInfused  INFUSED_WOOD_INFUSED;
     public static BlockInfusedWoodPlanks   INFUSED_WOOD_PLANKS;
     public static BlockStairsTemplate      INFUSED_WOOD_STAIRS;
-    public static BlockSlabTemplate INFUSED_WOOD_SLAB;
+    public static BlockSlabTemplate        INFUSED_WOOD_SLAB;
 
     public static BlockAquamarineSandOre AQUAMARINE_SAND_ORE;
-    public static BlockRockCrystalOre ROCK_CRYSTAL_ORE;
-    public static BlockStarmetalOre STARMETAL_ORE;
-    public static BlockGlowFlower GLOW_FLOWER;
+    public static BlockRockCrystalOre    ROCK_CRYSTAL_ORE;
+    public static BlockStarmetalOre      STARMETAL_ORE;
+    public static BlockGlowFlower        GLOW_FLOWER;
 
-    public static BlockRitualLink RITUAL_LINK;
+    public static BlockRitualLink     RITUAL_LINK;
     public static BlockRitualPedestal RITUAL_PEDESTAL;
-    public static BlockWell WELL;
+    public static BlockWell           WELL;
 
 }

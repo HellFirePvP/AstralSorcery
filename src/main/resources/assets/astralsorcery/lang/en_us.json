@@ -511,18 +511,6 @@
   "entity.EntityLiquidSpark.name": "Liquid Spark",
   "entity.EntityShootingStar.name": "Shooting Star",
 
-  "item.itemcraftingcomponent.aquamarine": "Aquamarine",
-  "item.itemcraftingcomponent.starmetal_ingot": "Starmetal Ingot",
-  "item.itemcraftingcomponent.stardust": "Stardust",
-  "item.itemcraftingcomponent.glass_lens": "Glass Lens",
-  "item.itemcraftingcomponent.reso_gem": "Resonating Gem",
-  "item.itemcraftingcomponent.parchment": "Parchment",
-
-  "item.itemconstellationpaper": "Constellation Paper",
-  "item.itemrockcrystalsimple": "Rock Crystal",
-  "item.itemtunedrockcrystal": "Attuned Rock Crystal",
-  "item.itemtunedcelestialcrystal": "Attuned Celestial Crystal",
-  "item.itemcelestialcrystal": "Celestial Crystal",
   "item.itemlinkingtool": "Linking Tool",
   "item.itemjournal": "Astral Tome",
   "item.itemwand": "Resonating Wand",
@@ -586,6 +574,24 @@
 
 
   "__comment": "",
+
+  "item.astralsorcery.aquamarine": "Aquamarine",
+  "item.astralsorcery.starmetal_ingot": "Starmetal Ingot",
+  "item.astralsorcery.stardust": "Stardust",
+  "item.astralsorcery.glass_lens": "Glass Lens",
+  "item.astralsorcery.resonating_gem": "Resonating Gem",
+  "item.astralsorcery.parchment": "Parchment",
+
+  "item.astralsorcery.constellation_paper": "Constellation Paper",
+  "item.astralsorcery.rock_crystal": "Rock Crystal",
+  "item.astralsorcery.attuned_rock_crystal": "Attuned Rock Crystal",
+  "item.astralsorcery.celestial_crystal": "Celestial Crystal",
+  "item.astralsorcery.attuned_celestial_crystal": "Attuned Celestial Crystal",
+
+
+
+
+
 
 
   "block.astralsorcery.marble_raw": "Marble",
@@ -659,12 +665,10 @@
   "block.astralsorcery.blockmapdrawingtable": "Stellar Refraction Table",
   "block.astralsorcery.blockcelestialgateway": "Celestial Gateway",
   "block.astralsorcery.blockchalice": "Containment Chalice",
-  "block.astralsorcery.blockfountain": "Evershifting Fountain",
   "block.astralsorcery.blockbore": "Evershifting Fountain",
   "block.astralsorcery.blockborehead.liquid": "Neromantic Prime",
   "block.astralsorcery.blockborehead.ore": "Petromantic Prime",
   "block.astralsorcery.blockborehead.vortex": "Fysallidic Prime",
-  "block.astralsorcery.blockportalnode": "",
   "block.astralsorcery.blockobservatory": "Observatory",
   "block.astralsorcery.blockgemcrystals.stage_0": "Gem Crystal Cluster",
   "block.astralsorcery.blockgemcrystals.stage_1": "Gem Crystal Cluster",
@@ -672,8 +676,6 @@
   "block.astralsorcery.blockgemcrystals.stage_2_day": "Gem Crystal Cluster",
   "block.astralsorcery.blockgemcrystals.stage_2_night": "Gem Crystal Cluster",
   "block.astralsorcery.fluidblockliquidstarlight": "Liquid Starlight",
-
-  "block.blockgeolosyssamplecluster": "Rock Crystal Sample",
 
   "gui.journal.cst.enchantments": "Refraction Table:",
   "gui.journal.cst.ritual": "Ritual Effect:",

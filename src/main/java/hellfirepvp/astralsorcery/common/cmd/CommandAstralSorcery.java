@@ -9,11 +9,12 @@
 package hellfirepvp.astralsorcery.common.cmd;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.cmd.sub.CommandHelp;
+import hellfirepvp.astralsorcery.common.cmd.sub.CommandMaximizeAll;
 import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,12 +27,12 @@ public class CommandAstralSorcery {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralCommandNode<CommandSource> cmdAstralSorcery = dispatcher.register(
-                LiteralArgumentBuilder.<CommandSource>literal(AstralSorcery.MODID)
+                Commands.literal(AstralSorcery.MODID)
                         .then(CommandHelp.register())
+                        .then(CommandMaximizeAll.register())
         );
 
-        dispatcher.register(LiteralArgumentBuilder.<CommandSource>literal("as")
-                .requires(cs -> cs.hasPermissionLevel(2))
+        dispatcher.register(Commands.literal("as")
                 .redirect(cmdAstralSorcery));
     }
 

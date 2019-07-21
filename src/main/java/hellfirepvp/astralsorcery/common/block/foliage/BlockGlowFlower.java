@@ -56,6 +56,9 @@ public class BlockGlowFlower extends BlockFoliageTemplate implements IPlantable 
 
     @Override
     public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
+        if (silktouch == 0) {
+            return 0;
+        }
         if (fortune > 0) {
             return fortune * MathHelper.nextInt(RANDOM, 2, 5);
         }
