@@ -183,7 +183,7 @@ public class ResearchManager {
         PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
         if(!progress.isValid()) return false;
 
-        if (constellation != null && !progress.getKnownConstellations().contains(constellation.getRegistryName().toString())) {
+        if (constellation != null && !progress.getKnownConstellations().contains(constellation.getRegistryName())) {
             return false;
         }
 

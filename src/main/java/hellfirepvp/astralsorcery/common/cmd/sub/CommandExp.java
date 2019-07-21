@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.cmd.sub;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -24,37 +25,36 @@ import net.minecraft.util.text.TextFormatting;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CommandMaximizeAll
+ * Class: CommandExp
  * Created by HellFirePvP
- * Date: 21.07.2019 / 16:33
+ * Date: 21.07.2019 / 20:19
  */
-public class CommandMaximizeAll implements Command<CommandSource> {
+public class CommandExp implements Command<CommandSource> {
 
-    private static final CommandMaximizeAll CMD = new CommandMaximizeAll();
+    private static final CommandExp CMD = new CommandExp();
 
-    private CommandMaximizeAll() {}
+    private CommandExp() {}
 
     public static ArgumentBuilder<CommandSource, ?> register() {
-        return Commands.literal("maximize")
+        return Commands.literal("exp")
                 .requires(cs -> cs.hasPermissionLevel(2))
                 .then(Commands.argument("player", EntityArgument.player())
-                        .executes(ctx -> {
-                            PlayerEntity target = (PlayerEntity) ctx.getArgument("player", EntitySelector.class).selectOne(ctx.getSource());
-                            ctx.getSource().sendFeedback(new StringTextComponent(TextFormatting.GREEN + "Success!"), true);
-                            maximizeAll(target);
-                            return 0;
-                        }))
-                .executes(CMD);
+                        .then(Commands.argument("exp", LongArgumentType.longArg())
+                                .executes(CMD)));
     }
 
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        maximizeAll(context.getSource().asPlayer());
-        context.getSource().sendFeedback(new StringTextComponent(TextFormatting.GREEN + "Success!"), true);
-        return 0;
-    }
+        PlayerEntity player = (PlayerEntity) context.getArgument("player", EntitySelector.class).selectOne(context.getSource());
+        long exp = LongArgumentType.getLong(context, "exp");
 
-    private static boolean maximizeAll(PlayerEntity entity) {
-        return ResearchManager.forceMaximizeAll(entity);
+        if (ResearchManager.setExp(player, exp)) {
+            context.getSource().sendFeedback(
+                    new StringTextComponent(TextFormatting.GREEN + "Success! Player exp has been set to " + exp), true);
+        } else {
+            context.getSource().sendFeedback(
+                    new StringTextComponent(TextFormatting.RED + "Failed! Player specified doesn't seem to have a research progress!"), true);
+        }
+        return 0;
     }
 }
