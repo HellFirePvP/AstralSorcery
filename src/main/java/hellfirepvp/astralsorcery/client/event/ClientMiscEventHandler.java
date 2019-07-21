@@ -36,13 +36,13 @@ import java.util.zip.GZIPInputStream;
 public class ClientMiscEventHandler {
 
     private static final WavefrontObject obj;
-    private static final ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/models/texw.png");
+    private static final ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/model/texw.png");
     private static int dList = -1;
 
     private ClientMiscEventHandler() {}
 
     static {
-        ResourceLocation mod = new ResourceLocation(AstralSorcery.MODID + ":model/obj/modelassec.obj");
+        ResourceLocation mod = new ResourceLocation(AstralSorcery.MODID + ":models/obj/modelassec.obj");
         WavefrontObject buf;
         try {
             buf = new WavefrontObject("astralSorcery:wingsrender", new GZIPInputStream(Minecraft.getInstance().getResourceManager().getResource(mod).getInputStream()));

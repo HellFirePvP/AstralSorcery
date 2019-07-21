@@ -94,6 +94,7 @@ public class CommonProxy {
         RegistryMaterials.init();
         RegistryGameRules.init();
         RegistryTags.registerTags();
+        RegistryLootFunctions.registerLootFunctions();
         PacketChannel.registerPackets();
 
         this.tickManager = new TickManager();
