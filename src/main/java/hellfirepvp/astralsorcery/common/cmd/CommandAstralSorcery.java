@@ -11,8 +11,10 @@ package hellfirepvp.astralsorcery.common.cmd;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.cmd.sub.CommandHelp;
+import hellfirepvp.astralsorcery.common.cmd.sub.CommandAttune;
+import hellfirepvp.astralsorcery.common.cmd.sub.CommandExp;
 import hellfirepvp.astralsorcery.common.cmd.sub.CommandMaximizeAll;
+import hellfirepvp.astralsorcery.common.cmd.sub.CommandReset;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 
@@ -28,8 +30,10 @@ public class CommandAstralSorcery {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralCommandNode<CommandSource> cmdAstralSorcery = dispatcher.register(
                 Commands.literal(AstralSorcery.MODID)
-                        .then(CommandHelp.register())
+                        .then(CommandAttune.register())
+                        .then(CommandExp.register())
                         .then(CommandMaximizeAll.register())
+                        .then(CommandReset.register())
         );
 
         dispatcher.register(Commands.literal("as")

@@ -1,7 +1,15 @@
 {
+  "__comment": "",
+
+
   "itemGroup.astralsorcery": "Astral Sorcery",
   "itemGroup.astralsorcery.papers": "[AS] Constellation Papers",
   "itemGroup.astralsorcery.crystals": "[AS] Attuned Crystals",
+
+  "argument.constellation.notfound": "Constellation not found.",
+
+
+  "__comment": "",
 
   "jei.category.well": "Lightwell",
   "jei.category.grindstone": "Grindstone",
