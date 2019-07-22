@@ -154,6 +154,7 @@ public class CommonProxy {
         this.commonConfig.addConfigEntry(CommonGeneralConfig.CONFIG);
 
         ConstellationEffectRegistry.addConfigEntries(this.serverConfig);
+        RegistryWorldGeneration.registerFeatureConfigurations(this.serverConfig);
     }
 
     public InternalRegistryPrimer getRegistryPrimer() {
@@ -197,6 +198,8 @@ public class CommonProxy {
     private void onCommonSetup(FMLCommonSetupEvent event) {
         RegistryCapabilities.initialize();
         RegistryIngredientTypes.init();
+
+        RegistryWorldGeneration.registerFeatures();
     }
 
     // Generic events

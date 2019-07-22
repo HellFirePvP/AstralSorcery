@@ -26,24 +26,23 @@ public class RegistryStructureTypes {
     private RegistryStructureTypes() {}
 
     public static void init() {
-        STYPE_MOUNTAIN = registerAS("struct_mountain", true);
-        STYPE_DESERT = registerAS("struct_desert", true);
-        STYPE_SMALL = registerAS("struct_small", true);
-        STYPE_TREASURE = registerAS("struct_treasure");
+        STYPE_MOUNTAIN = registerAS("struct_mountain", 768);
+        STYPE_DESERT = registerAS("struct_desert", 1024);
+        STYPE_SMALL = registerAS("struct_small", 512);
 
         PTYPE_RITUAL_PEDESTAL = registerAS("pattern_ritual_pedestal");
     }
 
     private static StructureType registerAS(String name) {
-        return registerAS(name, false);
+        return registerAS(name, -1);
     }
 
-    private static StructureType registerAS(String name, boolean requiresAvgDistance) {
-        return register(new ResourceLocation(AstralSorcery.MODID, name), requiresAvgDistance);
+    private static StructureType registerAS(String name, int averageDistance) {
+        return register(new ResourceLocation(AstralSorcery.MODID, name), averageDistance);
     }
 
-    private static StructureType register(ResourceLocation name, boolean requiresAvgDistance) {
-        StructureType type = new StructureType(name, requiresAvgDistance);
+    private static StructureType register(ResourceLocation name, int averageDistance) {
+        StructureType type = new StructureType(name, averageDistance);
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
         return type;
     }

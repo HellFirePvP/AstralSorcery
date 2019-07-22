@@ -6,25 +6,28 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.lib;
+package hellfirepvp.astralsorcery.common.registry;
 
-import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: StructureTypesAS
+ * Class: RegistryWorldGeneration
  * Created by HellFirePvP
- * Date: 30.05.2019 / 15:08
+ * Date: 21.07.2019 / 22:30
  */
-public class StructureTypesAS {
+// TODO no clue where or how to call this. Maybe this'll function as intended?
+public class RegistryWorldGeneration {
 
-    private StructureTypesAS() {}
+    private RegistryWorldGeneration() {}
 
-    public static StructureType STYPE_MOUNTAIN;
-    public static StructureType STYPE_DESERT;
-    public static StructureType STYPE_SMALL;
+    public static void registerFeatureConfigurations(ServerConfig cfg) {
 
-    public static StructureType PTYPE_RITUAL_PEDESTAL;
+    }
+
+    public static void registerFeatures() {
+
+    }
 
 }

@@ -15,10 +15,12 @@ import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
@@ -214,6 +216,24 @@ public class MiscUtils {
             }
         }
         return false;
+    }
+
+    public static boolean isFluidBlock(BlockState state) {
+        return state.getBlock() instanceof FlowingFluidBlock;
+    }
+
+    @Nullable
+    public static Fluid tryGetFuild(BlockState state) {
+        if (!isFluidBlock(state)) {
+            return null;
+        }
+        if (state.getBlock() instanceof FlowingFluidBlock) {
+            IFluidState fluidState = state.getBlock().getFluidState(state);
+            if (!fluidState.isEmpty()) {
+                return fluidState.getFluid();
+            }
+        }
+        return null;
     }
 
     public static boolean canPlayerAttackServer(@Nullable LivingEntity source, @Nonnull LivingEntity target) {
