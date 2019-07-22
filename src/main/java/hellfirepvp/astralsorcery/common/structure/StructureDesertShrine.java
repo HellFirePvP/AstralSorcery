@@ -6,25 +6,21 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.lib;
+package hellfirepvp.astralsorcery.common.structure;
 
-import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: StructureTypesAS
+ * Class: StructureDesertShrine
  * Created by HellFirePvP
- * Date: 30.05.2019 / 15:08
+ * Date: 22.07.2019 / 09:02
  */
-public class StructureTypesAS {
+public class StructureDesertShrine extends StructureBlockArray {
 
-    private StructureTypesAS() {}
-
-    public static StructureType STYPE_MOUNTAIN;
-    public static StructureType STYPE_DESERT;
-    public static StructureType STYPE_SMALL;
-
-    public static StructureType PTYPE_RITUAL_PEDESTAL;
+    public StructureDesertShrine() {
+        super(StructureTypesAS.STYPE_DESERT.getRegistryName());
+    }
 
 }

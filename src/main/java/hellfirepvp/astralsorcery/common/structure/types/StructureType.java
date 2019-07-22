@@ -31,15 +31,23 @@ import java.util.HashSet;
 public class StructureType implements IForgeRegistryEntry<StructureType> {
 
     private final ResourceLocation name;
-    private final boolean averageDistanceRequired;
+    private final int averageDistance;
 
-    public StructureType(ResourceLocation name, boolean averageDistanceRequired) {
+    public StructureType(ResourceLocation name) {
+        this(name, -1);
+    }
+
+    public StructureType(ResourceLocation name, int averageDistance) {
         this.name = name;
-        this.averageDistanceRequired = averageDistanceRequired;
+        this.averageDistance = averageDistance;
     }
 
     public boolean isAverageDistanceRequired() {
-        return averageDistanceRequired;
+        return averageDistance != -1;
+    }
+
+    public int getAverageDistance() {
+        return averageDistance;
     }
 
     public ChangeSubscriber<ChangeObserverStructure> observe(World world, BlockPos pos) {

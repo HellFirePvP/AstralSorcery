@@ -6,25 +6,17 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.lib;
-
-import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+package hellfirepvp.astralsorcery.common.world;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: StructureTypesAS
+ * Class: AstralWorldGenerator
  * Created by HellFirePvP
- * Date: 30.05.2019 / 15:08
+ * Date: 21.07.2019 / 22:24
  */
-public class StructureTypesAS {
+public class AstralWorldGenerator {
 
-    private StructureTypesAS() {}
 
-    public static StructureType STYPE_MOUNTAIN;
-    public static StructureType STYPE_DESERT;
-    public static StructureType STYPE_SMALL;
-
-    public static StructureType PTYPE_RITUAL_PEDESTAL;
 
 }
