@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.util.sound;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.sound.CategorizedSoundEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.util.SoundCategory;
@@ -25,7 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 22:59
  */
-public class PositionedLoopSound extends SimpleSound implements ITickableSound {
+public class PositionedLoopSound extends SimpleSound implements ITickableSound, ISound {
 
     private ActivityFunction func = null;
     private boolean hasStoppedPlaying = false;

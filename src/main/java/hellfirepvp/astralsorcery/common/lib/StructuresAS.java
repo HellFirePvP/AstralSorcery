@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.structure.StructureBlockArray;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
+import hellfirepvp.observerlib.common.block.PatternBlockArray;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,6 +23,10 @@ public class StructuresAS {
 
     private StructuresAS() {}
 
-    public static MatchableStructure STRUCT_RITUAL_PEDESTAL;
+    public static PatternBlockArray STRUCT_RITUAL_PEDESTAL;
+
+    public static StructureBlockArray STRUCT_DESERT_SHRINE;
+    public static StructureBlockArray STRUCT_MOUNTAIN_SHRINE;
+    public static StructureBlockArray STRUCT_SMALL_SHRINE;
 
 }

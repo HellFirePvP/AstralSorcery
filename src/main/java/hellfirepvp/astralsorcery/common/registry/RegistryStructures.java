@@ -10,11 +10,13 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.structure.PatternRitualPedestal;
+import hellfirepvp.astralsorcery.common.structure.StructureDesertShrine;
+import hellfirepvp.astralsorcery.common.structure.StructureMountainShrine;
+import hellfirepvp.astralsorcery.common.structure.StructureSmallShrine;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
 import hellfirepvp.observerlib.common.change.ObserverProviderStructure;
 
 import static hellfirepvp.astralsorcery.common.lib.StructuresAS.*;
-import static hellfirepvp.astralsorcery.common.lib.StructureTypesAS.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,6 +31,10 @@ public class RegistryStructures {
 
     public static void registerStructures() {
         STRUCT_RITUAL_PEDESTAL = register(new PatternRitualPedestal());
+
+        STRUCT_DESERT_SHRINE = register(new StructureDesertShrine());
+        STRUCT_MOUNTAIN_SHRINE = register(new StructureMountainShrine());
+        STRUCT_SMALL_SHRINE = register(new StructureSmallShrine());
     }
 
     private static <T extends MatchableStructure> T register(T struct) {

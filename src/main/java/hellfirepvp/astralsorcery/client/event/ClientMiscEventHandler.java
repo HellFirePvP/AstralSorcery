@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -68,12 +69,27 @@ public class ClientMiscEventHandler {
         GlStateManager.translated(event.getX(), event.getY(), event.getZ());
         Minecraft.getInstance().textureManager.bindTexture(tex);
         Vec3d motion = player.getMotion();
+
         boolean f = player.abilities.isFlying;
         double ma = f ? 15 : 5;
         double r = (ma * (Math.abs((ClientScheduler.getClientTick() % 80) - 40) / 40D)) +
                 ((65 - ma) * Math.max(0, Math.min(1, new Vector3(motion.x, 0, motion.z).length())));
         float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
-        GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
+
+
+        float swimAngle = player.getSwimAnimation(event.getPartialRenderTick());
+        if (swimAngle > 0) {
+            float waterPitch = player.isInWater() ? -90.0F - player.rotationPitch : -90.0F;
+            float bodySwimAngle = MathHelper.lerp(swimAngle, 0.0F, waterPitch);
+            GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
+            GlStateManager.rotatef(bodySwimAngle, 1F, 0F, 0F);
+            if (player.func_213314_bj()) {
+                GlStateManager.translatef(0.0F, -1.0F, 0.3F);
+            }
+        } else {
+            GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
+        }
+
         GlStateManager.scaled(0.07, 0.07, 0.07);
         GlStateManager.translated(0, 5.5, 0.7 - (((float) (r / ma)) * (f ? 0.5D : 0.2D)));
         if(dList == -1) {

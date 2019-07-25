@@ -29,8 +29,8 @@ import net.minecraftforge.common.IPlantable;
  */
 public abstract class BlockFoliageTemplate extends Block implements CustomItemBlock, IPlantable {
 
-    public BlockFoliageTemplate(boolean requiresBlockTick) {
-        super(requiresBlockTick ? PropertiesMisc.defaultTickingPlant() : PropertiesMisc.defaultPlant());
+    public BlockFoliageTemplate(Block.Properties properties) {
+        super(properties);
     }
 
     protected abstract boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos);

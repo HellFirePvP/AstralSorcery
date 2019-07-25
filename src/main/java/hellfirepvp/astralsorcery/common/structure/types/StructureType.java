@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.structure.types;
 
 import hellfirepvp.observerlib.api.ChangeSubscriber;
 import hellfirepvp.observerlib.api.ObserverHelper;
+import hellfirepvp.observerlib.common.block.BlockArray;
 import hellfirepvp.observerlib.common.change.ChangeObserverStructure;
 import hellfirepvp.observerlib.common.change.ObserverProviderStructure;
 import net.minecraft.util.ResourceLocation;
@@ -18,8 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,13 +32,15 @@ public class StructureType implements IForgeRegistryEntry<StructureType> {
 
     private final ResourceLocation name;
     private final int averageDistance;
+    private final Supplier<BlockArray> structureSupplier;
 
-    public StructureType(ResourceLocation name) {
-        this(name, -1);
+    public StructureType(ResourceLocation name, Supplier<BlockArray> structureSupplier) {
+        this(name, structureSupplier, -1);
     }
 
-    public StructureType(ResourceLocation name, int averageDistance) {
+    public StructureType(ResourceLocation name, Supplier<BlockArray> structureSupplier, int averageDistance) {
         this.name = name;
+        this.structureSupplier = structureSupplier;
         this.averageDistance = averageDistance;
     }
 
@@ -48,6 +50,10 @@ public class StructureType implements IForgeRegistryEntry<StructureType> {
 
     public int getAverageDistance() {
         return averageDistance;
+    }
+
+    public BlockArray getStructure() {
+        return this.structureSupplier.get();
     }
 
     public ChangeSubscriber<ChangeObserverStructure> observe(World world, BlockPos pos) {
