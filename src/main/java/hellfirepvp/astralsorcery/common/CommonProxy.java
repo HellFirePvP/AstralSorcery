@@ -84,18 +84,19 @@ public class CommonProxy {
         this.commonConfig = new CommonConfig();
         this.serverConfig = new ServerConfig();
 
+        RegistryData.init();
+        RegistryMaterials.init();
+        RegistryGameRules.init();
+        RegistryTags.registerTags();
+        RegistryStructureTypes.init();
+        PacketChannel.registerPackets();
+        RegistryLootFunctions.registerLootFunctions();
+
         this.initializeConfigurations();
 
         ConfigRegistries.getRegistries().buildDataRegistries();
         this.commonConfig.buildConfiguration();
         this.serverConfig.buildConfiguration();
-
-        RegistryData.init();
-        RegistryMaterials.init();
-        RegistryGameRules.init();
-        RegistryTags.registerTags();
-        RegistryLootFunctions.registerLootFunctions();
-        PacketChannel.registerPackets();
 
         this.tickManager = new TickManager();
         this.attachTickListeners(tickManager::register);

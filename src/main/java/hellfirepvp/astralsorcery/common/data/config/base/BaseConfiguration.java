@@ -38,9 +38,10 @@ public class BaseConfiguration {
         this.configType = configType;
     }
 
-    public void addConfigEntry(ConfigEntry configEntry) {
+    public <T extends ConfigEntry> T addConfigEntry(T configEntry) {
         configEntry.setConfigType(this.configType);
         configEntries.add(configEntry);
+        return configEntry;
     }
 
     public void buildConfiguration() {

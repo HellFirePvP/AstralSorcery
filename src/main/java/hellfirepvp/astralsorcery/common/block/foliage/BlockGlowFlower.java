@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.block.foliage;
 
 import hellfirepvp.astralsorcery.common.block.base.template.BlockFoliageTemplate;
+import hellfirepvp.astralsorcery.common.block.properties.PropertiesMisc;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
@@ -35,7 +36,7 @@ public class BlockGlowFlower extends BlockFoliageTemplate implements IPlantable 
     private final VoxelShape shape;
 
     public BlockGlowFlower() {
-        super(false);
+        super(PropertiesMisc.defaultTickingPlant().lightValue(5));
         this.shape = createShape();
     }
 

@@ -10,18 +10,23 @@ package hellfirepvp.astralsorcery.common.structure;
 
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.observerlib.api.block.MatchableState;
-import hellfirepvp.observerlib.api.tile.MatchableTile;
 import hellfirepvp.observerlib.common.block.PatternBlockArray;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.TickPriority;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,19 +43,67 @@ public class StructureBlockArray extends PatternBlockArray {
         super(registryName);
     }
 
-    public Map<BlockPos, BlockState> placeInWorld(World world, BlockPos center) {
+    public void setAir(IWorld world, BlockPos pos) {
+        world.setBlockState(pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT);
+    }
+
+    public void setBlockState(IWorld world, BlockPos pos, BlockState state) {
+        world.setBlockState(pos, state, Constants.BlockFlags.DEFAULT);
+    }
+
+    public void setBlockCube(IWorld world, BlockPos offset, Function<BlockPos, BlockState> stateSupplier, int ox, int oy, int oz, int tx, int ty, int tz) {
+        int lx, ly, lz;
+        int hx, hy, hz;
+        if(ox < tx) {
+            lx = ox;
+            hx = tx;
+        } else {
+            lx = tx;
+            hx = ox;
+        }
+        if(oy < ty) {
+            ly = oy;
+            hy = ty;
+        } else {
+            ly = ty;
+            hy = oy;
+        }
+        if(oz < tz) {
+            lz = oz;
+            hz = tz;
+        } else {
+            lz = tz;
+            hz = oz;
+        }
+
+        for (int xx = lx; xx <= hx; xx++) {
+            for (int zz = lz; zz <= hz; zz++) {
+                for (int yy = ly; yy <= hy; yy++) {
+                    BlockPos at = offset.add(xx, yy, zz);
+                    world.setBlockState(at, stateSupplier.apply(at), Constants.BlockFlags.DEFAULT);
+                }
+            }
+        }
+    }
+
+    public Map<BlockPos, BlockState> placeInWorld(IWorld world, BlockPos center, Predicate<BlockPos> posFilter) {
         Map<BlockPos, BlockState> result = new HashMap<>();
         for (Map.Entry<BlockPos, MatchableState> entry : this.getContents().entrySet()) {
             MatchableState match = entry.getValue();
             BlockPos at = center.add(entry.getKey());
+            if (!posFilter.test(at)) {
+                continue;
+            }
+
             BlockState state = match.getDescriptiveState(0);
             if (!world.setBlockState(at, state, Constants.BlockFlags.DEFAULT)) {
                 continue;
             }
             result.put(at, state);
 
-            if (MiscUtils.isFluidBlock(state)) {
-                world.neighborChanged(at, state.getBlock(), at);
+            Fluid f;
+            if (MiscUtils.isFluidBlock(state) && (f = MiscUtils.tryGetFuild(state)) != null) {
+                world.getPendingFluidTicks().scheduleTick(at, f, f.getTickRate(world), TickPriority.HIGH);
             }
 
             TileEntity placed = world.getTileEntity(at);
@@ -64,18 +117,21 @@ public class StructureBlockArray extends PatternBlockArray {
         return result;
     }
 
-    public Map<BlockPos, BlockState> placeInWorld(World world, BlockPos center, PastPlaceProcessor processor) {
-        Map<BlockPos, BlockState> result = this.placeInWorld(world, center);
+    public Map<BlockPos, BlockState> placeInWorld(IWorld world, BlockPos center, Predicate<BlockPos> posFilter, PastPlaceProcessor processor) {
+        Map<BlockPos, BlockState> result = this.placeInWorld(world, center, posFilter);
         if(processor != null) {
-            for (Map.Entry<BlockPos, BlockState> entry : result.entrySet())
-                processor.process(world, entry.getKey(), entry.getValue());
+            for (Map.Entry<BlockPos, BlockState> entry : result.entrySet()) {
+                if (posFilter.test(entry.getKey())) {
+                    processor.process(world, entry.getKey(), entry.getValue());
+                }
+            }
         }
         return result;
     }
 
     public static interface PastPlaceProcessor {
 
-        void process(World world, BlockPos pos, BlockState currentState);
+        void process(IWorld world, BlockPos pos, BlockState currentState);
 
     }
 

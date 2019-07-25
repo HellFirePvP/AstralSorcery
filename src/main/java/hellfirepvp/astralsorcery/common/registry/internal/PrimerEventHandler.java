@@ -74,7 +74,6 @@ public class PrimerEventHandler {
         RegistryConstellations.init();
         RegistryConstellations.initConstellationSignatures();
 
-        RegistryStructureTypes.init();
         RegistryStructures.registerStructures();
         RegistryKnowledgeFragments.init();
 

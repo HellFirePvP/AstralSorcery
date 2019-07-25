@@ -55,7 +55,7 @@ public class BlockStateHelper {
         return name.toString();
     }
 
-    @Nullable
+    @Nonnull
     public static <T extends Comparable<T>, V> BlockState deserialize(@Nonnull String serialized) {
         int propIndex = serialized.indexOf('[');
         boolean hasProperties = propIndex != -1;

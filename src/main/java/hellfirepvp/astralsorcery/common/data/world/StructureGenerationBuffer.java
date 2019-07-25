@@ -110,7 +110,7 @@ public class StructureGenerationBuffer extends SectionWorldData<StructureGenerat
 
     public static class StructureRegion extends WorldSection {
 
-        private Map<StructureType, Collection<BlockPos>> generatedStructures = new HashMap<>();
+        private Map<StructureType, Set<BlockPos>> generatedStructures = new HashMap<>();
 
         protected StructureRegion(int sX, int sZ) {
             super(sX, sZ);

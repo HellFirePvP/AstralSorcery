@@ -9,8 +9,13 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.lib.StructuresAS;
+import hellfirepvp.astralsorcery.common.structure.StructureBlockArray;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import hellfirepvp.observerlib.common.block.BlockArray;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.function.Supplier;
 
 import static hellfirepvp.astralsorcery.common.lib.StructureTypesAS.*;
 
@@ -26,23 +31,23 @@ public class RegistryStructureTypes {
     private RegistryStructureTypes() {}
 
     public static void init() {
-        STYPE_MOUNTAIN = registerAS("struct_mountain", 768);
-        STYPE_DESERT = registerAS("struct_desert", 1024);
-        STYPE_SMALL = registerAS("struct_small", 512);
+        STYPE_MOUNTAIN = registerAS("struct_mountain", 768, () -> StructuresAS.STRUCT_MOUNTAIN_SHRINE);
+        STYPE_DESERT = registerAS("struct_desert", 1024, () -> StructuresAS.STRUCT_DESERT_SHRINE);
+        STYPE_SMALL = registerAS("struct_small", 512, () -> StructuresAS.STRUCT_SMALL_SHRINE);
 
-        PTYPE_RITUAL_PEDESTAL = registerAS("pattern_ritual_pedestal");
+        PTYPE_RITUAL_PEDESTAL = registerAS("pattern_ritual_pedestal", () -> StructuresAS.STRUCT_RITUAL_PEDESTAL);
     }
 
-    private static StructureType registerAS(String name) {
-        return registerAS(name, -1);
+    private static StructureType registerAS(String name, Supplier<BlockArray> structureSupplier) {
+        return registerAS(name, -1, structureSupplier);
     }
 
-    private static StructureType registerAS(String name, int averageDistance) {
-        return register(new ResourceLocation(AstralSorcery.MODID, name), averageDistance);
+    private static StructureType registerAS(String name, int averageDistance, Supplier<BlockArray> structureSupplier) {
+        return register(new ResourceLocation(AstralSorcery.MODID, name), averageDistance, structureSupplier);
     }
 
-    private static StructureType register(ResourceLocation name, int averageDistance) {
-        StructureType type = new StructureType(name, averageDistance);
+    private static StructureType register(ResourceLocation name, int averageDistance, Supplier<BlockArray> structureSupplier) {
+        StructureType type = new StructureType(name, structureSupplier, averageDistance);
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
         return type;
     }
