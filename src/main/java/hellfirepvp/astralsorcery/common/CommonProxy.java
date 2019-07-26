@@ -148,7 +148,6 @@ public class CommonProxy {
         this.serverConfig.addConfigEntry(EntityConfig.CONFIG);
         this.serverConfig.addConfigEntry(CraftingConfig.CONFIG);
         this.serverConfig.addConfigEntry(LightNetworkConfig.CONFIG);
-        this.serverConfig.addConfigEntry(WorldGenConfig.CONFIG);
         this.serverConfig.addConfigEntry(LogConfig.CONFIG);
         this.serverConfig.addConfigEntry(PerkConfig.CONFIG);
 
