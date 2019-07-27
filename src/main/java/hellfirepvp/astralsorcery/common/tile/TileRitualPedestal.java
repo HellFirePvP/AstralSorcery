@@ -51,9 +51,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -180,6 +178,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
             MiscUtils.applyRandomOffset(from, rand, 0.05F);
 
             EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
+                    .setOwner(this.ownerUUID)
                     .spawn(from)
                     .setup(from.clone().addY(6), 1.5F, 1.5F)
                     .setAlphaMultiplier(0.5F + (0.5F * alphaDaytime))
@@ -192,6 +191,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                 at.add(rand.nextFloat() * 0.5 + 0.25, 0, rand.nextFloat() * 0.5 + 0.25);
 
                 EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                        .setOwner(this.ownerUUID)
                         .spawn(at)
                         .setAlphaMultiplier(0.7F)
                         .color(VFXColorFunction.WHITE)
@@ -210,6 +210,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                     from.setY(getPos().getY() - 0.6 + 1 * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1));
 
                     EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
+                            .setOwner(this.ownerUUID)
                             .spawn(from)
                             .setup(from.clone().addY(5 + rand.nextInt(3)), 1.3F, 1.3F)
                             .setAlphaMultiplier(alphaDaytime)
@@ -235,6 +236,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                     Vector3 motion = Vector3.random().multiply(0.02F);
 
                     EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                            .setOwner(this.ownerUUID)
                             .spawn(at)
                             .setMotion(motion)
                             .setAlphaMultiplier(1F)
@@ -255,6 +257,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                     }
 
                     EffectHelper.of(EffectTemplatesAS.LIGHTNING)
+                            .setOwner(this.ownerUUID)
                             .spawn(from)
                             .makeDefault(to)
                             .color(VFXColorFunction.constant(ritualConstellation.getConstellationColor()));
@@ -268,6 +271,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                 Vector3 to = new Vector3(this).add(mirror).add(0.5, 0.5, 0.5);
 
                 EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
+                        .setOwner(this.ownerUUID)
                         .spawn(source)
                         .setup(to, 0.8F, 0.8F);
 
@@ -275,6 +279,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                     source = new Vector3(this).add(0.5, 5.5, 0.5);
 
                     EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
+                            .setOwner(this.ownerUUID)
                             .spawn(source)
                             .setup(to, 0.8F, 0.8F)
                             .color(VFXColorFunction.random());

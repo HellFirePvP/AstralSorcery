@@ -30,6 +30,7 @@ public class ColorsAS {
     public static final Color CONSTELLATION_TYPE_WEAK  = new Color(67, 44, 176);
     public static final Color CONSTELLATION_TYPE_MINOR = new Color(93, 25, 127);
 
+    public static final Color RITUAL_CONSTELLATION_AEVITAS = new Color(63, 255, 63);
     public static final Color RITUAL_CONSTELLATION_ARMARA  = new Color(201, 30, 0);
     public static final Color RITUAL_CONSTELLATION_LUCERNA = new Color(255, 255, 127);
     public static final Color RITUAL_CONSTELLATION_VICIO   = new Color(200, 200, 255);

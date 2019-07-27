@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
-import hellfirepvp.astralsorcery.common.constellation.effect.provider.CEffectProviderVicio;
+import hellfirepvp.astralsorcery.common.constellation.effect.provider.*;
 
 import static hellfirepvp.astralsorcery.common.lib.ConstellationEffectsAS.*;
 
@@ -26,7 +26,8 @@ public class RegistryConstellationEffects {
     private RegistryConstellationEffects() {}
 
     public static void init() {
-        VICIO = register(new CEffectProviderVicio());
+        AEVITAS = register(new CEffectProviderAevitas());
+        VICIO   = register(new CEffectProviderVicio());
     }
 
     private static <T extends ConstellationEffectProvider> T register(T effectProvider) {

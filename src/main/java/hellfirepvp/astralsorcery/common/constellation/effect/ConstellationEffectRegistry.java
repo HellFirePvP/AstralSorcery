@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectVicio;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
@@ -32,7 +33,8 @@ public class ConstellationEffectRegistry {
     private static Map<IWeakConstellation, ConstellationEffect> clientEffectInstances = new HashMap<>();
 
     public static void addConfigEntries(ServerConfig config) {
-        config.addConfigEntry(new CEffectVicio.VicioConfig());
+        config.addConfigEntry(CEffectAevitas.CONFIG);
+        config.addConfigEntry(CEffectVicio.CONFIG);
     }
 
     @Nullable

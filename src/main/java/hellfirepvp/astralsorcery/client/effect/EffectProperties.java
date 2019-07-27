@@ -40,27 +40,27 @@ public class EffectProperties<T extends EntityVisualFX> {
     }
 
     // What player this effects belongs to, if any.
-    public EffectProperties<T> setOwner(@Nullable UUID owner) {
+    public <I extends EffectProperties<T>> I setOwner(@Nullable UUID owner) {
         this.owner = owner;
-        return this;
+        return (I) this;
     }
 
     // What type this effect is. As a means of classification/grouping
-    public EffectProperties<T> setType(@Nullable EffectType type) {
+    public <I extends EffectProperties<T>> I setType(@Nullable EffectType type) {
         this.type = type;
-        return this;
+        return (I) this;
     }
 
     // The position the effect originates from, if any.
-    public EffectProperties<T> setPosition(@Nonnull Vec3i position) {
+    public <I extends EffectProperties<T>> I setPosition(@Nonnull Vec3i position) {
         this.position = position;
-        return this;
+        return (I) this;
     }
 
     // If this effect should ignore the spawn-limit soft cap on particles
-    public EffectProperties<T> setIgnoreLimit(boolean ignoreLimit) {
+    public <I extends EffectProperties<T>> I setIgnoreLimit(boolean ignoreLimit) {
         this.ignoreLimit = ignoreLimit;
-        return this;
+        return (I) this;
     }
 
     public BatchRenderContext<T> getContext() {

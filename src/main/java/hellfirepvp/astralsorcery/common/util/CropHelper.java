@@ -23,7 +23,10 @@ import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,6 +36,27 @@ import java.util.Random;
  * Date: 11.06.2019 / 21:05
  */
 public class CropHelper {
+
+    public static final String GROWABLE = "growable";
+    public static final String GROWABLE_REED = "growable_reed";
+    public static final String GROWABLE_CACTUS = "growable_cactus";
+    public static final String GROWABLE_NETHERWART = "growable_netherwart";
+    public static final String HARVESTABLE = "harvestable";
+
+    public static Map<String, Function<BlockPos, GrowablePlant>> growableFactoryWrapper = new HashMap<String, Function<BlockPos, GrowablePlant>>() {
+        {
+            put(GROWABLE, GrowableWrapper::new);
+            put(GROWABLE_REED, GrowableReedWrapper::new);
+            put(GROWABLE_CACTUS, GrowableCactusWrapper::new);
+            put(GROWABLE_NETHERWART, GrowableNetherwartWrapper::new);
+            put(HARVESTABLE, HarvestableWrapper::new);
+        }
+    };
+
+    @Nullable
+    public static GrowablePlant fromNBT(CompoundNBT nbt, BlockPos pos) {
+        return growableFactoryWrapper.getOrDefault(nbt.getString("identifier"), (p) -> null).apply(pos);
+    }
 
     @Nullable
     public static GrowablePlant wrapPlant(World world, BlockPos pos) {
@@ -90,12 +114,21 @@ public class CropHelper {
 
     public static interface GrowablePlant extends CEffectAbstractList.ListEntry {
 
+        public String getIdentifier();
+
         public boolean isValid(World world, boolean forceChunkLoad);
 
         public boolean canGrow(World world);
 
         public boolean tryGrow(World world, Random rand);
 
+        @Override
+        default void readFromNBT(CompoundNBT nbt) {}
+
+        @Override
+        default void writeToNBT(CompoundNBT nbt) {
+            nbt.putString("identifier", this.getIdentifier());
+        }
     }
 
     public static interface HarvestablePlant extends GrowablePlant {
@@ -137,15 +170,14 @@ public class CropHelper {
         }
 
         @Override
-        public BlockPos getPos() {
-            return pos;
+        public String getIdentifier() {
+            return HARVESTABLE;
         }
 
         @Override
-        public void readFromNBT(CompoundNBT nbt) {}
-
-        @Override
-        public void writeToNBT(CompoundNBT nbt) {}
+        public BlockPos getPos() {
+            return pos;
+        }
 
         @Override
         public boolean isValid(World world, boolean forceChunkLoad) {
@@ -218,15 +250,14 @@ public class CropHelper {
         }
 
         @Override
-        public BlockPos getPos() {
-            return pos;
+        public String getIdentifier() {
+            return GROWABLE_NETHERWART;
         }
 
         @Override
-        public void readFromNBT(CompoundNBT nbt) {}
-
-        @Override
-        public void writeToNBT(CompoundNBT nbt) {}
+        public BlockPos getPos() {
+            return pos;
+        }
 
     }
 
@@ -291,15 +322,14 @@ public class CropHelper {
         }
 
         @Override
-        public BlockPos getPos() {
-            return pos;
+        public String getIdentifier() {
+            return GROWABLE_CACTUS;
         }
 
         @Override
-        public void readFromNBT(CompoundNBT nbt) {}
-
-        @Override
-        public void writeToNBT(CompoundNBT nbt) {}
+        public BlockPos getPos() {
+            return pos;
+        }
     }
 
     public static class GrowableReedWrapper implements HarvestablePlant {
@@ -364,15 +394,14 @@ public class CropHelper {
         }
 
         @Override
-        public BlockPos getPos() {
-            return pos;
+        public String getIdentifier() {
+            return GROWABLE_REED;
         }
 
         @Override
-        public void readFromNBT(CompoundNBT nbt) {}
-
-        @Override
-        public void writeToNBT(CompoundNBT nbt) {}
+        public BlockPos getPos() {
+            return pos;
+        }
 
     }
 
@@ -385,15 +414,14 @@ public class CropHelper {
         }
 
         @Override
-        public BlockPos getPos() {
-            return pos;
+        public String getIdentifier() {
+            return GROWABLE;
         }
 
         @Override
-        public void readFromNBT(CompoundNBT nbt) {}
-
-        @Override
-        public void writeToNBT(CompoundNBT nbt) {}
+        public BlockPos getPos() {
+            return pos;
+        }
 
         @Override
         public boolean isValid(World world, boolean forceChunkLoad) {
