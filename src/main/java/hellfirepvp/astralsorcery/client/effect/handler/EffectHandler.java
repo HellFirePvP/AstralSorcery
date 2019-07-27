@@ -95,6 +95,7 @@ public final class EffectHandler {
             rView = Minecraft.getInstance().player;
         }
         if (rView == null) {
+            cleanUp();
             return;
         }
 

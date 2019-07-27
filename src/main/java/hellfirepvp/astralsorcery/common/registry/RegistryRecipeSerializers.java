@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.crafting.serializer.LiquidInfusionSerializer;
 import hellfirepvp.astralsorcery.common.crafting.serializer.WellRecipeSerializer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
@@ -29,6 +30,7 @@ public class RegistryRecipeSerializers {
 
     public static void init() {
         WELL_LIQUEFACTION_SERIALIZER = register(new WellRecipeSerializer());
+        LIQUID_INFUSION_SERIALIZER = register(new LiquidInfusionSerializer());
     }
 
     private static <C extends IInventory, R extends IRecipe<C>, T extends IRecipeSerializer<R>> T register(T serializer) {

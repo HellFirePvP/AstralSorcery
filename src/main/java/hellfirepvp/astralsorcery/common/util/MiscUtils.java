@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import com.google.common.collect.Iterables;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.GameRulesAS;
@@ -94,9 +95,10 @@ public class MiscUtils {
     }
 
     @Nullable
-    public static <T> T getRandomEntry(List<T> list, Random rand) {
-        if(list == null || list.isEmpty()) return null;
-        return list.get(rand.nextInt(list.size()));
+    public static <T> T getRandomEntry(Collection<T> collection, Random rand) {
+        if(collection == null || collection.isEmpty()) return null;
+        int index = rand.nextInt(collection.size());
+        return Iterables.get(collection, index);
     }
 
     @Nullable
@@ -137,6 +139,18 @@ public class MiscUtils {
             return defaultValue;
         }
         return world.canBlockSeeSky(at);
+    }
+
+    public static <T> Runnable apply(Consumer<T> func, Supplier<T> supply) {
+        return () -> func.accept(supply.get());
+    }
+
+    public static <T, R> Supplier<R> apply(Function<T, R> func, Supplier<T> supply) {
+        return () -> func.apply(supply.get());
+    }
+
+    public static <T, P, R> Function<P, R> apply(BiFunction<T, P, R> func, Supplier<T> supply) {
+        return p -> func.apply(supply.get(), p);
     }
 
     public static <K, V, N> Map<K, N> remap(Map<K, V> map, Function<V, N> remapFct) {

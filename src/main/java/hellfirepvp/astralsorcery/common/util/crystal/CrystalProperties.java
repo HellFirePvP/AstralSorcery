@@ -90,12 +90,13 @@ public class CrystalProperties {
         return prop;
     }
 
-    public void writeToNBT(CompoundNBT compound) {
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
         compound.putInt("size", size);
         compound.putInt("purity", purity);
         compound.putInt("collect", collectiveCapability);
         compound.putInt("fract", fractured);
         compound.putInt("sizeOverride", sizeOverride);
+        return compound;
     }
 
     public static CrystalProperties createStructural() {

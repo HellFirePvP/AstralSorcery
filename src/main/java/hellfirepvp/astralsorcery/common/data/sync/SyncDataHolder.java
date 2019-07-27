@@ -108,11 +108,11 @@ public class SyncDataHolder implements ITickHandler {
     }
 
     public static void initialize() {
-        //register(new DataActiveCelestials.Provider(DATA_CONSTELLATIONS));
+        //init(new DataActiveCelestials.Provider(DATA_CONSTELLATIONS));
         register(new DataLightConnections.Provider(DATA_LIGHT_CONNECTIONS));
         register(new DataLightBlockEndpoints.Provider(DATA_LIGHT_BLOCK_ENDPOINTS));
-        //register(new DataTimeFreezeEffects.Provider(DATA_TIME_FREEZE_EFFECTS));
-        //register(new DataPatreonFlares.Provider(DATA_PATREON_FLARES));
+        //init(new DataTimeFreezeEffects.Provider(DATA_TIME_FREEZE_EFFECTS));
+        //init(new DataPatreonFlares.Provider(DATA_PATREON_FLARES));
     }
 
     @Override

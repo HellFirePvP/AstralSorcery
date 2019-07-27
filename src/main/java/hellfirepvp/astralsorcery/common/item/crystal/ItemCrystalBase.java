@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,11 @@ public abstract class ItemCrystalBase extends Item implements CrystalPropertyIte
     @Override
     public CrystalProperties getProperties(ItemStack stack) {
         return CrystalProperties.getCrystalProperties(stack);
+    }
+
+    @Override
+    public void applyCrystalProperties(ItemStack stack, @Nonnull CrystalProperties prop) {
+        applyProperties(stack, prop);
     }
 
     public void applyProperties(ItemStack stack, CrystalProperties properties) {

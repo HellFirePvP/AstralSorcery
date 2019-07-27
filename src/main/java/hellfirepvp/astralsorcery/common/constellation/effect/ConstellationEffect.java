@@ -34,7 +34,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 05.06.2019 / 22:07
  */
-public abstract class ConstellationEffect extends ForgeRegistryEntry<ConstellationEffect> {
+public abstract class ConstellationEffect {
 
     protected static final Random rand = new Random();
 
@@ -44,7 +44,6 @@ public abstract class ConstellationEffect extends ForgeRegistryEntry<Constellati
     protected ConstellationEffect(@Nullable ILocatable origin, IWeakConstellation cst) {
         this.cst = cst;
         this.pos = origin;
-        this.setRegistryName(cst.getRegistryName());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -81,7 +80,7 @@ public abstract class ConstellationEffect extends ForgeRegistryEntry<Constellati
     public PlayerEntity getOwningPlayerInWorld(World world, BlockPos pos) {
         TileRitualPedestal pedestal = getPedestal(world, pos);
         if (pedestal != null) {
-            return pedestal.getOwner(world);
+            return pedestal.getOwner();
         }
         return null;
     }

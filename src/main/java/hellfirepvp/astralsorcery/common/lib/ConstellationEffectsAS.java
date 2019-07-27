@@ -6,27 +6,21 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.crystal;
+package hellfirepvp.astralsorcery.common.lib;
 
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import hellfirepvp.astralsorcery.common.constellation.effect.provider.CEffectProviderVicio;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CrystalPropertyItem
+ * Class: ConstellationEffectsAS
  * Created by HellFirePvP
- * Date: 21.07.2019 / 13:31
+ * Date: 27.07.2019 / 15:09
  */
-public interface CrystalPropertyItem {
+public class ConstellationEffectsAS {
 
-    int getMaxPropertySize(ItemStack stack);
+    private ConstellationEffectsAS() {}
 
-    @Nullable
-    CrystalProperties getProperties(ItemStack stack);
-
-    void applyCrystalProperties(ItemStack stack, @Nonnull CrystalProperties prop);
+    public static CEffectProviderVicio VICIO;
 
 }

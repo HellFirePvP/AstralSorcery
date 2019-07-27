@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry.internal;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.registry.*;
@@ -31,8 +32,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -66,6 +65,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(StructureType.class, this::registerStructureTypes);
         eventBus.addGenericListener(ObserverProvider.class, this::registerStructureProviders);
         eventBus.addGenericListener(KnowledgeFragment.class, this::registerKnowledgeFragments);
+        eventBus.addGenericListener(ConstellationEffectProvider.class, this::registerConstellationEffects);
     }
 
     //This exists because you can't sort registries in any fashion or make one load after another in forge.
@@ -122,6 +122,11 @@ public class PrimerEventHandler {
 
     private void registerPerks(RegistryEvent.Register<AbstractPerk> event) {
         //RegistryPerks.init();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerConstellationEffects(RegistryEvent.Register<ConstellationEffectProvider> event) {
+        RegistryConstellationEffects.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

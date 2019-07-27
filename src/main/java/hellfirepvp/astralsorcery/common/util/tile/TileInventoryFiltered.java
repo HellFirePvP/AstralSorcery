@@ -96,8 +96,16 @@ public class TileInventoryFiltered extends TileInventory {
         return super.extractItem(slot, amount, simulate);
     }
 
+    public boolean canInsertItem(int slot, ItemStack toAdd) {
+        return this.canInsertItem(slot, toAdd, this.getStackInSlot(slot));
+    }
+
     private boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
         return inputFilter == null || inputFilter.canInsert(slot, toAdd, existing);
+    }
+
+    public boolean canExtractItem(int slot, int amount) {
+        return this.canExtractItem(slot, amount, this.getStackInSlot(slot));
     }
 
     private boolean canExtractItem(int slot, int amount, @Nonnull ItemStack existing) {

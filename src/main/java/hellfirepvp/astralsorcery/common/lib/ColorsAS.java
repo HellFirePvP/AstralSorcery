@@ -32,6 +32,7 @@ public class ColorsAS {
 
     public static final Color RITUAL_CONSTELLATION_ARMARA  = new Color(201, 30, 0);
     public static final Color RITUAL_CONSTELLATION_LUCERNA = new Color(255, 255, 127);
+    public static final Color RITUAL_CONSTELLATION_VICIO   = new Color(200, 200, 255);
 
     public static final Color CONSTELLATION_DISCIDIA   = new Color(0xE01903);
     public static final Color CONSTELLATION_ARMARA     = new Color(0xB7BBB8);

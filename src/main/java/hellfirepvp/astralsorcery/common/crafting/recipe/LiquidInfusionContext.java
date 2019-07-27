@@ -6,27 +6,15 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.crystal;
-
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+package hellfirepvp.astralsorcery.common.crafting.recipe;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CrystalPropertyItem
+ * Class: LiquidInfusionContext
  * Created by HellFirePvP
- * Date: 21.07.2019 / 13:31
+ * Date: 26.07.2019 / 21:29
  */
-public interface CrystalPropertyItem {
-
-    int getMaxPropertySize(ItemStack stack);
-
-    @Nullable
-    CrystalProperties getProperties(ItemStack stack);
-
-    void applyCrystalProperties(ItemStack stack, @Nonnull CrystalProperties prop);
+public class LiquidInfusionContext {
 
 }

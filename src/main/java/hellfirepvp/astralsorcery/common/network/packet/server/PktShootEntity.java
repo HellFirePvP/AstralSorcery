@@ -105,7 +105,6 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
 
                                 FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                                         .spawn(at)
-                                        .setGravityStrength(0.004F)
                                         .alpha(VFXAlphaFunction.FADE_OUT)
                                         .setAlphaMultiplier(1F)
                                         .setScaleMultiplier(0.35F + rand.nextFloat() * 0.2F)

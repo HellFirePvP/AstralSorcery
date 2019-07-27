@@ -51,7 +51,7 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
             lastUpdateTick = ticksExisted;
 
             boolean prevSky = doesSeeSky;
-            boolean newSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky);
+            boolean newSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos().up(), true, this.doesSeeSky);
             if (prevSky != newSky) {
                 notifySkyStateUpdate(prevSky, newSky);
                 doesSeeSky = newSky;

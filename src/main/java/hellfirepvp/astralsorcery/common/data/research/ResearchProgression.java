@@ -56,7 +56,7 @@ public enum ResearchProgression {
         for (ResearchNode node : researchNodes) {
             if(node.renderPosX == res.renderPosX &&
                     node.renderPosZ == res.renderPosZ) {
-                throw new IllegalArgumentException("Tried to register 2 Research Nodes at the same position at x=" + res.renderPosX + ", z=" + res.renderPosZ + "! " +
+                throw new IllegalArgumentException("Tried to init 2 Research Nodes at the same position at x=" + res.renderPosX + ", z=" + res.renderPosZ + "! " +
                         "Present: " + node.getUnLocalizedName() + " - Tried to set: " + res.getUnLocalizedName());
             }
         }
