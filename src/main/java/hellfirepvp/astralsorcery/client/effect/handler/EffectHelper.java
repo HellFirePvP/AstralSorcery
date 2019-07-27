@@ -9,10 +9,16 @@
 package hellfirepvp.astralsorcery.client.effect.handler;
 
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
+import hellfirepvp.astralsorcery.client.effect.EffectType;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.source.FXSource;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.util.math.Vec3i;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,6 +41,26 @@ public final class EffectHelper {
 
         public Builder(BatchRenderContext<T> ctx) {
             super(ctx);
+        }
+
+        @Override
+        public Builder<T> setOwner(@Nullable UUID owner) {
+            return super.setOwner(owner);
+        }
+
+        @Override
+        public Builder<T> setType(@Nullable EffectType type) {
+            return super.setType(type);
+        }
+
+        @Override
+        public Builder<T> setPosition(@Nonnull Vec3i position) {
+            return super.setPosition(position);
+        }
+
+        @Override
+        public Builder<T> setIgnoreLimit(boolean ignoreLimit) {
+            return super.setIgnoreLimit(ignoreLimit);
         }
 
         public T spawn(Vector3 spawnPos) {

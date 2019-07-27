@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.constellation.effect.provider.CEffectProviderVicio;
+import hellfirepvp.astralsorcery.common.constellation.effect.provider.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,6 +21,7 @@ public class ConstellationEffectsAS {
 
     private ConstellationEffectsAS() {}
 
-    public static CEffectProviderVicio VICIO;
+    public static CEffectProviderAevitas AEVITAS;
+    public static CEffectProviderVicio   VICIO;
 
 }

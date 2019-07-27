@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
-import com.google.common.collect.Sets;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import net.minecraft.util.ResourceLocation;
@@ -39,9 +38,9 @@ public class ConstellationRegistry {
         } else if (constellation instanceof IMinorConstellation) {
             minorConstellations.add((IMinorConstellation) constellation);
         } else {
-            AstralSorcery.log.warn("Tried to init constellation that's neither minor nor major or weak: " + constellation.toString());
+            AstralSorcery.log.warn("Tried to register constellation that's neither minor nor major or weak: " + constellation.toString());
             AstralSorcery.log.warn("Skipping specific constellation registration...");
-            throw new IllegalStateException("Tried to init non-minor, non-weak and non-major constellation.");
+            throw new IllegalArgumentException("Tried to register non-minor, non-weak and non-major constellation.");
         }
         if (constellation instanceof IConstellationSpecialShowup) {
             specialShowupConstellations.add((IConstellationSpecialShowup) constellation);

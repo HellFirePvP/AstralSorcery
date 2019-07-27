@@ -18,10 +18,12 @@ import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
@@ -37,6 +39,7 @@ import java.util.Random;
 public abstract class ConstellationEffect {
 
     protected static final Random rand = new Random();
+    protected static final AxisAlignedBB BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
     private final IWeakConstellation cst;
     private final ILocatable pos;
@@ -87,10 +90,28 @@ public abstract class ConstellationEffect {
 
     public static abstract class Config extends ConfigEntry {
 
-        public Config(String constellationName) {
+        private final double defaultRange;
+        private final double defaultRangePerLens;
+
+        public ForgeConfigSpec.DoubleValue range;
+        public ForgeConfigSpec.DoubleValue rangePerLens;
+
+        public Config(String constellationName, double defaultRange, double defaultRangePerLens) {
             super(String.format("constellation.effect.%s", constellationName));
+            this.defaultRange = defaultRange;
+            this.defaultRangePerLens = defaultRangePerLens;
         }
 
+        @Override
+        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+            this.range = cfgBuilder
+                    .comment("Defines the radius (in blocks) in which the ritual will allow the players to fly in.")
+                    .translation(translationKey("range"))
+                    .defineInRange("range", this.defaultRange, 1, 512);
+            this.rangePerLens = cfgBuilder
+                    .comment("Defines the increase in radius the ritual will get per active lens enhancing the ritual.")
+                    .translation(translationKey("rangePerLens"))
+                    .defineInRange("rangePerLens", this.defaultRangePerLens, 0, 128);
+        }
     }
-
 }

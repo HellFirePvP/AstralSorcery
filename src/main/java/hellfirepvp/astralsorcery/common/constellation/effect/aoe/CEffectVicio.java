@@ -45,7 +45,7 @@ import java.util.List;
  */
 public class CEffectVicio extends ConstellationEffect implements ConstellationEffectStatus {
 
-    private static final AxisAlignedBB BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
+    public static VicioConfig CONFIG = new VicioConfig();
 
     public CEffectVicio(@Nullable ILocatable origin) {
         super(origin, ConstellationsAS.vicio);
@@ -53,7 +53,7 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
 
     @Override
     public ConstellationEffectProperties createProperties(int mirrors) {
-        return new ConstellationEffectProperties(VicioConfig.RANGE.get() + mirrors * VicioConfig.RANGE_PER_LENS.get());
+        return new ConstellationEffectProperties(CONFIG.range.get() + mirrors * CONFIG.rangePerLens.get());
     }
 
     @Override
@@ -119,28 +119,10 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
         return foundPlayer;
     }
 
-    public static class VicioConfig extends Config {
+    private static class VicioConfig extends Config {
 
-        public static ForgeConfigSpec.DoubleValue RANGE;
-        public static ForgeConfigSpec.DoubleValue RANGE_PER_LENS;
-
-        public VicioConfig() {
-            super("vicio");
+        private VicioConfig() {
+            super("vicio", 24D, 16D);
         }
-
-        @Override
-        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
-            RANGE = cfgBuilder
-                    .comment("Defines the radius (in blocks) in which the ritual will allow the players to fly in.")
-                    .translation(translationKey("range"))
-                    .defineInRange("range", 24D, 1, 512);
-
-            RANGE_PER_LENS = cfgBuilder
-                    .comment("Defines the increase in radius the ritual will get per active lens enhancing the ritual.")
-                    .translation(translationKey("rangePerLens"))
-                    .defineInRange("rangePerLens", 16D, 1, 128);
-        }
-
     }
-
 }

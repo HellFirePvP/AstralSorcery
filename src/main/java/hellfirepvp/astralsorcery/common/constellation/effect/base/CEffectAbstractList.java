@@ -20,6 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -45,7 +46,11 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         this.verifier = verifier;
     }
 
-    public abstract T createElement(@Nullable World world, BlockPos pos);
+    @Nullable
+    public abstract T recreateElement(CompoundNBT tag, BlockPos pos);
+
+    @Nullable
+    public abstract T createElement(World world, BlockPos pos);
 
     public int getCount() {
         return this.elements.size();
@@ -109,9 +114,10 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         for (INBT nbt : list) {
             CompoundNBT tag = (CompoundNBT) nbt;
             BlockPos pos = NBTHelper.readBlockPosFromNBT(tag);
-            T element = this.createElement(null, pos);
+            CompoundNBT tagData = tag.getCompound("data");
+            T element = this.recreateElement(tagData, pos);
             if (element != null) {
-                element.readFromNBT(tag.getCompound("data"));
+                element.readFromNBT(tagData);
                 this.elements.add(element);
             }
         }
@@ -143,6 +149,28 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
 
         public void readFromNBT(CompoundNBT nbt);
 
+    }
+
+    public static class CountConfig extends Config {
+
+        private final int defaultMaxAmount;
+
+        public ForgeConfigSpec.IntValue maxAmount;
+
+        public CountConfig(String constellationName, double defaultRange, double defaultRangePerLens, int defaultMaxAmount) {
+            super(constellationName, defaultRange, defaultRangePerLens);
+            this.defaultMaxAmount = defaultMaxAmount;
+        }
+
+        @Override
+        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+            super.createEntries(cfgBuilder);
+
+            this.maxAmount = cfgBuilder
+                    .comment("Defines the amount of blocks this ritual will try to capture at most.")
+                    .translation(translationKey("maxAmount"))
+                    .defineInRange("maxAmount", this.defaultMaxAmount, 1, 2048);
+        }
     }
 
 }

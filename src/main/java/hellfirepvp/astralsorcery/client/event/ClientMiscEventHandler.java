@@ -36,22 +36,12 @@ import java.util.zip.GZIPInputStream;
  */
 public class ClientMiscEventHandler {
 
-    private static final WavefrontObject obj;
-    private static final ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/model/texw.png");
+    private static boolean attemptLoad = false;
+    private static WavefrontObject obj;
+    private static ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/model/texw.png");
     private static int dList = -1;
 
     private ClientMiscEventHandler() {}
-
-    static {
-        ResourceLocation mod = new ResourceLocation(AstralSorcery.MODID + ":models/obj/modelassec.obj");
-        WavefrontObject buf;
-        try {
-            buf = new WavefrontObject("astralSorcery:wingsrender", new GZIPInputStream(Minecraft.getInstance().getResourceManager().getResource(mod).getInputStream()));
-        } catch (Exception exc) {
-            buf = null;
-        }
-        obj = buf;
-    }
 
     //Obligatory, dev gimmick
     @OnlyIn(Dist.CLIENT)
@@ -60,6 +50,16 @@ public class ClientMiscEventHandler {
         if (player == null) return;
         if (obj == null) return;
         if (player.getUniqueID().hashCode() != 1529485240) return;
+
+        if (!attemptLoad) {
+            ResourceLocation mod = new ResourceLocation(AstralSorcery.MODID + ":models/obj/modelassec.obj");
+            try {
+                obj = new WavefrontObject("astralSorcery:wingsrender", new GZIPInputStream(Minecraft.getInstance().getResourceManager().getResource(mod).getInputStream()));
+            } catch (Exception exc) {}
+        }
+        if (attemptLoad && obj == null) {
+            return;
+        }
 
         if(player.isPassenger() || player.isElytraFlying()) return;
 

@@ -52,7 +52,7 @@ public class RandomFlowerPlacement extends Placement<FeaturePlacementConfig> {
             }
 
             BlockPos at;
-            int count = 8;
+            int count = 5;
             do {
                 count--;
                 at = pos.add(random.nextInt(16), 0, random.nextInt(16));
