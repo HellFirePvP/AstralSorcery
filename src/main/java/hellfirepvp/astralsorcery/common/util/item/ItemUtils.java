@@ -184,7 +184,9 @@ public class ItemUtils {
         if (worldIn.isRemote) return;
         for (int i = 0; i < handle.getSlots(); i++) {
             ItemStack stack = handle.getStackInSlot(i);
-            if (stack.isEmpty()) continue;
+            if (stack.isEmpty()) {
+                continue;
+            }
             dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
         }
     }

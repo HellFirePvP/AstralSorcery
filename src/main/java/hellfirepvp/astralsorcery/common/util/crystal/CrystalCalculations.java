@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.util.crystal;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.HashMap;
@@ -26,18 +27,18 @@ public class CrystalCalculations {
 
     private static Map<IConstellation, Float> fractureModifierMap = new HashMap<IConstellation, Float>() {
         {
-            //put(Constellations.aevitas,     0.001F);
-            //put(Constellations.discidia,    0.005F);
-            //put(Constellations.evorsio,     0.001F);
-            //put(Constellations.armara,      0.001F);
-            //put(Constellations.vicio,       0.001F);
-            //put(Constellations.lucerna,     0.0007F);
-            //put(Constellations.bootes,      0.1F);
-            //put(Constellations.mineralis,   0.007F);
-            //put(Constellations.octans,      0.1F);
-            //put(Constellations.pelotrio,    4F);
-            //put(Constellations.horologium,  0.0007F);
-            //put(Constellations.fornax,      0.009F);
+            put(ConstellationsAS.aevitas,     0.001F);
+            put(ConstellationsAS.discidia,    0.005F);
+            put(ConstellationsAS.evorsio,     0.001F);
+            put(ConstellationsAS.armara,      0.001F);
+            put(ConstellationsAS.vicio,       0.001F);
+            put(ConstellationsAS.lucerna,     0.0007F);
+            put(ConstellationsAS.bootes,      0.1F);
+            put(ConstellationsAS.mineralis,   0.007F);
+            put(ConstellationsAS.octans,      0.1F);
+            put(ConstellationsAS.pelotrio,    4F);
+            put(ConstellationsAS.horologium,  0.0007F);
+            put(ConstellationsAS.fornax,      0.009F);
         }
     };
 

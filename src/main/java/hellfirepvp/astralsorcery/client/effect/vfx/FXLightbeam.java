@@ -52,6 +52,9 @@ public class FXLightbeam extends EntityVisualFX {
         float g = c.getGreen() / 255F;
         float b = c.getBlue() / 255F;
         float a = this.getAlpha(pTicks);
+        r *= a;
+        g *= a;
+        b *= a;
         float scale = this.getScale(pTicks);
 
         renderCurrentTextureAroundAxis(buf, ctx, Math.toRadians(0F), scale, r, g, b, a);
@@ -61,8 +64,8 @@ public class FXLightbeam extends EntityVisualFX {
 
     private <T extends EntityVisualFX> void renderCurrentTextureAroundAxis(BufferBuilder buf, BatchRenderContext<T> ctx, double angle, float scale, float r, float g, float b, float a) {
         Vector3 perp = aimPerp.clone().rotate(angle, aim).normalize();
-        Vector3 perpFrom = perp.clone().multiply(fromSize * scale);
-        Vector3 perpTo = perp.multiply(toSize * scale);
+        Vector3 perpTo = perp.clone().multiply(toSize * scale);
+        Vector3 perpFrom = perp.multiply(fromSize * scale);
 
         SpriteSheetResource ssr = ctx.getSprite();
         Tuple<Double, Double> uvOffset = ssr.getUVOffset(age);
@@ -71,13 +74,13 @@ public class FXLightbeam extends EntityVisualFX {
         double uWidth = ssr.getULength();
         double vHeight = ssr.getVLength();
 
-        Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
+        Vector3 vec = to.clone().add(perpTo.clone().multiply(-1));
         vec.drawPos(buf).tex(u,          v + vHeight)            .color(r, g, b, a).endVertex();
-        vec = from.clone().add(perpFrom);
-        vec.drawPos(buf).tex(u + uWidth, v + vHeight).color(r, g, b, a).endVertex();
         vec = to.clone().add(perpTo);
+        vec.drawPos(buf).tex(u + uWidth, v + vHeight).color(r, g, b, a).endVertex();
+        vec = from.clone().add(perpFrom);
         vec.drawPos(buf).tex(u + uWidth, v)                      .color(r, g, b, a).endVertex();
-        vec = to.clone().add(perpTo.clone().multiply(-1));
+        vec = from.clone().add(perpFrom.clone().multiply(-1));
         vec.drawPos(buf).tex(u,          v)                                  .color(r, g, b, a).endVertex();
     }
 

@@ -220,10 +220,11 @@ public class NBTHelper {
         return compound.contains(tag) ? compound.getLong(tag) : defaultValue;
     }
 
-    public static void writeBlockPosToNBT(BlockPos pos, CompoundNBT compound) {
+    public static CompoundNBT writeBlockPosToNBT(BlockPos pos, CompoundNBT compound) {
         compound.putInt("bposX", pos.getX());
         compound.putInt("bposY", pos.getY());
         compound.putInt("bposZ", pos.getZ());
+        return compound;
     }
 
     public static BlockPos readBlockPosFromNBT(CompoundNBT compound) {
@@ -239,10 +240,11 @@ public class NBTHelper {
         return cmp;
     }
 
-    public static void writeVector3(Vector3 v, CompoundNBT compound) {
+    public static CompoundNBT writeVector3(Vector3 v, CompoundNBT compound) {
         compound.putDouble("vecPosX", v.getX());
         compound.putDouble("vecPosY", v.getY());
         compound.putDouble("vecPosZ", v.getZ());
+        return compound;
     }
 
     public static Vector3 readVector3(CompoundNBT compound) {
@@ -252,13 +254,14 @@ public class NBTHelper {
                 compound.getDouble("vecPosZ"));
     }
 
-    public static void writeBoundingBox(AxisAlignedBB box, CompoundNBT tag) {
+    public static CompoundNBT writeBoundingBox(AxisAlignedBB box, CompoundNBT tag) {
         tag.putDouble("boxMinX", box.minX);
         tag.putDouble("boxMinY", box.minY);
         tag.putDouble("boxMinZ", box.minZ);
         tag.putDouble("boxMaxX", box.maxX);
         tag.putDouble("boxMaxY", box.maxY);
         tag.putDouble("boxMaxZ", box.maxZ);
+        return tag;
     }
 
     public static AxisAlignedBB readBoundingBox(CompoundNBT tag) {

@@ -74,7 +74,7 @@ public class PerkTree {
     private PointConnector setPoint(AbstractPerk perk) throws IllegalArgumentException {
         PerkTreePoint<?> offsetPoint = perk.getPoint();
         if (this.treePoints.contains(offsetPoint)) {
-            throw new IllegalArgumentException("Tried to register perk-point at already placed position: " + offsetPoint.getOffset().toString());
+            throw new IllegalArgumentException("Tried to init perk-point at already placed position: " + offsetPoint.getOffset().toString());
         }
         this.treePoints.add(offsetPoint);
         return new PointConnector(perk);
