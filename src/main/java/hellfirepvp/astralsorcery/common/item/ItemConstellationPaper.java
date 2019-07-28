@@ -126,7 +126,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor {
                 }
             }
             if (!has) {
-                if (ResearchManager.memorizeConstellation(cst, (PlayerEntity) entity)) {
+                if (cst.canDiscover((PlayerEntity) entity, progress) && ResearchManager.memorizeConstellation(cst, (PlayerEntity) entity)) {
                     entity.sendMessage(
                             new TranslationTextComponent("progress.seen.constellation.chat",
                                     new TranslationTextComponent(cst.getUnlocalizedName())

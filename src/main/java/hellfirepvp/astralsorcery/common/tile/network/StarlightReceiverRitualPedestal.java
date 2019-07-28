@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
@@ -237,7 +238,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         this.ritualLinkPos = trp.getRitualLinkTo();
 
         if (this.channelingType != null && this.properties != null && this.hasMultiblock && this.effect == null) {
-            this.effect = this.channelingType.getRitualEffect(this);
+            this.effect = ConstellationEffectRegistry.createInstance(this, this.channelingType);
             this.needsTileSync = true;
         }
 
@@ -395,7 +396,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
 
         //Reset ritual effect.
         if (this.channelingType != null) {
-            this.effect = this.channelingType.getRitualEffect(this);
+            this.effect = ConstellationEffectRegistry.createInstance(this, this.channelingType);
             if (this.effect != null && compound.contains("effect")) {
                 this.effect.readFromNBT(compound.getCompound("effect"));
             }

@@ -210,12 +210,6 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
             super(name, color);
         }
 
-        @Nullable
-        @Override
-        public ConstellationEffect getRitualEffect(ILocatable origin) {
-            return ConstellationEffectRegistry.createInstance(origin, this);
-        }
-
         @Override
         public boolean canDiscover(PlayerEntity player, PlayerProgress progress) {
             return super.canDiscover(player, progress) &&
