@@ -86,6 +86,8 @@ public final class EffectHandler {
     void tick() {
         if (this.cleanRequested) {
             this.toAddBuffer.clear();
+            this.toAddSources.clear();
+            this.activeSources.clear();
             this.effectMap.values().forEach(List::clear);
             this.cleanRequested = false;
         }

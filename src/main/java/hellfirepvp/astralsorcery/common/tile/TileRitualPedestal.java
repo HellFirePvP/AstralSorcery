@@ -306,6 +306,12 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                 .collect(Collectors.toMap(tpl -> tpl.getA(), tpl -> tpl.getB()));
     }
 
+    public int getMirrorCount() {
+        return (int) this.offsetMirrors.values().stream()
+                .filter(b -> b)
+                .count();
+    }
+
     public boolean isFullyEnhanced() {
         return this.working && this.offsetMirrors.size() == MAX_MIRROR_COUNT;
     }

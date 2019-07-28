@@ -33,10 +33,13 @@ public class EventHelperRitualFlight {
         }
     }, TickEvent.Type.SERVER);
 
+    private EventHelperRitualFlight() {}
+
     public static void clearServer() {
         ritualFlight.clear();
     }
 
+    //TODO disconnect
     public static void onDisconnect(ServerPlayerEntity player) {
         ritualFlight.remove(player);
     }

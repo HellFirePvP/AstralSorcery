@@ -31,15 +31,11 @@ import java.util.function.Predicate;
  */
 public abstract class ConstellationEffectEntityCollect<T extends Entity> extends ConstellationEffect {
 
-    private static final AxisAlignedBB BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
+    private final Class<T> entityClazz;
+    private final Predicate<T> filter;
 
-    protected final Class<T> entityClazz;
-    protected final Predicate<T> filter;
-    protected final double radius;
-
-    protected ConstellationEffectEntityCollect(@Nullable ILocatable origin, IWeakConstellation cst, double range, Class<T> entityClazz, Predicate<T> filter) {
+    protected ConstellationEffectEntityCollect(@Nullable ILocatable origin, IWeakConstellation cst, Class<T> entityClazz, Predicate<T> filter) {
         super(origin, cst);
-        this.radius = range;
         this.filter = filter;
         this.entityClazz = entityClazz;
     }

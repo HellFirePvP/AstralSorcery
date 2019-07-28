@@ -73,6 +73,7 @@ public class PrimerEventHandler {
     private void registerRemainingData() {
         RegistryConstellations.init();
         RegistryConstellations.initConstellationSignatures();
+        RegistryConstellationEffects.init();
 
         RegistryStructures.registerStructures();
         RegistryKnowledgeFragments.init();
@@ -126,7 +127,6 @@ public class PrimerEventHandler {
     }
 
     private void registerConstellationEffects(RegistryEvent.Register<ConstellationEffectProvider> event) {
-        RegistryConstellationEffects.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

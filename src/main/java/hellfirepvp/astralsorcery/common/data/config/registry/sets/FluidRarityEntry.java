@@ -9,7 +9,9 @@
 package hellfirepvp.astralsorcery.common.data.config.registry.sets;
 
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataSet;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,50 +25,36 @@ import javax.annotation.Nullable;
  */
 public class FluidRarityEntry implements ConfigDataSet {
 
-    private final String fluidNameTmp;
-    public final Fluid fluid;
+    private final ResourceLocation fluidName;
     public final int guaranteedAmount, additionalRandomAmount, rarity;
 
-    public FluidRarityEntry(String fluidNameTmp, int rarity, int guaranteedAmount, int additionalRandomAmount) {
-        this.fluidNameTmp = fluidNameTmp;
-        this.fluid = null;
+    public FluidRarityEntry(ResourceLocation fluidName, int rarity, int guaranteedAmount, int additionalRandomAmount) {
+        this.fluidName = fluidName;
         this.rarity = rarity;
         this.guaranteedAmount = guaranteedAmount;
         this.additionalRandomAmount = additionalRandomAmount;
     }
 
-    public FluidRarityEntry(Fluid fluid, int rarity, int guaranteedAmount, int additionalRandomAmount) {
-        this.fluidNameTmp = null;
-        this.fluid = fluid;
-        this.rarity = rarity;
-        this.guaranteedAmount = guaranteedAmount;
-        this.additionalRandomAmount = additionalRandomAmount;
+    public Fluid getFluid() {
+        return ForgeRegistries.FLUIDS.getValue(this.fluidName);
     }
 
     @Nonnull
     @Override
     public String serialize() {
-        StringBuilder sb = new StringBuilder();
-        if(fluid == null) {
-            if(fluidNameTmp != null) {
-                sb.append(fluidNameTmp);
-            } else {
-                sb.append("water");
-            }
-        } else {
-            sb.append(fluid.getName());
-        }
-        sb.append(";").append(guaranteedAmount).append(";").append(additionalRandomAmount).append(";").append(rarity);
-        return sb.toString();
+        return fluidName + ";" + guaranteedAmount + ";" + additionalRandomAmount + ";" + rarity;
     }
 
     @Nullable
-    public static FluidRarityEntry deserialize(String str) {
+    public static FluidRarityEntry deserialize(String str) throws IllegalArgumentException {
         String[] split = str.split(";");
         if(split.length != 4) {
             return null;
         }
-        String fluidName = split[0];
+        ResourceLocation fluidName = new ResourceLocation(split[0]);
+        if (ForgeRegistries.FLUIDS.getValue(fluidName) == null) {
+            throw new IllegalArgumentException("Unknown Fluid: " + fluidName);
+        }
         String strGAmount = split[1];
         String strRAmount = split[2];
         String strRarity = split[3];
