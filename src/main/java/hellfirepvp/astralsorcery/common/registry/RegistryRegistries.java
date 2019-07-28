@@ -40,9 +40,6 @@ public class RegistryRegistries {
         REGISTRY_CONSTELLATION_EFFECT = new RegistryBuilder<ConstellationEffectProvider>()
                 .setName(REGISTRY_NAME_CONSTELLATION_EFFECTS)
                 .setType(ConstellationEffectProvider.class)
-                .add((IForgeRegistry.AddCallback<ConstellationEffectProvider>) (owner, stage, id, obj, oldObj) -> {
-                    DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ConstellationEffectRegistry.createClientInstance(obj));
-                })
                 .disableSaving()
                 .disableOverrides()
                 .create();

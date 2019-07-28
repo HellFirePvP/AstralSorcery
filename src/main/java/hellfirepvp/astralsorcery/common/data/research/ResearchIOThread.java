@@ -82,9 +82,6 @@ public class ResearchIOThread extends TimerTask implements ServerLifecycleListen
         inSave = true;
         for (Map.Entry<UUID, PlayerProgress> entry : playerSaveQueue.entrySet()) {
             saveNow(entry.getKey(), entry.getValue());
-            if (skipTick) {
-                return;
-            }
         }
         playerSaveQueue.clear();
         inSave = false;

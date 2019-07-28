@@ -48,12 +48,8 @@ public class ConstellationEffectRegistry {
         return null;
     }
 
-    public static void createClientInstance(ConstellationEffectProvider provider) {
-        clientEffectInstances.put(provider.getConstellation(), provider.createEffect(null));
-    }
-
     @Nullable
     public static ConstellationEffect getClientEffect(IWeakConstellation cst) {
-        return clientEffectInstances.get(cst);
+        return clientEffectInstances.computeIfAbsent(cst, c -> ConstellationEffectRegistry.createInstance(null, c));
     }
 }
