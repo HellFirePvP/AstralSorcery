@@ -21,12 +21,14 @@ import hellfirepvp.astralsorcery.common.data.config.entry.*;
 import hellfirepvp.astralsorcery.common.data.config.CommonConfig;
 import hellfirepvp.astralsorcery.common.data.config.entry.common.CommonGeneralConfig;
 import hellfirepvp.astralsorcery.common.data.config.registry.FluidRarityRegistry;
+import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegistry;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerIO;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
@@ -104,6 +106,7 @@ public class CommonProxy {
         this.serverLifecycleListeners.add(ResearchIOThread.startup());
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(ResearchHelper::saveAndClearServerCache));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperRitualFlight::clearServer));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperSpawnDeny::clearServer));
     }
 
     public void attachLifecycle(IEventBus modEventBus) {
@@ -123,7 +126,8 @@ public class CommonProxy {
 
         eventBus.addListener(BlockDropCaptureAssist.INSTANCE::onDrop);
 
-        EventHandlerIO.init(eventBus);
+        EventHandlerIO.attachListeners(eventBus);
+        EventHelperSpawnDeny.attachListeners(eventBus);
 
         tickManager.attachListeners(eventBus);
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);
@@ -138,10 +142,12 @@ public class CommonProxy {
         registrar.accept(SkyHandler.getInstance());
 
         EventHelperRitualFlight.attachTickListener(registrar);
+        EventHelperSpawnDeny.attachTickListener(registrar);
     }
 
     protected void initializeConfigurations() {
         ConfigRegistries.getRegistries().addDataRegistry(FluidRarityRegistry.INSTANCE);
+        ConfigRegistries.getRegistries().addDataRegistry(TechnicalEntityRegistry.INSTANCE);
 
         this.serverConfig.addConfigEntry(GeneralConfig.CONFIG);
         this.serverConfig.addConfigEntry(ToolsConfig.CONFIG);

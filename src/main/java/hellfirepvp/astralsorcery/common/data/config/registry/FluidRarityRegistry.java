@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.data.config.registry;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.FluidRarityEntry;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -29,8 +30,8 @@ public class FluidRarityRegistry extends ConfigDataAdapter<FluidRarityEntry> {
     @Override
     public List<FluidRarityEntry> getDefaultValues() {
         return Lists.newArrayList(
-                new FluidRarityEntry("water", 14000, Integer.MAX_VALUE, Integer.MAX_VALUE),
-                new FluidRarityEntry("lava", 7500, 4_000_000, 1_000_000)
+                new FluidRarityEntry(new ResourceLocation("minecraft", "water"), 14000, Integer.MAX_VALUE, Integer.MAX_VALUE),
+                new FluidRarityEntry(new ResourceLocation("minecraft", "lava"), 7500, 4_000_000, 1_000_000)
         );
     }
 
@@ -51,7 +52,7 @@ public class FluidRarityRegistry extends ConfigDataAdapter<FluidRarityEntry> {
     }
 
     @Override
-    public FluidRarityEntry deserialize(String string) {
+    public FluidRarityEntry deserialize(String string) throws IllegalArgumentException {
         return FluidRarityEntry.deserialize(string);
     }
 

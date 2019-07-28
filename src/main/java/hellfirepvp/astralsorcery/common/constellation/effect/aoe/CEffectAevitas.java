@@ -156,7 +156,7 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
             super.createEntries(cfgBuilder);
 
             this.potionAmplifier = cfgBuilder
-                    .comment("Set the amplifier for the regeneration potion effect.")
+                    .comment("Set the amplifier for the potion effects this ritual provides.")
                     .translation(translationKey("potionAmplifier"))
                     .defineInRange("potionAmplifier", this.defaultPotionAmplifier, 0, 10);
         }

@@ -32,7 +32,7 @@ public class FXOrbitalArmara extends FXSourceOrbital<FXFacingParticle, BatchRend
     private static final VFXColorFunction<FXFacingParticle> armaraPrimary =
             VFXColorFunction.constant(ColorsAS.RITUAL_CONSTELLATION_ARMARA);
     private static final VFXColorFunction<FXFacingParticle> armaraSecondary =
-            VFXColorFunction.constant(new Color(80, 0, 150));
+            VFXColorFunction.constant(ColorsAS.RITUAL_CONSTELLATION_ARMARA_SECONDARY);
 
     private int count = 2 + rand.nextInt(2);
 

@@ -83,6 +83,11 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
     }
 
     @Override
+    public boolean playEffect(World world, BlockPos pos, ConstellationEffectProperties properties, @Nullable IMinorConstellation trait) {
+        return false;
+    }
+
+    @Override
     public boolean runEffect(World world, BlockPos pos, int mirrorAmount, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         boolean foundPlayer = false;
         double range = modified.getSize();

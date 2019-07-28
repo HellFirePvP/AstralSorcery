@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.config.base;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -28,6 +29,8 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
     private ForgeConfigSpec.ConfigValue<List<? extends String>> registryStore = null;
     private final ModConfig.Type registryConfigType;
 
+    private List<T> configuredValues = null;
+
     public ConfigDataAdapter() {
         this(ModConfig.Type.SERVER);
     }
@@ -45,14 +48,24 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
     }
 
     public List<T> getConfiguredValues() {
-        List<T> created = new ArrayList<>();
-        for (String str : registryStore.get()) {
-            T val = deserialize(str);
-            if (val != null) {
-                created.add(val);
+        if (configuredValues == null) {
+            configuredValues = new ArrayList<>();
+            for (String str : registryStore.get()) {
+                T val;
+                try {
+                    val = deserialize(str);
+                } catch (IllegalArgumentException exc) {
+                    AstralSorcery.log.error("Skipping configured entry in " + this.getFileName() + "!");
+                    AstralSorcery.log.error(exc.getMessage());
+                    continue;
+                }
+                if (val != null) {
+                    configuredValues.add(val);
+                }
             }
         }
-        return created;
+
+        return configuredValues;
     }
 
     public abstract List<T> getDefaultValues();
@@ -70,6 +83,6 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
     }
 
     @Nullable
-    public abstract T deserialize(String string);
+    public abstract T deserialize(String string) throws IllegalArgumentException;
 
 }

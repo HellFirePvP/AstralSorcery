@@ -50,16 +50,14 @@ public abstract class ConstellationEffect {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float alphaMultiplier, boolean extended) {}
+    public abstract void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float alphaMultiplier, boolean extended);
 
-    public boolean playEffect(World world, BlockPos pos, ConstellationEffectProperties properties, @Nullable IMinorConstellation trait) {
-        return false;
-    }
+    public abstract boolean playEffect(World world, BlockPos pos, ConstellationEffectProperties properties, @Nullable IMinorConstellation trait) ;
 
     @Nullable
     public TileRitualPedestal getPedestal(World world, BlockPos pos) {
         TileEntity te = MiscUtils.getTileAt(world, pos, TileEntity.class, false);
-        if(te instanceof TileRitualLink) {
+        if (te instanceof TileRitualLink) {
             TileRitualLink link = (TileRitualLink) te;
             pos = link.getLinkedTo();
             return MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);

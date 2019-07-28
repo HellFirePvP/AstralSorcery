@@ -22,9 +22,15 @@ import java.util.function.Supplier;
  */
 public enum Mods {
 
-    ;
+    MINECRAFT("minecraft") {
+        @Override
+        public boolean isPresent() {
+            return true;
+        }
+    },
+    BOTANIA("botania");
 
-    public final String modid;
+    private final String modid;
     private final boolean loaded;
 
     //private static Class<?> gcPlayerClass, urPlayerClass;
@@ -32,6 +38,10 @@ public enum Mods {
     private Mods(String modName) {
         this.modid = modName;
         this.loaded = ModList.get().isLoaded(this.modid);
+    }
+
+    public String getModId() {
+        return this.modid;
     }
 
     public boolean isPresent() {
@@ -42,6 +52,16 @@ public enum Mods {
         if (this.isPresent()) {
             execSupplier.get().run();
         }
+    }
+
+    @Nullable
+    public static Mods byModId(String modId) {
+        for (Mods mod : values()) {
+            if (mod.getModId().equals(modId)) {
+                return mod;
+            }
+        }
+        return null;
     }
 
     @Nullable
