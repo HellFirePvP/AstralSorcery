@@ -31,6 +31,7 @@ public class ConstellationEffectRegistry {
 
     public static final String LUCERNA_SKIP_ENTITY = "skip.spawn.deny";
 
+    private static Map<IWeakConstellation, ConstellationEffectProvider> clientEffectProviders = new HashMap<>();
     private static Map<IWeakConstellation, ConstellationEffect> clientEffectInstances = new HashMap<>();
 
     public static void addConfigEntries(ServerConfig config) {
@@ -48,8 +49,25 @@ public class ConstellationEffectRegistry {
         return null;
     }
 
+    public static void createClientInstance(ConstellationEffectProvider provider) {
+        clientEffectProviders.put(provider.getConstellation(), provider);
+    }
+
+    //TODO logout
+    public static void cleanUp() {
+        clientEffectInstances.clear();
+    }
+
     @Nullable
     public static ConstellationEffect getClientEffect(IWeakConstellation cst) {
-        return clientEffectInstances.computeIfAbsent(cst, c -> ConstellationEffectRegistry.createInstance(null, c));
+        ConstellationEffect effect = clientEffectInstances.get(cst);
+        if (effect == null) {
+            ConstellationEffectProvider prov = clientEffectProviders.get(cst);
+            if (prov != null) {
+                effect = prov.createEffect(null);
+                clientEffectInstances.put(cst, effect);
+            }
+        }
+        return effect;
     }
 }

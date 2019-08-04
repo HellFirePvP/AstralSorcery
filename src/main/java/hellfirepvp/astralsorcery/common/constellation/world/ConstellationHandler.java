@@ -69,7 +69,7 @@ public class ConstellationHandler {
     private void updateActiveConstellations(World world) {
         MoonPhase ph = MoonPhase.fromWorld(world);
 
-        LinkedList<IConstellation> active = this.activeMap.computeIfAbsent(ph, p -> Lists.newLinkedList());
+        LinkedList<IConstellation> active = new LinkedList<>(this.activeMap.computeIfAbsent(ph, p -> Lists.newLinkedList()));
         for (IConstellationSpecialShowup cst : ConstellationRegistry.getSpecialShowupConstellations()) {
             if (cst.doesShowUp(world, lastRecordedDay)) {
                 active.add(cst);
@@ -93,19 +93,18 @@ public class ConstellationHandler {
 
         LinkedList<IWeakConstellation> weakAndMajor = Lists.newLinkedList(ConstellationRegistry.getWeakConstellations());
         Collections.shuffle(weakAndMajor, rand);
-        weakAndMajor.forEach(c -> addConstellationCycle(c, occupiedSlots));
+        weakAndMajor.forEach(c -> addConstellationCycle(c, rand, occupiedSlots));
 
         LinkedList<IConstellation> constellations = Lists.newLinkedList(ConstellationRegistry.getMinorConstellations());
         Collections.shuffle(constellations, rand);
-        constellations.forEach(c -> addConstellationCycle(c, occupiedSlots));
+        constellations.forEach(c -> addConstellationCycle(c, rand, occupiedSlots));
     }
 
-    private void addConstellationCycle(IConstellation cst, boolean[] slots) {
+    private void addConstellationCycle(IConstellation cst, Random rand, boolean[] slots) {
         if (cst instanceof IConstellationSpecialShowup) {
             return;
         }
 
-        Random rand = ctx.getRandom();
         if (cst instanceof IMinorConstellation) {
             for (MoonPhase ph : ((IMinorConstellation) cst).getShowupMoonPhases(ctx.getSeed())) {
                 this.activeMap.get(ph).add(cst);
@@ -152,8 +151,8 @@ public class ConstellationHandler {
     }
 
     private void occupySlots(int start, boolean[] occupied) {
-        for (int i = start; i < start + 8; i++) {
-            int index = start % 8;
+        for (int i = 0; i < 5; i++) {
+            int index = (start + i) % 8;
             if (!occupied[index]) occupied[index] = true;
         }
     }

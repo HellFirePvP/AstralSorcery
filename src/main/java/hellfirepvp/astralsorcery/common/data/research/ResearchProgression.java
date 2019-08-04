@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.data.research;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import net.minecraftforge.common.IExtensibleEnum;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,33 +23,30 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 10.08.2016 / 13:38
  */
-public enum ResearchProgression {
+public enum ResearchProgression implements IExtensibleEnum {
 
-    DISCOVERY(0, ProgressionTier.DISCOVERY),
-    BASIC_CRAFT(1, ProgressionTier.BASIC_CRAFT, DISCOVERY),
-    ATTUNEMENT(2, ProgressionTier.ATTUNEMENT, BASIC_CRAFT),
-    CONSTELLATION(3, ProgressionTier.CONSTELLATION_CRAFT, ATTUNEMENT),
-    RADIANCE(4, ProgressionTier.TRAIT_CRAFT, CONSTELLATION),
-    BRILLIANCE(5, ProgressionTier.BRILLIANCE, RADIANCE)
+    DISCOVERY(ProgressionTier.DISCOVERY),
+    BASIC_CRAFT(ProgressionTier.BASIC_CRAFT, DISCOVERY),
+    ATTUNEMENT(ProgressionTier.ATTUNEMENT, BASIC_CRAFT),
+    CONSTELLATION(ProgressionTier.CONSTELLATION_CRAFT, ATTUNEMENT),
+    RADIANCE(ProgressionTier.TRAIT_CRAFT, CONSTELLATION),
+    BRILLIANCE(ProgressionTier.BRILLIANCE, RADIANCE)
     ;
 
-    private final int progressId;
     private List<ResearchProgression> preConditions = new LinkedList<>();
     private List<ResearchNode> researchNodes = new LinkedList<>();
     private final ProgressionTier requiredProgress;
     private final String unlocName;
 
-    private static final Map<Integer, ResearchProgression> BY_ID = new HashMap<>();
     private static final Map<String, ResearchProgression> BY_NAME = new HashMap<>();
 
-    private ResearchProgression(int id, ProgressionTier requiredProgress, ResearchProgression... preConditions) {
-        this(id, requiredProgress, Arrays.asList(preConditions));
+    private ResearchProgression(ProgressionTier requiredProgress, ResearchProgression... preConditions) {
+        this(requiredProgress, Arrays.asList(preConditions));
     }
 
-    private ResearchProgression(int id, ProgressionTier requiredProgress, List<ResearchProgression> preConditions) {
+    private ResearchProgression(ProgressionTier requiredProgress, List<ResearchProgression> preConditions) {
         this.preConditions.addAll(preConditions);
         this.requiredProgress = requiredProgress;
-        this.progressId = id;
         this.unlocName = AstralSorcery.MODID + ".journal.cluster." + name().toLowerCase() + ".name";
     }
 
@@ -61,6 +59,10 @@ public enum ResearchProgression {
             }
         }
         this.researchNodes.add(res);
+    }
+
+    public static ResearchProgression create(String name, ProgressionTier tier, List<ResearchProgression> preConditions) {
+        throw new IllegalStateException("Enum not extended");
     }
 
     public List<ResearchNode> getResearchNodes() {
@@ -95,14 +97,6 @@ public enum ResearchProgression {
         return unlocName;
     }
 
-    public int getProgressId() {
-        return progressId;
-    }
-
-    public static ResearchProgression getById(int id) {
-        return BY_ID.get(id);
-    }
-
     public static ResearchProgression getByEnumName(String name) {
         return BY_NAME.get(name);
     }
@@ -132,7 +126,6 @@ public enum ResearchProgression {
 
     static {
         for (ResearchProgression progress : values()) {
-            BY_ID.put(progress.progressId, progress);
             BY_NAME.put(progress.name(), progress);
         }
     }

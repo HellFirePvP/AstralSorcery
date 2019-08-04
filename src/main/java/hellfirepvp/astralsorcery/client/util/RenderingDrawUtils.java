@@ -8,18 +8,27 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,6 +38,102 @@ import org.lwjgl.opengl.GL11;
  * Date: 27.05.2019 / 22:27
  */
 public class RenderingDrawUtils {
+
+    public static void renderStringCentered(@Nullable FontRenderer fr, String str, int x, int y, float scale, int color) {
+        if (fr == null) {
+            fr = Minecraft.getInstance().fontRenderer;
+        }
+
+        double strLength = fr.getStringWidth(str) * scale;
+        double offsetLeft = x - strLength;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translated(offsetLeft, y, 0);
+        GlStateManager.scaled(scale, scale, scale);
+        renderStringAtCurrentPos(fr, str, color);
+        GlStateManager.popMatrix();
+    }
+
+    public static void renderStringAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
+        renderStringAtPos(0, 0, fr, str, color);
+    }
+
+    public static void renderStringAtPos(int x, int y, @Nullable FontRenderer fr, String str, int color) {
+        if (fr == null) {
+            fr = Minecraft.getInstance().fontRenderer;
+        }
+
+        //FontRenderer always enables alpha test, so we disable it afterwards if necessary.
+        boolean alphaTest = GL11.glGetBoolean(GL11.GL_ALPHA_TEST);
+
+        fr.drawString(str, x, y, color);
+
+        if (!alphaTest) {
+            GlStateManager.disableAlphaTest();
+        }
+    }
+
+    public static void renderBlueTooltip(int x, int y, java.util.List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+        renderTooltip(x, y, tooltipData, 0x000027, 0x000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
+    }
+
+    public static void renderTooltip(int x, int y, List<String> tooltipData, int color, int colorFade, Color strColor, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+        GlStateManager.disableRescaleNormal();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepthTest();
+
+        if (!tooltipData.isEmpty()) {
+            int maxWidth = 0;
+            for (String toolTip : tooltipData) {
+                int width = fontRenderer.getStringWidth(toolTip);
+                if (width > maxWidth) {
+                    maxWidth = width;
+                }
+            }
+            if(x + 15 + maxWidth > Minecraft.getInstance().mainWindow.getScaledWidth()) {
+                x -= maxWidth + 24;
+            }
+            List<String> lengthLimitedToolTip = new ArrayList<>();
+            for (String tTip : tooltipData) {
+                lengthLimitedToolTip.addAll(fontRenderer.listFormattedStringToWidth(tTip, maxWidth));
+            }
+
+            int pX = x + 12;
+            int pY = y - 12;
+            int sumLineHeight = 8;
+            if (tooltipData.size() > 1) {
+                sumLineHeight += 2 + (tooltipData.size() - 1) * 10;
+            }
+            int z = 300;
+
+            GuiUtils.drawGradientRect(z, pX - 3,           pY - 4,                 pX + maxWidth + 3, pY - 3,                 color, colorFade);
+            GuiUtils.drawGradientRect(z, pX - 3,           pY + sumLineHeight + 3, pX + maxWidth + 3, pY + sumLineHeight + 4, color, colorFade);
+            GuiUtils.drawGradientRect(z, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY + sumLineHeight + 3, color, colorFade);
+            GuiUtils.drawGradientRect(z, pX - 4,           pY - 3,                 pX - 3,           pY + sumLineHeight + 3, color, colorFade);
+            GuiUtils.drawGradientRect(z, pX + maxWidth + 3,pY - 3,                 pX + maxWidth + 4, pY + sumLineHeight + 3, color, colorFade);
+
+            int col = (color & 0x00FFFFFF) | color & 0xFF000000;
+            GuiUtils.drawGradientRect(z, pX - 3,           pY - 3 + 1,             pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, col);
+            GuiUtils.drawGradientRect(z, pX + maxWidth + 2,pY - 3 + 1,             pX + maxWidth + 3, pY + sumLineHeight + 3 - 1, color, col);
+            GuiUtils.drawGradientRect(z, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY - 3 + 1,                 col,   col);
+            GuiUtils.drawGradientRect(z, pX - 3,           pY + sumLineHeight + 2, pX + maxWidth + 3, pY + sumLineHeight + 3,     color, color);
+
+            for (int i = 0; i < lengthLimitedToolTip.size(); ++i) {
+                String str = lengthLimitedToolTip.get(i);
+                fontRenderer.drawString(str, pX, pY, strColor.getRGB());
+                if (isFirstLineHeadline && i == 0) {
+                    pY += 2;
+                }
+                pY += 10;
+            }
+        }
+
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepthTest();
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.enableRescaleNormal();
+    }
 
     public static void renderFacingFullQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, int r, int g, int b, float alpha) {
         renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, 0, 0, 1, 1, r, g, b, alpha);

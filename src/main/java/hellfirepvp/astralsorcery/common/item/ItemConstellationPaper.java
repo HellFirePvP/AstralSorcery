@@ -8,15 +8,19 @@
 
 package hellfirepvp.astralsorcery.common.item;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
+import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -26,8 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -74,6 +77,19 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor {
         } else {
             toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("constellation.noInformation")));
         }
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getHeldItem(hand);
+        if(itemStack.isEmpty()) {
+            return ActionResult.newResult(ActionResultType.SUCCESS, itemStack);
+        }
+        if(world.isRemote() && getConstellation(itemStack) != null) {
+            SoundHelper.playSoundClient(SoundsAS.GUI_JOURNAL_PAGE, 1F, 1F);
+            AstralSorcery.getProxy().openGui(player, GuiType.CONSTELLATION_PAPER, getConstellation(itemStack));
+        }
+        return ActionResult.newResult(ActionResultType.SUCCESS, itemStack);
     }
 
     @Override

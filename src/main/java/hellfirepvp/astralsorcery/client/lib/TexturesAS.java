@@ -23,6 +23,33 @@ public class TexturesAS {
 
     public static AbstractRenderableTexture TEX_BLACK;
 
+    public static AbstractRenderableTexture TEX_GUI_CONSTELLATION_PAPER;
+    public static AbstractRenderableTexture TEX_GUI_KNOWLEDGE_FRAGMENT;
+    public static AbstractRenderableTexture TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK;
+    public static AbstractRenderableTexture TEX_GUI_BOOKMARK;
+    public static AbstractRenderableTexture TEX_GUI_BOOKMARK_STRETCHED;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_ARROWS;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_UNDERLINE;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_BLANK;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_FRAME_FULL;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_FRAME_LEFT;
+    public static AbstractRenderableTexture TEX_GUI_STARFIELD_OVERLAY;
+    public static AbstractRenderableTexture TEX_GUI_BACKGROUND_DEFAULT;
+    public static AbstractRenderableTexture TEX_GUI_BACKGROUND_PERKS;
+    public static AbstractRenderableTexture TEX_GUI_BACKGROUND_CONSTELLATIONS;
+
+    public static AbstractRenderableTexture TEX_GUI_CLUSTER_ATTUNEMENT;
+    public static AbstractRenderableTexture TEX_GUI_CLUSTER_BASICCRAFT;
+    public static AbstractRenderableTexture TEX_GUI_CLUSTER_BRILLIANCE;
+    public static AbstractRenderableTexture TEX_GUI_CLUSTER_CONSTELLATION;
+    public static AbstractRenderableTexture TEX_GUI_CLUSTER_DISCOVERY;
+    public static AbstractRenderableTexture TEX_GUI_CLUSTER_RADIANCE;
+
+    public static AbstractRenderableTexture TEX_SOLAR_ECLIPSE;
+    public static AbstractRenderableTexture TEX_STAR_CONNECTION;
+    public static AbstractRenderableTexture TEX_STAR_1;
+    public static AbstractRenderableTexture TEX_STAR_2;
+
     public static AbstractRenderableTexture TEX_STATIC_FLARE;
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_1;
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_2;

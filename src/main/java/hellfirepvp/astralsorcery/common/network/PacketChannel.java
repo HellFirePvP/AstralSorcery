@@ -61,6 +61,7 @@ public class PacketChannel {
         registerMessage(PktSyncPerkActivity::new);
         registerMessage(PktSyncStepAssist::new);
         registerMessage(PktUpdateGateways::new);
+        registerMessage(PktOpenGui::new);
 
         // CLIENT -> DEDICATED_SERVER
         registerMessage(PktAttuneConstellation::new);

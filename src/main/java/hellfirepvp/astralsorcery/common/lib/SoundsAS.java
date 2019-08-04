@@ -6,25 +6,27 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.data.journal;
+package hellfirepvp.astralsorcery.common.lib;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import hellfirepvp.astralsorcery.common.util.sound.CategorizedSoundEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: IJournalPage
+ * Class: SoundsAS
  * Created by HellFirePvP
- * Date: 29.08.2016 / 18:00
+ * Date: 02.08.2019 / 21:21
  */
-public interface IJournalPage {
+public class SoundsAS {
 
-    public static final int DEFAULT_WIDTH = 175;
-    public static final int DEFAULT_HEIGHT = 220;
+    private SoundsAS() {}
 
-    //Called when the collection of pages that contains this page is opened.
-    //@OnlyIn(Dist.CLIENT)
-    //public IGuiRenderablePage buildRenderPage();
+    public static CategorizedSoundEvent BLOCK_COLOREDLENS_ATTACH;
+
+    public static CategorizedSoundEvent CRAFT_FINISH;
+    public static CategorizedSoundEvent CRAFT_ATTUNEMENT;
+
+    public static CategorizedSoundEvent GUI_JOURNAL_CLOSE;
+    public static CategorizedSoundEvent GUI_JOURNAL_PAGE;
 
 }

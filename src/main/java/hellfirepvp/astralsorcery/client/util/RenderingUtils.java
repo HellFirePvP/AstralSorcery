@@ -21,6 +21,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -29,6 +30,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Random;
 
 /**
@@ -47,6 +49,27 @@ public class RenderingUtils {
     public static TextureAtlasSprite getSprite(FluidStack stack) {
         ResourceLocation res = stack.getFluid().getFlowing(stack);
         return Minecraft.getInstance().getTextureMap().getSprite(res);
+    }
+
+    public static Color clampToColor(int rgb) {
+        return clampToColorWithMultiplier(rgb, 1F);
+    }
+
+    public static Color clampToColorWithMultiplier(int rgb, float mul) {
+        int r = ((rgb >> 16) & 0xFF);
+        int g = ((rgb >> 8)  & 0xFF);
+        int b = ((rgb >> 0)  & 0xFF);
+        return new Color(
+                MathHelper.clamp((int) (((float) r) * mul), 0, 255),
+                MathHelper.clamp((int) (((float) g) * mul), 0, 255),
+                MathHelper.clamp((int) (((float) b) * mul), 0, 255));
+    }
+
+    public static Color clampToColor(int r, int g, int b) {
+        return new Color(
+                MathHelper.clamp((int) (((float) r)), 0, 255),
+                MathHelper.clamp((int) (((float) g)), 0, 255),
+                MathHelper.clamp((int) (((float) b)), 0, 255));
     }
 
     public static boolean canEffectExist(EntityComplexFX fx) {

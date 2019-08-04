@@ -95,6 +95,9 @@ public class SkyHandler implements ITickHandler {
 
     @Nullable
     public static WorldContext getContext(World world, Dist dist) {
+        if (world == null) {
+            return null;
+        }
         int dimId = world.getDimension().getType().getId();
         if (dist.isClient()) {
             return getInstance().worldHandlersClient.getOrDefault(dimId, null);

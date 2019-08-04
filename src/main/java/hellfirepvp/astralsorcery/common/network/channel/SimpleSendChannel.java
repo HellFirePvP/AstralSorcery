@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.channel;
 
+import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.chunk.Chunk;
@@ -28,21 +29,21 @@ public abstract class SimpleSendChannel extends SimpleChannel {
         super(instance);
     }
 
-    public <P> void sendToPlayer(PlayerEntity player, P packet) {
+    public <P extends ASPacket<P>> void sendToPlayer(PlayerEntity player, P packet) {
         if (player instanceof ServerPlayerEntity) {
             this.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), packet);
         }
     }
 
-    public <P> void sendToAll(P packet) {
+    public <P extends ASPacket<P>> void sendToAll(P packet) {
         this.send(PacketDistributor.ALL.noArg(), packet);
     }
 
-    public <P> void sendToAllObservingChunk(P packet, Chunk ch) {
+    public <P extends ASPacket<P>> void sendToAllObservingChunk(P packet, Chunk ch) {
         this.send(PacketDistributor.TRACKING_CHUNK.with(() -> ch), packet);
     }
 
-    public <P> void sendToAllAround(P packet, PacketDistributor.TargetPoint point) {
+    public <P extends ASPacket<P>> void sendToAllAround(P packet, PacketDistributor.TargetPoint point) {
         this.send(PacketDistributor.NEAR.with(() -> point), packet);
     }
 

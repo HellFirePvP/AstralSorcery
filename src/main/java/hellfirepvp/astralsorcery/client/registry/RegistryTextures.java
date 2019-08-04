@@ -8,10 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.registry;
 
-import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
-import hellfirepvp.astralsorcery.client.resource.AssetLoader;
-
 import static hellfirepvp.astralsorcery.client.lib.TexturesAS.*;
+import static hellfirepvp.astralsorcery.client.resource.AssetLibrary.loadTexture;
+import static hellfirepvp.astralsorcery.client.resource.AssetLoader.TextureLocation.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,16 +24,42 @@ public class RegistryTextures {
     private RegistryTextures() {}
 
     public static void loadTextures() {
-        TEX_BLACK = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
+        TEX_BLACK = loadTexture(MISC, "black");
 
-        TEX_STATIC_FLARE = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarestatic");
-        TEX_CRYSTAL_EFFECT_1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1");
-        TEX_CRYSTAL_EFFECT_2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2");
-        TEX_CRYSTAL_EFFECT_3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3");
-        TEX_COLLECTOR_EFFECT = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2");
+        TEX_GUI_CONSTELLATION_PAPER         = loadTexture(GUI, "constellation_paper");
+        TEX_GUI_KNOWLEDGE_FRAGMENT          = loadTexture(GUI, "knowledge_fragment");
+        TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK    = loadTexture(GUI, "knowledge_fragment_blank");
+        TEX_GUI_BOOKMARK                    = loadTexture(GUI, "bookmark");
+        TEX_GUI_BOOKMARK_STRETCHED          = loadTexture(GUI, "bookmark_stretched");
+        TEX_GUI_BOOK_ARROWS                 = loadTexture(GUI, "book_arrows");
+        TEX_GUI_BOOK_UNDERLINE              = loadTexture(GUI, "book_underline");
+        TEX_GUI_BOOK_BLANK                  = loadTexture(GUI, "book_blank");
+        TEX_GUI_BOOK_FRAME_FULL             = loadTexture(GUI, "book_frame_full");
+        TEX_GUI_BOOK_FRAME_LEFT             = loadTexture(GUI, "book_frame_left");
+        TEX_GUI_STARFIELD_OVERLAY           = loadTexture(GUI, "starfield_overlay");
+        TEX_GUI_BACKGROUND_DEFAULT          = loadTexture(GUI, "book_background_default");
+        TEX_GUI_BACKGROUND_PERKS            = loadTexture(GUI, "book_background_perks");
+        TEX_GUI_BACKGROUND_CONSTELLATIONS   = loadTexture(GUI, "book_background_constellations");
+        TEX_GUI_CLUSTER_ATTUNEMENT          = loadTexture(GUI, "cluster_attunement");
+        TEX_GUI_CLUSTER_BASICCRAFT          = loadTexture(GUI, "cluster_basiccraft");
+        TEX_GUI_CLUSTER_BRILLIANCE          = loadTexture(GUI, "cluster_brilliance");
+        TEX_GUI_CLUSTER_CONSTELLATION       = loadTexture(GUI, "cluster_constellation");
+        TEX_GUI_CLUSTER_DISCOVERY           = loadTexture(GUI, "cluster_discovery");
+        TEX_GUI_CLUSTER_RADIANCE            = loadTexture(GUI, "cluster_radiance");
 
-        TEX_LIGHTNING_PART = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightningpart");
-        TEX_LIGHTBEAM = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam");
+        TEX_SOLAR_ECLIPSE   = loadTexture(ENVIRONMENT, "solar_eclipse");
+        TEX_STAR_CONNECTION = loadTexture(ENVIRONMENT, "line");
+        TEX_STAR_1          = loadTexture(ENVIRONMENT, "star_1");
+        TEX_STAR_2          = loadTexture(ENVIRONMENT, "star_2");
+
+        TEX_STATIC_FLARE     = loadTexture(EFFECT, "flarestatic");
+        TEX_CRYSTAL_EFFECT_1 = loadTexture(EFFECT, "ceffect1");
+        TEX_CRYSTAL_EFFECT_2 = loadTexture(EFFECT, "ceffect2");
+        TEX_CRYSTAL_EFFECT_3 = loadTexture(EFFECT, "ceffect3");
+        TEX_COLLECTOR_EFFECT = loadTexture(EFFECT, "burst2");
+
+        TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightningpart");
+        TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");
     }
 
 }
