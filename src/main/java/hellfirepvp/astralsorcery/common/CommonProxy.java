@@ -30,6 +30,7 @@ import hellfirepvp.astralsorcery.common.event.handler.EventHandlerIO;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktOpenGui;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
@@ -40,6 +41,9 @@ import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.ServerLifecycleListener;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.observerlib.common.util.tick.TickManager;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
@@ -197,6 +201,19 @@ public class CommonProxy {
 
     public void scheduleDelayed(Runnable r) {
         this.scheduleDelayed(r, 0);
+    }
+
+    // GUI stuff
+
+    public void openGuiClient(GuiType type, CompoundNBT data) {
+        //No-Op
+    }
+
+    public void openGui(PlayerEntity player, GuiType type, Object... data) {
+        if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
+            PktOpenGui pkt = new PktOpenGui(type, type.serializeArguments(data));
+            PacketChannel.CHANNEL.sendToPlayer(player, pkt);
+        }
     }
 
     // Mod events

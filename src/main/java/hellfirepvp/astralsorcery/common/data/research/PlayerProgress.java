@@ -154,10 +154,7 @@ public class PlayerProgress {
         if (compound.contains("research")) {
             int[] research = compound.getIntArray("research");
             for (int resOrdinal : research) {
-                ResearchProgression prog = ResearchProgression.getById(resOrdinal);
-                if (prog != null) {
-                    researchProgression.add(prog);
-                }
+                researchProgression.add(ResearchProgression.values()[resOrdinal]);
             }
         }
 
@@ -206,8 +203,7 @@ public class PlayerProgress {
         cmp.put("pointTokens", listTokens);
         int[] researchArray = new int[researchProgression.size()];
         for (int i = 0; i < researchProgression.size(); i++) {
-            ResearchProgression progression = researchProgression.get(i);
-            researchArray[i] = progression.getProgressId();
+            researchArray[i] = researchProgression.get(i).ordinal();
         }
         cmp.putIntArray("research", researchArray);
         if(attunedConstellation != null) {
@@ -261,8 +257,7 @@ public class PlayerProgress {
         cmp.putBoolean("wasAttuned", wasOnceAttuned);
         int[] researchArray = new int[researchProgression.size()];
         for (int i = 0; i < researchProgression.size(); i++) {
-            ResearchProgression progression = researchProgression.get(i);
-            researchArray[i] = progression.getProgressId();
+            researchArray[i] = researchProgression.get(i).ordinal();
         }
         cmp.putIntArray("research", researchArray);
     }
@@ -308,10 +303,7 @@ public class PlayerProgress {
         if (compound.contains("research")) {
             int[] research = compound.getIntArray("research");
             for (int resOrdinal : research) {
-                ResearchProgression prog = ResearchProgression.getById(resOrdinal);
-                if (prog != null) {
-                    researchProgression.add(prog);
-                }
+                researchProgression.add(ResearchProgression.values()[resOrdinal]);
             }
         }
 

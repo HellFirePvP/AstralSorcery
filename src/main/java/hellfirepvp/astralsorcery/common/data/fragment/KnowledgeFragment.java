@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.data.fragment;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPages;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -21,6 +23,8 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -60,7 +64,7 @@ public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFrag
         return new KnowledgeFragment(name, c == null ? "" : c.getUnlocalizedName()) {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public boolean isVisible(Screen journalGui) {
+            public boolean isVisible(ScreenJournal journalGui) {
                 return false;
                 //TODO journal constelltation details
                 //return journalGui instanceof GuiJournalConstellationDetails &&
@@ -88,11 +92,9 @@ public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFrag
         return new KnowledgeFragment(name, nd == null ? "" : nd.getUnLocalizedName()) {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public boolean isVisible(Screen journalGui) {
-                return false;
-                //TODO journal
-                //return journalGui instanceof GuiJournalPages &&
-                //        MiscUtils.contains(nds, n -> n.equals(((GuiJournalPages) journalGui).getResearchNode()));
+            public boolean isVisible(ScreenJournal journalGui) {
+                return journalGui instanceof ScreenJournalPages &&
+                        MiscUtils.contains(nds, n -> n.equals(((ScreenJournalPages) journalGui).getResearchNode()));
             }
         }
         // Any preconditions visible
@@ -193,10 +195,8 @@ public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFrag
         return canSeeTest.test(progress) && canDiscoverTest.test(progress);
     }
 
-    //TODO journal
     @OnlyIn(Dist.CLIENT)
-    public abstract boolean isVisible(Screen journalGui);
-    //public abstract boolean isVisible(GuiScreenJournal journalGui);
+    public abstract boolean isVisible(ScreenJournal journalGui);
 
     public String getUnlocalizedName() {
         return String.format("%s.name", getLocalizationBaseString());
@@ -223,24 +223,22 @@ public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFrag
                 (this.unlocPrefix.isEmpty() || I18n.hasKey(this.unlocPrefix));
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public String getLocalizedName() {
-        return I18n.format(getUnlocalizedName());
+    public ITextComponent getLocalizedName() {
+        return new TranslationTextComponent(this.getUnlocalizedName());
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public String getLocalizedBookmark() {
-        return I18n.format(getUnlocalizedBookmark());
+    public ITextComponent getLocalizedBookmark() {
+        return new TranslationTextComponent(this.getUnlocalizedBookmark());
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public String getLocalizedPage() {
-        return I18n.format(getUnlocalizedPage());
+    public ITextComponent getLocalizedPage() {
+        return new TranslationTextComponent(this.getUnlocalizedPage());
     }
 
     @OnlyIn(Dist.CLIENT)
     public String getLocalizedIndexName() {
-        return this.unlocPrefix.isEmpty() ? this.getLocalizedName() : String.format("%s: %s", I18n.format(this.unlocPrefix), this.getLocalizedName());
+        return this.unlocPrefix.isEmpty() ? this.getLocalizedName().getFormattedText() :
+                String.format("%s: %s", I18n.format(this.unlocPrefix), this.getLocalizedName().getFormattedText());
     }
 
     @Override

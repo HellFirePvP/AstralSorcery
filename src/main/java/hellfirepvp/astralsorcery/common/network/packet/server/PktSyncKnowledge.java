@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -81,7 +82,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
 
             ByteBufUtils.writeList(buffer, packet.knownConstellations, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeList(buffer, packet.seenConstellations, ByteBufUtils::writeResourceLocation);
-            ByteBufUtils.writeList(buffer, packet.researchProgression, (buf, prog) -> buf.writeInt(prog.getProgressId()));
+            ByteBufUtils.writeList(buffer, packet.researchProgression, ByteBufUtils::writeEnumValue);
             ByteBufUtils.writeOptional(buffer, packet.attunedConstellation, ByteBufUtils::writeRegistryEntry);
             ByteBufUtils.writeMap(buffer, packet.usedPerks, ByteBufUtils::writeRegistryEntry, ByteBufUtils::writeNBTTag);
             ByteBufUtils.writeList(buffer, packet.sealedPerks, ByteBufUtils::writeRegistryEntry);
@@ -101,7 +102,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
 
             pkt.knownConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.seenConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
-            pkt.researchProgression = ByteBufUtils.readList(buffer, buf -> ResearchProgression.getById(buf.readInt()));
+            pkt.researchProgression = ByteBufUtils.readList(buffer, buf -> ByteBufUtils.readEnumValue(buf, ResearchProgression.class));
             pkt.attunedConstellation = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
             pkt.usedPerks = ByteBufUtils.readMap(buffer, ByteBufUtils::readRegistryEntry, ByteBufUtils::readNBTTag);
             pkt.sealedPerks = ByteBufUtils.readList(buffer, ByteBufUtils::readRegistryEntry);

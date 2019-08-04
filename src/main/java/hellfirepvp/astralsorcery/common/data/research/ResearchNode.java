@@ -8,9 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.data.research;
 
+import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.resource.query.SpriteQuery;
 import hellfirepvp.astralsorcery.client.resource.query.TextureQuery;
-import hellfirepvp.astralsorcery.common.data.journal.IJournalPage;
+import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -37,13 +38,13 @@ public class ResearchNode {
     private String unlocName;
 
     private ItemStack[] renderItemStacks;
-    private TextureQuery renderTextureQuery;
     private SpriteQuery renderSpriteQuery;
+    private TextureQuery backgroundTextureQuery = new TextureQuery(AssetLoader.TextureLocation.GUI, "research_frame_wood");
 
     private Color textureColorHint = new Color(0xFFFFFFFF, true);
 
     private List<ResearchNode> connectionsTo = new LinkedList<>();
-    private List<IJournalPage> pages = new LinkedList<>();
+    private List<JournalPage> pages = new LinkedList<>();
 
     private ResearchNode(RenderType type, String unlocName, int rPosX, int rPosZ) {
         this.id = counter;
@@ -62,11 +63,6 @@ public class ResearchNode {
     public ResearchNode(ItemStack[] stacks, String unlocName, int renderPosX, int renderPosZ) {
         this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
         this.renderItemStacks = stacks;
-    }
-
-    public ResearchNode(TextureQuery query, String unlocName, int renderPosX, int renderPosZ) {
-        this(RenderType.TEXTURE, unlocName, renderPosX, renderPosZ);
-        this.renderTextureQuery = query;
     }
 
     public ResearchNode(SpriteQuery query, String unlocName, int renderPosX, int renderPosZ) {
@@ -92,7 +88,7 @@ public class ResearchNode {
         return connectionsTo;
     }
 
-    public ResearchNode addPage(IJournalPage page) {
+    public ResearchNode addPage(JournalPage page) {
         pages.add(page);
         return this;
     }
@@ -122,15 +118,15 @@ public class ResearchNode {
         return renderItemStacks[((int) ((tick / 40) % renderItemStacks.length))];
     }
 
-    public TextureQuery getTexture() {
-        return renderTextureQuery;
+    public TextureQuery getBackgroundTexture() {
+        return backgroundTextureQuery;
     }
 
     public SpriteQuery getSpriteTexture() {
         return renderSpriteQuery;
     }
 
-    public List<IJournalPage> getPages() {
+    public List<JournalPage> getPages() {
         return pages;
     }
 
@@ -158,7 +154,7 @@ public class ResearchNode {
 
     public static enum RenderType {
 
-        ITEMSTACK, TEXTURE, TEXTURE_SPRITE
+        ITEMSTACK, TEXTURE_SPRITE
 
     }
 

@@ -40,6 +40,10 @@ public enum GatedKnowledge {
         this.capability = capability;
     }
 
+    public boolean canSee(PlayerProgress progress) {
+        return canSee(progress.getTierReached());
+    }
+
     public boolean canSee(ProgressionTier compCapability) {
         return capability.ordinal() <= compCapability.ordinal();
     }

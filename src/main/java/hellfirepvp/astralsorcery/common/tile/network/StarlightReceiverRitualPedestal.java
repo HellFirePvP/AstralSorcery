@@ -120,7 +120,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             collectStarlight(world);
         }
 
-        if (this.collectedStarlight > 0) {
+        if (this.effect != null && this.collectedStarlight > 0) {
             doRitualEffect(world);
         }
     }

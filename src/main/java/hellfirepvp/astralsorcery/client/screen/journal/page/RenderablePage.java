@@ -6,23 +6,23 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client;
-
-import net.minecraft.client.gui.ScreenManager;
+package hellfirepvp.astralsorcery.client.screen.journal.page;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ClientGuiHandler
+ * Class: RenderablePage
  * Created by HellFirePvP
- * Date: 19.04.2019 / 22:22
+ * Date: 03.08.2019 / 18:53
  */
-public class ClientGuiHandler {
+public interface RenderablePage {
 
-    private ClientGuiHandler() {}
+    public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY);
 
-    public static void registerScreens() {
+    default public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {}
 
+    default public boolean propagateMouseClick(double mouseX, double mouseZ) {
+        return false;
     }
 
 }

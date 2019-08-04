@@ -464,7 +464,7 @@ public class RegistryConstellations {
             public float getDistribution(World world, long day, boolean showingUp) {
                 if (showingUp) return 1F;
                 MoonPhase current = MoonPhase.fromWorld(world);
-                if(current == MoonPhase.WANING1_2 || current == MoonPhase.WAXING1_2) {
+                if(current == MoonPhase.WANING_1_2 || current == MoonPhase.WAXING_1_2) {
                     return 0.3F;
                 }
                 return 0.65F;
@@ -485,7 +485,7 @@ public class RegistryConstellations {
         pelotrio.addConnection(sl6, sl3);
         register(pelotrio);
 
-        gelu = new ConstellationBase.Minor("gelu", CONSTELLATION_GELU, MoonPhase.NEW, MoonPhase.WAXING1_4, MoonPhase.WAXING1_2);
+        gelu = new ConstellationBase.Minor("gelu", CONSTELLATION_GELU, MoonPhase.NEW, MoonPhase.WAXING_1_4, MoonPhase.WAXING_1_2);
         sl1 = gelu.addStar(8, 7);
         sl2 = gelu.addStar(28, 8);
         sl3 = gelu.addStar(23, 21);
@@ -499,7 +499,7 @@ public class RegistryConstellations {
         gelu.addConnection(sl4, sl6);
         register(gelu);
 
-        ulteria = new ConstellationBase.Minor("ulteria", CONSTELLATION_ULTERIA, MoonPhase.WANING1_2, MoonPhase.WANING3_4, MoonPhase.NEW);
+        ulteria = new ConstellationBase.Minor("ulteria", CONSTELLATION_ULTERIA, MoonPhase.WANING_1_2, MoonPhase.WANING_3_4, MoonPhase.NEW);
         sl1 = ulteria.addStar(14, 9);
         sl2 = ulteria.addStar(17, 16);
         sl3 = ulteria.addStar(25, 19);
@@ -511,7 +511,7 @@ public class RegistryConstellations {
         ulteria.addConnection(sl4, sl5);
         register(ulteria);
 
-        alcara = new ConstellationBase.Minor("alcara", CONSTELLATION_ALCARA, MoonPhase.WANING1_2, MoonPhase.WAXING1_2);
+        alcara = new ConstellationBase.Minor("alcara", CONSTELLATION_ALCARA, MoonPhase.WANING_1_2, MoonPhase.WAXING_1_2);
         sl1 = alcara.addStar(6, 27);
         sl2 = alcara.addStar(14, 20);
         sl3 = alcara.addStar(17, 24);
@@ -526,7 +526,7 @@ public class RegistryConstellations {
         alcara.addConnection(sl4, sl6);
         register(alcara);
 
-        vorux = new ConstellationBase.Minor("vorux", CONSTELLATION_VORUX, MoonPhase.FULL, MoonPhase.WAXING3_4, MoonPhase.WANING3_4);
+        vorux = new ConstellationBase.Minor("vorux", CONSTELLATION_VORUX, MoonPhase.FULL, MoonPhase.WAXING_3_4, MoonPhase.WANING_3_4);
         sl1 = vorux.addStar(3, 21);
         sl2 = vorux.addStar(7, 7);
         sl3 = vorux.addStar(14, 15);

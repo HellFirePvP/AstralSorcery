@@ -166,7 +166,7 @@ public class PrimerEventHandler {
     }
 
     private void registerSounds(RegistryEvent.Register<SoundEvent> event) {
-        //RegistrySounds.init();
+        RegistrySounds.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

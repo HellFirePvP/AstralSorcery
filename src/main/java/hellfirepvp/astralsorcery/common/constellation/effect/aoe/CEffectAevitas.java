@@ -63,7 +63,7 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
                             pos.getX() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5,
                             pos.getY() + rand.nextFloat() * 2 + 0.5,
                             pos.getZ() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5))
-                    .setGravityStrength(-0.05F)
+                    .setGravityStrength(-0.008F)
                     .setScaleMultiplier(0.45F)
                     .color(VFXColorFunction.constant(ColorsAS.RITUAL_CONSTELLATION_AEVITAS))
                     .setMaxAge(35);

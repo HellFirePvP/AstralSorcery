@@ -21,11 +21,18 @@ import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.GuiType;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -101,6 +108,20 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void scheduleClientside(Runnable r, int tickDelay) {
         this.clientScheduler.addRunnable(r, tickDelay);
+    }
+
+    @Override
+    public void openGuiClient(GuiType type, CompoundNBT data) {
+        Minecraft.getInstance().displayGuiScreen(type.deserialize(data));
+    }
+
+    @Override
+    public void openGui(PlayerEntity player, GuiType type, Object... data) {
+        if (player instanceof AbstractClientPlayerEntity) {
+            openGuiClient(type, type.serializeArguments(data));
+            return;
+        }
+        super.openGui(player, type, data);
     }
 
     private void clientSetup(FMLClientSetupEvent event) {

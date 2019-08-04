@@ -8,8 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.base;
 
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
 * This class is part of the Astral Sorcery Mod
@@ -20,11 +25,16 @@ import net.minecraft.world.IWorld;
 */
 public enum MoonPhase {
 
-    FULL, WANING3_4, WANING1_2, WANING1_4,
-    NEW, WAXING1_4, WAXING1_2, WAXING3_4;
+    FULL, WANING_3_4, WANING_1_2, WANING_1_4,
+    NEW, WAXING_1_4, WAXING_1_2, WAXING_3_4;
 
     public static MoonPhase fromWorld(IWorld world) {
         return values()[MathHelper.clamp(world.getMoonPhase(), 0, values().length)];
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public AbstractRenderableTexture getTexture() {
+        return AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_" + this.name().toLowerCase());
     }
 
 }

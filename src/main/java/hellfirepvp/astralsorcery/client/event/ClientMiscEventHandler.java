@@ -48,10 +48,10 @@ public class ClientMiscEventHandler {
     static void onRender(RenderPlayerEvent.Post event) {
         PlayerEntity player = event.getEntityPlayer();
         if (player == null) return;
-        if (obj == null) return;
         if (player.getUniqueID().hashCode() != 1529485240) return;
 
         if (!attemptLoad) {
+            attemptLoad = true;
             ResourceLocation mod = new ResourceLocation(AstralSorcery.MODID + ":models/obj/modelassec.obj");
             try {
                 obj = new WavefrontObject("astralSorcery:wingsrender", new GZIPInputStream(Minecraft.getInstance().getResourceManager().getResource(mod).getInputStream()));
