@@ -56,6 +56,8 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
 
     public String getUnlocalizedName();
 
+    public String getUnlocalizedType();
+
     default public String getUnlocalizedInfo() {
         return getUnlocalizedName() + ".info";
     }

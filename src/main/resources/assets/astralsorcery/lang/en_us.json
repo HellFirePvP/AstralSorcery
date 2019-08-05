@@ -161,9 +161,9 @@
   "astralsorcery.journal.cluster.radiance.name": "Radiance",
   "astralsorcery.journal.cluster.brilliance.name": "Brilliance",
 
-  "astralsorcery.journal.constellation.dst.major": "Bright",
-  "astralsorcery.journal.constellation.dst.weak": "Dim",
-  "astralsorcery.journal.constellation.dst.minor": "Faint",
+  "astralsorcery.journal.constellation.major": "Bright",
+  "astralsorcery.journal.constellation.weak": "Dim",
+  "astralsorcery.journal.constellation.minor": "Faint",
 
   "research.SHRINES.name": "Ancient Shrines",
   "astralsorcery.journal.SHRINES.1.text": "Scattered across the world are ancient shrines, built from marble by a civilization long past. Some of the most impressive shrines, featuring elaborate structures, have been located atop high hills and mountains, while smaller ones have been dug up from under the sands in deserts.<NL>While they don't seem to be very special at first, it's told that many of them harbor old and sacred treasures. Unlike the legends, however, only a few old chests and stories of strange floating crystals have ever been found.",

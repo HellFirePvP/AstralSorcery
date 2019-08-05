@@ -14,25 +14,24 @@ import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectUpdater;
 import hellfirepvp.astralsorcery.client.event.ConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.EffectRenderEventHandler;
-import hellfirepvp.astralsorcery.client.registry.RegistryEffectTemplates;
-import hellfirepvp.astralsorcery.client.registry.RegistrySprites;
-import hellfirepvp.astralsorcery.client.registry.RegistryTextures;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalConstellationOverview;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
+import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -69,6 +68,8 @@ public class ClientProxy extends CommonProxy {
         super.initialize();
 
         this.clientConfig.buildConfiguration();
+
+        this.addTomeBookmarks();
     }
 
     @Override
@@ -124,8 +125,27 @@ public class ClientProxy extends CommonProxy {
         super.openGui(player, type, data);
     }
 
+    private void addTomeBookmarks() {
+        ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.progression", 10,
+                ScreenJournalProgression::getJournalInstance,
+                () -> true));
+        ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.constellations", 20,
+                ScreenJournalConstellationOverview::getConstellationScreen,
+                () -> !ResearchHelper.getClientProgress().getSeenConstellations().isEmpty()));
+        //TODO perk tree gui
+        //ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.perks", 30,
+        //        GuiJournalPerkTree::new,
+        //        () -> ResearchManager.clientProgress.getAttunedConstellation() != null));
+        //TODO knowledge fragment gui
+        //ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.knowledge", 40,
+        //        GuiJournalKnowledgeIndex::new,
+        //        () -> !((KnowledgeFragmentData) PersistentDataManager.INSTANCE
+        //                .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS))
+        //                .getAllFragments().isEmpty()));
+    }
+
     private void clientSetup(FMLClientSetupEvent event) {
-        ClientGuiHandler.registerScreens();
+
     }
 
 }

@@ -193,6 +193,11 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
             return true;
         }
 
+        @Override
+        public String getUnlocalizedType() {
+            return "astralsorcery.journal.constellation.major";
+        }
+
         //@Override
         //public boolean canDiscover(PlayerEntity player, PlayerProgress progress) {
         //    return !Mods.GAMESTAGES.isPresent() ||
@@ -215,6 +220,11 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
             return super.canDiscover(player, progress) &&
                     progress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) &&
                     progress.wasOnceAttuned();
+        }
+
+        @Override
+        public String getUnlocalizedType() {
+            return "astralsorcery.journal.constellation.weak";
         }
     }
 
@@ -278,7 +288,11 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
                     progress.wasOnceAttuned() &&
                     progress.getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT);
         }
-    }
 
+        @Override
+        public String getUnlocalizedType() {
+            return "astralsorcery.journal.constellation.minor";
+        }
+    }
 }
 

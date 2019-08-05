@@ -36,6 +36,7 @@ public class WidthHeightScreen extends Screen {
 
     protected WidthHeightScreen(ITextComponent titleIn, int guiHeight, int guiWidth) {
         super(titleIn);
+        this.passEvents = true;
         this.guiHeight = guiHeight;
         this.guiWidth = guiWidth;
     }
@@ -79,7 +80,7 @@ public class WidthHeightScreen extends Screen {
             return true;
         }
 
-        if (closeWithInventoryKey && charCode == Minecraft.getInstance().gameSettings.keyBindInventory.getKey().getKeyCode()) {
+        if (closeWithInventoryKey && Minecraft.getInstance().gameSettings.keyBindInventory.isKeyDown()) {
             this.onClose();
 
             if (Minecraft.getInstance().currentScreen == null) {

@@ -8,11 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -86,6 +89,7 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
                         out = TextFormatting.AQUA + out;
                         Minecraft.getInstance().player.sendMessage(new StringTextComponent(out));
                     }
+                    packet.refreshJournal();
                 });
             }
 
@@ -96,12 +100,12 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
 
     @OnlyIn(Dist.CLIENT)
     private void refreshJournal() {
-        //GuiScreen open = Minecraft.getInstance().currentScreen;
-        //if(open != null) {
-        //    if(open instanceof GuiScreenJournal && !(open instanceof GuiJournalPerkTree)) {
-        //        Minecraft.getInstance().displayGuiScreen(null);
-        //    }
-        //}
-        //GuiJournalProgression.resetJournal();
+        Screen open = Minecraft.getInstance().currentScreen;
+        if (open != null) {//TODO perk tree gui
+            if(open instanceof ScreenJournal) {// && !(open instanceof GuiJournalPerkTree)) {
+                Minecraft.getInstance().displayGuiScreen(null);
+            }
+        }
+        ScreenJournalProgression.resetJournal();
     }
 }

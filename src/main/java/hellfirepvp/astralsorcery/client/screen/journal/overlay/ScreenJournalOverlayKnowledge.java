@@ -76,7 +76,7 @@ public class ScreenJournalOverlayKnowledge extends ScreenJournalOverlay {
         int offsetX = guiLeft + guiWidth / 2 - DEFAULT_WIDTH / 2;
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-            RenderingDrawUtils.renderStringAtPos(offsetX, offsetY + (i * 10), font, line, 0xEE333333);
+            RenderingDrawUtils.renderStringAtPos(offsetX, offsetY + (i * 10), font, line, 0xEE333333, false);
         }
     }
 

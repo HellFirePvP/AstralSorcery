@@ -55,10 +55,14 @@ public class RenderingDrawUtils {
     }
 
     public static void renderStringAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
-        renderStringAtPos(0, 0, fr, str, color);
+        renderStringAtPos(0, 0, fr, str, color, false);
     }
 
-    public static void renderStringAtPos(int x, int y, @Nullable FontRenderer fr, String str, int color) {
+    public static void renderStringWithShadowAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
+        renderStringAtPos(0, 0, fr, str, color, true);
+    }
+
+    public static void renderStringAtPos(int x, int y, @Nullable FontRenderer fr, String str, int color, boolean dropShadow) {
         if (fr == null) {
             fr = Minecraft.getInstance().fontRenderer;
         }

@@ -87,7 +87,6 @@ public class ScreenJournal extends WidthHeightScreen {
         drawnBookmarks.clear();
 
         GlStateManager.pushMatrix();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
 
         double bookmarkWidth =  67;
         double bookmarkHeight = 15;
