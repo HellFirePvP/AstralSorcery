@@ -70,22 +70,19 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
                 .collect(Collectors.toList()));
     }
 
+    //TODO refactor, blending enabled by default
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
-        super.render(mouseX, mouseY, pTicks);
-
-        GlStateManager.enableBlend();
-
         drawConstellationBackground();
         drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
 
+        GlStateManager.enableBlend();
         this.blitOffset += 250;
 
         drawNavArrows(pTicks, mouseX, mouseY);
         drawConstellations(pTicks, mouseX, mouseY);
 
         this.blitOffset -= 250;
-
         GlStateManager.disableBlend();
     }
 
@@ -145,15 +142,13 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
 
         RenderingConstellationUtils.renderConstellationIntoGUI(display,
                 0, 0, 0,
-                95, 95, 2F, () -> {
-                    return 0.3F + 0.7F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10));
-                }, true, false);
+                95, 95, 2F, () -> 0.3F + 0.7F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10)), true, false);
 
         GlStateManager.color4f(r, g, b, a);
 
         String trName = I18n.format(display.getUnlocalizedName()).toUpperCase();
         float fullLength = (width / 2) - (((float) font.getStringWidth(trName)) / 2F);
-        RenderingDrawUtils.renderStringAtPos(MathHelper.floor(fullLength), 90, font, trName, 0xFFFFFFFF);
+        RenderingDrawUtils.renderStringAtPos(MathHelper.floor(fullLength), 90, font, trName, 0xFFFFFFFF, false);
 
         GlStateManager.color4f(1F, 1F, 1F, 1F);
         GlStateManager.popMatrix();

@@ -59,6 +59,7 @@ public class ScreenJournalProgressionRenderer {
 
     private boolean hasPrevOffset = false;
     private Map<Rectangle, ResearchProgression> clusterRectMap = new HashMap<>();
+    private Point lastMousePosition = null;
 
     public ScreenJournalProgressionRenderer(ScreenJournalProgression gui, int guiHeight, int guiWidth) {
         this.parentGui = gui;
@@ -84,7 +85,7 @@ public class ScreenJournalProgressionRenderer {
     }
 
     public void moveMouse(double changedX, double changedY) {
-        if(sizeHandler.getScalingFactor() >= 6.1D && clusterRenderer != null) {
+        if (sizeHandler.getScalingFactor() >= 6.1D && clusterRenderer != null) {
             clusterRenderer.moveMouse(changedX, changedY);
         } else {
             if (hasPrevOffset) {
@@ -102,7 +103,7 @@ public class ScreenJournalProgressionRenderer {
     }
 
     public void applyMovedMouseOffset() {
-        if(sizeHandler.getScalingFactor() >= 6.1D && clusterRenderer != null) {
+        if (sizeHandler.getScalingFactor() >= 6.1D && clusterRenderer != null) {
             clusterRenderer.applyMovedMouseOffset();
         } else {
             this.previousMousePointScaled = ScalingPoint.createPoint(
@@ -137,32 +138,35 @@ public class ScreenJournalProgressionRenderer {
     }
 
     //Nothing to actually click here, we redirect if we can.
-    public void propagateClick(Point p) {
-        if(clusterRenderer != null) {
-            if(sizeHandler.getScalingFactor() > 6) {
-                clusterRenderer.propagateClick(parentGui, p);
-                return;
+    public boolean propagateClick(Point p) {
+        if (clusterRenderer != null) {
+            if (sizeHandler.getScalingFactor() > 6) {
+                if (clusterRenderer.propagateClick(parentGui, p)) {
+                    return true;
+                }
             }
         }
-        if(focusedClusterMouse != null) {
-            if(sizeHandler.getScalingFactor() <= 6) {
+        if (focusedClusterMouse != null) {
+            if (sizeHandler.getScalingFactor() <= 6) {
                 long current = System.currentTimeMillis();
-                if(current - this.doubleClickLast < 400L) {
+                if (current - this.doubleClickLast < 400L) {
                     int timeout = 500; //Handles irregular clicks on the GUI so it doesn't loop trying to find a focus cluster
-                    while (focusedClusterMouse != null && sizeHandler.getScalingFactor() < 9.9 && timeout > 0) {
-                        handleZoomIn(p);
+                    while (focusedClusterMouse != null && lastMousePosition != null && sizeHandler.getScalingFactor() < 9.9 && timeout > 0) {
+                        handleZoomIn();
                         timeout--;
                     }
                     this.doubleClickLast = 0L;
+                    return true;
                 }
                 this.doubleClickLast = current;
             }
         }
+        return false;
     }
 
-    public void drawMouseHighlight(float zLevel, Point mousePoint) {
-        if(clusterRenderer != null && sizeHandler.getScalingFactor() > 6) {
-            clusterRenderer.drawMouseHighlight(zLevel, mousePoint);
+    public void drawMouseHighlight(float zLevel, int mouseX, int mouseY) {
+        if (clusterRenderer != null && sizeHandler.getScalingFactor() > 6) {
+            clusterRenderer.drawMouseHighlight(zLevel, mouseX, mouseY);
         }
     }
 
@@ -175,9 +179,9 @@ public class ScreenJournalProgressionRenderer {
         this.sizeHandler.handleZoomOut();
         rescale(sizeHandler.getScalingFactor());
 
-        if(this.sizeHandler.getScalingFactor() <= 4.0) {
+        if (this.sizeHandler.getScalingFactor() <= 4.0) {
             unfocus();
-        } else if(this.sizeHandler.getScalingFactor() >= 6.0 && this.clusterRenderer != null) {
+        } else if (this.sizeHandler.getScalingFactor() >= 6.0 && this.clusterRenderer != null) {
             clusterRenderer.handleZoomOut();
         }
     }
@@ -188,17 +192,17 @@ public class ScreenJournalProgressionRenderer {
      * 4.0 - 6.0 has to have focus + centering to center of cluster
      * 6.0 - 10.0 transition (6.0 - 8.0) + cluster rendering + handling (cursor movement)
      */
-    public void handleZoomIn(Point mouse) {
+    public void handleZoomIn() {
         double scale = sizeHandler.getScalingFactor();
         //double nextScale = Math.min(10.0D, scale + 0.2D);
-        if(scale >= 4.0D) {
-            if(focusedClusterZoom == null) {
-                ResearchProgression prog = tryFocusCluster(mouse);
-                if(prog != null) {
+        if (scale >= 4.0D) {
+            if (focusedClusterZoom == null && lastMousePosition != null) {
+                ResearchProgression prog = tryFocusCluster(lastMousePosition.x, lastMousePosition.y);
+                if (prog != null) {
                     focus(prog);
                 }
             }
-            if(focusedClusterZoom == null) {
+            if (focusedClusterZoom == null) {
                 return;
             }
             if (scale < 6.1D) { //Floating point shenanigans
@@ -207,10 +211,10 @@ public class ScreenJournalProgressionRenderer {
                 Vector3 center = new Vector3(rect.getCenterX(), rect.getCenterY(), 0);
                 Vector3 mousePos = new Vector3(mousePointScaled.getScaledPosX(), mousePointScaled.getScaledPosY(), 0);
                 Vector3 dir = center.subtract(mousePos);
-                if(vDiv > 0.05) {
+                if (vDiv > 0.05) {
                     dir.divide(vDiv);
                 }
-                if(!hasPrevOffset) {
+                if (!hasPrevOffset) {
                     mousePointScaled.updateScaledPos(
                             sizeHandler.clampX(mousePos.getX() + dir.getX()),
                             sizeHandler.clampY(mousePos.getY() + dir.getY()),
@@ -223,7 +227,7 @@ public class ScreenJournalProgressionRenderer {
                 }
 
                 updateMouseState();
-            } else if(clusterRenderer != null) {
+            } else if (clusterRenderer != null) {
                 clusterRenderer.handleZoomIn();
             }
         }
@@ -233,18 +237,20 @@ public class ScreenJournalProgressionRenderer {
 
     private void rescale(double newScale) {
         this.mousePointScaled.rescale(newScale);
-        if(this.previousMousePointScaled != null) {
+        if (this.previousMousePointScaled != null) {
             this.previousMousePointScaled.rescale(newScale);
         }
         updateMouseState();
     }
 
-    public void drawProgressionPart(float zLevel, Point mouse) {
+    public void drawProgressionPart(float zLevel, int mouseX, int mouseY) {
+        lastMousePosition = new Point(mouseX, mouseY);
+        
         drawBackground(zLevel);
 
         drawClusters(zLevel);
 
-        focusedClusterMouse = tryFocusCluster(mouse);
+        focusedClusterMouse = tryFocusCluster(mouseX, mouseY);
 
         double scaleX = this.mousePointScaled.getPosX();
         double scaleY = this.mousePointScaled.getPosY();
@@ -297,9 +303,9 @@ public class ScreenJournalProgressionRenderer {
     }
 
     @Nullable
-    private ResearchProgression tryFocusCluster(Point mouse) {
+    private ResearchProgression tryFocusCluster(int mouseX, int mouseY) {
         for (Rectangle r : this.clusterRectMap.keySet()) {
-            if(r.contains(mouse)) {
+            if (r.contains(mouseX, mouseY)) {
                 return this.clusterRectMap.get(r);
             }
         }
@@ -317,7 +323,7 @@ public class ScreenJournalProgressionRenderer {
 
     private void drawClusters(float zLevel) {
         clusterRectMap.clear();
-        if(sizeHandler.getScalingFactor() >= 8.01) return;
+        if (sizeHandler.getScalingFactor() >= 8.01) return;
 
         PlayerProgress thisProgress = ResearchHelper.getClientProgress();
         for (ResearchProgression progress : thisProgress.getResearchProgression()) {
@@ -331,9 +337,11 @@ public class ScreenJournalProgressionRenderer {
     }
 
     private void drawStarfieldParralaxLayers(double scalePosX, double scalePosY, float zLevel) {
+        GlStateManager.enableBlend();
         drawStarfieldOverlay(zLevel, scalePosX, scalePosY, 1.5);
         drawStarfieldOverlay(zLevel, scalePosX, scalePosY, 2.5);
         drawStarfieldOverlay(zLevel, scalePosX, scalePosY, 3.5);
+        GlStateManager.disableBlend();
     }
 
     private void renderCluster(ResearchProgression p, JournalCluster cluster,
@@ -360,12 +368,13 @@ public class ScreenJournalProgressionRenderer {
 
         double scale = sizeHandler.getScalingFactor();
         float br = 1F;
-        if(scale > 8.01) {
+        if (scale > 8.01) {
             br = 0F;
         } else if (scale >= 6) {
             br = (float) (1F - ((scale - 6) / 2));
         }
 
+        GlStateManager.enableBlend();
         Blending.ADDITIVEDARK.applyStateManager();
 
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -376,6 +385,7 @@ public class ScreenJournalProgressionRenderer {
         t.draw();
 
         Blending.DEFAULT.applyStateManager();
+        GlStateManager.disableBlend();
 
         GlStateManager.popMatrix();
     }
@@ -383,7 +393,7 @@ public class ScreenJournalProgressionRenderer {
     private void drawClusterBackground(AbstractRenderableTexture tex, float zLevel) {
         double scale = sizeHandler.getScalingFactor();
         float br = 0F;
-        if(scale > 8.01) {
+        if (scale > 8.01) {
             br = 1F;
         } else if (scale >= 6) {
             br = (float) (((scale - 6) / 2));
@@ -406,8 +416,7 @@ public class ScreenJournalProgressionRenderer {
 
     private void drawBackground(float zLevel) {
         float br = 0.5F;
-        GL11.glColor4f(br, br, br, 1.0F);
-        GlStateManager.disableBlend();
+        GlStateManager.color4f(br, br, br, 1F);
         TexturesAS.TEX_GUI_BACKGROUND_DEFAULT.bindTexture();
 
         BufferBuilder vb = Tessellator.getInstance().getBuffer();
@@ -418,13 +427,14 @@ public class ScreenJournalProgressionRenderer {
         vb.pos(realCoordLowerX,                   realCoordLowerY,                    zLevel).tex(0, 0).color(br, br, br, 1.0F).endVertex();
         Tessellator.getInstance().draw();
 
-        GlStateManager.enableBlend();
+        GlStateManager.color4f(1F, 1F, 1F, 1F);
     }
 
     private void drawStarfieldOverlay(float zLevel, double scalePosX, double scalePosY, double scaleFactor) {
-        GL11.glColor4f(1F, 1F, 1F, 0.15F);
         GlStateManager.pushMatrix();
         GlStateManager.scaled(scaleFactor, scaleFactor, scaleFactor);
+        Blending.OVERLAYDARK.applyStateManager();
+
         TexturesAS.TEX_GUI_STARFIELD_OVERLAY.bindTexture();
 
         double th = sizeHandler.getTotalHeight() / sizeHandler.getScalingFactor();
@@ -435,18 +445,16 @@ public class ScreenJournalProgressionRenderer {
         double lowV = (scalePosY - sizeHandler.heightToBorder) / th;
         double highV = lowV + (((float) realRenderHeight) / th);
 
-        Blending.ADDITIVEDARK.applyStateManager();
-
         BufferBuilder vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        vb.pos(0,               realRenderHeight, zLevel).tex(lowU,  highV).color(1F, 1F, 1F, 0.15F).endVertex();
-        vb.pos(realRenderWidth, realRenderHeight, zLevel).tex(highU, highV).color(1F, 1F, 1F, 0.15F).endVertex();
-        vb.pos(realRenderWidth, 0,                zLevel).tex(highU, lowV).color(1F, 1F, 1F, 0.15F).endVertex();
-        vb.pos(0,               0,                zLevel).tex(lowU, lowV).color(1F, 1F, 1F, 0.15F).endVertex();
+        vb.pos(0,               realRenderHeight, zLevel).tex(lowU,  highV).color(0.6F, 0.6F, 0.6F, 1F).endVertex();
+        vb.pos(realRenderWidth, realRenderHeight, zLevel).tex(highU, highV).color(0.6F, 0.6F, 0.6F, 1F).endVertex();
+        vb.pos(realRenderWidth, 0,                zLevel).tex(highU, lowV).color(0.6F, 0.6F, 0.6F, 1F).endVertex();
+        vb.pos(0,               0,                zLevel).tex(lowU, lowV).color(0.6F, 0.6F, 0.6F, 1F).endVertex();
         Tessellator.getInstance().draw();
-        GlStateManager.popMatrix();
 
         Blending.DEFAULT.applyStateManager();
+        GlStateManager.popMatrix();
     }
 
 }

@@ -78,23 +78,25 @@ public class ScreenJournalClusterRenderer {
         this.renderGuiWidth = guiWidth;
     }
 
-    public void propagateClick(ScreenJournalProgression parent, Point p) {
+    public boolean propagateClick(ScreenJournalProgression parent, Point p) {
         Rectangle frame = new Rectangle(renderOffsetX, renderOffsetY, renderGuiWidth, renderGuiHeight);
-        if(frame.contains(p)) {
+        if (frame.contains(p)) {
             for (Rectangle r : clickableNodes.keySet()) {
-                if(r.contains(p)) {
+                if (r.contains(p)) {
                     ResearchNode clicked = clickableNodes.get(r);
                     Minecraft.getInstance().displayGuiScreen(new ScreenJournalPages(parent, clicked));
+                    return true;
                 }
             }
         }
+        return false;
     }
 
-    public void drawMouseHighlight(float zLevel, Point mousePoint) {
+    public void drawMouseHighlight(float zLevel, int mouseX, int mouseY) {
         Rectangle frame = new Rectangle(renderOffsetX, renderOffsetY, renderGuiWidth, renderGuiHeight);
-        if (frame.contains(mousePoint)) {
+        if (frame.contains(mouseX, mouseY)) {
             for (Rectangle r : clickableNodes.keySet()) {
-                if (r.contains(mousePoint)) {
+                if (r.contains(mouseX, mouseY)) {
                     GlStateManager.pushMatrix();
                     GlStateManager.translated(r.getX(), r.getY(), 0);
                     GlStateManager.scaled(progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor());

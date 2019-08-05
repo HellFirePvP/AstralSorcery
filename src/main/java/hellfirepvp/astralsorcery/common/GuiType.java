@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common;
 
 import hellfirepvp.astralsorcery.client.screen.ScreenConstellationPaper;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import net.minecraft.client.gui.screen.Screen;
@@ -26,7 +27,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 public enum GuiType {
 
-    CONSTELLATION_PAPER;
+    CONSTELLATION_PAPER,
+    TOME;
 
     public CompoundNBT serializeArguments(Object[] data) {
         try {
@@ -49,7 +51,10 @@ public enum GuiType {
         try {
             switch (this) {
                 case CONSTELLATION_PAPER:
-                    return new ScreenConstellationPaper(RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(new ResourceLocation(data.getString("cst"))));
+                    return ScreenJournalProgression.getOpenJournalInstance();
+                    //return new ScreenConstellationPaper(RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(new ResourceLocation(data.getString("cst"))));
+                case TOME:
+                    return ScreenJournalProgression.getOpenJournalInstance();
                 default:
                     break;
             }
