@@ -38,7 +38,7 @@ public enum GuiType {
                     nbt.putString("cst", ((IConstellation) data[0]).getRegistryName().toString());
                     break;
                 default:
-                    throw new IllegalArgumentException("Unknown GuiType: " + this.name());
+                    break;
             }
             return nbt;
         } catch (Exception exc) {
@@ -51,16 +51,14 @@ public enum GuiType {
         try {
             switch (this) {
                 case CONSTELLATION_PAPER:
-                    return ScreenJournalProgression.getOpenJournalInstance();
-                    //return new ScreenConstellationPaper(RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(new ResourceLocation(data.getString("cst"))));
+                    return new ScreenConstellationPaper(RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(new ResourceLocation(data.getString("cst"))));
                 case TOME:
                     return ScreenJournalProgression.getOpenJournalInstance();
                 default:
-                    break;
+                    throw new IllegalArgumentException("Unknown GuiType: " + this.name());
             }
         } catch (Exception exc) {
             throw new IllegalArgumentException("Invalid Arguments for GuiType: " + this.name(), exc);
         }
-        throw new IllegalArgumentException("Unknown GuiType: " + this.name());
     }
 }

@@ -29,6 +29,13 @@ public class RegistrySprites {
         SPR_CRYSTAL_EFFECT_2 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_2, 5, 8);
         SPR_CRYSTAL_EFFECT_3 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_3, 5, 8);
 
+        SPR_PERK_INACTIVE          = new SpriteSheetResource(TEX_GUI_PERK_INACTIVE, 5, 8);
+        SPR_PERK_ACTIVE            = new SpriteSheetResource(TEX_GUI_PERK_ACTIVE, 5, 8);
+        SPR_PERK_ACTIVATEABLE      = new SpriteSheetResource(TEX_GUI_PERK_ACTIVATEABLE, 5, 8);
+        SPR_PERK_HALO_INACTIVE     = new SpriteSheetResource(TEX_GUI_PERK_HALO_INACTIVE, 4, 8);
+        SPR_PERK_HALO_ACTIVE       = new SpriteSheetResource(TEX_GUI_PERK_HALO_ACTIVE, 4, 8);
+        SPR_PERK_HALO_ACTIVATEABLE = new SpriteSheetResource(TEX_GUI_PERK_HALO_ACTIVATEABLE, 4, 8);
+
         SPR_COLLECTOR_EFFECT = new SpriteSheetResource(TEX_COLLECTOR_EFFECT, 5, 16);
         SPR_LIGHTBEAM = new SpriteSheetResource(TEX_LIGHTBEAM, 4, 16);
     }

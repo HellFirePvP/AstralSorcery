@@ -10,8 +10,9 @@ package hellfirepvp.astralsorcery.common.registry.internal;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
-import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
+import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
@@ -66,6 +67,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(ObserverProvider.class, this::registerStructureProviders);
         eventBus.addGenericListener(KnowledgeFragment.class, this::registerKnowledgeFragments);
         eventBus.addGenericListener(ConstellationEffectProvider.class, this::registerConstellationEffects);
+        eventBus.addGenericListener(PerkAttributeType.class, this::registerPerkAttributeTypes);
     }
 
     //This exists because you can't sort registries in any fashion or make one load after another in forge.
@@ -77,6 +79,8 @@ public class PrimerEventHandler {
 
         RegistryStructures.registerStructures();
         RegistryKnowledgeFragments.init();
+
+        RegistryPerkAttributeTypes.init();
 
         TransmissionClassRegistry.setupRegistry();
         SourceClassRegistry.setupRegistry();
@@ -127,6 +131,10 @@ public class PrimerEventHandler {
     }
 
     private void registerConstellationEffects(RegistryEvent.Register<ConstellationEffectProvider> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerPerkAttributeTypes(RegistryEvent.Register<PerkAttributeType> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

@@ -243,7 +243,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         GlStateManager.translated(guiLeft + 30, guiTop + 30, 0);
         for (int i = 0; i < locTextCapeEffect.size(); i++) {
             String line = locTextCapeEffect.get(i);
-            RenderingDrawUtils.renderStringAtPos(0, i * 10, font, line, 0xDDDDDD, true);
+            RenderingDrawUtils.renderStringAtPos(0, i * 10, font, line, 0xCCDDDDDD, true);
         }
         GlStateManager.popMatrix();
 
@@ -269,7 +269,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         GlStateManager.translated(guiLeft + 30, guiTop + 30, 0);
         for (int i = 0; i < locTextRitualEnch.size(); i++) {
             String line = locTextRitualEnch.get(i);
-            RenderingDrawUtils.renderStringAtPos(0, i * 10, font, line, 0xDDDDDD, true);
+            RenderingDrawUtils.renderStringAtPos(0, i * 10, font, line, 0xCCDDDDDD, true);
         }
         GlStateManager.popMatrix();
 
@@ -343,8 +343,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         } else {
             boolean known = ResearchHelper.getClientProgress().hasConstellationDiscovered(this.constellation);
 
-            GlStateManager.enableBlend();
-
             int size = 19;
             int offsetX = 95 + (width / 2) - (MoonPhase.values().length * (size + 2)) / 2;
             int offsetY = 199 + guiTop;
@@ -366,7 +364,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             }
 
             GlStateManager.color4f(1F, 1F, 1F, 1F);
-            GlStateManager.disableBlend();
         }
     }
 
@@ -403,7 +400,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
 
         Random rand = new Random(0x4196A15C91A5E199L);
 
-        GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
 
         boolean known = ResearchHelper.getClientProgress().hasConstellationDiscovered(constellation);
@@ -414,7 +410,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
                 true, false);
 
         GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GlStateManager.disableBlend();
     }
 
     private void drawBackArrow(float partialTicks, int mouseX, int mouseY) {
