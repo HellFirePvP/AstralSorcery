@@ -143,7 +143,7 @@ public class AstralSorcery {
         EventHandlerEntity.ritualFlight.clear();
         EventHandlerEntity.attackStack.clear();
         EventHandlerEntity.spawnDenyRegions.clear();
-        ((DataPatreonFlares) SyncDataHolder.getDataClient(SyncDataHolder.DATA_PATREON_FLARES)).cleanUp(Side.SERVER);
+        ((DataPatreonFlares) SyncDataHolder.getDataServer(SyncDataHolder.DATA_PATREON_FLARES)).cleanUp(Side.SERVER);
         PerkAttributeHelper.clearServer();
         ShootingStarHandler.getInstance().clearServerCache();
         PlayerActivityManager.INSTANCE.clearCache(Side.SERVER);
