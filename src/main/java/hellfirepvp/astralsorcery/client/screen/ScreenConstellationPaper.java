@@ -84,7 +84,6 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
         drawConstellation();
 
         drawPhaseInformation();
-
         GlStateManager.disableBlend();
     }
 

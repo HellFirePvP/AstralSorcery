@@ -337,11 +337,9 @@ public class ScreenJournalProgressionRenderer {
     }
 
     private void drawStarfieldParralaxLayers(double scalePosX, double scalePosY, float zLevel) {
-        GlStateManager.enableBlend();
         drawStarfieldOverlay(zLevel, scalePosX, scalePosY, 1.5);
         drawStarfieldOverlay(zLevel, scalePosX, scalePosY, 2.5);
         drawStarfieldOverlay(zLevel, scalePosX, scalePosY, 3.5);
-        GlStateManager.disableBlend();
     }
 
     private void renderCluster(ResearchProgression p, JournalCluster cluster,
@@ -374,7 +372,6 @@ public class ScreenJournalProgressionRenderer {
             br = (float) (1F - ((scale - 6) / 2));
         }
 
-        GlStateManager.enableBlend();
         Blending.ADDITIVEDARK.applyStateManager();
 
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -385,7 +382,6 @@ public class ScreenJournalProgressionRenderer {
         t.draw();
 
         Blending.DEFAULT.applyStateManager();
-        GlStateManager.disableBlend();
 
         GlStateManager.popMatrix();
     }

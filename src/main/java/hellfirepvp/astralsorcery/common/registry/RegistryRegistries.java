@@ -11,15 +11,14 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
-import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
+import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.registries.*;
 
 import static hellfirepvp.astralsorcery.common.lib.RegistriesAS.*;
@@ -80,6 +79,15 @@ public class RegistryRegistries {
         REGISTRY_KNOWLEDGE_FRAGMENTS = new RegistryBuilder<KnowledgeFragment>()
                 .setName(REGISTRY_NAME_KNOWLEDGE_FRAGMENTS)
                 .setType(KnowledgeFragment.class)
+                .disableSaving()
+                .disableOverrides()
+                .create();
+
+        REGISTRY_PERK_ATTRIBUTE_TYPES = new RegistryBuilder<PerkAttributeType>()
+                .setName(REGISTRY_NAME_PERK_ATTRIBUTE_TYPES)
+                .setType(PerkAttributeType.class)
+                .add((IForgeRegistry.AddCallback<PerkAttributeType>) (owner, stage, id, obj, oldObj) ->
+                        VanillaPerkAttributeTypeRegistry.register(obj))
                 .disableSaving()
                 .disableOverrides()
                 .create();

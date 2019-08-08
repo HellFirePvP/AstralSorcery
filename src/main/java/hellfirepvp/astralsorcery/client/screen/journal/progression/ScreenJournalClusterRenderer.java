@@ -203,7 +203,6 @@ public class ScreenJournalClusterRenderer {
 
         GlStateManager.pushMatrix();
         GlStateManager.depthMask(true);
-        GlStateManager.enableBlend();
 
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -287,7 +286,6 @@ public class ScreenJournalClusterRenderer {
                 break;
         }
 
-        GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }
 
@@ -311,7 +309,6 @@ public class ScreenJournalClusterRenderer {
         GlStateManager.pushMatrix();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
         GlStateManager.disableTexture();
-        GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
         GlStateManager.lineWidth(3.5F);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
@@ -337,7 +334,6 @@ public class ScreenJournalClusterRenderer {
 
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GlStateManager.lineWidth(2.0F);
-        GlStateManager.disableBlend();
         GlStateManager.enableTexture();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
         GlStateManager.popMatrix();

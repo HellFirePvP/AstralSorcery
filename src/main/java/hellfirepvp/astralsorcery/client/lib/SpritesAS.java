@@ -25,6 +25,13 @@ public class SpritesAS {
     public static SpriteSheetResource SPR_CRYSTAL_EFFECT_2;
     public static SpriteSheetResource SPR_CRYSTAL_EFFECT_3;
 
+    public static SpriteSheetResource SPR_PERK_INACTIVE;
+    public static SpriteSheetResource SPR_PERK_ACTIVE;
+    public static SpriteSheetResource SPR_PERK_ACTIVATEABLE;
+    public static SpriteSheetResource SPR_PERK_HALO_INACTIVE;
+    public static SpriteSheetResource SPR_PERK_HALO_ACTIVE;
+    public static SpriteSheetResource SPR_PERK_HALO_ACTIVATEABLE;
+
     public static SpriteSheetResource SPR_COLLECTOR_EFFECT;
     public static SpriteSheetResource SPR_LIGHTBEAM;
 

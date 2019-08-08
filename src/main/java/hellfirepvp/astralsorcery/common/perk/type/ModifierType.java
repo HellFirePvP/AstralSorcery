@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2019
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.perk.type;
+
+import net.minecraft.util.math.MathHelper;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: ModifierType
+ * Created by HellFirePvP
+ * Date: 08.08.2019 / 17:27
+ */
+public enum  ModifierType {
+
+    ADDITION,
+    ADDED_MULTIPLY,
+    STACKING_MULTIPLY;
+
+    public static ModifierType fromVanillaAttributeOperation(int op) {
+        return values()[MathHelper.clamp(op, 0, values().length - 1)];
+    }
+
+    public int getVanillaAttributeOperation() {
+        return ordinal();
+    }
+
+    // We don't need the explicit + addition to positive percentages
+    public String stringifyValue(float number) {
+        if (this == ADDITION) {
+            String str = Integer.toString(Math.round(number));
+            if (number > 0) {
+                str = "+" + str;
+            }
+            return str;
+        } else {
+            int nbr = Math.round(number * 100);
+            return Integer.toString(Math.abs(this == STACKING_MULTIPLY ? 100 - nbr : nbr));
+        }
+    }
+
+    public String getUnlocalizedModifierName(float number) {
+        boolean positive;
+        if (this == ADDITION) {
+            positive = number > 0; //0 would be kinda... weird as addition/subtraction modifier...
+        } else {
+            int nbr = Math.round(number * 100);
+            positive = this == STACKING_MULTIPLY ? nbr > 100 : nbr > 0;
+        }
+        return getUnlocalizedModifierName(positive);
+    }
+
+    public String getUnlocalizedModifierName(boolean positive) {
+        String base = positive ? "perk.modifier.%s.add" : "perk.modifier.%s.sub";
+        return String.format(base, name().toLowerCase());
+    }
+}

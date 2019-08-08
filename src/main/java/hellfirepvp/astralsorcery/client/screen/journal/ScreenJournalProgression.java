@@ -114,6 +114,7 @@ public class ScreenJournalProgression extends ScreenJournal {
     public void render(int mouseX, int mouseY, float pTicks) {
         super.render(mouseX, mouseY, pTicks);
 
+        GlStateManager.enableBlend();
         GlStateManager.pushMatrix();
 
         int cleanedX = mouseX - guiLeft;
@@ -153,6 +154,7 @@ public class ScreenJournalProgression extends ScreenJournal {
         this.blitOffset -= 150;
 
         GlStateManager.popMatrix();
+        GlStateManager.disableBlend();
     }
 
     private void drawMouseHighlight(float zLevel, int mouseX, int mouseY, Rectangle starRect) {

@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.event;
 
-import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.Event;

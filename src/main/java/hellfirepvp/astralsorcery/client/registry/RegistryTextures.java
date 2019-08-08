@@ -47,6 +47,13 @@ public class RegistryTextures {
         TEX_GUI_CLUSTER_DISCOVERY           = loadTexture(GUI, "cluster_discovery");
         TEX_GUI_CLUSTER_RADIANCE            = loadTexture(GUI, "cluster_radiance");
 
+        TEX_GUI_PERK_INACTIVE               = loadTexture(EFFECT, "perk_inactive");
+        TEX_GUI_PERK_ACTIVE                 = loadTexture(EFFECT, "perk_active");
+        TEX_GUI_PERK_ACTIVATEABLE           = loadTexture(EFFECT, "perk_activateable");
+        TEX_GUI_PERK_HALO_INACTIVE          = loadTexture(EFFECT, "perk_halo_inactive");
+        TEX_GUI_PERK_HALO_ACTIVE            = loadTexture(EFFECT, "perk_halo_active");
+        TEX_GUI_PERK_HALO_ACTIVATEABLE      = loadTexture(EFFECT, "perk_halo_activateable");
+
         TEX_SOLAR_ECLIPSE   = loadTexture(ENVIRONMENT, "solar_eclipse");
         TEX_STAR_CONNECTION = loadTexture(ENVIRONMENT, "line");
         TEX_STAR_1          = loadTexture(ENVIRONMENT, "star_1");
