@@ -138,6 +138,7 @@
   "gui.journal.perks": "Perks",
   "gui.journal.perks.stats": "Perk Statistics",
   "gui.journal.knowledge": "Knowledge",
+  "gui.tome.storage": "Tome",
 
   "death.attack.as.stellar": "%1$s disintegrated into Stardust",
   "death.attack.as.bleed": "%1$s bled to death",

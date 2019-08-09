@@ -55,19 +55,26 @@ public class RegistryTextures {
         TEX_GUI_PERK_HALO_ACTIVATEABLE      = loadTexture(EFFECT, "perk_halo_activateable");
         TEX_GUI_PERK_SEARCH                 = TEX_GUI_PERK_INACTIVE; //Works fine enough
         TEX_GUI_PERK_SEAL                   = loadTexture(EFFECT, "perk_seal");
+        TEX_GUI_PERK_SEAL_BREAK             = loadTexture(EFFECT, "perk_seal_break");
+        TEX_GUI_PERK_UNLOCK                 = loadTexture(EFFECT, "perk_unlock");
+
+        TEX_GUI_LINE_CONNECTION             = loadTexture(EFFECT, "line_connection");
+        TEX_GUI_TEXT_FIELD                  = loadTexture(GUI, "text_field");
+        TEX_GUI_MENU_SLOT_GEM_CONTEXT       = loadTexture(GUI, "menu_slot_gem_context");
+        TEX_GUI_MENU_SLOT                   = loadTexture(GUI, "menu_slot");
 
         TEX_SOLAR_ECLIPSE   = loadTexture(ENVIRONMENT, "solar_eclipse");
         TEX_STAR_CONNECTION = loadTexture(ENVIRONMENT, "line");
         TEX_STAR_1          = loadTexture(ENVIRONMENT, "star_1");
         TEX_STAR_2          = loadTexture(ENVIRONMENT, "star_2");
 
-        TEX_STATIC_FLARE     = loadTexture(EFFECT, "flarestatic");
-        TEX_CRYSTAL_EFFECT_1 = loadTexture(EFFECT, "ceffect1");
-        TEX_CRYSTAL_EFFECT_2 = loadTexture(EFFECT, "ceffect2");
-        TEX_CRYSTAL_EFFECT_3 = loadTexture(EFFECT, "ceffect3");
-        TEX_COLLECTOR_EFFECT = loadTexture(EFFECT, "burst2");
+        TEX_STATIC_FLARE     = loadTexture(EFFECT, "flare_light");
+        TEX_CRYSTAL_EFFECT_1 = loadTexture(EFFECT, "crystal_burst_effect_1");
+        TEX_CRYSTAL_EFFECT_2 = loadTexture(EFFECT, "crystal_burst_effect_2");
+        TEX_CRYSTAL_EFFECT_3 = loadTexture(EFFECT, "crystal_burst_effect_3");
+        TEX_COLLECTOR_EFFECT = loadTexture(EFFECT, "collector_crystal_burst");
 
-        TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightningpart");
+        TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");
     }
 

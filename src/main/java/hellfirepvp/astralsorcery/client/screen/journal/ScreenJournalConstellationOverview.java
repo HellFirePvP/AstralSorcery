@@ -70,20 +70,17 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
                 .collect(Collectors.toList()));
     }
 
-    //TODO refactor, blending enabled by default
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
         drawConstellationBackground();
         drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
 
-        GlStateManager.enableBlend();
         this.blitOffset += 250;
 
         drawNavArrows(pTicks, mouseX, mouseY);
         drawConstellations(pTicks, mouseX, mouseY);
 
         this.blitOffset -= 250;
-        GlStateManager.disableBlend();
     }
 
     private void drawConstellationBackground() {

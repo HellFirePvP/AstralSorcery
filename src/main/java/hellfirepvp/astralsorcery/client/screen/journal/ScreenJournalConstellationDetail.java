@@ -23,7 +23,6 @@ import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.GatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
@@ -37,7 +36,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -203,8 +201,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
     public void render(int mouseX, int mouseY, float pTicks) {
         this.lastFramePage = null;
 
-        GlStateManager.enableBlend();
-
         if (this.doublePageID == 0) {
             drawCstBackground();
             drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_LEFT, mouseX, mouseY);
@@ -235,8 +231,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
                 break;
         }
         this.blitOffset -= 250;
-
-        GlStateManager.disableBlend();
     }
 
     private void drawCapeInformationPages(int mouseX, int mouseY, float partialTicks) {
@@ -351,7 +345,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             int offsetX = 95 + (width / 2) - (MoonPhase.values().length * (size + 2)) / 2;
             int offsetY = 199 + guiTop;
 
-            Blending.DEFAULT.applyStateManager();
             MoonPhase[] mPhases = MoonPhase.values();
             for (int i = 0; i < mPhases.length; i++) {
                 MoonPhase phase = mPhases[i];
@@ -366,6 +359,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
                 }
                 drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
             }
+            Blending.DEFAULT.applyStateManager();
 
             GlStateManager.color4f(1F, 1F, 1F, 1F);
         }
@@ -403,8 +397,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         GlStateManager.enableDepthTest();
 
         Random rand = new Random(0x4196A15C91A5E199L);
-
-        Blending.DEFAULT.applyStateManager();
 
         boolean known = ResearchHelper.getClientProgress().hasConstellationDiscovered(constellation);
         RenderingConstellationUtils.renderConstellationIntoGUI(known ? constellation.getConstellationColor() : constellation.getTierRenderColor(), constellation,

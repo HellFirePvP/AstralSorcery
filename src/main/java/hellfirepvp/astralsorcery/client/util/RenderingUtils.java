@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import net.minecraft.block.BlockRenderType;
@@ -15,9 +16,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -81,6 +85,27 @@ public class RenderingUtils {
             return false;
         }
         return fx.getPosition().distanceSquared(view) <= RenderingConfig.CONFIG.getMaxEffectRenderDistanceSq();
+    }
+
+    public static void renderItemStack(ItemRenderer itemRenderer, ItemStack stack, int x, int y, @Nullable String alternativeText) {
+        RenderHelper.enableGUIStandardItemLighting();
+        GlStateManager.disableDepthTest();
+        GlStateManager.pushMatrix();
+
+        GlStateManager.translatef(0.0F, 0.0F, 32.0F);
+        itemRenderer.zLevel = 200.0F;
+        net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
+        if (font == null) {
+            font = Minecraft.getInstance().fontRenderer;
+        }
+        itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
+        itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y - (stack.isEmpty() ? 0 : 8), alternativeText);
+
+        itemRenderer.zLevel = 0.0F;
+
+        GlStateManager.popMatrix();
+        GlStateManager.enableDepthTest();
+        RenderHelper.enableStandardItemLighting();
     }
 
     public static void renderSimpleBlockModel(BlockState state, BufferBuilder buf) {
