@@ -56,7 +56,6 @@ public class ScreenJournalOverlayKnowledge extends ScreenJournalOverlay {
         super.render(mouseX, mouseY, partialTicks);
 
         GlStateManager.disableDepthTest();
-        GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
 
         int width = 275;

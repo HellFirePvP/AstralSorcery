@@ -21,6 +21,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -256,11 +258,11 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     //Default: modname of added mod
     @Nullable
     @OnlyIn(Dist.CLIENT)
-    public Collection<String> getSource() {
+    public Collection<ITextComponent> getSource() {
         String modid = getRegistryName().getNamespace();
         ModContainer mod = ModList.get().getModContainerById(modid).orElse(null);
         if (mod != null) {
-            return Lists.newArrayList(mod.getModInfo().getDisplayName());
+            return Lists.newArrayList(new StringTextComponent(mod.getModInfo().getDisplayName()));
         }
         return null;
     }

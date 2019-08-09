@@ -31,6 +31,8 @@ import java.util.TreeMap;
 @OnlyIn(Dist.CLIENT)
 public class BatchPerkContext {
 
+    private static final BufferContext ctx = BufferBatchHelper.make();
+
     public static final int PRIORITY_BACKGROUND = 100;
     public static final int PRIORITY_FOREGROUND = 200;
     public static final int PRIORITY_OVERLAY    = 300;
@@ -41,7 +43,7 @@ public class BatchPerkContext {
         TextureObjectGroup group = MiscUtils.iterativeSearch(bufferGroups.keySet(), gr -> gr.getResource().equals(tex));
         if (group == null) {
             group = new TextureObjectGroup(tex, sortPriority);
-            bufferGroups.put(group, BufferBatchHelper.make());
+            bufferGroups.put(group, ctx);
         }
         return group;
     }

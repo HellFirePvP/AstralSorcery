@@ -37,10 +37,8 @@ public class ConnectionEventHandler {
 
     //TODO on disconnect.
     public void onDc() {
-        AstralSorcery.log.info("Cleaning client cache...");
         EffectHandler.cleanUp();
         ClientProxy.connected = false;
-        AstralSorcery.log.info("Cleared cached client data! Disconnected from server.");
     }
 
 }

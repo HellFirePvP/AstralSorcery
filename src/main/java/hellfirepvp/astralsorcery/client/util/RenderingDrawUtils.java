@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -19,9 +21,9 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -29,6 +31,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -77,7 +80,42 @@ public class RenderingDrawUtils {
         }
     }
 
-    public static void renderBlueTooltip(int x, int y, java.util.List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+    public static Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeightBase, float pTicks) {
+        float tick = ClientScheduler.getClientTick() + pTicks;
+        float deg = (tick * 2) % 360F;
+        float wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick) * 4) % 360F)) + 1F);
+        drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
+
+        deg = ((tick + 22.5F) * 2) % 360F;
+        wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick + 45F) * 4) % 360F)) + 1F);
+        drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
+
+        return new Rectangle(MathHelper.floor(offsetX - widthHeightBase / 2F), MathHelper.floor(offsetY - widthHeightBase / 2F),
+                MathHelper.floor(widthHeightBase), MathHelper.floor(widthHeightBase));
+    }
+
+    public static void drawInfoStarSingle(float offsetX, float offsetY, float zLevel, float widthHeight, double deg) {
+        TexturesAS.TEX_STAR_1.bindTexture();
+        Vector3 offset = new Vector3(-widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv01   = new Vector3(-widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv11   = new Vector3( widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv10   = new Vector3( widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(offsetX + uv01.getX(),   offsetY + uv01.getY(),   zLevel).tex(0, 1).endVertex();
+        vb.pos(offsetX + uv11.getX(),   offsetY + uv11.getY(),   zLevel).tex(1, 1).endVertex();
+        vb.pos(offsetX + uv10.getX(),   offsetY + uv10.getY(),   zLevel).tex(1, 0).endVertex();
+        vb.pos(offsetX + offset.getX(), offsetY + offset.getY(), zLevel).tex(0, 0).endVertex();
+        tes.draw();
+    }
+
+    public static void renderBlueTooltipComponents(int x, int y, List<ITextComponent> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+        renderBlueTooltip(x, y, tooltipData.stream().map(ITextComponent::getFormattedText).collect(Collectors.toList()), fontRenderer, isFirstLineHeadline);
+    }
+
+    public static void renderBlueTooltip(int x, int y, List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         renderTooltip(x, y, tooltipData, 0x000027, 0x000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
     }
 
@@ -137,6 +175,28 @@ public class RenderingDrawUtils {
         GlStateManager.enableDepthTest();
         RenderHelper.enableStandardItemLighting();
         GlStateManager.enableRescaleNormal();
+    }
+
+    public static void renderBlueTooltipBox(int x, int y, int width, int height) {
+        renderTooltipBox(x, y, width, height, 0x000027, 0x000044);
+    }
+
+    public static void renderTooltipBox(int x, int y, int width, int height, int color, int colorFade) {
+        int pX = x + 12;
+        int pY = y - 12;
+        int z = 300;
+
+        GuiUtils.drawGradientRect(z, pX - 3,           pY - 4,          pX + width + 3, pY - 3,         color, colorFade);
+        GuiUtils.drawGradientRect(z, pX - 3,           pY + height + 3, pX + width + 3, pY + height + 4, color, colorFade);
+        GuiUtils.drawGradientRect(z, pX - 3,           pY - 3,          pX + width + 3, pY + height + 3, color, colorFade);
+        GuiUtils.drawGradientRect(z, pX - 4,           pY - 3,          pX - 3,         pY + height + 3, color, colorFade);
+        GuiUtils.drawGradientRect(z, pX + width + 3,   pY - 3,          pX + width + 4, pY + height + 3, color, colorFade);
+
+        int col = (color & 0x00FFFFFF) | color & 0xFF000000;
+        GuiUtils. drawGradientRect(z, pX - 3,           pY - 3 + 1,      pX - 3 + 1,     pY + height + 3 - 1, color, col);
+        GuiUtils. drawGradientRect(z, pX + width + 2,   pY - 3 + 1,      pX + width + 3, pY + height + 3 - 1, color, col);
+        GuiUtils. drawGradientRect(z, pX - 3,           pY - 3,          pX + width + 3, pY - 3 + 1,          col,   col);
+        GuiUtils. drawGradientRect(z, pX - 3,           pY + height + 2, pX + width + 3, pY + height + 3,     color, color);
     }
 
     public static void renderFacingFullQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, int r, int g, int b, float alpha) {

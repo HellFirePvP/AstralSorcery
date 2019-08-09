@@ -45,6 +45,11 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_CLUSTER_DISCOVERY;
     public static AbstractRenderableTexture TEX_GUI_CLUSTER_RADIANCE;
 
+    public static AbstractRenderableTexture TEX_GUI_LINE_CONNECTION;
+    public static AbstractRenderableTexture TEX_GUI_TEXT_FIELD;
+    public static AbstractRenderableTexture TEX_GUI_MENU_SLOT_GEM_CONTEXT;
+    public static AbstractRenderableTexture TEX_GUI_MENU_SLOT;
+
     public static AbstractRenderableTexture TEX_GUI_PERK_INACTIVE;
     public static AbstractRenderableTexture TEX_GUI_PERK_ACTIVE;
     public static AbstractRenderableTexture TEX_GUI_PERK_ACTIVATEABLE;
@@ -53,6 +58,8 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_PERK_HALO_ACTIVATEABLE;
     public static AbstractRenderableTexture TEX_GUI_PERK_SEARCH;
     public static AbstractRenderableTexture TEX_GUI_PERK_SEAL;
+    public static AbstractRenderableTexture TEX_GUI_PERK_SEAL_BREAK;
+    public static AbstractRenderableTexture TEX_GUI_PERK_UNLOCK;
 
     public static AbstractRenderableTexture TEX_SOLAR_ECLIPSE;
     public static AbstractRenderableTexture TEX_STAR_CONNECTION;

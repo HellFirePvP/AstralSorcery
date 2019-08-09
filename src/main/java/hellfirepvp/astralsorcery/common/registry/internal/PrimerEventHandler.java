@@ -22,6 +22,7 @@ import hellfirepvp.observerlib.api.structure.MatchableStructure;
 import hellfirepvp.observerlib.api.structure.ObserverProvider;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Potion;
@@ -68,6 +69,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(KnowledgeFragment.class, this::registerKnowledgeFragments);
         eventBus.addGenericListener(ConstellationEffectProvider.class, this::registerConstellationEffects);
         eventBus.addGenericListener(PerkAttributeType.class, this::registerPerkAttributeTypes);
+        eventBus.addGenericListener(ContainerType.class, this::registerContainerTypes);
     }
 
     //This exists because you can't sort registries in any fashion or make one load after another in forge.
@@ -135,6 +137,11 @@ public class PrimerEventHandler {
     }
 
     private void registerPerkAttributeTypes(RegistryEvent.Register<PerkAttributeType> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event) {
+        RegistryContainerTypes.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

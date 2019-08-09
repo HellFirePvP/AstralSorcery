@@ -74,7 +74,6 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
-        GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
 
         drawWHRect(TexturesAS.TEX_GUI_CONSTELLATION_PAPER);
@@ -84,7 +83,6 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
         drawConstellation();
 
         drawPhaseInformation();
-        GlStateManager.disableBlend();
     }
 
     private void drawHeader() {

@@ -120,7 +120,6 @@ public class ScreenJournalPages extends ScreenJournal {
         super.render(mouseX, mouseY, pTicks);
 
         GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
 
         if (origin != null) {
             drawDefault(TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
