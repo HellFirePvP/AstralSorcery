@@ -8,12 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -72,11 +75,10 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
             public void handleClient(PktUnlockPerk packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
                     if (packet.serverAccept) {
-                        //TODO perks
-                        //GuiScreen current = Minecraft.getInstance().currentScreen;
-                        //if (current instanceof GuiJournalPerkTree) {
-                        //    Minecraft.getInstance().addScheduledTask(() -> ((GuiJournalPerkTree) current).playUnlockAnimation(packet.perk));
-                        //}
+                        Screen current = Minecraft.getInstance().currentScreen;
+                        if (current instanceof ScreenJournalPerkTree) {
+                            Minecraft.getInstance().enqueue(() -> ((ScreenJournalPerkTree) current).playUnlockAnimation(packet.perk));
+                        }
                     }
                 });
             }

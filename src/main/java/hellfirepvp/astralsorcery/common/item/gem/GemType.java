@@ -6,26 +6,27 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.perk.type.vanilla;
-
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.player.PlayerEntity;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+package hellfirepvp.astralsorcery.common.item.gem;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: VanillaPerkAttributeType
+ * Class: GemType
  * Created by HellFirePvP
- * Date: 08.08.2019 / 17:07
+ * Date: 09.08.2019 / 07:33
  */
-public interface VanillaPerkAttributeType {
+public enum GemType {
 
-    @Nonnull
-    IAttribute getAttribute();
+    SKY(1.0F, 1.0F),
+    DAY(7.5F, 0.6F),
+    NIGHT(0.5F, 3.0F);
 
-    void refreshAttribute(PlayerEntity player);
+    public final float countModifier;
+    public final float amplifierModifier;
+
+    GemType(float countModifier, float amplifierModifier) {
+        this.countModifier = countModifier;
+        this.amplifierModifier = amplifierModifier;
+    }
 
 }

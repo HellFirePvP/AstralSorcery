@@ -30,10 +30,6 @@ public class AttributeConverterPerk extends ProgressGatedPerk implements Convert
 
     private List<PerkConverter> converters = Lists.newArrayList();
 
-    public AttributeConverterPerk(String name, int x, int y) {
-        super(name, x, y);
-    }
-
     public AttributeConverterPerk(ResourceLocation name, int x, int y) {
         super(name, x, y);
     }

@@ -32,10 +32,6 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     private BiFunction<PlayerEntity, PlayerProgress, Boolean> unlockFunction = (player, progress) -> true;
 
-    public ProgressGatedPerk(String name, int x, int y) {
-        super(name, x, y);
-    }
-
     public ProgressGatedPerk(ResourceLocation name, int x, int y) {
         super(name, x, y);
     }

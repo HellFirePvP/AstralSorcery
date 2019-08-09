@@ -91,6 +91,10 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         buildCapeText();
     }
 
+    public IConstellation getConstellation() {
+        return constellation;
+    }
+
     private void buildCapeText() {
         if (GatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchHelper.getClientProgress())) {
             String unlocEnch = constellation.getUnlocalizedName() + ".capeeffect";

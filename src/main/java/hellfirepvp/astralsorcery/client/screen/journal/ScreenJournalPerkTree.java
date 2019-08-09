@@ -12,9 +12,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.screen.helper.ScalingPoint;
 import hellfirepvp.astralsorcery.client.screen.helper.ScreenRenderBoundingBox;
 import hellfirepvp.astralsorcery.client.screen.helper.SizeHandler;
+import hellfirepvp.astralsorcery.client.screen.journal.overlay.ScreenJournalOverlayPerkStatistics;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRenderGroup;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkTreeSizeHandler;
@@ -23,6 +25,8 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.ItemPerkSeal;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktPerkGemModification;
@@ -30,6 +34,7 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestPerkSeal
 import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.ProgressGatedPerk;
+import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
@@ -89,7 +94,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private ScreenTextEntry searchTextEntry = new ScreenTextEntry();
     private List<AbstractPerk> searchMatches = Lists.newArrayList();
 
-    //private GemSlotPerk socketMenu = null;
+    private GemSlotPerk socketMenu = null;
     private Rectangle rSocketMenu = null;
     private Map<Rectangle, Integer> slotsSocketMenu = Maps.newHashMap();
     private Rectangle rStatStar = null;
@@ -120,9 +125,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     public static void initializeDrawBuffer() {
         drawBuffer = new BatchPerkContext();
 
-        //TODO add sprites
-        //searchContext = drawBuffer.addContext(textureSearchMark, BatchPerkContext.PRIORITY_OVERLAY);
-        //sealContext = drawBuffer.addContext(SpriteLibrary.spritePerkSeal, BatchPerkContext.PRIORITY_FOREGROUND);
+        searchContext = drawBuffer.addContext(SpritesAS.SPR_PERK_SEARCH, BatchPerkContext.PRIORITY_OVERLAY);
+        sealContext = drawBuffer.addContext(SpritesAS.SPR_PERK_SEAL, BatchPerkContext.PRIORITY_FOREGROUND);
 
         List<PerkRenderGroup> groups = Lists.newArrayList();
         for (PerkTreePoint<?> p : PerkTree.PERK_TREE.getPerkPoints()) {
@@ -253,12 +257,11 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     }
 
     private void closeSocketMenu() {
-        //this.socketMenu = null;
+        this.socketMenu = null;
         this.rSocketMenu = null;
         this.slotsSocketMenu.clear();
     }
 
-    /* TODO actually implement fully tomorrow.
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int state) {
         if (super.mouseReleased(mouseX, mouseY, state)) {
@@ -379,14 +382,14 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
             if (rectSealBox.contains(mouseX - guiLeft, mouseY - guiTop)) {
                 if (!this.foundSeals.isEmpty()) {
-                    this.mouseSealStack = new ItemStack(ItemsAS.perkSeal);
+                    this.mouseSealStack = new ItemStack(ItemsAS.PERK_SEAL);
                 }
                 return true;
             }
 
             if (rStatStar.contains(mouseX, mouseY)) {
                 this.expectReinit = true;
-                mc.displayGuiScreen(new GuiJournalOverlayPerkStats(this));
+                mc.displayGuiScreen(new ScreenJournalOverlayPerkStatistics(this));
                 return true;
             }
         }
@@ -437,8 +440,6 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         }
         return false;
     }
-
-    */
 
     @Override
     public boolean charTyped(char charCode, int keyModifiers) {

@@ -53,6 +53,8 @@ public class RegistryTextures {
         TEX_GUI_PERK_HALO_INACTIVE          = loadTexture(EFFECT, "perk_halo_inactive");
         TEX_GUI_PERK_HALO_ACTIVE            = loadTexture(EFFECT, "perk_halo_active");
         TEX_GUI_PERK_HALO_ACTIVATEABLE      = loadTexture(EFFECT, "perk_halo_activateable");
+        TEX_GUI_PERK_SEARCH                 = TEX_GUI_PERK_INACTIVE; //Works fine enough
+        TEX_GUI_PERK_SEAL                   = loadTexture(EFFECT, "perk_seal");
 
         TEX_SOLAR_ECLIPSE   = loadTexture(ENVIRONMENT, "solar_eclipse");
         TEX_STAR_CONNECTION = loadTexture(ENVIRONMENT, "line");

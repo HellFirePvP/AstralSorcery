@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
+import hellfirepvp.astralsorcery.common.item.ItemPerkSeal;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
@@ -72,10 +74,9 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
             public void handleClient(PktRequestPerkSealAction packet, NetworkEvent.Context context) {
                 if (!packet.doSealing) {
                     Screen current = Minecraft.getInstance().currentScreen;
-                    // TODO perk seals
-                    //if(current instanceof GuiJournalPerkTree) {
-                    //    Minecraft.getInstance().addScheduledTask(() -> ((GuiJournalPerkTree) current).playSealBreakAnimation(packet.perk));
-                    //}
+                    if(current instanceof ScreenJournalPerkTree) {
+                        Minecraft.getInstance().enqueue(() -> ((ScreenJournalPerkTree) current).playSealBreakAnimation(packet.perk));
+                    }
                 }
             }
 
@@ -84,13 +85,12 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
                 context.enqueueWork(() -> {
                     PlayerEntity player = context.getSender();
                     if (packet.doSealing) {
-                        // TODO perk seals
-                        //if (ItemPerkSeal.useSeal(player, true) &&
-                        //        ResearchManager.applyPerkSeal(player, packet.perk)) {
-                        //    if (!ItemPerkSeal.useSeal(player, false)) {
-                        //        ResearchManager.breakPerkSeal(player, packet.perk);
-                        //    }
-                        //}
+                        if (ItemPerkSeal.useSeal(player, true) &&
+                                ResearchManager.applyPerkSeal(player, packet.perk)) {
+                            if (!ItemPerkSeal.useSeal(player, false)) {
+                                ResearchManager.breakPerkSeal(player, packet.perk);
+                            }
+                        }
                     } else {
                         if(ResearchManager.breakPerkSeal(player, packet.perk)) {
                             packet.replyWith(new PktRequestPerkSealAction(packet.perk, false), context);

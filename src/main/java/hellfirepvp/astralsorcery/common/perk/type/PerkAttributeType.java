@@ -10,7 +10,9 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -19,6 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -61,11 +64,10 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
 
     protected void init() {}
 
-    //TODO attribute readers
-    //@Nullable
-    //public AttributeReader getReader() {
-    //    return AttributeReaderRegistry.getReader(this.getTypeString());
-    //}
+    @Nullable
+    public PerkAttributeReader getReader() {
+        return RegistriesAS.REGISTRY_PERK_ATTRIBUTE_READERS.getValue(this.getRegistryName());
+    }
 
     @Nonnull
     public PerkAttributeModifier createModifier(float modifier, ModifierType mode) {

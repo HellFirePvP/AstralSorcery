@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.screen.journal.overlay;
 
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
@@ -62,10 +63,9 @@ public abstract class ScreenJournalOverlay extends ScreenJournal {
             ((ScreenJournalProgression) origin).expectReInit();
         }
 
-        //TODO perk tree screen
-        //if (origin instanceof GuiJournalPerkTree) {
-        //    ((GuiJournalPerkTree) origin).expectReinit = true;
-        //}
+        if (origin instanceof ScreenJournalPerkTree) {
+            ((ScreenJournalPerkTree) origin).expectReinit = true;
+        }
     }
 
     @Override

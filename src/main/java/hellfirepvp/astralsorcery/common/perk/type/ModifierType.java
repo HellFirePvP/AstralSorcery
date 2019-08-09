@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -23,12 +24,12 @@ public enum  ModifierType {
     ADDED_MULTIPLY,
     STACKING_MULTIPLY;
 
-    public static ModifierType fromVanillaAttributeOperation(int op) {
-        return values()[MathHelper.clamp(op, 0, values().length - 1)];
+    public static ModifierType fromVanillaAttributeOperation(AttributeModifier.Operation op) {
+        return values()[MathHelper.clamp(op.getId(), 0, values().length - 1)];
     }
 
-    public int getVanillaAttributeOperation() {
-        return ordinal();
+    public AttributeModifier.Operation getVanillaAttributeOperation() {
+        return AttributeModifier.Operation.values()[ordinal()];
     }
 
     // We don't need the explicit + addition to positive percentages

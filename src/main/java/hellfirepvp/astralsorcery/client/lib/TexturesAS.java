@@ -51,6 +51,8 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_PERK_HALO_INACTIVE;
     public static AbstractRenderableTexture TEX_GUI_PERK_HALO_ACTIVE;
     public static AbstractRenderableTexture TEX_GUI_PERK_HALO_ACTIVATEABLE;
+    public static AbstractRenderableTexture TEX_GUI_PERK_SEARCH;
+    public static AbstractRenderableTexture TEX_GUI_PERK_SEAL;
 
     public static AbstractRenderableTexture TEX_SOLAR_ECLIPSE;
     public static AbstractRenderableTexture TEX_STAR_CONNECTION;

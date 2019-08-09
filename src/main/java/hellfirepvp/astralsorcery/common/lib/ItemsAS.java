@@ -13,6 +13,10 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystal;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemDay;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,6 +36,10 @@ public class ItemsAS {
     public static ItemStarmetalIngot STARMETAL_INGOT;
     public static ItemStardust STARDUST;
 
+    public static ItemPerkSeal PERK_SEAL;
+    public static ItemPerkGemSky PERK_GEM_SKY;
+    public static ItemPerkGemDay PERK_GEM_DAY;
+    public static ItemPerkGemNight PERK_GEM_NIGHT;
 
     public static ItemConstellationPaper CONSTELLATION_PAPER;
 

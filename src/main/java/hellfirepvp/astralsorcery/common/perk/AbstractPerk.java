@@ -62,11 +62,6 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     protected String ovrUnlocalizedNamePrefix = null;
     private PerkTreePoint<? extends AbstractPerk> treePoint = null;
 
-    public AbstractPerk(String name, int x, int y) {
-        this.setRegistryName(new ResourceLocation(AstralSorcery.MODID, name.toLowerCase()));
-        this.offset = new Point(x, y);
-    }
-
     public AbstractPerk(ResourceLocation name, int x, int y) {
         this.setRegistryName(name);
         this.offset = new Point(x, y);
