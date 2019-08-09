@@ -19,6 +19,9 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystal;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemDay;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
@@ -73,6 +76,11 @@ public class RegistryItems {
         PARCHMENT = registerItem(new ItemParchment());
         STARMETAL_INGOT = registerItem(new ItemStarmetalIngot());
         STARDUST = registerItem(new ItemStardust());
+
+        PERK_SEAL = registerItem(new ItemPerkSeal());
+        PERK_GEM_SKY = registerItem(new ItemPerkGemSky());
+        PERK_GEM_DAY = registerItem(new ItemPerkGemDay());
+        PERK_GEM_NIGHT = registerItem(new ItemPerkGemNight());
 
         CONSTELLATION_PAPER = registerItem(new ItemConstellationPaper());
 

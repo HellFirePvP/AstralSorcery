@@ -43,10 +43,6 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
     private List<PerkAttributeModifier> typeModifierList = Lists.newArrayList();
 
-    public AttributeModifierPerk(String name, int x, int y) {
-        super(name, x, y);
-    }
-
     public AttributeModifierPerk(ResourceLocation name, int x, int y) {
         super(name, x, y);
     }

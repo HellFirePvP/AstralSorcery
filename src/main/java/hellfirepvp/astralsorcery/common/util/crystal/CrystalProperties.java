@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
@@ -138,16 +139,15 @@ public class CrystalProperties {
             return MAX_SIZE_ROCK;
         }
 
-        //TODO crystal items
-        //if(stack.getItem() instanceof CrystalPropertyItem) {
-        //    return ((CrystalPropertyItem) stack.getItem()).getMaxSize(stack);
-        //}
-        //if(stack.getItem() instanceof ItemBlock) {
-        //    Block b = ((ItemBlock) stack.getItem()).getBlock();
-        //    if(b instanceof CrystalPropertyItem) {
-        //        return ((CrystalPropertyItem) b).getMaxSize(stack);
-        //    }
-        //}
+        if(stack.getItem() instanceof CrystalPropertyItem) {
+            return ((CrystalPropertyItem) stack.getItem()).getMaxPropertySize(stack);
+        }
+        if(stack.getItem() instanceof BlockItem) {
+            Block b = ((BlockItem) stack.getItem()).getBlock();
+            if(b instanceof CrystalPropertyItem) {
+                return ((CrystalPropertyItem) b).getMaxPropertySize(stack);
+            }
+        }
         return MAX_SIZE_ROCK;
     }
 

@@ -8,9 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
+import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
 
 import javax.annotation.Nonnull;
 
@@ -74,8 +80,6 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
     public Handler<PktPerkGemModification> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
-                /*
-                TODO gem perks
                 PlayerEntity player = context.getSender();
                 if (!(packet.perk instanceof GemSlotPerk)) { //Exclusively for socketable gem perks.
                     return;
@@ -101,7 +105,6 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
                     default:
                         break;
                 }
-                */
             });
         };
     }

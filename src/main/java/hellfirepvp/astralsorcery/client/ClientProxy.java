@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalConstellationOverview;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
@@ -132,10 +133,9 @@ public class ClientProxy extends CommonProxy {
         ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.constellations", 20,
                 ScreenJournalConstellationOverview::getConstellationScreen,
                 () -> !ResearchHelper.getClientProgress().getSeenConstellations().isEmpty()));
-        //TODO perk tree gui
-        //ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.perks", 30,
-        //        GuiJournalPerkTree::new,
-        //        () -> ResearchManager.clientProgress.getAttunedConstellation() != null));
+        ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.perks", 30,
+                ScreenJournalPerkTree::new,
+                () -> ResearchHelper.getClientProgress().getAttunedConstellation() != null));
         //TODO knowledge fragment gui
         //ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.knowledge", 40,
         //        GuiJournalKnowledgeIndex::new,
@@ -145,7 +145,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
-
+        ScreenJournalPerkTree.initializeDrawBuffer();
     }
 
 }

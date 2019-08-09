@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
@@ -88,6 +89,13 @@ public class RegistryRegistries {
                 .setType(PerkAttributeType.class)
                 .add((IForgeRegistry.AddCallback<PerkAttributeType>) (owner, stage, id, obj, oldObj) ->
                         VanillaPerkAttributeTypeRegistry.register(obj))
+                .disableSaving()
+                .disableOverrides()
+                .create();
+
+        REGISTRY_PERK_ATTRIBUTE_READERS = new RegistryBuilder<PerkAttributeReader>()
+                .setName(REGISTRY_NAME_PERK_ATTRIBUTE_READERS)
+                .setType(PerkAttributeReader.class)
                 .disableSaving()
                 .disableOverrides()
                 .create();

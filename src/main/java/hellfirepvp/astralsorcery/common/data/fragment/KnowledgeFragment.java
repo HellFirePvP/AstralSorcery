@@ -12,6 +12,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalConstellationDetail;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPages;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -65,10 +66,8 @@ public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFrag
             @Override
             @OnlyIn(Dist.CLIENT)
             public boolean isVisible(ScreenJournal journalGui) {
-                return false;
-                //TODO journal constelltation details
-                //return journalGui instanceof GuiJournalConstellationDetails &&
-                //        MiscUtils.contains(cst, n -> n.equals(((GuiJournalConstellationDetails) journalGui).getConstellation()));
+                return journalGui instanceof ScreenJournalConstellationDetail &&
+                        MiscUtils.contains(cst, n -> n.equals(((ScreenJournalConstellationDetail) journalGui).getConstellation()));
             }
         }
         // Any involved constellation discovered

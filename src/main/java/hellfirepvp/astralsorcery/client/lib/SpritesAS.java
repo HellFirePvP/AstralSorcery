@@ -31,6 +31,8 @@ public class SpritesAS {
     public static SpriteSheetResource SPR_PERK_HALO_INACTIVE;
     public static SpriteSheetResource SPR_PERK_HALO_ACTIVE;
     public static SpriteSheetResource SPR_PERK_HALO_ACTIVATEABLE;
+    public static SpriteSheetResource SPR_PERK_SEARCH;
+    public static SpriteSheetResource SPR_PERK_SEAL;
 
     public static SpriteSheetResource SPR_COLLECTOR_EFFECT;
     public static SpriteSheetResource SPR_LIGHTBEAM;

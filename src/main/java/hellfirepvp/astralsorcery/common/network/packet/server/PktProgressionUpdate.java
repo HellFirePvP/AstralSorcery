@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
+import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
@@ -101,8 +102,8 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
     @OnlyIn(Dist.CLIENT)
     private void refreshJournal() {
         Screen open = Minecraft.getInstance().currentScreen;
-        if (open != null) {//TODO perk tree gui
-            if(open instanceof ScreenJournal) {// && !(open instanceof GuiJournalPerkTree)) {
+        if (open != null) {
+            if(open instanceof ScreenJournal && !(open instanceof ScreenJournalPerkTree)) {
                 Minecraft.getInstance().displayGuiScreen(null);
             }
         }
