@@ -10,11 +10,13 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.container.ContainerTome;
+import hellfirepvp.astralsorcery.common.container.factory.ContainerTomeProvider;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.IContainerFactory;
 
 import static hellfirepvp.astralsorcery.common.lib.ContainerTypesAS.*;
 
@@ -30,29 +32,18 @@ public class RegistryContainerTypes {
     private RegistryContainerTypes() {}
 
     public static void init() {
-        TOME = register("tome", (id, player) -> new ContainerTome(id));
+        TOME = register("tome", new ContainerTomeProvider.Factory());
     }
 
-    private static <C extends Container, T extends ContainerType<C>> T register(String name, PlayerFactory<C> containerFactory) {
+    private static <C extends Container, T extends ContainerType<C>> T register(String name, IContainerFactory<C> containerFactory) {
         return register(new ResourceLocation(AstralSorcery.MODID, name), containerFactory);
     }
 
-    private static <C extends Container, T extends ContainerType<C>> T register(ResourceLocation name, PlayerFactory<C> containerFactory) {
+    private static <C extends Container, T extends ContainerType<C>> T register(ResourceLocation name, IContainerFactory<C> containerFactory) {
         ContainerType<C> type = new ContainerType<>(containerFactory);
         type.setRegistryName(name);
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
         return (T) type;
-    }
-
-    //Rather dealing with a player than just its inventory.
-    private static interface PlayerFactory<C extends Container> extends ContainerType.IFactory<C> {
-
-        C create(int id, PlayerEntity player);
-
-        @Override
-        default C create(int id, PlayerInventory plInv) {
-            return this.create(id, plInv.player);
-        }
     }
 
 }

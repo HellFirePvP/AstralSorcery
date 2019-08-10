@@ -74,7 +74,7 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
-        Blending.DEFAULT.applyStateManager();
+        GlStateManager.enableBlend();
 
         drawWHRect(TexturesAS.TEX_GUI_CONSTELLATION_PAPER);
 
@@ -116,7 +116,7 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
         List<MoonPhase> phases = this.phases == null ? Collections.emptyList() : this.phases;
         if (phases.isEmpty()) {
             RenderingDrawUtils.renderStringCentered(Minecraft.getInstance().fontRenderer,
-                    "? ? ?", width / 2, guiTop + 239,
+                    "? ? ?", guiLeft + guiWidth / 2 + 25, guiTop + 239,
                     1.8F, 0xAA4D4D4D);
         } else {
             int size = 16;

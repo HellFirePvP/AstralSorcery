@@ -199,6 +199,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        GlStateManager.enableBlend();
         this.lastFramePage = null;
 
         if (this.doublePageID == 0) {

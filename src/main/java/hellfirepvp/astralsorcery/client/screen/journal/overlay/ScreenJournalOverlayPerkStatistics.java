@@ -204,7 +204,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
             information.add(stat.getPostProcessInfo());
         }
 
-        RenderingDrawUtils.renderBlueTooltip(x, y, information, this.font, false);
+        RenderingDrawUtils.renderBlueTooltipString(x, y, information, this.font, false);
     }
 
     private void buildDisplayWidth() {

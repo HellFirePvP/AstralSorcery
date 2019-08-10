@@ -78,11 +78,11 @@ public class ScreenJournalClusterRenderer {
         this.renderGuiWidth = guiWidth;
     }
 
-    public boolean propagateClick(ScreenJournalProgression parent, Point p) {
+    public boolean propagateClick(ScreenJournalProgression parent, double mouseX, double mouseY) {
         Rectangle frame = new Rectangle(renderOffsetX, renderOffsetY, renderGuiWidth, renderGuiHeight);
-        if (frame.contains(p)) {
+        if (frame.contains(mouseX, mouseY)) {
             for (Rectangle r : clickableNodes.keySet()) {
-                if (r.contains(p)) {
+                if (r.contains(mouseX, mouseY)) {
                     ResearchNode clicked = clickableNodes.get(r);
                     Minecraft.getInstance().displayGuiScreen(new ScreenJournalPages(parent, clicked));
                     return true;
@@ -104,7 +104,7 @@ public class ScreenJournalClusterRenderer {
                     String name = clickableNodes.get(r).getUnLocalizedName();
                     name = I18n.format(name);
 
-                    RenderingDrawUtils.renderTooltip(0, 0, Lists.newArrayList(name), 0x00100033, 0xf0100010, Color.WHITE, Minecraft.getInstance().fontRenderer, true);
+                    RenderingDrawUtils.renderBlueTooltipString(0, 0, Lists.newArrayList(name), Minecraft.getInstance().fontRenderer, false);
 
                     GlStateManager.popMatrix();
                 }

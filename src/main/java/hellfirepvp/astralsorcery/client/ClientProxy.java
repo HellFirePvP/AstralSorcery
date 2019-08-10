@@ -84,8 +84,6 @@ public class ClientProxy extends CommonProxy {
     public void attachLifecycle(IEventBus modEventBus) {
         super.attachLifecycle(modEventBus);
 
-        modEventBus.addListener(this::clientSetup);
-
         modEventBus.addListener(RegistryItems::registerColors);
         modEventBus.addListener(RegistryBlocks::registerColors);
     }
@@ -142,10 +140,6 @@ public class ClientProxy extends CommonProxy {
         //        () -> !((KnowledgeFragmentData) PersistentDataManager.INSTANCE
         //                .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS))
         //                .getAllFragments().isEmpty()));
-    }
-
-    private void clientSetup(FMLClientSetupEvent event) {
-        ScreenJournalPerkTree.initializeDrawBuffer();
     }
 
 }

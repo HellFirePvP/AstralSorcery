@@ -11,12 +11,14 @@ package hellfirepvp.astralsorcery.common.item;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.container.factory.ContainerTomeProvider;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
@@ -46,7 +48,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 09.08.2019 / 21:12
  */
-public class ItemTome extends Item implements INamedContainerProvider {
+public class ItemTome extends Item {
 
     public ItemTome() {
         super(new Properties()
@@ -58,25 +60,14 @@ public class ItemTome extends Item implements INamedContainerProvider {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
         if (worldIn.isRemote() && !playerIn.isSneaking()) {
             AstralSorcery.getProxy().openGui(playerIn, GuiType.TOME);
-        } else if (!worldIn.isRemote() && playerIn.isSneaking()) {
-            playerIn.openContainer(this);
+        } else if (!worldIn.isRemote() && playerIn.isSneaking() && hand == Hand.MAIN_HAND && playerIn instanceof ServerPlayerEntity) {
+            new ContainerTomeProvider(playerIn.getHeldItem(hand), playerIn.inventory.currentItem)
+                    .openFor((ServerPlayerEntity) playerIn);
         }
         return ActionResult.newResult(ActionResultType.SUCCESS, playerIn.getHeldItem(hand));
     }
 
-    @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.tome.storage");
-    }
-
-    @Nullable
-    @Override
-    public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
-        return null; //TODO uh... tomorrow i guess.
-    }
-
-    @Nullable
-    public static IInventory getJournalStorage(ItemStack stack) {
+    public static IInventory getTomeStorage(ItemStack stack) {
         Inventory i = new Inventory(27);
         ItemStack[] toFill = getStoredConstellationStacks(stack);
         for (int i1 = 0; i1 < toFill.length; i1++) {

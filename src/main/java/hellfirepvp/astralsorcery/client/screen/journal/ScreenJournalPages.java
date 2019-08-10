@@ -117,6 +117,7 @@ public class ScreenJournalPages extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        GlStateManager.enableBlend();
         super.render(mouseX, mouseY, pTicks);
 
         GlStateManager.pushMatrix();

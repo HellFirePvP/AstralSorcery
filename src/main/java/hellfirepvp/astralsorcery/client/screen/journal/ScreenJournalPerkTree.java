@@ -68,10 +68,8 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -190,6 +188,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        GlStateManager.enableBlend();
         this.thisFramePerks.clear();
 
         handleMouseMovement(mouseX, mouseY);
@@ -228,11 +227,11 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         TexturesAS.TEX_GUI_MENU_SLOT.bindTexture();
         drawTexturedRect(guiLeft + rectSealBox.x - 1, guiTop + rectSealBox.y - 1, rectSealBox.width + 2, rectSealBox.height + 2, TexturesAS.TEX_GUI_MENU_SLOT);
         GlStateManager.enableAlphaTest();
-        GlStateManager.enableDepthTest();
 
         if (!this.foundSeals.isEmpty()) {
             RenderingUtils.renderItemStack(this.itemRenderer, this.foundSeals, guiLeft + rectSealBox.x, guiTop + rectSealBox.y, null);
         }
+        GlStateManager.enableDepthTest();
     }
 
     private void drawHoverTooltips(int mouseX, int mouseY) {
@@ -411,8 +410,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
             GlStateManager.pushMatrix();
             GlStateManager.translated(rStatStar.x + rStatStar.width / 2F, rStatStar.y + rStatStar.height, 0);
 
-            RenderingDrawUtils.renderBlueTooltip(0, 0,
-                    Lists.newArrayList(I18n.format("perk.reader.infostar")), font, false);
+            RenderingDrawUtils.renderBlueTooltipString(0, 0, Lists.newArrayList(I18n.format("perk.reader.infostar")), font, false);
 
             GlStateManager.popMatrix();
             GlStateManager.enableDepthTest();
@@ -654,7 +652,6 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 if (converter instanceof PerkConverter.Radius) {
                     double radius = ((PerkConverter.Radius) converter).getRadius();
 
-                    //TODO rework design/visuals
                     drawSearchHalo(ctx, mapDrawSize * radius * scale, offset.x, offset.y);
                 }
             }
@@ -1074,16 +1071,19 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     }
 
     @Override
-    public boolean charTyped(char charCode, int keyModifiers) {
-        if (super.charTyped(charCode, keyModifiers)) {
+    public boolean keyPressed(int key, int scanCode, int modifiers) {
+        if (this.searchTextEntry.keyTyped(key)) {
             return true;
         }
+        return super.keyPressed(key, scanCode, modifiers);
+    }
 
-        if (charCode != 256) { //InputMappings escape key
-            this.searchTextEntry.textboxKeyTyped(charCode, keyModifiers);
+    @Override
+    public boolean charTyped(char charCode, int keyModifiers) {
+        if (this.searchTextEntry.charTyped(charCode)) {
             return true;
         }
-        return false;
+        return super.charTyped(charCode, keyModifiers);
     }
 
     public void playUnlockAnimation(AbstractPerk perk) {

@@ -41,6 +41,7 @@ public class ItemsAS {
     public static ItemPerkGemDay PERK_GEM_DAY;
     public static ItemPerkGemNight PERK_GEM_NIGHT;
 
+    public static ItemTome TOME;
     public static ItemConstellationPaper CONSTELLATION_PAPER;
 
     public static ItemRockCrystal ROCK_CRYSTAL;

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.fonts.TextInputUtil;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.SharedConstants;
 
@@ -26,6 +27,15 @@ public class ScreenTextEntry {
 
     private String text = "";
     private Runnable changeCallback = null;
+
+    private final TextInputUtil inputUtil;
+
+    public ScreenTextEntry() {
+        inputUtil = new TextInputUtil(Minecraft.getInstance(),
+                this::getText,
+                this::setText,
+                256);
+    }
 
     public void setChangeCallback(Runnable changeCallback) {
         this.changeCallback = changeCallback;
@@ -47,24 +57,19 @@ public class ScreenTextEntry {
         return text;
     }
 
-    public void textboxKeyTyped(char typedChar, int keyCode) {
-        if (Screen.isCopy(keyCode)) {
-            Minecraft.getInstance().keyboardListener.setClipboardString(this.getText());
-        } else if (Screen.isPaste(keyCode)) {
-            this.setText(Minecraft.getInstance().keyboardListener.getClipboardString());
-        } else if (Screen.isCut(keyCode)) {
-            Minecraft.getInstance().keyboardListener.setClipboardString(this.getText());
-            this.setText("");
-        } else {
-            String text = this.getText();
-            //Keyboard.KEY_BACK: uh....
-            if (keyCode == 259) {
-                this.setText(text.length() > 1 ? text.substring(0, text.length() - 1) : "");
-            } else {
-                if (SharedConstants.isAllowedCharacter(typedChar)) {
-                    this.setText(text + String.valueOf(typedChar));
-                }
-            }
+    public boolean keyTyped(int key) {
+        //Escape & Return & Numpad Enter
+        if (key == 256 || key == 257 || key == 335) {
+            return false;
         }
+        //Arrow keys
+        if (key >= 262 && key <= 265) {
+            return false;
+        }
+        return this.inputUtil.func_216897_a(key);
+    }
+
+    public boolean charTyped(char charCode) {
+        return this.inputUtil.func_216894_a(charCode);
     }
 }

@@ -167,7 +167,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
         CompoundNBT tag = new CompoundNBT();
         tag.putUniqueId("id", getUniqueId());
         tag.putString("type", getAttributeType().getRegistryName().toString());
-        tag.putInt("mode", getMode().getVanillaAttributeOperation());
+        tag.putInt("mode", getMode().ordinal());
         tag.putFloat("baseValue", this.value);
         tag.putLong("mId", this.getId());
         return tag;
@@ -180,7 +180,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
             return null;
         }
         UUID id = tag.getUniqueId("id");
-        ModifierType mode = ModifierType.fromVanillaAttributeOperation(tag.getInt("mode"));
+        ModifierType mode = ModifierType.values()[tag.getInt("mode")];
         float val = tag.getFloat("baseValue");
         long mId = tag.getLong("mId");
         GemAttributeModifier mod = new GemAttributeModifier(id, attrType, mode, val);
