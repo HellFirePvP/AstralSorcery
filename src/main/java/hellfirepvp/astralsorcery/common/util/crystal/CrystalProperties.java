@@ -86,8 +86,8 @@ public class CrystalProperties {
         prop.size = compound.getInt("size");
         prop.purity = compound.getInt("purity");
         prop.collectiveCapability = compound.getInt("collect");
-        prop.fractured = NBTHelper.getInteger(compound, "fract", 0);
-        prop.sizeOverride = NBTHelper.getInteger(compound, "sizeOverride", -1);
+        prop.fractured = compound.getInt("fract");
+        prop.sizeOverride = compound.contains("sizeOverride") ? compound.getInt("sizeOverride") : -1;
         return prop;
     }
 
@@ -153,7 +153,7 @@ public class CrystalProperties {
 
     @OnlyIn(Dist.CLIENT)
     public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<ITextComponent> tooltip, int maxSize) {
-        return addPropertyTooltip(prop, tooltip, Screen.hasShiftDown(), maxSize);
+        return addPropertyTooltip(prop, tooltip, true, maxSize);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -247,7 +247,7 @@ public class CrystalProperties {
         int purity = prop.getInt("purity");
         int colCap = prop.getInt("collectiveCapability");
         int fract = prop.getInt("fract");
-        int sizeOvr = NBTHelper.getInteger(prop, "sizeOverride", -1);
+        int sizeOvr = prop.contains("sizeOverride") ? prop.getInt("sizeOverride") : -1;
         return new CrystalProperties(size, purity, colCap, fract, sizeOvr);
     }
 

@@ -20,11 +20,11 @@ import java.awt.*;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ScreenSky
+ * Class: SkyScreen
  * Created by HellFirePvP
  * Date: 03.08.2019 / 15:47
  */
-public interface ScreenSky {
+public interface SkyScreen {
 
     static final float THRESHOLD_TO_START = 0.8F;
     static final float THRESHOLD_TO_SHIFT_BLUEGRAD = 0.5F;

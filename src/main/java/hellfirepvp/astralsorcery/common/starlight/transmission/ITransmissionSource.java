@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.starlight.transmission;
 
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
+import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,4 +24,13 @@ public interface ITransmissionSource extends IPrismTransmissionNode {
 
     public IIndependentStarlightSource provideNewIndependentSource(IStarlightSource source);
 
+    @Override
+    default <T extends TileEntity> boolean updateFromTileEntity(T tile) {
+        WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(tile.getWorld());
+        IIndependentStarlightSource src = handle.getSourceAt(getLocationPos());
+        if (src != null) {
+            return src.updateFromTileEntity(tile);
+        }
+        return true;
+    }
 }

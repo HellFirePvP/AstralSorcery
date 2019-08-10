@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.starlight;
 
-import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import net.minecraft.util.math.BlockPos;
 
@@ -21,7 +20,7 @@ import javax.annotation.Nonnull;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 12:23
  */
-public interface IStarlightSource<T extends IPrismTransmissionNode> extends IStarlightTransmission {
+public interface IStarlightSource<T extends ITransmissionSource> extends IStarlightTransmission {
 
     @Nonnull
     public IIndependentStarlightSource provideNewSourceNode();
@@ -29,9 +28,9 @@ public interface IStarlightSource<T extends IPrismTransmissionNode> extends ISta
     @Nonnull
     public T provideSourceNode(BlockPos at);
 
-    public boolean needToUpdateStarlightSource();
+    public boolean needsToRefreshNetworkChain();
 
-    public void markUpdated();
+    public void markChainRebuilt();
 
     @Override
     @Nonnull

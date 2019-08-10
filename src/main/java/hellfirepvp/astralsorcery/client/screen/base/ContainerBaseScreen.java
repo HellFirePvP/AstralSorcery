@@ -19,13 +19,13 @@ import net.minecraft.util.text.ITextComponent;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ScreenContainerBase
+ * Class: ContainerBaseScreen
  * Created by HellFirePvP
  * Date: 03.08.2019 / 16:08
  */
-public abstract class ScreenContainerBase<T extends TileEntity, C extends ContainerTileEntity<T>> extends ContainerScreen<C> {
+public abstract class ContainerBaseScreen<T extends TileEntity, C extends ContainerTileEntity<T>> extends ContainerScreen<C> {
 
-    public ScreenContainerBase(C screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public ContainerBaseScreen(C screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
     }
 

@@ -14,6 +14,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.Random;
 
@@ -27,6 +28,7 @@ import java.util.Random;
 public abstract class TileEntitySynchronized extends TileEntity {
 
     protected static final Random rand = new Random();
+    protected static final AxisAlignedBB BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
     protected TileEntitySynchronized(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);

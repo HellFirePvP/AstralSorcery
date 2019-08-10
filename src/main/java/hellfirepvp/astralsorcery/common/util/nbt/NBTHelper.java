@@ -29,7 +29,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -97,6 +99,24 @@ public class NBTHelper {
             stack.setTag(compound);
         }
         return compound;
+    }
+
+    public static <T> void writeOptional(CompoundNBT nbt, String key, @Nullable T object, BiConsumer<CompoundNBT, T> writer) {
+        nbt.putBoolean(key + "_present", object != null);
+        if (object != null) {
+            CompoundNBT write = new CompoundNBT();
+            writer.accept(write, object);
+            nbt.put(key, write);
+        }
+    }
+
+    @Nullable
+    public static <T> T readOptional(CompoundNBT nbt, String key, Function<CompoundNBT, T> reader) {
+        if (nbt.getBoolean(key + "_present")) {
+            CompoundNBT read = nbt.getCompound(key);
+            return reader.apply(read);
+        }
+        return null;
     }
 
     public static void setBlockState(CompoundNBT cmp, String key, BlockState state) {
@@ -186,38 +206,6 @@ public class NBTHelper {
             return ItemStack.read(compound.getCompound(tag));
         }
         return defaultValue;
-    }
-
-    public static boolean getBoolean(CompoundNBT compound, String tag, boolean defaultValue) {
-        return compound.contains(tag) ? compound.getBoolean(tag) : defaultValue;
-    }
-
-    public static String getString(CompoundNBT compound, String tag, String defaultValue) {
-        return compound.contains(tag) ? compound.getString(tag) : defaultValue;
-    }
-
-    public static int getInteger(CompoundNBT compound, String tag, int defaultValue) {
-        return compound.contains(tag) ? compound.getInt(tag) : defaultValue;
-    }
-
-    public static double getDouble(CompoundNBT compound, String tag, double defaultValue) {
-        return compound.contains(tag) ? compound.getDouble(tag) : defaultValue;
-    }
-
-    public static float getFloat(CompoundNBT compound, String tag, float defaultValue) {
-        return compound.contains(tag) ? compound.getFloat(tag) : defaultValue;
-    }
-
-    public static byte getByte(CompoundNBT compound, String tag, byte defaultValue) {
-        return compound.contains(tag) ? compound.getByte(tag) : defaultValue;
-    }
-
-    public static short getShort(CompoundNBT compound, String tag, short defaultValue) {
-        return compound.contains(tag) ? compound.getShort(tag) : defaultValue;
-    }
-
-    public static long getLong(CompoundNBT compound, String tag, long defaultValue) {
-        return compound.contains(tag) ? compound.getLong(tag) : defaultValue;
     }
 
     public static CompoundNBT writeBlockPosToNBT(BlockPos pos, CompoundNBT compound) {

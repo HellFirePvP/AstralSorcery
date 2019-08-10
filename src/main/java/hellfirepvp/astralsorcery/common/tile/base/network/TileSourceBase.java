@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.tile.base.network;
 
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkableTileEntity;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
-import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
+import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -33,9 +33,9 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 21:06
  */
-public abstract class TileSourceBase<T extends IPrismTransmissionNode> extends TileNetwork<T> implements IStarlightSource<T>, LinkableTileEntity {
+public abstract class TileSourceBase<T extends ITransmissionSource> extends TileNetwork<T> implements IStarlightSource<T>, LinkableTileEntity {
 
-    protected boolean needsUpdate = false;
+    protected boolean needsNetworkChainRebuild = false;
     private boolean linked = false;
     private List<BlockPos> positions = new LinkedList<>();
 
@@ -45,13 +45,6 @@ public abstract class TileSourceBase<T extends IPrismTransmissionNode> extends T
 
     public boolean hasBeenLinked() {
         return linked;
-    }
-
-    @Override
-    protected void notifySkyStateUpdate(boolean doesSeeSkyPrev, boolean doesSeeSkyNow) {
-        super.notifySkyStateUpdate(doesSeeSkyPrev, doesSeeSkyNow);
-
-        this.needsUpdate = true;
     }
 
     @Override
@@ -103,12 +96,12 @@ public abstract class TileSourceBase<T extends IPrismTransmissionNode> extends T
         if (TransmissionNetworkHelper.createTransmissionLink(this, other)) {
             if (!this.positions.contains(other)) {
                 this.positions.add(other);
-                markDirty();
+                this.needsNetworkChainRebuild = true;
+                markForUpdate();
             }
 
             if (!hasBeenLinked()) {
                 this.linked = true;
-                this.needsUpdate = true;
             }
         }
     }
@@ -125,7 +118,8 @@ public abstract class TileSourceBase<T extends IPrismTransmissionNode> extends T
         if (TransmissionNetworkHelper.hasTransmissionLink(this, other)) {
             TransmissionNetworkHelper.removeTransmissionLink(this, other);
             this.positions.remove(other);
-            markDirty();
+            this.needsNetworkChainRebuild = true;
+            markForUpdate();
             return true;
         }
         return false;
@@ -142,13 +136,12 @@ public abstract class TileSourceBase<T extends IPrismTransmissionNode> extends T
     }
 
     @Override
-    public void markUpdated() {
-        this.needsUpdate = false;
+    public boolean needsToRefreshNetworkChain() {
+        return this.needsNetworkChainRebuild;
     }
 
     @Override
-    public boolean needToUpdateStarlightSource() {
-        return needsUpdate;
+    public void markChainRebuilt() {
+        this.needsNetworkChainRebuild = false;
     }
-
 }

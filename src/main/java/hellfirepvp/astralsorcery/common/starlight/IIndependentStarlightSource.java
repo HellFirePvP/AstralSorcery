@@ -11,9 +11,11 @@ package hellfirepvp.astralsorcery.common.starlight;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -28,6 +30,8 @@ public interface IIndependentStarlightSource {
     //As the purpose of the source, this should produce the starlight - called once every tick
     public float produceStarlightTick(World world, BlockPos pos);
 
+    //Can be null or change per tick.
+    @Nullable
     public IWeakConstellation getStarlightType();
 
     default public boolean providesAutoLink() {
@@ -35,7 +39,10 @@ public interface IIndependentStarlightSource {
     }
 
     //Update the state of the independent tile. for example if "doesSeeSky" has changed or something.
-    public void informTileStateChange(IStarlightSource sourceTile);
+    //Return true to indicate a successful update.
+    default public <T extends TileEntity> boolean updateFromTileEntity(T tile) {
+        return true;
+    }
 
     //Update (maybe) if proximity to other sources should be checked - to prevent the user from placing everything super dense.
     //Threaded to prevent overhead, so remember to sync savely to avoid CME or other threaded stuffs.

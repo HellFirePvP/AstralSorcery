@@ -24,6 +24,8 @@ public interface CrystalPropertyItem {
 
     int getMaxPropertySize(ItemStack stack);
 
+    CrystalProperties getMaxProperties(ItemStack stack);
+
     @Nullable
     CrystalProperties getProperties(ItemStack stack);
 

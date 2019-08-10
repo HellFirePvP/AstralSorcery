@@ -278,7 +278,4 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
         }
         return super.getCapability(cap, side);
     }
-
-    @Override
-    protected void onFirstTick() {}
 }

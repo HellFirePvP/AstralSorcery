@@ -17,9 +17,7 @@ import hellfirepvp.astralsorcery.common.block.marble.*;
 import hellfirepvp.astralsorcery.common.block.ore.BlockAquamarineSandOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockRockCrystalOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockStarmetalOre;
-import hellfirepvp.astralsorcery.common.block.tile.BlockRitualLink;
-import hellfirepvp.astralsorcery.common.block.tile.BlockRitualPedestal;
-import hellfirepvp.astralsorcery.common.block.tile.BlockWell;
+import hellfirepvp.astralsorcery.common.block.tile.*;
 import net.minecraft.block.StairsBlock;
 
 /**
@@ -66,8 +64,10 @@ public class BlocksAS {
     public static BlockStarmetalOre      STARMETAL_ORE;
     public static BlockGlowFlower        GLOW_FLOWER;
 
-    public static BlockRitualLink     RITUAL_LINK;
-    public static BlockRitualPedestal RITUAL_PEDESTAL;
-    public static BlockWell           WELL;
+    public static BlockRockCollectorCrystal      ROCK_COLLECTOR_CRYSTAL;
+    public static BlockCelestialCollectorCrystal CELESTIAL_COLLECTOR_CRYSTAL;
+    public static BlockRitualLink                RITUAL_LINK;
+    public static BlockRitualPedestal            RITUAL_PEDESTAL;
+    public static BlockWell                      WELL;
 
 }

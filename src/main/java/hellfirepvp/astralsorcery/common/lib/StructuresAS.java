@@ -24,6 +24,7 @@ public class StructuresAS {
     private StructuresAS() {}
 
     public static PatternBlockArray STRUCT_RITUAL_PEDESTAL;
+    public static PatternBlockArray STRUCT_ENHANCED_COLLECTOR_CRYSTAL;
 
     public static StructureBlockArray STRUCT_DESERT_SHRINE;
     public static StructureBlockArray STRUCT_MOUNTAIN_SHRINE;

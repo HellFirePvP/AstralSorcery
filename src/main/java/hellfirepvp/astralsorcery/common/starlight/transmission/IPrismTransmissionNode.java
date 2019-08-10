@@ -14,10 +14,12 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,6 +30,8 @@ import java.util.List;
  */
 public interface IPrismTransmissionNode extends ILocatable {
 
+    public static final Random rand = new Random();
+
     //Get the exact position of this Node
     public BlockPos getLocationPos();
 
@@ -35,6 +39,12 @@ public interface IPrismTransmissionNode extends ILocatable {
     //Arbitrarily this returns a max. sized Property by default...
     default public CrystalProperties getTransmissionProperties() {
         return CrystalProperties.getMaxCelestialProperties();
+    }
+
+    //Used to push update from the tileentity owning this node (potentially)
+    //to this network node. Return true to indicate a successful data transfer
+    default public <T extends TileEntity> boolean updateFromTileEntity(T tile) {
+        return true;
     }
 
     //Get this node's additional transmission loss multiplier.

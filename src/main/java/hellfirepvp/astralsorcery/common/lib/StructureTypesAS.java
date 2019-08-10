@@ -26,5 +26,6 @@ public class StructureTypesAS {
     public static StructureType STYPE_SMALL;
 
     public static StructureType PTYPE_RITUAL_PEDESTAL;
+    public static StructureType PTYPE_ENHANCED_COLLECTOR_CRYSTAL;
 
 }

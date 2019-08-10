@@ -50,6 +50,11 @@ public class ItemCelestialCrystal extends ItemCrystalBase implements ItemGatedVi
     }
 
     @Override
+    public CrystalProperties getMaxProperties(ItemStack stack) {
+        return CrystalProperties.getMaxCelestialProperties();
+    }
+
+    @Override
     public Item getAttunedVariant() {
         return null;
     }

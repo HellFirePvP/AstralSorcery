@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.EffectIncrementer;
@@ -28,12 +29,9 @@ import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventoryFiltered;
-import hellfirepvp.observerlib.api.ChangeSubscriber;
-import hellfirepvp.observerlib.common.change.ChangeObserverStructure;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -70,8 +68,6 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     private TileInventoryFiltered inventory;
 
     //Own sync data
-    private ChangeSubscriber<ChangeObserverStructure> structureMatch;
-    private boolean hasMultiblock = false;
     private UUID ownerUUID = null;
     private BlockPos ritualLinkTo = null;
 
@@ -81,8 +77,6 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
 
     //client data
     private EffectIncrementer effectWork = new EffectIncrementer(64);
-
-    private boolean needsNetworkSync = false;
 
     public TileRitualPedestal() {
         super(TileEntityTypesAS.RITUAL_PEDESTAL);
@@ -99,16 +93,10 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         super.tick();
 
         if (!getWorld().isRemote()) {
-            updateMultiblockState();
+            this.doesSeeSky();
+            this.hasMultiblock();
 
-            updateLinkTile();
-
-            if (needsNetworkSync) {
-                StarlightReceiverRitualPedestal srp = getNetworkNode();
-                if (srp != null && srp.setPedestalData(this)) {
-                    needsNetworkSync = false;
-                }
-            }
+            this.updateLinkTile();
         }
 
         this.effectWork.update(this.working);
@@ -135,30 +123,10 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         }
     }
 
-    private void updateMultiblockState() {
-        if (this.structureMatch == null) {
-            this.structureMatch = StructureTypesAS.PTYPE_RITUAL_PEDESTAL.observe(getWorld(), getPos());
-        }
-        boolean found = this.structureMatch.isValid(getWorld());
-        if (found != this.hasMultiblock) {
-            LogCategory.STRUCTURE_MATCH.info(() ->
-                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
-                            " (" + this.hasMultiblock + " -> " + found + ")");
-            this.hasMultiblock = found;
-            markForUpdate();
-        }
-    }
-
+    @Nullable
     @Override
-    protected void notifySkyStateUpdate(boolean doesSeeSkyPrev, boolean doesSeeSkyNow) {
-        super.notifySkyStateUpdate(doesSeeSkyPrev, doesSeeSkyNow);
-        this.markForUpdate();
-    }
-
-    @Override
-    public void markForUpdate() {
-        super.markForUpdate();
-        this.needsNetworkSync = true;
+    protected StructureType getRequiredStructureType() {
+        return StructureTypesAS.PTYPE_RITUAL_PEDESTAL;
     }
 
     //=========================================================================================
@@ -296,10 +264,6 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         return this.working;
     }
 
-    public boolean hasMultiblock() {
-        return this.hasMultiblock;
-    }
-
     public Map<BlockPos, Boolean> getMirrors() {
         return this.offsetMirrors.entrySet().stream()
                 .map(e -> new Tuple<>(e.getKey().add(this.getPos()), e.getValue()))
@@ -435,7 +399,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         this.markForUpdate();
 
         if (!needsReSync) {
-            this.needsNetworkSync = false;
+            this.preventNetworkSync();
         }
     }
 
@@ -457,15 +421,10 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     }
 
     @Override
-    protected void onFirstTick() {}
-
-    @Override
     public void readCustomNBT(CompoundNBT compound) {
         super.readCustomNBT(compound);
 
         this.inventory = this.inventory.deserialize(compound.getCompound("inventory"));
-        this.needsNetworkSync = compound.getBoolean("needsNetworkSync");
-        this.hasMultiblock = compound.getBoolean("hasMultiblock");
         if (compound.hasUniqueId("ownerUUID")) {
             this.ownerUUID = compound.getUniqueId("ownerUUID");
         } else {
@@ -491,8 +450,6 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         super.writeCustomNBT(compound);
 
         compound.put("inventory", this.inventory.serialize());
-        compound.putBoolean("needsNetworkSync", this.needsNetworkSync);
-        compound.putBoolean("hasMultiblock", this.hasMultiblock);
         if (this.ownerUUID != null) {
             compound.putUniqueId("ownerUUID", this.ownerUUID);
         }

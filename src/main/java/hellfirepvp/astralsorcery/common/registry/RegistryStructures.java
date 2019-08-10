@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.structure.PatternRitualPedestal;
-import hellfirepvp.astralsorcery.common.structure.StructureDesertShrine;
-import hellfirepvp.astralsorcery.common.structure.StructureMountainShrine;
-import hellfirepvp.astralsorcery.common.structure.StructureSmallShrine;
+import hellfirepvp.astralsorcery.common.structure.*;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
 import hellfirepvp.observerlib.common.change.ObserverProviderStructure;
 
@@ -31,6 +28,7 @@ public class RegistryStructures {
 
     public static void registerStructures() {
         STRUCT_RITUAL_PEDESTAL = register(new PatternRitualPedestal());
+        STRUCT_ENHANCED_COLLECTOR_CRYSTAL = register(new PatternEnhancedCollectorCrystal());
 
         STRUCT_DESERT_SHRINE = register(new StructureDesertShrine());
         STRUCT_MOUNTAIN_SHRINE = register(new StructureMountainShrine());
