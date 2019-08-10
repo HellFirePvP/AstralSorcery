@@ -1,4 +1,5 @@
 {
   "add_player_field": "coremods/add_player_field.js",
-  "set_player_field": "coremods/set_player_field.js"
+  "set_player_field": "coremods/set_player_field.js",
+  "post_process_vanilla": "coremods/post_process_vanilla.js"
 }

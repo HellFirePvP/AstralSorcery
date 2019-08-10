@@ -82,6 +82,7 @@ public class RegistryItems {
         PERK_GEM_DAY = registerItem(new ItemPerkGemDay());
         PERK_GEM_NIGHT = registerItem(new ItemPerkGemNight());
 
+        TOME = registerItem(new ItemTome());
         CONSTELLATION_PAPER = registerItem(new ItemConstellationPaper());
 
         ROCK_CRYSTAL = registerItem(new ItemRockCrystal());

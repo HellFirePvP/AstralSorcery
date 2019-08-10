@@ -21,16 +21,20 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -73,7 +77,11 @@ public class RenderingDrawUtils {
         //FontRenderer always enables alpha test, so we disable it afterwards if necessary.
         boolean alphaTest = GL11.glGetBoolean(GL11.GL_ALPHA_TEST);
 
-        fr.drawString(str, x, y, color);
+        if (dropShadow) {
+            fr.drawStringWithShadow(str, x, y, color);
+        } else {
+            fr.drawString(str, x, y, color);
+        }
 
         if (!alphaTest) {
             GlStateManager.disableAlphaTest();
@@ -103,7 +111,7 @@ public class RenderingDrawUtils {
 
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX + uv01.getX(),   offsetY + uv01.getY(),   zLevel).tex(0, 1).endVertex();
         vb.pos(offsetX + uv11.getX(),   offsetY + uv11.getY(),   zLevel).tex(1, 1).endVertex();
         vb.pos(offsetX + uv10.getX(),   offsetY + uv10.getY(),   zLevel).tex(1, 0).endVertex();
@@ -111,24 +119,48 @@ public class RenderingDrawUtils {
         tes.draw();
     }
 
+    public static void renderBlueTooltipString(int x, int y, List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+        List<Tuple<ItemStack, ITextComponent>> stackTooltip = new LinkedList<>();
+        for (String in : tooltipData) {
+            stackTooltip.add(new Tuple<>(ItemStack.EMPTY, new StringTextComponent(in)));
+        }
+        renderBlueTooltip(x, y, stackTooltip, fontRenderer, isFirstLineHeadline);
+    }
+
     public static void renderBlueTooltipComponents(int x, int y, List<ITextComponent> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        renderBlueTooltip(x, y, tooltipData.stream().map(ITextComponent::getFormattedText).collect(Collectors.toList()), fontRenderer, isFirstLineHeadline);
+        List<Tuple<ItemStack, ITextComponent>> stackTooltip = tooltipData.stream()
+                .map(tTip -> new Tuple<>(ItemStack.EMPTY, tTip))
+                .collect(Collectors.toList());
+        renderBlueTooltip(x, y, stackTooltip, fontRenderer, isFirstLineHeadline);
     }
 
-    public static void renderBlueTooltip(int x, int y, List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        renderTooltip(x, y, tooltipData, 0x000027, 0x000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
+    public static void renderBlueTooltip(int x, int y, List<Tuple<ItemStack, ITextComponent>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+        renderTooltip(x, y, tooltipData, 0xFF000027, 0xFF000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
     }
 
-    public static void renderTooltip(int x, int y, List<String> tooltipData, int color, int colorFade, Color strColor, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        GlStateManager.disableRescaleNormal();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepthTest();
+    public static void renderBlueStackTooltip(int x, int y, List<Tuple<ItemStack, String>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+        List<Tuple<ItemStack, ITextComponent>> stackTooltip = new LinkedList<>();
+        for (Tuple<ItemStack, String> in : tooltipData) {
+            stackTooltip.add(new Tuple<>(in.getA(), new StringTextComponent(in.getB())));
+        }
+        renderTooltip(x, y, stackTooltip, 0xFF000027, 0xFF000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
+    }
+
+    public static void renderTooltip(int x, int y, List<Tuple<ItemStack, ITextComponent>> tooltipData, int color, int colorFade, Color strColor, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+        int stackBoxSize = 18;
 
         if (!tooltipData.isEmpty()) {
+            boolean anyItemFound = false;
+
             int maxWidth = 0;
-            for (String toolTip : tooltipData) {
-                int width = fontRenderer.getStringWidth(toolTip);
+            for (Tuple<ItemStack, ITextComponent> toolTip : tooltipData) {
+                int width = fontRenderer.getStringWidth(toolTip.getB().getFormattedText());
+                if (!toolTip.getA().isEmpty()) {
+                    anyItemFound = true;
+                }
+                if (anyItemFound) {
+                    width += stackBoxSize;
+                }
                 if (width > maxWidth) {
                     maxWidth = width;
                 }
@@ -136,45 +168,68 @@ public class RenderingDrawUtils {
             if(x + 15 + maxWidth > Minecraft.getInstance().mainWindow.getScaledWidth()) {
                 x -= maxWidth + 24;
             }
-            List<String> lengthLimitedToolTip = new ArrayList<>();
-            for (String tTip : tooltipData) {
-                lengthLimitedToolTip.addAll(fontRenderer.listFormattedStringToWidth(tTip, maxWidth));
+
+            int formatWidth = anyItemFound ? maxWidth - stackBoxSize : maxWidth;
+            List<Tuple<ItemStack, List<String>>> lengthLimitedToolTip = new LinkedList<>();
+            for (Tuple<ItemStack, ITextComponent> toolTip : tooltipData) {
+                lengthLimitedToolTip.add(new Tuple<>(toolTip.getA(), fontRenderer.listFormattedStringToWidth(toolTip.getB().getFormattedText(), formatWidth)));
             }
 
             int pX = x + 12;
             int pY = y - 12;
             int sumLineHeight = 8;
-            if (tooltipData.size() > 1) {
-                sumLineHeight += 2 + (tooltipData.size() - 1) * 10;
+            if (!lengthLimitedToolTip.isEmpty()) {
+                if (lengthLimitedToolTip.size() > 1 && isFirstLineHeadline) {
+                    sumLineHeight += 2;
+                }
+                for (Tuple<ItemStack, List<String>> toolTip : lengthLimitedToolTip) {
+                    int segmentHeight = 0;
+                    if (!toolTip.getA().isEmpty()) {
+                        segmentHeight += stackBoxSize;
+                        segmentHeight += (Math.max(toolTip.getB().size() - 2, 0)) * 10;
+                    } else {
+                        segmentHeight += (Math.max(toolTip.getB().size() - 1, 0)) * 10;
+                    }
+                    sumLineHeight += segmentHeight;
+                }
             }
-            int z = 300;
 
-            GuiUtils.drawGradientRect(z, pX - 3,           pY - 4,                 pX + maxWidth + 3, pY - 3,                 color, colorFade);
-            GuiUtils.drawGradientRect(z, pX - 3,           pY + sumLineHeight + 3, pX + maxWidth + 3, pY + sumLineHeight + 4, color, colorFade);
-            GuiUtils.drawGradientRect(z, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY + sumLineHeight + 3, color, colorFade);
-            GuiUtils.drawGradientRect(z, pX - 4,           pY - 3,                 pX - 3,           pY + sumLineHeight + 3, color, colorFade);
-            GuiUtils.drawGradientRect(z, pX + maxWidth + 3,pY - 3,                 pX + maxWidth + 4, pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(0, pX - 3,           pY - 4,                 pX + maxWidth + 3, pY - 3,                 color, colorFade);
+            drawGradientRect(0, pX - 3,           pY + sumLineHeight + 3, pX + maxWidth + 3, pY + sumLineHeight + 4, color, colorFade);
+            drawGradientRect(0, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(0, pX - 4,           pY - 3,                 pX - 3,           pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(0, pX + maxWidth + 3,pY - 3,                 pX + maxWidth + 4, pY + sumLineHeight + 3, color, colorFade);
 
             int col = (color & 0x00FFFFFF) | color & 0xFF000000;
-            GuiUtils.drawGradientRect(z, pX - 3,           pY - 3 + 1,             pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, col);
-            GuiUtils.drawGradientRect(z, pX + maxWidth + 2,pY - 3 + 1,             pX + maxWidth + 3, pY + sumLineHeight + 3 - 1, color, col);
-            GuiUtils.drawGradientRect(z, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY - 3 + 1,                 col,   col);
-            GuiUtils.drawGradientRect(z, pX - 3,           pY + sumLineHeight + 2, pX + maxWidth + 3, pY + sumLineHeight + 3,     color, color);
+            drawGradientRect(0, pX - 3,           pY - 3 + 1,             pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, col);
+            drawGradientRect(0, pX + maxWidth + 2,pY - 3 + 1,             pX + maxWidth + 3, pY + sumLineHeight + 3 - 1, color, col);
+            drawGradientRect(0, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY - 3 + 1,                 col,   col);
+            drawGradientRect(0, pX - 3,           pY + sumLineHeight + 2, pX + maxWidth + 3, pY + sumLineHeight + 3,     color, color);
 
-            for (int i = 0; i < lengthLimitedToolTip.size(); ++i) {
-                String str = lengthLimitedToolTip.get(i);
-                fontRenderer.drawString(str, pX, pY, strColor.getRGB());
-                if (isFirstLineHeadline && i == 0) {
+            int offset = anyItemFound ? stackBoxSize : 0;
+
+            boolean first = true;
+            for (Tuple<ItemStack, List<String>> toolTip : lengthLimitedToolTip) {
+                int minYShift = 10;
+                if (!toolTip.getA().isEmpty()) {
+                    RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), toolTip.getA(), pX, pY, null);
+                    minYShift = stackBoxSize;
+                }
+                for (String str : toolTip.getB()) {
+                    RenderingDrawUtils.renderStringAtPos(pX + offset, pY, fontRenderer, str, strColor.getRGB(), false);
+                    pY += 10;
+                    minYShift -= 10;
+                }
+                if (minYShift > 0) {
+                    pY += minYShift;
+                }
+                if (isFirstLineHeadline && first) {
                     pY += 2;
                 }
-                pY += 10;
+                first = false;
+
             }
         }
-
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepthTest();
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.enableRescaleNormal();
     }
 
     public static void renderBlueTooltipBox(int x, int y, int width, int height) {
@@ -184,19 +239,46 @@ public class RenderingDrawUtils {
     public static void renderTooltipBox(int x, int y, int width, int height, int color, int colorFade) {
         int pX = x + 12;
         int pY = y - 12;
-        int z = 300;
 
-        GuiUtils.drawGradientRect(z, pX - 3,           pY - 4,          pX + width + 3, pY - 3,         color, colorFade);
-        GuiUtils.drawGradientRect(z, pX - 3,           pY + height + 3, pX + width + 3, pY + height + 4, color, colorFade);
-        GuiUtils.drawGradientRect(z, pX - 3,           pY - 3,          pX + width + 3, pY + height + 3, color, colorFade);
-        GuiUtils.drawGradientRect(z, pX - 4,           pY - 3,          pX - 3,         pY + height + 3, color, colorFade);
-        GuiUtils.drawGradientRect(z, pX + width + 3,   pY - 3,          pX + width + 4, pY + height + 3, color, colorFade);
+        drawGradientRect(0, pX - 3,           pY - 4,          pX + width + 3, pY - 3,         color, colorFade);
+        drawGradientRect(0, pX - 3,           pY + height + 3, pX + width + 3, pY + height + 4, color, colorFade);
+        drawGradientRect(0, pX - 3,           pY - 3,          pX + width + 3, pY + height + 3, color, colorFade);
+        drawGradientRect(0, pX - 4,           pY - 3,          pX - 3,         pY + height + 3, color, colorFade);
+        drawGradientRect(0, pX + width + 3,   pY - 3,          pX + width + 4, pY + height + 3, color, colorFade);
 
         int col = (color & 0x00FFFFFF) | color & 0xFF000000;
-        GuiUtils. drawGradientRect(z, pX - 3,           pY - 3 + 1,      pX - 3 + 1,     pY + height + 3 - 1, color, col);
-        GuiUtils. drawGradientRect(z, pX + width + 2,   pY - 3 + 1,      pX + width + 3, pY + height + 3 - 1, color, col);
-        GuiUtils. drawGradientRect(z, pX - 3,           pY - 3,          pX + width + 3, pY - 3 + 1,          col,   col);
-        GuiUtils. drawGradientRect(z, pX - 3,           pY + height + 2, pX + width + 3, pY + height + 3,     color, color);
+        drawGradientRect(0, pX - 3,           pY - 3 + 1,      pX - 3 + 1,     pY + height + 3 - 1, color, col);
+        drawGradientRect(0, pX + width + 2,   pY - 3 + 1,      pX + width + 3, pY + height + 3 - 1, color, col);
+        drawGradientRect(0, pX - 3,           pY - 3,          pX + width + 3, pY - 3 + 1,          col,   col);
+        drawGradientRect(0, pX - 3,           pY + height + 2, pX + width + 3, pY + height + 3,     color, color);
+    }
+
+    private static void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
+        float startAlpha = (float)(startColor >> 24 & 255) / 255.0F;
+        float startRed   = (float)(startColor >> 16 & 255) / 255.0F;
+        float startGreen = (float)(startColor >>  8 & 255) / 255.0F;
+        float startBlue  = (float)(startColor       & 255) / 255.0F;
+        float endAlpha   = (float)(endColor   >> 24 & 255) / 255.0F;
+        float endRed     = (float)(endColor   >> 16 & 255) / 255.0F;
+        float endGreen   = (float)(endColor   >>  8 & 255) / 255.0F;
+        float endBlue    = (float)(endColor         & 255) / 255.0F;
+
+        GlStateManager.disableTexture();
+        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        buffer.pos(right,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+        buffer.pos( left,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+        buffer.pos( left, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+        buffer.pos(right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+        tessellator.draw();
+
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.enableTexture();
     }
 
     public static void renderFacingFullQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, int r, int g, int b, float alpha) {

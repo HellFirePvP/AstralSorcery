@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.base;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.common.container.ContainerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -30,6 +31,7 @@ public abstract class ScreenContainerBase<T extends TileEntity, C extends Contai
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        GlStateManager.enableBlend();
         this.renderBackground();
         super.render(mouseX, mouseY, pTicks);
         this.renderHoveredToolTip(mouseX, mouseY);

@@ -72,6 +72,7 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        GlStateManager.enableBlend();
         drawConstellationBackground();
         drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
 
@@ -137,9 +138,11 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
         float b = 0xDD / 255F;
         float a = 0xBB / 255F;
 
-        RenderingConstellationUtils.renderConstellationIntoGUI(display,
+        RenderingConstellationUtils.renderConstellationIntoGUI(display.getConstellationColor(), display,
                 0, 0, 0,
-                95, 95, 2F, () -> 0.3F + 0.7F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10)), true, false);
+                95, 95, 1.6F,
+                () -> 0.5F + 0.5F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10)),
+                true, false);
 
         GlStateManager.color4f(r, g, b, a);
 

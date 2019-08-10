@@ -1,11 +1,11 @@
 function initializeCoreMod() {
     return {
-        'coremodmethod': {
+        'post_process_vanilla': {
             'target': {
                 'type': 'METHOD',
-                'name': 'net.minecraft.entity.ai.attributes.ModifiableAttributeInstance',
+                'class': 'net.minecraft.entity.ai.attributes.ModifiableAttributeInstance',
                 'methodName': 'computeValue',
-                'methodDesc': '()D;'
+                'methodDesc': '()D'
             },
             'transformer': function(method) {
                 print('[AstralSorcery] Adding \'post_process_vanilla\' ASM patch...');
@@ -25,10 +25,11 @@ function initializeCoreMod() {
                         ASMAPI.MethodType.STATIC));
                     method.instructions.insert(prev, new VarInsnNode(Opcodes.ALOAD, 0));
 
-                    aReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.DRETURN, aReturn.index + 3);
+                    aReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.DRETURN, method.instructions.indexOf(aReturn) + 3);
                 }
 
                 print('[AstralSorcery] Added \'post_process_vanilla\' ASM patch!');
+                return method;
             }
         }
     }

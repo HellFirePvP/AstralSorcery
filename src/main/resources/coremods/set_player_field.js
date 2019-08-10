@@ -1,9 +1,9 @@
 function initializeCoreMod() {
     return {
-        'coremodmethod': {
+        'set_player_field': {
             'target': {
                 'type': 'METHOD',
-                'name': 'net.minecraft.entity.LivingEntity',
+                'class': 'net.minecraft.entity.LivingEntity',
                 'methodName': 'getAttributes',
                 'methodDesc': '()Lnet/minecraft/entity/ai/attributes/AbstractAttributeMap;'
             },
@@ -21,14 +21,15 @@ function initializeCoreMod() {
                     method.instructions.insert(prev, ASMAPI.buildMethodCall(
                         'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
                         'markPlayer',
-                        '(Lnet/minecraft/entity/ai/attributes/AbstractAttributeMap;Lnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/entity/ai/attributes/AbstractAttributeMap;',
+                        '(Lnet/minecraft/entity/ai/attributes/AbstractAttributeMap;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/ai/attributes/AbstractAttributeMap;',
                         ASMAPI.MethodType.STATIC));
                     method.instructions.insert(prev, new VarInsnNode(Opcodes.ALOAD, 0));
 
-                    aReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.ARETURN, aReturn.index + 3);
+                    aReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.ARETURN, method.instructions.indexOf(aReturn) + 3);
                 }
 
                 print('[AstralSorcery] Added \'set_player_field\' ASM patch!');
+                return method;
             }
         }
     }

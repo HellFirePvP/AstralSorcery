@@ -89,7 +89,6 @@ public class RenderingUtils {
 
     public static void renderItemStack(ItemRenderer itemRenderer, ItemStack stack, int x, int y, @Nullable String alternativeText) {
         RenderHelper.enableGUIStandardItemLighting();
-        GlStateManager.disableDepthTest();
         GlStateManager.pushMatrix();
 
         GlStateManager.translatef(0.0F, 0.0F, 32.0F);
@@ -104,8 +103,7 @@ public class RenderingUtils {
         itemRenderer.zLevel = 0.0F;
 
         GlStateManager.popMatrix();
-        GlStateManager.enableDepthTest();
-        RenderHelper.enableStandardItemLighting();
+        RenderHelper.enableGUIStandardItemLighting();
     }
 
     public static void renderSimpleBlockModel(BlockState state, BufferBuilder buf) {

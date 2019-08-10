@@ -39,9 +39,6 @@ public class ScreenJournalProgression extends ScreenJournal {
 
     private static ScreenJournalProgressionRenderer progressionRenderer;
 
-    private int bufX, bufY;
-    private boolean dragging = false;
-
     private ScreenJournalProgression() {
         super(new TranslationTextComponent("gui.journal.progression"), 10);
     }
@@ -112,25 +109,10 @@ public class ScreenJournalProgression extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        GlStateManager.enableBlend();
         super.render(mouseX, mouseY, pTicks);
 
         GlStateManager.pushMatrix();
-
-        int cleanedX = mouseX - guiLeft;
-        int cleanedY = mouseY - guiTop;
-
-        if (Minecraft.getInstance().mouseHelper.isLeftDown() && progressionRenderer.realRenderBox.isInBox(cleanedX, cleanedY)) {
-            if (dragging) {
-                progressionRenderer.moveMouse(-(cleanedX - bufX), -(cleanedY - bufY));
-            } else {
-                bufX = cleanedX;
-                bufY = cleanedY;
-                dragging = true;
-            }
-        } else {
-            progressionRenderer.applyMovedMouseOffset();
-            dragging = false;
-        }
 
         MainWindow window = Minecraft.getInstance().mainWindow;
         int factor = (int) window.getGuiScaleFactor();
@@ -144,8 +126,7 @@ public class ScreenJournalProgression extends ScreenJournal {
         Rectangle guiStar = null;
         if (!ResearchHelper.getClientProgress().wasOnceAttuned()) {
             GlStateManager.disableDepthTest();
-            //TODO render star
-            //guiStar = IGuiRenderablePage.GUI_INTERFACE.drawInfoStar( guiLeft + guiWidth - 39, guiTop + 23, zLevel, 15, partialTicks);
+            guiStar = RenderingDrawUtils.drawInfoStar( guiLeft + guiWidth - 39, guiTop + 23, this.blitOffset, 15, pTicks);
             GlStateManager.enableDepthTest();
         }
         this.blitOffset += 150;
@@ -159,7 +140,7 @@ public class ScreenJournalProgression extends ScreenJournal {
         progressionRenderer.drawMouseHighlight(zLevel, mouseX, mouseY);
 
         if(starRect != null && starRect.contains(mouseX, mouseY)) {
-            RenderingDrawUtils.renderBlueTooltip(mouseX, mouseY, new LinkedList<String>() {
+            RenderingDrawUtils.renderBlueTooltipString(mouseX, mouseY, new LinkedList<String>() {
                 {
                     add(I18n.format("misc.journal.info.1"));
                     add(I18n.format("misc.journal.info.2",
@@ -171,14 +152,25 @@ public class ScreenJournalProgression extends ScreenJournal {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    protected void mouseDragTick(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY) {
+        super.mouseDragTick(mouseX, mouseY, mouseDiffX, mouseDiffY);
+        progressionRenderer.moveMouse(mouseDiffX, mouseDiffY);
+    }
 
-        if (Minecraft.getInstance().gameSettings.keyBindForward.isKeyDown()) {
-            progressionRenderer.handleZoomIn();
-        } else if (Minecraft.getInstance().gameSettings.keyBindBack.isKeyDown()) {
+    @Override
+    protected void mouseDragStop(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY) {
+        super.mouseDragStop(mouseX, mouseY, mouseDiffX, mouseDiffY);
+        progressionRenderer.applyMovedMouseOffset();
+    }
+
+    @Override
+    protected void keyPressedTick(int key) {
+        if (key == Minecraft.getInstance().gameSettings.keyBindForward.getKey().getKeyCode()) {
+            progressionRenderer.handleZoomIn(0, 0); //Doesn't matter for keyboard zooming
+        } else if (key == Minecraft.getInstance().gameSettings.keyBindBack.getKey().getKeyCode()) {
             progressionRenderer.handleZoomOut();
         }
+        super.keyPressedTick(key);
     }
 
     @Override
@@ -188,7 +180,7 @@ public class ScreenJournalProgression extends ScreenJournal {
             return true;
         }
         if(scroll > 0)  {
-            progressionRenderer.handleZoomIn();
+            progressionRenderer.handleZoomIn(mouseX, mouseY);
             return true;
         }
         return false;
@@ -206,6 +198,6 @@ public class ScreenJournalProgression extends ScreenJournal {
         if (handleBookmarkClick(mouseX, mouseY)) {
             return true;
         }
-        return progressionRenderer.propagateClick(new Point((int) mouseX, (int) mouseY));
+        return progressionRenderer.propagateClick(mouseX, mouseY);
     }
 }

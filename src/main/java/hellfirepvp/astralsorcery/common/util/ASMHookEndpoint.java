@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,8 +24,8 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class ASMHookEndpoint {
 
-    public static AbstractAttributeMap markPlayer(AbstractAttributeMap map, PlayerEntity player) {
-        AttributeEvent.setEntity(map, player);
+    public static AbstractAttributeMap markPlayer(AbstractAttributeMap map, LivingEntity entity) {
+        AttributeEvent.setEntity(map, entity);
         return map;
     }
 

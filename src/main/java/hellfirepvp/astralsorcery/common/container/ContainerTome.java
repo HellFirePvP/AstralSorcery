@@ -12,13 +12,13 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.container.slot.SlotConstellationPaper;
 import hellfirepvp.astralsorcery.common.container.slot.SlotUnclickable;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.item.ItemTome;
 import hellfirepvp.astralsorcery.common.lib.ContainerTypesAS;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -34,15 +34,15 @@ import java.util.LinkedList;
  */
 public class ContainerTome extends Container {
 
-    private final ItemStack parentJournal;
-    private final int journalIndex;
+    private final ItemStack parentTome;
+    private final int tomeIndex;
 
-    public ContainerTome(int id, PlayerInventory plInventory, ItemStack journal, int journalIndex) {
+    public ContainerTome(int id, PlayerInventory plInventory, ItemStack tome, int tomeIndex) {
         super(ContainerTypesAS.TOME, id);
-        this.parentJournal = journal;
-        this.journalIndex = journalIndex;
+        this.parentTome = tome;
+        this.tomeIndex = tomeIndex;
         buildPlayerSlots(plInventory);
-        buildSlots(new InvWrapper(ItemJournal.getJournalStorage(journal)));
+        buildSlots(new InvWrapper(ItemTome.getTomeStorage(tome)));
     }
 
     private void buildPlayerSlots(PlayerInventory playerInv) {
@@ -50,7 +50,7 @@ public class ContainerTome extends Container {
             for (int j = 0; j < 9; j++) {
                 int index = j + i * 9 + 9;
 
-                if(index == journalIndex) {
+                if(index == tomeIndex) {
                     addSlot(new SlotUnclickable(playerInv, index, 8 + j * 18, 84 + i * 18));
                 } else {
                     addSlot(           new Slot(playerInv, index, 8 + j * 18, 84 + i * 18));
@@ -58,7 +58,7 @@ public class ContainerTome extends Container {
             }
         }
         for (int i = 0; i < 9; i++) {
-            if(i == journalIndex) {
+            if(i == tomeIndex) {
                 addSlot(new SlotUnclickable(playerInv, i, 8 + i * 18, 142));
             } else {
                 addSlot(           new Slot(playerInv, i, 8 + i * 18, 142));
@@ -124,8 +124,7 @@ public class ContainerTome extends Container {
         return true;
     }
 
-
-    void slotChanged() {
+    public void slotChanged() {
         if (EffectiveSide.get().isServer()) {
             LinkedList<IConstellation> saveConstellations = new LinkedList<>();
             for (int i = 36; i < 63; i++) {
@@ -138,7 +137,7 @@ public class ContainerTome extends Container {
                     saveConstellations.add(c);
                 }
             }
-            ItemJournal.setStoredConstellations(parentJournal, saveConstellations);
+            ItemTome.setStoredConstellations(parentTome, saveConstellations);
         }
     }
 }

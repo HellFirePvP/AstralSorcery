@@ -26,7 +26,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 02.08.2019 / 20:33
  */
-public class WidthHeightScreen extends Screen {
+public class WidthHeightScreen extends InputScreen {
 
     protected final int guiHeight;
     protected final int guiWidth;
@@ -36,7 +36,6 @@ public class WidthHeightScreen extends Screen {
 
     protected WidthHeightScreen(ITextComponent titleIn, int guiHeight, int guiWidth) {
         super(titleIn);
-        this.passEvents = true;
         this.guiHeight = guiHeight;
         this.guiWidth = guiWidth;
     }

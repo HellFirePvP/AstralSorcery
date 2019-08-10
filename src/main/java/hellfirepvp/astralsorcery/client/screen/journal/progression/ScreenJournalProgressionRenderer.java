@@ -20,10 +20,12 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -59,7 +61,6 @@ public class ScreenJournalProgressionRenderer {
 
     private boolean hasPrevOffset = false;
     private Map<Rectangle, ResearchProgression> clusterRectMap = new HashMap<>();
-    private Point lastMousePosition = null;
 
     public ScreenJournalProgressionRenderer(ScreenJournalProgression gui, int guiHeight, int guiWidth) {
         this.parentGui = gui;
@@ -138,10 +139,10 @@ public class ScreenJournalProgressionRenderer {
     }
 
     //Nothing to actually click here, we redirect if we can.
-    public boolean propagateClick(Point p) {
+    public boolean propagateClick(double mouseX, double mouseY) {
         if (clusterRenderer != null) {
             if (sizeHandler.getScalingFactor() > 6) {
-                if (clusterRenderer.propagateClick(parentGui, p)) {
+                if (clusterRenderer.propagateClick(parentGui, mouseX, mouseY)) {
                     return true;
                 }
             }
@@ -151,8 +152,8 @@ public class ScreenJournalProgressionRenderer {
                 long current = System.currentTimeMillis();
                 if (current - this.doubleClickLast < 400L) {
                     int timeout = 500; //Handles irregular clicks on the GUI so it doesn't loop trying to find a focus cluster
-                    while (focusedClusterMouse != null && lastMousePosition != null && sizeHandler.getScalingFactor() < 9.9 && timeout > 0) {
-                        handleZoomIn();
+                    while (focusedClusterMouse != null && sizeHandler.getScalingFactor() < 9.9 && timeout > 0) {
+                        handleZoomIn(mouseX, mouseY);
                         timeout--;
                     }
                     this.doubleClickLast = 0L;
@@ -192,12 +193,12 @@ public class ScreenJournalProgressionRenderer {
      * 4.0 - 6.0 has to have focus + centering to center of cluster
      * 6.0 - 10.0 transition (6.0 - 8.0) + cluster rendering + handling (cursor movement)
      */
-    public void handleZoomIn() {
+    public void handleZoomIn(double mouseX, double mouseY) {
         double scale = sizeHandler.getScalingFactor();
         //double nextScale = Math.min(10.0D, scale + 0.2D);
         if (scale >= 4.0D) {
-            if (focusedClusterZoom == null && lastMousePosition != null) {
-                ResearchProgression prog = tryFocusCluster(lastMousePosition.x, lastMousePosition.y);
+            if (focusedClusterZoom == null) {
+                ResearchProgression prog = tryFocusCluster(mouseX, mouseY);
                 if (prog != null) {
                     focus(prog);
                 }
@@ -244,8 +245,6 @@ public class ScreenJournalProgressionRenderer {
     }
 
     public void drawProgressionPart(float zLevel, int mouseX, int mouseY) {
-        lastMousePosition = new Point(mouseX, mouseY);
-        
         drawBackground(zLevel);
 
         drawClusters(zLevel);
@@ -286,15 +285,16 @@ public class ScreenJournalProgressionRenderer {
             }
 
             String name = I18n.format(focusedClusterMouse.getUnlocalizedName());
+            double length = Minecraft.getInstance().fontRenderer.getStringWidth(name) * 1.4;
 
             GlStateManager.pushMatrix();
-            GlStateManager.translated(offsetX + ((rX - lX) / 2), offsetY + ((rY - lY) / 3), 0);
+            GlStateManager.translated(offsetX + ((rX - lX) / 2) - length / 2D, offsetY + ((rY - lY) / 3), 0);
             GlStateManager.scaled(1.4, 1.4, 1.4);
             int alpha = 0xCC;
             alpha *= br;
             alpha = Math.max(alpha, 5);
             int color = 0x5A28FF | (alpha << 24);
-            RenderingDrawUtils.renderStringAtCurrentPos(null, name, color);
+            RenderingDrawUtils.renderStringWithShadowAtCurrentPos(null, name, color);
 
             GlStateManager.popMatrix();
         }
@@ -303,7 +303,7 @@ public class ScreenJournalProgressionRenderer {
     }
 
     @Nullable
-    private ResearchProgression tryFocusCluster(int mouseX, int mouseY) {
+    private ResearchProgression tryFocusCluster(double mouseX, double mouseY) {
         for (Rectangle r : this.clusterRectMap.keySet()) {
             if (r.contains(mouseX, mouseY)) {
                 return this.clusterRectMap.get(r);
@@ -337,9 +337,14 @@ public class ScreenJournalProgressionRenderer {
     }
 
     private void drawStarfieldParralaxLayers(double scalePosX, double scalePosY, float zLevel) {
+        TexturesAS.TEX_GUI_STARFIELD_OVERLAY.bindTexture();
+        Blending.OVERLAYDARK.applyStateManager();
+
         drawStarfieldOverlay(zLevel, scalePosX, scalePosY, 1.5);
         drawStarfieldOverlay(zLevel, scalePosX, scalePosY, 2.5);
         drawStarfieldOverlay(zLevel, scalePosX, scalePosY, 3.5);
+
+        Blending.DEFAULT.applyStateManager();
     }
 
     private void renderCluster(ResearchProgression p, JournalCluster cluster,
@@ -357,7 +362,7 @@ public class ScreenJournalProgressionRenderer {
         double width =  higherPosX - lowerPosX;
         double height = higherPosY - lowerPosY;
 
-        Rectangle r = new Rectangle(cluster);
+        Rectangle r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
         clusterRectMap.put(r, p);
 
         Tessellator t = Tessellator.getInstance();
@@ -429,9 +434,6 @@ public class ScreenJournalProgressionRenderer {
     private void drawStarfieldOverlay(float zLevel, double scalePosX, double scalePosY, double scaleFactor) {
         GlStateManager.pushMatrix();
         GlStateManager.scaled(scaleFactor, scaleFactor, scaleFactor);
-        Blending.OVERLAYDARK.applyStateManager();
-
-        TexturesAS.TEX_GUI_STARFIELD_OVERLAY.bindTexture();
 
         double th = sizeHandler.getTotalHeight() / sizeHandler.getScalingFactor();
         double tw = sizeHandler.getTotalWidth()  / sizeHandler.getScalingFactor();
@@ -449,7 +451,6 @@ public class ScreenJournalProgressionRenderer {
         vb.pos(0,               0,                zLevel).tex(lowU, lowV).color(0.6F, 0.6F, 0.6F, 1F).endVertex();
         Tessellator.getInstance().draw();
 
-        Blending.DEFAULT.applyStateManager();
         GlStateManager.popMatrix();
     }
 

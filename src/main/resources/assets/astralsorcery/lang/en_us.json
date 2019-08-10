@@ -521,7 +521,6 @@
   "entity.EntityShootingStar.name": "Shooting Star",
 
   "item.itemlinkingtool": "Linking Tool",
-  "item.itemjournal": "Astral Tome",
   "item.itemwand": "Resonating Wand",
   "item.itemcrystalpickaxe": "Crystal Pickaxe",
   "item.itemcrystalshovel": "Crystal Shovel",
@@ -550,12 +549,8 @@
   "item.itemsextant.upgraded": "Augmented",
   "item.itemenchantmentamulet": "Resplendent Prism",
   "item.itemenchantmentamulet.pure": "Pure",
-  "item.itemperkseal": "Sealing Sigil",
   "item.itemknowledgefragment": "Lucent Scroll",
   "item.itemfragmentcapsule": "Shining Casing",
-  "item.itemperkgem.day": "Ilium Gem",
-  "item.itemperkgem.night": "Fengarum Gem",
-  "item.itemperkgem.sky": "Ourium Gem",
 
   "item.itemskyresonator.starlight": "Fosic Resonator",
   "item.itemskyresonator.liquid": "Ichosic Resonator",
@@ -591,11 +586,17 @@
   "item.astralsorcery.resonating_gem": "Resonating Gem",
   "item.astralsorcery.parchment": "Parchment",
 
+  "item.astralsorcery.tome": "Astral Tome",
   "item.astralsorcery.constellation_paper": "Constellation Paper",
   "item.astralsorcery.rock_crystal": "Rock Crystal",
   "item.astralsorcery.attuned_rock_crystal": "Attuned Rock Crystal",
   "item.astralsorcery.celestial_crystal": "Celestial Crystal",
   "item.astralsorcery.attuned_celestial_crystal": "Attuned Celestial Crystal",
+
+  "item.astralsorcery.perk_gem_day": "Ilium Gem",
+  "item.astralsorcery.perk_gem_night": "Fengarum Gem",
+  "item.astralsorcery.perk_gem_sky": "Ourium Gem",
+  "item.astralsorcery.perk_seal": "Sealing Sigil",
 
 
 
