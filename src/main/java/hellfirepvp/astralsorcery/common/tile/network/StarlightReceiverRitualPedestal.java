@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -218,7 +219,13 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         return false;
     }
 
-    public boolean setPedestalData(TileRitualPedestal trp) {
+    @Override
+    public <T extends TileEntity> boolean updateFromTileEntity(T tile) {
+        if (!(tile instanceof TileRitualPedestal)) {
+            return super.updateFromTileEntity(tile); //Whatever.
+        }
+
+        TileRitualPedestal trp = (TileRitualPedestal) tile;
         if (this.channelingType != trp.getRitualConstellation() ||
                 (this.properties != null && trp.getChannelingCrystalProperties() == null) ||
                 this.hasMultiblock != trp.hasMultiblock()) {
@@ -247,7 +254,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         }
 
         this.markDirty(trp.getWorld());
-        return true;
+        return super.updateFromTileEntity(tile);
     }
 
     //=========================================================================================

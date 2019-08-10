@@ -8,10 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
+import hellfirepvp.observerlib.api.ChangeSubscriber;
+import hellfirepvp.observerlib.common.change.ChangeObserverStructure;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,6 +30,9 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
 
     private boolean doesSeeSky = false;
     private int lastUpdateTick = -1;
+
+    private ChangeSubscriber<ChangeObserverStructure> structureMatch;
+    private boolean hasMultiblock = false;
 
     protected int ticksExisted = 0;
 
@@ -40,7 +49,12 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
         ticksExisted++;
     }
 
-    protected abstract void onFirstTick();
+    @Nullable
+    protected StructureType getRequiredStructureType() {
+        return null;
+    }
+
+    protected void onFirstTick() {}
 
     public int getTicksExisted() {
         return ticksExisted;
@@ -53,29 +67,55 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
             boolean prevSky = doesSeeSky;
             boolean newSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos().up(), true, this.doesSeeSky);
             if (prevSky != newSky) {
-                notifySkyStateUpdate(prevSky, newSky);
-                doesSeeSky = newSky;
+                this.notifySkyStateUpdate(prevSky, newSky);
+                this.doesSeeSky = newSky;
+                this.markForUpdate();
             }
         }
         return doesSeeSky;
     }
 
+    public boolean hasMultiblock() {
+        if (this.getRequiredStructureType() == null) {
+            return false;
+        }
+
+        if (this.structureMatch == null) {
+            this.structureMatch = this.getRequiredStructureType().observe(getWorld(), getPos());
+        }
+        boolean prevFound = this.hasMultiblock;
+        boolean found = this.structureMatch.isValid(getWorld());
+        if (prevFound != found) {
+            LogCategory.STRUCTURE_MATCH.info(() ->
+                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                            " (" + this.hasMultiblock + " -> " + found + ")");
+            this.notifyMultiblockStateUpdate(prevFound, found);
+            this.hasMultiblock = found;
+            this.markForUpdate();
+        }
+        return this.hasMultiblock;
+    }
+
     protected void notifySkyStateUpdate(boolean doesSeeSkyPrev, boolean doesSeeSkyNow) {}
+
+    protected void notifyMultiblockStateUpdate(boolean hadMultiblockPrev, boolean hasMultiblockNow) {}
 
     @Override
     public void readCustomNBT(CompoundNBT compound) {
         super.readCustomNBT(compound);
         
-        ticksExisted = compound.getInt("ticksExisted");
-        doesSeeSky = compound.getBoolean("doesSeeSky");
+        this.ticksExisted = compound.getInt("ticksExisted");
+        this.doesSeeSky = compound.getBoolean("doesSeeSky");
+        this.hasMultiblock = compound.getBoolean("hasMultiblock");
     }
 
     @Override
     public void writeCustomNBT(CompoundNBT compound) {
         super.writeCustomNBT(compound);
 
-        compound.putInt("ticksExisted", ticksExisted);
-        compound.putBoolean("doesSeeSky", doesSeeSky);
+        compound.putInt("ticksExisted", this.ticksExisted);
+        compound.putBoolean("doesSeeSky", this.doesSeeSky);
+        compound.putBoolean("hasMultiblock", this.hasMultiblock);
     }
 
 }

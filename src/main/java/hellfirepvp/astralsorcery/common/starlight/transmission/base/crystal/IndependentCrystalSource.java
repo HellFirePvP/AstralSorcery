@@ -9,25 +9,29 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
-import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleIndependentSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
+import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -38,32 +42,27 @@ import java.util.function.Function;
  * Created by HellFirePvP
  * Date: 04.08.2016 / 15:01
  */
-public class IndependentCrystalSource extends SimpleIndependentSource {
+public class IndependentCrystalSource implements IIndependentStarlightSource {
 
     public static final double MIN_DST = 16;
 
-    private CrystalProperties crystalProperties;
-    private boolean doesSeeSky, structural;
+    private IWeakConstellation constellation = null;
+    private CrystalProperties crystalProperties = null;
+    private boolean doesSeeSky = false;
+    private boolean doesAutoLink = false;
+
     private double collectionDstMultiplier = 1;
     private float posDistribution = -1;
-
     private boolean enhanced = false;
-
-    public IndependentCrystalSource(CrystalProperties properties, IWeakConstellation constellation, boolean seesSky, boolean hasBeenLinkedBefore) {
-        super(constellation);
-        this.crystalProperties = properties;
-        this.doesSeeSky = seesSky;
-        this.structural = hasBeenLinkedBefore;
-    }
 
     @Override
     public float produceStarlightTick(World world, BlockPos pos) {
+        if (!doesSeeSky || crystalProperties == null) {
+            return 0F;
+        }
         IWeakConstellation cst = getStarlightType();
-        if (cst == null) return 0F;
-        if (crystalProperties == null) return 0F;
-
         WorldContext ctx = SkyHandler.getContext(world, Dist.DEDICATED_SERVER);
-        if (!doesSeeSky || ctx == null) {
+        if (ctx == null || cst == null) {
             return 0F;
         }
 
@@ -79,12 +78,8 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
                 distrFunction.apply(ctx.getDistributionHandler().getDistribution(cst))));
     }
 
-    public void setEnhanced(boolean enhanced) {
-        this.enhanced = enhanced;
-    }
-
     private Function<Float, Float> getDistributionFunc() {
-        if(enhanced) {
+        if (enhanced) {
             return (in) -> 0.6F + (1.1F * in);
         } else {
             return (in) -> 0.2F + (0.8F * in);
@@ -93,41 +88,47 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     @Override
     public boolean providesAutoLink() {
-        return structural;
+        return this.doesAutoLink;
     }
 
     @Override
-    public void informTileStateChange(IStarlightSource sourceTile) {
-        TileEntityTick tns = MiscUtils.getTileAt(sourceTile.getTrWorld(), sourceTile.getTrPos(), TileEntityTick.class, true);
-        if(tns != null) {
-            this.doesSeeSky = tns.doesSeeSky();
+    public <T extends TileEntity> boolean updateFromTileEntity(T tile) {
+        if (!(tile instanceof TileCollectorCrystal)) {
+            return true;
         }
-        if(tns instanceof TileSourceBase && ((TileSourceBase) tns).hasBeenLinked()) {
-            this.structural = true;
-        }
-        //TODO collector crystal
-        //if(tns instanceof TileCollectorCrystal) {
-        //    this.crystalProperties = ((TileCollectorCrystal) tns).getCrystalProperties();
-        //    this.starlightType = ((TileCollectorCrystal) tns).getConstellation();
-        //}
+        TileCollectorCrystal tcc = (TileCollectorCrystal) tile;
+        this.doesSeeSky = tcc.doesSeeSky();
+        this.doesAutoLink = !tcc.isPlayerMade(); //Structural, not player-placed.
+        this.enhanced = tcc.isEnhanced();
+        this.constellation = tcc.getConstellationType();
+        this.crystalProperties = tcc.getCrystalProperties();
+        return false;
     }
 
     @Override
     public void threadedUpdateProximity(BlockPos thisPos, Map<BlockPos, IIndependentStarlightSource> otherSources) {
         double minDstSq = Double.MAX_VALUE;
         for (BlockPos other : otherSources.keySet()) {
-            if(other.equals(thisPos)) continue;
+            if (other.equals(thisPos)) {
+                continue;
+            }
             double dstSq = thisPos.distanceSq(other);
-            if(dstSq < minDstSq) {
+            if (dstSq < minDstSq) {
                 minDstSq = dstSq;
             }
         }
         double dst = Math.sqrt(minDstSq);
-        if(dst <= MIN_DST) {
-            collectionDstMultiplier = dst / MIN_DST;
+        if (dst <= MIN_DST) {
+            this.collectionDstMultiplier = dst / MIN_DST;
         } else {
-            collectionDstMultiplier = 1;
+            this.collectionDstMultiplier = 1;
         }
+    }
+
+    @Nullable
+    @Override
+    public IWeakConstellation getStarlightType() {
+        return this.constellation;
     }
 
     @Override
@@ -137,25 +138,27 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     @Override
     public void readFromNBT(CompoundNBT compound) {
-        super.readFromNBT(compound);
-
-        this.crystalProperties = CrystalProperties.readFromNBT(compound);
-        this.doesSeeSky = compound.getBoolean("seesSky");
-        this.structural = compound.getBoolean("linkedBefore");
-        this.collectionDstMultiplier = compound.getDouble("dstMul");
+        this.constellation = NBTHelper.readOptional(compound, "constellation", (nbt) -> {
+            IConstellation cst = IConstellation.readFromNBT(nbt);
+            if (cst instanceof IWeakConstellation) {
+                return (IWeakConstellation) cst;
+            }
+            return null;
+        });
+        this.crystalProperties = NBTHelper.readOptional(compound, "crystalProperties", CrystalProperties::readFromNBT);
+        this.doesSeeSky = compound.getBoolean("doesSeeSky");
+        this.doesAutoLink = compound.getBoolean("doesAutoLink");
+        this.collectionDstMultiplier = compound.getDouble("collectionDstMultiplier");
         this.enhanced = compound.getBoolean("enhanced");
     }
 
     @Override
     public void writeToNBT(CompoundNBT compound) {
-        super.writeToNBT(compound);
-
-        if(crystalProperties != null) {
-            crystalProperties.writeToNBT(compound);
-        }
-        compound.putBoolean("seesSky", doesSeeSky);
-        compound.putBoolean("linkedBefore", structural);
-        compound.putDouble("dstMul", collectionDstMultiplier);
+        NBTHelper.writeOptional(compound, "constellation", this.constellation, (nbt, cst) -> cst.writeToNBT(nbt));
+        NBTHelper.writeOptional(compound, "crystalProperties", this.crystalProperties, (nbt, prop) -> prop.writeToNBT(nbt));
+        compound.putBoolean("doesSeeSky", doesSeeSky);
+        compound.putBoolean("doesAutoLink", doesAutoLink);
+        compound.putDouble("collectionDstMultiplier", collectionDstMultiplier);
         compound.putBoolean("enhanced", enhanced);
     }
 
@@ -163,7 +166,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
         @Override
         public IIndependentStarlightSource provideEmptySource() {
-            return new IndependentCrystalSource(null, null, false, false);
+            return new IndependentCrystalSource();
         }
 
         @Override

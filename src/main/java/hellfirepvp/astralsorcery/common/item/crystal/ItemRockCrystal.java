@@ -47,6 +47,11 @@ public class ItemRockCrystal extends ItemCrystalBase {
     }
 
     @Override
+    public CrystalProperties getMaxProperties(ItemStack stack) {
+        return CrystalProperties.getMaxRockProperties();
+    }
+
+    @Override
     public Item getAttunedVariant() {
         return null;
     }

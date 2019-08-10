@@ -47,7 +47,7 @@ public class RegistryItems {
     public static final ItemGroup ITEM_GROUP_AS = new ItemGroup(AstralSorcery.MODID) {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(Items.APPLE);
+            return new ItemStack(TOME);
         }
     };
     public static final ItemGroup ITEM_GROUP_AS_PAPERS = new ItemGroup(AstralSorcery.MODID + ".papers") {

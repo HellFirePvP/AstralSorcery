@@ -8,10 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary.link;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -89,6 +93,13 @@ public interface LinkableTileEntity {
      * @return boolean true if the select actually selected it, false for any other selection modification
      */
     default public boolean onSelect(PlayerEntity player) {
+        if (player.isSneaking()) {
+            for (BlockPos linkTo : Lists.newArrayList(getLinkedPositions())) {
+                tryUnlink(player, linkTo);
+            }
+            player.sendMessage(new TranslationTextComponent("misc.link.unlink.all").setStyle(new Style().setColor(TextFormatting.GREEN)));
+            return false;
+        }
         return true;
     }
 

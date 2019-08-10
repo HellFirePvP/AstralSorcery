@@ -637,11 +637,11 @@
   "block.astralsorcery.aquamarine_sand_ore": "Aquamarine Shale",
   "block.astralsorcery.glow_flower": "Faint Amaranth",
 
+  "block.astralsorcery.rock_collector_crystal": "Collector Crystal",
+  "block.astralsorcery.celestial_collector_crystal": "Celestial Collector Crystal",
+
   "__comment": "",
 
-  "block.astralsorcery.blockcollectorcrystal": "Collector Crystal",
-  "block.astralsorcery.blockcelestialcollectorcrystal": "Celestial Collector Crystal",
-  "block.astralsorcery.blockcollectorcrystal.obf": "Floating Crystal",
   "block.astralsorcery.blockaltar.altar_1": "Luminous Crafting Table",
   "block.astralsorcery.blockaltar.altar_2": "Starlight Crafting Altar",
   "block.astralsorcery.blockaltar.altar_3": "Celestial Altar",

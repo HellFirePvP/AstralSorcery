@@ -111,6 +111,8 @@ public class CommonProxy {
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(ResearchHelper::saveAndClearServerCache));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperRitualFlight::clearServer));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperSpawnDeny::clearServer));
+
+        SyncDataHolder.initialize();
     }
 
     public void attachLifecycle(IEventBus modEventBus) {

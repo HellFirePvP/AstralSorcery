@@ -8,12 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyItem;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvents;
@@ -38,9 +36,7 @@ import java.util.Random;
 public abstract class ItemCrystalBase extends Item implements CrystalPropertyItem {
 
     public ItemCrystalBase(Properties prop) {
-        super(prop
-                .maxStackSize(1)
-                .maxDamage(0));
+        super(prop.maxDamage(0));
     }
 
     @Override

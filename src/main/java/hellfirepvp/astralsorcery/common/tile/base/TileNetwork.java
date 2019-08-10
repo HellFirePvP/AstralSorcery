@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.tile.base;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 
 import javax.annotation.Nullable;
@@ -29,6 +30,7 @@ public abstract class TileNetwork<T extends IPrismTransmissionNode> extends Tile
     private boolean isNetworkInformed = false;
 
     private T cachedNetworkNode = null;
+    private boolean needsNetworkSync = false;
 
     protected TileNetwork(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
@@ -60,12 +62,35 @@ public abstract class TileNetwork<T extends IPrismTransmissionNode> extends Tile
     public void tick() {
         super.tick();
 
-        if (!this.world.isRemote() && !this.isNetworkInformed) {
-            if (!TransmissionNetworkHelper.isTileInNetwork(this)) {
-                TransmissionNetworkHelper.informNetworkTilePlacement(this);
+        if (!this.world.isRemote()) {
+            if (!this.isNetworkInformed) {
+                if (!TransmissionNetworkHelper.isTileInNetwork(this)) {
+                    TransmissionNetworkHelper.informNetworkTilePlacement(this);
+                }
+                this.isNetworkInformed = true;
             }
-            this.isNetworkInformed = true;
+
+            if (this.needsNetworkSync) {
+                this.doNetworkSync();
+            }
         }
+    }
+
+    protected void doNetworkSync() {
+        T networkNode = this.getNetworkNode();
+        if (networkNode != null && networkNode.updateFromTileEntity(this)) {
+            this.needsNetworkSync = false;
+        }
+    }
+
+    @Override
+    public void markForUpdate() {
+        super.markForUpdate();
+        this.needsNetworkSync = true;
+    }
+
+    protected void preventNetworkSync() {
+        this.needsNetworkSync = false;
     }
 
     public void onBreak() {
@@ -74,4 +99,17 @@ public abstract class TileNetwork<T extends IPrismTransmissionNode> extends Tile
         this.isNetworkInformed = false;
     }
 
+    @Override
+    public void writeSaveNBT(CompoundNBT compound) {
+        super.writeSaveNBT(compound);
+
+        compound.putBoolean("needsNetworkSync", this.needsNetworkSync);
+    }
+
+    @Override
+    public void readSaveNBT(CompoundNBT compound) {
+        super.readSaveNBT(compound);
+
+        this.needsNetworkSync = compound.getBoolean("needsNetworkSync");
+    }
 }

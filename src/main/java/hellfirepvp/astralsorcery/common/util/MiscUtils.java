@@ -36,10 +36,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.ServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.Dimension;
@@ -75,14 +72,14 @@ public class MiscUtils {
     private static Map<DyeColor, Color> prettierColorMapping = new HashMap<>();
 
     @Nullable
-    public static <T> T getTileAt(IWorldReader world, BlockPos pos, Class<T> tileClass, boolean forceChunkLoad) {
-        if(world == null || pos == null) return null; //Duh.
-        if(world instanceof World) {
-            if (!world.isBlockLoaded(pos) && !forceChunkLoad) return null;
+    public static <T> T getTileAt(IBlockReader world, BlockPos pos, Class<T> tileClass, boolean forceChunkLoad) {
+        if (world == null || pos == null) return null; //Duh.
+        if (world instanceof IWorldReader) {
+            if (!((IWorldReader) world).isBlockLoaded(pos) && !forceChunkLoad) return null;
         }
         TileEntity te = world.getTileEntity(pos);
-        if(te == null) return null;
-        if(tileClass.isInstance(te)) return (T) te;
+        if (te == null) return null;
+        if (tileClass.isInstance(te)) return (T) te;
         return null;
     }
 

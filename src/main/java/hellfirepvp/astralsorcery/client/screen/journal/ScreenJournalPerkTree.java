@@ -221,6 +221,28 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         GlStateManager.popMatrix();
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (Minecraft.getInstance().player != null) {
+            int count = ItemPerkSeal.getPlayerSealCount(Minecraft.getInstance().player);
+            if (count > 0) {
+                this.foundSeals = new ItemStack(ItemsAS.PERK_SEAL, count);
+            } else {
+                this.foundSeals = ItemStack.EMPTY;
+            }
+        } else {
+            this.foundSeals = ItemStack.EMPTY;
+        }
+
+        this.tickSealBreak--;
+        if (this.tickSealBreak <= 0) {
+            this.tickSealBreak = 0;
+            this.sealBreakPrimed = null;
+        }
+    }
+
     private void drawSealBox() {
         GlStateManager.disableDepthTest();
         GlStateManager.disableAlphaTest();

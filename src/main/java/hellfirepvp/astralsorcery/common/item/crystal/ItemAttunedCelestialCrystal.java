@@ -57,6 +57,11 @@ public class ItemAttunedCelestialCrystal extends ItemAttunedCrystalBase implemen
     }
 
     @Override
+    public CrystalProperties getMaxProperties(ItemStack stack) {
+        return CrystalProperties.getMaxCelestialProperties();
+    }
+
+    @Override
     public Item getAttunedVariant() {
         return this;
     }

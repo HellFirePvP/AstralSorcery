@@ -177,18 +177,23 @@ public class RenderingDrawUtils {
 
             int pX = x + 12;
             int pY = y - 12;
-            int sumLineHeight = 8;
+            int sumLineHeight = 0;
             if (!lengthLimitedToolTip.isEmpty()) {
                 if (lengthLimitedToolTip.size() > 1 && isFirstLineHeadline) {
                     sumLineHeight += 2;
                 }
-                for (Tuple<ItemStack, List<String>> toolTip : lengthLimitedToolTip) {
+                Iterator<Tuple<ItemStack, List<String>>> iterator = lengthLimitedToolTip.iterator();
+                while (iterator.hasNext()) {
+                    Tuple<ItemStack, List<String>> toolTip = iterator.next();
                     int segmentHeight = 0;
                     if (!toolTip.getA().isEmpty()) {
                         segmentHeight += stackBoxSize;
-                        segmentHeight += (Math.max(toolTip.getB().size() - 2, 0)) * 10;
-                    } else {
                         segmentHeight += (Math.max(toolTip.getB().size() - 1, 0)) * 10;
+                    } else {
+                        segmentHeight += toolTip.getB().size() * 10;
+                    }
+                    if (!iterator.hasNext()) {
+                        segmentHeight -= 2;
                     }
                     sumLineHeight += segmentHeight;
                 }

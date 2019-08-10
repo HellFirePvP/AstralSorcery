@@ -22,9 +22,7 @@ import hellfirepvp.astralsorcery.common.block.blackmarble.*;
 import hellfirepvp.astralsorcery.common.block.ore.BlockAquamarineSandOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockRockCrystalOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockStarmetalOre;
-import hellfirepvp.astralsorcery.common.block.tile.BlockRitualLink;
-import hellfirepvp.astralsorcery.common.block.tile.BlockRitualPedestal;
-import hellfirepvp.astralsorcery.common.block.tile.BlockWell;
+import hellfirepvp.astralsorcery.common.block.tile.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
@@ -85,6 +83,8 @@ public class RegistryBlocks {
         STARMETAL_ORE       = registerBlock(new BlockStarmetalOre());
         GLOW_FLOWER         = registerBlock(new BlockGlowFlower());
 
+        ROCK_COLLECTOR_CRYSTAL = registerBlock(new BlockRockCollectorCrystal());
+        CELESTIAL_COLLECTOR_CRYSTAL = registerBlock(new BlockCelestialCollectorCrystal());
         RITUAL_LINK = registerBlock(new BlockRitualLink());
         RITUAL_PEDESTAL = registerBlock(new BlockRitualPedestal());
         WELL = registerBlock(new BlockWell());

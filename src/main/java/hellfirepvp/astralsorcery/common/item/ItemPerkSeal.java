@@ -30,8 +30,8 @@ public class ItemPerkSeal extends Item {
 
     public ItemPerkSeal() {
         super(new Properties()
-                .maxStackSize(16)
                 .maxDamage(0)
+                .maxStackSize(16)
                 .group(RegistryItems.ITEM_GROUP_AS));
     }
 

@@ -85,12 +85,11 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
                 TileEntity te = world.getTileEntity(pos); //Safe to do now.
                 if (te != null) {
                     if (te instanceof IStarlightSource) {
-                        if (((IStarlightSource) te).needToUpdateStarlightSource()) {
-                            source.informTileStateChange((IStarlightSource) te);
-                            ((IStarlightSource) te).markUpdated();
+                        if (((IStarlightSource) te).needsToRefreshNetworkChain()) {
                             if (handle != null) {
                                 handle.breakSourceNetwork(source);
                             }
+                            ((IStarlightSource) te).markChainRebuilt();
                         }
                     } else {
                         BlockState actual = world.getBlockState(pos);
@@ -262,7 +261,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
         data.addSourceTile(pos, source);
 
         IIndependentStarlightSource newSource = addIndependentSource(pos, source);
-        if(newSource != null) {
+        if (newSource != null) {
             Map<BlockPos, IIndependentStarlightSource> copyTr = Collections.unmodifiableMap(new HashMap<>(starlightSources));
             Thread tr = new Thread(() -> threadedUpdateSourceProximity(copyTr));
             tr.setName("StarlightNetwork-UpdateThread");
