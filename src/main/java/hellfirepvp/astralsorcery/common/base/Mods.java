@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.base;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -28,6 +31,8 @@ public enum Mods {
             return true;
         }
     },
+    DRACONIC_EVOLUTION("draconicevolution"),
+    CURIOS("curios"),
     BOTANIA("botania");
 
     private final String modid;
@@ -51,6 +56,18 @@ public enum Mods {
     public void executeIfPresent(Supplier<Runnable> execSupplier) {
         if (this.isPresent()) {
             execSupplier.get().run();
+        }
+    }
+
+    public boolean owns(IForgeRegistryEntry<?> entry) {
+        return this.isPresent() &&
+                entry.getRegistryName() != null &&
+                entry.getRegistryName().getNamespace().equals(this.modid);
+    }
+
+    public void sendIMC(String method, Supplier<?> thing) {
+        if (this.isPresent()) {
+            InterModComms.sendTo(AstralSorcery.MODID, this.getModId(), method, thing);
         }
     }
 

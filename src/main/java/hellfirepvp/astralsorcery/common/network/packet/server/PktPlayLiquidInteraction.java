@@ -20,6 +20,7 @@ import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -68,8 +69,9 @@ public class PktPlayLiquidInteraction extends ASPacket<PktPlayLiquidInteraction>
             @Override
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktPlayLiquidInteraction packet, NetworkEvent.Context context) {
-                World mcWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
+                Optional<World> mcWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
 
+                //TODO uh... particles? fluids
                 context.enqueueWork(() -> {
 
                 });
