@@ -17,8 +17,8 @@ function initializeCoreMod() {
                 var aReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.ARETURN, 0);
 
                 while (aReturn !== null) {
-                    method.instructions.insertBefore(iReturn, new VarInsnNode(Opcodes.ALOAD, 0)); //ItemStack
-                    method.instructions.insertBefore(iReturn, ASMAPI.buildMethodCall(
+                    method.instructions.insertBefore(aReturn, new VarInsnNode(Opcodes.ALOAD, 0)); //ItemStack
+                    method.instructions.insertBefore(aReturn, ASMAPI.buildMethodCall(
                         'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
                         'applyNewEnchantmentLevels',
                         '(Ljava/util/Map;Lnet/minecraft/item/ItemStack;)Ljava/util/Map;',
