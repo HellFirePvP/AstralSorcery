@@ -153,12 +153,7 @@ public class CrystalProperties {
 
     @OnlyIn(Dist.CLIENT)
     public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<ITextComponent> tooltip, int maxSize) {
-        return addPropertyTooltip(prop, tooltip, true, maxSize);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<ITextComponent> tooltip, boolean extended, int maxSize) {
-        return addPropertyTooltip(prop, tooltip, extended, ResearchHelper.getClientProgress().getTierReached(), maxSize);
+        return addPropertyTooltip(prop, tooltip, ResearchHelper.getClientProgress().getTierReached(), maxSize);
     }
 
     /**
@@ -171,39 +166,34 @@ public class CrystalProperties {
      * True = Everything has been displayed.
      */
     @OnlyIn(Dist.CLIENT)
-    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<ITextComponent> tooltip, boolean extended, ProgressionTier tier, int maxSize) {
+    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<ITextComponent> tooltip, ProgressionTier tier, int maxSize) {
         if (prop != null) {
-            if (extended) {
-                boolean missing = false;
-                if(GatedKnowledge.CRYSTAL_SIZE.canSee(tier)) {
-                    TextFormatting color = (prop.getSize() > maxSize ? TextFormatting.AQUA : prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE);
-                    tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + color + prop.getSize()));
-                } else {
-                    missing = true;
-                }
-                if(GatedKnowledge.CRYSTAL_PURITY.canSee(tier)) {
-                    TextFormatting color = (prop.getPurity() > 100 ? TextFormatting.AQUA : prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
-                    tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + color + prop.getPurity() + "%"));
-                } else {
-                    missing = true;
-                }
-                if(GatedKnowledge.CRYSTAL_COLLECT.canSee(tier)) {
-                    TextFormatting color = (prop.getCollectiveCapability() > 100 ? TextFormatting.AQUA : prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
-                    tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + color + prop.getCollectiveCapability() + "%"));
-                } else {
-                    missing = true;
-                }
-                if(GatedKnowledge.CRYSTAL_FRACTURE.canSee(tier) && prop.getFracturation() > 0) {
-                    tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.fracture") + ": " + TextFormatting.RED + prop.getFracturation() + "%"));
-                }
-                if (missing) {
-                    tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("progress.missing.knowledge")));
-                }
-                return Optional.of(missing);
+            boolean missing = false;
+            if(GatedKnowledge.CRYSTAL_SIZE.canSee(tier)) {
+                TextFormatting color = (prop.getSize() > maxSize ? TextFormatting.AQUA : prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE);
+                tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + color + prop.getSize()));
             } else {
-                tooltip.add(new StringTextComponent(TextFormatting.DARK_GRAY + TextFormatting.ITALIC.toString() + I18n.format("misc.moreInformation")));
-                return Optional.empty();
+                missing = true;
             }
+            if(GatedKnowledge.CRYSTAL_PURITY.canSee(tier)) {
+                TextFormatting color = (prop.getPurity() > 100 ? TextFormatting.AQUA : prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + color + prop.getPurity() + "%"));
+            } else {
+                missing = true;
+            }
+            if(GatedKnowledge.CRYSTAL_COLLECT.canSee(tier)) {
+                TextFormatting color = (prop.getCollectiveCapability() > 100 ? TextFormatting.AQUA : prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + color + prop.getCollectiveCapability() + "%"));
+            } else {
+                missing = true;
+            }
+            if(GatedKnowledge.CRYSTAL_FRACTURE.canSee(tier) && prop.getFracturation() > 0) {
+                tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.fracture") + ": " + TextFormatting.RED + prop.getFracturation() + "%"));
+            }
+            if (missing) {
+                tooltip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("progress.missing.knowledge")));
+            }
+            return Optional.of(missing);
         }
         return Optional.empty();
     }
