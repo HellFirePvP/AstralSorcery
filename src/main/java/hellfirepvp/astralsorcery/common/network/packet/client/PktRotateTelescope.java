@@ -23,6 +23,7 @@ import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -76,7 +77,7 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktRotateTelescope packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
-                    World world = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
+                    Optional<World> clWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
                     //TODO telescope
                     //TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
                     //if(tt != null) {

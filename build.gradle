@@ -91,18 +91,23 @@ minecraft {
 repositories {
 
     maven {
-        // My own
         name 'hellfirepvp maven'
         url 'https://maven.hellfiredev.net/'
+    }
+
+    maven {
+        name 'curios maven'
+        url "https://maven.theillusivec4.top/"
     }
 
 }
 
 dependencies {
 
-    minecraft "net.minecraftforge:forge:1.14.4-28.0.41"
+    minecraft "net.minecraftforge:forge:1.14.4-28.0.45"
 
-    compileOnly 'hellfirepvp.observerlib:observerlib:1.14.3-1.1.0.v22'
+    compileOnly 'hellfirepvp.observerlib:observerlib:1.14.4-1.1.0.v23'
+    compileOnly 'top.theillusivec4.curios:curios:FORGE-1.14.4-0.21'
 
 }
 

@@ -84,6 +84,7 @@ public class RegistryItems {
 
         TOME = registerItem(new ItemTome());
         CONSTELLATION_PAPER = registerItem(new ItemConstellationPaper());
+        ENCHANTMENT_AMULET = registerItem(new ItemEnchantmentAmulet());
 
         ROCK_CRYSTAL = registerItem(new ItemRockCrystal());
         ATTUNED_ROCK_CRYSTAL = registerItem(new ItemAttunedRockCrystal());

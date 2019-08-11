@@ -59,7 +59,8 @@ public class TechnicalEntityRegistry extends ConfigDataAdapter<EntityTechnicalEn
     @Override
     public String getCommentDescription() {
         return "Defines entities whose purpose is mostly technical and less gameplay impactful. Those will be excluded from effects that manipulate entities. " +
-                "Add entities by their entity type name.";
+                "Add entities by their entity type name." +
+                "Format: <EntityTypeName>";
     }
 
     @Override

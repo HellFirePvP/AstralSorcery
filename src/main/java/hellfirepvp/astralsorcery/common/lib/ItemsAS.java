@@ -43,6 +43,7 @@ public class ItemsAS {
 
     public static ItemTome TOME;
     public static ItemConstellationPaper CONSTELLATION_PAPER;
+    public static ItemEnchantmentAmulet ENCHANTMENT_AMULET;
 
     public static ItemRockCrystal ROCK_CRYSTAL;
     public static ItemAttunedRockCrystal ATTUNED_ROCK_CRYSTAL;

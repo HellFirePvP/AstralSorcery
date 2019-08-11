@@ -28,6 +28,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -89,11 +90,11 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktShootEntity packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
-                    World world = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
-                    Entity entity = world.getEntityByID(packet.entityId);
-                    if(entity != null) {
+                    Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
+                    Entity entity = world.map(w -> w.getEntityByID(packet.entityId)).orElse(null);
+                    if (entity != null) {
                         entity.setMotion(packet.motionVector.toVec3d());
-                        if(packet.hasEffect) {
+                        if (packet.hasEffect) {
                             Vector3 origin = Vector3.atEntityCenter(entity)
                                     .setY(entity.posY + entity.getHeight());
                             Vector3 look = new Vector3(entity.getLookVec()).normalize().multiply(packet.effectLength * 18);
@@ -110,7 +111,7 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
                                         .setScaleMultiplier(0.35F + rand.nextFloat() * 0.2F)
                                         .setMaxAge(10 + rand.nextInt(10));
 
-                                if(rand.nextBoolean()) {
+                                if (rand.nextBoolean()) {
                                     p.color(VFXColorFunction.WHITE)
                                             .setScaleMultiplier(0.1F + rand.nextFloat() * 0.05F);
                                 } else {

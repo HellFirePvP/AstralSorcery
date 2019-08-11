@@ -547,8 +547,6 @@
   "item.itemskyresonator": "Fosic Resonator",
   "item.itemsextant": "Sextant",
   "item.itemsextant.upgraded": "Augmented",
-  "item.itemenchantmentamulet": "Resplendent Prism",
-  "item.itemenchantmentamulet.pure": "Pure",
   "item.itemknowledgefragment": "Lucent Scroll",
   "item.itemfragmentcapsule": "Shining Casing",
 
@@ -586,6 +584,7 @@
   "item.astralsorcery.resonating_gem": "Resonating Gem",
   "item.astralsorcery.parchment": "Parchment",
 
+  "item.astralsorcery.enchantment_amulet": "Resplendent Prism",
   "item.astralsorcery.tome": "Astral Tome",
   "item.astralsorcery.constellation_paper": "Constellation Paper",
   "item.astralsorcery.rock_crystal": "Rock Crystal",

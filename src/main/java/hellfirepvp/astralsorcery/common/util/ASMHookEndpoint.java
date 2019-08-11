@@ -8,8 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
+import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -32,19 +35,24 @@ import java.util.Map;
 public class ASMHookEndpoint {
 
     public static Map<Enchantment, Integer> applyNewEnchantmentLevels(Map<Enchantment, Integer> enchantments, ItemStack stack) {
-        return enchantments;
+        return DynamicEnchantmentHelper.addNewLevels(enchantments, stack);
     }
 
     public static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack stack) {
-        return current;
+        return DynamicEnchantmentHelper.getNewEnchantmentLevel(current, enchantment, stack, null);
     }
 
     public static ListNBT addNewEnchantmentLevelsTag(ListNBT list, ItemStack stack) {
-        return list;
+        return DynamicEnchantmentHelper.modifyEnchantmentTags(list, stack);
     }
 
     public static void addNoTagTooltip(ItemStack stack, List<ITextComponent> tooltip) {
-
+        Map<Enchantment, Integer> enchantments;
+        if (!stack.hasTag() && !(enchantments = EnchantmentHelper.getEnchantments(stack)).isEmpty()) {
+            for (Enchantment e : enchantments.keySet()) {
+                tooltip.add(e.getDisplayName(enchantments.get(e)));
+            }
+        }
     }
 
     public static AbstractAttributeMap markPlayer(AbstractAttributeMap map, LivingEntity entity) {

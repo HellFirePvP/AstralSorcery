@@ -20,11 +20,14 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigRegistries;
 import hellfirepvp.astralsorcery.common.data.config.entry.*;
 import hellfirepvp.astralsorcery.common.data.config.CommonConfig;
 import hellfirepvp.astralsorcery.common.data.config.entry.common.CommonGeneralConfig;
+import hellfirepvp.astralsorcery.common.data.config.registry.AmuletEnchantmentRegistry;
 import hellfirepvp.astralsorcery.common.data.config.registry.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegistry;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
+import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerIO;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
@@ -134,6 +137,7 @@ public class CommonProxy {
 
         EventHandlerIO.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
+        eventBus.addListener(PlayerAmuletHandler::onEnchantmentAdd);
 
         tickManager.attachListeners(eventBus);
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);
@@ -146,6 +150,7 @@ public class CommonProxy {
         registrar.accept(SyncDataHolder.getTickInstance());
         registrar.accept(LinkHandler.getInstance());
         registrar.accept(SkyHandler.getInstance());
+        registrar.accept(PlayerAmuletHandler.INSTANCE);
 
         EventHelperRitualFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);
@@ -154,14 +159,17 @@ public class CommonProxy {
     protected void initializeConfigurations() {
         ConfigRegistries.getRegistries().addDataRegistry(FluidRarityRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(TechnicalEntityRegistry.INSTANCE);
+        ConfigRegistries.getRegistries().addDataRegistry(AmuletEnchantmentRegistry.INSTANCE);
 
         this.serverConfig.addConfigEntry(GeneralConfig.CONFIG);
         this.serverConfig.addConfigEntry(ToolsConfig.CONFIG);
+        this.serverConfig.addConfigEntry(ToolsConfig.CONFIG.newSubSection(WandsConfig.CONFIG));
         this.serverConfig.addConfigEntry(EntityConfig.CONFIG);
         this.serverConfig.addConfigEntry(CraftingConfig.CONFIG);
         this.serverConfig.addConfigEntry(LightNetworkConfig.CONFIG);
         this.serverConfig.addConfigEntry(LogConfig.CONFIG);
         this.serverConfig.addConfigEntry(PerkConfig.CONFIG);
+        this.serverConfig.addConfigEntry(AmuletRandomizeHelper.CONFIG);
 
         this.commonConfig.addConfigEntry(CommonGeneralConfig.CONFIG);
 

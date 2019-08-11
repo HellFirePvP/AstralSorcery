@@ -64,6 +64,7 @@ public class ASRegistryEvents {
      * Use this event to remove perks at AS' post-init
      * Removed associated connections aswell
      */
+    //TODO post remove
     public static class PerkPostRemove extends Event {
 
         private boolean removed;

@@ -24,6 +24,7 @@ import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -90,8 +91,8 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
             @Override
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktAttunementAltarState packet, NetworkEvent.Context context) {
-                World mcWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
-                if (mcWorld.getDimension().getType().equals(packet.type)) {
+                Optional<World> mcWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
+                if (mcWorld.isPresent() && mcWorld.get().getDimension().getType().equals(packet.type)) {
                     PlayerEntity player = Minecraft.getInstance().player;
                     if (player != null && player.getEntityId() == packet.entityId) {
                         // TODO attunement altar
