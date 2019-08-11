@@ -28,7 +28,7 @@ function initializeCoreMod() {
                     method.instructions.insertBefore(next, ASMAPI.buildMethodCall(
                         'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
                         'addNewEnchantmentLevelsTag',
-                        '(Lnet/minecraft/nbt/NBTTagList;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/nbt/NBTTagList;',
+                        '(Lnet/minecraft/nbt/ListNBT;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/nbt/ListNBT;',
                         ASMAPI.MethodType.STATIC));
 
                     methodCall = ASMAPI.findFirstMethodCallAfter(method,
