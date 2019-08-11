@@ -10,10 +10,9 @@ package hellfirepvp.astralsorcery.common.structure;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
-import hellfirepvp.observerlib.common.block.PatternBlockArray;
+import hellfirepvp.observerlib.api.util.PatternBlockArray;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,85 +36,81 @@ public class PatternRitualPedestal extends PatternBlockArray {
         addBlockCube(air, -3, 0, -1, 3, 2, 1);
         addBlockCube(air, -1, 0, -3, 1, 2, 3);
 
-        addBlock(BlockPos.ZERO, BlocksAS.RITUAL_PEDESTAL.getDefaultState());
+        addBlock(BlocksAS.RITUAL_PEDESTAL.getDefaultState(), 0, 0, 0);
 
         BlockState chiseled = BlocksAS.MARBLE_CHISELED.getDefaultState();
         BlockState bricks = BlocksAS.MARBLE_BRICKS.getDefaultState();
         BlockState raw = BlocksAS.MARBLE_RAW.getDefaultState();
         BlockState arch = BlocksAS.MARBLE_ARCH.getDefaultState();
 
-        addBlock(0, -1, 0, chiseled);
+        addBlock(chiseled, 0, -1, 0);
 
-        addBlock( 0, -1,  1, bricks);
-        addBlock( 0, -1,  2, bricks);
-        addBlock( 0, -1,  3, bricks);
-        addBlock( 1, -1,  3, bricks);
-        addBlock(-1, -1,  3, bricks);
+        addBlock(bricks,  0, -1,  1);
+        addBlock(bricks,  0, -1,  2);
+        addBlock(bricks,  0, -1,  3);
+        addBlock(bricks,  1, -1,  3);
+        addBlock(bricks, -1, -1,  3);
+        addBlock(bricks,  0, -1, -1);
+        addBlock(bricks,  0, -1, -2);
+        addBlock(bricks,  0, -1, -3);
+        addBlock(bricks,  1, -1, -3);
+        addBlock(bricks, -1, -1, -3);
+        addBlock(bricks,  1, -1,  0);
+        addBlock(bricks,  2, -1,  0);
+        addBlock(bricks,  3, -1,  0);
+        addBlock(bricks,  3, -1,  1);
+        addBlock(bricks,  3, -1, -1);
+        addBlock(bricks, -1, -1,  0);
+        addBlock(bricks, -2, -1,  0);
+        addBlock(bricks, -3, -1,  0);
+        addBlock(bricks, -3, -1,  1);
+        addBlock(bricks, -3, -1, -1);
+        addBlock(bricks,  2, -1,  2);
+        addBlock(bricks, -2, -1,  2);
+        addBlock(bricks,  2, -1, -2);
+        addBlock(bricks, -2, -1, -2);
 
-        addBlock( 0, -1, -1, bricks);
-        addBlock( 0, -1, -2, bricks);
-        addBlock( 0, -1, -3, bricks);
-        addBlock( 1, -1, -3, bricks);
-        addBlock(-1, -1, -3, bricks);
+        addBlock(raw,  1, -1,  1);
+        addBlock(raw,  1, -1,  2);
+        addBlock(raw,  2, -1,  1);
 
-        addBlock( 1, -1,  0, bricks);
-        addBlock( 2, -1,  0, bricks);
-        addBlock( 3, -1,  0, bricks);
-        addBlock( 3, -1,  1, bricks);
-        addBlock( 3, -1, -1, bricks);
+        addBlock(raw, -1, -1,  1);
+        addBlock(raw, -1, -1,  2);
+        addBlock(raw, -2, -1,  1);
 
-        addBlock(-1, -1,  0, bricks);
-        addBlock(-2, -1,  0, bricks);
-        addBlock(-3, -1,  0, bricks);
-        addBlock(-3, -1,  1, bricks);
-        addBlock(-3, -1, -1, bricks);
+        addBlock(raw,  1, -1, -1);
+        addBlock(raw,  1, -1, -2);
+        addBlock(raw,  2, -1, -1);
 
-        addBlock( 2, -1,  2, bricks);
-        addBlock(-2, -1,  2, bricks);
-        addBlock( 2, -1, -2, bricks);
-        addBlock(-2, -1, -2, bricks);
+        addBlock(raw, -1, -1, -1);
+        addBlock(raw, -1, -1, -2);
+        addBlock(raw, -2, -1, -1);
 
-        addBlock( 1, -1,  1, raw);
-        addBlock( 1, -1,  2, raw);
-        addBlock( 2, -1,  1, raw);
+        addBlock(arch,  0, -1,  4);
+        addBlock(arch,  1, -1,  4);
+        addBlock(arch, -1, -1,  4);
 
-        addBlock(-1, -1,  1, raw);
-        addBlock(-1, -1,  2, raw);
-        addBlock(-2, -1,  1, raw);
+        addBlock(arch,  0, -1, -4);
+        addBlock(arch,  1, -1, -4);
+        addBlock(arch, -1, -1, -4);
 
-        addBlock( 1, -1, -1, raw);
-        addBlock( 1, -1, -2, raw);
-        addBlock( 2, -1, -1, raw);
+        addBlock(arch,  4, -1,  0);
+        addBlock(arch,  4, -1,  1);
+        addBlock(arch,  4, -1, -1);
 
-        addBlock(-1, -1, -1, raw);
-        addBlock(-1, -1, -2, raw);
-        addBlock(-2, -1, -1, raw);
+        addBlock(arch, -4, -1,  0);
+        addBlock(arch, -4, -1,  1);
+        addBlock(arch, -4, -1, -1);
 
-        addBlock( 0, -1,  4, arch);
-        addBlock( 1, -1,  4, arch);
-        addBlock(-1, -1,  4, arch);
+        addBlock(arch,  3, -1,  2);
+        addBlock(arch,  3, -1, -2);
+        addBlock(arch, -3, -1,  2);
+        addBlock(arch, -3, -1, -2);
 
-        addBlock( 0, -1, -4, arch);
-        addBlock( 1, -1, -4, arch);
-        addBlock(-1, -1, -4, arch);
-
-        addBlock( 4, -1,  0, arch);
-        addBlock( 4, -1,  1, arch);
-        addBlock( 4, -1, -1, arch);
-
-        addBlock(-4, -1,  0, arch);
-        addBlock(-4, -1,  1, arch);
-        addBlock(-4, -1, -1, arch);
-
-        addBlock( 3, -1,  2, arch);
-        addBlock( 3, -1, -2, arch);
-        addBlock(-3, -1,  2, arch);
-        addBlock(-3, -1, -2, arch);
-
-        addBlock( 2, -1,  3, arch);
-        addBlock(-2, -1,  3, arch);
-        addBlock( 2, -1, -3, arch);
-        addBlock(-2, -1, -3, arch);
+        addBlock(arch,  2, -1,  3);
+        addBlock(arch, -2, -1,  3);
+        addBlock(arch,  2, -1, -3);
+        addBlock(arch, -2, -1, -3);
     }
 
 }

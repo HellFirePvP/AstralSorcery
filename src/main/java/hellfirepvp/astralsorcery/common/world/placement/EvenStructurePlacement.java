@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.common.world.placement;
 import com.mojang.datafixers.Dynamic;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.world.placement.config.EvenStructurePlacementConfig;
-import hellfirepvp.observerlib.common.block.BlockArray;
+import hellfirepvp.observerlib.api.util.BlockArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IWorld;
