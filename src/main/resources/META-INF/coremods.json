@@ -1,5 +1,10 @@
 {
   "add_player_field": "coremods/add_player_field.js",
   "set_player_field": "coremods/set_player_field.js",
-  "post_process_vanilla": "coremods/post_process_vanilla.js"
+  "post_process_vanilla": "coremods/post_process_vanilla.js",
+  "add_enchantment_helper_apply_modifier": "coremods/add_enchantment_helper_apply_modifier.js",
+  "add_enchantment_helper_enchantments": "coremods/add_enchantment_helper_enchantments.js",
+  "add_enchantment_helper_levels": "coremods/add_enchantment_helper_levels.js",
+  "add_enchantment_tooltip": "coremods/add_enchantment_tooltip.js",
+  "add_missing_tag_enchantment_tooltip": "coremods/add_missing_tag_enchantment_tooltip.js"
 }
