@@ -11,14 +11,17 @@ package hellfirepvp.astralsorcery.common.structure;
 import hellfirepvp.astralsorcery.common.block.marble.BlockMarblePillar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
+import hellfirepvp.observerlib.api.util.StructureBlockArray;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -51,26 +54,26 @@ public class StructureDesertShrine extends StructureBlockArray {
         BlockState mplUp   = BlocksAS.MARBLE_PILLAR.getDefaultState().with(BlockMarblePillar.PILLAR_TYPE, BlockMarblePillar.PillarType.TOP);
         BlockState mplDown = BlocksAS.MARBLE_PILLAR.getDefaultState().with(BlockMarblePillar.PILLAR_TYPE, BlockMarblePillar.PillarType.BOTTOM);
 
-        setBlockCube(world, center, at -> world.getBiome(at).getSurfaceBuilderConfig().getTop(), -4, 1, -4, 4, 1, 4);
+        placeBlockCube(world, center, at -> world.getBiome(at).getSurfaceBuilderConfig().getTop(), -4, 1, -4, 4, 1, 4);
 
-        setBlockState(world, center.add(0, 1, 0), mpl);
-        setBlockState(world, center.add(0, 2, 0), mch);
+        world.setBlockState(center.add(0, 1, 0), mpl, Constants.BlockFlags.DEFAULT);
+        world.setBlockState(center.add(0, 2, 0), mch, Constants.BlockFlags.DEFAULT);
 
-        setBlockState(world, center.add(3, 1, 3), mplDown);
-        setBlockState(world, center.add(3, 2, 3), mplUp);
-        setBlockState(world, center.add(3, 3, 3), mch);
+        world.setBlockState(center.add(3, 1, 3), mplDown, Constants.BlockFlags.DEFAULT);
+        world.setBlockState(center.add(3, 2, 3), mplUp, Constants.BlockFlags.DEFAULT);
+        world.setBlockState(center.add(3, 3, 3), mch, Constants.BlockFlags.DEFAULT);
 
-        setBlockState(world, center.add(-3, 1,  3), mplDown);
-        setBlockState(world, center.add(-3, 2,  3), mplUp);
-        setBlockState(world, center.add(-3, 3,  3), mch);
+        world.setBlockState(center.add(-3, 1,  3), mplDown, Constants.BlockFlags.DEFAULT);
+        world.setBlockState(center.add(-3, 2,  3), mplUp, Constants.BlockFlags.DEFAULT);
+        world.setBlockState(center.add(-3, 3,  3), mch, Constants.BlockFlags.DEFAULT);
 
-        setBlockState(world, center.add(-3, 1, -3), mplDown);
-        setBlockState(world, center.add(-3, 2, -3), mplUp);
-        setBlockState(world, center.add(-3, 3, -3), mch);
+        world.setBlockState(center.add(-3, 1, -3), mplDown, Constants.BlockFlags.DEFAULT);
+        world.setBlockState(center.add(-3, 2, -3), mplUp, Constants.BlockFlags.DEFAULT);
+        world.setBlockState(center.add(-3, 3, -3), mch, Constants.BlockFlags.DEFAULT);
 
-        setBlockState(world, center.add(3, 1, -3), mplDown);
-        setBlockState(world, center.add(3, 2, -3), mplUp);
-        setBlockState(world, center.add(3, 3, -3), mch);
+        world.setBlockState(center.add(3, 1, -3), mplDown, Constants.BlockFlags.DEFAULT);
+        world.setBlockState(center.add(3, 2, -3), mplUp, Constants.BlockFlags.DEFAULT);
+        world.setBlockState(center.add(3, 3, -3), mch, Constants.BlockFlags.DEFAULT);
 
         topBlockWithOffset(3, 4, 3, world, center, 1F);
         topBlockWithOffset(-3, 4,  3, world, center, 1F);
@@ -171,56 +174,91 @@ public class StructureDesertShrine extends StructureBlockArray {
 
         addBlockCube(Blocks.AIR.getDefaultState(), -2, -2, -2,  2, -5,  2);
 
-        addBlock(-3, -5, -1, mplDown);
+        addBlock(mplDown, -3, -5, -1);
         addBlockCube(mpl, -3, -3, -1, -3, -4, -1);
-        addBlock(-3, -2, -1, mplUp);
+        addBlock(mplUp, -3, -2, -1);
 
-        addBlock(-3, -5,  1, mplDown);
+        addBlock(mplDown, -3, -5,  1);
         addBlockCube(mpl, -3, -3,  1, -3, -4,  1);
-        addBlock(-3, -2,  1, mplUp);
+        addBlock(mplUp, -3, -2,  1);
 
-        addBlock( 3, -5, -1, mplDown);
+        addBlock(mplDown,  3, -5, -1);
         addBlockCube(mpl,  3, -3, -1,  3, -4, -1);
-        addBlock( 3, -2, -1, mplUp);
+        addBlock(mplUp,  3, -2, -1);
 
-        addBlock( 3, -5,  1, mplDown);
+        addBlock(mplDown,  3, -5,  1);
         addBlockCube(mpl,  3, -3,  1,  3, -4,  1);
-        addBlock( 3, -2,  1, mplUp);
+        addBlock(mplUp,  3, -2,  1);
 
-        addBlock(-1, -5, -3, mplDown);
+        addBlock(mplDown, -1, -5, -3);
         addBlockCube(mpl, -1, -3, -3, -1, -4, -3);
-        addBlock(-1, -2, -3, mplUp);
+        addBlock(mplUp, -1, -2, -3);
 
-        addBlock( 1, -5, -3, mplDown);
+        addBlock(mplDown,  1, -5, -3);
         addBlockCube(mpl,  1, -3, -3,  1, -4, -3);
-        addBlock( 1, -2, -3, mplUp);
+        addBlock(mplUp,  1, -2, -3);
 
-        addBlock(-1, -5,  3, mplDown);
+        addBlock(mplDown, -1, -5,  3);
         addBlockCube(mpl, -1, -3,  3, -1, -4,  3);
-        addBlock(-1, -2,  3, mplUp);
+        addBlock(mplUp, -1, -2,  3);
 
-        addBlock( 1, -5,  3, mplDown);
+        addBlock(mplDown,  1, -5,  3);
         addBlockCube(mpl,  1, -3,  3,  1, -4,  3);
-        addBlock( 1, -2,  3, mplUp);
+        addBlock(mplUp,  1, -2,  3);
 
         addBlockCube(mar, -2, -6, -2, 2, -6, 2);
         addBlockCube(Blocks.AIR.getDefaultState(), -2, -6,  0, 2, -6, 0);
         addBlockCube(Blocks.AIR.getDefaultState(), 0, -6, -2, 0, -6, 2);
-        addBlock(-2, -6, -2, mrw);
-        addBlock(-2, -6, 2, mrw);
-        addBlock(2, -6, -2, mrw);
-        addBlock( 2, -6,  2, mrw);
+        addBlock(mrw, -2, -6, -2);
+        addBlock(mrw, -2, -6,  2);
+        addBlock(mrw,  2, -6, -2);
+        addBlock(mrw,  2, -6,  2);
 
-        addBlock(-3, -3,  0, Blocks.WATER.getDefaultState());
-        addBlock( 3, -3,  0, Blocks.WATER.getDefaultState());
-        addBlock( 0, -3, -3, Blocks.WATER.getDefaultState());
-        addBlock( 0, -3,  3, Blocks.WATER.getDefaultState());
+        addBlock(Blocks.WATER.getDefaultState(), -3, -3,  0);
+        addBlock(Blocks.WATER.getDefaultState(),  3, -3,  0);
+        addBlock(Blocks.WATER.getDefaultState(),  0, -3, -3);
+        addBlock(Blocks.WATER.getDefaultState(),  0, -3,  3);
+    }
+
+    private void placeBlockCube(IWorld world, BlockPos offset, Function<BlockPos, BlockState> stateProvider, int ox, int oy, int oz, int tx, int ty, int tz) {
+        int lx, ly, lz;
+        int hx, hy, hz;
+        if(ox < tx) {
+            lx = ox;
+            hx = tx;
+        } else {
+            lx = tx;
+            hx = ox;
+        }
+        if(oy < ty) {
+            ly = oy;
+            hy = ty;
+        } else {
+            ly = ty;
+            hy = oy;
+        }
+        if(oz < tz) {
+            lz = oz;
+            hz = tz;
+        } else {
+            lz = tz;
+            hz = oz;
+        }
+
+        for (int xx = lx; xx <= hx; xx++) {
+            for (int zz = lz; zz <= hz; zz++) {
+                for (int yy = ly; yy <= hy; yy++) {
+                    BlockPos at = offset.add(xx, yy, zz);
+                    world.setBlockState(at, stateProvider.apply(at), Constants.BlockFlags.DEFAULT);
+                }
+            }
+        }
     }
 
     private void topBlockWithOffset(int x, int y, int z, IWorld world, BlockPos center, double chance) {
         if(rand.nextFloat() <= chance) {
             BlockPos at = center.add(x, y, z);
-            setBlockState(world, at, world.getBiome(at).getSurfaceBuilderConfig().getTop());
+            world.setBlockState(at, world.getBiome(at).getSurfaceBuilderConfig().getTop(), Constants.BlockFlags.DEFAULT);
         }
     }
 }

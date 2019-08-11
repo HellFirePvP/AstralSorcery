@@ -9,11 +9,10 @@
 package hellfirepvp.astralsorcery.common.world.feature;
 
 import hellfirepvp.astralsorcery.common.lib.DataAS;
-import hellfirepvp.astralsorcery.common.structure.StructureBlockArray;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import hellfirepvp.observerlib.api.util.StructureBlockArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;

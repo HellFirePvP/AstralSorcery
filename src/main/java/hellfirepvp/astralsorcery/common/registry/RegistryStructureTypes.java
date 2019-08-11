@@ -10,9 +10,8 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.StructuresAS;
-import hellfirepvp.astralsorcery.common.structure.StructureBlockArray;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
-import hellfirepvp.observerlib.common.block.BlockArray;
+import hellfirepvp.observerlib.api.util.BlockArray;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Supplier;

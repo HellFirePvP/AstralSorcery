@@ -18,8 +18,8 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceCl
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
+import hellfirepvp.observerlib.api.ObserverProvider;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
-import hellfirepvp.observerlib.api.structure.ObserverProvider;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.container.ContainerType;

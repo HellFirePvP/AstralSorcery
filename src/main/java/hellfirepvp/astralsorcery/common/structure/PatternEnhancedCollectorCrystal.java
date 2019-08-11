@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.structure;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
-import hellfirepvp.observerlib.common.block.PatternBlockArray;
+import hellfirepvp.observerlib.api.util.PatternBlockArray;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -41,31 +41,31 @@ public class PatternEnhancedCollectorCrystal extends PatternBlockArray {
         //TODO collector crystal
 
         addBlockCube(raw, -1, -5, -1, 1, -5, 1);
-        addBlock(0, -2, 0, chiseled);
-        addBlock(0, -3, 0, pillar);
-        addBlock(0, -4, 0, engraved);
+        addBlock(chiseled, 0, -2, 0);
+        addBlock(pillar, 0, -3, 0);
+        addBlock(engraved, 0, -4, 0);
 
-        addBlock(-2, -4, -2, chiseled);
-        addBlock(-2, -4,  2, chiseled);
-        addBlock( 2, -4,  2, chiseled);
-        addBlock( 2, -4, -2, chiseled);
-        addBlock(-2, -3, -2, engraved);
-        addBlock(-2, -3,  2, engraved);
-        addBlock( 2, -3,  2, engraved);
-        addBlock( 2, -3, -2, engraved);
+        addBlock(chiseled, -2, -4, -2);
+        addBlock(chiseled, -2, -4,  2);
+        addBlock(chiseled,  2, -4,  2);
+        addBlock(chiseled,  2, -4, -2);
+        addBlock(engraved, -2, -3, -2);
+        addBlock(engraved, -2, -3,  2);
+        addBlock(engraved,  2, -3,  2);
+        addBlock(engraved,  2, -3, -2);
 
-        addBlock(-2, -4, -1, runed);
-        addBlock(-2, -4,  0, runed);
-        addBlock(-2, -4,  1, runed);
-        addBlock( 2, -4, -1, runed);
-        addBlock( 2, -4,  0, runed);
-        addBlock( 2, -4,  1, runed);
-        addBlock(-1, -4, -2, runed);
-        addBlock( 0, -4, -2, runed);
-        addBlock( 1, -4, -2, runed);
-        addBlock(-1, -4,  2, runed);
-        addBlock( 0, -4,  2, runed);
-        addBlock( 1, -4,  2, runed);
+        addBlock(runed, -2, -4, -1);
+        addBlock(runed, -2, -4,  0);
+        addBlock(runed, -2, -4,  1);
+        addBlock(runed,  2, -4, -1);
+        addBlock(runed,  2, -4,  0);
+        addBlock(runed,  2, -4,  1);
+        addBlock(runed, -1, -4, -2);
+        addBlock(runed,  0, -4, -2);
+        addBlock(runed,  1, -4, -2);
+        addBlock(runed, -1, -4,  2);
+        addBlock(runed,  0, -4,  2);
+        addBlock(runed,  1, -4,  2);
     }
 
 }

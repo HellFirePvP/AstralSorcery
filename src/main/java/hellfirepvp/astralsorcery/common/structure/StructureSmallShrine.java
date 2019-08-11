@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.structure;
 import hellfirepvp.astralsorcery.common.block.marble.BlockMarblePillar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
+import hellfirepvp.observerlib.api.util.StructureBlockArray;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 
@@ -42,30 +43,30 @@ public class StructureSmallShrine extends StructureBlockArray {
         addBlockCube(mBrick, -3, 1, -3, 3, 1, 3);
         addBlockCube(Blocks.AIR.getDefaultState(), -1, 1, -1, 1, 1, 1);
 
-        addBlock(0, 1, 0, mPillarDown.with(BlockMarblePillar.WATERLOGGED, true));
-        addBlock(0, 2, 0, mPillarUp.with(BlockMarblePillar.WATERLOGGED, true));
-        addBlock(0, 3, 0, Blocks.SEA_LANTERN.getDefaultState());
-        addBlock(0, 4, 0, Blocks.WATER.getDefaultState());
+        addBlock(mPillarDown.with(BlockMarblePillar.WATERLOGGED, true), 0, 1, 0);
+        addBlock(mPillarUp.with(BlockMarblePillar.WATERLOGGED, true), 0, 2, 0);
+        addBlock(Blocks.SEA_LANTERN.getDefaultState(), 0, 3, 0);
+        addBlock(Blocks.WATER.getDefaultState(), 0, 4, 0);
 
-        addBlock( 2, 2,  2, mPillarDown);
-        addBlock( 2, 3,  2, mPillar);
-        addBlock( 2, 4,  2, mPillarUp);
-        addBlock( 2, 5,  2, mChisel);
+        addBlock(mPillarDown,  2, 2,  2);
+        addBlock(mPillar,  2, 3,  2);
+        addBlock(mPillarUp,  2, 4,  2);
+        addBlock(mChisel,  2, 5,  2);
 
-        addBlock( 2, 2, -2, mPillarDown);
-        addBlock( 2, 3, -2, mPillar);
-        addBlock( 2, 4, -2, mPillarUp);
-        addBlock( 2, 5, -2, mChisel);
+        addBlock(mPillarDown,  2, 2, -2);
+        addBlock(mPillar,  2, 3, -2);
+        addBlock(mPillarUp,  2, 4, -2);
+        addBlock(mChisel,  2, 5, -2);
 
-        addBlock(-2, 2,  2, mPillarDown);
-        addBlock(-2, 3,  2, mPillar);
-        addBlock(-2, 4,  2, mPillarUp);
-        addBlock(-2, 5,  2, mChisel);
+        addBlock(mPillarDown, -2, 2,  2);
+        addBlock(mPillar, -2, 3,  2);
+        addBlock(mPillarUp, -2, 4,  2);
+        addBlock(mChisel, -2, 5,  2);
 
-        addBlock(-2, 2, -2, mPillarDown);
-        addBlock(-2, 3, -2, mPillar);
-        addBlock(-2, 4, -2, mPillarUp);
-        addBlock(-2, 5, -2, mChisel);
+        addBlock(mPillarDown, -2, 2, -2);
+        addBlock(mPillar, -2, 3, -2);
+        addBlock(mPillarUp, -2, 4, -2);
+        addBlock(mChisel, -2, 5, -2);
     }
 
 }

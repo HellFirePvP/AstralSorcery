@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.structure.types;
 
 import hellfirepvp.observerlib.api.ChangeSubscriber;
 import hellfirepvp.observerlib.api.ObserverHelper;
-import hellfirepvp.observerlib.common.block.BlockArray;
+import hellfirepvp.observerlib.api.util.BlockArray;
 import hellfirepvp.observerlib.common.change.ChangeObserverStructure;
 import hellfirepvp.observerlib.common.change.ObserverProviderStructure;
 import net.minecraft.util.ResourceLocation;
