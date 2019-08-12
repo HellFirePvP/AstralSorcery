@@ -14,6 +14,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -57,6 +58,14 @@ public enum Mods {
         if (this.isPresent()) {
             execSupplier.get().run();
         }
+    }
+
+    @Nullable
+    public <T> T getIfPresent(Supplier<Supplier<T>> supplierSupplier) {
+        if (this.isPresent()) {
+            return supplierSupplier.get().get();
+        }
+        return null;
     }
 
     public boolean owns(IForgeRegistryEntry<?> entry) {

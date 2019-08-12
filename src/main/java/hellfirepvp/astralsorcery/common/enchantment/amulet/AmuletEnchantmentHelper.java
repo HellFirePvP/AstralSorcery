@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.enchantment.amulet;
 
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHelper;
+import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.item.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -25,6 +27,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -123,15 +126,13 @@ public class AmuletEnchantmentHelper {
         PlayerEntity player = getPlayerHavingTool(anyTool);
         if (player == null) return null;
 
-        //TODO check for curio
-        if (player.inventory.getStackInSlot(0).getItem() instanceof ItemEnchantmentAmulet) {
-            return new Tuple<>(player.inventory.getStackInSlot(0), player);
+        if (Mods.CURIOS.isPresent()) {
+            Optional<ImmutableTriple<String, Integer, ItemStack>> curios =
+                    Mods.CURIOS.getIfPresent(() -> () -> IntegrationCurios.getCurio(player, (stack) -> stack.getItem() instanceof ItemEnchantmentAmulet));
+            if (curios.isPresent()) {
+                return new Tuple<>(curios.get().right, player);
+            }
         }
-        //Check if the player wears an amulet and return that one then..
-        //if(BaublesHelper.doesPlayerWearBauble(player, BaubleType.AMULET, (stack) -> !stack.isEmpty() && stack.getItem() instanceof ItemEnchantmentAmulet)) {
-        //    ItemStack stack =  BaublesHelper.getFirstWornBaublesForType(player, BaubleType.AMULET);
-        //    return new Tuple<>(stack, player);
-        //}
         return null;
     }
 

@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
@@ -32,6 +33,7 @@ import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerIO;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
+import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktOpenGui;
 import hellfirepvp.astralsorcery.common.registry.*;
@@ -55,6 +57,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
@@ -120,6 +123,7 @@ public class CommonProxy {
 
     public void attachLifecycle(IEventBus modEventBus) {
         modEventBus.addListener(this::onCommonSetup);
+        modEventBus.addListener(this::onEnqueueIMC);
 
         modEventBus.addListener(RegistryRegistries::buildRegistries);
         registryEventHandler.attachEventHandlers(modEventBus);
@@ -233,6 +237,10 @@ public class CommonProxy {
         RegistryIngredientTypes.init();
 
         RegistryWorldGeneration.registerFeatures();
+    }
+
+    private void onEnqueueIMC(InterModEnqueueEvent event) {
+        Mods.CURIOS.executeIfPresent(() -> IntegrationCurios::initIMC);
     }
 
     // Generic events

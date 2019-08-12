@@ -92,7 +92,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     //TODO crafttweaker?
     //@Optional.Method(modid = "crafttweaker")
     //public final void adjustMultipliers() {
-    //    double multiplier = hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.PerkTree.getMultiplier(this);
+    //    double multiplier = hellfirepvp.astralsorcery.common.integration.mods.crafttweaker.tweaks.PerkTree.getMultiplier(this);
     //    applyEffectMultiplier(multiplier);
     //}
 
