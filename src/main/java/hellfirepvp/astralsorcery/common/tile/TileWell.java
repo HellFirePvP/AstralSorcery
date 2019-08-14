@@ -73,8 +73,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
             if (toAdd.isEmpty()) {
                 return true;
             }
-            return existing.isEmpty() && RecipeTypesAS.TYPE_WELL
-                    .findRecipe(Dist.DEDICATED_SERVER, new WellLiquefactionContext(toAdd)) != null;
+            return existing.isEmpty() && RecipeTypesAS.TYPE_WELL.findRecipe(new WellLiquefactionContext(toAdd)) != null;
         });
     }
 
@@ -93,7 +92,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
                     breakCatalyst();
                 } else {
                     if (runningRecipe == null) {
-                        runningRecipe = RecipeTypesAS.TYPE_WELL.findRecipe(Dist.DEDICATED_SERVER, new WellLiquefactionContext(this));
+                        runningRecipe = RecipeTypesAS.TYPE_WELL.findRecipe(new WellLiquefactionContext(this));
                     }
 
                     if (runningRecipe != null) {
@@ -159,7 +158,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
     private void doClientEffects() {
         ItemStack stack = this.inventory.getStackInSlot(0);
         if(!stack.isEmpty()) {
-            runningRecipe = RecipeTypesAS.TYPE_WELL.findRecipe(Dist.CLIENT, new WellLiquefactionContext(this));
+            runningRecipe = RecipeTypesAS.TYPE_WELL.findRecipe(new WellLiquefactionContext(this));
 
             if (runningRecipe != null) {
                 Color color = Color.WHITE;

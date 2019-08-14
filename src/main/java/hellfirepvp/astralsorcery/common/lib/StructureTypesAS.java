@@ -21,6 +21,8 @@ public class StructureTypesAS {
 
     private StructureTypesAS() {}
 
+    public static StructureType EMPTY;
+
     public static StructureType STYPE_MOUNTAIN;
     public static StructureType STYPE_DESERT;
     public static StructureType STYPE_SMALL;

@@ -92,11 +92,7 @@ public class StorageNetwork {
             this.addCore(pos, box);
         }
 
-        this.setMaster(null);
-        if (tag.contains("master", Constants.NBT.TAG_COMPOUND)) {
-            BlockPos pos = NBTHelper.readBlockPosFromNBT(tag.getCompound("master"));
-            this.setMaster(pos);
-        }
+        this.setMaster(NBTHelper.readFromSubTag(tag, "master", NBTHelper::readBlockPosFromNBT));
     }
 
     public static class CoreArea {

@@ -9,8 +9,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.crafting.helper.ResolvingRecipeType;
-import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
-import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefactionContext;
+import hellfirepvp.astralsorcery.common.crafting.recipe.*;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraftforge.items.IItemHandler;
 
@@ -25,8 +24,8 @@ public class RecipeTypesAS {
 
     private RecipeTypesAS() {}
 
-    public static ResolvingRecipeType<IItemHandler, WellLiquefaction, WellLiquefactionContext> TYPE_WELL =
-            new ResolvingRecipeType<>("well", WellLiquefaction.class,
-                    (recipe, context) -> recipe.matches(context.getInput()));
+    public static ResolvingRecipeType<IItemHandler, WellLiquefaction, WellLiquefactionContext> TYPE_WELL;
+    public static ResolvingRecipeType<IItemHandler, LiquidInfusion, LiquidInfusionContext> TYPE_INFUSION;
+    public static ResolvingRecipeType<IItemHandler, SimpleAltarRecipe, SimpleAltarRecipeContext> TYPE_ALTAR;
 
 }

@@ -53,7 +53,7 @@ public class SoundHelper {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch, PositionedLoopSound.ActivityFunction func, boolean isGlobal) {
+    public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, PositionedLoopSound.ActivityFunction func) {
         SoundCategory cat = SoundCategory.MASTER;
         if(sound instanceof CategorizedSoundEvent) {
             cat = ((CategorizedSoundEvent) sound).getCategory();

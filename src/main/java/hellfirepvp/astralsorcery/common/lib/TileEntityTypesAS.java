@@ -8,10 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
-import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
+import hellfirepvp.astralsorcery.common.tile.*;
 import net.minecraft.tileentity.TileEntityType;
 
 /**
@@ -25,6 +22,8 @@ public class TileEntityTypesAS {
 
     private TileEntityTypesAS() {}
 
+    public static TileEntityType<TileSpectralRelay> SPECTRAL_RELAY;
+    public static TileEntityType<TileAltar> ALTAR;
     public static TileEntityType<TileCollectorCrystal> COLLECTOR_CRYSTAL;
     public static TileEntityType<TileRitualLink> RITUAL_LINK;
     public static TileEntityType<TileRitualPedestal> RITUAL_PEDESTAL;

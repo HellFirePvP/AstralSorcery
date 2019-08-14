@@ -22,6 +22,8 @@ public class StructuresAS {
 
     private StructuresAS() {}
 
+    public static PatternBlockArray EMPTY;
+
     public static PatternBlockArray STRUCT_RITUAL_PEDESTAL;
     public static PatternBlockArray STRUCT_ENHANCED_COLLECTOR_CRYSTAL;
 

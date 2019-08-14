@@ -126,14 +126,9 @@ public class AmuletEnchantmentHelper {
         PlayerEntity player = getPlayerHavingTool(anyTool);
         if (player == null) return null;
 
-        if (Mods.CURIOS.isPresent()) {
-            Optional<ImmutableTriple<String, Integer, ItemStack>> curios =
-                    Mods.CURIOS.getIfPresent(() -> () -> IntegrationCurios.getCurio(player, (stack) -> stack.getItem() instanceof ItemEnchantmentAmulet));
-            if (curios.isPresent()) {
-                return new Tuple<>(curios.get().right, player);
-            }
-        }
-        return null;
+        Optional<ImmutableTriple<String, Integer, ItemStack>> curios =
+                IntegrationCurios.getCurio(player, (stack) -> stack.getItem() instanceof ItemEnchantmentAmulet);
+        return curios.map(trpl -> new Tuple<>(trpl.right, player)).orElse(null);
     }
 
     @OnlyIn(Dist.CLIENT)

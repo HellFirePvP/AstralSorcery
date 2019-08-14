@@ -29,13 +29,8 @@ import javax.annotation.Nullable;
 public class BlockRitualLink extends ContainerBlock implements CustomItemBlock {
 
     public BlockRitualLink() {
-        super(PropertiesGlass.coatedGlass());
-    }
-
-    @Nullable
-    @Override
-    public ToolType getHarvestTool(BlockState p_getHarvestTool_1_) {
-        return ToolType.PICKAXE;
+        super(PropertiesGlass.coatedGlass()
+                .harvestTool(ToolType.PICKAXE));
     }
 
     @Nullable

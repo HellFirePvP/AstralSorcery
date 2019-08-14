@@ -6,18 +6,20 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.crafting.recipe;
+package hellfirepvp.astralsorcery.common.crafting.recipe.altar;
 
-import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
-import net.minecraftforge.items.IItemHandler;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: LiquidInfusionContext
+ * Class: AltarCraftingProgress
  * Created by HellFirePvP
- * Date: 26.07.2019 / 21:29
+ * Date: 13.08.2019 / 21:05
  */
-public class LiquidInfusionContext extends RecipeCraftingContext<LiquidInfusion, IItemHandler> {
+public interface AltarCraftingProgress {
+
+    boolean tryProcess(TileAltar altar, ActiveSimpleAltarRecipe currentRecipe, CompoundNBT data, int ticksCrafting, int totalCraftingTime);
 
 }

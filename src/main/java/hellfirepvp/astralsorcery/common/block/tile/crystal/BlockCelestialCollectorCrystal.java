@@ -6,26 +6,27 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.block.tile;
+package hellfirepvp.astralsorcery.common.block.tile.crystal;
 
+import hellfirepvp.astralsorcery.common.block.tile.BlockCollectorCrystal;
+import hellfirepvp.astralsorcery.common.item.block.ItemBlockCelestialCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCollectorCrystal;
-import hellfirepvp.astralsorcery.common.item.block.ItemBlockRockCollectorCrystal;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockRockCollectorCrystal
+ * Class: BlockCelestialCollectorCrystal
  * Created by HellFirePvP
- * Date: 10.08.2019 / 23:03
+ * Date: 10.08.2019 / 23:04
  */
-public class BlockRockCollectorCrystal extends BlockCollectorCrystal {
+public class BlockCelestialCollectorCrystal extends BlockCollectorCrystal {
 
-    public BlockRockCollectorCrystal() {
-        super(CollectorCrystalType.ROCK_CRYSTAL);
+    public BlockCelestialCollectorCrystal() {
+        super(CollectorCrystalType.CELESTIAL_CRYSTAL);
     }
 
     @Override
     public Class<? extends ItemBlockCollectorCrystal> getItemBlockClass() {
-        return ItemBlockRockCollectorCrystal.class;
+        return ItemBlockCelestialCollectorCrystal.class;
     }
 }
