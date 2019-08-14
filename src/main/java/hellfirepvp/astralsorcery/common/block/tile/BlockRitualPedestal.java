@@ -43,7 +43,9 @@ import javax.annotation.Nullable;
 public class BlockRitualPedestal extends BlockStarlightNetwork implements CustomItemBlock, BlockStructureObserver {
 
     public BlockRitualPedestal() {
-        super(PropertiesMarble.defaultMarble());
+        super(PropertiesMarble.defaultMarble()
+                .harvestLevel(2)
+                .harvestTool(ToolType.PICKAXE));
     }
 
     @Override

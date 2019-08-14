@@ -8,10 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.block.base;
 
-import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
-import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.block.Block;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.tileentity.TileEntity;
@@ -24,23 +22,26 @@ import net.minecraftforge.items.IItemHandler;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockNetwork
+ * Class: BlockInventory
  * Created by HellFirePvP
- * Date: 03.08.2016 / 21:01
+ * Date: 14.08.2019 / 07:01
  */
-public abstract class BlockStarlightNetwork extends BlockInventory {
+public abstract class BlockInventory extends ContainerBlock {
 
-    protected BlockStarlightNetwork(Block.Properties builder) {
+    protected BlockInventory(Properties builder) {
         super(builder);
     }
 
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        TileNetwork te = MiscUtils.getTileAt(worldIn, pos, TileNetwork.class, true);
-        if (te != null) {
-            ((TileNetwork<?>) te).onBreak();
+        TileEntity te = MiscUtils.getTileAt(worldIn, pos, TileEntity.class, true);
+        if (te != null && !worldIn.isRemote) {
+            LazyOptional<IItemHandler> opt = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+            if (opt.isPresent()) {
+                ItemUtils.dropInventory(opt.orElse(ItemUtils.EMPTY_INVENTORY), worldIn, pos);
+            }
         }
+
         super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
-
 }

@@ -18,7 +18,12 @@ import hellfirepvp.astralsorcery.common.block.ore.BlockAquamarineSandOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockRockCrystalOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockStarmetalOre;
 import hellfirepvp.astralsorcery.common.block.tile.*;
-import net.minecraft.block.StairsBlock;
+import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarAttunement;
+import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarConstellation;
+import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarDiscovery;
+import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarRadiance;
+import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockCelestialCollectorCrystal;
+import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockRockCollectorCrystal;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -64,6 +69,11 @@ public class BlocksAS {
     public static BlockStarmetalOre      STARMETAL_ORE;
     public static BlockGlowFlower        GLOW_FLOWER;
 
+    public static BlockSpectralRelay             SPECTRAL_RELAY;
+    public static BlockAltarDiscovery            ALTAR_DISCOVERY;
+    public static BlockAltarAttunement           ALTAR_ATTUNEMENT;
+    public static BlockAltarConstellation        ALTAR_CONSTELLATION;
+    public static BlockAltarRadiance             ALTAR_RADIANCE;
     public static BlockRockCollectorCrystal      ROCK_COLLECTOR_CRYSTAL;
     public static BlockCelestialCollectorCrystal CELESTIAL_COLLECTOR_CRYSTAL;
     public static BlockRitualLink                RITUAL_LINK;

@@ -23,6 +23,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
+import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -58,20 +59,12 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
                 return ResolvingRecipeType.this.id.getPath();
             }
         };
-        Registry.register(Registry.RECIPE_TYPE, this.id, this.type);
+        Registry.register(Registry.RECIPE_TYPE, this.getRegistryName(), this.getType());
     }
 
     @Nonnull
-    public Collection<T> getAllRecipes(Dist dist) {
-        RecipeManager mgr = null;
-        if (dist.isClient()) {
-            mgr = getClientManager();
-        } else {
-            MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-            if (srv != null) {
-                mgr = srv.getRecipeManager();
-            }
-        }
+    public Collection<T> getAllRecipes() {
+        RecipeManager mgr = getRecipeManager();
         if (mgr == null) {
             return Collections.emptyList();
         }
@@ -91,9 +84,26 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
         return type;
     }
 
+    public ResourceLocation getRegistryName() {
+        return id;
+    }
+
     @Nullable
-    public T findRecipe(Dist dist, R context) {
-        return MiscUtils.iterativeSearch(this.getAllRecipes(dist), (recipe) -> this.matchFct.test(recipe, context));
+    public RecipeManager getRecipeManager() {
+        if (EffectiveSide.get() == LogicalSide.CLIENT) {
+            return getClientManager();
+        } else {
+            MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+            if (srv != null) {
+                return srv.getRecipeManager();
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public T findRecipe(R context) {
+        return MiscUtils.iterativeSearch(this.getAllRecipes(), (recipe) -> this.matchFct.test(recipe, context));
     }
 
     @Nullable

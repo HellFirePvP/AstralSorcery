@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.crafting.recipe;
 
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
+import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -75,8 +76,7 @@ public class LiquidInfusion extends CustomMatcherRecipe {
 
     @Override
     public IRecipeType<?> getType() {
-        //TODO infuser
-        return null;
+        return RecipeTypesAS.TYPE_INFUSION.getType();
     }
 
     @Override

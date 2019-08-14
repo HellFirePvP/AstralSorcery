@@ -66,7 +66,9 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
     private final VoxelShape shape;
 
     public BlockWell() {
-        super(PropertiesMarble.defaultMarble());
+        super(PropertiesMarble.defaultMarble()
+                .harvestLevel(2)
+                .harvestTool(ToolType.PICKAXE));
         this.shape = createShape();
     }
 
@@ -98,7 +100,7 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
                     return true;
                 }
 
-                WellLiquefaction entry = RecipeTypesAS.TYPE_WELL.findRecipe(Dist.DEDICATED_SERVER, new WellLiquefactionContext(heldItem));
+                WellLiquefaction entry = RecipeTypesAS.TYPE_WELL.findRecipe(new WellLiquefactionContext(heldItem));
                 if(entry != null) {
                     ItemStackHandler handle = tw.getInventory();
                     if (!handle.getStackInSlot(0).isEmpty()) {
@@ -166,17 +168,6 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
     @Override
     public BlockRenderType getRenderType(BlockState p_149645_1_) {
         return BlockRenderType.MODEL;
-    }
-
-    @Override
-    public int getHarvestLevel(BlockState p_getHarvestLevel_1_) {
-        return 2;
-    }
-
-    @Nullable
-    @Override
-    public ToolType getHarvestTool(BlockState p_getHarvestTool_1_) {
-        return ToolType.PICKAXE;
     }
 
     @Nullable

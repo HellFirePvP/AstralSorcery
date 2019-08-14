@@ -6,18 +6,25 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.crafting.recipe;
+package hellfirepvp.astralsorcery.common.block.tile.altar;
 
-import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
-import net.minecraftforge.items.IItemHandler;
+import hellfirepvp.astralsorcery.common.block.tile.BlockAltar;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockReader;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: LiquidInfusionContext
+ * Class: BlockAltarDiscovery
  * Created by HellFirePvP
- * Date: 26.07.2019 / 21:29
+ * Date: 12.08.2019 / 21:58
  */
-public class LiquidInfusionContext extends RecipeCraftingContext<LiquidInfusion, IItemHandler> {
+public class BlockAltarDiscovery extends BlockAltar {
 
+    public BlockAltarDiscovery() {
+        super(AltarType.DISCOVERY);
+    }
 }

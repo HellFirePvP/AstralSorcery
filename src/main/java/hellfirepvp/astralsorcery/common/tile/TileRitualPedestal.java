@@ -430,11 +430,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         } else {
             this.ownerUUID = null;
         }
-        if (compound.contains("ritualLinkTo")) {
-            this.ritualLinkTo = NBTHelper.readBlockPosFromNBT(compound.getCompound("ritualLinkTo"));
-        } else {
-            this.ritualLinkTo = null;
-        }
+        this.ritualLinkTo = NBTHelper.readFromSubTag(compound, "ritualLinkTo", NBTHelper::readBlockPosFromNBT);
         this.working = compound.getBoolean("working");
 
         this.offsetMirrors.clear();

@@ -12,10 +12,12 @@ import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.observerlib.api.ChangeSubscriber;
+import hellfirepvp.observerlib.api.ObserverHelper;
 import hellfirepvp.observerlib.common.change.ChangeObserverStructure;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
@@ -77,9 +79,12 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
 
     public boolean hasMultiblock() {
         if (this.getRequiredStructureType() == null) {
+            refreshMatcher();
+            resetMultiblockState();
             return false;
         }
 
+        refreshMatcher();
         if (this.structureMatch == null) {
             this.structureMatch = this.getRequiredStructureType().observe(getWorld(), getPos());
         }
@@ -95,6 +100,27 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
         }
         return this.hasMultiblock;
     }
+
+    private void refreshMatcher() {
+        StructureType struct = this.getRequiredStructureType();
+        if (this.structureMatch != null) {
+            //Same registry name as the structure type.
+            ResourceLocation key = this.structureMatch.getObserver().getProviderRegistryName();
+            if (struct == null || !key.equals(struct.getRegistryName())) {
+                ObserverHelper.getHelper().removeObserver(getWorld(), getPos());
+                this.structureMatch = null;
+            }
+        }
+    }
+
+    private void resetMultiblockState() {
+        if (this.hasMultiblock) {
+            this.notifyMultiblockStateUpdate(true, false);
+            this.hasMultiblock = false;
+            this.markForUpdate();
+        }
+    }
+
 
     protected void notifySkyStateUpdate(boolean doesSeeSkyPrev, boolean doesSeeSkyNow) {}
 

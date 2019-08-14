@@ -30,6 +30,8 @@ public class RegistryStructureTypes {
     private RegistryStructureTypes() {}
 
     public static void init() {
+        EMPTY = registerAS("empty", () -> StructuresAS.EMPTY);
+
         STYPE_MOUNTAIN = registerAS("struct_mountain", 768, () -> StructuresAS.STRUCT_MOUNTAIN_SHRINE);
         STYPE_DESERT = registerAS("struct_desert", 1024, () -> StructuresAS.STRUCT_DESERT_SHRINE);
         STYPE_SMALL = registerAS("struct_small", 512, () -> StructuresAS.STRUCT_SMALL_SHRINE);

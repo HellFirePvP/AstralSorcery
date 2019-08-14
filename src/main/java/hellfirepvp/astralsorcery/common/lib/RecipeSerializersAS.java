@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.serializer.LiquidInfusionSerializer;
+import hellfirepvp.astralsorcery.common.crafting.serializer.SimpleAltarRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.serializer.WellRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 
@@ -25,9 +26,11 @@ public class RecipeSerializersAS {
     private RecipeSerializersAS() {}
 
     public static final ResourceLocation WELL_LIQUEFACTION = new ResourceLocation(AstralSorcery.MODID, "lightwell");
-    public static final ResourceLocation LIQUID_INFUSION = new ResourceLocation(AstralSorcery.MODID, "infuser");
+    public static final ResourceLocation LIQUID_INFUSION = new ResourceLocation(AstralSorcery.MODID, "liquid_infuser");
+    public static final ResourceLocation SIMPLE_ALTAR_CRAFTING = new ResourceLocation(AstralSorcery.MODID, "simple_altar");
 
     public static WellRecipeSerializer WELL_LIQUEFACTION_SERIALIZER;
     public static LiquidInfusionSerializer LIQUID_INFUSION_SERIALIZER;
+    public static SimpleAltarRecipeSerializer ALTAR_RECIPE_SERIALIZER;
 
 }

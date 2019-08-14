@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.block.tile;
+package hellfirepvp.astralsorcery.common.block.tile.crystal;
 
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import net.minecraft.block.material.MaterialColor;

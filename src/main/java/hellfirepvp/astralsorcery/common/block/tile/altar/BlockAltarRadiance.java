@@ -6,18 +6,20 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.crafting.recipe;
+package hellfirepvp.astralsorcery.common.block.tile.altar;
 
-import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
-import net.minecraftforge.items.IItemHandler;
+import hellfirepvp.astralsorcery.common.block.tile.BlockAltar;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: LiquidInfusionContext
+ * Class: BlockAltarRadiance
  * Created by HellFirePvP
- * Date: 26.07.2019 / 21:29
+ * Date: 12.08.2019 / 21:59
  */
-public class LiquidInfusionContext extends RecipeCraftingContext<LiquidInfusion, IItemHandler> {
+public class BlockAltarRadiance extends BlockAltar {
 
+    public BlockAltarRadiance() {
+        super(AltarType.RADIANCE);
+    }
 }

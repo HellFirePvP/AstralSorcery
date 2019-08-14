@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item.block;
 
-import hellfirepvp.astralsorcery.common.block.tile.CollectorCrystalType;
+import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

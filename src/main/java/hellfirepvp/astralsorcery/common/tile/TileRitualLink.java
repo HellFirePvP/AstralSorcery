@@ -108,11 +108,7 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
     public void readCustomNBT(CompoundNBT compound) {
         super.readCustomNBT(compound);
 
-        if (compound.contains("posLink")) {
-            this.linkedTo = NBTHelper.readBlockPosFromNBT(compound.getCompound("posLink"));
-        } else {
-            this.linkedTo = null;
-        }
+        this.linkedTo = NBTHelper.readFromSubTag(compound, "posLink", NBTHelper::readBlockPosFromNBT);
     }
 
     @Override

@@ -23,6 +23,12 @@ import hellfirepvp.astralsorcery.common.block.ore.BlockAquamarineSandOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockRockCrystalOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockStarmetalOre;
 import hellfirepvp.astralsorcery.common.block.tile.*;
+import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarAttunement;
+import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarConstellation;
+import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarDiscovery;
+import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarRadiance;
+import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockCelestialCollectorCrystal;
+import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockRockCollectorCrystal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
@@ -83,6 +89,11 @@ public class RegistryBlocks {
         STARMETAL_ORE       = registerBlock(new BlockStarmetalOre());
         GLOW_FLOWER         = registerBlock(new BlockGlowFlower());
 
+        SPECTRAL_RELAY = registerBlock(new BlockSpectralRelay());
+        ALTAR_DISCOVERY = registerBlock(new BlockAltarDiscovery());
+        ALTAR_ATTUNEMENT = registerBlock(new BlockAltarAttunement());
+        ALTAR_CONSTELLATION = registerBlock(new BlockAltarConstellation());
+        ALTAR_RADIANCE = registerBlock(new BlockAltarRadiance());
         ROCK_COLLECTOR_CRYSTAL = registerBlock(new BlockRockCollectorCrystal());
         CELESTIAL_COLLECTOR_CRYSTAL = registerBlock(new BlockCelestialCollectorCrystal());
         RITUAL_LINK = registerBlock(new BlockRitualLink());

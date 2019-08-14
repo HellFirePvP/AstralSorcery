@@ -187,25 +187,25 @@ public class NBTHelper {
         compound.put(tag, newTag);
     }
 
+    @Nullable
+    public static <T> T readFromSubTag(CompoundNBT compound, String tag, Function<CompoundNBT, T> readFct) {
+        if (compound.contains(tag, Constants.NBT.TAG_COMPOUND)) {
+            return readFct.apply(compound.getCompound(tag));
+        }
+        return null;
+    }
+
     public static void setStack(CompoundNBT compound, String tag, ItemStack stack) {
         setAsSubTag(compound, tag, stack::write);
+    }
+
+    public static ItemStack getStack(CompoundNBT compound, String tag) {
+        return readFromSubTag(compound, tag, ItemStack::read);
     }
 
     public static void removeUUID(CompoundNBT compound, String key) {
         compound.remove(key + "Most");
         compound.remove(key + "Least");
-    }
-
-    public static ItemStack getStack(CompoundNBT compound, String tag) {
-        return getStack(compound, tag, ItemStack.EMPTY);
-    }
-
-    //Get tags with default value
-    public static ItemStack getStack(CompoundNBT compound, String tag, ItemStack defaultValue) {
-        if (compound.contains(tag)) {
-            return ItemStack.read(compound.getCompound(tag));
-        }
-        return defaultValue;
     }
 
     public static CompoundNBT writeBlockPosToNBT(BlockPos pos, CompoundNBT compound) {

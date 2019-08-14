@@ -84,6 +84,9 @@ public class PrimerEventHandler {
 
         RegistryPerkAttributeTypes.init();
 
+        RegistryRecipeTypes.init();
+        RegistryRecipeSerializers.init();
+
         TransmissionClassRegistry.setupRegistry();
         SourceClassRegistry.setupRegistry();
     }
@@ -160,7 +163,6 @@ public class PrimerEventHandler {
     }
 
     private void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
-        RegistryRecipeSerializers.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
