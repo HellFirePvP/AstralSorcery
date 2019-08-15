@@ -9,18 +9,25 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.block.tile.BlockAltar;
+import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -451,73 +458,61 @@ public class ResearchManager {
         return true;
     }
 
-    //TODO crafting???
-    /*
-    public static void informCraftingGridCompletion(PlayerEntity player, ItemStack out) {
-        Item iOut = out.getItem();
-        informCraft(player, out, iOut, Block.getBlockFromItem(iOut));
-    }
+    //TODO infuser
+    //public static void informCraftedInfuser(TileStarlightInfuser infuser, ActiveInfusionTask recipe) {
+    //    PlayerEntity crafter = recipe.tryGetCraftingPlayerServer();
+    //    if(crafter == null) {
+    //        AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
+    //        AstralSorcery.log.warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
+    //        return;
+    //    }
+    //    ItemStack out = recipe.getRecipeToCraft().getOutput(infuser);
+    //    Item iOut = out.getItem();
+    //    informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
+    //}
 
-    public static void informCraftingInfusionCompletion(TileStarlightInfuser infuser, ActiveInfusionTask recipe) {
+    public static void informCraftedAltar(TileAltar altar, ActiveSimpleAltarRecipe recipe, ItemStack crafted) {
         PlayerEntity crafter = recipe.tryGetCraftingPlayerServer();
-        if(crafter == null) {
-            AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
-            AstralSorcery.log.warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
-            return;
-        }
-
-        ItemStack out = recipe.getRecipeToCraft().getOutput(infuser);
-        Item iOut = out.getItem();
-
-        informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
-    }
-
-    public static void informCraftingAltarCompletion(TileAltar altar, ActiveCraftingTask recipeToCraft) {
-        PlayerEntity crafter = recipeToCraft.tryGetCraftingPlayerServer();
         if(!(crafter instanceof ServerPlayerEntity)) {
             AstralSorcery.log.warn("Crafting finished, player that initialized crafting could not be found!");
-            AstralSorcery.log.warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
+            AstralSorcery.log.warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().getDimension().getType().getId());
             return;
         }
 
-        ItemStack out = recipeToCraft.getRecipeToCraft().getOutputForMatching();
-        Item iOut = out.getItem();
+        informCrafted(crafter, crafted);
 
-        informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
-
-        AdvancementTriggers.ALTAR_CRAFT.trigger((ServerPlayerEntity) crafter, recipeToCraft.getRecipeToCraft());
+        //TODO advancement trigger altar craft
+        //AdvancementTriggers.ALTAR_CRAFT.trigger((ServerPlayerEntity) crafter, recipeToCraft.getRecipeToCraft());
     }
 
-    private static void informCraft(PlayerEntity crafter, ItemStack crafted, Item itemCrafted, @Nullable Block iBlock) {
-        if(iBlock != null) {
-            if(iBlock instanceof BlockAltar) {
+    public static void informCrafted(PlayerEntity player, ItemStack out) {
+        if (!out.isEmpty()) {
+            informCraftCompletion(player, out, out.getItem(), Block.getBlockFromItem(out.getItem()));
+        }
+    }
+
+    private static void informCraftCompletion(PlayerEntity crafter, ItemStack crafted, Item itemCrafted, @Nullable Block blockCrafted) {
+        if (blockCrafted != null) {
+            if (blockCrafted instanceof BlockAltar) {
                 giveProgressionIgnoreFail(crafter, ProgressionTier.BASIC_CRAFT);
                 giveResearchIgnoreFail(crafter, ResearchProgression.BASIC_CRAFT);
 
-                TileAltar.AltarLevel to = TileAltar.AltarLevel.values()[crafted.getItemDamage()];
-                switch (to) {
+                //Fallthrough switch to lower tiers
+                switch (((BlockAltar) blockCrafted).getAltarType()) {
+                    case RADIANCE:
+                        giveProgressionIgnoreFail(crafter, ProgressionTier.TRAIT_CRAFT);
+                        giveResearchIgnoreFail(crafter, ResearchProgression.RADIANCE);
+                    case CONSTELLATION:
+                        giveProgressionIgnoreFail(crafter, ProgressionTier.CONSTELLATION_CRAFT);
+                        giveResearchIgnoreFail(crafter, ResearchProgression.CONSTELLATION);
                     case ATTUNEMENT:
                         giveProgressionIgnoreFail(crafter, ProgressionTier.ATTUNEMENT);
                         giveResearchIgnoreFail(crafter, ResearchProgression.ATTUNEMENT);
-                        break;
-                    case CONSTELLATION_CRAFT:
-                        giveProgressionIgnoreFail(crafter, ProgressionTier.CONSTELLATION_CRAFT);
-                        giveResearchIgnoreFail(crafter, ResearchProgression.CONSTELLATION);
-                        break;
-                    case TRAIT_CRAFT:
-                        giveProgressionIgnoreFail(crafter, ProgressionTier.TRAIT_CRAFT);
-                        giveResearchIgnoreFail(crafter, ResearchProgression.RADIANCE);
-                        break;
-                    case BRILLIANCE:
-                        giveProgressionIgnoreFail(crafter, ProgressionTier.BRILLIANCE);
-                        giveResearchIgnoreFail(crafter, ResearchProgression.BRILLIANCE);
-                        break;
                     default:
                         break;
                 }
             }
         }
     }
-    */
 
 }

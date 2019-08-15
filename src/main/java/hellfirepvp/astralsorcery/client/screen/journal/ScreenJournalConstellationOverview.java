@@ -52,7 +52,7 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
     private Rectangle rectPrev, rectNext;
 
     private ScreenJournalConstellationOverview(int pageId, List<IConstellation> constellations) {
-        super(new TranslationTextComponent("gui.journal.constellations"), 20);
+        super(new TranslationTextComponent("screen.astralsorcery.tome.constellations"), 20);
         this.constellations = constellations;
         this.pageId = pageId;
     }

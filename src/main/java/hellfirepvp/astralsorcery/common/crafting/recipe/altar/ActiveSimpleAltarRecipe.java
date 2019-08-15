@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.crafting.recipe.altar;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
@@ -93,6 +94,12 @@ public class ActiveSimpleAltarRecipe {
         return srv.getPlayerList().getPlayerByUUID(this.getPlayerCraftingUUID());
     }
 
+    public void createItemOutputs(TileAltar altar) {
+        for (ItemStack crafted : this.getRecipeToCraft().doItemOutput(altar)) {
+            ResearchManager.informCraftedAltar(altar, this, crafted);
+        }
+    }
+
     public void consumeInputs(TileAltar altar) {
         TileInventory inv = altar.getInventory();
 
@@ -152,8 +159,8 @@ public class ActiveSimpleAltarRecipe {
         }
         return true;
     }
-
     //True if the recipe progressed, false if it's stuck
+
     public CraftingState tick(TileAltar altar) {
         if (recipeToCraft instanceof AltarCraftingProgress) {
             if (!((AltarCraftingProgress) recipeToCraft).tryProcess(altar, this, craftingData, ticksCrafting, totalCraftingTime)) {

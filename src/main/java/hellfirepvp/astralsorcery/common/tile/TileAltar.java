@@ -126,20 +126,16 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
     }
 
     private void finishRecipe() {
-        SimpleAltarRecipe recipe = this.activeRecipe.getRecipeToCraft();
-
         ForgeHooks.setCraftingPlayer(this.activeRecipe.tryGetCraftingPlayerServer());
         this.activeRecipe.consumeInputs(this);
         ForgeHooks.setCraftingPlayer(null);
 
-        recipe.doItemOutput(this);
+        this.activeRecipe.createItemOutputs(this);
 
         if (!this.activeRecipe.matches(this)) {
             this.abortCrafting();
         }
 
-        //TODO crafting inform
-        //ResearchManager.informCraftingAltarCompletion(this, craftingTask);
         markForUpdate();
     }
 
@@ -228,6 +224,10 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
         return storedStarlight;
     }
 
+    public float getAmbientStarlightPercent() {
+        return ((float) getStoredStarlight()) / ((float) getAltarType().getStarlightCapacity());
+    }
+
     public AltarType getAltarType() {
         return altarType;
     }
@@ -280,9 +280,10 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
             }
         }
 
+        this.altarType = newType;
+
         CompoundNBT thisTag = new CompoundNBT();
         this.writeCustomNBT(thisTag);
-        this.altarType = newType;
         this.readCustomNBT(thisTag);
         if (!initialPlacement) {
             this.markForUpdate();

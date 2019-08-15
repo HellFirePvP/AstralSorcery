@@ -133,18 +133,12 @@
   "enchantment.astralsorcery.enchantment.as.nightvision.desc": "Grants the wearer night vision.",
   "enchantment.astralsorcery.enchantment.as.smelting.desc": "Blocks mined with this enchantment will have their drops smelted, as though in a furnace.",
 
-  "gui.journal.progression": "Research",
-  "gui.journal.constellations": "Constellations",
-  "gui.journal.perks": "Perks",
-  "gui.journal.perks.stats": "Perk Statistics",
-  "gui.journal.knowledge": "Knowledge",
-  "gui.tome.storage": "Tome",
-
-  "death.attack.as.stellar": "%1$s disintegrated into Stardust",
-  "death.attack.as.bleed": "%1$s bled to death",
-
-  "enchantment.as.nightvision": "Night Vision",
-  "enchantment.as.smelting": "Scorching Heat",
+  "screen.astralsorcery.tome.progression": "Research",
+  "screen.astralsorcery.tome.constellations": "Constellations",
+  "screen.astralsorcery.tome.perks": "Perks",
+  "screen.astralsorcery.tome.perks.stats": "Perk Statistics",
+  "screen.astralsorcery.tome.knowledge": "Knowledge",
+  "screen.astralsorcery.tome": "Tome",
 
   "progress.missing.knowledge": "Something seems to be here, but understanding of it is not yet revealed.",
   "progress.gain.progress.chat": "Your vision expands.",

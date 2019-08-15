@@ -26,6 +26,12 @@ public class RegistryTextures {
     public static void loadTextures() {
         TEX_BLACK = loadTexture(MISC, "black");
 
+        TEX_CONTAINER_TOME_STORAGE          = loadTexture(GUI, "container_tome_storage");
+        TEX_CONTAINER_ALTAR_DISCOVERY       = loadTexture(GUI, "container_altar_discovery");
+        TEX_CONTAINER_ALTAR_ATTUNEMENT      = loadTexture(GUI, "container_altar_attunement");
+        TEX_CONTAINER_ALTAR_CONSTELLATION   = loadTexture(GUI, "container_altar_constellation");
+        TEX_CONTAINER_ALTAR_RADIANCE        = loadTexture(GUI, "container_altar_radiance");
+
         TEX_GUI_CONSTELLATION_PAPER         = loadTexture(GUI, "constellation_paper");
         TEX_GUI_KNOWLEDGE_FRAGMENT          = loadTexture(GUI, "knowledge_fragment");
         TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK    = loadTexture(GUI, "knowledge_fragment_blank");
@@ -76,6 +82,8 @@ public class RegistryTextures {
 
         TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");
+
+        TEX_STARLIGHT_STORE = loadTexture(EFFECT, "starlight_storage");
     }
 
 }

@@ -403,7 +403,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         RenderingConstellationUtils.renderConstellationIntoGUI(known ? constellation.getConstellationColor() : constellation.getTierRenderColor(), constellation,
                 guiLeft + 40, guiTop + 60, this.blitOffset,
                 150, 150, 2F,
-                () -> 0.3F + 0.7F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10)),
+                () -> 0.6F + 0.4F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10)),
                 true, false);
 
         GlStateManager.color4f(1F, 1F, 1F, 1F);
