@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.container.ContainerTome;
+import hellfirepvp.astralsorcery.common.container.*;
 import net.minecraft.inventory.container.ContainerType;
 
 /**
@@ -23,5 +23,10 @@ public class ContainerTypesAS {
     private ContainerTypesAS() {}
 
     public static ContainerType<ContainerTome> TOME;
+
+    public static ContainerType<ContainerAltarDiscovery> ALTAR_DISCOVERY;
+    public static ContainerType<ContainerAltarAttunement> ALTAR_ATTUNEMENT;
+    public static ContainerType<ContainerAltarConstellation> ALTAR_CONSTELLATION;
+    public static ContainerType<ContainerAltarTrait> ALTAR_RADIANCE;
 
 }

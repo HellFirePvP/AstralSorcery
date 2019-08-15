@@ -56,7 +56,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
     private int suffixStrWidth = -1;
 
     public ScreenJournalOverlayPerkStatistics(ScreenJournal origin) {
-        super(new TranslationTextComponent("gui.journal.perks.stats"), origin);
+        super(new TranslationTextComponent("screen.astralsorcery.tome.perks.stats"), origin);
     }
 
     @Override

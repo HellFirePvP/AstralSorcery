@@ -23,6 +23,12 @@ public class TexturesAS {
 
     public static AbstractRenderableTexture TEX_BLACK;
 
+    public static AbstractRenderableTexture TEX_CONTAINER_TOME_STORAGE;
+    public static AbstractRenderableTexture TEX_CONTAINER_ALTAR_DISCOVERY;
+    public static AbstractRenderableTexture TEX_CONTAINER_ALTAR_ATTUNEMENT;
+    public static AbstractRenderableTexture TEX_CONTAINER_ALTAR_CONSTELLATION;
+    public static AbstractRenderableTexture TEX_CONTAINER_ALTAR_RADIANCE;
+
     public static AbstractRenderableTexture TEX_GUI_CONSTELLATION_PAPER;
     public static AbstractRenderableTexture TEX_GUI_KNOWLEDGE_FRAGMENT;
     public static AbstractRenderableTexture TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK;
@@ -74,5 +80,7 @@ public class TexturesAS {
 
     public static AbstractRenderableTexture TEX_LIGHTNING_PART;
     public static AbstractRenderableTexture TEX_LIGHTBEAM;
+
+    public static AbstractRenderableTexture TEX_STARLIGHT_STORE;
 
 }

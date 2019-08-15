@@ -23,14 +23,14 @@ import javax.annotation.Nullable;
  */
 public abstract class ContainerTileEntity<T extends TileEntity> extends Container {
 
-    private final TileEntity te;
+    private final T te;
 
     protected ContainerTileEntity(T tileEntity, @Nullable ContainerType<?> type, int windowId) {
         super(type, windowId);
         this.te = tileEntity;
     }
 
-    public TileEntity getTileEntity() {
+    public T getTileEntity() {
         return te;
     }
 }

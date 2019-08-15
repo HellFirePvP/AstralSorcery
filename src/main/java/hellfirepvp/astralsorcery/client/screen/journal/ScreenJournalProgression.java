@@ -40,7 +40,7 @@ public class ScreenJournalProgression extends ScreenJournal {
     private static ScreenJournalProgressionRenderer progressionRenderer;
 
     private ScreenJournalProgression() {
-        super(new TranslationTextComponent("gui.journal.progression"), 10);
+        super(new TranslationTextComponent("screen.astralsorcery.tome.progression"), 10);
     }
 
     public static ScreenJournalProgression getJournalInstance() {

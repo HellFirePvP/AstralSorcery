@@ -12,12 +12,17 @@ import hellfirepvp.astralsorcery.common.block.base.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
+import hellfirepvp.astralsorcery.common.container.factory.*;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -41,6 +46,42 @@ public abstract class BlockAltar extends BlockStarlightNetwork implements Custom
                 .harvestTool(ToolType.PICKAXE));
 
         this.type = type;
+    }
+
+    public AltarType getAltarType() {
+        return type;
+    }
+
+    @Override
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+        if (!world.isRemote() && player instanceof ServerPlayerEntity) {
+            TileAltar altar = MiscUtils.getTileAt(world, pos, TileAltar.class, true);
+            if (altar != null) {
+                CustomContainerProvider<?> provider;
+                switch (altar.getAltarType()) {
+                    case DISCOVERY:
+                        provider = new ContainerAltarDiscoveryProvider(altar);
+                        break;
+                    case ATTUNEMENT:
+                        provider = new ContainerAltarAttunementProvider(altar);
+                        break;
+                    case CONSTELLATION:
+                        provider = new ContainerAltarConstellationProvider(altar);
+                        break;
+                    case RADIANCE:
+                        provider = new ContainerAltarRadianceProvider(altar);
+                        break;
+                    default:
+                        provider = null;
+                        break;
+                }
+
+                if (provider != null) {
+                    provider.openFor((ServerPlayerEntity) player);
+                }
+            }
+        }
+        return true;
     }
 
     @Override

@@ -119,7 +119,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private ItemStack foundSeals = ItemStack.EMPTY;
 
     public ScreenJournalPerkTree() {
-        super(new TranslationTextComponent("gui.journal.perks"), 30);
+        super(new TranslationTextComponent("screen.astralsorcery.tome.perks"), 30);
         this.closeWithInventoryKey = false;
         this.searchTextEntry.setChangeCallback(this::updateSearchHighlight);
 

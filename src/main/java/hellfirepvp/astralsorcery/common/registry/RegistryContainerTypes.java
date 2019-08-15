@@ -9,13 +9,14 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.container.ContainerTome;
-import hellfirepvp.astralsorcery.common.container.factory.ContainerTomeProvider;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import hellfirepvp.astralsorcery.client.screen.container.*;
+import hellfirepvp.astralsorcery.common.container.factory.*;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.IContainerFactory;
 
 import static hellfirepvp.astralsorcery.common.lib.ContainerTypesAS.*;
@@ -33,6 +34,20 @@ public class RegistryContainerTypes {
 
     public static void init() {
         TOME = register("tome", new ContainerTomeProvider.Factory());
+
+        ALTAR_DISCOVERY = register("altar_discovery", new ContainerAltarDiscoveryProvider.Factory());
+        ALTAR_ATTUNEMENT = register("altar_attunement", new ContainerAltarAttunementProvider.Factory());
+        ALTAR_CONSTELLATION = register("altar_constellation", new ContainerAltarConstellationProvider.Factory());
+        ALTAR_RADIANCE = register("altar_radiance", new ContainerAltarRadianceProvider.Factory());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void initClient() {
+        ScreenManager.registerFactory(TOME, ScreenContainerTome::new);
+        ScreenManager.registerFactory(ALTAR_DISCOVERY, ScreenContainerAltarDiscovery::new);
+        ScreenManager.registerFactory(ALTAR_ATTUNEMENT, ScreenContainerAltarAttunement::new);
+        ScreenManager.registerFactory(ALTAR_CONSTELLATION, ScreenContainerAltarConstellation::new);
+        ScreenManager.registerFactory(ALTAR_RADIANCE, ScreenContainerAltarRadiance::new);
     }
 
     private static <C extends Container, T extends ContainerType<C>> T register(String name, IContainerFactory<C> containerFactory) {
@@ -45,5 +60,4 @@ public class RegistryContainerTypes {
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
         return (T) type;
     }
-
 }

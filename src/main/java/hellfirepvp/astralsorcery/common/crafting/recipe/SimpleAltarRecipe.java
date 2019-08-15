@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -23,6 +25,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -74,11 +77,16 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
         return starlightRequirement;
     }
 
-    public void doItemOutput(TileAltar altar) {
+    public List<ItemStack> doItemOutput(TileAltar altar) {
         ItemStack out = ItemUtils.copyStackWithSize(this.output, this.output.getCount());
         if (!out.isEmpty()) {
             altar.dropItemOnTop(out);
         }
+        return Lists.newArrayList(out);
+    }
+
+    public ItemStack getOutputForRender() {
+        return ItemUtils.copyStackWithSize(this.output, this.output.getCount());
     }
 
     public void setFocusConstellation(IConstellation focusConstellation) {

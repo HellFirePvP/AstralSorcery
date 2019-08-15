@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.registry.RegistryContainerTypes;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -86,6 +87,7 @@ public class ClientProxy extends CommonProxy {
 
         modEventBus.addListener(RegistryItems::registerColors);
         modEventBus.addListener(RegistryBlocks::registerColors);
+        modEventBus.addListener(this::onClientSetup);
     }
 
     @Override
@@ -124,18 +126,22 @@ public class ClientProxy extends CommonProxy {
         super.openGui(player, type, data);
     }
 
+    private void onClientSetup(FMLClientSetupEvent event) {
+        RegistryContainerTypes.initClient();
+    }
+
     private void addTomeBookmarks() {
-        ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.progression", 10,
+        ScreenJournal.addBookmark(new BookmarkProvider("screen.astralsorcery.tome.progression", 10,
                 ScreenJournalProgression::getJournalInstance,
                 () -> true));
-        ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.constellations", 20,
+        ScreenJournal.addBookmark(new BookmarkProvider("screen.astralsorcery.tome.constellations", 20,
                 ScreenJournalConstellationOverview::getConstellationScreen,
                 () -> !ResearchHelper.getClientProgress().getSeenConstellations().isEmpty()));
-        ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.perks", 30,
+        ScreenJournal.addBookmark(new BookmarkProvider("screen.astralsorcery.tome.perks", 30,
                 ScreenJournalPerkTree::new,
                 () -> ResearchHelper.getClientProgress().getAttunedConstellation() != null));
         //TODO knowledge fragment gui
-        //ScreenJournal.addBookmark(new BookmarkProvider("gui.journal.knowledge", 40,
+        //ScreenJournal.addBookmark(new BookmarkProvider("screen.astralsorcery.tome.knowledge", 40,
         //        GuiJournalKnowledgeIndex::new,
         //        () -> !((KnowledgeFragmentData) PersistentDataManager.INSTANCE
         //                .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS))
