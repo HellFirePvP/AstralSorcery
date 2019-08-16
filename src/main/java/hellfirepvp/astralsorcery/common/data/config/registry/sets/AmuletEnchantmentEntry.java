@@ -70,7 +70,7 @@ public class AmuletEnchantmentEntry implements ConfigDataSet, Comparable<AmuletE
         }
 
         Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(registryName);
-        if(ench == null) {
+        if (ench == null) {
             AstralSorcery.log.info("Ignoring whitelist entry " + str + " for amulet enchantments - Enchantment does not exist!");
             return null;
         }

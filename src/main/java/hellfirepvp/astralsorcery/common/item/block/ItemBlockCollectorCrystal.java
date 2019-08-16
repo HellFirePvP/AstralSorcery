@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.block;
 
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyItem;
@@ -32,7 +29,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 10.08.2019 / 20:58
  */
-public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implements CrystalPropertyItem {
+public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implements CrystalPropertyItem, ConstellationItem {
 
     public ItemBlockCollectorCrystal(Block block, Properties itemProperties) {
         super(block, itemProperties
@@ -45,7 +42,7 @@ public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implemen
         if (isInGroup(group)) {
             for (IWeakConstellation cst : ConstellationRegistry.getWeakConstellations()) {
                 ItemStack stack = new ItemStack(this);
-                setConstellation(stack, cst);
+                setAttunedConstellation(stack, cst);
                 applyCrystalProperties(stack, getMaxProperties(stack));
                 stacks.add(stack);
             }
@@ -54,21 +51,34 @@ public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implemen
 
     public abstract CollectorCrystalType getCollectorType();
 
-    public static void setConstellation(ItemStack stack, IWeakConstellation constellation) {
-        constellation.writeToNBT(NBTHelper.getPersistentData(stack), "constellation");
-    }
-
-    public static IWeakConstellation getConstellation(ItemStack stack) {
+    @Override
+    public IWeakConstellation getAttunedConstellation(ItemStack stack) {
         return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack), "constellation");
     }
 
-    public static void setTraitConstellation(ItemStack stack, @Nullable IMinorConstellation constellation) {
-        if(constellation == null) return;
-        constellation.writeToNBT(NBTHelper.getPersistentData(stack), "trait");
+    @Override
+    public boolean setAttunedConstellation(ItemStack stack, IWeakConstellation cst) {
+        if (cst != null) {
+            cst.writeToNBT(NBTHelper.getPersistentData(stack), "constellation");
+        } else {
+            NBTHelper.getPersistentData(stack).remove("constellation");
+        }
+        return true;
     }
 
-    public static IMinorConstellation getTrait(ItemStack stack) {
+    @Override
+    public IMinorConstellation getTraitConstellation(ItemStack stack) {
         return (IMinorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack), "trait");
+    }
+
+    @Override
+    public boolean setTraitConstellation(ItemStack stack, IMinorConstellation cst) {
+        if (cst != null) {
+            cst.writeToNBT(NBTHelper.getPersistentData(stack), "trait");
+        } else {
+            NBTHelper.getPersistentData(stack).remove("trait");
+        }
+        return true;
     }
 
     @Nullable

@@ -42,7 +42,7 @@ public class ItemAttunedRockCrystal extends ItemAttunedCrystalBase implements It
         if (this.isInGroup(group)) {
             for (IWeakConstellation cst : ConstellationRegistry.getWeakConstellations()) {
                 ItemStack stack = new ItemStack(this);
-                ItemAttunedCrystalBase.applyMainConstellation(stack, cst);
+                setAttunedConstellation(stack, cst);
                 this.applyProperties(stack, CrystalProperties.getMaxRockProperties());
 
                 items.add(stack);

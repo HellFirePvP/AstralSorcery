@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.container.factory.*;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -87,6 +88,10 @@ public abstract class BlockAltar extends BlockStarlightNetwork implements Custom
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
+            TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class, true);
+            if (ta != null && !worldIn.isRemote) {
+                ItemUtils.dropInventory(ta.getInventory(), worldIn, pos);
+            }
             super.onReplaced(state, worldIn, pos, newState, isMoving);
         } else {
             AltarType thisType = ((BlockAltar)    state.getBlock()).type;

@@ -43,7 +43,7 @@ public class ItemAttunedCelestialCrystal extends ItemAttunedCrystalBase implemen
         if (this.isInGroup(group)) {
             for (IWeakConstellation cst : ConstellationRegistry.getWeakConstellations()) {
                 ItemStack stack = new ItemStack(this);
-                ItemAttunedCrystalBase.applyMainConstellation(stack, cst);
+                setAttunedConstellation(stack, cst);
                 this.applyProperties(stack, CrystalProperties.getMaxCelestialProperties());
 
                 items.add(stack);

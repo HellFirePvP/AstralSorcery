@@ -54,7 +54,7 @@ public class ContainerAltarTrait extends ContainerAltarBase {
     void bindAltarInventory(TileInventory altarInventory) {
         for (int yy = 0; yy < 5; yy++) {
             for (int xx = 0; xx < 5; xx++) {
-                addSlot(new SlotItemHandler(altarInventory, yy * 5 + xx, 102 + xx * 18, 11 + yy * 18));
+                addSlot(new SlotItemHandler(altarInventory, yy * 5 + xx, 84 + xx * 18, 11 + yy * 18));
             }
         }
 
