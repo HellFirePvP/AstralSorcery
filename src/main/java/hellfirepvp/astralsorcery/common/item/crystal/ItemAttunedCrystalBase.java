@@ -8,10 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.data.research.GatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -42,7 +39,7 @@ import java.util.Optional;
  * Created by HellFirePvP
  * Date: 21.07.2019 / 13:39
  */
-public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements IConstellationFocus {
+public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements IConstellationFocus, ConstellationItem {
 
     public ItemAttunedCrystalBase(Properties prop) {
         super(prop);
@@ -52,24 +49,24 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> toolTip, ITooltipFlag flag) {
         Optional<Boolean> out = this.appendPropertyTooltip(stack, toolTip);
-        if(Screen.hasShiftDown() && out.isPresent()) {
+        if (Screen.hasShiftDown() && out.isPresent()) {
             ProgressionTier tier = ResearchHelper.getClientProgress().getTierReached();
 
-            IWeakConstellation c = getMainConstellation(stack);
-            if(c != null) {
-                if(GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
+            IWeakConstellation c = getAttunedConstellation(stack);
+            if (c != null) {
+                if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
                     toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.attuned", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()))));
-                } else if(!out.get()) {
+                } else if (!out.get()) {
                     toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("progress.missing.knowledge")));
                     out = Optional.of(true);
                 }
             }
 
-            IMinorConstellation tr = getTrait(stack);
-            if(tr != null) {
-                if(GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(tr)) {
+            IMinorConstellation tr = getTraitConstellation(stack);
+            if (tr != null) {
+                if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(tr)) {
                     toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.trait", TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName()))));
-                } else if(!out.get()) {
+                } else if (!out.get()) {
                     toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("progress.missing.knowledge")));
                 }
             }
@@ -79,33 +76,37 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
     @Nullable
     @Override
     public IConstellation getFocusConstellation(ItemStack stack) {
-        return getMainConstellation(stack);
+        return getAttunedConstellation(stack);
     }
 
-    public static void applyTrait(ItemStack stack, IMinorConstellation trait) {
-        if (!(stack.getItem() instanceof ItemAttunedCrystalBase)) return;
-
-        trait.writeToNBT(NBTHelper.getPersistentData(stack), "constellationTrait");
+    @Override
+    public IWeakConstellation getAttunedConstellation(ItemStack stack) {
+        return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
-    @Nullable
-    public static IMinorConstellation getTrait(ItemStack stack) {
-        if (!(stack.getItem() instanceof ItemAttunedCrystalBase)) return null;
+    @Override
+    public boolean setAttunedConstellation(ItemStack stack, IWeakConstellation cst) {
+        if (cst != null) {
+            cst.writeToNBT(NBTHelper.getPersistentData(stack));
+        } else {
+            NBTHelper.getPersistentData(stack).remove(IConstellation.getDefaultSaveKey());
+        }
+        return true;
+    }
 
+    @Override
+    public IMinorConstellation getTraitConstellation(ItemStack stack) {
         return (IMinorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack), "constellationTrait");
     }
 
-    public static void applyMainConstellation(ItemStack stack, IWeakConstellation constellation) {
-        if (!(stack.getItem() instanceof ItemAttunedCrystalBase)) return;
-
-        constellation.writeToNBT(NBTHelper.getPersistentData(stack));
-    }
-
-    @Nullable
-    public static IWeakConstellation getMainConstellation(ItemStack stack) {
-        if (!(stack.getItem() instanceof ItemAttunedCrystalBase)) return null;
-
-        return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
+    @Override
+    public boolean setTraitConstellation(ItemStack stack, IMinorConstellation cst) {
+        if (cst != null) {
+            cst.writeToNBT(NBTHelper.getPersistentData(stack), "constellationTrait");
+        } else {
+            NBTHelper.getPersistentData(stack).remove("constellationTrait");
+        }
+        return true;
     }
 
 }

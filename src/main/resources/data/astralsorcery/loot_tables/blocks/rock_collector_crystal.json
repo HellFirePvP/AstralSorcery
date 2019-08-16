@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:block",
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "astralsorcery:rock_collector_crystal"
+                }
+            ],
+            "functions": [
+                {
+                    "function": "astralsorcery:copy_crystal_properties"
+                },
+                {
+                    "function": "astralsorcery:copy_constellation"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "minecraft:survives_explosion"
+                }
+            ]
+        }
+    ]
+}

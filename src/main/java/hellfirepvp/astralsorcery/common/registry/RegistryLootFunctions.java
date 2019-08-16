@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.util.loot.CopyConstellation;
+import hellfirepvp.astralsorcery.common.util.loot.CopyCrystalProperties;
 import hellfirepvp.astralsorcery.common.util.loot.LinearLuckBonus;
 import hellfirepvp.astralsorcery.common.util.loot.RandomCrystalProperty;
 import net.minecraft.util.ResourceLocation;
@@ -29,6 +31,8 @@ public class RegistryLootFunctions {
     public static void registerLootFunctions() {
         register(new LinearLuckBonus.Serializer(new ResourceLocation(AstralSorcery.MODID, "linear_luck_bonus")));
         register(new RandomCrystalProperty.Serializer(new ResourceLocation(AstralSorcery.MODID, "random_crystal_property")));
+        register(new CopyCrystalProperties.Serializer(new ResourceLocation(AstralSorcery.MODID, "copy_crystal_properties")));
+        register(new CopyConstellation.Serializer(new ResourceLocation(AstralSorcery.MODID, "copy_constellation")));
     }
 
     private static <T extends ILootFunction> void register(ILootFunction.Serializer<T> serializer) {

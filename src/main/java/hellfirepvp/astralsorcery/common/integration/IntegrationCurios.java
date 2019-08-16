@@ -8,10 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.integration;
 
+import hellfirepvp.astralsorcery.common.base.Mods;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.InterModComms;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
+import top.theillusivec4.curios.api.CurioTags;
 import top.theillusivec4.curios.api.CuriosAPI;
+import top.theillusivec4.curios.api.imc.CurioIMCMessage;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -26,7 +30,7 @@ import java.util.function.Predicate;
 public class IntegrationCurios {
 
     public static void initIMC() {
-
+        InterModComms.sendTo(Mods.CURIOS.getModId(), CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("necklace"));
     }
 
     public static Optional<ImmutableTriple<String, Integer, ItemStack>> getCurio(PlayerEntity player, Predicate<ItemStack> match) {

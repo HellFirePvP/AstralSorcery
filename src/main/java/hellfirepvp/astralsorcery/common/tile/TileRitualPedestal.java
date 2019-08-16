@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationItem;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
@@ -307,8 +308,8 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     @Nullable
     public IWeakConstellation getRitualConstellation() {
         ItemStack crystal = this.inventory.getStackInSlot(0);
-        if (!crystal.isEmpty() && crystal.getItem() instanceof ItemAttunedCrystalBase) {
-            return ItemAttunedCrystalBase.getMainConstellation(crystal);
+        if (!crystal.isEmpty() && crystal.getItem() instanceof ConstellationItem) {
+            return ((ConstellationItem) crystal.getItem()).getAttunedConstellation(crystal);
         }
         return null;
     }
@@ -316,8 +317,8 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     @Nullable
     public IMinorConstellation getRitualTrait() {
         ItemStack crystal = this.inventory.getStackInSlot(0);
-        if (!crystal.isEmpty() && crystal.getItem() instanceof ItemAttunedCrystalBase) {
-            return ItemAttunedCrystalBase.getTrait(crystal);
+        if (!crystal.isEmpty() && crystal.getItem() instanceof ConstellationItem) {
+            return ((ConstellationItem) crystal.getItem()).getTraitConstellation(crystal);
         }
         return null;
     }

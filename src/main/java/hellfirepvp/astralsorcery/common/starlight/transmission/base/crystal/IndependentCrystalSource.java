@@ -100,7 +100,7 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
         this.doesSeeSky = tcc.doesSeeSky();
         this.doesAutoLink = !tcc.isPlayerMade(); //Structural, not player-placed.
         this.enhanced = tcc.isEnhanced();
-        this.constellation = tcc.getConstellationType();
+        this.constellation = tcc.getAttunedConstellation();
         this.crystalProperties = tcc.getCrystalProperties();
         return false;
     }

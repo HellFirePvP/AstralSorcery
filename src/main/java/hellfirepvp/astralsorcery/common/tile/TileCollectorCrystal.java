@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationTile;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
@@ -20,6 +21,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.Inde
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyTile;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -36,7 +38,7 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 10.08.2019 / 19:55
  */
-public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourceNode> {
+public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourceNode> implements CrystalPropertyTile, ConstellationTile {
 
     private static final BlockPos[] OFFSETS_LIQUID_STARLIGHT = new BlockPos[] {
             new BlockPos(-1, -4, -1),
@@ -85,6 +87,28 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
         return this.getPlayerUUID() != null;
     }
 
+    @Override
+    public IWeakConstellation getAttunedConstellation() {
+        return this.constellationType;
+    }
+
+    @Override
+    public boolean setAttunedConstellation(IWeakConstellation cst) {
+        return false;
+    }
+
+    @Override
+    public IMinorConstellation getTraitConstellation() {
+        return this.constellationTrait;
+    }
+
+    @Override
+    public boolean setTraitConstellation(IMinorConstellation cst) {
+        return false;
+    }
+
+    @Nullable
+    @Override
     public CrystalProperties getCrystalProperties() {
         return crystalProperties;
     }
