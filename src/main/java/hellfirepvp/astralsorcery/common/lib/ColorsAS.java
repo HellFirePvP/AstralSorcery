@@ -26,6 +26,13 @@ public class ColorsAS {
     public static final Color ROCK_CRYSTAL      = new Color(0xDDDDFF);
     public static final Color CELESTIAL_CRYSTAL = new Color(0x0088FF);
 
+    public static final Color NOCTURNAL_POWDER_1 = Color.BLACK;
+    public static final Color NOCTURNAL_POWDER_2 = new Color(0x4E016D);
+    public static final Color NOCTURNAL_POWDER_3 = new Color(0x0C1576);
+    public static final Color ILLUMINATION_POWDER_1 = Color.WHITE;
+    public static final Color ILLUMINATION_POWDER_2 = new Color(0xFEFF9E);
+    public static final Color ILLUMINATION_POWDER_3 = new Color(0xFFE539);
+
     public static final Color CONSTELLATION_TYPE_MAJOR = new Color(40, 67, 204);
     public static final Color CONSTELLATION_TYPE_WEAK  = new Color(67, 44, 176);
     public static final Color CONSTELLATION_TYPE_MINOR = new Color(93, 25, 127);

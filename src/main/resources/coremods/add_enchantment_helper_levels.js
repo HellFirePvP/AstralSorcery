@@ -4,7 +4,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.enchantment.EnchantmentHelper',
-                'methodName': 'getEnchantmentLevel',
+                'methodName': 'func_77506_a',
                 'methodDesc': '(Lnet/minecraft/enchantment/Enchantment;Lnet/minecraft/item/ItemStack;)I'
             },
             'transformer': function(method) {

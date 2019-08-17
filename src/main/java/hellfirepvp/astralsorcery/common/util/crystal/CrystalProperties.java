@@ -198,25 +198,6 @@ public class CrystalProperties {
         return Optional.empty();
     }
 
-    @Nullable
-    public CrystalProperties grindCopy(Random rand) {
-        CrystalProperties copy = new CrystalProperties(size, purity, collectiveCapability, fractured, sizeOverride);
-        int grind = 7 + rand.nextInt(5);
-        double purity = ((double) this.purity) / 100D;
-        if(purity <= 0.4) purity = 0.4;
-        for (int j = 0; j < 3; j++) {
-            if (purity <= rand.nextFloat()) {
-                grind += grind;
-            }
-        }
-        int collectToAdd = 3 + rand.nextInt(4);
-        copy.size = size - grind;
-        copy.collectiveCapability = Math.min((collectiveCapability > 100 ? collectiveCapability : 100), collectiveCapability + collectToAdd);
-        if(copy.size <= 0)
-            return null;
-        return copy;
-    }
-
     public static void applyCrystalProperties(ItemStack stack, CrystalProperties properties) {
         CompoundNBT cmp = NBTHelper.getPersistentData(stack);
         CompoundNBT crystalProp = new CompoundNBT();

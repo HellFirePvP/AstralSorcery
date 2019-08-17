@@ -1,0 +1,10 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "astralsorcery:item/scroll_empty"
+  },
+  "overrides": [
+    { "predicate": { "written": 0.00 }, "model": "astralsorcery:item/knowledge_share_empty" },
+    { "predicate": { "written": 0.99 }, "model": "astralsorcery:item/knowledge_share_written" }
+  ]
+}

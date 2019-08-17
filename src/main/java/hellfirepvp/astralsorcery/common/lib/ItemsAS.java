@@ -13,10 +13,15 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystal;
-import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
+import hellfirepvp.astralsorcery.common.item.dust.ItemIlluminationPowder;
+import hellfirepvp.astralsorcery.common.item.dust.ItemNocturnalPowder;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemDay;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,10 +45,18 @@ public class ItemsAS {
     public static ItemPerkGemSky PERK_GEM_SKY;
     public static ItemPerkGemDay PERK_GEM_DAY;
     public static ItemPerkGemNight PERK_GEM_NIGHT;
+    public static ItemCrystalAxe CRYSTAL_AXE;
+    public static ItemCrystalPickaxe CRYSTAL_PICKAXE;
+    public static ItemCrystalShovel CRYSTAL_SHOVEL;
+    public static ItemCrystalSword CRYSTAL_SWORD;
 
     public static ItemTome TOME;
     public static ItemConstellationPaper CONSTELLATION_PAPER;
     public static ItemEnchantmentAmulet ENCHANTMENT_AMULET;
+    public static ItemKnowledgeShare KNOWLEDGE_SHARE;
+
+    public static ItemNocturnalPowder NOCTURNAL_POWDER;
+    public static ItemIlluminationPowder ILLUMINATION_POWDER;
 
     public static ItemRockCrystal ROCK_CRYSTAL;
     public static ItemAttunedRockCrystal ATTUNED_ROCK_CRYSTAL;

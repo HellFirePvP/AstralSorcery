@@ -22,6 +22,12 @@ import net.minecraft.block.material.MaterialColor;
  */
 public class PropertiesMisc {
 
+    public static Block.Properties defaultAir() {
+        return Block.Properties.create(Material.AIR, MaterialColor.AIR)
+                .doesNotBlockMovement()
+                .noDrops();
+    }
+
     public static Block.Properties defaultSand() {
         return Block.Properties.create(Material.SAND, MaterialColor.SAND)
                 .hardnessAndResistance(0.5F)

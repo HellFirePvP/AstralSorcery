@@ -22,6 +22,7 @@ import hellfirepvp.observerlib.api.ObserverProvider;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -54,6 +55,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(Item.class, this::registerItems);
         eventBus.addGenericListener(Block.class, this::registerBlocks);
         eventBus.addGenericListener(TileEntityType.class, this::registerTiles);
+        eventBus.addGenericListener(EntityType.class, this::registerEntities);
         eventBus.addGenericListener(Biome.class, this::registerBiomes);
         eventBus.addGenericListener(Potion.class, this::registerPotions);
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
@@ -108,6 +110,11 @@ public class PrimerEventHandler {
 
     private void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
         RegistryTileEntities.registerTiles();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
+        RegistryEntities.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

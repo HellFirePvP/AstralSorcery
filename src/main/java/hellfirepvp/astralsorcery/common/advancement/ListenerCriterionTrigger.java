@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.advancements;
+package hellfirepvp.astralsorcery.common.advancement;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
