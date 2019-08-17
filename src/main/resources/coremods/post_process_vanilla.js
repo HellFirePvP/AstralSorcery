@@ -4,7 +4,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.entity.ai.attributes.ModifiableAttributeInstance',
-                'methodName': 'computeValue',
+                'methodName': 'func_111129_g',
                 'methodDesc': '()D'
             },
             'transformer': function(method) {

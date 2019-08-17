@@ -4,7 +4,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.entity.LivingEntity',
-                'methodName': 'getAttributes',
+                'methodName': 'func_110140_aT',
                 'methodDesc': '()Lnet/minecraft/entity/ai/attributes/AbstractAttributeMap;'
             },
             'transformer': function(method) {

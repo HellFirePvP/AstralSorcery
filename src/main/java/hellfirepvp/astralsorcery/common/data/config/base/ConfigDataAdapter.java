@@ -47,7 +47,7 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
         this.registryStore = createdValue;
     }
 
-    public List<T> getConfiguredValues() {
+    public synchronized List<T> getConfiguredValues() {
         if (configuredValues == null) {
             configuredValues = new ArrayList<>();
             for (String str : registryStore.get()) {

@@ -8,14 +8,21 @@
 
 package hellfirepvp.astralsorcery.common.util.entity;
 
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.*;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -27,6 +34,8 @@ import java.util.function.Function;
  * Date: 27.05.2019 / 22:26
  */
 public class EntityUtils {
+
+    private static final Random rand = new Random();
 
     public static void applyVortexMotion(Function<Void, Vector3> getPositionFunction, Function<Vector3, Object> addMotionFunction, Vector3 to, double vortexRange, double multiplier) {
         Vector3 pos = getPositionFunction.apply(null);
@@ -42,6 +51,60 @@ public class EntityUtils {
             toAdd.setZ(diffZ / dist * dstFactorSq * 0.15D * multiplier);
             addMotionFunction.apply(toAdd);
         }
+    }
+
+    @Nullable
+    public static LivingEntity performWorldSpawningAt(World world, BlockPos pos, EntityClassification category, SpawnReason reason, boolean ignoreWeighting) {
+        List<Biome.SpawnListEntry> spawnList = world.getChunkProvider().getChunkGenerator().getPossibleCreatures(EntityClassification.MONSTER, pos);
+        spawnList = ForgeEventFactory.getPotentialSpawns(world, category, pos, spawnList);
+        spawnList.removeIf(s -> !s.entityType.isSummonable());
+        Biome.SpawnListEntry entry;
+        if (ignoreWeighting) {
+            entry = MiscUtils.getRandomEntry(spawnList, rand);
+        } else {
+            entry = MiscUtils.getWeightedRandomEntry(spawnList, rand, ee -> ee.itemWeight);
+        }
+
+        if (entry != null && WorldEntitySpawner.isSpawnableSpace(world, pos, world.getBlockState(pos), world.getFluidState(pos))) {
+
+            float x = pos.getX() + 0.5F;
+            float y = pos.getY();
+            float z = pos.getZ() + 0.5F;
+
+            if (isSpawnableAt(world, pos)) {
+
+                MobEntity entity;
+                try {
+                    entity = (MobEntity) entry.entityType.create(world);
+                } catch (Exception exception) {
+                    return null;
+                }
+                if (entity == null) {
+                    return null;
+                }
+
+                entity.setLocationAndAngles(x, y, z, rand.nextFloat() * 360F, 0F);
+                int result = ForgeHooks.canEntitySpawn(entity, world, x, y, z, null);
+                if (result == -1) {
+                    return null;
+                }
+
+                if (!ForgeEventFactory.doSpecialSpawn(entity, world, x, y, z, null)) {
+                    entity.onInitialSpawn(world, world.getDifficultyForLocation(pos), reason, null, null);
+                }
+
+                if (world.addEntity(entity)) {
+                    return entity;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static boolean isSpawnableAt(World world, BlockPos pos) {
+        BlockPos up = pos.up();
+        return WorldEntitySpawner.isSpawnableSpace(world, pos, world.getBlockState(pos), world.getFluidState(pos)) &&
+                WorldEntitySpawner.isSpawnableSpace(world, up, world.getBlockState(up), world.getFluidState(up));
     }
 
     public static boolean canEntitySpawnHere(World world, BlockPos at, EntityType<? extends Entity> type, SpawnReason spawnReason, @Nullable Consumer<Entity> preCheckEntity) {

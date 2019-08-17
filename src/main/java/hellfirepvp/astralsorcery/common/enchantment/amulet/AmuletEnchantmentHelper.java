@@ -8,8 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.enchantment.amulet;
 
-import hellfirepvp.astralsorcery.common.base.Mods;
-import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHelper;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.item.ItemEnchantmentAmulet;
@@ -29,6 +27,7 @@ import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,12 +62,12 @@ public class AmuletEnchantmentHelper {
         }
     }
 
-    @Nullable
+    @Nonnull
     private static UUID getWornPlayerUUID(ItemStack anyTool) {
         if (DynamicEnchantmentHelper.canHaveDynamicEnchantment(anyTool) && anyTool.hasTag()) {
             return anyTool.getTag().getUniqueId(KEY_AS_OWNER);
         }
-        return null;
+        return new UUID(0, 0);
     }
 
     public static void applyAmuletOwner(ItemStack tool, PlayerEntity wearer) {
@@ -90,7 +89,7 @@ public class AmuletEnchantmentHelper {
     @Nullable
     public static PlayerEntity getPlayerHavingTool(ItemStack anyTool) {
         UUID plUUID = getWornPlayerUUID(anyTool);
-        if (plUUID == null) {
+        if (plUUID.getLeastSignificantBits() == 0 && plUUID.getMostSignificantBits() == 0) {
             return null;
         }
         PlayerEntity player;

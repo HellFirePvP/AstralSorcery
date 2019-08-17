@@ -19,10 +19,15 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystal;
+import hellfirepvp.astralsorcery.common.item.dust.ItemIlluminationPowder;
+import hellfirepvp.astralsorcery.common.item.dust.ItemNocturnalPowder;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemDay;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
@@ -81,10 +86,18 @@ public class RegistryItems {
         PERK_GEM_SKY = registerItem(new ItemPerkGemSky());
         PERK_GEM_DAY = registerItem(new ItemPerkGemDay());
         PERK_GEM_NIGHT = registerItem(new ItemPerkGemNight());
+        CRYSTAL_AXE = registerItem(new ItemCrystalAxe());
+        CRYSTAL_PICKAXE = registerItem(new ItemCrystalPickaxe());
+        CRYSTAL_SHOVEL = registerItem(new ItemCrystalShovel());
+        CRYSTAL_SWORD = registerItem(new ItemCrystalSword());
 
         TOME = registerItem(new ItemTome());
         CONSTELLATION_PAPER = registerItem(new ItemConstellationPaper());
         ENCHANTMENT_AMULET = registerItem(new ItemEnchantmentAmulet());
+        KNOWLEDGE_SHARE = registerItem(new ItemKnowledgeShare());
+
+        NOCTURNAL_POWDER = registerItem(new ItemNocturnalPowder());
+        ILLUMINATION_POWDER = registerItem(new ItemIlluminationPowder());
 
         ROCK_CRYSTAL = registerItem(new ItemRockCrystal());
         ATTUNED_ROCK_CRYSTAL = registerItem(new ItemAttunedRockCrystal());

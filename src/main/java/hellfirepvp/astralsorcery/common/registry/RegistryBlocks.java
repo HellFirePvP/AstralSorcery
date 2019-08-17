@@ -99,6 +99,8 @@ public class RegistryBlocks {
         RITUAL_LINK = registerBlock(new BlockRitualLink());
         RITUAL_PEDESTAL = registerBlock(new BlockRitualPedestal());
         WELL = registerBlock(new BlockWell());
+
+        FLARE_LIGHT = registerBlock(new BlockFlareLight());
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.registry.RegistryContainerTypes;
+import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -128,6 +129,7 @@ public class ClientProxy extends CommonProxy {
 
     private void onClientSetup(FMLClientSetupEvent event) {
         RegistryContainerTypes.initClient();
+        RegistryEntities.initClient();
     }
 
     private void addTomeBookmarks() {

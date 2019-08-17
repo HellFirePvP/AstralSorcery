@@ -4,7 +4,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.item.ItemStack',
-                'methodName': 'getTooltip',
+                'methodName': 'func_82840_a',
                 'methodDesc': '(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/client/util/ITooltipFlag;)Ljava/util/List;'
             },
             'transformer': function(method) {
@@ -14,16 +14,19 @@ function initializeCoreMod() {
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
+                var callGetEnchantmentTagList = ASMAPI.mapMethod('func_77986_q');
+                var callHasTag = ASMAPI.mapMethod('func_77942_o');
+
                 var methodEnchantmentTagList = ASMAPI.findFirstMethodCall(method,
                         ASMAPI.MethodType.VIRTUAL,
                         'net/minecraft/item/ItemStack',
-                        'getEnchantmentTagList',
+                        callGetEnchantmentTagList,
                         '()Lnet/minecraft/nbt/ListNBT;');
 
                 var methodHasTag = ASMAPI.findFirstMethodCallBefore(method,
                         ASMAPI.MethodType.VIRTUAL,
                         'net/minecraft/item/ItemStack',
-                        'hasTag',
+                        callHasTag,
                         '()Z',
                         method.instructions.indexOf(methodEnchantmentTagList));
 

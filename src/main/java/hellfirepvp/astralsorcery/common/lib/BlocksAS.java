@@ -80,4 +80,6 @@ public class BlocksAS {
     public static BlockRitualPedestal            RITUAL_PEDESTAL;
     public static BlockWell                      WELL;
 
+    public static BlockFlareLight                FLARE_LIGHT;
+
 }
