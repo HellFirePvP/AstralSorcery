@@ -22,7 +22,6 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
 
 /**
@@ -38,7 +37,6 @@ public class RegistryCapabilities {
 
     public static void initialize() {
         register(ICompatFluidHandler.class, new TankFluidStorage<>(), () -> new CompatFluidTank(CompatFluidStack.BUCKET_VOLUME));
-
         register(ICompatFluidHandlerItem.class, new TankFluidStorage<>(), () -> new CompatFluidHandlerItemStack(new ItemStack(Items.BUCKET), CompatFluidStack.BUCKET_VOLUME));
     }
 

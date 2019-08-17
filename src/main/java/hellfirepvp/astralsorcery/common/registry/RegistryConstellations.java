@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.TagsAS;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
@@ -250,8 +251,7 @@ public class RegistryConstellations {
         alcara.addSignatureItem(new ItemStack(Items.COAL));
 
         vorux.addSignatureItem(new ItemStack(Items.BLAZE_POWDER));
-        //TODO special dusts
-        //vorux.addSignatureItem((ItemUsableDust.DustType.NOCTURNAL.asStack()));
+        vorux.addSignatureItem(new ItemStack(ItemsAS.NOCTURNAL_POWDER));
         vorux.addSignatureItem(new ItemStack(Items.GUNPOWDER));
         vorux.addSignatureItem(new ItemStack(Items.NETHER_BRICK));
     }

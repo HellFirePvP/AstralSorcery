@@ -35,6 +35,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -110,7 +111,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
     }
 
     @Override
-    public void onLoad(World world) {
+    public void onLoad(IWorld world) {
         super.onLoad(world);
 
         if (LightNetworkConfig.CONFIG.performNetworkIntegrityCheck.get()) {

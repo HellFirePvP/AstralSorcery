@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
+import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,6 +55,7 @@ public class ItemsAS {
     public static ItemConstellationPaper CONSTELLATION_PAPER;
     public static ItemEnchantmentAmulet ENCHANTMENT_AMULET;
     public static ItemKnowledgeShare KNOWLEDGE_SHARE;
+    public static ItemWand WAND;
 
     public static ItemNocturnalPowder NOCTURNAL_POWDER;
     public static ItemIlluminationPowder ILLUMINATION_POWDER;

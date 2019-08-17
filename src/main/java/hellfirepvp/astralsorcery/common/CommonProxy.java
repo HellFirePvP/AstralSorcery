@@ -50,9 +50,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -137,11 +139,10 @@ public class CommonProxy {
         eventBus.addListener(this::onServerStarting);
         eventBus.addListener(this::onServerStarted);
 
-        eventBus.addListener(BlockDropCaptureAssist.INSTANCE::onDrop);
-
         EventHandlerIO.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
         eventBus.addListener(PlayerAmuletHandler::onEnchantmentAdd);
+        eventBus.addListener(BlockDropCaptureAssist.INSTANCE::onDrop);
 
         tickManager.attachListeners(eventBus);
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);

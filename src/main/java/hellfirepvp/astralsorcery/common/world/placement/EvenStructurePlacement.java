@@ -42,7 +42,7 @@ public class EvenStructurePlacement extends StructurePlacement<EvenStructurePlac
 
     @Override
     public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, EvenStructurePlacementConfig config, BlockPos pos) {
-        BlockPos closest = DataAS.DOMAIN_AS.getData(worldIn.getWorld(), DataAS.KEY_STRUCTURE_GENERATION).getClosest(config.getType(), pos, 384);
+        BlockPos closest = DataAS.DOMAIN_AS.getData(worldIn, DataAS.KEY_STRUCTURE_GENERATION).getClosest(config.getType(), pos, 384);
         if (closest != null) {
             BlockArray structure = config.getType().getStructure();
             Vec3i min = closest.add(structure.getMinimumOffset());

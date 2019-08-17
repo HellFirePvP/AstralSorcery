@@ -18,6 +18,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -77,7 +78,7 @@ public class GatewayCache extends GlobalWorldData {
     public void updateTick(World world) {}
 
     @Override
-    public void onLoad(World world) {
+    public void onLoad(IWorld world) {
         super.onLoad(world);
 
         LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Checking GatewayCache integrity for dimension " + world.getDimension().getType().getId());

@@ -515,7 +515,6 @@
   "entity.EntityShootingStar.name": "Shooting Star",
 
   "item.itemlinkingtool": "Linking Tool",
-  "item.itemwand": "Resonating Wand",
   "item.itemchargedcrystalpickaxe": "Infused Crystal Pickaxe",
   "item.itemchargedcrystalshovel": "Infused Crystal Shovel",
   "item.itemchargedcrystalaxe": "Infused Crystal Axe",
@@ -578,6 +577,7 @@
   "item.astralsorcery.tome": "Astral Tome",
   "item.astralsorcery.constellation_paper": "Constellation Paper",
   "item.astralsorcery.knowledge_share": "Scroll of Written Expertise",
+  "item.astralsorcery.wand": "Resonating Wand",
 
   "item.astralsorcery.illumination_powder": "Illumination Powder",
   "item.astralsorcery.nocturnal_powder": "Nocturnal Powder",
