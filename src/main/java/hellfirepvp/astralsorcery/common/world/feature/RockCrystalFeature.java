@@ -9,9 +9,11 @@
 package hellfirepvp.astralsorcery.common.world.feature;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.DataAS;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
@@ -35,7 +37,7 @@ public class RockCrystalFeature extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        // TODO rock crystal capability cache
+        DataAS.DOMAIN_AS.getData(worldIn, DataAS.KEY_ROCK_CRYSTAL_BUFFER).addOre(pos);
         return worldIn.setBlockState(pos, BlocksAS.ROCK_CRYSTAL_ORE.getDefaultState(), Constants.BlockFlags.NOTIFY_LISTENERS);
     }
 }

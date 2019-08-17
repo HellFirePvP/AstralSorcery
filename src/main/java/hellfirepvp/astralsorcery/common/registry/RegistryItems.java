@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
+import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
@@ -95,6 +96,7 @@ public class RegistryItems {
         CONSTELLATION_PAPER = registerItem(new ItemConstellationPaper());
         ENCHANTMENT_AMULET = registerItem(new ItemEnchantmentAmulet());
         KNOWLEDGE_SHARE = registerItem(new ItemKnowledgeShare());
+        WAND = registerItem(new ItemWand());
 
         NOCTURNAL_POWDER = registerItem(new ItemNocturnalPowder());
         ILLUMINATION_POWDER = registerItem(new ItemIlluminationPowder());

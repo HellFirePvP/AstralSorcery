@@ -38,7 +38,7 @@ public class StarlightUpdateHandler implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         World world = (World) context[0];
-        if(world.isRemote) return;
+        if (world.isRemote()) return;
 
         List<IPrismTransmissionNode> nodes = getNodes(world);
         synchronized (accessLock) {
@@ -48,23 +48,18 @@ public class StarlightUpdateHandler implements ITickHandler {
         }
     }
 
-    private List<IPrismTransmissionNode> getNodes(World world) {
+    private List<IPrismTransmissionNode> getNodes(IWorld world) {
         int dimId = world.getDimension().getType().getId();
-        List<IPrismTransmissionNode> nodes = updateRequired.get(dimId);
-        if(nodes == null) {
-            nodes = new LinkedList<>();
-            updateRequired.put(dimId, nodes);
-        }
-        return nodes;
+        return updateRequired.computeIfAbsent(dimId, k -> new LinkedList<>());
     }
 
-    public void removeNode(World world, IPrismTransmissionNode node) {
+    public void removeNode(IWorld world, IPrismTransmissionNode node) {
         synchronized (accessLock) {
             getNodes(world).remove(node);
         }
     }
 
-    public void addNode(World world, IPrismTransmissionNode node) {
+    public void addNode(IWorld world, IPrismTransmissionNode node) {
         synchronized (accessLock) {
             getNodes(world).add(node);
         }

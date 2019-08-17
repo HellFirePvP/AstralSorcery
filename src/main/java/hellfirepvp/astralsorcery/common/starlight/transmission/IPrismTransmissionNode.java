@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -104,7 +105,7 @@ public interface IPrismTransmissionNode extends ILocatable {
 
     //Called once after reading the node from NBT
     //Use this for post-load/place logic.
-    default public void postLoad(World world) {}
+    default public void postLoad(IWorld world) {}
 
     //Flags the world's LightNetworkBuffer as dirty,
     //which causes it to be recalculated and saved

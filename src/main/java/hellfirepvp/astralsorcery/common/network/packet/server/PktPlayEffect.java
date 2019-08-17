@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -137,11 +138,14 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
 
     public static enum Type {
 
+        ROCK_CRYSTAL_HIGHTLIGHT,
         WELL_CATALYST_BREAK;
 
         @OnlyIn(Dist.CLIENT)
         private Consumer<PktPlayEffect> runEffect() {
             switch (this) {
+                case ROCK_CRYSTAL_HIGHTLIGHT:
+                    return ItemWand::playEffect;
                 case WELL_CATALYST_BREAK:
                     return TileWell::catalystBurst;
             }
