@@ -62,14 +62,14 @@ public class RegistryWorldGeneration {
                 50, 210, 40, 1));
         Placement.ROCK_CRYSTAL = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("rock_crystal", false, true,
                 Lists.newArrayList(), Lists.newArrayList(0),
-                2, 5, 14, 3,
+                2, 5, 25, 2,
                 Lists.newArrayList(Blocks.STONE.getDefaultState(), Blocks.DIORITE.getDefaultState(), Blocks.GRANITE.getDefaultState(), Blocks.ANDESITE.getDefaultState())));
         Placement.AQUAMARINE = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("aquamarine", true, true,
                 Lists.newArrayList(BiomeDictionary.Type.RIVER, BiomeDictionary.Type.BEACH), Lists.newArrayList(0),
                 45, 25, 1, 64,
                 Lists.newArrayList(Blocks.SAND.getDefaultState())));
 
-        Placement.MARBLE = new CountRangeConfig(10, 0, 0, 192);
+        Placement.MARBLE = new CountRangeConfig(10, 0, 0, 64);
     }
 
     public static void registerFeatures() {

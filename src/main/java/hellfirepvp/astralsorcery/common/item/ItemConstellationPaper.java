@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.entity.EntityItemExplosionResistant;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -25,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -90,6 +92,30 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor {
             AstralSorcery.getProxy().openGui(player, GuiType.CONSTELLATION_PAPER, getConstellation(itemStack));
         }
         return ActionResult.newResult(ActionResultType.SUCCESS, itemStack);
+    }
+
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+        EntityItemExplosionResistant res = new EntityItemExplosionResistant(world, location.posX, location.posY, location.posZ, itemstack);
+        res.setDefaultPickupDelay();
+        res.setMotion(location.getMotion());
+        if (location instanceof ItemEntity) {
+            res.setThrowerId(((ItemEntity) location).getThrowerId());
+            res.setOwnerId(((ItemEntity) location).getOwnerId());
+        }
+        if (itemstack.getItem() instanceof ItemConstellationPaper) {
+            IConstellation cst = getConstellation(itemstack);
+            if (cst != null) {
+                res.applyColor(cst.getConstellationColor());
+            }
+        }
+        return res;
     }
 
     @Override

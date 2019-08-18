@@ -71,8 +71,7 @@ public class ItemWand extends Item {
                             buf.removeOre(rPos);
                             continue;
                         }
-                        BlockPos p = rPos.up();
-                        PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_HIGHTLIGHT).setPos(new Vector3(p));
+                        PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_HIGHTLIGHT).setPos(new Vector3(rPos.up()));
                         PacketChannel.CHANNEL.sendToPlayer((PlayerEntity) entity, pkt);
                     }
                 }
