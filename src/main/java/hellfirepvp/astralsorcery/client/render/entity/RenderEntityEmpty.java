@@ -19,13 +19,13 @@ import javax.annotation.Nullable;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: EmptyRenderEntity
+ * Class: RenderEntityEmpty
  * Created by HellFirePvP
  * Date: 17.08.2019 / 13:08
  */
-public class EmptyRenderEntity extends EntityRenderer<Entity> {
+public class RenderEntityEmpty extends EntityRenderer<Entity> {
 
-    public EmptyRenderEntity(EntityRendererManager mgr) {
+    public RenderEntityEmpty(EntityRendererManager mgr) {
         super(mgr);
     }
 
@@ -42,7 +42,7 @@ public class EmptyRenderEntity extends EntityRenderer<Entity> {
 
         @Override
         public EntityRenderer<? super Entity> createRenderFor(EntityRendererManager manager) {
-            return new EmptyRenderEntity(manager);
+            return new RenderEntityEmpty(manager);
         }
     }
 

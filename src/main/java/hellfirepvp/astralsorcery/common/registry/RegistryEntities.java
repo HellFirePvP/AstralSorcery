@@ -9,20 +9,19 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.render.entity.EmptyRenderEntity;
+import hellfirepvp.astralsorcery.client.render.entity.RenderEntityEmpty;
+import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entity.EntityIlluminationSpark;
+import hellfirepvp.astralsorcery.common.entity.EntityItemExplosionResistant;
+import hellfirepvp.astralsorcery.common.entity.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entity.EntityNocturnalSpark;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.network.FMLPlayMessages;
-
-import java.util.function.BiFunction;
 
 import static hellfirepvp.astralsorcery.common.lib.EntityTypesAS.*;
 
@@ -56,12 +55,32 @@ public class RegistryEntities {
                         .setTrackingRange(32)
                         .setCustomClientFactory((spawnEntity, world) -> new EntityIlluminationSpark(world))
                         .size(0.1F, 0.1F));
+
+        ITEM_HIGHLIGHT = register("item_highlighted",
+                EntityType.Builder.create(EntityItemHighlighted.factoryHighlighted(), EntityClassification.MISC)
+                        .disableSummoning()
+                        .setUpdateInterval(1)
+                        .setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(16)
+                        .setCustomClientFactory(((spawnEntity, world) -> new EntityItemHighlighted(world)))
+                        .size(0.25F, 0.25F));
+        ITEM_EXPLOSION_RESISTANT = register("item_explosion_resistant",
+                EntityType.Builder.create(EntityItemExplosionResistant.factoryExplosionResistant(), EntityClassification.MISC)
+                        .disableSummoning()
+                        .setUpdateInterval(1)
+                        .setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(16)
+                        .setCustomClientFactory(((spawnEntity, world) -> new EntityItemExplosionResistant(world)))
+                        .size(0.25F, 0.25F));
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityNocturnalSpark.class, new EmptyRenderEntity.Factory());
-        RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new EmptyRenderEntity.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityNocturnalSpark.class, new RenderEntityEmpty.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityEmpty.Factory());
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlighted.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityItemExplosionResistant.class, new RenderEntityItemHighlighted.Factory());
     }
 
     private static <E extends Entity> EntityType<E> register(String name, EntityType.Builder<E> typeBuilder) {
