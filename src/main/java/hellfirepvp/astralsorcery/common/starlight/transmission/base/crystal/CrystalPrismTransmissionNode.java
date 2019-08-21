@@ -8,10 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimplePrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,12 +24,12 @@ import net.minecraft.world.World;
  */
 public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
 
-    private CrystalProperties properties;
+    private CrystalAttributes attributes;
     private float additionalLoss = 1F;
 
-    public CrystalPrismTransmissionNode(BlockPos thisPos, CrystalProperties properties) {
+    public CrystalPrismTransmissionNode(BlockPos thisPos, CrystalAttributes attributes) {
         super(thisPos);
-        this.properties = properties;
+        this.attributes = attributes;
     }
 
     public CrystalPrismTransmissionNode(BlockPos thisPos) {
@@ -61,8 +60,8 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
     }
 
     @Override
-    public CrystalProperties getTransmissionProperties() {
-        return properties;
+    public CrystalAttributes getTransmissionProperties() {
+        return attributes;
     }
 
     @Override
@@ -75,7 +74,7 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
     public void readFromNBT(CompoundNBT compound) {
         super.readFromNBT(compound);
 
-        this.properties = CrystalProperties.readFromNBT(compound);
+        this.attributes = CrystalAttributes.getCrystalAttributes(compound);
         this.additionalLoss = compound.getFloat("lossMultiplier");
     }
 
@@ -83,7 +82,9 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
     public void writeToNBT(CompoundNBT compound) {
         super.writeToNBT(compound);
 
-        this.properties.writeToNBT(compound);
+        if (this.attributes != null) {
+            this.attributes.store(compound);
+        }
         compound.putFloat("lossMultiplier", this.additionalLoss);
     }
 

@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.registry.internal;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
+import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
@@ -72,6 +74,8 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(ConstellationEffectProvider.class, this::registerConstellationEffects);
         eventBus.addGenericListener(PerkAttributeType.class, this::registerPerkAttributeTypes);
         eventBus.addGenericListener(ContainerType.class, this::registerContainerTypes);
+        eventBus.addGenericListener(CrystalProperty.class, this::registerCrystalProperties);
+        eventBus.addGenericListener(PropertyUsage.class, this::registerCrystalUsages);
     }
 
     //This exists because you can't sort registries in any fashion or make one load after another in forge.
@@ -85,6 +89,10 @@ public class PrimerEventHandler {
         RegistryKnowledgeFragments.init();
 
         RegistryPerkAttributeTypes.init();
+
+        RegistryCrystalProperties.init();
+        RegistryCrystalPropertyUsages.init();
+        RegistryCrystalProperties.initDefaultAttributes();
 
         RegistryRecipeTypes.init();
         RegistryRecipeSerializers.init();
@@ -152,6 +160,14 @@ public class PrimerEventHandler {
 
     private void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event) {
         RegistryContainerTypes.init();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerCrystalProperties(RegistryEvent.Register<CrystalProperty> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerCrystalUsages(RegistryEvent.Register<PropertyUsage> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

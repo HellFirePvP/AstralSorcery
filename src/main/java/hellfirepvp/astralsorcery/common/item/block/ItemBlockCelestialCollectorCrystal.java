@@ -9,10 +9,10 @@
 package hellfirepvp.astralsorcery.common.item.block;
 
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,12 +34,7 @@ public class ItemBlockCelestialCollectorCrystal extends ItemBlockCollectorCrysta
     }
 
     @Override
-    public int getMaxPropertySize(ItemStack stack) {
-        return CrystalProperties.MAX_SIZE_CELESTIAL;
-    }
-
-    @Override
-    public CrystalProperties getMaxProperties(ItemStack stack) {
-        return CrystalProperties.getMaxCelestialProperties();
+    protected CrystalAttributes getCreativeTemplateAttributes() {
+        return CrystalPropertiesAS.CREATIVE_CELESTIAL_COLLECTOR_ATTRIBUTES;
     }
 }

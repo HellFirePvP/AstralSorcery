@@ -34,6 +34,10 @@ public class ConstellationEffectProperties {
         return size;
     }
 
+    public void multiplySize(double multiplier) {
+        this.size *= multiplier;
+    }
+
     public double getPotency() {
         return potency;
     }

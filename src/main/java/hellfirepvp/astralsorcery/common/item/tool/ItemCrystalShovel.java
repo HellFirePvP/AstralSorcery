@@ -9,9 +9,8 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -42,15 +41,14 @@ public class ItemCrystalShovel extends ItemCrystalTierItem {
             .build();
 
     public ItemCrystalShovel() {
-        super(1, ToolType.SHOVEL, new Properties(), Sets.newHashSet(Material.SNOW, Material.SNOW_BLOCK));
+        super(ToolType.SHOVEL, new Properties(), Sets.newHashSet(Material.SNOW, Material.SNOW_BLOCK));
     }
 
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
         if (this.isInGroup(group)) {
-            CrystalProperties crystal = CrystalProperties.getMaxCelestialProperties();
             ItemStack stack = new ItemStack(this);
-            setToolProperties(stack, ToolCrystalProperties.merge(crystal));
+            CrystalPropertiesAS.CREATIVE_CRYSTAL_TOOL_ATTRIBUTES.store(stack);
             stacks.add(stack);
         }
     }

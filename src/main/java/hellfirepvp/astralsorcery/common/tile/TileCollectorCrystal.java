@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationTile;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeTile;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
@@ -20,8 +22,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileSourceBase;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyTile;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -38,7 +38,7 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 10.08.2019 / 19:55
  */
-public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourceNode> implements CrystalPropertyTile, ConstellationTile {
+public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourceNode> implements CrystalAttributeTile, ConstellationTile {
 
     private static final BlockPos[] OFFSETS_LIQUID_STARLIGHT = new BlockPos[] {
             new BlockPos(-1, -4, -1),
@@ -52,7 +52,7 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
     };
 
     private UUID playerUUID = null;
-    private CrystalProperties crystalProperties;
+    private CrystalAttributes crystalAttributes;
     private CollectorCrystalType collectorType;
     private IWeakConstellation constellationType;
     private IMinorConstellation constellationTrait;
@@ -109,8 +109,13 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
 
     @Nullable
     @Override
-    public CrystalProperties getCrystalProperties() {
-        return crystalProperties;
+    public CrystalAttributes getAttributes() {
+        return crystalAttributes;
+    }
+
+    @Override
+    public void setAttributes(@Nullable CrystalAttributes attributes) {
+        this.crystalAttributes = attributes;
     }
 
     public IWeakConstellation getConstellationType() {
@@ -129,10 +134,10 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
         return playerUUID;
     }
 
-    public void updateData(IWeakConstellation constellationType, IMinorConstellation constellationTrait, CrystalProperties properties, UUID playerUUID, CollectorCrystalType collectorType) {
+    public void updateData(IWeakConstellation constellationType, IMinorConstellation constellationTrait, CrystalAttributes attributes, UUID playerUUID, CollectorCrystalType collectorType) {
         this.constellationType = constellationType;
         this.constellationTrait = constellationTrait;
-        this.crystalProperties = properties;
+        this.crystalAttributes = attributes;
         this.playerUUID = playerUUID;
         this.collectorType = collectorType;
 
@@ -163,8 +168,9 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
             }
             return null;
         });
+        setAttributes(CrystalAttributes.getCrystalAttributes(compound));
+        this.crystalAttributes = CrystalAttributes.getCrystalAttributes(compound);
         this.collectorType = NBTHelper.readOptional(compound, "collectorType", (nbt) -> CollectorCrystalType.values()[nbt.getInt("collectorType")]);
-        this.crystalProperties = NBTHelper.readOptional(compound, "crystalProperties", CrystalProperties::readFromNBT);
         this.playerUUID = NBTHelper.readOptional(compound, "playerUUID", (nbt) -> nbt.getUniqueId("playerUUID"));
     }
 
@@ -172,10 +178,12 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
     public void writeCustomNBT(CompoundNBT compound) {
         super.writeCustomNBT(compound);
 
+        if (getAttributes() != null) {
+            getAttributes().store(compound);
+        }
         NBTHelper.writeOptional(compound, "constellationType", this.constellationType, (nbt, cst) -> cst.writeToNBT(nbt));
         NBTHelper.writeOptional(compound, "constellationTrait", this.constellationTrait, (nbt, cst) -> cst.writeToNBT(nbt));
         NBTHelper.writeOptional(compound, "collectorType", this.collectorType, (nbt, type) -> nbt.putInt("collectorType", type.ordinal()));
-        NBTHelper.writeOptional(compound, "crystalProperties", this.crystalProperties, (nbt, prop) -> prop.writeToNBT(nbt));
         NBTHelper.writeOptional(compound, "playerUUID", this.playerUUID, (nbt, uuid) -> nbt.putUniqueId("playerUUID", uuid));
     }
 

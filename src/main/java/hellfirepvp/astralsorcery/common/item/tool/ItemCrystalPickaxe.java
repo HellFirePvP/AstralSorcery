@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
 import com.google.common.collect.Sets;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -26,15 +26,14 @@ import net.minecraftforge.common.ToolType;
 public class ItemCrystalPickaxe extends ItemCrystalTierItem {
 
     public ItemCrystalPickaxe() {
-        super(3, ToolType.PICKAXE, new Properties(), Sets.newHashSet(Material.ROCK, Material.IRON, Material.ANVIL));
+        super(ToolType.PICKAXE, new Properties(), Sets.newHashSet(Material.ROCK, Material.IRON, Material.ANVIL));
     }
 
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
         if (this.isInGroup(group)) {
-            CrystalProperties crystal = CrystalProperties.getMaxCelestialProperties();
             ItemStack stack = new ItemStack(this);
-            setToolProperties(stack, ToolCrystalProperties.merge(crystal, crystal, crystal));
+            CrystalPropertiesAS.CREATIVE_CRYSTAL_TOOL_ATTRIBUTES.store(stack);
             stacks.add(stack);
         }
     }

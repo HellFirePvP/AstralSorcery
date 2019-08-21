@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
 import com.google.common.collect.Sets;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,15 +29,14 @@ import net.minecraft.world.World;
 public class ItemCrystalSword extends ItemCrystalTierItem {
 
     public ItemCrystalSword() {
-        super(2, null, new Properties(), Sets.newHashSet(Material.WEB));
+        super(null, new Properties(), Sets.newHashSet(Material.WEB));
     }
 
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
         if (this.isInGroup(group)) {
-            CrystalProperties crystal = CrystalProperties.getMaxCelestialProperties();
             ItemStack stack = new ItemStack(this);
-            setToolProperties(stack, ToolCrystalProperties.merge(crystal, crystal));
+            CrystalPropertiesAS.CREATIVE_CRYSTAL_TOOL_ATTRIBUTES.store(stack);
             stacks.add(stack);
         }
     }

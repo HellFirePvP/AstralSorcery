@@ -2,19 +2,15 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1,
+      "rolls": {
+        "type": "uniform",
+        "min": 1.0,
+        "max": 3.0
+      },
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
-            },
             {
               "function": "astralsorcery:random_crystal_property"
             },

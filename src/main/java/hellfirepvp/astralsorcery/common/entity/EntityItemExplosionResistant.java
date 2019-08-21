@@ -12,8 +12,10 @@ import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,28 +26,29 @@ import net.minecraft.world.World;
  */
 public class EntityItemExplosionResistant extends EntityItemHighlighted {
 
-    public EntityItemExplosionResistant(World world) {
-        super(EntityTypesAS.ITEM_EXPLOSION_RESISTANT, world);
-    }
-
     public EntityItemExplosionResistant(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
     }
 
-    public EntityItemExplosionResistant(World worldIn, double x, double y, double z) {
-        super(worldIn, x, y, z);
+    public EntityItemExplosionResistant(EntityType<? extends ItemEntity> type, World world, double x, double y, double z) {
+        super(type, world, x, y, z);
     }
 
-    public EntityItemExplosionResistant(World worldIn, double x, double y, double z, ItemStack stack) {
-        super(worldIn, x, y, z, stack);
+    public EntityItemExplosionResistant(EntityType<? extends ItemEntity> type, World world, double x, double y, double z, ItemStack stack) {
+        super(type, world, x, y, z, stack);
     }
 
     public static EntityType.IFactory<EntityItemExplosionResistant> factoryExplosionResistant() {
-        return (spawnEntity, world) -> new EntityItemExplosionResistant(world);
+        return (spawnEntity, world) -> new EntityItemExplosionResistant(EntityTypesAS.ITEM_EXPLOSION_RESISTANT, world);
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         return !source.isExplosion() && super.attackEntityFrom(source, amount);
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

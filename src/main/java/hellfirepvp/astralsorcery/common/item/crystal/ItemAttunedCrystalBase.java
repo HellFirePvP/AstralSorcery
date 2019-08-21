@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.constellation.*;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.data.research.GatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -21,9 +22,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -48,26 +47,28 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> toolTip, ITooltipFlag flag) {
-        Optional<Boolean> out = this.appendPropertyTooltip(stack, toolTip);
-        if (Screen.hasShiftDown() && out.isPresent()) {
+        CrystalAttributes.TooltipResult result = addCrystalPropertyToolTip(stack, toolTip);
+        if (result != null) {
             ProgressionTier tier = ResearchHelper.getClientProgress().getTierReached();
 
+            boolean addedMissing = result != CrystalAttributes.TooltipResult.ADDED_ALL;
             IWeakConstellation c = getAttunedConstellation(stack);
-            if (c != null) {
-                if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
+            if(c != null) {
+                if(GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
                     toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.attuned", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()))));
-                } else if (!out.get()) {
-                    toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("progress.missing.knowledge")));
-                    out = Optional.of(true);
+                } else if(!addedMissing) {
+                    toolTip.add(new TranslationTextComponent("progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    addedMissing = true;
                 }
             }
 
             IMinorConstellation tr = getTraitConstellation(stack);
-            if (tr != null) {
-                if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(tr)) {
-                    toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.trait", TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName()))));
-                } else if (!out.get()) {
-                    toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("progress.missing.knowledge")));
+            if(tr != null) {
+                if(GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(tr)) {
+                    toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.trait",
+                            TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName()))));
+                } else if(!addedMissing) {
+                    toolTip.add(new TranslationTextComponent("progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
                 }
             }
         }

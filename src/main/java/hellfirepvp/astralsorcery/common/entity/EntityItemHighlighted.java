@@ -12,10 +12,12 @@ import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -32,24 +34,25 @@ public class EntityItemHighlighted extends ItemEntity {
     private static final DataParameter<Integer> DATA_COLOR = EntityDataManager.createKey(EntityItemHighlighted.class, DataSerializers.VARINT);
     private static final int NO_COLOR = 0xFF000000;
 
-    public EntityItemHighlighted(World world) {
-        super(EntityTypesAS.ITEM_HIGHLIGHT, world);
-    }
-
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
     }
 
-    public EntityItemHighlighted(World worldIn, double x, double y, double z) {
-        super(worldIn, x, y, z);
+    public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world, double x, double y, double z) {
+        this(type, world);
+        this.setPosition(x, y, z);
+        this.rotationYaw = this.rand.nextFloat() * 360.0F;
+        this.setMotion(this.rand.nextDouble() * 0.2D - 0.1D, 0.2D, this.rand.nextDouble() * 0.2D - 0.1D);
     }
 
-    public EntityItemHighlighted(World worldIn, double x, double y, double z, ItemStack stack) {
-        super(worldIn, x, y, z, stack);
+    public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world, double x, double y, double z, ItemStack stack) {
+        this(type, world, x, y, z);
+        this.setItem(stack);
+        this.lifespan = stack.isEmpty() ? 6000 : stack.getEntityLifespan(world);
     }
 
     public static EntityType.IFactory<EntityItemHighlighted> factoryHighlighted() {
-        return (spawnEntity, world) -> new EntityItemHighlighted(world);
+        return (spawnEntity, world) -> new EntityItemHighlighted(EntityTypesAS.ITEM_HIGHLIGHT, world);
     }
 
     @Override
@@ -63,7 +66,7 @@ public class EntityItemHighlighted extends ItemEntity {
     }
 
     public boolean hasColor() {
-        return this.getDataManager().get(DATA_COLOR) == NO_COLOR;
+        return this.getDataManager().get(DATA_COLOR) != NO_COLOR;
     }
 
     @Nullable
@@ -73,5 +76,10 @@ public class EntityItemHighlighted extends ItemEntity {
         }
         int colorInt = this.getDataManager().get(DATA_COLOR);
         return new Color(colorInt, false);
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

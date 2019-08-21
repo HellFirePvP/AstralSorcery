@@ -6,29 +6,24 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.crystal;
+package hellfirepvp.astralsorcery.common.crystal;
 
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CrystalPropertyItem
+ * Class: CrystalAttributeItem
  * Created by HellFirePvP
- * Date: 21.07.2019 / 13:31
+ * Date: 20.08.2019 / 19:27
  */
-public interface CrystalPropertyItem {
-
-    int getMaxPropertySize(ItemStack stack);
-
-    CrystalProperties getMaxProperties(ItemStack stack);
+public interface CrystalAttributeItem {
 
     @Nullable
-    CrystalProperties getProperties(ItemStack stack);
+    CrystalAttributes getAttributes(ItemStack stack);
 
-    void applyCrystalProperties(ItemStack stack, @Nonnull CrystalProperties prop);
+    void setAttributes(ItemStack stack, @Nullable CrystalAttributes attributes);
 
 }

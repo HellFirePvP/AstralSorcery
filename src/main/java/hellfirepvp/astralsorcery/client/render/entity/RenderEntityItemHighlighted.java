@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.render.entity;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.common.entity.EntityItemHighlighted;
 import net.minecraft.client.Minecraft;
@@ -33,9 +34,11 @@ public class RenderEntityItemHighlighted extends ItemRenderer {
     @Override
     public void doRender(ItemEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         if (entity instanceof EntityItemHighlighted && ((EntityItemHighlighted) entity).hasColor()) {
-            RenderingDrawUtils.renderLightRayFan(x, y + 0.5, z,
+            GlStateManager.enableBlend();
+            RenderingDrawUtils.renderLightRayFan(x, y + 0.35, z,
                     ((EntityItemHighlighted) entity).getHighlightColor(), 160420L,
                     16, 12, 15);
+            GlStateManager.disableBlend();
         }
 
         super.doRender(entity, x, y, z, entityYaw, partialTicks);

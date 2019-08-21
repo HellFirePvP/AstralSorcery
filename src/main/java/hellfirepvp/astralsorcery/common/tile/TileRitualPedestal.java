@@ -18,6 +18,9 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeTile;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
@@ -26,8 +29,6 @@ import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.EffectIncrementer;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -62,7 +63,7 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 09.07.2019 / 19:25
  */
-public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitualPedestal> {
+public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitualPedestal> implements CrystalAttributeTile {
 
     public static final int MAX_MIRROR_COUNT = 5;
 
@@ -196,8 +197,8 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                 }
             }
 
-            CrystalProperties prop = this.getChannelingCrystalProperties();
-            if (prop != null && prop.getFracturation() > 0 && rand.nextFloat() < (prop.getFracturation() / 100F)) {
+            CrystalAttributes prop = this.getAttributes();
+            if (prop != null && rand.nextInt(4) == 0) {
                 for (int i = 0; i < 3; i++) {
                     Vector3 at = new Vector3(this)
                             .add(0.5, 1.35, 0.5)
@@ -324,12 +325,21 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     }
 
     @Nullable
-    public CrystalProperties getChannelingCrystalProperties() {
+    @Override
+    public CrystalAttributes getAttributes() {
         ItemStack crystal = this.inventory.getStackInSlot(0);
-        if (!crystal.isEmpty() && crystal.getItem() instanceof CrystalPropertyItem) {
-            return ((CrystalPropertyItem) crystal.getItem()).getProperties(crystal);
+        if (!crystal.isEmpty() && crystal.getItem() instanceof CrystalAttributeItem) {
+            return ((CrystalAttributeItem) crystal.getItem()).getAttributes(crystal);
         }
         return null;
+    }
+
+    @Override
+    public void setAttributes(@Nullable CrystalAttributes attributes) {
+        ItemStack crystal = this.inventory.getStackInSlot(0);
+        if (!crystal.isEmpty() && crystal.getItem() instanceof CrystalAttributeItem) {
+            ((CrystalAttributeItem) crystal.getItem()).setAttributes(crystal, attributes);
+        }
     }
 
     //=========================================================================================
@@ -374,20 +384,21 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     }
 
     //Stuff sent over from StarlightReceiverRitualPedestal
-    public void setReceiverData(boolean working, Map<BlockPos, Boolean> mirrorData, int fractureCount) {
+    public void setReceiverData(boolean working, Map<BlockPos, Boolean> mirrorData) {
         boolean needsReSync = false;
 
         this.working = working;
         this.offsetMirrors = new HashMap<>(mirrorData);
 
-        CrystalProperties prop = this.getChannelingCrystalProperties();
-        if (prop != null && fractureCount > 0) {
+        /*
+        TODO fracturing from network node?
+        CrystalAttributes prop = this.getAttributes();
+        if (prop != null) {
             prop = new CrystalProperties(prop.getSize(), prop.getPurity(),
                     prop.getCollectiveCapability(), prop.getFracturation() + fractureCount, prop.getSizeOverride());
 
             if (prop.getFracturation() >= 100) {
                 SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, getWorld(), getPos(), 7.5F, 1.4F);
-                //TODO shatter effect
 
                 this.inventory.setStackInSlot(0, ItemStack.EMPTY);
             } else {
@@ -396,18 +407,12 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
 
             needsReSync = true;
         }
+        */
 
         this.markForUpdate();
 
         if (!needsReSync) {
             this.preventNetworkSync();
-        }
-    }
-
-    private void setChannelingCrystalProperties(CrystalProperties prop) {
-        ItemStack crystal = this.inventory.getStackInSlot(0);
-        if (!crystal.isEmpty() && crystal.getItem() instanceof CrystalPropertyItem) {
-            ((CrystalPropertyItem) crystal.getItem()).applyCrystalProperties(crystal, prop);
         }
     }
 
