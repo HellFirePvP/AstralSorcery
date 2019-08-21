@@ -10,13 +10,12 @@ package hellfirepvp.astralsorcery.common.util.loot;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyItem;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyTile;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeTile;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootFunction;
 import net.minecraft.world.storage.loot.LootParameters;
@@ -39,10 +38,10 @@ public class CopyCrystalProperties extends LootFunction {
     protected ItemStack doApply(ItemStack stack, LootContext context) {
         if (context.has(LootParameters.BLOCK_ENTITY)) {
             TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
-            if (tile instanceof CrystalPropertyTile && stack.getItem() instanceof CrystalPropertyItem) {
-                CrystalProperties prop = ((CrystalPropertyTile) tile).getCrystalProperties();
-                if (prop != null) {
-                    ((CrystalPropertyItem) stack.getItem()).applyCrystalProperties(stack, prop);
+            if (tile instanceof CrystalAttributeTile && stack.getItem() instanceof CrystalAttributeItem) {
+                CrystalAttributes attr = ((CrystalAttributeTile) tile).getAttributes();
+                if (attr != null) {
+                    ((CrystalAttributeItem) stack.getItem()).setAttributes(stack, attr);
                 }
             }
         }

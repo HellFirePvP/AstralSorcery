@@ -6,20 +6,18 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.crystal;
-
-import javax.annotation.Nullable;
+package hellfirepvp.astralsorcery.common.crystal;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CrystalPropertyTile
+ * Class: CrystalAttributeGenItem
  * Created by HellFirePvP
- * Date: 16.08.2019 / 06:20
+ * Date: 20.08.2019 / 20:14
  */
-public interface CrystalPropertyTile {
+public interface CrystalAttributeGenItem extends CrystalAttributeItem {
 
-    @Nullable
-    CrystalProperties getCrystalProperties();
+    int getGeneratedPropertyTiers();
 
+    int getMaxPropertyTiers();
 }

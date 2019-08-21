@@ -10,16 +10,17 @@ package hellfirepvp.astralsorcery.common.item.block;
 
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
 import hellfirepvp.astralsorcery.common.constellation.*;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
+import hellfirepvp.astralsorcery.common.crystal.CrystalPropertyRegistry;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -29,7 +30,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 10.08.2019 / 20:58
  */
-public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implements CrystalPropertyItem, ConstellationItem {
+public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implements CrystalAttributeItem, ConstellationItem {
 
     public ItemBlockCollectorCrystal(Block block, Properties itemProperties) {
         super(block, itemProperties
@@ -43,13 +44,22 @@ public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implemen
             for (IWeakConstellation cst : ConstellationRegistry.getWeakConstellations()) {
                 ItemStack stack = new ItemStack(this);
                 setAttunedConstellation(stack, cst);
-                applyCrystalProperties(stack, getMaxProperties(stack));
+
+                CrystalProperty prop = CrystalPropertyRegistry.INSTANCE.getConstellationProperty(cst);
+                CrystalAttributes attr = this.getCreativeTemplateAttributes();
+                if (prop != null) {
+                    attr = attr.modifyLevel(prop, prop.getMaxTier());
+                }
+                attr.store(stack);
+
                 stacks.add(stack);
             }
         }
     }
 
     public abstract CollectorCrystalType getCollectorType();
+
+    protected abstract CrystalAttributes getCreativeTemplateAttributes();
 
     @Override
     public IWeakConstellation getAttunedConstellation(ItemStack stack) {
@@ -83,12 +93,16 @@ public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implemen
 
     @Nullable
     @Override
-    public CrystalProperties getProperties(ItemStack stack) {
-        return CrystalProperties.getCrystalProperties(stack);
+    public CrystalAttributes getAttributes(ItemStack stack) {
+        return CrystalAttributes.getCrystalAttributes(stack);
     }
 
     @Override
-    public void applyCrystalProperties(ItemStack stack, @Nonnull CrystalProperties prop) {
-        CrystalProperties.applyCrystalProperties(stack, prop);
+    public void setAttributes(ItemStack stack, @Nullable CrystalAttributes attributes) {
+        if (attributes != null) {
+            attributes.store(stack);
+        } else {
+            CrystalAttributes.storeNull(stack);
+        }
     }
 }

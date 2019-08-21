@@ -1,0 +1,130 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2019
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.crystal;
+
+import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+
+import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Properties.*;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: CrystalGenerator
+ * Created by HellFirePvP
+ * Date: 03.02.2019 / 10:08
+ */
+public class CrystalGenerator {
+
+    private static final int COUNT_PHYSICAL_PROPERTY_TIERS = 5;
+    private static final float CHANCE_PHYSICAL_PROPERTIES = 0.8F;
+    private static final List<CrystalProperty> PHYSICAL_PROPERTIES = Lists.newArrayList(
+            PROPERTY_SIZE,
+            PROPERTY_SHAPE,
+            PROPERTY_PURITY
+    );
+
+    private static final int COUNT_USAGE_PROPERTY_TIERS = 4;
+    private static final float CHANCE_USAGE_PROPERTIES = 0.75F;
+    private static final List<CrystalProperty> USAGE_PROPERTIES = Lists.newArrayList(
+            PROPERTY_TOOL_DURABILITY,
+            PROPERTY_TOOL_EFFICIENCY,
+
+            PROPERTY_RITUAL_RANGE,
+            PROPERTY_RITUAL_EFFECT,
+            PROPERTY_COLLECTOR_COLLECTION_RATE
+    );
+
+    private static final Random RAND = new Random();
+
+    public static CrystalProperty getRandomProperty() {
+        return getRandomProperty(RAND);
+    }
+
+    public static CrystalProperty getRandomProperty(Random random) {
+        if (random.nextFloat() <= CHANCE_PHYSICAL_PROPERTIES) {
+            return MiscUtils.getRandomEntry(PHYSICAL_PROPERTIES, random);
+        }
+        if (random.nextFloat() <= CHANCE_USAGE_PROPERTIES) {
+            return MiscUtils.getRandomEntry(USAGE_PROPERTIES, random);
+        }
+
+        Collection<CrystalProperty> remaining = new ArrayList<>(RegistriesAS.REGISTRY_CRYSTAL_PROPERTIES.getValues());
+        remaining.removeAll(USAGE_PROPERTIES);
+        remaining.removeAll(PHYSICAL_PROPERTIES);
+        return MiscUtils.getRandomEntry(remaining, random);
+    }
+
+    public static CrystalAttributes generate(ItemStack item) {
+        return generate(item, RAND);
+    }
+
+    public static CrystalAttributes generate(ItemStack item, Random random) {
+        int toGenerate = 4;
+        if (item.getItem() instanceof CrystalAttributeGenItem) {
+            toGenerate = ((CrystalAttributeGenItem) item.getItem()).getGeneratedPropertyTiers();
+        }
+        CrystalAttributes.Builder attrBuilder = CrystalAttributes.Builder.newBuilder(false);
+
+        int totalAdded = 0;
+        for (int x = 0; x < COUNT_PHYSICAL_PROPERTY_TIERS; x++) {
+            if (totalAdded >= toGenerate) {
+                break;
+            }
+            if (random.nextFloat() <= CHANCE_PHYSICAL_PROPERTIES) {
+                while (!addRandomProperty(attrBuilder, PHYSICAL_PROPERTIES, random)) {}
+                totalAdded++;
+            }
+        }
+        for (int x = 0; x < COUNT_USAGE_PROPERTY_TIERS; x++) {
+            if (totalAdded >= toGenerate) {
+                break;
+            }
+            if (random.nextFloat() <= CHANCE_USAGE_PROPERTIES) {
+                while (!addRandomProperty(attrBuilder, USAGE_PROPERTIES, random)) {}
+                totalAdded++;
+            }
+        }
+
+        Collection<CrystalProperty> remaining = new ArrayList<>(RegistriesAS.REGISTRY_CRYSTAL_PROPERTIES.getValues());
+        remaining.removeAll(USAGE_PROPERTIES);
+        remaining.removeAll(PHYSICAL_PROPERTIES);
+        while (totalAdded < toGenerate) {
+            while (!addRandomProperty(attrBuilder, remaining, random)) {}
+            totalAdded++;
+        }
+
+        return attrBuilder.build();
+    }
+
+    private static boolean addRandomProperty(CrystalAttributes.Builder builder, Collection<CrystalProperty> properties,
+                                             Random random) {
+        List<CrystalProperty> existing = builder.getProperties();
+        existing.removeIf(o -> !properties.contains(o));
+        existing.removeIf(property -> builder.getPropertyLvl(property, 0) >= property.getMaxTier());
+        CrystalProperty propExisting = MiscUtils.getRandomEntry(existing, random);
+        CrystalProperty prop = (random.nextFloat() <= 0.85F && propExisting != null) ? propExisting :
+                MiscUtils.getRandomEntry(properties, random);
+        int existingLvl = builder.getPropertyLvl(prop, 0);
+        if (existingLvl < prop.getMaxTier()) {
+            builder.addProperty(prop, 1);
+            return true;
+        }
+        return false;
+    }
+
+}

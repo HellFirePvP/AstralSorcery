@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entity.EntityItemExplosionResistant;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
+import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -102,7 +103,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor {
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        EntityItemExplosionResistant res = new EntityItemExplosionResistant(world, location.posX, location.posY, location.posZ, itemstack);
+        EntityItemExplosionResistant res = new EntityItemExplosionResistant(EntityTypesAS.ITEM_EXPLOSION_RESISTANT, world, location.posX, location.posY, location.posZ, itemstack);
         res.setDefaultPickupDelay();
         res.setMotion(location.getMotion());
         if (location instanceof ItemEntity) {

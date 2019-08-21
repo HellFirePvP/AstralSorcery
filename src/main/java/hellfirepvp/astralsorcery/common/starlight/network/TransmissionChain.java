@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.crystal.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.data.sync.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.sync.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
@@ -19,8 +20,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalCalculations;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -111,8 +110,7 @@ public class TransmissionChain {
     private void recBuildChain(IPrismTransmissionNode node, float lossMultiplier, LinkedList<BlockPos> prevPath) {
         if(lossMultiplier <= 0.001F) return; //No. we don't transfer a part less than 0.1% of the starlight.
 
-        CrystalProperties properties = node.getTransmissionProperties();
-        float lossPerc = CrystalCalculations.getThroughputMultiplier(properties);
+        float lossPerc = CrystalCalculations.getThroughputMultiplier(node.getTransmissionProperties());
         lossPerc *= node.getAdditionalTransmissionLossMultiplier();
         List<NodeConnection<IPrismTransmissionNode>> next = node.queryNext(handler);
         float nextLoss = (lossMultiplier * lossPerc) / ((float) next.size());

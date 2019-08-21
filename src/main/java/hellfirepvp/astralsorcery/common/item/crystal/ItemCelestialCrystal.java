@@ -10,14 +10,14 @@ package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import java.util.Random;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,37 +35,31 @@ public class ItemCelestialCrystal extends ItemCrystalBase implements ItemGatedVi
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (this.isInGroup(group)) {
-            ItemStack stack = new ItemStack(this);
-            this.applyProperties(stack, CrystalProperties.getMaxCelestialProperties());
-
-            items.add(stack);
-        }
-    }
-
-    @Override
-    public int getMaxPropertySize(ItemStack stack) {
-        return CrystalProperties.MAX_SIZE_CELESTIAL;
-    }
-
-    @Override
-    public CrystalProperties getMaxProperties(ItemStack stack) {
-        return CrystalProperties.getMaxCelestialProperties();
-    }
-
-    @Override
-    public Item getAttunedVariant() {
-        return null;
-    }
-
-    @Override
-    public CrystalProperties generateRandom(Random rand) {
-        return CrystalProperties.createRandomCelestial();
-    }
-
-    @Override
     public boolean isSupposedToSeeInRender(ItemStack stack) {
         return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT);
+    }
+
+    protected Color getItemEntityColor(ItemStack stack) {
+        return ColorsAS.CELESTIAL_CRYSTAL;
+    }
+
+    @Override
+    public int getGeneratedPropertyTiers() {
+        return 12;
+    }
+
+    @Override
+    public int getMaxPropertyTiers() {
+        return 18;
+    }
+
+    @Override
+    public ItemAttunedCrystalBase getTunedItemVariant() {
+        return ItemsAS.ATTUNED_CELESTIAL_CRYSTAL;
+    }
+
+    @Override
+    public ItemCrystalBase getInertDuplicateItem() {
+        return ItemsAS.CELESTIAL_CRYSTAL;
     }
 }

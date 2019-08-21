@@ -11,10 +11,8 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityEmpty;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlighted;
-import hellfirepvp.astralsorcery.common.entity.EntityIlluminationSpark;
-import hellfirepvp.astralsorcery.common.entity.EntityItemExplosionResistant;
-import hellfirepvp.astralsorcery.common.entity.EntityItemHighlighted;
-import hellfirepvp.astralsorcery.common.entity.EntityNocturnalSpark;
+import hellfirepvp.astralsorcery.common.entity.*;
+import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -62,7 +60,7 @@ public class RegistryEntities {
                         .setUpdateInterval(1)
                         .setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(16)
-                        .setCustomClientFactory(((spawnEntity, world) -> new EntityItemHighlighted(world)))
+                        .setCustomClientFactory(((spawnEntity, world) -> new EntityItemHighlighted(ITEM_HIGHLIGHT, world)))
                         .size(0.25F, 0.25F));
         ITEM_EXPLOSION_RESISTANT = register("item_explosion_resistant",
                 EntityType.Builder.create(EntityItemExplosionResistant.factoryExplosionResistant(), EntityClassification.MISC)
@@ -70,7 +68,15 @@ public class RegistryEntities {
                         .setUpdateInterval(1)
                         .setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(16)
-                        .setCustomClientFactory(((spawnEntity, world) -> new EntityItemExplosionResistant(world)))
+                        .setCustomClientFactory(((spawnEntity, world) -> new EntityItemExplosionResistant(ITEM_EXPLOSION_RESISTANT, world)))
+                        .size(0.25F, 0.25F));
+        ITEM_CRYSTAL = register("item_crystal",
+                EntityType.Builder.create(EntityCrystal.factoryCrystal(), EntityClassification.MISC)
+                        .disableSummoning()
+                        .setUpdateInterval(1)
+                        .setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(16)
+                        .setCustomClientFactory(((spawnEntity, world) -> new EntityCrystal(ITEM_CRYSTAL, world)))
                         .size(0.25F, 0.25F));
     }
 

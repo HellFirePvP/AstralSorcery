@@ -8,11 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.starlight.transmission;
 
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -31,6 +31,7 @@ import java.util.Random;
  */
 public interface IPrismTransmissionNode extends ILocatable {
 
+    public static final CrystalAttributes EMPTY = CrystalAttributes.Builder.newBuilder(false).build();
     public static final Random rand = new Random();
 
     //Get the exact position of this Node
@@ -38,8 +39,8 @@ public interface IPrismTransmissionNode extends ILocatable {
 
     //Get his node's transmission properties to calculate transmission loss and so on
     //Arbitrarily this returns a max. sized Property by default...
-    default public CrystalProperties getTransmissionProperties() {
-        return CrystalProperties.getMaxCelestialProperties();
+    default public CrystalAttributes getTransmissionProperties() {
+        return EMPTY;
     }
 
     //Used to push update from the tileentity owning this node (potentially)

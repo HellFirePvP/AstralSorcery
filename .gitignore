@@ -54,4 +54,4 @@ hs_err_pid*
 
 # For good measure...
 *.jks
-gradle.properties
+gradle.attributes

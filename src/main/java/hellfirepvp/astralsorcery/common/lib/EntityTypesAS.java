@@ -8,10 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.entity.EntityIlluminationSpark;
-import hellfirepvp.astralsorcery.common.entity.EntityItemExplosionResistant;
-import hellfirepvp.astralsorcery.common.entity.EntityItemHighlighted;
-import hellfirepvp.astralsorcery.common.entity.EntityNocturnalSpark;
+import hellfirepvp.astralsorcery.common.entity.*;
 import net.minecraft.entity.EntityType;
 
 /**
@@ -30,5 +27,6 @@ public class EntityTypesAS {
 
     public static EntityType<EntityItemHighlighted> ITEM_HIGHLIGHT;
     public static EntityType<EntityItemExplosionResistant> ITEM_EXPLOSION_RESISTANT;
+    public static EntityType<EntityCrystal> ITEM_CRYSTAL;
 
 }

@@ -18,6 +18,8 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.crystal.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
@@ -25,8 +27,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalCalculations;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
@@ -40,6 +40,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -82,14 +83,13 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     private boolean doesSeeSky = false, hasMultiblock = false;
     private IWeakConstellation channelingType = null;
     private IMinorConstellation channelingTrait = null;
-    private CrystalProperties properties = null;
+    private CrystalAttributes attributes = null;
     private BlockPos ritualLinkPos = null;
 
     //Random other data
     private int ticksExisted = 0;
     private ConstellationEffect effect = null;
     private double collectedStarlight = 0;
-    private int fracturationToSync = 0;
 
     private boolean needsTileSync = false;
     private float noiseDistribution = -1;
@@ -106,11 +106,8 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             this.needsTileSync = false;
         }
 
-        if (!this.hasMultiblock || this.channelingType == null || this.properties == null) {
+        if (!this.hasMultiblock || this.channelingType == null || this.attributes == null) {
             return;
-        }
-        if (this.properties.getFracturation() + this.fracturationToSync > 100) {
-            return; //Crystal will shatter the next time the tile ticks. No need to run the ritual.
         }
 
         if ((this.ticksExisted % 20) == 0) {
@@ -131,16 +128,21 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         if (this.channelingTrait != null) {
             properties.modify(this.channelingTrait);
         }
+        properties.multiplySize(CrystalCalculations.getRitualEffectRangeFactor(this, this.attributes));
 
-        double maxDrain = 14D;
-        maxDrain /= CrystalCalculations.getMaxRitualReduction(this.properties);
+        double maxDrain = 12D;
+        maxDrain *= CrystalCalculations.getRitualCostReductionFactor(this, this.attributes);
         maxDrain /= Math.max(1, this.getMirrorCount() - 1);
         collectedStarlight *= properties.getPotency();
         int executeTimes = MathHelper.floor(collectedStarlight / maxDrain);
 
-        int freeCap = MathHelper.floor(CrystalCalculations.getChannelingCapacity(this.properties) * properties.getFracturationLowerBoundaryMultiplier());
-        double addFractureChance = CrystalCalculations.getFractureChance(executeTimes, freeCap) * CrystalCalculations.getCstFractureModifier(this.channelingType) * properties.getFracturationRate();
-        int part = Math.max(1, executeTimes - freeCap);
+        // Ranges from 1 to 23.21637[...]
+        int nonFracturingExecutions = MathHelper.floor(
+                Math.max(1, Math.sqrt(CrystalCalculations.getRitualEffectCapacityFactor(this, this.attributes)) * 10) *
+                        properties.getFracturationLowerBoundaryMultiplier());
+        double fractureChancePer = CrystalCalculations.getRitualCrystalFractureChance(executeTimes, nonFracturingExecutions)
+                * properties.getFracturationRate();
+        int part = Math.max(1, executeTimes - nonFracturingExecutions);
 
         BlockPos to = getLocationPos();
         if (this.ritualLinkPos != null) {
@@ -151,7 +153,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             collectedStarlight = 0;
             if (((ConstellationEffectStatus) this.effect).runEffect(world, to, this.getMirrorCount(), properties, this.channelingTrait)) {
                 for (int i = 0; i < part; i++) {
-                    if(rand.nextFloat() < (addFractureChance * properties.getEffectAmplifier() / part)) {
+                    if(rand.nextFloat() < (fractureChancePer * properties.getEffectAmplifier() / part)) {
                         fractureCrystal();
                     }
                 }
@@ -168,7 +170,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
                 collectedStarlight = 0F;
             }
             if (this.effect.playEffect(world, to, properties, this.channelingTrait)) {
-                if (rand.nextFloat() < (addFractureChance * properties.getEffectAmplifier() / part)) {
+                if (rand.nextFloat() < (fractureChancePer * properties.getEffectAmplifier() / part)) {
                     fractureCrystal();
                 }
                 markDirty(world);
@@ -177,7 +179,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     }
 
     private void fractureCrystal() {
-        this.fracturationToSync++;
+        //TODO fracture?
     }
 
     private void collectStarlight(World world) {
@@ -192,8 +194,9 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             this.noiseDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, this.getLocationPos());
         }
 
-        collected *= 1F + (0.35F * ctx.getDistributionHandler().getDistribution(this.channelingType));
-        collected *= 1F + (0.4F * CrystalCalculations.getCollectionAmt(this.properties, noiseDistribution));
+        collected *= CrystalCalculations.getCrystalCollectionRate(attributes);
+        collected *= 0.2F + (0.8F * ctx.getDistributionHandler().getDistribution(this.channelingType));
+        collected *= 1F + (0.5F * this.noiseDistribution);
 
         this.collectedStarlight += collected / 2F;
     }
@@ -213,7 +216,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     private boolean syncData(World world) {
         TileRitualPedestal trp = this.getTileAtPos(world, TileRitualPedestal.class);
         if (trp != null) {
-            trp.setReceiverData(this.effect != null, this.offsetMirrors, this.fracturationToSync);
+            trp.setReceiverData(this.effect != null, this.offsetMirrors);
             return true;
         }
         return false;
@@ -227,7 +230,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
 
         TileRitualPedestal trp = (TileRitualPedestal) tile;
         if (this.channelingType != trp.getRitualConstellation() ||
-                (this.properties != null && trp.getChannelingCrystalProperties() == null) ||
+                (this.attributes != null && trp.getAttributes() == null) ||
                 this.hasMultiblock != trp.hasMultiblock()) {
 
             this.effect = null;
@@ -241,10 +244,10 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         this.hasMultiblock = trp.hasMultiblock();
         this.channelingType = trp.getRitualConstellation();
         this.channelingTrait = trp.getRitualTrait();
-        this.properties = trp.getChannelingCrystalProperties();
+        this.attributes = trp.getAttributes();
         this.ritualLinkPos = trp.getRitualLinkTo();
 
-        if (this.channelingType != null && this.properties != null && this.hasMultiblock && this.effect == null) {
+        if (this.channelingType != null && this.attributes != null && this.hasMultiblock && this.effect == null) {
             this.effect = ConstellationEffectRegistry.createInstance(this, this.channelingType);
             this.needsTileSync = true;
         }
@@ -349,6 +352,16 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     // Misc and I/O
     //=========================================================================================
 
+    @Nullable
+    public IWeakConstellation getChannelingType() {
+        return channelingType;
+    }
+
+    @Nullable
+    public IMinorConstellation getChannelingTrait() {
+        return channelingTrait;
+    }
+
     @Override
     public boolean needsUpdate() {
         return true;
@@ -383,11 +396,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             this.channelingTrait = null;
         }
 
-        if (compound.contains("crystal")) {
-            this.properties = CrystalProperties.readFromNBT(compound.getCompound("crystal"));
-        } else {
-            this.properties = null;
-        }
+        this.attributes = CrystalAttributes.getCrystalAttributes(compound);
         if (compound.contains("ritualLinkPos")) {
             this.ritualLinkPos = NBTHelper.readBlockPosFromNBT(compound.getCompound("ritualLinkPos"));
         } else {
@@ -428,8 +437,8 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             this.channelingTrait.writeToNBT(compound, "channelingTrait");
         }
 
-        if (this.properties != null) {
-            compound.put("crystal", this.properties.writeToNBT(new CompoundNBT()));
+        if (attributes != null) {
+            attributes.store(compound);
         }
         if (this.ritualLinkPos != null) {
             compound.put("ritualLinkPos", NBTHelper.writeBlockPosToNBT(this.ritualLinkPos, new CompoundNBT()));

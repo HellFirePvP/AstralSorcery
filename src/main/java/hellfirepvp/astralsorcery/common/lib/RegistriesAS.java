@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
+import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
@@ -40,6 +42,8 @@ public class RegistriesAS {
     public static final ResourceLocation REGISTRY_NAME_KNOWLEDGE_FRAGMENTS = new ResourceLocation(AstralSorcery.MODID, "knowledge_fragments");
     public static final ResourceLocation REGISTRY_NAME_PERK_ATTRIBUTE_TYPES = new ResourceLocation(AstralSorcery.MODID, "perk_attribute_types");
     public static final ResourceLocation REGISTRY_NAME_PERK_ATTRIBUTE_READERS = new ResourceLocation(AstralSorcery.MODID, "perk_attribute_readers");
+    public static final ResourceLocation REGISTRY_NAME_CRYSTAL_PROPERTIES = new ResourceLocation(AstralSorcery.MODID, "attribute_crystal_properties");
+    public static final ResourceLocation REGISTRY_NAME_CRYSTAL_USAGES = new ResourceLocation(AstralSorcery.MODID, "attribute_crystal_usages");
 
     public static IForgeRegistry<ConstellationEffectProvider> REGISTRY_CONSTELLATION_EFFECT;
     public static IForgeRegistry<IConstellation> REGISTRY_CONSTELLATIONS;
@@ -49,5 +53,7 @@ public class RegistriesAS {
     public static IForgeRegistry<KnowledgeFragment> REGISTRY_KNOWLEDGE_FRAGMENTS;
     public static IForgeRegistry<PerkAttributeType> REGISTRY_PERK_ATTRIBUTE_TYPES;
     public static IForgeRegistry<PerkAttributeReader> REGISTRY_PERK_ATTRIBUTE_READERS;
+    public static IForgeRegistry<CrystalProperty> REGISTRY_CRYSTAL_PROPERTIES;
+    public static IForgeRegistry<PropertyUsage> REGISTRY_CRYSTAL_USAGES;
 
 }

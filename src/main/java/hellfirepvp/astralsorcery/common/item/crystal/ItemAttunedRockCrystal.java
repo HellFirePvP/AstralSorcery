@@ -12,16 +12,13 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,36 +40,24 @@ public class ItemAttunedRockCrystal extends ItemAttunedCrystalBase implements It
             for (IWeakConstellation cst : ConstellationRegistry.getWeakConstellations()) {
                 ItemStack stack = new ItemStack(this);
                 setAttunedConstellation(stack, cst);
-                this.applyProperties(stack, CrystalProperties.getMaxRockProperties());
-
                 items.add(stack);
             }
         }
     }
 
     @Override
-    public int getMaxPropertySize(ItemStack stack) {
-        return CrystalProperties.MAX_SIZE_ROCK;
-    }
-
-    @Override
-    public CrystalProperties getMaxProperties(ItemStack stack) {
-        return CrystalProperties.getMaxRockProperties();
-    }
-
-    @Override
-    public Item getAttunedVariant() {
-        return this;
-    }
-
-    @Override
-    public CrystalProperties generateRandom(Random rand) {
-        return CrystalProperties.createRandomRock();
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
     public boolean isSupposedToSeeInRender(ItemStack stack) {
         return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT);
+    }
+
+    @Override
+    public ItemAttunedCrystalBase getTunedItemVariant() {
+        return ItemsAS.ATTUNED_ROCK_CRYSTAL;
+    }
+
+    @Override
+    public ItemCrystalBase getInertDuplicateItem() {
+        return ItemsAS.ROCK_CRYSTAL;
     }
 }

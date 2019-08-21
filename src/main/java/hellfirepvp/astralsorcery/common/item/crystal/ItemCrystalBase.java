@@ -8,23 +8,25 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyItem;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeGenItem;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.crystal.CrystalGenerator;
+import hellfirepvp.astralsorcery.common.entity.EntityCrystal;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +35,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 21.07.2019 / 12:58
  */
-public abstract class ItemCrystalBase extends Item implements CrystalPropertyItem {
+public abstract class ItemCrystalBase extends Item implements CrystalAttributeGenItem {
 
     public ItemCrystalBase(Properties prop) {
         super(prop.maxDamage(0));
@@ -41,13 +43,12 @@ public abstract class ItemCrystalBase extends Item implements CrystalPropertyIte
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean isSelected) {
-        CrystalProperties prop = getProperties(stack);
-        if (prop == null) {
-            this.applyProperties(stack, this.generateRandom(random));
-        } else {
-            if (prop.getFracturation() >= 100) {
-                stack.setCount(0);
-                entity.playSound(SoundEvents.ENTITY_ITEM_BREAK, 0.5F, random.nextFloat() * 0.2F + 0.8F);
+        if (!world.isRemote()) {
+            CrystalAttributes attributes = getAttributes(stack);
+
+            if (attributes == null && stack.getItem() instanceof CrystalAttributeGenItem) {
+                attributes = CrystalGenerator.generate(stack);
+                attributes.store(stack);
             }
         }
     }
@@ -55,32 +56,68 @@ public abstract class ItemCrystalBase extends Item implements CrystalPropertyIte
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> toolTip, ITooltipFlag flag) {
-        super.addInformation(stack, world, toolTip, flag);
-        this.appendPropertyTooltip(stack, toolTip);
-    }
-
-    public abstract Item getAttunedVariant();
-
-    public abstract CrystalProperties generateRandom(Random rand);
-
-    @Nullable
-    @Override
-    public CrystalProperties getProperties(ItemStack stack) {
-        return CrystalProperties.getCrystalProperties(stack);
-    }
-
-    @Override
-    public void applyCrystalProperties(ItemStack stack, @Nonnull CrystalProperties prop) {
-        applyProperties(stack, prop);
-    }
-
-    public void applyProperties(ItemStack stack, CrystalProperties properties) {
-        CrystalProperties.applyCrystalProperties(stack, properties);
+        this.addCrystalPropertyToolTip(stack, toolTip);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public Optional<Boolean> appendPropertyTooltip(ItemStack stack, List<ITextComponent> tooltip) {
-        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, getMaxPropertySize(stack));
+    protected CrystalAttributes.TooltipResult addCrystalPropertyToolTip(ItemStack stack, List<ITextComponent> tooltip) {
+        CrystalAttributes attr = getAttributes(stack);
+        if (attr != null) {
+            return attr.addTooltip(tooltip);
+        }
+        return CrystalAttributes.TooltipResult.ALL_MISSING;
     }
+
+    @Nullable
+    @Override
+    public CrystalAttributes getAttributes(ItemStack stack) {
+        return CrystalAttributes.getCrystalAttributes(stack);
+    }
+
+    @Override
+    public void setAttributes(ItemStack stack, @Nullable CrystalAttributes attributes) {
+        if (attributes != null) {
+            attributes.store(stack);
+        } else {
+            CrystalAttributes.storeNull(stack);
+        }
+    }
+
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+        EntityCrystal res = new EntityCrystal(EntityTypesAS.ITEM_CRYSTAL, world, location.posX, location.posY, location.posZ, itemstack);
+        res.setDefaultPickupDelay();
+        res.setMotion(location.getMotion());
+        if (location instanceof ItemEntity) {
+            res.setThrowerId(((ItemEntity) location).getThrowerId());
+            res.setOwnerId(((ItemEntity) location).getOwnerId());
+        }
+        res.applyColor(this.getItemEntityColor(itemstack));
+        return res;
+    }
+
+    @Override
+    public int getGeneratedPropertyTiers() {
+        return 8;
+    }
+
+    @Override
+    public int getMaxPropertyTiers() {
+        return 12;
+    }
+
+    protected Color getItemEntityColor(ItemStack stack) {
+        return ColorsAS.ROCK_CRYSTAL;
+    }
+
+    public abstract ItemAttunedCrystalBase getTunedItemVariant();
+
+    public abstract ItemCrystalBase getInertDuplicateItem();
 
 }

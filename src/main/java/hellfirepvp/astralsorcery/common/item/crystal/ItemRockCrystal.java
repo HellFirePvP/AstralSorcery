@@ -8,14 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,32 +26,12 @@ public class ItemRockCrystal extends ItemCrystalBase {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (this.isInGroup(group)) {
-            ItemStack stack = new ItemStack(this);
-            this.applyProperties(stack, CrystalProperties.getMaxRockProperties());
-
-            items.add(stack);
-        }
+    public ItemAttunedCrystalBase getTunedItemVariant() {
+        return ItemsAS.ATTUNED_ROCK_CRYSTAL;
     }
 
     @Override
-    public int getMaxPropertySize(ItemStack stack) {
-        return CrystalProperties.MAX_SIZE_ROCK;
-    }
-
-    @Override
-    public CrystalProperties getMaxProperties(ItemStack stack) {
-        return CrystalProperties.getMaxRockProperties();
-    }
-
-    @Override
-    public Item getAttunedVariant() {
-        return null;
-    }
-
-    @Override
-    public CrystalProperties generateRandom(Random rand) {
-        return CrystalProperties.createRandomRock();
+    public ItemCrystalBase getInertDuplicateItem() {
+        return ItemsAS.ROCK_CRYSTAL;
     }
 }

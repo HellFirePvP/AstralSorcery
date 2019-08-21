@@ -12,16 +12,16 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Random;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,36 +44,28 @@ public class ItemAttunedCelestialCrystal extends ItemAttunedCrystalBase implemen
             for (IWeakConstellation cst : ConstellationRegistry.getWeakConstellations()) {
                 ItemStack stack = new ItemStack(this);
                 setAttunedConstellation(stack, cst);
-                this.applyProperties(stack, CrystalProperties.getMaxCelestialProperties());
-
                 items.add(stack);
             }
         }
     }
 
     @Override
-    public int getMaxPropertySize(ItemStack stack) {
-        return CrystalProperties.MAX_SIZE_CELESTIAL;
-    }
-
-    @Override
-    public CrystalProperties getMaxProperties(ItemStack stack) {
-        return CrystalProperties.getMaxCelestialProperties();
-    }
-
-    @Override
-    public Item getAttunedVariant() {
-        return this;
-    }
-
-    @Override
-    public CrystalProperties generateRandom(Random rand) {
-        return CrystalProperties.createRandomCelestial();
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
     public boolean isSupposedToSeeInRender(ItemStack stack) {
         return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT);
+    }
+
+    protected Color getItemEntityColor(ItemStack stack) {
+        return ColorsAS.CELESTIAL_CRYSTAL;
+    }
+
+    @Override
+    public ItemAttunedCrystalBase getTunedItemVariant() {
+        return ItemsAS.ATTUNED_CELESTIAL_CRYSTAL;
+    }
+
+    @Override
+    public ItemCrystalBase getInertDuplicateItem() {
+        return ItemsAS.CELESTIAL_CRYSTAL;
     }
 }

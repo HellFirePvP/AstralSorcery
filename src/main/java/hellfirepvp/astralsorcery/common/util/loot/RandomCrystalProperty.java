@@ -10,17 +10,14 @@ package hellfirepvp.astralsorcery.common.util.loot;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import hellfirepvp.astralsorcery.common.item.crystal.ItemCrystalBase;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalProperties;
-import hellfirepvp.astralsorcery.common.util.crystal.CrystalPropertyItem;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeGenItem;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.crystal.CrystalGenerator;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootFunction;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,20 +28,15 @@ import java.util.Random;
  */
 public class RandomCrystalProperty extends LootFunction {
 
-    private static final Random rand = new Random();
-
     private RandomCrystalProperty(ILootCondition[] conditions) {
         super(conditions);
     }
 
     @Override
     protected ItemStack doApply(ItemStack itemStack, LootContext lootContext) {
-        CrystalProperties prop = CrystalProperties.createRandomRock();
-        if (itemStack.getItem() instanceof ItemCrystalBase) {
-            prop = ((ItemCrystalBase) itemStack.getItem()).generateRandom(rand);
-            ((ItemCrystalBase) itemStack.getItem()).applyProperties(itemStack, prop);
-        } else {
-            CrystalProperties.applyCrystalProperties(itemStack, prop);
+        if (itemStack.getItem() instanceof CrystalAttributeGenItem) {
+            CrystalAttributes attr = CrystalGenerator.generate(itemStack);
+            ((CrystalAttributeGenItem) itemStack.getItem()).setAttributes(itemStack, attr);
         }
         return itemStack;
     }

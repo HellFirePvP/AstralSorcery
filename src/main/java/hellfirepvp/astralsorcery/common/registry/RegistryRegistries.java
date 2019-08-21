@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
+import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
@@ -96,6 +98,20 @@ public class RegistryRegistries {
         REGISTRY_PERK_ATTRIBUTE_READERS = new RegistryBuilder<PerkAttributeReader>()
                 .setName(REGISTRY_NAME_PERK_ATTRIBUTE_READERS)
                 .setType(PerkAttributeReader.class)
+                .disableSaving()
+                .disableOverrides()
+                .create();
+
+        REGISTRY_CRYSTAL_PROPERTIES = new RegistryBuilder<CrystalProperty>()
+                .setName(REGISTRY_NAME_CRYSTAL_PROPERTIES)
+                .setType(CrystalProperty.class)
+                .disableSaving()
+                .disableOverrides()
+                .create();
+
+        REGISTRY_CRYSTAL_USAGES = new RegistryBuilder<PropertyUsage>()
+                .setName(REGISTRY_NAME_CRYSTAL_USAGES)
+                .setType(PropertyUsage.class)
                 .disableSaving()
                 .disableOverrides()
                 .create();
