@@ -52,6 +52,7 @@ public class RegistryTextures {
         TEX_GUI_CLUSTER_CONSTELLATION       = loadTexture(GUI, "cluster_constellation");
         TEX_GUI_CLUSTER_DISCOVERY           = loadTexture(GUI, "cluster_discovery");
         TEX_GUI_CLUSTER_RADIANCE            = loadTexture(GUI, "cluster_radiance");
+        TEX_GUI_BOOK_STRUCTURE_ICONS        = loadTexture(GUI, "book_structure_icons");
 
         TEX_GUI_PERK_INACTIVE               = loadTexture(EFFECT, "perk_inactive");
         TEX_GUI_PERK_ACTIVE                 = loadTexture(EFFECT, "perk_active");

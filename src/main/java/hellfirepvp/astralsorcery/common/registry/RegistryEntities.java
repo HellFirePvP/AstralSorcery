@@ -87,6 +87,7 @@ public class RegistryEntities {
 
         RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlighted.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityItemExplosionResistant.class, new RenderEntityItemHighlighted.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityCrystal.class, new RenderEntityItemHighlighted.Factory());
     }
 
     private static <E extends Entity> EntityType<E> register(String name, EntityType.Builder<E> typeBuilder) {

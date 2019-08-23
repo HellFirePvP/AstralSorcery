@@ -35,6 +35,11 @@ public class BlockAquamarineSandOre extends BlockSandTemplate {
     }
 
     @Override
+    public boolean isSolid(BlockState p_200124_1_) {
+        return true;
+    }
+
+    @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }

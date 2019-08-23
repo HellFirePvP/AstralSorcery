@@ -58,9 +58,7 @@ public class ItemWand extends Item {
 
         if (!world.isRemote()) {
             if (active) {
-                if (world.getGameTime() % 20 == 0 &&
-                        entity instanceof ServerPlayerEntity &&
-                        !DayTimeHelper.isDay(world)) {
+                if (entity instanceof ServerPlayerEntity) {
 
                     RockCrystalBuffer buf = DataAS.DOMAIN_AS.getData(world, DataAS.KEY_ROCK_CRYSTAL_BUFFER);
 
@@ -71,10 +69,40 @@ public class ItemWand extends Item {
                             buf.removeOre(rPos);
                             continue;
                         }
-                        PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_HIGHTLIGHT).setPos(new Vector3(rPos.up()));
-                        PacketChannel.CHANNEL.sendToPlayer((PlayerEntity) entity, pkt);
+                        if (!DayTimeHelper.isDay(world) && random.nextInt(30) == 0) {
+                            PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_COLUMN).setPos(new Vector3(rPos.up()));
+                            PacketChannel.CHANNEL.sendToPlayer((PlayerEntity) entity, pkt);
+                        }
+                        if (random.nextInt(14) == 0) {
+                            PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_SPARKS).setPos(new Vector3(rPos.up()));
+                            PacketChannel.CHANNEL.sendToPlayer((PlayerEntity) entity, pkt);
+                        }
                     }
                 }
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void playUndergroundEffect(PktPlayEffect effect) {
+        World world = Minecraft.getInstance().world;
+        if (world == null) {
+            return;
+        }
+
+        float dstr = 0.1F + 0.9F * DayTimeHelper.getCurrentDaytimeDistribution(world);
+        Vector3 plVec = Vector3.atEntityCorner(Minecraft.getInstance().player);
+        float dst = (float) effect.getPos().distance(plVec);
+        float dstMul = dst <= 25 ? 1F : (dst >= 50 ? 0F : (1F - (dst - 25F) / 25F));
+        for (int i = 0; i < 3; i++) {
+            if (random.nextBoolean()) {
+                EffectHelper.of(EffectTemplatesAS.GENERIC_DEPTH_PARTICLE)
+                        .spawn(effect.getPos().clone().add(-1 + random.nextFloat() * 3, -1 + random.nextFloat() * 3, -1 + random.nextFloat() * 3))
+                        .color(VFXColorFunction.constant(ColorsAS.ROCK_CRYSTAL))
+                        .setScaleMultiplier(0.4F)
+                        .setAlphaMultiplier(((150F * dstr) / 255F) * dstMul)
+                        .alpha(VFXAlphaFunction.FADE_OUT)
+                        .setMaxAge(30 + random.nextInt(10));
             }
         }
     }
@@ -93,40 +121,22 @@ public class ItemWand extends Item {
         MiscUtils.applyRandomOffset(columnDisplay, random, 2F);
 
         double mX = random.nextFloat() * 0.01F * (random.nextBoolean() ? 1 : -1);
-        double mY = random.nextFloat() * 0.3F;
+        double mY = random.nextFloat() * 0.5F;
         double mZ = random.nextFloat() * 0.01F * (random.nextBoolean() ? 1 : -1);
         float dstr = DayTimeHelper.getCurrentDaytimeDistribution(world);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 8 + random.nextInt(10); i++) {
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(columnDisplay)
                     .setMotion(new Vector3(
                             mX * (0.2 + 0.8 * random.nextFloat()),
-                            mY * (0.4 + 0.6 * random.nextFloat()),
+                            mY * (random.nextFloat()),
                             mZ * (0.2 + 0.8 * random.nextFloat())
                     ))
                     .color(VFXColorFunction.constant(ColorsAS.ROCK_CRYSTAL))
                     .setAlphaMultiplier((150 * dstr) / 255F)
-                    .setScaleMultiplier(0.7F)
-                    .setMaxAge(70);
-        }
-
-        dstr = MathHelper.sqrt(dstr);
-        dstr = MathHelper.sqrt(dstr);
-        Vector3 plVec = Vector3.atEntityCorner(Minecraft.getInstance().player);
-        float dst = (float) effect.getPos().distance(plVec);
-        float dstMul = dst <= 25 ? 1F : (dst >= 50 ? 0F : (1F - (dst - 25F) / 25F));
-        if (dstMul >= 1E-4) {
-            for (int i = 0; i < 3; i++) {
-                if (random.nextBoolean()) {
-                    EffectHelper.of(EffectTemplatesAS.GENERIC_DEPTH_PARTICLE)
-                            .spawn(effect.getPos().clone().add(-1 + random.nextFloat() * 3, -1 + random.nextFloat() * 3, -1 + random.nextFloat() * 3))
-                            .color(VFXColorFunction.constant(ColorsAS.ROCK_CRYSTAL))
-                            .setScaleMultiplier(0.4F)
-                            .setAlphaMultiplier(((150 * dstr) / 255F) * dstMul)
-                            .alpha(VFXAlphaFunction.FADE_OUT)
-                            .setMaxAge(30 + random.nextInt(10));
-                }
-            }
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .setScaleMultiplier(0.3F + 0.3F * random.nextFloat())
+                    .setMaxAge(25 + random.nextInt(30));
         }
     }
 }

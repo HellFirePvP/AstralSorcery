@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.block.ore;
 
 import hellfirepvp.astralsorcery.common.block.base.template.BlockRockTemplate;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
 
 /**
@@ -19,6 +20,11 @@ import net.minecraft.util.BlockRenderLayer;
  * Date: 21.07.2019 / 08:40
  */
 public class BlockStarmetalOre extends BlockRockTemplate {
+
+    @Override
+    public boolean isSolid(BlockState p_200124_1_) {
+        return true;
+    }
 
     @Override
     public BlockRenderLayer getRenderLayer() {

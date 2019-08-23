@@ -49,7 +49,7 @@ public class RandomReplaceablePlacement extends Placement<ReplacingFeaturePlacem
         BlockPos at = pos.add(random.nextInt(16), 0, random.nextInt(16));
         at = new BlockPos(at.getX(), configIn.getRandomY(random), at.getZ());
 
-        if (!configIn.canPlace(worldIn, at, random)) {
+        if (configIn.canPlace(worldIn, at, random)) {
             result.add(at);
         }
 

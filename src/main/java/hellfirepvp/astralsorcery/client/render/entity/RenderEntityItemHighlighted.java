@@ -36,7 +36,7 @@ public class RenderEntityItemHighlighted extends ItemRenderer {
         if (entity instanceof EntityItemHighlighted && ((EntityItemHighlighted) entity).hasColor()) {
             GlStateManager.enableBlend();
             RenderingDrawUtils.renderLightRayFan(x, y + 0.35, z,
-                    ((EntityItemHighlighted) entity).getHighlightColor(), 160420L,
+                    ((EntityItemHighlighted) entity).getHighlightColor(), 160420L + entity.getEntityId(),
                     16, 12, 15);
             GlStateManager.disableBlend();
         }
