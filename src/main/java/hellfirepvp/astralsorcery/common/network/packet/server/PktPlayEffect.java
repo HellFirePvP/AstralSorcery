@@ -138,14 +138,17 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
 
     public static enum Type {
 
-        ROCK_CRYSTAL_HIGHTLIGHT,
+        ROCK_CRYSTAL_COLUMN,
+        ROCK_CRYSTAL_SPARKS,
         WELL_CATALYST_BREAK;
 
         @OnlyIn(Dist.CLIENT)
         private Consumer<PktPlayEffect> runEffect() {
             switch (this) {
-                case ROCK_CRYSTAL_HIGHTLIGHT:
+                case ROCK_CRYSTAL_COLUMN:
                     return ItemWand::playEffect;
+                case ROCK_CRYSTAL_SPARKS:
+                    return ItemWand::playUndergroundEffect;
                 case WELL_CATALYST_BREAK:
                     return TileWell::catalystBurst;
             }

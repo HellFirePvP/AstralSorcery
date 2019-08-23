@@ -22,10 +22,12 @@ import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.order.DependencySorter;
+import hellfirepvp.observerlib.common.util.AlternatingSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 
@@ -44,9 +46,8 @@ public final class EffectHandler {
     private boolean cleanRequested = false;
     private boolean acceptsNewEffects = false; //Wait for 1st tick to finish.
     private List<PendingEffect> toAddBuffer = Lists.newLinkedList();
-    private List<FXSource<?, ?>> toAddSources = Lists.newLinkedList();
 
-    private List<FXSource<?, ?>> activeSources = Lists.newLinkedList();
+    private AlternatingSet<FXSource<?, ?>> sources = new AlternatingSet<>();
     private List<BatchRenderContext<?>> orderedEffects = null;
     private Map<BatchRenderContext<?>, List<PendingEffect>> effectMap = Maps.newHashMap();
 
@@ -86,8 +87,7 @@ public final class EffectHandler {
     void tick() {
         if (this.cleanRequested) {
             this.toAddBuffer.clear();
-            this.toAddSources.clear();
-            this.activeSources.clear();
+            this.sources.clear();
             this.effectMap.values().forEach(List::clear);
             this.cleanRequested = false;
         }
@@ -122,32 +122,26 @@ public final class EffectHandler {
             }
         });
 
-        Iterator<FXSource<?, ?>> iterator = this.activeSources.iterator();
-        while (iterator.hasNext()) {
-            FXSource<?, ?> src = iterator.next();
-
-            src.tick();
-            src.tickSpawnFX(new EffectRegistrar(src));
-            if (src.canRemove()) {
-                iterator.remove();
-                src.flagAsRemoved();
-            }
-        }
+        try {
+            this.sources.forEach(src -> {
+                src.tick();
+                src.tickSpawnFX(new EffectRegistrar(src));
+                if (src.canRemove()) {
+                    src.flagAsRemoved();
+                    return false;
+                }
+                return true;
+            });
+        } catch (IOException ignored) {}
 
         this.acceptsNewEffects = true;
 
-        this.activeSources.addAll(this.toAddSources);
-        this.toAddSources.clear();
         this.toAddBuffer.forEach(this::registerUnsafe);
         this.toAddBuffer.clear();
     }
 
     void queueSource(FXSource<?, ?> source) {
-        if (this.acceptsNewEffects) {
-            this.activeSources.add(source);
-        } else {
-            this.toAddSources.add(source);
-        }
+        this.sources.add(source);
     }
 
     void queueParticle(PendingEffect pendingEffect) {

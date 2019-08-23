@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.world.feature.RockCrystalFeature;
 import hellfirepvp.astralsorcery.common.world.feature.StructureGenerationFeature;
 import hellfirepvp.astralsorcery.common.world.placement.EvenStructurePlacement;
 import hellfirepvp.astralsorcery.common.world.placement.RandomReplaceablePlacement;
+import hellfirepvp.astralsorcery.common.world.placement.RiverbedPlacement;
 import hellfirepvp.astralsorcery.common.world.placement.config.EvenStructurePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.placement.config.FeaturePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.placement.RandomFlowerPlacement;
@@ -62,11 +63,11 @@ public class RegistryWorldGeneration {
                 50, 210, 40, 1));
         Placement.ROCK_CRYSTAL = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("rock_crystal", false, true,
                 Lists.newArrayList(), Lists.newArrayList(0),
-                2, 5, 25, 2,
+                2, 5, 55, 2,
                 Lists.newArrayList(Blocks.STONE.getDefaultState(), Blocks.DIORITE.getDefaultState(), Blocks.GRANITE.getDefaultState(), Blocks.ANDESITE.getDefaultState())));
         Placement.AQUAMARINE = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("aquamarine", true, true,
                 Lists.newArrayList(BiomeDictionary.Type.RIVER, BiomeDictionary.Type.BEACH), Lists.newArrayList(0),
-                45, 25, 1, 64,
+                50, 65, 1, 35,
                 Lists.newArrayList(Blocks.SAND.getDefaultState())));
 
         Placement.MARBLE = new CountRangeConfig(10, 0, 0, 64);
@@ -91,7 +92,7 @@ public class RegistryWorldGeneration {
                 new ConfiguredPlacement<>(new RandomReplaceablePlacement(Placement.ROCK_CRYSTAL), Placement.ROCK_CRYSTAL));
         registerFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
                 new ConfiguredFeature<>(new AquamarineFeature(), NoFeatureConfig.NO_FEATURE_CONFIG),
-                new ConfiguredPlacement<>(new RandomReplaceablePlacement(Placement.AQUAMARINE), Placement.AQUAMARINE));
+                new ConfiguredPlacement<>(new RiverbedPlacement(Placement.AQUAMARINE), Placement.AQUAMARINE));
 
         registerFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
                 new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BlocksAS.MARBLE_RAW.getDefaultState(), 33)),

@@ -39,6 +39,7 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_BOOK_BLANK;
     public static AbstractRenderableTexture TEX_GUI_BOOK_FRAME_FULL;
     public static AbstractRenderableTexture TEX_GUI_BOOK_FRAME_LEFT;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_STRUCTURE_ICONS;
     public static AbstractRenderableTexture TEX_GUI_STARFIELD_OVERLAY;
     public static AbstractRenderableTexture TEX_GUI_BACKGROUND_DEFAULT;
     public static AbstractRenderableTexture TEX_GUI_BACKGROUND_PERKS;

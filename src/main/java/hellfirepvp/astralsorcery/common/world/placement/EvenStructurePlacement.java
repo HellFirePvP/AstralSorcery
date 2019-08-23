@@ -56,7 +56,7 @@ public class EvenStructurePlacement extends StructurePlacement<EvenStructurePlac
             return Stream.empty();
         }
 
-        pos = pos.add(random.nextInt(16) + 8, 0, random.nextInt(16) + 8);
+        pos = pos.add(random.nextInt(16), 0, random.nextInt(16));
         pos = worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, pos).down();
 
         if (!config.canPlace(worldIn, pos, random)) {

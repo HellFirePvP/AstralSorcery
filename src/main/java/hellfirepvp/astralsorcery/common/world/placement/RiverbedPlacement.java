@@ -15,15 +15,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.placement.Placement;
-import net.minecraftforge.fluids.Fluid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class RiverbedPlacement extends Placement<ReplacingFeaturePlacementConfig
     public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, ReplacingFeaturePlacementConfig configIn, BlockPos pos) {
         List<BlockPos> result = new ArrayList<>();
         for (int i = 0; i < configIn.getGenerationAmount(); i++) {
-            BlockPos at = new BlockPos(random.nextInt(16), configIn.getRandomY(random), random.nextInt(16));
+            BlockPos at = pos.add(random.nextInt(16), configIn.getRandomY(random), random.nextInt(16));
 
             if (!configIn.canPlace(worldIn, at, random)) {
                 continue;
@@ -63,8 +64,10 @@ public class RiverbedPlacement extends Placement<ReplacingFeaturePlacementConfig
                 BlockPos check = at.offset(Direction.UP, yy);
                 BlockState bs = worldIn.getBlockState(check);
                 Block block = bs.getBlock();
-                if ((MiscUtils.tryGetFuild(bs) == Fluids.WATER || MiscUtils.tryGetFuild(bs) == Fluids.FLOWING_WATER) || block.isIn(BlockTags.ICE)) {
+                Fluid f;
+                if ((f = MiscUtils.tryGetFuild(bs)) != null && f.isIn(FluidTags.WATER) || block.isIn(BlockTags.ICE)) {
                     foundWater = true;
+                    at = check.down();
                     break;
                 }
             }

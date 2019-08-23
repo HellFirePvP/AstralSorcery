@@ -28,11 +28,11 @@ public class RegistryData {
     public static void init() {
         DOMAIN_AS = WorldCacheManager.createDomain(AstralSorcery.MODID);
 
-        KEY_GATEWAY_CACHE = DOMAIN_AS.createSaveKey("gateway_cache", GatewayCache::new);
+        KEY_GATEWAY_CACHE = DOMAIN_AS.createSaveKey("gateway-cache", GatewayCache::new);
         KEY_STARLIGHT_NETWORK = DOMAIN_AS.createSaveKey("lightnetwork", LightNetworkBuffer::new);
         KEY_STORAGE_NETWORK = DOMAIN_AS.createSaveKey("storagenetwork", StorageNetworkBuffer::new);
-        KEY_STRUCTURE_GENERATION = DOMAIN_AS.createSaveKey("structure_gen", StructureGenerationBuffer::new);
-        KEY_ROCK_CRYSTAL_BUFFER = DOMAIN_AS.createSaveKey("rock_crystals", RockCrystalBuffer::new);
+        KEY_STRUCTURE_GENERATION = DOMAIN_AS.createSaveKey("structure-gen", StructureGenerationBuffer::new);
+        KEY_ROCK_CRYSTAL_BUFFER = DOMAIN_AS.createSaveKey("rock-crystals", RockCrystalBuffer::new);
     }
 
 }
