@@ -147,12 +147,7 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
                 playerUUID = entity.getUniqueID();
             }
 
-            tcc.updateData(
-                    ibcc.getAttunedConstellation(stack),
-                    ibcc.getTraitConstellation(stack),
-                    ibcc.getAttributes(stack),
-                    playerUUID,
-                    ibcc.getCollectorType());
+            tcc.updateData(playerUUID, ibcc.getCollectorType());
         }
 
         super.onBlockPlacedBy(world, pos, state, entity, stack);

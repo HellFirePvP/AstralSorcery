@@ -17,6 +17,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.UUID;
 
@@ -34,28 +35,28 @@ public abstract class VanillaAttributeType extends PerkAttributeType implements 
     }
 
     @Override
-    public void onApply(PlayerEntity player, Dist side) {
+    public void onApply(PlayerEntity player, LogicalSide side) {
         super.onApply(player, side);
 
         refreshAttribute(player);
     }
 
     @Override
-    public void onRemove(PlayerEntity player, Dist side, boolean removedCompletely) {
+    public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely) {
         super.onRemove(player, side, removedCompletely);
 
         refreshAttribute(player);
     }
 
     @Override
-    public void onModeApply(PlayerEntity player, ModifierType mode, Dist side) {
+    public void onModeApply(PlayerEntity player, ModifierType mode, LogicalSide side) {
         super.onModeApply(player, mode, side);
 
         IAttributeInstance attr = player.getAttributes().getAttributeInstance(getAttribute());
 
         //The attributes don't get written/read from bytebuffer on local connection, but ARE in dedicated connections.
         //Remove minecraft's dummy instances in case we're on a dedicated server.
-        if (side == Dist.CLIENT) {
+        if (side.isClient()) {
             AttributeModifier modifier;
             if ((modifier = attr.getModifier(getID(mode))) != null) {
                 if (!(modifier instanceof DynamicAttributeModifier)) {
@@ -82,7 +83,7 @@ public abstract class VanillaAttributeType extends PerkAttributeType implements 
     }
 
     @Override
-    public void onModeRemove(PlayerEntity player, ModifierType mode, Dist side, boolean removedCompletely) {
+    public void onModeRemove(PlayerEntity player, ModifierType mode, LogicalSide side, boolean removedCompletely) {
         super.onModeRemove(player, mode, side, removedCompletely);
 
         IAttributeInstance attr = player.getAttributes().getAttributeInstance(getAttribute());
@@ -121,14 +122,14 @@ public abstract class VanillaAttributeType extends PerkAttributeType implements 
     static class DynamicAttributeModifier extends AttributeModifier {
 
         private PlayerEntity player;
-        private Dist side;
+        private LogicalSide side;
         private PerkAttributeType type;
 
-        public DynamicAttributeModifier(UUID idIn, String nameIn, PerkAttributeType type, ModifierType mode, PlayerEntity player, Dist side) {
+        public DynamicAttributeModifier(UUID idIn, String nameIn, PerkAttributeType type, ModifierType mode, PlayerEntity player, LogicalSide side) {
             this(idIn, nameIn, type, mode.getVanillaAttributeOperation(), player, side);
         }
 
-        public DynamicAttributeModifier(UUID idIn, String nameIn, PerkAttributeType type, Operation operationIn, PlayerEntity player, Dist side) {
+        public DynamicAttributeModifier(UUID idIn, String nameIn, PerkAttributeType type, Operation operationIn, PlayerEntity player, LogicalSide side) {
             super(idIn, nameIn, 0, operationIn);
             this.setSaved(false);
             this.player = player;

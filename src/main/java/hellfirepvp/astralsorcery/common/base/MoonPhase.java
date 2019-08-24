@@ -29,7 +29,7 @@ public enum MoonPhase {
     NEW, WAXING_1_4, WAXING_1_2, WAXING_3_4;
 
     public static MoonPhase fromWorld(IWorld world) {
-        return values()[MathHelper.clamp(world.getMoonPhase(), 0, values().length)];
+        return values()[MathHelper.clamp(world.getDimension().getMoonPhase(world.getWorld().getDayTime()), 0, values().length)];
     }
 
     @OnlyIn(Dist.CLIENT)

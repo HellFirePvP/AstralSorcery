@@ -204,30 +204,17 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
             for (int i = 0; i < list.size(); i++) {
                 CompoundNBT sourcePos = list.getCompound(i);
                 BlockPos at = NBTHelper.readBlockPosFromNBT(sourcePos);
-                ChunkSectionNetworkData section = getSectionData(at);
-                if(section == null) {
-                    AstralSorcery.log.warn("Expected source tile at " + at + " but didn't even find chunk section!");
-                } else {
-                    IPrismTransmissionNode node = section.getTransmissionNode(at);
-                    if (node == null) {
-                        AstralSorcery.log.warn("Expected source tile at " + at + " but didn't find a transmission node!");
-                        continue;
-                    }
-                    if (!(node instanceof ITransmissionSource)) {
-                        AstralSorcery.log.warn("Expected source tile at " + at + " but transmission node isn't a source!");
-                        continue;
-                    }
-                    CompoundNBT comp = sourcePos.getCompound("source");
-                    String identifier = comp.getString("sTypeId");
-                    SourceClassRegistry.SourceProvider provider = SourceClassRegistry.getProvider(identifier);
-                    if (provider == null) {
-                        AstralSorcery.log.warn("Couldn't load source tile at " + at + " - invalid identifier: " + identifier);
-                        continue;
-                    }
-                    IIndependentStarlightSource source = provider.provideEmptySource();
-                    source.readFromNBT(comp);
-                    this.starlightSources.put(at, source);
+
+                CompoundNBT comp = sourcePos.getCompound("source");
+                String identifier = comp.getString("sTypeId");
+                SourceClassRegistry.SourceProvider provider = SourceClassRegistry.getProvider(identifier);
+                if (provider == null) {
+                    AstralSorcery.log.warn("Couldn't load source tile at " + at + " - invalid identifier: " + identifier);
+                    continue;
                 }
+                IIndependentStarlightSource source = provider.provideEmptySource();
+                source.readFromNBT(comp);
+                this.starlightSources.put(at, source);
             }
         }
     }

@@ -9,20 +9,23 @@
 package hellfirepvp.astralsorcery.common.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.ClientProxy;
+import hellfirepvp.astralsorcery.common.network.base.ASLoginPacket;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.network.channel.BufferedReplyChannel;
 import hellfirepvp.astralsorcery.common.network.channel.SimpleSendChannel;
-import hellfirepvp.astralsorcery.common.network.packet.client.*;
-import hellfirepvp.astralsorcery.common.network.packet.server.*;
-import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
+import hellfirepvp.astralsorcery.common.network.login.client.PktLoginAcknowledge;
+import hellfirepvp.astralsorcery.common.network.login.server.PktLoginSyncDataHolder;
+import hellfirepvp.astralsorcery.common.network.login.server.PktLoginSyncGateway;
+import hellfirepvp.astralsorcery.common.network.play.client.*;
+import hellfirepvp.astralsorcery.common.network.play.server.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Collections;
 import java.util.function.Supplier;
 
 /**
@@ -37,18 +40,23 @@ public class PacketChannel {
     private static int packetIndex = 0;
     private static final String NET_COMM_VERSION = "0"; //AS network version
 
-    public static final SimpleSendChannel CHANNEL = new BufferedReplyChannel(
-            ReflectionHelper.createInstance(
-                    new ResourceLocation(AstralSorcery.MODID, "net_channel"),
-                    () -> NET_COMM_VERSION,
-                    NET_COMM_VERSION::equals,
-                    NET_COMM_VERSION::equals));
+    public static final SimpleSendChannel CHANNEL = new BufferedReplyChannel(NetworkRegistry.newSimpleChannel(
+            new ResourceLocation(AstralSorcery.MODID, "net_channel"),
+            () -> NET_COMM_VERSION,
+            NET_COMM_VERSION::equals,
+            NET_COMM_VERSION::equals));
 
     public static void registerPackets() {
-        // DEDICATED_SERVER -> CLIENT
+        // LOGIN DEDICATED_SERVER -> CLIENT
+        registerLoginMessage(PktLoginSyncDataHolder::new, PktLoginSyncDataHolder::makeLogin);
+        registerLoginMessage(PktLoginSyncGateway::new, PktLoginSyncGateway::makeLogin);
+
+        // LOGIN CLIENT -> DEDICATED_SERVER
+        registerLoginMessage(PktLoginAcknowledge::new, PktLoginAcknowledge::new);
+
+        // PLAY DEDICATED_SERVER -> CLIENT
         registerMessage(PktAttunementAltarState::new);
         registerMessage(PktCraftingTableFix::new);
-        registerMessage(PktFinalizeLogin::new);
         registerMessage(PktPlayLiquidFountain::new);
         registerMessage(PktOreScan::new);
         registerMessage(PktPlayEffect::new);
@@ -63,7 +71,7 @@ public class PacketChannel {
         registerMessage(PktUpdateGateways::new);
         registerMessage(PktOpenGui::new);
 
-        // CLIENT -> DEDICATED_SERVER
+        // PLAY CLIENT -> DEDICATED_SERVER
         registerMessage(PktAttuneConstellation::new);
         registerMessage(PktBurnParchment::new);
         registerMessage(PktClearBlockStorageStack::new);
@@ -82,6 +90,18 @@ public class PacketChannel {
         registerMessage(PktUnlockPerk::new);
     }
 
+    private static <T extends ASLoginPacket<T>> void registerLoginMessage(Supplier<T> pktSupplier, Supplier<T> makeLoginPacket) {
+        T packet = pktSupplier.get();
+        int index = packetIndex++;
+        CHANNEL.messageBuilder((Class<T>) packet.getClass(), index)
+                .loginIndex(ASLoginPacket::getLoginIndex, ASLoginPacket::setLoginIndex)
+                .encoder(packet.encoder())
+                .decoder(packet.decoder())
+                .consumer(packet.handler())
+                .buildLoginPacketList((local) -> Collections.singletonList(Pair.of(packet.getClass().getName(), makeLoginPacket.get())))
+                .add();
+    }
+
     private static <T extends ASPacket<T>> void registerMessage(Supplier<T> pktSupplier) {
         T packet = pktSupplier.get();
         CHANNEL.messageBuilder((Class<T>) packet.getClass(), packetIndex++)
@@ -93,11 +113,6 @@ public class PacketChannel {
 
     public static PacketDistributor.TargetPoint pointFromPos(World world, Vec3i pos, double range) {
         return new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world.getDimension().getType());
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static boolean canBeSentToServer() {
-        return ClientProxy.connected;
     }
 
 }

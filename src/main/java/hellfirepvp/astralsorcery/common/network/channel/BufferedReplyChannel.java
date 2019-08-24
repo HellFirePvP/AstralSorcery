@@ -8,9 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.network.channel;
 
-import hellfirepvp.astralsorcery.common.network.ClientReplyPacket;
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import net.minecraftforge.fml.network.NetworkInstance;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 /**
@@ -22,16 +19,17 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
  */
 public class BufferedReplyChannel extends SimpleSendChannel {
 
-    public BufferedReplyChannel(NetworkInstance instance) {
-        super(instance);
+    public BufferedReplyChannel(SimpleChannel channel) {
+        super(channel);
     }
 
-    @Override
-    public <MSG> void sendToServer(MSG message) {
-        if (message instanceof ClientReplyPacket && !PacketChannel.canBeSentToServer()) {
-            return;
-        }
-        super.sendToServer(message);
-    }
+    //Re-add when necessary. hopefully never.
+    //@Override
+    //public <MSG> void sendToServer(MSG message) {
+    //    if (message instanceof ClientReplyPacket && !PacketChannel.canBeSentToServer()) {
+    //        return;
+    //    }
+    //    super.sendToServer(message);
+    //}
 
 }

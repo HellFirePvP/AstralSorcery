@@ -1,0 +1,97 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2019
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.block.tile;
+
+import hellfirepvp.astralsorcery.common.block.base.BlockStarlightNetwork;
+import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
+import hellfirepvp.astralsorcery.common.block.properties.PropertiesGlass;
+import hellfirepvp.astralsorcery.common.item.block.ItemBlockPrism;
+import hellfirepvp.astralsorcery.common.tile.TilePrism;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.common.ToolType;
+
+import javax.annotation.Nullable;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: BlockPrism
+ * Created by HellFirePvP
+ * Date: 24.08.2019 / 23:10
+ */
+public class BlockPrism extends BlockStarlightNetwork implements CustomItemBlock {
+
+    private static final VoxelShape PRISM_DOWN =  VoxelShapes.create(3D / 16D, 0,      3D / 16D, 13D / 16D, 14D / 16D, 13D / 16D);
+    private static final VoxelShape PRISM_UP =    VoxelShapes.create(3D / 16D, 2D / 16D, 3D / 16D, 13D / 16D, 1,       13D / 16D);
+    private static final VoxelShape PRISM_NORTH = VoxelShapes.create(3D / 16D, 3D / 16D, 0,      13D / 16D, 13D / 16D, 14D / 16D);
+    private static final VoxelShape PRISM_SOUTH = VoxelShapes.create(3D / 16D, 3D / 16D, 2D / 16D, 13D / 16D, 13D / 16D, 1);
+    private static final VoxelShape PRISM_EAST =  VoxelShapes.create(2D / 16D, 3D / 16D, 3D / 16D, 1,       13D / 16D, 13D / 16D);
+    private static final VoxelShape PRISM_WEST =  VoxelShapes.create(0,      3D / 16D, 3D / 16D, 14D / 16D, 13D / 16D, 13D / 16D);
+    
+    public static EnumProperty<Direction> PLACED_AGAINST = EnumProperty.create("against", Direction.class);
+
+    public BlockPrism() {
+        super(PropertiesGlass.coatedGlass()
+                .harvestTool(ToolType.PICKAXE));
+        setDefaultState(this.getStateContainer().getBaseState().with(PLACED_AGAINST, Direction.DOWN));
+    }
+
+    @Override
+    public Class<? extends BlockItem> getItemBlockClass() {
+        return ItemBlockPrism.class;
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(PLACED_AGAINST);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(PLACED_AGAINST, context.getFace().getOpposite());
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        switch (state.get(PLACED_AGAINST)) {
+            case UP:
+                return PRISM_UP;
+            case NORTH:
+                return PRISM_NORTH;
+            case SOUTH:
+                return PRISM_SOUTH;
+            case WEST:
+                return PRISM_WEST;
+            case EAST:
+                return PRISM_EAST;
+            default:
+            case DOWN:
+                return PRISM_DOWN;
+        }
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+        return new TilePrism();
+    }
+}

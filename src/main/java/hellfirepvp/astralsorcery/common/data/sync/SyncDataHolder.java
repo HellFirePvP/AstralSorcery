@@ -8,14 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.data.sync;
 
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
+import hellfirepvp.astralsorcery.common.network.play.server.PktSyncData;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.*;
 
@@ -65,6 +63,10 @@ public class SyncDataHolder implements ITickHandler {
         return pId;
     }
 
+    public static Map<String, AbstractData> getSyncServerData() {
+        return serverData;
+    }
+
     public static <T extends AbstractData> T getDataServer(String key) {
         return (T) serverData.get(key);
     }
@@ -91,11 +93,6 @@ public class SyncDataHolder implements ITickHandler {
                 dirtyData.add(key);
             }
         }
-    }
-
-    public static void syncAllDataTo(PlayerEntity player) {
-        PktSyncData dataSync = new PktSyncData(serverData, true);
-        PacketChannel.CHANNEL.sendToPlayer(player, dataSync);
     }
 
     public static void receiveServerPacket(Map<String, AbstractData> data) {
@@ -126,7 +123,7 @@ public class SyncDataHolder implements ITickHandler {
             }
             dirtyData.clear();
         }
-        PktSyncData dataSync = new PktSyncData(pktData, false);
+        PktSyncData dataSync = new PktSyncData(pktData);
         PacketChannel.CHANNEL.sendToAll(dataSync);
     }
 

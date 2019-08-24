@@ -22,6 +22,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
  */
 public class EventHandlerIO {
 
+    private EventHandlerIO() {}
+
     public static void attachListeners(IEventBus eventBus) {
         eventBus.addListener(EventHandlerIO::onUnload);
     }

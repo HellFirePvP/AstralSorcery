@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.perk;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -27,6 +26,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -99,14 +99,14 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     protected void applyEffectMultiplier(double multiplier) {}
 
     //Return true to display that the perk's modifiers got disabled by pack's configurations
-    public boolean modifiersDisabled(PlayerEntity player, Dist dist) {
+    public boolean modifiersDisabled(PlayerEntity player, LogicalSide dist) {
         ASRegistryEvents.PerkDisable event = new ASRegistryEvents.PerkDisable(this, player, dist);
         MinecraftForge.EVENT_BUS.post(event);
         return event.isPerkDisabled();
     }
 
     //Reserving application/removal methods to delegate for later pre-application logic
-    final void applyPerk(PlayerEntity player, Dist dist) {
+    final void applyPerk(PlayerEntity player, LogicalSide dist) {
         if (modifiersDisabled(player, dist)) {
             return;
         }
@@ -118,7 +118,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         //}
     }
 
-    final void removePerk(PlayerEntity player, Dist dist) {
+    final void removePerk(PlayerEntity player, LogicalSide dist) {
         if (modifiersDisabled(player, dist)) {
             return;
         }
@@ -130,12 +130,12 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         //}
     }
 
-    protected abstract void applyPerkLogic(PlayerEntity player, Dist dist);
+    protected abstract void applyPerkLogic(PlayerEntity player, LogicalSide dist);
 
-    protected abstract void removePerkLogic(PlayerEntity player, Dist dist);
+    protected abstract void removePerkLogic(PlayerEntity player, LogicalSide dist);
 
     @Nullable
-    public CompoundNBT getPerkData(PlayerEntity player, Dist dist) {
+    public CompoundNBT getPerkData(PlayerEntity player, LogicalSide dist) {
         return ResearchHelper.getProgress(player, dist).getPerkData(this);
     }
 
@@ -173,11 +173,11 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         return category;
     }
 
-    public AllocationStatus getPerkStatus(@Nullable PlayerEntity player, Dist dist) {
+    public AllocationStatus getPerkStatus(@Nullable PlayerEntity player, LogicalSide side) {
         if (player == null) {
             return AllocationStatus.UNALLOCATED;
         }
-        PlayerProgress progress = ResearchHelper.getProgress(player, dist);
+        PlayerProgress progress = ResearchHelper.getProgress(player, side);
         if (!progress.isValid()) {
             return AllocationStatus.UNALLOCATED;
         }
@@ -219,7 +219,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
 
         tooltipCache = Lists.newArrayList();
         String key = this.ovrUnlocalizedNamePrefix;
-        if (modifiersDisabled(Minecraft.getInstance().player, Dist.CLIENT)) {
+        if (modifiersDisabled(Minecraft.getInstance().player, LogicalSide.CLIENT)) {
             tooltipCache.add(TextFormatting.GRAY + I18n.format("perk.info.disabled"));
         } else if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
             tooltipCache.add(this.getCategory().getTextFormatting() + I18n.format(this.getUnlocalizedName() + ".name"));
@@ -267,7 +267,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         return null;
     }
 
-    public void clearCaches(Dist dist) {}
+    public void clearCaches(LogicalSide side) {}
 
     //TODO client gui
     @OnlyIn(Dist.CLIENT)

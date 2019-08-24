@@ -16,13 +16,13 @@ import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -38,19 +38,19 @@ public interface GemSlotPerk {
 
     public static final String SOCKET_DATA_KEY = "socketedItem";
 
-    default public boolean hasItem(PlayerEntity player, Dist side) {
+    default public boolean hasItem(PlayerEntity player, LogicalSide side) {
         return hasItem(player, side, null);
     }
 
-    default public boolean hasItem(PlayerEntity player, Dist side, @Nullable CompoundNBT data) {
+    default public boolean hasItem(PlayerEntity player, LogicalSide side, @Nullable CompoundNBT data) {
         return !getContainedItem(player, side, data).isEmpty();
     }
 
-    default public ItemStack getContainedItem(PlayerEntity player, Dist side) {
+    default public ItemStack getContainedItem(PlayerEntity player, LogicalSide side) {
         return getContainedItem(player, side, null);
     }
 
-    default public ItemStack getContainedItem(PlayerEntity player, Dist side, @Nullable CompoundNBT dataOvr) {
+    default public ItemStack getContainedItem(PlayerEntity player, LogicalSide side, @Nullable CompoundNBT dataOvr) {
         if (!(this instanceof AbstractPerk)) {
             throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
         }
@@ -62,11 +62,11 @@ public interface GemSlotPerk {
         return NBTHelper.getStack(data, SOCKET_DATA_KEY);
     }
 
-    default public boolean setContainedItem(PlayerEntity player, Dist side, ItemStack stack) {
+    default public boolean setContainedItem(PlayerEntity player, LogicalSide side, ItemStack stack) {
         return setContainedItem(player, side, null, stack);
     }
 
-    default public boolean setContainedItem(PlayerEntity player, Dist side, @Nullable CompoundNBT dataOvr, ItemStack stack) {
+    default public boolean setContainedItem(PlayerEntity player, LogicalSide side, @Nullable CompoundNBT dataOvr, ItemStack stack) {
         if (!(this instanceof AbstractPerk)) {
             throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
         }
@@ -108,20 +108,20 @@ public interface GemSlotPerk {
 
         boolean updateData = data == null;
         if (updateData) {
-            data = ((AbstractPerk) this).getPerkData(player, Dist.DEDICATED_SERVER);
+            data = ((AbstractPerk) this).getPerkData(player, LogicalSide.SERVER);
         }
         if (data == null) {
             return;
         }
         CompoundNBT prev = data.copy();
 
-        ItemStack contained = getContainedItem(player, Dist.DEDICATED_SERVER, data);
+        ItemStack contained = getContainedItem(player, LogicalSide.SERVER, data);
         if (!contained.isEmpty()) {
             if (!player.addItemStackToInventory(contained)) {
                 ItemUtils.dropItem(player.world, player.posX, player.posY, player.posZ, contained);
             }
         }
-        setContainedItem(player, Dist.DEDICATED_SERVER, data, ItemStack.EMPTY);
+        setContainedItem(player, LogicalSide.SERVER, data, ItemStack.EMPTY);
 
         if (updateData) {
             ResearchManager.setPerkData(player, (AbstractPerk) this, prev, data);
@@ -139,7 +139,7 @@ public interface GemSlotPerk {
         }
         Style gray = new Style().setColor(TextFormatting.GRAY);
 
-        ItemStack contained = getContainedItem(Minecraft.getInstance().player, Dist.CLIENT);
+        ItemStack contained = getContainedItem(Minecraft.getInstance().player, LogicalSide.CLIENT);
         if (contained.isEmpty()) {
             tooltip.add(new TranslationTextComponent("perk.info.gem.empty").setStyle(gray));
             if (prog.hasPerkEffect((AbstractPerk) this)) {

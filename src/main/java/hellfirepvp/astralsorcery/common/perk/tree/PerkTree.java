@@ -19,6 +19,7 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -102,8 +103,8 @@ public class PerkTree {
     }
 
     //TODO client cache clear? disconnect
-    public void clearCache(Dist dist) {
-        this.treePoints.stream().map(PerkTreePoint::getPerk).forEach(p -> p.clearCaches(dist));
+    public void clearCache(LogicalSide side) {
+        this.treePoints.stream().map(PerkTreePoint::getPerk).forEach(p -> p.clearCaches(side));
     }
 
     public void removePerk(AbstractPerk perk) {

@@ -17,7 +17,7 @@ import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,13 +33,13 @@ import java.util.stream.Collectors;
  */
 public class PerkAttributeMap {
 
-    private Dist dist;
+    private LogicalSide side;
     private Set<AbstractPerk> cacheAppliedPerks = new HashSet<>();
     private Map<PerkAttributeType, List<PerkAttributeModifier>> attributes = new HashMap<>();
     private List<PerkConverter> converters = new ArrayList<>();
 
-    PerkAttributeMap(Dist dist) {
-        this.dist = dist;
+    PerkAttributeMap(LogicalSide side) {
+        this.side = side;
     }
 
     public boolean applyModifier(PlayerEntity player, PerkAttributeType type, PerkAttributeModifier modifier) {
@@ -49,9 +49,9 @@ public class PerkAttributeMap {
             return false;
         }
 
-        type.onApply(player, dist);
+        type.onApply(player, side);
         if (noModifiers) {
-            type.onModeApply(player, modifier.getMode(), dist);
+            type.onModeApply(player, modifier.getMode(), side);
         }
         return modifiers.add(modifier);
     }
@@ -59,9 +59,9 @@ public class PerkAttributeMap {
     public boolean removeModifier(PlayerEntity player, PerkAttributeType type, PerkAttributeModifier modifier) {
         if (attributes.computeIfAbsent(type, t -> Lists.newArrayList()).remove(modifier)) {
             boolean completelyRemoved = attributes.get(type).isEmpty();
-            type.onRemove(player, dist, completelyRemoved);
+            type.onRemove(player, side, completelyRemoved);
             if (getModifiersByType(type, modifier.getMode()).isEmpty()) {
-                type.onModeRemove(player, modifier.getMode(), dist, completelyRemoved);
+                type.onModeRemove(player, modifier.getMode(), side, completelyRemoved);
             }
             return true;
         }
@@ -104,13 +104,13 @@ public class PerkAttributeMap {
     boolean applyConverter(PlayerEntity player, PerkConverter converter) {
         assertConvertersModifiable();
 
-        LogCategory.PERKS.info(() -> "Try adding converter " + converter.getId() + " on " + this.dist.name());
+        LogCategory.PERKS.info(() -> "Try adding converter " + converter.getId() + " on " + this.side.name());
 
         if (converters.contains(converter)) {
             return false;
         }
         if (converters.add(converter)) {
-            converter.onApply(player, dist);
+            converter.onApply(player, side);
 
             LogCategory.PERKS.info(() -> "Added converter " + converter.getId());
             return true;
@@ -121,10 +121,10 @@ public class PerkAttributeMap {
     boolean removeConverter(PlayerEntity player, PerkConverter converter) {
         assertConvertersModifiable();
 
-        LogCategory.PERKS.info(() -> "Try removing converter " + converter.getId() + " on " + this.dist.name());
+        LogCategory.PERKS.info(() -> "Try removing converter " + converter.getId() + " on " + this.side.name());
 
         if (converters.remove(converter)) {
-            converter.onRemove(player, dist);
+            converter.onRemove(player, side);
 
             LogCategory.PERKS.info(() -> "Removed converter " + converter.getId());
             return true;
@@ -139,7 +139,7 @@ public class PerkAttributeMap {
         }
         if (appliedModifiers > 0) {
 
-            LogCategory.PERKS.warn(() -> "Following modifiers are still applied on " + this.dist.name() + " while trying to modify converters:");
+            LogCategory.PERKS.warn(() -> "Following modifiers are still applied on " + this.side.name() + " while trying to modify converters:");
             for (List<PerkAttributeModifier> modifiers : this.attributes.values()) {
                 for (PerkAttributeModifier modifier : modifiers) {
                     LogCategory.PERKS.warn(() -> "Modifier: " + modifier.getId());

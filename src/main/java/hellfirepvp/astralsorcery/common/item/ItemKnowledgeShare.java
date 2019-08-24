@@ -13,12 +13,11 @@ import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
+import hellfirepvp.astralsorcery.common.network.play.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
@@ -32,6 +31,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -134,7 +134,7 @@ public class ItemKnowledgeShare extends Item {
 
     private void tryInscribeKnowledge(ItemStack stack, PlayerEntity player) {
         if (canInscribeKnowledge(stack, player)) {
-            setKnowledge(stack, player, ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER));
+            setKnowledge(stack, player, ResearchHelper.getProgress(player, LogicalSide.SERVER));
         }
     }
 

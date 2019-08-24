@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
+import hellfirepvp.astralsorcery.common.tile.TileLens;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -43,11 +45,10 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
 
     @Override
     public void onTransmissionTick(World world) {
-        //TODO lens
-        //TileCrystalLens lens = MiscUtils.getTileAt(world, getLocationPos(), TileCrystalLens.class, false);
-        //if(lens != null) {
-        //    lens.onTransmissionTick();
-        //}
+        TileLens lens = MiscUtils.getTileAt(world, getLocationPos(), TileLens.class, false);
+        if (lens != null) {
+            lens.transmissionTick();
+        }
     }
 
     @Override

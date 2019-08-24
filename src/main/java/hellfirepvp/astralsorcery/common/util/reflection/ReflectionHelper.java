@@ -29,25 +29,8 @@ import java.util.function.*;
  */
 public class ReflectionHelper {
 
-    private static BiFunction<Object, Object[], ?> createNetworkInstanceMethod = null,
-            createGameRuleMethod = null;
+    private static BiFunction<Object, Object[], ?> createGameRuleMethod = null;
     private static Function<Object[], ?> gameRuleTypeConstructor = null;
-
-    public static NetworkInstance createInstance(ResourceLocation name,
-                                                 Supplier<String> networkProtocolVersion,
-                                                 Predicate<String> clientAcceptedVersions,
-                                                 Predicate<String> serverAcceptedVersions) {
-
-        if (createNetworkInstanceMethod == null) {
-            createNetworkInstanceMethod = resolveMethod(
-                    NetworkRegistry.class,
-                    "createInstance",
-                    ResourceLocation.class, Supplier.class, Predicate.class, Predicate.class
-            );
-        }
-        return (NetworkInstance) createNetworkInstanceMethod.apply(null,
-                new Object[] { name, networkProtocolVersion, clientAcceptedVersions, serverAcceptedVersions });
-    }
 
     public static <T extends GameRules.RuleValue<T>> GameRules.RuleKey<T> registerGameRule(String name,
                                                                                            GameRules.RuleType<T> type) {

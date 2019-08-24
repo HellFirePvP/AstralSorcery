@@ -56,6 +56,7 @@ public class ItemsAS {
     public static ItemEnchantmentAmulet ENCHANTMENT_AMULET;
     public static ItemKnowledgeShare KNOWLEDGE_SHARE;
     public static ItemWand WAND;
+    public static ItemLinkingTool LINKING_TOOL;
 
     public static ItemNocturnalPowder NOCTURNAL_POWDER;
     public static ItemIlluminationPowder ILLUMINATION_POWDER;

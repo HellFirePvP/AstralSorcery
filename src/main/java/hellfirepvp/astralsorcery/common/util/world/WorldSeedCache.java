@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.util.world;
 
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestSeed;
+import hellfirepvp.astralsorcery.common.network.play.client.PktRequestSeed;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;

@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Collection;
 import java.util.function.BiFunction;
@@ -74,10 +75,10 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     @OnlyIn(Dist.CLIENT)
     public final boolean canSeeClient() {
-        return canSee(Minecraft.getInstance().player, Dist.CLIENT);
+        return canSee(Minecraft.getInstance().player, LogicalSide.CLIENT);
     }
 
-    public final boolean canSee(PlayerEntity player, Dist side) {
+    public final boolean canSee(PlayerEntity player, LogicalSide side) {
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
         if (prog.isValid()) {
             return canSee(player, prog);
@@ -90,9 +91,9 @@ public class ProgressGatedPerk extends AbstractPerk {
     }
 
     @Override
-    protected void applyPerkLogic(PlayerEntity player, Dist side) {}
+    protected void applyPerkLogic(PlayerEntity player, LogicalSide side) {}
 
     @Override
-    protected void removePerkLogic(PlayerEntity player, Dist side) {}
+    protected void removePerkLogic(PlayerEntity player, LogicalSide side) {}
 
 }

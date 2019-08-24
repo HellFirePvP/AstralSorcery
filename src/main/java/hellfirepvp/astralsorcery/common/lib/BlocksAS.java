@@ -76,6 +76,8 @@ public class BlocksAS {
     public static BlockAltarRadiance             ALTAR_RADIANCE;
     public static BlockRockCollectorCrystal      ROCK_COLLECTOR_CRYSTAL;
     public static BlockCelestialCollectorCrystal CELESTIAL_COLLECTOR_CRYSTAL;
+    public static BlockLens                      LENS;
+    public static BlockPrism                     PRISM;
     public static BlockRitualLink                RITUAL_LINK;
     public static BlockRitualPedestal            RITUAL_PEDESTAL;
     public static BlockWell                      WELL;

@@ -45,7 +45,7 @@ public class EntityCrystal extends EntityItemExplosionResistant {
     public void tick() {
         super.tick();
 
-        if (!world.isRemote() && this.getAge() + 10 >= this.lifespan) {
+        if (!world.isRemote() && this.age + 10 >= this.lifespan) {
             this.age = 0;
         }
     }

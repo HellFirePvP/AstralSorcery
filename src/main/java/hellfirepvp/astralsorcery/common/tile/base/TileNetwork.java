@@ -80,6 +80,8 @@ public abstract class TileNetwork<T extends IPrismTransmissionNode> extends Tile
         T networkNode = this.getNetworkNode();
         if (networkNode != null && networkNode.updateFromTileEntity(this)) {
             this.needsNetworkSync = false;
+            this.markForUpdate();
+            this.preventNetworkSync();
         }
     }
 

@@ -12,8 +12,10 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
+import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,13 +54,13 @@ public abstract class PerkConverter {
     }
 
     /**
-     * Use {@link PerkAttributeModifier#convertModifier(String, ModifierType, float)} to convert the given modifier
+     * Use {@link PerkAttributeModifier#convertModifier(PerkAttributeType, ModifierType, float)} to convert the given modifier
      */
     @Nonnull
     public abstract PerkAttributeModifier convertModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
 
     /**
-     * Use {@link PerkAttributeModifier#gainAsExtraModifier(PerkConverter, String, ModifierType, float)} to create new modifiers
+     * Use {@link PerkAttributeModifier#gainAsExtraModifier(PerkConverter, PerkAttributeType, ModifierType, float)} to create new modifiers
      * based off of the given modifier! The resulting modifiers cannot be modified with perk converters.
      */
     @Nonnull
@@ -66,9 +68,9 @@ public abstract class PerkConverter {
         return Lists.newArrayList();
     }
 
-    public void onApply(PlayerEntity player, Dist dist) {}
+    public void onApply(PlayerEntity player, LogicalSide dist) {}
 
-    public void onRemove(PlayerEntity player, Dist dist) {}
+    public void onRemove(PlayerEntity player, LogicalSide dist) {}
 
     public PerkConverter andThen(PerkConverter next) {
         PerkConverter thisConverter = this;

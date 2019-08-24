@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -80,7 +81,7 @@ public class PerkAttributeInterpreter {
 
         public PerkAttributeInterpreter build() {
             if (this.reader.attributeMap == null) {
-                this.reader.attributeMap = PerkAttributeHelper.getOrCreateMap(this.reader.player, Dist.CLIENT);
+                this.reader.attributeMap = PerkAttributeHelper.getOrCreateMap(this.reader.player, LogicalSide.CLIENT);
             }
             return this.reader;
         }

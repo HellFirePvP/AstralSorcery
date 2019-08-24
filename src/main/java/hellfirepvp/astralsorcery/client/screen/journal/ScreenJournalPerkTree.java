@@ -36,9 +36,9 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktPerkGemModification;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestPerkSealAction;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
+import hellfirepvp.astralsorcery.common.network.play.client.PktPerkGemModification;
+import hellfirepvp.astralsorcery.common.network.play.client.PktRequestPerkSealAction;
+import hellfirepvp.astralsorcery.common.network.play.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
 import hellfirepvp.astralsorcery.common.perk.AttributeConverterPerk;
@@ -64,6 +64,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -646,7 +647,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         Point.Double offset = shift2DOffset(lowX, lowY);
 
         double scale = this.sizeHandler.getScalingFactor();
-        AllocationStatus status = perkPoint.getPerk().getPerkStatus(Minecraft.getInstance().player, Dist.CLIENT);
+        AllocationStatus status = perkPoint.getPerk().getPerkStatus(Minecraft.getInstance().player, LogicalSide.CLIENT);
 
         Rectangle.Double drawSize = perkPoint.renderPerkAtBatch(ctx, status, effectTick, pTicks, offset.x, offset.y, scale);
 
@@ -670,7 +671,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         double mapDrawSize = 28;
         if (perkPoint.getPerk() instanceof AttributeConverterPerk) {
-            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk()).provideConverters(Minecraft.getInstance().player, Dist.CLIENT)) {
+            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk()).provideConverters(Minecraft.getInstance().player, LogicalSide.CLIENT)) {
                 if (converter instanceof PerkConverter.Radius) {
                     double radius = ((PerkConverter.Radius) converter).getRadius();
 
@@ -1012,7 +1013,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         if (mouseButton == 0) {
             if (socketMenu != null) {
                 for (Rectangle r : slotsSocketMenu.keySet()) {
-                    if (r.contains(mouseX, mouseY) && !socketMenu.hasItem(mc.player, Dist.CLIENT)) {
+                    if (r.contains(mouseX, mouseY) && !socketMenu.hasItem(mc.player, LogicalSide.CLIENT)) {
                         int slotId = slotsSocketMenu.get(r);
                         ItemStack potentialStack = mc.player.inventory.getStackInSlot(slotId);
                         if (!potentialStack.isEmpty() &&
@@ -1057,7 +1058,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 }
                 if (mouseButton == 1) {
                     if (prog.hasPerkEffect(perk) && perk instanceof GemSlotPerk) {
-                        if (((GemSlotPerk) perk).hasItem(mc.player, Dist.CLIENT)) {
+                        if (((GemSlotPerk) perk).hasItem(mc.player, LogicalSide.CLIENT)) {
                             PktPerkGemModification pkt = PktPerkGemModification.dropItem(perk);
                             PacketChannel.CHANNEL.sendToServer(pkt);
                             AstralSorcery.getProxy().scheduleClientside(() -> {

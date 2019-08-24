@@ -11,8 +11,10 @@ package hellfirepvp.astralsorcery.common.network.channel;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fml.network.NetworkInstance;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
@@ -23,10 +25,12 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
  * Created by HellFirePvP
  * Date: 30.05.2019 / 17:56
  */
-public abstract class SimpleSendChannel extends SimpleChannel {
+public abstract class SimpleSendChannel {
 
-    public SimpleSendChannel(NetworkInstance instance) {
-        super(instance);
+    private final SimpleChannel channel;
+
+    public SimpleSendChannel(SimpleChannel channel) {
+        this.channel = channel;
     }
 
     public <P extends ASPacket<P>> void sendToPlayer(PlayerEntity player, P packet) {
@@ -45,6 +49,26 @@ public abstract class SimpleSendChannel extends SimpleChannel {
 
     public <P extends ASPacket<P>> void sendToAllAround(P packet, PacketDistributor.TargetPoint point) {
         this.send(PacketDistributor.NEAR.with(() -> point), packet);
+    }
+
+    public <MSG> void sendToServer(MSG message) {
+        channel.sendToServer(message);
+    }
+
+    public <MSG> void sendTo(MSG message, NetworkManager manager, NetworkDirection direction) {
+        channel.sendTo(message, manager, direction);
+    }
+
+    public <MSG> void send(PacketDistributor.PacketTarget target, MSG message) {
+        channel.send(target, message);
+    }
+
+    public <MSG> void reply(MSG msgToReply, NetworkEvent.Context context) {
+        channel.reply(msgToReply, context);
+    }
+
+    public <MSG> SimpleChannel.MessageBuilder<MSG> messageBuilder(final Class<MSG> type, int id) {
+        return channel.messageBuilder(type, id);
     }
 
 }

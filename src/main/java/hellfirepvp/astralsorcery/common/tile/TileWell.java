@@ -19,7 +19,7 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefactionContext;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
+import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverWell;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;

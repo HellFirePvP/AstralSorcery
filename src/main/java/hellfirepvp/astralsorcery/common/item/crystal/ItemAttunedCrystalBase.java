@@ -81,12 +81,13 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
     }
 
     @Override
+    @Nullable
     public IWeakConstellation getAttunedConstellation(ItemStack stack) {
         return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
     @Override
-    public boolean setAttunedConstellation(ItemStack stack, IWeakConstellation cst) {
+    public boolean setAttunedConstellation(ItemStack stack, @Nullable IWeakConstellation cst) {
         if (cst != null) {
             cst.writeToNBT(NBTHelper.getPersistentData(stack));
         } else {
@@ -96,12 +97,13 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
     }
 
     @Override
+    @Nullable
     public IMinorConstellation getTraitConstellation(ItemStack stack) {
         return (IMinorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack), "constellationTrait");
     }
 
     @Override
-    public boolean setTraitConstellation(ItemStack stack, IMinorConstellation cst) {
+    public boolean setTraitConstellation(ItemStack stack, @Nullable IMinorConstellation cst) {
         if (cst != null) {
             cst.writeToNBT(NBTHelper.getPersistentData(stack), "constellationTrait");
         } else {
