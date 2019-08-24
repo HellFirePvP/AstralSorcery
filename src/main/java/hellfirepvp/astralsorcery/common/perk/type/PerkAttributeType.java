@@ -13,17 +13,20 @@ import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,11 +44,11 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
 
     private final boolean isOnlyMultiplicative;
 
-    public PerkAttributeType(ResourceLocation key) {
+    protected PerkAttributeType(ResourceLocation key) {
         this(key, false);
     }
 
-    public PerkAttributeType(ResourceLocation key, boolean isMultiplicative) {
+    protected PerkAttributeType(ResourceLocation key, boolean isMultiplicative) {
         this.setRegistryName(key);
         this.isOnlyMultiplicative = isMultiplicative;
     }
@@ -64,6 +67,12 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     }
 
     protected void init() {}
+
+    protected void attachListeners(IEventBus eventBus) {}
+
+    protected LogicalSide getSide(Entity entity) {
+        return entity.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
+    }
 
     @Nullable
     public PerkAttributeReader getReader() {

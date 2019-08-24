@@ -6,10 +6,12 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.perk.type;
+package hellfirepvp.astralsorcery.common.perk.type.vanilla;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
+import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -19,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.LogicalSide;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 /**
@@ -30,8 +33,8 @@ import java.util.UUID;
  */
 public abstract class VanillaAttributeType extends PerkAttributeType implements VanillaPerkAttributeType {
 
-    public VanillaAttributeType(ResourceLocation key) {
-        super(key);
+    public VanillaAttributeType(ResourceLocation name) {
+        super(name);
     }
 
     @Override
@@ -53,7 +56,11 @@ public abstract class VanillaAttributeType extends PerkAttributeType implements 
         super.onModeApply(player, mode, side);
 
         IAttributeInstance attr = player.getAttributes().getAttributeInstance(getAttribute());
+        if (attr == null) {
+            return;
+        }
 
+        //TODO 1.14 validate
         //The attributes don't get written/read from bytebuffer on local connection, but ARE in dedicated connections.
         //Remove minecraft's dummy instances in case we're on a dedicated server.
         if (side.isClient()) {
@@ -87,6 +94,10 @@ public abstract class VanillaAttributeType extends PerkAttributeType implements 
         super.onModeRemove(player, mode, side, removedCompletely);
 
         IAttributeInstance attr = player.getAttributes().getAttributeInstance(getAttribute());
+        if (attr == null) {
+            return;
+        }
+
         switch (mode) {
             case ADDITION:
                 attr.removeModifier(getID(mode));
@@ -104,6 +115,10 @@ public abstract class VanillaAttributeType extends PerkAttributeType implements 
 
     public void refreshAttribute(PlayerEntity player) {
         IAttributeInstance attr = player.getAttributes().getAttributeInstance(getAttribute());
+        if (attr == null) {
+            return;
+        }
+
         double base = attr.getBaseValue();
         if (base == 0) {
             attr.setBaseValue(1);
@@ -117,6 +132,7 @@ public abstract class VanillaAttributeType extends PerkAttributeType implements 
 
     public abstract String getDescription();
 
+    @Nonnull
     public abstract IAttribute getAttribute();
 
     static class DynamicAttributeModifier extends AttributeModifier {

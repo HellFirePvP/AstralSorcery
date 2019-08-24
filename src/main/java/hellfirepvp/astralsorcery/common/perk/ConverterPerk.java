@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.perk.type;
+package hellfirepvp.astralsorcery.common.perk;
 
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkConverter;
 import net.minecraft.entity.player.PlayerEntity;
