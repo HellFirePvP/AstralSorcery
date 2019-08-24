@@ -18,7 +18,7 @@ import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
-import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeTypeHelper;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraftforge.event.RegistryEvent;
@@ -89,8 +89,9 @@ public class RegistryRegistries {
         REGISTRY_PERK_ATTRIBUTE_TYPES = new RegistryBuilder<PerkAttributeType>()
                 .setName(REGISTRY_NAME_PERK_ATTRIBUTE_TYPES)
                 .setType(PerkAttributeType.class)
-                .add((IForgeRegistry.AddCallback<PerkAttributeType>) (owner, stage, id, obj, oldObj) ->
-                        VanillaPerkAttributeTypeRegistry.register(obj))
+                .add((IForgeRegistry.AddCallback<PerkAttributeType>) (owner, stage, id, obj, oldObj) -> {
+                    PerkAttributeTypeHelper.register(obj);
+                })
                 .disableSaving()
                 .disableOverrides()
                 .create();

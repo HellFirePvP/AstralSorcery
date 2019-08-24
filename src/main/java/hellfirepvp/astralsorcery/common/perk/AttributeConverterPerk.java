@@ -9,11 +9,9 @@
 package hellfirepvp.astralsorcery.common.perk;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.perk.type.ConverterPerk;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkConverter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.awt.*;

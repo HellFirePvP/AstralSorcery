@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.event;
 
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
-import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeTypeHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -68,7 +68,7 @@ public class AttributeEvent {
 
         @Nullable
         public PerkAttributeType resolveAttributeType() {
-            return VanillaPerkAttributeTypeRegistry.findVanillaType(getAttribute());
+            return PerkAttributeTypeHelper.findVanillaType(getAttribute());
         }
 
         @Nullable
