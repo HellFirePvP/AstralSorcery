@@ -38,6 +38,7 @@ import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -127,7 +128,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor {
 
         IConstellation cst = getConstellation(stack);
         if (cst == null) {
-            PlayerProgress progress = ResearchHelper.getProgress((PlayerEntity) entity, Dist.DEDICATED_SERVER);
+            PlayerProgress progress = ResearchHelper.getProgress((PlayerEntity) entity, LogicalSide.SERVER);
 
             List<IConstellation> constellations = new ArrayList<>();
             for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
@@ -158,7 +159,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor {
 
         cst = getConstellation(stack);
         if (cst != null) {
-            PlayerProgress progress = ResearchHelper.getProgress((PlayerEntity) entity, Dist.DEDICATED_SERVER);
+            PlayerProgress progress = ResearchHelper.getProgress((PlayerEntity) entity, LogicalSide.SERVER);
 
             boolean has = false;
             for (ResourceLocation strConstellation : progress.getSeenConstellations()) {

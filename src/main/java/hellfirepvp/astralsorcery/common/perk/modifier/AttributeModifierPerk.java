@@ -23,6 +23,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,7 +66,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
         typeModifierList.forEach(t -> t.multiplyValue(multiplier));
     }
 
-    protected Collection<PerkAttributeModifier> getModifiers(PlayerEntity player, Dist side) {
+    protected Collection<PerkAttributeModifier> getModifiers(PlayerEntity player, LogicalSide side) {
         if (modifiersDisabled(player, side)) {
             return Collections.emptyList();
         }
@@ -74,7 +75,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     }
 
     @Override
-    public void applyPerkLogic(PlayerEntity player, Dist side) {
+    public void applyPerkLogic(PlayerEntity player, LogicalSide side) {
         super.applyPerkLogic(player, side);
 
         LogCategory.PERKS.info(() -> "Applying modifiers of " + this.getRegistryName() + " on " + side.name());
@@ -102,7 +103,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     }
 
     @Override
-    public void removePerkLogic(PlayerEntity player, Dist side) {
+    public void removePerkLogic(PlayerEntity player, LogicalSide side) {
         super.removePerkLogic(player, side);
 
         LogCategory.PERKS.info(() -> "Removing modifiers of " + this.getRegistryName() + " on " + side.name());
@@ -132,7 +133,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     @Override
     @OnlyIn(Dist.CLIENT)
     public boolean addLocalizedTooltip(Collection<String> tooltip) {
-        Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getInstance().player, Dist.CLIENT);
+        Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getInstance().player, LogicalSide.CLIENT);
         boolean addEmptyLine = !modifiers.isEmpty();
 
         if (canSeeClient()) {

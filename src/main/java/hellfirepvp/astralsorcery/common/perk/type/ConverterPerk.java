@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk.type;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkConverter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Collection;
 
@@ -23,6 +24,6 @@ import java.util.Collection;
  */
 public interface ConverterPerk {
 
-    Collection<PerkConverter> provideConverters(PlayerEntity player, Dist dist);
+    Collection<PerkConverter> provideConverters(PlayerEntity player, LogicalSide side);
 
 }

@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.observerlib.api.util.BlockArray;
 import hellfirepvp.observerlib.client.util.RenderWorld;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.text.ITextComponent;
@@ -51,7 +52,7 @@ public class RenderPageStructure implements RenderablePage {
         this.blocks = structure;
         this.name = name;
         this.shift = shift;
-        this.contentStacks = structure.getAsStacks(this.render).stream()
+        this.contentStacks = structure.getAsStacks(this.render, Minecraft.getInstance().player).stream()
                 .map(stack -> new Tuple<>(stack, new StringTextComponent(stack.getCount() + "x").appendSibling(stack.getDisplayName())))
                 .collect(Collectors.toList());
     }

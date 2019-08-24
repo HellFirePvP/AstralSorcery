@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.perk.modifier.PerkConverter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.awt.*;
 import java.util.Collections;
@@ -45,7 +46,7 @@ public class AttributeConverterPerk extends ProgressGatedPerk implements Convert
     }
 
     @Override
-    public List<PerkConverter> provideConverters(PlayerEntity player, Dist side) {
+    public List<PerkConverter> provideConverters(PlayerEntity player, LogicalSide side) {
         if (modifiersDisabled(player, side)) {
             return Collections.emptyList();
         }
@@ -54,8 +55,8 @@ public class AttributeConverterPerk extends ProgressGatedPerk implements Convert
     }
 
     @Override
-    public void applyPerkLogic(PlayerEntity player, Dist side) {}
+    public void applyPerkLogic(PlayerEntity player, LogicalSide side) {}
 
     @Override
-    public void removePerkLogic(PlayerEntity player, Dist side) {}
+    public void removePerkLogic(PlayerEntity player, LogicalSide side) {}
 }

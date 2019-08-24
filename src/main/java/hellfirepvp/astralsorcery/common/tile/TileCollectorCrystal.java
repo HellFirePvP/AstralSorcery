@@ -93,8 +93,12 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
     }
 
     @Override
-    public boolean setAttunedConstellation(IWeakConstellation cst) {
-        return false;
+    public boolean setAttunedConstellation(@Nullable IWeakConstellation cst) {
+        if (cst != this.constellationType) {
+            markForUpdate();
+        }
+        this.constellationType = cst;
+        return true;
     }
 
     @Override
@@ -103,8 +107,12 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
     }
 
     @Override
-    public boolean setTraitConstellation(IMinorConstellation cst) {
-        return false;
+    public boolean setTraitConstellation(@Nullable IMinorConstellation cst) {
+        if (cst != this.constellationTrait) {
+            markForUpdate();
+        }
+        this.constellationTrait = cst;
+        return true;
     }
 
     @Nullable
@@ -115,15 +123,16 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
 
     @Override
     public void setAttributes(@Nullable CrystalAttributes attributes) {
+        if (this.crystalAttributes == null && attributes == null) {
+            return;
+        }
+
+        // this.crystalAttributes null check is covered in .equals
+        if (attributes == null ||
+                !attributes.equals(this.crystalAttributes)) {
+            markForUpdate();
+        }
         this.crystalAttributes = attributes;
-    }
-
-    public IWeakConstellation getConstellationType() {
-        return constellationType;
-    }
-
-    public IMinorConstellation getConstellationTrait() {
-        return constellationTrait;
     }
 
     public CollectorCrystalType getCollectorType() {
@@ -134,10 +143,7 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
         return playerUUID;
     }
 
-    public void updateData(IWeakConstellation constellationType, IMinorConstellation constellationTrait, CrystalAttributes attributes, UUID playerUUID, CollectorCrystalType collectorType) {
-        this.constellationType = constellationType;
-        this.constellationTrait = constellationTrait;
-        this.crystalAttributes = attributes;
+    public void updateData(UUID playerUUID, CollectorCrystalType collectorType) {
         this.playerUUID = playerUUID;
         this.collectorType = collectorType;
 

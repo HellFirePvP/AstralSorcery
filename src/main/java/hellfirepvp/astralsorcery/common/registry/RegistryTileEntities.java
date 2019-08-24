@@ -34,6 +34,8 @@ public class RegistryTileEntities {
         SPECTRAL_RELAY = registerTile(TileSpectralRelay.class, BlocksAS.SPECTRAL_RELAY);
         ALTAR = registerTile(TileAltar.class, BlocksAS.ALTAR_DISCOVERY, BlocksAS.ALTAR_ATTUNEMENT, BlocksAS.ALTAR_CONSTELLATION, BlocksAS.ALTAR_RADIANCE);
         COLLECTOR_CRYSTAL = registerTile(TileCollectorCrystal.class, BlocksAS.ROCK_COLLECTOR_CRYSTAL, BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
+        LENS = registerTile(TileLens.class, BlocksAS.LENS);
+        PRISM = registerTile(TilePrism.class, BlocksAS.PRISM);
         RITUAL_LINK = registerTile(TileRitualLink.class, BlocksAS.RITUAL_LINK);
         RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class, BlocksAS.RITUAL_PEDESTAL);
         WELL = registerTile(TileWell.class, BlocksAS.WELL);

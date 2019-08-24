@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary.link;
 
+import hellfirepvp.astralsorcery.common.item.base.OverrideInteractItem;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -15,5 +17,6 @@ package hellfirepvp.astralsorcery.common.auxiliary.link;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 20:59
  */
-public interface IItemLinkingTool {
+public interface IItemLinkingTool extends OverrideInteractItem {
+
 }

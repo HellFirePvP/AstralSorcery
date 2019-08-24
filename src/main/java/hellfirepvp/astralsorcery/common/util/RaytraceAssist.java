@@ -29,7 +29,7 @@ import java.util.*;
 public class RaytraceAssist {
 
     private static final List<BlockPredicate> passable = new ArrayList<>();
-    private static final double STEP_WIDTH = 0.05;
+    private static final double STEP_WIDTH = 0.1;
     private static final Vector3 CENTRALIZE = new Vector3(0.5, 0.5, 0.5);
 
     private final Vector3 start, target;

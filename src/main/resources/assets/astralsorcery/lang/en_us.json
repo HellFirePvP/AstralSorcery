@@ -536,7 +536,6 @@
   "entity.EntityLiquidSpark.name": "Liquid Spark",
   "entity.EntityShootingStar.name": "Shooting Star",
 
-  "item.itemlinkingtool": "Linking Tool",
   "item.itemchargedcrystalpickaxe": "Infused Crystal Pickaxe",
   "item.itemchargedcrystalshovel": "Infused Crystal Shovel",
   "item.itemchargedcrystalaxe": "Infused Crystal Axe",
@@ -600,6 +599,7 @@
   "item.astralsorcery.constellation_paper": "Constellation Paper",
   "item.astralsorcery.knowledge_share": "Scroll of Written Expertise",
   "item.astralsorcery.wand": "Resonating Wand",
+  "item.astralsorcery.linking_tool": "Linking Tool",
 
   "item.astralsorcery.illumination_powder": "Illumination Powder",
   "item.astralsorcery.nocturnal_powder": "Nocturnal Powder",
@@ -656,6 +656,8 @@
   "block.astralsorcery.altar_brilliance": "Altar",
   "block.astralsorcery.rock_collector_crystal": "Collector Crystal",
   "block.astralsorcery.celestial_collector_crystal": "Celestial Collector Crystal",
+  "block.astralsorcery.lens": "Lens",
+  "block.astralsorcery.prism": "PrismLens",
   "block.astralsorcery.ritual_link": "Ritual Anchor",
   "block.astralsorcery.ritual_pedestal": "Ritual Pedestal",
   "block.astralsorcery.well": "Lightwell",
@@ -667,8 +669,6 @@
   "block.astralsorcery.blockworldilluminator": "Cave Illuminator",
   "block.astralsorcery.blockmarblestairs": "Marble Stairs",
   "block.astralsorcery.blockmarbleslab.bricks": "Marble Slab",
-  "block.astralsorcery.blockprism": "PrismLens",
-  "block.astralsorcery.blocklens": "Lens",
   "block.astralsorcery.blockcelestialcrystals.stage_0": "Celestial Crystal Cluster",
   "block.astralsorcery.blockcelestialcrystals.stage_1": "Celestial Crystal Cluster",
   "block.astralsorcery.blockcelestialcrystals.stage_2": "Celestial Crystal Cluster",

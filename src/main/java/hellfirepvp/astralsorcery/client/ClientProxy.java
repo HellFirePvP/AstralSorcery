@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectUpdater;
 import hellfirepvp.astralsorcery.client.event.ConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.EffectRenderEventHandler;
+import hellfirepvp.astralsorcery.client.event.LightbeamRenderHelper;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
@@ -49,8 +50,6 @@ import java.util.function.Consumer;
  * Date: 19.04.2019 / 18:38
  */
 public class ClientProxy extends CommonProxy {
-
-    public static boolean connected = false;
 
     private ClientScheduler clientScheduler;
 
@@ -106,6 +105,8 @@ public class ClientProxy extends CommonProxy {
         registrar.accept(this.clientScheduler);
         registrar.accept(RenderInfo.getInstance());
         registrar.accept(EffectUpdater.getInstance());
+
+        LightbeamRenderHelper.attachTickListener(registrar);
     }
 
     @Override

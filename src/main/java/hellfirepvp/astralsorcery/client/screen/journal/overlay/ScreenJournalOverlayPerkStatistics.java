@@ -30,6 +30,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -75,7 +76,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
                 .forEach(t -> ((VanillaPerkAttributeType) t).refreshAttribute(player));
 
         for (PerkAttributeType type : RegistriesAS.REGISTRY_PERK_ATTRIBUTE_TYPES.getValues()) {
-            if (type.hasTypeApplied(player, Dist.CLIENT)) {
+            if (type.hasTypeApplied(player, LogicalSide.CLIENT)) {
                 PerkStatistic strPerkStat = interpreter.getValue(type);
                 if (strPerkStat != null) {
                     statistics.add(strPerkStat);
@@ -179,7 +180,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         }
 
         PlayerEntity player = Minecraft.getInstance().player;
-        PerkAttributeMap attrMap = PerkAttributeHelper.getOrCreateMap(player, Dist.CLIENT);
+        PerkAttributeMap attrMap = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.CLIENT);
 
         List<String> information = Lists.newArrayList();
         information.add(I18n.format("perk.reader.description.head",

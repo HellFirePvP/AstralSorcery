@@ -97,6 +97,7 @@ public class RegistryItems {
         ENCHANTMENT_AMULET = registerItem(new ItemEnchantmentAmulet());
         KNOWLEDGE_SHARE = registerItem(new ItemKnowledgeShare());
         WAND = registerItem(new ItemWand());
+        LINKING_TOOL = registerItem(new ItemLinkingTool());
 
         NOCTURNAL_POWDER = registerItem(new ItemNocturnalPowder());
         ILLUMINATION_POWDER = registerItem(new ItemIlluminationPowder());

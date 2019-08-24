@@ -17,6 +17,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.ResourceLocation;
@@ -27,11 +28,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -91,6 +95,32 @@ public class NBTHelper {
         base.remove(AstralSorcery.MODID);
     }
 
+    @Nonnull
+    public static <E, N extends INBT> List<E> readList(CompoundNBT nbt, String key, int type, Function<N, E> deserializer) {
+        if (!nbt.contains(key, Constants.NBT.TAG_LIST)) {
+            return new ArrayList<>();
+        }
+        return readList(nbt.getList(key, type), deserializer);
+    }
+
+    @Nonnull
+    public static <E, N extends INBT> List<E> readList(ListNBT nbt, Function<N, E> deserializer) {
+        return nbt.stream()
+                .map(n -> deserializer.apply((N) n))
+                .collect(Collectors.toList());
+    }
+
+    public static <E> void writeList(CompoundNBT tag, String key, Collection<E> collection, Function<E, INBT> serializer) {
+        tag.put(key, writeList(collection, serializer));
+    }
+
+    public static <E> ListNBT writeList(Collection<E> collection, Function<E, INBT> serializer) {
+        ListNBT nbt = new ListNBT();
+        nbt.addAll(collection.stream()
+                .map(serializer)
+                .collect(Collectors.toList()));
+        return nbt;
+    }
 
     public static CompoundNBT getData(ItemStack stack) {
         CompoundNBT compound = stack.getTag();

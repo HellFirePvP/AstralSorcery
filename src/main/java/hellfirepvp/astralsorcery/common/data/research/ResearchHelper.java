@@ -11,8 +11,8 @@ package hellfirepvp.astralsorcery.common.data.research;
 import com.google.common.io.Files;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
+import hellfirepvp.astralsorcery.common.network.play.server.PktProgressionUpdate;
+import hellfirepvp.astralsorcery.common.network.play.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -44,14 +44,13 @@ import java.util.UUID;
  */
 public class ResearchHelper {
 
-    private static PlayerProgress clientProgress = new PlayerProgress();
-    private static boolean clientInitialized = false;
+    private static PlayerProgress clientProgress = new PlayerProgressTestAccess();
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
     @Nonnull
-    public static PlayerProgress getProgress(PlayerEntity player, Dist dist) {
-        if (dist.isClient()) {
+    public static PlayerProgress getProgress(PlayerEntity player, LogicalSide side) {
+        if (side.isClient()) {
             return getClientProgress();
         } else if (player instanceof ServerPlayerEntity) {
             return getProgressServer((ServerPlayerEntity) player);
@@ -63,10 +62,6 @@ public class ResearchHelper {
     @Nonnull
     public static PlayerProgress getClientProgress() {
         return clientProgress;
-    }
-
-    public static boolean isClientInitialized() {
-        return clientInitialized;
     }
 
     @Nonnull
@@ -96,7 +91,6 @@ public class ResearchHelper {
         if (pkt != null) {
             ResearchHelper.clientProgress.receive(pkt);
         }
-        ResearchHelper.clientInitialized = pkt != null;
     }
 
     public static void loadPlayerKnowledge(ServerPlayerEntity p) {
@@ -179,7 +173,7 @@ public class ResearchHelper {
     }
 
     public static boolean mergeApplyPlayerprogress(PlayerProgress toMergeFrom, PlayerEntity player) {
-        PlayerProgress progress = ResearchHelper.getProgress(player, Dist.DEDICATED_SERVER);
+        PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if(!progress.isValid()) return false;
 
         progress.acceptMergeFrom(toMergeFrom);

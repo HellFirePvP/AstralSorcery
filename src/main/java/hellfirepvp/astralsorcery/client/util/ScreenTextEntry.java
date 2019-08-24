@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.fonts.TextInputUtil;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.SharedConstants;
+import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,12 +59,11 @@ public class ScreenTextEntry {
     }
 
     public boolean keyTyped(int key) {
-        //Escape & Return & Numpad Enter
-        if (key == 256 || key == 257 || key == 335) {
+        if (key == GLFW.GLFW_KEY_ESCAPE || key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER) {
             return false;
         }
         //Arrow keys
-        if (key >= 262 && key <= 265) {
+        if (key >= GLFW.GLFW_KEY_RIGHT && key <= GLFW.GLFW_KEY_UP) {
             return false;
         }
         return this.inputUtil.func_216897_a(key);

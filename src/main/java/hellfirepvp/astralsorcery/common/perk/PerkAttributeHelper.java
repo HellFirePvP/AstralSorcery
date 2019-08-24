@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -32,16 +33,16 @@ public class PerkAttributeHelper {
     private PerkAttributeHelper() {}
 
     @Nonnull
-    public static PerkAttributeMap getOrCreateMap(PlayerEntity player, Dist dist) {
-        if (dist == Dist.CLIENT) {
+    public static PerkAttributeMap getOrCreateMap(PlayerEntity player, LogicalSide dist) {
+        if (dist.isClient()) {
             return playerPerkAttributesClient.computeIfAbsent(player.getUniqueID(), (uuid) -> new PerkAttributeMap(dist));
         } else {
             return playerPerkAttributes.computeIfAbsent(player.getUniqueID(), (uuid) -> new PerkAttributeMap(dist));
         }
     }
 
-    public static PerkAttributeMap getMockInstance(Dist dist) {
-        return new PerkAttributeMap(dist);
+    public static PerkAttributeMap getMockInstance(LogicalSide side) {
+        return new PerkAttributeMap(side);
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.auxiliary.gateway.CelestialGatewayHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
@@ -31,11 +32,13 @@ import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerIO;
+import hellfirepvp.astralsorcery.common.event.handler.EventHandlerConnect;
+import hellfirepvp.astralsorcery.common.event.handler.EventHandlerInteract;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktOpenGui;
+import hellfirepvp.astralsorcery.common.network.play.server.PktOpenGui;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
@@ -50,11 +53,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -119,6 +120,7 @@ public class CommonProxy {
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(ResearchHelper::saveAndClearServerCache));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperRitualFlight::clearServer));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperSpawnDeny::clearServer));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.start(CelestialGatewayHandler.INSTANCE::onServerStart));
 
         SyncDataHolder.initialize();
     }
@@ -140,9 +142,13 @@ public class CommonProxy {
         eventBus.addListener(this::onServerStarted);
 
         EventHandlerIO.attachListeners(eventBus);
+        EventHandlerConnect.attachListeners(eventBus);
+        EventHandlerInteract.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
+
         eventBus.addListener(PlayerAmuletHandler::onEnchantmentAdd);
         eventBus.addListener(BlockDropCaptureAssist.INSTANCE::onDrop);
+        eventBus.addListener(CelestialGatewayHandler.INSTANCE::onWorldInit);
 
         tickManager.attachListeners(eventBus);
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);

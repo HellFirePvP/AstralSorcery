@@ -10,8 +10,8 @@ package hellfirepvp.astralsorcery.common.event;
 
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,12 +31,12 @@ public class ASRegistryEvents {
         private boolean perkDisabled;
         private final AbstractPerk perk;
         private final PlayerEntity player;
-        private final Dist dist;
+        private final LogicalSide side;
 
-        public PerkDisable(AbstractPerk perk, PlayerEntity player, Dist dist) {
+        public PerkDisable(AbstractPerk perk, PlayerEntity player, LogicalSide side) {
             this.perk = perk;
             this.player = player;
-            this.dist = dist;
+            this.side = side;
         }
 
         public AbstractPerk getPerk() {
@@ -47,8 +47,8 @@ public class ASRegistryEvents {
             return player;
         }
 
-        public Dist getSide() {
-            return dist;
+        public LogicalSide getSide() {
+            return side;
         }
 
         public boolean isPerkDisabled() {

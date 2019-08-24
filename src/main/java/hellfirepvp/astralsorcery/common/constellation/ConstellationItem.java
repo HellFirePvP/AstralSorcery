@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.constellation;
 
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -19,12 +21,14 @@ import net.minecraft.item.ItemStack;
  */
 public interface ConstellationItem {
 
+    @Nullable
     IWeakConstellation getAttunedConstellation(ItemStack stack);
 
-    boolean setAttunedConstellation(ItemStack stack, IWeakConstellation cst);
+    boolean setAttunedConstellation(ItemStack stack, @Nullable IWeakConstellation cst);
 
+    @Nullable
     IMinorConstellation getTraitConstellation(ItemStack stack);
 
-    boolean setTraitConstellation(ItemStack stack, IMinorConstellation cst);
+    boolean setTraitConstellation(ItemStack stack, @Nullable IMinorConstellation cst);
 
 }

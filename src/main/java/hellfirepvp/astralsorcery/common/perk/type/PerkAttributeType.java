@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
@@ -36,7 +37,7 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     protected static final Random rand = new Random();
 
     //May be used by subclasses to more efficiently track who's got a perk applied
-    private Map<Dist, List<UUID>> applicationCache = Maps.newHashMap();
+    private Map<LogicalSide, List<UUID>> applicationCache = Maps.newHashMap();
 
     private final boolean isOnlyMultiplicative;
 
@@ -77,29 +78,29 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
         return new PerkAttributeModifier(this, mode, modifier);
     }
 
-    public void onApply(PlayerEntity player, Dist side) {
+    public void onApply(PlayerEntity player, LogicalSide side) {
         List<UUID> applied = applicationCache.computeIfAbsent(side, s -> Lists.newArrayList());
         if (!applied.contains(player.getUniqueID())) {
             applied.add(player.getUniqueID());
         }
     }
 
-    public void onRemove(PlayerEntity player, Dist side, boolean removedCompletely) {
+    public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely) {
         if (removedCompletely) {
             applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).remove(player.getUniqueID());
         }
     }
 
-    public void onModeApply(PlayerEntity player, ModifierType mode, Dist side) {}
+    public void onModeApply(PlayerEntity player, ModifierType mode, LogicalSide side) {}
 
-    public void onModeRemove(PlayerEntity player, ModifierType mode, Dist side, boolean removedCompletely) {}
+    public void onModeRemove(PlayerEntity player, ModifierType mode, LogicalSide side, boolean removedCompletely) {}
 
-    public boolean hasTypeApplied(PlayerEntity player, Dist side) {
+    public boolean hasTypeApplied(PlayerEntity player, LogicalSide side) {
         return applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).contains(player.getUniqueID());
     }
 
     //TODO cache clear DC
-    public final void clear(Dist side) {
+    public final void clear(LogicalSide side) {
         applicationCache.remove(side);
     }
 
