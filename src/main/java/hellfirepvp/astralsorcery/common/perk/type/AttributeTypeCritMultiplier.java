@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk.type;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -31,8 +32,8 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class AttributeTypeCritMultiplier extends PerkAttributeType {
 
-    public AttributeTypeCritMultiplier(ResourceLocation key) {
-        super(key, true);
+    public AttributeTypeCritMultiplier() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_INC_CRIT_MULTIPLIER, true);
     }
 
     @Override

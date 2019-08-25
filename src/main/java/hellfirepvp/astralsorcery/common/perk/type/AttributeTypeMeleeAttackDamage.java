@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaAttributeType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -29,8 +30,8 @@ public class AttributeTypeMeleeAttackDamage extends VanillaAttributeType {
     private static final UUID MELEE_ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID = UUID.fromString("020E0DFB-87AE-4653-95D6-831010FF91A1");
     private static final UUID MELEE_ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID = UUID.fromString("020E0DFB-87AE-4653-9F56-831010FF91A2");
 
-    public AttributeTypeMeleeAttackDamage(ResourceLocation name) {
-        super(name);
+    public AttributeTypeMeleeAttackDamage() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_MELEE_DAMAGE);
     }
 
     @Nonnull

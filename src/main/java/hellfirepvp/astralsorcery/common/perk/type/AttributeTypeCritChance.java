@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierCritChance;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
@@ -34,8 +35,8 @@ import javax.annotation.Nonnull;
  */
 public class AttributeTypeCritChance extends PerkAttributeType {
 
-    public AttributeTypeCritChance(ResourceLocation key) {
-        super(key);
+    public AttributeTypeCritChance() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_INC_CRIT_CHANCE);
     }
 
     @Override

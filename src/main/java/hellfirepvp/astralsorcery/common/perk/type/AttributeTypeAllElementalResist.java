@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
@@ -28,8 +29,8 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class AttributeTypeAllElementalResist extends PerkAttributeType {
 
-    public AttributeTypeAllElementalResist(ResourceLocation name) {
-        super(name, true);
+    public AttributeTypeAllElementalResist() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST, true);
     }
 
     @Override

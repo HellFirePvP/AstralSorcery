@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaAttributeType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -29,8 +30,8 @@ public class AttributeTypeMaxHealth extends VanillaAttributeType {
     private static final UUID MAX_HEALTH_ADD_MULTIPLY_ID = UUID.fromString("1FA85BB6-4ECF-45A3-A880-68045A46Dc39");
     private static final UUID MAX_HEALTH_STACK_MULTIPLY_ID = UUID.fromString("1FA85BB6-F6CF-45A3-A880-68045A46Dc39");
 
-    public AttributeTypeMaxHealth(ResourceLocation name) {
-        super(name);
+    public AttributeTypeMaxHealth() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_HEALTH);
     }
 
     @Nonnull

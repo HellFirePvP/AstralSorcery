@@ -89,6 +89,7 @@ public class PrimerEventHandler {
         RegistryKnowledgeFragments.init();
 
         RegistryPerkAttributeTypes.init();
+        RegistryPerkAttributeReaders.init();
 
         RegistryCrystalProperties.init();
         RegistryCrystalPropertyUsages.init();

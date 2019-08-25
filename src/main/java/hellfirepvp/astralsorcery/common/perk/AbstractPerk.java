@@ -20,9 +20,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,16 +48,16 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
 
     protected static final Random rand = new Random();
 
-    public static final PerkCategory CATEGORY_BASE = new PerkCategory("base", TextFormatting.WHITE.toString());
-    public static final PerkCategory CATEGORY_ROOT = new PerkCategory("root", TextFormatting.WHITE.toString());
-    public static final PerkCategory CATEGORY_MAJOR = new PerkCategory("major", TextFormatting.WHITE.toString());
-    public static final PerkCategory CATEGORY_KEY = new PerkCategory("key", TextFormatting.GOLD.toString());
-    public static final PerkCategory CATEGORY_EPIPHANY = new PerkCategory("epiphany", TextFormatting.GOLD.toString());
-    public static final PerkCategory CATEGORY_FOCUS = new PerkCategory("focus", TextFormatting.GOLD.toString());
+    public static final PerkCategory CATEGORY_BASE = new PerkCategory("base", TextFormatting.WHITE);
+    public static final PerkCategory CATEGORY_ROOT = new PerkCategory("root", TextFormatting.WHITE);
+    public static final PerkCategory CATEGORY_MAJOR = new PerkCategory("major", TextFormatting.WHITE);
+    public static final PerkCategory CATEGORY_KEY = new PerkCategory("key", TextFormatting.GOLD);
+    public static final PerkCategory CATEGORY_EPIPHANY = new PerkCategory("epiphany", TextFormatting.GOLD);
+    public static final PerkCategory CATEGORY_FOCUS = new PerkCategory("focus", TextFormatting.GOLD);
 
     protected final Point offset;
     private PerkCategory category = CATEGORY_BASE;
-    private List<String> tooltipCache = null;
+    private List<ITextComponent> tooltipCache = null;
     private boolean cacheTooltip = true;
     protected String ovrUnlocalizedNamePrefix = null;
     private PerkTreePoint<? extends AbstractPerk> treePoint = null;
@@ -212,7 +210,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public final Collection<String> getLocalizedTooltip() {
+    public final Collection<ITextComponent> getLocalizedTooltip() {
         if (cacheTooltip && tooltipCache != null) {
             return tooltipCache;
         }
@@ -220,9 +218,11 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         tooltipCache = Lists.newArrayList();
         String key = this.ovrUnlocalizedNamePrefix;
         if (modifiersDisabled(Minecraft.getInstance().player, LogicalSide.CLIENT)) {
-            tooltipCache.add(TextFormatting.GRAY + I18n.format("perk.info.disabled"));
+            tooltipCache.add(new TranslationTextComponent("perk.info.disabled")
+                    .setStyle(new Style().setColor(TextFormatting.GRAY)));
         } else if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
-            tooltipCache.add(this.getCategory().getTextFormatting() + I18n.format(this.getUnlocalizedName() + ".name"));
+            tooltipCache.add(new TranslationTextComponent(this.getUnlocalizedName() + ".name")
+                    .setStyle(new Style().setColor(this.getCategory().getTextFormatting())));
 
             if (key == null) {
                 key = "perk." + getRegistryName().getNamespace() + "." + getRegistryName().getPath();
@@ -230,27 +230,28 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
             int prevLength = tooltipCache.size();
             boolean shouldAdd = addLocalizedTooltip(tooltipCache);
             if (shouldAdd && prevLength != tooltipCache.size()) {
-                tooltipCache.add(""); //Add empty line..
+                tooltipCache.add(new StringTextComponent(""));
             }
             if (I18n.hasKey(key + ".desc.1")) { // Might have a indexed list there
                 int count = 1;
                 while (I18n.hasKey(key + ".desc." + count)) {
-                    tooltipCache.add(I18n.format(key + ".desc." + count));
+                    tooltipCache.add(new TranslationTextComponent(key + ".desc." + count));
                     count++;
                 }
-                tooltipCache.add("");
+                tooltipCache.add(new StringTextComponent(""));
             } else if (I18n.hasKey(key + ".desc")) {
-                tooltipCache.add(I18n.format(key + ".desc"));
-                tooltipCache.add("");
+                tooltipCache.add(new TranslationTextComponent(key + ".desc"));
+                tooltipCache.add(new StringTextComponent(""));
             }
         } else {
-            tooltipCache.add(TextFormatting.RED + I18n.format("perk.info.missing_progress"));
+            tooltipCache.add(new TranslationTextComponent("perk.info.missing_progress")
+                    .setStyle(new Style().setColor(TextFormatting.RED)));
         }
         return tooltipCache;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public boolean addLocalizedTooltip(Collection<String> tooltip) {
+    public boolean addLocalizedTooltip(Collection<ITextComponent> tooltip) {
         return false;
     }
 
@@ -297,19 +298,19 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     public static class PerkCategory {
 
         private final String unlocName;
-        private String textFormatting;
+        private TextFormatting color;
 
-        public PerkCategory(@Nonnull String unlocName, @Nonnull String formattingPrefix) {
+        public PerkCategory(@Nonnull String unlocName, @Nonnull TextFormatting color) {
             this.unlocName = unlocName;
-            this.textFormatting = formattingPrefix;
+            this.color = color;
         }
 
         public String getUnlocalizedName() {
             return unlocName;
         }
 
-        public String getTextFormatting() {
-            return textFormatting;
+        public TextFormatting getTextFormatting() {
+            return color;
         }
 
         @Nullable

@@ -21,6 +21,8 @@ import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -132,7 +134,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean addLocalizedTooltip(Collection<String> tooltip) {
+    public boolean addLocalizedTooltip(Collection<ITextComponent> tooltip) {
         Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getInstance().player, LogicalSide.CLIENT);
         boolean addEmptyLine = !modifiers.isEmpty();
 
@@ -140,7 +142,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
             for (PerkAttributeModifier modifier : modifiers) {
                 String modifierDisplay = modifier.getLocalizedDisplayString();
                 if (modifierDisplay != null) {
-                    tooltip.add(modifierDisplay);
+                    tooltip.add(new StringTextComponent(modifierDisplay));
                 } else {
                     addEmptyLine = false;
                 }
