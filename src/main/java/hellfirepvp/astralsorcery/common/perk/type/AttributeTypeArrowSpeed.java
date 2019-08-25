@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,8 +29,8 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class AttributeTypeArrowSpeed extends PerkAttributeType {
 
-    public AttributeTypeArrowSpeed(ResourceLocation key) {
-        super(key, true);
+    public AttributeTypeArrowSpeed() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_PROJ_SPEED, true);
     }
 
     @Override

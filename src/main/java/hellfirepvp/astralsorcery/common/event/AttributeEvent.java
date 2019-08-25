@@ -144,6 +144,12 @@ public class AttributeEvent {
         return (float) postProcessModded(player, key, (double) value);
     }
 
+    public static double postProcessVanilla(double value, ModifiableAttributeInstance attribute) {
+        AttributeEvent.PostProcessVanilla event = new AttributeEvent.PostProcessVanilla(attribute, value);
+        MinecraftForge.EVENT_BUS.post(event);
+        return event.getAttribute().clampValue(event.getValue());
+    }
+
     @Nullable
     private static LivingEntity getEntity(AbstractAttributeMap map) {
         if (fAttributeMapEntity != null) {

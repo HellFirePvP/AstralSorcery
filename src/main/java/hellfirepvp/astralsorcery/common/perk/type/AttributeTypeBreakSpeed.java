@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -29,8 +30,8 @@ public class AttributeTypeBreakSpeed extends PerkAttributeType {
 
     public static boolean evaluateBreakSpeedWithoutPerks = false;
 
-    public AttributeTypeBreakSpeed(ResourceLocation key) {
-        super(key, true);
+    public AttributeTypeBreakSpeed() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_INC_HARVEST_SPEED, true);
     }
 
     @Override

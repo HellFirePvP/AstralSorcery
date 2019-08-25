@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaAttributeType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -29,8 +30,8 @@ public class AttributeTypeArmor extends VanillaAttributeType {
     private static final UUID ARMOR_ADD_MULTIPLY_ID = UUID.fromString("92AAF3D7-C4CD-44CD-A721-7975FBFDB763");
     private static final UUID ARMOR_STACK_MULTIPLY_ID = UUID.fromString("92AAF3D7-FF4D-44CD-A721-7975FBFDB763");
 
-    public AttributeTypeArmor(ResourceLocation name) {
-        super(name);
+    public AttributeTypeArmor() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_ARMOR);
     }
 
     @Nonnull

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierLifeLeech;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
@@ -32,8 +33,8 @@ import javax.annotation.Nonnull;
  */
 public class AttributeTypeLifeLeech extends PerkAttributeType {
 
-    public AttributeTypeLifeLeech(ResourceLocation key) {
-        super(key);
+    public AttributeTypeLifeLeech() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_ATTACK_LIFE_LEECH);
     }
 
     @Override

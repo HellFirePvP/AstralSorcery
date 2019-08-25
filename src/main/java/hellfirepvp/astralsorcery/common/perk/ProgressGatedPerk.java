@@ -14,7 +14,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -65,9 +68,10 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean addLocalizedTooltip(Collection<String> tooltip) {
+    public boolean addLocalizedTooltip(Collection<ITextComponent> tooltip) {
         if (!canSeeClient()) {
-            tooltip.add(TextFormatting.RED + I18n.format("perk.info.missing_progress"));
+            tooltip.add(new TranslationTextComponent("perk.info.missing_progress")
+                    .setStyle(new Style().setColor(TextFormatting.RED)));
             return false;
         }
         return super.addLocalizedTooltip(tooltip);

@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierThorns;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
@@ -37,8 +38,8 @@ import javax.annotation.Nonnull;
  */
 public class AttributeTypeThorns extends PerkAttributeType {
 
-    public AttributeTypeThorns(ResourceLocation key) {
-        super(key);
+    public AttributeTypeThorns() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_INC_THORNS);
     }
 
     @Override

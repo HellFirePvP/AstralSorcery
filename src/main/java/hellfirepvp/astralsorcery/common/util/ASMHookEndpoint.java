@@ -64,9 +64,7 @@ public class ASMHookEndpoint {
     }
 
     public static double postProcessVanilla(double value, ModifiableAttributeInstance attributeInstance) {
-        AttributeEvent.PostProcessVanilla event = new AttributeEvent.PostProcessVanilla(attributeInstance, value);
-        MinecraftForge.EVENT_BUS.post(event);
-        return event.getAttribute().clampValue(event.getValue());
+        return AttributeEvent.postProcessVanilla(value, attributeInstance);
     }
 
 }

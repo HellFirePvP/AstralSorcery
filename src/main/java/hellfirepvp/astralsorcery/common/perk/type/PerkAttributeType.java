@@ -18,7 +18,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -26,7 +25,6 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,6 +49,10 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     protected PerkAttributeType(ResourceLocation key, boolean isMultiplicative) {
         this.setRegistryName(key);
         this.isOnlyMultiplicative = isMultiplicative;
+    }
+
+    public static PerkAttributeType makeDefault(ResourceLocation name, boolean isMultiplicative) {
+        return new PerkAttributeType(name, isMultiplicative);
     }
 
     public boolean isMultiplicative() {

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.text.DecimalFormat;
@@ -71,7 +72,7 @@ public abstract class PerkAttributeReader extends ForgeRegistryEntry<PerkAttribu
      * @param side The current side
      * @return The default value as it would be without any modifiers.
      */
-    public abstract double getDefaultValue(PerkAttributeMap statMap, PlayerEntity player, Dist side);
+    public abstract double getDefaultValue(PerkAttributeMap statMap, PlayerEntity player, LogicalSide side);
 
     /**
      * Return the modifier (multiplier or addition) for the given mode.
@@ -82,7 +83,7 @@ public abstract class PerkAttributeReader extends ForgeRegistryEntry<PerkAttribu
      * @param mode The mode to get the modifier for
      * @return The currently applying modifier value for the given mode.
      */
-    public abstract double getModifierValueForMode(PerkAttributeMap statMap, PlayerEntity player, Dist side,
+    public abstract double getModifierValueForMode(PerkAttributeMap statMap, PlayerEntity player, LogicalSide side,
                                                    ModifierType mode);
 
     public static String formatDecimal(double decimal) {

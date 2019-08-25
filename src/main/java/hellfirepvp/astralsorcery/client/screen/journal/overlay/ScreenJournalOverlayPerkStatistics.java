@@ -184,15 +184,15 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
 
         List<String> information = Lists.newArrayList();
         information.add(I18n.format("perk.reader.description.head",
-                PerkAttributeReader.formatDecimal(reader.getDefaultValue(attrMap, player, Dist.CLIENT))));
+                PerkAttributeReader.formatDecimal(reader.getDefaultValue(attrMap, player, LogicalSide.CLIENT))));
         information.add(I18n.format("perk.reader.description.addition",
-                PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, Dist.CLIENT,
+                PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, LogicalSide.CLIENT,
                         ModifierType.ADDITION) - 1)));
         information.add(I18n.format("perk.reader.description.increase",
-                PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, Dist.CLIENT,
+                PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, LogicalSide.CLIENT,
                         ModifierType.ADDED_MULTIPLY))));
         information.add(I18n.format("perk.reader.description.moreless",
-                PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, Dist.CLIENT,
+                PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, LogicalSide.CLIENT,
                         ModifierType.STACKING_MULTIPLY))));
 
         if (!stat.getSuffix().isEmpty() || !stat.getPostProcessInfo().isEmpty()) {

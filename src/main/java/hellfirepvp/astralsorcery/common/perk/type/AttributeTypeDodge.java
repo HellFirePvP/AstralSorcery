@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierDodge;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
@@ -31,8 +32,8 @@ import javax.annotation.Nonnull;
  */
 public class AttributeTypeDodge extends PerkAttributeType {
 
-    public AttributeTypeDodge(ResourceLocation key) {
-        super(key);
+    public AttributeTypeDodge() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_INC_DODGE);
     }
 
     @Override

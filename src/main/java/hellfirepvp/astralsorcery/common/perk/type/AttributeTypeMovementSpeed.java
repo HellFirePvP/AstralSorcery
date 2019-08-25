@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaAttributeType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -29,8 +30,8 @@ public class AttributeTypeMovementSpeed extends VanillaAttributeType {
     private static final UUID MOVE_SPEED_ADD_MULTIPLY_ID = UUID.fromString("0E769034-8CDD-48A1-88ED-1908F602E127");
     private static final UUID MOVE_SPEED_STACK_MULTIPLY_ID = UUID.fromString("0E769034-8C14-48A1-88ED-1908F602E127");
 
-    public AttributeTypeMovementSpeed(ResourceLocation name) {
-        super(name);
+    public AttributeTypeMovementSpeed() {
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_MOVESPEED);
     }
 
     @Nonnull

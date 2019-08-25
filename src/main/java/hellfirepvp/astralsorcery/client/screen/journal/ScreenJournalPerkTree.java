@@ -43,7 +43,7 @@ import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
 import hellfirepvp.astralsorcery.common.perk.AttributeConverterPerk;
 import hellfirepvp.astralsorcery.common.perk.ProgressGatedPerk;
-import hellfirepvp.astralsorcery.common.perk.modifier.PerkConverter;
+import hellfirepvp.astralsorcery.common.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
@@ -63,7 +63,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.*;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
@@ -293,8 +292,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     AbstractPerk perk = rctPerk.getKey();
                     PlayerProgress prog = ResearchHelper.getClientProgress();
 
-                    perk.getLocalizedTooltip().forEach(line ->
-                            toolTip.add(new StringTextComponent(line).setStyle(tTipInfo)));
+                    perk.getLocalizedTooltip().forEach(line -> toolTip.add(line.setStyle(tTipInfo)));
 
                     if (prog.isPerkSealed(perk)) {
                         toolTip.add(new TranslationTextComponent("perk.info.sealed").setStyle(red));
@@ -743,13 +741,13 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         Color overlay = Color.WHITE;
         switch (status) {
             case UNALLOCATED:
-                overlay = ColorsAS.PERK_UNALLOCATED;
+                overlay = ColorsAS.PERK_CONNECTION_UNALLOCATED;
                 break;
             case ALLOCATED:
-                overlay = ColorsAS.PERK_ALLOCATED;
+                overlay = ColorsAS.PERK_CONNECTION_ALLOCATED;
                 break;
             case UNLOCKABLE:
-                overlay = ColorsAS.PERK_UNLOCKABLE;
+                overlay = ColorsAS.PERK_CONNECTION_UNLOCKABLE;
                 break;
             default:
                 break;
@@ -867,8 +865,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
             if (catStr != null && catStr.toLowerCase().contains(matchText)) {
                 this.searchMatches.add(perk);
             } else {
-                for (String tooltip : perk.getLocalizedTooltip()) {
-                    if (tooltip.toLowerCase().contains(matchText)) {
+                for (ITextComponent tooltip : perk.getLocalizedTooltip()) {
+                    if (tooltip.getFormattedText().contains(matchText)) {
                         this.searchMatches.add(perk);
                         break;
                     }
