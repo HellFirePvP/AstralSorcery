@@ -25,17 +25,17 @@ import javax.annotation.Nullable;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CorePerk
+ * Class: KeyCore
  * Created by HellFirePvP
  * Date: 25.08.2019 / 18:17
  */
-public class CorePerk extends KeyPerk {
+public class KeyCore extends KeyPerk {
 
     public static final ResourceLocation NAME = new ResourceLocation(AstralSorcery.MODID, "core");
 
     private static final int AMT_PERK_POINTS = 2;
 
-    public CorePerk() {
+    public KeyCore() {
         super(NAME, 0, 0);
 
         ConstellationRegistry.getMajorConstellations()

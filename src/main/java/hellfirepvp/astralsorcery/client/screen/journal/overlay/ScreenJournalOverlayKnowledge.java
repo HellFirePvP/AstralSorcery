@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -62,7 +63,7 @@ public class ScreenJournalOverlayKnowledge extends ScreenJournalOverlay {
         int height = 344;
 
         TexturesAS.TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK.bindTexture();
-        drawTexturedRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, width, height, TexturesAS.TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK);
+        RenderingGuiUtils.drawTexturedRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, this.blitOffset, width, height, TexturesAS.TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK);
 
         drawHeader();
         drawPageText();

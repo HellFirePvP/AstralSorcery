@@ -1,15 +1,9 @@
 {
-  "__comment": "",
-
-
   "itemGroup.astralsorcery": "Astral Sorcery",
   "itemGroup.astralsorcery.papers": "[AS] Constellation Papers",
   "itemGroup.astralsorcery.crystals": "[AS] Attuned Crystals",
 
   "argument.constellation.notfound": "Constellation not found.",
-
-
-  "__comment": "",
 
   "jei.category.well": "Lightwell",
   "jei.category.grindstone": "Grindstone",
@@ -84,7 +78,7 @@
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
   "potion.potency.9": "X",
-  "potion.as.crafted.name": "Stardew",
+  "potion.astralsorcery.crafted.name": "Stardew",
 
   "misc.moreInformation": "<Hold SHIFT for more details>",
   "misc.craftInformation": "§7Click to see recipe",
@@ -115,13 +109,13 @@
   "misc.ctrlcopy": "CTRL + leftclick to copy",
   "misc.ctrlcopy.copied": "Copied: %s",
 
-  "misc.sword.sharpened": "Sharpened (%s increased Damage)",
   "misc.chaos.resistance": "+%s Chaos Resistance",
   "misc.chaos.resistance.max": "Chaos Immunity",
 
-  "effect.as.cheatdeath": "Phoenix-Fire",
-  "effect.as.bleed": "Bleeding",
-  "effect.as.dropmod": "Inner Wealth",
+  "effect.astralsorcery.bleed": "Bleeding",
+  "effect.astralsorcery.cheat_death": "Phoenix' Blessing",
+  "effect.astralsorcery.drop_modifier": "Inner Wealth",
+  "effect.astralsorcery.time_freeze": "Time Freeze",
 
   "amulet.enchantment.level.one": "level",
   "amulet.enchantment.level.more": "levels",

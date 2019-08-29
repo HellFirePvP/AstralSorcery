@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -149,7 +150,7 @@ public class ScreenJournalPages extends ScreenJournal {
             TexturesAS.TEX_GUI_BOOK_UNDERLINE.bindTexture();
             GlStateManager.pushMatrix();
             GlStateManager.translated(guiLeft + 30, guiTop + 35, this.blitOffset);
-            drawTexturedRectAtCurrentPos(175, 6);
+            RenderingGuiUtils.drawTexturedRectAtCurrentPos(175, 6, this.blitOffset);
             GlStateManager.popMatrix();
 
             pageYOffset += 30;
@@ -214,7 +215,7 @@ public class ScreenJournalPages extends ScreenJournal {
         GlStateManager.color4f(1F, 1F, 1F, 0.8F);
         GlStateManager.translated(-(width / 2), -(height / 2), 0);
         TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-        drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+        RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
         GlStateManager.color4f(1F, 1F, 1F, 1F);
 
         GlStateManager.popMatrix();
@@ -246,7 +247,7 @@ public class ScreenJournalPages extends ScreenJournal {
             GlStateManager.color4f(1F, 1F, 1F, 0.8F);
             GlStateManager.translated(-(width / 2), -(height / 2), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
             GlStateManager.popMatrix();
         }
         int nextIndex = cIndex + 2;
@@ -267,7 +268,7 @@ public class ScreenJournalPages extends ScreenJournal {
             }
             GlStateManager.translated(-(width / 2), -(height / 2), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
             GlStateManager.popMatrix();
         }
         GlStateManager.color4f(1F, 1F, 1F, 1F);

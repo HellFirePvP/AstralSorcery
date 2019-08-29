@@ -10,20 +10,24 @@ package hellfirepvp.astralsorcery.common.perk;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
+import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
-import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
@@ -57,10 +61,12 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
 
     protected final Point offset;
     private PerkCategory category = CATEGORY_BASE;
-    private List<ITextComponent> tooltipCache = null;
-    private boolean cacheTooltip = true;
     protected String ovrUnlocalizedNamePrefix = null;
     private PerkTreePoint<? extends AbstractPerk> treePoint = null;
+
+    private List<ITextComponent> tooltipCache = null;
+    private boolean cacheTooltip = true;
+    private double cacheEffectMultiplier = 1.0;
 
     public AbstractPerk(ResourceLocation name, int x, int y) {
         this.setRegistryName(name);
@@ -69,6 +75,13 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
 
     protected PerkTreePoint<? extends AbstractPerk> initPerkTreePoint() {
         return new PerkTreePoint<>(this, this.getOffset());
+    }
+
+    protected void attachListeners(IEventBus bus) {}
+
+    @Nullable
+    protected ConfigEntry addConfig() {
+        return null;
     }
 
     public Point getOffset() {
@@ -94,7 +107,17 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     //    applyEffectMultiplier(multiplier);
     //}
 
-    protected void applyEffectMultiplier(double multiplier) {}
+    protected void applyEffectMultiplier(double multiplier) {
+        this.cacheEffectMultiplier = multiplier;
+    }
+
+    protected int multipliedI(double val) {
+        return MathHelper.floor(val * this.cacheEffectMultiplier);
+    }
+
+    protected double multipliedD(double val) {
+        return val * this.cacheEffectMultiplier;
+    }
 
     //Return true to display that the perk's modifiers got disabled by pack's configurations
     public boolean modifiersDisabled(PlayerEntity player, LogicalSide dist) {
@@ -110,10 +133,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         }
 
         this.applyPerkLogic(player, dist);
-        // TODO perks
-        //if (PerkAttributeHelper.getOrCreateMap(player, dist).markPerkApplied(this)) {
-        //    LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " applied!");
-        //}
+        PerkAttributeHelper.getOrCreateMap(player, dist).markPerkApplied(this);
     }
 
     final void removePerk(PlayerEntity player, LogicalSide dist) {
@@ -122,15 +142,16 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         }
 
         this.removePerkLogic(player, dist);
-        // TODO perks
-        //if (PerkAttributeHelper.getOrCreateMap(player, dist).markPerkRemoved(this)) {
-        //    LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " removed!");
-        //}
+        PerkAttributeHelper.getOrCreateMap(player, dist).markPerkRemoved(this);
     }
 
     protected abstract void applyPerkLogic(PlayerEntity player, LogicalSide dist);
 
     protected abstract void removePerkLogic(PlayerEntity player, LogicalSide dist);
+
+    protected LogicalSide getSide(Entity entity) {
+        return entity.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
+    }
 
     @Nullable
     public CompoundNBT getPerkData(PlayerEntity player, LogicalSide dist) {
@@ -268,9 +289,9 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         return null;
     }
 
+    //TODO more client clear stuff
     public void clearCaches(LogicalSide side) {}
 
-    //TODO client gui
     @OnlyIn(Dist.CLIENT)
     public void clearClientCaches() {
         this.tooltipCache = null;

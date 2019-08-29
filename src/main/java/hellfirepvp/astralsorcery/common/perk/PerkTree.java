@@ -6,14 +6,16 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.perk.tree;
+package hellfirepvp.astralsorcery.common.perk;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.config.entry.PerkConfig;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.perk.node.RootPerk;
+import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,7 +36,7 @@ import java.util.*;
  */
 public class PerkTree {
 
-    public static final int PERK_TREE_VERSION = 2;
+    public static final int PERK_TREE_VERSION = 3;
     public static final PerkTree PERK_TREE = new PerkTree();
 
     private List<PerkTreePoint<?>> treePoints = new LinkedList<>();
@@ -46,22 +48,20 @@ public class PerkTree {
     private PerkTree() {}
 
     public void addPerk(AbstractPerk perk) {
-        //TODO root perks
-        //if (perk instanceof RootPerk) {
-        //    rootPerks.put(perk.getConstellation(), perk);
-        //}
-        MinecraftForge.EVENT_BUS.register(perk);
-        setPoint(perk);
+        if (perk instanceof RootPerk) {
+            rootPerks.put(((RootPerk) perk).getConstellation(), perk);
+        }
+        perk.attachListeners(MinecraftForge.EVENT_BUS);
+        ConfigEntry entry = perk.addConfig();
+        if (entry != null) {
+            PerkConfig.CONFIG.newSubSection(entry);
+        }
+        this.setPoint(perk);
     }
 
     @Nullable
     public AbstractPerk getPerk(ResourceLocation key) {
         return RegistriesAS.REGISTRY_PERKS.getValue(key);
-    }
-
-    @Nullable
-    public AbstractPerk getAstralSorceryPerk(String keyName) {
-        return getPerk(new ResourceLocation(AstralSorcery.MODID, keyName));
     }
 
     @Nullable
@@ -80,8 +80,10 @@ public class PerkTree {
     }
 
     @Nullable
-    public PointConnector tryGetConnector(AbstractPerk point) {
-        if (point == null) return null;
+    public PointConnector getConnector(AbstractPerk point) {
+        if (point == null) {
+            return null;
+        }
         if (this.treePoints.contains(point.getPoint())) {
             return new PointConnector(point);
         }
@@ -108,10 +110,9 @@ public class PerkTree {
     }
 
     public void removePerk(AbstractPerk perk) {
-        //TODO root perks
-        //if (perk instanceof RootPerk) {
-        //    rootPerks.remove(((RootPerk) perk).getConstellation());
-        //}
+        if (perk instanceof RootPerk) {
+            rootPerks.remove(((RootPerk) perk).getConstellation());
+        }
         RegistriesAS.REGISTRY_PERKS.remove(perk.getRegistryName());
         MinecraftForge.EVENT_BUS.unregister(perk);
         PerkTreePoint<?> point = perk.getPoint();

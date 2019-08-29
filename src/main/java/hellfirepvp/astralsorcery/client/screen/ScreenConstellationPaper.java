@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
@@ -124,7 +125,7 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
             int offsetY = guiTop + 237;
             for (int i = 0; i < phases.size(); i++) {
                 phases.get(i).getTexture().bindTexture();
-                drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
+                RenderingGuiUtils.drawRect(offsetX + (i * (size + 2)), offsetY, this.blitOffset, size, size);
             }
         }
     }

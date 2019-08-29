@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.client.screen.journal.perk.DynamicPerkRender;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRenderGroup;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkTreeSizeHandler;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.ScreenTextEntry;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
@@ -45,7 +46,7 @@ import hellfirepvp.astralsorcery.common.perk.AttributeConverterPerk;
 import hellfirepvp.astralsorcery.common.perk.ProgressGatedPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
-import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
@@ -247,7 +248,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         GlStateManager.disableDepthTest();
         GlStateManager.disableAlphaTest();
         TexturesAS.TEX_GUI_MENU_SLOT.bindTexture();
-        drawTexturedRect(guiLeft + rectSealBox.x - 1, guiTop + rectSealBox.y - 1, rectSealBox.width + 2, rectSealBox.height + 2, TexturesAS.TEX_GUI_MENU_SLOT);
+        RenderingGuiUtils.drawTexturedRect(guiLeft + rectSealBox.x - 1, guiTop + rectSealBox.y - 1, this.blitOffset, rectSealBox.width + 2, rectSealBox.height + 2, TexturesAS.TEX_GUI_MENU_SLOT);
         GlStateManager.enableAlphaTest();
 
         if (!this.foundSeals.isEmpty()) {
@@ -383,7 +384,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
             for (int index = 0; index < found.size(); index++) {
                 int addedX = (index % 5) * scaledSlotSize;
                 int addedY = (index / 5) * scaledSlotSize;
-                drawTexturedRect(offsetX + addedX, offsetY + addedY, scaledSlotSize, scaledSlotSize,
+                RenderingGuiUtils.drawTexturedRect(offsetX + addedX, offsetY + addedY, this.blitOffset, scaledSlotSize, scaledSlotSize,
                         0, 0, 1, 1);
             }
 
@@ -446,7 +447,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         GlStateManager.pushMatrix();
         GlStateManager.translated(guiLeft + 300, guiTop + 16, 0);
         TexturesAS.TEX_GUI_TEXT_FIELD.bindTexture();
-        drawTexturedRectAtCurrentPos(88.5, 15);
+        RenderingGuiUtils.drawTexturedRectAtCurrentPos(88.5, 15, this.blitOffset);
 
         String text = this.searchTextEntry.getText();
 

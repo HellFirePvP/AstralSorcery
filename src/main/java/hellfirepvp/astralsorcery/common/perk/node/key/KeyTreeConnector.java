@@ -12,8 +12,7 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.node.MajorPerk;
-import hellfirepvp.astralsorcery.common.perk.tree.PerkTree;
-import hellfirepvp.astralsorcery.common.util.log.LogCategory;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -28,15 +27,15 @@ import java.util.List;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: TreeConnectorPerk
+ * Class: KeyTreeConnector
  * Created by HellFirePvP
  * Date: 25.08.2019 / 18:29
  */
-public class TreeConnectorPerk extends MajorPerk {
+public class KeyTreeConnector extends MajorPerk {
 
-    private static List<TreeConnectorPerk> connectorCache = new ArrayList<>();
+    private static List<KeyTreeConnector> connectorCache = new ArrayList<>();
 
-    public TreeConnectorPerk(ResourceLocation name, int x, int y) {
+    public KeyTreeConnector(ResourceLocation name, int x, int y) {
         super(name, x, y);
         this.setCategory(CATEGORY_EPIPHANY);
         connectorCache.add(this);
@@ -55,7 +54,7 @@ public class TreeConnectorPerk extends MajorPerk {
             }
         }
         if (!hasAllAdjacent) {
-            for (TreeConnectorPerk conn : connectorCache) {
+            for (KeyTreeConnector conn : connectorCache) {
                 if (progress.hasPerkEffect(conn)) {
                     return true;
                 }

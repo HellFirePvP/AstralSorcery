@@ -28,7 +28,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.potion.Potion;
+import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.Biome;
@@ -59,7 +59,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(TileEntityType.class, this::registerTiles);
         eventBus.addGenericListener(EntityType.class, this::registerEntities);
         eventBus.addGenericListener(Biome.class, this::registerBiomes);
-        eventBus.addGenericListener(Potion.class, this::registerPotions);
+        eventBus.addGenericListener(Effect.class, this::registerEffects);
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
         eventBus.addGenericListener(SoundEvent.class, this::registerSounds);
         eventBus.addGenericListener(IConstellation.class, this::registerConstellations);
@@ -113,7 +113,6 @@ public class PrimerEventHandler {
 
     private void registerBlocks(RegistryEvent.Register<Block> event) {
         RegistryBlocks.registerBlocks();
-        //RegistryBlocks.initRenderRegistry();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
@@ -132,8 +131,8 @@ public class PrimerEventHandler {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
-    private void registerPotions(RegistryEvent.Register<Potion> event) {
-        //RegistryPotions.init();
+    private void registerEffects(RegistryEvent.Register<Effect> event) {
+        RegistryEffects.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
@@ -147,7 +146,7 @@ public class PrimerEventHandler {
     }
 
     private void registerPerks(RegistryEvent.Register<AbstractPerk> event) {
-        //RegistryPerks.init();
+        RegistryPerks.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

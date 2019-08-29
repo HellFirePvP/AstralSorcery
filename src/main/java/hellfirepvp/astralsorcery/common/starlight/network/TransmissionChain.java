@@ -10,8 +10,8 @@ package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crystal.CrystalCalculations;
-import hellfirepvp.astralsorcery.common.data.sync.DataLightBlockEndpoints;
-import hellfirepvp.astralsorcery.common.data.sync.DataLightConnections;
+import hellfirepvp.astralsorcery.common.data.sync.server.DataLightBlockEndpoints;
+import hellfirepvp.astralsorcery.common.data.sync.server.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
@@ -41,10 +41,10 @@ public class TransmissionChain {
     private List<LightConnection> foundConnections = new LinkedList<>();
     private Map<BlockPos, Float> remainMultiplierMap = new HashMap<>();
 
-    private List<BlockPos> uncheckedEndpointsBlock = new LinkedList<>(); //Might be IBlockSLRecipient or just a normal block.
-    private List<BlockPos> resolvedNormalBlockPositions = new LinkedList<>();
-    private List<ITransmissionReceiver> endpointsNodes = new LinkedList<>(); //Safe to assume those are endpoints
-    private List<IPrismTransmissionNode> transmissionUpdateList = new LinkedList<>();
+    private Set<BlockPos> uncheckedEndpointsBlock = new HashSet<>(); //Might be IBlockSLRecipient or just a normal block.
+    private Set<BlockPos> resolvedNormalBlockPositions = new HashSet<>();
+    private Set<ITransmissionReceiver> endpointsNodes = new HashSet<>(); //Safe to assume those are endpoints
+    private Set<IPrismTransmissionNode> transmissionUpdateList = new HashSet<>();
 
     private final WorldNetworkHandler handler;
     private final IPrismTransmissionNode sourceNode;
@@ -58,11 +58,11 @@ public class TransmissionChain {
         Thread tr = new Thread(() -> {
             TransmissionChain chain = buildFromSource(netHandler, sourcePos);
             handle.threadTransmissionChainCallback(world, chain, source, netHandler, sourcePos);
-            AstralSorcery.getProxy().scheduleDelayed(() -> {
-                DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
-                connections.updateNewConnectionsThreaded(netHandler.getWorld().getDimension().getType().getId(), chain.getFoundConnections());
-                DataLightBlockEndpoints endpoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
-                endpoints.updateNewEndpoints(netHandler.getWorld().getDimension().getType().getId(), chain.resolvedNormalBlockPositions);
+            SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
+                data.updateNewConnectionsThreaded(netHandler.getWorld().getDimension().getType().getId(), chain.getFoundConnections());
+            });
+            SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
+                data.updateNewEndpoints(netHandler.getWorld().getDimension().getType().getId(), chain.getResolvedNormalBlockPositions());
             });
         });
         tr.setName("TrChainCalculationThread");
@@ -84,26 +84,24 @@ public class TransmissionChain {
     }
 
     private void resolveLoadedEndpoints(World world) {
-        Iterator<BlockPos> iterator = uncheckedEndpointsBlock.iterator();
-        while (iterator.hasNext()) {
-            BlockPos pos = iterator.next();
+        for (BlockPos pos : uncheckedEndpointsBlock) {
             if (MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) {
                 BlockState state = world.getBlockState(pos);
                 Block b = state.getBlock();
-                if (b instanceof BlockStarlightRecipient) continue;
-                if (!resolvedNormalBlockPositions.contains(pos)) {
-                    resolvedNormalBlockPositions.add(pos);
+                if (b instanceof BlockStarlightRecipient) {
+                    continue;
                 }
-                //iterator.remove();
+                resolvedNormalBlockPositions.add(pos);
             }
         }
     }
 
     protected void updatePosAsResolved(World world, BlockPos pos) {
-        if(uncheckedEndpointsBlock.contains(pos) && !resolvedNormalBlockPositions.contains(pos)) {
+        if (uncheckedEndpointsBlock.contains(pos) && !resolvedNormalBlockPositions.contains(pos)) {
             resolvedNormalBlockPositions.add(pos);
-            DataLightBlockEndpoints endpoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
-            endpoints.updateNewEndpoint(world.getDimension().getType().getId(), pos);
+            SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
+                data.updateNewEndpoint(world.getDimension().getType().getId(), pos);
+            });
         }
     }
 
@@ -116,34 +114,30 @@ public class TransmissionChain {
         float nextLoss = (lossMultiplier * lossPerc) / ((float) next.size());
         prevPath.push(node.getLocationPos());
 
-        if(node.needsTransmissionUpdate() && !transmissionUpdateList.contains(node)) {
+        if (node.needsTransmissionUpdate()) {
             transmissionUpdateList.add(node);
         }
 
         for (NodeConnection<IPrismTransmissionNode> nextNode : next) {
             IPrismTransmissionNode trNode = nextNode.getNode();
-            if(nextNode.canConnect()) {
+            if (nextNode.canConnect()) {
                 BlockPos nextPos = nextNode.getTo();
                 addIfNonExistentConnection(node.getLocationPos(), nextPos);
-                if(!prevPath.contains(nextPos)) { //Saves us from cycles. cyclic starlight transmission to a cyclic node means 100% loss.
+                if (!prevPath.contains(nextPos)) { //Saves us from cycles. cyclic starlight transmission to a cyclic node means 100% loss.
 
-                    Float currentLoss = remainMultiplierMap.get(nextPos);
-                    if (currentLoss != null) {
-                        remainMultiplierMap.put(nextPos, currentLoss + nextLoss); //This never exceeds 1F
-                    } else {
-                        remainMultiplierMap.put(nextPos, nextLoss);
-                    }
+                    //This never exceeds 1F
+                    remainMultiplierMap.merge(nextPos, nextLoss, (current, newNext) -> current + newNext);
 
-                    if(trNode != null) {
-                        if(trNode instanceof ITransmissionReceiver) { //Tile endpoint
-                            if(!this.endpointsNodes.contains(trNode))
+                    if (trNode != null) {
+                        if (trNode instanceof ITransmissionReceiver) { //Tile endpoint
+                            if (!this.endpointsNodes.contains(trNode)) {
                                 this.endpointsNodes.add((ITransmissionReceiver) trNode);
+                            }
                         } else {
                             recBuildChain(trNode, nextLoss, prevPath);
                         }
                     } else { //BlockPos endpoint - Check for BlockStarlightRecipient is missing here, bc chunk is/might be unloaded.
-                        if(!this.uncheckedEndpointsBlock.contains(nextPos))
-                            this.uncheckedEndpointsBlock.add(nextPos);
+                        this.uncheckedEndpointsBlock.add(nextPos);
                     }
                 }
             }
@@ -160,7 +154,7 @@ public class TransmissionChain {
         }
     }
 
-    public List<BlockPos> getResolvedNormalBlockPositions() {
+    public Set<BlockPos> getResolvedNormalBlockPositions() {
         return resolvedNormalBlockPositions;
     }
 
@@ -174,7 +168,7 @@ public class TransmissionChain {
         if(!foundConnections.contains(newCon)) foundConnections.add(newCon);
     }
 
-    public List<IPrismTransmissionNode> getTransmissionUpdateList() {
+    public Set<IPrismTransmissionNode> getTransmissionUpdateList() {
         return transmissionUpdateList;
     }
 
@@ -190,11 +184,11 @@ public class TransmissionChain {
         return foundConnections;
     }
 
-    public List<ITransmissionReceiver> getEndpointsNodes() {
+    public Set<ITransmissionReceiver> getEndpointsNodes() {
         return endpointsNodes;
     }
 
-    public List<BlockPos> getUncheckedEndpointsBlock() {
+    public Set<BlockPos> getUncheckedEndpointsBlock() {
         return uncheckedEndpointsBlock;
     }
 

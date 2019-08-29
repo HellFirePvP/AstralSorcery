@@ -45,6 +45,11 @@ public class ColorsAS {
     public static final Color PERK_ALLOCATED = new Color(0xEEEE00);
     public static final Color PERK_UNLOCKABLE = new Color(0xC920DD);
 
+    public static final Color EFFECT_BLEED = new Color(0x751200);
+    public static final Color EFFECT_CHEAT_DEATH = new Color(0xFF5711);
+    public static final Color EFFECT_DROP_MODIFIER = new Color(0xFFD114);
+    public static final Color EFFECT_TIME_FREEZE = new Color(0x696969);
+
     public static final Color RITUAL_CONSTELLATION_AEVITAS           = new Color(63, 255, 63);
     public static final Color RITUAL_CONSTELLATION_ARMARA            = new Color(201, 30, 0);
     public static final Color RITUAL_CONSTELLATION_ARMARA_SECONDARY  = new Color(80, 0, 150);

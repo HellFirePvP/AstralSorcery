@@ -13,6 +13,9 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -32,9 +35,9 @@ import java.util.function.Consumer;
 public class PktPlayEffect extends ASPacket<PktPlayEffect> {
 
     private Type type;
-    private Vector3 pos = null;
-    private Vector3 target = null;
-    private Number data = null;
+    private Consumer<PacketBuffer> encoder = (buf) -> {};
+
+    private PacketBuffer data = null;
 
     public PktPlayEffect() {}
 
@@ -42,56 +45,13 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         this.type = type;
     }
 
-    public PktPlayEffect setPos(Vector3 pos) {
-        this.pos = pos;
+    public PktPlayEffect addData(Consumer<PacketBuffer> encoder) {
+        this.encoder.andThen(encoder);
         return this;
     }
 
-    public Vector3 getPos() {
-        return pos;
-    }
-
-    public PktPlayEffect setTarget(Vector3 target) {
-        this.target = target;
-        return this;
-    }
-
-    public Vector3 getTarget() {
-        return target;
-    }
-
-    public PktPlayEffect setColor(Color c) {
-        setData(c.getRGB());
-        return this;
-    }
-
-    public Color getColor() {
-        return new Color(getIntData(), true);
-    }
-
-    public PktPlayEffect setData(Number nbr) {
-        this.data = nbr;
-        return this;
-    }
-
-    public float getFloatData() {
-        return Float.intBitsToFloat(this.data.intValue());
-    }
-
-    public double getDoubleData() {
-        return Double.longBitsToDouble(this.data.longValue());
-    }
-
-    public long getLongData() {
-        return this.data.longValue();
-    }
-
-    public int getIntData() {
-        return this.data.intValue();
-    }
-
-    public byte getByteData() {
-        return this.data.byteValue();
+    public PacketBuffer getExtraData() {
+        return data;
     }
 
     @Nonnull
@@ -99,9 +59,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
     public Encoder<PktPlayEffect> encoder() {
         return (packet, buffer) -> {
             ByteBufUtils.writeEnumValue(buffer, packet.type);
-            ByteBufUtils.writeOptional(buffer, packet.pos, ByteBufUtils::writeVector);
-            ByteBufUtils.writeOptional(buffer, packet.target, ByteBufUtils::writeVector);
-            ByteBufUtils.writeOptional(buffer, packet.data, ByteBufUtils::writeNumber);
+            this.encoder.accept(buffer);
         };
     }
 
@@ -111,9 +69,9 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         return buffer -> {
             Type type = ByteBufUtils.readEnumValue(buffer, Type.class);
             PktPlayEffect pkt = new PktPlayEffect(type);
-            pkt.setPos(ByteBufUtils.readOptional(buffer, ByteBufUtils::readVector));
-            pkt.setTarget(ByteBufUtils.readOptional(buffer, ByteBufUtils::readVector));
-            pkt.setData(ByteBufUtils.readOptional(buffer, ByteBufUtils::readNumber));
+            ByteBuf buf = Unpooled.buffer(buffer.readableBytes());
+            buffer.readBytes(buf);
+            pkt.data = new PacketBuffer(buf);
             return pkt;
         };
     }

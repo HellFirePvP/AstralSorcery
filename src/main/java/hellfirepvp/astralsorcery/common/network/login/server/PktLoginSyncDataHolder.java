@@ -8,12 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.network.login.server;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.data.sync.AbstractData;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.sync.base.AbstractData;
+import hellfirepvp.astralsorcery.common.data.sync.base.ClientData;
+import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
 import hellfirepvp.astralsorcery.common.network.base.ASLoginPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -22,6 +25,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,13 +36,19 @@ import java.util.Map;
  */
 public class PktLoginSyncDataHolder extends ASLoginPacket<PktLoginSyncDataHolder> {
 
-    private Map<String, AbstractData> data = new HashMap<>();
+    private Map<ResourceLocation, CompoundNBT> syncData = new HashMap<>();
 
     public PktLoginSyncDataHolder() {}
 
     public static PktLoginSyncDataHolder makeLogin() {
         PktLoginSyncDataHolder pkt = new PktLoginSyncDataHolder();
-        pkt.data = SyncDataHolder.getSyncServerData();
+        for (ResourceLocation key : SyncDataHolder.getServerDataKeys()) {
+            SyncDataHolder.executeServer(key, AbstractData.class, data -> {
+                CompoundNBT nbt = new CompoundNBT();
+                data.writeAllDataToPacket(nbt);
+                pkt.syncData.put(key, nbt);
+            });
+        }
         return pkt;
     }
 
@@ -46,16 +56,11 @@ public class PktLoginSyncDataHolder extends ASLoginPacket<PktLoginSyncDataHolder
     @Override
     public Encoder<PktLoginSyncDataHolder> encoder() {
         return (packet, buffer) -> {
-            buffer.writeInt(packet.data.size());
+            buffer.writeInt(packet.syncData.size());
 
-            for (String key : packet.data.keySet()) {
-                AbstractData aData = packet.data.get(key);
-                CompoundNBT tag = new CompoundNBT();
-                aData.writeAllDataToPacket(tag);
-
-                ByteBufUtils.writeString(buffer, key);
-                buffer.writeByte(aData.getProviderID());
-                ByteBufUtils.writeNBTTag(buffer, tag);
+            for (ResourceLocation key : packet.syncData.keySet()) {
+                ByteBufUtils.writeResourceLocation(buffer, key);
+                ByteBufUtils.writeNBTTag(buffer, packet.syncData.get(key));
             }
         };
     }
@@ -68,22 +73,10 @@ public class PktLoginSyncDataHolder extends ASLoginPacket<PktLoginSyncDataHolder
             int size = buffer.readInt();
 
             for (int i = 0; i < size; i++) {
-                String key = ByteBufUtils.readString(buffer);
-                byte providerId = buffer.readByte();
+                ResourceLocation key = ByteBufUtils.readResourceLocation(buffer);
                 CompoundNBT tag = ByteBufUtils.readNBTTag(buffer);
-
-                AbstractData.AbstractDataProvider<? extends AbstractData> provider = AbstractData.Registry.getProvider(providerId);
-                if (provider == null) {
-                    AstralSorcery.log.warn("Provider for ID " + providerId + " doesn't exist! Skipping...");
-                    continue;
-                }
-
-                AbstractData dat = provider.provideNewInstance(Dist.CLIENT);
-                dat.readRawFromPacket(tag);
-
-                pktData.data.put(key, dat);
+                pktData.syncData.put(key, tag);
             }
-
             return pktData;
         };
     }
@@ -96,8 +89,14 @@ public class PktLoginSyncDataHolder extends ASLoginPacket<PktLoginSyncDataHolder
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktLoginSyncDataHolder packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
-                    SyncDataHolder.receiveServerPacket(packet.data);
-                    acknowledge(context);
+                    for (ResourceLocation key : packet.syncData.keySet()) {
+                        ClientDataReader reader = SyncDataHolder.getReader(key);
+                        if (reader != null) {
+                            SyncDataHolder.executeClient(key, ClientData.class, data -> {
+                                reader.readFromIncomingFullSync(data, packet.syncData.get(key));
+                            });
+                        }
+                    }
                 });
             }
 

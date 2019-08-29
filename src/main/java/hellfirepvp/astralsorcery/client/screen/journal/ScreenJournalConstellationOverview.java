@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -181,7 +182,7 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
             GlStateManager.color4f(1F, 1F, 1F, 0.8F);
             GlStateManager.translated(-(width / 2), -(height / 2), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
             GlStateManager.popMatrix();
         }
         int nextIndex = cIndex + CONSTELLATIONS_PER_PAGE;
@@ -202,7 +203,7 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
             }
             GlStateManager.translated(-(width / 2), -(height / 2), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
             GlStateManager.popMatrix();
         }
         GlStateManager.color4f(1F, 1F, 1F, 1F);
