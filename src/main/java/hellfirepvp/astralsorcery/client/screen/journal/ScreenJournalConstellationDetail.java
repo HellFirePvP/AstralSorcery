@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
@@ -358,7 +359,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
                     Blending.DEFAULT.applyStateManager();
                     GlStateManager.color4f(0.7F, 0.7F, 0.7F, 0.6F);
                 }
-                drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
+                RenderingGuiUtils.drawRect(offsetX + (i * (size + 2)), offsetY, this.blitOffset, size, size);
             }
             Blending.DEFAULT.applyStateManager();
 
@@ -425,7 +426,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             GlStateManager.scaled(sin, sin, sin);
         }
         GlStateManager.translated(-(width / 2), -(height / 2), 0);
-        drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+        RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
         GlStateManager.popMatrix();
     }
 
@@ -452,7 +453,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             }
 
             GlStateManager.translated(-(width / 2), -(height / 2), 0);
-            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
             GlStateManager.popMatrix();
         }
 
@@ -472,7 +473,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
                 GlStateManager.scaled(sin, sin, sin);
             }
             GlStateManager.translated(-(width / 2), -(height / 2), 0);
-            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
             GlStateManager.popMatrix();
         }
         GlStateManager.enableDepthTest();

@@ -8,12 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.network.play.server;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.data.sync.AbstractData;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.sync.base.ClientData;
+import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -32,28 +33,23 @@ import java.util.Map;
  */
 public class PktSyncData extends ASPacket<PktSyncData> {
 
-    private Map<String, AbstractData> data = new HashMap<>();
+    private Map<ResourceLocation, CompoundNBT> diffData = new HashMap<>();
 
     public PktSyncData() {}
 
-    public PktSyncData(Map<String, AbstractData> dataToSend) {
-        this.data = dataToSend;
+    public PktSyncData(Map<ResourceLocation, CompoundNBT> dataToSend) {
+        this.diffData = dataToSend;
     }
 
     @Nonnull
     @Override
     public Encoder<PktSyncData> encoder() {
         return (packet, buffer) -> {
-            buffer.writeInt(packet.data.size());
+            buffer.writeInt(packet.diffData.size());
 
-            for (String key : packet.data.keySet()) {
-                AbstractData aData = packet.data.get(key);
-                CompoundNBT tag = new CompoundNBT();
-                aData.writeToPacket(tag);
-
-                ByteBufUtils.writeString(buffer, key);
-                buffer.writeByte(aData.getProviderID());
-                ByteBufUtils.writeNBTTag(buffer, tag);
+            for (ResourceLocation key : packet.diffData.keySet()) {
+                ByteBufUtils.writeResourceLocation(buffer, key);
+                ByteBufUtils.writeNBTTag(buffer, packet.diffData.get(key));
             }
         };
     }
@@ -66,22 +62,10 @@ public class PktSyncData extends ASPacket<PktSyncData> {
             int size = buffer.readInt();
 
             for (int i = 0; i < size; i++) {
-                String key = ByteBufUtils.readString(buffer);
-                byte providerId = buffer.readByte();
+                ResourceLocation key = ByteBufUtils.readResourceLocation(buffer);
                 CompoundNBT tag = ByteBufUtils.readNBTTag(buffer);
-
-                AbstractData.AbstractDataProvider<? extends AbstractData> provider = AbstractData.Registry.getProvider(providerId);
-                if (provider == null) {
-                    AstralSorcery.log.warn("Provider for ID " + providerId + " doesn't exist! Skipping...");
-                    continue;
-                }
-
-                AbstractData dat = provider.provideNewInstance(Dist.CLIENT);
-                dat.readRawFromPacket(tag);
-
-                pktData.data.put(key, dat);
+                pktData.diffData.put(key, tag);
             }
-
             return pktData;
         };
     }
@@ -93,7 +77,15 @@ public class PktSyncData extends ASPacket<PktSyncData> {
             @Override
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktSyncData packet, NetworkEvent.Context context) {
-                context.enqueueWork(() -> SyncDataHolder.receiveServerPacket(packet.data));
+                context.enqueueWork(() -> {
+                    for (ResourceLocation key : packet.diffData.keySet()) {
+                        ClientDataReader reader = SyncDataHolder.getReader(key);
+                        if (reader != null) {
+                            SyncDataHolder.executeClient(key, ClientData.class,
+                                    data -> reader.readFromIncomingDiff(data, packet.diffData.get(key)));
+                        }
+                    }
+                });
             }
 
             @Override

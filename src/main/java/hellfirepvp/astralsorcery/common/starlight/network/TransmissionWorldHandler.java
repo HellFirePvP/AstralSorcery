@@ -10,8 +10,8 @@ package hellfirepvp.astralsorcery.common.starlight.network;
 
 import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.data.sync.DataLightBlockEndpoints;
-import hellfirepvp.astralsorcery.common.data.sync.DataLightConnections;
+import hellfirepvp.astralsorcery.common.data.sync.server.DataLightBlockEndpoints;
+import hellfirepvp.astralsorcery.common.data.sync.server.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
@@ -194,10 +194,12 @@ public class TransmissionWorldHandler {
                     }
                 }
             }
-            DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
-            connections.removeOldConnectionsThreaded(dimId, knownChain.getFoundConnections());
-            DataLightBlockEndpoints endPoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
-            endPoints.removeEndpoints(dimId, knownChain.getResolvedNormalBlockPositions());
+            SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
+                data.removeOldConnectionsThreaded(dimId, knownChain.getFoundConnections());
+            });
+            SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
+                data.removeEndpoints(dimId, knownChain.getResolvedNormalBlockPositions());
+            });
         }
         activeChunkMap.remove(source);
         cachedSourceChain.remove(source);
@@ -245,10 +247,12 @@ public class TransmissionWorldHandler {
         this.cachedSourceChain.clear();
         this.involvedSourceMap.clear();
         this.posToSourceMap.clear();
-        DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
-        connections.clearDimensionPositions(dimId);
-        DataLightBlockEndpoints endpoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
-        endpoints.clearDimensionEndpoints(dimId);
+        SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
+            data.clear(dimId);
+        });
+        SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
+            data.clear(dimId);
+        });
     }
 
 }

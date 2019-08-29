@@ -9,13 +9,13 @@
 package hellfirepvp.astralsorcery.client.screen.base;
 
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
-import net.minecraft.client.MainWindow;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.text.ITextComponent;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -70,7 +70,7 @@ public class WidthHeightScreen extends InputScreen {
 
     protected void drawWHRect(AbstractRenderableTexture resource) {
         resource.bindTexture();
-        drawRect(guiLeft, guiTop, guiWidth, guiHeight);
+        RenderingGuiUtils.drawRect(guiLeft, guiTop, this.blitOffset, guiWidth, guiHeight);
     }
 
     @Override
@@ -112,76 +112,4 @@ public class WidthHeightScreen extends InputScreen {
     protected boolean handleRightClickClose(double mouseX, double mouseY) {
         return false;
     }
-
-    protected void drawTexturedRect(double offsetX, double offsetY, double width, double height, Rectangle.Float uvBounds) {
-        drawTexturedRect(offsetX, offsetY, width, height, uvBounds.x, uvBounds.y, uvBounds.width, uvBounds.height);
-    }
-
-    protected void drawTexturedRect(double offsetX, double offsetY, double width, double height, float uFrom, float vFrom, float uWidth, float vWidth) {
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,         offsetY + height, this.blitOffset).tex(uFrom,          vFrom + vWidth).endVertex();
-        vb.pos(offsetX + width, offsetY + height, this.blitOffset).tex(uFrom + uWidth, vFrom + vWidth).endVertex();
-        vb.pos(offsetX + width, offsetY,          this.blitOffset).tex(uFrom + uWidth, vFrom)         .endVertex();
-        vb.pos(offsetX,         offsetY,          this.blitOffset).tex(uFrom,          vFrom)         .endVertex();
-        tes.draw();
-    }
-
-    protected void drawTexturedRect(double offsetX, double offsetY, double width, double height, AbstractRenderableTexture tex) {
-        Point.Double off = tex.getUVOffset();
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,         offsetY + height, this.blitOffset).tex(off.x,          off.y + tex.getVWidth()).endVertex();
-        vb.pos(offsetX + width, offsetY + height, this.blitOffset).tex(off.x + tex.getUWidth(), off.y + tex.getVWidth()).endVertex();
-        vb.pos(offsetX + width, offsetY,          this.blitOffset).tex(off.x + tex.getUWidth(), off.y)         .endVertex();
-        vb.pos(offsetX,         offsetY,          this.blitOffset).tex(off.x,          off.y)         .endVertex();
-        tes.draw();
-    }
-
-    protected void drawTexturedRectAtCurrentPos(double width, double height, float uFrom, float vFrom, float uWidth, float vWidth) {
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(0,         0 + height, this.blitOffset).tex(uFrom,          vFrom + vWidth).endVertex();
-        vb.pos(0 + width, 0 + height, this.blitOffset).tex(uFrom + uWidth, vFrom + vWidth).endVertex();
-        vb.pos(0 + width, 0,          this.blitOffset).tex(uFrom + uWidth, vFrom)         .endVertex();
-        vb.pos(0,         0,          this.blitOffset).tex(uFrom,          vFrom)         .endVertex();
-        tes.draw();
-    }
-
-    protected void drawTexturedRectAtCurrentPos(double width, double height) {
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(0,         0 + height, this.blitOffset).tex(0, 1).endVertex();
-        vb.pos(0 + width, 0 + height, this.blitOffset).tex(1, 1).endVertex();
-        vb.pos(0 + width, 0,          this.blitOffset).tex(1, 0).endVertex();
-        vb.pos(0,         0,          this.blitOffset).tex(0, 0).endVertex();
-        tes.draw();
-    }
-
-    protected void drawRectDetailed(float offsetX, float offsetY, float width, float height) {
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,         offsetY + height, this.blitOffset).tex(0, 1).endVertex();
-        vb.pos(offsetX + width, offsetY + height, this.blitOffset).tex(1, 1).endVertex();
-        vb.pos(offsetX + width, offsetY,          this.blitOffset).tex(1, 0).endVertex();
-        vb.pos(offsetX,         offsetY,          this.blitOffset).tex(0, 0).endVertex();
-        tes.draw();
-    }
-
-    protected void drawRect(int offsetX, int offsetY, int width, int height) {
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,         offsetY + height, this.blitOffset).tex(0, 1).endVertex();
-        vb.pos(offsetX + width, offsetY + height, this.blitOffset).tex(1, 1).endVertex();
-        vb.pos(offsetX + width, offsetY,          this.blitOffset).tex(1, 0).endVertex();
-        vb.pos(offsetX,         offsetY,          this.blitOffset).tex(0, 0).endVertex();
-        tes.draw();
-    }
-
 }

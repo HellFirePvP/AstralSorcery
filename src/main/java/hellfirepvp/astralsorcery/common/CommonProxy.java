@@ -40,6 +40,8 @@ import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktOpenGui;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeLimiter;
+import hellfirepvp.astralsorcery.common.perk.PerkCooldownHelper;
+import hellfirepvp.astralsorcery.common.perk.PerkTickHelper;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
@@ -172,9 +174,11 @@ public class CommonProxy {
         registrar.accept(LinkHandler.getInstance());
         registrar.accept(SkyHandler.getInstance());
         registrar.accept(PlayerAmuletHandler.INSTANCE);
+        registrar.accept(PerkTickHelper.INSTANCE);
 
         EventHelperRitualFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);
+        PerkCooldownHelper.attachTickListeners(registrar);
     }
 
     protected void initializeConfigurations() {

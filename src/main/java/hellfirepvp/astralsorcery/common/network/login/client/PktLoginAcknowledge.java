@@ -53,7 +53,7 @@ public class PktLoginAcknowledge extends ASLoginPacket<PktLoginAcknowledge> {
 
             @Override
             public void handle(PktLoginAcknowledge packet, NetworkEvent.Context context, LogicalSide side) {
-                AstralSorcery.log.info("ack for index " + packet.getLoginIndex());
+
             }
         };
     }

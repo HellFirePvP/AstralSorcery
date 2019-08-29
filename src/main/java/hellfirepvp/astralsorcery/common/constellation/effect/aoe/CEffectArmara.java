@@ -158,7 +158,7 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
                     entity.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 100, potionAmplifier + 4));
                     entity.addPotionEffect(new EffectInstance(Effects.HASTE, 100, potionAmplifier + 4));
                     //TODO potions
-                    //entity.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 40000, 6));
+                    //entity.addPotionEffect(new PotionEffect(RegistryEffects.potionDropModifier, 40000, 6));
                 } else {
                     entity.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 30, Math.min(potionAmplifier, 3)));
                     if (entity instanceof PlayerEntity) {

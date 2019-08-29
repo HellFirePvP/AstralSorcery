@@ -111,7 +111,7 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
             if (entity.isAlive()) {
                 if (properties.isCorrupted()) {
                     //TODO potions
-                    //entity.addPotionEffect(new PotionEffect(RegistryPotions.potionBleed, 200, potionAmplifier * 2));
+                    //entity.addPotionEffect(new PotionEffect(RegistryEffects.potionBleed, 200, potionAmplifier * 2));
                     entity.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 200, amplifier * 3));
                     entity.addPotionEffect(new EffectInstance(Effects.HUNGER, 200, amplifier * 4));
                     entity.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 200, amplifier * 2));

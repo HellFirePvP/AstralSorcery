@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.perk;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,6 +20,6 @@ import net.minecraftforge.api.distmarker.Dist;
  */
 public interface PlayerTickPerk {
 
-    void onPlayerTick(PlayerEntity player, Dist dist);
+    void onPlayerTick(PlayerEntity player, LogicalSide side);
 
 }

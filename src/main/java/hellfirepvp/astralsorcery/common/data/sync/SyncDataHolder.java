@@ -8,14 +8,24 @@
 
 package hellfirepvp.astralsorcery.common.data.sync;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.data.sync.base.AbstractData;
+import hellfirepvp.astralsorcery.common.data.sync.base.AbstractDataProvider;
+import hellfirepvp.astralsorcery.common.data.sync.base.ClientData;
+import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
+import hellfirepvp.astralsorcery.common.data.sync.server.DataLightBlockEndpoints;
+import hellfirepvp.astralsorcery.common.data.sync.server.DataLightConnections;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncData;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.event.TickEvent;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,17 +39,17 @@ public class SyncDataHolder implements ITickHandler {
     private static final SyncDataHolder tickInstance = new SyncDataHolder();
 
     public static final String DATA_CONSTELLATIONS = "AstralConstellations";
-    public static final String DATA_LIGHT_CONNECTIONS = "StarlightNetworkConnections";
-    public static final String DATA_LIGHT_BLOCK_ENDPOINTS = "StarlightNetworkEndpoints";
+    public static final ResourceLocation DATA_LIGHT_CONNECTIONS = new ResourceLocation(AstralSorcery.MODID, "connections");
+    public static final ResourceLocation DATA_LIGHT_BLOCK_ENDPOINTS = new ResourceLocation(AstralSorcery.MODID, "endpoints");
     public static final String DATA_TIME_FREEZE_EFFECTS = "TimeFreezeEffects";
     public static final String DATA_PATREON_FLARES = "PatreonFlares";
 
-    private static Map<String, AbstractData> serverData = new HashMap<>();
-    private static Map<String, AbstractData> clientData = new HashMap<>();
+    private static Map<ResourceLocation, AbstractData> serverData = new HashMap<>();
+    private static Map<ResourceLocation, ClientData<?>> clientData = new HashMap<>();
+    private static Map<ResourceLocation, ClientDataReader<?>> readers = new HashMap<>();
 
-    private static List<String> dirtyData = new ArrayList<>();
-    private static final Object dirtyLock = new Object();
-    private static byte providerCounter = 0;
+    private static Set<ResourceLocation> dirtyData = new HashSet<>();
+    private static final Object lck = new Object();
 
     private SyncDataHolder() {}
 
@@ -47,59 +57,49 @@ public class SyncDataHolder implements ITickHandler {
         return tickInstance;
     }
 
-    public static void register(AbstractData.AbstractDataProvider<? extends AbstractData> provider) {
-        AbstractData.Registry.register(provider);
-        AbstractData ad = provider.provideNewInstance(Dist.DEDICATED_SERVER);
-        ad.setProviderId(provider.getProviderId());
-        serverData.put(provider.getKey(), ad);
-        ad = provider.provideNewInstance(Dist.CLIENT);
-        ad.setProviderId(provider.getProviderId());
-        clientData.put(provider.getKey(), ad);
+    public static void register(AbstractDataProvider<? extends AbstractData, ? extends ClientData> provider) {
+        SyncDataRegistry.register(provider);
+        serverData.put(provider.getKey(), provider.provideServerData());
+        clientData.put(provider.getKey(), provider.provideClientData());
+        readers.put(provider.getKey(), provider.createReader());
     }
 
-    public static byte allocateNewId() {
-        byte pId = providerCounter;
-        providerCounter++;
-        return pId;
-    }
-
-    public static Map<String, AbstractData> getSyncServerData() {
-        return serverData;
-    }
-
-    public static <T extends AbstractData> T getDataServer(String key) {
-        return (T) serverData.get(key);
-    }
-
-    public static <T extends AbstractData> T getDataClient(String key) {
-        return (T) clientData.get(key);
-    }
-
-    public static <T extends AbstractData> T getData(Dist dist, String key) {
-        switch (dist) {
-            case CLIENT:
-                return getDataClient(key);
-            case DEDICATED_SERVER:
-                return getDataServer(key);
-            default:
-                break;
-        }
-        throw new IllegalArgumentException("Side not defined: " + dist.name());
-    }
-
-    public static void markForUpdate(String key) {
-        synchronized (dirtyLock) {
-            if (!dirtyData.contains(key)) {
-                dirtyData.add(key);
+    public static <T extends AbstractData> void executeServer(ResourceLocation key, Class<T> typeHint, Consumer<T> fct) {
+        synchronized (lck) {
+            T dat = (T) serverData.get(key);
+            if (dat != null) {
+                fct.accept(dat);
             }
         }
     }
 
-    public static void receiveServerPacket(Map<String, AbstractData> data) {
-        for (String key : data.keySet()) {
-            AbstractData dat = clientData.get(key);
-            if (dat != null) {
-                dat.handleIncomingData(data.get(key));
+    public static <T extends ClientData<T>> void executeClient(ResourceLocation key, Class<T> typeHint, Consumer<T> fct) {
+        T dat = (T) clientData.get(key);
+        if (dat != null) {
+            fct.accept(dat);
+        }
+    }
+
+    @Nullable
+    public static <T extends ClientData<T>> ClientDataReader<T> getReader(ResourceLocation key) {
+        return (ClientDataReader<T>) readers.get(key);
+    }
+
+    public static Collection<ResourceLocation> getServerDataKeys() {
+        return Collections.unmodifiableCollection(serverData.keySet());
+    }
+
+    public static void markForUpdate(ResourceLocation key) {
+        synchronized (lck) {
+            dirtyData.add(key);
+        }
+    }
+
+    public static void clearWorld(IWorld world) {
+        int dimId = world.getDimension().getType().getId();
+        if (world.isRemote()) {
+            for (ResourceLocation key : getServerDataKeys()) {
+                executeClient(key, ClientData.class, data -> data.clear(dimId));
             }
         }
     }
@@ -114,12 +114,18 @@ public class SyncDataHolder implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        if (dirtyData.isEmpty()) return;
-        Map<String, AbstractData> pktData = new HashMap<>();
-        synchronized (dirtyLock) {
-            for (String s : dirtyData) {
-                AbstractData d = getDataServer(s);
-                pktData.put(s, d);
+        if (dirtyData.isEmpty()) {
+            return;
+        }
+        Map<ResourceLocation, CompoundNBT> pktData = new HashMap<>();
+        synchronized (lck) {
+            for (ResourceLocation key : dirtyData) {
+                AbstractData dat = serverData.get(key);
+                if (dat != null) {
+                    CompoundNBT nbt = new CompoundNBT();
+                    dat.writeDiffDataToPacket(nbt);
+                    pktData.put(key, nbt);
+                }
             }
             dirtyData.clear();
         }

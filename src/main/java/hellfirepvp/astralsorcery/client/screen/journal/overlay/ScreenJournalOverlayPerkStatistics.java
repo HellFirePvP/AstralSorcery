@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeMap;
@@ -98,7 +99,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
 
         GlStateManager.disableDepthTest();
         TexturesAS.TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK.bindTexture();
-        drawTexturedRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2,
+        RenderingGuiUtils.drawTexturedRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, this.blitOffset,
                 width, height, TexturesAS.TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK);
         GlStateManager.enableDepthTest();
 

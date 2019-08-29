@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -69,11 +70,13 @@ public class ItemWand extends Item {
                             continue;
                         }
                         if (!DayTimeHelper.isDay(world) && random.nextInt(30) == 0) {
-                            PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_COLUMN).setPos(new Vector3(rPos.up()));
+                            PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_COLUMN)
+                                    .addData(b -> ByteBufUtils.writeVector(b, new Vector3(rPos.up())));
                             PacketChannel.CHANNEL.sendToPlayer((PlayerEntity) entity, pkt);
                         }
                         if (random.nextInt(14) == 0) {
-                            PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_SPARKS).setPos(new Vector3(rPos.up()));
+                            PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_SPARKS)
+                                    .addData(b -> ByteBufUtils.writeVector(b, new Vector3(rPos.up())));
                             PacketChannel.CHANNEL.sendToPlayer((PlayerEntity) entity, pkt);
                         }
                     }
@@ -84,6 +87,8 @@ public class ItemWand extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public static void playUndergroundEffect(PktPlayEffect effect) {
+        Vector3 at = ByteBufUtils.readVector(effect.getExtraData());
+
         World world = Minecraft.getInstance().world;
         if (world == null) {
             return;
@@ -91,12 +96,12 @@ public class ItemWand extends Item {
 
         float dstr = 0.1F + 0.9F * DayTimeHelper.getCurrentDaytimeDistribution(world);
         Vector3 plVec = Vector3.atEntityCorner(Minecraft.getInstance().player);
-        float dst = (float) effect.getPos().distance(plVec);
+        float dst = (float) at.distance(plVec);
         float dstMul = dst <= 25 ? 1F : (dst >= 50 ? 0F : (1F - (dst - 25F) / 25F));
         for (int i = 0; i < 3; i++) {
             if (random.nextBoolean()) {
                 EffectHelper.of(EffectTemplatesAS.GENERIC_DEPTH_PARTICLE)
-                        .spawn(effect.getPos().clone().add(-1 + random.nextFloat() * 3, -1 + random.nextFloat() * 3, -1 + random.nextFloat() * 3))
+                        .spawn(at.clone().add(-1 + random.nextFloat() * 3, -1 + random.nextFloat() * 3, -1 + random.nextFloat() * 3))
                         .color(VFXColorFunction.constant(ColorsAS.ROCK_CRYSTAL))
                         .setScaleMultiplier(0.4F)
                         .setAlphaMultiplier(((150F * dstr) / 255F) * dstMul)
@@ -108,12 +113,14 @@ public class ItemWand extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public static void playEffect(PktPlayEffect effect) {
+        Vector3 pos = ByteBufUtils.readVector(effect.getExtraData());
+
         World world = Minecraft.getInstance().world;
         if (world == null) {
             return;
         }
 
-        BlockPos at = effect.getPos().toBlockPos();
+        BlockPos at = pos.toBlockPos();
         BlockPos top = world.getHeight(Heightmap.Type.WORLD_SURFACE, at);
 
         Vector3 columnDisplay = new Vector3(top);

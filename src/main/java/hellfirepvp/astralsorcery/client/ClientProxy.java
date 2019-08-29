@@ -26,6 +26,8 @@ import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.registry.RegistryContainerTypes;
 import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
@@ -35,12 +37,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.profiler.IProfiler;
+import net.minecraft.resources.IFutureReloadListener;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.resource.IResourceType;
+import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -131,6 +141,10 @@ public class ClientProxy extends CommonProxy {
     private void onClientSetup(FMLClientSetupEvent event) {
         RegistryContainerTypes.initClient();
         RegistryEntities.initClient();
+
+        ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager())
+                .addReloadListener((ISelectiveResourceReloadListener) (resourceManager, resourcePredicate) ->
+                        RegistriesAS.REGISTRY_PERKS.forEach(AbstractPerk::clearClientCaches));
     }
 
     private void addTomeBookmarks() {

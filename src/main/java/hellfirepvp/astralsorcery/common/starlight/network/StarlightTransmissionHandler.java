@@ -57,7 +57,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
         worldHandlers.clear();
     }
 
-    public void informWorldUnload(World world) {
+    public void informWorldUnload(IWorld world) {
         int dimId = world.getDimension().getType().getId();
         TransmissionWorldHandler handle = worldHandlers.get(dimId);
         if(handle != null) {
