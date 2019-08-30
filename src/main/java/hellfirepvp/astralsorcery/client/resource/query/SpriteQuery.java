@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -53,6 +55,7 @@ public class SpriteQuery extends TextureQuery {
         return columns;
     }
 
+    @Nonnull
     @OnlyIn(Dist.CLIENT)
     public SpriteSheetResource resolveSprite() {
         if(spriteResource == null) {

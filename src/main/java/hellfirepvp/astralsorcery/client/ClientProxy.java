@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
+import hellfirepvp.astralsorcery.common.base.patreon.manager.PatreonManagerClient;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
@@ -115,6 +116,7 @@ public class ClientProxy extends CommonProxy {
         registrar.accept(this.clientScheduler);
         registrar.accept(RenderInfo.getInstance());
         registrar.accept(EffectUpdater.getInstance());
+        registrar.accept(PatreonManagerClient.INSTANCE);
 
         LightbeamRenderHelper.attachTickListener(registrar);
     }

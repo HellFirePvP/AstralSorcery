@@ -87,6 +87,13 @@ public class DataLightBlockEndpoints extends AbstractData {
     }
 
     @Override
+    public void clearServer() {
+        this.dimensionClearBuffer.clear();
+        this.serverChangeBuffer.clear();
+        this.serverPositions.clear();
+    }
+
+    @Override
     public void writeAllDataToPacket(CompoundNBT compound) {
         for (int dimId : serverPositions.keySet()) {
             Set<BlockPos> dat = serverPositions.get(dimId);

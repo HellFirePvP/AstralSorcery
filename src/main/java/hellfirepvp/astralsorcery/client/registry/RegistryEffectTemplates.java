@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.registry;
 
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.*;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
@@ -43,6 +42,9 @@ public class RegistryEffectTemplates {
         COLLECTOR_BURST = register(new RenderContextBurst(SPR_COLLECTOR_EFFECT));
         LIGHTBEAM       = register(new RenderContextLightbeam(new ObjectReference<>()));
 
+        TEXTURE_SPRITE = register(new RenderContextSpritePlaneDynamic());
+        FACING_SPRITE = register(new RenderContextFacingSprite());
+
         CUBE_OPAQUE_ATLAS = register(new RenderContextOpaqueCube());
         CUBE_TRANSLUCENT_ATLAS = register(new RenderContextTranslucentCube());
         CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH = register(new RenderContextTranslucentDepthCube());
@@ -64,11 +66,13 @@ public class RegistryEffectTemplates {
 
         //L0
         List<BatchRenderContext<?>> generalGrp = new LinkedList<>();
+        generalGrp.add(TEXTURE_SPRITE);
         generalGrp.add(CRYSTAL_BURST_1);
         generalGrp.add(CRYSTAL_BURST_2);
         generalGrp.add(CRYSTAL_BURST_3);
         generalGrp.add(COLLECTOR_BURST);
         generalGrp.add(LIGHTBEAM);
+        generalGrp.add(FACING_SPRITE);
 
         generalGrp.forEach(c -> c.setAfter(LIGHTNING));
 

@@ -18,6 +18,8 @@ import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import net.minecraft.client.Minecraft;
 
+import javax.annotation.Nullable;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -29,12 +31,12 @@ public final class EffectRegistrar {
 
     private EffectRegistrar() {}
 
-    public static <T extends EntityVisualFX> T registerFX(T entityComplexFX, EffectProperties<T> properties) {
+    static <T extends EntityVisualFX> T registerFX(T entityComplexFX, EffectProperties<T> properties) {
         register(entityComplexFX, properties);
         return entityComplexFX;
     }
 
-    public static <E extends EntityVisualFX, T extends BatchRenderContext<E>, F extends FXSource<E, T>> F registerSource(F source) {
+    static <E extends EntityVisualFX, T extends BatchRenderContext<E>, F extends FXSource<E, T>> F registerSource(F source) {
         register(source);
         return source;
     }

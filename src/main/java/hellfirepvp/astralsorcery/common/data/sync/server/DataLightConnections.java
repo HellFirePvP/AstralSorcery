@@ -83,6 +83,13 @@ public class DataLightConnections extends AbstractData {
         }
     }
 
+    @Override
+    public void clearServer() {
+        this.dimensionClearBuffer.clear();
+        this.serverChangeBuffer.clear();
+        this.serverPosBuffer.clear();
+    }
+
     private void notifyConnectionAdd(int dimid, List<TransmissionChain.LightConnection> added) {
         LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dimid, k -> new LinkedList<>());
         for (TransmissionChain.LightConnection l : added) {

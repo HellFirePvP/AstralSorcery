@@ -22,6 +22,7 @@ public class TexturesAS {
     private TexturesAS() {}
 
     public static AbstractRenderableTexture TEX_BLACK;
+    public static AbstractRenderableTexture TEX_BLANK;
 
     public static AbstractRenderableTexture TEX_CONTAINER_TOME_STORAGE;
     public static AbstractRenderableTexture TEX_CONTAINER_ALTAR_DISCOVERY;

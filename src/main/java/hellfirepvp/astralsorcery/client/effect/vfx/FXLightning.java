@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.effect.vfx;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -118,7 +119,7 @@ public class FXLightning extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
         if (root == null) {
             return;
         }

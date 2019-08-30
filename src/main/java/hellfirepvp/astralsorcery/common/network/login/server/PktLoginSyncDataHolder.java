@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.login.server;
 
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.sync.SyncDataRegistry;
 import hellfirepvp.astralsorcery.common.data.sync.base.AbstractData;
 import hellfirepvp.astralsorcery.common.data.sync.base.ClientData;
 import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
@@ -42,7 +43,7 @@ public class PktLoginSyncDataHolder extends ASLoginPacket<PktLoginSyncDataHolder
 
     public static PktLoginSyncDataHolder makeLogin() {
         PktLoginSyncDataHolder pkt = new PktLoginSyncDataHolder();
-        for (ResourceLocation key : SyncDataHolder.getServerDataKeys()) {
+        for (ResourceLocation key : SyncDataRegistry.getKnownKeys()) {
             SyncDataHolder.executeServer(key, AbstractData.class, data -> {
                 CompoundNBT nbt = new CompoundNBT();
                 data.writeAllDataToPacket(nbt);

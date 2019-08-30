@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.data.sync.base.AbstractDataProvider;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,8 +29,12 @@ public class SyncDataRegistry {
 
     private SyncDataRegistry() {}
 
-    public static void register(AbstractDataProvider<?, ?> provider) {
+    static void register(AbstractDataProvider<?, ?> provider) {
         REGISTRY.put(provider.getKey(), provider);
+    }
+
+    public static Collection<ResourceLocation> getKnownKeys() {
+        return REGISTRY.keySet();
     }
 
     @Nullable

@@ -35,6 +35,13 @@ public class BufferContext extends BufferBuilder {
         this.inDrawing = true;
     }
 
+    @Override
+    public void sortVertexData(float x, float y, float z) {
+        if (this.inDrawing) {
+            super.sortVertexData(x, y, z);
+        }
+    }
+
     public void draw() {
         if (this.inDrawing) {
             this.finishDrawing();

@@ -70,12 +70,10 @@ public class FXBlock extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
         if (this.blockState == null || !(buf instanceof BufferContext)) {
             return;
         }
-        BufferContext vBuf = (BufferContext) buf;
-
         float alpha = this.getAlpha(pTicks);
         float scale = this.getScale(pTicks);
         Color c = this.getColor(pTicks);
@@ -100,9 +98,9 @@ public class FXBlock extends EntityVisualFX {
         GlStateManager.rotated(rotation.getZ(), 0, 0, 1);
         GlStateManager.translated(-0.5, -0.5, -0.5);
 
-        vBuf.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        RenderingUtils.renderSimpleBlockModel(this.blockState, vBuf);
-        vBuf.draw();
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        RenderingUtils.renderSimpleBlockModel(this.blockState, buf);
+        buf.draw();
 
         GlStateManager.popMatrix();
     }

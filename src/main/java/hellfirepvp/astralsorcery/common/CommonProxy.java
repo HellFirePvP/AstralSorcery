@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.gateway.CelestialGatewayHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonDataManager;
+import hellfirepvp.astralsorcery.common.base.patreon.manager.PatreonManager;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
@@ -175,6 +177,7 @@ public class CommonProxy {
         registrar.accept(SkyHandler.getInstance());
         registrar.accept(PlayerAmuletHandler.INSTANCE);
         registrar.accept(PerkTickHelper.INSTANCE);
+        registrar.accept(PatreonManager.INSTANCE);
 
         EventHelperRitualFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);
@@ -258,6 +261,8 @@ public class CommonProxy {
         RegistryIngredientTypes.init();
 
         RegistryWorldGeneration.registerFeatures();
+
+        PatreonDataManager.loadPatreonEffects();
     }
 
     private void onEnqueueIMC(InterModEnqueueEvent event) {
