@@ -35,6 +35,9 @@ public class EffectTemplatesAS {
     public static BatchRenderContext<FXFacingParticle> CRYSTAL_BURST_2;
     public static BatchRenderContext<FXFacingParticle> CRYSTAL_BURST_3;
 
+    public static BatchRenderContext<FXSpritePlane> TEXTURE_SPRITE;
+    public static BatchRenderContext<FXFacingSprite> FACING_SPRITE;
+
     public static BatchRenderContext<FXFacingParticle> COLLECTOR_BURST;
     public static BatchRenderContext<FXLightning> LIGHTNING;
     public static BatchRenderContext<FXLightbeam> LIGHTBEAM;

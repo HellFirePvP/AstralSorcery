@@ -85,8 +85,9 @@ public abstract class EntityComplexFX implements IComplexEffect {
         return (T) this;
     }
 
-    public void refresh(RefreshFunction<?> refreshFunction) {
+    public <T extends EntityComplexFX> T  refresh(RefreshFunction<?> refreshFunction) {
         this.refreshFunction = refreshFunction;
+        return (T) this;
     }
 
     public <T> T getOrCreateData(String str, Supplier<T> defaultProvider) {

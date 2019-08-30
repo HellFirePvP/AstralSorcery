@@ -15,11 +15,14 @@ import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
+import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Tuple;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -39,8 +42,15 @@ public class FXSpritePlane extends EntityVisualFX {
     private int ticksPerFullRot = 100;
     private float fixDegree = 0;
 
+    private SpriteSheetResource sprite = null;
+
     public FXSpritePlane(Vector3 pos) {
         super(pos);
+    }
+
+    public FXSpritePlane setSprite(SpriteSheetResource sprite) {
+        this.sprite = sprite;
+        return this;
     }
 
     public FXSpritePlane setAxis(Vector3 axis) {
@@ -70,7 +80,7 @@ public class FXSpritePlane extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
         if (!RenderingUtils.canEffectExist(this)) {
             return;
         }
@@ -104,15 +114,16 @@ public class FXSpritePlane extends EntityVisualFX {
         float g = c.getGreen() / 255F;
         float b = c.getBlue() / 255F;
 
-        SpriteSheetResource ssr = ctx.getSprite();
+        SpriteSheetResource ssr = this.sprite != null ? this.sprite : ctx.getSprite();
         Tuple<Double, Double> uvOffset = ssr.getUVOffset(age);
         double u = uvOffset.getA();
         double v = uvOffset.getB();
         double uLength = ssr.getULength();
         double vLength = ssr.getVLength();
 
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, pos, axis, Math.toRadians(deg), scale, u, v, uLength, vLength, r, g, b, alpha);
-
+        buf.draw();
     }
 
 }

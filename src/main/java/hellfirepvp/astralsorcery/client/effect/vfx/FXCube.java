@@ -103,12 +103,7 @@ public class FXCube extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferBuilder buf, float pTicks) {
-        if (!(buf instanceof BufferContext)) {
-            return;
-        }
-        BufferContext vBuf = (BufferContext) buf;
-
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
         double u, v, uLength, vLength;
         if (this.tas != null) {
             u = this.tas.getMinU();
@@ -143,11 +138,11 @@ public class FXCube extends EntityVisualFX {
         GlStateManager.rotated(((float) rotation.getZ()), 0, 0, 1);
 
         if(lightCoordX == -1 && lightCoordY == -1) {
-            RenderingDrawUtils.renderTexturedCubeCentralColor(vBuf, scale,
+            RenderingDrawUtils.renderTexturedCubeCentralColor(buf, scale,
                     u, v, uLength, vLength,
                     r, g, b, alpha);
         } else {
-            RenderingDrawUtils.renderTexturedCubeCentralWithLightAndColor(vBuf, scale,
+            RenderingDrawUtils.renderTexturedCubeCentralWithLightAndColor(buf, scale,
                     u, v, uLength, vLength,
                     lightCoordX, lightCoordY,
                     r, g, b, alpha);

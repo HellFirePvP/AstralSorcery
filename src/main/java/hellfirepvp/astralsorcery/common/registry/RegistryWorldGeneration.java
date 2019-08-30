@@ -32,6 +32,7 @@ import net.minecraft.world.gen.placement.ConfiguredPlacement;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static hellfirepvp.astralsorcery.common.lib.WorldGenerationAS.*;
@@ -104,9 +105,11 @@ public class RegistryWorldGeneration {
             ConfiguredFeature<FC> feature,
             ConfiguredPlacement<PC> placement) {
 
-        for (Biome b : ForgeRegistries.BIOMES) {
-            b.addFeature(stage, Biome.createDecoratedFeature(feature.feature, feature.config, placement.decorator, placement.config));
-        }
+        DeferredWorkQueue.runLater(() -> {
+            for (Biome b : ForgeRegistries.BIOMES) {
+                b.addFeature(stage, Biome.createDecoratedFeature(feature.feature, feature.config, placement.decorator, placement.config));
+            }
+        });
     }
 
 }

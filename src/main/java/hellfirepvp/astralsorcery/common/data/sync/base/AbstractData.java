@@ -37,6 +37,8 @@ public abstract class AbstractData {
 
     public abstract void clear(int dimId);
 
+    public abstract void clearServer();
+
     public abstract void writeAllDataToPacket(CompoundNBT compound);
 
     public abstract void writeDiffDataToPacket(CompoundNBT compound);
