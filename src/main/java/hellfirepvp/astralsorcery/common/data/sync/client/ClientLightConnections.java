@@ -14,8 +14,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
@@ -31,15 +35,15 @@ import java.util.*;
  */
 public class ClientLightConnections extends ClientData<ClientLightConnections> {
 
-    private Map<Integer, Map<BlockPos, Set<BlockPos>>> clientPosBuffer = new HashMap<>();
+    private Map<DimensionType, Map<BlockPos, Set<BlockPos>>> clientPosBuffer = new HashMap<>();
 
     @Nonnull
-    public Map<BlockPos, Set<BlockPos>> getClientConnections(int dimId) {
-        return this.clientPosBuffer.getOrDefault(dimId, new HashMap<>());
+    public Map<BlockPos, Set<BlockPos>> getClientConnections(DimensionType dimType) {
+        return this.clientPosBuffer.getOrDefault(dimType, new HashMap<>());
     }
 
     @Override
-    public void clear(int dimId) {
+    public void clear(DimensionType dimId) {
         this.clientPosBuffer.remove(dimId);
     }
 
@@ -54,16 +58,14 @@ public class ClientLightConnections extends ClientData<ClientLightConnections> {
         public void readFromIncomingFullSync(ClientLightConnections cl, CompoundNBT compound) {
             cl.clientPosBuffer.clear();
 
-            for (String dimIdKey : compound.keySet()) {
-                int dimId;
-                try {
-                    dimId = Integer.parseInt(dimIdKey);
-                } catch (NumberFormatException exc) {
-                    continue; //Skip wrongly formatted dimensionids
+            for (String dimTypeKey : compound.keySet()) {
+                DimensionType type = DimensionManager.getRegistry().getValue(new ResourceLocation(dimTypeKey)).orElse(null);
+                if (type == null) {
+                    continue;
                 }
 
                 Map<BlockPos, Set<BlockPos>> posMap = new HashMap<>();
-                ListNBT list = compound.getList(dimIdKey, Constants.NBT.TAG_COMPOUND);
+                ListNBT list = compound.getList(dimTypeKey, Constants.NBT.TAG_COMPOUND);
                 for (INBT iTag : list) {
                     CompoundNBT tag = (CompoundNBT) iTag;
 
@@ -73,28 +75,33 @@ public class ClientLightConnections extends ClientData<ClientLightConnections> {
                             .add(end);
                 }
 
-                cl.clientPosBuffer.put(dimId, posMap);
+                cl.clientPosBuffer.put(type, posMap);
             }
         }
 
         @Override
         public void readFromIncomingDiff(ClientLightConnections cl, CompoundNBT compound) {
-            for (INBT dimIdNbt : compound.getList("clear", Constants.NBT.TAG_INT)) {
-                int dimId = ((IntNBT) dimIdNbt).getInt();
-                cl.clientPosBuffer.remove(dimId);
-            }
-
-            for (String dimIdKey : compound.keySet()) {
-                int dimId;
-                try {
-                    dimId = Integer.parseInt(dimIdKey);
-                } catch (NumberFormatException exc) {
-                    continue; //Skip wrongly formatted dimensionids
+            Set<String> clearedDimensions = new HashSet<>();
+            for (INBT dimKeyNBT : compound.getList("clear", Constants.NBT.TAG_STRING)) {
+                String dimKey = dimKeyNBT.getString();
+                DimensionType type = DimensionManager.getRegistry()
+                        .getValue(new ResourceLocation(dimKey)).orElse(null);
+                if (type != null) {
+                    cl.clientPosBuffer.remove(type);
                 }
 
-                Map<BlockPos, Set<BlockPos>> posMap = cl.clientPosBuffer.computeIfAbsent(dimId, d -> new HashMap<>());
+                clearedDimensions.add(dimKey);
+            }
 
-                ListNBT list = compound.getList(dimIdKey, Constants.NBT.TAG_COMPOUND);
+            for (String dimTypeKey : compound.keySet()) {
+                if (clearedDimensions.contains(dimTypeKey)) {
+                    continue;
+                }
+                DimensionType type = DimensionManager.getRegistry().getValue(new ResourceLocation(dimTypeKey)).orElse(null);
+
+                Map<BlockPos, Set<BlockPos>> posMap = cl.clientPosBuffer.computeIfAbsent(type, d -> new HashMap<>());
+
+                ListNBT list = compound.getList(dimTypeKey, Constants.NBT.TAG_COMPOUND);
                 for (INBT iTag : list) {
                     CompoundNBT tag = (CompoundNBT) iTag;
 

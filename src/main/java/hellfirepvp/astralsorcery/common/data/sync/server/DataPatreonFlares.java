@@ -18,6 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -92,7 +93,7 @@ public class DataPatreonFlares extends AbstractData {
     }
 
     @Override
-    public void clear(int dimId) {}
+    public void clear(DimensionType dimType) {}
 
     @Override
     public void clearServer() {
@@ -157,6 +158,9 @@ public class DataPatreonFlares extends AbstractData {
 
         compound.put("updates", listUpdates);
         compound.put("removals", listRemovals);
+
+        this.flarePlayerUpdates.clear();
+        this.flareRemovals.clear();
     }
 
     public static class Provider extends AbstractDataProvider<DataPatreonFlares, ClientPatreonFlares> {

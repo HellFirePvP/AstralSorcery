@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.dimension.DimensionType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public abstract class AbstractData {
         SyncDataHolder.markForUpdate(this.key);
     }
 
-    public abstract void clear(int dimId);
+    public abstract void clear(DimensionType dimType);
 
     public abstract void clearServer();
 

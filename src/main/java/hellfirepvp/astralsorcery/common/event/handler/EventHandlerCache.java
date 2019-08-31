@@ -23,6 +23,8 @@ import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkCooldownHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
+import hellfirepvp.astralsorcery.common.util.time.TimeStopController;
 import hellfirepvp.astralsorcery.common.util.world.WorldSeedCache;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -71,7 +73,7 @@ public class EventHandlerCache {
     }
 
     public static void onServerStart() {
-        
+
     }
 
     public static void onServerStop() {
@@ -81,6 +83,7 @@ public class EventHandlerCache {
         PerkAttributeType.clearCache(LogicalSide.SERVER);
         PerkCooldownHelper.clearCache(LogicalSide.SERVER);
 
+        StarlightTransmissionHandler.getInstance().clearServer();
         EventHelperRitualFlight.clearServer();
         EventHelperSpawnDeny.clearServer();
         ResearchHelper.saveAndClearServerCache();
@@ -91,6 +94,8 @@ public class EventHandlerCache {
 
         SkyHandler.getInstance().informWorldUnload(w);
         SyncDataHolder.clearWorld(w);
+        TimeStopController.onWorldUnload(w);
+        StarlightTransmissionHandler.getInstance().informWorldUnload(w);
     }
 
     private static void onPlayerConnect(PlayerEvent.PlayerLoggedInEvent event) {

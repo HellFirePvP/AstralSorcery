@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.time.TimeStopEffectHelper;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
@@ -95,7 +96,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
 
         ROCK_CRYSTAL_COLUMN,
         ROCK_CRYSTAL_SPARKS,
-        WELL_CATALYST_BREAK;
+        WELL_CATALYST_BREAK,
+        TIME_FREEZE_EFFECT;
 
         @OnlyIn(Dist.CLIENT)
         private Consumer<PktPlayEffect> runEffect() {
@@ -106,6 +108,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return ItemWand::playUndergroundEffect;
                 case WELL_CATALYST_BREAK:
                     return TileWell::catalystBurst;
+                case TIME_FREEZE_EFFECT:
+                    return TimeStopEffectHelper::playEntityParticles;
             }
             return (pkt) -> {};
         }

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -49,7 +50,7 @@ public class ClientPatreonFlares extends ClientData<ClientPatreonFlares> {
     }
 
     @Override
-    public void clear(int dimId) {}
+    public void clear(DimensionType dimType) {}
 
     @Override
     public void clearClient() {

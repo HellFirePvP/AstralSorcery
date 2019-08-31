@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.data.sync.base;
 
+import net.minecraft.world.dimension.DimensionType;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -17,7 +19,7 @@ package hellfirepvp.astralsorcery.common.data.sync.base;
  */
 public abstract class ClientData<C extends ClientData<C>> {
 
-    public abstract void clear(int dimId);
+    public abstract void clear(DimensionType dimType);
 
     public abstract void clearClient();
 }

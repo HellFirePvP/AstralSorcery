@@ -16,12 +16,14 @@ import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
 import hellfirepvp.astralsorcery.common.data.sync.server.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.sync.server.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.sync.server.DataPatreonFlares;
+import hellfirepvp.astralsorcery.common.data.sync.server.DataTimeFreezeEffects;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncData;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -42,7 +44,7 @@ public class SyncDataHolder implements ITickHandler {
 
     public static final ResourceLocation DATA_LIGHT_CONNECTIONS = new ResourceLocation(AstralSorcery.MODID, "connections");
     public static final ResourceLocation DATA_LIGHT_BLOCK_ENDPOINTS = new ResourceLocation(AstralSorcery.MODID, "endpoints");
-    public static final String DATA_TIME_FREEZE_EFFECTS = "TimeFreezeEffects";
+    public static final ResourceLocation DATA_TIME_FREEZE_EFFECTS = new ResourceLocation(AstralSorcery.MODID, "time_freeze");
     public static final ResourceLocation DATA_PATREON_FLARES = new ResourceLocation(AstralSorcery.MODID, "patreon");
 
     private static Map<ResourceLocation, AbstractData> serverData = new HashMap<>();
@@ -93,12 +95,12 @@ public class SyncDataHolder implements ITickHandler {
     }
 
     public static void clearWorld(IWorld world) {
-        int dimId = world.getDimension().getType().getId();
+        DimensionType dimType = world.getDimension().getType();
         for (ResourceLocation key : SyncDataRegistry.getKnownKeys()) {
             if (world.isRemote()) {
-                executeClient(key, ClientData.class, data -> data.clear(dimId));
+                executeClient(key, ClientData.class, data -> data.clear(dimType));
             } else {
-                executeServer(key, AbstractData.class, data -> data.clear(dimId));
+                executeServer(key, AbstractData.class, data -> data.clear(dimType));
             }
         }
     }
@@ -116,7 +118,7 @@ public class SyncDataHolder implements ITickHandler {
     public static void initialize() {
         register(new DataLightConnections.Provider(DATA_LIGHT_CONNECTIONS));
         register(new DataLightBlockEndpoints.Provider(DATA_LIGHT_BLOCK_ENDPOINTS));
-        //init(new DataTimeFreezeEffects.Provider(DATA_TIME_FREEZE_EFFECTS));
+        register(new DataTimeFreezeEffects.Provider(DATA_TIME_FREEZE_EFFECTS));
         register(new DataPatreonFlares.Provider(DATA_PATREON_FLARES));
     }
 

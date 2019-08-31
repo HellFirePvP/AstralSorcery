@@ -11,8 +11,12 @@ package hellfirepvp.astralsorcery.common.effect;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.resource.query.SpriteQuery;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.common.util.time.TimeStopController;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectType;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,19 @@ public class EffectTimeFreeze extends EffectCustomTexture {
     @Override
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>(0);
+    }
+
+    @Override
+    public void attachEventListeners(IEventBus bus) {
+        super.attachEventListeners(bus);
+
+        bus.addListener(EventPriority.HIGHEST, this::onLivingTick);
+    }
+
+    private void onLivingTick(LivingEvent.LivingUpdateEvent event) {
+        if (TimeStopController.skipLivingTick(event.getEntityLiving())) {
+            event.setCanceled(true);
+        }
     }
 
     @Override
