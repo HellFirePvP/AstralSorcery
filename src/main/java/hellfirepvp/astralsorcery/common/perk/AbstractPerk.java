@@ -111,11 +111,11 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         this.cacheEffectMultiplier = multiplier;
     }
 
-    protected int multipliedI(double val) {
+    protected int applyMultiplierI(double val) {
         return MathHelper.floor(val * this.cacheEffectMultiplier);
     }
 
-    protected double multipliedD(double val) {
+    protected double applyMultiplierD(double val) {
         return val * this.cacheEffectMultiplier;
     }
 

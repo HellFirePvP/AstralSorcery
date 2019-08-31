@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktProgressionUpdate;
@@ -204,9 +205,9 @@ public class ResearchManager {
             CompoundNBT data = new CompoundNBT();
             root.onUnlockPerkServer(player, progress, data);
             progress.applyPerk(root, data);
-            //TODO perks
-            //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, LogicalSide.SERVER, root, false);
-            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(root, true));
+
+            PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, root, PerkEffectHelper.Action.ADD);
+            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(root, PerkEffectHelper.Action.ADD));
         }
 
         //TODO advancements
@@ -222,10 +223,9 @@ public class ResearchManager {
         if (!progress.isValid()) return false;
         if (!progress.hasPerkEffect(perk)) return false;
 
-        //TODO perks
-        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, LogicalSide.SERVER, perk, true);
+        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.REMOVE);
         progress.applyPerk(perk, newData);
-        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, LogicalSide.SERVER, perk, false);
+        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
 
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, prevoiusData, newData));
 
@@ -244,9 +244,8 @@ public class ResearchManager {
         perk.onUnlockPerkServer(player, progress, data);
         progress.applyPerk(perk, data);
 
-        //TODO perks
-        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, LogicalSide.SERVER, perk, false);
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, true));
+        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -263,9 +262,8 @@ public class ResearchManager {
             return false;
         }
 
-        //TODO perks
-        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, LogicalSide.SERVER, perk, true);
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, false));
+        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.REMOVE);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.REMOVE));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -282,15 +280,14 @@ public class ResearchManager {
             return false;
         }
 
-        //TODO perks
-        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, LogicalSide.SERVER, perk, false);
+        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
 
         //Send way after research sync...
         AstralSorcery.getProxy().scheduleDelayed(() -> {
-            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, true));
+            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
         });
         return true;
     }
@@ -330,9 +327,8 @@ public class ResearchManager {
         perk.onUnlockPerkServer(player, progress, data);
         progress.applyPerk(perk, data);
 
-        //TODO perks
-        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, LogicalSide.SERVER, perk, false);
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, true));
+        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -349,7 +345,7 @@ public class ResearchManager {
         }
         dropPerk(progress, player, LogicalSide.SERVER, perk, data);
 
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, false));
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.REMOVE));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -374,8 +370,7 @@ public class ResearchManager {
 
     private static void dropPerk(PlayerProgress progress, PlayerEntity player, LogicalSide side, AbstractPerk perk, CompoundNBT data) {
         progress.removePerk(perk);
-        //TODO perks
-        //PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, side, perk, true);
+        PerkEffectHelper.modifySinglePerk(player, side, perk, PerkEffectHelper.Action.REMOVE);
         perk.onRemovePerkServer(player, progress, data);
         progress.removePerkData(perk);
     }

@@ -88,7 +88,7 @@ public class RegistryPerks {
         initializeMinorConstellationPerks();
         initializeTreeConnectorPerks();*/
     }
-/*
+
     private static <T extends AbstractPerk> PerkTree.PointConnector register(T perk) {
         AstralSorcery.getProxy().getRegistryPrimer().register(perk);
         PERK_TREE.addPerk(perk);
@@ -290,7 +290,7 @@ public class RegistryPerks {
         AttributeModifierPerk perkIncLRedA2 = new AttributeModifierPerk(name("unwav_life_armor_1"), 28, 12).setNameOverride(perkIncLRedA1);
         perkIncLRedA2.addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
         perkIncLRedA2.addModifier(0.75F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
-        KeyNoKnockBack noKnockBack = new KeyNoKnockBack(name("key_no_knockback"), 29, 11);
+        KeyNoKnockback noKnockBack = new KeyNoKnockback(name("key_no_knockback"), 29, 11);
 
         register(perkIncLRedA1)
                 .connect(PERK_TREE.getPerk(name("outer_s_inc_def_2")));
@@ -305,7 +305,7 @@ public class RegistryPerks {
         perkIncArmor2.addModifier(0.06F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
         AttributeModifierPerk perkIncArmor3 = new AttributeModifierPerk(name("bol_red_inc_armor_2"), 28, 2).setNameOverride(perkIncArmor1);
         perkIncArmor3.addModifier(0.06F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
-        KeyDamageArmor keyDamageArmor = new KeyDamageArmor(name("key_damage_armor"), 29, 3, 0.05F);
+        KeyDamageArmor keyDamageArmor = new KeyDamageArmor(name("key_damage_armor"), 29, 3);
 
         register(perkIncArmor1)
                 .connect(PERK_TREE.getPerk(name("outer_s_inc_def_1")));
@@ -371,7 +371,7 @@ public class RegistryPerks {
         perkIncAts1.addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
         AttributeModifierPerk perkIncAts2 = new AttributeModifierPerk(name("inc_ats_ailm_1"), 8, -23).setNameOverride(perkIncAts1);
         perkIncAts2.addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
-        KeyDamageEffect keyAilments = new KeyDamageEffect(name("key_ailments"), 7, -24);
+        KeyDamageEffects keyAilments = new KeyDamageEffects(name("key_ailments"), 7, -24);
 
         register(perkIncAts1)
                 .connect(PERK_TREE.getPerk(name("outer_s_inc_dmg_2")));
@@ -386,7 +386,7 @@ public class RegistryPerks {
         perkIncMs2.addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
         AttributeModifierPerk perkIncCrit = new AttributeModifierPerk(name("inc_cull_crit"), 21, -10);
         perkIncCrit.addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE);
-        KeyCullAttack keyCull = new KeyCullAttack(name("key_cull_attack"), 20, -11);
+        KeyCullingAttack keyCull = new KeyCullingAttack(name("key_cull_attack"), 20, -11);
 
         register(perkIncMs1)
                 .connect(PERK_TREE.getPerk(name("outer_s_inc_dmg_5")));
@@ -1078,7 +1078,7 @@ public class RegistryPerks {
         perkSEP2.addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         AttributeModifierPerk perkSEP3 = new AttributeModifierPerk(name("key_enrich_path_node_2"), -20, 13).setNameOverride(perkSEP1);
         perkSEP3.addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
-        KeyStoneEnrichment stoneEnrichmentKey = new KeyStoneEnrichment(name("key_stone_enrichment"), -19, 14);
+        /*KeyStoneEnrichment stoneEnrichmentKey = new KeyStoneEnrichment(name("key_stone_enrichment"), -19, 14);
 
         register(perkSEP1)
                 .connect(PERK_TREE.getPerk(name("base_inc_perkeffect_t4_16")));
@@ -1087,7 +1087,7 @@ public class RegistryPerks {
         register(perkSEP3)
                 .connect(perkSEP2);
         register(stoneEnrichmentKey)
-                .connect(perkSEP3);
+                .connect(perkSEP3);*/
 
         AttributeModifierPerk perkMD1 = new AttributeModifierPerk(name("key_mending_path_node"), -21, 3);
         perkMD1.addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE);
@@ -1112,7 +1112,7 @@ public class RegistryPerks {
         perkGP2.addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
         AttributeModifierPerk perkGP3 = new AttributeModifierPerk(name("key_growables_path_node_2"), -11, 15).setNameOverride(perkGP1);
         perkGP3.addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
-        KeyGrowable growableKey = new KeyGrowable(name("key_growables"), -10, 16);
+        KeyGrowables growableKey = new KeyGrowables(name("key_growables"), -10, 16);
 
         register(perkGP1)
                 .connect(PERK_TREE.getPerk(name("base_inc_perkeffect_t3_10")));
@@ -1789,7 +1789,7 @@ public class RegistryPerks {
     }
 
     private static void initializeRoot() {
-        RootPerk rootAevitas = new AevitasRootPerk(-6, 2);
+        /*RootPerk rootAevitas = new AevitasRootPerk(-6, 2);
         rootAevitas.addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_HEALTH);
 
         RootPerk rootVicio = new VicioRootPerk(0, 7);
@@ -1808,7 +1808,7 @@ public class RegistryPerks {
         register(rootVicio);
         register(rootArmara);
         register(rootDiscidia);
-        register(rootEvorsio);
-    }*/
+        register(rootEvorsio);*/
+    }
 
 }

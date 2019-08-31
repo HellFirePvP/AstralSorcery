@@ -16,12 +16,15 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstractList;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
+import hellfirepvp.astralsorcery.common.lib.EffectsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
+import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -37,6 +40,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -92,9 +96,9 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
                         changed = true;
                     } else {
                         if (plant.tryGrow(world, rand)) {
-                            //TODO pkt effects
-                            //PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, plant.getPos());
-                            //PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, plant.getPos(), 8));
+                            PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.CROP_GROWTH)
+                                    .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(plant.getPos())));
+                            PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, plant.getPos(), 16));
                             changed = true;
                         }
                     }
@@ -110,8 +114,7 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
         for (LivingEntity entity : entities) {
             if (entity.isAlive()) {
                 if (properties.isCorrupted()) {
-                    //TODO potions
-                    //entity.addPotionEffect(new PotionEffect(RegistryEffects.potionBleed, 200, potionAmplifier * 2));
+                    entity.addPotionEffect(new EffectInstance(EffectsAS.EFFECT_BLEED, 200, amplifier * 2));
                     entity.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 200, amplifier * 3));
                     entity.addPotionEffect(new EffectInstance(Effects.HUNGER, 200, amplifier * 4));
                     entity.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 200, amplifier * 2));
@@ -139,6 +142,18 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
     @Override
     public ConstellationEffectProperties createProperties(int mirrors) {
         return new ConstellationEffectProperties(CONFIG.range.get() + mirrors * CONFIG.rangePerLens.get());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void playParticles(PktPlayEffect event) {
+        Vector3 at = ByteBufUtils.readVector(event.getExtraData());
+        for (int i = 0; i < 8; i++) {
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(at.clone().add(rand.nextFloat(), 0.2, rand.nextFloat()))
+                    .setMotion(new Vector3(0, 0.005 + rand.nextFloat() * 0.01, 0))
+                    .setScaleMultiplier(0.1F + rand.nextFloat() * 0.1F)
+                    .color(VFXColorFunction.constant(Color.GREEN));
+        }
     }
 
     private static class AevitasConfig extends CountConfig {

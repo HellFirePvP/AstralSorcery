@@ -26,6 +26,8 @@ public class ColorsAS {
     public static final Color ROCK_CRYSTAL      = new Color(0xDDDDFF);
     public static final Color CELESTIAL_CRYSTAL = new Color(0x0088FF);
 
+    public static final Color EFFECT_LIGHTNING = new Color(0x0195FF);
+
     public static final Color NOCTURNAL_POWDER_1 = Color.BLACK;
     public static final Color NOCTURNAL_POWDER_2 = new Color(0x4E016D);
     public static final Color NOCTURNAL_POWDER_3 = new Color(0x0C1576);

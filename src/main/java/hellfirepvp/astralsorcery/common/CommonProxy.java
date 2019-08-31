@@ -24,17 +24,13 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigRegistries;
 import hellfirepvp.astralsorcery.common.data.config.entry.*;
 import hellfirepvp.astralsorcery.common.data.config.CommonConfig;
 import hellfirepvp.astralsorcery.common.data.config.entry.common.CommonGeneralConfig;
-import hellfirepvp.astralsorcery.common.data.config.registry.AmuletEnchantmentRegistry;
-import hellfirepvp.astralsorcery.common.data.config.registry.FluidRarityRegistry;
-import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegistry;
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.data.config.registry.*;
 import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
-import hellfirepvp.astralsorcery.common.event.handler.EventHandlerConnect;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerInteract;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
@@ -123,8 +119,6 @@ public class CommonProxy {
         this.initializeConfigurations();
 
         ConfigRegistries.getRegistries().buildDataRegistries();
-        this.commonConfig.buildConfiguration();
-        this.serverConfig.buildConfiguration();
 
         this.tickManager = new TickManager();
         this.attachTickListeners(tickManager::register);
@@ -152,7 +146,6 @@ public class CommonProxy {
         eventBus.addListener(this::onServerStarting);
         eventBus.addListener(this::onServerStarted);
 
-        EventHandlerConnect.attachListeners(eventBus);
         EventHandlerInteract.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
         PerkAttributeLimiter.attachListeners(eventBus);
@@ -185,10 +178,13 @@ public class CommonProxy {
         ConfigRegistries.getRegistries().addDataRegistry(FluidRarityRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(TechnicalEntityRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(AmuletEnchantmentRegistry.INSTANCE);
+        ConfigRegistries.getRegistries().addDataRegistry(OreItemRarityRegistry.VOID_TRASH_REWARD);
+        ConfigRegistries.getRegistries().addDataRegistry(OreBlockRarityRegistry.STONE_ENRICHMENT);
+
+        ToolsConfig.CONFIG.newSubSection(WandsConfig.CONFIG);
 
         this.serverConfig.addConfigEntry(GeneralConfig.CONFIG);
         this.serverConfig.addConfigEntry(ToolsConfig.CONFIG);
-        this.serverConfig.addConfigEntry(ToolsConfig.CONFIG.newSubSection(WandsConfig.CONFIG));
         this.serverConfig.addConfigEntry(EntityConfig.CONFIG);
         this.serverConfig.addConfigEntry(CraftingConfig.CONFIG);
         this.serverConfig.addConfigEntry(LightNetworkConfig.CONFIG);
@@ -258,6 +254,9 @@ public class CommonProxy {
     // Mod events
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
+        this.commonConfig.buildConfiguration();
+        this.serverConfig.buildConfiguration();
+
         RegistryCapabilities.initialize();
         RegistryIngredientTypes.init();
 

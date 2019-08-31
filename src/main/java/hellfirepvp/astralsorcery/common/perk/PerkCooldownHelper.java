@@ -47,6 +47,19 @@ public class PerkCooldownHelper {
         }
     }
 
+    public static void removeAllCooldowns(PlayerEntity player, LogicalSide side) {
+        PlayerWrapperContainer ct = new PlayerWrapperContainer(player);
+        if (side.isClient()) {
+            if (perkCooldownsClient.hasList(ct)) {
+                perkCooldownsClient.removeList(ct);
+            }
+        } else {
+            if (perkCooldowns.hasList(ct)) {
+                perkCooldowns.removeList(ct);
+            }
+        }
+    }
+
     public static boolean isCooldownActiveForPlayer(PlayerEntity player, AbstractPerk perk) {
         if (!(perk instanceof CooldownPerk)) return false;
 

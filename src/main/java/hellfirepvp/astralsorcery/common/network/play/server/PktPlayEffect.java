@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.network.play.server;
 
+import hellfirepvp.astralsorcery.client.util.MiscPlayEffect;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
@@ -94,20 +96,26 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
 
     public static enum Type {
 
+        LIGHTNING,
         ROCK_CRYSTAL_COLUMN,
         ROCK_CRYSTAL_SPARKS,
         WELL_CATALYST_BREAK,
+        CROP_GROWTH,
         TIME_FREEZE_EFFECT;
 
         @OnlyIn(Dist.CLIENT)
         private Consumer<PktPlayEffect> runEffect() {
             switch (this) {
+                case LIGHTNING:
+                    return MiscPlayEffect::fireLightning;
                 case ROCK_CRYSTAL_COLUMN:
                     return ItemWand::playEffect;
                 case ROCK_CRYSTAL_SPARKS:
                     return ItemWand::playUndergroundEffect;
                 case WELL_CATALYST_BREAK:
                     return TileWell::catalystBurst;
+                case CROP_GROWTH:
+                    return CEffectAevitas::playParticles;
                 case TIME_FREEZE_EFFECT:
                     return TimeStopEffectHelper::playEntityParticles;
             }

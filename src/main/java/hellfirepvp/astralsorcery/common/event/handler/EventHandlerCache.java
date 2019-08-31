@@ -13,22 +13,25 @@ import hellfirepvp.astralsorcery.client.effect.handler.EffectHandler;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
+import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchSyncHelper;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkCooldownHelper;
+import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopController;
 import hellfirepvp.astralsorcery.common.util.world.WorldSeedCache;
-import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,8 +39,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
-
-import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,6 +55,7 @@ public class EventHandlerCache {
         eventBus.addListener(EventHandlerCache::onUnload);
         eventBus.addListener(EventHandlerCache::onPlayerConnect);
         eventBus.addListener(EventHandlerCache::onPlayerDisconnect);
+        eventBus.addListener(EventHandlerCache::onPlayerClone);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -99,17 +101,27 @@ public class EventHandlerCache {
     }
 
     private static void onPlayerConnect(PlayerEvent.PlayerLoggedInEvent event) {
-        PlayerEntity player = event.getPlayer();
+        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+        if (GeneralConfig.CONFIG.giveJournalOnJoin.get() && !progress.didReceiveTome()) {
+            if (player.inventory.addItemStackToInventory(new ItemStack(ItemsAS.TOME))) {
+                ResearchManager.setTomeReceived(player);
+            }
+        }
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        PerkEffectHelper.onPlayerConnectEvent(player);
     }
 
     private static void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
-        PlayerEntity player = event.getPlayer();
+        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
-        if (player instanceof ServerPlayerEntity) {
-            EventHelperRitualFlight.onDisconnect((ServerPlayerEntity) player);
-        }
+        EventHelperRitualFlight.onDisconnect(player);
+        PerkEffectHelper.onPlayerDisconnectEvent(player);
+    }
+
+    private static void onPlayerClone(PlayerEvent.Clone event) {
+        PerkEffectHelper.onPlayerCloneEvent((ServerPlayerEntity) event.getOriginal(), (ServerPlayerEntity) event.getPlayer());
     }
 }
