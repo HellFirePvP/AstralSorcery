@@ -64,10 +64,10 @@ public class KeyCheatDeath extends KeyPerk implements CooldownPerk {
             PlayerProgress progress = ResearchHelper.getProgress(player, side);
             if (progress.hasPerkEffect(this)) {
                 if (!PerkCooldownHelper.isCooldownActiveForPlayer(player, this)) {
-                    PerkCooldownHelper.setCooldownActiveForPlayer(player, this, this.multipliedI(this.config.cooldownPotionApplication.get()));
+                    PerkCooldownHelper.setCooldownActiveForPlayer(player, this, this.applyMultiplierI(this.config.cooldownPotionApplication.get()));
                     player.addPotionEffect(new EffectInstance(EffectsAS.EFFECT_CHEAT_DEATH,
-                            this.multipliedI(this.config.potionDuration.get()),
-                            this.multipliedI(this.config.potionAmplifier.get()),
+                            this.applyMultiplierI(this.config.potionDuration.get()),
+                            this.applyMultiplierI(this.config.potionAmplifier.get()),
                             true, false, true));
                 }
             }

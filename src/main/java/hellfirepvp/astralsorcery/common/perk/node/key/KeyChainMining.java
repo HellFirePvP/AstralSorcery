@@ -12,8 +12,6 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
@@ -23,7 +21,6 @@ import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.observerlib.api.util.BlockArray;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -108,11 +105,11 @@ public class KeyChainMining extends KeyPerk {
 
     private boolean doMiningChain(ServerWorld world, BlockPos pos, BlockState state, ServerPlayerEntity player, LogicalSide side) {
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
-        double ch = this.multipliedD(this.config.chainChance.get());
+        double ch = this.applyMultiplierD(this.config.chainChance.get());
         ch = PerkAttributeHelper.getOrCreateMap(player, side)
                 .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_MINING_CHAIN_CHANCE, (float) ch);
         if (rand.nextFloat() < ch) {
-            float length = this.multipliedI(this.config.chainLength.get());
+            float length = this.applyMultiplierI(this.config.chainLength.get());
             length = PerkAttributeHelper.getOrCreateMap(player, side)
                     .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_MINING_CHAIN_LENGTH, length);
             BlockArray chain = BlockDiscoverer.discoverBlocksWithSameStateAroundChain(world, pos, state, MathHelper.floor(length), null,

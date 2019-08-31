@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegi
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
+import hellfirepvp.astralsorcery.common.lib.EffectsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.block.WorldBlockPos;
@@ -157,8 +158,7 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
                     entity.addPotionEffect(new EffectInstance(Effects.STRENGTH, 100, potionAmplifier + 4));
                     entity.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 100, potionAmplifier + 4));
                     entity.addPotionEffect(new EffectInstance(Effects.HASTE, 100, potionAmplifier + 4));
-                    //TODO potions
-                    //entity.addPotionEffect(new PotionEffect(RegistryEffects.potionDropModifier, 40000, 6));
+                    entity.addPotionEffect(new EffectInstance(EffectsAS.EFFECT_DROP_MODIFIER, 100, 6));
                 } else {
                     entity.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 30, Math.min(potionAmplifier, 3)));
                     if (entity instanceof PlayerEntity) {

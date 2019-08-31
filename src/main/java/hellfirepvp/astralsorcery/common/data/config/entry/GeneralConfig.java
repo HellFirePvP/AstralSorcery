@@ -13,6 +13,8 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,7 +32,7 @@ public class GeneralConfig extends ConfigEntry {
 
     public ForgeConfigSpec.BooleanValue giveJournalOnJoin;
     public ForgeConfigSpec.BooleanValue mobSpawningDenyAllTypes;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> modidOreGenBlacklist;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> modidOreBlacklist;
 
     private GeneralConfig() {
         super("general");
@@ -53,10 +55,10 @@ public class GeneralConfig extends ConfigEntry {
                 .translation(translationKey("mobSpawningDenyAllTypes"))
                 .define("mobSpawningDenyAllTypes", false);
 
-        modidOreGenBlacklist = cfgBuilder
-                .comment("List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.")
-                .translation(translationKey("modidOreGenBlacklist"))
-                .defineList("modidOreGenBlacklist", Lists.newArrayList("techreborn", "gregtech"), Predicates.alwaysTrue());
+        modidOreBlacklist = cfgBuilder
+                .comment("Features generating random ores in AstralSorcery will not spawn ores from mods listed here.")
+                .translation(translationKey("modidOreBlacklist"))
+                .defineList("modidOreBlacklist", Arrays.asList("techreborn", "gregtech"), Predicates.alwaysTrue());
     }
 
 }

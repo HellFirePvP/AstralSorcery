@@ -8,9 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.util.entity;
 
+import com.google.common.base.Predicate;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.*;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,6 +25,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -142,6 +147,63 @@ public class EntityUtils {
             }
         }
         return true;
+    }
+
+    public static Predicate<? super Entity> selectEntities(Class<? extends Entity>... entities) {
+        return (Predicate<Entity>) entity -> {
+            if (entity == null || !entity.isAlive()) return false;
+            Class<? extends Entity> clazz = entity.getClass();
+            for (Class<? extends Entity> test : entities) {
+                if (test.isAssignableFrom(clazz)) return true;
+            }
+            return false;
+        };
+    }
+
+    public static Predicate<? super Entity> selectItemClassInstaceof(Class<?> itemClass) {
+        return (Predicate<Entity>) entity -> {
+            if(entity == null || !entity.isAlive()) return false;
+            if(!(entity instanceof ItemEntity)) return false;
+            ItemStack i = ((ItemEntity) entity).getItem();
+            if(i.isEmpty()) return false;
+            return itemClass.isAssignableFrom(i.getItem().getClass());
+        };
+    }
+
+    public static Predicate<? super Entity> selectItem(Item item) {
+        return (Predicate<Entity>) entity -> {
+            if(entity == null || !entity.isAlive()) return false;
+            if(!(entity instanceof ItemEntity)) return false;
+            ItemStack i = ((ItemEntity) entity).getItem();
+            if(i.isEmpty()) return false;
+            return i.getItem().equals(item);
+        };
+    }
+
+    public static Predicate<? super Entity> selectItemStack(Function<ItemStack, Boolean> acceptor) {
+        return entity -> {
+            if(entity == null || !entity.isAlive()) return false;
+            if(!(entity instanceof ItemEntity)) return false;
+            ItemStack i = ((ItemEntity) entity).getItem();
+            if(i.isEmpty()) return false;
+            return acceptor.apply(i);
+        };
+    }
+
+    @Nullable
+    public static <T> T selectClosest(Collection<T> elements, Function<T, Double> dstFunc) {
+        if(elements.isEmpty()) return null;
+
+        double dstClosest = Double.MAX_VALUE;
+        T closestElement = null;
+        for (T element : elements) {
+            double dst = dstFunc.apply(element);
+            if(dst < dstClosest) {
+                closestElement = element;
+                dstClosest = dst;
+            }
+        }
+        return closestElement;
     }
 
 }
