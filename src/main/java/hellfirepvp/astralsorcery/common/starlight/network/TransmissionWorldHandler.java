@@ -25,6 +25,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 
 import java.util.*;
 
@@ -54,10 +55,10 @@ public class TransmissionWorldHandler {
     //Contains a list of source positions whose sources currently calculate their network.
     private Set<BlockPos> sourcePosBuilding = new HashSet<>();
 
-    private final int dimId;
+    private final DimensionType dimType;
 
-    public TransmissionWorldHandler(int dimId) {
-        this.dimId = dimId;
+    public TransmissionWorldHandler(DimensionType dimType) {
+        this.dimType = dimType;
     }
 
     public void tick(World world) {
@@ -194,10 +195,10 @@ public class TransmissionWorldHandler {
                 }
             }
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
-                data.removeOldConnectionsThreaded(dimId, knownChain.getFoundConnections());
+                data.removeOldConnectionsThreaded(dimType, knownChain.getFoundConnections());
             });
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
-                data.removeEndpoints(dimId, knownChain.getResolvedNormalBlockPositions());
+                data.removeEndpoints(dimType, knownChain.getResolvedNormalBlockPositions());
             });
         }
         activeChunkMap.remove(source);
@@ -240,18 +241,11 @@ public class TransmissionWorldHandler {
         }
     }
 
-    //Free memory before removing the object
-    public void clear(int dimId) {
+    public void clear() {
         this.activeChunkMap.clear();
         this.cachedSourceChain.clear();
         this.involvedSourceMap.clear();
         this.posToSourceMap.clear();
-        SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
-            data.clear(dimId);
-        });
-        SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
-            data.clear(dimId);
-        });
     }
 
 }
