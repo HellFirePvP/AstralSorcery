@@ -32,9 +32,8 @@ public class WorldSeedCache {
 
     private static Map<DimensionType, Long> cacheSeedLookup = new HashMap<>();
 
-    //TODO on disconnect
     @OnlyIn(Dist.CLIENT)
-    public static void clearCache() {
+    public static void clearClient() {
         activeSession++;
         cacheSeedLookup.clear();
     }

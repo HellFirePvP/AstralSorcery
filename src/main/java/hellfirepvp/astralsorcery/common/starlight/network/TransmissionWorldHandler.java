@@ -63,7 +63,6 @@ public class TransmissionWorldHandler {
     public void tick(World world) {
         WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(world);
 
-        //TODO of course i broke something. sources disappear after restart... -_-
         for (Tuple<BlockPos, IIndependentStarlightSource> sourceTuple : handler.getAllSources()) {
             BlockPos at = sourceTuple.getA();
             IIndependentStarlightSource source = sourceTuple.getB();

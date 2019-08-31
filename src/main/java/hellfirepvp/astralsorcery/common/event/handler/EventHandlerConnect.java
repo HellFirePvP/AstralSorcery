@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -32,7 +33,7 @@ public class EventHandlerConnect {
     private EventHandlerConnect() {}
 
     public static void attachListeners(IEventBus eventBus) {
-        eventBus.addListener(EventHandlerConnect::onPlayerConnect);
+        eventBus.addListener(EventPriority.HIGH, EventHandlerConnect::onPlayerConnect);
     }
 
     private static void onPlayerConnect(PlayerEvent.PlayerLoggedInEvent event) {
@@ -44,8 +45,5 @@ public class EventHandlerConnect {
                 ResearchManager.setTomeReceived(player);
             }
         }
-
-        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
     }
-
 }

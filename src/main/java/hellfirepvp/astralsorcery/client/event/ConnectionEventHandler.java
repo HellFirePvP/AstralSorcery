@@ -35,9 +35,4 @@ public class ConnectionEventHandler {
 
     }
 
-    //TODO on disconnect.
-    public void onDc() {
-        EffectHandler.cleanUp();
-    }
-
 }

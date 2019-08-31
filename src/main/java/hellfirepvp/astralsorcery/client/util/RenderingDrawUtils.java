@@ -398,12 +398,10 @@ public class RenderingDrawUtils {
         pos.clone().add(v4).subtract(iPos).drawPos(vb).tex(u,           v + vLength).color(cR, cG, cB, alpha).endVertex();
     }
 
-    public static void renderTexturedCubeCentralColor(BufferContext buf, double size,
+    public static void renderTexturedCubeCentralColor(BufferBuilder buf, double size,
                                                                   double u, double v, double uLength, double vLength,
                                                                   float cR, float cG, float cB, float cA) {
         double half = size / 2D;
-
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 
         buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).endVertex();
         buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
@@ -434,17 +432,13 @@ public class RenderingDrawUtils {
         buf.pos(-half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
         buf.pos( half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
         buf.pos( half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
-
-        buf.draw();
     }
 
-    public static void renderTexturedCubeCentralWithLightAndColor(BufferContext buf, double size,
+    public static void renderTexturedCubeCentralWithLightAndColor(BufferBuilder buf, double size,
                                                                   double u, double v, double uLength, double vLength,
                                                                   int lX, int lY,
                                                                   float cR, float cG, float cB, float cA) {
         double half = size / 2D;
-
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 
         buf.pos(-half, -half, -half).tex(u, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
         buf.pos( half, -half, -half).tex(u + uLength, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
@@ -475,8 +469,6 @@ public class RenderingDrawUtils {
         buf.pos(-half,  half,  half).tex(u, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
         buf.pos( half,  half,  half).tex(u + uLength, v + vLength).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
         buf.pos( half, -half,  half).tex(u + uLength, v).lightmap(lX, lY).color(cR, cG, cB, cA).endVertex();
-
-        buf.draw();
     }
 
     public static void renderAngleRotatedTexturedRectVB(BufferBuilder buf, Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, float r, float g, float b, float a) {

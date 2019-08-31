@@ -71,7 +71,7 @@ public class FXBlock extends EntityVisualFX {
 
     @Override
     public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
-        if (this.blockState == null || !(buf instanceof BufferContext)) {
+        if (this.blockState == null) {
             return;
         }
         float alpha = this.getAlpha(pTicks);

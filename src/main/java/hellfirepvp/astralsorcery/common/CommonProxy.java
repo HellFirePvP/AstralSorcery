@@ -33,7 +33,7 @@ import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
-import hellfirepvp.astralsorcery.common.event.handler.EventHandlerIO;
+import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerConnect;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerInteract;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
@@ -130,9 +130,7 @@ public class CommonProxy {
         this.attachTickListeners(tickManager::register);
 
         this.serverLifecycleListeners.add(ResearchIOThread.startup());
-        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(ResearchHelper::saveAndClearServerCache));
-        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperRitualFlight::clearServer));
-        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(EventHelperSpawnDeny::clearServer));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.wrap(EventHandlerCache::onServerStart, EventHandlerCache::onServerStop));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(CelestialGatewayHandler.INSTANCE::onServerStart));
 
         SyncDataHolder.initialize();
@@ -154,7 +152,6 @@ public class CommonProxy {
         eventBus.addListener(this::onServerStarting);
         eventBus.addListener(this::onServerStarted);
 
-        EventHandlerIO.attachListeners(eventBus);
         EventHandlerConnect.attachListeners(eventBus);
         EventHandlerInteract.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
@@ -207,6 +204,10 @@ public class CommonProxy {
 
     public InternalRegistryPrimer getRegistryPrimer() {
         return registryPrimer;
+    }
+
+    public TickManager getTickManager() {
+        return tickManager;
     }
 
     // Utils

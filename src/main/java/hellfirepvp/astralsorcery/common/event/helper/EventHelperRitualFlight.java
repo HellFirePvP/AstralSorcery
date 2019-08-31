@@ -39,7 +39,6 @@ public class EventHelperRitualFlight {
         ritualFlight.clear();
     }
 
-    //TODO disconnect
     public static void onDisconnect(ServerPlayerEntity player) {
         ritualFlight.remove(player);
     }

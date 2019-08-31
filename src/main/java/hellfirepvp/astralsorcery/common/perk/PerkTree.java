@@ -104,7 +104,6 @@ public class PerkTree {
         return ImmutableList.copyOf(this.connections);
     }
 
-    //TODO client cache clear? disconnect
     public void clearCache(LogicalSide side) {
         this.treePoints.stream().map(PerkTreePoint::getPerk).forEach(p -> p.clearCaches(side));
     }

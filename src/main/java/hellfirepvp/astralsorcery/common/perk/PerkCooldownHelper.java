@@ -13,6 +13,7 @@ import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -36,6 +37,14 @@ public class PerkCooldownHelper {
     public static void attachTickListeners(Consumer<ITickHandler> registrar) {
         registrar.accept(perkCooldowns);
         registrar.accept(perkCooldownsClient);
+    }
+
+    public static void clearCache(LogicalSide side) {
+        if (side.isClient()) {
+            perkCooldownsClient.clear();
+        } else {
+            perkCooldowns.clear();
+        }
     }
 
     public static boolean isCooldownActiveForPlayer(PlayerEntity player, AbstractPerk perk) {

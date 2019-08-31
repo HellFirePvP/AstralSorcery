@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.base.patreon;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -72,6 +73,8 @@ public class PatreonDataManager {
                     PatreonEffect pe = type.getProvider().buildEffect(plUuid, entry.getParameters());
 
                     pe.initialize();
+                    pe.attachEventListeners(MinecraftForge.EVENT_BUS);
+                    pe.attachTickListeners(AstralSorcery.getProxy().getTickManager()::register);
                     PatreonEffectHelper.playerEffectMap.computeIfAbsent(plUuid, uuid -> new ArrayList<>()).add(pe);
                     PatreonEffectHelper.effectMap.put(pe.getUUID(), pe);
                 } catch (Exception exc) {

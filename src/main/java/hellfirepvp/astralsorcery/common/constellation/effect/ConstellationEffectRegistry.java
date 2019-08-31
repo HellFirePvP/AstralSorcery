@@ -53,8 +53,7 @@ public class ConstellationEffectRegistry {
         clientEffectProviders.put(provider.getConstellation(), provider);
     }
 
-    //TODO logout
-    public static void cleanUp() {
+    public static void clearClient() {
         clientEffectInstances.clear();
     }
 

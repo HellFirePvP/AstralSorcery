@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -47,7 +48,9 @@ public class FXFacingSprite extends EntityVisualFX {
         float alpha = this.getAlpha(pTicks);
         float fScale = this.getScale(pTicks);
         Color col = this.getColor(pTicks);
-        Tuple<Double, Double> uvOffset = ssr.getUVOffset(this.getAge());
+
+        ssr.bindTexture();
+        Tuple<Double, Double> uvOffset = ssr.getUVOffset(this);
 
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         RenderingDrawUtils.renderFacingQuadVB(buf,

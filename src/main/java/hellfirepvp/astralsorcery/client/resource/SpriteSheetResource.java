@@ -9,7 +9,9 @@
 package hellfirepvp.astralsorcery.client.resource;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 import java.util.Objects;
@@ -83,6 +85,12 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
     public Tuple<Double, Double> getUVOffset(long frameTimer) {
         int frame = (int) (frameTimer % frameCount);
         return new Tuple<>((frame % columns) * uPart, (frame / columns) * vPart);
+    }
+
+    public Tuple<Double, Double> getUVOffset(EntityComplexFX fx) {
+        float perc = ((float) fx.getAge()) / ((float) fx.getMaxAge());
+        long timer = MathHelper.floor(this.getFrameCount() * perc);
+        return getUVOffset(timer);
     }
 
     public int getFrameCount() {

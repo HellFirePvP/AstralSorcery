@@ -8,9 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -65,6 +67,10 @@ public class ASMHookEndpoint {
 
     public static double postProcessVanilla(double value, ModifiableAttributeInstance attributeInstance) {
         return AttributeEvent.postProcessVanilla(value, attributeInstance);
+    }
+
+    public static void onClientDisconnect() {
+        EventHandlerCache.onClientDisconnect();
     }
 
 }

@@ -66,7 +66,6 @@ public class ScreenJournalProgression extends ScreenJournal {
         this.rescaleAndRefresh = false;
     }
 
-    //TODO on disconnect
     public static void resetJournal() {
         currentInstance = null;
         ScreenJournalPages.getClearOpenGuiInstance();
