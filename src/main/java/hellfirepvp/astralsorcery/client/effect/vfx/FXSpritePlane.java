@@ -115,7 +115,8 @@ public class FXSpritePlane extends EntityVisualFX {
         float b = c.getBlue() / 255F;
 
         SpriteSheetResource ssr = this.sprite != null ? this.sprite : ctx.getSprite();
-        Tuple<Double, Double> uvOffset = ssr.getUVOffset(age);
+        ssr.bindTexture();
+        Tuple<Double, Double> uvOffset = ssr.getUVOffset(this);
         double u = uvOffset.getA();
         double v = uvOffset.getB();
         double uLength = ssr.getULength();

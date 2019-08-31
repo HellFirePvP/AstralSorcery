@@ -289,11 +289,10 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         return null;
     }
 
-    //TODO more client clear stuff
     public void clearCaches(LogicalSide side) {}
 
     @OnlyIn(Dist.CLIENT)
-    public void clearClientCaches() {
+    public void clearClientResourceCaches() {
         this.tooltipCache = null;
     }
 

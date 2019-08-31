@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
@@ -38,7 +37,7 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     protected static final Random rand = new Random();
 
     //May be used by subclasses to more efficiently track who's got a perk applied
-    private Map<LogicalSide, List<UUID>> applicationCache = Maps.newHashMap();
+    private Map<LogicalSide, Set<UUID>> applicationCache = Maps.newHashMap();
 
     private final boolean isOnlyMultiplicative;
 
@@ -90,15 +89,13 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     }
 
     public void onApply(PlayerEntity player, LogicalSide side) {
-        List<UUID> applied = applicationCache.computeIfAbsent(side, s -> Lists.newArrayList());
-        if (!applied.contains(player.getUniqueID())) {
-            applied.add(player.getUniqueID());
-        }
+        Set<UUID> applied = applicationCache.computeIfAbsent(side, s -> new HashSet<>());
+        applied.add(player.getUniqueID());
     }
 
     public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely) {
         if (removedCompletely) {
-            applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).remove(player.getUniqueID());
+            applicationCache.computeIfAbsent(side, s -> new HashSet<>()).remove(player.getUniqueID());
         }
     }
 
@@ -107,12 +104,17 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     public void onModeRemove(PlayerEntity player, ModifierType mode, LogicalSide side, boolean removedCompletely) {}
 
     public boolean hasTypeApplied(PlayerEntity player, LogicalSide side) {
-        return applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).contains(player.getUniqueID());
+        return applicationCache.computeIfAbsent(side, s -> new HashSet<>()).contains(player.getUniqueID());
     }
 
-    //TODO cache clear DC
-    public final void clear(LogicalSide side) {
-        applicationCache.remove(side);
+    private void clear(LogicalSide side) {
+        this.applicationCache.remove(side);
+    }
+
+    public static void clearCache(LogicalSide side) {
+        for (PerkAttributeType type : RegistriesAS.REGISTRY_PERK_ATTRIBUTE_TYPES) {
+            type.clear(side);
+        }
     }
 
     @Override

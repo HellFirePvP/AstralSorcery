@@ -14,11 +14,11 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXPositionController;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
-import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingSprite;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.client.resource.query.SpriteQuery;
 import hellfirepvp.astralsorcery.common.base.patreon.FlareColor;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffect;
-import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,18 +50,18 @@ public class PatreonFlare extends PatreonPartialEntity {
         super.tickClient();
 
         if (this.clientSprite != null) {
-            FXFacingParticle sprite = (FXFacingParticle) clientSprite;
+            FXFacingSprite sprite = (FXFacingSprite) clientSprite;
             if (sprite.isRemoved() && RenderingConfig.CONFIG.patreonEffects.get()) {
                 this.clientSprite = null;
             }
         }
 
         if (this.clientSprite == null) {
-            FlareColor color = this.getFlareColor();
-            if (color != null) {
+            SpriteQuery sprite = getSpriteQuery();
+            if (sprite != null) {
                 this.clientSprite = EffectHelper.of(EffectTemplatesAS.FACING_SPRITE)
                         .spawn(pos)
-                        .setSprite(color.getSpriteQuery().resolveSprite())
+                        .setSprite(sprite.resolveSprite())
                         .setScaleMultiplier(0.35F)
                         .position(new VFXPositionController<EntityVisualFX>() {
                             @Nonnull
@@ -73,6 +73,15 @@ public class PatreonFlare extends PatreonPartialEntity {
                         .refresh(fx -> !PatreonFlare.this.removed && RenderingConfig.CONFIG.patreonEffects.get());
             }
         }
+    }
+
+    @Nullable
+    protected SpriteQuery getSpriteQuery() {
+        FlareColor color = getFlareColor();
+        if (color != null) {
+            return color.getSpriteQuery();
+        }
+        return null;
     }
 
     @Override

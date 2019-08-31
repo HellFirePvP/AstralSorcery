@@ -18,9 +18,11 @@ import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -138,14 +140,18 @@ public class FXCube extends EntityVisualFX {
         GlStateManager.rotated(((float) rotation.getZ()), 0, 0, 1);
 
         if(lightCoordX == -1 && lightCoordY == -1) {
+            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             RenderingDrawUtils.renderTexturedCubeCentralColor(buf, scale,
                     u, v, uLength, vLength,
                     r, g, b, alpha);
+            buf.draw();
         } else {
+            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
             RenderingDrawUtils.renderTexturedCubeCentralWithLightAndColor(buf, scale,
                     u, v, uLength, vLength,
                     lightCoordX, lightCoordY,
                     r, g, b, alpha);
+            buf.draw();
         }
 
         GlStateManager.popMatrix();

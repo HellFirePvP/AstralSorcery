@@ -8,6 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.base.patreon;
 
+import hellfirepvp.astralsorcery.common.base.patreon.types.provider.ProviderBlockRing;
+import hellfirepvp.astralsorcery.common.base.patreon.types.provider.ProviderFlare;
+import hellfirepvp.astralsorcery.common.base.patreon.types.provider.ProviderFlareDynamicColor;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -17,7 +21,11 @@ package hellfirepvp.astralsorcery.common.base.patreon;
  */
 public enum PatreonEffectType {
 
-    ;
+    //TODO finish adding all types..
+    FLARE(new ProviderFlare()),
+    FLARE_DYNAMIC_COLOR(new ProviderFlareDynamicColor()),
+
+    BLOCK_RING(new ProviderBlockRing());
 
     private final PatreonEffectProvider<?> provider;
 

@@ -83,17 +83,16 @@ public class AttributeTypeThorns extends PerkAttributeType {
             reflectTarget = (LivingEntity) source.getImmediateSource();
         }
 
-        //TODO ranged thorns as type
-        //if (reflectTarget == null &&
-        //        AttributeEvent.postProcessModded(player, this,
-        //                PerkAttributeHelper.getOrCreateMap(player, side)
-        //                        .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS_RANGED)) > 1) {
-        //    if (source.getTrueSource() != null &&
-        //            source.getTrueSource() instanceof LivingEntity &&
-        //            source.getTrueSource().isAlive()) {
-        //        reflectTarget = (LivingEntity) source.getTrueSource();
-        //    }
-        //}
+        if (reflectTarget == null &&
+                AttributeEvent.postProcessModded(player, this,
+                        PerkAttributeHelper.getOrCreateMap(player, side)
+                                .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_THORNS_RANGED)) > 1) {
+            if (source.getTrueSource() != null &&
+                    source.getTrueSource() instanceof LivingEntity &&
+                    source.getTrueSource().isAlive()) {
+                reflectTarget = (LivingEntity) source.getTrueSource();
+            }
+        }
 
         if (reflectTarget != null) {
             float dmgReflected = event.getAmount() * reflectAmount;

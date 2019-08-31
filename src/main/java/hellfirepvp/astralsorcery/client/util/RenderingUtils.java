@@ -27,6 +27,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
@@ -53,6 +54,23 @@ public class RenderingUtils {
     public static TextureAtlasSprite getSprite(FluidStack stack) {
         ResourceLocation res = stack.getFluid().getFlowing(stack);
         return Minecraft.getInstance().getTextureMap().getSprite(res);
+    }
+
+    @Nullable
+    public static TextureAtlasSprite getTexture(BlockState state, @Nullable BlockPos positionHint) {
+        World world = Minecraft.getInstance().world;
+        if (world == null) {
+            return null;
+        }
+        BlockPos pos = positionHint != null ? positionHint : BlockPos.ZERO;
+        try {
+            if (state.isAir(world, pos)) {
+                return null;
+            }
+        } catch (Exception exc) {
+            return null;
+        }
+        return Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state, world, pos);
     }
 
     public static Color clampToColor(int rgb) {

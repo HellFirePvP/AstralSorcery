@@ -104,7 +104,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
         this.age++;
 
         if (this.canRemove() && refreshFunction.shouldRefresh(this) && RenderingUtils.canEffectExist(this)) {
-            this.age = 0;
+            this.resetLifespan();
         }
     }
 
@@ -127,6 +127,11 @@ public abstract class EntityComplexFX implements IComplexEffect {
 
     public void flagAsRemoved() {
         this.flagRemoved = true;
+        this.removeRequested = false;
+    }
+
+    public void setActive() {
+        this.flagRemoved = false;
         this.removeRequested = false;
     }
 

@@ -151,6 +151,7 @@ public final class EffectHandler {
         } else {
             this.toAddBuffer.add(pendingEffect);
         }
+        pendingEffect.getEffect().setActive();
     }
 
     private void registerUnsafe(PendingEffect pendingEffect) {

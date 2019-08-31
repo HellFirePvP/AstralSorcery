@@ -20,6 +20,6 @@ import java.util.UUID;
  */
 public interface PatreonEffectProvider<T extends PatreonEffect> {
 
-    public T buildEffect(UUID uuid, List<String> effectParameters) throws Exception;
+    public T buildEffect(UUID playerUUID, List<String> effectParameters) throws Exception;
 
 }
