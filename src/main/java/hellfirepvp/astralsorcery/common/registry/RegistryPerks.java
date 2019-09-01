@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.perk.node.focus.KeyGelu;
 import hellfirepvp.astralsorcery.common.perk.node.focus.KeyUlteria;
 import hellfirepvp.astralsorcery.common.perk.node.focus.KeyVorux;
 import hellfirepvp.astralsorcery.common.perk.node.key.*;
+import hellfirepvp.astralsorcery.common.perk.node.root.*;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
@@ -51,7 +52,7 @@ public class RegistryPerks {
     private RegistryPerks() {}
 
     public static void init() {
-        /*initializeRoot();
+        initializeRoot();
 
         initializeAevitasRoot();
         initializeVicioRoot();
@@ -86,7 +87,7 @@ public class RegistryPerks {
         initializeOuterVicioPerks();
 
         initializeMinorConstellationPerks();
-        initializeTreeConnectorPerks();*/
+        initializeTreeConnectorPerks();
     }
 
     private static <T extends AbstractPerk> PerkTree.PointConnector register(T perk) {
@@ -1078,7 +1079,7 @@ public class RegistryPerks {
         perkSEP2.addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
         AttributeModifierPerk perkSEP3 = new AttributeModifierPerk(name("key_enrich_path_node_2"), -20, 13).setNameOverride(perkSEP1);
         perkSEP3.addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
-        /*KeyStoneEnrichment stoneEnrichmentKey = new KeyStoneEnrichment(name("key_stone_enrichment"), -19, 14);
+        KeyStoneEnrichment stoneEnrichmentKey = new KeyStoneEnrichment(name("key_stone_enrichment"), -19, 14);
 
         register(perkSEP1)
                 .connect(PERK_TREE.getPerk(name("base_inc_perkeffect_t4_16")));
@@ -1087,7 +1088,7 @@ public class RegistryPerks {
         register(perkSEP3)
                 .connect(perkSEP2);
         register(stoneEnrichmentKey)
-                .connect(perkSEP3);*/
+                .connect(perkSEP3);
 
         AttributeModifierPerk perkMD1 = new AttributeModifierPerk(name("key_mending_path_node"), -21, 3);
         perkMD1.addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE);
@@ -1789,26 +1790,26 @@ public class RegistryPerks {
     }
 
     private static void initializeRoot() {
-        /*RootPerk rootAevitas = new AevitasRootPerk(-6, 2);
+        RootPerk rootAevitas = new RootAevitas(name("aevitas"), -6, 2);
         rootAevitas.addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_HEALTH);
 
-        RootPerk rootVicio = new VicioRootPerk(0, 7);
+        RootPerk rootVicio = new RootVicio(name("vicio"), 0, 7);
         rootVicio.addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_REACH);
 
-        RootPerk rootArmara = new ArmaraRootPerk(6, 2);
+        RootPerk rootArmara = new RootArmara(name("armara"), 6, 2);
         rootArmara.addModifier(1.15F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
 
-        RootPerk rootDiscidia = new DiscidiaRootPerk(4, -5);
+        RootPerk rootDiscidia = new RootDiscidia(name("discidia"), 4, -5);
         rootDiscidia.addModifier(10F, ModifierType.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
 
-        RootPerk rootEvorsio = new EvorsioRootPerk(-4, -5);
+        RootPerk rootEvorsio = new RootEvorsio(name("evorsio"), -4, -5);
         rootEvorsio.addModifier(1.2F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
 
         register(rootAevitas);
         register(rootVicio);
         register(rootArmara);
         register(rootDiscidia);
-        register(rootEvorsio);*/
+        register(rootEvorsio);
     }
 
 }

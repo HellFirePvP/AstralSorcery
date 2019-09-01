@@ -69,6 +69,7 @@ public class ASMHookEndpoint {
         return AttributeEvent.postProcessVanilla(value, attributeInstance);
     }
 
+    //TODO remove in favor of the event. that's at the same position. sigh.
     public static void onClientDisconnect() {
         EventHandlerCache.onClientDisconnect();
     }

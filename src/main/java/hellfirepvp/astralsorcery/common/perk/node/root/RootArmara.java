@@ -19,7 +19,8 @@ import hellfirepvp.astralsorcery.common.perk.node.RootPerk;
 import hellfirepvp.astralsorcery.common.util.DiminishingMultiplier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -28,34 +29,35 @@ import javax.annotation.Nonnull;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RootAevitas
+ * Class: RootArmara
  * Created by HellFirePvP
- * Date: 25.08.2019 / 19:49
+ * Date: 01.09.2019 / 09:56
  */
-public class RootAevitas extends RootPerk {
+public class RootArmara extends RootPerk {
 
-    public RootAevitas(ResourceLocation name, int x, int y) {
-        super(name, ConstellationsAS.aevitas, x, y);
+    public RootArmara(ResourceLocation name, int x, int y) {
+        super(name, ConstellationsAS.armara, x, y);
     }
 
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(5_000L, 0.05F, 0.07F, 0.05F);
+        return new DiminishingMultiplier(20_000L, 0.1F, 0.05F, 0.001F);
     }
 
     @Override
     protected void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
 
-        bus.addListener(this::onPlace);
+        bus.addListener(EventPriority.HIGHEST, this::onHurt);
     }
 
-    private void onPlace(BlockEvent.EntityPlaceEvent event) {
-        if (!(event.getEntity() instanceof PlayerEntity)) {
+    private void onHurt(LivingHurtEvent event) {
+        if (!(event.getEntityLiving() instanceof PlayerEntity)) {
             return;
         }
-        PlayerEntity player = (PlayerEntity) event.getEntity();
+
+        PlayerEntity player = (PlayerEntity) event.getEntityLiving();
         LogicalSide side = this.getSide(player);
         if (!side.isServer()) {
             return;
@@ -66,14 +68,13 @@ public class RootAevitas extends RootPerk {
             return;
         }
 
-        float xp = Math.max(event.getPlacedBlock().getBlockHardness(event.getWorld(), event.getPos()) / 20F, 1);
-        xp *= this.getExpMultiplier();
-        xp *= this.getDiminishingReturns(player);
-        xp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
-        xp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP);
+        float expGain = event.getAmount() * 2F;
+        expGain *= this.getExpMultiplier();
+        expGain *= this.getDiminishingReturns(player);
+        expGain *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
+        expGain *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP);
+        expGain = AttributeEvent.postProcessModded(player, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP, expGain);
 
-        xp = AttributeEvent.postProcessModded(player, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP, xp);
-
-        ResearchManager.modifyExp(player, xp);
+        ResearchManager.modifyExp(player, expGain);
     }
 }

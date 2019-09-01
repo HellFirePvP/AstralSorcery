@@ -58,8 +58,11 @@ public class RegistryRegistries {
         REGISTRY_PERKS = (IForgeRegistryModifiable<AbstractPerk>) new RegistryBuilder<AbstractPerk>()
                 .setName(REGISTRY_NAME_PERKS)
                 .setType(AbstractPerk.class)
-                .add((IForgeRegistry.AddCallback<AbstractPerk>) (owner, stage, id, obj, oldObj) ->
-                        PerkTree.PERK_TREE.addPerk(obj))
+                .add((IForgeRegistry.AddCallback<AbstractPerk>) (owner, stage, id, obj, oldObj) -> {
+                    if (PerkTree.PERK_TREE.getConnector(obj) == null) {
+                        PerkTree.PERK_TREE.addPerk(obj);
+                    }
+                })
                 .disableSaving()
                 .disableOverrides()
                 .allowModification()

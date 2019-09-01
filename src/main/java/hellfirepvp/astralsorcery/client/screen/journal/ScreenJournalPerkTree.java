@@ -81,6 +81,8 @@ import java.util.List;
  */
 public class ScreenJournalPerkTree extends ScreenJournal {
 
+    //TODO fix scrolling, perk names formatting
+
     private static Rectangle rectSealBox = new Rectangle(29, 16, 16, 16);
     private static Rectangle rectSearchTextEntry = new Rectangle(300, 16, 88, 15);
 
@@ -719,6 +721,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         BufferContext batch = ctx.getContext(searchContext);
         SpriteSheetResource searchMark = SpritesAS.SPR_PERK_SEARCH;
 
+        searchMark.bindTexture();
         Vector3 starVec = new Vector3(x - size, y - size, 0);
         double uLength = searchMark.getUWidth();
         double vLength = searchMark.getVWidth();
@@ -867,7 +870,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 this.searchMatches.add(perk);
             } else {
                 for (ITextComponent tooltip : perk.getLocalizedTooltip()) {
-                    if (tooltip.getFormattedText().contains(matchText)) {
+                    if (tooltip.getFormattedText().toLowerCase().contains(matchText)) {
                         this.searchMatches.add(perk);
                         break;
                     }
