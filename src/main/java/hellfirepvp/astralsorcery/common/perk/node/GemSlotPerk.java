@@ -59,7 +59,8 @@ public interface GemSlotPerk {
             return ItemStack.EMPTY;
         }
 
-        return NBTHelper.getStack(data, SOCKET_DATA_KEY);
+        ItemStack stack = NBTHelper.getStack(data, SOCKET_DATA_KEY);
+        return stack != null ? stack : ItemStack.EMPTY;
     }
 
     default public boolean setContainedItem(PlayerEntity player, LogicalSide side, ItemStack stack) {

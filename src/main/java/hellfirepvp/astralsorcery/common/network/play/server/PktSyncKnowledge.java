@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.network.play.server;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.data.research.ResearchSyncHelper;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -17,8 +18,12 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -120,9 +125,18 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
     public Handler<PktSyncKnowledge> handler() {
         return new Handler<PktSyncKnowledge>() {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public void handleClient(PktSyncKnowledge packet, NetworkEvent.Context context) {
-                context.enqueueWork(() ->
-                        ResearchHelper.updateClientResearch(packet.state == STATE_ADD ? packet : null));
+                context.enqueueWork(() -> {
+                    PlayerEntity player = Minecraft.getInstance().player;
+                    if (player != null) {
+                        if (packet.state == STATE_ADD) {
+                            ResearchSyncHelper.recieveProgressFromServer(packet, player);
+                        } else {
+                            ResearchHelper.updateClientResearch(null);
+                        }
+                    }
+                });
             }
 
             @Override

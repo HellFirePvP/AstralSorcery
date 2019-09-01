@@ -81,8 +81,6 @@ import java.util.List;
  */
 public class ScreenJournalPerkTree extends ScreenJournal {
 
-    //TODO fix scrolling, perk names formatting
-
     private static Rectangle rectSealBox = new Rectangle(29, 16, 16, 16);
     private static Rectangle rectSearchTextEntry = new Rectangle(300, 16, 88, 15);
 
@@ -194,11 +192,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         GlStateManager.enableBlend();
         this.thisFramePerks.clear();
 
-        handleMouseMovement(mouseX, mouseY);
-
         GlStateManager.pushMatrix();
 
-        this.drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
         this.blitOffset -= 50;
         this.drawBackground();
         this.blitOffset += 50;
@@ -209,6 +204,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         GL11.glScissor((guiLeft + 27) * factor, (guiTop + 27) * factor, (guiWidth - 54) * factor, (guiHeight - 54) * factor);
         drawPerkTree(pTicks);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+
+        this.drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
 
         drawSearchBox();
         drawMiscInfo(mouseX, mouseY, pTicks);
@@ -295,7 +292,13 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     AbstractPerk perk = rctPerk.getKey();
                     PlayerProgress prog = ResearchHelper.getClientProgress();
 
-                    perk.getLocalizedTooltip().forEach(line -> toolTip.add(line.setStyle(tTipInfo)));
+                    perk.getLocalizedTooltip().forEach(line -> {
+                        Style style = line.getStyle();
+                        if (style.getColor() == null) {
+                            line.setStyle(tTipInfo);
+                        }
+                        toolTip.add(line);
+                    });
 
                     if (prog.isPerkSealed(perk)) {
                         toolTip.add(new TranslationTextComponent("perk.info.sealed").setStyle(red));
@@ -325,7 +328,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                         toolTip.add(new StringTextComponent(perk.getRegistryName().toString()).setStyle(gray));
                         toolTip.add(new TranslationTextComponent("misc.ctrlcopy").setStyle(gray));
                     }
-                    RenderingDrawUtils.renderBlueTooltipComponents(mouseX, mouseY, toolTip, font, false);
+                    RenderingDrawUtils.renderBlueTooltipComponents(mouseX, mouseY, toolTip, font, true);
                     break;
                 }
             }
@@ -408,7 +411,6 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 slotsSocketMenu.put(r, slotId);
                 index++;
             }
-            GlStateManager.disableBlend();
         }
     }
 
@@ -794,27 +796,23 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         return new Point.Double(offsetX, offsetY);
     }
 
-    private void handleMouseMovement(int mouseX, int mouseY) {
-        int guiMouseX = mouseX - guiLeft;
-        int guiMouseY = mouseY - guiTop;
-
-        if(this.mouseSealStack.isEmpty() &&
-                Minecraft.getInstance().mouseHelper.isLeftDown() &&
-                guiBox.isInBox(guiMouseX, guiMouseY)) {
-            if(mouseDragging) {
-                moveMouse(-(guiMouseX - mouseBufferX), -(guiMouseY - mouseBufferY));
-            } else {
-                mouseBufferX = guiMouseX;
-                mouseBufferY = guiMouseY;
-                mouseDragging = true;
-            }
-        } else {
-            applyMovedMouseOffset();
-            mouseDragging = false;
+    @Override
+    protected void mouseDragTick(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY) {
+        super.mouseDragTick(mouseX, mouseY, mouseDiffX, mouseDiffY);
+        if (this.mouseSealStack.isEmpty()) {
+            moveMouse(mouseDiffX, mouseDiffY);
         }
     }
 
-    private void moveMouse(int changeX, int changeY) {
+    @Override
+    protected void mouseDragStop(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY) {
+        super.mouseDragStop(mouseX, mouseY, mouseDiffX, mouseDiffY);
+        if (this.mouseSealStack.isEmpty()) {
+            applyMovedMouseOffset();
+        }
+    }
+
+    private void moveMouse(double changeX, double changeY) {
         if (this.previousMousePosition != null) {
             mousePosition.updateScaledPos(
                     sizeHandler.clampX(previousMousePosition.getScaledPosX() + changeX),

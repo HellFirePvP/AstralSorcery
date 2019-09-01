@@ -93,14 +93,14 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
                         if (!toInsert.isEmpty() &&
                                 toInsert.getItem() instanceof ItemPerkGem &&
                                 !ItemPerkGem.getModifiers(toInsert).isEmpty() &&
-                                !((GemSlotPerk) perk).hasItem(player, LogicalSide.SERVER) &&
-                                ((GemSlotPerk) perk).setContainedItem(player, LogicalSide.SERVER, toInsert)) {
+                                !((GemSlotPerk) packet.perk).hasItem(player, LogicalSide.SERVER) &&
+                                ((GemSlotPerk) packet.perk).setContainedItem(player, LogicalSide.SERVER, toInsert)) {
                             player.inventory.setInventorySlotContents(packet.slotId, ItemUtils.copyStackWithSize(stack, stack.getCount() - 1));
                         }
                         break;
                     case 1:
-                        if (((GemSlotPerk) perk).hasItem(player, LogicalSide.SERVER)) {
-                            ((GemSlotPerk) perk).dropItemToPlayer(player);
+                        if (((GemSlotPerk) packet.perk).hasItem(player, LogicalSide.SERVER)) {
+                            ((GemSlotPerk) packet.perk).dropItemToPlayer(player);
                         }
                         break;
                     default:
