@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -111,7 +112,7 @@ public class RenderingUtils {
 
         GlStateManager.translatef(0.0F, 0.0F, 32.0F);
         itemRenderer.zLevel = 200.0F;
-        net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
+        FontRenderer font = stack.getItem().getFontRenderer(stack);
         if (font == null) {
             font = Minecraft.getInstance().fontRenderer;
         }
@@ -121,7 +122,7 @@ public class RenderingUtils {
         itemRenderer.zLevel = 0.0F;
 
         GlStateManager.popMatrix();
-        RenderHelper.enableGUIStandardItemLighting();
+        RenderHelper.disableStandardItemLighting();
     }
 
     public static void renderSimpleBlockModel(BlockState state, BufferBuilder buf) {

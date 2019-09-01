@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
+import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
@@ -73,6 +74,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(KnowledgeFragment.class, this::registerKnowledgeFragments);
         eventBus.addGenericListener(ConstellationEffectProvider.class, this::registerConstellationEffects);
         eventBus.addGenericListener(PerkAttributeType.class, this::registerPerkAttributeTypes);
+        eventBus.addGenericListener(PerkAttributeReader.class, this::registerPerkAttributeReaders);
         eventBus.addGenericListener(ContainerType.class, this::registerContainerTypes);
         eventBus.addGenericListener(CrystalProperty.class, this::registerCrystalProperties);
         eventBus.addGenericListener(PropertyUsage.class, this::registerCrystalUsages);
@@ -87,9 +89,6 @@ public class PrimerEventHandler {
 
         RegistryStructures.registerStructures();
         RegistryKnowledgeFragments.init();
-
-        RegistryPerkAttributeTypes.init();
-        RegistryPerkAttributeReaders.init();
 
         RegistryCrystalProperties.init();
         RegistryCrystalPropertyUsages.init();
@@ -155,6 +154,10 @@ public class PrimerEventHandler {
     }
 
     private void registerPerkAttributeTypes(RegistryEvent.Register<PerkAttributeType> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerPerkAttributeReaders(RegistryEvent.Register<PerkAttributeReader> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

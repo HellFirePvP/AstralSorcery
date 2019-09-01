@@ -8,9 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.item.gem;
 
-import com.google.common.collect.Maps;
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
+import hellfirepvp.astralsorcery.common.data.config.registry.GemAttributeRegistry;
+import hellfirepvp.astralsorcery.common.data.config.registry.sets.GemAttributeEntry;
 import hellfirepvp.astralsorcery.common.perk.modifier.GemAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
@@ -31,30 +30,6 @@ import java.util.*;
 public class GemAttributeHelper {
 
     private static final Random rand = new Random();
-
-    //TODO move to data registry
-    private static Map<PerkAttributeType, Integer> weightedModifiers = new HashMap<PerkAttributeType, Integer>() {
-        {
-            put(PerkAttributeTypesAS.ATTR_TYPE_HEALTH,                    12);
-            put(PerkAttributeTypesAS.ATTR_TYPE_MOVESPEED,                 8);
-            put(PerkAttributeTypesAS.ATTR_TYPE_ARMOR,                     8);
-            put(PerkAttributeTypesAS.ATTR_TYPE_REACH,                     4);
-            put(PerkAttributeTypesAS.ATTR_TYPE_ATTACK_SPEED,              2);
-            put(PerkAttributeTypesAS.ATTR_TYPE_MELEE_DAMAGE,              8);
-            put(PerkAttributeTypesAS.ATTR_TYPE_PROJ_DAMAGE,               8);
-            put(PerkAttributeTypesAS.ATTR_TYPE_LIFE_RECOVERY,             2);
-            put(PerkAttributeTypesAS.ATTR_TYPE_INC_HARVEST_SPEED,         2);
-            put(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_CHANCE,           4);
-            put(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_MULTIPLIER,       4);
-            put(PerkAttributeTypesAS.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST,  2);
-            put(PerkAttributeTypesAS.ATTR_TYPE_INC_DODGE,                 2);
-            put(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP,              1);
-
-            //TC runic shielding
-            //put(AstralSorcery.MODID + ".compat.thaumcraft.runicshield", 2);
-        }
-    };
-    private static Map<PerkAttributeType, Integer> configuredModifiers = Maps.newHashMap();
 
     private static float chance3Modifiers = 0.2F;
     private static float chance4Modifiers = 0.05F;
@@ -90,31 +65,34 @@ public class GemAttributeHelper {
 
         int rolls = getPotentialMods(random, gemType.countModifier);
         List<GemAttributeModifier> mods = new ArrayList<>();
+        List<GemAttributeEntry> configuredModifiers = GemAttributeRegistry.INSTANCE.getConfiguredValues();
+
         for (int i = 0; i < rolls; i++) {
-            PerkAttributeType type = null;
+            GemAttributeEntry entry = null;
             if (allowDuplicateTypes) {
-                type = MiscUtils.getWeightedRandomEntry(configuredModifiers.keySet(),
-                        random, s -> configuredModifiers.getOrDefault(s, 1));
+                entry = MiscUtils.getWeightedRandomEntry(configuredModifiers, random, GemAttributeEntry::getWeight);
             } else {
-                List<PerkAttributeType> keys = new ArrayList<>(configuredModifiers.keySet());
-                while (!keys.isEmpty() && type == null) {
-                    PerkAttributeType item = getWeightedResultAndRemove(keys, random);
+                List<GemAttributeEntry> keys = new ArrayList<>(configuredModifiers);
+                while (!keys.isEmpty() && entry == null) {
+                    GemAttributeEntry item = getWeightedResultAndRemove(keys, random);
                     if (item != null) {
                         boolean foundType = false;
                         for (GemAttributeModifier m : mods) {
-                            if (m.getAttributeType().equals(item)) {
+                            if (m.getAttributeType().equals(item.getType())) {
                                 foundType = true;
+                                break;
                             }
                         }
+
                         if (foundType) {
                             continue;
                         }
-                        type = item;
+                        entry = item;
                     }
                 }
             }
 
-            if (type == null) {
+            if (entry == null) {
                 continue;
             }
 
@@ -134,10 +112,10 @@ public class GemAttributeHelper {
             ModifierType mode = isMultiplicative ? ModifierType.STACKING_MULTIPLY : ModifierType.ADDED_MULTIPLY;
             float rValue = isMultiplicative ? 1F + value : value;
 
+            PerkAttributeType type = entry.getType();
             if (allowDuplicateTypes) {
-                PerkAttributeType fType = type;
                 GemAttributeModifier existing = MiscUtils.iterativeSearch(mods,
-                        mod -> mod.getAttributeType().equals(fType) && mod.getMode().equals(mode));
+                        mod -> mod.getAttributeType().equals(type) && mod.getMode().equals(mode));
                 if (existing != null) {
                     mods.remove(existing);
                     float combinedValue;
@@ -162,11 +140,11 @@ public class GemAttributeHelper {
     }
 
     @Nullable
-    private static PerkAttributeType getWeightedResultAndRemove(List<PerkAttributeType> list, Random random) {
+    private static GemAttributeEntry getWeightedResultAndRemove(List<GemAttributeEntry> list, Random random) {
         if (list.isEmpty()) {
             return null;
         }
-        PerkAttributeType result = MiscUtils.getWeightedRandomEntry(list, random, s -> configuredModifiers.getOrDefault(s, 1));
+        GemAttributeEntry result = MiscUtils.getWeightedRandomEntry(list, random, GemAttributeEntry::getWeight);
         if (result != null) {
             list.remove(result);
         }

@@ -85,14 +85,13 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
                 });
             }
 
-            //TODO Doesn't seem to unlock?
             @Override
             public void handle(PktUnlockPerk packet, NetworkEvent.Context context, LogicalSide side) {
                 context.enqueueWork(() -> {
                     PlayerEntity player = context.getSender();
                     PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
                     if (!prog.hasPerkUnlocked(packet.perk) && prog.isValid()) {
-                        if (perk.mayUnlockPerk(prog, player) && ResearchManager.applyPerk(player, packet.perk)) {
+                        if (packet.perk.mayUnlockPerk(prog, player) && ResearchManager.applyPerk(player, packet.perk)) {
                             packet.replyWith(new PktUnlockPerk(true, packet.perk), context);
                         }
                     }

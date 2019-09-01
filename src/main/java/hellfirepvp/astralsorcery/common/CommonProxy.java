@@ -115,6 +115,8 @@ public class CommonProxy {
         RegistryStructureTypes.init();
         PacketChannel.registerPackets();
         RegistryLootFunctions.registerLootFunctions();
+        RegistryPerkAttributeTypes.init();
+        RegistryPerkAttributeReaders.init();
 
         this.initializeConfigurations();
 
@@ -147,6 +149,7 @@ public class CommonProxy {
         eventBus.addListener(this::onServerStarted);
 
         EventHandlerInteract.attachListeners(eventBus);
+        EventHandlerCache.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
         PerkAttributeLimiter.attachListeners(eventBus);
 
@@ -178,6 +181,7 @@ public class CommonProxy {
         ConfigRegistries.getRegistries().addDataRegistry(FluidRarityRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(TechnicalEntityRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(AmuletEnchantmentRegistry.INSTANCE);
+        ConfigRegistries.getRegistries().addDataRegistry(GemAttributeRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(OreItemRarityRegistry.VOID_TRASH_REWARD);
         ConfigRegistries.getRegistries().addDataRegistry(OreBlockRarityRegistry.STONE_ENRICHMENT);
 
