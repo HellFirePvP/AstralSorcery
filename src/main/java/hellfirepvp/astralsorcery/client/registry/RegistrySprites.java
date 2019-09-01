@@ -35,7 +35,7 @@ public class RegistrySprites {
         SPR_PERK_HALO_INACTIVE     = new SpriteSheetResource(TEX_GUI_PERK_HALO_INACTIVE, 4, 8);
         SPR_PERK_HALO_ACTIVE       = new SpriteSheetResource(TEX_GUI_PERK_HALO_ACTIVE, 4, 8);
         SPR_PERK_HALO_ACTIVATEABLE = new SpriteSheetResource(TEX_GUI_PERK_HALO_ACTIVATEABLE, 4, 8);
-        SPR_PERK_SEARCH            = new SpriteSheetResource(TEX_GUI_PERK_INACTIVE, 5, 8);
+        SPR_PERK_SEARCH            = new SpriteSheetResource(TEX_GUI_PERK_SEARCH, 5, 8);
         SPR_PERK_SEAL              = new SpriteSheetResource(TEX_GUI_PERK_SEAL, 4, 8);
         SPR_PERK_SEAL_BREAK        = new SpriteSheetResource(TEX_GUI_PERK_SEAL_BREAK, 7, 8);
         SPR_PERK_UNLOCK            = new SpriteSheetResource(TEX_GUI_PERK_UNLOCK, 5, 16);

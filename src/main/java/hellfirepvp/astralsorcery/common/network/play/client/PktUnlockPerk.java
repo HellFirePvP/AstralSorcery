@@ -85,6 +85,7 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
                 });
             }
 
+            //TODO Doesn't seem to unlock?
             @Override
             public void handle(PktUnlockPerk packet, NetworkEvent.Context context, LogicalSide side) {
                 context.enqueueWork(() -> {

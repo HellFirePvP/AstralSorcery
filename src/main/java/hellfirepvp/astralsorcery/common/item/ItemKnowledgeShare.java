@@ -49,7 +49,6 @@ public class ItemKnowledgeShare extends Item {
     public ItemKnowledgeShare() {
         super(new Properties()
                 .maxStackSize(1)
-                .rarity(RegistryItems.RARITY_CELESTIAL)
                 .group(RegistryItems.ITEM_GROUP_AS));
 
         this.addPropertyOverride(new ResourceLocation("written"),

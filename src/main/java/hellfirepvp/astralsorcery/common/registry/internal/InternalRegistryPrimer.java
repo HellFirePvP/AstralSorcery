@@ -9,9 +9,13 @@
 package hellfirepvp.astralsorcery.common.registry.internal;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +41,12 @@ public class InternalRegistryPrimer {
 
     <T extends IForgeRegistryEntry<T>> List<?> getEntries(Class<T> type) {
         return primed.getOrDefault(type, Collections.emptyList());
+    }
+
+    @Nullable
+    public <V extends IForgeRegistryEntry<V>> V getCached(IForgeRegistry<V> registry, ResourceLocation key) {
+        return (V) MiscUtils.iterativeSearch(this.primed.getOrDefault(registry.getRegistrySuperType(), Collections.emptyList()),
+                entry -> entry.getRegistryName().equals(key));
     }
 
 }

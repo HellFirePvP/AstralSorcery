@@ -17,9 +17,12 @@ import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.node.RootPerk;
 import hellfirepvp.astralsorcery.common.util.DiminishingMultiplier;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -28,35 +31,33 @@ import javax.annotation.Nonnull;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RootAevitas
+ * Class: RootEvorsio
  * Created by HellFirePvP
- * Date: 25.08.2019 / 19:49
+ * Date: 01.09.2019 / 10:46
  */
-public class RootAevitas extends RootPerk {
+public class RootEvorsio extends RootPerk {
 
-    public RootAevitas(ResourceLocation name, int x, int y) {
-        super(name, ConstellationsAS.aevitas, x, y);
+    public RootEvorsio(ResourceLocation name, int x, int y) {
+        super(name, ConstellationsAS.evorsio, x, y);
     }
 
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(5_000L, 0.05F, 0.07F, 0.05F);
+        return new DiminishingMultiplier(10_000, 0.1F, 0.01F, 0.05F);
     }
 
     @Override
     protected void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
 
-        bus.addListener(this::onPlace);
+        bus.addListener(EventPriority.LOWEST, this::onBreak);
     }
 
-    private void onPlace(BlockEvent.EntityPlaceEvent event) {
-        if (!(event.getEntity() instanceof PlayerEntity)) {
-            return;
-        }
-        PlayerEntity player = (PlayerEntity) event.getEntity();
+    private void onBreak(BlockEvent.BreakEvent event) {
+        PlayerEntity player = event.getPlayer();
         LogicalSide side = this.getSide(player);
+
         if (!side.isServer()) {
             return;
         }
@@ -66,14 +67,24 @@ public class RootAevitas extends RootPerk {
             return;
         }
 
-        float xp = Math.max(event.getPlacedBlock().getBlockHardness(event.getWorld(), event.getPos()) / 20F, 1);
-        xp *= this.getExpMultiplier();
-        xp *= this.getDiminishingReturns(player);
-        xp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
-        xp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP);
+        BlockState broken = event.getState();
+        IWorld world = event.getWorld();
+        float gainedExp;
+        try {
+            gainedExp = broken.getBlockHardness(world, event.getPos());
+        } catch (Exception exc) {
+            gainedExp = 0.5F;
+        }
+        if (gainedExp <= 0) {
+            return; //Unbreakable lol. you're not getting exp for that.
+        }
 
-        xp = AttributeEvent.postProcessModded(player, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP, xp);
+        gainedExp *= this.getExpMultiplier();
+        gainedExp *= this.getDiminishingReturns(player);
+        gainedExp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
+        gainedExp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP);
+        gainedExp = AttributeEvent.postProcessModded(player, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP, gainedExp);
 
-        ResearchManager.modifyExp(player, xp);
+        ResearchManager.modifyExp(player, gainedExp);
     }
 }

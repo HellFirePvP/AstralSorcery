@@ -31,7 +31,7 @@ public class AttributeTypeBreakSpeed extends PerkAttributeType {
     public static boolean evaluateBreakSpeedWithoutPerks = false;
 
     public AttributeTypeBreakSpeed() {
-        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_INC_HARVEST_SPEED, true);
+        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_INC_HARVEST_SPEED);
     }
 
     @Override

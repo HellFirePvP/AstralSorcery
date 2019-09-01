@@ -79,7 +79,6 @@ public class PacketChannel {
         registerMessage(PktElytraCapeState::new);
         registerMessage(PktEngraveGlass::new);
         registerMessage(PktPerkGemModification::new);
-        registerMessage(PktPlayerStatus::new);
         registerMessage(PktRemoveKnowledgeFragment::new);
         registerMessage(PktRequestPerkSealAction::new);
         registerMessage(PktRequestSeed::new);

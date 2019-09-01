@@ -61,7 +61,7 @@ public class RegistryTextures {
         TEX_GUI_PERK_HALO_INACTIVE          = loadTexture(EFFECT, "perk_halo_inactive");
         TEX_GUI_PERK_HALO_ACTIVE            = loadTexture(EFFECT, "perk_halo_active");
         TEX_GUI_PERK_HALO_ACTIVATEABLE      = loadTexture(EFFECT, "perk_halo_activateable");
-        TEX_GUI_PERK_SEARCH                 = TEX_GUI_PERK_INACTIVE; //Works fine enough
+        TEX_GUI_PERK_SEARCH                 = TEX_GUI_PERK_HALO_INACTIVE; //Works fine enough
         TEX_GUI_PERK_SEAL                   = loadTexture(EFFECT, "perk_seal");
         TEX_GUI_PERK_SEAL_BREAK             = loadTexture(EFFECT, "perk_seal_break");
         TEX_GUI_PERK_UNLOCK                 = loadTexture(EFFECT, "perk_unlock");

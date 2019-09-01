@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.config.entry.PerkConfig;
@@ -61,7 +62,8 @@ public class PerkTree {
 
     @Nullable
     public AbstractPerk getPerk(ResourceLocation key) {
-        return RegistriesAS.REGISTRY_PERKS.getValue(key);
+        AbstractPerk perk = RegistriesAS.REGISTRY_PERKS.getValue(key);
+        return perk != null ? perk : AstralSorcery.getProxy().getRegistryPrimer().getCached(RegistriesAS.REGISTRY_PERKS, key);
     }
 
     @Nullable
@@ -155,7 +157,7 @@ public class PerkTree {
         }
 
         public PointConnector connect(AbstractPerk other) {
-            if (other ==  null) {
+            if (other == null) {
                 return this;
             }
 
