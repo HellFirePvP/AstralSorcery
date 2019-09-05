@@ -9,11 +9,6 @@
 package hellfirepvp.astralsorcery.common.util.tile;
 
 import hellfirepvp.astralsorcery.common.lib.CapabilitiesAS;
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.ICompatFluidHandler;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.CompatFluidTankInfo;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.ICompatFluidTank;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.ICompatFluidTankProperties;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -21,8 +16,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -33,7 +32,7 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 22:30
  */
-public class PrecisionSingleFluidTank implements ICompatFluidTank, ICompatFluidTankProperties, ICompatFluidHandler {
+public class PrecisionSingleFluidTank implements IFluidTank, IFluidHandler {
 
     private double amount = 0;
     private int maxCapacity;
@@ -88,9 +87,11 @@ public class PrecisionSingleFluidTank implements ICompatFluidTank, ICompatFluidT
     }
 
     //returns amount drained
-    @Nullable
-    public CompatFluidStack drain(double amount) {
-        if (this.fluid == null) return null;
+    @Nonnull
+    public FluidStack drain(double amount) {
+        if (this.fluid == null) {
+            return FluidStack.EMPTY;
+        }
         int drainable = getMaxDrainable(amount);
         this.amount -= drainable;
         Fluid drainedFluid = this.fluid;
@@ -100,14 +101,14 @@ public class PrecisionSingleFluidTank implements ICompatFluidTank, ICompatFluidT
         if (Math.abs(drainable) > 0 && this.onUpdate != null) {
             this.onUpdate.run();
         }
-        return new CompatFluidStack(drainedFluid, drainable);
+        return new FluidStack(drainedFluid, drainable);
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public CompatFluidStack getFluid() {
+    public FluidStack getFluid() {
         if (fluid == null) return null;
-        return new CompatFluidStack(fluid, getFluidAmount());
+        return new FluidStack(fluid, getFluidAmount());
     }
 
     @Nullable
@@ -134,7 +135,7 @@ public class PrecisionSingleFluidTank implements ICompatFluidTank, ICompatFluidT
 
     @Nullable
     @Override
-    public CompatFluidStack getContents() {
+    public FluidStack getContents() {
         return getFluid();
     }
 

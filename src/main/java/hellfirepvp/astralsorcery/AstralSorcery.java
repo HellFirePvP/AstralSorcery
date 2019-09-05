@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery;
 import hellfirepvp.astralsorcery.client.ClientProxy;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
@@ -49,8 +48,6 @@ public class AstralSorcery {
         this.proxy.initialize();
         this.proxy.attachLifecycle(FMLJavaModLoadingContext.get().getModEventBus());
         this.proxy.attachEventHandlers(MinecraftForge.EVENT_BUS);
-
-        FluidRegistry.enableUniversalBucket();
     }
 
     public static AstralSorcery getInstance() {

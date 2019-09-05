@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import net.minecraft.item.ItemStack;
@@ -18,6 +17,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
 
@@ -230,18 +230,18 @@ public class ByteBufUtils {
         }
     }
 
-    public static void writeFluidStack(PacketBuffer byteBuf, @Nullable CompatFluidStack stack) {
+    public static void writeFluidStack(PacketBuffer byteBuf, @Nullable FluidStack stack) {
         boolean defined = stack != null;
         byteBuf.writeBoolean(defined);
         if (defined) {
-            writeNBTTag(byteBuf, stack.serialize());
+            stack.writeToPacket(byteBuf);
         }
     }
 
     @Nullable
-    public static CompatFluidStack readFluidStack(PacketBuffer byteBuf) {
+    public static FluidStack readFluidStack(PacketBuffer byteBuf) {
         if (byteBuf.readBoolean()) {
-            return CompatFluidStack.deserialize(readNBTTag(byteBuf));
+            return FluidStack.readFromPacket(byteBuf);
         } else {
             return null;
         }
