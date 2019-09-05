@@ -35,6 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -53,13 +54,13 @@ public class EventHandlerCache {
 
     public static void attachListeners(IEventBus eventBus) {
         eventBus.addListener(EventHandlerCache::onUnload);
+        eventBus.addListener(EventHandlerCache::onClientDisconnect);
         eventBus.addListener(EventHandlerCache::onPlayerConnect);
         eventBus.addListener(EventHandlerCache::onPlayerDisconnect);
         eventBus.addListener(EventHandlerCache::onPlayerClone);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static void onClientDisconnect() {
+    private static void onClientDisconnect(ClientPlayerNetworkEvent.LoggedOutEvent event) {
         EffectHandler.cleanUp();
         ScreenJournalProgression.resetJournal();
         ConstellationEffectRegistry.clearClient();

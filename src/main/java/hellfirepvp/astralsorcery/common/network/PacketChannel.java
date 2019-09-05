@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.network.play.server.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLHandshakeHandler;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
@@ -96,7 +97,9 @@ public class PacketChannel {
                 .loginIndex(ASLoginPacket::getLoginIndex, ASLoginPacket::setLoginIndex)
                 .encoder(packet.encoder())
                 .decoder(packet.decoder())
-                .consumer(packet.handler())
+                .consumer(FMLHandshakeHandler.indexFirst((handshakeHandler, msg, ctxSupplier) -> {
+                    packet.handler().accept(msg, ctxSupplier);
+                }))
                 .buildLoginPacketList((local) -> Collections.singletonList(Pair.of(packet.getClass().getName(), makeLoginPacket.get())))
                 .add();
     }

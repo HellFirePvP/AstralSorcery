@@ -6,6 +6,5 @@
   "add_enchantment_helper_enchantments": "coremods/add_enchantment_helper_enchantments.js",
   "add_enchantment_helper_levels": "coremods/add_enchantment_helper_levels.js",
   "add_enchantment_tooltip": "coremods/add_enchantment_tooltip.js",
-  "add_missing_tag_enchantment_tooltip": "coremods/add_missing_tag_enchantment_tooltip.js",
-  "client_disconnect": "coremods/client_disconnect.js"
+  "add_missing_tag_enchantment_tooltip": "coremods/add_missing_tag_enchantment_tooltip.js"
 }

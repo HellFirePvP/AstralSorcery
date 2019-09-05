@@ -14,26 +14,18 @@ import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefactionContext;
 import hellfirepvp.astralsorcery.common.lib.CapabilitiesAS;
-import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.VoxelUtils;
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidActionResult;
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidUtil;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.CompatEmptyFluidHandler;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.ICompatFluidHandler;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -43,12 +35,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -123,11 +118,11 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
                     }
                 }
 
-                ICompatFluidHandler handler = tw.getCapability(CapabilitiesAS.FLUID_HANDLER_COMPAT, null).orElse(null);
+                IFluidHandler handler = tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).orElse(null);
                 if (handler != null) {
-                    CompatFluidActionResult far = CompatFluidUtil.tryFillContainerAndStow(heldItem,
-                            handler, new InvWrapper(player.inventory), CompatFluidStack.BUCKET_VOLUME, player, true);
-                    if(far.isSuccess()) {
+                    FluidActionResult far = FluidUtil.tryFillContainerAndStow(heldItem,
+                            handler, new InvWrapper(player.inventory), FluidAttributes.BUCKET_VOLUME, player, false);
+                    if (far.isSuccess()) {
                         player.setHeldItem(hand, far.getResult());
                         SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, world, pos, 1F, 1F);
                         tw.markForUpdate();

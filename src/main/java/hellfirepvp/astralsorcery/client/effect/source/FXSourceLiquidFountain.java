@@ -53,7 +53,7 @@ public class FXSourceLiquidFountain extends FXSource<FXCube, BatchRenderContext<
         cube.setScaleMultiplier(0.1F);
         cube.setMaxAge(40 + rand.nextInt(40));
         cube.setMotion(motion);
-        cube.color((fx, pTicks) -> new Color(fluid.getFluid().getColor(fluid)));
+        cube.color((fx, pTicks) -> new Color(fluid.getFluid().getAttributes().getColor(fluid)));
         cube.motion((fx, vec) -> vec.setY(vec.getY() - 0.003F));
     }
 

@@ -34,6 +34,6 @@ public class AquamarineFeature extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        return worldIn.setBlockState(pos, BlocksAS.AQUAMARINE_SAND_ORE.getDefaultState(), Constants.BlockFlags.NOTIFY_LISTENERS);
+        return worldIn.setBlockState(pos, BlocksAS.AQUAMARINE_SAND_ORE.getDefaultState(), Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 }
