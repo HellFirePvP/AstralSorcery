@@ -230,21 +230,13 @@ public class ByteBufUtils {
         }
     }
 
-    public static void writeFluidStack(PacketBuffer byteBuf, @Nullable FluidStack stack) {
-        boolean defined = stack != null;
-        byteBuf.writeBoolean(defined);
-        if (defined) {
-            stack.writeToPacket(byteBuf);
-        }
+    public static void writeFluidStack(PacketBuffer byteBuf, @Nonnull FluidStack stack) {
+        stack.writeToPacket(byteBuf);
     }
 
-    @Nullable
+    @Nonnull
     public static FluidStack readFluidStack(PacketBuffer byteBuf) {
-        if (byteBuf.readBoolean()) {
-            return FluidStack.readFromPacket(byteBuf);
-        } else {
-            return null;
-        }
+        return FluidStack.readFromPacket(byteBuf);
     }
 
     public static void writeNBTTag(PacketBuffer byteBuf, @Nonnull CompoundNBT tag) {

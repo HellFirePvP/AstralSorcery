@@ -8,22 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.util.tile;
 
-import hellfirepvp.astralsorcery.common.lib.CapabilitiesAS;
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.ICompatFluidHandler;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.CompatFluidTankInfo;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.ICompatFluidTank;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.tank.ICompatFluidTankProperties;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +26,7 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 22:31
  */
-public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTankProperties, ICompatFluidHandler {
+public class SimpleSingleFluidTank implements IFluidTank {
 
     private int amount = 0;
     private Fluid fluid = null;
@@ -41,17 +35,10 @@ public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTank
 
     private boolean allowInput = true, allowOutput = true;
 
-    public Set<Direction> accessibleSides = new HashSet<>();
-
     private SimpleSingleFluidTank() {}
 
     public SimpleSingleFluidTank(int maxCapacity) {
-        this(maxCapacity, Direction.values());
-    }
-
-    public SimpleSingleFluidTank(int capacity, Direction... accessibleFrom) {
-        this.maxCapacity = Math.max(0, capacity);
-        this.accessibleSides.addAll(Arrays.asList(accessibleFrom));
+        this.maxCapacity = Math.max(0, maxCapacity);
     }
 
     public void setOnUpdate(Runnable onUpdate) {
@@ -87,9 +74,11 @@ public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTank
     }
 
     //returns amount drained
-    @Nullable
-    public CompatFluidStack drain(int amount) {
-        if (this.fluid == null) return null;
+    @Nonnull
+    public FluidStack drain(int amount) {
+        if (this.fluid == null) {
+            return FluidStack.EMPTY;
+        }
         int drainable = getMaxDrainable(amount);
         this.amount -= drainable;
         Fluid drainedFluid = this.fluid;
@@ -99,19 +88,7 @@ public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTank
         if (Math.abs(drainable) > 0 && this.onUpdate != null) {
             this.onUpdate.run();
         }
-        return new CompatFluidStack(drainedFluid, drainable);
-    }
-
-    @Nullable
-    @Override
-    public CompatFluidStack getFluid() {
-        if (fluid == null) return null;
-        return new CompatFluidStack(fluid, amount);
-    }
-
-    @Nullable
-    public Fluid getTankFluid() {
-        return fluid;
+        return new FluidStack(drainedFluid, drainable);
     }
 
     public void setFluid(@Nullable Fluid fluid) {
@@ -126,15 +103,18 @@ public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTank
         }
     }
 
+    @Nonnull
+    @Override
+    public FluidStack getFluid() {
+        if (fluid == null) {
+            return FluidStack.EMPTY;
+        }
+        return new FluidStack(fluid, amount);
+    }
+
     @Override
     public int getFluidAmount() {
         return amount;
-    }
-
-    @Nullable
-    @Override
-    public CompatFluidStack getContents() {
-        return getFluid();
     }
 
     @Override
@@ -143,23 +123,24 @@ public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTank
     }
 
     @Override
+    public boolean isFluidValid(FluidStack stack) {
+        return true;
+    }
+
     public boolean canFill() {
         return this.allowInput && this.amount < this.maxCapacity;
     }
 
-    @Override
     public boolean canDrain() {
         return this.allowOutput && this.amount > 0 && this.fluid != null;
     }
 
-    @Override
-    public boolean canFillFluidType(CompatFluidStack CompatFluidStack) {
-        return canFill() && (this.fluid == null || CompatFluidStack.getFluid().equals(this.fluid));
+    public boolean canFillFluidType(FluidStack fluidStack) {
+        return canFill() && (this.fluid == null || fluidStack.getFluid().equals(this.fluid));
     }
 
-    @Override
-    public boolean canDrainFluidType(CompatFluidStack CompatFluidStack) {
-        return canDrain() && (this.fluid != null && CompatFluidStack.getFluid().equals(this.fluid));
+    public boolean canDrainFluidType(FluidStack fluidStack) {
+        return canDrain() && (this.fluid != null && fluidStack.getFluid().equals(this.fluid));
     }
 
     public float getPercentageFilled() {
@@ -167,45 +148,41 @@ public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTank
     }
 
     @Override
-    public CompatFluidTankInfo getInfo() {
-        return new CompatFluidTankInfo(this);
-    }
-
-    @Override
-    public ICompatFluidTankProperties[] getTankProperties() {
-        return new ICompatFluidTankProperties[] { this };
-    }
-
-    @Override
-    public int fill(CompatFluidStack resource, boolean doFill) {
-        if (!canFillFluidType(resource)) return 0;
+    public int fill(FluidStack resource, IFluidHandler.FluidAction action) {
+        if (!canFillFluidType(resource)) {
+            return 0;
+        }
         int maxAdded = resource.getAmount();
         int addable = getMaxAddable(maxAdded);
-        if(addable > 0 && this.fluid == null && doFill) {
-            setFluid(resource.getFluid());
-        }
-        if(doFill) {
+        if (action.execute()) {
+            if (addable > 0 && this.fluid == null) {
+                setFluid(resource.getFluid());
+            }
             addable -= addAmount(addable);
         }
         return addable;
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public CompatFluidStack drain(CompatFluidStack resource, boolean doDrain) {
-        if (!canDrainFluidType(resource)) return null;
-        return drain(resource.getAmount(), doDrain);
+    public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
+        if (!canDrainFluidType(resource)) {
+            return FluidStack.EMPTY;
+        }
+        return drain(resource.getAmount(), action);
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public CompatFluidStack drain(int maxDrain, boolean doDrain) {
-        if (!canDrain()) return null;
+    public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
+        if (!canDrain()) {
+            return FluidStack.EMPTY;
+        }
         int maxDrainable = getMaxDrainable(maxDrain);
-        if (doDrain) {
+        if (action.execute()) {
             return drain(maxDrainable);
         }
-        return new CompatFluidStack(this.fluid, maxDrainable);
+        return new FluidStack(this.fluid, maxDrainable);
     }
 
     public CompoundNBT writeNBT() {
@@ -214,16 +191,7 @@ public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTank
         tag.putInt("capacity", this.maxCapacity);
         tag.putBoolean("aIn", this.allowInput);
         tag.putBoolean("aOut", this.allowOutput);
-        if (this.fluid != null) {
-            tag.putString("fluid", this.fluid.getRegistryName().toString());
-        }
-        int[] sides = new int[accessibleSides.size()];
-        Object[] arraySides = this.accessibleSides.toArray();
-        for (int i = 0; i < arraySides.length; i++) {
-            Direction side = (Direction) arraySides[i];
-            sides[i] = side.ordinal();
-        }
-        tag.putIntArray("sides", sides);
+        tag.putString("fluid", this.fluid.getRegistryName().toString());
         return tag;
     }
 
@@ -232,33 +200,13 @@ public class SimpleSingleFluidTank implements ICompatFluidTank, ICompatFluidTank
         this.maxCapacity = tag.getInt("capacity");
         this.allowInput = tag.getBoolean("aIn");
         this.allowOutput = tag.getBoolean("aOut");
-        if (tag.contains("fluid")) {
-            this.fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(tag.getString("fluid")));
-        } else {
-            this.fluid = null;
-        }
-        int[] sides = tag.getIntArray("sides");
-        for (int i : sides) {
-            this.accessibleSides.add(Direction.values()[i]);
-        }
+        this.fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(tag.getString("fluid")));
     }
 
     public static SimpleSingleFluidTank deserialize(CompoundNBT tag) {
         SimpleSingleFluidTank tank = new SimpleSingleFluidTank();
         tank.readNBT(tag);
         return tank;
-    }
-
-    private boolean hasHandlerForSide(@Nullable Direction facing) {
-        return facing == null || accessibleSides.contains(facing);
-    }
-
-    public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-        return hasHandlerForSide(facing) && CapabilitiesAS.FLUID_HANDLER_COMPAT == capability;
-    }
-
-    public LazyOptional<SimpleSingleFluidTank> getCapability() {
-        return LazyOptional.of(() -> this);
     }
 
 }

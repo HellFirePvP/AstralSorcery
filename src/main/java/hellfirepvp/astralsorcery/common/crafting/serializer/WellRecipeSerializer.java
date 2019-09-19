@@ -16,11 +16,11 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.util.JsonHelper;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;
 
@@ -48,7 +48,7 @@ public class WellRecipeSerializer extends CustomRecipeSerializer<WellLiquefactio
         if (((FluidIngredient) output).getFluids().size() != 1) {
             throw new JsonParseException("Expected 'output' to be a single fluid, not multiple!");
         }
-        CompatFluidStack fluid = ((FluidIngredient) output).getFluids().get(0);
+        FluidStack fluid = ((FluidIngredient) output).getFluids().get(0);
         float productionMultiplier = JSONUtils.getFloat(json, "productionMultiplier");
         float shatterMultiplier = JSONUtils.getFloat(json, "shatterMultiplier");
         Color color = null;
@@ -63,7 +63,7 @@ public class WellRecipeSerializer extends CustomRecipeSerializer<WellLiquefactio
     @Override
     public WellLiquefaction read(ResourceLocation recipeId, PacketBuffer buffer) {
         Ingredient input = Ingredient.read(buffer);
-        CompatFluidStack fluid = ByteBufUtils.readFluidStack(buffer);
+        FluidStack fluid = ByteBufUtils.readFluidStack(buffer);
         float shatter = buffer.readFloat();
         float production = buffer.readFloat();
         Color color = ByteBufUtils.readOptional(buffer, buf -> new Color(buf.readInt(), true));

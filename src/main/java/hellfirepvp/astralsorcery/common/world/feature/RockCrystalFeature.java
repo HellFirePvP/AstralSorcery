@@ -38,6 +38,6 @@ public class RockCrystalFeature extends Feature<NoFeatureConfig> {
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
         DataAS.DOMAIN_AS.getData(worldIn, DataAS.KEY_ROCK_CRYSTAL_BUFFER).addOre(pos);
-        return worldIn.setBlockState(pos, BlocksAS.ROCK_CRYSTAL_ORE.getDefaultState(), Constants.BlockFlags.NOTIFY_LISTENERS);
+        return worldIn.setBlockState(pos, BlocksAS.ROCK_CRYSTAL_ORE.getDefaultState(), Constants.BlockFlags.DEFAULT);
     }
 }

@@ -53,7 +53,7 @@ public class RenderingUtils {
 
     @Nonnull
     public static TextureAtlasSprite getSprite(FluidStack stack) {
-        ResourceLocation res = stack.getFluid().getFlowing(stack);
+        ResourceLocation res = stack.getFluid().getAttributes().getFlowing(stack);
         return Minecraft.getInstance().getTextureMap().getSprite(res);
     }
 
