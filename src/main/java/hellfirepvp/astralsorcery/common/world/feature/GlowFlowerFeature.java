@@ -38,7 +38,7 @@ public class GlowFlowerFeature extends Feature<NoFeatureConfig> {
         BlockState glowFlower = BlocksAS.GLOW_FLOWER.getDefaultState();
 
         if (worldIn.isAirBlock(pos) && glowFlower.isValidPosition(worldIn, pos)) {
-            return worldIn.setBlockState(pos, glowFlower, Constants.BlockFlags.NOTIFY_LISTENERS);
+            return worldIn.setBlockState(pos, glowFlower, Constants.BlockFlags.DEFAULT);
         }
         return false;
     }

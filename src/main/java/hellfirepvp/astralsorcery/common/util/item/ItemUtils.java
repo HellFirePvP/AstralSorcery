@@ -8,10 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.util.item;
 
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidActionResult;
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidStack;
-import hellfirepvp.astralsorcery.common.util.fluid.CompatFluidUtil;
-import hellfirepvp.astralsorcery.common.util.fluid.handler.CompatVoidFluidHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -189,14 +185,6 @@ public class ItemUtils {
             }
             dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
         }
-    }
-
-    public static CompatFluidActionResult drainFluidFromItem(ItemStack stack, Fluid fluid, int mbAmount, boolean doDrain) {
-        return drainFluidFromItem(stack, new CompatFluidStack(fluid, mbAmount), doDrain);
-    }
-
-    public static CompatFluidActionResult drainFluidFromItem(ItemStack stack, CompatFluidStack fluidStack, boolean doDrain) {
-        return CompatFluidUtil.tryEmptyContainer(stack, CompatVoidFluidHandler.INSTANCE, fluidStack.getAmount(), null, doDrain);
     }
 
     /*public static void decrStackInInventory(ItemStack[] stacks, int slot) {

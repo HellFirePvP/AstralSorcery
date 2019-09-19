@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverWell;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.tile.FluidTankAccess;
 import hellfirepvp.astralsorcery.common.util.tile.PrecisionSingleFluidTank;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventoryFiltered;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
@@ -38,6 +39,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,7 +59,9 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
 
     private WellLiquefaction runningRecipe = null;
 
+    private FluidTankAccess access;
     private PrecisionSingleFluidTank tank;
+
     private TileInventoryFiltered inventory;
     private double starlightBuffer = 0;
     private float posDistribution = -1;
@@ -64,9 +69,11 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
     public TileWell() {
         super(TileEntityTypesAS.WELL);
 
-        this.tank = new PrecisionSingleFluidTank(MAX_CAPACITY, Direction.DOWN);
+        this.tank = new PrecisionSingleFluidTank(MAX_CAPACITY);
         this.tank.setAllowInput(false);
         this.tank.setOnUpdate(this::markForUpdate);
+        this.access = new FluidTankAccess();
+        this.access.putTank(0, tank, Direction.DOWN);
 
         this.inventory = new TileInventoryFiltered(this, () -> 1, Direction.DOWN);
         this.inventory.canExtract((slot, amount, existing) -> false);
@@ -127,13 +134,13 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
 
     private void fillAndDiscardRest(WellLiquefaction recipe, double gain) {
         Fluid produced = recipe.getFluidOutput().getFluid();
-        if (tank.getFluidAmount() < 10) {
+        if (tank.getFluidAmount() < 10) { //Fix fluids never changing on "empty" wells
             tank.setFluid(produced);
         }
 
-        if (tank.getTankFluid() == null) {
+        if (tank.getFluid().isEmpty()) {
             tank.setFluid(produced);
-        } else if (!produced.equals(tank.getTankFluid())) {
+        } else if (!produced.equals(tank.getFluid().getFluid())) {
             return;
         }
         tank.addAmount(gain);
@@ -273,8 +280,8 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (this.tank.hasCapability(cap, side)) {
-            return this.tank.getCapability().cast();
+        if (this.access.hasCapability(cap, side)) {
+            return this.access.getCapability(side).cast();
         }
         if (this.inventory.hasCapability(cap, side)) {
             return this.inventory.getCapability().cast();
