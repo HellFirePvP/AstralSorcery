@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.common.block.base.template.BlockSlabTemplate;
 import hellfirepvp.astralsorcery.common.block.base.template.BlockStairsTemplate;
 import hellfirepvp.astralsorcery.common.block.blackmarble.*;
+import hellfirepvp.astralsorcery.common.fluid.BlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.foliage.BlockGlowFlower;
 import hellfirepvp.astralsorcery.common.block.infusedwood.*;
 import hellfirepvp.astralsorcery.common.block.marble.*;
@@ -35,6 +36,8 @@ import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockRockCollectorCry
 public class BlocksAS {
 
     private BlocksAS() {}
+
+    public static BlockLiquidStarlight FLUID_LIQUID_STARLIGHT;
 
     public static BlockMarbleArch          MARBLE_ARCH;
     public static BlockMarbleBricks        MARBLE_BRICKS;

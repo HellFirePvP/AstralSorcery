@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.util.tile;
 
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -31,7 +33,7 @@ public class PrecisionSingleFluidTank implements IFluidTank {
 
     private double amount = 0;
     private int maxCapacity;
-    private Fluid fluid = null;
+    private Fluid fluid = Fluids.EMPTY;
     private Runnable onUpdate = null;
 
     private boolean allowInput = true, allowOutput = true;
@@ -65,7 +67,7 @@ public class PrecisionSingleFluidTank implements IFluidTank {
 
     //leftover amount that could not be added
     public double addAmount(double amount) {
-        if (this.fluid == null) {
+        if (this.fluid == Fluids.EMPTY) {
             return amount;
         }
         double addable = getMaxAddable(amount);
@@ -79,14 +81,14 @@ public class PrecisionSingleFluidTank implements IFluidTank {
     //returns amount drained
     @Nonnull
     public FluidStack drain(double amount) {
-        if (this.fluid == null) {
+        if (this.fluid == Fluids.EMPTY) {
             return FluidStack.EMPTY;
         }
         int drainable = getMaxDrainable(amount);
         this.amount -= drainable;
         Fluid drainedFluid = this.fluid;
         if (this.amount <= 0) {
-            setFluid(null);
+            setFluid(Fluids.EMPTY);
         }
         if (Math.abs(drainable) > 0 && this.onUpdate != null) {
             this.onUpdate.run();
@@ -97,13 +99,13 @@ public class PrecisionSingleFluidTank implements IFluidTank {
     @Nonnull
     @Override
     public FluidStack getFluid() {
-        if (fluid == null) {
+        if (fluid == Fluids.EMPTY) {
             return FluidStack.EMPTY;
         }
         return new FluidStack(fluid, getFluidAmount());
     }
 
-    public void setFluid(@Nullable Fluid fluid) {
+    public void setFluid(@Nonnull Fluid fluid) {
         boolean update = false;
         if (fluid != this.fluid) {
             this.amount = 0;
@@ -135,15 +137,15 @@ public class PrecisionSingleFluidTank implements IFluidTank {
     }
 
     public boolean canDrain() {
-        return this.allowOutput && this.amount > 0 && this.fluid != null;
+        return this.allowOutput && this.amount > 0 && this.fluid != Fluids.EMPTY;
     }
 
     public boolean canFillFluidType(FluidStack fluidStack) {
-        return canFill() && (this.fluid == null || fluidStack.getFluid().equals(this.fluid));
+        return canFill() && (this.fluid == Fluids.EMPTY || fluidStack.getFluid().equals(this.fluid));
     }
 
     public boolean canDrainFluidType(FluidStack fluidStack) {
-        return canDrain() && (this.fluid != null && fluidStack.getFluid().equals(this.fluid));
+        return canDrain() && (this.fluid != Fluids.EMPTY && fluidStack.getFluid().equals(this.fluid));
     }
 
     public float getPercentageFilled() {
@@ -158,7 +160,7 @@ public class PrecisionSingleFluidTank implements IFluidTank {
         int maxAdded = resource.getAmount();
         int addable = MathHelper.floor(getMaxAddable(maxAdded));
         if (action.execute()) {
-            if (addable > 0 && this.fluid == null) {
+            if (addable > 0 && this.fluid == Fluids.EMPTY) {
                 setFluid(resource.getFluid());
             }
             addable -= addAmount(addable);

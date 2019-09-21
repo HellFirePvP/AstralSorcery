@@ -48,7 +48,7 @@ public class NBTHelper {
 
     @Nonnull
     public static CompoundNBT getPersistentData(Entity entity) {
-        return getPersistentData(entity.getEntityData());
+        return getPersistentData(entity.getPersistentData());
     }
 
     @Nonnull
@@ -69,7 +69,7 @@ public class NBTHelper {
     }
 
     public static boolean hasPersistentData(Entity entity) {
-        return hasPersistentData(entity.getEntityData());
+        return hasPersistentData(entity.getPersistentData());
     }
 
     public static boolean hasPersistentData(ItemStack item) {
@@ -82,7 +82,7 @@ public class NBTHelper {
 
 
     public static void removePersistentData(Entity entity) {
-        removePersistentData(entity.getEntityData());
+        removePersistentData(entity.getPersistentData());
     }
 
     public static void removePersistentData(ItemStack item) {

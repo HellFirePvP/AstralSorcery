@@ -49,7 +49,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
     }
 
     public PktPlayEffect addData(Consumer<PacketBuffer> encoder) {
-        this.encoder.andThen(encoder);
+        this.encoder = this.encoder.andThen(encoder);
         return this;
     }
 
@@ -62,7 +62,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
     public Encoder<PktPlayEffect> encoder() {
         return (packet, buffer) -> {
             ByteBufUtils.writeEnumValue(buffer, packet.type);
-            this.encoder.accept(buffer);
+            packet.encoder.accept(buffer);
         };
     }
 

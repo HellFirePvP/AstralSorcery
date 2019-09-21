@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.fluid.ItemLiquidStarlightBucket;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
@@ -34,6 +35,8 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 public class ItemsAS {
 
     private ItemsAS() {}
+
+    public static ItemLiquidStarlightBucket BUCKET_LIQUID_STARLIGHT;
 
     public static ItemAquamarine AQUAMARINE;
     public static ItemResonatingGem RESONATING_GEM;

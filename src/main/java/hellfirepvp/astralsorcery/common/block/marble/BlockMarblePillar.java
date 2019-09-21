@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.block.base.template.BlockMarbleTemplate;
 import hellfirepvp.astralsorcery.common.util.VoxelUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.IWaterLoggable;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
@@ -39,7 +40,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 01.06.2019 / 12:41
  */
-public class BlockMarblePillar extends BlockMarbleTemplate {
+public class BlockMarblePillar extends BlockMarbleTemplate implements IWaterLoggable {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final EnumProperty<PillarType> PILLAR_TYPE = EnumProperty.create("pillartype", PillarType.class);

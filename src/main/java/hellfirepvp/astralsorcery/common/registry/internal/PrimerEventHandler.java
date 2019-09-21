@@ -26,6 +26,7 @@ import hellfirepvp.observerlib.api.structure.MatchableStructure;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -57,6 +58,7 @@ public class PrimerEventHandler {
     public void attachEventHandlers(IEventBus eventBus) {
         eventBus.addGenericListener(Item.class, this::registerItems);
         eventBus.addGenericListener(Block.class, this::registerBlocks);
+        eventBus.addGenericListener(Fluid.class, this::registerFluids);
         eventBus.addGenericListener(TileEntityType.class, this::registerTiles);
         eventBus.addGenericListener(EntityType.class, this::registerEntities);
         eventBus.addGenericListener(Biome.class, this::registerBiomes);
@@ -104,6 +106,7 @@ public class PrimerEventHandler {
     private void registerItems(RegistryEvent.Register<Item> event) {
         RegistryItems.registerItems();
         RegistryItems.registerItemBlocks();
+        RegistryItems.registerFluidContainerItems();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
 
         //Item registration happens after block registration. Register misc stuff here.
@@ -111,7 +114,13 @@ public class PrimerEventHandler {
     }
 
     private void registerBlocks(RegistryEvent.Register<Block> event) {
+        RegistryFluids.registerFluids();
         RegistryBlocks.registerBlocks();
+        RegistryBlocks.registerFluidBlocks();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerFluids(RegistryEvent.Register<Fluid> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

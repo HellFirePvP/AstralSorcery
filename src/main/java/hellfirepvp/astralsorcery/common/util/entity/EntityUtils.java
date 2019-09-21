@@ -89,12 +89,12 @@ public class EntityUtils {
                 }
 
                 entity.setLocationAndAngles(x, y, z, rand.nextFloat() * 360F, 0F);
-                int result = ForgeHooks.canEntitySpawn(entity, world, x, y, z, null);
+                int result = ForgeHooks.canEntitySpawn(entity, world, x, y, z, null, reason);
                 if (result == -1) {
                     return null;
                 }
 
-                if (!ForgeEventFactory.doSpecialSpawn(entity, world, x, y, z, null)) {
+                if (!ForgeEventFactory.doSpecialSpawn(entity, world, x, y, z, null, reason)) {
                     entity.onInitialSpawn(world, world.getDifficultyForLocation(pos), reason, null, null);
                 }
 
@@ -136,7 +136,7 @@ public class EntityUtils {
         if(entity instanceof LivingEntity) {
             if (entity instanceof MobEntity) {
                 MobEntity mobEntity = (MobEntity) entity;
-                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn(mobEntity, world, entity.posX, entity.posY, entity.posZ, null);
+                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn(mobEntity, world, entity.posX, entity.posY, entity.posZ, null, spawnReason);
                 if (canSpawn == Event.Result.DENY) {
                     return false;
                 } else if (canSpawn == Event.Result.DEFAULT) {

@@ -22,11 +22,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
+import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collections;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 /**
@@ -97,9 +99,16 @@ public class PacketChannel {
                 .loginIndex(ASLoginPacket::getLoginIndex, ASLoginPacket::setLoginIndex)
                 .encoder(packet.encoder())
                 .decoder(packet.decoder())
-                .consumer(FMLHandshakeHandler.indexFirst((handshakeHandler, msg, ctxSupplier) -> {
-                    packet.handler().accept(msg, ctxSupplier);
-                }))
+                .consumer((t, contextSupplier) -> {
+                    BiConsumer<T, Supplier<NetworkEvent.Context>> handler;
+                    if (contextSupplier.get().getDirection().getReceptionSide().isServer()) {
+                        handler = FMLHandshakeHandler.indexFirst((handshakeHandler, pkt, ctxSupplier) -> packet.handler().accept(pkt, ctxSupplier));
+                    } else {
+                        handler = packet.handler();
+                    }
+
+                    handler.accept(t, contextSupplier);
+                })
                 .buildLoginPacketList((local) -> Collections.singletonList(Pair.of(packet.getClass().getName(), makeLoginPacket.get())))
                 .add();
     }
