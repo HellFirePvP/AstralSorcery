@@ -15,10 +15,10 @@ import hellfirepvp.astralsorcery.common.block.base.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.base.template.BlockSlabTemplate;
 import hellfirepvp.astralsorcery.common.block.base.template.BlockStairsTemplate;
+import hellfirepvp.astralsorcery.common.block.blackmarble.*;
 import hellfirepvp.astralsorcery.common.block.foliage.BlockGlowFlower;
 import hellfirepvp.astralsorcery.common.block.infusedwood.*;
 import hellfirepvp.astralsorcery.common.block.marble.*;
-import hellfirepvp.astralsorcery.common.block.blackmarble.*;
 import hellfirepvp.astralsorcery.common.block.ore.BlockAquamarineSandOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockRockCrystalOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockStarmetalOre;
@@ -51,7 +51,7 @@ import static hellfirepvp.astralsorcery.common.lib.BlocksAS.*;
 public class RegistryBlocks {
 
     private static List<BlockDynamicColor> colorBlocks = Lists.newArrayList();
-    static List<CustomItemBlock> defaultItemBlocks = new LinkedList<>();
+    static final List<CustomItemBlock> ITEM_BLOCKS = new LinkedList<>();
 
     private RegistryBlocks() {}
 
@@ -105,6 +105,10 @@ public class RegistryBlocks {
         FLARE_LIGHT = registerBlock(new BlockFlareLight());
     }
 
+    public static void registerFluidBlocks() {
+        RegistryFluids.FLUID_BLOCKS.forEach(RegistryBlocks::registerBlock);
+    }
+
     @OnlyIn(Dist.CLIENT)
     public static void registerColors(ColorHandlerEvent.Block blockColorEvent) {
         colorBlocks.forEach(block -> blockColorEvent.getBlockColors().register(block::getColor, (Block) block));
@@ -132,7 +136,7 @@ public class RegistryBlocks {
         block.setRegistryName(name);
         AstralSorcery.getProxy().getRegistryPrimer().register(block);
         if (block instanceof CustomItemBlock) {
-            defaultItemBlocks.add((CustomItemBlock) block);
+            ITEM_BLOCKS.add((CustomItemBlock) block);
         }
         if (block instanceof BlockDynamicColor) {
             colorBlocks.add((BlockDynamicColor) block);
@@ -148,5 +152,4 @@ public class RegistryBlocks {
         name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
         return new ResourceLocation(AstralSorcery.MODID, name);
     }
-
 }

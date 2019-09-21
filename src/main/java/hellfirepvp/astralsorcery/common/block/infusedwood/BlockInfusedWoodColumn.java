@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.block.base.template.BlockInfusedWoodTemp
 import hellfirepvp.astralsorcery.common.util.VoxelUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.IWaterLoggable;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
@@ -38,7 +39,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 20.07.2019 / 20:09
  */
-public class BlockInfusedWoodColumn extends BlockInfusedWoodTemplate {
+public class BlockInfusedWoodColumn extends BlockInfusedWoodTemplate implements IWaterLoggable {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final EnumProperty<PillarType> PILLAR_TYPE = EnumProperty.create("pillartype", PillarType.class);

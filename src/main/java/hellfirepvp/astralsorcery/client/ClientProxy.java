@@ -27,19 +27,28 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.base.patreon.manager.PatreonManagerClient;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.lib.FluidsAS;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.registry.RegistryContainerTypes;
-import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
+import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.ISprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ForgeBlockStateV1;
+import net.minecraftforge.client.model.ModelDynBucket;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
@@ -92,6 +101,8 @@ public class ClientProxy extends CommonProxy {
         modEventBus.addListener(RegistryItems::registerColors);
         modEventBus.addListener(RegistryBlocks::registerColors);
         modEventBus.addListener(this::onClientSetup);
+        modEventBus.addListener(this::stitchBucketTextures);
+        modEventBus.addListener(this::onModelBake);
     }
 
     @Override
@@ -131,6 +142,23 @@ public class ClientProxy extends CommonProxy {
             return;
         }
         super.openGui(player, type, data);
+    }
+
+    private void stitchBucketTextures(TextureStitchEvent.Pre event) {
+        if (event.getMap().getBasePath().equals("textures")) {
+            event.addSprite(new ResourceLocation(AstralSorcery.MODID,"fluid/bucket_mask"));
+        }
+    }
+
+    private void onModelBake(ModelBakeEvent event) {
+        //Returns actually a SimpleModelState, which is however both an IModelState and ISprite
+        ISprite bucketTransforms = (ISprite) ForgeBlockStateV1.Transforms.get("forge:default-item")
+                .orElseThrow(() -> new IllegalStateException("Forge ModelTransforms not initialized!"));
+
+        RegistryFluids.registerFluidBucketRender((bucketModel, modelName) -> {
+            IBakedModel baked = bucketModel.bake(event.getModelLoader(), Minecraft.getInstance().getTextureMap()::getSprite, bucketTransforms, DefaultVertexFormats.ITEM);
+            event.getModelRegistry().put(modelName, baked);
+        });
     }
 
     private void onClientSetup(FMLClientSetupEvent event) {

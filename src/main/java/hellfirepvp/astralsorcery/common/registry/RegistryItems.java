@@ -109,7 +109,11 @@ public class RegistryItems {
     }
 
     public static void registerItemBlocks() {
-        RegistryBlocks.defaultItemBlocks.forEach(RegistryItems::registerItemBlock);
+        RegistryBlocks.ITEM_BLOCKS.forEach(RegistryItems::registerItemBlock);
+    }
+
+    public static void registerFluidContainerItems() {
+        RegistryFluids.FLUID_HOLDER_ITEMS.forEach(RegistryItems::registerItem);
     }
 
     @OnlyIn(Dist.CLIENT)
