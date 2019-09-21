@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.function.Supplier;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -26,7 +28,7 @@ public class TextureQuery {
     private final AssetLoader.TextureLocation location;
     private final String name;
 
-    private Object resolvedResource;
+    private Supplier<?> resource;
 
     public TextureQuery(AssetLoader.TextureLocation location, String name) {
         this.location = location;
@@ -35,10 +37,10 @@ public class TextureQuery {
 
     @OnlyIn(Dist.CLIENT)
     public AbstractRenderableTexture resolve() {
-        if(resolvedResource == null) {
-            resolvedResource = AssetLibrary.loadTexture(location, name);
+        if (resource == null) {
+            resource = AssetLibrary.loadReference(location, name);
         }
-        return (AbstractRenderableTexture) resolvedResource;
+        return (AbstractRenderableTexture) resource.get();
     }
 
 }

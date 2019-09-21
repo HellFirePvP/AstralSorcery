@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.resource;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.util.object.CacheReference;
 import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
@@ -17,6 +18,7 @@ import net.minecraftforge.resource.VanillaResourceType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,17 +36,16 @@ public class AssetLibrary implements ISelectiveResourceReloadListener {
 
     private AssetLibrary() {}
 
-    public static BindableResource loadTexture(AssetLoader.TextureLocation location, String name) {
-        if(name.endsWith(".png")) {
+    public static Supplier<AbstractRenderableTexture> loadReference(AssetLoader.TextureLocation location, String name) {
+        return new CacheReference<>(() -> loadTexture(location, name));
+    }
+
+    public static AbstractRenderableTexture loadTexture(AssetLoader.TextureLocation location, String name) {
+        if (name.endsWith(".png")) {
             throw new IllegalArgumentException("Tried to loadTexture with appended .png from the AssetLibrary!");
         }
-        Map<String, BindableResource> resources = loadedTextures.computeIfAbsent(location, l -> new HashMap<>());
-        if(resources.containsKey(name)) {
-            return resources.get(name);
-        }
-        BindableResource res = AssetLoader.loadTexture(location, name);
-        resources.put(name, res);
-        return res;
+        return loadedTextures.computeIfAbsent(location, l -> new HashMap<>())
+                .computeIfAbsent(name, str -> AssetLoader.loadTexture(location, str));
     }
 
     public static boolean isReloading() {
@@ -53,22 +54,17 @@ public class AssetLibrary implements ISelectiveResourceReloadListener {
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-        if(reloading || !resourcePredicate.test(VanillaResourceType.TEXTURES)) {
+        if (reloading || !resourcePredicate.test(VanillaResourceType.TEXTURES)) {
             return;
         }
         reloading = true;
         AstralSorcery.log.info("[AssetLibrary] Refreshing and Invalidating Resources");
         for (Map<String, BindableResource> map : loadedTextures.values()) {
-            for (BindableResource res : map.values()) {
-                res.invalidateAndReload(); //Massively unloading all textures.
-            }
+            map.values().forEach(BindableResource::invalidateAndReload);
         }
         reloading = false;
 
-        AstralSorcery.log.info("[AssetLibrary] Finished reloading, rebinding textures...");
-        //TexturePreloader.doPreloadRoutine();
-        //RenderSkybox.resetAstralSkybox();
-        AstralSorcery.log.info("[AssetLibrary] Successfully reloaded and rebound library.");
+        AstralSorcery.log.info("[AssetLibrary] Successfully reloaded library.");
     }
 
 }

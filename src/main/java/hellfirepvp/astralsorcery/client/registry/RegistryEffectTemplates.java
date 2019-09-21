@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.*;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.context.base.RenderContextColorSphere;
-import hellfirepvp.astralsorcery.common.util.ObjectReference;
+import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -144,9 +144,10 @@ public class ClientProxy extends CommonProxy {
         super.openGui(player, type, data);
     }
 
+    // Append custom textures otherwise not referenced
     private void stitchBucketTextures(TextureStitchEvent.Pre event) {
         if (event.getMap().getBasePath().equals("textures")) {
-            event.addSprite(new ResourceLocation(AstralSorcery.MODID,"fluid/bucket_mask"));
+            event.addSprite(new ResourceLocation(AstralSorcery.MODID, "fluid/bucket_mask"));
         }
     }
 
@@ -164,6 +165,7 @@ public class ClientProxy extends CommonProxy {
     private void onClientSetup(FMLClientSetupEvent event) {
         RegistryContainerTypes.initClient();
         RegistryEntities.initClient();
+        RegistryTileEntities.initClient();
 
         ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager())
                 .addReloadListener((ISelectiveResourceReloadListener) (resourceManager, resourcePredicate) ->

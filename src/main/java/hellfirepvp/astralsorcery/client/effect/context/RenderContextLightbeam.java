@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXLightbeam;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.common.util.ObjectReference;
+import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
