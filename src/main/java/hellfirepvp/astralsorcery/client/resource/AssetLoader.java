@@ -32,7 +32,7 @@ public class AssetLoader {
 
     @OnlyIn(Dist.CLIENT)
     private static String buildResourceString(AssetLocation location, SubLocation subLocation, String name, String suffix) {
-        if(name.endsWith(suffix)) { //In case of derp.
+        if (name.endsWith(suffix)) { //In case of derp.
             name = name.substring(0, name.length() - suffix.length());
         }
 

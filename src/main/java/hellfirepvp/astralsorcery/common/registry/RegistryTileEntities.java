@@ -10,12 +10,16 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import com.google.common.base.CaseFormat;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.*;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import static hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS.*;
 
@@ -39,6 +43,11 @@ public class RegistryTileEntities {
         RITUAL_LINK = registerTile(TileRitualLink.class, BlocksAS.RITUAL_LINK);
         RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class, BlocksAS.RITUAL_PEDESTAL);
         WELL = registerTile(TileWell.class, BlocksAS.WELL);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void initClient() {
+        ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderTileLens());
     }
 
     private static <T extends TileEntity> TileEntityType<T> registerTile(Class<T> tileClass, Block... validBlocks) {

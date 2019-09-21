@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util;
+package hellfirepvp.astralsorcery.common.util.object;
 
 /**
  * This class is part of the Astral Sorcery Mod
