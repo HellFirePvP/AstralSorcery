@@ -79,7 +79,9 @@ public class ItemUtils {
     @Nullable
     public static BlockState createBlockState(ItemStack stack) {
         Block b = Block.getBlockFromItem(stack.getItem());
-        if (b == Blocks.AIR) return null;
+        if (b == Blocks.AIR) {
+            return null;
+        }
         return b.getDefaultState();
     }
 

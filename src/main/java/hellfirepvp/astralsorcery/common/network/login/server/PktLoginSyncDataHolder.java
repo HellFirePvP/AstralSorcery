@@ -95,10 +95,10 @@ public class PktLoginSyncDataHolder extends ASLoginPacket<PktLoginSyncDataHolder
                         if (reader != null) {
                             SyncDataHolder.executeClient(key, ClientData.class, data -> {
                                 reader.readFromIncomingFullSync(data, packet.syncData.get(key));
-                                acknowledge(context);
                             });
                         }
                     }
+                    acknowledge(context);
                 });
             }
 

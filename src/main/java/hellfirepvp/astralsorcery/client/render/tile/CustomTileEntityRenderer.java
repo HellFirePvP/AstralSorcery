@@ -19,7 +19,10 @@ import net.minecraft.tileentity.TileEntity;
  * Created by HellFirePvP
  * Date: 21.09.2019 / 15:29
  */
-public class CustomTileEntityRenderer<T extends TileEntity> extends TileEntityRenderer<T> {
+public abstract class CustomTileEntityRenderer<T extends TileEntity> extends TileEntityRenderer<T> {
+
+    @Override
+    public abstract void render(T tile, double x, double y, double z, float pTicks, int destroyStage);
 
     protected void bind(AbstractRenderableTexture texture) {
         this.bindDamaged(texture, -1);

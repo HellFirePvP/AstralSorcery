@@ -52,6 +52,14 @@ public class ColorsAS {
     public static final Color EFFECT_DROP_MODIFIER = new Color(0xFFD114);
     public static final Color EFFECT_TIME_FREEZE = new Color(0x696969);
 
+    public static final Color COLORED_LENS_FIRE     = new Color(0xff7f00);
+    public static final Color COLORED_LENS_BREAK    = new Color(0xffdf00);
+    public static final Color COLORED_LENS_GROWTH = new Color(0x00df00);
+    public static final Color COLORED_LENS_DAMAGE   = new Color(0xdf0000);
+    public static final Color COLORED_LENS_REGEN    = new Color(0xff7fbf);
+    public static final Color COLORED_LENS_PUSH     = new Color(0x00dfff);
+    public static final Color COLORED_LENS_SPECTRAL = new Color(0x7f00bf);
+
     public static final Color RITUAL_CONSTELLATION_AEVITAS           = new Color(63, 255, 63);
     public static final Color RITUAL_CONSTELLATION_ARMARA            = new Color(201, 30, 0);
     public static final Color RITUAL_CONSTELLATION_ARMARA_SECONDARY  = new Color(80, 0, 150);

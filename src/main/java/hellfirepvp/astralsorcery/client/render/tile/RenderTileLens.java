@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.tile.TileLens;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.math.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.List;
@@ -37,6 +38,7 @@ public class RenderTileLens extends CustomTileEntityRenderer<TileLens> {
     public void render(TileLens lens, double x, double y, double z, float pTicks, int destroyStage) {
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.15F);
         GlStateManager.pushMatrix();
 
         List<BlockPos> linked = lens.getLinkedPositions();
@@ -218,6 +220,7 @@ public class RenderTileLens extends CustomTileEntityRenderer<TileLens> {
         }
 
         TextureHelper.refreshTextureBind();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
         GlStateManager.popMatrix();
     }
 

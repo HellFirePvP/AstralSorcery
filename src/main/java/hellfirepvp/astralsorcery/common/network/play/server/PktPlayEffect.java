@@ -9,7 +9,9 @@
 package hellfirepvp.astralsorcery.common.network.play.server;
 
 import hellfirepvp.astralsorcery.client.util.MiscPlayEffect;
+import hellfirepvp.astralsorcery.common.auxiliary.BlockBreakHelper;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
+import hellfirepvp.astralsorcery.common.item.lens.ItemColoredLensFire;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
@@ -97,10 +99,12 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
     public static enum Type {
 
         LIGHTNING,
+        BEAM_BREAK,
         ROCK_CRYSTAL_COLUMN,
         ROCK_CRYSTAL_SPARKS,
         WELL_CATALYST_BREAK,
         CROP_GROWTH,
+        MELT_BLOCK,
         TIME_FREEZE_EFFECT;
 
         @OnlyIn(Dist.CLIENT)
@@ -118,6 +122,10 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return CEffectAevitas::playParticles;
                 case TIME_FREEZE_EFFECT:
                     return TimeStopEffectHelper::playEntityParticles;
+                case BEAM_BREAK:
+                    return BlockBreakHelper::blockBreakAnimation;
+                case MELT_BLOCK:
+                    return ItemColoredLensFire::playParticles;
             }
             return (pkt) -> {};
         }

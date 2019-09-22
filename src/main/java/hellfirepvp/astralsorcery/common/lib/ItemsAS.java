@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.item.dust.ItemNocturnalPowder;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemDay;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
+import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
@@ -63,6 +64,14 @@ public class ItemsAS {
 
     public static ItemNocturnalPowder NOCTURNAL_POWDER;
     public static ItemIlluminationPowder ILLUMINATION_POWDER;
+
+    public static ItemColoredLensFire         COLORED_LENS_FIRE;
+    public static ItemColoredLensBreak        COLORED_LENS_BREAK;
+    public static ItemColoredLensGrowth       COLORED_LENS_GROWTH;
+    public static ItemColoredLensDamage       COLORED_LENS_DAMAGE;
+    public static ItemColoredLensRegeneration COLORED_LENS_REGENERATION;
+    public static ItemColoredLensPush         COLORED_LENS_PUSH;
+    public static ItemColoredLensSpectral     COLORED_LENS_SPECTRAL;
 
     public static ItemRockCrystal ROCK_CRYSTAL;
     public static ItemAttunedRockCrystal ATTUNED_ROCK_CRYSTAL;

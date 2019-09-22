@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.network.login.client;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.network.base.ASLoginPacket;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -52,9 +51,7 @@ public class PktLoginAcknowledge extends ASLoginPacket<PktLoginAcknowledge> {
             }
 
             @Override
-            public void handle(PktLoginAcknowledge packet, NetworkEvent.Context context, LogicalSide side) {
-
-            }
+            public void handle(PktLoginAcknowledge packet, NetworkEvent.Context context, LogicalSide side) {}
         };
     }
 }

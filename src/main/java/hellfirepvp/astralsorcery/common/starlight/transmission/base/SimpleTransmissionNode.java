@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.starlight.transmission.base;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionWorldHandler;
@@ -58,10 +57,10 @@ public class SimpleTransmissionNode implements ITransmissionNode {
     public void updateIgnoreBlockCollisionState(World world, boolean ignoreBlockCollision) {
         this.ignoreBlockCollision = ignoreBlockCollision;
         TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
-        if(assistNext != null && handle != null) {
+        if (assistNext != null && handle != null) {
             boolean oldState = this.nextReachable;
             this.nextReachable = ignoreBlockCollision || assistNext.isClear(world);
-            if(nextReachable != oldState) {
+            if (nextReachable != oldState) {
                 handle.notifyTransmissionNodeChange(this);
             }
         }
@@ -73,7 +72,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public boolean notifyUnlink(World world, BlockPos to) {
-        if(to.equals(nextPos)) { //cleanup
+        if (to.equals(nextPos)) { //cleanup
             this.nextPos = null;
             this.assistNext = null;
             this.dstToNextSq = 0;
@@ -91,7 +90,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
     private void addLink(World world, BlockPos pos, boolean doRayTest, boolean oldRayState) {
         this.nextPos = pos;
         this.assistNext = new RaytraceAssist(thisPos, nextPos);
-        if(doRayTest) {
+        if (doRayTest) {
             this.nextReachable = this.ignoreBlockCollision || assistNext.isClear(world);
         } else {
             this.nextReachable = oldRayState;
@@ -101,10 +100,14 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public boolean notifyBlockChange(World world, BlockPos at) {
-        if(nextPos == null) return false;
+        if (nextPos == null) {
+            return false;
+        }
         double dstStart = thisPos.distanceSq(at);
         double dstEnd = nextPos.distanceSq(at);
-        if(dstStart > dstToNextSq || dstEnd > dstToNextSq) return false; //out of range
+        if (dstStart > dstToNextSq || dstEnd > dstToNextSq) {
+            return false; //out of range
+        }
         boolean oldState = this.nextReachable;
         this.nextReachable = ignoreBlockCollision || assistNext.isClear(world);
         return this.nextReachable != oldState;
@@ -122,7 +125,9 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public NodeConnection<IPrismTransmissionNode> queryNextNode(WorldNetworkHandler handler) {
-        if(nextPos == null) return null;
+        if (nextPos == null) {
+            return null;
+        }
         return new NodeConnection<>(handler.getTransmissionNode(nextPos), nextPos, nextReachable);
     }
 
@@ -168,7 +173,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
         }
         compound.put("sources", sources);
 
-        if(nextPos != null) {
+        if (nextPos != null) {
             CompoundNBT pos = new CompoundNBT();
             NBTHelper.writeBlockPosToNBT(nextPos, pos);
             pos.putBoolean("rayState", nextReachable);

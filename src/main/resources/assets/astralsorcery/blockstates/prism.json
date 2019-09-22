@@ -1,0 +1,116 @@
+{
+  "multipart": [
+    {
+      "when": { "against": "up" },
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism",
+          "x": 180
+        }
+      ]
+    },
+    {
+      "when": {"AND": [{ "has_lens": true }, { "against": "up" }]},
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism_colored",
+          "x": 180
+        }
+      ]
+    },
+    {
+      "when": { "against": "down" },
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism"
+        }
+      ]
+    },
+    {
+      "when": {"AND": [{ "has_lens": true }, { "against": "down" }]},
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism_colored"
+        }
+      ]
+    },
+    {
+      "when": { "against": "north" },
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism",
+          "x": 90,
+          "y": 180
+        }
+      ]
+    },
+    {
+      "when": {"AND": [{ "has_lens": true }, { "against": "north" }]},
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism_colored",
+          "x": 90,
+          "y": 180
+        }
+      ]
+    },
+    {
+      "when": { "against": "south" },
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism",
+          "x": 90
+        }
+      ]
+    },
+    {
+      "when": {"AND": [{ "has_lens": true }, { "against": "south" }]},
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism_colored",
+          "x": 90
+        }
+      ]
+    },
+    {
+      "when": { "against": "east" },
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism",
+          "x": 90,
+          "y": 270
+        }
+      ]
+    },
+    {
+      "when": {"AND": [{ "has_lens": true }, { "against": "east" }]},
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism_colored",
+          "x": 90,
+          "y": 270
+        }
+      ]
+    },
+    {
+      "when": { "against": "west" },
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism",
+          "x": 90,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "when": {"AND": [{ "has_lens": true }, { "against": "west" }]},
+      "apply": [
+        {
+          "model": "astralsorcery:block/hybrid/prism_colored",
+          "x": 90,
+          "y": 90
+        }
+      ]
+    }
+  ]
+}

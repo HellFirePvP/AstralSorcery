@@ -62,16 +62,17 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
             return 0F;
         }
 
-        if(posDistribution == -1) {
+        if (posDistribution == -1) {
             posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
         }
 
         Function<Float, Float> distrFunction = getDistributionFunc();
-        float perc = DayTimeHelper.getCurrentDaytimeDistribution(world);
+        float perc = CrystalCalculations.getCollectorCrystalCollectionRate(this);
+        perc *= 0.3 + (0.7 * DayTimeHelper.getCurrentDaytimeDistribution(world));
         perc *= collectionDstMultiplier;
         perc *= 1 + (0.3 * posDistribution);
         perc *= distrFunction.apply(ctx.getDistributionHandler().getDistribution(cst));
-        return CrystalCalculations.getCollectorCrystalCollectionRate(this) * perc;
+        return perc;
     }
 
     private Function<Float, Float> getDistributionFunc() {

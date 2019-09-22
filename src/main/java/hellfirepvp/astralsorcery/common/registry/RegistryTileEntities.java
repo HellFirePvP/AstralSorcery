@@ -48,6 +48,7 @@ public class RegistryTileEntities {
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderTileLens());
+        ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderTilePrism());
     }
 
     private static <T extends TileEntity> TileEntityType<T> registerTile(Class<T> tileClass, Block... validBlocks) {

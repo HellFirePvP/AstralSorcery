@@ -87,6 +87,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
             return;
         }
 
+
         if (!this.occupiedConnections.isEmpty()) {
             this.occupiedConnections.clear();
             markForUpdate();
@@ -109,11 +110,13 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
                 boolean clear = rta.isClear(world);
                 if (!clear && rta.positionHit() != null) {
                     BlockPos posHit = rta.positionHit();
-                    if (!this.getLinkedPositions().contains(posHit)) {
-                        BlockState stateHit = world.getBlockState(posHit);
-                        colorType.blockInBeam(world, posHit, stateHit, str);
-                    }
+
+                    BlockState stateHit = world.getBlockState(posHit);
+                    colorType.blockInBeam(world, posHit, stateHit, str);
+
                     this.occupiedConnections.add(posHit);
+                } else {
+                    this.occupiedConnections.add(linkedTo);
                 }
             }
             if (colorType.getType() == LensColorType.TargetType.ENTITY || colorType.getType() == LensColorType.TargetType.ANY) {
@@ -134,14 +137,11 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
         Color lensColor = this.colorType.getColor();
 
         EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                .spawn(at)
+                .spawn(new Vector3(this)
+                        .add(0.2, 0.2, 0.2)
+                        .add(rand.nextFloat() * 0.6, rand.nextFloat() * 0.6, rand.nextFloat() * 0.6))
                 .color(VFXColorFunction.constant(lensColor))
-                .setMotion(new Vector3(
-                        rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
-                        rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
-                        rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1)
-                ))
-                .setScaleMultiplier(0.1F + rand.nextFloat() * 0.1F);
+                .setScaleMultiplier(0.1F + rand.nextFloat() * 0.15F);
 
         if (getTicksExisted() % 40 == 0) {
             for (BlockPos connected : this.occupiedConnections) {
@@ -152,6 +152,16 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
                         .color(VFXColorFunction.constant(lensColor));
             }
         }
+    }
+
+    public LensColorType setColorType(@Nullable LensColorType colorType) {
+        if (this.getColorType() == colorType) {
+            return colorType;
+        }
+        LensColorType prev = this.getColorType();
+        this.colorType = colorType;
+        this.markForUpdate();
+        return prev;
     }
 
     @Nullable
