@@ -11,10 +11,13 @@ package hellfirepvp.astralsorcery.client.util;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.particle.DiggingParticle;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -27,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biomes;
@@ -72,6 +76,40 @@ public class RenderingUtils {
             return null;
         }
         return Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state, world, pos);
+    }
+
+    //Straight up ripped off of MC code.
+    public static void playBlockBreakParticles(BlockPos pos, BlockState state) {
+        World world = Minecraft.getInstance().world;
+        ParticleManager mgr = Minecraft.getInstance().particles;
+
+        VoxelShape voxelshape = state.getShape(world, pos);
+        voxelshape.forEachBox((p_199284_3_, p_199284_5_, p_199284_7_, p_199284_9_, p_199284_11_, p_199284_13_) -> {
+            double d1 = Math.min(1.0D, p_199284_9_ - p_199284_3_);
+            double d2 = Math.min(1.0D, p_199284_11_ - p_199284_5_);
+            double d3 = Math.min(1.0D, p_199284_13_ - p_199284_7_);
+            int i = Math.max(2, MathHelper.ceil(d1 / 0.25D));
+            int j = Math.max(2, MathHelper.ceil(d2 / 0.25D));
+            int k = Math.max(2, MathHelper.ceil(d3 / 0.25D));
+
+            for (int l = 0; l < i; ++l) {
+                for (int i1 = 0; i1 < j; ++i1) {
+                    for (int j1 = 0; j1 < k; ++j1) {
+                        double d4 = ((double)l + 0.5D) / (double)i;
+                        double d5 = ((double)i1 + 0.5D) / (double)j;
+                        double d6 = ((double)j1 + 0.5D) / (double)k;
+                        double d7 = d4 * d1 + p_199284_3_;
+                        double d8 = d5 * d2 + p_199284_5_;
+                        double d9 = d6 * d3 + p_199284_7_;
+                        mgr.addEffect((new DiggingParticle(world,
+                                pos.getX() + d7, pos.getY() + d8, pos.getZ() + d9,
+                                d4 - 0.5D, d5 - 0.5D, d6 - 0.5D,
+                                state)).setBlockPos(pos));
+                    }
+                }
+            }
+
+        });
     }
 
     public static Color clampToColor(int rgb) {

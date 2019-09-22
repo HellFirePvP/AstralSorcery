@@ -600,6 +600,14 @@
   "item.astralsorcery.illumination_powder": "Illumination Powder",
   "item.astralsorcery.nocturnal_powder": "Nocturnal Powder",
 
+  "item.astralsorcery.colored_lens_fire": "Ignition Lens",
+  "item.astralsorcery.colored_lens_break": "Break Lens",
+  "item.astralsorcery.colored_lens_growth": "Growth Lens",
+  "item.astralsorcery.colored_lens_push": "Push Lens",
+  "item.astralsorcery.colored_lens_damage": "Damage Lens",
+  "item.astralsorcery.colored_lens_regeneration": "Regeneration Lens",
+  "item.astralsorcery.colored_lens_spectral": "Spectral Lens",
+
   "item.astralsorcery.rock_crystal": "Rock Crystal",
   "item.astralsorcery.attuned_rock_crystal": "Attuned Rock Crystal",
   "item.astralsorcery.celestial_crystal": "Celestial Crystal",

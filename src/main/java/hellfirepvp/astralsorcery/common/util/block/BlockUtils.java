@@ -24,9 +24,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.world.BlockEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -136,7 +138,18 @@ public class BlockUtils {
         FakePlayer fakePlayer = AstralSorcery.getProxy().getASFakePlayerServer(world);
         int xp;
         try {
-            xp = net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(world, GameType.SURVIVAL, fakePlayer, pos);
+            boolean preCancelEvent = false;
+            if (!heldItem.isEmpty() && !heldItem.getItem().canPlayerBreakBlockWhileHolding(stateBroken, world, pos, fakePlayer)) {
+                preCancelEvent = true;
+            }
+            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, stateBroken, fakePlayer);
+            event.setCanceled(preCancelEvent);
+            MinecraftForge.EVENT_BUS.post(event);
+
+            if (event.isCanceled()) {
+                return false;
+            }
+            xp = event.getExpToDrop();
         } catch (Exception exc) {
             return false;
         }

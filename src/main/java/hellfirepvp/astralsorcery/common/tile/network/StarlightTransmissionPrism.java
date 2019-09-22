@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.common.tile.network;
 
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.item.lens.LensColorType;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
+import hellfirepvp.astralsorcery.common.tile.TilePrism;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -27,5 +30,17 @@ public class StarlightTransmissionPrism extends CrystalPrismTransmissionNode {
 
     public StarlightTransmissionPrism(BlockPos thisPos) {
         super(thisPos);
+    }
+
+    @Override
+    public <T extends TileEntity> boolean updateFromTileEntity(T tile) {
+        if (!(tile instanceof TilePrism)) {
+            return super.updateFromTileEntity(tile);
+        }
+
+        LensColorType colorType = ((TilePrism) tile).getColorType();
+        this.updateAdditionalLoss(colorType == null ? 1 : colorType.getFlowMultiplier());
+        this.updateIgnoreBlockCollisionState(tile.getWorld(), colorType != null && colorType.doesIgnoreBlockCollision());
+        return true;
     }
 }

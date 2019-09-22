@@ -20,7 +20,7 @@ import hellfirepvp.astralsorcery.common.network.play.client.*;
 import hellfirepvp.astralsorcery.common.network.play.server.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -122,7 +122,7 @@ public class PacketChannel {
                 .add();
     }
 
-    public static PacketDistributor.TargetPoint pointFromPos(World world, Vec3i pos, double range) {
+    public static PacketDistributor.TargetPoint pointFromPos(IWorld world, Vec3i pos, double range) {
         return new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world.getDimension().getType());
     }
 

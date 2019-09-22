@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.item.dust.ItemNocturnalPowder;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemDay;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
+import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
@@ -101,6 +102,14 @@ public class RegistryItems {
 
         NOCTURNAL_POWDER = registerItem(new ItemNocturnalPowder());
         ILLUMINATION_POWDER = registerItem(new ItemIlluminationPowder());
+
+        COLORED_LENS_FIRE = registerItem(new ItemColoredLensFire());
+        COLORED_LENS_BREAK = registerItem(new ItemColoredLensBreak());
+        COLORED_LENS_GROWTH = registerItem(new ItemColoredLensGrowth());
+        COLORED_LENS_DAMAGE = registerItem(new ItemColoredLensDamage());
+        COLORED_LENS_REGENERATION = registerItem(new ItemColoredLensRegeneration());
+        COLORED_LENS_PUSH = registerItem(new ItemColoredLensPush());
+        COLORED_LENS_SPECTRAL = registerItem(new ItemColoredLensSpectral());
 
         ROCK_CRYSTAL = registerItem(new ItemRockCrystal());
         ATTUNED_ROCK_CRYSTAL = registerItem(new ItemAttunedRockCrystal());

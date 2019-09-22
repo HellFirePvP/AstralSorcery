@@ -4,8 +4,8 @@
     {
       "rolls": {
         "type": "uniform",
-        "min": 1.0,
-        "max": 3.0
+        "min": 3.0,
+        "max": 6.0
       },
       "entries": [
         {

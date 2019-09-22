@@ -15,6 +15,8 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -88,7 +90,11 @@ public abstract class TileEntitySynchronized extends TileEntity {
         super.onDataPacket(manager, packet);
         readCustomNBT(packet.getNbtCompound());
         readNetNBT(packet.getNbtCompound());
+        this.onDataReceived();
     }
+
+    @OnlyIn(Dist.CLIENT)
+    protected void onDataReceived() {}
 
     public void markForUpdate() {
         if (getWorld() != null) {

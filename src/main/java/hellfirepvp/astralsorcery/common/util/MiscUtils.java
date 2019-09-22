@@ -441,11 +441,11 @@ public class MiscUtils {
         target.addZ(rand.nextFloat() * multiplier * (rand.nextBoolean() ? 1 : -1));
     }
 
-    public static boolean isChunkLoaded(World world, BlockPos pos) {
+    public static boolean isChunkLoaded(IWorld world, BlockPos pos) {
         return world.isBlockLoaded(pos);
     }
 
-    public static boolean isChunkLoaded(World world, ChunkPos pos) {
+    public static boolean isChunkLoaded(IWorld world, ChunkPos pos) {
         return world.isBlockLoaded(new BlockPos(pos.x * 16, 0, pos.z * 16));
     }
 

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.item.lens;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -19,6 +20,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,17 +34,22 @@ public abstract class LensColorType {
     //No. not making a registry for this.
     private static final Map<ResourceLocation, LensColorType> BY_NAME = new HashMap<>();
 
+    private final Supplier<ItemStack> itemSupplier;
     private final ResourceLocation name;
     private final TargetType type;
     private final Color color;
     private final float flowReduction;
+    private final boolean ignoresBlockCollision;
 
-    public LensColorType(ResourceLocation name, TargetType type, Color color, float flowReduction) {
+    public LensColorType(ResourceLocation name, TargetType type, Supplier<ItemStack> itemSupplier, Color color, float flowReduction, boolean ignoresBlockCollision) {
         this.name = name;
         this.type = type;
         this.color = color;
-        this.flowReduction = flowReduction;
-        BY_NAME.put(name, this);
+        this.flowReduction = 1F - flowReduction;
+        this.ignoresBlockCollision = ignoresBlockCollision;
+        this.itemSupplier = itemSupplier;
+
+        BY_NAME.put(name, this); //You can override existing types if needed with equal name.
     }
 
     public ResourceLocation getName() {
@@ -53,12 +60,20 @@ public abstract class LensColorType {
         return type;
     }
 
-    public float getFlowReduction() {
+    public float getFlowMultiplier() {
         return flowReduction;
+    }
+
+    public boolean doesIgnoreBlockCollision() {
+        return ignoresBlockCollision;
     }
 
     public Color getColor() {
         return color;
+    }
+
+    public ItemStack getStack() {
+        return itemSupplier.get();
     }
 
     @Nullable
