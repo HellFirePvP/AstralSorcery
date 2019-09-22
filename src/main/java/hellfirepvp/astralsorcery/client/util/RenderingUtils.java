@@ -481,9 +481,9 @@ public class RenderingUtils {
         render.rotationPitch =       (float)pitch;
         render.prevRotationPitch =   (float)pitchPrev;
 
-        Minecraft.getMinecraft().setIngameNotInFocus();
+        Minecraft.getMinecraft().inGameHasFocus = false;
         ActiveRenderInfo.updateRenderInfo(render, false);
-        Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+        ClientUtils.grabMouseCursor();
     }
 
     @Deprecated
@@ -507,14 +507,13 @@ public class RenderingUtils {
             if(Minecraft.getMinecraft().currentScreen != null) {
                 Minecraft.getMinecraft().displayGuiScreen(null);
             }
+
+            if (Display.isActive()) {
+                ClientUtils.ungrabMouseCursor();
+            }
+
             Minecraft.getMinecraft().inGameHasFocus = false;
             Minecraft.getMinecraft().setIngameFocus();
-
-            if (Minecraft.IS_RUNNING_ON_MAC) {
-                Mouse.setGrabbed(false);
-                Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
-                Mouse.setGrabbed(true);
-            }
         }
     }
 
