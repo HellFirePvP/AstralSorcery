@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.gui.base.GuiSkyScreen;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.ClientUtils;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
@@ -128,7 +129,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
         }
-        mc.mouseHelper.grabMouseCursor();
+        ClientUtils.grabMouseCursor();
         mc.inGameHasFocus = true;
     }
 
@@ -139,7 +140,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
         }
-        mc.mouseHelper.grabMouseCursor();
+        ClientUtils.grabMouseCursor();
         mc.inGameHasFocus = true;
     }
 
@@ -193,13 +194,13 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
             if(!Minecraft.IS_RUNNING_ON_MAC) {
                 KeyBinding.updateKeyBindState();
             }
-            Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+            ClientUtils.grabMouseCursor();
             Minecraft.getMinecraft().inGameHasFocus = true;
             grabCursor = false;
             clearLines();
         }
         if (!grabCursor && ctrl) {
-            Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
+            ClientUtils.ungrabMouseCursor();
             Minecraft.getMinecraft().inGameHasFocus = false;
             grabCursor = true;
         }

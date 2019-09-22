@@ -127,7 +127,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
         }
-        mc.mouseHelper.grabMouseCursor();
+        ClientUtils.grabMouseCursor();
         mc.inGameHasFocus = true;
 
         mc.player.renderYawOffset = mc.player.rotationYawHead;
@@ -149,7 +149,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
         }
-        mc.mouseHelper.grabMouseCursor();
+        ClientUtils.grabMouseCursor();
         mc.inGameHasFocus = true;
     }
 
@@ -503,13 +503,13 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
             if(!Minecraft.IS_RUNNING_ON_MAC) {
                 KeyBinding.updateKeyBindState();
             }
-            Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+            ClientUtils.grabMouseCursor();
             Minecraft.getMinecraft().inGameHasFocus = true;
             grabCursor = false;
             clearLines();
         }
         if (!grabCursor && ctrl) {
-            Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
+            ClientUtils.ungrabMouseCursor();
             Minecraft.getMinecraft().inGameHasFocus = false;
             grabCursor = true;
         }
