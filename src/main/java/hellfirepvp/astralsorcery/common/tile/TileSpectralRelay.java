@@ -36,6 +36,7 @@ public class TileSpectralRelay extends TileEntityTick {
         this.inventory = new TileInventory(this, () -> 1);
     }
 
+    @Nonnull
     public TileInventory getInventory() {
         return inventory;
     }

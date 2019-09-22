@@ -23,5 +23,4 @@ public class RenderTilePrism extends CustomTileEntityRenderer<TilePrism> {
     public void render(TilePrism prism, double x, double y, double z, float pTicks, int destroyStage) {
         //TODO render some additional stuff? idk.
     }
-
 }

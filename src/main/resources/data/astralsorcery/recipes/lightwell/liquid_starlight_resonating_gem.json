@@ -1,0 +1,14 @@
+{
+    "type": "astralsorcery:lightwell",
+    "input": {
+        "type": "minecraft:item",
+        "item": "astralsorcery:resonating_gem"
+    },
+    "output": {
+        "type": "astralsorcery:fluid",
+        "fluid": "astralsorcery:liquid_starlight_source"
+    },
+    "productionMultiplier": 0.6,
+    "shatterMultiplier": 18,
+    "color": "000088DD"
+}

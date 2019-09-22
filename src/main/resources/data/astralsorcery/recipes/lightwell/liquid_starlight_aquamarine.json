@@ -1,0 +1,14 @@
+{
+    "type": "astralsorcery:lightwell",
+    "input": {
+        "type": "minecraft:item",
+        "item": "astralsorcery:aquamarine"
+    },
+    "output": {
+        "type": "astralsorcery:fluid",
+        "fluid": "astralsorcery:liquid_starlight_source"
+    },
+    "productionMultiplier": 0.4,
+    "shatterMultiplier": 12,
+    "color": "000088DD"
+}

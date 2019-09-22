@@ -1,0 +1,14 @@
+{
+    "type": "astralsorcery:lightwell",
+    "input": {
+        "type": "minecraft:item",
+        "item": "astralsorcery:celestial_crystal"
+    },
+    "output": {
+        "type": "astralsorcery:fluid",
+        "fluid": "astralsorcery:liquid_starlight_source"
+    },
+    "productionMultiplier": 0.9,
+    "shatterMultiplier": 50,
+    "color": "000088FF"
+}

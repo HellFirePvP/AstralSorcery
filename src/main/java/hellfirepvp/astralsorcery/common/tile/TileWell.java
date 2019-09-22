@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
@@ -16,6 +17,8 @@ import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefactionContext;
+import hellfirepvp.astralsorcery.common.fluid.BlockLiquidStarlight;
+import hellfirepvp.astralsorcery.common.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -166,7 +169,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
     @OnlyIn(Dist.CLIENT)
     private void doClientEffects() {
         ItemStack stack = this.inventory.getStackInSlot(0);
-        if(!stack.isEmpty()) {
+        if (!stack.isEmpty()) {
             runningRecipe = RecipeTypesAS.TYPE_WELL.findRecipe(new WellLiquefactionContext(this));
 
             if (runningRecipe != null) {
@@ -177,25 +180,27 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
                 doCatalystEffect(color);
             }
         }
-        // TODO fluids / liquid starlight
-        //if(tank.getFluidAmount() > 0 &&
-        //        tank.getTankFluid() instanceof FluidLiquidStarlight) {
-        //    doStarlightEffect();
-        //}
+        if (tank.getFluidAmount() > 0 && tank.getFluid().getFluid() instanceof FluidLiquidStarlight) {
+            BlockLiquidStarlight.playLiquidStarlightBlockEffect(rand,
+                    new Vector3(this).add(0, 0.4 + tank.getPercentageFilled() * 0.5, 0),
+                    0.7F);
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
     private void doCatalystEffect(Color color) {
         if (rand.nextInt(6) == 0) {
             Vector3 at = new Vector3(this)
-                    .add(0.5, 1.3, 0.5)
-                    .add(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
-                            rand.nextFloat() * 0.1,
-                            rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+                    .add(0.5, 1, 0.5)
+                    .add(rand.nextFloat() * 0.15 * (rand.nextBoolean() ? 1 : -1),
+                            rand.nextFloat() * 0.2,
+                            rand.nextFloat() * 0.15 * (rand.nextBoolean() ? 1 : -1));
 
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(at)
-                    .color(VFXColorFunction.constant(color));
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .color(VFXColorFunction.constant(color))
+                    .setMaxAge(25 + rand.nextInt(20));
         }
     }
 

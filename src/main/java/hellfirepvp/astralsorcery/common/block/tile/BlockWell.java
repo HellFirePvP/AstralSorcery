@@ -38,6 +38,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -86,6 +87,11 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
     }
 
     @Override
+    public boolean hasCustomBreakingProgress(BlockState p_190946_1_) {
+        return true;
+    }
+
+    @Override
     public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!world.isRemote()) {
             ItemStack heldItem = player.getHeldItem(hand);
@@ -118,16 +124,16 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
                     }
                 }
 
-                IFluidHandler handler = tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).orElse(null);
-                if (handler != null) {
-                    FluidActionResult far = FluidUtil.tryFillContainerAndStow(heldItem,
-                            handler, new InvWrapper(player.inventory), FluidAttributes.BUCKET_VOLUME, player, false);
-                    if (far.isSuccess()) {
-                        player.setHeldItem(hand, far.getResult());
-                        SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, world, pos, 1F, 1F);
-                        tw.markForUpdate();
-                    }
-                }
+                tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)
+                        .ifPresent((handler) -> {
+                            FluidActionResult far = FluidUtil.tryFillContainerAndStow(heldItem,
+                                    handler, new InvWrapper(player.inventory), FluidAttributes.BUCKET_VOLUME, player, true);
+                            if (far.isSuccess()) {
+                                player.setHeldItem(hand, far.getResult());
+                                SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, world, pos, 1F, 1F);
+                                tw.markForUpdate();
+                            }
+                        });
             }
         }
         return true;
