@@ -247,5 +247,4 @@ public class RenderTileLens extends CustomTileEntityRenderer<TileLens> {
         MODEL_LENS.render(1, destroyStage);
         RenderHelper.disableStandardItemLighting();
     }
-
 }

@@ -48,7 +48,7 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(5_000L, 0.05F, 0.005F, 0.01F);
+        return new DiminishingMultiplier(5_000L, 0.08F, 0.005F, 0.001F);
     }
 
     @Override

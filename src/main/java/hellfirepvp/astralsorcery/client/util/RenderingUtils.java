@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.util;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -25,6 +26,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -57,7 +59,7 @@ public class RenderingUtils {
 
     @Nonnull
     public static TextureAtlasSprite getSprite(FluidStack stack) {
-        ResourceLocation res = stack.getFluid().getAttributes().getFlowing(stack);
+        ResourceLocation res = stack.getFluid().getAttributes().getStill(stack);
         return Minecraft.getInstance().getTextureMap().getSprite(res);
     }
 
@@ -142,6 +144,14 @@ public class RenderingUtils {
             return false;
         }
         return fx.getPosition().distanceSquared(view) <= RenderingConfig.CONFIG.getMaxEffectRenderDistanceSq();
+    }
+
+    public static void renderItemAsEntity(ItemStack stack, double x, double y, double z, float pTicks, int age) {
+        ItemEntity ei = new ItemEntity(Minecraft.getInstance().world, x, y, z, stack);
+        ei.age = age;
+        ei.hoverStart = 0;
+        Minecraft.getInstance().getRenderManager().renderEntity(ei, x, y, z, 0, pTicks, true);
+        TextureHelper.bindBlockAtlas();
     }
 
     public static void renderItemStack(ItemRenderer itemRenderer, ItemStack stack, int x, int y, @Nullable String alternativeText) {
