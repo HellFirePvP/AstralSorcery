@@ -75,6 +75,12 @@ public class ActiveSimpleAltarRecipe {
         this.totalCraftingTime = recipeToCraft.getDuration() / durationDivisor;
     }
 
+    private void recoverContainedEffects(@Nullable ActiveSimpleAltarRecipe previous) {
+        if (previous != null && previous.getRecipeToCraft().getId().equals(this.recipeToCraft.getId())) {
+            this.clientEffectContainer.putAll(previous.clientEffectContainer);
+        }
+    }
+
     public CompoundNBT getCraftingData() {
         return craftingData;
     }
@@ -110,6 +116,7 @@ public class ActiveSimpleAltarRecipe {
         for (ItemStack crafted : this.getRecipeToCraft().doItemOutput(altar)) {
             ResearchManager.informCraftedAltar(altar, this, crafted);
         }
+        this.getRecipeToCraft().onRecipeCompletion(altar);
     }
 
     public void consumeInputs(TileAltar altar) {
@@ -171,8 +178,8 @@ public class ActiveSimpleAltarRecipe {
         }
         return true;
     }
-
     //True if the recipe progressed, false if it's stuck
+
     public CraftingState tick(TileAltar altar) {
         if (recipeToCraft instanceof AltarCraftingProgress) {
             if (!((AltarCraftingProgress) recipeToCraft).tryProcess(altar, this, craftingData, ticksCrafting, totalCraftingTime)) {
@@ -246,7 +253,7 @@ public class ActiveSimpleAltarRecipe {
     }
 
     @Nullable
-    public static ActiveSimpleAltarRecipe deserialize(CompoundNBT compound) {
+    public static ActiveSimpleAltarRecipe deserialize(CompoundNBT compound, @Nullable ActiveSimpleAltarRecipe previous) {
         RecipeManager mgr = RecipeTypesAS.TYPE_ALTAR.getRecipeManager();
         if (mgr == null) {
             return null;
@@ -275,6 +282,7 @@ public class ActiveSimpleAltarRecipe {
         task.setState(state);
         task.craftingData = compound.getCompound("craftingData");
         task.focusStacks = stacks;
+        task.recoverContainedEffects(previous);
         return task;
     }
 

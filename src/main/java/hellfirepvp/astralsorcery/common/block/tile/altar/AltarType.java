@@ -29,17 +29,15 @@ import java.util.function.Supplier;
  */
 public enum AltarType {
 
-    DISCOVERY(9, () -> StructureTypesAS.EMPTY, 6, 7, 8, 11, 12, 13, 16, 17, 18),
-    ATTUNEMENT(13, () -> StructureTypesAS.EMPTY, 0, 4, 6, 7, 8, 11, 12, 13, 16, 17, 18, 20, 23),
-    CONSTELLATION(21, () -> StructureTypesAS.EMPTY, (slot) -> slot != 3 && slot != 10 && slot != 14 && slot != 22),
-    RADIANCE(25, () -> StructureTypesAS.EMPTY, (slot) -> true);
+    DISCOVERY(() -> StructureTypesAS.EMPTY, 6, 7, 8, 11, 12, 13, 16, 17, 18),
+    ATTUNEMENT(() -> StructureTypesAS.EMPTY, 0, 4, 6, 7, 8, 11, 12, 13, 16, 17, 18, 20, 23),
+    CONSTELLATION(() -> StructureTypesAS.EMPTY, (slot) -> slot != 3 && slot != 10 && slot != 14 && slot != 22),
+    RADIANCE(() -> StructureTypesAS.EMPTY, (slot) -> true);
 
-    private final int inventorySize;
     private final Supplier<StructureType> structureSupplier;
     private Predicate<Integer> slotValidator;
 
-    AltarType(int inventorySize, Supplier<StructureType> structureSupplier, int... validSlots) {
-        this.inventorySize = inventorySize;
+    AltarType(Supplier<StructureType> structureSupplier, int... validSlots) {
         this.structureSupplier = structureSupplier;
         List<Integer> slots = new ArrayList<>();
         for (int slot : validSlots) {
@@ -48,14 +46,9 @@ public enum AltarType {
         this.slotValidator = slots::contains;
     }
 
-    AltarType(int inventorySize, Supplier<StructureType> structureSupplier, Predicate<Integer> slotValidator) {
-        this.inventorySize = inventorySize;
+    AltarType(Supplier<StructureType> structureSupplier, Predicate<Integer> slotValidator) {
         this.structureSupplier = structureSupplier;
         this.slotValidator = slotValidator;
-    }
-
-    public int getInventorySize() {
-        return this.inventorySize;
     }
 
     @Nonnull
@@ -71,7 +64,7 @@ public enum AltarType {
         return (int) (1000 * Math.pow(2, ordinal()));
     }
 
-    public boolean thisIsLowerThan(AltarType type) {
+    public boolean isThisLEThan(AltarType type) {
         return this.ordinal() <= type.ordinal();
     }
 

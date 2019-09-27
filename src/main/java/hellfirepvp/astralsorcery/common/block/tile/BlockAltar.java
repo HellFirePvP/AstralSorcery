@@ -87,7 +87,7 @@ public abstract class BlockAltar extends BlockStarlightNetwork implements Custom
 
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (state.getBlock() != newState.getBlock()) {
+        if (!(newState.getBlock() instanceof BlockAltar)) {
             TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class, true);
             if (ta != null && !worldIn.isRemote) {
                 ItemUtils.dropInventory(ta.getInventory(), worldIn, pos);

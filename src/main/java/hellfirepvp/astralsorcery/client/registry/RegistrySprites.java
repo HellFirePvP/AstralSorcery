@@ -42,6 +42,7 @@ public class RegistrySprites {
 
         SPR_COLLECTOR_EFFECT = new SpriteSheetResource(TEX_COLLECTOR_EFFECT, 5, 16);
         SPR_CRAFT_BURST = new SpriteSheetResource(TEX_CRAFT_BURST, 6, 8);
+        SPR_CRAFT_FLARE = new SpriteSheetResource(TEX_CRAFT_FLARE, 8, 8);
         SPR_LIGHTBEAM = new SpriteSheetResource(TEX_LIGHTBEAM, 4, 16);
 
         SPR_STARLIGHT_STORE = new SpriteSheetResource(TEX_STARLIGHT_STORE, 16, 4);

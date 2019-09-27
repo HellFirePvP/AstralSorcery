@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.effect.function;
 
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
+import net.minecraft.util.math.MathHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,5 +30,15 @@ public interface VFXAlphaFunction<T extends EntityVisualFX> {
     };
 
     public float getAlpha(T fx, float alphaIn, float pTicks);
+
+    public static  <T extends EntityVisualFX> VFXAlphaFunction<T> fadeIn(float fadeInTicks) {
+        return (fx, alphaIn, pTicks) -> {
+            if (fx.getAgeRefreshCount() > 0) {
+                return alphaIn;
+            }
+            float mul = MathHelper.clamp((fadeInTicks - (fx.getAge() + pTicks)) / fadeInTicks, 0F, 1F);
+            return alphaIn * mul;
+        };
+    }
 
 }

@@ -20,23 +20,26 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BuiltinEffectDiscoveryCentralBeam
+ * Class: EffectCommonRandomLightbeams
  * Created by HellFirePvP
- * Date: 24.09.2019 / 06:38
+ * Date: 23.09.2019 / 20:51
  */
-public class BuiltinEffectDiscoveryCentralBeam extends AltarRecipeEffect {
+public class EffectAltarDefaultLightbeams extends AltarRecipeEffect {
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
-        if(state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE &&
-                rand.nextInt(14) == 0) {
-            Vector3 from = new Vector3(altar).add(0.5, 0.3, 0.5);
-            MiscUtils.applyRandomOffset(from, rand, 0.4F);
+        if (state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE &&
+                rand.nextInt(10) == 0) {
+            float scale = (float) getRandomPillarOffset(altar.getAltarType()).getX();
+
+            Vector3 from = new Vector3(altar).add(0.5, -0.6, 0.5);
+            MiscUtils.applyRandomOffset(from, rand, scale * 0.85F);
+
             EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
                     .spawn(from)
-                    .setup(from.clone().addY(4 + rand.nextInt(2)), 1F, 1F)
-                    .setMaxAge(64);
+                    .setup(from.clone().addY(5 + rand.nextFloat() * 3), 1, 1)
+                    .setMaxAge(40 + rand.nextInt(30));
         }
     }
 

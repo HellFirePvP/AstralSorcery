@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.base.patreon.manager.PatreonManager;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.DerivativeAltarRecipeHandler;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigRegistries;
 import hellfirepvp.astralsorcery.common.data.config.entry.*;
@@ -118,6 +119,7 @@ public class CommonProxy {
         RegistryLootFunctions.registerLootFunctions();
         RegistryPerkAttributeTypes.init();
         RegistryPerkAttributeReaders.init();
+        DerivativeAltarRecipeHandler.registerDefaultConverters();
 
         this.initializeConfigurations();
 
