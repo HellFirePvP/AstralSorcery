@@ -62,7 +62,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
             this.setRegistryName(new ResourceLocation(mod.getModId(), name));
             this.name = mod.getModId() + ".constellation." + name;
         } else {
-            this.setRegistryName(new ResourceLocation(AstralSorcery.MODID, name));
+            this.setRegistryName(AstralSorcery.key(name));
             this.name = "unknown.constellation." + name;
         }
         this.color = color;

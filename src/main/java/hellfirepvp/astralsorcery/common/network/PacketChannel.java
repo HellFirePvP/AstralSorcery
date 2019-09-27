@@ -44,7 +44,7 @@ public class PacketChannel {
     private static final String NET_COMM_VERSION = "0"; //AS network version
 
     public static final SimpleSendChannel CHANNEL = new BufferedReplyChannel(NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(AstralSorcery.MODID, "net_channel"),
+            AstralSorcery.key("net_channel"),
             () -> NET_COMM_VERSION,
             NET_COMM_VERSION::equals,
             NET_COMM_VERSION::equals));

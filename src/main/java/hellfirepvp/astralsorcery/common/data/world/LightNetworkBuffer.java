@@ -32,6 +32,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -206,7 +207,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
                 BlockPos at = NBTHelper.readBlockPosFromNBT(sourcePos);
 
                 CompoundNBT comp = sourcePos.getCompound("source");
-                String identifier = comp.getString("sTypeId");
+                ResourceLocation identifier = new ResourceLocation(comp.getString("sTypeId"));
                 SourceClassRegistry.SourceProvider provider = SourceClassRegistry.getProvider(identifier);
                 if (provider == null) {
                     AstralSorcery.log.warn("Couldn't load source tile at " + at + " - invalid identifier: " + identifier);
@@ -236,7 +237,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
                 AstralSorcery.log.warn("This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
                 continue;
             }
-            source.putString("sTypeId", sourceNode.getProvider().getIdentifier());
+            source.putString("sTypeId", sourceNode.getProvider().getIdentifier().toString());
             sourceTag.put("source", source);
             sourceList.add(sourceTag);
         }
@@ -431,7 +432,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
                 BlockPos pos = NBTHelper.readBlockPosFromNBT(nodeComp);
 
                 CompoundNBT prismComp = nodeComp.getCompound("nodeTag");
-                String nodeIdentifier = prismComp.getString("trNodeId");
+                ResourceLocation nodeIdentifier = new ResourceLocation(prismComp.getString("trNodeId"));
                 TransmissionProvider provider = TransmissionClassRegistry.getProvider(nodeIdentifier);
                 if(provider == null) {
                     AstralSorcery.log.warn("Couldn't load node tile at " + pos + " - invalid identifier: " + nodeIdentifier);
@@ -453,7 +454,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
                     CompoundNBT prismComp = new CompoundNBT();
                     IPrismTransmissionNode prismNode = node.getValue();
                     prismNode.writeToNBT(prismComp);
-                    prismComp.putString("trNodeId", prismNode.getProvider().getIdentifier());
+                    prismComp.putString("trNodeId", prismNode.getProvider().getIdentifier().toString());
 
                     nodeComp.put("nodeTag", prismComp);
                     sectionData.add(nodeComp);

@@ -92,7 +92,7 @@ public class RegistryEntities {
 
     private static <E extends Entity> EntityType<E> register(String name, EntityType.Builder<E> typeBuilder) {
         EntityType<E> type = typeBuilder.build(name);
-        type.setRegistryName(new ResourceLocation(AstralSorcery.MODID, name));
+        type.setRegistryName(AstralSorcery.key(name));
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
         return type;
     }

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.util.sound.PositionedLoopSound;
+import hellfirepvp.astralsorcery.common.auxiliary.RecipeHelper;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
@@ -17,12 +18,16 @@ import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.item.base.IConstellationFocus;
+import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -31,9 +36,13 @@ import hellfirepvp.astralsorcery.common.util.tile.TileInventoryFiltered;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
@@ -90,8 +99,8 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
 
     @OnlyIn(Dist.CLIENT)
     private void doCraftEffects() {
-        //craftingTask.getRecipeToCraft().onCraftClientTick(this,
-        //        craftingTask.getState(), ClientScheduler.getClientTick(), rand);
+        this.activeRecipe.getRecipeToCraft().getCraftingEffects()
+                .forEach(effect -> effect.onTick(this, this.activeRecipe.getState()));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -105,6 +114,29 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
             }
         } else {
             clientCraftSound = null;
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void finishCraftingEffects(PktPlayEffect pkt) {
+        ResourceLocation recipeName = ByteBufUtils.readResourceLocation(pkt.getExtraData());
+        BlockPos at = ByteBufUtils.readPos(pkt.getExtraData());
+        boolean isChaining = pkt.getExtraData().readBoolean();
+
+        World world = Minecraft.getInstance().world;
+        if (world == null) {
+            return;
+        }
+
+        TileAltar thisAltar = MiscUtils.getTileAt(world, at, TileAltar.class, false);
+        if (thisAltar != null) {
+            world.getRecipeManager().getRecipe(recipeName).ifPresent(recipe -> {
+                if (recipe instanceof SimpleAltarRecipe) {
+                    ((SimpleAltarRecipe) recipe).getCraftingEffects().forEach(effect -> {
+                        effect.onCraftingFinish(thisAltar, isChaining);
+                    });
+                }
+            });
         }
     }
 
@@ -132,9 +164,19 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
 
         this.activeRecipe.createItemOutputs(this);
 
-        if (!this.activeRecipe.matches(this)) {
+        boolean isChaining;
+        ResourceLocation recipeName = this.activeRecipe.getRecipeToCraft().getId();
+
+        if (!(isChaining = this.activeRecipe.matches(this))) {
             this.abortCrafting();
         }
+        PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ALTAR_RECIPE_FINISH)
+                .addData(buf -> {
+                    ByteBufUtils.writeResourceLocation(buf, recipeName);
+                    ByteBufUtils.writePos(buf, this.getPos());
+                    buf.writeBoolean(isChaining);
+                });
+        PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(this.getWorld(), this.getPos(), 32));
 
         markForUpdate();
     }
@@ -232,6 +274,11 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
         return altarType;
     }
 
+    @Nullable
+    public ActiveSimpleAltarRecipe getActiveRecipe() {
+        return activeRecipe;
+    }
+
     @Nonnull
     public ItemStack getFocusItem() {
         return focusItem;
@@ -302,7 +349,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
         this.focusItem = NBTHelper.readFromSubTag(compound, "focusItem", ItemStack::read);
 
         if (compound.contains("activeRecipe", Constants.NBT.TAG_COMPOUND)) {
-            this.activeRecipe = ActiveSimpleAltarRecipe.deserialize(compound.getCompound("activeRecipe"), this.activeRecipe);
+            this.activeRecipe = ActiveSimpleAltarRecipe.deserialize(compound.getCompound("activeRecipe"));
         } else {
             this.activeRecipe = null;
         }

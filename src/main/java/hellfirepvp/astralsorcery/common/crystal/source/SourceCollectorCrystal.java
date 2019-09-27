@@ -24,7 +24,7 @@ import net.minecraft.util.ResourceLocation;
 public class SourceCollectorCrystal extends PropertySource<IndependentCrystalSource, Crystal> {
 
     public SourceCollectorCrystal() {
-        super(new ResourceLocation(AstralSorcery.MODID, "collector_crystal"));
+        super(AstralSorcery.key("collector_crystal"));
     }
 
     @Override

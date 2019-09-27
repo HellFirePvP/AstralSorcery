@@ -8,13 +8,17 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.helper.IHandlerRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
 import hellfirepvp.astralsorcery.common.crafting.helper.ResolvingRecipeType;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
-import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusionContext;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.EffectLuminescenceBurst;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.EffectUpgradeAltar;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.items.IItemHandler;
 
@@ -35,6 +39,17 @@ public class RegistryRecipeTypes {
         TYPE_WELL = new ResolvingRecipeType<>("well", WellLiquefaction.class, (recipe, context) -> recipe.matches(context.getInput()));
         TYPE_INFUSION = new ResolvingRecipeType<>("infusion", LiquidInfusion.class, (recipe, context) -> true);
         TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) -> recipe.matches(context.getAltar()));
+    }
+
+    public static void initAltarEffects() {
+        registerEffect(new EffectUpgradeAltar());
+        registerEffect(new EffectLuminescenceBurst());
+    }
+
+    private static <T extends AltarRecipeEffect> T registerEffect(T recipeEffect) {
+        recipeEffect.setRegistryName(NameUtil.fromClass(recipeEffect, "Effect"));
+        AstralSorcery.getProxy().getRegistryPrimer().register(recipeEffect);
+        return recipeEffect;
     }
 
     private static <C extends IItemHandler, T extends IHandlerRecipe<C>, R extends RecipeCraftingContext<T, C>, S extends ResolvingRecipeType<C, T, R>> S register(S recipeType) {

@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
  */
 public class KeyCore extends KeyPerk {
 
-    public static final ResourceLocation NAME = new ResourceLocation(AstralSorcery.MODID, "core");
+    public static final ResourceLocation NAME = AstralSorcery.key("core");
 
     private static final int AMT_PERK_POINTS = 2;
 

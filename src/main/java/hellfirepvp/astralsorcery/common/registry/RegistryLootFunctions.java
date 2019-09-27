@@ -29,10 +29,10 @@ public class RegistryLootFunctions {
     private RegistryLootFunctions() {}
 
     public static void registerLootFunctions() {
-        register(new LinearLuckBonus.Serializer(new ResourceLocation(AstralSorcery.MODID, "linear_luck_bonus")));
-        register(new RandomCrystalProperty.Serializer(new ResourceLocation(AstralSorcery.MODID, "random_crystal_property")));
-        register(new CopyCrystalProperties.Serializer(new ResourceLocation(AstralSorcery.MODID, "copy_crystal_properties")));
-        register(new CopyConstellation.Serializer(new ResourceLocation(AstralSorcery.MODID, "copy_constellation")));
+        register(new LinearLuckBonus.Serializer(AstralSorcery.key("linear_luck_bonus")));
+        register(new RandomCrystalProperty.Serializer(AstralSorcery.key("random_crystal_property")));
+        register(new CopyCrystalProperties.Serializer(AstralSorcery.key("copy_crystal_properties")));
+        register(new CopyConstellation.Serializer(AstralSorcery.key("copy_constellation")));
     }
 
     private static <T extends ILootFunction> void register(ILootFunction.Serializer<T> serializer) {

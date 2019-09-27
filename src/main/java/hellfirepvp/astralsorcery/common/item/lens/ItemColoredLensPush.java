@@ -39,7 +39,7 @@ public class ItemColoredLensPush extends ItemColoredLens {
     private static class ColorTypePush extends LensColorType {
 
         private ColorTypePush() {
-            super(new ResourceLocation(AstralSorcery.MODID, "push"),
+            super(AstralSorcery.key("push"),
                     TargetType.ENTITY,
                     () -> new ItemStack(ItemsAS.COLORED_LENS_PUSH),
                     ColorsAS.COLORED_LENS_PUSH,

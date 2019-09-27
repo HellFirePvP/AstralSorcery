@@ -40,7 +40,7 @@ public class ItemColoredLensRegeneration extends ItemColoredLens {
     private static class ColorTypeRegeneration extends LensColorType {
 
         private ColorTypeRegeneration() {
-            super(new ResourceLocation(AstralSorcery.MODID, "regeneration"),
+            super(AstralSorcery.key("regeneration"),
                     TargetType.ENTITY,
                     () -> new ItemStack(ItemsAS.COLORED_LENS_REGENERATION),
                     ColorsAS.COLORED_LENS_REGEN,

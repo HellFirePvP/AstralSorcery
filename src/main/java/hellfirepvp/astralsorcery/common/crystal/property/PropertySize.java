@@ -26,7 +26,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 public class PropertySize extends CrystalProperty {
 
     public PropertySize() {
-        super(new ResourceLocation(AstralSorcery.MODID, "size"));
+        super(AstralSorcery.key("size"));
         this.tierRequirement = ProgressionTier.BASIC_CRAFT;
     }
 

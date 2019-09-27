@@ -26,7 +26,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 public class PropertyRitualEffect extends CrystalProperty {
 
     public PropertyRitualEffect() {
-        super(new ResourceLocation(AstralSorcery.MODID, "ritual.effect"));
+        super(AstralSorcery.key("ritual.effect"));
         this.tierRequirement = ProgressionTier.ATTUNEMENT;
     }
 

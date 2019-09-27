@@ -35,7 +35,7 @@ public class RegistryDataSerializers {
 
     private static <V, T extends IDataSerializer<V>> T register(T dataSerializer, String name) {
         DataSerializerEntry entry = new DataSerializerEntry(dataSerializer);
-        entry.setRegistryName(new ResourceLocation(AstralSorcery.MODID, name.toLowerCase()));
+        entry.setRegistryName(AstralSorcery.key(name.toLowerCase()));
         AstralSorcery.getProxy().getRegistryPrimer().register(entry);
         return dataSerializer;
     }

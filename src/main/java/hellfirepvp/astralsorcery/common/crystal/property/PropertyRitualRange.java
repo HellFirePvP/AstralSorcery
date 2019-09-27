@@ -26,7 +26,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 public class PropertyRitualRange extends CrystalProperty {
 
     public PropertyRitualRange() {
-        super(new ResourceLocation(AstralSorcery.MODID, "ritual.range"));
+        super(AstralSorcery.key("ritual.range"));
         this.tierRequirement = ProgressionTier.ATTUNEMENT;
     }
 

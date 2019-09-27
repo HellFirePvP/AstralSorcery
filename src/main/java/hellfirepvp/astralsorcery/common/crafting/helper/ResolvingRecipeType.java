@@ -46,7 +46,7 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
     private final IRecipeType<T> type;
 
     public ResolvingRecipeType(String name, Class<T> baseClass, BiPredicate<T, R> matchFct) {
-        this(new ResourceLocation(AstralSorcery.MODID, name), baseClass, matchFct);
+        this(AstralSorcery.key(name), baseClass, matchFct);
     }
 
     public ResolvingRecipeType(ResourceLocation id, Class<T> baseClass, BiPredicate<T, R> matchFct) {

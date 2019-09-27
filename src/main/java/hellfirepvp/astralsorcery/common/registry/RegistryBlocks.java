@@ -29,6 +29,7 @@ import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarDiscovery;
 import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarRadiance;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockCelestialCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockRockCollectorCrystal;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
@@ -129,7 +130,7 @@ public class RegistryBlocks {
     }
 
     private static <T extends Block> T registerBlock(T block) {
-        return registerBlock(block, createBlockName(block));
+        return registerBlock(block, NameUtil.fromClass(block, "Block"));
     }
 
     private static <T extends Block> T registerBlock(T block, ResourceLocation name) {
@@ -142,14 +143,5 @@ public class RegistryBlocks {
             colorBlocks.add((BlockDynamicColor) block);
         }
         return block;
-    }
-
-    private static ResourceLocation createBlockName(Block block) {
-        String name = block.getClass().getSimpleName();
-        if (name.startsWith("Block")) {
-            name = name.substring(5);
-        }
-        name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
-        return new ResourceLocation(AstralSorcery.MODID, name);
     }
 }

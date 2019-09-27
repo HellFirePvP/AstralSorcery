@@ -42,10 +42,10 @@ public class SyncDataHolder implements ITickHandler {
 
     private static final SyncDataHolder tickInstance = new SyncDataHolder();
 
-    public static final ResourceLocation DATA_LIGHT_CONNECTIONS = new ResourceLocation(AstralSorcery.MODID, "connections");
-    public static final ResourceLocation DATA_LIGHT_BLOCK_ENDPOINTS = new ResourceLocation(AstralSorcery.MODID, "endpoints");
-    public static final ResourceLocation DATA_TIME_FREEZE_EFFECTS = new ResourceLocation(AstralSorcery.MODID, "time_freeze");
-    public static final ResourceLocation DATA_PATREON_FLARES = new ResourceLocation(AstralSorcery.MODID, "patreon");
+    public static final ResourceLocation DATA_LIGHT_CONNECTIONS = AstralSorcery.key("connections");
+    public static final ResourceLocation DATA_LIGHT_BLOCK_ENDPOINTS = AstralSorcery.key("endpoints");
+    public static final ResourceLocation DATA_TIME_FREEZE_EFFECTS = AstralSorcery.key("time_freeze");
+    public static final ResourceLocation DATA_PATREON_FLARES = AstralSorcery.key("patreon");
 
     private static Map<ResourceLocation, AbstractData> serverData = new HashMap<>();
     private static Map<ResourceLocation, ClientData<?>> clientData = new HashMap<>();

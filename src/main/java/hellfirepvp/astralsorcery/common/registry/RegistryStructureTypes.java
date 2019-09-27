@@ -45,7 +45,7 @@ public class RegistryStructureTypes {
     }
 
     private static StructureType registerAS(String name, int averageDistance, Supplier<BlockArray> structureSupplier) {
-        return register(new ResourceLocation(AstralSorcery.MODID, name), averageDistance, structureSupplier);
+        return register(AstralSorcery.key(name), averageDistance, structureSupplier);
     }
 
     private static StructureType register(ResourceLocation name, int averageDistance, Supplier<BlockArray> structureSupplier) {

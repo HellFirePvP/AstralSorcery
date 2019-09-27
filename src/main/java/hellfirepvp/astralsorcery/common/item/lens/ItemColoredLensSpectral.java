@@ -37,7 +37,7 @@ public class ItemColoredLensSpectral extends ItemColoredLens {
     private static class ColorTypeSpectral extends LensColorType {
 
         private ColorTypeSpectral() {
-            super(new ResourceLocation(AstralSorcery.MODID, "spectral"),
+            super(AstralSorcery.key("spectral"),
                     TargetType.NONE,
                     () -> new ItemStack(ItemsAS.COLORED_LENS_SPECTRAL),
                     ColorsAS.COLORED_LENS_SPECTRAL,

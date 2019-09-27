@@ -51,7 +51,7 @@ public class RegistryContainerTypes {
     }
 
     private static <C extends Container, T extends ContainerType<C>> T register(String name, IContainerFactory<C> containerFactory) {
-        return register(new ResourceLocation(AstralSorcery.MODID, name), containerFactory);
+        return register(AstralSorcery.key(name), containerFactory);
     }
 
     private static <C extends Container, T extends ContainerType<C>> T register(ResourceLocation name, IContainerFactory<C> containerFactory) {

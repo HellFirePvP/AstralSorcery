@@ -360,13 +360,16 @@ public class MiscUtils {
         return Character.toTitleCase(str.charAt(0)) + str.substring(1);
     }
 
-    public static void transferEntityTo(Entity entity, DimensionType target, BlockPos targetPos) {
-        if (entity.getEntityWorld().isRemote) return; //No transfers on clientside.
+    @Nullable
+    public static <T extends Entity> T transferEntityTo(T entity, DimensionType target, BlockPos targetPos) {
+        if (entity.getEntityWorld().isRemote) {
+            return null; //No transfers on clientside.
+        }
         entity.setSneaking(false);
         Dimension dimFrom = entity.getEntityWorld().getDimension();
         if (dimFrom.getType() != target) {
             if (!ForgeHooks.onTravelToDimension(entity, target)) {
-                return;
+                return null;
             }
 
             if (entity instanceof ServerPlayerEntity) {
@@ -379,10 +382,14 @@ public class MiscUtils {
                         entity.rotationYaw,
                         entity.rotationPitch);
             } else {
-                entity.changeDimension(target);
+                entity = (T) entity.changeDimension(target);
+                if (entity == null) {
+                    return null;
+                }
             }
         }
         entity.setPositionAndUpdate(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
+        return entity;
     }
 
     @Nullable
@@ -413,12 +420,12 @@ public class MiscUtils {
         return out;
     }
 
-    @Nullable
+    @Nonnull
     public static RayTraceResult rayTraceLook(PlayerEntity player) {
         return rayTraceLook(player, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
     }
 
-    @Nullable
+    @Nonnull
     public static RayTraceResult rayTraceLook(LivingEntity entity, double reachDst) {
         Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d lookVec = entity.getLookVec();
@@ -450,7 +457,9 @@ public class MiscUtils {
     }
 
     public static boolean isPlayerFakeMP(ServerPlayerEntity player) {
-        if(player instanceof FakePlayer) return true;
+        if (player instanceof FakePlayer) {
+            return true;
+        }
 
         boolean isModdedPlayer = false;
         for (Mods mod : Mods.values()) {
@@ -458,18 +467,20 @@ public class MiscUtils {
                 continue;
             }
             Class<?> specificPlayerClass = mod.getExtendedPlayerClass();
-            if(specificPlayerClass != null) {
-                if(player.getClass() != ServerPlayerEntity.class && player.getClass() == specificPlayerClass) {
+            if (specificPlayerClass != null) {
+                if (player.getClass() != ServerPlayerEntity.class && player.getClass() == specificPlayerClass) {
                     isModdedPlayer = true;
                     break;
                 }
             }
         }
-        if(!isModdedPlayer && player.getClass() != ServerPlayerEntity.class) {
+        if (!isModdedPlayer && player.getClass() != ServerPlayerEntity.class) {
             return true;
         }
 
-        if(player.connection == null) return true;
+        if (player.connection == null) {
+            return true;
+        }
         try {
             player.getPlayerIP().length();
             player.connection.netManager.getRemoteAddress().toString();
@@ -488,31 +499,30 @@ public class MiscUtils {
                     for (int zz = -r; zz <= r; zz++) {
 
                         BlockPos pos = center.add(xx, yy, zz);
-                        if(isChunkLoaded(world, new ChunkPos(pos))) {
+                        if (isChunkLoaded(world, new ChunkPos(pos))) {
                             BlockState state = world.getBlockState(pos);
-                            if(acceptor.test(world, pos, state)) {
+                            if (acceptor.test(world, pos, state)) {
                                 posList.add(pos);
                             }
                         }
                     }
                 }
             }
-            if(!posList.isEmpty()) {
+            if (!posList.isEmpty()) {
                 Vector3 offset = new Vector3(center).add(0.5, 0.5, 0.5);
-                if(offsetFrom != null) {
+                if (offsetFrom != null) {
                     offset = offsetFrom;
                 }
                 BlockPos closest = null;
                 double prevDst = 0;
                 for (BlockPos pos : posList) {
-                    if(closest == null || offset.distance(pos) < prevDst) {
+                    if (closest == null || offset.distance(pos) < prevDst) {
                          closest = pos;
                          prevDst = offset.distance(pos);
                     }
                 }
                 return closest;
             }
-            posList.clear();
         }
         return null;
     }
@@ -523,10 +533,9 @@ public class MiscUtils {
             for (int yy = -radius; yy <= radius; yy++) {
                 for (int zz = -radius; zz <= radius; zz++) {
                     BlockPos pos = center.add(xx, yy, zz);
-                    if(isChunkLoaded(world, new ChunkPos(pos))) {
+                    if (isChunkLoaded(world, new ChunkPos(pos))) {
                         BlockState state = world.getBlockState(pos);
-                        Block b = state.getBlock();
-                        if(b.equals(blockToSearch)) {
+                        if (state.equals(blockToSearch)) {
                             found.add(pos);
                         }
                     }

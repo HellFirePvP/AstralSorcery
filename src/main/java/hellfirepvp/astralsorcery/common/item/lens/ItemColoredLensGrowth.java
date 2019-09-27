@@ -41,7 +41,7 @@ public class ItemColoredLensGrowth extends ItemColoredLens {
     private static class ColoredTypeGrowth extends LensColorType {
 
         private ColoredTypeGrowth() {
-            super(new ResourceLocation(AstralSorcery.MODID, "growth"),
+            super(AstralSorcery.key("growth"),
                     TargetType.BLOCK,
                     () -> new ItemStack(ItemsAS.COLORED_LENS_GROWTH),
                     ColorsAS.COLORED_LENS_GROWTH,

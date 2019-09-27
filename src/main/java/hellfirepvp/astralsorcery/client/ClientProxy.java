@@ -147,7 +147,7 @@ public class ClientProxy extends CommonProxy {
     // Append custom textures otherwise not referenced
     private void stitchBucketTextures(TextureStitchEvent.Pre event) {
         if (event.getMap().getBasePath().equals("textures")) {
-            event.addSprite(new ResourceLocation(AstralSorcery.MODID, "fluid/bucket_mask"));
+            event.addSprite(AstralSorcery.key("fluid/bucket_mask"));
         }
     }
 

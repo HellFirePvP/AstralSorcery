@@ -23,10 +23,12 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Function;
@@ -173,8 +175,9 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
         }
 
         @Override
-        public String getIdentifier() {
-            return AstralSorcery.MODID + ":IndependentCrystalSource";
+        @Nonnull
+        public ResourceLocation getIdentifier() {
+            return AstralSorcery.key("independent_crystal_source");
         }
 
     }

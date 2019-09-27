@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import com.google.common.base.CaseFormat;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.effect.*;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,19 +37,9 @@ public class RegistryEffects {
     }
 
     private static <T extends EffectCustomTexture> T register(T effect) {
-        effect.setRegistryName(createEffectName(effect));
+        effect.setRegistryName(NameUtil.fromClass(effect, "Effect"));
         effect.attachEventListeners(MinecraftForge.EVENT_BUS);
         AstralSorcery.getProxy().getRegistryPrimer().register(effect);
         return effect;
     }
-
-    private static ResourceLocation createEffectName(Effect item) {
-        String name = item.getClass().getSimpleName();
-        if (name.startsWith("Effect")) {
-            name = name.substring(6);
-        }
-        name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
-        return new ResourceLocation(AstralSorcery.MODID, name);
-    }
-
 }

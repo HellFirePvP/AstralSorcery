@@ -29,7 +29,7 @@ public class RegistryIngredientTypes {
     public static void init() {
         FLUID_SERIALIZER = new FluidIngredientSerializer();
 
-        CraftingHelper.register(new ResourceLocation(AstralSorcery.MODID, "fluid"), FLUID_SERIALIZER);
+        CraftingHelper.register(AstralSorcery.key("fluid"), FLUID_SERIALIZER);
     }
 
 }

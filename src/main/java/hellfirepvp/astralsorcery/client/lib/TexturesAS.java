@@ -79,6 +79,7 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_2;
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_3;
     public static AbstractRenderableTexture TEX_COLLECTOR_EFFECT;
+    public static AbstractRenderableTexture TEX_CRAFT_BURST;
 
     public static AbstractRenderableTexture TEX_LIGHTNING_PART;
     public static AbstractRenderableTexture TEX_LIGHTBEAM;

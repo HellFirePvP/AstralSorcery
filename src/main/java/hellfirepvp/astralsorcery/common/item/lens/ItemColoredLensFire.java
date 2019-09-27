@@ -77,7 +77,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
     private static class ColorTypeFire extends LensColorType {
 
         private ColorTypeFire() {
-            super(new ResourceLocation(AstralSorcery.MODID, "fire"),
+            super(AstralSorcery.key("fire"),
                     TargetType.ANY,
                     () -> new ItemStack(ItemsAS.COLORED_LENS_FIRE),
                     ColorsAS.COLORED_LENS_FIRE,

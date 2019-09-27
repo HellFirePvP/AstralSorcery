@@ -42,7 +42,7 @@ public class ItemColoredLensBreak extends ItemColoredLens {
     private static class ColorTypeBreak extends LensColorType {
 
         private ColorTypeBreak() {
-            super(new ResourceLocation(AstralSorcery.MODID, "break"),
+            super(AstralSorcery.key("break"),
                     TargetType.BLOCK,
                     () -> new ItemStack(ItemsAS.COLORED_LENS_BREAK),
                     ColorsAS.COLORED_LENS_BREAK,

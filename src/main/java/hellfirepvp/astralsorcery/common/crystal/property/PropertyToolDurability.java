@@ -26,7 +26,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 public class PropertyToolDurability extends CrystalProperty {
 
     public PropertyToolDurability() {
-        super(new ResourceLocation(AstralSorcery.MODID, "tool.durability"));
+        super(AstralSorcery.key("tool.durability"));
         this.tierRequirement = ProgressionTier.BASIC_CRAFT;
     }
 

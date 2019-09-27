@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
 import hellfirepvp.astralsorcery.common.item.lens.ItemColoredLensFire;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -105,6 +106,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         WELL_CATALYST_BREAK,
         CROP_GROWTH,
         MELT_BLOCK,
+        ALTAR_RECIPE_FINISH,
         TIME_FREEZE_EFFECT;
 
         @OnlyIn(Dist.CLIENT)
@@ -126,6 +128,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return BlockBreakHelper::blockBreakAnimation;
                 case MELT_BLOCK:
                     return ItemColoredLensFire::playParticles;
+                case ALTAR_RECIPE_FINISH:
+                    return TileAltar::finishCraftingEffects;
             }
             return (pkt) -> {};
         }
