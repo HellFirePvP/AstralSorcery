@@ -36,7 +36,7 @@ public class RegistryCrystalPropertyUsages {
     }
 
     private static <T extends PropertyUsage> T createUsage(String plainName) {
-        return (T) registerUsage(new PropertyUsage(new ResourceLocation(AstralSorcery.MODID, plainName)));
+        return (T) registerUsage(new PropertyUsage(AstralSorcery.key(plainName)));
     }
 
     private static <T extends PropertyUsage> T registerUsage(T usage) {

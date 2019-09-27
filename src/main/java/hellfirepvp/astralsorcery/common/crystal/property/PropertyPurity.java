@@ -26,7 +26,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 public class PropertyPurity extends CrystalProperty {
 
     public PropertyPurity() {
-        super(new ResourceLocation(AstralSorcery.MODID, "purity"));
+        super(AstralSorcery.key("purity"));
         this.tierRequirement = ProgressionTier.BASIC_CRAFT;
     }
 

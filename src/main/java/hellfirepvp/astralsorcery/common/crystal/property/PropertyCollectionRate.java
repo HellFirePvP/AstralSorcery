@@ -26,7 +26,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 public class PropertyCollectionRate extends CrystalProperty {
 
     public PropertyCollectionRate() {
-        super(new ResourceLocation(AstralSorcery.MODID, "collector.rate"));
+        super(AstralSorcery.key("collector.rate"));
         this.tierRequirement = ProgressionTier.ATTUNEMENT;
     }
 

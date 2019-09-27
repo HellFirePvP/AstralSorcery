@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.fluid.ItemLiquidStarlightBucket;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
@@ -76,7 +77,7 @@ public class RegistryFluids {
     private static void makeBucketModel(Item bucketItem, Fluid fluid, BiConsumer<IUnbakedModel, ModelResourceLocation> modelBakery) {
         ModelResourceLocation modelName = new ModelResourceLocation(bucketItem.getRegistryName(), "inventory");
         ResourceLocation vanillaBucket = new ResourceLocation("item/bucket");
-        ResourceLocation fluidOverlay = new ResourceLocation(AstralSorcery.MODID, "fluid/bucket_mask");
+        ResourceLocation fluidOverlay = AstralSorcery.key("fluid/bucket_mask");
 
         ModelDynBucket bucket = new ModelDynBucket(vanillaBucket, fluidOverlay, null,
                 fluid, true, false);
@@ -94,7 +95,7 @@ public class RegistryFluids {
                                                                Function<FluidAttributes.Builder, FluidAttributes.Builder> postProcess,
                                                                Supplier<ForgeFlowingFluid> stillFluidSupplier,
                                                                Supplier<ForgeFlowingFluid> flowingFluidSupplier) {
-        String name = createFluidName(fluidClass).getPath();
+        String name = NameUtil.fromClass(fluidClass, "Fluid").getPath();
         return new ForgeFlowingFluid.Properties(
                 stillFluidSupplier,
                 flowingFluidSupplier,
@@ -102,30 +103,18 @@ public class RegistryFluids {
     }
 
     private static FluidAttributes.Builder builderFor(String fluidName) {
-        ResourceLocation still = new ResourceLocation(AstralSorcery.MODID, "fluid/" + fluidName + "_still");
-        ResourceLocation flowing = new ResourceLocation(AstralSorcery.MODID, "fluid/" + fluidName + "_flowing");
+        ResourceLocation still = AstralSorcery.key("fluid/" + fluidName + "_still");
+        ResourceLocation flowing = AstralSorcery.key("fluid/" + fluidName + "_flowing");
         return FluidAttributes.builder(still, flowing);
     }
 
     private static <T extends Fluid> T registerFluid(T fluid) {
-        return registerFluid(fluid, createFluidName(fluid.getClass()));
+        return registerFluid(fluid, NameUtil.fromClass(fluid, "Fluid"));
     }
 
     private static <T extends Fluid> T registerFluid(T fluid, ResourceLocation name) {
         fluid.setRegistryName(name);
         AstralSorcery.getProxy().getRegistryPrimer().register(fluid);
         return fluid;
-    }
-
-    private static ResourceLocation createFluidName(Class<?> fluidClass) {
-        String name = fluidClass.getSimpleName();
-        if (fluidClass.getEnclosingClass() != null) {
-            name = fluidClass.getEnclosingClass().getSimpleName() + name;
-        }
-        if (name.startsWith("Fluid")) {
-            name = name.substring(5);
-        }
-        name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
-        return new ResourceLocation(AstralSorcery.MODID, name);
     }
 }

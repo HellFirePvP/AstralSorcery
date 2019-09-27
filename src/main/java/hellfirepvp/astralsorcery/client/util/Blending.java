@@ -40,6 +40,7 @@ public enum  Blending {
         dfactor = d;
     }
 
+    //TODO move to blendFuncSeparate for more controlled alpha blending
     public void applyStateManager() {
         GlStateManager.blendFunc(sfactor, dfactor);
     }

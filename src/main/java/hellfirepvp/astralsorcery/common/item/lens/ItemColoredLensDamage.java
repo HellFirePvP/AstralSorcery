@@ -41,7 +41,7 @@ public class ItemColoredLensDamage extends ItemColoredLens {
     private static class ColorTypeDamage extends LensColorType {
 
         public ColorTypeDamage() {
-            super(new ResourceLocation(AstralSorcery.MODID, "damage"),
+            super(AstralSorcery.key("damage"),
                     TargetType.ENTITY,
                     () -> new ItemStack(ItemsAS.COLORED_LENS_DAMAGE),
                     ColorsAS.COLORED_LENS_DAMAGE,

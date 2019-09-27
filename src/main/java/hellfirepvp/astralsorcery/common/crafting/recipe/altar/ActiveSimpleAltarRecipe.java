@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.crafting.helper.CraftingFocusStack;
+import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
@@ -16,17 +18,17 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -35,6 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +50,7 @@ public class ActiveSimpleAltarRecipe {
 
     private static final Random rand = new Random();
 
-    //TODO registry altar crafting effects
+    private Map<Integer, Object> clientEffectContainer = new HashMap<>();
 
     private final SimpleAltarRecipe recipeToCraft;
     private final UUID playerCraftingUUID;
@@ -88,10 +91,19 @@ public class ActiveSimpleAltarRecipe {
         return state;
     }
 
+    public List<CraftingFocusStack> getFocusStacks() {
+        return focusStacks;
+    }
+
     @Nullable
     public PlayerEntity tryGetCraftingPlayerServer() {
         MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
         return srv.getPlayerList().getPlayerByUUID(this.getPlayerCraftingUUID());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public <T> T getEffectContained(int index, Function<Integer, T> provider) {
+        return (T) clientEffectContainer.computeIfAbsent(index, provider);
     }
 
     public void createItemOutputs(TileAltar altar) {
@@ -109,7 +121,7 @@ public class ActiveSimpleAltarRecipe {
         }
 
         for (CraftingFocusStack input : this.focusStacks) {
-            TileSpectralRelay tar = MiscUtils.getTileAt(altar.getWorld(), input.at, TileSpectralRelay.class, true);
+            TileSpectralRelay tar = MiscUtils.getTileAt(altar.getWorld(), input.getRealPosition(), TileSpectralRelay.class, true);
             if (tar != null) {
                 TileInventory tarInventory = tar.getInventory();
                 decrementItem(tarInventory.getStackInSlot(0), st -> tarInventory.setStackInSlot(0, st), altar::dropItemOnTop);
@@ -145,10 +157,10 @@ public class ActiveSimpleAltarRecipe {
             return false;
         }
 
-        List<Ingredient> listIngredients = this.getRecipeToCraft().getTraitInputIngredients();
+        List<WrappedIngredient> listIngredients = this.getRecipeToCraft().getTraitInputIngredients();
         for (CraftingFocusStack stack : this.focusStacks) {
-            if (stack.stackIndex >= 0 && stack.stackIndex < listIngredients.size()) {
-                TileSpectralRelay relay = MiscUtils.getTileAt(altar.getWorld(), stack.at, TileSpectralRelay.class, true);
+            if (stack.getStackIndex() >= 0 && stack.getStackIndex() < listIngredients.size()) {
+                TileSpectralRelay relay = MiscUtils.getTileAt(altar.getWorld(), stack.getRealPosition(), TileSpectralRelay.class, true);
                 if (relay == null) {
                     return false;
                 }
@@ -159,8 +171,8 @@ public class ActiveSimpleAltarRecipe {
         }
         return true;
     }
-    //True if the recipe progressed, false if it's stuck
 
+    //True if the recipe progressed, false if it's stuck
     public CraftingState tick(TileAltar altar) {
         if (recipeToCraft instanceof AltarCraftingProgress) {
             if (!((AltarCraftingProgress) recipeToCraft).tryProcess(altar, this, craftingData, ticksCrafting, totalCraftingTime)) {
@@ -168,7 +180,7 @@ public class ActiveSimpleAltarRecipe {
             }
         }
 
-        List<Ingredient> iIngredients = this.getRecipeToCraft().getTraitInputIngredients();
+        List<WrappedIngredient> iIngredients = this.getRecipeToCraft().getTraitInputIngredients();
         //Start the surrounding stack intake past 66%
         int part = totalCraftingTime / 3;
         //Every input is evenly spread
@@ -180,10 +192,10 @@ public class ActiveSimpleAltarRecipe {
 
             int offset = part + (index * cttPart);
             if (this.ticksCrafting >= offset) {
-                CraftingFocusStack found = MiscUtils.iterativeSearch(this.focusStacks, fStack -> fStack.stackIndex == index);
+                CraftingFocusStack found = MiscUtils.iterativeSearch(this.focusStacks, fStack -> fStack.getStackIndex() == index);
                 if (found == null) {
                     Set<BlockPos> relays = altar.nearbyRelays();
-                    relays.removeIf(pos -> MiscUtils.contains(this.focusStacks, fs -> fs.at.equals(pos)));
+                    relays.removeIf(pos -> MiscUtils.contains(this.focusStacks, fs -> fs.getRealPosition().equals(pos)));
                     //No unused relay found for a new focus-stack..
                     if (relays.isEmpty()) {
                         waitMissingInputs = true;
@@ -198,13 +210,13 @@ public class ActiveSimpleAltarRecipe {
                     found = new CraftingFocusStack(index, at);
                     this.focusStacks.add(found);
                 }
-                TileSpectralRelay tar = MiscUtils.getTileAt(altar.getWorld(), found.at, TileSpectralRelay.class, true);
+                TileSpectralRelay tar = MiscUtils.getTileAt(altar.getWorld(), found.getRealPosition(), TileSpectralRelay.class, true);
                 if (tar != null) {
                     waitMissingInputs = true;
                     continue;
                 }
-                Ingredient input = iIngredients.get(i);
-                if (!input.test(tar.getInventory().getStackInSlot(0))) {
+                WrappedIngredient input = iIngredients.get(i);
+                if (!input.getIngredient().test(tar.getInventory().getStackInSlot(0))) {
                     waitMissingInputs = true;
                 }
             }
@@ -234,7 +246,7 @@ public class ActiveSimpleAltarRecipe {
     }
 
     @Nullable
-    public static ActiveSimpleAltarRecipe deserialize(CompoundNBT compound, @Nullable ActiveSimpleAltarRecipe previous) {
+    public static ActiveSimpleAltarRecipe deserialize(CompoundNBT compound) {
         RecipeManager mgr = RecipeTypesAS.TYPE_ALTAR.getRecipeManager();
         if (mgr == null) {
             return null;
@@ -263,7 +275,6 @@ public class ActiveSimpleAltarRecipe {
         task.setState(state);
         task.craftingData = compound.getCompound("craftingData");
         task.focusStacks = stacks;
-        //task.attemptRecoverEffects(previous); //TODO altar effect recovery
         return task;
     }
 
@@ -293,27 +304,4 @@ public class ActiveSimpleAltarRecipe {
 
     }
 
-    public static class CraftingFocusStack {
-
-        private final int stackIndex;
-        private final BlockPos at;
-
-        CraftingFocusStack(int stackIndex, BlockPos at) {
-            this.stackIndex = stackIndex;
-            this.at = at;
-        }
-
-        public CraftingFocusStack(CompoundNBT nbt) {
-            this.stackIndex = nbt.getInt("stackIndex");
-            this.at = NBTHelper.readBlockPosFromNBT(nbt);
-        }
-
-        public CompoundNBT serialize() {
-            CompoundNBT nbt = new CompoundNBT();
-            NBTHelper.writeBlockPosToNBT(this.at, nbt);
-            nbt.putInt("stackIndex", this.stackIndex);
-            return nbt;
-        }
-
-    }
 }

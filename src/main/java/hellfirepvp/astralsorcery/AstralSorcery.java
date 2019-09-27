@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery;
 
 import hellfirepvp.astralsorcery.client.ClientProxy;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
@@ -60,6 +61,10 @@ public class AstralSorcery {
 
     public static CommonProxy getProxy() {
         return getInstance().proxy;
+    }
+
+    public static ResourceLocation key(String path) {
+        return new ResourceLocation(AstralSorcery.MODID, path);
     }
 
 }

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.effect.function;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
+import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -23,6 +24,8 @@ import java.util.Random;
  * Date: 08.07.2019 / 19:31
  */
 public interface VFXColorFunction<T extends EntityVisualFX> {
+
+    static final Random rand = new Random();
 
     public static VFXColorFunction<? extends EntityVisualFX> WHITE = constant(Color.WHITE);
     public static VFXColorFunction<? extends EntityVisualFX> BLACK = constant(Color.BLACK);
@@ -41,8 +44,24 @@ public interface VFXColorFunction<T extends EntityVisualFX> {
         };
     }
 
+    public static <T extends EntityVisualFX> VFXColorFunction<T> randomBetween(Color c1, Color c2) {
+        float[] hsb1 = Color.RGBtoHSB(c1.getRed(), c1.getGreen(), c1.getBlue(), null);
+        float[] hsb2 = Color.RGBtoHSB(c2.getRed(), c2.getGreen(), c2.getBlue(), null);
+        float degree = rand.nextFloat();
+        return new VFXColorFunction<T>() {
+            @Nonnull
+            @Override
+            public Color getColor(@Nonnull T fx, float pTicks) {
+                float h = (float) RenderingVectorUtils.interpolate(hsb1[0], hsb2[0], degree);
+                float s = (float) RenderingVectorUtils.interpolate(hsb1[1], hsb2[1], degree);
+                float b = (float) RenderingVectorUtils.interpolate(hsb1[2], hsb2[2], degree);
+                return Color.getHSBColor(h, s, b);
+            }
+        };
+    }
+
     public static <T extends EntityVisualFX> VFXColorFunction<T> random() {
-        Color c = Color.getHSBColor(new Random().nextFloat(), 1F, 1F);
+        Color c = Color.getHSBColor(rand.nextFloat(), 1F, 1F);
         return new VFXColorFunction<T>() {
             @Nonnull
             @Override

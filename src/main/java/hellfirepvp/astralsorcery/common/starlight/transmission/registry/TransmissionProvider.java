@@ -8,8 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.starlight.transmission.registry;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
@@ -23,12 +24,12 @@ import java.util.function.Supplier;
  */
 public abstract class TransmissionProvider implements Supplier<IPrismTransmissionNode> {
 
-    private String identifierCache = null;
+    private ResourceLocation identifierCache = null;
 
     @Nonnull
-    public String getIdentifier() {
+    public ResourceLocation getIdentifier() {
         if (identifierCache == null) {
-            identifierCache = AstralSorcery.MODID + ":" + get().getClass().getSimpleName();
+            identifierCache = NameUtil.fromClass(get());
         }
         return identifierCache;
     }

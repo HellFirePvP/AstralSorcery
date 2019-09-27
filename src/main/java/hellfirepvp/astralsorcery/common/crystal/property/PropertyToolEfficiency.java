@@ -26,7 +26,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 public class PropertyToolEfficiency extends CrystalProperty {
 
     public PropertyToolEfficiency() {
-        super(new ResourceLocation(AstralSorcery.MODID, "tool.efficiency"));
+        super(AstralSorcery.key("tool.efficiency"));
         this.tierRequirement = ProgressionTier.BASIC_CRAFT;
     }
 

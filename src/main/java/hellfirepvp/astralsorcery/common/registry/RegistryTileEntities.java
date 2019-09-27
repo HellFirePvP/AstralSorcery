@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.*;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -54,7 +55,7 @@ public class RegistryTileEntities {
     }
 
     private static <T extends TileEntity> TileEntityType<T> registerTile(Class<T> tileClass, Block... validBlocks) {
-        ResourceLocation name = createTileEntityName(tileClass);
+        ResourceLocation name = NameUtil.fromClass(tileClass, "Tile");
         TileEntityType.Builder<T> typeBuilder = TileEntityType.Builder.create(() -> {
             try {
                 return tileClass.newInstance();
@@ -68,14 +69,5 @@ public class RegistryTileEntities {
         type.setRegistryName(name);
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
         return type;
-    }
-
-    private static ResourceLocation createTileEntityName(Class<? extends TileEntity> tileClass) {
-        String name = tileClass.getSimpleName();
-        if (name.startsWith("Tile")) {
-            name = name.substring(4);
-        }
-        name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
-        return new ResourceLocation(AstralSorcery.MODID, name);
     }
 }

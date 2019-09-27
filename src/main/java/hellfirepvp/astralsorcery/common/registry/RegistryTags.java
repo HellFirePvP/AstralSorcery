@@ -33,7 +33,7 @@ public class RegistryTags {
     }
 
     private static Tag<Item> makeWrapperTag(String name) {
-        return new ItemTags.Wrapper(new ResourceLocation(AstralSorcery.MODID, name));
+        return new ItemTags.Wrapper(AstralSorcery.key(name));
     }
 
 }

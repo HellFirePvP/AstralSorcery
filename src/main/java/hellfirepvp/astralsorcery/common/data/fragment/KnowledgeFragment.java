@@ -56,7 +56,7 @@ public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFrag
     }
 
     public static KnowledgeFragment onConstellations(String name, IConstellation... constellations) {
-        return onConstellations(new ResourceLocation(AstralSorcery.MODID, name), constellations);
+        return onConstellations(AstralSorcery.key(name), constellations);
     }
 
     public static KnowledgeFragment onConstellations(ResourceLocation name, IConstellation... constellations) {
@@ -82,7 +82,7 @@ public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFrag
     }
 
     public static KnowledgeFragment onResearchNodes(String name, ResearchNode... nodes) {
-        return onResearchNodes(new ResourceLocation(AstralSorcery.MODID, name), nodes);
+        return onResearchNodes(AstralSorcery.key(name), nodes);
     }
 
     private static KnowledgeFragment onResearchNodes(ResourceLocation name, ResearchNode... nodes) {

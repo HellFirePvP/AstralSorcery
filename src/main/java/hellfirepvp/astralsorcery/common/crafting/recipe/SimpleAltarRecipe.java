@@ -12,7 +12,9 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
@@ -45,7 +47,9 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
     private final ItemStack output;
 
     private IConstellation focusConstellation = null;
-    private List<Ingredient> inputIngredient = new LinkedList<>();
+    private List<WrappedIngredient> inputIngredient = new LinkedList<>();
+
+    private List<AltarRecipeEffect> craftingEffects = new LinkedList<>();
 
     public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, ItemStack output, AltarRecipeGrid recipeGrid) {
         super(recipeId);
@@ -61,12 +65,16 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
         return focusConstellation;
     }
 
-    public List<Ingredient> getTraitInputIngredients() {
+    public List<WrappedIngredient> getTraitInputIngredients() {
         return inputIngredient;
     }
 
     public AltarRecipeGrid getInputs() {
         return altarRecipeGrid;
+    }
+
+    public List<AltarRecipeEffect> getCraftingEffects() {
+        return craftingEffects;
     }
 
     public int getDuration() {
@@ -94,7 +102,11 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
     }
 
     public boolean addTraitInputIngredient(Ingredient i) {
-        return this.inputIngredient.add(i);
+        return this.inputIngredient.add(new WrappedIngredient(i));
+    }
+
+    public boolean addAltarEffect(AltarRecipeEffect effect) {
+        return this.craftingEffects.add(effect);
     }
 
     public boolean matches(TileAltar altar) {

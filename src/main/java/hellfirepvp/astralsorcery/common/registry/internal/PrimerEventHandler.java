@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.registry.internal;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
@@ -80,6 +81,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(ContainerType.class, this::registerContainerTypes);
         eventBus.addGenericListener(CrystalProperty.class, this::registerCrystalProperties);
         eventBus.addGenericListener(PropertyUsage.class, this::registerCrystalUsages);
+        eventBus.addGenericListener(AltarRecipeEffect.class, this::registerAltarRecipeEffects);
     }
 
     //This exists because you can't sort registries in any fashion or make one load after another in forge.
@@ -180,6 +182,11 @@ public class PrimerEventHandler {
     }
 
     private void registerCrystalUsages(RegistryEvent.Register<PropertyUsage> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerAltarRecipeEffects(RegistryEvent.Register<AltarRecipeEffect> event) {
+        RegistryRecipeTypes.initAltarEffects();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

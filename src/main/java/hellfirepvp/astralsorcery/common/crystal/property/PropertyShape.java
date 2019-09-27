@@ -26,7 +26,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 public class PropertyShape extends CrystalProperty {
 
     public PropertyShape() {
-        super(new ResourceLocation(AstralSorcery.MODID, "shape"));
+        super(AstralSorcery.key("shape"));
         this.tierRequirement = ProgressionTier.BASIC_CRAFT;
     }
 

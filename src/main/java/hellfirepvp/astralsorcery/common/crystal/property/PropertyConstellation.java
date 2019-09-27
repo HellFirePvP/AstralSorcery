@@ -32,7 +32,7 @@ public class PropertyConstellation extends CrystalProperty {
     private IWeakConstellation cst;
 
     public PropertyConstellation(IWeakConstellation cst) {
-        super(new ResourceLocation(AstralSorcery.MODID, "constellation." + cst.getSimpleName()));
+        super(AstralSorcery.key("constellation." + cst.getSimpleName()));
         this.cst = cst;
         this.tierRequirement = ProgressionTier.ATTUNEMENT;
     }

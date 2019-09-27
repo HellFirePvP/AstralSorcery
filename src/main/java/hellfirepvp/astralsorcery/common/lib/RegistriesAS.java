@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
@@ -34,16 +35,17 @@ public class RegistriesAS {
 
     private RegistriesAS() {}
 
-    public static final ResourceLocation REGISTRY_NAME_CONSTELLATIONS = new ResourceLocation(AstralSorcery.MODID, "constellations");
-    public static final ResourceLocation REGISTRY_NAME_PERKS = new ResourceLocation(AstralSorcery.MODID, "perks");
-    public static final ResourceLocation REGISTRY_NAME_SEXTANT_TARGETS = new ResourceLocation(AstralSorcery.MODID, "sextant_targets");
-    public static final ResourceLocation REGISTRY_NAME_CONSTELLATION_EFFECTS = new ResourceLocation(AstralSorcery.MODID, "constellation_effect");
-    public static final ResourceLocation REGISTRY_NAME_STRUCTURE_TYPES = new ResourceLocation(AstralSorcery.MODID, "structure_types");
-    public static final ResourceLocation REGISTRY_NAME_KNOWLEDGE_FRAGMENTS = new ResourceLocation(AstralSorcery.MODID, "knowledge_fragments");
-    public static final ResourceLocation REGISTRY_NAME_PERK_ATTRIBUTE_TYPES = new ResourceLocation(AstralSorcery.MODID, "perk_attribute_types");
-    public static final ResourceLocation REGISTRY_NAME_PERK_ATTRIBUTE_READERS = new ResourceLocation(AstralSorcery.MODID, "perk_attribute_readers");
-    public static final ResourceLocation REGISTRY_NAME_CRYSTAL_PROPERTIES = new ResourceLocation(AstralSorcery.MODID, "attribute_crystal_properties");
-    public static final ResourceLocation REGISTRY_NAME_CRYSTAL_USAGES = new ResourceLocation(AstralSorcery.MODID, "attribute_crystal_usages");
+    public static final ResourceLocation REGISTRY_NAME_CONSTELLATIONS = AstralSorcery.key("constellations");
+    public static final ResourceLocation REGISTRY_NAME_PERKS = AstralSorcery.key("perks");
+    public static final ResourceLocation REGISTRY_NAME_SEXTANT_TARGETS = AstralSorcery.key("sextant_targets");
+    public static final ResourceLocation REGISTRY_NAME_CONSTELLATION_EFFECTS = AstralSorcery.key("constellation_effect");
+    public static final ResourceLocation REGISTRY_NAME_STRUCTURE_TYPES = AstralSorcery.key("structure_types");
+    public static final ResourceLocation REGISTRY_NAME_KNOWLEDGE_FRAGMENTS = AstralSorcery.key("knowledge_fragments");
+    public static final ResourceLocation REGISTRY_NAME_PERK_ATTRIBUTE_TYPES = AstralSorcery.key("perk_attribute_types");
+    public static final ResourceLocation REGISTRY_NAME_PERK_ATTRIBUTE_READERS = AstralSorcery.key("perk_attribute_readers");
+    public static final ResourceLocation REGISTRY_NAME_CRYSTAL_PROPERTIES = AstralSorcery.key("attribute_crystal_properties");
+    public static final ResourceLocation REGISTRY_NAME_CRYSTAL_USAGES = AstralSorcery.key("attribute_crystal_usages");
+    public static final ResourceLocation REGISTRY_NAME_ALTAR_EFFECTS = AstralSorcery.key("altar_recipe_effects");
 
     public static IForgeRegistry<ConstellationEffectProvider> REGISTRY_CONSTELLATION_EFFECT;
     public static IForgeRegistry<IConstellation> REGISTRY_CONSTELLATIONS;
@@ -55,5 +57,6 @@ public class RegistriesAS {
     public static IForgeRegistry<PerkAttributeReader> REGISTRY_PERK_ATTRIBUTE_READERS;
     public static IForgeRegistry<CrystalProperty> REGISTRY_CRYSTAL_PROPERTIES;
     public static IForgeRegistry<PropertyUsage> REGISTRY_CRYSTAL_USAGES;
+    public static IForgeRegistry<AltarRecipeEffect> REGISTRY_ALTAR_EFFECTS;
 
 }

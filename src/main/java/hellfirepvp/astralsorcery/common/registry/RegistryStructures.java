@@ -29,7 +29,7 @@ public class RegistryStructures {
     private RegistryStructures() {}
 
     public static void registerStructures() {
-        EMPTY = register(new PatternBlockArray(new ResourceLocation(AstralSorcery.MODID, "empty")));
+        EMPTY = register(new PatternBlockArray(AstralSorcery.key("empty")));
 
         STRUCT_RITUAL_PEDESTAL = register(new PatternRitualPedestal());
         STRUCT_ENHANCED_COLLECTOR_CRYSTAL = register(new PatternEnhancedCollectorCrystal());

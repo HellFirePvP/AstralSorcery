@@ -86,7 +86,7 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
             this.advanced = advanced;
             this.name = targetName;
             this.color = color;
-            this.setRegistryName(new ResourceLocation(AstralSorcery.MODID, this.name));
+            this.setRegistryName(AstralSorcery.key(this.name));
         }
 
         @Override

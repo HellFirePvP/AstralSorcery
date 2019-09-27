@@ -25,7 +25,7 @@ import net.minecraft.util.ResourceLocation;
 public class SourceRitualPedestal extends PropertySource<StarlightReceiverRitualPedestal, Ritual> {
 
     public SourceRitualPedestal() {
-        super(new ResourceLocation(AstralSorcery.MODID, "ritual"));
+        super(AstralSorcery.key("ritual"));
     }
 
     @Override

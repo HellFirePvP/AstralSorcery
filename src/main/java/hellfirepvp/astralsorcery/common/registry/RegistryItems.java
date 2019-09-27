@@ -30,6 +30,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
@@ -137,22 +138,13 @@ public class RegistryItems {
     }
 
     private static <T extends Item> T registerItem(T item) {
-        ResourceLocation name = createItemName(item);
+        ResourceLocation name = NameUtil.fromClass(item, "Item");
         item.setRegistryName(name);
         AstralSorcery.getProxy().getRegistryPrimer().register(item);
         if (item instanceof ItemDynamicColor) {
             colorItems.add((ItemDynamicColor) item);
         }
         return item;
-    }
-
-    private static ResourceLocation createItemName(Item item) {
-        String name = item.getClass().getSimpleName();
-        if (name.startsWith("Item")) {
-            name = name.substring(4);
-        }
-        name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
-        return new ResourceLocation(AstralSorcery.MODID, name);
     }
 
     private static Item.Properties buildItemBlockProperties(Block block) {

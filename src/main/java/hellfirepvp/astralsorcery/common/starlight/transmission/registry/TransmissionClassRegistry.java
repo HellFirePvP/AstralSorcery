@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverAltar;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverWell;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
@@ -35,7 +36,7 @@ public class TransmissionClassRegistry {
 
     public static final TransmissionClassRegistry eventInstance = new TransmissionClassRegistry();
 
-    private static Map<String, TransmissionProvider> providerMap = new HashMap<>();
+    private static Map<ResourceLocation, TransmissionProvider> providerMap = new HashMap<>();
 
     private TransmissionClassRegistry() {}
 
@@ -44,12 +45,14 @@ public class TransmissionClassRegistry {
     }
 
     @Nullable
-    public static TransmissionProvider getProvider(String identifier) {
+    public static TransmissionProvider getProvider(ResourceLocation identifier) {
         return providerMap.get(identifier);
     }
 
     public static void register(TransmissionProvider provider) {
-        if(providerMap.containsKey(provider.getIdentifier())) throw new RuntimeException("Already registered identifier TransmissionProvider: " + provider.getIdentifier());
+        if (providerMap.containsKey(provider.getIdentifier())) {
+            throw new RuntimeException("Already registered identifier TransmissionProvider: " + provider.getIdentifier());
+        }
         providerMap.put(provider.getIdentifier(), provider);
     }
 
