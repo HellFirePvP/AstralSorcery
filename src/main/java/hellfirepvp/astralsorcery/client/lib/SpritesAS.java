@@ -38,6 +38,7 @@ public class SpritesAS {
 
     public static SpriteSheetResource SPR_COLLECTOR_EFFECT;
     public static SpriteSheetResource SPR_CRAFT_BURST;
+    public static SpriteSheetResource SPR_CRAFT_FLARE;
     public static SpriteSheetResource SPR_LIGHTBEAM;
 
     public static SpriteSheetResource SPR_STARLIGHT_STORE;

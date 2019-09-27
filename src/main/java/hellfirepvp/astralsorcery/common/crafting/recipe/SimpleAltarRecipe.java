@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -27,9 +27,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,7 +47,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
     private IConstellation focusConstellation = null;
     private List<WrappedIngredient> inputIngredient = new LinkedList<>();
 
-    private List<AltarRecipeEffect> craftingEffects = new LinkedList<>();
+    private Set<AltarRecipeEffect> craftingEffects = new HashSet<>();
 
     public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, ItemStack output, AltarRecipeGrid recipeGrid) {
         super(recipeId);
@@ -58,6 +56,22 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
         this.starlightRequirement = starlightRequirement;
         this.altarRecipeGrid = recipeGrid;
         this.output = output;
+
+        this.addDefaultEffects();
+    }
+
+    private void addDefaultEffects() {
+        switch (this.getAltarType()) {
+            case RADIANCE:
+                this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_TRAIT_FOCUS_CIRCLE);
+                this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_TRAIT_RELAY_HIGHLIGHT);
+            case CONSTELLATION:
+                this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_CONSTELLATION_LINES);
+            case ATTUNEMENT:
+                this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_ATTUNEMENT_SPARKLE);
+            case DISCOVERY:
+                this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_DISCOVERY_CENTRAL_BEAM);
+        }
     }
 
     @Nullable
@@ -73,7 +87,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
         return altarRecipeGrid;
     }
 
-    public List<AltarRecipeEffect> getCraftingEffects() {
+    public Collection<AltarRecipeEffect> getCraftingEffects() {
         return craftingEffects;
     }
 
@@ -93,6 +107,8 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
         return Lists.newArrayList(out);
     }
 
+    public void onRecipeCompletion(TileAltar altar) {}
+
     public ItemStack getOutputForRender() {
         return ItemUtils.copyStackWithSize(this.output, this.output.getCount());
     }
@@ -105,12 +121,12 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
         return this.inputIngredient.add(new WrappedIngredient(i));
     }
 
-    public boolean addAltarEffect(AltarRecipeEffect effect) {
-        return this.craftingEffects.add(effect);
+    public void addAltarEffect(AltarRecipeEffect effect) {
+        this.craftingEffects.add(effect);
     }
 
     public boolean matches(TileAltar altar) {
-        if (!this.getAltarType().thisIsLowerThan(altar.getAltarType())) {
+        if (!this.getAltarType().isThisLEThan(altar.getAltarType())) {
             return false;
         }
         if (this.getFocusConstellation() != null) {

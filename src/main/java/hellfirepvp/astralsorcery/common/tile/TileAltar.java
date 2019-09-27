@@ -76,7 +76,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
 
     public TileAltar() {
         super(TileEntityTypesAS.ALTAR);
-        this.inventory = new TileInventoryFiltered(this, () -> this.altarType.getInventorySize());
+        this.inventory = new TileInventoryFiltered(this, () -> 25);
     }
 
     @Override
@@ -312,19 +312,6 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
     public <T extends TileAltar> T updateType(AltarType newType, boolean initialPlacement) {
         if (!initialPlacement) {
             this.abortCrafting();
-
-            IItemHandlerModifiable inv = this.getInventory();
-            if (newType.getInventorySize() < inv.getSlots()) {
-                for (int i = 0; i < inv.getSlots(); i++) {
-                    if (i >= newType.getInventorySize()) {
-                        ItemStack stack = inv.getStackInSlot(i);
-                        if (!stack.isEmpty()) {
-                            ItemUtils.dropItemNaturally(this.world, this.pos.getX() + 0.5, this.pos.getY() + 1.5, this.pos.getZ() + 0.5, stack);
-                            inv.setStackInSlot(i, ItemStack.EMPTY);
-                        }
-                    }
-                }
-            }
         }
 
         this.altarType = newType;
@@ -349,7 +336,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
         this.focusItem = NBTHelper.readFromSubTag(compound, "focusItem", ItemStack::read);
 
         if (compound.contains("activeRecipe", Constants.NBT.TAG_COMPOUND)) {
-            this.activeRecipe = ActiveSimpleAltarRecipe.deserialize(compound.getCompound("activeRecipe"));
+            this.activeRecipe = ActiveSimpleAltarRecipe.deserialize(compound.getCompound("activeRecipe"), this.activeRecipe);
         } else {
             this.activeRecipe = null;
         }

@@ -31,19 +31,20 @@ public abstract class AltarRecipeEffect extends ForgeRegistryEntry<AltarRecipeEf
 
     protected static final int INDEX_NOISE_PLANE_LAYER1 = 0;
     protected static final int INDEX_NOISE_PLANE_LAYER2 = 1;
+    protected static final int INDEX_CRAFT_FLARE = 2;
 
     protected static final Random rand = new Random();
     private static final Vector3[] offsetPillarsT2 = new Vector3[] {
+            new Vector3( 2, 0,  2),
+            new Vector3(-2, 0,  2),
+            new Vector3( 2, 0, -2),
+            new Vector3(-2, 0, -2)
+    };
+    private static final Vector3[] offsetPillarsT3 = new Vector3[] {
             new Vector3( 3, 0,  3),
             new Vector3(-3, 0,  3),
             new Vector3( 3, 0, -3),
             new Vector3(-3, 0, -3)
-    };
-    private static final Vector3[] offsetPillarsT3 = new Vector3[] {
-            new Vector3( 4, 0,  4),
-            new Vector3(-4, 0,  4),
-            new Vector3( 4, 0, -4),
-            new Vector3(-4, 0, -4)
     };
 
     protected static Vector3 getRandomPillarOffset(AltarType type) {
@@ -51,6 +52,7 @@ public abstract class AltarRecipeEffect extends ForgeRegistryEntry<AltarRecipeEf
             case ATTUNEMENT:
                 return offsetPillarsT2[rand.nextInt(offsetPillarsT2.length)].clone();
             case CONSTELLATION:
+            case RADIANCE:
                 return offsetPillarsT3[rand.nextInt(offsetPillarsT3.length)].clone();
         }
         return new Vector3();
@@ -72,6 +74,7 @@ public abstract class AltarRecipeEffect extends ForgeRegistryEntry<AltarRecipeEf
             case ATTUNEMENT:
                 return 2;
             case CONSTELLATION:
+            case RADIANCE:
                 return 3;
         }
         return 0;

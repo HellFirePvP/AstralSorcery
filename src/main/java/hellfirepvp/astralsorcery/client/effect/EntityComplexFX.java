@@ -34,6 +34,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
     private final long id;
     protected int age = 0;
     protected int maxAge = 40;
+    protected int ageRefreshCount = 0;
 
     protected Vector3 pos;
 
@@ -105,11 +106,16 @@ public abstract class EntityComplexFX implements IComplexEffect {
 
         if (this.canRemove() && refreshFunction.shouldRefresh(this) && RenderingUtils.canEffectExist(this)) {
             this.resetLifespan();
+            this.ageRefreshCount++;
         }
     }
 
     public void resetLifespan() {
         this.age = 0;
+    }
+
+    public int getAgeRefreshCount() {
+        return ageRefreshCount;
     }
 
     @Override

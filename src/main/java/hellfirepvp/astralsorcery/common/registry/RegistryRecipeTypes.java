@@ -15,13 +15,12 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ResolvingRecipeType;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
-import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
-import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.EffectLuminescenceBurst;
-import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.EffectUpgradeAltar;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.items.IItemHandler;
 
+import static hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS.*;
 import static hellfirepvp.astralsorcery.common.lib.RecipeTypesAS.*;
 
 /**
@@ -42,8 +41,27 @@ public class RegistryRecipeTypes {
     }
 
     public static void initAltarEffects() {
-        registerEffect(new EffectUpgradeAltar());
-        registerEffect(new EffectLuminescenceBurst());
+        BUILTIN_ATTUNEMENT_SPARKLE = registerEffect(new BuiltInEffectAttunementSparkle());
+        BUILTIN_CONSTELLATION_LINES = registerEffect(new BuiltInEffectConstellationLines());
+        BUILTIN_DISCOVERY_CENTRAL_BEAM = registerEffect(new BuiltInEffectDiscoveryCentralBeam());
+        BUILTIN_TRAIT_FOCUS_CIRCLE = registerEffect(new BuiltInEffectTraitFocusCircle());
+        BUILTIN_TRAIT_RELAY_HIGHLIGHT = registerEffect(new BuiltInEffectTraitRelayHighlight());
+
+        ALTAR_DEFAULT_LIGHTBEAMS = registerEffect(new EffectAltarDefaultLightbeams());
+        ALTAR_DEFAULT_SPARKLE = registerEffect(new EffectAltarDefaultSparkle());
+        ALTAR_FOCUS_SPARKLE = registerEffect(new EffectAltarFocusSparkle());
+        ALTAR_RANDOM_SPARKLE = registerEffect(new EffectAltarRandomSparkle());
+        FOCUS_DUST_SWIRL = registerEffect(new EffectFocusDustSwirl());
+        FOCUS_EDGE = registerEffect(new EffectFocusEdge());
+        GATEWAY_EDGE = registerEffect(new EffectGatewayEdge());
+        LARGE_DUST_SWIRL = registerEffect(new EffectLargeDustSwirl());
+        LIQUID_BURST = registerEffect(new EffectLiquidBurst());
+        LUMINESCENCE_BURST = registerEffect(new EffectLuminescenceBurst());
+        LUMINESCENCE_FLARE = registerEffect(new EffectLuminescenceFlare());
+        PILLAR_LIGHTBEAMS = registerEffect(new EffectPillarLightbeams());
+        PILLAR_SPARKLE = registerEffect(new EffectPillarSparkle());
+        UPGRADE_ALTAR = registerEffect(new EffectUpgradeAltar());
+        VORTEX_PLANE = registerEffect(new EffectVortexPlane());
     }
 
     private static <T extends AltarRecipeEffect> T registerEffect(T recipeEffect) {
