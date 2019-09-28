@@ -33,14 +33,14 @@ import java.util.List;
  */
 public class ConstellationUpgradeRecipe extends SimpleAltarRecipe {
 
-    public ConstellationUpgradeRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, ItemStack output, AltarRecipeGrid recipeGrid) {
-        super(recipeId, altarType, duration, starlightRequirement, output, recipeGrid);
+    public ConstellationUpgradeRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, AltarRecipeGrid recipeGrid) {
+        super(recipeId, altarType, duration, starlightRequirement, recipeGrid);
 
         this.addAltarEffect(AltarRecipeEffectsAS.UPGRADE_ALTAR);
     }
 
     public static ConstellationUpgradeRecipe convertToThis(SimpleAltarRecipe other) {
-        return new ConstellationUpgradeRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getRecipeOutput(), other.getInputs());
+        return new ConstellationUpgradeRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getInputs());
     }
 
     @Nonnull

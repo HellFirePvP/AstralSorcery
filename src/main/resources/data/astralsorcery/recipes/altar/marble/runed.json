@@ -1,0 +1,23 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 60,
+  "starlight": 50,
+  "output": "astralsorcery:marble_runed",
+  "outputCount": 3,
+  "pattern": [
+    "_____",
+    "_____",
+    "_RCR_",
+    "_____",
+    "_____"
+  ],
+  "key": {
+    "R": {
+      "item": "astralsorcery:marble_raw"
+    },
+    "C": {
+      "item": "astralsorcery:marble_chiseled"
+    }
+  }
+}

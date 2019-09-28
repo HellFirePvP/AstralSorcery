@@ -29,12 +29,12 @@ import java.util.List;
  */
 public class ConstellationBaseMergeStatsRecipe extends ConstellationBaseItemRecipe {
 
-    public ConstellationBaseMergeStatsRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, ItemStack output, AltarRecipeGrid recipeGrid) {
-        super(recipeId, altarType, duration, starlightRequirement, output, recipeGrid);
+    public ConstellationBaseMergeStatsRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, AltarRecipeGrid recipeGrid) {
+        super(recipeId, altarType, duration, starlightRequirement, recipeGrid);
     }
 
     public static ConstellationBaseMergeStatsRecipe convertToThis(SimpleAltarRecipe other) {
-        return new ConstellationBaseMergeStatsRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getRecipeOutput(), other.getInputs());
+        return new ConstellationBaseMergeStatsRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getInputs());
     }
 
     @Override

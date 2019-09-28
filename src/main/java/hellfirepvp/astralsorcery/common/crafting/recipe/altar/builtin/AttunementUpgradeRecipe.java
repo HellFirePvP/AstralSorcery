@@ -33,14 +33,14 @@ import java.util.List;
  */
 public class AttunementUpgradeRecipe extends SimpleAltarRecipe {
 
-    public AttunementUpgradeRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, ItemStack output, AltarRecipeGrid recipeGrid) {
-        super(recipeId, altarType, duration, starlightRequirement, output, recipeGrid);
+    public AttunementUpgradeRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, AltarRecipeGrid recipeGrid) {
+        super(recipeId, altarType, duration, starlightRequirement, recipeGrid);
 
         this.addAltarEffect(AltarRecipeEffectsAS.UPGRADE_ALTAR);
     }
 
     public static AttunementUpgradeRecipe convertToThis(SimpleAltarRecipe other) {
-        return new AttunementUpgradeRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getRecipeOutput(), other.getInputs());
+        return new AttunementUpgradeRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getInputs());
     }
 
     @Nonnull

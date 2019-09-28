@@ -41,12 +41,12 @@ public class ConstellationBaseItemRecipe extends SimpleAltarRecipe {
 
     private IConstellation constellation = null;
 
-    public ConstellationBaseItemRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, ItemStack output, AltarRecipeGrid recipeGrid) {
-        super(recipeId, altarType, duration, starlightRequirement, output, recipeGrid);
+    public ConstellationBaseItemRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, AltarRecipeGrid recipeGrid) {
+        super(recipeId, altarType, duration, starlightRequirement, recipeGrid);
     }
 
     public static ConstellationBaseItemRecipe convertToThis(SimpleAltarRecipe other) {
-        return new ConstellationBaseItemRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getRecipeOutput(), other.getInputs());
+        return new ConstellationBaseItemRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getInputs());
     }
 
     @Override

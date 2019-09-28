@@ -1,0 +1,23 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 100,
+  "starlight": 500,
+  "output": "astralsorcery:infused_wood_enriched",
+  "outputCount": 4,
+  "pattern": [
+    "_____",
+    "__P__",
+    "_PAP_",
+    "__P__",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "P": {
+      "item": "astralsorcery:infused_wood_planks"
+    }
+  }
+}

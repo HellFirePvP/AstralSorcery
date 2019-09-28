@@ -30,12 +30,12 @@ import java.util.List;
  */
 public class CrystalCountRecipe extends ConstellationBaseAverageStatsRecipe {
 
-    public CrystalCountRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, ItemStack output, AltarRecipeGrid recipeGrid) {
-        super(recipeId, altarType, duration, starlightRequirement, output, recipeGrid);
+    public CrystalCountRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, AltarRecipeGrid recipeGrid) {
+        super(recipeId, altarType, duration, starlightRequirement, recipeGrid);
     }
 
     public static CrystalCountRecipe convertToThis(SimpleAltarRecipe other) {
-        return new CrystalCountRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getRecipeOutput(), other.getInputs());
+        return new CrystalCountRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getInputs());
     }
 
     @Nonnull

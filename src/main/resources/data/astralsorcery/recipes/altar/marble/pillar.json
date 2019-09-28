@@ -1,0 +1,20 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 60,
+  "starlight": 50,
+  "output": "astralsorcery:marble_pillar",
+  "outputCount": 2,
+  "pattern": [
+    "_____",
+    "__R__",
+    "__R__",
+    "_____",
+    "_____"
+  ],
+  "key": {
+    "R": {
+      "item": "astralsorcery:marble_raw"
+    }
+  }
+}
