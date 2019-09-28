@@ -49,7 +49,7 @@ public class ScreenContainerAltarDiscovery extends ScreenContainerAltar<Containe
 
         SimpleAltarRecipe recipe = this.findRecipe();
         if (recipe != null) {
-            ItemStack out = recipe.getOutputForRender();
+            ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity());
             this.blitOffset = 10;
             GlStateManager.pushMatrix();
             GlStateManager.translated(130, 20, 0);

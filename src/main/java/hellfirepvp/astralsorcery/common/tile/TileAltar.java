@@ -162,7 +162,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
         this.activeRecipe.consumeInputs(this);
         ForgeHooks.setCraftingPlayer(null);
 
-        this.activeRecipe.createItemOutputs(this);
+        this.activeRecipe.createItemOutputs(this, this::dropItemOnTop);
 
         boolean isChaining;
         ResourceLocation recipeName = this.activeRecipe.getRecipeToCraft().getId();

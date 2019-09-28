@@ -179,7 +179,9 @@ public class ItemUtils {
     }
 
     public static void dropInventory(IItemHandler handle, World worldIn, BlockPos pos) {
-        if (worldIn.isRemote) return;
+        if (worldIn.isRemote) {
+            return;
+        }
         for (int i = 0; i < handle.getSlots(); i++) {
             ItemStack stack = handle.getStackInSlot(i);
             if (stack.isEmpty()) {
@@ -200,9 +202,13 @@ public class ItemUtils {
     }*/
 
     public static void decrStackInInventory(ItemStackHandler handler, int slot) {
-        if (slot < 0 || slot >= handler.getSlots()) return;
+        if (slot < 0 || slot >= handler.getSlots()) {
+            return;
+        }
         ItemStack st = handler.getStackInSlot(slot);
-        if (st.isEmpty()) return;
+        if (st.isEmpty()) {
+            return;
+        }
         st.setCount(st.getCount() - 1);
         if (st.getCount() <= 0) {
             handler.setStackInSlot(slot, ItemStack.EMPTY);
@@ -215,7 +221,9 @@ public class ItemUtils {
 
     public static boolean tryPlaceItemInInventory(@Nonnull ItemStack stack, IItemHandler handler, int start, int end) {
         ItemStack toAdd = stack.copy();
-        if (!hasInventorySpace(toAdd, handler, start, end)) return false;
+        if (!hasInventorySpace(toAdd, handler, start, end)) {
+            return false;
+        }
         int max = stack.getMaxStackSize();
 
         for (int i = start; i < end; i++) {

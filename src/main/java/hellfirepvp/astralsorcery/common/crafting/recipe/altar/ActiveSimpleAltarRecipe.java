@@ -112,10 +112,11 @@ public class ActiveSimpleAltarRecipe {
         return (T) clientEffectContainer.computeIfAbsent(index, provider);
     }
 
-    public void createItemOutputs(TileAltar altar) {
-        for (ItemStack crafted : this.getRecipeToCraft().doItemOutput(altar)) {
-            ResearchManager.informCraftedAltar(altar, this, crafted);
-        }
+    public void createItemOutputs(TileAltar altar, Consumer<ItemStack> output) {
+        Consumer<ItemStack> informer = stack -> ResearchManager.informCraftedAltar(altar, ActiveSimpleAltarRecipe.this, stack);
+
+        Consumer<ItemStack> handleCrafted = informer.andThen(output);
+        this.getRecipeToCraft().getOutputs(altar).forEach(handleCrafted);
         this.getRecipeToCraft().onRecipeCompletion(altar);
     }
 

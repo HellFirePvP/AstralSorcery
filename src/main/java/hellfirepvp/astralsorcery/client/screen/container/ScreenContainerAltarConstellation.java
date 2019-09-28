@@ -48,7 +48,7 @@ public class ScreenContainerAltarConstellation extends ScreenContainerAltar<Cont
 
         SimpleAltarRecipe recipe = this.findRecipe();
         if (recipe != null) {
-            ItemStack out = recipe.getOutputForRender();
+            ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity());
             this.blitOffset = 10;
             GlStateManager.pushMatrix();
             GlStateManager.translated(190, 35, 0);

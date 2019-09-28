@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.crafting.recipe;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
@@ -24,8 +26,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -44,6 +50,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
     private final AltarRecipeGrid altarRecipeGrid;
     private final ItemStack output;
 
+    private ResourceLocation customRecipeType = null;
     private IConstellation focusConstellation = null;
     private List<WrappedIngredient> inputIngredient = new LinkedList<>();
 
@@ -75,10 +82,20 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
     }
 
     @Nullable
+    public ResourceLocation getCustomRecipeType() {
+        return this.customRecipeType;
+    }
+
+    public void setCustomRecipeType(@Nullable ResourceLocation customRecipeType) {
+        this.customRecipeType = customRecipeType;
+    }
+
+    @Nullable
     public IConstellation getFocusConstellation() {
         return focusConstellation;
     }
 
+    @Nonnull
     public List<WrappedIngredient> getTraitInputIngredients() {
         return inputIngredient;
     }
@@ -99,18 +116,17 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
         return starlightRequirement;
     }
 
-    public List<ItemStack> doItemOutput(TileAltar altar) {
-        ItemStack out = ItemUtils.copyStackWithSize(this.output, this.output.getCount());
-        if (!out.isEmpty()) {
-            altar.dropItemOnTop(out);
-        }
-        return Lists.newArrayList(out);
-    }
-
     public void onRecipeCompletion(TileAltar altar) {}
 
-    public ItemStack getOutputForRender() {
+    @Nonnull
+    @OnlyIn(Dist.CLIENT)
+    public ItemStack getOutputForRender(TileAltar altar) {
         return ItemUtils.copyStackWithSize(this.output, this.output.getCount());
+    }
+
+    @Nonnull
+    public List<ItemStack> getOutputs(TileAltar altar) {
+        return Lists.newArrayList(ItemUtils.copyStackWithSize(this.output, this.output.getCount()));
     }
 
     public void setFocusConstellation(IConstellation focusConstellation) {
@@ -141,6 +157,12 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
 
         return this.altarRecipeGrid.containsInputs(altar.getInventory(), true);
     }
+
+    public void deserializeAdditionalJson(JsonObject recipeObject) throws JsonSyntaxException {}
+
+    public void writeRecipeSync(PacketBuffer buf) {}
+
+    public void readRecipeSync(PacketBuffer buf) {}
 
     public AltarType getAltarType() {
         return altarType;
