@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -16,11 +17,13 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.CustomAltarRecipeHandler;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -34,6 +37,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,21 +52,20 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
     private final int starlightRequirement;
     private final int duration;
     private final AltarRecipeGrid altarRecipeGrid;
-    private final ItemStack output;
 
+    private final List<ItemStack> outputs = new LinkedList<>();
     private ResourceLocation customRecipeType = null;
     private IConstellation focusConstellation = null;
     private List<WrappedIngredient> inputIngredient = new LinkedList<>();
 
     private Set<AltarRecipeEffect> craftingEffects = new HashSet<>();
 
-    public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, ItemStack output, AltarRecipeGrid recipeGrid) {
+    public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, AltarRecipeGrid recipeGrid) {
         super(recipeId);
         this.altarType = altarType;
         this.duration = duration;
         this.starlightRequirement = starlightRequirement;
         this.altarRecipeGrid = recipeGrid;
-        this.output = output;
 
         this.addDefaultEffects();
     }
@@ -121,12 +124,15 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
     @Nonnull
     @OnlyIn(Dist.CLIENT)
     public ItemStack getOutputForRender(TileAltar altar) {
-        return ItemUtils.copyStackWithSize(this.output, this.output.getCount());
+        ItemStack first = Iterables.getFirst(this.outputs, ItemStack.EMPTY);
+        return ItemUtils.copyStackWithSize(first, first.getCount());
     }
 
     @Nonnull
     public List<ItemStack> getOutputs(TileAltar altar) {
-        return Lists.newArrayList(ItemUtils.copyStackWithSize(this.output, this.output.getCount()));
+        return this.outputs.stream()
+                .map(stack -> ItemUtils.copyStackWithSize(stack, stack.getCount()))
+                .collect(Collectors.toList());
     }
 
     public void setFocusConstellation(IConstellation focusConstellation) {
@@ -139,6 +145,10 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
 
     public void addAltarEffect(AltarRecipeEffect effect) {
         this.craftingEffects.add(effect);
+    }
+
+    public void addOutput(ItemStack output) {
+        this.outputs.add(ItemUtils.copyStackWithSize(output, output.getCount()));
     }
 
     public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement) {
@@ -163,6 +173,44 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
     public void writeRecipeSync(PacketBuffer buf) {}
 
     public void readRecipeSync(PacketBuffer buf) {}
+
+    public static SimpleAltarRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        AltarType type = ByteBufUtils.readEnumValue(buffer, AltarType.class);
+        int duration = buffer.readInt();
+        int starlight = buffer.readInt();
+        AltarRecipeGrid grid = AltarRecipeGrid.read(buffer);
+        SimpleAltarRecipe recipe = new SimpleAltarRecipe(recipeId, type, duration, starlight, grid);
+        ResourceLocation customType = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
+        if (customType != null) {
+            recipe = CustomAltarRecipeHandler.convert(recipe, customType);
+            recipe.setCustomRecipeType(customType);
+        }
+
+        List<ItemStack> outputs = ByteBufUtils.readList(buffer, ByteBufUtils::readItemStack);
+        outputs.forEach(recipe::addOutput);
+        recipe.setFocusConstellation(ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry));
+        ByteBufUtils.readList(buffer, Ingredient::read).forEach(recipe::addTraitInputIngredient);
+        List<AltarRecipeEffect> effects = ByteBufUtils.readList(buffer, ByteBufUtils::readRegistryEntry);
+        for (AltarRecipeEffect effect : effects) {
+            recipe.addAltarEffect(effect);
+        }
+        recipe.readRecipeSync(buffer);
+        return recipe;
+    }
+
+    public final void write(PacketBuffer buffer) {
+        ByteBufUtils.writeEnumValue(buffer, this.getAltarType());
+        buffer.writeInt(this.getDuration());
+        buffer.writeInt(this.getStarlightRequirement());
+        this.getInputs().write(buffer);
+        ByteBufUtils.writeOptional(buffer, this.getCustomRecipeType(), ByteBufUtils::writeResourceLocation);
+
+        ByteBufUtils.writeList(buffer, this.outputs, ByteBufUtils::writeItemStack);
+        ByteBufUtils.writeOptional(buffer, this.getFocusConstellation(), ByteBufUtils::writeRegistryEntry);
+        ByteBufUtils.writeList(buffer, this.getTraitInputIngredients(), (buf, ingredient) -> ingredient.getIngredient().write(buf));
+        ByteBufUtils.writeList(buffer, this.getCraftingEffects(), ByteBufUtils::writeRegistryEntry);
+        this.writeRecipeSync(buffer);
+    }
 
     public AltarType getAltarType() {
         return altarType;

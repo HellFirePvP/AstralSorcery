@@ -185,7 +185,7 @@ public class RenderingUtils {
             font = Minecraft.getInstance().fontRenderer;
         }
         itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
-        itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y - (stack.isEmpty() ? 0 : 8), alternativeText);
+        itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y, alternativeText);
 
         itemRenderer.zLevel = 0.0F;
 

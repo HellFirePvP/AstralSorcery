@@ -51,10 +51,10 @@ public class AltarRecipeGrid {
     public boolean containsInputs(IItemHandlerModifiable itemHandler, boolean testMirrored) {
         for (int xx = 0; xx <= (GRID_SIZE - this.width); xx++) {
             for (int zz = 0; zz <= (GRID_SIZE - this.height); zz++) {
-                if (matches(itemHandler, xx, zz, Function.identity())) {
+                if (matches(itemHandler, xx, zz, false)) {
                     return true;
                 }
-                if (testMirrored && matches(itemHandler, xx, zz, (slot) -> mirrorRowIndex(GRID_SIZE, slot))) {
+                if (testMirrored && matches(itemHandler, xx, zz, true)) {
                     return true;
                 }
             }
@@ -66,24 +66,39 @@ public class AltarRecipeGrid {
         return this.gridParts.getOrDefault(index, Ingredient.EMPTY);
     }
 
-    // The slot-converted indices must stay in the same width/height frame of the recipe.
-    // So... actually only mirror & flip operations.
-    private boolean matches(IItemHandlerModifiable itemHandler, int xOffset, int zOffset, Function<Integer, Integer> slotConverter) {
+    private boolean matches(IItemHandlerModifiable itemHandler, int xOffset, int zOffset, boolean mirrored) {
+        Set<Integer> matchedItems = new HashSet<>();
         int totalOffset = zOffset * GRID_SIZE + xOffset;
-        for (Integer slotId : this.gridParts.keySet()) {
-            Ingredient expected = this.gridParts.get(slotId);
-            int actualSlot = totalOffset + slotConverter.apply(slotId);
+        for (int x = 0; x < this.width; x++) {
+            for (int z = 0; z < this.height; z++) {
+                int index = x + z * GRID_SIZE;
+                if (mirrored) {
+                    index = (this.width - x - 1) + z * GRID_SIZE;
+                }
 
-            ItemStack contained = itemHandler.getStackInSlot(actualSlot);
-            if (!expected.test(contained)) {
-                return false;
+                Ingredient expected = this.getIngredient(index);
+                int slot = index + totalOffset;
+
+                ItemStack contained = itemHandler.getStackInSlot(slot);
+                if (!expected.test(contained)) {
+                    return false;
+                }
+                matchedItems.add(slot);
+            }
+        }
+        return isGridEmpty(itemHandler, matchedItems);
+    }
+
+    private boolean isGridEmpty(IItemHandlerModifiable inventory, Collection<Integer> skipSlots) {
+        for (int x = 0; x < GRID_SIZE; x++) {
+            for (int z = 0; z < GRID_SIZE; z++) {
+                int slot = x + z * GRID_SIZE;
+                if (!skipSlots.contains(slot) && !inventory.getStackInSlot(slot).isEmpty()) {
+                    return false;
+                }
             }
         }
         return true;
-    }
-
-    private int mirrorRowIndex(int gridSize, int in) {
-        return (in / gridSize) * gridSize + (gridSize - ((in % gridSize) + 1));
     }
 
     public void write(PacketBuffer buffer) {

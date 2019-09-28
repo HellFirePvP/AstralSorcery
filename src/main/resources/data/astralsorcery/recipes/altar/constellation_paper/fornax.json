@@ -1,0 +1,49 @@
+{
+  "type": "astralsorcery:altar",
+  "recipe_class": "astralsorcery:constellation_base",
+  "options": {
+    "constellation": "astralsorcery:fornax"
+  },
+  "altar_type": 3,
+  "duration": 500,
+  "starlight": 3000,
+  "output": "astralsorcery:constellation_paper",
+  "pattern": [
+    "__L__",
+    "__F__",
+    "LSPSL",
+    "__B__",
+    "__L__"
+  ],
+  "key": {
+    "F": {
+      "tag": "forge:feathers"
+    },
+    "S": {
+      "item": "astralsorcery:stardust"
+    },
+    "B": {
+      "tag": "forge:dyes/black"
+    },
+    "P": {
+      "item": "astralsorcery:parchment"
+    },
+    "L": {
+      "tag": "minecraft:coals"
+    }
+  },
+  "relay_inputs": [
+    {
+      "tag": "minecraft:coals"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    },
+    {
+      "tag": "forge:ingots/iron"
+    },
+    {
+      "tag": "forge:gunpowder"
+    }
+  ]
+}

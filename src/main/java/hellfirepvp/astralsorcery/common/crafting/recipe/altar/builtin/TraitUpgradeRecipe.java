@@ -32,14 +32,14 @@ import java.util.List;
  */
 public class TraitUpgradeRecipe extends SimpleAltarRecipe {
 
-    public TraitUpgradeRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, ItemStack output, AltarRecipeGrid recipeGrid) {
-        super(recipeId, altarType, duration, starlightRequirement, output, recipeGrid);
+    public TraitUpgradeRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, AltarRecipeGrid recipeGrid) {
+        super(recipeId, altarType, duration, starlightRequirement, recipeGrid);
 
         this.addAltarEffect(AltarRecipeEffectsAS.UPGRADE_ALTAR);
     }
 
     public static TraitUpgradeRecipe convertToThis(SimpleAltarRecipe other) {
-        return new TraitUpgradeRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getRecipeOutput(), other.getInputs());
+        return new TraitUpgradeRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getInputs());
     }
 
     @Nonnull

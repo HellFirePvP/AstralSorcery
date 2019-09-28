@@ -1,0 +1,20 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 60,
+  "starlight": 50,
+  "output": "astralsorcery:black_marble_slab",
+  "outputCount": 6,
+  "pattern": [
+    "_____",
+    "_____",
+    "_RRR_",
+    "_____",
+    "_____"
+  ],
+  "key": {
+    "R": {
+      "item": "astralsorcery:black_marble_raw"
+    }
+  }
+}

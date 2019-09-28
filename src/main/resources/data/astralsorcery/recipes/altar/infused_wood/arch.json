@@ -1,0 +1,20 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 60,
+  "starlight": 50,
+  "output": "astralsorcery:infused_wood_arch",
+  "outputCount": 3,
+  "pattern": [
+    "_____",
+    "_____",
+    "_PPP_",
+    "_____",
+    "_____"
+  ],
+  "key": {
+    "P": {
+      "item": "astralsorcery:infused_wood_planks"
+    }
+  }
+}

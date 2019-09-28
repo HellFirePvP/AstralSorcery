@@ -1,0 +1,49 @@
+{
+  "type": "astralsorcery:altar",
+  "recipe_class": "astralsorcery:constellation_base",
+  "options": {
+    "constellation": "astralsorcery:bootes"
+  },
+  "altar_type": 3,
+  "duration": 500,
+  "starlight": 3000,
+  "output": "astralsorcery:constellation_paper",
+  "pattern": [
+    "__L__",
+    "__F__",
+    "LSPSL",
+    "__B__",
+    "__L__"
+  ],
+  "key": {
+    "F": {
+      "tag": "forge:feathers"
+    },
+    "S": {
+      "item": "astralsorcery:stardust"
+    },
+    "B": {
+      "tag": "forge:dyes/black"
+    },
+    "P": {
+      "item": "astralsorcery:parchment"
+    },
+    "L": {
+      "tag": "forge:crops/wheat"
+    }
+  },
+  "relay_inputs": [
+    {
+      "tag": "forge:crops/wheat"
+    },
+    {
+      "tag": "forge:bones"
+    },
+    {
+      "item": "minecraft:apple"
+    },
+    {
+      "tag": "forge:leather"
+    }
+  ]
+}
