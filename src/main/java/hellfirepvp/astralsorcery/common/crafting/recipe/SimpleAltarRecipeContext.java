@@ -23,9 +23,19 @@ import net.minecraftforge.items.IItemHandler;
 public class SimpleAltarRecipeContext extends RecipeCraftingContext<SimpleAltarRecipe, IItemHandler> {
 
     private final TileAltar altar;
+    private boolean ignoreStarlightRequirement = false;
 
     public SimpleAltarRecipeContext(TileAltar altar) {
         this.altar = altar;
+    }
+
+    public SimpleAltarRecipeContext setIgnoreStarlightRequirement(boolean ignoreStarlightRequirement) {
+        this.ignoreStarlightRequirement = ignoreStarlightRequirement;
+        return this;
+    }
+
+    public boolean ignoreStarlightRequirement() {
+        return ignoreStarlightRequirement;
     }
 
     public TileAltar getAltar() {

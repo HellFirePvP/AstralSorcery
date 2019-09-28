@@ -49,30 +49,30 @@ public class ContainerAltarConstellation extends ContainerAltarBase {
     @Override
     void bindAltarInventory(TileInventory altarInventory) {
         for (int xx = 0; xx < 3; xx++) {
-            addSlot(new SlotItemHandler(altarInventory,     xx, 102 + xx * 18, 29));
+            addSlot(new SlotItemHandler(altarInventory,  6 + xx, 102 + xx * 18, 29));
         }
         for (int xx = 0; xx < 3; xx++) {
-            addSlot(new SlotItemHandler(altarInventory, 3 + xx, 102 + xx * 18, 47));
+            addSlot(new SlotItemHandler(altarInventory, 11 + xx, 102 + xx * 18, 47));
         }
         for (int xx = 0; xx < 3; xx++) {
-            addSlot(new SlotItemHandler(altarInventory, 6 + xx, 102 + xx * 18, 65));
+            addSlot(new SlotItemHandler(altarInventory, 16 + xx, 102 + xx * 18, 65));
         }
-        addSlot(new SlotItemHandler(altarInventory,  9, 84,  11));
-        addSlot(new SlotItemHandler(altarInventory, 10, 156, 11));
-        addSlot(new SlotItemHandler(altarInventory, 11, 84,  83));
-        addSlot(new SlotItemHandler(altarInventory, 12, 156, 83));
+        addSlot(new SlotItemHandler(altarInventory,  0, 84,  11));
+        addSlot(new SlotItemHandler(altarInventory,  4, 156, 11));
+        addSlot(new SlotItemHandler(altarInventory, 20, 84,  83));
+        addSlot(new SlotItemHandler(altarInventory, 24, 156, 83));
 
-        addSlot(new SlotItemHandler(altarInventory, 13, 102,  11));
-        addSlot(new SlotItemHandler(altarInventory, 14, 138,  11));
+        addSlot(new SlotItemHandler(altarInventory,  1, 102,  11));
+        addSlot(new SlotItemHandler(altarInventory,  3, 138,  11));
 
-        addSlot(new SlotItemHandler(altarInventory, 15,  84,  29));
-        addSlot(new SlotItemHandler(altarInventory, 16, 156,  29));
+        addSlot(new SlotItemHandler(altarInventory,  5,  84,  29));
+        addSlot(new SlotItemHandler(altarInventory,  9, 156,  29));
 
-        addSlot(new SlotItemHandler(altarInventory, 17, 84,   65));
-        addSlot(new SlotItemHandler(altarInventory, 18, 156,  65));
+        addSlot(new SlotItemHandler(altarInventory, 15, 84,   65));
+        addSlot(new SlotItemHandler(altarInventory, 19, 156,  65));
 
-        addSlot(new SlotItemHandler(altarInventory, 19, 102,  83));
-        addSlot(new SlotItemHandler(altarInventory, 20, 138,  83));
+        addSlot(new SlotItemHandler(altarInventory, 21, 102,  83));
+        addSlot(new SlotItemHandler(altarInventory, 23, 138,  83));
     }
 
     @Override

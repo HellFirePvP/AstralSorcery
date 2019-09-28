@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngredientSerializer;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredientSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -28,8 +29,10 @@ public class RegistryIngredientTypes {
 
     public static void init() {
         FLUID_SERIALIZER = new FluidIngredientSerializer();
+        CRYSTAL_SERIALIZER = new CrystalIngredientSerializer();
 
         CraftingHelper.register(AstralSorcery.key("fluid"), FLUID_SERIALIZER);
+        CraftingHelper.register(AstralSorcery.key("crystal"), CRYSTAL_SERIALIZER);
     }
 
 }

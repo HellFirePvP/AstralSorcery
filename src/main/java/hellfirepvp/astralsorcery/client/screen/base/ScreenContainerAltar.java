@@ -32,9 +32,9 @@ public abstract class ScreenContainerAltar<T extends ContainerAltarBase> extends
     }
 
     @Nullable
-    public SimpleAltarRecipe findRecipe() {
+    public SimpleAltarRecipe findRecipe(boolean ignoreStarlightRequirement) {
         TileAltar ta = getContainer().getTileEntity();
-        return RecipeTypesAS.TYPE_ALTAR.findRecipe(new SimpleAltarRecipeContext(ta));
+        return RecipeTypesAS.TYPE_ALTAR.findRecipe(new SimpleAltarRecipeContext(ta).setIgnoreStarlightRequirement(ignoreStarlightRequirement));
     }
 
     @Override

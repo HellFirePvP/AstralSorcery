@@ -50,8 +50,8 @@ public class ConstellationUpgradeRecipe extends SimpleAltarRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar) {
-        return altar.getAltarType() == AltarType.ATTUNEMENT && super.matches(altar);
+    public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement) {
+        return altar.getAltarType() == AltarType.ATTUNEMENT && super.matches(altar, ignoreStarlightRequirement);
     }
 
     @Override

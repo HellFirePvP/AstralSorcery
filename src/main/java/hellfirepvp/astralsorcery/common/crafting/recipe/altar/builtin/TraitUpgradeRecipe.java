@@ -49,8 +49,8 @@ public class TraitUpgradeRecipe extends SimpleAltarRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar) {
-        return altar.getAltarType() == AltarType.CONSTELLATION && super.matches(altar);
+    public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement) {
+        return altar.getAltarType() == AltarType.CONSTELLATION && super.matches(altar, ignoreStarlightRequirement);
     }
 
     @Override

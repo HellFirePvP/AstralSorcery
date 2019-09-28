@@ -37,7 +37,7 @@ public class RegistryRecipeTypes {
     public static void init() {
         TYPE_WELL = new ResolvingRecipeType<>("well", WellLiquefaction.class, (recipe, context) -> recipe.matches(context.getInput()));
         TYPE_INFUSION = new ResolvingRecipeType<>("infusion", LiquidInfusion.class, (recipe, context) -> true);
-        TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) -> recipe.matches(context.getAltar()));
+        TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) -> recipe.matches(context.getAltar(), context.ignoreStarlightRequirement()));
     }
 
     public static void initAltarEffects() {
