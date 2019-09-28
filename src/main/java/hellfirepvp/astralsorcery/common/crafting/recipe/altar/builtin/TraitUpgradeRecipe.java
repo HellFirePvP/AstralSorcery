@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,8 +42,9 @@ public class TraitUpgradeRecipe extends SimpleAltarRecipe {
         return new TraitUpgradeRecipe(other.getId(), other.getAltarType(), other.getDuration(), other.getStarlightRequirement(), other.getRecipeOutput(), other.getInputs());
     }
 
+    @Nonnull
     @Override
-    public List<ItemStack> doItemOutput(TileAltar altar) {
+    public List<ItemStack> getOutputs(TileAltar altar) {
         return Collections.emptyList();
     }
 

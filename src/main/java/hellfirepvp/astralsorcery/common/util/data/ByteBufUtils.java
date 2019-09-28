@@ -63,7 +63,7 @@ public class ByteBufUtils {
         return new UUID(buf.readLong(), buf.readLong());
     }
 
-    public static <T> void writeList(PacketBuffer buf, @Nullable List<T> list, BiConsumer<PacketBuffer, T> iterationFct) {
+    public static <T> void writeList(PacketBuffer buf, @Nullable Collection<T> list, BiConsumer<PacketBuffer, T> iterationFct) {
         if (list != null) {
             buf.writeInt(list.size());
             list.forEach(e -> iterationFct.accept(buf, e));

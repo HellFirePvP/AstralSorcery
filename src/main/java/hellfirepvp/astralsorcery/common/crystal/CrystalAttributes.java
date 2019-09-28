@@ -104,6 +104,10 @@ public final class CrystalAttributes {
         return MiscUtils.contains(this.getCrystalAttributes(), attribute -> !attribute.isDiscovered());
     }
 
+    public boolean isEmpty() {
+        return this.crystalAttributes.isEmpty();
+    }
+
     @Nonnull
     @OnlyIn(Dist.CLIENT)
     public TooltipResult addTooltip(List<ITextComponent> tooltip) {
@@ -346,6 +350,17 @@ public final class CrystalAttributes {
 
         public List<CrystalProperty> getProperties() {
             return Lists.newArrayList(this.properties.keySet());
+        }
+
+        public CrystalAttributes buildAverage(int count) {
+            Map<CrystalProperty, Integer> average = new HashMap<>();
+            for (CrystalProperty prop : this.properties.keySet()) {
+                int newLevel = MathHelper.ceil(this.properties.getOrDefault(prop, 0) / (float) count);
+                if (newLevel > 0) {
+                    average.put(prop, newLevel);
+                }
+            }
+            return new CrystalAttributes(average);
         }
 
         public CrystalAttributes build() {

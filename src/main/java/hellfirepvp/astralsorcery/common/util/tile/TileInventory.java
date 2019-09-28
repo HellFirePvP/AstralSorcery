@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 21:20
  */
-public class TileInventory extends ItemStackHandler {
+public class TileInventory extends ItemStackHandler implements Iterable<ItemStack> {
 
     protected final TileEntitySynchronized tile;
     protected final Consumer<Integer> changeListener;
@@ -117,4 +117,9 @@ public class TileInventory extends ItemStackHandler {
         }
     }
 
+    @Override
+    @Nonnull
+    public Iterator<ItemStack> iterator() {
+        return this.stacks.iterator();
+    }
 }

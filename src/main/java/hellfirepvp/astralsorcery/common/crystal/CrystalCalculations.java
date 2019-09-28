@@ -78,7 +78,7 @@ public class CrystalCalculations {
     }
 
     // Range: 1 - 7
-    public static int getLensCraftingAmount(CrystalAttributes attributes) {
+    public static int getSizeCraftingAmount(CrystalAttributes attributes) {
         int amt = 1;
         CrystalAttributes.Attribute sizeAttr = attributes.getAttribute(PROPERTY_SIZE);
         if (sizeAttr != null) {

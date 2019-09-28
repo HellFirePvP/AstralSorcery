@@ -10,7 +10,14 @@ package hellfirepvp.astralsorcery.common.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 
@@ -22,6 +29,27 @@ import java.awt.*;
  * Date: 19.07.2019 / 21:02
  */
 public class JsonHelper {
+
+    public static ItemStack getItemStack(JsonObject object, String key) {
+        Item i = JSONUtils.getItem(object, key);
+        ItemStack out = new ItemStack(i);
+
+        String nbtKey = key + "Nbt";
+        if (JSONUtils.hasField(object, nbtKey)) {
+            try {
+                CompoundNBT nbt = JsonToNBT.getTagFromJson(JSONUtils.getString(object.get(nbtKey), nbtKey));
+                out.setTag(nbt);
+            } catch (CommandSyntaxException e) {
+                throw new JsonSyntaxException("Invalid nbt tag: " + e.getMessage(), e);
+            }
+        }
+        String countKey = key + "Count";
+        if (JSONUtils.hasField(object, countKey)) {
+            int count = JSONUtils.getInt(object, countKey);
+            out.setCount(MathHelper.clamp(count, 1, out.getMaxStackSize()));
+        }
+        return out;
+    }
 
     public static Color getColor(JsonObject object, String key) {
         String value = JSONUtils.getString(object, key);

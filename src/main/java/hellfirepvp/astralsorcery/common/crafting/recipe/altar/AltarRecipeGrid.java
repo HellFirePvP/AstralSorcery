@@ -15,11 +15,13 @@ import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,6 +34,8 @@ public class AltarRecipeGrid {
 
     public static final int GRID_SIZE = 5;
     public static final int MAX_INVENTORY_SIZE = GRID_SIZE * GRID_SIZE;
+
+    private static final Pattern SKIP_CHARS = Pattern.compile("^\\s|_|#$");
 
     private final Map<Integer, Ingredient> gridParts;
 
@@ -69,6 +73,24 @@ public class AltarRecipeGrid {
         return (in / gridSize) * gridSize + (gridSize - ((in % gridSize) + 1));
     }
 
+    public void write(PacketBuffer buffer) {
+        buffer.writeInt(this.gridParts.size());
+        this.gridParts.forEach((key, value) -> {
+            buffer.writeInt(key);
+            value.write(buffer);
+        });
+    }
+
+    public static AltarRecipeGrid read(PacketBuffer buffer) {
+        Map<Integer, Ingredient> ingredientMap = new HashMap<>();
+        for (int i = 0; i < buffer.readInt(); i++) {
+            int slot = buffer.readInt();
+            Ingredient ingredient = Ingredient.read(buffer);
+            ingredientMap.put(slot, ingredient);
+        }
+        return new AltarRecipeGrid(ingredientMap);
+    }
+
     public static AltarRecipeGrid deserialize(AltarType type, JsonArray pattern, JsonObject objKeyElements) throws JsonSyntaxException {
         Map<Integer, Character> patternMap = new HashMap<>();
         Set<Character> usedChars = new HashSet<>();
@@ -77,7 +99,7 @@ public class AltarRecipeGrid {
         }
         usedChars.add('_');
 
-        for (int i = 0; i < Math.min(pattern.size(), 5); i++) {
+        for (int i = 0; i < Math.min(pattern.size(), GRID_SIZE); i++) {
             String str = JSONUtils.getString(pattern.get(i), String.format("pattern[%s]", i));
             if (str.length() > GRID_SIZE) {
                 throw new JsonSyntaxException("Invalid pattern: too many columns, " + GRID_SIZE + " is maximum");
@@ -86,11 +108,12 @@ public class AltarRecipeGrid {
             char[] charArray = str.toCharArray();
             for (int j = 0; j < charArray.length; j++) {
                 char c = charArray[j];
-                if (c == ' ' || c == '_') {
+                String strChar = String.valueOf(c);
+                if (SKIP_CHARS.matcher(strChar).matches()) {
                     continue;
                 }
                 usedChars.add(c);
-                patternMap.put(i % 5 + j, c);
+                patternMap.put(i % GRID_SIZE + j, c);
             }
         }
 
@@ -131,10 +154,7 @@ public class AltarRecipeGrid {
 
         for (Integer slot : mappedIngredients.keySet()) {
             if (!type.hasSlot(slot)) {
-                Ingredient i = mappedIngredients.get(slot);
-                if (!i.hasNoMatchingItems()) {
-                    throw new JsonSyntaxException("Slot " + slot + " has an ingredient but cannot be used in altar type " + type.name());
-                }
+                throw new JsonSyntaxException("Slot " + slot + " has an ingredient but cannot be used in altar type " + type.name());
             }
         }
 

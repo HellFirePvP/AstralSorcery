@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.GuiType;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -51,7 +52,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 21.07.2019 / 14:47
  */
-public class ItemConstellationPaper extends Item implements ItemDynamicColor {
+public class ItemConstellationPaper extends Item implements ItemDynamicColor, ConstellationBaseItem {
 
     public ItemConstellationPaper() {
         super(new Properties()
@@ -203,19 +204,13 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor {
         return 0xFF595959;
     }
 
-    public static IConstellation getConstellation(ItemStack stack) {
-        Item i = stack.getItem();
-        if (!(i instanceof ItemConstellationPaper)) {
-            return null;
-        }
+    @Nullable
+    public IConstellation getConstellation(ItemStack stack) {
         return IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
-    public static void setConstellation(ItemStack stack, IConstellation constellation) {
-        Item i = stack.getItem();
-        if (!(i instanceof ItemConstellationPaper)) {
-            return;
-        }
+    public boolean setConstellation(ItemStack stack, @Nullable IConstellation constellation) {
         constellation.writeToNBT(NBTHelper.getPersistentData(stack));
+        return true;
     }
 }
