@@ -145,7 +145,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
             return;
         }
 
-        if (!this.hasMultiblock() || !this.activeRecipe.matches(this)) {
+        if (!this.hasMultiblock() || !this.activeRecipe.matches(this, false)) {
             this.abortCrafting();
             return;
         }
@@ -167,7 +167,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
         boolean isChaining;
         ResourceLocation recipeName = this.activeRecipe.getRecipeToCraft().getId();
 
-        if (!(isChaining = this.activeRecipe.matches(this))) {
+        if (!(isChaining = this.activeRecipe.matches(this, false))) {
             this.abortCrafting();
         }
         PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ALTAR_RECIPE_FINISH)
@@ -193,6 +193,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
         }
 
         this.storedStarlight *= 0.95;
+        this.storedStarlight = this.getAltarType().getStarlightCapacity();
         int yLevel = getPos().getY();
         if (yLevel > 40) {
             float collect = 160;
@@ -334,6 +335,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
         this.altarType = AltarType.values()[compound.getInt("altarType")];
         this.inventory = this.inventory.deserialize(compound.getCompound("inventory"));
         this.focusItem = NBTHelper.readFromSubTag(compound, "focusItem", ItemStack::read);
+        this.storedStarlight = compound.getInt("storedStarlight");
 
         if (compound.contains("activeRecipe", Constants.NBT.TAG_COMPOUND)) {
             this.activeRecipe = ActiveSimpleAltarRecipe.deserialize(compound.getCompound("activeRecipe"), this.activeRecipe);
@@ -349,6 +351,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
         compound.putInt("altarType", this.altarType.ordinal());
         compound.put("inventory", this.inventory.serialize());
         NBTHelper.setAsSubTag(compound, "focusItem", this.focusItem::write);
+        compound.putInt("storedStarlight", this.storedStarlight);
 
         if (this.activeRecipe != null) {
             compound.put("activeRecipe", this.activeRecipe.serialize());

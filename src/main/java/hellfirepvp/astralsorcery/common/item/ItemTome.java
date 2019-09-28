@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.GuiType;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.container.factory.ContainerTomeProvider;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -83,7 +84,9 @@ public class ItemTome extends Item {
         for (int i = 0; i < out.size(); i++) {
             IConstellation c = out.get(i);
             ItemStack paper = new ItemStack(ItemsAS.CONSTELLATION_PAPER);
-            ItemConstellationPaper.setConstellation(paper, c);
+            if (paper.getItem() instanceof ConstellationBaseItem) {
+                ((ConstellationBaseItem) paper.getItem()).setConstellation(paper, c);
+            }
             items[i] = paper;
         }
         return items;

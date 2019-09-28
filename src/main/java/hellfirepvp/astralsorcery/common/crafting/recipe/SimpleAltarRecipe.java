@@ -141,7 +141,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
         this.craftingEffects.add(effect);
     }
 
-    public boolean matches(TileAltar altar) {
+    public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement) {
         if (!this.getAltarType().isThisLEThan(altar.getAltarType())) {
             return false;
         }
@@ -151,7 +151,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
                 return false;
             }
         }
-        if (altar.getStoredStarlight() < this.getStarlightRequirement()) {
+        if (!ignoreStarlightRequirement && altar.getStoredStarlight() < this.getStarlightRequirement()) {
             return false;
         }
 

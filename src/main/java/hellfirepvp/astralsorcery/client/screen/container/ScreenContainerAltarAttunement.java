@@ -46,7 +46,7 @@ public class ScreenContainerAltarAttunement extends ScreenContainerAltar<Contain
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         GlStateManager.enableBlend();
 
-        SimpleAltarRecipe recipe = this.findRecipe();
+        SimpleAltarRecipe recipe = this.findRecipe(false);
         if (recipe != null) {
             ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity());
             this.blitOffset = 10;
@@ -88,7 +88,7 @@ public class ScreenContainerAltarAttunement extends ScreenContainerAltar<Contain
                     uvOffset.getA(), uvOffset.getB(),
                     spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength());
 
-            SimpleAltarRecipe aar = findRecipe();
+            SimpleAltarRecipe aar = findRecipe(true);
             if (aar != null) {
                 int req = aar.getStarlightRequirement();
                 int has = altar.getStoredStarlight();

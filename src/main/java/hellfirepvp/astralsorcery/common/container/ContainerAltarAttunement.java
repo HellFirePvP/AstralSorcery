@@ -49,18 +49,18 @@ public class ContainerAltarAttunement extends ContainerAltarBase {
     @Override
     void bindAltarInventory(TileInventory altarInventory) {
         for (int xx = 0; xx < 3; xx++) {
-            addSlot(new SlotItemHandler(altarInventory,     xx, 102 + xx * 18, 29));
+            addSlot(new SlotItemHandler(altarInventory,  6 + xx, 102 + xx * 18, 29));
         }
         for (int xx = 0; xx < 3; xx++) {
-            addSlot(new SlotItemHandler(altarInventory, 3 + xx, 102 + xx * 18, 47));
+            addSlot(new SlotItemHandler(altarInventory, 11 + xx, 102 + xx * 18, 47));
         }
         for (int xx = 0; xx < 3; xx++) {
-            addSlot(new SlotItemHandler(altarInventory, 6 + xx, 102 + xx * 18, 65));
+            addSlot(new SlotItemHandler(altarInventory, 16 + xx, 102 + xx * 18, 65));
         }
-        addSlot(new SlotItemHandler(altarInventory,  9, 84,  11));
-        addSlot(new SlotItemHandler(altarInventory, 10, 156, 11));
-        addSlot(new SlotItemHandler(altarInventory, 11, 84,  83));
-        addSlot(new SlotItemHandler(altarInventory, 12, 156, 83));
+        addSlot(new SlotItemHandler(altarInventory,  0, 84,  11));
+        addSlot(new SlotItemHandler(altarInventory,  4, 156, 11));
+        addSlot(new SlotItemHandler(altarInventory, 20, 84,  83));
+        addSlot(new SlotItemHandler(altarInventory, 24, 156, 83));
     }
 
     @Override

@@ -47,13 +47,13 @@ public class ContainerAltarDiscovery extends ContainerAltarBase {
     @Override
     void bindAltarInventory(TileInventory altarInventory) {
         for (int xx = 0; xx < 3; xx++) {
-            addSlot(new SlotItemHandler(altarInventory,     xx, 62 + xx * 18, 11));
+            addSlot(new SlotItemHandler(altarInventory,  6 + xx, 62 + xx * 18, 11));
         }
         for (int xx = 0; xx < 3; xx++) {
-            addSlot(new SlotItemHandler(altarInventory, 3 + xx, 62 + xx * 18, 29));
+            addSlot(new SlotItemHandler(altarInventory, 11 + xx, 62 + xx * 18, 29));
         }
         for (int xx = 0; xx < 3; xx++) {
-            addSlot(new SlotItemHandler(altarInventory, 6 + xx, 62 + xx * 18, 47));
+            addSlot(new SlotItemHandler(altarInventory, 16 + xx, 62 + xx * 18, 47));
         }
     }
 

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
+import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.container.slot.SlotConstellationPaper;
 import hellfirepvp.astralsorcery.common.container.slot.SlotUnclickable;
@@ -83,7 +84,7 @@ public class ContainerTome extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if(!itemstack1.isEmpty() && itemstack1.getItem() instanceof ItemConstellationPaper && ItemConstellationPaper.getConstellation(itemstack1) != null) {
+            if(!itemstack1.isEmpty() && itemstack1.getItem() instanceof ItemConstellationPaper && ((ItemConstellationPaper) itemstack1.getItem()).getConstellation(itemstack1) != null) {
                 if(index >= 0 && index < 36) {
                     if(!this.mergeItemStack(itemstack1, 36, 63, false)) {
                         return ItemStack.EMPTY;
@@ -132,7 +133,10 @@ public class ContainerTome extends Container {
                 if (in.isEmpty()) {
                     continue;
                 }
-                IConstellation c = ItemConstellationPaper.getConstellation(in);
+                if (!(in.getItem() instanceof ConstellationBaseItem)) {
+                    continue;
+                }
+                IConstellation c = ((ConstellationBaseItem) in.getItem()).getConstellation(in);
                 if (c != null) {
                     saveConstellations.add(c);
                 }

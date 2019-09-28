@@ -160,8 +160,8 @@ public class ActiveSimpleAltarRecipe {
         }
     }
 
-    public boolean matches(TileAltar altar) {
-        if (!this.getRecipeToCraft().matches(altar)) {
+    public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement) {
+        if (!this.getRecipeToCraft().matches(altar, ignoreStarlightRequirement)) {
             return false;
         }
 
