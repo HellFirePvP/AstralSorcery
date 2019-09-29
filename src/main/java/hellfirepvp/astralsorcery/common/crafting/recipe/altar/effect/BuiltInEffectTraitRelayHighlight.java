@@ -59,10 +59,8 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
                 if (relay != null) {
                     ItemStack in = relay.getInventory().getStackInSlot(0);
                     if (!in.isEmpty() && match.getIngredient().test(in)) {
-                        Color color = ItemColorizationHelper.getDominantColorFromItemStack(in);
-                        if (color == null) {
-                            color = ColorsAS.CELESTIAL_CRYSTAL;
-                        }
+                        Color color = ItemColorizationHelper.getDominantColorFromItemStack(in)
+                                .orElse(ColorsAS.CELESTIAL_CRYSTAL);
 
                         playLightbeam(altar, relay, color);
                         playRelayHighlightParticles(relay, color);
@@ -79,10 +77,8 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
                         }
                     } else {
                         ItemStack chosen = match.getRandomMatchingStack(getClientTick());
-                        Color color = ItemColorizationHelper.getDominantColorFromItemStack(chosen);
-                        if (color == null) {
-                            color = ColorsAS.CELESTIAL_CRYSTAL;
-                        }
+                        Color color = ItemColorizationHelper.getDominantColorFromItemStack(chosen)
+                                .orElse(ColorsAS.CELESTIAL_CRYSTAL);
 
                         playLightbeam(altar, relay, color);
                         playRelayHighlightParticles(relay, color);

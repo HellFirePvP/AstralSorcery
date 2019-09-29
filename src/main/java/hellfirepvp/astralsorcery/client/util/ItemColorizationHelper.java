@@ -23,11 +23,13 @@ import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 import net.minecraftforge.resource.VanillaResourceType;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -51,16 +53,16 @@ public class ItemColorizationHelper implements ISelectiveResourceReloadListener 
         }
     }
 
-    @Nullable
-    public static Color getDominantColorFromItemStack(ItemStack stack) {
+    @Nonnull
+    public static Optional<Color> getDominantColorFromItemStack(ItemStack stack) {
         if (stack.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
         Color c = instance.colorizationMap.get(stack.getItem());
         if (c == null) {
             instance.resolveColor(stack);
         }
-        return instance.colorizationMap.get(stack.getItem());
+        return Optional.ofNullable(instance.colorizationMap.get(stack.getItem()));
     }
 
     @Nullable

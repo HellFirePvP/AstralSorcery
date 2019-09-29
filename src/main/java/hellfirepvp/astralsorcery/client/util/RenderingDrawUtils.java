@@ -288,7 +288,7 @@ public class RenderingDrawUtils {
         GlStateManager.enableTexture();
     }
 
-    public static void renderLightRayFan(double x, double y, double z, Color effectColor, long seed, int minScale, float scale, int count) {
+    public static void renderLightRayFan(double x, double y, double z, Color color, long seed, int minScale, float scale, int count) {
         rand.setSeed(seed);
 
         GlStateManager.pushMatrix();
@@ -297,10 +297,10 @@ public class RenderingDrawUtils {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
 
-        RenderHelper.disableStandardItemLighting();
         float f1 = ClientScheduler.getClientTick() / 400.0F;
-        float f2 = 0.4F;
+        float f2 = 0.0F;
 
+        RenderHelper.disableStandardItemLighting();
         GlStateManager.disableTexture();
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Blending.ADDITIVE_ALPHA.applyStateManager();
@@ -319,11 +319,11 @@ public class RenderingDrawUtils {
             float f4 = rand.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
             fa /= 30.0F / (Math.min(minScale, 10 * scale) / 10.0F);
             f4 /= 30.0F / (Math.min(minScale, 10 * scale) / 10.0F);
-            vb.pos(0, 0, 0).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
-            vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos( 0.7D * f4, fa,   -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos( 0.0D,      fa,    1.0F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
+            vb.pos(0, 0, 0).color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
+            vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos( 0.7D * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos( 0.0D,      fa,    1.0F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
             tes.draw();
         }
         GlStateManager.popMatrix();
