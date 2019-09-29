@@ -19,12 +19,14 @@ import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.CustomAltarRecipeHandler;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -33,6 +35,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,7 +49,7 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 12.08.2019 / 19:31
  */
-public class SimpleAltarRecipe extends CustomMatcherRecipe {
+public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecipe.Progression {
 
     private final AltarType altarType;
     private final int starlightRequirement;
@@ -75,13 +78,21 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
             case RADIANCE:
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_TRAIT_FOCUS_CIRCLE);
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_TRAIT_RELAY_HIGHLIGHT);
+                this.addAltarEffect(AltarRecipeEffectsAS.ALTAR_DEFAULT_SPARKLE);
             case CONSTELLATION:
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_CONSTELLATION_LINES);
+                this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_CONSTELLATION_FINISH);
             case ATTUNEMENT:
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_ATTUNEMENT_SPARKLE);
             case DISCOVERY:
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_DISCOVERY_CENTRAL_BEAM);
         }
+    }
+
+    @Nonnull
+    @Override
+    public ResearchProgression getRequiredProgression() {
+        return this.getAltarType().getAssociatedTier();
     }
 
     @Nullable
@@ -151,7 +162,20 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe {
         this.outputs.add(ItemUtils.copyStackWithSize(output, output.getCount()));
     }
 
-    public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement) {
+    public boolean matches(LogicalSide side, PlayerEntity crafter, TileAltar altar, boolean ignoreStarlightRequirement) {
+        if (crafter == null) {
+            return false;
+        }
+        boolean hasProgress;
+        if (side.isClient()) {
+            hasProgress = this.hasProgressionClient();
+        } else {
+            hasProgress = this.hasProgressionServer(crafter);
+        }
+        if (!hasProgress) {
+            return false;
+        }
+
         if (!this.getAltarType().isThisLEThan(altar.getAltarType())) {
             return false;
         }

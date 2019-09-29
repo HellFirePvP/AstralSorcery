@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect;
 
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
@@ -39,6 +40,7 @@ public class BuiltInEffectTraitFocusCircle extends AltarRecipeEffect {
 
                 EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                         .spawn(at)
+                        .color(VFXColorFunction.WHITE)
                         .alpha(VFXAlphaFunction.FADE_OUT)
                         .setScaleMultiplier(0.15F + rand.nextFloat() * 0.2F);
             }
@@ -47,9 +49,10 @@ public class BuiltInEffectTraitFocusCircle extends AltarRecipeEffect {
                         .setY(0)
                         .normalize()
                         .multiply(1.3F + rand.nextFloat() * 0.5F)
-                        .add(new Vector3(altarPos).addY(2F + rand.nextFloat() * 0.4F));
+                        .add(new Vector3(altarPos).add(0.5, 2F + rand.nextFloat() * 0.4F, 0.5));
                 EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                         .spawn(r)
+                        .color(VFXColorFunction.WHITE)
                         .alpha(VFXAlphaFunction.FADE_OUT)
                         .setScaleMultiplier(0.1F + rand.nextFloat() * 0.2F);
             }
@@ -58,9 +61,10 @@ public class BuiltInEffectTraitFocusCircle extends AltarRecipeEffect {
                         .setY(0)
                         .normalize()
                         .multiply(2F + rand.nextFloat() * 0.5F)
-                        .add(new Vector3(altarPos).addY(1.1F + rand.nextFloat() * 0.4F));
+                        .add(new Vector3(altarPos).add(0.5, 1.1F + rand.nextFloat() * 0.4F, 0.5));
                 EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                         .spawn(r)
+                        .color(VFXColorFunction.WHITE)
                         .alpha(VFXAlphaFunction.FADE_OUT)
                         .setScaleMultiplier(0.1F + rand.nextFloat() * 0.2F);
             }

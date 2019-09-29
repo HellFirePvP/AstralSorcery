@@ -37,12 +37,14 @@ public class RegistryRecipeTypes {
     public static void init() {
         TYPE_WELL = new ResolvingRecipeType<>("well", WellLiquefaction.class, (recipe, context) -> recipe.matches(context.getInput()));
         TYPE_INFUSION = new ResolvingRecipeType<>("infusion", LiquidInfusion.class, (recipe, context) -> true);
-        TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) -> recipe.matches(context.getAltar(), context.ignoreStarlightRequirement()));
+        TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) ->
+                recipe.matches(context.getSide(), context.getCrafter(), context.getAltar(), context.ignoreStarlightRequirement()));
     }
 
     public static void initAltarEffects() {
         BUILTIN_ATTUNEMENT_SPARKLE = registerEffect(new BuiltInEffectAttunementSparkle());
         BUILTIN_CONSTELLATION_LINES = registerEffect(new BuiltInEffectConstellationLines());
+        BUILTIN_CONSTELLATION_FINISH = registerEffect(new BuiltInEffectConstellationFinish());
         BUILTIN_DISCOVERY_CENTRAL_BEAM = registerEffect(new BuiltInEffectDiscoveryCentralBeam());
         BUILTIN_TRAIT_FOCUS_CIRCLE = registerEffect(new BuiltInEffectTraitFocusCircle());
         BUILTIN_TRAIT_RELAY_HIGHLIGHT = registerEffect(new BuiltInEffectTraitRelayHighlight());

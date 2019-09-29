@@ -1,0 +1,28 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 180,
+  "starlight": 300,
+  "output": "astralsorcery:spectral_relay",
+  "pattern": [
+    "_____",
+    "_____",
+    "_NGN_",
+    "_PMP_",
+    "_____"
+  ],
+  "key": {
+    "N": {
+      "tag": "forge:nuggets/gold"
+    },
+    "G": {
+      "item": "astralsorcery:glass_lens"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "M": {
+      "item": "astralsorcery:marble_raw"
+    }
+  }
+}

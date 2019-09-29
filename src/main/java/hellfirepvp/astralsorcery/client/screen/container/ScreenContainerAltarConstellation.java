@@ -34,7 +34,7 @@ import net.minecraft.util.text.ITextComponent;
 public class ScreenContainerAltarConstellation extends ScreenContainerAltar<ContainerAltarConstellation> {
 
     public ScreenContainerAltarConstellation(ContainerAltarConstellation screenContainer, PlayerInventory inv, ITextComponent name) {
-        super(screenContainer, inv, name, 256, 202);
+        super(screenContainer, inv, name, 255, 202);
     }
 
     @Override

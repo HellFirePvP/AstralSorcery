@@ -1,4 +1,75 @@
 {
+	"altar_craft_start": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:altar/craft_start_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:altar/craft_start_2",
+				"stream": false
+			}
+		]
+	},
+	"altar_craft_finish": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:altar/craft_finish_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:altar/craft_finish_2",
+				"stream": false
+			}
+		]
+	},
+	"altar_craft_loop_t1": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:altar/craft_loop_t1",
+				"stream": false
+			}
+		]
+	},
+	"altar_craft_loop_t2": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:altar/craft_loop_t2",
+				"stream": false
+			}
+		]
+	},
+	"altar_craft_loop_t3": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:altar/craft_loop_t3",
+				"stream": false
+			}
+		]
+	},
+	"altar_craft_loop_t4": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:altar/craft_loop_t4",
+				"stream": false
+			}
+		]
+	},
+	"altar_craft_loop_t4_waiting": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:altar/craft_loop_t4_waiting",
+				"stream": false
+			}
+		]
+	},
     "craft_attunement": {
         "category": "master",
         "sounds": [

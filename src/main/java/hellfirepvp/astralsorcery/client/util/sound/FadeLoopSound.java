@@ -17,38 +17,61 @@ import net.minecraft.util.math.MathHelper;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: FadeInLoopSound
+ * Class: FadeLoopSound
  * Created by HellFirePvP
  * Date: 25.09.2019 / 16:55
  */
-public class FadeInLoopSound extends PositionedLoopSound {
+public class FadeLoopSound extends PositionedLoopSound {
 
     private float fadeInTicks = 40;
-    private int tick = 0;
+    private float fadeOutTicks = 1;
 
-    public FadeInLoopSound(CategorizedSoundEvent sound, float volume, float pitch, Vector3 pos, boolean isGlobal) {
+    private int tick = 0;
+    private int stopTick = 0;
+    private boolean shouldStop = false;
+
+    public FadeLoopSound(CategorizedSoundEvent sound, float volume, float pitch, Vector3 pos, boolean isGlobal) {
         super(sound, volume, pitch, pos, isGlobal);
     }
 
-    public FadeInLoopSound(SoundEvent sound, SoundCategory category, float volume, float pitch, Vector3 pos, boolean isGlobal) {
+    public FadeLoopSound(SoundEvent sound, SoundCategory category, float volume, float pitch, Vector3 pos, boolean isGlobal) {
         super(sound, category, volume, pitch, pos, isGlobal);
     }
 
-    public <T extends FadeInLoopSound> T setFadeInTicks(float fadeInTicks) {
+    public <T extends FadeLoopSound> T setFadeInTicks(float fadeInTicks) {
         this.fadeInTicks = fadeInTicks;
         return (T) this;
+    }
+
+    public <T extends FadeLoopSound> T setFadeOutTicks(float fadeOutTicks) {
+        this.fadeOutTicks = fadeOutTicks;
+        return (T) this;
+    }
+
+    @Override
+    public boolean isDonePlaying() {
+        return (this.shouldStop = super.isDonePlaying()) && this.stopTick > this.fadeOutTicks;
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        tick++;
+        this.tick++;
+        if (this.shouldStop) {
+            this.stopTick++;
+        }
+    }
+
+    @Override
+    public boolean canBeSilent() {
+        return true;
     }
 
     @Override
     public float getVolume() {
-        float mul = MathHelper.clamp(this.tick / fadeInTicks, 0F, 1F);
-        return mul * super.getVolume();
+        float mulFadeIn = MathHelper.clamp(this.tick / this.fadeInTicks, 0F, 1F);
+        float mulFadeOut = MathHelper.clamp(1F - this.stopTick / this.fadeOutTicks, 0F, 1F);
+        return mulFadeIn * mulFadeOut * super.getVolume();
     }
 }

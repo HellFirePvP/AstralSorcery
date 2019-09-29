@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.sound;
 
-import hellfirepvp.astralsorcery.client.util.sound.FadeInLoopSound;
+import hellfirepvp.astralsorcery.client.util.sound.FadeLoopSound;
 import hellfirepvp.astralsorcery.client.util.sound.PositionedLoopSound;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -66,19 +66,19 @@ public class SoundHelper {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static FadeInLoopSound playSoundLoopFadeInClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, PositionedLoopSound.ActivityFunction func) {
+    public static FadeLoopSound playSoundLoopFadeInClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, PositionedLoopSound.ActivityFunction func) {
         SoundCategory cat = SoundCategory.MASTER;
         if(sound instanceof CategorizedSoundEvent) {
             cat = ((CategorizedSoundEvent) sound).getCategory();
         }
-        FadeInLoopSound posSound = new FadeInLoopSound(sound, cat, volume, pitch, pos, isGlobal);
+        FadeLoopSound posSound = new FadeLoopSound(sound, cat, volume, pitch, pos, isGlobal);
         posSound.setRefreshFunction(func);
         Minecraft.getInstance().getSoundHandler().play(posSound);
         return posSound;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public float getSoundVolume(SoundCategory cat) {
+    public static float getSoundVolume(SoundCategory cat) {
         return Minecraft.getInstance().gameSettings.getSoundLevel(cat);
     }
 

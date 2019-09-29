@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.data.world.RockCrystalBuffer;
+import hellfirepvp.astralsorcery.common.item.base.OverrideInteractItem;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -28,6 +29,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -35,12 +37,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 
@@ -51,7 +56,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 17.08.2019 / 23:03
  */
-public class ItemWand extends Item implements ConstellationItem {
+public class ItemWand extends Item implements ConstellationItem, OverrideInteractItem {
 
     //TODO wand augments
 
@@ -92,6 +97,28 @@ public class ItemWand extends Item implements ConstellationItem {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean shouldInterceptInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+        return true;
+    }
+
+    @Override
+    public boolean doInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+        World world = player.getEntityWorld();
+        BlockState state = world.getBlockState(pos);
+        Block b = state.getBlock();
+        if (b instanceof WandInteractable) {
+            ((WandInteractable) b).onInteract(world, pos, player, face, player.isSneaking());
+            return true;
+        }
+        WandInteractable wandTe = MiscUtils.getTileAt(world, pos, WandInteractable.class, true);
+        if(wandTe != null) {
+            wandTe.onInteract(world, pos, player, face, player.isSneaking());
+            return true;
+        }
+        return false;
     }
 
     @OnlyIn(Dist.CLIENT)

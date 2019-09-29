@@ -3,12 +3,14 @@
   "altar_type": 0,
   "duration": 60,
   "starlight": 50,
-  "output": "astralsorcery:infused_wood_slab",
-  "outputCount": 6,
+  "output": {
+    "item": "astralsorcery:infused_wood_slab",
+    "count": 6
+  },
   "pattern": [
     "_____",
     "_____",
-    "_PPP_",
+    "_RRR_",
     "_____",
     "_____"
   ],

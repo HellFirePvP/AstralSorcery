@@ -1,0 +1,25 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 200,
+  "starlight": 200,
+  "output": "astralsorcery:wand",
+  "pattern": [
+    "_____",
+    "__AE_",
+    "__MA_",
+    "_M___",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "M": {
+      "item": "astralsorcery:marble_raw"
+    },
+    "E": {
+      "tag": "forge:ender_pearls"
+    }
+  }
+}

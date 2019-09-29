@@ -18,6 +18,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -110,4 +111,16 @@ public abstract class AltarRecipeEffect extends ForgeRegistryEntry<AltarRecipeEf
     @OnlyIn(Dist.CLIENT)
     public abstract void onCraftingFinish(TileAltar altar, boolean isChaining);
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AltarRecipeEffect that = (AltarRecipeEffect) o;
+        return this.getRegistryName().equals(that.getRegistryName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getRegistryName());
+    }
 }

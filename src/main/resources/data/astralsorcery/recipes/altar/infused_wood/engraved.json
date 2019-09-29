@@ -3,8 +3,10 @@
   "altar_type": 0,
   "duration": 60,
   "starlight": 50,
-  "output": "astralsorcery:infused_wood_engraved",
-  "outputCount": 4,
+  "output": {
+    "item": "astralsorcery:infused_wood_engraved",
+    "count": 4
+  },
   "pattern": [
     "_____",
     "__P__",

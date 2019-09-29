@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.crafting.recipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.items.IItemHandler;
 
 /**
@@ -23,15 +25,27 @@ import net.minecraftforge.items.IItemHandler;
 public class SimpleAltarRecipeContext extends RecipeCraftingContext<SimpleAltarRecipe, IItemHandler> {
 
     private final TileAltar altar;
+    private final PlayerEntity crafter;
+    private final LogicalSide side;
     private boolean ignoreStarlightRequirement = false;
 
-    public SimpleAltarRecipeContext(TileAltar altar) {
+    public SimpleAltarRecipeContext(PlayerEntity crafter, LogicalSide side, TileAltar altar) {
         this.altar = altar;
+        this.crafter = crafter;
+        this.side = side;
     }
 
     public SimpleAltarRecipeContext setIgnoreStarlightRequirement(boolean ignoreStarlightRequirement) {
         this.ignoreStarlightRequirement = ignoreStarlightRequirement;
         return this;
+    }
+
+    public LogicalSide getSide() {
+        return side;
+    }
+
+    public PlayerEntity getCrafter() {
+        return crafter;
     }
 
     public boolean ignoreStarlightRequirement() {

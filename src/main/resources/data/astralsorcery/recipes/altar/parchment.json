@@ -1,0 +1,25 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 100,
+  "starlight": 50,
+  "output": {
+    "item": "astralsorcery:parchment",
+    "count": 4
+  },
+  "pattern": [
+    "_____",
+    "__P__",
+    "_PAP_",
+    "__P__",
+    "_____"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    }
+  }
+}

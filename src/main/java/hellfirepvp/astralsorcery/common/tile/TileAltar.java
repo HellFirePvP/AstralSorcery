@@ -16,8 +16,10 @@ import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
+import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipeContext;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.item.base.IConstellationFocus;
+import hellfirepvp.astralsorcery.common.item.wand.WandInteractable;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
@@ -31,14 +33,17 @@ import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import hellfirepvp.astralsorcery.common.util.sound.CategorizedSoundEvent;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventoryFiltered;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -47,6 +52,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
@@ -61,7 +67,7 @@ import java.util.Set;
  * Created by HellFirePvP
  * Date: 12.08.2019 / 19:53
  */
-public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
+public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implements WandInteractable {
 
     private float posDistribution = -1;
 
@@ -73,6 +79,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
     private int storedStarlight = 0;
 
     private Object clientCraftSound = null;
+    private Object clientWaitSound = null;
 
     public TileAltar() {
         super(TileEntityTypesAS.ALTAR);
@@ -90,7 +97,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
             this.gatherStarlight();
             this.doCraftingCycle();
         } else {
-            if (this.activeRecipe != null) {
+            if (this.getActiveRecipe() != null) {
                 this.doCraftEffects();
                 this.doCraftSound();
             }
@@ -105,14 +112,50 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
 
     @OnlyIn(Dist.CLIENT)
     private void doCraftSound() {
-        if(Minecraft.getInstance().gameSettings.getSoundLevel(SoundCategory.MASTER) > 0) {
+        if (SoundHelper.getSoundVolume(SoundCategory.BLOCKS) > 0) {
+            ActiveSimpleAltarRecipe activeRecipe = this.getActiveRecipe();
+            AltarType type = this.getAltarType();
+
             if (clientCraftSound == null || ((PositionedLoopSound) clientCraftSound).hasStoppedPlaying()) {
-                clientCraftSound = SoundHelper.playSoundLoopClient(SoundsAS.CRAFT_ATTUNEMENT, new Vector3(this), 0.25F, 1F, false,
+                CategorizedSoundEvent sound = SoundsAS.ALTAR_CRAFT_LOOP_T1;
+                switch (type) {
+                    case ATTUNEMENT:
+                        sound = SoundsAS.ALTAR_CRAFT_LOOP_T2;
+                        break;
+                    case CONSTELLATION:
+                        sound = SoundsAS.ALTAR_CRAFT_LOOP_T3;
+                        break;
+                    case RADIANCE:
+                        sound = SoundsAS.ALTAR_CRAFT_LOOP_T4;
+                        break;
+                }
+
+                clientCraftSound = SoundHelper.playSoundLoopFadeInClient(sound, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F, false,
                         () -> isRemoved() ||
-                                Minecraft.getInstance().gameSettings.getSoundLevel(SoundCategory.MASTER) <= 0 ||
-                                this.activeRecipe == null);
+                                Minecraft.getInstance().gameSettings.getSoundLevel(SoundCategory.BLOCKS) <= 0 ||
+                                this.getActiveRecipe() == null)
+                        .setFadeInTicks(40)
+                        .setFadeOutTicks(20);
+            }
+
+            if (activeRecipe.getState() == ActiveSimpleAltarRecipe.CraftingState.WAITING && type == AltarType.RADIANCE) {
+
+                if (clientWaitSound == null || ((PositionedLoopSound) clientWaitSound).hasStoppedPlaying()) {
+                    clientWaitSound = SoundHelper.playSoundLoopFadeInClient(SoundsAS.ALTAR_CRAFT_LOOP_T4_WAITING, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F, false,
+                            () -> isRemoved() ||
+                                    Minecraft.getInstance().gameSettings.getSoundLevel(SoundCategory.BLOCKS) <= 0 ||
+                                    this.getActiveRecipe() == null ||
+                                    this.getActiveRecipe().getState() != ActiveSimpleAltarRecipe.CraftingState.WAITING)
+                            .setFadeInTicks(30)
+                            .setFadeOutTicks(10);
+                }
+
+                ((PositionedLoopSound) clientCraftSound).setVolumeMultiplier(0.75F);
+            } else {
+                ((PositionedLoopSound) clientCraftSound).setVolumeMultiplier(1F);
             }
         } else {
+            clientWaitSound = null;
             clientCraftSound = null;
         }
     }
@@ -137,6 +180,10 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
                     });
                 }
             });
+
+            if (!isChaining) {
+                SoundHelper.playSoundClientWorld(SoundsAS.ALTAR_CRAFT_FINISH, at, 1F, 1F);
+            }
         }
     }
 
@@ -159,10 +206,9 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
 
     private void finishRecipe() {
         ForgeHooks.setCraftingPlayer(this.activeRecipe.tryGetCraftingPlayerServer());
+        this.activeRecipe.createItemOutputs(this, this::dropItemOnTop);
         this.activeRecipe.consumeInputs(this);
         ForgeHooks.setCraftingPlayer(null);
-
-        this.activeRecipe.createItemOutputs(this, this::dropItemOnTop);
 
         boolean isChaining;
         ResourceLocation recipeName = this.activeRecipe.getRecipeToCraft().getId();
@@ -184,6 +230,39 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
     private void abortCrafting() {
         this.activeRecipe = null;
         markForUpdate();
+    }
+
+    protected SimpleAltarRecipe findRecipe(PlayerEntity crafter) {
+        return RecipeTypesAS.TYPE_ALTAR.findRecipe(new SimpleAltarRecipeContext(crafter, LogicalSide.SERVER, this)
+                .setIgnoreStarlightRequirement(false));
+    }
+
+    protected void startCrafting(SimpleAltarRecipe recipe, PlayerEntity crafter) {
+        if (this.getActiveRecipe() != null) {
+            return;
+        }
+
+        int divisor = Math.max(0, this.getAltarType().ordinal() - recipe.getAltarType().ordinal());
+        divisor = (int) Math.round(Math.pow(2, divisor));
+        this.activeRecipe = new ActiveSimpleAltarRecipe(recipe, divisor, crafter.getUniqueID());
+        markForUpdate();
+
+        SoundHelper.playSoundAround(SoundsAS.ALTAR_CRAFT_START, SoundCategory.BLOCKS, this.world, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F);
+    }
+
+    @Override
+    public void onInteract(World world, BlockPos pos, PlayerEntity player, Direction side, boolean sneak) {
+        if (!world.isRemote()) {
+            if (this.getActiveRecipe() != null) {
+                if (!this.getActiveRecipe().matches(this, false)) {
+                    abortCrafting();
+                }
+            }
+            SimpleAltarRecipe recipe = this.findRecipe(player);
+            if (recipe != null) {
+                this.startCrafting(recipe, player);
+            }
+        }
     }
 
     private void gatherStarlight() {
@@ -230,7 +309,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> {
                 BlockPos offset = new BlockPos(xx, 0, zz);
                 TileSpectralRelay tar = MiscUtils.getTileAt(getWorld(), getPos().add(offset), TileSpectralRelay.class, true);
                 if (tar != null) {
-                    eligableRelayOffsets.add(offset);
+                    eligableRelayOffsets.add(getPos().add(offset));
                 }
             }
         }

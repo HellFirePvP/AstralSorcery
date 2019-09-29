@@ -1,0 +1,22 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 80,
+  "starlight": 150,
+  "output": "astralsorcery:glass_lens",
+  "pattern": [
+    "_____",
+    "__A__",
+    "_APA_",
+    "__A__",
+    "_____"
+  ],
+  "key": {
+    "P": {
+      "tag": "forge:glass_panes"
+    },
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    }
+  }
+}

@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.util.image.ColorThief;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -28,7 +27,6 @@ import javax.annotation.Nullable;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -48,7 +46,7 @@ public class ItemColorizationHelper implements ISelectiveResourceReloadListener 
 
     private void resolveColor(ItemStack stack) {
         Color dominant = getDominantColorFromStack(stack);
-        if(dominant != null) {
+        if (dominant != null) {
             colorizationMap.put(stack.getItem(), dominant);
         }
     }
@@ -81,7 +79,7 @@ public class ItemColorizationHelper implements ISelectiveResourceReloadListener 
             r = MathHelper.clamp(r, 0, 255);
             g = MathHelper.clamp(g, 0, 255);
             b = MathHelper.clamp(b, 0, 255);
-            return new Color(r, g, b).brighter();
+            return new Color(r, g, b);
         } catch (Exception exc) {
             AstralSorcery.log.error("Item Colorization Helper: Ignoring non-resolvable image " + tas.getName().toString());
             exc.printStackTrace();
@@ -97,12 +95,14 @@ public class ItemColorizationHelper implements ISelectiveResourceReloadListener 
         if (w <= 0 || h <= 0 || count <= 0) {
             return null;
         }
+
         BufferedImage bufferedImage = new BufferedImage(w, h * count, BufferedImage.TYPE_4BYTE_ABGR);
         for (int i = 0; i < count; i++) {
             int[] pxArray = new int[tas.getWidth() * tas.getHeight()];
             for (int xx = 0; xx < tas.getWidth(); xx++) {
                 for (int zz = 0; zz < tas.getHeight(); zz++) {
-                    pxArray[xx * tas.getHeight() + zz] = tas.getPixelRGBA(i, xx, zz);
+                    int argb = tas.getPixelRGBA(0, xx, zz + (i * tas.getHeight()));
+                    pxArray[zz * tas.getWidth() + xx] = argb & 0xFF00FF00 | ((argb & 0x00FF0000) >> 16) | ((argb & 0x000000FF) << 16);
                 }
             }
             bufferedImage.setRGB(0, i * h, w, h, pxArray, 0, w);

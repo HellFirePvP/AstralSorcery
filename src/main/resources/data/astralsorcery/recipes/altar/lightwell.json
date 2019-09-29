@@ -1,7 +1,7 @@
 {
   "type": "astralsorcery:altar",
   "altar_type": 0,
-  "duration": 100,
+  "duration": 180,
   "starlight": 200,
   "output": "astralsorcery:well",
   "pattern": [

@@ -1,0 +1,18 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "ICI"
+  ],
+  "key": {
+    "I": {
+      "item": "astralsorcery:marble_raw"
+    },
+    "C": {
+      "item": "astralsorcery:marble_chiseled"
+    }
+  },
+  "result": {
+    "item": "astralsorcery:marble_runed",
+    "amount": 3
+  }
+}

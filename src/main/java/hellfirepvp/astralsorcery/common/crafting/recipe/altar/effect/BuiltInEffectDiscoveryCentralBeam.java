@@ -30,9 +30,9 @@ public class BuiltInEffectDiscoveryCentralBeam extends AltarRecipeEffect {
     @OnlyIn(Dist.CLIENT)
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
         if(state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE &&
-                rand.nextInt(14) == 0) {
+                rand.nextInt(10) == 0) {
             Vector3 from = new Vector3(altar).add(0.5, 0.3, 0.5);
-            MiscUtils.applyRandomOffset(from, rand, 0.4F);
+            MiscUtils.applyRandomOffset(from, rand, 0.26F);
             EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
                     .spawn(from)
                     .setup(from.clone().addY(4 + rand.nextInt(2)), 1F, 1F)

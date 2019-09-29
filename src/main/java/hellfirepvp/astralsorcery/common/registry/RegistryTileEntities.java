@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import com.google.common.base.CaseFormat;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -49,6 +48,7 @@ public class RegistryTileEntities {
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAltar.class, new RenderTileAltar());
         ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderTileLens());
         ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderTilePrism());
         ClientRegistry.bindTileEntitySpecialRenderer(TileWell.class, new RenderWell());
