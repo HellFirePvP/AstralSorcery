@@ -3,8 +3,10 @@
   "altar_type": 0,
   "duration": 60,
   "starlight": 50,
-  "output": "astralsorcery:infused_wood_column",
-  "outputCount": 2,
+  "output": {
+    "item": "astralsorcery:infused_wood_column",
+    "count": 2
+  },
   "pattern": [
     "_____",
     "__P__",

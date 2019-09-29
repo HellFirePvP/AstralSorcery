@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.block.tile.altar;
 
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 
@@ -29,15 +30,17 @@ import java.util.function.Supplier;
  */
 public enum AltarType {
 
-    DISCOVERY(() -> StructureTypesAS.EMPTY, 6, 7, 8, 11, 12, 13, 16, 17, 18),
-    ATTUNEMENT(() -> StructureTypesAS.EMPTY, 0, 4, 6, 7, 8, 11, 12, 13, 16, 17, 18, 20, 23),
-    CONSTELLATION(() -> StructureTypesAS.EMPTY, (slot) -> slot != 3 && slot != 10 && slot != 14 && slot != 22),
-    RADIANCE(() -> StructureTypesAS.EMPTY, (slot) -> true);
+    DISCOVERY(ResearchProgression.BASIC_CRAFT, () -> StructureTypesAS.EMPTY, 6, 7, 8, 11, 12, 13, 16, 17, 18),
+    ATTUNEMENT(ResearchProgression.ATTUNEMENT, () -> StructureTypesAS.EMPTY, 0, 4, 6, 7, 8, 11, 12, 13, 16, 17, 18, 20, 23),
+    CONSTELLATION(ResearchProgression.CONSTELLATION, () -> StructureTypesAS.EMPTY, (slot) -> slot != 3 && slot != 10 && slot != 14 && slot != 22),
+    RADIANCE(ResearchProgression.RADIANCE, () -> StructureTypesAS.EMPTY, (slot) -> true);
 
+    private final ResearchProgression associatedTier;
     private final Supplier<StructureType> structureSupplier;
     private Predicate<Integer> slotValidator;
 
-    AltarType(Supplier<StructureType> structureSupplier, int... validSlots) {
+    AltarType(ResearchProgression progressTier, Supplier<StructureType> structureSupplier, int... validSlots) {
+        this.associatedTier = progressTier;
         this.structureSupplier = structureSupplier;
         List<Integer> slots = new ArrayList<>();
         for (int slot : validSlots) {
@@ -46,9 +49,15 @@ public enum AltarType {
         this.slotValidator = slots::contains;
     }
 
-    AltarType(Supplier<StructureType> structureSupplier, Predicate<Integer> slotValidator) {
+    AltarType(ResearchProgression progressTier, Supplier<StructureType> structureSupplier, Predicate<Integer> slotValidator) {
+        this.associatedTier = progressTier;
         this.structureSupplier = structureSupplier;
         this.slotValidator = slotValidator;
+    }
+
+    @Nonnull
+    public ResearchProgression getAssociatedTier() {
+        return associatedTier;
     }
 
     @Nonnull

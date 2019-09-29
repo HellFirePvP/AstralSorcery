@@ -3,8 +3,10 @@
   "altar_type": 0,
   "duration": 60,
   "starlight": 50,
-  "output": "astralsorcery:black_marble_raw",
-  "outputCount": 8,
+  "output": {
+    "item": "astralsorcery:black_marble_raw",
+    "count": 8
+  },
   "pattern": [
     "_____",
     "_RRR_",

@@ -15,9 +15,11 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -49,8 +51,8 @@ public class TraitUpgradeRecipe extends SimpleAltarRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement) {
-        return altar.getAltarType() == AltarType.CONSTELLATION && super.matches(altar, ignoreStarlightRequirement);
+    public boolean matches(LogicalSide side, PlayerEntity crafter, TileAltar altar, boolean ignoreStarlightRequirement) {
+        return altar.getAltarType() == AltarType.CONSTELLATION && super.matches(side, crafter, altar, ignoreStarlightRequirement);
     }
 
     @Override

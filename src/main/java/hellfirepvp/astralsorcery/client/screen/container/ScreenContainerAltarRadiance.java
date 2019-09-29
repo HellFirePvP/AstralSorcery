@@ -43,7 +43,7 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
     private static final Random rand = new Random();
 
     public ScreenContainerAltarRadiance(ContainerAltarTrait screenContainer, PlayerInventory inv, ITextComponent name) {
-        super(screenContainer, inv, name, 256, 202);
+        super(screenContainer, inv, name, 255, 202);
     }
 
     @Override

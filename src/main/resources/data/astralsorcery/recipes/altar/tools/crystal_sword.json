@@ -1,0 +1,25 @@
+{
+  "type": "astralsorcery:altar",
+  "recipe_class": "astralsorcery:constellation_base_merge",
+  "altar_type": 0,
+  "duration": 360,
+  "starlight": 300,
+  "output": "astralsorcery:crystal_sword",
+  "pattern": [
+    "_____",
+    "__C__",
+    "__C__",
+    "__S__",
+    "_____"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "C": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false
+    }
+  }
+}

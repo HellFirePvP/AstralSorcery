@@ -3,8 +3,10 @@
   "altar_type": 0,
   "duration": 60,
   "starlight": 50,
-  "output": "astralsorcery:marble_engraved",
-  "outputCount": 5,
+  "output": {
+    "item": "astralsorcery:marble_engraved",
+    "count": 5
+  },
   "pattern": [
     "_____",
     "__R__",

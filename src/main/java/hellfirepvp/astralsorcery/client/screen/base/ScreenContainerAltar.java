@@ -13,8 +13,10 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipeContext;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 
@@ -34,7 +36,8 @@ public abstract class ScreenContainerAltar<T extends ContainerAltarBase> extends
     @Nullable
     public SimpleAltarRecipe findRecipe(boolean ignoreStarlightRequirement) {
         TileAltar ta = getContainer().getTileEntity();
-        return RecipeTypesAS.TYPE_ALTAR.findRecipe(new SimpleAltarRecipeContext(ta).setIgnoreStarlightRequirement(ignoreStarlightRequirement));
+        return RecipeTypesAS.TYPE_ALTAR.findRecipe(new SimpleAltarRecipeContext(Minecraft.getInstance().player, LogicalSide.CLIENT, ta)
+                .setIgnoreStarlightRequirement(ignoreStarlightRequirement));
     }
 
     @Override

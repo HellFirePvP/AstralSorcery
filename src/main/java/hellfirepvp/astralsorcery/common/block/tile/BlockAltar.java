@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.container.factory.*;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -103,6 +104,11 @@ public abstract class BlockAltar extends BlockStarlightNetwork implements Custom
                 }
             }
         }
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     @Nullable

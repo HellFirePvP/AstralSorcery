@@ -3,8 +3,10 @@
   "altar_type": 0,
   "duration": 60,
   "starlight": 50,
-  "output": "astralsorcery:black_marble_chiseled",
-  "outputCount": 4,
+  "output": {
+    "item": "astralsorcery:black_marble_chiseled",
+    "count": 4
+  },
   "pattern": [
     "_____",
     "__R__",

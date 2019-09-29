@@ -33,7 +33,7 @@ public class BuiltInEffectConstellationLines extends AltarRecipeEffect {
         if (state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE) {
             Vector3 thisAltar = new Vector3(altar).clone().add(0.5, 0.5, 0.5);
             for (int i = 0; i < 4; i++) {
-                Vector3 at = getRandomPillarOffset(altar.getAltarType()).clone();
+                Vector3 at = getRandomPillarOffset(altar.getAltarType()).clone().addY(getPillarHeight(altar.getAltarType()));
                 at.multiply(rand.nextFloat()).add(thisAltar);
 
                 EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)

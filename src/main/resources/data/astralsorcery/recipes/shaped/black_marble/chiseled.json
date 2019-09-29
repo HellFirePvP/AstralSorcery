@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " I ",
+    "I I",
+    " I "
+  ],
+  "key": {
+    "I": {
+      "item": "astralsorcery:black_marble_raw"
+    }
+  },
+  "result": {
+    "item": "astralsorcery:black_marble_chiseled",
+    "amount": 4
+  }
+}

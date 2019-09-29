@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -38,6 +39,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -125,43 +127,54 @@ public class ActiveSimpleAltarRecipe {
 
         for (int slot = 0; slot < AltarRecipeGrid.MAX_INVENTORY_SIZE; slot++) {
             int fSlot = slot;
-            decrementItem(inv.getStackInSlot(slot), st -> inv.setStackInSlot(fSlot, st), altar::dropItemOnTop);
+            decrementItem(() -> inv.getStackInSlot(fSlot), st -> inv.setStackInSlot(fSlot, st), altar::dropItemOnTop);
         }
 
         for (CraftingFocusStack input : this.focusStacks) {
             TileSpectralRelay tar = MiscUtils.getTileAt(altar.getWorld(), input.getRealPosition(), TileSpectralRelay.class, true);
             if (tar != null) {
                 TileInventory tarInventory = tar.getInventory();
-                decrementItem(tarInventory.getStackInSlot(0), st -> tarInventory.setStackInSlot(0, st), altar::dropItemOnTop);
+                decrementItem(() -> tarInventory.getStackInSlot(0), st -> tarInventory.setStackInSlot(0, st), altar::dropItemOnTop);
             }
         }
     }
 
-    private void decrementItem(ItemStack consume, Consumer<ItemStack> setIntoInventory, Consumer<ItemStack> dropOtherwise) {
-        ItemStack replaceable = ItemStack.EMPTY;
-        if (consume.hasContainerItem()) {
-            replaceable = consume.getContainerItem();
+    private void decrementItem(Supplier<ItemStack> getFromInventory, Consumer<ItemStack> setIntoInventory, Consumer<ItemStack> dropOtherwise) {
+        ItemStack toConsume = getFromInventory.get();
+        toConsume = ItemUtils.copyStackWithSize(toConsume, toConsume.getCount());
+
+        ItemStack toReplaceWith = ItemStack.EMPTY;
+        if (toConsume.hasContainerItem()) {
+            toReplaceWith = toConsume.getContainerItem();
         }
 
-        if (!consume.isEmpty()) {
-            consume.setCount(consume.getCount() - 1);
-        }
+        toConsume.shrink(1);
 
-        if (!replaceable.isEmpty()) {
-            if (consume.isEmpty()) {
-                setIntoInventory.accept(replaceable);
-            } else if (ItemComparator.compare(consume, replaceable, ItemComparator.Clause.Sets.ITEMSTACK_STRICT_NOAMOUNT)) {
-                replaceable.grow(consume.getCount());
-                setIntoInventory.accept(replaceable);
+        //Stuff might need to be placed back into the inventory
+        if (!toReplaceWith.isEmpty()) {
+            if (toConsume.isEmpty()) {
+                setIntoInventory.accept(toReplaceWith);
+            } else if (ItemComparator.compare(toConsume, toReplaceWith, ItemComparator.Clause.Sets.ITEMSTACK_STRICT_NOAMOUNT)) {
+                toReplaceWith.grow(toConsume.getCount());
+                if (toReplaceWith.getCount() > toReplaceWith.getMaxStackSize()) {
+                    int overcapped = toReplaceWith.getCount() - toReplaceWith.getMaxStackSize();
+                    setIntoInventory.accept(ItemUtils.copyStackWithSize(toReplaceWith, toReplaceWith.getMaxStackSize()));
+                    dropOtherwise.accept(ItemUtils.copyStackWithSize(toReplaceWith, overcapped));
+                } else {
+                    setIntoInventory.accept(toReplaceWith);
+                }
             } else {
                 //Different item, no space left. welp.
-                dropOtherwise.accept(replaceable);
+                dropOtherwise.accept(toReplaceWith);
             }
+        } else {
+            //Or the item just doesn't have a container. then we can just set the shrunk stack back.
+            setIntoInventory.accept(toConsume);
         }
     }
 
     public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement) {
-        if (!this.getRecipeToCraft().matches(altar, ignoreStarlightRequirement)) {
+        if (!this.getRecipeToCraft().matches(LogicalSide.SERVER, this.tryGetCraftingPlayerServer(), altar, ignoreStarlightRequirement)) {
             return false;
         }
 
@@ -189,10 +202,24 @@ public class ActiveSimpleAltarRecipe {
         }
 
         List<WrappedIngredient> iIngredients = this.getRecipeToCraft().getTraitInputIngredients();
+
+        if (!iIngredients.isEmpty()) {
+            boolean shouldWait = tickCraftingRelayInputs(altar, iIngredients);
+            if (shouldWait) {
+                return CraftingState.WAITING;
+            }
+        }
+
+        ticksCrafting++;
+        return CraftingState.ACTIVE;
+    }
+
+    private boolean tickCraftingRelayInputs(TileAltar altar, List<WrappedIngredient> iIngredients) {
         //Start the surrounding stack intake past 66%
         int part = totalCraftingTime / 3;
         //Every input is evenly spread
         int cttPart = part / (iIngredients.size()) + 1;
+
 
         boolean waitMissingInputs = false;
         for (int i = 0; i < iIngredients.size(); i++) {
@@ -219,7 +246,7 @@ public class ActiveSimpleAltarRecipe {
                     this.focusStacks.add(found);
                 }
                 TileSpectralRelay tar = MiscUtils.getTileAt(altar.getWorld(), found.getRealPosition(), TileSpectralRelay.class, true);
-                if (tar != null) {
+                if (tar == null) {
                     waitMissingInputs = true;
                     continue;
                 }
@@ -229,12 +256,7 @@ public class ActiveSimpleAltarRecipe {
                 }
             }
         }
-        if (waitMissingInputs) {
-            return CraftingState.WAITING;
-        }
-
-        ticksCrafting++;
-        return CraftingState.ACTIVE;
+        return waitMissingInputs;
     }
 
     public int getTicksCrafting() {

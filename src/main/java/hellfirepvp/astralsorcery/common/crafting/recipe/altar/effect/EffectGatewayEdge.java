@@ -34,32 +34,30 @@ public class EffectGatewayEdge extends AltarRecipeEffect {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
-        if (state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE) {
-            double scale = getRandomPillarOffset(altar.getAltarType()).getX();
-            double edgeScale = (scale * 2 + 1);
-            for (int amount = 0; amount < 3; amount++) {
+        double scale = getRandomPillarOffset(altar.getAltarType()).getX();
+        double edgeScale = (scale * 2 + 1);
+        for (int amount = 0; amount < 3; amount++) {
 
-                Vector3 offset = new Vector3(altar).add(-scale, 0, -scale);
-                if(rand.nextBoolean()) {
-                    offset.add(edgeScale * (rand.nextBoolean() ? 1 : 0), 0, rand.nextFloat() * edgeScale);
-                } else {
-                    offset.add(rand.nextFloat() * edgeScale, 0, edgeScale * (rand.nextBoolean() ? 1 : 0));
-                }
-                FXFacingParticle particle = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                        .spawn(offset)
-                        .setGravityStrength(-0.003F)
-                        .setScaleMultiplier(0.25F + rand.nextFloat() * 0.15F)
-                        .color(VFXColorFunction.constant(ColorsAS.DEFAULT_GENERIC_PARTICLE))
-                        .setMaxAge(20 + rand.nextInt(30));
+            Vector3 offset = new Vector3(altar).add(-scale, 0, -scale);
+            if(rand.nextBoolean()) {
+                offset.add(edgeScale * (rand.nextBoolean() ? 1 : 0), 0, rand.nextFloat() * edgeScale);
+            } else {
+                offset.add(rand.nextFloat() * edgeScale, 0, edgeScale * (rand.nextBoolean() ? 1 : 0));
+            }
+            FXFacingParticle particle = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(offset)
+                    .setGravityStrength(-0.003F)
+                    .setScaleMultiplier(0.25F + rand.nextFloat() * 0.15F)
+                    .color(VFXColorFunction.constant(ColorsAS.DEFAULT_GENERIC_PARTICLE))
+                    .setMaxAge(20 + rand.nextInt(30));
 
-                switch (rand.nextInt(4)) {
-                    case 0:
-                        particle.color(VFXColorFunction.WHITE);
-                        break;
-                    case 1:
-                        particle.color(VFXColorFunction.constant(ColorsAS.CELESTIAL_CRYSTAL));
-                        break;
-                }
+            switch (rand.nextInt(4)) {
+                case 0:
+                    particle.color(VFXColorFunction.WHITE);
+                    break;
+                case 1:
+                    particle.color(VFXColorFunction.constant(ColorsAS.CELESTIAL_CRYSTAL));
+                    break;
             }
         }
     }

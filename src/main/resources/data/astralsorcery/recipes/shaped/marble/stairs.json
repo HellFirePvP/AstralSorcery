@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "I  ",
+    "II ",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "astralsorcery:marble_raw"
+    }
+  },
+  "result": {
+    "item": "astralsorcery:marble_stairs",
+    "amount": 4
+  }
+}

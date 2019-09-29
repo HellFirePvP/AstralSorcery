@@ -3,8 +3,10 @@
   "altar_type": 0,
   "duration": 60,
   "starlight": 50,
-  "output": "astralsorcery:marble_arch",
-  "outputCount": 3,
+  "output": {
+    "item": "astralsorcery:marble_arch",
+    "count": 3
+  },
   "pattern": [
     "_____",
     "_____",

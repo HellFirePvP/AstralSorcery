@@ -16,6 +16,7 @@ import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -30,6 +31,7 @@ public class PositionedLoopSound extends SimpleSound implements ITickableSound, 
 
     private ActivityFunction func = null;
     private boolean hasStoppedPlaying = false;
+    private float volumeMultiplier = 1F;
 
     public PositionedLoopSound(CategorizedSoundEvent sound, float volume, float pitch, Vector3 pos, boolean isGlobal) {
         this(sound, sound.getCategory(), volume, pitch, pos, isGlobal);
@@ -51,6 +53,15 @@ public class PositionedLoopSound extends SimpleSound implements ITickableSound, 
 
     public boolean hasStoppedPlaying() {
         return hasStoppedPlaying || !Minecraft.getInstance().getSoundHandler().isPlaying(this);
+    }
+
+    public void setVolumeMultiplier(float volumeMultiplier) {
+        this.volumeMultiplier = MathHelper.clamp(volumeMultiplier, 0F, 1F);
+    }
+
+    @Override
+    public float getVolume() {
+        return super.getVolume() * volumeMultiplier;
     }
 
     @Override

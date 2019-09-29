@@ -8,16 +8,18 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
+import net.minecraftforge.common.crafting.CraftingHelper;
 
 import java.awt.*;
 
@@ -30,25 +32,35 @@ import java.awt.*;
  */
 public class JsonHelper {
 
-    public static ItemStack getItemStack(JsonObject object, String key) {
-        Item i = JSONUtils.getItem(object, key);
-        ItemStack out = new ItemStack(i);
+    public static ItemStack getItemStack(JsonElement itemElement, String infoKey) {
+        ItemStack itemstack;
+        if (itemElement.isJsonPrimitive() && ((JsonPrimitive) itemElement).isString()) {
+            String strKey = itemElement.getAsString();
+            ResourceLocation itemKey = new ResourceLocation(strKey);
+            itemstack = new ItemStack(Registry.ITEM.getValue(itemKey).orElseThrow(
+                    () -> new IllegalStateException("Item: " + strKey + " does not exist")));
+        } else if (itemElement.isJsonObject()) {
+            itemstack = CraftingHelper.getItemStack(itemElement.getAsJsonObject(), true);
+        } else {
+            throw new JsonSyntaxException("Missing " + infoKey + ", expected to find a string or object");
+        }
+        return itemstack;
+    }
 
-        String nbtKey = key + "Nbt";
-        if (JSONUtils.hasField(object, nbtKey)) {
-            try {
-                CompoundNBT nbt = JsonToNBT.getTagFromJson(JSONUtils.getString(object.get(nbtKey), nbtKey));
-                out.setTag(nbt);
-            } catch (CommandSyntaxException e) {
-                throw new JsonSyntaxException("Invalid nbt tag: " + e.getMessage(), e);
-            }
+    public static ItemStack getItemStack(JsonObject root, String key) {
+        if (!JSONUtils.hasField(root, key)) {
+            throw new JsonSyntaxException("Missing " + key + ", expected to find a string or object");
         }
-        String countKey = key + "Count";
-        if (JSONUtils.hasField(object, countKey)) {
-            int count = JSONUtils.getInt(object, countKey);
-            out.setCount(MathHelper.clamp(count, 1, out.getMaxStackSize()));
+        ItemStack itemstack;
+        if (root.get(key).isJsonObject()) {
+            itemstack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(root, key), true);
+        } else {
+            String strKey = JSONUtils.getString(root, key);
+            ResourceLocation itemKey = new ResourceLocation(strKey);
+            itemstack = new ItemStack(Registry.ITEM.getValue(itemKey).orElseThrow(
+                    () -> new IllegalStateException("Item: " + strKey + " does not exist")));
         }
-        return out;
+        return itemstack;
     }
 
     public static Color getColor(JsonObject object, String key) {

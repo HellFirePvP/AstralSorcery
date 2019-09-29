@@ -8,10 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.serializer;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -24,12 +21,16 @@ import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.util.JsonHelper;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -67,10 +68,7 @@ public class SimpleAltarRecipeSerializer extends CustomRecipeSerializer<SimpleAl
         if (JSONUtils.isJsonArray(json, "output")) {
             JsonArray outputArray = JSONUtils.getJsonArray(json, "output");
             for (int i = 0; i < outputArray.size(); i++) {
-                JsonElement outputElement = outputArray.get(i);
-
-                JsonObject object = JSONUtils.getJsonObject(outputElement, String.format("output[%s]", i));
-                recipe.addOutput(JsonHelper.getItemStack(object, "output"));
+                recipe.addOutput(JsonHelper.getItemStack(outputArray.get(i), String.format("output[%s]", i)));
             }
         } else {
             recipe.addOutput(JsonHelper.getItemStack(json, "output"));

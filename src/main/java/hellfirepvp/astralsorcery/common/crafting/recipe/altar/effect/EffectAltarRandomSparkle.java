@@ -30,19 +30,17 @@ public class EffectAltarRandomSparkle extends AltarRecipeEffect {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
-        if (state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE) {
-            Vector3 altarPos = new Vector3(altar);
-            double scale = getRandomPillarOffset(altar.getAltarType()).getX();
-            double edgeScale = (scale * 2 + 1);
+        Vector3 altarPos = new Vector3(altar);
+        double scale = getRandomPillarOffset(altar.getAltarType()).getX();
+        double edgeScale = (scale * 2 + 1);
 
-            for (int i = 0; i < 2; i++) {
-                Vector3 at = altarPos.clone().add(-scale + rand.nextFloat() * edgeScale, 0, -scale + rand.nextFloat() * edgeScale);
-                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                        .spawn(at)
-                        .alpha(VFXAlphaFunction.FADE_OUT)
-                        .setScaleMultiplier(0.1F + rand.nextFloat() * 0.2F)
-                        .color(VFXColorFunction.random());
-            }
+        for (int i = 0; i < 2; i++) {
+            Vector3 at = altarPos.clone().add(-scale + rand.nextFloat() * edgeScale, 0, -scale + rand.nextFloat() * edgeScale);
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(at)
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .setScaleMultiplier(0.1F + rand.nextFloat() * 0.2F)
+                    .color(VFXColorFunction.random());
         }
     }
 

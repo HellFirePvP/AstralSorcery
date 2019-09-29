@@ -23,6 +23,7 @@ public class AltarRecipeEffectsAS {
 
     public static AltarRecipeEffect BUILTIN_ATTUNEMENT_SPARKLE;
     public static AltarRecipeEffect BUILTIN_CONSTELLATION_LINES;
+    public static AltarRecipeEffect BUILTIN_CONSTELLATION_FINISH;
     public static AltarRecipeEffect BUILTIN_DISCOVERY_CENTRAL_BEAM;
     public static AltarRecipeEffect BUILTIN_TRAIT_FOCUS_CIRCLE;
     public static AltarRecipeEffect BUILTIN_TRAIT_RELAY_HIGHLIGHT;

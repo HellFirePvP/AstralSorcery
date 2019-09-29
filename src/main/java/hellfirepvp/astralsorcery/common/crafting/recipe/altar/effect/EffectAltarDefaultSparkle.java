@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect;
 
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
@@ -29,18 +30,17 @@ public class EffectAltarDefaultSparkle extends AltarRecipeEffect {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
-        if (state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE) {
-            Vector3 altarPos = new Vector3(altar);
-            double scale = getRandomPillarOffset(altar.getAltarType()).getX();
-            double edgeScale = (scale * 2 + 1);
+        Vector3 altarPos = new Vector3(altar);
+        double scale = getRandomPillarOffset(altar.getAltarType()).getX();
+        double edgeScale = (scale * 2 + 1);
 
-            for (int i = 0; i < 2; i++) {
-                Vector3 at = altarPos.clone().add(-scale + rand.nextFloat() * edgeScale, 0, -scale + rand.nextFloat() * edgeScale);
-                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                        .spawn(at)
-                        .alpha(VFXAlphaFunction.FADE_OUT)
-                        .setScaleMultiplier(0.1F + rand.nextFloat() * 0.2F);
-            }
+        for (int i = 0; i < 1; i++) {
+            Vector3 at = altarPos.clone().add(-scale + rand.nextFloat() * edgeScale, 0.02, -scale + rand.nextFloat() * edgeScale);
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(at)
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .color(VFXColorFunction.WHITE)
+                    .setScaleMultiplier(0.1F + rand.nextFloat() * 0.2F);
         }
     }
 

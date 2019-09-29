@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
@@ -95,16 +96,16 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
     private void playRelayHighlightParticles(TileSpectralRelay relay, Color color) {
         if (rand.nextBoolean()) {
             FXFacingParticle particle = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                    .spawn(new Vector3(relay).add(rand.nextFloat() * 0.8 + 0.1, 0, rand.nextFloat() * 0.8 + 0.1))
+                    .spawn(new Vector3(relay).add(rand.nextFloat(), 0, rand.nextFloat()))
                     .setAlphaMultiplier(0.7F)
-                    .setScaleMultiplier(0.25F + rand.nextFloat() * 0.15F)
+                    .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F)
                     .setMaxAge(30 + rand.nextInt(50));
             if (rand.nextInt(3) == 0) {
                 particle.color(VFXColorFunction.WHITE)
                         .setScaleMultiplier(0.1F + rand.nextFloat() * 0.1F);
             } else {
                 particle.color(VFXColorFunction.constant(color))
-                        .setGravityStrength(-0.002F);
+                        .setGravityStrength(-0.0015F);
             }
         }
     }
@@ -138,11 +139,11 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
 
                 if (relay == null || (!match.getIngredient().test(relay.getInventory().getStackInSlot(0)))) {
                     ItemStack potential = match.getRandomMatchingStack(getClientTick());
-                    RenderingUtils.renderTranslucentItemStack(potential,
-                            x + 0.5  + offset.getX(),
-                            y + 0.25 + offset.getY(),
-                            z + 0.5  + offset.getZ(),
-                            pTicks);
+                    GlStateManager.pushMatrix();
+                    GlStateManager.translated(x + 0.5  + offset.getX(), y + 0.35 + offset.getY(), z + 0.5  + offset.getZ());
+                    GlStateManager.scaled(0.5, 0.5, 0.5);
+                    RenderingUtils.renderTranslucentItemStack(potential, 0, 0, 0, pTicks);
+                    GlStateManager.popMatrix();
                 }
             }
         }

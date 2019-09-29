@@ -3,8 +3,10 @@
   "altar_type": 0,
   "duration": 60,
   "starlight": 50,
-  "output": "astralsorcery:marble_slab",
-  "outputCount": 6,
+  "output": {
+    "item": "astralsorcery:marble_slab",
+    "count": 6
+  },
   "pattern": [
     "_____",
     "_____",

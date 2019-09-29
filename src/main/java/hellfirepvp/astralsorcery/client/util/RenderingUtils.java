@@ -212,15 +212,21 @@ public class RenderingUtils {
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+
         GlStateManager.enableRescaleNormal();
+        GlStateManager.cullFace(GlStateManager.CullFace.FRONT);
         GlStateManager.enableBlend();
-        Blending.CONSTANT_ALPHA.applyStateManager();
+        Blending.PREALPHA.applyStateManager();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
 
         renderItemModelWithColor(stack, bakedModel, overlayColor, alpha);
 
-        GlStateManager.disableRescaleNormal();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.01F);
         Blending.DEFAULT.applyStateManager();
         GlStateManager.disableBlend();
+        GlStateManager.cullFace(GlStateManager.CullFace.BACK);
+        GlStateManager.disableRescaleNormal();
+
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
 
@@ -250,9 +256,9 @@ public class RenderingUtils {
         Random renderRand = new Random();
         IModelData data = EmptyModelData.INSTANCE;
 
-        for (Direction enumfacing : Direction.values()) {
+        for (Direction dir : Direction.values()) {
             renderRand.setSeed(42);
-            renderColoredQuads(bufferbuilder, model.getQuads(null, enumfacing, renderRand, data), alphaColor, stack);
+            renderColoredQuads(bufferbuilder, model.getQuads(null, dir, renderRand, data), alphaColor, stack);
         }
 
         renderRand.setSeed(42);
@@ -270,10 +276,10 @@ public class RenderingUtils {
             int col = color.getRGB();
             if (useOverlayColors && bakedquad.hasTintIndex()) {
                 col = itemColors.getColor(stack, bakedquad.getTintIndex());
-
-                col &= 0x00FFFFFF;
-                col |= (color.getAlpha() << 24);
             }
+
+            col &= 0x00FFFFFF;
+            col |= (color.getAlpha() << 24);
 
             LightUtil.renderQuadColor(vb, bakedquad, col);
         }
