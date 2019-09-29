@@ -46,6 +46,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -138,7 +139,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
                         .setFadeOutTicks(20);
             }
 
-            if (activeRecipe.getState() == ActiveSimpleAltarRecipe.CraftingState.WAITING && type == AltarType.RADIANCE) {
+            if (activeRecipe.getState() == ActiveSimpleAltarRecipe.CraftingState.WAITING && type.isThisGEThan(AltarType.RADIANCE)) {
 
                 if (clientWaitSound == null || ((PositionedLoopSound) clientWaitSound).hasStoppedPlaying()) {
                     clientWaitSound = SoundHelper.playSoundLoopFadeInClient(SoundsAS.ALTAR_CRAFT_LOOP_T4_WAITING, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F, false,
@@ -387,6 +388,16 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     @Nonnull
     public TileInventoryFiltered getInventory() {
         return inventory;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox() {
+        AxisAlignedBB box = super.getRenderBoundingBox().expand(0, 5, 0);
+        if (this.getAltarType().isThisGEThan(AltarType.RADIANCE)) {
+            box = box.grow(3, 0, 3);
+        }
+        return box;
     }
 
     public <T extends TileAltar> T updateType(AltarType newType, boolean initialPlacement) {

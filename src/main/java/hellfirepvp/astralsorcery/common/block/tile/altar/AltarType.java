@@ -77,4 +77,8 @@ public enum AltarType {
         return this.ordinal() <= type.ordinal();
     }
 
+    public boolean isThisGEThan(AltarType type) {
+        return this.ordinal() >= type.ordinal();
+    }
+
 }

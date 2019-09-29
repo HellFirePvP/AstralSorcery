@@ -91,7 +91,7 @@ public abstract class AltarRecipeEffect extends ForgeRegistryEntry<AltarRecipeEf
     protected static Vector3 getFocusRelayOffset(AltarType type) {
         switch (type) {
             case RADIANCE:
-                return new Vector3(0, 4, 0);
+                return new Vector3(0, 4.5, 0);
         }
         return new Vector3();
     }
