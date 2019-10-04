@@ -9,11 +9,13 @@
 package hellfirepvp.astralsorcery.common.crystal;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -51,10 +53,45 @@ public class CrystalGenerator {
 
     private static final Random RAND = new Random();
 
+    @Nonnull
+    public static CrystalAttributes upgradeProperties(ItemStack stack) {
+        return upgradeProperties(stack, RAND);
+    }
+
+    @Nonnull
+    public static CrystalAttributes upgradeProperties(ItemStack stack, Random random) {
+        if (!(stack.getItem() instanceof CrystalAttributeItem)) {
+            return generateNewAttributes(stack, random);
+        }
+        CrystalAttributes attr = ((CrystalAttributeItem) stack.getItem()).getAttributes(stack);
+        if (attr == null) {
+            return generateNewAttributes(stack, random);
+        }
+        if (!(stack.getItem() instanceof CrystalAttributeGenItem)) {
+            return attr; //Can't upgrade 'to' something then.
+        }
+        int existing = attr.getTotalTierLevel();
+        int expected = MathHelper.clamp(existing + 1,
+                ((CrystalAttributeGenItem) stack.getItem()).getGeneratedPropertyTiers(),
+                ((CrystalAttributeGenItem) stack.getItem()).getMaxPropertyTiers());
+        int generate = expected - attr.getTotalTierLevel();
+
+        CrystalAttributes.Builder builder = CrystalAttributes.Builder.newBuilder(false);
+        builder.addAll(attr);
+        for (int i = 0; i < generate; i++) {
+            Collection<CrystalProperty> remaining = new ArrayList<>(RegistriesAS.REGISTRY_CRYSTAL_PROPERTIES.getValues());
+            while (!addRandomProperty(builder, remaining, random)) {}
+        }
+
+        return builder.build();
+    }
+
+    @Nullable
     public static CrystalProperty getRandomProperty() {
         return getRandomProperty(RAND);
     }
 
+    @Nullable
     public static CrystalProperty getRandomProperty(Random random) {
         if (random.nextFloat() <= CHANCE_PHYSICAL_PROPERTIES) {
             return MiscUtils.getRandomEntry(PHYSICAL_PROPERTIES, random);
@@ -69,11 +106,13 @@ public class CrystalGenerator {
         return MiscUtils.getRandomEntry(remaining, random);
     }
 
-    public static CrystalAttributes generate(ItemStack item) {
-        return generate(item, RAND);
+    @Nonnull
+    public static CrystalAttributes generateNewAttributes(ItemStack item) {
+        return generateNewAttributes(item, RAND);
     }
 
-    public static CrystalAttributes generate(ItemStack item, Random random) {
+    @Nonnull
+    public static CrystalAttributes generateNewAttributes(ItemStack item, Random random) {
         int toGenerate = 4;
         if (item.getItem() instanceof CrystalAttributeGenItem) {
             toGenerate = ((CrystalAttributeGenItem) item.getItem()).getGeneratedPropertyTiers();

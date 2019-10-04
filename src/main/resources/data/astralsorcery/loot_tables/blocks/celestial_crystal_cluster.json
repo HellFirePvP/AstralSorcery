@@ -1,0 +1,103 @@
+{
+    "type": "minecraft:block",
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "astralsorcery:celestial_crystal"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "minecraft:block_state_property",
+                    "block": "astralsorcery:celestial_crystal_cluster",
+                    "properties": {
+                        "stage": "4"
+                    }
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "astralsorcery:stardust"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "minecraft:block_state_property",
+                    "block": "astralsorcery:celestial_crystal_cluster",
+                    "properties": {
+                        "stage": "1"
+                    }
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "astralsorcery:stardust"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "minecraft:block_state_property",
+                    "block": "astralsorcery:celestial_crystal_cluster",
+                    "properties": {
+                        "stage": "2"
+                    }
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "astralsorcery:stardust"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "minecraft:block_state_property",
+                    "block": "astralsorcery:celestial_crystal_cluster",
+                    "properties": {
+                        "stage": "3"
+                    }
+                }
+            ]
+        },
+        {
+            "rolls": 2,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "astralsorcery:stardust"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "minecraft:block_state_property",
+                    "block": "astralsorcery:celestial_crystal_cluster",
+                    "properties": {
+                        "stage": "4"
+                    }
+                }
+            ]
+        }
+    ],
+    "functions": [
+        {
+            "function": "minecraft:explosion_decay"
+        },
+        {
+            "function": "astralsorcery:copy_crystal_properties"
+        }
+    ]
+}

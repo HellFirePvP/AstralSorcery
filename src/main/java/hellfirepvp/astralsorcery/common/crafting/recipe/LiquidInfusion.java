@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
@@ -31,13 +32,13 @@ public class LiquidInfusion extends CustomMatcherRecipe {
 
     private final Fluid liquidInput;
     private final Ingredient itemInput;
-    private final Ingredient itemOutput;
+    private final ItemStack itemOutput;
 
     private final float consumptionChance;
     private final boolean consumeMultipleFluids;
     private final boolean acceptChaliceInput;
 
-    public LiquidInfusion(ResourceLocation recipeId, Fluid liquidInput, Ingredient itemInput, Ingredient itemOutput, float consumptionChance, boolean consumeMultipleFluids, boolean acceptChaliceInput) {
+    public LiquidInfusion(ResourceLocation recipeId, Fluid liquidInput, Ingredient itemInput, ItemStack itemOutput, float consumptionChance, boolean consumeMultipleFluids, boolean acceptChaliceInput) {
         super(recipeId);
         this.liquidInput = liquidInput;
         this.itemInput = itemInput;
@@ -58,7 +59,7 @@ public class LiquidInfusion extends CustomMatcherRecipe {
     }
 
     @Nonnull
-    public Ingredient getItemOutput() {
+    public ItemStack getItemOutput() {
         return itemOutput;
     }
 

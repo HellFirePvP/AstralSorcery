@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopEffectHelper;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -28,7 +27,6 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 import java.util.function.Consumer;
 
 /**
@@ -103,7 +101,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         BEAM_BREAK,
         ROCK_CRYSTAL_COLUMN,
         ROCK_CRYSTAL_SPARKS,
-        WELL_CATALYST_BREAK,
+        SMALL_CRYSTAL_BREAK,
         CROP_GROWTH,
         MELT_BLOCK,
         ALTAR_RECIPE_FINISH,
@@ -118,8 +116,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return ItemWand::playEffect;
                 case ROCK_CRYSTAL_SPARKS:
                     return ItemWand::playUndergroundEffect;
-                case WELL_CATALYST_BREAK:
-                    return TileWell::catalystBurst;
+                case SMALL_CRYSTAL_BREAK:
+                    return MiscPlayEffect::catalystBurst;
                 case CROP_GROWTH:
                     return CEffectAevitas::playParticles;
                 case TIME_FREEZE_EFFECT:

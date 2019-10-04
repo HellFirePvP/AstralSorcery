@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.helper.IHandlerRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
 import hellfirepvp.astralsorcery.common.crafting.helper.ResolvingRecipeType;
+import hellfirepvp.astralsorcery.common.crafting.nojson.LiquidStarlightCraftingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
@@ -39,6 +40,9 @@ public class RegistryRecipeTypes {
         TYPE_INFUSION = new ResolvingRecipeType<>("infusion", LiquidInfusion.class, (recipe, context) -> true);
         TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) ->
                 recipe.matches(context.getSide(), context.getCrafter(), context.getAltar(), context.ignoreStarlightRequirement()));
+
+        //Other, non-json recipes/recipe-ish conversions
+        LiquidStarlightCraftingRegistry.init();
     }
 
     public static void initAltarEffects() {

@@ -112,11 +112,12 @@ dependencies {
     minecraft "net.minecraftforge:forge:1.14.4-28.1.24"
 
     compileOnly 'hellfirepvp.observerlib:observerlib:1.14.4-1.1.0.v28'
+    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.14.4-1.1.0.v28:deobf'
 
     compileOnly 'top.theillusivec4.curios:curios:FORGE-1.14.4-1.0.0.3:api'
     runtimeOnly 'top.theillusivec4.curios:curios:FORGE-1.14.4-1.0.0.3:deobf'
 
-    compileOnly 'mezz.jei:jei-1.14.4:6.0.0.13:api'
+    compileOnly fg.deobf('mezz.jei:jei-1.14.4:6.0.0.13:api')
     runtimeOnly fg.deobf('mezz.jei:jei-1.14.4:6.0.0.13')
     //runtimeOnly 'mezz.jei:jei-1.14.4:6.0.0.13'
 
