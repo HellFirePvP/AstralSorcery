@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.block.base;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,7 +25,7 @@ import net.minecraftforge.items.IItemHandler;
  * Created by HellFirePvP
  * Date: 14.08.2019 / 07:01
  */
-public abstract class BlockInventory extends ContainerBlock {
+public abstract class BlockInventory extends BlockCrystalContainer {
 
     protected BlockInventory(Properties builder) {
         super(builder);

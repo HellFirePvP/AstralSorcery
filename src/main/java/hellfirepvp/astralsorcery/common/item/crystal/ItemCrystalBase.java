@@ -47,7 +47,7 @@ public abstract class ItemCrystalBase extends Item implements CrystalAttributeGe
             CrystalAttributes attributes = getAttributes(stack);
 
             if (attributes == null && stack.getItem() instanceof CrystalAttributeGenItem) {
-                attributes = CrystalGenerator.generate(stack);
+                attributes = CrystalGenerator.generateNewAttributes(stack);
                 attributes.store(stack);
             }
         }

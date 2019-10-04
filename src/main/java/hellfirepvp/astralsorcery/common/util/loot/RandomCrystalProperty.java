@@ -35,7 +35,7 @@ public class RandomCrystalProperty extends LootFunction {
     @Override
     protected ItemStack doApply(ItemStack itemStack, LootContext lootContext) {
         if (itemStack.getItem() instanceof CrystalAttributeGenItem) {
-            CrystalAttributes attr = CrystalGenerator.generate(itemStack);
+            CrystalAttributes attr = CrystalGenerator.generateNewAttributes(itemStack);
             ((CrystalAttributeGenItem) itemStack.getItem()).setAttributes(itemStack, attr);
         }
         return itemStack;

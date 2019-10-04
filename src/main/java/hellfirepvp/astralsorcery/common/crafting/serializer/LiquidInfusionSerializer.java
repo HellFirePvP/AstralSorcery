@@ -12,6 +12,10 @@ import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
+import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 
@@ -30,16 +34,28 @@ public class LiquidInfusionSerializer extends CustomRecipeSerializer<LiquidInfus
 
     @Override
     public LiquidInfusion read(ResourceLocation recipeId, JsonObject json) {
+        //TODO
         return null;
     }
 
     @Override
     public LiquidInfusion read(ResourceLocation recipeId, PacketBuffer buffer) {
-        return null;
+        Fluid fluidIn = ByteBufUtils.readRegistryEntry(buffer);
+        Ingredient itemIn = Ingredient.read(buffer);
+        ItemStack output = ByteBufUtils.readItemStack(buffer);
+        float consumptionChance = buffer.readFloat();
+        boolean consumeMultiple = buffer.readBoolean();
+        boolean acceptChalice = buffer.readBoolean();
+        return new LiquidInfusion(recipeId, fluidIn, itemIn, output, consumptionChance, consumeMultiple, acceptChalice);
     }
 
     @Override
     public void write(PacketBuffer buffer, LiquidInfusion recipe) {
-
+        ByteBufUtils.writeRegistryEntry(buffer, recipe.getLiquidInput());
+        recipe.getItemInput().write(buffer);
+        ByteBufUtils.writeItemStack(buffer, recipe.getItemOutput());
+        buffer.writeFloat(recipe.getConsumptionChance());
+        buffer.writeBoolean(recipe.doesConsumeMultipleFluids());
+        buffer.writeBoolean(recipe.acceptsChaliceInput());
     }
 }

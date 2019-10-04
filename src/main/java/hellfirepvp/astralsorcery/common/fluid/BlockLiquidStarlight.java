@@ -12,13 +12,19 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.crafting.nojson.LiquidStarlightCraftingRegistry;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -45,6 +51,26 @@ public class BlockLiquidStarlight extends FlowingFluidBlock {
     }
 
     @Override
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+        super.onEntityCollision(state, world, pos, entity);
+
+        if (state.get(LEVEL) != 0) {
+            return;
+        }
+
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 300, 0, true, true));
+        } else if (entity instanceof ItemEntity) {
+            LiquidStarlightCraftingRegistry.tryCraft((ItemEntity) entity);
+
+            if (!world.isRemote() &&((ItemEntity) entity).getItem().isEmpty()) {
+                entity.remove();
+            }
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random rand) {
         Integer level = state.get(LEVEL);
         double percHeight = 1D - (((double) level + 1) / 8D);

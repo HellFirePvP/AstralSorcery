@@ -35,9 +35,11 @@ public class RenderEntityItemHighlighted extends ItemRenderer {
     public void doRender(ItemEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         if (entity instanceof EntityItemHighlighted && ((EntityItemHighlighted) entity).hasColor()) {
             GlStateManager.enableBlend();
+            GlStateManager.disableAlphaTest();
             RenderingDrawUtils.renderLightRayFan(x, y + 0.35, z,
                     ((EntityItemHighlighted) entity).getHighlightColor(), 160420L + entity.getEntityId(),
                     16, 12, 15);
+            GlStateManager.enableAlphaTest();
             GlStateManager.disableBlend();
         }
 

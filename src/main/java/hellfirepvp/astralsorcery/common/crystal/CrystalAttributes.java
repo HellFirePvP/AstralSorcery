@@ -248,6 +248,7 @@ public final class CrystalAttributes {
         baseTag.remove("crystalProperties");
     }
 
+
     @Nullable
     public static CrystalAttributes getCrystalAttributes(ItemStack stack) {
         return !stack.isEmpty() ? getCrystalAttributes(NBTHelper.getPersistentData(stack)) : null;

@@ -42,8 +42,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -153,10 +151,10 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
         this.inventory.setStackInSlot(0, ItemStack.EMPTY);
         this.runningRecipe = null;
 
-        PktPlayEffect effect = new PktPlayEffect(PktPlayEffect.Type.WELL_CATALYST_BREAK)
-                .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(this)));
-
+        PktPlayEffect effect = new PktPlayEffect(PktPlayEffect.Type.SMALL_CRYSTAL_BREAK)
+                .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(this).add(0.5, 1.3, 0.5)));
         PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(getWorld(), getPos(), 32));
+
         SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, getWorld(), getPos(), 1F, 1F);
         markForUpdate();
     }
@@ -202,28 +200,6 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
                     .color(VFXColorFunction.constant(color))
                     .setMaxAge(25 + rand.nextInt(20));
         }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void catalystBurst(PktPlayEffect event) {
-        Vector3 vec = ByteBufUtils.readVector(event.getExtraData());
-
-        BatchRenderContext<? extends FXFacingParticle> ctx;
-        switch (rand.nextInt(3)) {
-            case 2:
-                ctx = EffectTemplatesAS.CRYSTAL_BURST_3;
-                break;
-            case 1:
-                ctx = EffectTemplatesAS.CRYSTAL_BURST_2;
-                break;
-            default:
-            case 0:
-                ctx = EffectTemplatesAS.CRYSTAL_BURST_1;
-                break;
-        }
-        EffectHelper.of(ctx)
-                .spawn(vec.add(0.5, 1.3, 0.5))
-                .setScaleMultiplier(1.5F);
     }
 
     private void collectStarlight() {
