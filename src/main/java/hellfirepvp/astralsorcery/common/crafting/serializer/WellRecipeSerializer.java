@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
-import hellfirepvp.astralsorcery.common.util.JsonHelper;
+import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;

@@ -566,11 +566,12 @@
   "item.itemcoloredlens.effect.push": "Push",
   "item.itemcoloredlens.effect.spectral": "Spectral",
 
-  "fluid.astralsorcery.liquidStarlight": "Liquid Starlight",
-
 
 
   "__comment": "",
+
+  "fluid.astralsorcery.liquid_starlight_source": "Liquid Starlight",
+  "fluid.astralsorcery.liquid_starlight_flowing": "Liquid Starlight",
 
   "item.astralsorcery.liquid_starlight_bucket": "Liquid Starlight Bucket",
 
