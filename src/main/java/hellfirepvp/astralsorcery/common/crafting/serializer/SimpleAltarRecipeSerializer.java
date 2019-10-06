@@ -19,20 +19,12 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.altar.CustomAltarRecipeH
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
-import hellfirepvp.astralsorcery.common.util.JsonHelper;
-import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

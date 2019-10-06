@@ -10,11 +10,14 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -35,11 +38,11 @@ import javax.annotation.Nullable;
  */
 public class BlockCelestialCrystalCluster extends BlockCrystalContainer {
 
-    private static final VoxelShape GROWTH_STAGE_0 = VoxelShapes.create(0.1, 0.0, 0.1, 0.9, 0.3, 0.9);
-    private static final VoxelShape GROWTH_STAGE_1 = VoxelShapes.create(0.1, 0.0, 0.1, 0.9, 0.4, 0.9);
-    private static final VoxelShape GROWTH_STAGE_2 = VoxelShapes.create(0.1, 0.0, 0.1, 0.9, 0.5, 0.9);
-    private static final VoxelShape GROWTH_STAGE_3 = VoxelShapes.create(0.1, 0.0, 0.1, 0.9, 0.6, 0.9);
-    private static final VoxelShape GROWTH_STAGE_4 = VoxelShapes.create(0.1, 0.0, 0.1, 0.9, 0.7, 0.9);
+    private static final VoxelShape GROWTH_STAGE_0 = Block.makeCuboidShape(4, 0, 5, 12, 8, 11);
+    private static final VoxelShape GROWTH_STAGE_1 = Block.makeCuboidShape(4, 0, 5, 12, 10, 11);
+    private static final VoxelShape GROWTH_STAGE_2 = Block.makeCuboidShape(2, 0, 4, 12, 12, 14);
+    private static final VoxelShape GROWTH_STAGE_3 = Block.makeCuboidShape(2, 0, 2, 14, 14, 14);
+    private static final VoxelShape GROWTH_STAGE_4 = Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
 
     public static IntegerProperty STAGE = IntegerProperty.create("stage", 0, 4);
 
@@ -58,20 +61,37 @@ public class BlockCelestialCrystalCluster extends BlockCrystalContainer {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+        Vec3d offset = state.getOffset(world, pos);
+        VoxelShape shape;
         switch (state.get(STAGE)) {
-            case 0:
-                return GROWTH_STAGE_0;
-            case 1:
-                return GROWTH_STAGE_1;
-            case 2:
-                return GROWTH_STAGE_2;
-            case 3:
-                return GROWTH_STAGE_3;
             case 4:
-                return GROWTH_STAGE_4;
+                shape = GROWTH_STAGE_4;
+                break;
+            case 3:
+                shape = GROWTH_STAGE_3;
+                break;
+            case 2:
+                shape = GROWTH_STAGE_2;
+                break;
+            case 1:
+                shape = GROWTH_STAGE_1;
+                break;
+            case 0:
+            default:
+                shape = GROWTH_STAGE_0;
         }
-        return GROWTH_STAGE_0;
+        return shape.withOffset(offset.x, offset.y, offset.z);
+    }
+
+    @Override
+    public OffsetType getOffsetType() {
+        return OffsetType.XZ;
+    }
+
+    @Override
+    public Vec3d getOffset(BlockState state, IBlockReader world, BlockPos pos) {
+        return super.getOffset(state, world, pos).mul(0.7, 0.7, 0.7);
     }
 
     @Override
@@ -97,7 +117,8 @@ public class BlockCelestialCrystalCluster extends BlockCrystalContainer {
             super.onReplaced(state, world, pos, newState, isMoving);
 
             PktPlayEffect effect = new PktPlayEffect(PktPlayEffect.Type.SMALL_CRYSTAL_BREAK)
-                    .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(pos).add(0.5, 0.4, 0.5)));
+                    .addData(buf -> ByteBufUtils.writeVector(buf,
+                            new Vector3(pos).add(state.getOffset(world, pos)).add(0.5, 0.4, 0.5)));
             PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(world, pos, 32));
         }
     }

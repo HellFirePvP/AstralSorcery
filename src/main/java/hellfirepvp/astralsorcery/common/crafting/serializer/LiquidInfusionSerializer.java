@@ -13,11 +13,15 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +38,8 @@ public class LiquidInfusionSerializer extends CustomRecipeSerializer<LiquidInfus
 
     @Override
     public LiquidInfusion read(ResourceLocation recipeId, JsonObject json) {
-        //TODO
+        FluidStack fluidInput = JsonHelper.getFluidStack(json.get("fluidInput"), "fluidInput");
+        Ingredient input = CraftingHelper.getIngredient(json.get())
         return null;
     }
 
