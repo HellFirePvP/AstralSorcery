@@ -10,10 +10,8 @@ package hellfirepvp.astralsorcery.client.screen.journal;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
-import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
 import hellfirepvp.astralsorcery.client.screen.journal.progression.ScreenJournalProgressionRenderer;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -151,8 +149,8 @@ public class ScreenJournalProgression extends ScreenJournal {
     }
 
     @Override
-    protected void mouseDragTick(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY) {
-        super.mouseDragTick(mouseX, mouseY, mouseDiffX, mouseDiffY);
+    protected void mouseDragTick(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY, double mouseOffsetX, double mouseOffsetY) {
+        super.mouseDragTick(mouseX, mouseY, mouseDiffX, mouseDiffY, mouseOffsetX, mouseOffsetY);
         progressionRenderer.moveMouse(mouseDiffX, mouseDiffY);
     }
 

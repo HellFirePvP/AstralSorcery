@@ -45,7 +45,7 @@ public class InputScreen extends Screen {
 
     protected void mouseDragStop(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY) {}
 
-    protected void mouseDragTick(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY) {}
+    protected void mouseDragTick(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY, double mouseOffsetX, double mouseOffsetY) {}
 
     @Override
     public boolean keyPressed(int key, int scanCode, int modifiers) {
@@ -84,7 +84,7 @@ public class InputScreen extends Screen {
         if (clickType == 0 && this.dragging) {
             double diffX = this.oMouseX - mouseX;
             double diffY = this.oMouseY - mouseY;
-            this.mouseDragTick(mouseX, mouseY, diffX, diffY);
+            this.mouseDragTick(mouseX, mouseY, diffX, diffY, offsetX, offsetY);
         }
         return super.mouseDragged(mouseX, mouseY, clickType, offsetX, offsetY);
     }

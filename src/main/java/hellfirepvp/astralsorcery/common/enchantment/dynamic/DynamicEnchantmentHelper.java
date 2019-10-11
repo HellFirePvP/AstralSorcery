@@ -170,15 +170,9 @@ public class DynamicEnchantmentHelper {
         if (i.getRegistryName() == null) {
             return false;
         }
-        if (!i.isEnchantable(stack)) {
+        if (!i.isEnchantable(stack) || !stack.isDamageable()) {
             return false;
         }
-
-        //Has overridden isEnchantable
-        if (i instanceof EnchantedBookItem) {
-            return false;
-        }
-
         if (Mods.DRACONIC_EVOLUTION.owns(stack.getItem())) {
             return false;
         }
@@ -192,9 +186,13 @@ public class DynamicEnchantmentHelper {
             return new ArrayList<>();
         }
         DynamicEnchantmentEvent.Add addEvent = new DynamicEnchantmentEvent.Add(tool, foundEntity);
-        MinecraftForge.EVENT_BUS.post(addEvent);
+        if (MinecraftForge.EVENT_BUS.post(addEvent)) {
+            return new ArrayList<>();
+        }
         DynamicEnchantmentEvent.Modify modifyEvent = new DynamicEnchantmentEvent.Modify(tool, addEvent.getEnchantmentsToApply(), foundEntity);
-        MinecraftForge.EVENT_BUS.post(modifyEvent);
+        if (MinecraftForge.EVENT_BUS.post(modifyEvent)) {
+            return new ArrayList<>();
+        }
         return modifyEvent.getEnchantmentsToApply();
     }
 

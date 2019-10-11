@@ -797,8 +797,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     }
 
     @Override
-    protected void mouseDragTick(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY) {
-        super.mouseDragTick(mouseX, mouseY, mouseDiffX, mouseDiffY);
+    protected void mouseDragTick(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY, double mouseOffsetX, double mouseOffsetY) {
+        super.mouseDragTick(mouseX, mouseY, mouseDiffX, mouseDiffY, mouseOffsetX, mouseOffsetY);
         if (this.mouseSealStack.isEmpty()) {
             moveMouse(mouseDiffX, mouseDiffY);
         }

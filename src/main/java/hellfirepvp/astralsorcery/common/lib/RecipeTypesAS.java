@@ -26,6 +26,7 @@ public class RecipeTypesAS {
 
     public static ResolvingRecipeType<IItemHandler, WellLiquefaction, WellLiquefactionContext> TYPE_WELL;
     public static ResolvingRecipeType<IItemHandler, LiquidInfusion, LiquidInfusionContext> TYPE_INFUSION;
+    public static ResolvingRecipeType<IItemHandler, BlockTransmutation, BlockTransmutationContext> TYPE_BLOCK_TRANSMUTATION;
     public static ResolvingRecipeType<IItemHandler, SimpleAltarRecipe, SimpleAltarRecipeContext> TYPE_ALTAR;
 
 }

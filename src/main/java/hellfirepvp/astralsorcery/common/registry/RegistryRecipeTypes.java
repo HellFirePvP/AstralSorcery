@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.IHandlerRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
 import hellfirepvp.astralsorcery.common.crafting.helper.ResolvingRecipeType;
 import hellfirepvp.astralsorcery.common.crafting.nojson.LiquidStarlightCraftingRegistry;
+import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
@@ -38,6 +39,8 @@ public class RegistryRecipeTypes {
     public static void init() {
         TYPE_WELL = new ResolvingRecipeType<>("well", WellLiquefaction.class, (recipe, context) -> recipe.matches(context.getInput()));
         TYPE_INFUSION = new ResolvingRecipeType<>("infusion", LiquidInfusion.class, (recipe, context) -> true);
+        TYPE_BLOCK_TRANSMUTATION = new ResolvingRecipeType<>("block_transmutation", BlockTransmutation.class, (recipe, context) ->
+                recipe.matches(context.getWorld(), context.getPos(), context.getState(), context.getConstellation()));
         TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) ->
                 recipe.matches(context.getSide(), context.getCrafter(), context.getAltar(), context.ignoreStarlightRequirement()));
 

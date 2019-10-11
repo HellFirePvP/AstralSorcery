@@ -57,7 +57,10 @@ public class ScreenJournalPages extends ScreenJournal {
         this.origin = origin;
         this.previous = null;
         this.pages = new ArrayList<>(node.getPages().size());
-        pages.addAll(node.getPages().stream().map(JournalPage::buildRenderPage).collect(Collectors.toList()));
+        this.pages.addAll(node.getPages()
+                .stream()
+                .map(JournalPage::buildRenderPage)
+                .collect(Collectors.toList()));
     }
 
     //Use this to use this screen independently of the actual journal.
@@ -67,7 +70,10 @@ public class ScreenJournalPages extends ScreenJournal {
         this.origin = null;
         this.previous = previous;
         this.pages = new ArrayList<>(detailedInformation.getPages().size());
-        pages.addAll(detailedInformation.getPages().stream().map(JournalPage::buildRenderPage).collect(Collectors.toList()));
+        this.pages.addAll(detailedInformation.getPages()
+                .stream()
+                .map(JournalPage::buildRenderPage)
+                .collect(Collectors.toList()));
         this.currentPageOffset = exactPage / 2;
     }
 
@@ -289,6 +295,26 @@ public class ScreenJournalPages extends ScreenJournal {
     }
 
     @Override
+    protected void mouseDragTick(double mouseX, double mouseY, double mouseDiffX, double mouseDiffY, double mouseOffsetX, double mouseOffsetY) {
+        int index = currentPageOffset * 2;
+        if (pages.size() > index) {
+            RenderablePage page = pages.get(index);
+            if (page != null) {
+                if (page.propagateMouseDrag(mouseOffsetX, mouseOffsetY)) {
+                    return;
+                }
+            }
+        }
+        index += 1;
+        if (pages.size() > index) {
+            RenderablePage page = pages.get(index);
+            if (page != null) {
+                page.propagateMouseDrag(mouseOffsetX, mouseOffsetY);
+            }
+        }
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
             return true;
@@ -331,7 +357,7 @@ public class ScreenJournalPages extends ScreenJournal {
         if (pages.size() > index) {
             RenderablePage page = pages.get(index);
             if (page != null) {
-                if(page.propagateMouseClick(mouseX, mouseY)) {
+                if (page.propagateMouseClick(mouseX, mouseY)) {
                     return true;
                 }
             }
