@@ -156,7 +156,11 @@ public class RenderingDrawUtils {
 
             int maxWidth = 0;
             for (Tuple<ItemStack, ITextComponent> toolTip : tooltipData) {
-                int width = fontRenderer.getStringWidth(toolTip.getB().getFormattedText());
+                FontRenderer customFR = toolTip.getA().getItem().getFontRenderer(toolTip.getA());
+                if (customFR == null) {
+                    customFR = fontRenderer;
+                }
+                int width = customFR.getStringWidth(toolTip.getB().getFormattedText());
                 if (!toolTip.getA().isEmpty()) {
                     anyItemFound = true;
                 }
@@ -174,7 +178,11 @@ public class RenderingDrawUtils {
             int formatWidth = anyItemFound ? maxWidth - stackBoxSize : maxWidth;
             List<Tuple<ItemStack, List<String>>> lengthLimitedToolTip = new LinkedList<>();
             for (Tuple<ItemStack, ITextComponent> toolTip : tooltipData) {
-                lengthLimitedToolTip.add(new Tuple<>(toolTip.getA(), fontRenderer.listFormattedStringToWidth(toolTip.getB().getFormattedText(), formatWidth)));
+                FontRenderer customFR = toolTip.getA().getItem().getFontRenderer(toolTip.getA());
+                if (customFR == null) {
+                    customFR = fontRenderer;
+                }
+                lengthLimitedToolTip.add(new Tuple<>(toolTip.getA(), customFR.listFormattedStringToWidth(toolTip.getB().getFormattedText(), formatWidth)));
             }
 
             int pX = x + 12;
@@ -223,7 +231,11 @@ public class RenderingDrawUtils {
                     minYShift = stackBoxSize;
                 }
                 for (String str : toolTip.getB()) {
-                    RenderingDrawUtils.renderStringAtPos(pX + offset, pY, fontRenderer, str, strColor.getRGB(), false);
+                    FontRenderer customFR = toolTip.getA().getItem().getFontRenderer(toolTip.getA());
+                    if (customFR == null) {
+                        customFR = fontRenderer;
+                    }
+                    RenderingDrawUtils.renderStringAtPos(pX + offset, pY, customFR, str, strColor.getRGB(), false);
                     pY += 10;
                     minYShift -= 10;
                 }

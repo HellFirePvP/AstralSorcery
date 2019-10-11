@@ -12,6 +12,7 @@ import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.*;
@@ -26,7 +27,7 @@ import java.util.*;
 public class StarlightUpdateHandler implements ITickHandler {
 
     private static final StarlightUpdateHandler instance = new StarlightUpdateHandler();
-    private static Map<Integer, List<IPrismTransmissionNode>> updateRequired = new HashMap<>();
+    private static Map<DimensionType, List<IPrismTransmissionNode>> updateRequired = new HashMap<>();
     private static final Object accessLock = new Object();
 
     private StarlightUpdateHandler() {}
@@ -49,8 +50,8 @@ public class StarlightUpdateHandler implements ITickHandler {
     }
 
     private List<IPrismTransmissionNode> getNodes(IWorld world) {
-        int dimId = world.getDimension().getType().getId();
-        return updateRequired.computeIfAbsent(dimId, k -> new LinkedList<>());
+        DimensionType dimType = world.getDimension().getType();
+        return updateRequired.computeIfAbsent(dimType, k -> new LinkedList<>());
     }
 
     public void removeNode(IWorld world, IPrismTransmissionNode node) {
@@ -67,7 +68,7 @@ public class StarlightUpdateHandler implements ITickHandler {
 
     public void informWorldLoad(IWorld world) {
         synchronized (accessLock) {
-            updateRequired.remove(world.getDimension().getType().getId());
+            updateRequired.remove(world.getDimension().getType());
         }
     }
 

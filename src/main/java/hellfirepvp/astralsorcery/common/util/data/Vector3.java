@@ -63,7 +63,7 @@ public class Vector3 {
         this.z = z;
     }
 
-    public Vector3(BlockPos pos) {
+    public Vector3(Vec3i pos) {
         this(pos.getX(), pos.getY(), pos.getZ());
     }
 

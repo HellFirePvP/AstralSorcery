@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.crafting.serializer.BlockTransmutationSerializer;
 import hellfirepvp.astralsorcery.common.crafting.serializer.LiquidInfusionSerializer;
 import hellfirepvp.astralsorcery.common.crafting.serializer.SimpleAltarRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.serializer.WellRecipeSerializer;
@@ -27,10 +28,12 @@ public class RecipeSerializersAS {
 
     public static final ResourceLocation WELL_LIQUEFACTION = AstralSorcery.key("lightwell");
     public static final ResourceLocation LIQUID_INFUSION = AstralSorcery.key("liquid_infuser");
+    public static final ResourceLocation BLOCK_TRANSMUTATION = AstralSorcery.key("block_transmutation");
     public static final ResourceLocation SIMPLE_ALTAR_CRAFTING = AstralSorcery.key("altar");
 
     public static WellRecipeSerializer WELL_LIQUEFACTION_SERIALIZER;
     public static LiquidInfusionSerializer LIQUID_INFUSION_SERIALIZER;
+    public static BlockTransmutationSerializer BLOCK_TRANSMUTATION_SERIALIZER;
     public static SimpleAltarRecipeSerializer ALTAR_RECIPE_SERIALIZER;
 
 }

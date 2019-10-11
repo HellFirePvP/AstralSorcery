@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.event;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nonnull;
@@ -27,6 +28,7 @@ import java.util.List;
 public class DynamicEnchantmentEvent {
 
     //The event to ADD new dynamic enchantments
+    @Cancelable
     public static class Add extends Event {
 
         private List<DynamicEnchantment> enchantmentsToApply = new LinkedList<>();
@@ -53,6 +55,7 @@ public class DynamicEnchantmentEvent {
     }
 
     //The event to MODIFY or REACT to previously defined/added dynamic enchantments + enchantments
+    @Cancelable
     public static class Modify extends Event {
 
         private List<DynamicEnchantment> enchantmentsToApply;

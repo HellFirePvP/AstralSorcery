@@ -35,9 +35,13 @@ public class StarlightNetworkRegistry {
     @Nullable
     public static IStarlightBlockHandler getStarlightHandler(World world, BlockPos pos, BlockState state, IWeakConstellation cst) {
         Block b = state.getBlock();
-        if(b instanceof BlockStarlightRecipient) return null;
+        if (b instanceof BlockStarlightRecipient) {
+            return null;
+        }
         for (IStarlightBlockHandler handler : dynamicBlockHandlers) {
-            if(handler.isApplicable(world, pos, state, cst)) return handler;
+            if (handler.isApplicable(world, pos, state, cst)) {
+                return handler;
+            }
         }
         return null;
     }

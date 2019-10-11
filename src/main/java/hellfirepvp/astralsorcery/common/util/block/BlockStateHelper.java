@@ -37,7 +37,7 @@ import java.util.Optional;
  */
 public class BlockStateHelper {
 
-    private static final Splitter PROP_SPLITTER = Splitter.on(';');
+    private static final Splitter PROP_SPLITTER = Splitter.on(',');
     private static final Splitter PROP_ELEMENT_SPLITTER = Splitter.on('=');
 
     @Nonnull
@@ -49,7 +49,7 @@ public class BlockStateHelper {
             for (int i = 0; i < props.size(); i++) {
                 IProperty<?> prop = props.get(i);
                 if (i > 0) {
-                    name.append(';');
+                    name.append(',');
                 }
                 name.append(prop.getName());
                 name.append('=');
@@ -61,7 +61,7 @@ public class BlockStateHelper {
     }
 
     @Nonnull
-    public static <T extends Comparable<T>, V> BlockState deserialize(@Nonnull String serialized) {
+    public static <T extends Comparable<T>> BlockState deserialize(@Nonnull String serialized) {
         int propIndex = serialized.indexOf('[');
         boolean hasProperties = propIndex != -1;
         ResourceLocation key;

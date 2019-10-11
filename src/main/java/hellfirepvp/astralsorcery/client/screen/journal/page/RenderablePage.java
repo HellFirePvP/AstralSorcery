@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -23,6 +26,14 @@ public interface RenderablePage {
 
     default public boolean propagateMouseClick(double mouseX, double mouseZ) {
         return false;
+    }
+
+    default public boolean propagateMouseDrag(double mouseDX, double mouseDZ) {
+        return false;
+    }
+
+    public static FontRenderer getFontRenderer() {
+        return Minecraft.getInstance().fontRenderer;
     }
 
 }
