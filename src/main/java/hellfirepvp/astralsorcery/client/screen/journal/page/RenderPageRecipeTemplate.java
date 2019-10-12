@@ -127,7 +127,7 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
                 this.thisFrameOuputStack.getA().contains(mouseX, mouseZ)) {
             String recipeName = recipe.getId().toString();
             Minecraft.getInstance().keyboardListener.setClipboardString(recipeName);
-            Minecraft.getInstance().player.sendMessage(new TranslationTextComponent("misc.ctrlcopy.copied", recipeName));
+            Minecraft.getInstance().player.sendMessage(new TranslationTextComponent("astralsorcery.misc.ctrlcopy.copied", recipeName));
             return true;
         }
         return false;
@@ -261,8 +261,8 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
 
             if (Minecraft.getInstance().gameSettings.showDebugInfo) {
                 tooltip.add(new StringTextComponent(""));
-                tooltip.add(new TranslationTextComponent("misc.recipename", recipeName.toString()).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE).setItalic(true)));
-                tooltip.add(new TranslationTextComponent("misc.ctrlcopy", recipeName.toString()).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE).setItalic(true)));
+                tooltip.add(new TranslationTextComponent("astralsorcery.misc.recipename", recipeName.toString()).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE).setItalic(true)));
+                tooltip.add(new TranslationTextComponent("astralsorcery.misc.ctrlcopy", recipeName.toString()).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE).setItalic(true)));
             }
         }
     }
@@ -271,18 +271,18 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
         try {
             tooltip.addAll(stack.getTooltip(Minecraft.getInstance().player, Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
         } catch (Exception exc) {
-            tooltip.add(new TranslationTextComponent("misc.tooltipError").setStyle(new Style().setColor(TextFormatting.RED)));
+            tooltip.add(new TranslationTextComponent("astralsorcery.misc.tooltipError").setStyle(new Style().setColor(TextFormatting.RED)));
         }
         BookLookupInfo info = BookLookupRegistry.findPage(Minecraft.getInstance().player, LogicalSide.CLIENT, stack);
         if (info != null) {
             tooltip.add(new StringTextComponent(""));
-            tooltip.add(new TranslationTextComponent("misc.craftInformation").setStyle(new Style().setColor(TextFormatting.GRAY)));
+            tooltip.add(new TranslationTextComponent("astralsorcery.misc.craftInformation").setStyle(new Style().setColor(TextFormatting.GRAY)));
         }
         if (stackIngredient != null && Minecraft.getInstance().gameSettings.advancedItemTooltips) {
             Tag<Item> itemTag = IngredientHelper.guessTag(stackIngredient);
             if (itemTag != null) {
                 tooltip.add(new StringTextComponent(""));
-                tooltip.add(new TranslationTextComponent("misc.input.tag", itemTag.getId().toString()).setStyle(new Style().setColor(TextFormatting.GRAY)));
+                tooltip.add(new TranslationTextComponent("astralsorcery.misc.input.tag", itemTag.getId().toString()).setStyle(new Style().setColor(TextFormatting.GRAY)));
             }
             if (stackIngredient instanceof FluidIngredient) {
                 List<FluidStack> fluids = ((FluidIngredient) stackIngredient).getFluids();
@@ -293,11 +293,11 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
                         if (cmp == null) {
                             cmp = f.getFluid().getAttributes().getDisplayName(f);
                         } else {
-                            cmp = new TranslationTextComponent("misc.input.fluid.chain", cmp, f.getFluid().getAttributes().getDisplayName(f)).setStyle(new Style().setColor(TextFormatting.GRAY));
+                            cmp = new TranslationTextComponent("astralsorcery.misc.input.fluid.chain", cmp, f.getFluid().getAttributes().getDisplayName(f)).setStyle(new Style().setColor(TextFormatting.GRAY));
                         }
                     }
                     tooltip.add(new StringTextComponent(""));
-                    tooltip.add(new TranslationTextComponent("misc.input.fluid", cmp).setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    tooltip.add(new TranslationTextComponent("astralsorcery.misc.input.fluid", cmp).setStyle(new Style().setColor(TextFormatting.GRAY)));
                 }
             }
         }

@@ -62,7 +62,7 @@ public class ReaderFlatAttribute extends PerkAttributeReader {
         if (PerkAttributeLimiter.hasLimit(this.getType())) {
             Pair<Double, Double> limits = PerkAttributeLimiter.getLimit(this.getType());
             limit = limits.getRight();
-            limitStr = I18n.format("perk.reader.limit.default", MathHelper.floor(limit));
+            limitStr = I18n.format("perk.reader.astralsorcery.limit.default", MathHelper.floor(limit));
         }
 
         double value = statMap.modifyValue(player, ResearchHelper.getProgress(player, LogicalSide.CLIENT),
@@ -73,7 +73,7 @@ public class ReaderFlatAttribute extends PerkAttributeReader {
         if (Math.abs(value - post) > 1E-4 &&
                 (limit == null || Math.abs(post - limit) > 1E-4)) {
             if (Math.abs(post) >= 1E-4) {
-                postProcess = I18n.format("perk.reader.postprocess.default", formatForDisplay(post));
+                postProcess = I18n.format("perk.reader.astralsorcery.postprocess.default", formatForDisplay(post));
             }
             value = post;
         }

@@ -81,12 +81,12 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
             public void handleClient(PktProgressionUpdate packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
                     if (packet.prog != null) {
-                        String out = TextFormatting.BLUE + I18n.format("progress.gain.progress.chat");
+                        String out = TextFormatting.BLUE + I18n.format("astralsorcery.progress.gain.progress.chat");
                         Minecraft.getInstance().player.sendMessage(new StringTextComponent(out));
                     }
                     if (packet.tier != null) {
                         String tr = I18n.format(packet.prog.getUnlocalizedName());
-                        String out = I18n.format("progress.gain.research.chat", tr);
+                        String out = I18n.format("astralsorcery.progress.gain.research.chat", tr);
                         out = TextFormatting.AQUA + out;
                         Minecraft.getInstance().player.sendMessage(new StringTextComponent(out));
                     }

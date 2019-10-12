@@ -239,7 +239,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         tooltipCache = Lists.newArrayList();
         String key = this.ovrUnlocalizedNamePrefix;
         if (modifiersDisabled(Minecraft.getInstance().player, LogicalSide.CLIENT)) {
-            tooltipCache.add(new TranslationTextComponent("perk.info.disabled")
+            tooltipCache.add(new TranslationTextComponent("perk.info.astralsorcery.disabled")
                     .setStyle(new Style().setColor(TextFormatting.GRAY)));
         } else if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
             tooltipCache.add(new TranslationTextComponent(this.getUnlocalizedName() + ".name")
@@ -265,7 +265,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
                 tooltipCache.add(new StringTextComponent(""));
             }
         } else {
-            tooltipCache.add(new TranslationTextComponent("perk.info.missing_progress")
+            tooltipCache.add(new TranslationTextComponent("perk.info.astralsorcery.missing_progress")
                     .setStyle(new Style().setColor(TextFormatting.RED)));
         }
         return tooltipCache;
@@ -336,11 +336,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         @Nullable
         @OnlyIn(Dist.CLIENT)
         public String getLocalizedName() {
-            String str = "perk.category." + unlocName + ".name";
-            if (I18n.hasKey(str)) {
-                return I18n.format("perk.category." + unlocName + ".name");
-            }
-            return null;
+            return I18n.format("perk.category.astralsorcery." + unlocName + ".name");
         }
 
         @Override

@@ -35,6 +35,6 @@ public class AttributeModifierThorns extends PerkAttributeModifier {
     @Override
     @OnlyIn(Dist.CLIENT)
     public String getAttributeDisplayFormat() {
-        return I18n.format("perk.modifier.format.thorns");
+        return I18n.format("perk.modifier.astralsorcery.format.thorns");
     }
 }

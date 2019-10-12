@@ -63,7 +63,7 @@ public abstract class ItemPerkGem extends Item {
                 }
             }
         } else {
-            tooltip.add(new TranslationTextComponent("progress.missing.knowledge")
+            tooltip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge")
                     .setStyle(new Style().setColor(TextFormatting.GRAY)));
         }
     }

@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class ArgumentTypeConstellation implements ArgumentType<IConstellation> {
 
     public static final SimpleCommandExceptionType CONSTELLATION_NOT_FOUND =
-            new SimpleCommandExceptionType(new TranslationTextComponent("argument.constellation.notfound"));
+            new SimpleCommandExceptionType(new TranslationTextComponent("astralsorcery.command.argument.constellation.notfound"));
 
     private final Predicate<IConstellation> filter;
 

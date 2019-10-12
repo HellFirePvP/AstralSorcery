@@ -93,24 +93,24 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
             IWeakConstellation c = ((ConstellationItem) stack.getItem()).getAttunedConstellation(stack);
             if (c != null) {
                 if (GatedKnowledge.COLLECTOR_TYPE.canSee(tier) && clientProgress.hasConstellationDiscovered(c)) {
-                    toolTip.add(new TranslationTextComponent("crystal.collect.type",
+                    toolTip.add(new TranslationTextComponent("crystal.info.astralsorcery.collect.type",
                             new TranslationTextComponent(c.getUnlocalizedName()).setStyle(new Style().setColor(TextFormatting.BLUE)))
                         .setStyle(new Style().setColor(TextFormatting.GRAY)));
 
                 } else if (!addedMissing) {
-                    toolTip.add(new TranslationTextComponent("progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
                 }
             }
 
             IMinorConstellation tr = ((ConstellationItem) stack.getItem()).getTraitConstellation(stack);
             if (tr != null) {
                 if (GatedKnowledge.CRYSTAL_TRAIT.canSee(tier) && clientProgress.hasConstellationDiscovered(tr)) {
-                    toolTip.add(new TranslationTextComponent("crystal.trait",
+                    toolTip.add(new TranslationTextComponent("crystal.info.astralsorcery.trait",
                             new TranslationTextComponent(tr.getUnlocalizedName()).setStyle(new Style().setColor(TextFormatting.BLUE)))
                             .setStyle(new Style().setColor(TextFormatting.GRAY)));
 
                 } else if(!addedMissing) {
-                    toolTip.add(new TranslationTextComponent("progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
                 }
             }
         }

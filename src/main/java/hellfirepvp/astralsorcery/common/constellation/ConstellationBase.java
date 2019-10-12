@@ -195,7 +195,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
 
         @Override
         public String getUnlocalizedType() {
-            return "astralsorcery.journal.constellation.major";
+            return "astralsorcery.journal.constellation.type.major";
         }
 
         //@Override
@@ -224,7 +224,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
 
         @Override
         public String getUnlocalizedType() {
-            return "astralsorcery.journal.constellation.weak";
+            return "astralsorcery.journal.constellation.type.weak";
         }
     }
 
@@ -291,7 +291,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
 
         @Override
         public String getUnlocalizedType() {
-            return "astralsorcery.journal.constellation.minor";
+            return "astralsorcery.journal.constellation.type.minor";
         }
     }
 }

@@ -170,7 +170,7 @@ public class PerkAttributeModifier {
 
     @OnlyIn(Dist.CLIENT)
     public String getAttributeDisplayFormat() {
-        return I18n.format("perk.modifier.format");
+        return I18n.format("perk.modifier.astralsorcery.format");
     }
 
     @Nullable

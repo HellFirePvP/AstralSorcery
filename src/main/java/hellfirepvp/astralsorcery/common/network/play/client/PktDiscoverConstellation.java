@@ -65,7 +65,7 @@ public class PktDiscoverConstellation extends ASPacket<PktDiscoverConstellation>
                     if (prog.isValid() &&
                             packet.constellation.canDiscover(player, prog) &&
                             ResearchManager.discoverConstellation(packet.constellation, player)) {
-                        player.sendMessage(new TranslationTextComponent("progress.discover.constellation.chat",
+                        player.sendMessage(new TranslationTextComponent("astralsorcery.progress.constellation.discover.chat",
                                 new TranslationTextComponent(packet.constellation.getUnlocalizedName())
                                         .setStyle(new Style().setColor(TextFormatting.GRAY)))
                                 .setStyle(new Style().setColor(TextFormatting.BLUE)));
