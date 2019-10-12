@@ -105,6 +105,11 @@ public class FluidIngredient extends Ingredient {
     }
 
     @Override
+    public boolean hasNoMatchingItems() {
+        return this.fluids.isEmpty();
+    }
+
+    @Override
     protected void invalidate() {
         super.invalidate();
 

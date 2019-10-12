@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.book.BookLookupRegistry;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
+import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
@@ -30,19 +31,25 @@ import hellfirepvp.astralsorcery.common.util.IngredientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.*;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.LogicalSide;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,7 +60,7 @@ import java.util.Map;
  */
 public abstract class RenderPageRecipeTemplate implements RenderablePage {
 
-    protected Map<Rectangle, ItemStack> thisFrameInputStacks = new HashMap<>();
+    protected Map<Rectangle, Tuple<ItemStack, Ingredient>> thisFrameInputStacks = new HashMap<>();
     protected Tuple<Rectangle, ItemStack> thisFrameOuputStack = null;
     protected Rectangle thisFrameInfoStar = null;
 
@@ -77,7 +84,7 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
             GlStateManager.translated(offsetX, offsetY, zLevel + 60);
             GlStateManager.scaled(scale, scale, scale);
             RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), expected, 0, 0, null);
-            this.thisFrameInputStacks.put(new Rectangle((int) offsetX, (int) offsetY, (int) (16 * scale), (int) (16 * scale)), expected);
+            this.thisFrameInputStacks.put(new Rectangle((int) offsetX, (int) offsetY, (int) (16 * scale), (int) (16 * scale)), new Tuple<>(expected, ingredient));
             GlStateManager.popMatrix();
         }
     }
@@ -129,7 +136,7 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
     public boolean handleBookLookupClick(double mouseX, double mouseZ) {
         for (Rectangle r : thisFrameInputStacks.keySet()) {
             if (r.contains(mouseX, mouseZ)) {
-                ItemStack stack = thisFrameInputStacks.get(r);
+                ItemStack stack = thisFrameInputStacks.get(r).getA();
                 BookLookupInfo info = BookLookupRegistry.findPage(Minecraft.getInstance().player, LogicalSide.CLIENT, stack);
                 if (info != null && info.canSee(ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT))) {
                     info.openGui();
@@ -243,31 +250,15 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
     protected void addStackTooltip(float mouseX, float mouseY, ResourceLocation recipeName, List<ITextComponent> tooltip) {
         for (Rectangle rect : thisFrameInputStacks.keySet()) {
             if (rect.contains(mouseX, mouseY)) {
-                ItemStack stack = thisFrameInputStacks.get(rect);
-                try {
-                    tooltip.addAll(stack.getTooltip(Minecraft.getInstance().player, Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
-                } catch (Exception exc) {
-                    tooltip.add(new TranslationTextComponent("misc.tooltipError").setStyle(new Style().setColor(TextFormatting.RED)));
-                }
-                BookLookupInfo info = BookLookupRegistry.findPage(Minecraft.getInstance().player, LogicalSide.CLIENT, stack);
-                if (info != null) {
-                    tooltip.add(new StringTextComponent(""));
-                    tooltip.add(new TranslationTextComponent("misc.craftInformation").setStyle(new Style().setColor(TextFormatting.GRAY)));
-                }
+                Tuple<ItemStack, Ingredient> inputInfo = thisFrameInputStacks.get(rect);
+                addInputInformation(inputInfo.getA(), inputInfo.getB(), tooltip);
+                return;
             }
         }
         if (this.thisFrameOuputStack.getA().contains(mouseX, mouseY)) {
             ItemStack stack = this.thisFrameOuputStack.getB();
-            try {
-                tooltip.addAll(stack.getTooltip(Minecraft.getInstance().player, Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
-            } catch (Exception exc) {
-                tooltip.add(new TranslationTextComponent("misc.tooltipError").setStyle(new Style().setColor(TextFormatting.RED)));
-            }
-            BookLookupInfo info = BookLookupRegistry.findPage(Minecraft.getInstance().player, LogicalSide.CLIENT, stack);
-            if (info != null) {
-                tooltip.add(new StringTextComponent(""));
-                tooltip.add(new TranslationTextComponent("misc.craftInformation").setStyle(new Style().setColor(TextFormatting.GRAY)));
-            }
+            addInputInformation(stack, null, tooltip);
+
             if (Minecraft.getInstance().gameSettings.showDebugInfo) {
                 tooltip.add(new StringTextComponent(""));
                 tooltip.add(new TranslationTextComponent("misc.recipename", recipeName.toString()).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE).setItalic(true)));
@@ -276,4 +267,39 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
         }
     }
 
+    protected void addInputInformation(ItemStack stack, @Nullable Ingredient stackIngredient, List<ITextComponent> tooltip) {
+        try {
+            tooltip.addAll(stack.getTooltip(Minecraft.getInstance().player, Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
+        } catch (Exception exc) {
+            tooltip.add(new TranslationTextComponent("misc.tooltipError").setStyle(new Style().setColor(TextFormatting.RED)));
+        }
+        BookLookupInfo info = BookLookupRegistry.findPage(Minecraft.getInstance().player, LogicalSide.CLIENT, stack);
+        if (info != null) {
+            tooltip.add(new StringTextComponent(""));
+            tooltip.add(new TranslationTextComponent("misc.craftInformation").setStyle(new Style().setColor(TextFormatting.GRAY)));
+        }
+        if (stackIngredient != null && Minecraft.getInstance().gameSettings.advancedItemTooltips) {
+            Tag<Item> itemTag = IngredientHelper.guessTag(stackIngredient);
+            if (itemTag != null) {
+                tooltip.add(new StringTextComponent(""));
+                tooltip.add(new TranslationTextComponent("misc.input.tag", itemTag.getId().toString()).setStyle(new Style().setColor(TextFormatting.GRAY)));
+            }
+            if (stackIngredient instanceof FluidIngredient) {
+                List<FluidStack> fluids = ((FluidIngredient) stackIngredient).getFluids();
+
+                if (!fluids.isEmpty()) {
+                    ITextComponent cmp = null;
+                    for (FluidStack f : fluids) {
+                        if (cmp == null) {
+                            cmp = f.getFluid().getAttributes().getDisplayName(f);
+                        } else {
+                            cmp = new TranslationTextComponent("misc.input.fluid.chain", cmp, f.getFluid().getAttributes().getDisplayName(f)).setStyle(new Style().setColor(TextFormatting.GRAY));
+                        }
+                    }
+                    tooltip.add(new StringTextComponent(""));
+                    tooltip.add(new TranslationTextComponent("misc.input.fluid", cmp).setStyle(new Style().setColor(TextFormatting.GRAY)));
+                }
+            }
+        }
+    }
 }
