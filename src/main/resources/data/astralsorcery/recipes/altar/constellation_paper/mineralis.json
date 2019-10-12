@@ -4,6 +4,7 @@
   "options": {
     "constellation": "astralsorcery:mineralis"
   },
+  "focus_constellation": "astralsorcery:mineralis",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

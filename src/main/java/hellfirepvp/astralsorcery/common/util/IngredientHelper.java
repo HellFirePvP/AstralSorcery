@@ -6,9 +6,8 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.crafting.helper;
+package hellfirepvp.astralsorcery.common.util;
 
-import hellfirepvp.astralsorcery.common.util.IngredientHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.math.MathHelper;
@@ -16,24 +15,19 @@ import net.minecraft.util.math.MathHelper;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: WrappedIngredient
+ * Class: IngredientHelper
  * Created by HellFirePvP
- * Date: 25.09.2019 / 18:19
+ * Date: 11.10.2019 / 22:18
  */
-public class WrappedIngredient {
+public class IngredientHelper {
 
-    private final Ingredient ingredient;
-
-    public WrappedIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
-    }
-
-    public Ingredient getIngredient() {
-        return ingredient;
-    }
-
-    public ItemStack getRandomMatchingStack(long tick) {
-        return IngredientHelper.getRandomMatchingStack(this.getIngredient(), tick);
+    public static ItemStack getRandomMatchingStack(Ingredient ingredient, long tick) {
+        if (ingredient.hasNoMatchingItems()) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack[] stacks = ingredient.getMatchingStacks();
+        int mod = (int) ((tick / 20L) % stacks.length);
+        return stacks[MathHelper.clamp(mod, 0, stacks.length - 1)];
     }
 
 }

@@ -4,6 +4,7 @@
   "options": {
     "constellation": "astralsorcery:fornax"
   },
+  "focus_constellation": "astralsorcery:fornax",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

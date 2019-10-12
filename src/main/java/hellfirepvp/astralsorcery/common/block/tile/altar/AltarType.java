@@ -9,8 +9,11 @@
 package hellfirepvp.astralsorcery.common.block.tile.altar;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,17 +33,31 @@ import java.util.function.Supplier;
  */
 public enum AltarType {
 
-    DISCOVERY(ResearchProgression.BASIC_CRAFT, () -> StructureTypesAS.EMPTY, 6, 7, 8, 11, 12, 13, 16, 17, 18),
-    ATTUNEMENT(ResearchProgression.ATTUNEMENT, () -> StructureTypesAS.EMPTY, 0, 4, 6, 7, 8, 11, 12, 13, 16, 17, 18, 20, 23),
-    CONSTELLATION(ResearchProgression.CONSTELLATION, () -> StructureTypesAS.EMPTY, (slot) -> slot != 3 && slot != 10 && slot != 14 && slot != 22),
-    RADIANCE(ResearchProgression.RADIANCE, () -> StructureTypesAS.EMPTY, (slot) -> true);
+    DISCOVERY    (ResearchProgression.BASIC_CRAFT,
+            () -> BlocksAS.ALTAR_DISCOVERY.asItem(),
+            () -> StructureTypesAS.EMPTY,
+            6, 7, 8, 11, 12, 13, 16, 17, 18),
+    ATTUNEMENT   (ResearchProgression.ATTUNEMENT,
+            () -> BlocksAS.ALTAR_ATTUNEMENT.asItem(),
+            () -> StructureTypesAS.EMPTY,
+            0, 4, 6, 7, 8, 11, 12, 13, 16, 17, 18, 20, 23),
+    CONSTELLATION(ResearchProgression.CONSTELLATION,
+            () -> BlocksAS.ALTAR_CONSTELLATION.asItem(),
+            () -> StructureTypesAS.EMPTY,
+            (slot) -> slot != 3 && slot != 10 && slot != 14 && slot != 22),
+    RADIANCE     (ResearchProgression.RADIANCE,
+            () -> BlocksAS.ALTAR_RADIANCE.asItem(),
+            () -> StructureTypesAS.EMPTY,
+            (slot) -> true);
 
     private final ResearchProgression associatedTier;
+    private final Supplier<Item> altarItemSupplier;
     private final Supplier<StructureType> structureSupplier;
     private Predicate<Integer> slotValidator;
 
-    AltarType(ResearchProgression progressTier, Supplier<StructureType> structureSupplier, int... validSlots) {
+    AltarType(ResearchProgression progressTier, Supplier<Item> altarItemSupplier, Supplier<StructureType> structureSupplier, int... validSlots) {
         this.associatedTier = progressTier;
+        this.altarItemSupplier = altarItemSupplier;
         this.structureSupplier = structureSupplier;
         List<Integer> slots = new ArrayList<>();
         for (int slot : validSlots) {
@@ -49,8 +66,9 @@ public enum AltarType {
         this.slotValidator = slots::contains;
     }
 
-    AltarType(ResearchProgression progressTier, Supplier<StructureType> structureSupplier, Predicate<Integer> slotValidator) {
+    AltarType(ResearchProgression progressTier, Supplier<Item> altarItemSupplier, Supplier<StructureType> structureSupplier, Predicate<Integer> slotValidator) {
         this.associatedTier = progressTier;
+        this.altarItemSupplier = altarItemSupplier;
         this.structureSupplier = structureSupplier;
         this.slotValidator = slotValidator;
     }
@@ -63,6 +81,11 @@ public enum AltarType {
     @Nonnull
     public StructureType getRequiredStructure() {
         return this.structureSupplier.get();
+    }
+
+    @Nonnull
+    public ItemStack getAltarItemRepresentation() {
+        return new ItemStack(this.altarItemSupplier.get());
     }
 
     public boolean hasSlot(int slotId) {

@@ -57,7 +57,7 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
 
         SimpleAltarRecipe recipe = this.findRecipe(false);
         if (recipe != null) {
-            ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity());
+            ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity().getInventory());
             this.blitOffset = 10;
             GlStateManager.pushMatrix();
             GlStateManager.translated(190, 35, 0);

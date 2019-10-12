@@ -70,7 +70,7 @@ public class RenderingGuiUtils {
         tes.draw();
     }
     
-    public static void drawRectDetailed(float offsetX, float offsetY, double zLevel, float width, float height) {
+    public static void drawRectDetailed(double offsetX, double offsetY, double zLevel, float width, float height) {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);

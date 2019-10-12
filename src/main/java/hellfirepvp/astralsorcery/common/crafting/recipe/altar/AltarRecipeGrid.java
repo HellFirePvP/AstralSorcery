@@ -66,6 +66,14 @@ public class AltarRecipeGrid {
         return this.gridParts.getOrDefault(index, Ingredient.EMPTY);
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     private boolean matches(IItemHandlerModifiable itemHandler, int xOffset, int zOffset, boolean mirrored) {
         Set<Integer> matchedItems = new HashSet<>();
         int totalOffset = zOffset * GRID_SIZE + xOffset;

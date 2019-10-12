@@ -40,9 +40,9 @@ public class CrystalCountRecipe extends ConstellationBaseAverageStatsRecipe {
 
     @Nonnull
     @Override
-    public ItemStack getOutputForRender(TileAltar altar) {
-        ItemStack out = super.getOutputForRender(altar);
-        setAmount(out, altar);
+    public ItemStack getOutputForRender(Iterable<ItemStack> inventoryContents) {
+        ItemStack out = super.getOutputForRender(inventoryContents);
+        setAmount(out);
         return out;
     }
 
@@ -50,11 +50,11 @@ public class CrystalCountRecipe extends ConstellationBaseAverageStatsRecipe {
     @Override
     public List<ItemStack> getOutputs(TileAltar altar) {
         List<ItemStack> out = super.getOutputs(altar);
-        out.forEach(stack -> setAmount(stack, altar));
+        out.forEach(this::setAmount);
         return out;
     }
 
-    private void setAmount(ItemStack out, TileAltar altar) {
+    private void setAmount(ItemStack out) {
         if (out.getItem() instanceof CrystalAttributeItem) {
             CrystalAttributes attr = ((CrystalAttributeItem) out.getItem()).getAttributes(out);
             if (attr != null && !attr.isEmpty()) {

@@ -103,26 +103,6 @@ public class ScreenJournalPages extends ScreenJournal {
     }
 
     @Override
-    public void onClose() {
-        super.onClose();
-
-        if (origin != null) {
-            if (saveSite) {
-                openGuiInstance = this;
-                ScreenJournalProgression.getJournalInstance().preventRefresh();
-            } else {
-                saveSite = true;
-                openGuiInstance = null;
-            }
-        }
-        if (previous != null) {
-            if (informPreviousClose) {
-                previous.onClose();
-            }
-        }
-    }
-
-    @Override
     public void render(int mouseX, int mouseY, float pTicks) {
         GlStateManager.enableBlend();
         super.render(mouseX, mouseY, pTicks);
@@ -282,16 +262,34 @@ public class ScreenJournalPages extends ScreenJournal {
     }
 
     @Override
-    protected boolean handleRightClickClose(double mouseX, double mouseY) {
+    protected boolean shouldRightClickCloseScreen(double mouseX, double mouseY) {
         if (origin != null) {
             origin.expectReInit();
             saveSite = false;
-            Minecraft.getInstance().displayGuiScreen(origin);
         } else {
             informPreviousClose = false;
-            Minecraft.getInstance().displayGuiScreen(previous);
         }
         return true;
+    }
+
+    @Override
+    public void onClose() {
+        if (origin != null) {
+            if (saveSite) {
+                openGuiInstance = this;
+                ScreenJournalProgression.getJournalInstance().preventRefresh();
+            } else {
+                saveSite = true;
+                openGuiInstance = null;
+            }
+
+            Minecraft.getInstance().displayGuiScreen(origin);
+        } else {
+            if (previous != null && informPreviousClose) {
+                previous.onClose();
+            }
+            Minecraft.getInstance().displayGuiScreen(previous);
+        }
     }
 
     @Override
@@ -320,6 +318,10 @@ public class ScreenJournalPages extends ScreenJournal {
             return true;
         }
 
+        if (mouseButton == 1) {
+            return true;
+        }
+
         if (mouseButton != 0) {
             return false;
         }
@@ -334,11 +336,11 @@ public class ScreenJournalPages extends ScreenJournal {
             if (origin != null) {
                 origin.expectReInit();
                 saveSite = false;
-                Minecraft.getInstance().displayGuiScreen(origin);
+                this.onClose();
                 return true;
             } else {
                 informPreviousClose = false;
-                Minecraft.getInstance().displayGuiScreen(previous);
+                this.onClose();
                 return true;
             }
         }
