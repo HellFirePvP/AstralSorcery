@@ -65,8 +65,8 @@ public class ConstellationBaseItemRecipe extends SimpleAltarRecipe {
     @Override
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    public ItemStack getOutputForRender(TileAltar altar) {
-        ItemStack out = super.getOutputForRender(altar);
+    public ItemStack getOutputForRender(Iterable<ItemStack> inventoryContents) {
+        ItemStack out = super.getOutputForRender(inventoryContents);
         setConstellations(out);
         return out;
     }

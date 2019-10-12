@@ -134,7 +134,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
 
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    public ItemStack getOutputForRender(TileAltar altar) {
+    public ItemStack getOutputForRender(Iterable<ItemStack> inventoryContents) {
         ItemStack first = Iterables.getFirst(this.outputs, ItemStack.EMPTY);
         return ItemUtils.copyStackWithSize(first, first.getCount());
     }

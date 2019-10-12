@@ -968,31 +968,27 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     }
 
     @Override
-    protected boolean handleRightClickClose(double mouseX, double mouseY) {
-        if (super.handleRightClickClose(mouseX, mouseY)) {
-            return true;
-        }
-
+    protected boolean shouldRightClickCloseScreen(double mouseX, double mouseY) {
         if (rectSearchTextEntry.contains(mouseX - guiLeft, mouseY - guiTop)) {
             searchTextEntry.setText("");
-            return true;
+            return false;
         }
         if (socketMenu != null &&
                 rSocketMenu != null &&
                 !rSocketMenu.contains(mouseX, mouseY)) {
             closeSocketMenu();
-            return true;
+            return false;
         }
 
         for (Map.Entry<AbstractPerk, Rectangle.Double> rctPerk : this.thisFramePerks.entrySet()) {
             if (rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 AbstractPerk perk = rctPerk.getKey();
                 if (perk instanceof GemSlotPerk) {
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     @Override

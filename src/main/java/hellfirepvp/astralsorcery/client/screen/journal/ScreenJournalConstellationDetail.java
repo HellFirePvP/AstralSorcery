@@ -506,9 +506,13 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
     }
 
     @Override
-    protected boolean handleRightClickClose(double mouseX, double mouseY) {
-        Minecraft.getInstance().displayGuiScreen(origin);
+    protected boolean shouldRightClickCloseScreen(double mouseX, double mouseY) {
         return true;
+    }
+
+    @Override
+    public void onClose() {
+        Minecraft.getInstance().displayGuiScreen(origin);
     }
 
     @Override

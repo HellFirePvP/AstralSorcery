@@ -69,6 +69,11 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
     }
 
     @Override
+    protected boolean shouldRightClickCloseScreen(double mouseX, double mouseY) {
+        return true;
+    }
+
+    @Override
     public boolean isPauseScreen() {
         return false;
     }

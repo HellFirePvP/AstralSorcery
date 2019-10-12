@@ -11,13 +11,7 @@ package hellfirepvp.astralsorcery.client.screen.base;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.text.ITextComponent;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -95,7 +89,7 @@ public class WidthHeightScreen extends InputScreen {
             return true;
         }
 
-        if (button == 1 && !handleRightClickClose(mouseX, mouseY)) {
+        if (button == 1 && shouldRightClickCloseScreen(mouseX, mouseY)) {
             this.onClose();
 
             if (Minecraft.getInstance().currentScreen == null) {
@@ -107,9 +101,9 @@ public class WidthHeightScreen extends InputScreen {
     }
 
     /**
-     * @return false if rightclick is not handled any other way and allow for close. true to deny rightclick close and handle otherwise;
+     * @return false if rightclick shouldn't close the current screen, true if it should close the current screen
      */
-    protected boolean handleRightClickClose(double mouseX, double mouseY) {
+    protected boolean shouldRightClickCloseScreen(double mouseX, double mouseY) {
         return false;
     }
 }

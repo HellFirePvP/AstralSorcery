@@ -39,9 +39,9 @@ public class ConstellationBaseAverageStatsRecipe extends ConstellationBaseItemRe
 
     @Override
     @Nonnull
-    public ItemStack getOutputForRender(TileAltar altar) {
-        ItemStack out = super.getOutputForRender(altar);
-        setStats(out, altar);
+    public ItemStack getOutputForRender(Iterable<ItemStack> inventoryContents) {
+        ItemStack out = super.getOutputForRender(inventoryContents);
+        setStats(out, inventoryContents);
         return out;
     }
 
@@ -49,18 +49,18 @@ public class ConstellationBaseAverageStatsRecipe extends ConstellationBaseItemRe
     @Override
     public List<ItemStack> getOutputs(TileAltar altar) {
         List<ItemStack> out = super.getOutputs(altar);
-        out.forEach(stack -> setStats(stack, altar));
+        out.forEach(stack -> setStats(stack, altar.getInventory()));
         return out;
     }
 
-    private void setStats(ItemStack out, TileAltar altar) {
+    private void setStats(ItemStack out, Iterable<ItemStack> inventoryContents) {
         if (!(out.getItem() instanceof CrystalAttributeItem)) {
             return;
         }
 
         int count = 0;
         CrystalAttributes.Builder builder = CrystalAttributes.Builder.newBuilder(true);
-        for (ItemStack stack : altar.getInventory()) {
+        for (ItemStack stack : inventoryContents) {
             if (stack.getItem() instanceof CrystalAttributeItem) {
                 CrystalAttributes attr = ((CrystalAttributeItem) stack.getItem()).getAttributes(stack);
                 if (attr != null) {

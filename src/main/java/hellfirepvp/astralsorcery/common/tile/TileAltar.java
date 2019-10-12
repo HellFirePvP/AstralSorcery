@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.util.sound.PositionedLoopSound;
-import hellfirepvp.astralsorcery.common.auxiliary.RecipeHelper;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;

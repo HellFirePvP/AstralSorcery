@@ -41,6 +41,11 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_BOOK_FRAME_FULL;
     public static AbstractRenderableTexture TEX_GUI_BOOK_FRAME_LEFT;
     public static AbstractRenderableTexture TEX_GUI_BOOK_STRUCTURE_ICONS;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_SLOT;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_T1;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_T2;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_T3;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_T4;
     public static AbstractRenderableTexture TEX_GUI_STARFIELD_OVERLAY;
     public static AbstractRenderableTexture TEX_GUI_BACKGROUND_DEFAULT;
     public static AbstractRenderableTexture TEX_GUI_BACKGROUND_PERKS;

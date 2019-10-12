@@ -52,9 +52,13 @@ public abstract class ScreenJournalOverlay extends ScreenJournal {
     }
 
     @Override
-    protected boolean handleRightClickClose(double mouseX, double mouseY) {
-        Minecraft.getInstance().displayGuiScreen(this.origin);
+    protected boolean shouldRightClickCloseScreen(double mouseX, double mouseY) {
         return true;
+    }
+
+    @Override
+    public void onClose() {
+        Minecraft.getInstance().displayGuiScreen(this.origin);
     }
 
     @Override

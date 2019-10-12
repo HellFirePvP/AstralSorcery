@@ -43,6 +43,12 @@ public class RegistryTextures {
         TEX_GUI_BOOK_BLANK                  = loadTexture(GUI, "book_blank");
         TEX_GUI_BOOK_FRAME_FULL             = loadTexture(GUI, "book_frame_full");
         TEX_GUI_BOOK_FRAME_LEFT             = loadTexture(GUI, "book_frame_left");
+        TEX_GUI_BOOK_STRUCTURE_ICONS        = loadTexture(GUI, "book_structure_icons");
+        TEX_GUI_BOOK_GRID_SLOT              = loadTexture(GUI, "book_grid_slot");
+        TEX_GUI_BOOK_GRID_T1                = loadTexture(GUI, "book_grid_t1");
+        TEX_GUI_BOOK_GRID_T2                = loadTexture(GUI, "book_grid_t2");
+        TEX_GUI_BOOK_GRID_T3                = loadTexture(GUI, "book_grid_t3");
+        TEX_GUI_BOOK_GRID_T4                = loadTexture(GUI, "book_grid_t4");
         TEX_GUI_STARFIELD_OVERLAY           = loadTexture(GUI, "starfield_overlay");
         TEX_GUI_BACKGROUND_DEFAULT          = loadTexture(GUI, "book_background_default");
         TEX_GUI_BACKGROUND_PERKS            = loadTexture(GUI, "book_background_perks");
@@ -53,7 +59,6 @@ public class RegistryTextures {
         TEX_GUI_CLUSTER_CONSTELLATION       = loadTexture(GUI, "cluster_constellation");
         TEX_GUI_CLUSTER_DISCOVERY           = loadTexture(GUI, "cluster_discovery");
         TEX_GUI_CLUSTER_RADIANCE            = loadTexture(GUI, "cluster_radiance");
-        TEX_GUI_BOOK_STRUCTURE_ICONS        = loadTexture(GUI, "book_structure_icons");
 
         TEX_GUI_PERK_INACTIVE               = loadTexture(EFFECT, "perk_inactive");
         TEX_GUI_PERK_ACTIVE                 = loadTexture(EFFECT, "perk_active");

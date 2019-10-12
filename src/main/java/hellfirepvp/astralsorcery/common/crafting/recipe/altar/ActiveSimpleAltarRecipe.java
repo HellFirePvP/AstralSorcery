@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.RecipeHelper;
 import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
@@ -277,7 +278,7 @@ public class ActiveSimpleAltarRecipe {
 
     @Nullable
     public static ActiveSimpleAltarRecipe deserialize(CompoundNBT compound, @Nullable ActiveSimpleAltarRecipe previous) {
-        RecipeManager mgr = RecipeTypesAS.TYPE_ALTAR.getRecipeManager();
+        RecipeManager mgr = RecipeHelper.getRecipeManager();
         if (mgr == null) {
             return null;
         }

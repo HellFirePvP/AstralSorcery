@@ -10,25 +10,21 @@ package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.play.ClientPlayNetHandler;
+import hellfirepvp.astralsorcery.common.util.RecipeHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.LogicalSidedProvider;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiPredicate;
 
 /**
@@ -64,7 +60,7 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
 
     @Nonnull
     public Collection<T> getAllRecipes() {
-        RecipeManager mgr = getRecipeManager();
+        RecipeManager mgr = RecipeHelper.getRecipeManager();
         if (mgr == null) {
             return Collections.emptyList();
         }
@@ -89,31 +85,8 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
     }
 
     @Nullable
-    public RecipeManager getRecipeManager() {
-        if (EffectiveSide.get() == LogicalSide.CLIENT) {
-            return getClientManager();
-        } else {
-            MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-            if (srv != null) {
-                return srv.getRecipeManager();
-            }
-        }
-        return null;
-    }
-
-    @Nullable
     public T findRecipe(R context) {
         return MiscUtils.iterativeSearch(this.getAllRecipes(), (recipe) -> this.matchFct.test(recipe, context));
-    }
-
-    @Nullable
-    @OnlyIn(Dist.CLIENT)
-    private RecipeManager getClientManager() {
-        ClientPlayNetHandler conn;
-        if ((conn = Minecraft.getInstance().getConnection()) != null) {
-            return conn.getRecipeManager();
-        }
-        return null;
     }
 
 }
