@@ -131,7 +131,7 @@ public class ResearchNode {
     }
 
     public String getUnLocalizedName() {
-        return String.format("research.%s.name", unlocName);
+        return String.format("astralsorcery.journal.node.%s.name", unlocName);
     }
 
     public String getSimpleName() {

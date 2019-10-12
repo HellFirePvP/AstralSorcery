@@ -73,7 +73,7 @@ public class LinkHandler implements ITickHandler {
                 String name = tile.getUnLocalizedDisplayName();
                 if (tile.onSelect(playerIn)) {
                     if (name != null) {
-                        playerIn.sendMessage(new TranslationTextComponent("misc.link.start", new TranslationTextComponent(name)).setStyle(green));
+                        playerIn.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.start", new TranslationTextComponent(name)).setStyle(green));
                     }
                 }
                 break;
@@ -84,7 +84,7 @@ public class LinkHandler implements ITickHandler {
                 }
                 if (tile.tryLink(playerIn, pos)) {
                     tile.onLinkCreate(playerIn, pos);
-                    String linkedTo = "misc.link.link.block";
+                    String linkedTo = "astralsorcery.misc.link.link.block";
                     if (te instanceof LinkableTileEntity) {
                         String unloc = ((LinkableTileEntity) te).getUnLocalizedDisplayName();
                         if (unloc != null) {
@@ -93,13 +93,13 @@ public class LinkHandler implements ITickHandler {
                     }
                     String linkedFrom = tile.getUnLocalizedDisplayName();
                     if (linkedFrom != null) {
-                        playerIn.sendMessage(new TranslationTextComponent("misc.link.link", new TranslationTextComponent(linkedFrom), new TranslationTextComponent(linkedTo)).setStyle(green));
+                        playerIn.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.link", new TranslationTextComponent(linkedFrom), new TranslationTextComponent(linkedTo)).setStyle(green));
                     }
                 }
                 break;
             case TRY_UNLINK:
                 if (tile.tryUnlink(playerIn, pos)) {
-                    String linkedTo = "misc.link.link.block";
+                    String linkedTo = "astralsorcery.misc.link.link.block";
                     te = worldIn.getTileEntity(pos);
                     if (te instanceof LinkableTileEntity) {
                         String unloc = ((LinkableTileEntity) te).getUnLocalizedDisplayName();
@@ -109,7 +109,7 @@ public class LinkHandler implements ITickHandler {
                     }
                     String linkedFrom = tile.getUnLocalizedDisplayName();
                     if (linkedFrom != null) {
-                        playerIn.sendMessage(new TranslationTextComponent("misc.link.unlink", new TranslationTextComponent(linkedFrom), new TranslationTextComponent(linkedTo)).setStyle(green));
+                        playerIn.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.unlink", new TranslationTextComponent(linkedFrom), new TranslationTextComponent(linkedTo)).setStyle(green));
                     }
                 }
                 break;
@@ -137,7 +137,7 @@ public class LinkHandler implements ITickHandler {
             if (dimId != pl.dimension.getId()) needsRemoval = true;
             if (needsRemoval) {
                 iterator.remove();
-                pl.sendMessage(new TranslationTextComponent("misc.link.stop").setStyle(new Style().setColor(TextFormatting.RED)));
+                pl.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.stop").setStyle(new Style().setColor(TextFormatting.RED)));
             }
         }
     }

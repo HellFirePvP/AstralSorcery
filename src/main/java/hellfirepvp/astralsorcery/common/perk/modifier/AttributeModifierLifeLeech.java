@@ -35,6 +35,6 @@ public class AttributeModifierLifeLeech extends PerkAttributeModifier {
     @Override
     @OnlyIn(Dist.CLIENT)
     public String getAttributeDisplayFormat() {
-        return I18n.format("perk.modifier.format.lifeleech");
+        return I18n.format("perk.modifier.astralsorcery.format.lifeleech");
     }
 }

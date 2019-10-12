@@ -99,7 +99,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             String unlocEnch = constellation.getUnlocalizedName() + ".capeeffect";
             String textEnch = I18n.format(unlocEnch);
             if (!unlocEnch.equals(textEnch)) {
-                String head = I18n.format("gui.journal.cst.capeeffect");
+                String head = I18n.format("astralsorcery.journal.constellation.capeeffect");
                 locTextCapeEffect.add(head);
                 locTextCapeEffect.add("");
 
@@ -119,7 +119,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             String unlocEnch = constellation.getUnlocalizedName() + ".enchantments";
             String textEnch = I18n.format(unlocEnch);
             if (!unlocEnch.equals(textEnch)) {
-                String head = I18n.format("gui.journal.cst.enchantments");
+                String head = I18n.format("astralsorcery.journal.constellation.enchantments");
                 locTextRitualEnch.add(head);
                 locTextRitualEnch.add("");
 
@@ -140,7 +140,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
                 String unlocRitual = constellation.getUnlocalizedName() + ".trait";
                 String textRitual = I18n.format(unlocRitual);
                 if (!unlocRitual.equals(textRitual)) {
-                    String head = I18n.format("gui.journal.cst.ritual.trait");
+                    String head = I18n.format("astralsorcery.journal.constellation.ritual.trait");
                     locTextRitualEnch.add(head);
                     locTextRitualEnch.add("");
 
@@ -155,7 +155,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
                 String unlocRitual = constellation.getUnlocalizedName() + ".ritual";
                 String textRitual = I18n.format(unlocRitual);
                 if (!unlocRitual.equals(textRitual)) {
-                    String head = I18n.format("gui.journal.cst.ritual");
+                    String head = I18n.format("astralsorcery.journal.constellation.ritual");
                     locTextRitualEnch.add(head);
                     locTextRitualEnch.add("");
 

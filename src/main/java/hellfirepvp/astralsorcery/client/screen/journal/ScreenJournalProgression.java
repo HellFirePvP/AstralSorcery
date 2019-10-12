@@ -139,8 +139,8 @@ public class ScreenJournalProgression extends ScreenJournal {
         if(starRect != null && starRect.contains(mouseX, mouseY)) {
             RenderingDrawUtils.renderBlueTooltipString(mouseX, mouseY, new LinkedList<String>() {
                 {
-                    add(I18n.format("misc.journal.info.1"));
-                    add(I18n.format("misc.journal.info.2",
+                    add(I18n.format("astralsorcery.misc.journal.info.1"));
+                    add(I18n.format("astralsorcery.misc.journal.info.2",
                             Minecraft.getInstance().gameSettings.keyBindForward.getLocalizedName(),
                             Minecraft.getInstance().gameSettings.keyBindBack.getLocalizedName()));
                 }

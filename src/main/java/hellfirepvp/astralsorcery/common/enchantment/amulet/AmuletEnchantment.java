@@ -44,7 +44,7 @@ public class AmuletEnchantment extends DynamicEnchantment {
     @OnlyIn(Dist.CLIENT)
     public String getDisplay() {
         String typeStr = this.getType().getDisplayName();
-        String levelsStr = I18n.format(String.format("amulet.enchantment.level.%s", this.levelAddition > 1 ? "more" : "one"));
+        String levelsStr = I18n.format(String.format("astralsorcery.amulet.enchantment.level.%s", this.levelAddition > 1 ? "more" : "one"));
 
         if (this.getType().isEnchantmentSpecific()) {
             return I18n.format(typeStr, String.valueOf(this.getLevelAddition()), levelsStr, I18n.format(this.getEnchantment().getName()));

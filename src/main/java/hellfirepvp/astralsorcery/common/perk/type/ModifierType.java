@@ -58,7 +58,7 @@ public enum  ModifierType {
     }
 
     public String getUnlocalizedModifierName(boolean positive) {
-        String base = positive ? "perk.modifier.%s.add" : "perk.modifier.%s.sub";
+        String base = positive ? "perk.modifier.astralsorcery.%s.add" : "perk.modifier.astralsorcery.%s.sub";
         return String.format(base, name().toLowerCase());
     }
 }

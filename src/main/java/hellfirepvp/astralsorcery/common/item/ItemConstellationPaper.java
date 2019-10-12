@@ -80,7 +80,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
         if (c != null && c.canDiscover(Minecraft.getInstance().player, ResearchHelper.getClientProgress())) {
             toolTip.add(new StringTextComponent(TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
         } else {
-            toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("constellation.noInformation")));
+            toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("astralsorcery.misc.noinformation")));
         }
     }
 
@@ -173,13 +173,13 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
             if (!has) {
                 if (cst.canDiscover((PlayerEntity) entity, progress) && ResearchManager.memorizeConstellation(cst, (PlayerEntity) entity)) {
                     entity.sendMessage(
-                            new TranslationTextComponent("progress.seen.constellation.chat",
+                            new TranslationTextComponent("astralsorcery.progress.constellation.seen.chat",
                                     new TranslationTextComponent(cst.getUnlocalizedName())
                                             .setStyle(new Style().setColor(TextFormatting.GRAY)))
                                     .setStyle(new Style().setColor(TextFormatting.BLUE)));
                     if (ResearchHelper.getClientProgress().getSeenConstellations().size() == 1) {
                         entity.sendMessage(
-                                new TranslationTextComponent("progress.seen.constellation.first.chat")
+                                new TranslationTextComponent("astralsorcery.progress.constellation.seen.track")
                                         .setStyle(new Style().setColor(TextFormatting.BLUE)));
                     }
                 }

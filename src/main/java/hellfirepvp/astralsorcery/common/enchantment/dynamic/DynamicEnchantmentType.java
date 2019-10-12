@@ -36,7 +36,7 @@ public enum DynamicEnchantmentType {
     }
 
     public String getDisplayName() {
-        return String.format("amulet.enchantment.%s.name", this.name().toLowerCase());
+        return String.format("astralsorcery.amulet.enchantment.%s.name", this.name().toLowerCase());
     }
 
 }

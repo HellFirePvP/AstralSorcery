@@ -142,22 +142,22 @@ public interface GemSlotPerk {
 
         ItemStack contained = getContainedItem(Minecraft.getInstance().player, LogicalSide.CLIENT);
         if (contained.isEmpty()) {
-            tooltip.add(new TranslationTextComponent("perk.info.gem.empty").setStyle(gray));
+            tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.empty").setStyle(gray));
             if (prog.hasPerkEffect((AbstractPerk) this)) {
-                tooltip.add(new TranslationTextComponent("perk.info.gem.content.empty").setStyle(gray));
+                tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.empty").setStyle(gray));
 
                 boolean has = !ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getInstance().player,
                         s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !ItemPerkGem.getModifiers(s).isEmpty()).isEmpty();
                 if (!has) {
-                    tooltip.add(new TranslationTextComponent("perk.info.gem.content.empty.none")
+                    tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.empty.none")
                             .setStyle(new Style().setColor(TextFormatting.RED)));
                 }
             }
         } else {
-            tooltip.add(new TranslationTextComponent("perk.info.gem.content.item", contained.getDisplayName())
+            tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.item", contained.getDisplayName())
                     .setStyle(gray));
             if (prog.hasPerkEffect((AbstractPerk) this)) {
-                tooltip.add(new TranslationTextComponent("perk.info.gem.remove").setStyle(gray));
+                tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.remove").setStyle(gray));
             }
         }
     }

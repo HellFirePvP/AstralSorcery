@@ -108,7 +108,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
     }
 
     private void drawHeader() {
-        String locTitle = I18n.format("perk.reader.gui");
+        String locTitle = I18n.format("perk.reader.astralsorcery.gui");
         List<String> split = font.listFormattedStringToWidth(locTitle, MathHelper.floor(HEADER_WIDTH / 1.4));
         int step = 14;
 
@@ -184,15 +184,15 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         PerkAttributeMap attrMap = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.CLIENT);
 
         List<String> information = Lists.newArrayList();
-        information.add(I18n.format("perk.reader.description.head",
+        information.add(I18n.format("perk.reader.astralsorcery.description.head",
                 PerkAttributeReader.formatDecimal(reader.getDefaultValue(attrMap, player, LogicalSide.CLIENT))));
-        information.add(I18n.format("perk.reader.description.addition",
+        information.add(I18n.format("perk.reader.astralsorcery.description.addition",
                 PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, LogicalSide.CLIENT,
                         ModifierType.ADDITION) - 1)));
-        information.add(I18n.format("perk.reader.description.increase",
+        information.add(I18n.format("perk.reader.astralsorcery.description.increase",
                 PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, LogicalSide.CLIENT,
                         ModifierType.ADDED_MULTIPLY))));
-        information.add(I18n.format("perk.reader.description.moreless",
+        information.add(I18n.format("perk.reader.astralsorcery.description.moreless",
                 PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, LogicalSide.CLIENT,
                         ModifierType.STACKING_MULTIPLY))));
 

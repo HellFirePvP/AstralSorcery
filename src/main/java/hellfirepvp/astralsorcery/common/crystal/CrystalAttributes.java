@@ -137,7 +137,7 @@ public final class CrystalAttributes {
         }
 
         if (missing) {
-            tooltip.add(new TranslationTextComponent("progress.missing.knowledge")
+            tooltip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge")
                     .setStyle(new Style().setColor(TextFormatting.GRAY)));
         }
         return missing && !addedLeast ? TooltipResult.ALL_MISSING :
