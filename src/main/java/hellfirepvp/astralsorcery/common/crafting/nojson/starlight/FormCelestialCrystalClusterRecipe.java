@@ -68,7 +68,7 @@ public class FormCelestialCrystalClusterRecipe extends LiquidStarlightRecipe {
             if (consumeItemEntityInBlock(world, at, ItemsAS.STARDUST) != null &&
                     (crystalFound = consumeItemEntityInBlock(world, at, 1, stack -> stack.getItem() instanceof ItemCrystalBase)) != null) {
 
-                if (world.setBlockState(at, BlocksAS.CELESTIAL_CRYSTAL_CLUSTER.getDefaultState().with(BlockCelestialCrystalCluster.STAGE, 4))) {
+                if (world.setBlockState(at, BlocksAS.CELESTIAL_CRYSTAL_CLUSTER.getDefaultState())) {
                     TileCelestialCrystals cluster = MiscUtils.getTileAt(world, at, TileCelestialCrystals.class, true);
                     if (cluster != null) {
                         CrystalAttributes attr = ((CrystalAttributeItem) crystalFound.getItem()).getAttributes(crystalFound);

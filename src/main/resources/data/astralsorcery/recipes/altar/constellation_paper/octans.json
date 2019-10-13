@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:octans"
   },
-  "focus_constellation": "astralsorcery:octans",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

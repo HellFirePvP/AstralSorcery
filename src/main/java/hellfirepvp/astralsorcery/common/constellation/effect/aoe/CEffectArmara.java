@@ -108,7 +108,7 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
     @Override
     public boolean playEffect(World world, BlockPos pos, ConstellationEffectProperties properties, @Nullable IMinorConstellation trait) {
         int toAdd = 2 + rand.nextInt(5);
-        WorldBlockPos at = new WorldBlockPos(world, pos);
+        WorldBlockPos at = WorldBlockPos.wrapServer(world, pos);
         TickTokenMap.SimpleTickToken<Double> token = EventHelperSpawnDeny.spawnDenyRegions.get(at);
         if (token != null) {
             int next = token.getRemainingTimeout() + toAdd;

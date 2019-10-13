@@ -61,14 +61,7 @@ public enum GuiType {
                 case CONSTELLATION_PAPER:
                     return new ScreenConstellationPaper(RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(new ResourceLocation(data.getString("cst"))));
                 case TOME:
-                    return new ScreenJournalPages(null,
-                            new ResearchNode(new ItemStack(Items.APPLE), "", 0, 0)
-                                .addPage(new JournalPageText("astralsorcery.journal.SPEC_RELAY.1.text"))
-                                .addPage(new JournalPageRecipe(new ResourceLocation("dark_oak_planks")))
-                                .addPage(new JournalPageAltarRecipe(AstralSorcery.key("altar/marble/pillar")))
-                                .addPage(new JournalPageAltarRecipe(AstralSorcery.key("altar/constellation_paper/aevitas"))),
-                            0);
-                    //return ScreenJournalProgression.getOpenJournalInstance();
+                    return ScreenJournalProgression.getOpenJournalInstance();
                 default:
                     throw new IllegalArgumentException("Unknown GuiType: " + this.name());
             }

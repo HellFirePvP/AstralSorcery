@@ -9,10 +9,6 @@
 package hellfirepvp.astralsorcery.common.util.block;
 
 import com.google.common.base.Splitter;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,11 +18,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,23 +36,28 @@ public class BlockStateHelper {
     private static final Splitter PROP_ELEMENT_SPLITTER = Splitter.on('=');
 
     @Nonnull
-    public static String serialize(@Nonnull BlockState state) {
+    public static <V extends Comparable<V>> String serialize(@Nonnull BlockState state) {
         StringBuilder name = new StringBuilder(state.getBlock().getRegistryName().toString());
         List<IProperty<?>> props = new ArrayList<>(state.getProperties());
         if (!props.isEmpty()) {
             name.append('[');
             for (int i = 0; i < props.size(); i++) {
-                IProperty<?> prop = props.get(i);
+                IProperty<V> prop = (IProperty<V>) props.get(i);
                 if (i > 0) {
                     name.append(',');
                 }
                 name.append(prop.getName());
                 name.append('=');
-                name.append(state.get(prop));
+                name.append(prop.getName(state.get(prop)));
             }
             name.append(']');
         }
         return name.toString();
+    }
+
+    @Nonnull
+    public static BlockMatchInformation deserializeMatcher(@Nonnull String serialized) {
+        return new BlockMatchInformation(deserialize(serialized), !isMissingStateInformation(serialized));
     }
 
     @Nonnull
@@ -78,7 +78,7 @@ public class BlockStateHelper {
                 List<String> propertyValues = PROP_ELEMENT_SPLITTER.splitToList(serializedProperty);
                 String name = propertyValues.get(0);
                 String strValue = propertyValues.get(1);
-                IProperty<T> property = (IProperty<T>)  MiscUtils.iterativeSearch(state.getProperties(), prop -> prop.getName().equalsIgnoreCase(name));
+                IProperty<T> property = (IProperty<T>) MiscUtils.iterativeSearch(state.getProperties(), prop -> prop.getName().equalsIgnoreCase(name));
                 if (property != null) {
                     Optional<T> value = property.parseValue(strValue);
                     if (value.isPresent()) {
@@ -88,6 +88,10 @@ public class BlockStateHelper {
             }
         }
         return state;
+    }
+
+    public static boolean isMissingStateInformation(@Nonnull String serialized) {
+        return serialized.indexOf('[') == -1;
     }
 
 }

@@ -45,6 +45,7 @@ import hellfirepvp.astralsorcery.common.perk.PerkTickHelper;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
@@ -267,6 +268,7 @@ public class CommonProxy {
 
         RegistryCapabilities.initialize();
         RegistryIngredientTypes.init();
+        StarlightNetworkRegistry.setupRegistry();
 
         RegistryWorldGeneration.registerFeatures();
 

@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:aevitas"
   },
-  "focus_constellation": "astralsorcery:aevitas",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

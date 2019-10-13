@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:vicio"
   },
-  "focus_constellation": "astralsorcery:vicio",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

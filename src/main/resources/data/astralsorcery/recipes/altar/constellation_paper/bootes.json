@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:bootes"
   },
-  "focus_constellation": "astralsorcery:bootes",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

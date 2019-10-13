@@ -9,14 +9,22 @@
 package hellfirepvp.astralsorcery.common.util.block;
 
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.object.TransformReference;
 import net.minecraft.block.BlockState;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,50 +35,63 @@ import java.util.Objects;
  */
 public class WorldBlockPos extends BlockPos {
 
-    private final World world;
+    private final TransformReference<DimensionType, World> worldReference;
 
-    public WorldBlockPos(World world, BlockPos pos) {
+    private WorldBlockPos(TransformReference<DimensionType, World> worldReference, BlockPos pos) {
         super(pos);
-        this.world = world;
+        this.worldReference = worldReference;
     }
 
-    public static WorldBlockPos wrap(TileEntity te) {
-        return new WorldBlockPos(te.getWorld(), te.getPos());
+    private WorldBlockPos(DimensionType type, BlockPos pos, Function<DimensionType, World> worldProvider) {
+        super(pos);
+        this.worldReference = new TransformReference<>(type, worldProvider);
     }
 
-    public static WorldBlockPos wrap(World world, BlockPos pos) {
-        return new WorldBlockPos(world, pos);
+    public static WorldBlockPos wrapServer(World world, BlockPos pos) {
+        return new WorldBlockPos(world.getDimension().getType(), pos, type -> {
+            MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+            return DimensionManager.getWorld(server, type, true, false);
+        });
     }
 
-    public World getWorld() {
-        return world;
+    public DimensionType getDimensionType() {
+        return this.worldReference.getReference();
     }
 
-    public BlockState getStateAt() {
-        return world.getBlockState(this);
+    private WorldBlockPos wrapInternal(BlockPos pos) {
+        return new WorldBlockPos(this.worldReference, pos);
     }
 
     @Override
     public WorldBlockPos add(int x, int y, int z) {
-        return wrap(world, super.add(x, y, z));
+        return wrapInternal(super.add(x, y, z));
     }
 
     @Override
     public WorldBlockPos add(double x, double y, double z) {
-        return wrap(world, super.add(x, y, z));
+        return wrapInternal(super.add(x, y, z));
     }
 
     @Override
     public WorldBlockPos add(Vec3i vec) {
-        return wrap(world, super.add(vec));
+        return wrapInternal(super.add(vec));
     }
 
+    @Nullable
     public <T extends TileEntity> T getTileAt(Class<T> tileClass, boolean forceChunkLoad) {
-        return MiscUtils.getTileAt(world, this, tileClass, forceChunkLoad);
+        World world = this.worldReference.getValue();
+        if (world != null) {
+            return MiscUtils.getTileAt(world, this, tileClass, forceChunkLoad);
+        }
+        return null;
     }
 
     public boolean isChunkLoaded() {
-        return MiscUtils.isChunkLoaded(world, new ChunkPos(this));
+        World world = this.worldReference.getValue();
+        if (world != null) {
+            return MiscUtils.isChunkLoaded(world, new ChunkPos(this));
+        }
+        return false;
     }
 
     @Override
@@ -79,13 +100,13 @@ public class WorldBlockPos extends BlockPos {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         WorldBlockPos that = (WorldBlockPos) o;
-        return Objects.equals(world, that.world);
+        return Objects.equals(getDimensionType(), that.getDimensionType());
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (world != null ? world.hashCode() : 0);
+        result = 31 * result + getDimensionType().hashCode();
         return result;
     }
 }

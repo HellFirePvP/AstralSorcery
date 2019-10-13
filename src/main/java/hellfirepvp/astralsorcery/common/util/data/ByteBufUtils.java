@@ -8,12 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
@@ -228,6 +232,36 @@ public class ByteBufUtils {
         } else {
             return ItemStack.EMPTY;
         }
+    }
+
+    public static void writeBlockState(PacketBuffer byteBuf, @Nonnull BlockState state) {
+        ByteBufUtils.writeRegistryEntry(byteBuf, state.getBlock());
+
+        Collection<IProperty<?>> properties = state.getProperties();
+        byteBuf.writeInt(properties.size());
+        for (IProperty prop : properties) {
+            ByteBufUtils.writeString(byteBuf, prop.getName());
+            ByteBufUtils.writeString(byteBuf, prop.getName(state.get(prop)));
+        }
+    }
+
+    public static <T extends Comparable<T>> BlockState readBlockState(PacketBuffer byteBuf) {
+        Block block = ByteBufUtils.readRegistryEntry(byteBuf);
+        BlockState state = block.getDefaultState();
+
+        int properties = byteBuf.readInt();
+        for (int i = 0; i < properties; i++) {
+            String propName = ByteBufUtils.readString(byteBuf);
+            String valueStr = ByteBufUtils.readString(byteBuf);
+            IProperty<T> property = (IProperty<T>) MiscUtils.iterativeSearch(state.getProperties(), prop -> prop.getName().equalsIgnoreCase(propName));
+            if (property != null) {
+                Optional<T> value = property.parseValue(valueStr);
+                if (value.isPresent()) {
+                    state = state.with(property, value.get());
+                }
+            }
+        }
+        return state;
     }
 
     public static void writeFluidStack(PacketBuffer byteBuf, @Nonnull FluidStack stack) {
