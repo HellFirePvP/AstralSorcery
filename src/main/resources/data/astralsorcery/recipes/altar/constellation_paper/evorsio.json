@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:evorsio"
   },
-  "focus_constellation": "astralsorcery:evorsio",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:lucerna"
   },
-  "focus_constellation": "astralsorcery:lucerna",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

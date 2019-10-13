@@ -28,6 +28,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,6 +45,42 @@ public class JsonHelper {
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .create();
+
+    public static void parseMultipleStrings(JsonObject root, String key, Consumer<String> consumer) {
+        consumeJsonListConfiguration(root, key, "String", "Strings", JsonElement::isJsonPrimitive, JsonElement::getAsString, consumer);
+    }
+
+    public static void parseMultipleJsonPrimitives(JsonObject root, String key, String singular, String plural, Consumer<JsonPrimitive> consumer) {
+        consumeJsonListConfiguration(root, key, singular, plural, JsonElement::isJsonPrimitive, JsonElement::getAsJsonPrimitive, consumer);
+    }
+
+    public static void parseMultipleJsonObjects(JsonObject root, String key, Consumer<JsonObject> consumer) {
+        consumeJsonListConfiguration(root, key, "JsonObject", "JsonObjects", JsonElement::isJsonObject, JsonElement::getAsJsonObject, consumer);
+    }
+
+    private static <T> void consumeJsonListConfiguration(JsonObject root, String key,
+                                                                             String singular, String plural,
+                                                                             Predicate<JsonElement> verifier,
+                                                                             Function<JsonElement, T> consumerTransformer,
+                                                                             Consumer<T> consumer) {
+        if (!root.has(key)) {
+            throw new JsonSyntaxException(String.format("Expected '%s' to be a %s or an array of %s!", key, singular, plural));
+        }
+        JsonElement el = root.get(key);
+        if (verifier.test(el)) {
+            consumer.accept(consumerTransformer.apply(el));
+        } else if(el.isJsonArray()) {
+            JsonArray objectArray = el.getAsJsonArray();
+            for (JsonElement arrayEl : objectArray) {
+                if (!verifier.test(arrayEl)) {
+                    throw new JsonSyntaxException(String.format("Expected '%s' to be an array of %s!", key, plural));
+                }
+                consumer.accept(consumerTransformer.apply(arrayEl));
+            }
+        } else {
+            throw new JsonSyntaxException(String.format("Expected '%s' to be a %s or an array of %s!", key, singular, plural));
+        }
+    }
 
     @Nonnull
     public static FluidStack getFluidStack(JsonElement fluidElement, String infoKey) {

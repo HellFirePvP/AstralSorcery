@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:ulteria"
   },
-  "focus_constellation": "astralsorcery:ulteria",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

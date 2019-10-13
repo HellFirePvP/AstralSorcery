@@ -1,10 +1,13 @@
 package hellfirepvp.astralsorcery.common.block.tile;
 
 import hellfirepvp.astralsorcery.common.block.base.BlockCrystalContainer;
+import hellfirepvp.astralsorcery.common.block.base.BlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.*;
@@ -16,6 +19,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -28,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +41,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 30.09.2019 / 18:00
  */
-public class BlockCelestialCrystalCluster extends BlockCrystalContainer {
+public class BlockCelestialCrystalCluster extends BlockCrystalContainer implements BlockStarlightRecipient {
 
     private static final VoxelShape GROWTH_STAGE_0 = Block.makeCuboidShape(4, 0, 5, 12, 8, 11);
     private static final VoxelShape GROWTH_STAGE_1 = Block.makeCuboidShape(4, 0, 5, 12, 10, 11);
@@ -53,6 +58,14 @@ public class BlockCelestialCrystalCluster extends BlockCrystalContainer {
                 .harvestLevel(1)
                 .sound(SoundType.GLASS)
                 .lightValue(8));
+    }
+
+    @Override
+    public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType, double amount) {
+        TileCelestialCrystals crystals = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
+        if (crystals != null) {
+            crystals.grow((int) (30_000 / amount));
+        }
     }
 
     @Override
@@ -128,5 +141,4 @@ public class BlockCelestialCrystalCluster extends BlockCrystalContainer {
     public TileEntity createNewTileEntity(IBlockReader world) {
         return new TileCelestialCrystals();
     }
-
 }

@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:vorux"
   },
-  "focus_constellation": "astralsorcery:vorux",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

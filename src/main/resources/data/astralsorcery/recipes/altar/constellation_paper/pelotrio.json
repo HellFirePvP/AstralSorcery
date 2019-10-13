@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:pelotrio"
   },
-  "focus_constellation": "astralsorcery:pelotrio",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,

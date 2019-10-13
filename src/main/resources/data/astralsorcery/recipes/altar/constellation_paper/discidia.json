@@ -4,7 +4,6 @@
   "options": {
     "constellation": "astralsorcery:discidia"
   },
-  "focus_constellation": "astralsorcery:discidia",
   "altar_type": 3,
   "duration": 500,
   "starlight": 3000,
