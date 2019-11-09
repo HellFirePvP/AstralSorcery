@@ -123,8 +123,7 @@ public class CommonProxy {
         CustomAltarRecipeHandler.registerDefaultConverters();
 
         this.initializeConfigurations();
-
-        ConfigRegistries.getRegistries().buildDataRegistries();
+        ConfigRegistries.getRegistries().buildDataRegistries(this.serverConfig);
 
         this.tickManager = new TickManager();
         this.attachTickListeners(tickManager::register);

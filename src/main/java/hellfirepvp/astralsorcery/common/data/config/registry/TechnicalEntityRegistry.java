@@ -52,7 +52,7 @@ public class TechnicalEntityRegistry extends ConfigDataAdapter<EntityTechnicalEn
     }
 
     @Override
-    public String getFileName() {
+    public String getSectionName() {
         return "technical_entities";
     }
 

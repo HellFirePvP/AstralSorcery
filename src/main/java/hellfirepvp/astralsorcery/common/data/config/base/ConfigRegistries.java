@@ -10,12 +10,9 @@ package hellfirepvp.astralsorcery.common.data.config.base;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -41,25 +38,36 @@ public class ConfigRegistries {
         dataRegistries.add(dataAdapter);
     }
 
-    public void buildDataRegistries() {
-        for (ConfigDataAdapter<?> dataRegistry : this.dataRegistries) {
-            ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+    public void buildDataRegistries(BaseConfiguration out) {
+        out.addConfigEntry(new RegistrySection());
+    }
 
-            ForgeConfigSpec.ConfigValue<List<? extends String>> cfgList = builder
-                    .comment(dataRegistry.getCommentDescription())
-                    .translation(dataRegistry.getTranslationKey())
-                    .defineList(dataRegistry.getFileName(),
-                            dataRegistry.getDefaultValues()
-                                    .stream()
-                                    .map(ConfigDataSet::serialize)
-                                    .collect(Collectors.toList()),
-                            dataRegistry.getValidator());
+    private class RegistrySection extends ConfigEntry {
 
-            dataRegistry.configCreated(cfgList);
+        private RegistrySection() {
+            super("registries");
+        }
 
-            BaseConfiguration.makeAndRegister(dataRegistry.getRegistryConfigType(),
-                    builder.build(),
-                    String.format("%s-%s", AstralSorcery.MODID, dataRegistry.getFileName()));
+        @Override
+        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+            for (ConfigDataAdapter<?> dataRegistry : ConfigRegistries.this.dataRegistries) {
+
+                ForgeConfigSpec.ConfigValue<List<? extends String>> cfgList = cfgBuilder
+                        .comment(dataRegistry.getCommentDescription())
+                        .translation(dataRegistry.getTranslationKey())
+                        .defineList(registrySubSection(dataRegistry.getSectionName()),
+                                dataRegistry.getDefaultValues()
+                                        .stream()
+                                        .map(ConfigDataSet::serialize)
+                                        .collect(Collectors.toList()),
+                                dataRegistry.getValidator());
+
+                dataRegistry.configBuilt(cfgList);
+            }
+        }
+
+        private String registrySubSection(String section) {
+            return String.format("%s.%s", section.toLowerCase(), section.toLowerCase());
         }
     }
 

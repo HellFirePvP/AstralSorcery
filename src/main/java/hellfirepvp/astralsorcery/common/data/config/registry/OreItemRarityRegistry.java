@@ -76,7 +76,7 @@ public class OreItemRarityRegistry extends ConfigDataAdapter<OreItemRarityEntry>
     }
 
     @Override
-    public String getFileName() {
+    public String getSectionName() {
         return this.fileName;
     }
 

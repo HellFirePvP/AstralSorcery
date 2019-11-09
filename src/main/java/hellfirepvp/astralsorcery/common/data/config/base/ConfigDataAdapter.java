@@ -40,10 +40,10 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
     }
 
     protected String translationKey(String key) {
-        return String.format("config.registry.%s.%s", this.getFileName(), key);
+        return String.format("config.registry.%s.%s", this.getSectionName(), key);
     }
 
-    public final void configCreated(ForgeConfigSpec.ConfigValue<List<? extends String>> createdValue) {
+    public final void configBuilt(ForgeConfigSpec.ConfigValue<List<? extends String>> createdValue) {
         this.registryStore = createdValue;
     }
 
@@ -55,7 +55,7 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
                 try {
                     val = deserialize(str);
                 } catch (IllegalArgumentException exc) {
-                    AstralSorcery.log.error("Skipping configured entry in " + this.getFileName() + "!");
+                    AstralSorcery.log.error("Skipping configured entry in " + this.getSectionName() + "!");
                     AstralSorcery.log.error(exc.getMessage());
                     continue;
                 }
@@ -70,7 +70,7 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
 
     public abstract List<T> getDefaultValues();
 
-    public abstract String getFileName();
+    public abstract String getSectionName();
 
     public abstract String getCommentDescription();
 

@@ -36,7 +36,7 @@ public class FluidRarityRegistry extends ConfigDataAdapter<FluidRarityEntry> {
     }
 
     @Override
-    public String getFileName() {
+    public String getSectionName() {
         return "fluid_rarities";
     }
 
