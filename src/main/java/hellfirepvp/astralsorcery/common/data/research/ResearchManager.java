@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
+import hellfirepvp.astralsorcery.common.crafting.recipe.infusion.ActiveLiquidInfusionRecipe;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
@@ -21,6 +22,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileInfuser;
 import hellfirepvp.astralsorcery.common.util.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.block.Block;
@@ -452,24 +454,22 @@ public class ResearchManager {
         return true;
     }
 
-    //TODO infuser
-    //public static void informCraftedInfuser(TileStarlightInfuser infuser, ActiveInfusionTask recipe) {
-    //    PlayerEntity crafter = recipe.tryGetCraftingPlayerServer();
-    //    if(crafter == null) {
-    //        AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
-    //        AstralSorcery.log.warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
-    //        return;
-    //    }
-    //    ItemStack out = recipe.getRecipeToCraft().getOutput(infuser);
-    //    Item iOut = out.getItem();
-    //    informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
-    //}
+    public static void informCraftedInfuser(TileInfuser infuser, ActiveLiquidInfusionRecipe recipe, ItemStack crafted) {
+        PlayerEntity crafter = recipe.tryGetCraftingPlayerServer();
+        if (!(crafter instanceof ServerPlayerEntity)) {
+            AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
+            AstralSorcery.log.warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().getDimension().getType().getRegistryName());
+            return;
+        }
+
+        informCrafted(crafter, crafted);
+    }
 
     public static void informCraftedAltar(TileAltar altar, ActiveSimpleAltarRecipe recipe, ItemStack crafted) {
         PlayerEntity crafter = recipe.tryGetCraftingPlayerServer();
-        if(!(crafter instanceof ServerPlayerEntity)) {
+        if (!(crafter instanceof ServerPlayerEntity)) {
             AstralSorcery.log.warn("Crafting finished, player that initialized crafting could not be found!");
-            AstralSorcery.log.warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().getDimension().getType().getId());
+            AstralSorcery.log.warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().getDimension().getType().getRegistryName());
             return;
         }
 

@@ -42,6 +42,10 @@ public class RegistrySounds {
         ALTAR_CRAFT_LOOP_T4 = registerSound("altar_craft_loop_t4", SoundCategory.BLOCKS);
         ALTAR_CRAFT_LOOP_T4_WAITING = registerSound("altar_craft_loop_t4_waiting", SoundCategory.BLOCKS);
 
+        INFUSER_CRAFT_START = registerSound("infuser_craft_start", SoundCategory.BLOCKS);
+        INFUSER_CRAFT_LOOP = registerSound("infuser_craft_loop", SoundCategory.BLOCKS);
+        INFUSER_CRAFT_FINISH = registerSound("infuser_craft_finish", SoundCategory.BLOCKS);
+
         GUI_JOURNAL_CLOSE = registerSound("gui_journal_close", SoundCategory.MASTER);
         GUI_JOURNAL_PAGE = registerSound("gui_journal_page", SoundCategory.MASTER);
     }

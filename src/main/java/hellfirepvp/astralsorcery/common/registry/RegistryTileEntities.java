@@ -38,7 +38,9 @@ public class RegistryTileEntities {
         SPECTRAL_RELAY = registerTile(TileSpectralRelay.class, BlocksAS.SPECTRAL_RELAY);
         ALTAR = registerTile(TileAltar.class, BlocksAS.ALTAR_DISCOVERY, BlocksAS.ALTAR_ATTUNEMENT, BlocksAS.ALTAR_CONSTELLATION, BlocksAS.ALTAR_RADIANCE);
         CELESTIAL_CRYSTAL_CLUSTER = registerTile(TileCelestialCrystals.class, BlocksAS.CELESTIAL_CRYSTAL_CLUSTER);
+        CHALICE = registerTile(TileChalice.class, BlocksAS.CHALICE);
         COLLECTOR_CRYSTAL = registerTile(TileCollectorCrystal.class, BlocksAS.ROCK_COLLECTOR_CRYSTAL, BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
+        INFUSER = registerTile(TileInfuser.class, BlocksAS.INFUSER);
         LENS = registerTile(TileLens.class, BlocksAS.LENS);
         PRISM = registerTile(TilePrism.class, BlocksAS.PRISM);
         RITUAL_LINK = registerTile(TileRitualLink.class, BlocksAS.RITUAL_LINK);
@@ -49,6 +51,7 @@ public class RegistryTileEntities {
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileInfuser.class, new RenderInfuser());
         ClientRegistry.bindTileEntitySpecialRenderer(TileAltar.class, new RenderTileAltar());
         ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderTileLens());
         ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderTilePrism());

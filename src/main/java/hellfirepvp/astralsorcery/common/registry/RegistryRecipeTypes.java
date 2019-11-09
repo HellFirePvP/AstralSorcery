@@ -38,7 +38,8 @@ public class RegistryRecipeTypes {
 
     public static void init() {
         TYPE_WELL = new ResolvingRecipeType<>("well", WellLiquefaction.class, (recipe, context) -> recipe.matches(context.getInput()));
-        TYPE_INFUSION = new ResolvingRecipeType<>("infusion", LiquidInfusion.class, (recipe, context) -> true);
+        TYPE_INFUSION = new ResolvingRecipeType<>("infusion", LiquidInfusion.class, (recipe, context) ->
+                recipe.matches(context.getInfuser(), context.getCrafter(), context.getSide()));
         TYPE_BLOCK_TRANSMUTATION = new ResolvingRecipeType<>("block_transmutation", BlockTransmutation.class, (recipe, context) ->
                 recipe.matches(context.getWorld(), context.getPos(), context.getState(), context.getConstellation()));
         TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) ->

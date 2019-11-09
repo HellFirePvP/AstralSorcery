@@ -84,6 +84,8 @@ public class BlocksAS {
     public static BlockPrism                     PRISM;
     public static BlockRitualLink                RITUAL_LINK;
     public static BlockRitualPedestal            RITUAL_PEDESTAL;
+    public static BlockInfuser                   INFUSER;
+    public static BlockChalice                   CHALICE;
     public static BlockWell                      WELL;
 
     public static BlockFlareLight                FLARE_LIGHT;

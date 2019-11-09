@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.EffectIncrementer;
+import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
@@ -267,9 +268,9 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     }
 
     public Map<BlockPos, Boolean> getMirrors() {
-        return this.offsetMirrors.entrySet().stream()
-                .map(e -> new Tuple<>(e.getKey().add(this.getPos()), e.getValue()))
-                .collect(Collectors.toMap(tpl -> tpl.getA(), tpl -> tpl.getB()));
+        return MapStream.of(this.offsetMirrors)
+                .mapKey(pos -> pos.add(this.getPos()))
+                .toMap();
     }
 
     public int getMirrorCount() {

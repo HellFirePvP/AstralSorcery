@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
@@ -141,9 +142,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
 
     @Nonnull
     public List<ItemStack> getOutputs(TileAltar altar) {
-        return this.outputs.stream()
-                .map(stack -> ItemUtils.copyStackWithSize(stack, stack.getCount()))
-                .collect(Collectors.toList());
+        return MiscUtils.transform(this.outputs, stack -> ItemUtils.copyStackWithSize(stack, stack.getCount()));
     }
 
     public void setFocusConstellation(IConstellation focusConstellation) {

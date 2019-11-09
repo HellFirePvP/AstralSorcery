@@ -13,6 +13,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
+import hellfirepvp.astralsorcery.common.util.MapStream;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -218,15 +219,15 @@ public class AltarRecipeGrid {
         }
         if (firstColumn > 0) {
             int xShift = firstColumn;
-            mappedIngredients = mappedIngredients.entrySet().stream()
-                    .map(e -> new Tuple<>(e.getKey() - xShift, e.getValue()))
-                    .collect(Collectors.toMap(Tuple::getA, Tuple::getB));
+            mappedIngredients = MapStream.of(mappedIngredients)
+                    .mapKey(slot -> slot - xShift)
+                    .toMap();
         }
         if (firstRow > 0) {
             int yShift = firstRow * GRID_SIZE;
-            mappedIngredients = mappedIngredients.entrySet().stream()
-                    .map(e -> new Tuple<>(e.getKey() - yShift, e.getValue()))
-                    .collect(Collectors.toMap(Tuple::getA, Tuple::getB));
+            mappedIngredients = MapStream.of(mappedIngredients)
+                    .mapKey(slot -> slot - yShift)
+                    .toMap();
         }
 
         return new AltarRecipeGrid(mappedIngredients, (lastColumn - firstColumn) + 1, (lastRow - firstRow) + 1);

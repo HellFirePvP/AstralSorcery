@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -102,6 +104,10 @@ public abstract class TileEntitySynchronized extends TileEntity {
             getWorld().notifyBlockUpdate(getPos(), thisState, thisState, 3);
         }
         markDirty();
+    }
+
+    public void dropItemOnTop(ItemStack stack) {
+        ItemUtils.dropItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.5, getPos().getZ() + 0.5, stack);
     }
 
 }

@@ -62,7 +62,7 @@ public abstract class TileNetwork<T extends IPrismTransmissionNode> extends Tile
     public void tick() {
         super.tick();
 
-        if (!this.world.isRemote()) {
+        if (!this.getWorld().isRemote()) {
             if (!this.isNetworkInformed) {
                 if (!TransmissionNetworkHelper.isTileInNetwork(this)) {
                     TransmissionNetworkHelper.informNetworkTilePlacement(this);
@@ -96,7 +96,9 @@ public abstract class TileNetwork<T extends IPrismTransmissionNode> extends Tile
     }
 
     public void onBreak() {
-        if (this.world.isRemote()) return;
+        if (this.getWorld().isRemote()) {
+            return;
+        }
         TransmissionNetworkHelper.informNetworkTileRemoval(this);
         this.isNetworkInformed = false;
     }

@@ -12,6 +12,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
+import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.observerlib.api.client.StructureRenderer;
@@ -28,7 +29,6 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,10 +54,10 @@ public class RenderPageStructure implements RenderablePage {
         this.structureRenderer = new StructureRenderer(this.structure).setIsolateIndividualBlock(true);
         this.name = name;
         this.shift = shift;
-        this.contentStacks = structure.getAsStacks(this.structureRenderer.getRenderWorld(), Minecraft.getInstance().player)
-                .stream()
-                .map(stack -> new Tuple<>(stack, new StringTextComponent(stack.getCount() + "x ").appendSibling(stack.getDisplayName())))
-                .collect(Collectors.toList());
+        this.contentStacks = MapStream.ofKeys(
+                structure.getAsStacks(this.structureRenderer.getRenderWorld(), Minecraft.getInstance().player),
+                stack -> new StringTextComponent(stack.getCount() + "x ").appendSibling(stack.getDisplayName()))
+        .toTupleList();
     }
 
     @Override

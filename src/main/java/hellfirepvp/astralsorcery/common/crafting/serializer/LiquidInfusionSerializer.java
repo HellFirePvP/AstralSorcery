@@ -13,7 +13,6 @@ import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
-import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -23,7 +22,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -50,30 +48,20 @@ public class LiquidInfusionSerializer extends CustomRecipeSerializer<LiquidInfus
         Ingredient input = CraftingHelper.getIngredient(json.get("input"));
         ItemStack output = JsonHelper.getItemStack(json.get("output"), "output");
         float consumptionChance = JSONUtils.getFloat(json, "consumptionChance");
+        int duration = JSONUtils.getInt(json, "duration");
 
-        boolean consumeMultipleFluids = JSONUtils.getBoolean(json, "consumeMultipleFluids", true);
+        boolean consumeMultipleFluids = JSONUtils.getBoolean(json, "consumeMultipleFluids", false);
         boolean acceptChaliceInput = JSONUtils.getBoolean(json, "acceptChaliceInput", true);
-        return new LiquidInfusion(recipeId, fluidInput, input, output, consumptionChance, consumeMultipleFluids, acceptChaliceInput);
+        return new LiquidInfusion(recipeId, duration, fluidInput, input, output, consumptionChance, consumeMultipleFluids, acceptChaliceInput);
     }
 
     @Override
     public LiquidInfusion read(ResourceLocation recipeId, PacketBuffer buffer) {
-        Fluid fluidIn = ByteBufUtils.readRegistryEntry(buffer);
-        Ingredient itemIn = Ingredient.read(buffer);
-        ItemStack output = ByteBufUtils.readItemStack(buffer);
-        float consumptionChance = buffer.readFloat();
-        boolean consumeMultiple = buffer.readBoolean();
-        boolean acceptChalice = buffer.readBoolean();
-        return new LiquidInfusion(recipeId, fluidIn, itemIn, output, consumptionChance, consumeMultiple, acceptChalice);
+        return LiquidInfusion.read(recipeId, buffer);
     }
 
     @Override
     public void write(PacketBuffer buffer, LiquidInfusion recipe) {
-        ByteBufUtils.writeRegistryEntry(buffer, recipe.getLiquidInput());
-        recipe.getItemInput().write(buffer);
-        ByteBufUtils.writeItemStack(buffer, recipe.getItemOutput());
-        buffer.writeFloat(recipe.getConsumptionChance());
-        buffer.writeBoolean(recipe.doesConsumeMultipleFluids());
-        buffer.writeBoolean(recipe.acceptsChaliceInput());
+        recipe.write(buffer);
     }
 }

@@ -102,6 +102,8 @@ public class RegistryBlocks {
         PRISM = registerBlock(new BlockPrism());
         RITUAL_LINK = registerBlock(new BlockRitualLink());
         RITUAL_PEDESTAL = registerBlock(new BlockRitualPedestal());
+        INFUSER = registerBlock(new BlockInfuser());
+        CHALICE = registerBlock(new BlockChalice());
         WELL = registerBlock(new BlockWell());
 
         FLARE_LIGHT = registerBlock(new BlockFlareLight());

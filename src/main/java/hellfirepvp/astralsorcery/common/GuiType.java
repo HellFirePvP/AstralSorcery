@@ -8,19 +8,11 @@
 
 package hellfirepvp.astralsorcery.common;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.screen.ScreenConstellationPaper;
-import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPages;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.data.journal.JournalPageAltarRecipe;
-import hellfirepvp.astralsorcery.common.data.journal.JournalPageRecipe;
-import hellfirepvp.astralsorcery.common.data.journal.JournalPageText;
-import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;

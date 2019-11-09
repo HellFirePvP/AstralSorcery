@@ -6,7 +6,7 @@
     },
     "output": {
         "type": "astralsorcery:fluid",
-        "fluid": "astralsorcery:liquid_starlight_source"
+        "fluid": "astralsorcery:liquid_starlight"
     },
     "productionMultiplier": 1.0,
     "shatterMultiplier": 110,

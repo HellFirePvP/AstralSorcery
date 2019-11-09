@@ -116,7 +116,7 @@ public class ActiveSimpleAltarRecipe {
     }
 
     public void createItemOutputs(TileAltar altar, Consumer<ItemStack> output) {
-        Consumer<ItemStack> informer = stack -> ResearchManager.informCraftedAltar(altar, ActiveSimpleAltarRecipe.this, stack);
+        Consumer<ItemStack> informer = stack -> ResearchManager.informCraftedAltar(altar, this, stack);
 
         Consumer<ItemStack> handleCrafted = informer.andThen(output);
         this.getRecipeToCraft().getOutputs(altar).forEach(handleCrafted);
@@ -127,50 +127,15 @@ public class ActiveSimpleAltarRecipe {
         TileInventory inv = altar.getInventory();
 
         for (int slot = 0; slot < AltarRecipeGrid.MAX_INVENTORY_SIZE; slot++) {
-            int fSlot = slot;
-            decrementItem(() -> inv.getStackInSlot(fSlot), st -> inv.setStackInSlot(fSlot, st), altar::dropItemOnTop);
+            ItemUtils.decrementItem(inv, slot, altar::dropItemOnTop);
         }
 
         for (CraftingFocusStack input : this.focusStacks) {
             TileSpectralRelay tar = MiscUtils.getTileAt(altar.getWorld(), input.getRealPosition(), TileSpectralRelay.class, true);
             if (tar != null) {
                 TileInventory tarInventory = tar.getInventory();
-                decrementItem(() -> tarInventory.getStackInSlot(0), st -> tarInventory.setStackInSlot(0, st), altar::dropItemOnTop);
+                ItemUtils.decrementItem(tarInventory, 0, altar::dropItemOnTop);
             }
-        }
-    }
-
-    private void decrementItem(Supplier<ItemStack> getFromInventory, Consumer<ItemStack> setIntoInventory, Consumer<ItemStack> dropOtherwise) {
-        ItemStack toConsume = getFromInventory.get();
-        toConsume = ItemUtils.copyStackWithSize(toConsume, toConsume.getCount());
-
-        ItemStack toReplaceWith = ItemStack.EMPTY;
-        if (toConsume.hasContainerItem()) {
-            toReplaceWith = toConsume.getContainerItem();
-        }
-
-        toConsume.shrink(1);
-
-        //Stuff might need to be placed back into the inventory
-        if (!toReplaceWith.isEmpty()) {
-            if (toConsume.isEmpty()) {
-                setIntoInventory.accept(toReplaceWith);
-            } else if (ItemComparator.compare(toConsume, toReplaceWith, ItemComparator.Clause.Sets.ITEMSTACK_STRICT_NOAMOUNT)) {
-                toReplaceWith.grow(toConsume.getCount());
-                if (toReplaceWith.getCount() > toReplaceWith.getMaxStackSize()) {
-                    int overcapped = toReplaceWith.getCount() - toReplaceWith.getMaxStackSize();
-                    setIntoInventory.accept(ItemUtils.copyStackWithSize(toReplaceWith, toReplaceWith.getMaxStackSize()));
-                    dropOtherwise.accept(ItemUtils.copyStackWithSize(toReplaceWith, overcapped));
-                } else {
-                    setIntoInventory.accept(toReplaceWith);
-                }
-            } else {
-                //Different item, no space left. welp.
-                dropOtherwise.accept(toReplaceWith);
-            }
-        } else {
-            //Or the item just doesn't have a container. then we can just set the shrunk stack back.
-            setIntoInventory.accept(toConsume);
         }
     }
 
