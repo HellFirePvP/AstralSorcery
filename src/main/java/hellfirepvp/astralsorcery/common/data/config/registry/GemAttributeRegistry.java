@@ -53,7 +53,7 @@ public class GemAttributeRegistry extends ConfigDataAdapter<GemAttributeEntry> {
     }
 
     @Override
-    public String getFileName() {
+    public String getSectionName() {
         return "gem_attributes";
     }
 

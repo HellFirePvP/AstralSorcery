@@ -66,7 +66,7 @@ public class AmuletEnchantmentRegistry extends ConfigDataAdapter<AmuletEnchantme
     }
 
     @Override
-    public String getFileName() {
+    public String getSectionName() {
         return "amulet_enchantments";
     }
 
