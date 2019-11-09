@@ -34,6 +34,10 @@ public class SoundsAS {
     public static CategorizedSoundEvent ALTAR_CRAFT_LOOP_T4;
     public static CategorizedSoundEvent ALTAR_CRAFT_LOOP_T4_WAITING;
 
+    public static CategorizedSoundEvent INFUSER_CRAFT_START;
+    public static CategorizedSoundEvent INFUSER_CRAFT_LOOP;
+    public static CategorizedSoundEvent INFUSER_CRAFT_FINISH;
+
     public static CategorizedSoundEvent GUI_JOURNAL_CLOSE;
     public static CategorizedSoundEvent GUI_JOURNAL_PAGE;
 

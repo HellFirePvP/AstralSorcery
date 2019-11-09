@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.storage;
 
 import com.google.common.collect.Maps;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -62,7 +62,7 @@ public class StorageNetwork {
     }
 
     public List<CoreArea> getCores() {
-        return MiscUtils.flatten(this.cores, CoreArea::new);
+        return MapStream.of(this.cores).toList(CoreArea::new);
     }
 
     public void writeToNBT(CompoundNBT tag) {

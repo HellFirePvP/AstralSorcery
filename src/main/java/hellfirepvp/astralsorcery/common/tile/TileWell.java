@@ -42,6 +42,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidAttributes;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,7 +57,7 @@ import java.awt.*;
  */
 public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
 
-    private static final int MAX_CAPACITY = 2000;
+    private static final int TANK_SIZE = 2 * FluidAttributes.BUCKET_VOLUME;
 
     private WellLiquefaction runningRecipe = null;
 
@@ -70,7 +71,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
     public TileWell() {
         super(TileEntityTypesAS.WELL);
 
-        this.tank = new PrecisionSingleFluidTank(MAX_CAPACITY);
+        this.tank = new PrecisionSingleFluidTank(TANK_SIZE);
         this.tank.setAllowInput(false);
         this.tank.setOnUpdate(this::markForUpdate);
         this.access = new FluidTankAccess();
@@ -106,10 +107,8 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
 
                     if (runningRecipe != null) {
                         double gain = Math.sqrt(starlightBuffer) * runningRecipe.getProductionMultiplier();
-                        if (gain > 0 && tank.getFluidAmount() <= MAX_CAPACITY) {
-                            if (tank.getFluidAmount() <= MAX_CAPACITY) {
-                                markForUpdate();
-                            }
+                        if (gain > 0 && tank.getFluidAmount() <= TANK_SIZE) {
+
                             fillAndDiscardRest(runningRecipe, gain);
                             if (rand.nextInt(1500) == 0) {
                                 // TODO entities

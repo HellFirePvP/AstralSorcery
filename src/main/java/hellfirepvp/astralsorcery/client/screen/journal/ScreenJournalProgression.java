@@ -137,6 +137,7 @@ public class ScreenJournalProgression extends ScreenJournal {
         progressionRenderer.drawMouseHighlight(zLevel, mouseX, mouseY);
 
         if(starRect != null && starRect.contains(mouseX, mouseY)) {
+            GlStateManager.disableDepthTest();
             RenderingDrawUtils.renderBlueTooltipString(mouseX, mouseY, new LinkedList<String>() {
                 {
                     add(I18n.format("astralsorcery.misc.journal.info.1"));
@@ -145,6 +146,7 @@ public class ScreenJournalProgression extends ScreenJournal {
                             Minecraft.getInstance().gameSettings.keyBindBack.getLocalizedName()));
                 }
             }, font, false);
+            GlStateManager.enableDepthTest();
         }
     }
 

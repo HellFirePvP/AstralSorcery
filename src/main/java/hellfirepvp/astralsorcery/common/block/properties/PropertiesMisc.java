@@ -55,4 +55,10 @@ public class PropertiesMisc {
                 .sound(SoundType.PLANT);
     }
 
+    public static Block.Properties defaultGoldMachinery() {
+        return Block.Properties.create(Material.IRON, MaterialColor.GOLD)
+                .hardnessAndResistance(1.0F, 4.0F)
+                .sound(SoundType.STONE);
+    }
+
 }

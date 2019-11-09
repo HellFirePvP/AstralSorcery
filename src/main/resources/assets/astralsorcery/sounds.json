@@ -1,4 +1,43 @@
 {
+	"infuser_craft_start": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:infuser/craft_start_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:infuser/craft_start_2",
+				"stream": false
+			}
+		]
+	},
+	"infuser_craft_loop": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:infuser/craft_loop_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:infuser/craft_loop_2",
+				"stream": false
+			}
+		]
+	},
+	"infuser_craft_finish": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:infuser/craft_finish_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:infuser/craft_finish_2",
+				"stream": false
+			}
+		]
+	},
 	"altar_craft_start": {
 		"category": "block",
 		"sounds": [

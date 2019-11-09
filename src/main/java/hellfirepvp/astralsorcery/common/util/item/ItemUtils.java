@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.item;
 
+import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -30,7 +31,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static hellfirepvp.astralsorcery.common.util.item.ItemComparator.Clause.*;
@@ -63,6 +66,44 @@ public class ItemUtils {
         world.addEntity(ei);
         ei.setDefaultPickupDelay();
         return ei;
+    }
+
+    public static void decrementItem(TileInventory inventory, int slot, Consumer<ItemStack> handleExcess) {
+        decrementItem(() -> inventory.getStackInSlot(slot), stack -> inventory.setStackInSlot(slot, stack), handleExcess);
+    }
+
+    public static void decrementItem(Supplier<ItemStack> getFromInventory, Consumer<ItemStack> setIntoInventory, Consumer<ItemStack> handleExcess) {
+        ItemStack toConsume = getFromInventory.get();
+        toConsume = ItemUtils.copyStackWithSize(toConsume, toConsume.getCount());
+
+        ItemStack toReplaceWith = ItemStack.EMPTY;
+        if (toConsume.hasContainerItem()) {
+            toReplaceWith = toConsume.getContainerItem();
+        }
+
+        toConsume.shrink(1);
+
+        //Stuff might need to be placed back into the inventory
+        if (!toReplaceWith.isEmpty()) {
+            if (toConsume.isEmpty()) {
+                setIntoInventory.accept(toReplaceWith);
+            } else if (ItemComparator.compare(toConsume, toReplaceWith, ItemComparator.Clause.Sets.ITEMSTACK_STRICT_NOAMOUNT)) {
+                toReplaceWith.grow(toConsume.getCount());
+                if (toReplaceWith.getCount() > toReplaceWith.getMaxStackSize()) {
+                    int overcapped = toReplaceWith.getCount() - toReplaceWith.getMaxStackSize();
+                    setIntoInventory.accept(ItemUtils.copyStackWithSize(toReplaceWith, toReplaceWith.getMaxStackSize()));
+                    handleExcess.accept(ItemUtils.copyStackWithSize(toReplaceWith, overcapped));
+                } else {
+                    setIntoInventory.accept(toReplaceWith);
+                }
+            } else {
+                //Different item, no space left. welp.
+                handleExcess.accept(toReplaceWith);
+            }
+        } else {
+            //Or the item just doesn't have a container. then we can just set the shrunk stack back.
+            setIntoInventory.accept(toConsume);
+        }
     }
 
     private static void applyRandomDropOffset(ItemEntity item) {

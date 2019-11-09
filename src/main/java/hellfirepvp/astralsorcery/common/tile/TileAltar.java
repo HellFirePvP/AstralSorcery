@@ -72,10 +72,10 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     private float posDistribution = -1;
 
     private AltarType altarType = AltarType.DISCOVERY;
-    private ActiveSimpleAltarRecipe activeRecipe = null;
     private TileInventoryFiltered inventory;
-    private ItemStack focusItem = ItemStack.EMPTY;
 
+    private ActiveSimpleAltarRecipe activeRecipe = null;
+    private ItemStack focusItem = ItemStack.EMPTY;
     private int storedStarlight = 0;
 
     private Object clientCraftSound = null;
@@ -130,7 +130,11 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
                         break;
                 }
 
-                clientCraftSound = SoundHelper.playSoundLoopFadeInClient(sound, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F, false,
+                clientCraftSound = SoundHelper.playSoundLoopFadeInClient(sound,
+                        new Vector3(this).add(0.5, 0.5, 0.5),
+                        1F,
+                        1F,
+                        false,
                         () -> isRemoved() ||
                                 Minecraft.getInstance().gameSettings.getSoundLevel(SoundCategory.BLOCKS) <= 0 ||
                                 this.getActiveRecipe() == null)
@@ -319,14 +323,6 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     public void receiveStarlight(double amount) {
         storedStarlight = Math.min(this.getAltarType().getStarlightCapacity(), (int) (storedStarlight + (amount * 80D)));
         markForUpdate();
-    }
-
-    public void dropItemOnTop(ItemStack stack) {
-        ItemUtils.dropItem(getWorld(),
-                getPos().getX() + 0.5,
-                getPos().getY() + 1.5,
-                getPos().getZ() + 0.5,
-                stack);
     }
 
     @Override

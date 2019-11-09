@@ -58,6 +58,7 @@ import java.util.List;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -149,32 +150,12 @@ public class MiscUtils {
         return p -> func.apply(supply.get(), p);
     }
 
+    public static <T, V> List<V> transform(List<T> list, Function<T, V> map) {
+        return list.stream().map(map).collect(Collectors.toList());
+    }
+
     public static <K, V, N> Map<K, N> remap(Map<K, V> map, Function<V, N> remapFct) {
-        return map.entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, (e) -> remapFct.apply(e.getValue())));
-    }
-
-    public static <T, K, V> List<T> flatten(Map<K, V> map, BiFunction<K, V, T> flatFunction) {
-        return map.entrySet()
-                .stream()
-                .map((entry) -> flatFunction.apply(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-    }
-
-    public static <T> List<T> flatList(Collection<List<T>> listCollection) {
-        return listCollection.stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-    }
-
-    public static <K, V, L> Map<K, V> splitMap(Collection<L> col, Function<L, Tuple<K, V>> split) {
-        Map<K, V> map = new HashMap<>();
-        col.forEach(l -> {
-            Tuple<K, V> result = split.apply(l);
-            map.put(result.getA(), result.getB());
-        });
-        return map;
+        return MapStream.of(map).mapValue(remapFct).toMap();
     }
 
     public static <T> void mergeList(Collection<T> src, List<T> dst) {

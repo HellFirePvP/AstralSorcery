@@ -54,6 +54,10 @@ public class WorldBlockPos extends BlockPos {
         });
     }
 
+    public static WorldBlockPos wrapTileEntity(TileEntity tile) {
+        return new WorldBlockPos(tile.getWorld().getDimension().getType(), tile.getPos(), type -> tile.getWorld());
+    }
+
     public DimensionType getDimensionType() {
         return this.worldReference.getReference();
     }

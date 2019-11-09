@@ -109,7 +109,7 @@ public class RegistryFluids {
     }
 
     private static <T extends Fluid> T registerFluid(T fluid) {
-        return registerFluid(fluid, NameUtil.fromClass(fluid, "Fluid"));
+        return registerFluid(fluid, NameUtil.fromClass(fluid, "Fluid", "Source"));
     }
 
     private static <T extends Fluid> T registerFluid(T fluid, ResourceLocation name) {

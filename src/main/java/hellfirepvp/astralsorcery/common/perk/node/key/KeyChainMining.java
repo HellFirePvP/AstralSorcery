@@ -112,7 +112,7 @@ public class KeyChainMining extends KeyPerk {
             float length = this.applyMultiplierI(this.config.chainLength.get());
             length = PerkAttributeHelper.getOrCreateMap(player, side)
                     .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_MINING_CHAIN_LENGTH, length);
-            BlockArray chain = BlockDiscoverer.discoverBlocksWithSameStateAroundChain(world, pos, state, MathHelper.floor(length), null,
+            Set<BlockPos> chain = BlockDiscoverer.discoverBlocksWithSameStateAroundChain(world, pos, state, MathHelper.floor(length), null,
                     ((world1, pos1, state1) ->
                             pos1.getY() >= player.getPosition().getY() &&
                                     state1.getBlockHardness(world1, pos1) >= 0 &&
@@ -120,10 +120,9 @@ public class KeyChainMining extends KeyPerk {
                                     !world1.isAirBlock(pos1) &&
                                     state1.canHarvestBlock(world1, pos1, player)));
 
-            Set<BlockPos> chainPositions = chain.getContents().keySet();
-            if (!chainPositions.isEmpty()) {
+            if (!chain.isEmpty()) {
                 int broken = 0;
-                for (BlockPos at : chainPositions) {
+                for (BlockPos at : chain) {
                     List<ItemStack> drops;
                     BlockDropCaptureAssist.startCapturing();
                     try {
@@ -151,7 +150,7 @@ public class KeyChainMining extends KeyPerk {
                         }
                     });
                 }
-                return broken >= chainPositions.size() / 2;
+                return broken >= chain.size() / 2;
             }
         }
         return false;

@@ -37,6 +37,7 @@ public class RegistryStructureTypes {
         STYPE_SMALL = registerAS("struct_small", 512, () -> StructuresAS.STRUCT_SMALL_SHRINE);
 
         PTYPE_RITUAL_PEDESTAL = registerAS("pattern_ritual_pedestal", () -> StructuresAS.STRUCT_RITUAL_PEDESTAL);
+        PTYPE_INFUSER = registerAS("pattern_infuser", () -> StructuresAS.STRUCT_INFUSER);
         PTYPE_ENHANCED_COLLECTOR_CRYSTAL = registerAS("pattern_enhanced_collector_crystal", () -> StructuresAS.STRUCT_ENHANCED_COLLECTOR_CRYSTAL);
     }
 

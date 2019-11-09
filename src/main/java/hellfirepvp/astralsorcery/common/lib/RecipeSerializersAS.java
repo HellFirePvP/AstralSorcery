@@ -27,7 +27,7 @@ public class RecipeSerializersAS {
     private RecipeSerializersAS() {}
 
     public static final ResourceLocation WELL_LIQUEFACTION = AstralSorcery.key("lightwell");
-    public static final ResourceLocation LIQUID_INFUSION = AstralSorcery.key("liquid_infuser");
+    public static final ResourceLocation LIQUID_INFUSION = AstralSorcery.key("infuser");
     public static final ResourceLocation BLOCK_TRANSMUTATION = AstralSorcery.key("block_transmutation");
     public static final ResourceLocation SIMPLE_ALTAR_CRAFTING = AstralSorcery.key("altar");
 

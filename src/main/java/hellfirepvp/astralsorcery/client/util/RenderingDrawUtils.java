@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
+import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -122,17 +123,14 @@ public class RenderingDrawUtils {
     }
 
     public static void renderBlueTooltipString(int x, int y, List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        List<Tuple<ItemStack, ITextComponent>> stackTooltip = new LinkedList<>();
-        for (String in : tooltipData) {
-            stackTooltip.add(new Tuple<>(ItemStack.EMPTY, new StringTextComponent(in)));
-        }
+        List<Tuple<ItemStack, ITextComponent>> stackTooltip = MapStream.ofValues(tooltipData, t -> ItemStack.EMPTY)
+                .mapValue(tip -> (ITextComponent) new StringTextComponent(tip))
+                .toTupleList();
         renderBlueTooltip(x, y, stackTooltip, fontRenderer, isFirstLineHeadline);
     }
 
     public static void renderBlueTooltipComponents(int x, int y, List<ITextComponent> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        List<Tuple<ItemStack, ITextComponent>> stackTooltip = tooltipData.stream()
-                .map(tTip -> new Tuple<>(ItemStack.EMPTY, tTip))
-                .collect(Collectors.toList());
+        List<Tuple<ItemStack, ITextComponent>> stackTooltip = MapStream.ofValues(tooltipData, t -> ItemStack.EMPTY).toTupleList();
         renderBlueTooltip(x, y, stackTooltip, fontRenderer, isFirstLineHeadline);
     }
 
@@ -141,10 +139,9 @@ public class RenderingDrawUtils {
     }
 
     public static void renderBlueStackTooltip(int x, int y, List<Tuple<ItemStack, String>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        List<Tuple<ItemStack, ITextComponent>> stackTooltip = new LinkedList<>();
-        for (Tuple<ItemStack, String> in : tooltipData) {
-            stackTooltip.add(new Tuple<>(in.getA(), new StringTextComponent(in.getB())));
-        }
+        List<Tuple<ItemStack, ITextComponent>> stackTooltip = MapStream.of(tooltipData)
+                .mapValue(str -> (ITextComponent) new StringTextComponent(str))
+                .toTupleList();
         renderTooltip(x, y, stackTooltip, 0xFF000027, 0xFF000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
     }
 

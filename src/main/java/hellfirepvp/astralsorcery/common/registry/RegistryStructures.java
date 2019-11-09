@@ -32,6 +32,7 @@ public class RegistryStructures {
         EMPTY = register(new PatternBlockArray(AstralSorcery.key("empty")));
 
         STRUCT_RITUAL_PEDESTAL = register(new PatternRitualPedestal());
+        STRUCT_INFUSER = register(new PatternInfuser());
         STRUCT_ENHANCED_COLLECTOR_CRYSTAL = register(new PatternEnhancedCollectorCrystal());
 
         STRUCT_DESERT_SHRINE = register(new StructureDesertShrine());
