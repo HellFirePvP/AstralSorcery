@@ -59,17 +59,17 @@ public abstract class AbstractRenderableTexture {
     public static abstract class Full extends AbstractRenderableTexture {
 
         @Override
-        public Point.Double getUVOffset() {
+        public final Point.Double getUVOffset() {
             return new Point2D.Double(0, 0);
         }
 
         @Override
-        public double getUWidth() {
+        public final double getUWidth() {
             return 1.0;
         }
 
         @Override
-        public double getVWidth() {
+        public final double getVWidth() {
             return 1.0;
         }
     }

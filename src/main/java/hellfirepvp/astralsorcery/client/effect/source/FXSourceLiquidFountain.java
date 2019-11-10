@@ -34,7 +34,7 @@ public class FXSourceLiquidFountain extends FXSource<FXCube, BatchRenderContext<
 
     public FXSourceLiquidFountain(Vector3 pos, FluidStack fluid) {
         super(pos, EffectTemplatesAS.CUBE_TRANSLUCENT_ATLAS);
-        this.sprite = RenderingUtils.getSprite(fluid);
+        this.sprite = RenderingUtils.getParticleTexture(fluid);
         this.fluid = fluid;
     }
 

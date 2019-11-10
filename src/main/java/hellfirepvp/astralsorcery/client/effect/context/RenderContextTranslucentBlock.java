@@ -12,6 +12,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXBlock;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTextureResource;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
@@ -26,7 +27,7 @@ import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 public class RenderContextTranslucentBlock extends BatchRenderContext<FXBlock> {
 
     public RenderContextTranslucentBlock() {
-        super(AbstractRenderableTexture.wrap(TextureHelper.getBlockAtlasTexture()),
+        super(BlockAtlasTextureResource.getInstance(),
                 (ctx, pTicks) -> {
                     GlStateManager.pushMatrix();
                     RenderingVectorUtils.removeStandardTranslationFromTESRMatrix(pTicks);

@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
-import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
+import hellfirepvp.astralsorcery.client.util.ColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingFocusStack;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
@@ -25,9 +25,7 @@ import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -59,7 +57,7 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
                 if (relay != null) {
                     ItemStack in = relay.getInventory().getStackInSlot(0);
                     if (!in.isEmpty() && match.getIngredient().test(in)) {
-                        Color color = ItemColorizationHelper.getDominantColorFromItemStack(in)
+                        Color color = ColorizationHelper.getColor(in)
                                 .orElse(ColorsAS.CELESTIAL_CRYSTAL);
 
                         playLightbeam(altar, relay, color);
@@ -77,7 +75,7 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
                         }
                     } else {
                         ItemStack chosen = match.getRandomMatchingStack(getClientTick());
-                        Color color = ItemColorizationHelper.getDominantColorFromItemStack(chosen)
+                        Color color = ColorizationHelper.getColor(chosen)
                                 .orElse(ColorsAS.CELESTIAL_CRYSTAL);
 
                         playLightbeam(altar, relay, color);

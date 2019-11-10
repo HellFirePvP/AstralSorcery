@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalConstellatio
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider;
+import hellfirepvp.astralsorcery.client.util.ColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
@@ -75,6 +76,7 @@ public class ClientProxy extends CommonProxy {
         IReloadableResourceManager resMgr = (IReloadableResourceManager) Minecraft.getInstance().getResourceManager();
         resMgr.addReloadListener(AssetLibrary.INSTANCE);
         resMgr.addReloadListener(AssetPreLoader.INSTANCE);
+        resMgr.addReloadListener(ColorizationHelper.onReload());
 
         OBJLoader.INSTANCE.addDomain(AstralSorcery.MODID);
 

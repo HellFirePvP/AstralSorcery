@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.client.render.tile;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.tile.PrecisionSingleFluidTank;
@@ -44,7 +43,7 @@ public class RenderWell extends CustomTileEntityRenderer<TileWell> {
 
             Vector3 offset = new Vector3(x, y, z).add(0.5D, 0.32D, 0.5D);
             offset.addY(tank.getPercentageFilled() * 0.6);
-            TextureAtlasSprite tas = RenderingUtils.getSprite(contained);
+            TextureAtlasSprite tas = RenderingUtils.getParticleTexture(contained);
 
             Tessellator tes = Tessellator.getInstance();
             BufferBuilder buf = tes.getBuffer();

@@ -69,8 +69,6 @@ import java.util.stream.Stream;
  */
 public class MiscUtils {
 
-    private static Map<DyeColor, Color> prettierColorMapping = new HashMap<>();
-
     @Nullable
     public static <T> T getTileAt(IBlockReader world, BlockPos pos, Class<T> tileClass, boolean forceChunkLoad) {
         if (world == null || pos == null) return null; //Duh.
@@ -287,53 +285,6 @@ public class MiscUtils {
         return new Tuple<>(hand, held);
     }
 
-    @Nonnull
-    public static Color flareColorFromDye(DyeColor color) {
-        Color c = prettierColorMapping.get(color);
-        if(c == null) c = Color.WHITE;
-        return c;
-    }
-
-    @Nonnull
-    public static TextFormatting textFormattingForDye(DyeColor color) {
-        switch (color) {
-            case WHITE:
-                return TextFormatting.WHITE;
-            case ORANGE:
-                return TextFormatting.GOLD;
-            case MAGENTA:
-                return TextFormatting.DARK_PURPLE;
-            case LIGHT_BLUE:
-                return TextFormatting.DARK_AQUA;
-            case YELLOW:
-                return TextFormatting.YELLOW;
-            case LIME:
-                return TextFormatting.GREEN;
-            case PINK:
-                return TextFormatting.LIGHT_PURPLE;
-            case GRAY:
-                return TextFormatting.DARK_GRAY;
-            case LIGHT_GRAY:
-                return TextFormatting.GRAY;
-            case CYAN:
-                return TextFormatting.BLUE;
-            case PURPLE:
-                return TextFormatting.DARK_PURPLE;
-            case BLUE:
-                return TextFormatting.DARK_BLUE;
-            case BROWN:
-                return TextFormatting.GOLD;
-            case GREEN:
-                return TextFormatting.DARK_GREEN;
-            case RED:
-                return TextFormatting.DARK_RED;
-            case BLACK:
-                return TextFormatting.DARK_GRAY; //Black is unreadable. fck that.
-            default:
-                return TextFormatting.WHITE;
-        }
-    }
-
     public static String capitalizeFirst(String str) {
         if (str == null || str.isEmpty()) {
             return str;
@@ -524,25 +475,6 @@ public class MiscUtils {
             }
         }
         return found;
-    }
-
-    static {
-        prettierColorMapping.put(DyeColor.WHITE,      ColorsAS.DYE_WHITE);
-        prettierColorMapping.put(DyeColor.ORANGE,     ColorsAS.DYE_ORANGE);
-        prettierColorMapping.put(DyeColor.MAGENTA,    ColorsAS.DYE_MAGENTA);
-        prettierColorMapping.put(DyeColor.LIGHT_BLUE, ColorsAS.DYE_LIGHT_BLUE);
-        prettierColorMapping.put(DyeColor.YELLOW,     ColorsAS.DYE_YELLOW);
-        prettierColorMapping.put(DyeColor.LIME,       ColorsAS.DYE_LIME);
-        prettierColorMapping.put(DyeColor.PINK,       ColorsAS.DYE_PINK);
-        prettierColorMapping.put(DyeColor.GRAY,       ColorsAS.DYE_GRAY);
-        prettierColorMapping.put(DyeColor.LIGHT_GRAY, ColorsAS.DYE_LIGHT_GRAY);
-        prettierColorMapping.put(DyeColor.CYAN,       ColorsAS.DYE_CYAN);
-        prettierColorMapping.put(DyeColor.PURPLE,     ColorsAS.DYE_PURPLE);
-        prettierColorMapping.put(DyeColor.BLUE,       ColorsAS.DYE_BLUE);
-        prettierColorMapping.put(DyeColor.BROWN,      ColorsAS.DYE_BROWN);
-        prettierColorMapping.put(DyeColor.GREEN,      ColorsAS.DYE_GREEN);
-        prettierColorMapping.put(DyeColor.RED,        ColorsAS.DYE_RED);
-        prettierColorMapping.put(DyeColor.BLACK,      ColorsAS.DYE_BLACK);
     }
 
 }

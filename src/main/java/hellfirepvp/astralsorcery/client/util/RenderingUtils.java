@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -64,14 +65,20 @@ public class RenderingUtils {
     private static final Random rand = new Random();
     private static IEnviromentBlockReader plainRenderWorld = null;
 
-    @Nonnull
-    public static TextureAtlasSprite getSprite(FluidStack stack) {
+    @Nullable
+    public static TextureAtlasSprite getParticleTexture(FluidStack stack) {
+        if (stack.isEmpty()) {
+            return null;
+        }
         ResourceLocation res = stack.getFluid().getAttributes().getStill(stack);
+        if (MissingTextureSprite.getLocation().equals(res)) {
+            return null;
+        }
         return Minecraft.getInstance().getTextureMap().getSprite(res);
     }
 
     @Nullable
-    public static TextureAtlasSprite getParticleSprite(ItemStack stack) {
+    public static TextureAtlasSprite getParticleTexture(ItemStack stack) {
         if (stack.isEmpty()) {
             return null;
         }
@@ -80,11 +87,11 @@ public class RenderingUtils {
         if (mdl.equals(imm.getModelManager().getMissingModel())) {
             return null;
         }
-        return mdl.getParticleTexture();
+        return mdl.getParticleTexture(EmptyModelData.INSTANCE);
     }
 
     @Nullable
-    public static TextureAtlasSprite getTexture(BlockState state, @Nullable BlockPos positionHint) {
+    public static TextureAtlasSprite getParticleTexture(BlockState state, @Nullable BlockPos positionHint) {
         World world = Minecraft.getInstance().world;
         if (world == null) {
             return null;

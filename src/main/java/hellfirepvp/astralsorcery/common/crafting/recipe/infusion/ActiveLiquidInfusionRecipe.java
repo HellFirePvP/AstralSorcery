@@ -9,15 +9,18 @@
 package hellfirepvp.astralsorcery.common.crafting.recipe.infusion;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.util.ColorizationHelper;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.auxiliary.ChaliceHelper;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
-import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
 import hellfirepvp.astralsorcery.common.util.RecipeHelper;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
@@ -25,8 +28,9 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -89,6 +93,13 @@ public class ActiveLiquidInfusionRecipe {
         this.ticksCrafting++;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public void tickClient(TileInfuser infuser) {
+        Fluid required = this.getRecipeToCraft().getLiquidInput();
+        TextureAtlasSprite fSprite = RenderingUtils.getParticleTexture(new FluidStack(required, FluidAttributes.BUCKET_VOLUME));
+        //TODO BlockAtlas TAS facing sprites
+    }
+
     public void createItemOutputs(TileInfuser infuser, Consumer<ItemStack> output) {
         Consumer<ItemStack> informer = stack -> ResearchManager.informCraftedInfuser(infuser, this, stack);
 
@@ -144,6 +155,7 @@ public class ActiveLiquidInfusionRecipe {
         MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
         return srv.getPlayerList().getPlayerByUUID(this.getPlayerCraftingUUID());
     }
+
     @Nullable
     public static ActiveLiquidInfusionRecipe deserialize(CompoundNBT compound) {
         RecipeManager mgr = RecipeHelper.getRecipeManager();

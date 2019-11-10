@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,8 +43,8 @@ public class EntityUtils {
 
     private static final Random rand = new Random();
 
-    public static void applyVortexMotion(Function<Void, Vector3> getPositionFunction, Function<Vector3, Object> addMotionFunction, Vector3 to, double vortexRange, double multiplier) {
-        Vector3 pos = getPositionFunction.apply(null);
+    public static void applyVortexMotion(Supplier<Vector3> positionSupplier, Consumer<Vector3> addMotion, Vector3 to, double vortexRange, double multiplier) {
+        Vector3 pos = positionSupplier.get();
         double diffX = (to.getX() - pos.getX()) / vortexRange;
         double diffY = (to.getY() - pos.getY()) / vortexRange;
         double diffZ = (to.getZ() - pos.getZ()) / vortexRange;
@@ -54,7 +55,7 @@ public class EntityUtils {
             toAdd.setX(diffX / dist * dstFactorSq * 0.15D * multiplier);
             toAdd.setY(diffY / dist * dstFactorSq * 0.15D * multiplier);
             toAdd.setZ(diffZ / dist * dstFactorSq * 0.15D * multiplier);
-            addMotionFunction.apply(toAdd);
+            addMotion.accept(toAdd);
         }
     }
 
