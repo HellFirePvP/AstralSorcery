@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMisc;
+import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
@@ -52,7 +53,7 @@ public class BlockFlareLight extends Block {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random rand) {
-        Color c = MiscUtils.flareColorFromDye(state.get(COLOR));
+        Color c = ColorUtils.flareColorFromDye(state.get(COLOR));
         for (int i = 0; i < 2; i++) {
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(new Vector3(pos)

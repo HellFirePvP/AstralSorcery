@@ -140,7 +140,7 @@ public class TypeBlockRing extends PatreonEffect {
             for (BlockPos offset : pattern.keySet()) {
                 BlockState state = pattern.get(offset);
 
-                TextureAtlasSprite tas = RenderingUtils.getTexture(state, offset);
+                TextureAtlasSprite tas = RenderingUtils.getParticleTexture(state, offset);
                 if (tas == null) {
                     continue;
                 }

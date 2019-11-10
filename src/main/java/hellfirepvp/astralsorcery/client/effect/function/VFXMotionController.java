@@ -11,10 +11,9 @@ package hellfirepvp.astralsorcery.client.effect.function;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
-import net.minecraft.entity.Entity;
 
 import javax.annotation.Nonnull;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,26 +29,29 @@ public interface VFXMotionController<T extends EntityVisualFX> {
     @Nonnull
     public Vector3 updateMotion(@Nonnull T fx, @Nonnull Vector3 motion);
 
-    public static class EntityTarget<T extends EntityVisualFX> implements VFXMotionController<T> {
+    public static class VectorTarget<T extends EntityVisualFX> implements VFXMotionController<T> {
 
-        private final Entity target;
-        private final Function<T, Vector3> positionFunction;
+        private final Supplier<Vector3> positionSupplier;
+        private final double velocityMultiplier;
 
-        public EntityTarget(Entity target, Function<T, Vector3> positionFunction) {
-            this.target = target;
-            this.positionFunction = positionFunction;
+        public VectorTarget(Supplier<Vector3> positionSupplier) {
+            this(positionSupplier, 1);
         }
 
-        @Override
+        public VectorTarget(Supplier<Vector3> positionSupplier, double velocityMultiplier) {
+            this.positionSupplier = positionSupplier;
+            this.velocityMultiplier = velocityMultiplier;
+        }
+
         @Nonnull
+        @Override
         public Vector3 updateMotion(@Nonnull T fx, @Nonnull Vector3 motion) {
-            if (!target.isAlive()) {
+            Vector3 target = positionSupplier.get();
+            if (target == null) {
                 return motion;
             }
-            EntityUtils.applyVortexMotion((v) -> positionFunction.apply(fx), motion::add, Vector3.atEntityCorner(target), 256, 1);
+            EntityUtils.applyVortexMotion(fx::getPosition, motion::add, target, 256, this.velocityMultiplier);
             return motion.multiply(0.9);
         }
-
     }
-
 }

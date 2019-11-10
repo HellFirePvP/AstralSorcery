@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
-import hellfirepvp.astralsorcery.common.crafting.helper.CraftingFocusStack;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
@@ -22,7 +21,6 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
 import java.util.List;
@@ -83,7 +81,7 @@ public class RenderTileAltar extends CustomTileEntityRenderer<TileAltar> {
                 for (int i = 0; i < traitInputs.size(); i++) {
                     WrappedIngredient ingredient = traitInputs.get(i);
                     ItemStack traitInput = ingredient.getRandomMatchingStack(ClientScheduler.getClientTick());
-                    Color color = ItemColorizationHelper.getDominantColorFromItemStack(traitInput)
+                    Color color = ColorizationHelper.getColor(traitInput)
                             .orElse(ColorsAS.CELESTIAL_CRYSTAL);
 
                     RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, color, 0x1231943167156902L | id | (i * 0x5151L), 20, 2F, amount);

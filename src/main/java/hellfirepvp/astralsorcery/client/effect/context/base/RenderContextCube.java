@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.effect.context.base;
 
 import hellfirepvp.astralsorcery.client.effect.vfx.FXCube;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTextureResource;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
@@ -29,7 +30,7 @@ import java.util.function.Consumer;
 public abstract class RenderContextCube extends BatchRenderContext<FXCube> {
 
     protected RenderContextCube(BiConsumer<BufferContext, Float> before, Consumer<Float> after, BiFunction<BatchRenderContext<FXCube>, Vector3, FXCube> particleCreator) {
-        this(AbstractRenderableTexture.wrap(TextureHelper.getBlockAtlasTexture()), before, after, particleCreator);
+        this(BlockAtlasTextureResource.getInstance(), before, after, particleCreator);
     }
 
     public RenderContextCube(AbstractRenderableTexture resource, BiConsumer<BufferContext, Float> before, Consumer<Float> after, BiFunction<BatchRenderContext<FXCube>, Vector3, FXCube> particleCreator) {

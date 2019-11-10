@@ -181,9 +181,11 @@ public class TileInfuser extends TileEntityTick implements WandInteractable {
     public void onInteract(World world, BlockPos pos, PlayerEntity player, Direction side, boolean sneak) {
         if (!world.isRemote() && this.hasMultiblock() && !this.getItemInput().isEmpty()) {
             if (this.getActiveRecipe() != null) {
-                if (!this.getActiveRecipe().matches(this)) {
-                    abortCrafting();
+                if (this.getActiveRecipe().matches(this)) {
+                    return;
                 }
+
+                abortCrafting();
             }
             LiquidInfusion recipe = this.findRecipe(player);
             if (recipe != null) {

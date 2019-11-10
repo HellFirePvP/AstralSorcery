@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util.draw;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.MissingTextureSprite;
@@ -32,12 +33,12 @@ public class TextureHelper {
 
     public static void bindBlockAtlas() {
         ITextureObject obj = getBlockAtlasTexture();
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
+        GlStateManager.bindTexture(obj.getGlTextureId());
     }
 
     public static void bindMissingTexture() {
         ITextureObject obj = getMissingTexture();
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
+        GlStateManager.bindTexture(obj.getGlTextureId());
     }
 
     public static void refreshTextureBind() {
