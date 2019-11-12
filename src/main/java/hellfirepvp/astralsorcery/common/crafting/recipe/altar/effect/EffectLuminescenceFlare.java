@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect;
 
+import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
@@ -49,11 +50,10 @@ public class EffectLuminescenceFlare extends AltarRecipeEffect {
                         .alpha(VFXAlphaFunction.fadeIn(30))
                         .setScaleMultiplier(9F)
                         .setAlphaMultiplier(0.65F)
-                        .refresh(fx -> !altar.isRemoved() &&
-                                MiscUtils.getTileAt(altar.getWorld(), altar.getPos(), TileAltar.class, false) != null &&
-                                altar.getActiveRecipe() != null &&
-                                altar.getActiveRecipe().getState() == ActiveSimpleAltarRecipe.CraftingState.ACTIVE &&
-                                recipeName.equals(altar.getActiveRecipe().getRecipeToCraft().getId()));
+                        .refresh(RefreshFunction.tileExistsAnd(altar,
+                                (tAltar, fx) -> tAltar.getActiveRecipe() != null &&
+                                        tAltar.getActiveRecipe().getState() == ActiveSimpleAltarRecipe.CraftingState.ACTIVE &&
+                                        recipeName.equals(tAltar.getActiveRecipe().getRecipeToCraft().getId())));
             });
 
             if (spr.isRemoved()) {

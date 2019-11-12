@@ -25,7 +25,7 @@ public class RenderInfuser extends CustomTileEntityRenderer<TileInfuser> {
     public void render(TileInfuser tile, double x, double y, double z, float pTicks, int destroyStage) {
         ItemStack i = tile.getItemInput();
         if (!i.isEmpty()) {
-            RenderingUtils.renderItemAsEntity(i, x + 0.5, y + 0.8, z + 0.5, pTicks, tile.getTicksExisted());
+            RenderingUtils.renderItemAsEntity(i, x + 0.5, y + 0.75, z + 0.5, pTicks, tile.getTicksExisted());
         }
     }
 }

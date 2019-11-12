@@ -38,6 +38,10 @@ public class SoundsAS {
     public static CategorizedSoundEvent INFUSER_CRAFT_LOOP;
     public static CategorizedSoundEvent INFUSER_CRAFT_FINISH;
 
+    public static CategorizedSoundEvent PERK_SEAL;
+    public static CategorizedSoundEvent PERK_UNSEAL;
+    public static CategorizedSoundEvent PERK_UNLOCK;
+
     public static CategorizedSoundEvent GUI_JOURNAL_CLOSE;
     public static CategorizedSoundEvent GUI_JOURNAL_PAGE;
 

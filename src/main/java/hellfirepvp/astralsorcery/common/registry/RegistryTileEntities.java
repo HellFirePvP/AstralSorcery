@@ -50,11 +50,12 @@ public class RegistryTileEntities {
 
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileInfuser.class, new RenderInfuser());
         ClientRegistry.bindTileEntitySpecialRenderer(TileAltar.class, new RenderTileAltar());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileChalice.class, new RenderChalice());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileInfuser.class, new RenderInfuser());
         ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderTileLens());
         ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderTilePrism());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
         ClientRegistry.bindTileEntitySpecialRenderer(TileWell.class, new RenderWell());
     }
 

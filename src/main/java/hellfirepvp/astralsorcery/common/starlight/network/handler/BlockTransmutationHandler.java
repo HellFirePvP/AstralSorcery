@@ -42,8 +42,8 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
     }
 
     @Override
-    public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType, double amount) {
-        BlockTransmutation recipe = RecipeTypesAS.TYPE_BLOCK_TRANSMUTATION.findRecipe(new BlockTransmutationContext(world, pos, world.getBlockState(pos), starlightType));
+    public void receiveStarlight(World world, Random rand, BlockPos pos, BlockState state, IWeakConstellation starlightType, double amount) {
+        BlockTransmutation recipe = RecipeTypesAS.TYPE_BLOCK_TRANSMUTATION.findRecipe(new BlockTransmutationContext(world, pos, state, starlightType));
         if (recipe == null) {
             return; //Wait what
         }

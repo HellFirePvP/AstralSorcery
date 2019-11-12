@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.client.effect.function;
 
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,9 +32,13 @@ public interface VFXAlphaFunction<T extends EntityVisualFX> {
         return (1F - (Math.abs(halfAge - fx.getAge()) / halfAge)) * alphaIn;
     };
 
+    public static <T extends EntityVisualFX> VFXAlphaFunction<T> proximity(Supplier<Vector3> targetSupplier, float distance) {
+        return (fx, alpha, pTicks) -> alpha * MathHelper.clamp(((float) fx.getRenderPosition(pTicks).distance(targetSupplier.get())) / distance, 0F, 1F);
+    }
+
     public float getAlpha(T fx, float alphaIn, float pTicks);
 
-    public static  <T extends EntityVisualFX> VFXAlphaFunction<T> fadeIn(float fadeInTicks) {
+    public static <T extends EntityVisualFX> VFXAlphaFunction<T> fadeIn(float fadeInTicks) {
         return (fx, alphaIn, pTicks) -> {
             if (fx.getAgeRefreshCount() > 0) {
                 return alphaIn;

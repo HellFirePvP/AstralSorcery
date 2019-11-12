@@ -50,7 +50,7 @@ public class FXOrbitalLucerna extends FXSourceOrbital<FXFacingParticle, BatchRen
     public void tick() {
         super.tick();
 
-        this.getOffset().addY(0.05);
+        this.move(new Vector3(0, 0.05, 0));
     }
 
     @Override

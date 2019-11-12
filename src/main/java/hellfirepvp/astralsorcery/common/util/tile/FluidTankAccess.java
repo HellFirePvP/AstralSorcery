@@ -56,7 +56,7 @@ public class FluidTankAccess {
     public LazyOptional<IFluidHandler> getCapability(@Nullable Direction facing) {
         Set<AccessibleTank> available = facing == null ? this.tanks :
                 this.tanks.stream().filter(t -> t.isAccessible(facing)).collect(Collectors.toSet());
-        return LazyOptional.of(() -> new SidedAccess(available));
+        return available.isEmpty() ? LazyOptional.empty() : LazyOptional.of(() -> new SidedAccess(available));
     }
 
     private static class SidedAccess implements IFluidHandler {

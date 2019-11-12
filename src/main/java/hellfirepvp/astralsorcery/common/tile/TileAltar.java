@@ -177,13 +177,12 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
         TileAltar thisAltar = MiscUtils.getTileAt(world, at, TileAltar.class, false);
         if (thisAltar != null) {
-            world.getRecipeManager().getRecipe(recipeName).ifPresent(recipe -> {
-                if (recipe instanceof SimpleAltarRecipe) {
-                    ((SimpleAltarRecipe) recipe).getCraftingEffects().forEach(effect -> {
-                        effect.onCraftingFinish(thisAltar, isChaining);
-                    });
-                }
-            });
+            IRecipe<?> recipe = world.getRecipeManager().getRecipes(RecipeTypesAS.TYPE_ALTAR.getType()).get(recipeName);
+            if (recipe instanceof SimpleAltarRecipe) {
+                ((SimpleAltarRecipe) recipe).getCraftingEffects().forEach(effect -> {
+                    effect.onCraftingFinish(thisAltar, isChaining);
+                });
+            }
 
             if (!isChaining) {
                 SoundHelper.playSoundClientWorld(SoundsAS.ALTAR_CRAFT_FINISH, at, 1F, 1F);

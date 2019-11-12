@@ -191,7 +191,7 @@ public final class EffectHandler {
         @Override
         public E apply(Vector3 pos) {
             EffectHelper.Builder<E> prop = source.generateFX();
-            E  fx = prop.getContext().makeParticle(pos);
+            E fx = prop.getContext().makeParticle(pos);
             PendingEffect effect = new PendingEffect(fx, prop);
             getInstance().registerUnsafe(effect);
             return fx;

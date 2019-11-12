@@ -60,7 +60,7 @@ public class StarlightNetworkRegistry {
 
         public boolean isApplicable(World world, BlockPos pos, BlockState state, IWeakConstellation starlightType);
 
-        public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType, double amount);
+        public void receiveStarlight(World world, Random rand, BlockPos pos, BlockState state, IWeakConstellation starlightType, double amount);
 
     }
 

@@ -29,6 +29,7 @@ public class EffectTemplatesAS {
 
     public static BatchRenderContext<FXFacingParticle> GENERIC_PARTICLE;
     public static BatchRenderContext<FXFacingParticle> GENERIC_DEPTH_PARTICLE;
+    public static BatchRenderContext<FXFacingAtlasParticle> GENERIC_ATLAS_PARTICLE;
     public static BatchRenderContext<FXFacingParticle> GENERIC_GATEWAY_PARTICLE;
 
     public static BatchRenderContext<FXFacingParticle> CRYSTAL_BURST_1;
