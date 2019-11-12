@@ -161,7 +161,8 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
     public int getComparatorInputOverride(BlockState state, World world, BlockPos pos) {
         TileWell tw = MiscUtils.getTileAt(world, pos, TileWell.class, false);
         if (tw != null) {
-            return MathHelper.ceil(tw.getTank().getPercentageFilled() * 15F);
+            int fluidPart = MathHelper.ceil(tw.getTank().getPercentageFilled() * 8F);
+            return tw.getCatalyst().isEmpty() ? fluidPart : fluidPart + 7;
         }
         return 0;
     }

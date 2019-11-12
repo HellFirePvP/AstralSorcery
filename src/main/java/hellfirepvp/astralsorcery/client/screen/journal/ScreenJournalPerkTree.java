@@ -36,6 +36,7 @@ import hellfirepvp.astralsorcery.common.item.ItemPerkSeal;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.client.PktPerkGemModification;
 import hellfirepvp.astralsorcery.common.network.play.client.PktRequestPerkSealAction;
@@ -1107,10 +1108,17 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
     public void playUnlockAnimation(AbstractPerk perk) {
         this.unlockEffects.put(perk, ClientScheduler.getClientTick());
+        SoundHelper.playSoundClient(SoundsAS.PERK_UNLOCK, 0.5F, 1F);
     }
 
     public void playSealBreakAnimation(AbstractPerk perk) {
         this.updateSearchHighlight();
         this.breakEffects.put(perk, ClientScheduler.getClientTick());
+        SoundHelper.playSoundClient(SoundsAS.PERK_UNSEAL, 0.5F, 1F);
+    }
+
+    public void playSealApplyAnimation(AbstractPerk perk) {
+        this.updateSearchHighlight();
+        SoundHelper.playSoundClient(SoundsAS.PERK_SEAL, 0.5F, 1F);
     }
 }

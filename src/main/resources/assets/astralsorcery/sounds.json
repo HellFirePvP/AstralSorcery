@@ -38,6 +38,45 @@
 			}
 		]
 	},
+	"perk_seal": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:perk/perk_seal_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:perk/perk_seal_2",
+				"stream": false
+			}
+		]
+	},
+	"perk_unseal": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:perk/perk_unseal_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:perk/perk_unseal_2",
+				"stream": false
+			}
+		]
+	},
+	"perk_unlock": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:perk/perk_unlock_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:perk/perk_unlock_2",
+				"stream": false
+			}
+		]
+	},
 	"altar_craft_start": {
 		"category": "block",
 		"sounds": [

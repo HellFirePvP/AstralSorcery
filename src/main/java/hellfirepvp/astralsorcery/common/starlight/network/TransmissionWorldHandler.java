@@ -116,7 +116,7 @@ public class TransmissionWorldHandler {
                         if (handle != null) {
                             Float multiplier = lossMultipliers.get(endPointPos);
                             if (multiplier != null) {
-                                handle.receiveStarlight(world, rand, endPointPos, type, starlight * multiplier);
+                                handle.receiveStarlight(world, rand, endPointPos, endState, type, starlight * multiplier);
                             }
                         } else {
                             chain.updatePosAsResolved(world, endPointPos);

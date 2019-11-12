@@ -69,7 +69,8 @@ public final class EffectHelper {
             return super.setIgnoreLimit(ignoreLimit);
         }
 
-        public T spawn(Vector3 spawnPos) {
+        public T spawn(@Nonnull Vector3 spawnPos) {
+            this.setPosition(spawnPos.toBlockPos());
             return EffectRegistrar.registerFX(this.getContext().makeParticle(spawnPos), this);
         }
 

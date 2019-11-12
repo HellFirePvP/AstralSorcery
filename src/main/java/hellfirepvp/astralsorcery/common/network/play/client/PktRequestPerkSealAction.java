@@ -72,10 +72,12 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
             @Override
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktRequestPerkSealAction packet, NetworkEvent.Context context) {
-                if (!packet.doSealing) {
-                    Screen current = Minecraft.getInstance().currentScreen;
-                    if(current instanceof ScreenJournalPerkTree) {
+                Screen current = Minecraft.getInstance().currentScreen;
+                if (current instanceof ScreenJournalPerkTree) {
+                    if (!packet.doSealing) {
                         Minecraft.getInstance().enqueue(() -> ((ScreenJournalPerkTree) current).playSealBreakAnimation(packet.perk));
+                    } else {
+                        Minecraft.getInstance().enqueue(() -> ((ScreenJournalPerkTree) current).playSealApplyAnimation(packet.perk));
                     }
                 }
             }
@@ -87,8 +89,12 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
                     if (packet.doSealing) {
                         if (ItemPerkSeal.useSeal(player, true) &&
                                 ResearchManager.applyPerkSeal(player, packet.perk)) {
+
+                            //Follow-up correction if we can't actually consume the seal item now, but already applied the seal.
                             if (!ItemPerkSeal.useSeal(player, false)) {
                                 ResearchManager.breakPerkSeal(player, packet.perk);
+                            } else {
+                                packet.replyWith(new PktRequestPerkSealAction(packet.perk, true), context);
                             }
                         }
                     } else {

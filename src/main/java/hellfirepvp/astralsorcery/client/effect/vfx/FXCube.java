@@ -43,7 +43,6 @@ public class FXCube extends EntityVisualFX {
 
     private float tumbleIntensityMultiplier = 1F;
     private float textureSubSizePercentage = 1F;
-    private int lightCoordX = -1, lightCoordY = -1;
 
     public FXCube(Vector3 pos) {
         super(pos);
@@ -52,13 +51,6 @@ public class FXCube extends EntityVisualFX {
     public FXCube setTextureAtlasSprite(TextureAtlasSprite tas) {
          this.tas = tas;
          return this;
-    }
-
-    public FXCube setWorldLightCoord(World iba, BlockPos pos) {
-        int light = iba.isBlockLoaded(pos) ? iba.getCombinedLight(pos, 0) : 0;
-        this.lightCoordX = light >> 16 & 65535;
-        this.lightCoordY = light & 65535;
-        return this;
     }
 
     public FXCube setTextureSubSizePercentage(float textureSubSizePercentage) {
@@ -110,18 +102,16 @@ public class FXCube extends EntityVisualFX {
         if (this.tas != null) {
             u = this.tas.getMinU();
             v = this.tas.getMinV();
-            uLength = this.tas.getMaxU() - u;
-            vLength = this.tas.getMaxV() - v;
+            uLength = (this.tas.getMaxU() - u) * this.textureSubSizePercentage;
+            vLength = (this.tas.getMaxV() - v) * this.textureSubSizePercentage;
         } else {
             SpriteSheetResource ssr = ctx.getSprite();
             Tuple<Double, Double> uv = ssr.getUVOffset(this.getAge());
             u = uv.getA();
             v = uv.getB();
-            uLength = ssr.getULength();
-            vLength = ssr.getVLength();
+            uLength = ssr.getULength() * this.textureSubSizePercentage;
+            vLength = ssr.getVLength() * this.textureSubSizePercentage;
         }
-        uLength *= this.textureSubSizePercentage;
-        vLength *= this.textureSubSizePercentage;
 
         float alpha = this.getAlpha(pTicks);
         float scale = this.getScale(pTicks);
@@ -139,20 +129,13 @@ public class FXCube extends EntityVisualFX {
         GlStateManager.rotated(((float) rotation.getY()), 0, 1, 0);
         GlStateManager.rotated(((float) rotation.getZ()), 0, 0, 1);
 
-        if(lightCoordX == -1 && lightCoordY == -1) {
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        RenderingDrawUtils.drawWithBlockLight(15, () -> {
             RenderingDrawUtils.renderTexturedCubeCentralColor(buf, scale,
                     u, v, uLength, vLength,
                     r, g, b, alpha);
-            buf.draw();
-        } else {
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
-            RenderingDrawUtils.renderTexturedCubeCentralWithLightAndColor(buf, scale,
-                    u, v, uLength, vLength,
-                    lightCoordX, lightCoordY,
-                    r, g, b, alpha);
-            buf.draw();
-        }
+        });
+        buf.draw();
 
         GlStateManager.popMatrix();
     }

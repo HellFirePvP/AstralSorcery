@@ -92,6 +92,20 @@ public class BlockInfuser extends BlockInventory implements CustomItemBlock {
     }
 
     @Override
+    public boolean hasComparatorInputOverride(BlockState p_149740_1_) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos) {
+        TileInfuser ti = MiscUtils.getTileAt(world, pos, TileInfuser.class, false);
+        if (ti != null) {
+            return ti.getItemInput().isEmpty() ? 0 : 15;
+        }
+        return 0;
+    }
+
+    @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }

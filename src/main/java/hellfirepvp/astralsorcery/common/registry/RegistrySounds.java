@@ -46,6 +46,10 @@ public class RegistrySounds {
         INFUSER_CRAFT_LOOP = registerSound("infuser_craft_loop", SoundCategory.BLOCKS);
         INFUSER_CRAFT_FINISH = registerSound("infuser_craft_finish", SoundCategory.BLOCKS);
 
+        PERK_SEAL = registerSound("perk_seal", SoundCategory.MASTER);
+        PERK_UNSEAL = registerSound("perk_unseal", SoundCategory.MASTER);
+        PERK_UNLOCK = registerSound("perk_unlock", SoundCategory.MASTER);
+
         GUI_JOURNAL_CLOSE = registerSound("gui_journal_close", SoundCategory.MASTER);
         GUI_JOURNAL_PAGE = registerSound("gui_journal_page", SoundCategory.MASTER);
     }

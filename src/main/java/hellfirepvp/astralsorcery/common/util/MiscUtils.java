@@ -91,7 +91,9 @@ public class MiscUtils {
 
     @Nullable
     public static <T> T getRandomEntry(Collection<T> collection, Random rand) {
-        if(collection == null || collection.isEmpty()) return null;
+        if (collection == null || collection.isEmpty()) {
+            return null;
+        }
         int index = rand.nextInt(collection.size());
         return Iterables.get(collection, index);
     }

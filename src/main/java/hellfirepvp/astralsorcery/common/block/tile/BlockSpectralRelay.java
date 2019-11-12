@@ -94,6 +94,20 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
     }
 
     @Override
+    public boolean hasComparatorInputOverride(BlockState p_149740_1_) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos) {
+        TileSpectralRelay tsr = MiscUtils.getTileAt(world, pos, TileSpectralRelay.class, false);
+        if (tsr != null) {
+            return tsr.getInventory().getStackInSlot(0).isEmpty() ? 0 : 15;
+        }
+        return 0;
+    }
+
+    @Override
     public BlockRenderType getRenderType(BlockState p_149645_1_) {
         return BlockRenderType.MODEL;
     }

@@ -34,6 +34,7 @@ public class RegistryEffectTemplates {
     public static void registerTemplates() {
         GENERIC_DEPTH_PARTICLE = register(new RenderContextGenericDepthParticle());
         GENERIC_PARTICLE       = register(new RenderContextGenericParticle());
+        GENERIC_ATLAS_PARTICLE = register(new RenderContextAtlasParticle());
         LIGHTNING              = register(new RenderContextLightning());
 
         CRYSTAL_BURST_1 = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_1));
@@ -62,7 +63,8 @@ public class RegistryEffectTemplates {
     //       cubes after textures, before gateway
     private static void setupRenderOrder() {
         GENERIC_PARTICLE.setAfter(GENERIC_DEPTH_PARTICLE);
-        LIGHTNING.setAfter(GENERIC_PARTICLE);
+        GENERIC_ATLAS_PARTICLE.setAfter(GENERIC_PARTICLE);
+        LIGHTNING.setAfter(GENERIC_ATLAS_PARTICLE);
 
         //L0
         List<BatchRenderContext<?>> generalGrp = new LinkedList<>();

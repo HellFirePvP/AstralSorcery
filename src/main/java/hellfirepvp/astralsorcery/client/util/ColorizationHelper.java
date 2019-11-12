@@ -86,7 +86,7 @@ public class ColorizationHelper {
         try {
             BufferedImage extractedImage = extractImage(tas);
             int[] dominantColor = ColorThief.getColor(extractedImage);
-            int color = (dominantColor[0] & 0xFF) << 16 | (dominantColor[0] & 0xFF) << 8 | (dominantColor[0] & 0xFF);
+            int color = (dominantColor[0] & 0xFF) << 16 | (dominantColor[1] & 0xFF) << 8 | (dominantColor[2] & 0xFF);
             return Optional.of(new Color(color));
         } catch (Exception exc) {
             AstralSorcery.log.error("Item Colorization Helper: Ignoring non-resolvable image " + tas.getName().toString());
