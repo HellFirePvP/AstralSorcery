@@ -424,35 +424,75 @@ public class RenderingDrawUtils {
                                                                   float cR, float cG, float cB, float cA) {
         double half = size / 2D;
 
-        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half, -half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos(-half, -half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
+        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half, -half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
 
-        buf.pos(-half,  half,  half).tex(u, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half,  half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
+        buf.pos(-half,  half,  half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
 
-        buf.pos(-half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos(-half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
+        buf.pos(-half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).endVertex();
 
-        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half, -half,  half).tex(u, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
+        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half,  half).tex(u, v).color(cR, cG, cB, cA).endVertex();
 
-        buf.pos( half, -half, -half).tex(u, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos(-half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos(-half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
+        buf.pos( half, -half, -half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
 
-        buf.pos(-half, -half,  half).tex(u, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos( half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
-        buf.pos(-half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(0F, 1F, 0F).endVertex();
+        buf.pos(-half, -half,  half).tex(u, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).endVertex();
+        buf.pos( half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        buf.pos(-half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).endVertex();
+    }
+
+    public static void renderTexturedCubeCentralColorNormal(BufferBuilder buf, double size,
+                                                            double u, double v, double uLength, double vLength,
+                                                            float cR, float cG, float cB, float cA,
+                                                            Vector3 normal) {
+        double half = size / 2D;
+        float nX = (float) normal.getX();
+        float nY = (float) normal.getY();
+        float nZ = (float) normal.getZ();
+
+        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half, -half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos(-half, -half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+
+        buf.pos(-half,  half,  half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half,  half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+
+        buf.pos(-half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos(-half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+
+        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half, -half,  half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+
+        buf.pos( half, -half, -half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos(-half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos(-half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+
+        buf.pos(-half, -half,  half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos( half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        buf.pos(-half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
     }
 
     public static void renderAngleRotatedTexturedRectVB(BufferBuilder buf, Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, float r, float g, float b, float a) {

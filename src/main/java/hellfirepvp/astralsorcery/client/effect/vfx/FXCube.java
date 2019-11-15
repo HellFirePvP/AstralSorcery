@@ -129,7 +129,7 @@ public class FXCube extends EntityVisualFX {
         GlStateManager.rotated(((float) rotation.getY()), 0, 1, 0);
         GlStateManager.rotated(((float) rotation.getZ()), 0, 0, 1);
 
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         RenderingDrawUtils.drawWithBlockLight(15, () -> {
             RenderingDrawUtils.renderTexturedCubeCentralColor(buf, scale,
                     u, v, uLength, vLength,

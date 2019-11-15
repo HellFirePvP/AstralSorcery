@@ -79,7 +79,9 @@ public class ActiveLiquidInfusionRecipe {
     public ActiveLiquidInfusionRecipe(World world, BlockPos center, LiquidInfusion recipeToCraft, UUID playerCraftingUUID) {
         this(recipeToCraft, playerCraftingUUID);
 
-        this.findChalices(world, center);
+        if (this.recipeToCraft.acceptsChaliceInput()) {
+            this.findChalices(world, center);
+        }
     }
 
     private ActiveLiquidInfusionRecipe(LiquidInfusion recipeToCraft, UUID playerCraftingUUID) {
@@ -134,6 +136,10 @@ public class ActiveLiquidInfusionRecipe {
 
         for (int i = 0; i < 7; i++) {
             playLiquidPoolEffect(infuser, required);
+        }
+
+        if (!this.supportingChalices.isEmpty()) {
+
         }
     }
 
