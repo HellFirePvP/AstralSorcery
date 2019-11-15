@@ -11,8 +11,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.fluid.Fluids;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -62,9 +60,10 @@ public class RenderChalice extends CustomTileEntityRenderer<TileChalice> {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder buf = tes.getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-        RenderingDrawUtils.renderTexturedCubeCentralColor(buf, percSize,
+        RenderingDrawUtils.renderTexturedCubeCentralColorNormal(buf, percSize,
                 uOffset, vOffset, uPart, vPart,
-                color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F);
+                color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F,
+                rotation);
         tes.draw();
 
         GlStateManager.enableLighting();

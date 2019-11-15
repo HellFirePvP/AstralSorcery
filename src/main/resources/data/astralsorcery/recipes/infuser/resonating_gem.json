@@ -5,6 +5,8 @@
     "item": "astralsorcery:aquamarine"
   },
   "output": "astralsorcery:resonating_gem",
-  "consumptionChance": 0.05,
+  "consumptionChance": 0.4,
+  "consumeMultipleFluids": false,
+  "acceptChaliceInput": true,
   "duration": 200
 }

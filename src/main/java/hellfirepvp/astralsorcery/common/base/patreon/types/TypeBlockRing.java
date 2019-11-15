@@ -156,7 +156,7 @@ public class TypeBlockRing extends PatreonEffect {
                 GlStateManager.translated(dir.getX(), dir.getY(), dir.getZ());
                 GlStateManager.scaled(0.09, 0.09, 0.09);
 
-                vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+                vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
                 RenderingDrawUtils.renderTexturedCubeCentralColor(vb, 1F,
                         tas.getMinU(), tas.getMinV(),
                         tas.getMaxU() - tas.getMinU(), tas.getMaxV() - tas.getMinV(),
