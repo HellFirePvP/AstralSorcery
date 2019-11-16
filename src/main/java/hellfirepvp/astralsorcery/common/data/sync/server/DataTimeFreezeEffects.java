@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.data.sync.base.AbstractData;
 import hellfirepvp.astralsorcery.common.data.sync.base.AbstractDataProvider;
 import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
 import hellfirepvp.astralsorcery.common.data.sync.client.ClientTimeFreezeEffects;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopEffectHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -121,7 +122,7 @@ public class DataTimeFreezeEffects extends AbstractData {
 
         @Nullable
         public static ServerSyncAction deserializeNBT(CompoundNBT cmp) {
-            ActionType type = ActionType.values()[MathHelper.clamp(cmp.getInt("type"), 0, ActionType.values().length - 1)];
+            ActionType type = MiscUtils.getEnumEntry(ActionType.class, cmp.getInt("type"));
             String dimTypeKey = cmp.getString("dimType");
             DimensionType dimType = DimensionManager.getRegistry().getValue(new ResourceLocation(dimTypeKey)).orElse(null);
             if (dimType == null) {

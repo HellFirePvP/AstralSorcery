@@ -18,7 +18,7 @@ package hellfirepvp.astralsorcery.common.item.gem;
 public enum GemType {
 
     SKY(1.0F, 1.0F),
-    DAY(7.5F, 0.6F),
+    DAY(9F, 0.3F),
     NIGHT(0.5F, 3.0F);
 
     public final float countModifier;

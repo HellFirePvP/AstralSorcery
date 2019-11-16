@@ -13,9 +13,12 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.block.tile.BlockGemCrystalCluster;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -69,4 +72,29 @@ public class MiscPlayEffect {
                 .setScaleMultiplier(1.5F);
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public static void gemCrystalBurst(PktPlayEffect event) {
+        Vector3 vec = ByteBufUtils.readVector(event.getExtraData());
+        BlockGemCrystalCluster.GrowthStageType type = MiscUtils.getEnumEntry(BlockGemCrystalCluster.GrowthStageType.class, event.getExtraData().readInt());
+
+        BatchRenderContext<? extends FXFacingParticle> ctx = EffectTemplatesAS.GEM_CRYSTAL_BURST;
+        float scale = 0.5F;
+        switch (type) {
+            case STAGE_2_SKY:
+                ctx = EffectTemplatesAS.GEM_CRYSTAL_BURST_SKY;
+                scale = 1.2F;
+                break;
+            case STAGE_2_DAY:
+                ctx = EffectTemplatesAS.GEM_CRYSTAL_BURST_DAY;
+                scale = 1.2F;
+                break;
+            case STAGE_2_NIGHT:
+                ctx = EffectTemplatesAS.GEM_CRYSTAL_BURST_NIGHT;
+                scale = 1.2F;
+                break;
+        }
+        EffectHelper.of(ctx)
+                .spawn(vec.add(0.5, 0.3, 0.5))
+                .setScaleMultiplier(scale);
+    }
 }

@@ -18,6 +18,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
  */
 public abstract class LiquidStarlightRecipe {
 
+    protected static final Random rand = new Random();
     private static final int WORLD_TIME_TOLERANCE = 10;
 
     @OnlyIn(Dist.CLIENT)
@@ -39,7 +41,10 @@ public abstract class LiquidStarlightRecipe {
 
     public abstract boolean matches(ItemEntity trigger, World world, BlockPos at);
 
-    public abstract void doCraftTick(ItemEntity trigger, World world, BlockPos at);
+    public abstract void doServerCraftTick(ItemEntity trigger, World world, BlockPos at);
+
+    @OnlyIn(Dist.CLIENT)
+    public abstract void doClientEffectTick(ItemEntity trigger, World world, BlockPos at);
 
     protected final List<Entity> getEntitiesInBlock(IWorld world, BlockPos pos) {
         return world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos));

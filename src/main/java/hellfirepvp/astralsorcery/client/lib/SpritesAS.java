@@ -24,6 +24,10 @@ public class SpritesAS {
     public static SpriteSheetResource SPR_CRYSTAL_EFFECT_1;
     public static SpriteSheetResource SPR_CRYSTAL_EFFECT_2;
     public static SpriteSheetResource SPR_CRYSTAL_EFFECT_3;
+    public static SpriteSheetResource SPR_GEM_CRYSTAL_BURST;
+    public static SpriteSheetResource SPR_GEM_CRYSTAL_BURST_SKY;
+    public static SpriteSheetResource SPR_GEM_CRYSTAL_BURST_DAY;
+    public static SpriteSheetResource SPR_GEM_CRYSTAL_BURST_NIGHT;
 
     public static SpriteSheetResource SPR_PERK_INACTIVE;
     public static SpriteSheetResource SPR_PERK_ACTIVE;

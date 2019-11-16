@@ -26,12 +26,16 @@ public class ColorsAS {
     public static final Color ROCK_CRYSTAL      = new Color(0xDDDDFF);
     public static final Color CELESTIAL_CRYSTAL = new Color(0x0088FF);
 
-    public static final Color EFFECT_LIGHTNING = new Color(0x0195FF);
+    public static final Color EFFECT_LIGHTNING   = new Color(0x0195FF);
     public static final Color EFFECT_CRAFT_FLARE = new Color(0x5066EC);
 
-    public static final Color NOCTURNAL_POWDER_1 = Color.BLACK;
-    public static final Color NOCTURNAL_POWDER_2 = new Color(0x4E016D);
-    public static final Color NOCTURNAL_POWDER_3 = new Color(0x0C1576);
+    public static final Color GEM_SKY   = new Color(0x2561B5);
+    public static final Color GEM_DAY   = new Color(0xE04C02);
+    public static final Color GEM_NIGHT = new Color(0x808080);
+
+    public static final Color NOCTURNAL_POWDER_1    = Color.BLACK;
+    public static final Color NOCTURNAL_POWDER_2    = new Color(0x4E016D);
+    public static final Color NOCTURNAL_POWDER_3    = new Color(0x0C1576);
     public static final Color ILLUMINATION_POWDER_1 = Color.WHITE;
     public static final Color ILLUMINATION_POWDER_2 = new Color(0xFEFF9E);
     public static final Color ILLUMINATION_POWDER_3 = new Color(0xFFE539);
@@ -42,20 +46,20 @@ public class ColorsAS {
     public static final Color CONSTELLATION_TYPE_BLANK = new Color(0xCC666666);
 
     public static final Color PERK_CONNECTION_UNALLOCATED = new Color(0xBBBBFF);
-    public static final Color PERK_CONNECTION_ALLOCATED = new Color(0x00EEEE00);
-    public static final Color PERK_CONNECTION_UNLOCKABLE = new Color(0x0071FF);
-    public static final Color PERK_UNALLOCATED = new Color(0x3333FF);
-    public static final Color PERK_ALLOCATED = new Color(0xEEEE00);
-    public static final Color PERK_UNLOCKABLE = new Color(0xC920DD);
+    public static final Color PERK_CONNECTION_ALLOCATED   = new Color(0x00EEEE00);
+    public static final Color PERK_CONNECTION_UNLOCKABLE  = new Color(0x0071FF);
+    public static final Color PERK_UNALLOCATED            = new Color(0x3333FF);
+    public static final Color PERK_ALLOCATED              = new Color(0xEEEE00);
+    public static final Color PERK_UNLOCKABLE             = new Color(0xC920DD);
 
-    public static final Color EFFECT_BLEED = new Color(0x751200);
-    public static final Color EFFECT_CHEAT_DEATH = new Color(0xFF5711);
+    public static final Color EFFECT_BLEED         = new Color(0x751200);
+    public static final Color EFFECT_CHEAT_DEATH   = new Color(0xFF5711);
     public static final Color EFFECT_DROP_MODIFIER = new Color(0xFFD114);
-    public static final Color EFFECT_TIME_FREEZE = new Color(0x696969);
+    public static final Color EFFECT_TIME_FREEZE   = new Color(0x696969);
 
     public static final Color COLORED_LENS_FIRE     = new Color(0xff7f00);
     public static final Color COLORED_LENS_BREAK    = new Color(0xffdf00);
-    public static final Color COLORED_LENS_GROWTH = new Color(0x00df00);
+    public static final Color COLORED_LENS_GROWTH   = new Color(0x00df00);
     public static final Color COLORED_LENS_DAMAGE   = new Color(0xdf0000);
     public static final Color COLORED_LENS_REGEN    = new Color(0xff7fbf);
     public static final Color COLORED_LENS_PUSH     = new Color(0x00dfff);

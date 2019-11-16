@@ -6,12 +6,11 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.loot;
+package hellfirepvp.astralsorcery.common.loot;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;

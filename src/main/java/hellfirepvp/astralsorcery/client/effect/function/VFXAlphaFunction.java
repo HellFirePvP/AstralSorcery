@@ -38,6 +38,11 @@ public interface VFXAlphaFunction<T extends EntityVisualFX> {
 
     public float getAlpha(T fx, float alphaIn, float pTicks);
 
+    default public VFXAlphaFunction<T> andThen(VFXAlphaFunction<T> multiplied) {
+        VFXAlphaFunction<T> existing = this;
+        return (fx, alphaIn, pTicks) -> multiplied.getAlpha(fx, existing.getAlpha(fx, alphaIn, pTicks), pTicks);
+    }
+
     public static <T extends EntityVisualFX> VFXAlphaFunction<T> fadeIn(float fadeInTicks) {
         return (fx, alphaIn, pTicks) -> {
             if (fx.getAgeRefreshCount() > 0) {

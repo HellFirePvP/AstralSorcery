@@ -25,9 +25,13 @@ public class RegistrySprites {
     private RegistrySprites() {}
 
     public static void loadSprites() {
-        SPR_CRYSTAL_EFFECT_1 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_1, 5, 8);
-        SPR_CRYSTAL_EFFECT_2 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_2, 5, 8);
-        SPR_CRYSTAL_EFFECT_3 = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_3, 5, 8);
+        SPR_CRYSTAL_EFFECT_1        = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_1, 5, 8);
+        SPR_CRYSTAL_EFFECT_2        = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_2, 5, 8);
+        SPR_CRYSTAL_EFFECT_3        = new SpriteSheetResource(TEX_CRYSTAL_EFFECT_3, 5, 8);
+        SPR_GEM_CRYSTAL_BURST       = new SpriteSheetResource(TEX_GEM_CRYSTAL_BURST, 5, 8);
+        SPR_GEM_CRYSTAL_BURST_SKY   = new SpriteSheetResource(TEX_GEM_CRYSTAL_BURST_SKY, 5, 8);
+        SPR_GEM_CRYSTAL_BURST_DAY   = new SpriteSheetResource(TEX_GEM_CRYSTAL_BURST_DAY, 5, 8);
+        SPR_GEM_CRYSTAL_BURST_NIGHT = new SpriteSheetResource(TEX_GEM_CRYSTAL_BURST_NIGHT, 5, 8);
 
         SPR_PERK_INACTIVE          = new SpriteSheetResource(TEX_GUI_PERK_INACTIVE, 5, 8);
         SPR_PERK_ACTIVE            = new SpriteSheetResource(TEX_GUI_PERK_ACTIVE, 5, 8);

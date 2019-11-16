@@ -83,6 +83,10 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_1;
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_2;
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_3;
+    public static AbstractRenderableTexture TEX_GEM_CRYSTAL_BURST;
+    public static AbstractRenderableTexture TEX_GEM_CRYSTAL_BURST_SKY;
+    public static AbstractRenderableTexture TEX_GEM_CRYSTAL_BURST_DAY;
+    public static AbstractRenderableTexture TEX_GEM_CRYSTAL_BURST_NIGHT;
     public static AbstractRenderableTexture TEX_COLLECTOR_EFFECT;
     public static AbstractRenderableTexture TEX_CRAFT_BURST;
     public static AbstractRenderableTexture TEX_CRAFT_FLARE;

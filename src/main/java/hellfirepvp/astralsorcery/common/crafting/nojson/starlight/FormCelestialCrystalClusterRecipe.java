@@ -1,6 +1,10 @@
 package hellfirepvp.astralsorcery.common.crafting.nojson.starlight;
 
-import hellfirepvp.astralsorcery.common.block.tile.BlockCelestialCrystalCluster;
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXMotionController;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidStarlightRecipe;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
@@ -8,11 +12,12 @@ import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalGenerator;
 import hellfirepvp.astralsorcery.common.item.ItemStardust;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCrystalBase;
-import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -61,7 +66,7 @@ public class FormCelestialCrystalClusterRecipe extends LiquidStarlightRecipe {
     }
 
     @Override
-    public void doCraftTick(ItemEntity trigger, World world, BlockPos at) {
+    public void doServerCraftTick(ItemEntity trigger, World world, BlockPos at) {
         Random r = new Random(MathHelper.getPositionRandom(at));
         if (!world.isRemote() && getAndIncrementCraftingTick(trigger) > 125 + r.nextInt(40)) {
             ItemStack crystalFound;
@@ -78,6 +83,38 @@ public class FormCelestialCrystalClusterRecipe extends LiquidStarlightRecipe {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void doClientEffectTick(ItemEntity trigger, World world, BlockPos at) {
+        for (int i = 0; i < 3; i++) {
+            Vector3 pos = Vector3.atEntityCenter(trigger);
+            MiscUtils.applyRandomOffset(pos, rand, 0.15F);
+
+            Vector3 motion = Vector3.RotAxis.Y_AXIS.clone();
+            motion.rotate(Math.toRadians(10 + rand.nextInt(20)), Vector3.RotAxis.X_AXIS)
+                .rotate(rand.nextFloat() * Math.PI * 2, Vector3.RotAxis.Y_AXIS)
+                .normalize().multiply(0.07F + rand.nextFloat() * 0.04F);
+
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(pos)
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .setMotion(motion)
+                    .setScaleMultiplier(0.05F + rand.nextFloat() * 0.2F)
+                    .setMaxAge(30 + rand.nextInt(20));
+        }
+        for (int i = 0; i < 4; i++) {
+            Vector3 target = Vector3.atEntityCenter(trigger);
+            Vector3 pos = target.clone().add(Vector3.random().normalize().multiply(3 + rand.nextFloat()));
+
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(pos)
+                    .alpha(VFXAlphaFunction.PYRAMID.andThen(VFXAlphaFunction.proximity(target::clone, 2)))
+                    .motion(VFXMotionController.target(target::clone, 0.1F))
+                    .setScaleMultiplier(0.15F + rand.nextFloat() * 0.1F)
+                    .setMaxAge(20 + rand.nextInt(20));
         }
     }
 }

@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.altar.CustomAltarRecipeH
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -42,7 +43,7 @@ public class SimpleAltarRecipeSerializer extends CustomRecipeSerializer<SimpleAl
     @Override
     public SimpleAltarRecipe read(ResourceLocation recipeId, JsonObject json) {
         int typeId = JSONUtils.getInt(json, "altar_type");
-        AltarType type = AltarType.values()[MathHelper.clamp(typeId, 0, AltarType.values().length - 1)];
+        AltarType type = MiscUtils.getEnumEntry(AltarType.class, typeId);
         int duration = JSONUtils.getInt(json, "duration");
         int starlightRequirement = JSONUtils.getInt(json, "starlight");
 

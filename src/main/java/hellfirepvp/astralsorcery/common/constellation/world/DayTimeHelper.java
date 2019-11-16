@@ -32,11 +32,11 @@ public class DayTimeHelper {
     }
 
     public static boolean isNight(World world) {
-        return getCurrentDaytimeDistribution(world) >= 0.6;
+        return getCurrentDaytimeDistribution(world) >= 0.55;
     }
 
     public static boolean isDay(World world) {
-        return getCurrentDaytimeDistribution(world) <= 0.4;
+        return getCurrentDaytimeDistribution(world) <= 0.05;
     }
 
     //For effect purposes to determine how long those events are/last

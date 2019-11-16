@@ -9,8 +9,10 @@
 package hellfirepvp.astralsorcery.common.crafting.recipe.infusion;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXMotionController;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.source.orbital.FXOrbitalInfuserLiquid;
@@ -29,6 +31,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
@@ -139,7 +142,47 @@ public class ActiveLiquidInfusionRecipe {
         }
 
         if (!this.supportingChalices.isEmpty()) {
+            playLiquidDrawEffect(infuser, required);
+        }
+    }
 
+    @OnlyIn(Dist.CLIENT)
+    private void playLiquidDrawEffect(TileInfuser infuser, FluidStack required) {
+        Collection<BlockPos> chalices = this.supportingChalices;
+        if (chalices.isEmpty()) {
+            return;
+        }
+        Vector3 target = new Vector3(infuser).add(0.5, 1.1, 0.5);
+        TextureAtlasSprite tas = RenderingUtils.getParticleTexture(required);
+        VFXColorFunction<?> colorFn = (fx, pTicks) -> new Color(ColorUtils.getOverlayColor(required));
+        for (int i = 0; i < 2 * this.supportingChalices.size(); i++) {
+            BlockPos chalice = MiscUtils.getRandomEntry(chalices, rand);
+            Vector3 pos = new Vector3(chalice).add(0.5, 1.4, 0.5);
+
+            int maxAge = 30;
+            maxAge *= Math.max(pos.distance(target) / 3, 1);
+
+            if (rand.nextInt(3) != 0) {
+                MiscUtils.applyRandomOffset(pos, rand, 0.3F);
+                EffectHelper.of(EffectTemplatesAS.GENERIC_ATLAS_PARTICLE)
+                        .spawn(pos)
+                        .setSprite(tas)
+                        .selectFraction(0.2F)
+                        .setScaleMultiplier(0.01F + rand.nextFloat() * 0.04F)
+                        .color(colorFn)
+                        .alpha(VFXAlphaFunction.proximity(() -> target, 2F).andThen(VFXAlphaFunction.FADE_OUT))
+                        .motion(VFXMotionController.target(target::clone, 0.08F))
+                        .setMaxAge(maxAge);
+            } else {
+                MiscUtils.applyRandomOffset(pos, rand, 0.4F);
+                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                        .spawn(pos)
+                        .setScaleMultiplier(0.15F + rand.nextFloat() * 0.1F)
+                        .color(colorFn)
+                        .alpha(VFXAlphaFunction.proximity(() -> target, 2F).andThen(VFXAlphaFunction.FADE_OUT))
+                        .motion(VFXMotionController.target(target::clone, 0.08F))
+                        .setMaxAge(maxAge);
+            }
         }
     }
 

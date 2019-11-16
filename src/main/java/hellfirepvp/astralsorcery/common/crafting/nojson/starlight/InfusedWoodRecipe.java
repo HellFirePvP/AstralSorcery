@@ -1,14 +1,17 @@
 package hellfirepvp.astralsorcery.common.crafting.nojson.starlight;
 
-import hellfirepvp.astralsorcery.common.block.infusedwood.BlockInfusedWood;
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidStarlightRecipe;
-import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustom;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.LogBlock;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -46,11 +49,27 @@ public class InfusedWoodRecipe extends LiquidStarlightRecipe {
     }
 
     @Override
-    public void doCraftTick(ItemEntity trigger, World world, BlockPos at) {
-        if (!world.isRemote() && getAndIncrementCraftingTick(trigger) > 10) {
+    public void doServerCraftTick(ItemEntity trigger, World world, BlockPos at) {
+        if (getAndIncrementCraftingTick(trigger) > 10) {
             if (consumeItemEntityInBlock(world, at, Blocks.OAK_LOG.asItem()) != null) {
                 ItemUtils.dropItemNaturally(world, trigger.posX, trigger.posY, trigger.posZ, new ItemStack(BlocksAS.INFUSED_WOOD));
             }
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void doClientEffectTick(ItemEntity trigger, World world, BlockPos at) {
+        for (int i = 0; i < 4; i++) {
+            Vector3 pos = new Vector3(at).add(0.5, 0.5, 0.5);
+            MiscUtils.applyRandomOffset(pos, rand, 0.5F);
+
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(pos)
+                    .color(VFXColorFunction.constant(ColorsAS.DYE_BROWN))
+                    .alpha(VFXAlphaFunction.PYRAMID)
+                    .setScaleMultiplier(0.1F + rand.nextFloat() * 0.1F)
+                    .setMaxAge(30 + rand.nextInt(20));
         }
     }
 }

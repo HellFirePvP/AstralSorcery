@@ -81,13 +81,17 @@ public class RegistryTextures {
         TEX_STAR_1          = loadTexture(ENVIRONMENT, "star_1");
         TEX_STAR_2          = loadTexture(ENVIRONMENT, "star_2");
 
-        TEX_STATIC_FLARE     = loadTexture(EFFECT, "flare_light");
-        TEX_CRYSTAL_EFFECT_1 = loadTexture(EFFECT, "crystal_burst_effect_1");
-        TEX_CRYSTAL_EFFECT_2 = loadTexture(EFFECT, "crystal_burst_effect_2");
-        TEX_CRYSTAL_EFFECT_3 = loadTexture(EFFECT, "crystal_burst_effect_3");
-        TEX_COLLECTOR_EFFECT = loadTexture(EFFECT, "collector_crystal_burst");
-        TEX_CRAFT_BURST      = loadTexture(EFFECT, "craft_burst");
-        TEX_CRAFT_FLARE      = loadTexture(EFFECT, "craft_flare");
+        TEX_STATIC_FLARE            = loadTexture(EFFECT, "flare_light");
+        TEX_CRYSTAL_EFFECT_1        = loadTexture(EFFECT, "crystal_burst_effect_1");
+        TEX_CRYSTAL_EFFECT_2        = loadTexture(EFFECT, "crystal_burst_effect_2");
+        TEX_CRYSTAL_EFFECT_3        = loadTexture(EFFECT, "crystal_burst_effect_3");
+        TEX_GEM_CRYSTAL_BURST       = loadTexture(EFFECT, "gem_crystal_burst");
+        TEX_GEM_CRYSTAL_BURST_SKY   = loadTexture(EFFECT, "gem_crystal_burst_sky");
+        TEX_GEM_CRYSTAL_BURST_DAY   = loadTexture(EFFECT, "gem_crystal_burst_day");
+        TEX_GEM_CRYSTAL_BURST_NIGHT = loadTexture(EFFECT, "gem_crystal_burst_night");
+        TEX_COLLECTOR_EFFECT        = loadTexture(EFFECT, "collector_crystal_burst");
+        TEX_CRAFT_BURST             = loadTexture(EFFECT, "craft_burst");
+        TEX_CRAFT_FLARE             = loadTexture(EFFECT, "craft_flare");
 
         TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");

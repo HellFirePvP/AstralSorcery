@@ -9,13 +9,19 @@
 package hellfirepvp.astralsorcery.common.util.block;
 
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,6 +63,33 @@ public class BlockDiscoverer {
         return out;
     }
 
+    public static Set<BlockPos> searchForTileEntitiesAround(World world, BlockPos origin, int distance, Predicate<TileEntity> match) {
+        Set<BlockPos> out = new HashSet<>();
+
+        int minChX = (origin.getX() - distance) >> 4;
+        int minChZ = (origin.getZ() - distance) >> 4;
+        int maxChX = (origin.getX() + distance) >> 4;
+        int maxChZ = (origin.getZ() + distance) >> 4;
+        for (int chX = minChX; chX <= maxChX; chX++) {
+            for (int chZ = minChZ; chZ <= maxChZ; chZ++) {
+                Chunk ch = world.getChunk(chX, chZ);
+                if (ch != null) {
+                    out.addAll(
+                            ch.getTileEntityMap()
+                                    .values()
+                                    .stream()
+                                    .filter(tile -> tile.getPos().withinDistance(origin, distance))
+                                    .filter(match)
+                                    .map(TileEntity::getPos)
+                                    .collect(Collectors.toList())
+                    );
+                }
+            }
+        }
+
+        return out;
+    }
+
     public static Set<BlockPos> searchForBlocksAround(World world, BlockPos origin, int cubeSize, BlockPredicate match) {
         Set<BlockPos> out = new HashSet<>();
 
@@ -76,5 +109,42 @@ public class BlockDiscoverer {
             }
         }
         return out;
+    }
+
+    @Nullable
+    public static BlockPos searchAreaForFirst(World world, BlockPos center, int radius, @Nullable Vector3 offsetFrom, BlockPredicate acceptor) {
+        for (int r = 0; r <= radius; r++) {
+            Set<BlockPos> posList = new HashSet<>();
+            for (int xx = -r; xx <= r; xx++) {
+                for (int yy = -r; yy <= r; yy++) {
+                    for (int zz = -r; zz <= r; zz++) {
+
+                        BlockPos pos = center.add(xx, yy, zz);
+                        if (MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) {
+                            BlockState state = world.getBlockState(pos);
+                            if (acceptor.test(world, pos, state)) {
+                                posList.add(pos);
+                            }
+                        }
+                    }
+                }
+            }
+            if (!posList.isEmpty()) {
+                Vector3 offset = new Vector3(center).add(0.5, 0.5, 0.5);
+                if (offsetFrom != null) {
+                    offset = offsetFrom;
+                }
+                BlockPos closest = null;
+                double prevDst = 0;
+                for (BlockPos pos : posList) {
+                    if (closest == null || offset.distance(pos) < prevDst) {
+                        closest = pos;
+                        prevDst = offset.distance(pos);
+                    }
+                }
+                return closest;
+            }
+        }
+        return null;
     }
 }

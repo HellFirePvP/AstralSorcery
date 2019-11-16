@@ -37,11 +37,15 @@ public class RegistryEffectTemplates {
         GENERIC_ATLAS_PARTICLE = register(new RenderContextAtlasParticle());
         LIGHTNING              = register(new RenderContextLightning());
 
-        CRYSTAL_BURST_1 = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_1));
-        CRYSTAL_BURST_2 = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_2));
-        CRYSTAL_BURST_3 = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_3));
-        COLLECTOR_BURST = register(new RenderContextBurst(SPR_COLLECTOR_EFFECT));
-        LIGHTBEAM       = register(new RenderContextLightbeam(new ObjectReference<>()));
+        CRYSTAL_BURST_1         = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_1));
+        CRYSTAL_BURST_2         = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_2));
+        CRYSTAL_BURST_3         = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_3));
+        COLLECTOR_BURST         = register(new RenderContextBurst(SPR_COLLECTOR_EFFECT));
+        GEM_CRYSTAL_BURST       = register(new RenderContextBurst(SPR_GEM_CRYSTAL_BURST));
+        GEM_CRYSTAL_BURST_SKY   = register(new RenderContextBurst(SPR_GEM_CRYSTAL_BURST_SKY));
+        GEM_CRYSTAL_BURST_DAY   = register(new RenderContextBurst(SPR_GEM_CRYSTAL_BURST_DAY));
+        GEM_CRYSTAL_BURST_NIGHT = register(new RenderContextBurst(SPR_GEM_CRYSTAL_BURST_NIGHT));
+        LIGHTBEAM               = register(new RenderContextLightbeam(new ObjectReference<>()));
 
         TEXTURE_SPRITE = register(new RenderContextSpritePlaneDynamic());
         FACING_SPRITE = register(new RenderContextFacingSprite());
@@ -72,6 +76,10 @@ public class RegistryEffectTemplates {
         generalGrp.add(CRYSTAL_BURST_1);
         generalGrp.add(CRYSTAL_BURST_2);
         generalGrp.add(CRYSTAL_BURST_3);
+        generalGrp.add(GEM_CRYSTAL_BURST);
+        generalGrp.add(GEM_CRYSTAL_BURST_SKY);
+        generalGrp.add(GEM_CRYSTAL_BURST_DAY);
+        generalGrp.add(GEM_CRYSTAL_BURST_NIGHT);
         generalGrp.add(COLLECTOR_BURST);
         generalGrp.add(LIGHTBEAM);
         generalGrp.add(FACING_SPRITE);

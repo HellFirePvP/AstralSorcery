@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.loot;
+package hellfirepvp.astralsorcery.common.loot;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;

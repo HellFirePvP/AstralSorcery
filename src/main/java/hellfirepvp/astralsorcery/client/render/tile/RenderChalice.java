@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
+import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.tile.TileChalice;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -56,6 +57,8 @@ public class RenderChalice extends CustomTileEntityRenderer<TileChalice> {
         GlStateManager.rotated((float) rotation.getZ(), 0, 0, 1);
         this.setLightmapDisabled(true);
         GlStateManager.disableLighting();
+
+        TextureHelper.bindBlockAtlas();
 
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder buf = tes.getBuffer();

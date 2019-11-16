@@ -64,7 +64,7 @@ public class BlockCelestialCrystalCluster extends BlockCrystalContainer implemen
     public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType, double amount) {
         TileCelestialCrystals crystals = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
         if (crystals != null) {
-            crystals.grow((int) (30_000 / amount));
+            crystals.grow((int) (TileCelestialCrystals.TICK_GROWTH_CHANCE / amount));
         }
     }
 
