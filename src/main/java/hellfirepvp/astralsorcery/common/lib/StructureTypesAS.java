@@ -30,5 +30,6 @@ public class StructureTypesAS {
     public static StructureType PTYPE_RITUAL_PEDESTAL;
     public static StructureType PTYPE_INFUSER;
     public static StructureType PTYPE_ENHANCED_COLLECTOR_CRYSTAL;
+    public static StructureType PTYPE_SPECTRAL_RELAY;
 
 }

@@ -1,0 +1,122 @@
+{
+	"comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+    "ambientocclusion": false,
+	"parent": "block/block",
+	"textures": {
+		"particle": "astralsorcery:block/crystal/gem_cluster_stage_2_earth_crystal",
+		"texture": "astralsorcery:block/crystal/gem_cluster_stage_2_earth_crystal",
+		"stone": "block/stone",
+		"core": "astralsorcery:block/crystal/gem_cluster_stage_2_earth"
+	},
+	"elements": [ 	 
+		{
+			"from": [ 5, 0, 5 ],
+			"to": [ 11, 10, 5.001 ],
+			"faces": {
+				"north": { "uv": [ 0, 6, 6, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 0, 6, 6, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 5, 0, 10.995 ],
+			"to": [ 11, 10, 11 ],
+			"faces": {
+				"north": { "uv": [ 0, 6, 6, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 0, 6, 6, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 5, 0, 5 ],
+			"to": [ 5.005, 10, 11 ],
+			"faces": {
+				"west": { "uv": [ 0, 6, 6, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 0, 6, 6, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 10.995, 0, 5 ],
+			"to": [ 11, 10, 11 ],
+			"faces": {
+				"west": { "uv": [ 0, 6, 6, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 0, 6, 6, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 5, 9.995, 5 ],
+			"to": [ 11, 10, 11 ],
+			"faces": {
+				"down": { "uv": [ 10, 0, 16, 6 ], "texture": "#texture" },
+				"up": { "uv": [ 10, 0, 16, 6 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 5, 0, 5 ],
+			"to": [ 11, 0.005, 11 ],
+			"faces": {
+				"down": { "uv": [ 10, 0, 16, 6 ], "texture": "#texture" },
+				"up": { "uv": [ 10, 0, 16, 6 ], "texture": "#texture" }
+			}
+		},
+		{
+			"__comment": "core",
+			"from": [ 6, 5, 6 ],
+			"to": [ 10, 9, 10 ],
+			"faces": {
+				"down": { "uv": [ 8, 0, 12, 4 ], "texture": "#core" },
+				"up": { "uv": [ 4, 0, 8, 4 ], "texture": "#core" },
+				"north": { "uv": [ 12, 4, 16, 8 ], "texture": "#core" },
+				"south": { "uv": [ 4, 4, 8, 8 ], "texture": "#core" },
+				"west": { "uv": [ 0, 4, 4, 8 ], "texture": "#core" },
+				"east": { "uv": [ 8, 4, 12, 8 ], "texture": "#core" }
+			}
+		},
+		{
+			"from": [ 6, 0.01, 3 ],
+			"to": [ 9, 2.01, 6 ],
+			"faces": {
+				"down": { "uv": [ 6, 10, 9, 13 ], "texture": "#stone" },
+				"up": { "uv": [ 6, 3, 9, 6 ], "texture": "#stone" },
+				"north": { "uv": [ 7, 14, 10, 16 ], "texture": "#stone" },
+				"south": { "uv": [ 6, 14, 9, 16 ], "texture": "#stone" },
+				"west": { "uv": [ 3, 14, 6, 16 ], "texture": "#stone" },
+				"east": { "uv": [ 10, 14, 13, 16 ], "texture": "#stone" }
+			}
+		},
+		{
+			"from": [ 10, 0.01, 6 ],
+			"to": [ 13, 2.01, 9 ],
+			"faces": {
+				"down": { "uv": [ 10, 7, 13, 10 ], "texture": "#stone" },
+				"up": { "uv": [ 10, 6, 13, 9 ], "texture": "#stone" },
+				"north": { "uv": [ 3, 14, 6, 16 ], "texture": "#stone" },
+				"south": { "uv": [ 10, 14, 13, 16 ], "texture": "#stone" },
+				"west": { "uv": [ 6, 14, 9, 16 ], "texture": "#stone" },
+				"east": { "uv": [ 7, 14, 10, 16 ], "texture": "#stone" }
+			}
+		},
+		{
+			"from": [ 7, 0.01, 10 ],
+			"to": [ 10, 2.01, 13 ],
+			"faces": {
+				"down": { "uv": [ 7, 3, 10, 6 ], "texture": "#stone" },
+				"up": { "uv": [ 7, 10, 10, 13 ], "texture": "#stone" },
+				"north": { "uv": [ 6, 14, 9, 16 ], "texture": "#stone" },
+				"south": { "uv": [ 7, 14, 10, 16 ], "texture": "#stone" },
+				"west": { "uv": [ 10, 14, 13, 16 ], "texture": "#stone" },
+				"east": { "uv": [ 3, 14, 6, 16 ], "texture": "#stone" }
+			}
+		},
+		{
+			"from": [ 3, 0.01, 7 ],
+			"to": [ 6, 2.01, 10 ],
+			"faces": {
+				"down": { "uv": [ 3, 6, 6, 9 ], "texture": "#stone" },
+				"up": { "uv": [ 3, 7, 6, 10 ], "texture": "#stone" },
+				"north": { "uv": [ 10, 14, 13, 16 ], "texture": "#stone" },
+				"south": { "uv": [ 3, 14, 6, 16 ], "texture": "#stone" },
+				"west": { "uv": [ 7, 14, 10, 16 ], "texture": "#stone" },
+				"east": { "uv": [ 6, 14, 9, 16 ], "texture": "#stone" }
+			}
+		}
+	]
+}

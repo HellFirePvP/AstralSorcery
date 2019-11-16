@@ -35,6 +35,8 @@ import javax.annotation.Nullable;
  */
 public class TileCelestialCrystals extends TileEntityTick implements CrystalAttributeTile {
 
+    public static final int TICK_GROWTH_CHANCE = 24_000;
+
     private CrystalAttributes attributes = null;
 
     public TileCelestialCrystals() {
@@ -47,7 +49,7 @@ public class TileCelestialCrystals extends TileEntityTick implements CrystalAttr
 
         if (!getWorld().isRemote()) {
             if (getGrowth() < 4 && doesSeeSky()) {
-                this.tryGrowWithChance(24000);
+                this.tryGrowWithChance(TICK_GROWTH_CHANCE);
             }
         } else {
             BlockState downState = getWorld().getBlockState(getPos().down());

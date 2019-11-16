@@ -103,6 +103,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         ROCK_CRYSTAL_COLUMN,
         ROCK_CRYSTAL_SPARKS,
         SMALL_CRYSTAL_BREAK,
+        GEM_CRYSTAL_BREAK,
         CROP_GROWTH,
         MELT_BLOCK,
         ALTAR_RECIPE_FINISH,
@@ -120,6 +121,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return ItemWand::playUndergroundEffect;
                 case SMALL_CRYSTAL_BREAK:
                     return MiscPlayEffect::catalystBurst;
+                case GEM_CRYSTAL_BREAK:
+                    return MiscPlayEffect::gemCrystalBurst;
                 case CROP_GROWTH:
                     return CEffectAevitas::playParticles;
                 case TIME_FREEZE_EFFECT:

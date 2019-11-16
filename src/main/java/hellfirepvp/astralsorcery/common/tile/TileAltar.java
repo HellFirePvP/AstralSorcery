@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
@@ -275,7 +276,6 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
         }
 
         this.storedStarlight *= 0.95;
-        this.storedStarlight = this.getAltarType().getStarlightCapacity();
         int yLevel = getPos().getY();
         if (yLevel > 40) {
             float collect = 160;
@@ -320,6 +320,10 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     }
 
     public void receiveStarlight(double amount) {
+        if (amount <= 0.01) {
+            return;
+        }
+
         storedStarlight = Math.min(this.getAltarType().getStarlightCapacity(), (int) (storedStarlight + (amount * 80D)));
         markForUpdate();
     }
@@ -334,6 +338,24 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
                     this.focusItem);
 
             this.focusItem = ItemStack.EMPTY;
+        }
+    }
+
+    @Override
+    protected void onFirstTick() {
+        super.onFirstTick();
+
+        this.updateNearbyRelayLinkStates();
+    }
+
+    private void updateNearbyRelayLinkStates() {
+        Set<BlockPos> relayPositions = BlockDiscoverer.searchForTileEntitiesAround(getWorld(), getPos(), 16, tile -> tile instanceof TileSpectralRelay);
+
+        for (BlockPos relayPos : relayPositions) {
+            TileSpectralRelay tsr = MiscUtils.getTileAt(getWorld(), relayPos, TileSpectralRelay.class, true);
+            if (tsr != null) {
+                tsr.updateAltarLinkState();
+            }
         }
     }
 

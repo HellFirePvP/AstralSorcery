@@ -103,6 +103,18 @@ public class MiscUtils {
         return ModLoadingContext.get().getActiveContainer();
     }
 
+    @Nonnull
+    public static <T> T getEnumEntry(Class<T> enumClazz, int index) {
+        if (!enumClazz.isEnum()) {
+            throw new IllegalArgumentException("Called getEnumEntry on class " + enumClazz.getName() + " which isn't an enum.");
+        }
+        T[] values = enumClazz.getEnumConstants();
+        if (values.length == 0) {
+            throw new IllegalArgumentException(enumClazz.getName() + " has no enum constants.");
+        }
+        return values[MathHelper.clamp(index, 0, values.length - 1)];
+    }
+
     @Nullable
     public static <T> T getWeightedRandomEntry(Collection<T> list, Random rand, Function<T, Integer> getWeightFunction) {
         if (list.isEmpty()) {
@@ -422,61 +434,6 @@ public class MiscUtils {
             return true;
         }
         return false;
-    }
-
-    @Nullable
-    public static BlockPos searchAreaForFirst(World world, BlockPos center, int radius, @Nullable Vector3 offsetFrom, BlockPredicate acceptor) {
-        for (int r = 0; r <= radius; r++) {
-            List<BlockPos> posList = new LinkedList<>();
-            for (int xx = -r; xx <= r; xx++) {
-                for (int yy = -r; yy <= r; yy++) {
-                    for (int zz = -r; zz <= r; zz++) {
-
-                        BlockPos pos = center.add(xx, yy, zz);
-                        if (isChunkLoaded(world, new ChunkPos(pos))) {
-                            BlockState state = world.getBlockState(pos);
-                            if (acceptor.test(world, pos, state)) {
-                                posList.add(pos);
-                            }
-                        }
-                    }
-                }
-            }
-            if (!posList.isEmpty()) {
-                Vector3 offset = new Vector3(center).add(0.5, 0.5, 0.5);
-                if (offsetFrom != null) {
-                    offset = offsetFrom;
-                }
-                BlockPos closest = null;
-                double prevDst = 0;
-                for (BlockPos pos : posList) {
-                    if (closest == null || offset.distance(pos) < prevDst) {
-                         closest = pos;
-                         prevDst = offset.distance(pos);
-                    }
-                }
-                return closest;
-            }
-        }
-        return null;
-    }
-
-    public static List<BlockPos> searchAreaFor(World world, BlockPos center, BlockState blockToSearch, int radius) {
-        List<BlockPos> found = new LinkedList<>();
-        for (int xx = -radius; xx <= radius; xx++) {
-            for (int yy = -radius; yy <= radius; yy++) {
-                for (int zz = -radius; zz <= radius; zz++) {
-                    BlockPos pos = center.add(xx, yy, zz);
-                    if (isChunkLoaded(world, new ChunkPos(pos))) {
-                        BlockState state = world.getBlockState(pos);
-                        if (state.equals(blockToSearch)) {
-                            found.add(pos);
-                        }
-                    }
-                }
-            }
-        }
-        return found;
     }
 
 }

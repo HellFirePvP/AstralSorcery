@@ -79,6 +79,7 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
                     if (!player.isCreative()) {
                         held.shrink(1);
                     }
+                    tar.updateAltarLinkState();
                     tar.markForUpdate();
                 } else {
                     if (!inv.getStackInSlot(0).isEmpty()) {

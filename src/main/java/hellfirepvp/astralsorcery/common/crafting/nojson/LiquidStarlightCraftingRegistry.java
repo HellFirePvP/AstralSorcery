@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.crafting.nojson;
 
 import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.FormCelestialCrystalClusterRecipe;
+import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.FormGemCrystalClusterRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.InfusedWoodRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidStarlightRecipe;
 import net.minecraft.entity.item.ItemEntity;
@@ -25,6 +26,7 @@ public class LiquidStarlightCraftingRegistry {
     public static void init() {
         recipes.add(new InfusedWoodRecipe());
         recipes.add(new FormCelestialCrystalClusterRecipe());
+        recipes.add(new FormGemCrystalClusterRecipe());
     }
 
     @Nullable
@@ -45,7 +47,11 @@ public class LiquidStarlightCraftingRegistry {
 
         LiquidStarlightRecipe recipe = LiquidStarlightCraftingRegistry.getRecipeFor(itemEntity, world, floorAt);
         if (recipe != null) {
-            recipe.doCraftTick(itemEntity, world, floorAt);
+            if (!world.isRemote()) {
+                recipe.doServerCraftTick(itemEntity, world, floorAt);
+            } else {
+                recipe.doClientEffectTick(itemEntity, world, floorAt);
+            }
         }
     }
 

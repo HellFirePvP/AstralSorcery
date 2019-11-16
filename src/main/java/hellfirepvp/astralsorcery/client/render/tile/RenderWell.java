@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.render.tile;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.tile.PrecisionSingleFluidTank;
@@ -50,6 +51,8 @@ public class RenderWell extends CustomTileEntityRenderer<TileWell> {
 
             GlStateManager.disableAlphaTest();
             RenderHelper.disableStandardItemLighting();
+
+            TextureHelper.bindBlockAtlas();
 
             buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, offset, Vector3.RotAxis.Y_AXIS.clone(), Math.toRadians(45), 0.54,

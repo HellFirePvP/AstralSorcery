@@ -35,6 +35,10 @@ public class EffectTemplatesAS {
     public static BatchRenderContext<FXFacingParticle> CRYSTAL_BURST_1;
     public static BatchRenderContext<FXFacingParticle> CRYSTAL_BURST_2;
     public static BatchRenderContext<FXFacingParticle> CRYSTAL_BURST_3;
+    public static BatchRenderContext<FXFacingParticle> GEM_CRYSTAL_BURST;
+    public static BatchRenderContext<FXFacingParticle> GEM_CRYSTAL_BURST_SKY;
+    public static BatchRenderContext<FXFacingParticle> GEM_CRYSTAL_BURST_DAY;
+    public static BatchRenderContext<FXFacingParticle> GEM_CRYSTAL_BURST_NIGHT;
 
     public static BatchRenderContext<FXSpritePlane> TEXTURE_SPRITE;
     public static BatchRenderContext<FXFacingSprite> FACING_SPRITE;

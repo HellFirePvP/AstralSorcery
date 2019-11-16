@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -18,14 +19,14 @@ import net.minecraft.util.math.MathHelper;
  * Created by HellFirePvP
  * Date: 08.08.2019 / 17:27
  */
-public enum  ModifierType {
+public enum ModifierType {
 
     ADDITION,
     ADDED_MULTIPLY,
     STACKING_MULTIPLY;
 
     public static ModifierType fromVanillaAttributeOperation(AttributeModifier.Operation op) {
-        return values()[MathHelper.clamp(op.getId(), 0, values().length - 1)];
+        return MiscUtils.getEnumEntry(ModifierType.class, op.getId());
     }
 
     public AttributeModifier.Operation getVanillaAttributeOperation() {

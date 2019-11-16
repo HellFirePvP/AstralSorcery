@@ -63,6 +63,10 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
     }
 
     public boolean doesSeeSky() {
+        if (getWorld().isRemote()) {
+            return this.doesSeeSky;
+        }
+
         if (lastUpdateTick == -1 || (ticksExisted - lastUpdateTick) >= 20) {
             lastUpdateTick = ticksExisted;
 
@@ -78,6 +82,10 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
     }
 
     public boolean hasMultiblock() {
+        if (getWorld().isRemote()) {
+            return this.hasMultiblock;
+        }
+
         if (this.getRequiredStructureType() == null) {
             refreshMatcher();
             resetMultiblockState();
@@ -110,6 +118,9 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
                 ObserverHelper.getHelper().removeObserver(getWorld(), getPos());
                 this.structureMatch = null;
             }
+        }
+        if (struct == null && ObserverHelper.getHelper().getSubscriber(getWorld(), getPos()) != null) {
+            ObserverHelper.getHelper().removeObserver(getWorld(), getPos());
         }
     }
 

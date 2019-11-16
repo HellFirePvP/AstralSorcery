@@ -9,11 +9,10 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.util.loot.CopyConstellation;
-import hellfirepvp.astralsorcery.common.util.loot.CopyCrystalProperties;
-import hellfirepvp.astralsorcery.common.util.loot.LinearLuckBonus;
-import hellfirepvp.astralsorcery.common.util.loot.RandomCrystalProperty;
-import net.minecraft.util.ResourceLocation;
+import hellfirepvp.astralsorcery.common.loot.CopyConstellation;
+import hellfirepvp.astralsorcery.common.loot.CopyCrystalProperties;
+import hellfirepvp.astralsorcery.common.loot.LinearLuckBonus;
+import hellfirepvp.astralsorcery.common.loot.RandomCrystalProperty;
 import net.minecraft.world.storage.loot.functions.ILootFunction;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 

@@ -147,7 +147,7 @@ public class PlayerProgress {
 
         if (compound.contains("tierReached")) {
             int tierOrdinal = compound.getInt("tierReached");
-            tierReached = ProgressionTier.values()[MathHelper.clamp(tierOrdinal, 0, ProgressionTier.values().length - 1)];
+            tierReached = MiscUtils.getEnumEntry(ProgressionTier.class, tierOrdinal);
         }
 
         if (compound.contains("research")) {
@@ -296,7 +296,7 @@ public class PlayerProgress {
 
         if (compound.contains("tierReached")) {
             int tierOrdinal = compound.getInt("tierReached");
-            tierReached = ProgressionTier.values()[MathHelper.clamp(tierOrdinal, 0, ProgressionTier.values().length - 1)];
+            tierReached = MiscUtils.getEnumEntry(ProgressionTier.class, tierOrdinal);
         }
 
         if (compound.contains("research")) {
@@ -542,7 +542,7 @@ public class PlayerProgress {
         this.knownConstellations = message.knownConstellations;
         this.seenConstellations = message.seenConstellations;
         this.researchProgression = message.researchProgression;
-        this.tierReached = ProgressionTier.values()[MathHelper.clamp(message.progressTier, 0, ProgressionTier.values().length - 1)];
+        this.tierReached = MiscUtils.getEnumEntry(ProgressionTier.class, message.progressTier);
         this.attunedConstellation = message.attunedConstellation;
         this.wasOnceAttuned = message.wasOnceAttuned;
         this.usedTargets = message.usedTargets;

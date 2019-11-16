@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.base;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,7 +30,7 @@ public enum MoonPhase {
     NEW, WAXING_1_4, WAXING_1_2, WAXING_3_4;
 
     public static MoonPhase fromWorld(IWorld world) {
-        return values()[MathHelper.clamp(world.getDimension().getMoonPhase(world.getWorld().getDayTime()), 0, values().length)];
+        return MiscUtils.getEnumEntry(MoonPhase.class, world.getDimension().getMoonPhase(world.getWorld().getDayTime()));
     }
 
     @OnlyIn(Dist.CLIENT)
