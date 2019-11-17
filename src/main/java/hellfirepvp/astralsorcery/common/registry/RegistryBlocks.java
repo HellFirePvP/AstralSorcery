@@ -95,6 +95,7 @@ public class RegistryBlocks {
         ALTAR_ATTUNEMENT = registerBlock(new BlockAltarAttunement());
         ALTAR_CONSTELLATION = registerBlock(new BlockAltarConstellation());
         ALTAR_RADIANCE = registerBlock(new BlockAltarRadiance());
+        ATTUNEMENT_ALTAR = registerBlock(new BlockAttunementAltar());
         CELESTIAL_CRYSTAL_CLUSTER = registerBlock(new BlockCelestialCrystalCluster());
         GEM_CRYSTAL_CLUSTER = registerBlock(new BlockGemCrystalCluster());
         ROCK_COLLECTOR_CRYSTAL = registerBlock(new BlockRockCollectorCrystal());

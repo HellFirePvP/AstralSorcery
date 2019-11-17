@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.structure.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
@@ -37,6 +38,7 @@ public class RegistryTileEntities {
     public static void registerTiles() {
         SPECTRAL_RELAY = registerTile(TileSpectralRelay.class, BlocksAS.SPECTRAL_RELAY);
         ALTAR = registerTile(TileAltar.class, BlocksAS.ALTAR_DISCOVERY, BlocksAS.ALTAR_ATTUNEMENT, BlocksAS.ALTAR_CONSTELLATION, BlocksAS.ALTAR_RADIANCE);
+        ATTUNEMENT_ALTAR = registerTile(TileAttunementAltar.class, BlocksAS.ATTUNEMENT_ALTAR);
         CELESTIAL_CRYSTAL_CLUSTER = registerTile(TileCelestialCrystals.class, BlocksAS.CELESTIAL_CRYSTAL_CLUSTER);
         CHALICE = registerTile(TileChalice.class, BlocksAS.CHALICE);
         COLLECTOR_CRYSTAL = registerTile(TileCollectorCrystal.class, BlocksAS.ROCK_COLLECTOR_CRYSTAL, BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
@@ -51,11 +53,12 @@ public class RegistryTileEntities {
 
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAltar.class, new RenderTileAltar());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAltar.class, new RenderAltar());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAttunementAltar.class, new RenderAttunementAltar());
         ClientRegistry.bindTileEntitySpecialRenderer(TileChalice.class, new RenderChalice());
         ClientRegistry.bindTileEntitySpecialRenderer(TileInfuser.class, new RenderInfuser());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderTileLens());
-        ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderTilePrism());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderLens());
+        ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderPrism());
         ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
         ClientRegistry.bindTileEntitySpecialRenderer(TileWell.class, new RenderWell());
     }

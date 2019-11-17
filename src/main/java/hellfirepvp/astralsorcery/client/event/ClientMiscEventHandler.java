@@ -46,7 +46,7 @@ public class ClientMiscEventHandler {
     //Obligatory, dev gimmick
     @OnlyIn(Dist.CLIENT)
     static void onRender(RenderPlayerEvent.Post event) {
-        PlayerEntity player = event.getEntityPlayer();
+        PlayerEntity player = event.getPlayer();
         if (player == null) return;
         if (player.getUniqueID().hashCode() != 1529485240) return;
 
@@ -102,6 +102,8 @@ public class ClientMiscEventHandler {
             GlStateManager.endList();
         }
 
+        GlStateManager.disableLighting();
+
         GlStateManager.pushMatrix();
         GlStateManager.rotatef((float) (20.0 + r), 0, -1, 0);
         GlStateManager.callList(dList);
@@ -111,6 +113,8 @@ public class ClientMiscEventHandler {
         GlStateManager.callList(dList + 1);
         GlStateManager.popMatrix();
         GlStateManager.popMatrix();
+
+        GlStateManager.enableLighting();
     }
 
 }

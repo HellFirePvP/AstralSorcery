@@ -25,11 +25,11 @@ import java.util.List;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RenderTileLens
+ * Class: RenderLens
  * Created by HellFirePvP
  * Date: 21.09.2019 / 15:01
  */
-public class RenderTileLens extends CustomTileEntityRenderer<TileLens> {
+public class RenderLens extends CustomTileEntityRenderer<TileLens> {
 
     private static final ModelLens MODEL_LENS = new ModelLens();
     private static final ModelLensColored MODEL_LENS_COLORED = new ModelLensColored();
