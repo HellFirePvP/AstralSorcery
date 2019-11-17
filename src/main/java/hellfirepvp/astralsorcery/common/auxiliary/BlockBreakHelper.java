@@ -71,8 +71,9 @@ public class BlockBreakHelper {
     public static void blockBreakAnimation(PktPlayEffect pktPlayEffect) {
         BlockPos pos = ByteBufUtils.readPos(pktPlayEffect.getExtraData());
         int id = pktPlayEffect.getExtraData().readInt();
+        BlockState state = Block.getStateById(id);
 
-        RenderingUtils.playBlockBreakParticles(pos, Block.getStateById(id));
+        RenderingUtils.playBlockBreakParticles(pos, state, state);
     }
 
     public static class BreakEntry implements TickTokenMap.TickMapToken<Float>, CEffectAbstractList.ListEntry {

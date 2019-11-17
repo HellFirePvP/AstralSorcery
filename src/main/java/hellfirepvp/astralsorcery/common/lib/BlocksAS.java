@@ -77,6 +77,7 @@ public class BlocksAS {
     public static BlockAltarAttunement           ALTAR_ATTUNEMENT;
     public static BlockAltarConstellation        ALTAR_CONSTELLATION;
     public static BlockAltarRadiance             ALTAR_RADIANCE;
+    public static BlockAttunementAltar           ATTUNEMENT_ALTAR;
     public static BlockCelestialCrystalCluster   CELESTIAL_CRYSTAL_CLUSTER;
     public static BlockGemCrystalCluster         GEM_CRYSTAL_CLUSTER;
     public static BlockRockCollectorCrystal      ROCK_COLLECTOR_CRYSTAL;

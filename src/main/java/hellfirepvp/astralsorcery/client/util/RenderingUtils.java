@@ -38,6 +38,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biomes;
@@ -108,32 +109,42 @@ public class RenderingUtils {
     }
 
     //Straight up ripped off of MC code.
-    public static void playBlockBreakParticles(BlockPos pos, BlockState state) {
+    public static void playBlockBreakParticles(BlockPos pos, BlockState actualState, BlockState particleState) {
         World world = Minecraft.getInstance().world;
         ParticleManager mgr = Minecraft.getInstance().particles;
 
-        VoxelShape voxelshape = state.getShape(world, pos);
-        voxelshape.forEachBox((p_199284_3_, p_199284_5_, p_199284_7_, p_199284_9_, p_199284_11_, p_199284_13_) -> {
-            double d1 = Math.min(1.0D, p_199284_9_ - p_199284_3_);
-            double d2 = Math.min(1.0D, p_199284_11_ - p_199284_5_);
-            double d3 = Math.min(1.0D, p_199284_13_ - p_199284_7_);
-            int i = Math.max(2, MathHelper.ceil(d1 / 0.25D));
-            int j = Math.max(2, MathHelper.ceil(d2 / 0.25D));
-            int k = Math.max(2, MathHelper.ceil(d3 / 0.25D));
+        VoxelShape voxelshape;
+        try {
+            voxelshape = actualState.getShape(world, pos);
+        } catch (Exception exc) {
+            voxelshape = VoxelShapes.fullCube();
+        }
+        voxelshape.forEachBox((minX, minY, minZ, maxX, maxY, maxZ) -> {
+            double xDist = Math.min(1, maxX - minX);
+            double yDist = Math.min(1, maxY - minY);
+            double zDist = Math.min(1, maxZ - minZ);
+            double i = Math.max(2, MathHelper.ceil(xDist / 0.25D));
+            double j = Math.max(2, MathHelper.ceil(yDist / 0.25D));
+            double k = Math.max(2, MathHelper.ceil(zDist / 0.25D));
 
-            for (int l = 0; l < i; ++l) {
-                for (int i1 = 0; i1 < j; ++i1) {
-                    for (int j1 = 0; j1 < k; ++j1) {
-                        double d4 = ((double)l + 0.5D) / (double)i;
-                        double d5 = ((double)i1 + 0.5D) / (double)j;
-                        double d6 = ((double)j1 + 0.5D) / (double)k;
-                        double d7 = d4 * d1 + p_199284_3_;
-                        double d8 = d5 * d2 + p_199284_5_;
-                        double d9 = d6 * d3 + p_199284_7_;
-                        mgr.addEffect((new DiggingParticle(world,
+            for (int xx = 0; xx < i; ++xx) {
+                for (int yy = 0; yy < j; ++yy) {
+                    for (int zz = 0; zz < k; ++zz) {
+
+                        double d4 = (xx + 0.5D) / i;
+                        double d5 = (yy + 0.5D) / j;
+                        double d6 = (zz + 0.5D) / k;
+                        double d7 = d4 * xDist + minX;
+                        double d8 = d5 * yDist + minY;
+                        double d9 = d6 * zDist + minZ;
+
+                        DiggingParticle p = (new DiggingParticle(world,
                                 pos.getX() + d7, pos.getY() + d8, pos.getZ() + d9,
                                 d4 - 0.5D, d5 - 0.5D, d6 - 0.5D,
-                                state)).setBlockPos(pos));
+                                particleState));
+                        p.init();
+                        p.setBlockPos(pos);
+                        mgr.addEffect(p);
                     }
                 }
             }

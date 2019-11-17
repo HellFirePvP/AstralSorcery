@@ -28,11 +28,11 @@ import java.util.List;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RenderTileAltar
+ * Class: RenderAltar
  * Created by HellFirePvP
  * Date: 28.09.2019 / 22:05
  */
-public class RenderTileAltar extends CustomTileEntityRenderer<TileAltar> {
+public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
 
     @Override
     public void render(TileAltar altar, double x, double y, double z, float pTicks, int destroyStage) {

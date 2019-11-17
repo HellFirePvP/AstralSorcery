@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,7 +44,7 @@ import javax.annotation.Nullable;
  */
 public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomItemBlock {
 
-    private static final VoxelShape RELAY = VoxelShapes.create(2D / 16D, 0, 2D / 16D, 14D / 16D, 2D / 16D, 14D / 16D);
+    private static final VoxelShape RELAY = Block.makeCuboidShape(2, 0, 2, 14, 2, 14);
 
     public BlockSpectralRelay() {
         super(PropertiesGlass.coatedGlass()

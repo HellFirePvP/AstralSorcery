@@ -621,6 +621,7 @@
   "block.astralsorcery.altar_constellation": "Celestial Altar",
   "block.astralsorcery.altar_radiance": "Iridescent Altar",
   "block.astralsorcery.altar_brilliance": "Altar",
+  "block.astralsorcery.attunement_altar": "Attunement Altar",
   "block.astralsorcery.rock_collector_crystal": "Collector Crystal",
   "block.astralsorcery.celestial_collector_crystal": "Celestial Collector Crystal",
   "block.astralsorcery.chalice": "Containment Chalice",
@@ -633,7 +634,6 @@
 
   "__comment": "",
 
-  "block.astralsorcery.blockattunementaltar": "Attunement Altar",
   "block.astralsorcery.blockworldilluminator": "Cave Illuminator",
   "block.astralsorcery.blockmachine.telescope": "Telescope",
   "block.astralsorcery.blocktreebeacon": "Tree Beacon",

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.structure.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.*;
 import net.minecraft.tileentity.TileEntityType;
 
@@ -24,6 +25,7 @@ public class TileEntityTypesAS {
 
     public static TileEntityType<TileSpectralRelay> SPECTRAL_RELAY;
     public static TileEntityType<TileAltar> ALTAR;
+    public static TileEntityType<TileAttunementAltar> ATTUNEMENT_ALTAR;
     public static TileEntityType<TileCelestialCrystals> CELESTIAL_CRYSTAL_CLUSTER;
     public static TileEntityType<TileChalice> CHALICE;
     public static TileEntityType<TileCollectorCrystal> COLLECTOR_CRYSTAL;
