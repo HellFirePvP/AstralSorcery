@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -131,7 +132,7 @@ public class NBTHelper {
     }
 
     @Nullable
-    public static <T extends Comparable<T>> IBlockState getBlockStateFromTag(NBTTagCompound cmp) {
+    public static IBlockState getBlockStateFromTag(NBTTagCompound cmp) {
         return getBlockStateFromTag(cmp, null);
     }
 
@@ -160,10 +161,14 @@ public class NBTHelper {
         return state;
     }
 
+    public static void setAsSubTag(NBTTagCompound compound, String tag, Consumer<NBTTagCompound> applyFct) {
+        NBTTagCompound newTag = new NBTTagCompound();
+        applyFct.accept(newTag);
+        compound.setTag(tag, newTag);
+    }
+
     public static void setStack(NBTTagCompound compound, String tag, ItemStack stack) {
-        NBTTagCompound stackCompound = new NBTTagCompound();
-        stack.writeToNBT(stackCompound);
-        compound.setTag(tag, stackCompound);
+        setAsSubTag(compound, tag, stack::writeToNBT);
     }
 
     public static void removeUUID(NBTTagCompound compound, String key) {

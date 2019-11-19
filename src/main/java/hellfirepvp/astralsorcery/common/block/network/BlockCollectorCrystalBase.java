@@ -197,13 +197,13 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if(placer == null || !(placer instanceof EntityPlayer)) return;
+        if(!(placer instanceof EntityPlayer)) return;
         TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
         if(te == null) return;
 
         IWeakConstellation c = ItemCollectorCrystal.getConstellation(stack);
         if(c != null) {
-            te.onPlace(c, ItemCollectorCrystal.getTrait(stack), CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
+            te.onPlace(c, ItemCollectorCrystal.getTrait(stack), CrystalProperties.getCrystalProperties(stack), placer.getUniqueID(), ItemCollectorCrystal.getType(stack));
         }
     }
 

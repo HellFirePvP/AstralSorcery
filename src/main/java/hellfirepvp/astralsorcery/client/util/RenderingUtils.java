@@ -154,6 +154,10 @@ public class RenderingUtils {
         return cube;
     }
 
+    public static float getCurrentRenderPartialTicks() {
+        return Minecraft.getMinecraft().isGamePaused() ? 0 : Minecraft.getMinecraft().getRenderPartialTicks();
+    }
+
     public static void renderBlockSafelyWithOptionalColor(IBlockAccess world, BlockPos offset, IBlockState state, BufferBuilder vb, int color) {
         if (color == -1) {
             renderBlockSafely(world, offset, state, vb);
@@ -535,8 +539,9 @@ public class RenderingUtils {
         GlStateManager.disableTexture2D();
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         GlStateManager.enableBlend();
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        //GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.ADDITIVE_ALPHA.applyStateManager();
+        Blending.ADDITIVE_ALPHA.apply();
         GlStateManager.disableAlpha();
         GlStateManager.depthMask(false);
         GlStateManager.pushMatrix();

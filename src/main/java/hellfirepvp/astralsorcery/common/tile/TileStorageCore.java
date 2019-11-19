@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.tile.storage.IStorageNetworkTile;
 import hellfirepvp.astralsorcery.common.tile.storage.StorageCache;
 import hellfirepvp.astralsorcery.common.tile.storage.StorageKey;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -130,9 +131,7 @@ public class TileStorageCore extends TileEntityTick implements IStorageNetworkTi
     public void writeSaveNBT(NBTTagCompound compound) {
         super.writeSaveNBT(compound);
 
-        NBTTagCompound tag = new NBTTagCompound();
-        this.storageCache.writeToNBT(tag);
-        compound.setTag("storage", tag);
+        NBTHelper.setAsSubTag(compound, "storage", this.storageCache::writeToNBT);
     }
 
 }

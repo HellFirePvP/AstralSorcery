@@ -161,6 +161,7 @@ public abstract class AbstractPerk {
     /**
      * Clean up and remove the perk from that single player.
      * Data in the dataStorage is filled with the data set in onUnlockPerkServer
+     * Called after the perk is already removed from the player
      */
     public void onRemovePerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
 

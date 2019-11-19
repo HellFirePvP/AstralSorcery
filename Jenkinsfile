@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('Prepare Build') {
       steps {
-        sh '''cp -a /var/lib/jenkins/buildMetadata/AstralSorcery/. .
+        sh '''cp -a /var/lib/jenkins/buildMetadata/AstralSorcery-1.12/. .
 rm -rf AS-Example.zs perkMapDraft.pdn README.html README.md AstralSorcery'''
       }
     }

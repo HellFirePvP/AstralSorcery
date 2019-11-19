@@ -101,7 +101,6 @@ public class ItemCrystalPickaxe extends ItemCrystalToolBase {
         if(m != Material.ROCK && m != Material.ANVIL && m != Material.IRON && m != Material.PISTON) {
             str /= this.efficiency;
         }
-        System.out.println("" + str + state.getBlock().getRegistryName().toString());
         return str;
     }
 

@@ -24,7 +24,7 @@ public interface BlockStructureObserver {
 
     // oldState's block will be *this* block's instance!
     default boolean removeWithNewState(IBlockAccess world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-        return true;
+        return oldState != newState;
     }
 
 }

@@ -27,7 +27,7 @@ import net.minecraft.potion.PotionEffect;
 public class EnchantmentNightVision extends EnchantmentPlayerWornTick {
 
     public EnchantmentNightVision() {
-        super("as.nightvision", Rarity.VERY_RARE, EnumEnchantmentType.ARMOR, EntityEquipmentSlot.HEAD);
+        super("as.nightvision", Rarity.VERY_RARE, EnumEnchantmentType.ARMOR_HEAD, EntityEquipmentSlot.HEAD);
     }
 
     @Override

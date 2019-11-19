@@ -73,9 +73,11 @@ public class BlockDiscoverer {
             for (int zz = -cubeSize; zz <= cubeSize; zz++) {
                 for (int yy = -cubeSize; yy <= cubeSize; yy++) {
                     offset.setPos(origin.getX() + xx, origin.getY() + yy, origin.getZ() + zz);
-                    IBlockState atState = world.getBlockState(offset);
-                    if(match.isStateValid(world, offset, atState)) {
-                        out.addBlock(new BlockPos(offset), atState);
+                    if (world.isBlockLoaded(offset)) {
+                        IBlockState atState = world.getBlockState(offset);
+                        if(match.isStateValid(world, offset, atState)) {
+                            out.addBlock(new BlockPos(offset), atState);
+                        }
                     }
                 }
             }

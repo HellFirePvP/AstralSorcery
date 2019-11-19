@@ -259,7 +259,6 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
                 }
             }
         }
-
     }
 
     @Override

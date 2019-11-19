@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonScheduler;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.DataLightConnections;
@@ -54,14 +56,16 @@ public class TransmissionChain {
         this.sourceNode = sourceNode;
     }
 
-    public static void threadedBuildTransmissionChain(TransmissionWorldHandler handle, IIndependentStarlightSource source, WorldNetworkHandler netHandler, BlockPos sourcePos) {
+    public static void threadedBuildTransmissionChain(World world, TransmissionWorldHandler handle, IIndependentStarlightSource source, WorldNetworkHandler netHandler, BlockPos sourcePos) {
         Thread tr = new Thread(() -> {
             TransmissionChain chain = buildFromSource(netHandler, sourcePos);
-            handle.threadTransmissionChainCallback(chain, source, netHandler, sourcePos);
-            DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
-            connections.updateNewConnectionsThreaded(netHandler.getWorld().provider.getDimension(), chain.getFoundConnections());
-            DataLightBlockEndpoints endpoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
-            endpoints.updateNewEndpoints(netHandler.getWorld().provider.getDimension(), chain.resolvedNormalBlockPositions);
+            handle.threadTransmissionChainCallback(world, chain, source, netHandler, sourcePos);
+            AstralSorcery.proxy.scheduleDelayed(() -> {
+                DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
+                connections.updateNewConnectionsThreaded(netHandler.getWorld().provider.getDimension(), chain.getFoundConnections());
+                DataLightBlockEndpoints endpoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
+                endpoints.updateNewEndpoints(netHandler.getWorld().provider.getDimension(), chain.resolvedNormalBlockPositions);
+            });
         });
         tr.setName("TrChainCalculationThread");
         tr.start();

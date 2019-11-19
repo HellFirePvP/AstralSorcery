@@ -6,29 +6,23 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.log;
+package hellfirepvp.astralsorcery.common.base.patreon.base;
 
-import hellfirepvp.astralsorcery.common.util.Provider;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: LogCategory
+ * Class: PtEffectCorruptedCelestialCrystal
  * Created by HellFirePvP
- * Date: 06.04.2019 / 13:19
+ * Date: 19.04.2019 / 11:14
  */
-public enum LogCategory {
+public class PtEffectCorruptedCelestialCrystal extends PatreonEffectHelper.PatreonEffect {
 
-    PERKS,
-    STRUCTURE_MATCH,
-    TREE_BEACON;
-
-    public void info(Provider<String> message) {
-        LogUtil.info(this, message);
-    }
-
-    public void warn(Provider<String> message) {
-        LogUtil.warn(this, message);
+    public PtEffectCorruptedCelestialCrystal(UUID sessionEffectId, PatreonEffectHelper.FlareColor chosenColor) {
+        super(sessionEffectId, chosenColor);
     }
 
 }

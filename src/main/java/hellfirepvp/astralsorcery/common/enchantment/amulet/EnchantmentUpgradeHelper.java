@@ -272,7 +272,7 @@ public class EnchantmentUpgradeHelper {
         UUID plUUID = getWornPlayerUUID(anyTool);
         if(plUUID == null) return null;
         EntityPlayer player;
-        if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+        if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             player = resolvePlayerClient(plUUID);
         } else {
             MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();

@@ -117,9 +117,7 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
             pers.removeTag("targetPos");
             pers.removeTag("targetDim");
         } else {
-            NBTTagCompound posTag = new NBTTagCompound();
-            NBTHelper.writeBlockPosToNBT(pos, posTag);
-            pers.setTag("targetPos", posTag);
+            NBTHelper.setAsSubTag(pers, "targetPos", tag -> NBTHelper.writeBlockPosToNBT(pos, tag));
             pers.setInteger("targetDim", dim);
         }
     }

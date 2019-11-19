@@ -107,7 +107,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 if (rand.nextFloat() < pel.getChanceSpawnPick()) {
                     BlockPos at = pl.getPosition().up();
                     EntitySpectralTool esp = new EntitySpectralTool(
-                            event.getWorld(), at, new ItemStack(Items.DIAMOND_PICKAXE),
+                            event.getWorld(),
+                            at,
+                            new ItemStack(Items.DIAMOND_PICKAXE),
                             EntitySpectralTool.ToolTask.createPickaxeTask());
                     event.getWorld().spawnEntity(esp);
                     return;
@@ -119,7 +121,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 if (rand.nextFloat() < pel.getChanceSpawnAxe()) {
                     BlockPos at = pl.getPosition().up();
                     EntitySpectralTool esp = new EntitySpectralTool(
-                            event.getWorld(), at, new ItemStack(Items.DIAMOND_AXE),
+                            event.getWorld(),
+                            at,
+                            new ItemStack(Items.DIAMOND_AXE),
                             EntitySpectralTool.ToolTask.createLogTask());
                     event.getWorld().spawnEntity(esp);
                 }
@@ -247,7 +251,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
             if (pel != null && !attacker.getHeldItemMainhand().isEmpty() && rand.nextFloat() < pel.getChanceSpawnSword()) {
                 BlockPos at = attacker.getPosition().up();
                 EntitySpectralTool esp = new EntitySpectralTool(
-                        attacker.getEntityWorld(), at, new ItemStack(Items.DIAMOND_SWORD),
+                        attacker.getEntityWorld(),
+                        at,
+                        new ItemStack(Items.DIAMOND_SWORD),
                         EntitySpectralTool.ToolTask.createAttackTask());
                 attacker.getEntityWorld().spawnEntity(esp);
             }

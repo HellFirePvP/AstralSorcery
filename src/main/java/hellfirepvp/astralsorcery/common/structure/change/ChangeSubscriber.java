@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import hellfirepvp.astralsorcery.common.structure.ObservableArea;
 import hellfirepvp.astralsorcery.common.structure.StructureMatcher;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -74,9 +75,14 @@ public class ChangeSubscriber<T extends StructureMatcher> {
             return isMatching;
         }
 
-        this.isMatching = this.matcher.notifyChange(world, this.requester, this.changeSet);
+        Boolean matchedBefore = this.isMatching;
+        LogCategory.STRUCTURE_MATCH.info(() -> "Updating matching for " + this.getRequester() + " with " + this.changeSet.getChanges().size() + " changes.");
+
+        this.isMatching = this.matcher.notifyChange(world, this.getRequester(), this.changeSet);
         this.changeSet.reset();
         WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_MATCH).markDirty();
+
+        LogCategory.STRUCTURE_MATCH.info(() -> "Updating matched-state from " + (matchedBefore == null ? "<unmatched>" : matchedBefore.toString()) + " to " + this.isMatching);
 
         return this.isMatching;
     }
@@ -95,13 +101,8 @@ public class ChangeSubscriber<T extends StructureMatcher> {
     }
 
     public void writeToNBT(NBTTagCompound tag) {
-        NBTTagCompound areaData = new NBTTagCompound();
-        this.matcher.writeToNBT(areaData);
-        tag.setTag("matchData", areaData);
-
-        NBTTagCompound changeData = new NBTTagCompound();
-        this.changeSet.writeToNBT(changeData);
-        tag.setTag("changeData", changeData);
+        NBTHelper.setAsSubTag(tag, "matchData", this.matcher::writeToNBT);
+        NBTHelper.setAsSubTag(tag, "changeData", this.changeSet::writeToNBT);
 
         NBTHelper.writeBlockPosToNBT(this.requester, tag);
         if (this.isMatching != null) {

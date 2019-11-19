@@ -23,6 +23,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityFlyHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,6 +52,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
 
     private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntitySpectralTool.class, DataSerializers.ITEM_STACK);
     private AIToolTask aiTask;
+    private BlockPos originalStartPosition;
     private int ticksUntilDeath = 0;
 
     public EntitySpectralTool(World worldIn) {
@@ -64,6 +66,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
         setSize(0.6F, 0.8F);
         setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.5, spawnPos.getZ() + 0.5);
         setItem(tool);
+        this.originalStartPosition = spawnPos;
         this.aiTask.taskTarget = task;
         this.ticksUntilDeath = 100 + rand.nextInt(40);
         this.moveHelper = new EntityFlyHelper(this);
@@ -81,6 +84,20 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
     }
 
     @Override
+    public void applyEntityCollision(Entity entityIn) {
+        if(entityIn != null && !(entityIn instanceof EntityPlayer || entityIn instanceof EntitySpectralTool)) {
+            super.applyEntityCollision(entityIn);
+        }
+    }
+
+    @Override
+    protected void collideWithEntity(Entity entityIn) {
+        if(entityIn != null && !(entityIn instanceof EntityPlayer || entityIn instanceof EntitySpectralTool)) {
+            super.collideWithEntity(entityIn);
+        }
+    }
+
+    @Override
     protected void entityInit() {
         super.entityInit();
 
@@ -94,7 +111,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
 
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.5);
+        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.85);
     }
 
     @Override
@@ -168,6 +185,9 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
             this.aiTask.taskTarget = new ToolTask(ToolTask.Type.BREAK_BLOCK);
         }
         this.ticksUntilDeath = compound.getInteger("AS_ToolDeathTicks");
+        this.originalStartPosition = compound.hasKey("AS_StartPosition") ?
+                NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("AS_StartPosition")) :
+                this.getPosition();
     }
 
     @Override
@@ -181,6 +201,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
         }
         compound.setInteger("AS_ToolTask", task);
         compound.setInteger("AS_ToolDeathTicks", this.ticksUntilDeath);
+        NBTHelper.setAsSubTag(compound, "AS_StartPosition", subTag -> NBTHelper.writeBlockPosToNBT(this.originalStartPosition, subTag));
     }
 
     public static class ToolTask {
@@ -404,6 +425,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                 case BREAK_BLOCK:
                     BlockPos validStateStone = MiscUtils.searchAreaForFirst(parentEntity.world, parentEntity.getPosition(), 8, Vector3.atEntityCorner(this.parentEntity),
                             (world, at, state) -> world.getTileEntity(at) == null &&
+                            at.getY() >= parentEntity.originalStartPosition.getY() &&
                             !state.getBlock().isAir(state, world, at) &&
                             state.getBlockHardness(world, at) != -1 &&
                             state.getBlockHardness(world, at) <= 10 &&

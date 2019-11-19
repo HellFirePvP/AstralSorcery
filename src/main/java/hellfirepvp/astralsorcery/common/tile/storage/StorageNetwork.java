@@ -78,9 +78,7 @@ public class StorageNetwork {
 
         CoreArea master;
         if ((master = getMaster()) != null) {
-            NBTTagCompound masterTag = new NBTTagCompound();
-            NBTHelper.writeBlockPosToNBT(master.getPos(), masterTag);
-            tag.setTag("master", masterTag);
+            NBTHelper.setAsSubTag(tag, "master", nbt -> NBTHelper.writeBlockPosToNBT(master.getPos(), nbt));
         }
     }
 

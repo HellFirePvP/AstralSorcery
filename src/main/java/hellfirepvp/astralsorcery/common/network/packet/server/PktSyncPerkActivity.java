@@ -60,43 +60,23 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
     @Override
     public void fromBytes(ByteBuf buf) {
         this.unlock = buf.readBoolean();
-        int tt = buf.readInt();
-        if (tt == -1) {
-            this.type = null;
-        } else {
-            this.type = Type.values()[MathHelper.clamp(tt, 0, Type.values().length - 1)];
+        this.type = ByteBufUtils.readOptional(buf, (byteBuf) -> ByteBufUtils.readEnumValue(byteBuf, Type.class));
+        ResourceLocation key = ByteBufUtils.readOptional(buf, ByteBufUtils::readResourceLocation);
+        if (key != null) {
+            this.perk = PerkTree.PERK_TREE.getPerk(key);
         }
-        if (buf.readBoolean()) {
-            this.perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(ByteBufUtils.readString(buf)));
-        }
-        if (buf.readBoolean()) {
-            this.newData = ByteBufUtils.readNBTTag(buf);
-        }
-        if (buf.readBoolean()) {
-            this.oldData = ByteBufUtils.readNBTTag(buf);
-        }
+        this.newData = ByteBufUtils.readOptional(buf, ByteBufUtils::readNBTTag);
+        this.oldData = ByteBufUtils.readOptional(buf, ByteBufUtils::readNBTTag);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeBoolean(this.unlock);
-        if (this.type == null) {
-            buf.writeInt(-1);
-        } else {
-            buf.writeInt(this.type.ordinal());
-        }
-        buf.writeBoolean(this.perk != null);
-        if (this.perk != null) {
-            ByteBufUtils.writeString(buf, this.perk.getRegistryName().toString());
-        }
-        buf.writeBoolean(this.newData != null);
-        if (newData != null) {
-            ByteBufUtils.writeNBTTag(buf, newData);
-        }
-        buf.writeBoolean(this.oldData != null);
-        if (oldData != null) {
-            ByteBufUtils.writeNBTTag(buf, oldData);
-        }
+        ByteBufUtils.writeOptional(buf, this.type, ByteBufUtils::writeEnumValue);
+        ByteBufUtils.writeOptional(buf, this.perk,
+                ((byteBuf, perk) -> ByteBufUtils.writeResourceLocation(byteBuf, perk.getRegistryName())));
+        ByteBufUtils.writeOptional(buf, this.newData, ByteBufUtils::writeNBTTag);
+        ByteBufUtils.writeOptional(buf, this.oldData, ByteBufUtils::writeNBTTag);
     }
 
     @Override

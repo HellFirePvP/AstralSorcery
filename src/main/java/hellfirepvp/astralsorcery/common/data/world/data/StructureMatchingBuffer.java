@@ -146,9 +146,7 @@ public class StructureMatchingBuffer extends CachedWorldData {
             NBTHelper.writeBlockPosToNBT(sub.getRequester(), subscriber);
             subscriber.setString("identifier", sub.getMatcher().getRegistryName().toString());
 
-            NBTTagCompound subscriberData = new NBTTagCompound();
-            sub.writeToNBT(subscriberData);
-            subscriber.setTag("matchData", subscriberData);
+            NBTHelper.setAsSubTag(subscriber, "matchData", sub::writeToNBT);
 
             subscriberList.appendTag(subscriber);
         }

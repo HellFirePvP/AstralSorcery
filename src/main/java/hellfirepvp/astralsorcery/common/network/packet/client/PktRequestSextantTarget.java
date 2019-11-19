@@ -32,6 +32,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -62,27 +68,15 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
     @Override
     public void fromBytes(ByteBuf buf) {
         this.regNameExpected = ByteBufUtils.readString(buf);
-        if (buf.readBoolean()) {
-            this.resultPos = ByteBufUtils.readPos(buf);
-        }
-        if (buf.readBoolean()) {
-            this.resultDim = buf.readInt();
-        }
+        this.resultPos = ByteBufUtils.readOptional(buf, ByteBufUtils::readPos);
+        this.resultDim = ByteBufUtils.readOptional(buf, ByteBuf::readInt);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeString(buf, this.regNameExpected);
-
-        buf.writeBoolean(resultPos != null);
-        if (resultPos != null) {
-            ByteBufUtils.writePos(buf, resultPos);
-        }
-
-        buf.writeBoolean(resultDim != null);
-        if (resultDim != null) {
-            buf.writeInt(resultDim);
-        }
+        ByteBufUtils.writeOptional(buf, resultPos, ByteBufUtils::writePos);
+        ByteBufUtils.writeOptional(buf, resultDim, ByteBuf::writeInt);
     }
 
     @Override
@@ -98,15 +92,23 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
                     if (heldStack == null) {
                         return;
                     }
-                    Thread tr = new Thread(() -> {
-                        //May be null; In that case, tell that to the client as well so it won't ask the server any longer.
-                        BlockPos result = to.searchFor((WorldServer) player.world, player.getPosition());
 
-                        PktRequestSextantTarget target = new PktRequestSextantTarget(to, result, player.world.provider.getDimension());
-                        PacketChannel.CHANNEL.sendTo(target, player);
-                    });
-                    tr.setName("SextantTargetFinder ThreadId=" + tr.getId());
-                    tr.start();
+                    ExecutorService exec = Executors.newSingleThreadExecutor();
+                    try {
+                        exec.invokeAll(Collections.singletonList(
+                                () -> {
+                                    BlockPos result = to.searchFor((WorldServer) player.world, player.getPosition());
+
+                                    PktRequestSextantTarget target = new PktRequestSextantTarget(to, result, player.world.provider.getDimension());
+                                    PacketChannel.CHANNEL.sendTo(target, player);
+                                    return null;
+                                }
+                        ), 5, TimeUnit.SECONDS);
+                    } catch (InterruptedException ignored) {
+                        // No-Op, drop the task if it fails.
+                    } finally {
+                        exec.shutdown();
+                    }
                 }
             });
         } else {

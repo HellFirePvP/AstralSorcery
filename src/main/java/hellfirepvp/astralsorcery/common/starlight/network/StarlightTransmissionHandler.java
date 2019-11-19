@@ -43,10 +43,10 @@ public class StarlightTransmissionHandler implements ITickHandler {
         int dimId = world.provider.getDimension();
         TransmissionWorldHandler handle = worldHandlers.get(dimId);
         if(handle == null) {
-            handle = new TransmissionWorldHandler(world);
+            handle = new TransmissionWorldHandler(dimId);
             worldHandlers.put(dimId, handle);
         }
-        handle.tick();
+        handle.tick(world);
     }
 
     public void serverCleanHandlers() {

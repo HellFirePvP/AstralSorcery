@@ -17,6 +17,8 @@ import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectC
 import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectCorruptedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
@@ -34,9 +36,11 @@ import hellfirepvp.astralsorcery.common.structure.match.StructureMatcherPatternA
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,6 +58,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -64,6 +69,7 @@ import java.util.Random;
  */
 public class TileCollectorCrystal extends TileSourceBase implements IMultiblockDependantTile, IStructureAreaOfInfluence {
 
+    private static final UUID DUMMY_UUID = UUID.fromString("0cd550cc-8341-4b96-8d1e-d4a12deb8ca3");
     public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
             new BlockPos(-1, -4, -1),
             new BlockPos( 0, -4, -1),
@@ -80,7 +86,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
     private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private BlockCollectorCrystalBase.CollectorCrystalType type;
     private CrystalProperties usedCrystalProperties;
-    private boolean playerMade;
+    private UUID playerRef;
     private boolean multiBlockPresent = false;
     private IWeakConstellation associatedType;
     private IMinorConstellation associatedTrait;
@@ -103,15 +109,17 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
                             getRequiredStructure());
                 }
                 boolean found = this.structureMatch.matches(getWorld());
-                boolean update = this.multiBlockPresent != found;
-                if (update) {
+                if (found != this.multiBlockPresent) {
+                    LogCategory.STRUCTURE_MATCH.info(() ->
+                            "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                                    " (" + this.multiBlockPresent + " -> " + found + ")");
                     this.multiBlockPresent = found;
                     setEnhanced(found);
                     markForUpdate();
                 }
             }
         } else {
-            if(!doesSeeSky()) {
+            if (!doesSeeSky()) {
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                         getPos().getX() + 0.5,
                         getPos().getY() + 0.5,
@@ -120,11 +128,16 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
                          (rand.nextFloat() * 0.04F) * (rand.nextBoolean() ? 1 : -1),
                          (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
                 p.scale(0.2F).setMaxAge(35);
+                Color c = Color.WHITE;
                 if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
-                    p.setColor(Color.CYAN);
-                } else {
-                    p.setColor(Color.WHITE);
+                    if (playerRef != null &&
+                            MiscUtils.contains(PatreonEffectHelper.getPatreonEffects(Side.CLIENT, playerRef), pe -> pe instanceof PtEffectCorruptedCelestialCrystal)) {
+                        c = Color.RED;
+                    } else {
+                        c = Color.CYAN;
+                    }
                 }
+                p.setColor(c);
             } else {
                 if(isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL && associatedType != null) {
                     playEnhancedEffects();
@@ -158,7 +171,14 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
             p.motion((rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
                      (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
                      (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.25F).setColor(Color.CYAN).setMaxAge(25);
+            p.scale(0.25F).setMaxAge(25);
+
+            Color c = Color.CYAN;
+            if (playerRef != null &&
+                    MiscUtils.contains(PatreonEffectHelper.getPatreonEffects(Side.CLIENT, playerRef), pe -> pe instanceof PtEffectCorruptedCelestialCrystal)) {
+                c = Color.RED;
+            }
+            p.setColor(c);
         }
 
         for (int i = 0; i < orbitals.length; i++) {
@@ -239,7 +259,11 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
     }
 
     public boolean isPlayerMade() {
-        return playerMade;
+        return playerRef != null;
+    }
+
+    public UUID getPlayerReference() {
+        return playerRef;
     }
 
     public CrystalProperties getCrystalProperties() {
@@ -254,10 +278,10 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
         return associatedTrait;
     }
 
-    public void onPlace(IWeakConstellation constellation, @Nullable IMinorConstellation trait, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public void onPlace(IWeakConstellation constellation, @Nullable IMinorConstellation trait, CrystalProperties properties, @Nullable UUID player, BlockCollectorCrystalBase.CollectorCrystalType type) {
         this.associatedType = constellation;
         this.associatedTrait = trait;
-        this.playerMade = player;
+        this.playerRef = player;
         this.usedCrystalProperties = properties;
         this.type = type;
 
@@ -270,7 +294,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
             this.multiBlockPresent = enhanced;
             WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(world);
             IIndependentStarlightSource source = handle.getSourceAt(getPos());
-            if(source != null && source instanceof IndependentCrystalSource) {
+            if (source instanceof IndependentCrystalSource) {
                 ((IndependentCrystalSource) source).setEnhanced(enhanced);
                 handle.markDirty();
             }
@@ -296,14 +320,20 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
 
     @Override
     public boolean hasBeenLinked() {
-        return !playerMade;
+        return playerRef == null;
     }
 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        this.playerMade = compound.getBoolean("player");
+        if (compound.hasUniqueId("playerRef")) {
+            this.playerRef = compound.getUniqueId("playerRef");
+        } else if (compound.hasKey("player") && compound.getBoolean("player")) {
+            this.playerRef = DUMMY_UUID; //Legacy data conversion..
+        } else {
+            this.playerRef = null;
+        }
         this.associatedType = (IWeakConstellation) IConstellation.readFromNBT(compound);
         this.associatedTrait = (IMinorConstellation) IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "trait");
         this.usedCrystalProperties = CrystalProperties.readFromNBT(compound);
@@ -315,7 +345,9 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        compound.setBoolean("player", playerMade);
+        if (this.playerRef != null) {
+            compound.setUniqueId("playerRef", this.playerRef);
+        }
         if (associatedType != null) {
             associatedType.writeToNBT(compound);
         }

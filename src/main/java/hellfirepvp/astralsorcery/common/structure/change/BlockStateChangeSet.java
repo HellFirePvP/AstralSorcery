@@ -53,7 +53,7 @@ public final class BlockStateChangeSet {
         return this.changes.isEmpty();
     }
 
-    public Iterable<StateChange> getChanges() {
+    public Collection<StateChange> getChanges() {
         return Collections.unmodifiableCollection(this.changes.values());
     }
 

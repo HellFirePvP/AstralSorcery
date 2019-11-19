@@ -20,7 +20,6 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
-import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.lib.AdvancementTriggers;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -41,7 +40,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -287,9 +285,7 @@ public class ResearchManager {
 
         Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
         for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
-            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
-            progress.removePerk(perkEntry.getKey());
-            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
+            dropPerk(progress, player, Side.SERVER, perkEntry.getKey(), perkEntry.getValue());
         }
 
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
@@ -300,7 +296,7 @@ public class ResearchManager {
         if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
             NBTTagCompound data = new NBTTagCompound();
             root.onUnlockPerkServer(player, progress, data);
-            progress.setPerkData(root, data);
+            progress.applyPerk(root, data);
             PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, root, false);
             PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(root, true), (EntityPlayerMP) player);
         }
@@ -318,7 +314,7 @@ public class ResearchManager {
         if (!progress.hasPerkEffect(perk)) return false;
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
-        progress.setPerkData(perk, newData);
+        progress.applyPerk(perk, newData);
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
 
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, prevoiusData, newData), (EntityPlayerMP) player);
@@ -336,7 +332,7 @@ public class ResearchManager {
 
         NBTTagCompound data = new NBTTagCompound();
         perk.onUnlockPerkServer(player, progress, data);
-        progress.setPerkData(perk, data);
+        progress.applyPerk(perk, data);
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
@@ -419,7 +415,7 @@ public class ResearchManager {
 
         NBTTagCompound data = new NBTTagCompound();
         perk.onUnlockPerkServer(player, progress, data);
-        progress.setPerkData(perk, data);
+        progress.applyPerk(perk, data);
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
@@ -437,9 +433,7 @@ public class ResearchManager {
         if (data == null) {
             return false;
         }
-        perk.onRemovePerkServer(player, progress, data);
-        progress.removePerk(perk);
-        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
+        dropPerk(progress, player, Side.SERVER, perk, data);
 
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, false), (EntityPlayerMP) player);
 
@@ -454,9 +448,7 @@ public class ResearchManager {
 
         Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
         for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
-            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
-            progress.removePerk(perkEntry.getKey());
-            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
+            dropPerk(progress, player, Side.SERVER, perkEntry.getKey(), perkEntry.getValue());
         }
 
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
@@ -464,6 +456,13 @@ public class ResearchManager {
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
         return true;
+    }
+
+    private static void dropPerk(PlayerProgress progress, EntityPlayer player, Side side, AbstractPerk perk, NBTTagCompound data) {
+        progress.removePerk(perk);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, side, perk, true);
+        perk.onRemovePerkServer(player, progress, data);
+        progress.removePerkData(perk);
     }
 
     public static boolean setTomeReceived(EntityPlayer player) {
@@ -663,8 +662,9 @@ public class ResearchManager {
     }
 
     private static File getPlayerDirectory() {
-        File wDir = DimensionManager.getWorld(0).getSaveHandler().getWorldDirectory();
-        File pDir = new File(wDir, "playerdata");
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        File worldDir = new File(server.anvilFile, server.getFolderName());
+        File pDir = new File(worldDir, "playerdata");
         if (!pDir.exists()) {
             pDir.mkdirs();
         }

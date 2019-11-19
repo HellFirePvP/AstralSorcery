@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -25,6 +26,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.charset.Charset;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,6 +37,21 @@ import java.util.UUID;
  * Date: 07.05.2016 / 01:13
  */
 public class ByteBufUtils {
+
+    @Nullable
+    public static <T> T readOptional(ByteBuf buf, Function<ByteBuf, T> readFct) {
+        if (buf.readBoolean()) {
+            return readFct.apply(buf);
+        }
+        return null;
+    }
+
+    public static <T> void writeOptional(ByteBuf buf, @Nullable T object, BiConsumer<ByteBuf, T> applyFct) {
+        buf.writeBoolean(object != null);
+        if (object != null) {
+            applyFct.accept(buf, object);
+        }
+    }
 
     public static void writeUUID(ByteBuf buf, UUID uuid) {
         buf.writeLong(uuid.getMostSignificantBits());
@@ -68,6 +86,25 @@ public class ByteBufUtils {
         byte[] strBytes = new byte[length];
         buf.readBytes(strBytes, 0, length);
         return new String(strBytes, Charset.forName("UTF-8"));
+    }
+
+    public static void writeResourceLocation(ByteBuf buf, ResourceLocation key) {
+        writeString(buf, key.toString());
+    }
+
+    public static ResourceLocation readResourceLocation(ByteBuf buf) {
+        return new ResourceLocation(readString(buf));
+    }
+
+    public static <T extends Enum<T>> void writeEnumValue(ByteBuf buf, T value) {
+        buf.writeInt(value.ordinal());
+    }
+
+    public static <T extends Enum<T>> T readEnumValue(ByteBuf buf, Class<T> enumClazz) {
+        if (!enumClazz.isEnum()) {
+            throw new IllegalArgumentException("Passed class is not an enum!");
+        }
+        return enumClazz.getEnumConstants()[buf.readInt()];
     }
 
     public static void writePos(ByteBuf buf, BlockPos pos) {

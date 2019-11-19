@@ -73,6 +73,8 @@ public class ItemCape extends ItemArmor implements ItemDynamicColor {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if(this.isInCreativeTab(tab)) {
+            items.add(new ItemStack(this));
+
             ItemStack stack;
             for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
                 if(c instanceof IMinorConstellation) continue;

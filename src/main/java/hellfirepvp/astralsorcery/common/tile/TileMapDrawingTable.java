@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -291,13 +292,8 @@ public class TileMapDrawingTable extends TileSkybound {
         super.writeNetNBT(compound);
         compound.setInteger("runTick", this.runTick);
 
-        NBTTagCompound tag = new NBTTagCompound();
-        this.slotIn.writeToNBT(tag);
-        compound.setTag("slotIn", tag);
-
-        tag = new NBTTagCompound();
-        this.slotGlassLens.writeToNBT(tag);
-        compound.setTag("slotGlassLens", tag);
+        NBTHelper.setAsSubTag(compound, "slotIn", this.slotIn::writeToNBT);
+        NBTHelper.setAsSubTag(compound, "slotGlassLens", this.slotGlassLens::writeToNBT);
     }
 
     @Override

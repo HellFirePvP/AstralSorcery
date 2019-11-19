@@ -111,7 +111,7 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
         if(findNewPosition(world, pos, modified)) changed = true;
         if(findNewPosition(world, pos, modified)) changed = true;
 
-        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(searchRange));
+        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(modified.getSize()));
         for (EntityLivingBase entity : entities) {
             if(!entity.isDead) {
                 if(modified.isCorrupted()) {

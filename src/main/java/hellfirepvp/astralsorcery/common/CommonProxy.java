@@ -103,6 +103,8 @@ import java.util.UUID;
  */
 public class CommonProxy implements IGuiHandler {
 
+    private static final UUID AS_FAKEPLAYER_UUID = UUID.fromString("5ae0411c-9069-4d79-8892-bc112c4b3a08");
+
     public static DamageSource dmgSourceBleed   = DamageSourceUtil.newType("as.bleed").setDamageBypassesArmor();
     public static DamageSource dmgSourceStellar = DamageSourceUtil.newType("as.stellar").setDamageBypassesArmor().setMagicDamage();
     public static DamageSource dmgSourceReflect = DamageSourceUtil.newType("thorns");
@@ -343,7 +345,7 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public FakePlayer getASFakePlayerServer(WorldServer world) {
-        return FakePlayerFactory.get(world, new GameProfile(UUID.randomUUID(), "AS-FakePlayer"));
+        return FakePlayerFactory.get(world, new GameProfile(AS_FAKEPLAYER_UUID, "AS-FakePlayer"));
     }
 
     public void registerVariantName(Item item, String name) {}

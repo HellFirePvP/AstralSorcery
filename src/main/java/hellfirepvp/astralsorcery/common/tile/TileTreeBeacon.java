@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.NonDuplicateCappedWeightedList;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
@@ -148,11 +149,15 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
 
     private boolean searchForTrees(List<WorldBlockPos> possibleTreePositions) {
         for(WorldBlockPos possibleSapling : possibleTreePositions) {
+            LogCategory.TREE_BEACON.info(() -> "TreeBeacon at " + getPos() + " attempt to capture tree at " + possibleSapling);
+            LogCategory.TREE_BEACON.info(() -> "Existing captured snapshots: " + world.capturedBlockSnapshots.size());
+
             IBlockState state = possibleSapling.getStateAt();
             Block b = state.getBlock();
             if(b instanceof IGrowable) { //If it's an IGrowable, chances are it just grows to a tree when we call .grow on it often enough
                 if(!TreeCaptureHelper.oneTimeCatches.contains(possibleSapling)) TreeCaptureHelper.oneTimeCatches.add(possibleSapling);
 
+                LogCategory.TREE_BEACON.info(() -> "Attempt IGrowable growth at " + possibleSapling);
                 int tries = 8;
                 world.captureBlockSnapshots = true;
                 do {
@@ -169,6 +174,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
             } else if(b.getTickRandomly()) { //If it's not an IGrowable it might just grow into a tree with tons of block updates.
                 if(!TreeCaptureHelper.oneTimeCatches.contains(possibleSapling)) TreeCaptureHelper.oneTimeCatches.add(possibleSapling);
 
+                LogCategory.TREE_BEACON.info(() -> "Attempt Block tickrandomly growth at " + possibleSapling);
                 int ticksToExecute = 250;
                 world.captureBlockSnapshots = true;
                 do {
@@ -193,6 +199,10 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
             if (!TreeCaptureHelper.oneTimeCatches.remove(saplingPos) &&
                     !world.capturedBlockSnapshots.isEmpty() &&
                     world.capturedBlockSnapshots.size() > 2) { //I guess then something grew after all?
+                LogCategory.TREE_BEACON.info(() -> "TreeBeacon at " + getPos() + " captured " + world.capturedBlockSnapshots.size() + " snapshots.");
+                LogCategory.TREE_BEACON.info(() -> "Accepts new blocks? " +
+                        (treePositions.getSize() + world.capturedBlockSnapshots.size()) + " <= " + ConfigEntryTreeBeacon.maxCount);
+
                 if (treePositions.getSize() + world.capturedBlockSnapshots.size() <= ConfigEntryTreeBeacon.maxCount) {
                     for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
                         IBlockState setBlock = snapshot.getCurrentBlock();
@@ -202,6 +212,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                             continue;
                         }
                         if (!setBlock.getBlock().equals(BlocksAS.blockFakeTree) && !setBlock.getBlock().equals(Blocks.DIRT) && !setBlock.getBlock().equals(Blocks.GRASS)) {
+                            LogCategory.TREE_BEACON.info(() -> "Change blockstate at " + snapshot.getPos());
                             if (!world.setBlockState(snapshot.getPos(), BlocksAS.blockFakeTree.getDefaultState())) {
                                 continue;
                             }
@@ -222,7 +233,10 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                                 }
                             }
                             WRItemObject<BlockPos> element = new WRItemObject<>(isTreeBlock ? 4 : 1, snapshot.getPos());
-                            if (treePositions.offerElement(element)) ret = true;
+                            if (treePositions.offerElement(element)) {
+                                LogCategory.TREE_BEACON.info(() -> "TreeBeacon at " + getPos() + " captured new position: " + snapshot.getPos());
+                                ret = true;
+                            }
                         }
                     }
                 } else {

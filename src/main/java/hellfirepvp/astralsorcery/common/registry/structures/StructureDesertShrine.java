@@ -283,7 +283,7 @@ public class StructureDesertShrine extends StructureBlockArray {
                     ((TileCollectorCrystal) te).onPlace(
                             MiscUtils.getRandomEntry(ConstellationRegistry.getMajorConstellations(), STATIC_RAND),
                             null,
-                            CrystalProperties.getMaxRockProperties(), false,
+                            CrystalProperties.getMaxRockProperties(), null,
                             BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL);
                 }
             }

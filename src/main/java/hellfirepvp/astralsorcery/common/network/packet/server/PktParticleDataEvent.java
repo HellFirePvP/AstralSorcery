@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -52,7 +53,7 @@ public class PktParticleDataEvent implements IMessage, IMessageHandler<PktPartic
         this.xCoord = buf.readDouble();
         this.yCoord = buf.readDouble();
         this.zCoord = buf.readDouble();
-        this.effectType = ParticleType.values()[MathHelper.clamp(buf.readInt(), 0, ParticleType.values().length)];
+        this.effectType = ByteBufUtils.readEnumValue(buf, ParticleType.class);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class PktParticleDataEvent implements IMessage, IMessageHandler<PktPartic
         buf.writeDouble(this.xCoord);
         buf.writeDouble(this.yCoord);
         buf.writeDouble(this.zCoord);
-        buf.writeDouble(this.effectType.ordinal());
+        ByteBufUtils.writeEnumValue(buf, this.effectType);
     }
 
     @Override

@@ -39,6 +39,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.PatternMatchHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import net.minecraft.entity.player.EntityPlayer;
@@ -232,8 +233,10 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
         }
         boolean found = this.structureMatch.matches(getWorld());
-        boolean update = this.hasMultiblock != found;
-        if (update) {
+        if (found != this.hasMultiblock) {
+            LogCategory.STRUCTURE_MATCH.info(() ->
+                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                            " (" + this.hasMultiblock + " -> " + found + ")");
             this.hasMultiblock = found;
             markForUpdate();
         }

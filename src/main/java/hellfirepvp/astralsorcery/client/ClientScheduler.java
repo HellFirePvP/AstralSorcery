@@ -61,6 +61,10 @@ public class ClientScheduler implements ITickHandler {
         return clientTick;
     }
 
+    public static long getIndependentClientTick() {
+        return System.currentTimeMillis() / 50;
+    }
+
     @Override
     public EnumSet<TickEvent.Type> getHandledTypes() {
         return EnumSet.of(TickEvent.Type.CLIENT);

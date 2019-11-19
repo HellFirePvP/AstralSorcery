@@ -27,7 +27,9 @@ public enum PatreonEffectType {
     CRYSTAL_FOOTPRINTS(new CrystalFootprintProvider()),
     BLOCK_RING(new BlockRingProvider()),
 
-    FLOATING_HALO(new SpecificPatreonHaloEffectProvider());
+    CORRUPTED_CRYSTAL(new CorruptedCelestialCrystalProvider()),
+    FLOATING_HALO(new SpecificPatreonHaloEffectProvider()),
+    CELESTIAL_WINGS(new CelestialWingsProvider());
 
     private final EffectProvider<?> provider;
 

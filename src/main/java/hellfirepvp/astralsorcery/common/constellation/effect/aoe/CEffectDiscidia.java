@@ -24,8 +24,10 @@ import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -47,13 +49,14 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.11.2016 / 22:30
  */
-public class CEffectDiscidia extends CEffectEntityCollect<EntityMob> {
+public class CEffectDiscidia extends CEffectEntityCollect<EntityLiving> {
 
     public static double potencyMultiplier = 1;
     public static float damage = 6.5F;
 
     public CEffectDiscidia(@Nullable ILocatable origin) {
-        super(origin, Constellations.discidia, "discidia", 16D, EntityMob.class, (entity) -> !entity.isDead && !(entity instanceof EntityTechnicalAmbient));
+        super(origin, Constellations.discidia, "discidia", 16D, EntityLiving.class,
+                (entity) -> !entity.isDead && !(entity instanceof EntityTechnicalAmbient) && entity instanceof IMob);
     }
 
     @Override
@@ -79,7 +82,7 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityMob> {
         }
         boolean did = false;
         float actDamageDealt = percStrength * damage;
-        List<EntityMob> entities = collectEntities(world, pos, modified);
+        List<EntityLiving> entities = collectEntities(world, pos, modified);
         if(!entities.isEmpty()) {
             EntityPlayer owner = getOwningPlayerInWorld(world, pos);
             DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSourceUtil.withEntityDirect(CommonProxy.dmgSourceStellar, owner);
@@ -87,7 +90,7 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityMob> {
                 DamageUtil.attackEntityFrom(owner, CommonProxy.dmgSourceStellar, 1.2F * percStrength);
                 did = true;
             }
-            for (EntityMob entity : entities) {
+            for (EntityLiving entity : entities) {
                 if(modified.isCorrupted()) {
                     entity.heal(actDamageDealt);
                     entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, 2));

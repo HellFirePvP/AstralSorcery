@@ -53,7 +53,7 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
     @Override
     public void fromBytes(ByteBuf buf) {
         this.serverAccept = buf.readBoolean();
-        AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(ByteBufUtils.readString(buf)));
+        AbstractPerk perk = PerkTree.PERK_TREE.getPerk(ByteBufUtils.readResourceLocation(buf));
         if(perk != null) {
             this.perk = perk;
         }
@@ -62,7 +62,7 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeBoolean(serverAccept);
-        ByteBufUtils.writeString(buf, perk.getRegistryName().toString());
+        ByteBufUtils.writeResourceLocation(buf, perk.getRegistryName());
     }
 
     @Override

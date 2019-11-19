@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
 import hellfirepvp.astralsorcery.common.structure.BlockStructureObserver;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -49,13 +50,16 @@ public class StructureIntegrityObserver {
         List<ChangeSubscriber<?>> subscribers = buf.getSubscribers(ch);
         for (ChangeSubscriber<?> subscriber : subscribers) {
             if (subscriber.observes(pos)) {
+                LogCategory.STRUCTURE_MATCH.info(() -> "Adding change at " + pos + " for " + subscriber.getRequester());
                 subscriber.addChange(pos, oldS, newS);
                 buf.markDirty();
             }
         }
 
         if (oldS.getBlock() instanceof BlockStructureObserver) {
+            LogCategory.STRUCTURE_MATCH.info(() -> "Testing removal for subscriber at " + pos);
             if (((BlockStructureObserver) oldS.getBlock()).removeWithNewState(world, pos, oldS, newS)) {
+                LogCategory.STRUCTURE_MATCH.info(() -> "Removing subscriber at " + pos);
                 buf.removeSubscriber(pos);
             }
         }
