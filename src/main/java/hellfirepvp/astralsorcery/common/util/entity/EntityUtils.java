@@ -13,19 +13,32 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandom;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameterSets;
+import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -148,6 +161,34 @@ public class EntityUtils {
             }
         }
         return true;
+    }
+
+    @Nonnull
+    public static List<ItemStack> generateLoot(LivingEntity entity, Random rand, DamageSource srcDeath, @Nullable LivingEntity lastAttacker) {
+        MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+        ServerWorld sw = (ServerWorld) entity.getEntityWorld();
+
+        if (!sw.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+            return Collections.emptyList();
+        }
+
+        ResourceLocation lootTableKey = entity.func_213346_cF();
+        LootTable table = srv.getLootTableManager().getLootTableFromLocation(lootTableKey);
+        LootContext.Builder builder = new LootContext.Builder(sw)
+                .withRandom(rand)
+                .withParameter(LootParameters.THIS_ENTITY, entity)
+                .withParameter(LootParameters.POSITION, new BlockPos(entity))
+                .withParameter(LootParameters.DAMAGE_SOURCE, srcDeath)
+                .withNullableParameter(LootParameters.KILLER_ENTITY, srcDeath.getTrueSource())
+                .withNullableParameter(LootParameters.DIRECT_KILLER_ENTITY, srcDeath.getImmediateSource());
+        if (lastAttacker != null) {
+            if (lastAttacker instanceof PlayerEntity) {
+                builder.withParameter(LootParameters.LAST_DAMAGE_PLAYER, (PlayerEntity) lastAttacker)
+                        .withLuck(((PlayerEntity) lastAttacker).getLuck());
+            }
+        }
+
+        return table.generate(builder.build(LootParameterSets.ENTITY));
     }
 
     public static Predicate<? super Entity> selectEntities(Class<? extends Entity>... entities) {

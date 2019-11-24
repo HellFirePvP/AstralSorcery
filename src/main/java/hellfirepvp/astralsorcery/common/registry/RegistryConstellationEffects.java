@@ -12,9 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectArmara;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectVicio;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
 import hellfirepvp.astralsorcery.common.constellation.effect.provider.*;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
@@ -35,9 +33,12 @@ public class RegistryConstellationEffects {
     private RegistryConstellationEffects() {}
 
     public static void init() {
-        AEVITAS = register(makeProvider(ConstellationsAS.aevitas, CEffectAevitas::new));
-        ARMARA  = register(makeProvider(ConstellationsAS.armara,  CEffectArmara::new));
-        VICIO   = register(makeProvider(ConstellationsAS.vicio,   CEffectVicio::new));
+        AEVITAS  = register(makeProvider(ConstellationsAS.aevitas,  CEffectAevitas::new));
+        ARMARA   = register(makeProvider(ConstellationsAS.armara,   CEffectArmara::new));
+        BOOTES   = register(makeProvider(ConstellationsAS.bootes,   CEffectBootes::new));
+        DISCIDIA = register(makeProvider(ConstellationsAS.discidia, CEffectDiscidia::new));
+        EVORSIO  = register(makeProvider(ConstellationsAS.evorsio,  CEffectEvorsio::new));
+        VICIO    = register(makeProvider(ConstellationsAS.vicio,    CEffectVicio::new));
     }
 
     private static ConstellationEffectProvider makeProvider(IWeakConstellation cst, Function<ILocatable, ? extends ConstellationEffect> effectProvider) {
