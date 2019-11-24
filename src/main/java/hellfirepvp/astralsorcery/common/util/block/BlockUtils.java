@@ -52,6 +52,7 @@ public class BlockUtils {
         LootContext.Builder builder = new LootContext.Builder(world)
                 .withParameter(LootParameters.POSITION, pos)
                 .withParameter(LootParameters.BLOCK_STATE, (state = world.getBlockState(pos)))
+                .withParameter(LootParameters.TOOL, ItemStack.EMPTY)
                 .withNullableParameter(LootParameters.BLOCK_ENTITY, world.getTileEntity(pos))
                 .withRandom(rand)
                 .withLuck(harvestFortune);

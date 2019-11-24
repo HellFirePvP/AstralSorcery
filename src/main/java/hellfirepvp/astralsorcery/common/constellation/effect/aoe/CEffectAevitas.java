@@ -38,6 +38,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
@@ -53,7 +54,7 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
 
     public static AevitasConfig CONFIG = new AevitasConfig();
 
-    public CEffectAevitas(@Nullable ILocatable origin) {
+    public CEffectAevitas(@Nonnull ILocatable origin) {
         super(origin, ConstellationsAS.aevitas, CONFIG.maxAmount.get(), (world, pos, state) -> CropHelper.wrapPlant(world, pos) != null);
     }
 
@@ -105,8 +106,8 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
             }
         }
 
-        if(findNewPosition(world, pos, properties)) changed = true;
-        if(findNewPosition(world, pos, properties)) changed = true;
+        if(this.findNewPosition(world, pos, properties) != null) changed = true;
+        if(this.findNewPosition(world, pos, properties) != null) changed = true;
 
         int amplifier = CONFIG.potionAmplifier.get();
         List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, BOX.offset(pos).grow(properties.getSize()));
@@ -139,8 +140,8 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
     }
 
     @Override
-    public ConstellationEffectProperties createProperties(int mirrors) {
-        return new ConstellationEffectProperties(CONFIG.range.get() + mirrors * CONFIG.rangePerLens.get());
+    public Config getConfig() {
+        return CONFIG;
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
+import hellfirepvp.astralsorcery.common.util.block.iterator.BlockPositionGenerator;
+import hellfirepvp.astralsorcery.common.util.block.iterator.BlockRandomPositionGenerator;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +41,15 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
 
     protected final BlockPredicate verifier;
     protected final int maxAmount;
+    private final BlockPositionGenerator positionStrategy;
     private List<T> elements = new ArrayList<>();
 
-    protected CEffectAbstractList(@Nullable ILocatable origin, IWeakConstellation cst, int maxAmount, BlockPredicate verifier) {
+    protected CEffectAbstractList(@Nonnull ILocatable origin, @Nonnull IWeakConstellation cst, int maxAmount, BlockPredicate verifier) {
         super(origin, cst);
         this.maxAmount = maxAmount;
         this.verifier = verifier;
+
+        this.positionStrategy = this.createPositionStrategy();
     }
 
     @Nullable
@@ -51,6 +57,11 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
 
     @Nullable
     public abstract T createElement(World world, BlockPos pos);
+
+    @Nonnull
+    protected BlockPositionGenerator createPositionStrategy() {
+        return new BlockRandomPositionGenerator();
+    }
 
     public int getCount() {
         return this.elements.size();
@@ -76,24 +87,25 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         return null;
     }
 
-    public boolean findNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
+    @Nullable
+    public T findNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
         if (this.getCount() >= this.maxAmount) {
-            return false;
+            return null;
         }
-        double range = prop.getSize();
-        double rX = -range + rand.nextFloat() * (2 * range + 1);
-        double rY = -range + rand.nextFloat() * (2 * range + 1);
-        double rZ = -range + rand.nextFloat() * (2 * range + 1);
-        BlockPos at = pos.add(rX, rY, rZ);
+        BlockPos at = this.positionStrategy.generateNextPosition(pos, prop.getSize());
         if (MiscUtils.isChunkLoaded(world, at) && this.verifier.test(world, at, world.getBlockState(at)) && !this.hasElement(at)) {
             T newElement = this.createElement(world, at);
             if (newElement != null) {
                 this.elements.add(newElement);
-                return true;
+                return newElement;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    public boolean removeElement(T entry) {
+        return removeElement(entry.getPos());
     }
 
     public boolean removeElement(BlockPos pos) {

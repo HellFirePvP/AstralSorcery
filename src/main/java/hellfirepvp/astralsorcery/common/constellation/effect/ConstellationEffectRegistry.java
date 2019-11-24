@@ -9,9 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectArmara;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectVicio;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
@@ -31,12 +29,12 @@ public class ConstellationEffectRegistry {
 
     public static final String LUCERNA_SKIP_ENTITY = "skip.spawn.deny";
 
-    private static Map<IWeakConstellation, ConstellationEffectProvider> clientEffectProviders = new HashMap<>();
-    private static Map<IWeakConstellation, ConstellationEffect> clientEffectInstances = new HashMap<>();
-
     public static void addConfigEntries(ServerConfig config) {
         config.addConfigEntry(CEffectAevitas.CONFIG);
         config.addConfigEntry(CEffectArmara.CONFIG);
+        config.addConfigEntry(CEffectBootes.CONFIG);
+        config.addConfigEntry(CEffectDiscidia.CONFIG);
+        config.addConfigEntry(CEffectEvorsio.CONFIG);
         config.addConfigEntry(CEffectVicio.CONFIG);
     }
 
@@ -47,26 +45,5 @@ public class ConstellationEffectRegistry {
             return effect.createEffect(origin);
         }
         return null;
-    }
-
-    public static void createClientInstance(ConstellationEffectProvider provider) {
-        clientEffectProviders.put(provider.getConstellation(), provider);
-    }
-
-    public static void clearClient() {
-        clientEffectInstances.clear();
-    }
-
-    @Nullable
-    public static ConstellationEffect getClientEffect(IWeakConstellation cst) {
-        ConstellationEffect effect = clientEffectInstances.get(cst);
-        if (effect == null) {
-            ConstellationEffectProvider prov = clientEffectProviders.get(cst);
-            if (prov != null) {
-                effect = prov.createEffect(null);
-                clientEffectInstances.put(cst, effect);
-            }
-        }
-        return effect;
     }
 }

@@ -30,6 +30,7 @@ import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPede
 import hellfirepvp.astralsorcery.common.util.EffectIncrementer;
 import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -80,6 +81,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
 
     //client data
     private EffectIncrementer effectWork = new EffectIncrementer(64);
+    private ConstellationEffect clientEffectInstance = null;
 
     public TileRitualPedestal() {
         super(TileEntityTypesAS.RITUAL_PEDESTAL);
@@ -190,11 +192,16 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                 }
             }
 
-            ConstellationEffect clientEffect = ConstellationEffectRegistry.getClientEffect(ritualConstellation);
-            if (clientEffect != null) {
-                clientEffect.playClientEffect(getWorld(), getPos(), this, percRunning, this.isFullyEnhanced());
+            if (this.clientEffectInstance != null && !this.clientEffectInstance.getConstellation().equals(ritualConstellation)) {
+                this.clientEffectInstance = null;
+            }
+            if (this.clientEffectInstance == null) {
+                this.clientEffectInstance = ConstellationEffectRegistry.createInstance(ILocatable.fromPos(getPos()), ritualConstellation);
+            }
+            if (this.clientEffectInstance != null) {
+                clientEffectInstance.playClientEffect(getWorld(), getPos(), this, percRunning, this.isFullyEnhanced());
                 if (this.ritualLinkTo != null) {
-                    clientEffect.playClientEffect(getWorld(), this.ritualLinkTo, this, percRunning, this.isFullyEnhanced());
+                    clientEffectInstance.playClientEffect(getWorld(), this.ritualLinkTo, this, percRunning, this.isFullyEnhanced());
                 }
             }
 

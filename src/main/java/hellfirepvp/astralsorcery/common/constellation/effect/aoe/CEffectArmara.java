@@ -42,6 +42,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
@@ -59,7 +60,7 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
 
     private int rememberedTimeout = 0;
 
-    public CEffectArmara(@Nullable ILocatable origin) {
+    public CEffectArmara(@Nonnull ILocatable origin) {
         super(origin, ConstellationsAS.armara, LivingEntity.class, (e) -> e.isAlive() && TechnicalEntityRegistry.INSTANCE.canAffect(e));
     }
 
@@ -172,8 +173,8 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
     }
 
     @Override
-    public ConstellationEffectProperties createProperties(int mirrors) {
-        return new ConstellationEffectProperties(CONFIG.range.get() + mirrors * CONFIG.rangePerLens.get());
+    public Config getConfig() {
+        return CONFIG;
     }
 
     @Override

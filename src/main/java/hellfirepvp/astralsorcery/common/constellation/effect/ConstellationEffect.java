@@ -26,6 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -44,7 +45,7 @@ public abstract class ConstellationEffect {
     private final IWeakConstellation cst;
     private final ILocatable pos;
 
-    protected ConstellationEffect(@Nullable ILocatable origin, IWeakConstellation cst) {
+    protected ConstellationEffect(@Nonnull ILocatable origin, @Nonnull IWeakConstellation cst) {
         this.cst = cst;
         this.pos = origin;
     }
@@ -65,10 +66,20 @@ public abstract class ConstellationEffect {
         return te instanceof TileRitualPedestal ? (TileRitualPedestal) te : null;
     }
 
-    public abstract ConstellationEffectProperties createProperties(int mirrors);
+    public ConstellationEffectProperties createProperties(int mirrors) {
+        return new ConstellationEffectProperties(getConfig().range.get() + mirrors * getConfig().rangePerLens.get());
+    }
 
+    public abstract Config getConfig();
+
+    @Nonnull
     public IWeakConstellation getConstellation() {
         return cst;
+    }
+
+    @Nonnull
+    public ILocatable getPos() {
+        return pos;
     }
 
     public void clearCache() {}
@@ -88,11 +99,13 @@ public abstract class ConstellationEffect {
 
     public static abstract class Config extends ConfigEntry {
 
-        private final double defaultRange;
-        private final double defaultRangePerLens;
+        private final boolean defaultEnabled = true;
+        private final double  defaultRange;
+        private final double  defaultRangePerLens;
 
-        public ForgeConfigSpec.DoubleValue range;
-        public ForgeConfigSpec.DoubleValue rangePerLens;
+        public ForgeConfigSpec.BooleanValue enabled;
+        public ForgeConfigSpec.DoubleValue  range;
+        public ForgeConfigSpec.DoubleValue  rangePerLens;
 
         public Config(String constellationName, double defaultRange, double defaultRangePerLens) {
             super(String.format("constellation.effect.%s", constellationName));
@@ -102,6 +115,10 @@ public abstract class ConstellationEffect {
 
         @Override
         public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+            this.enabled = cfgBuilder
+                    .comment("Set this to false to disable this ritual effect")
+                    .translation(translationKey("enabled"))
+                    .define("enabled", this.defaultEnabled);
             this.range = cfgBuilder
                     .comment("Defines the radius (in blocks) in which the ritual will allow the players to fly in.")
                     .translation(translationKey("range"))

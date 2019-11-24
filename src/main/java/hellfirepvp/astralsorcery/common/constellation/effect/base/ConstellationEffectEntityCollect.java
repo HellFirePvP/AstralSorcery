@@ -34,7 +34,7 @@ public abstract class ConstellationEffectEntityCollect<T extends Entity> extends
     private final Class<T> entityClazz;
     private final Predicate<T> filter;
 
-    protected ConstellationEffectEntityCollect(@Nullable ILocatable origin, IWeakConstellation cst, Class<T> entityClazz, Predicate<T> filter) {
+    protected ConstellationEffectEntityCollect(@Nonnull ILocatable origin, @Nonnull IWeakConstellation cst, Class<T> entityClazz, Predicate<T> filter) {
         super(origin, cst);
         this.filter = filter;
         this.entityClazz = entityClazz;

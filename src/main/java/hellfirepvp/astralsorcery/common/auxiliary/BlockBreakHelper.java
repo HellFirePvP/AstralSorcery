@@ -85,10 +85,6 @@ public class BlockBreakHelper {
 
         private int idleTimeout;
 
-        public BreakEntry(IWorld world) {
-            this.world = world;
-        }
-
         public BreakEntry(@Nonnull Float value, IWorld world, BlockPos at, BlockState expectedToBreak) {
             this.breakProgress = value;
             this.world = world;

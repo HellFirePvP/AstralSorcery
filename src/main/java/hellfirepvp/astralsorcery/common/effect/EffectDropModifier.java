@@ -12,27 +12,17 @@ import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.resource.query.SpriteQuery;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.EffectsAS;
+import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.LogicalSidedProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,36 +61,18 @@ public class EffectDropModifier extends EffectCustomTexture {
         }
 
         if (le.isPotionActive(EffectsAS.EFFECT_DROP_MODIFIER)) {
-            ServerWorld sw = (ServerWorld) le.getEntityWorld();
             DamageSource src = event.getSource();
-            MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
 
             int amplifier = le.removeActivePotionEffect(EffectsAS.EFFECT_DROP_MODIFIER).getAmplifier();
             if (amplifier == 0) {
                 event.getDrops().clear(); //Special case to void all items
             } else {
-                ResourceLocation ltName = le.func_213346_cF();
-                LootTable loottable = srv.getLootTableManager().getLootTableFromLocation(ltName);
-                LootContext.Builder builder = new LootContext.Builder(sw)
-                        .withRandom(rand)
-                        .withParameter(LootParameters.THIS_ENTITY, le)
-                        .withParameter(LootParameters.POSITION, new BlockPos(le))
-                        .withParameter(LootParameters.DAMAGE_SOURCE, src)
-                        .withNullableParameter(LootParameters.KILLER_ENTITY, src.getTrueSource())
-                        .withNullableParameter(LootParameters.DIRECT_KILLER_ENTITY, src.getImmediateSource());
-                if (event.isRecentlyHit()) {
-                    LivingEntity attack = le.getAttackingEntity();
-                    if (attack instanceof PlayerEntity) {
-                        builder.withParameter(LootParameters.LAST_DAMAGE_PLAYER, (PlayerEntity) attack)
-                                .withLuck(((PlayerEntity) attack).getLuck());
-                    }
-                }
                 for (int i = 0; i < amplifier; i++) {
-                    for (ItemStack stack : loottable.generate(builder.build(LootParameterSets.ENTITY))) {
+                    List<ItemStack> loot = EntityUtils.generateLoot(le, rand, src, event.isRecentlyHit() ? le.getAttackingEntity() : null);
+                    for (ItemStack stack : loot) {
                         if (stack.isEmpty()) {
                             continue;
                         }
-
                         event.getDrops().add(le.entityDropItem(stack));
                     }
                 }

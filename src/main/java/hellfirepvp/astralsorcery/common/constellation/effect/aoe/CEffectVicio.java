@@ -33,6 +33,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -47,13 +48,8 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
 
     public static VicioConfig CONFIG = new VicioConfig();
 
-    public CEffectVicio(@Nullable ILocatable origin) {
+    public CEffectVicio(@Nonnull ILocatable origin) {
         super(origin, ConstellationsAS.vicio);
-    }
-
-    @Override
-    public ConstellationEffectProperties createProperties(int mirrors) {
-        return new ConstellationEffectProperties(CONFIG.range.get() + mirrors * CONFIG.rangePerLens.get());
     }
 
     @Override
@@ -122,6 +118,11 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
             }
         }
         return foundPlayer;
+    }
+
+    @Override
+    public Config getConfig() {
+        return CONFIG;
     }
 
     private static class VicioConfig extends Config {
