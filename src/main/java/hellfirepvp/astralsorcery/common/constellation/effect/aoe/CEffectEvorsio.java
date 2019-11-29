@@ -48,16 +48,22 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
     private boolean isLinkedRitual = false;
 
     public CEffectEvorsio(@Nonnull ILocatable origin) {
-        super(origin, ConstellationsAS.evorsio, 1, (world, pos, state) -> true);
+        super(origin, ConstellationsAS.evorsio, 1, (world, pos, state) -> {
+            float hardness = state.getBlockHardness(world, pos);
+            if (hardness < 0 || hardness >= 75) {
+                return false;
+            }
+            return !state.isAir(world, pos);
+        });
     }
 
     @Nonnull
     @Override
     protected BlockPositionGenerator createPositionStrategy() {
         BlockPositionGenerator gen = new BlockSpherePositionGenerator();
-        gen.andFilter(pos -> !BlockPos.ZERO.equals(pos));
+        gen.andFilter(pos -> !BlockPos.ZERO.equals(pos.subtract(this.getPos().getLocationPos())));
         //Shift down as the ritual originates from a ritual link position.
-        gen.andFilter(pos -> this.isLinkedRitual || !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.add(0, -5, 0)));
+        gen.andFilter(pos -> this.isLinkedRitual || !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.subtract(this.getPos().getLocationPos())));
         return gen;
     }
 
@@ -80,24 +86,16 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
 
     @Override
     public boolean playEffect(World world, BlockPos pos, ConstellationEffectProperties properties, @Nullable IMinorConstellation trait) {
-        if (!MiscUtils.isChunkLoaded(world, pos)) {
+        if (!MiscUtils.isChunkLoaded(world, pos) || !(world instanceof ServerWorld)) {
             return false;
         }
         this.isLinkedRitual = MiscUtils.getTileAt(world, pos, TileRitualLink.class, true) != null;
 
-        TileRitualPedestal pedestal = MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, true);
-        if (pedestal != null) {
-            //Move offset higher.
-            pos.add(0, 5, 0);
-        }
-
         if (!properties.isCorrupted()) {
-            if (world instanceof ServerWorld) {
-                ListEntries.PosEntry newEntry = this.findNewPosition(world, pos, properties);
-                if (newEntry != null) {
-                    BlockPos at = newEntry.getPos();
-                    this.removeElement(at);
-
+            ListEntries.PosEntry newEntry = this.findNewPosition(world, pos, properties);
+            if (newEntry != null) {
+                BlockPos at = newEntry.getPos();
+                if (this.removeElement(at)) {
                     BlockDropCaptureAssist.startCapturing();
                     try {
                         BlockUtils.breakBlockWithoutPlayer((ServerWorld) world, at, world.getBlockState(at),

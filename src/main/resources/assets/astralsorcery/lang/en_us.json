@@ -507,7 +507,6 @@
   "item.itemchargedcrystalsword": "Infused Crystal Sword",
   "item.itemcoloredlens": "Colored Lens",
   "item.itemhandtelescope": "Looking Glass",
-  "item.itemilluminationwand": "Illumination Wand",
   "item.itemarchitectwand": "Formation Wand",
   "item.itemexchangewand": "Conversion Wand",
   "item.itemgrapplewand": "Impulsion Wand",
@@ -559,6 +558,7 @@
   "item.astralsorcery.knowledge_share": "Scroll of Written Expertise",
   "item.astralsorcery.wand": "Resonating Wand",
   "item.astralsorcery.linking_tool": "Linking Tool",
+  "item.astralsorcery.illumination_wand": "Illumination Wand",
 
   "item.astralsorcery.illumination_powder": "Illumination Powder",
   "item.astralsorcery.nocturnal_powder": "Nocturnal Powder",

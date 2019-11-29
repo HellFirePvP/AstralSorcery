@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
+import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.inventory.IInventory;
@@ -26,7 +28,9 @@ import net.minecraftforge.fml.common.thread.EffectiveSide;
 import org.apache.commons.lang3.ObjectUtils;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,6 +40,16 @@ import java.util.Optional;
  * Date: 11.10.2019 / 22:30
  */
 public class RecipeHelper {
+
+    @Nullable
+    public static SimpleAltarRecipe findAltarRecipeResult(Predicate<ItemStack> match) {
+        for (SimpleAltarRecipe recipe : RecipeTypesAS.TYPE_ALTAR.getAllRecipes()) {
+            if (match.test(recipe.getOutputForRender(Collections.emptyList()))) {
+                return recipe;
+            }
+        }
+        return null;
+    }
 
     public static ItemStack findSmeltingResult(World world, ItemStack input) {
         RecipeManager mgr = world.getRecipeManager();

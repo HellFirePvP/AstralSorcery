@@ -109,6 +109,7 @@ public class RegistryBlocks {
         WELL = registerBlock(new BlockWell());
 
         FLARE_LIGHT = registerBlock(new BlockFlareLight());
+        TRANSLUCENT_BLOCK = registerBlock(new BlockTranslucentBlock());
     }
 
     public static void registerFluidBlocks() {

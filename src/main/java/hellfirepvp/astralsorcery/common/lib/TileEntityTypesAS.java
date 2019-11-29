@@ -35,6 +35,7 @@ public class TileEntityTypesAS {
     public static TileEntityType<TilePrism> PRISM;
     public static TileEntityType<TileRitualLink> RITUAL_LINK;
     public static TileEntityType<TileRitualPedestal> RITUAL_PEDESTAL;
+    public static TileEntityType<TileTranslucentBlock> TRANSLUCENT_BLOCK;
     public static TileEntityType<TileWell> WELL;
 
 }

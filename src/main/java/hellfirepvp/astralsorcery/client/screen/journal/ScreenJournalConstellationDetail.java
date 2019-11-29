@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.screen.journal;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.screen.journal.page.RenderPageAltarRecipe;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
@@ -21,11 +22,15 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
+import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.GatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
+import hellfirepvp.astralsorcery.common.util.RecipeHelper;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -276,16 +281,19 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         GlStateManager.enableDepthTest();
         GlStateManager.color4f(1F, 1F, 1F, 1F);
 
-        if (GatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(ResearchHelper.getClientProgress())) {
-            //TODO altar recipe pages
-            //ConstellationPaperRecipe recipe = RecipesAS.paperCraftingRecipes.get(this.constellation);
-            //if (recipe != null) {
-            //    lastFramePage = new JournalPageTraitRecipe(recipe).buildRenderPage();
-            //    GlStateManager.pushMatrix();
-            //    lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
-            //    lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
-            //    GlStateManager.popMatrix();
-            //}
+        if (GatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(ResearchHelper.getClientProgress())) {
+            SimpleAltarRecipe recipe = RecipeHelper.findAltarRecipeResult(stack ->
+                    stack.getItem() instanceof ItemConstellationPaper &&
+                    this.constellation.equals(ItemsAS.CONSTELLATION_PAPER.getConstellation(stack)));
+
+            if (recipe != null) {
+                lastFramePage = new RenderPageAltarRecipe(recipe);
+
+                GlStateManager.pushMatrix();
+                lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
+                lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
+                GlStateManager.popMatrix();
+            }
         }
     }
 

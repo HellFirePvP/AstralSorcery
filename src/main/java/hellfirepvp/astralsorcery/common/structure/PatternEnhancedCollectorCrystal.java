@@ -9,7 +9,9 @@
 package hellfirepvp.astralsorcery.common.structure;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
+import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -37,10 +39,14 @@ public class PatternEnhancedCollectorCrystal extends PatternBlockArray {
         BlockState engraved = BlocksAS.MARBLE_ENGRAVED.getDefaultState();
         BlockState pillar = BlocksAS.MARBLE_PILLAR.getDefaultState();
 
-        //TODO liquid starlight
-        //TODO collector crystal
-
         addBlockCube(raw, -1, -5, -1, 1, -5, 1);
+        addBlockCube(Blocks.AIR.getDefaultState(), 1, 1, 1, -1, -1, -1);
+        for (BlockPos offset : TileCollectorCrystal.OFFSETS_LIQUID_STARLIGHT) {
+            addBlock(BlocksAS.FLUID_LIQUID_STARLIGHT.getDefaultState(), offset.getX(), offset.getY(), offset.getZ());
+        }
+
+        addBlock(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL.getDefaultState(), 0, 0, 0);
+
         addBlock(chiseled, 0, -2, 0);
         addBlock(pillar, 0, -3, 0);
         addBlock(engraved, 0, -4, 0);

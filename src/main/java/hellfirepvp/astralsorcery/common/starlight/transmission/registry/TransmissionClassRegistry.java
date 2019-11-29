@@ -60,7 +60,6 @@ public class TransmissionClassRegistry {
         register(new SimpleTransmissionNode.Provider());
         register(new SimplePrismTransmissionNode.Provider());
         register(new SimpleTransmissionSourceNode.Provider());
-        //init(new SimpleTransmissionReceiver.Provider());
 
         register(new CrystalTransmissionNode.Provider());
         register(new CrystalPrismTransmissionNode.Provider());
@@ -68,9 +67,8 @@ public class TransmissionClassRegistry {
         register(new StarlightReceiverWell.Provider());
         register(new StarlightReceiverRitualPedestal.Provider());
         register(new StarlightReceiverAltar.Provider());
-        //init(new TileStarlightInfuser.StarlightInfuserReceiverProvider());
         //init(new TileTreeBeacon.TreeBeaconReceiverProvider());
-        // TODO altar, infuser, tree beacon
+        // TODO tree beacon
 
         MinecraftForge.EVENT_BUS.post(new StarlightNetworkEvent.TransmissionRegister(eventInstance));
     }

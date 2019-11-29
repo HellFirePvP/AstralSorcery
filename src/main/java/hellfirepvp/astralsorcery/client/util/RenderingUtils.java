@@ -304,10 +304,10 @@ public class RenderingUtils {
     }
 
     public static void renderSimpleBlockModel(BlockState state, BufferBuilder buf) {
-        renderSimpleBlockModel(state, buf, BlockPos.ZERO, null);
+        renderSimpleBlockModel(state, buf, BlockPos.ZERO, null, false);
     }
 
-    public static void renderSimpleBlockModel(BlockState state, BufferBuilder buf, BlockPos pos, @Nullable TileEntity te) {
+    public static void renderSimpleBlockModel(BlockState state, BufferBuilder buf, BlockPos pos, @Nullable TileEntity te, boolean checkRenderSide) {
         if (plainRenderWorld == null) {
             plainRenderWorld = new EmptyRenderWorld(Biomes.PLAINS);
         }
@@ -323,8 +323,27 @@ public class RenderingUtils {
         }
         if (brt == BlockRenderType.MODEL) {
             IBakedModel model = brd.getModelForState(state);
-            brd.getBlockModelRenderer().renderModel(plainRenderWorld, model, state, pos, buf, false, rand, state.getPositionRandom(pos), data);
+            brd.getBlockModelRenderer().renderModel(plainRenderWorld, model, state, pos, buf, checkRenderSide, rand, state.getPositionRandom(pos), data);
         }
     }
 
+    public static void renderSimpleBlockModelCurrentWorld(BlockState state, BufferBuilder buf) {
+        renderSimpleBlockModelCurrentWorld(state, buf, BlockPos.ZERO, null, false);
+    }
+
+    public static void renderSimpleBlockModelCurrentWorld(BlockState state, BufferBuilder buf, BlockPos pos, @Nullable TileEntity te, boolean checkRenderSide) {
+        BlockRenderType brt = state.getRenderType();
+        if (brt == BlockRenderType.INVISIBLE) {
+            return;
+        }
+        BlockRendererDispatcher brd = Minecraft.getInstance().getBlockRendererDispatcher();
+        IModelData data = EmptyModelData.INSTANCE;
+        if (te != null) {
+            data = te.getModelData();
+        }
+        if (brt == BlockRenderType.MODEL) {
+            IBakedModel model = brd.getModelForState(state);
+            brd.getBlockModelRenderer().renderModel(Minecraft.getInstance().world, model, state, pos, buf, checkRenderSide, rand, state.getPositionRandom(pos), data);
+        }
+    }
 }

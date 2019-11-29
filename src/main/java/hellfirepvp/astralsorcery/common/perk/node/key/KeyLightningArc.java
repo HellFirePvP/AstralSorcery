@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
@@ -201,8 +202,8 @@ public class KeyLightningArc extends KeyPerk {
                         entities.remove(player);
                     }
                     entities.removeAll(visitedEntities);
-                    //TODO entities
-                    //entities.removeIf(e -> e instanceof EntityTechnicalAmbient || e instanceof EntityFlare);
+
+                    entities.removeIf(e -> !TechnicalEntityRegistry.INSTANCE.canAffect(e));
                     entities.removeIf(e -> !MiscUtils.canPlayerAttackServer(player, e));
 
                     if (!entities.isEmpty()) {
