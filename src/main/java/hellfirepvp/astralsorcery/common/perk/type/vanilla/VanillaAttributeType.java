@@ -60,7 +60,6 @@ public abstract class VanillaAttributeType extends PerkAttributeType implements 
             return;
         }
 
-        //TODO 1.14 validate
         //The attributes don't get written/read from bytebuffer on local connection, but ARE in dedicated connections.
         //Remove minecraft's dummy instances in case we're on a dedicated server.
         if (side.isClient()) {

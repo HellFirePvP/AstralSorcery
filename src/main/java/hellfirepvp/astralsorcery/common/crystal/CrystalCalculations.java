@@ -105,14 +105,12 @@ public class CrystalCalculations {
         return (float) calculate(1.0, attributes, ctx);
     }
 
-    // TODO Revision... ?
     // Range: 0.75 - 1.0
     public static float getThroughputMultiplier(CrystalAttributes attributes) {
-        return 1F;
-        //CalculationContext ctx = CalculationContext.Builder.newBuilder()
-        //        .addUsage(USE_LENS_TRANSFER)
-        //        .build();
-        //return MathHelper.clamp((float) calculate(1F, attributes, ctx), 0F, 1F);
+        CalculationContext ctx = CalculationContext.Builder.newBuilder()
+                .addUsage(USE_LENS_TRANSFER)
+                .build();
+        return MathHelper.clamp((float) calculate(1F, attributes, ctx), 0F, 1F);
     }
 
     // Range: 1.0 - 11.56 (Multiplier)

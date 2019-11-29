@@ -299,6 +299,13 @@ public class Vector3 {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 
+    public Vector3 abs() {
+        this.x = Math.abs(this.x);
+        this.y = Math.abs(this.y);
+        this.z = Math.abs(this.z);
+        return this;
+    }
+
     public Vector3 crossProduct(Vector3 o) {
         double newX = this.y * o.z - o.y * this.z;
         double newY = this.z * o.x - o.z * this.x;

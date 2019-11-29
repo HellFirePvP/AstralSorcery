@@ -48,6 +48,7 @@ public class RegistryTileEntities {
         PRISM = registerTile(TilePrism.class, BlocksAS.PRISM);
         RITUAL_LINK = registerTile(TileRitualLink.class, BlocksAS.RITUAL_LINK);
         RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class, BlocksAS.RITUAL_PEDESTAL);
+        TRANSLUCENT_BLOCK = registerTile(TileTranslucentBlock.class, BlocksAS.TRANSLUCENT_BLOCK);
         WELL = registerTile(TileWell.class, BlocksAS.WELL);
     }
 
@@ -60,6 +61,7 @@ public class RegistryTileEntities {
         ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderLens());
         ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderPrism());
         ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileTranslucentBlock.class, new RenderTranslucentBlock());
         ClientRegistry.bindTileEntitySpecialRenderer(TileWell.class, new RenderWell());
     }
 

@@ -16,7 +16,9 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -109,9 +111,16 @@ public class ColorUtils {
     }
 
     @Nonnull
+    public static ITextComponent getTranslation(DyeColor color) {
+        return new TranslationTextComponent(String.format("color.minecraft.%s", color.getTranslationKey()));
+    }
+
+    @Nonnull
     public static Color flareColorFromDye(DyeColor color) {
         Color c = prettierColorMapping.get(color);
-        if(c == null) c = Color.WHITE;
+        if (c == null) {
+            c = ColorsAS.DYE_WHITE;
+        }
         return c;
     }
 

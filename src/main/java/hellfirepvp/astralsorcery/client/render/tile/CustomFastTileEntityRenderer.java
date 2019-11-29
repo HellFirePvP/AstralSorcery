@@ -8,17 +8,19 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
-import hellfirepvp.astralsorcery.common.tile.TilePrism;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.model.animation.TileEntityRendererFast;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RenderPrism
+ * Class: CustomFastTileEntityRenderer
  * Created by HellFirePvP
- * Date: 21.09.2019 / 22:39
+ * Date: 28.11.2019 / 19:58
  */
-public class RenderPrism extends CustomTileEntityRenderer<TilePrism> {
+public abstract class CustomFastTileEntityRenderer<T extends TileEntity> extends TileEntityRendererFast<T> {
 
     @Override
-    public void render(TilePrism prism, double x, double y, double z, float pTicks, int destroyStage) {}
+    public abstract void renderTileEntityFast(T tile, double x, double y, double z, float pTicks, int destroyStage, BufferBuilder buffer);
 }

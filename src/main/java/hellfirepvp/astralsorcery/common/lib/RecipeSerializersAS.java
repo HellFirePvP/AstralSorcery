@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.crafting.custom.RecipeChangeWandColor;
 import hellfirepvp.astralsorcery.common.crafting.serializer.BlockTransmutationSerializer;
 import hellfirepvp.astralsorcery.common.crafting.serializer.LiquidInfusionSerializer;
 import hellfirepvp.astralsorcery.common.crafting.serializer.SimpleAltarRecipeSerializer;
@@ -31,9 +32,13 @@ public class RecipeSerializersAS {
     public static final ResourceLocation BLOCK_TRANSMUTATION = AstralSorcery.key("block_transmutation");
     public static final ResourceLocation SIMPLE_ALTAR_CRAFTING = AstralSorcery.key("altar");
 
+    public static final ResourceLocation CUSTOM_CHANGE_WAND_COLOR = AstralSorcery.key("change_wand_color");
+
     public static WellRecipeSerializer WELL_LIQUEFACTION_SERIALIZER;
     public static LiquidInfusionSerializer LIQUID_INFUSION_SERIALIZER;
     public static BlockTransmutationSerializer BLOCK_TRANSMUTATION_SERIALIZER;
     public static SimpleAltarRecipeSerializer ALTAR_RECIPE_SERIALIZER;
+
+    public static RecipeChangeWandColor.Serializer CUSTOM_CHANGE_WAND_COLOR_SERIALIZER;
 
 }

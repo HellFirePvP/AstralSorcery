@@ -63,7 +63,6 @@ public class EventHandlerCache {
     private static void onClientDisconnect(ClientPlayerNetworkEvent.LoggedOutEvent event) {
         EffectHandler.cleanUp();
         ScreenJournalProgression.resetJournal();
-        ConstellationEffectRegistry.clearClient();
 
         SyncDataHolder.clear(LogicalSide.CLIENT);
         PerkTree.PERK_TREE.clearCache(LogicalSide.CLIENT);

@@ -91,5 +91,6 @@ public class BlocksAS {
     public static BlockWell                      WELL;
 
     public static BlockFlareLight                FLARE_LIGHT;
+    public static BlockTranslucentBlock          TRANSLUCENT_BLOCK;
 
 }

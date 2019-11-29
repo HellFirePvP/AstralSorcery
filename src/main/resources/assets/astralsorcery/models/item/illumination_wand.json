@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "astralsorcery:item/illumination_wand",
+    "layer1": "astralsorcery:item/illumination_wand_overlay"
+  }
+}

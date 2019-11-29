@@ -25,10 +25,7 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemDay;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 import hellfirepvp.astralsorcery.common.item.lens.*;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
+import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
@@ -100,6 +97,7 @@ public class RegistryItems {
         KNOWLEDGE_SHARE = registerItem(new ItemKnowledgeShare());
         WAND = registerItem(new ItemWand());
         LINKING_TOOL = registerItem(new ItemLinkingTool());
+        ILLUMINATION_WAND = registerItem(new ItemIlluminationWand());
 
         NOCTURNAL_POWDER = registerItem(new ItemNocturnalPowder());
         ILLUMINATION_POWDER = registerItem(new ItemIlluminationPowder());

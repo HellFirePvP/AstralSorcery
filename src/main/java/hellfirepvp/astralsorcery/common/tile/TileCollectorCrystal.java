@@ -40,7 +40,7 @@ import java.util.UUID;
  */
 public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourceNode> implements CrystalAttributeTile, ConstellationTile {
 
-    private static final BlockPos[] OFFSETS_LIQUID_STARLIGHT = new BlockPos[] {
+    public static final BlockPos[] OFFSETS_LIQUID_STARLIGHT = new BlockPos[] {
             new BlockPos(-1, -4, -1),
             new BlockPos( 0, -4, -1),
             new BlockPos( 1, -4, -1),

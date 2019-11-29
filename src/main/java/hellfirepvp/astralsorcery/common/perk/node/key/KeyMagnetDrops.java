@@ -42,7 +42,6 @@ public class KeyMagnetDrops extends KeyPerk {
 
         bus.addListener(EventPriority.LOWEST, this::onEntityLoot);
     }
-    //TODO block drops are not functional yet. ASM or wait.
 
     private void onEntityLoot(LivingDropsEvent event) {
         DamageSource source = event.getSource();
