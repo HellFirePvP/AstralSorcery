@@ -23,12 +23,15 @@ import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.block.iterator.BlockPositionGenerator;
 import hellfirepvp.astralsorcery.common.util.block.iterator.BlockSpherePositionGenerator;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,22 +51,16 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
     private boolean isLinkedRitual = false;
 
     public CEffectEvorsio(@Nonnull ILocatable origin) {
-        super(origin, ConstellationsAS.evorsio, 1, (world, pos, state) -> {
-            float hardness = state.getBlockHardness(world, pos);
-            if (hardness < 0 || hardness >= 75) {
-                return false;
-            }
-            return !state.isAir(world, pos);
-        });
+        super(origin, ConstellationsAS.evorsio, 1, (world, pos, state) -> true);
     }
 
     @Nonnull
     @Override
     protected BlockPositionGenerator createPositionStrategy() {
         BlockPositionGenerator gen = new BlockSpherePositionGenerator();
-        gen.andFilter(pos -> !BlockPos.ZERO.equals(pos.subtract(this.getPos().getLocationPos())));
+        gen.andFilter(pos -> !BlockPos.ZERO.equals(pos));
         //Shift down as the ritual originates from a ritual link position.
-        gen.andFilter(pos -> this.isLinkedRitual || !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.subtract(this.getPos().getLocationPos())));
+        gen.andFilter(pos -> this.isLinkedRitual || !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos));
         return gen;
     }
 
@@ -91,25 +88,45 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
         }
         this.isLinkedRitual = MiscUtils.getTileAt(world, pos, TileRitualLink.class, true) != null;
 
-        if (!properties.isCorrupted()) {
-            ListEntries.PosEntry newEntry = this.findNewPosition(world, pos, properties);
+        if (properties.isCorrupted()) {
+            ListEntries.PosEntry newEntry = this.peekNewPosition(world, pos, properties);
             if (newEntry != null) {
                 BlockPos at = newEntry.getPos();
-                if (this.removeElement(at)) {
-                    BlockDropCaptureAssist.startCapturing();
-                    try {
-                        BlockUtils.breakBlockWithoutPlayer((ServerWorld) world, at, world.getBlockState(at),
-                                ItemStack.EMPTY, true, true, true);
-                    } finally {
-                        NonNullList<ItemStack> captured = BlockDropCaptureAssist.getCapturedStacksAndStop();
-                        captured.forEach((stack) -> ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack));
+                if (at.getY() < pos.getY() && world.isAirBlock(at)) {
+                    BlockState state = Blocks.DIRT.getDefaultState();
+                    if (rand.nextInt(3) == 0) {
+                        state = Blocks.STONE.getDefaultState();
                     }
+                    world.setBlockState(at, state, Constants.BlockFlags.DEFAULT_AND_RERENDER);
                 }
             }
-        } else {
-            //TODO
+            return false;
+        }
+
+        ListEntries.PosEntry newEntry = this.peekNewPosition(world, pos, properties);
+        if (newEntry != null) {
+            BlockPos at = newEntry.getPos();
+            if (this.canBreakBlock(world, at, world.getBlockState(at))) {
+                BlockDropCaptureAssist.startCapturing();
+                try {
+                    BlockUtils.breakBlockWithoutPlayer((ServerWorld) world, at, world.getBlockState(at),
+                            ItemStack.EMPTY, true, true, true);
+                } finally {
+                    NonNullList<ItemStack> captured = BlockDropCaptureAssist.getCapturedStacksAndStop();
+                    captured.forEach((stack) -> ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, stack));
+                }
+                return true;
+            }
         }
         return false;
+    }
+
+    private boolean canBreakBlock(World world, BlockPos pos, BlockState state) {
+        float hardness = state.getBlockHardness(world, pos);
+        if (hardness < 0 || hardness >= 75) {
+            return false;
+        }
+        return !state.isAir(world, pos);
     }
 
     @Override
@@ -120,7 +137,7 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
     private static class EvorsioConfig extends Config {
 
         public EvorsioConfig() {
-            super("evorsio", 12D, 4D);
+            super("evorsio", 6D, 4D);
         }
     }
 }

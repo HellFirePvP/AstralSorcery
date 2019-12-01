@@ -58,7 +58,7 @@ public class ItemColoredLensGrowth extends ItemColoredLens {
                 return;
             }
             CropHelper.GrowablePlant plant = CropHelper.wrapPlant(world, pos);
-            if (plant != null) {
+            if (plant != null && random.nextInt(8) == 0) {
                 plant.tryGrow(world, random);
                 PktPlayEffect packet = new PktPlayEffect(PktPlayEffect.Type.CROP_GROWTH)
                         .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(pos)));

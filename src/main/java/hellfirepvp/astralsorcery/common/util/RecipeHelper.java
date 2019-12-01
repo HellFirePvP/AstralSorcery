@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.inventory.IInventory;
@@ -27,6 +29,7 @@ import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 import org.apache.commons.lang3.ObjectUtils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Optional;
@@ -51,6 +54,16 @@ public class RecipeHelper {
         return null;
     }
 
+    @Nonnull
+    public static ItemStack findSmeltingResult(World world, BlockState input) {
+        ItemStack stack = ItemUtils.createBlockStack(input);
+        if (stack.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        return findSmeltingResult(world, stack);
+    }
+
+    @Nonnull
     public static ItemStack findSmeltingResult(World world, ItemStack input) {
         RecipeManager mgr = world.getRecipeManager();
         IInventory inv = new Inventory(input);

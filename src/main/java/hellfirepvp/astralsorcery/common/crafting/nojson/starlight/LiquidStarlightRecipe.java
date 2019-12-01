@@ -1,4 +1,12 @@
-package hellfirepvp.astralsorcery.common.crafting.recipe;
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2019
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.crafting.nojson.starlight;
 
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -8,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -15,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -29,10 +39,20 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 30.09.2019 / 20:27
  */
-public abstract class LiquidStarlightRecipe {
+public abstract class LiquidStarlightRecipe extends ForgeRegistryEntry<LiquidStarlightRecipe> {
 
     protected static final Random rand = new Random();
     private static final int WORLD_TIME_TOLERANCE = 10;
+
+    private final ResourceLocation key;
+
+    public LiquidStarlightRecipe(ResourceLocation key) {
+        this.key = key;
+    }
+
+    public final ResourceLocation getKey() {
+        return key;
+    }
 
     @OnlyIn(Dist.CLIENT)
     public abstract List<Ingredient> getInputForRender();

@@ -1,10 +1,10 @@
 package hellfirepvp.astralsorcery.common.crafting.nojson.starlight;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
-import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidStarlightRecipe;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -15,6 +15,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,6 +32,10 @@ import java.util.List;
  * Date: 01.10.2019 / 20:48
  */
 public class InfusedWoodRecipe extends LiquidStarlightRecipe {
+
+    public InfusedWoodRecipe() {
+        super(AstralSorcery.key("infused_wood"));
+    }
 
     @Override
     @OnlyIn(Dist.CLIENT)

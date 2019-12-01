@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.constellation.effect.base;
 
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
+import hellfirepvp.astralsorcery.common.crafting.nojson.WorldMeltableRegistry;
+import hellfirepvp.astralsorcery.common.crafting.nojson.meltable.WorldMeltableRecipe;
 import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
 import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -105,15 +107,51 @@ public class ListEntries {
                 world.playEvent(2004, e.getPosition(), 0);
             }
         }
+    }
 
+    public static class WorldMeltEntry extends CounterEntry {
+
+        private WorldMeltableRecipe recipe;
+
+        public WorldMeltEntry(BlockPos pos) {
+            super(pos);
+        }
+
+        public WorldMeltEntry(BlockPos pos, WorldMeltableRecipe recipe) {
+            super(pos);
+            this.recipe = recipe;
+        }
+
+        public WorldMeltableRecipe getRecipe() {
+            return recipe;
+        }
+
+        @Override
+        public void readFromNBT(CompoundNBT nbt) {
+            super.readFromNBT(nbt);
+
+            this.recipe = WorldMeltableRegistry.getRecipe(new ResourceLocation(nbt.getString("recipe")));
+        }
+
+        @Override
+        public void writeToNBT(CompoundNBT nbt) {
+            super.writeToNBT(nbt);
+
+            nbt.putString("recipe", this.recipe.getKey().toString());
+        }
     }
 
     public static class CounterMaxEntry extends CounterEntry {
 
         private int maxCount;
 
+        public CounterMaxEntry(BlockPos pos) {
+            super(pos);
+        }
+
         public CounterMaxEntry(BlockPos pos, int maxCount) {
             super(pos);
+            this.maxCount = maxCount;
         }
 
         public int getMaxCount() {
@@ -137,10 +175,18 @@ public class ListEntries {
 
     public static class CounterEntry extends PosEntry {
 
-        public int counter;
+        private int counter = 0;
 
         public CounterEntry(BlockPos pos) {
             super(pos);
+        }
+
+        public int getCounter() {
+            return counter;
+        }
+
+        public void setCounter(int counter) {
+            this.counter = counter;
         }
 
         @Override

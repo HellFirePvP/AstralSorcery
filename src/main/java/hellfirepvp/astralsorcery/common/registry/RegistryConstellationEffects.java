@@ -38,6 +38,7 @@ public class RegistryConstellationEffects {
         BOOTES   = register(makeProvider(ConstellationsAS.bootes,   CEffectBootes::new));
         DISCIDIA = register(makeProvider(ConstellationsAS.discidia, CEffectDiscidia::new));
         EVORSIO  = register(makeProvider(ConstellationsAS.evorsio,  CEffectEvorsio::new));
+        FORNAX   = register(makeProvider(ConstellationsAS.fornax,   CEffectFornax::new));
         VICIO    = register(makeProvider(ConstellationsAS.vicio,    CEffectVicio::new));
     }
 

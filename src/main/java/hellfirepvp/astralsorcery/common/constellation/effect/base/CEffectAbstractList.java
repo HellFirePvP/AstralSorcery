@@ -88,19 +88,25 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
     }
 
     @Nullable
+    public T peekNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
+        BlockPos at = this.positionStrategy.generateNextPosition(BlockPos.ZERO, prop.getSize());
+        BlockPos actual = at.add(pos);
+        if (MiscUtils.isChunkLoaded(world, actual) && this.verifier.test(world, actual, world.getBlockState(actual))) {
+            return this.createElement(world, actual);
+        }
+        return null;
+    }
+
+    @Nullable
     public T findNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
         if (this.getCount() >= this.maxAmount) {
             return null;
         }
-        BlockPos at = this.positionStrategy.generateNextPosition(pos, prop.getSize());
-        if (MiscUtils.isChunkLoaded(world, at) && this.verifier.test(world, at, world.getBlockState(at)) && !this.hasElement(at)) {
-            T newElement = this.createElement(world, at);
-            if (newElement != null) {
-                this.elements.add(newElement);
-                return newElement;
-            }
+        T newElement = this.peekNewPosition(world, pos, prop);
+        if (newElement != null && !this.hasElement(newElement.getPos())) {
+            this.elements.add(newElement);
+            return newElement;
         }
-
         return null;
     }
 

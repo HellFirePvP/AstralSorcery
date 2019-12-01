@@ -225,13 +225,13 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                 }
 
                 if (rand.nextInt(3) == 0) {
-                    Vector3 from = new Vector3(this).add(0.5, 1.25, 0.5);
+                    Vector3 from = new Vector3(this).add(0.5, 1.2, 0.5);
                     Vector3 to;
                     if (this.offsetMirrors.isEmpty()) {
                         to = new Vector3(this).add(0.5, 3.5 + rand.nextFloat() * 2.5, 0.5);
                     } else {
                         BlockPos mirror = MiscUtils.getRandomEntry(this.getMirrors().keySet(), rand);
-                        to = new Vector3(this).add(mirror).add(0.5, 0.5, 0.5);
+                        to = new Vector3(mirror).add(0.5, 0.5, 0.5);
                     }
 
                     EffectHelper.of(EffectTemplatesAS.LIGHTNING)
@@ -245,7 +245,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
 
         for (BlockPos mirror : this.offsetMirrors.keySet()) {
             if (ticksExisted % 32 == 0) {
-                Vector3 source = new Vector3(this).add(0.5, 0.75, 0.5);
+                Vector3 source = new Vector3(this).add(0.5, 0.9, 0.5);
                 Vector3 to = new Vector3(this).add(mirror).add(0.5, 0.5, 0.5);
 
                 EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)

@@ -54,26 +54,26 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
 
     private static final Random rand = new Random();
     private static final BlockPos[] circleOffsets = new BlockPos[] {
-            new BlockPos( 4, 0,  0),
-            new BlockPos( 4, 0,  1),
-            new BlockPos( 3, 0,  2),
-            new BlockPos( 2, 0,  3),
-            new BlockPos( 1, 0,  4),
-            new BlockPos( 0, 0,  4),
-            new BlockPos(-1, 0,  4),
-            new BlockPos(-2, 0,  3),
-            new BlockPos(-3, 0,  2),
-            new BlockPos(-4, 0,  1),
-            new BlockPos(-4, 0,  0),
-            new BlockPos(-4, 0, -1),
-            new BlockPos(-3, 0, -2),
-            new BlockPos(-2, 0, -3),
-            new BlockPos(-1, 0, -4),
-            new BlockPos( 0, 0, -4),
-            new BlockPos( 1, 0, -4),
-            new BlockPos( 2, 0, -3),
-            new BlockPos( 3, 0, -2),
-            new BlockPos( 4, 0, -1)
+            new BlockPos( 4, 2,  0),
+            new BlockPos( 4, 2,  1),
+            new BlockPos( 3, 2,  2),
+            new BlockPos( 2, 2,  3),
+            new BlockPos( 1, 2,  4),
+            new BlockPos( 0, 2,  4),
+            new BlockPos(-1, 2,  4),
+            new BlockPos(-2, 2,  3),
+            new BlockPos(-3, 2,  2),
+            new BlockPos(-4, 2,  1),
+            new BlockPos(-4, 2,  0),
+            new BlockPos(-4, 2, -1),
+            new BlockPos(-3, 2, -2),
+            new BlockPos(-2, 2, -3),
+            new BlockPos(-1, 2, -4),
+            new BlockPos( 0, 2, -4),
+            new BlockPos( 1, 2, -4),
+            new BlockPos( 2, 2, -3),
+            new BlockPos( 3, 2, -2),
+            new BlockPos( 4, 2, -1)
     };
 
     //own receiver data
@@ -164,7 +164,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         }
 
         executeTimes = MathHelper.floor(executeTimes * properties.getEffectAmplifier());
-        for (int i = 0; i <= executeTimes; i++) {
+        for (int i = 0; i < executeTimes; i++) {
             if (collectedStarlight >= maxDrain) {
                 collectedStarlight -= maxDrain;
             } else {
