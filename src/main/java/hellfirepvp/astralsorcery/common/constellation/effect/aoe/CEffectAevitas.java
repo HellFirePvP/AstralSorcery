@@ -78,7 +78,7 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
     public boolean playEffect(World world, BlockPos pos, ConstellationEffectProperties properties, @Nullable IMinorConstellation trait) {
         boolean changed = false;
         CropHelper.GrowablePlant plant = getRandomElementChanced();
-        if(plant != null) {
+        if (plant != null) {
             if (MiscUtils.isChunkLoaded(world, new ChunkPos(plant.getPos()))) {
                 if (properties.isCorrupted()) {
                     if(world instanceof ServerWorld) {
@@ -106,8 +106,8 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
             }
         }
 
-        if(this.findNewPosition(world, pos, properties) != null) changed = true;
-        if(this.findNewPosition(world, pos, properties) != null) changed = true;
+        if (this.findNewPosition(world, pos, properties) != null) changed = true;
+        if (this.findNewPosition(world, pos, properties) != null) changed = true;
 
         int amplifier = CONFIG.potionAmplifier.get();
         List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, BOX.offset(pos).grow(properties.getSize()));
@@ -163,7 +163,7 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
         public ForgeConfigSpec.IntValue potionAmplifier;
 
         public AevitasConfig() {
-            super("aevitas", 16D, 0D, 200);
+            super("aevitas", 10D, 4D, 200);
         }
 
         @Override

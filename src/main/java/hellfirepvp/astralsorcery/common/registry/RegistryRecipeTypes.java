@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.common.crafting.helper.IHandlerRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
 import hellfirepvp.astralsorcery.common.crafting.helper.ResolvingRecipeType;
 import hellfirepvp.astralsorcery.common.crafting.nojson.LiquidStarlightCraftingRegistry;
+import hellfirepvp.astralsorcery.common.crafting.nojson.WorldFreezingRegistry;
+import hellfirepvp.astralsorcery.common.crafting.nojson.WorldMeltableRegistry;
 import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
@@ -47,6 +49,8 @@ public class RegistryRecipeTypes {
 
         //Other, non-json recipes/recipe-ish conversions
         LiquidStarlightCraftingRegistry.init();
+        WorldMeltableRegistry.init();
+        WorldFreezingRegistry.init();
     }
 
     public static void initAltarEffects() {

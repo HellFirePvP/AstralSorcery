@@ -203,19 +203,18 @@ public class BufferBuilderDecorator extends BufferBuilder {
                     int offset = vPos & 3;
                     int bits = vertexData[index];
                     bits = bits >>> (offset * 8);
-                    if((vPos + typeSize - 1) / 4 != index) {
+                    if ((vPos + typeSize - 1) / 4 != index) {
                         bits |= vertexData[index + 1] << ((4 - offset) * 8);
                     }
                     bits &= dataMask;
                     vData[i] = unpack(bits, dataMask, elementType);
                 }
 
-                //Yes we can safely just use the decorators as we checked this before.
-                if (element.getUsage() == VertexFormatElement.Usage.NORMAL) {
+                if (element.getUsage() == VertexFormatElement.Usage.NORMAL && this.normalDecorator != null) {
                     float[] newNormals = this.normalDecorator.decorate(vData[0], vData[1], vData[2]);
                     System.arraycopy(newNormals, 0, vData, 0, 3);
                 }
-                if (element.getUsage() == VertexFormatElement.Usage.COLOR) {
+                if (element.getUsage() == VertexFormatElement.Usage.COLOR && this.colorDecorator != null) {
                     float[] newColor = this.colorDecorator.decorate(vData[0], vData[1], vData[2], vData[3]);
                     System.arraycopy(newColor, 0, vData, 0, 4);
                 }

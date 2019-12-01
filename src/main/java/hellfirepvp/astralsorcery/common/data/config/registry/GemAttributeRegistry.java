@@ -34,7 +34,7 @@ public class GemAttributeRegistry extends ConfigDataAdapter<GemAttributeEntry> {
     public List<GemAttributeEntry> getDefaultValues() {
         return new ArrayList<GemAttributeEntry>() {
             {
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_HEALTH,                    12));
+                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_HEALTH,                    2));
                 add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MOVESPEED,                 8));
                 add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ARMOR,                     8));
                 add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_REACH,                     4));

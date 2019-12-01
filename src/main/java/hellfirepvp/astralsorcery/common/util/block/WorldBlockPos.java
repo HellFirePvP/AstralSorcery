@@ -98,6 +98,11 @@ public class WorldBlockPos extends BlockPos {
         return false;
     }
 
+    @Nullable
+    public World getWorld() {
+        return this.worldReference.getValue();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

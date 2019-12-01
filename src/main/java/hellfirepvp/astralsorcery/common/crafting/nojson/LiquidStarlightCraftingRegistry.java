@@ -3,14 +3,15 @@ package hellfirepvp.astralsorcery.common.crafting.nojson;
 import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.FormCelestialCrystalClusterRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.FormGemCrystalClusterRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.InfusedWoodRecipe;
-import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidStarlightRecipe;
+import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.LiquidStarlightRecipe;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,17 +22,27 @@ import java.util.Set;
  */
 public class LiquidStarlightCraftingRegistry {
 
-    private static Set<LiquidStarlightRecipe> recipes = new HashSet<>();
+    private static Map<ResourceLocation, LiquidStarlightRecipe> recipes = new HashMap<>();
 
     public static void init() {
-        recipes.add(new InfusedWoodRecipe());
-        recipes.add(new FormCelestialCrystalClusterRecipe());
-        recipes.add(new FormGemCrystalClusterRecipe());
+        register(new InfusedWoodRecipe());
+        register(new FormCelestialCrystalClusterRecipe());
+        register(new FormGemCrystalClusterRecipe());
+    }
+
+    public static void register(LiquidStarlightRecipe recipe) {
+        recipes.put(recipe.getKey(), recipe);
+    }
+
+    @Nullable
+    public static LiquidStarlightRecipe getRecipe(ResourceLocation key) {
+        return recipes.get(key);
     }
 
     @Nullable
     public static LiquidStarlightRecipe getRecipeFor(ItemEntity itemEntity, World world, BlockPos at) {
-        return recipes.stream()
+        return recipes.values()
+                .stream()
                 .filter(recipe -> recipe.doesStartRecipe(itemEntity.getItem()))
                 .filter(recipes -> recipes.matches(itemEntity, world, at))
                 .findFirst()

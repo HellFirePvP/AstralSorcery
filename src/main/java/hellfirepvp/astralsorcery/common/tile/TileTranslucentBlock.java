@@ -9,17 +9,19 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
-import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import hellfirepvp.astralsorcery.common.util.object.PredicateBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,6 +36,8 @@ public class TileTranslucentBlock extends TileEntityTick {
     private DyeColor overlayColor = DyeColor.WHITE;
     private UUID playerUUID = null;
 
+    private Predicate<TileTranslucentBlock> persistenceFunction = (tile) -> true;
+
     public TileTranslucentBlock() {
         super(TileEntityTypesAS.TRANSLUCENT_BLOCK);
     }
@@ -46,6 +50,10 @@ public class TileTranslucentBlock extends TileEntityTick {
     @Override
     public void tick() {
         super.tick();
+
+        if (!persistenceFunction.test(this)) {
+            this.getWorld().setBlockState(this.getPos(), this.getFakedState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+        }
     }
 
     @Nonnull
@@ -84,6 +92,12 @@ public class TileTranslucentBlock extends TileEntityTick {
     public void setPlayerUUID(UUID playerUUID) {
         this.playerUUID = playerUUID;
         this.markForUpdate();
+    }
+
+    public void setPersistenceFunction(Predicate<TileTranslucentBlock> persistenceFunction) {
+        if (persistenceFunction != null) {
+            this.persistenceFunction = persistenceFunction;
+        }
     }
 
     @Override

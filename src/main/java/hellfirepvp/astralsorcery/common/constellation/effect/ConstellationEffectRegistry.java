@@ -35,6 +35,7 @@ public class ConstellationEffectRegistry {
         config.addConfigEntry(CEffectBootes.CONFIG);
         config.addConfigEntry(CEffectDiscidia.CONFIG);
         config.addConfigEntry(CEffectEvorsio.CONFIG);
+        config.addConfigEntry(CEffectFornax.CONFIG);
         config.addConfigEntry(CEffectVicio.CONFIG);
     }
 
