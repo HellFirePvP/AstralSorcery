@@ -26,7 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,7 +59,7 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
             return 0F;
         }
         IWeakConstellation cst = getStarlightType();
-        WorldContext ctx = SkyHandler.getContext(world, Dist.DEDICATED_SERVER);
+        WorldContext ctx = SkyHandler.getContext(world, LogicalSide.SERVER);
         if (ctx == null || cst == null) {
             return 0F;
         }

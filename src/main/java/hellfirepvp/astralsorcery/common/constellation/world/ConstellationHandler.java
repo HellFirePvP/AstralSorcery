@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -42,6 +43,10 @@ public class ConstellationHandler {
     @Nullable
     public MoonPhase getOffset(IConstellation cst) {
         return this.directOffsetMap.get(cst);
+    }
+
+    public boolean isActive(IConstellation cst, IWorld world) {
+        return isActive(cst, MoonPhase.fromWorld(world));
     }
 
     public boolean isActive(IConstellation cst, MoonPhase phase) {

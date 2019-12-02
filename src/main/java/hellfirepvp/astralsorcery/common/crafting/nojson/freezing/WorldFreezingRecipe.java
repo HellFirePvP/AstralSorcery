@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.nojson.freezing;
 
+import hellfirepvp.astralsorcery.common.crafting.nojson.CustomRecipe;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -24,18 +25,13 @@ import java.util.function.Consumer;
  * Created by HellFirePvP
  * Date: 30.11.2019 / 19:10
  */
-public abstract class WorldFreezingRecipe {
+public abstract class WorldFreezingRecipe extends CustomRecipe {
 
-    private final ResourceLocation key;
     private final BlockPredicate matcher;
 
     public WorldFreezingRecipe(ResourceLocation key, BlockPredicate matcher) {
-        this.key = key;
+        super(key);
         this.matcher = matcher;
-    }
-
-    public final ResourceLocation getKey() {
-        return key;
     }
 
     public boolean canFreeze(World world, BlockPos pos) {

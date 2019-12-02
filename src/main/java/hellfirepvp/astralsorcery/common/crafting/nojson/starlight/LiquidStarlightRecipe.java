@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.nojson.starlight;
 
+import hellfirepvp.astralsorcery.common.crafting.nojson.CustomRecipe;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.entity.Entity;
@@ -39,19 +40,13 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 30.09.2019 / 20:27
  */
-public abstract class LiquidStarlightRecipe extends ForgeRegistryEntry<LiquidStarlightRecipe> {
+public abstract class LiquidStarlightRecipe extends CustomRecipe {
 
     protected static final Random rand = new Random();
     private static final int WORLD_TIME_TOLERANCE = 10;
 
-    private final ResourceLocation key;
-
     public LiquidStarlightRecipe(ResourceLocation key) {
-        this.key = key;
-    }
-
-    public final ResourceLocation getKey() {
-        return key;
+        super(key);
     }
 
     @OnlyIn(Dist.CLIENT)

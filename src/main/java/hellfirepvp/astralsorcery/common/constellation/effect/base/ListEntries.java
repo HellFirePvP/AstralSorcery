@@ -109,38 +109,6 @@ public class ListEntries {
         }
     }
 
-    public static class WorldMeltEntry extends CounterEntry {
-
-        private WorldMeltableRecipe recipe;
-
-        public WorldMeltEntry(BlockPos pos) {
-            super(pos);
-        }
-
-        public WorldMeltEntry(BlockPos pos, WorldMeltableRecipe recipe) {
-            super(pos);
-            this.recipe = recipe;
-        }
-
-        public WorldMeltableRecipe getRecipe() {
-            return recipe;
-        }
-
-        @Override
-        public void readFromNBT(CompoundNBT nbt) {
-            super.readFromNBT(nbt);
-
-            this.recipe = WorldMeltableRegistry.getRecipe(new ResourceLocation(nbt.getString("recipe")));
-        }
-
-        @Override
-        public void writeToNBT(CompoundNBT nbt) {
-            super.writeToNBT(nbt);
-
-            nbt.putString("recipe", this.recipe.getKey().toString());
-        }
-    }
-
     public static class CounterMaxEntry extends CounterEntry {
 
         private int maxCount;

@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider;
 import hellfirepvp.astralsorcery.client.util.ColorizationHelper;
+import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
@@ -121,6 +122,7 @@ public class ClientProxy extends CommonProxy {
         registrar.accept(RenderInfo.getInstance());
         registrar.accept(EffectUpdater.getInstance());
         registrar.accept(PatreonManagerClient.INSTANCE);
+        registrar.accept(ClientCameraManager.INSTANCE);
 
         LightbeamRenderHelper.attachTickListener(registrar);
     }

@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.helper.IHandlerRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.RecipeCraftingContext;
 import hellfirepvp.astralsorcery.common.crafting.helper.ResolvingRecipeType;
+import hellfirepvp.astralsorcery.common.crafting.nojson.AttunementCraftingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.LiquidStarlightCraftingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.WorldFreezingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.WorldMeltableRegistry;
@@ -48,9 +49,10 @@ public class RegistryRecipeTypes {
                 recipe.matches(context.getSide(), context.getCrafter(), context.getAltar(), context.ignoreStarlightRequirement()));
 
         //Other, non-json recipes/recipe-ish conversions
-        LiquidStarlightCraftingRegistry.init();
-        WorldMeltableRegistry.init();
-        WorldFreezingRegistry.init();
+        LiquidStarlightCraftingRegistry.INSTANCE.init();
+        AttunementCraftingRegistry.INSTANCE.init();
+        WorldMeltableRegistry.INSTANCE.init();
+        WorldFreezingRegistry.INSTANCE.init();
     }
 
     public static void initAltarEffects() {

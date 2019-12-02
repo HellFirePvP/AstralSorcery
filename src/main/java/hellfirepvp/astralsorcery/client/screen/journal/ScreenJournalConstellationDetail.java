@@ -38,7 +38,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -191,7 +191,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
     }
 
     private void testActivePhases() {
-        WorldContext ctx = SkyHandler.getContext(Minecraft.getInstance().world, Dist.CLIENT);
+        WorldContext ctx = SkyHandler.getContext(Minecraft.getInstance().world, LogicalSide.CLIENT);
         if (ctx == null) {
             return;
         }
