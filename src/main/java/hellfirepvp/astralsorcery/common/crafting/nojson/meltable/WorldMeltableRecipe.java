@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.nojson.meltable;
 
+import hellfirepvp.astralsorcery.common.crafting.nojson.CustomRecipe;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -24,18 +25,13 @@ import java.util.function.Consumer;
  * Created by HellFirePvP
  * Date: 29.11.2019 / 22:57
  */
-public abstract class WorldMeltableRecipe {
+public abstract class WorldMeltableRecipe extends CustomRecipe {
 
-    private final ResourceLocation key;
     private final BlockPredicate matcher;
 
     public WorldMeltableRecipe(ResourceLocation key, BlockPredicate matcher) {
-        this.key = key;
+        super(key);
         this.matcher = matcher;
-    }
-
-    public final ResourceLocation getKey() {
-        return key;
     }
 
     public boolean canMelt(World world, BlockPos pos) {

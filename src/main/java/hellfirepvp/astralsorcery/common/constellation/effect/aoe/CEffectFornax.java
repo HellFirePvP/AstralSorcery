@@ -91,7 +91,7 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
         BlockPos at = newEntry.getPos();
 
         if (properties.isCorrupted()) {
-            WorldFreezingRecipe freezingRecipe = WorldFreezingRegistry.getRecipeFor(world, at);
+            WorldFreezingRecipe freezingRecipe = WorldFreezingRegistry.INSTANCE.getRecipeFor(world, at);
             if (freezingRecipe != null) {
                 freezingRecipe.doOutput(world, at, world.getBlockState(at), dropResult);
                 return true;
@@ -99,7 +99,7 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
             return false;
         }
 
-        WorldMeltableRecipe meltRecipe = WorldMeltableRegistry.getRecipeFor(world, at);
+        WorldMeltableRecipe meltRecipe = WorldMeltableRegistry.INSTANCE.getRecipeFor(world, at);
         if (meltRecipe != null) {
             meltRecipe.doOutput(world, at, world.getBlockState(at), dropResult);
             return true;

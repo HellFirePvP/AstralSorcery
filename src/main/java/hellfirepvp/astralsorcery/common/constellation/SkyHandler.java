@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -90,11 +91,11 @@ public class SkyHandler implements ITickHandler {
 
     @Nullable
     public static WorldContext getContext(World world) {
-        return getContext(world, world.isRemote() ? Dist.CLIENT : Dist.DEDICATED_SERVER);
+        return getContext(world, world.isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER);
     }
 
     @Nullable
-    public static WorldContext getContext(World world, Dist dist) {
+    public static WorldContext getContext(World world, LogicalSide dist) {
         if (world == null) {
             return null;
         }

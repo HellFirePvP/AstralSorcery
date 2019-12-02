@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.item.lens.ItemColoredLensFire;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
@@ -107,6 +108,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         CROP_GROWTH,
         MELT_BLOCK,
         ALTAR_RECIPE_FINISH,
+        ATTUNEMENT_RECIPE_FINISH,
         INFUSER_RECIPE_FINISH,
         TIME_FREEZE_EFFECT;
 
@@ -133,6 +135,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return ItemColoredLensFire::playParticles;
                 case ALTAR_RECIPE_FINISH:
                     return TileAltar::finishCraftingEffects;
+                case ATTUNEMENT_RECIPE_FINISH:
+                    return TileAttunementAltar::finishCraftingEffects;
                 case INFUSER_RECIPE_FINISH:
                     return TileInfuser::finishCraftingEffects;
             }

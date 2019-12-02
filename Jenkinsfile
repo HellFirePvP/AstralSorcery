@@ -7,7 +7,7 @@ pipeline {
     stage('Prepare Build') {
       steps {
         sh '''cp -a /var/lib/jenkins/buildMetadata/AstralSorcery-1.14/. .
-rm -rf AS-Example.zs AS-GameStages-Example.zs perkMapDraft.pdn README.html README.md AstralSorcery'''
+rm -rf perkMapDraft.pdn README.md AstralSorcery'''
       }
     }
     stage('Build only') {
@@ -33,11 +33,6 @@ rm -rf AS-Example.zs AS-GameStages-Example.zs perkMapDraft.pdn README.html READM
         sh '''cp -a ./build/libs/. .
 rm -rf build gradle .gradle
 find . ! -name \'*.jar\' -delete'''
-      }
-    }
-    stage('Archive') {
-      steps {
-        archiveArtifacts '*.jar'
       }
     }
     stage('Notify') {

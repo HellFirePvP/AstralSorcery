@@ -35,6 +35,7 @@ public class RegistryStructures {
         STRUCT_INFUSER = register(new PatternInfuser());
         STRUCT_ENHANCED_COLLECTOR_CRYSTAL = register(new PatternEnhancedCollectorCrystal());
         STRUCT_SPECTRAL_RELAY = register(new PatternSpectralRelay());
+        STRUCT_ATTUNEMENT_ALTAR = register(new PatternAttunementAltar());
 
         STRUCT_DESERT_SHRINE = register(new StructureDesertShrine());
         STRUCT_MOUNTAIN_SHRINE = register(new StructureMountainShrine());

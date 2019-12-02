@@ -9,7 +9,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,28 +22,20 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 30.09.2019 / 20:27
  */
-public class LiquidStarlightCraftingRegistry {
+public class LiquidStarlightCraftingRegistry extends CustomRecipeRegistry<LiquidStarlightRecipe> {
 
-    private static Map<ResourceLocation, LiquidStarlightRecipe> recipes = new HashMap<>();
+    public static final LiquidStarlightCraftingRegistry INSTANCE = new LiquidStarlightCraftingRegistry();
 
-    public static void init() {
-        register(new InfusedWoodRecipe());
-        register(new FormCelestialCrystalClusterRecipe());
-        register(new FormGemCrystalClusterRecipe());
-    }
-
-    public static void register(LiquidStarlightRecipe recipe) {
-        recipes.put(recipe.getKey(), recipe);
+    @Override
+    public void init() {
+        this.register(new InfusedWoodRecipe());
+        this.register(new FormCelestialCrystalClusterRecipe());
+        this.register(new FormGemCrystalClusterRecipe());
     }
 
     @Nullable
-    public static LiquidStarlightRecipe getRecipe(ResourceLocation key) {
-        return recipes.get(key);
-    }
-
-    @Nullable
-    public static LiquidStarlightRecipe getRecipeFor(ItemEntity itemEntity, World world, BlockPos at) {
-        return recipes.values()
+    public LiquidStarlightRecipe getRecipeFor(ItemEntity itemEntity, World world, BlockPos at) {
+        return this.getRecipes()
                 .stream()
                 .filter(recipe -> recipe.doesStartRecipe(itemEntity.getItem()))
                 .filter(recipes -> recipes.matches(itemEntity, world, at))
@@ -56,7 +50,7 @@ public class LiquidStarlightCraftingRegistry {
         World world = itemEntity.getEntityWorld();
         BlockPos floorAt = itemEntity.getPosition();
 
-        LiquidStarlightRecipe recipe = LiquidStarlightCraftingRegistry.getRecipeFor(itemEntity, world, floorAt);
+        LiquidStarlightRecipe recipe = LiquidStarlightCraftingRegistry.INSTANCE.getRecipeFor(itemEntity, world, floorAt);
         if (recipe != null) {
             if (!world.isRemote()) {
                 recipe.doServerCraftTick(itemEntity, world, floorAt);

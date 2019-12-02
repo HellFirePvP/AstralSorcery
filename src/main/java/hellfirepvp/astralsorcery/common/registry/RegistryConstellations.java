@@ -22,8 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fml.LogicalSide;
 
 import static hellfirepvp.astralsorcery.common.lib.ColorsAS.*;
 import static hellfirepvp.astralsorcery.common.lib.ConstellationsAS.*;
@@ -389,7 +389,7 @@ public class RegistryConstellations {
         horologium = new ConstellationBase.WeakSpecial("horologium", CONSTELLATION_HOROLOGIUM) {
             @Override
             public boolean doesShowUp(World world, long day) {
-                WorldContext ctx = SkyHandler.getContext(world, Dist.CLIENT);
+                WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
                 if (ctx != null) {
                     return ctx.getCelestialHandler().isDayOfSolarEclipse();
                 }

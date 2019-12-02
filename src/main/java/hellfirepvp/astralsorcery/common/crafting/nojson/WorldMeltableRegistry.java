@@ -29,32 +29,24 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 29.11.2019 / 22:56
  */
-public class WorldMeltableRegistry {
+public class WorldMeltableRegistry extends CustomRecipeRegistry<WorldMeltableRecipe> {
 
-    private static Map<ResourceLocation, WorldMeltableRecipe> recipes = new HashMap<>();
+    public static final WorldMeltableRegistry INSTANCE = new WorldMeltableRegistry();
 
-    public static void init() {
-        register(BlockMeltableRecipe.of(BlockTags.ICE, Blocks.WATER.getDefaultState()));
-        register(BlockMeltableRecipe.of(Tags.Blocks.STONE, Blocks.LAVA.getDefaultState()));
-        register(BlockMeltableRecipe.of(Tags.Blocks.NETHERRACK, Blocks.LAVA.getDefaultState()));
-        register(BlockMeltableRecipe.of(Tags.Blocks.OBSIDIAN, Blocks.LAVA.getDefaultState()));
-        register(BlockMeltableRecipe.of(Blocks.MAGMA_BLOCK.getDefaultState(), Blocks.LAVA.getDefaultState()));
+    @Override
+    public void init() {
+        this.register(BlockMeltableRecipe.of(BlockTags.ICE, Blocks.WATER.getDefaultState()));
+        this.register(BlockMeltableRecipe.of(Tags.Blocks.STONE, Blocks.LAVA.getDefaultState()));
+        this.register(BlockMeltableRecipe.of(Tags.Blocks.NETHERRACK, Blocks.LAVA.getDefaultState()));
+        this.register(BlockMeltableRecipe.of(Tags.Blocks.OBSIDIAN, Blocks.LAVA.getDefaultState()));
+        this.register(BlockMeltableRecipe.of(Blocks.MAGMA_BLOCK.getDefaultState(), Blocks.LAVA.getDefaultState()));
 
-        register(new FurnaceMeltableRecipe());
-    }
-
-    public static void register(WorldMeltableRecipe recipe) {
-        recipes.put(recipe.getKey(), recipe);
+        this.register(new FurnaceMeltableRecipe());
     }
 
     @Nullable
-    public static WorldMeltableRecipe getRecipe(ResourceLocation key) {
-        return recipes.get(key);
-    }
-
-    @Nullable
-    public static WorldMeltableRecipe getRecipeFor(World world, BlockPos pos) {
-        return recipes.values()
+    public WorldMeltableRecipe getRecipeFor(World world, BlockPos pos) {
+        return this.getRecipes()
                 .stream()
                 .filter(recipe -> recipe.canMelt(world, pos))
                 .findFirst()

@@ -37,8 +37,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -185,7 +185,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     }
 
     private void collectStarlight(World world) {
-        WorldContext ctx = SkyHandler.getContext(world, Dist.DEDICATED_SERVER);
+        WorldContext ctx = SkyHandler.getContext(world, LogicalSide.SERVER);
         if (ctx == null) {
             return;
         }

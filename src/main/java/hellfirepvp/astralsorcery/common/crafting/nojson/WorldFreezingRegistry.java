@@ -30,30 +30,22 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 30.11.2019 / 19:10
  */
-public class WorldFreezingRegistry {
+public class WorldFreezingRegistry extends CustomRecipeRegistry<WorldFreezingRecipe> {
 
-    private static Map<ResourceLocation, WorldFreezingRecipe> recipes = new HashMap<>();
+    public static final WorldFreezingRegistry INSTANCE = new WorldFreezingRegistry();
 
-    public static void init() {
-        register(BlockFreezingRecipe.of(Blocks.FIRE, Blocks.AIR.getDefaultState()));
-        register(BlockFreezingRecipe.of(Blocks.AIR.getDefaultState(), Blocks.ICE.getDefaultState()));
-        register(BlockFreezingRecipe.of(Blocks.CAVE_AIR.getDefaultState(), Blocks.PACKED_ICE.getDefaultState()));
+    @Override
+    public void init() {
+        this.register(BlockFreezingRecipe.of(Blocks.FIRE, Blocks.AIR.getDefaultState()));
+        this.register(BlockFreezingRecipe.of(Blocks.AIR.getDefaultState(), Blocks.ICE.getDefaultState()));
+        this.register(BlockFreezingRecipe.of(Blocks.CAVE_AIR.getDefaultState(), Blocks.PACKED_ICE.getDefaultState()));
 
-        register(new FluidFreezingRecipe());
-    }
-
-    public static void register(WorldFreezingRecipe recipe) {
-        recipes.put(recipe.getKey(), recipe);
+        this.register(new FluidFreezingRecipe());
     }
 
     @Nullable
-    public static WorldFreezingRecipe getRecipe(ResourceLocation key) {
-        return recipes.get(key);
-    }
-
-    @Nullable
-    public static WorldFreezingRecipe getRecipeFor(World world, BlockPos pos) {
-        return recipes.values()
+    public WorldFreezingRecipe getRecipeFor(World world, BlockPos pos) {
+        return this.getRecipes()
                 .stream()
                 .filter(recipe -> recipe.canFreeze(world, pos))
                 .findFirst()

@@ -14,9 +14,8 @@ import hellfirepvp.astralsorcery.client.model.builtin.ModelAttunementAltar;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.common.structure.TileAttunementAltar;
+import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.function.Supplier;
