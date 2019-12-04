@@ -18,7 +18,6 @@ import hellfirepvp.astralsorcery.common.network.login.server.PktLoginSyncDataHol
 import hellfirepvp.astralsorcery.common.network.login.server.PktLoginSyncGateway;
 import hellfirepvp.astralsorcery.common.network.play.client.*;
 import hellfirepvp.astralsorcery.common.network.play.server.*;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
@@ -75,7 +74,7 @@ public class PacketChannel {
         registerMessage(PktOpenGui::new);
 
         // PLAY CLIENT -> DEDICATED_SERVER
-        registerMessage(PktAttuneConstellation::new);
+        registerMessage(PktAttunePlayerConstellation::new);
         registerMessage(PktBurnParchment::new);
         registerMessage(PktClearBlockStorageStack::new);
         registerMessage(PktDiscoverConstellation::new);

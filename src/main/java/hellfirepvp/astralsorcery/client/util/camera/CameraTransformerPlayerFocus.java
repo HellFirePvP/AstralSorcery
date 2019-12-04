@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.client.util.camera;
 
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,7 +30,7 @@ public class CameraTransformerPlayerFocus extends CameraTransformerSettingsCache
 
         EntityClientReplacement repl = new EntityClientReplacement();
         repl.read(Minecraft.getInstance().player.writeWithoutTypeId(new CompoundNBT()));
-        Minecraft.getInstance().world.addEntity(repl);
+        Minecraft.getInstance().world.addPlayer(repl.getEntityId(), repl);
         this.clientEntity = repl;
 
         entity.setAsRenderViewEntity();
@@ -70,13 +69,13 @@ public class CameraTransformerPlayerFocus extends CameraTransformerSettingsCache
     }
 
     @Override
-    public int getPriority() {
-        return 0;
+    public ICameraPersistencyFunction getPersistencyFunction() {
+        return func;
     }
 
     @Override
-    public boolean needsRemoval() {
-        return func.needsRemoval();
+    public int getPriority() {
+        return 0;
     }
 
     @Override

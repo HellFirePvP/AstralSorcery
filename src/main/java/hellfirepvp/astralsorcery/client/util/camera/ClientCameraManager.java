@@ -37,7 +37,7 @@ public class ClientCameraManager implements ITickHandler {
                     lastTransformer = prio;
                 }
                 prio.transformRenderView(pTicks);
-                if (prio.needsRemoval()) {
+                if (prio.getPersistencyFunction().isExpired()) {
                     prio.onStopTransforming(pTicks);
                     transformers.remove(prio);
                 }
@@ -65,6 +65,10 @@ public class ClientCameraManager implements ITickHandler {
 
     public void addTransformer(ICameraTransformer transformer) {
         this.transformers.add(transformer);
+    }
+
+    public void removeTransformer(ICameraTransformer transformer) {
+        this.transformers.remove(transformer);
     }
 
     @Nullable

@@ -49,6 +49,8 @@ public class ClientCameraUtil {
         render.prevRotationYawHead = iYaw;
         render.cameraYaw =           iYaw;
         render.prevCameraYaw =       iYaw;
+        render.renderYawOffset =     iYaw;
+        render.prevRenderYawOffset = iYaw;
         render.rotationPitch =       iPitch;
         render.prevRotationPitch =   iPitch;
 
@@ -70,6 +72,8 @@ public class ClientCameraUtil {
         render.prevRotationYawHead = iYaw;
         render.cameraYaw =           iYaw;
         render.prevCameraYaw =       iYaw;
+        render.renderYawOffset =     iYaw;
+        render.prevRenderYawOffset = iYaw;
         render.rotationPitch =       iPitch;
         render.prevRotationPitch =   iPitch;
     }
