@@ -11,9 +11,9 @@ public interface ICameraTransformer {
 
     public int getPriority();
 
-    public boolean needsRemoval();
-
     public void onClientTick();
+
+    public ICameraPersistencyFunction getPersistencyFunction();
 
     public void onStartTransforming(float pTicks);
 

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.event.handler;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHandler;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
+import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
@@ -63,6 +64,7 @@ public class EventHandlerCache {
     private static void onClientDisconnect(ClientPlayerNetworkEvent.LoggedOutEvent event) {
         EffectHandler.cleanUp();
         ScreenJournalProgression.resetJournal();
+        ClientCameraManager.INSTANCE.removeAllAndCleanup();
 
         SyncDataHolder.clear(LogicalSide.CLIENT);
         PerkTree.PERK_TREE.clearCache(LogicalSide.CLIENT);

@@ -106,26 +106,25 @@ public class CameraPath extends EntityCameraRenderView implements ICameraPersist
         return pathPoints.getLast().dstPoint; //Doesn't happen since the list isn't empty.
     }
 
+    @Override
     public boolean isExpired() {
         return expired;
     }
 
+    @Override
     public void setExpired() {
         this.expired = true;
     }
 
+    @Override
     public void forceStop() {
         this.stopped = true;
         setExpired();
     }
 
+    @Override
     public boolean wasForciblyStopped() {
         return stopped;
-    }
-
-    @Override
-    public boolean needsRemoval() {
-        return expired;
     }
 
     CameraPath copy() {

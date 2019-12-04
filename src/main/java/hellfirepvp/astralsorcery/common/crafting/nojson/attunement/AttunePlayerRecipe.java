@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.crafting.nojson.attunement;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.active.ActivePlayerAttunementRecipe;
@@ -19,6 +20,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -40,38 +42,58 @@ public class AttunePlayerRecipe extends AttunementRecipe<ActivePlayerAttunementR
     @Override
     public boolean canStartCrafting(TileAttunementAltar altar) {
         World world = altar.getWorld();
-        if (altar.getActiveConstellation() instanceof IMajorConstellation && DayTimeHelper.isNight(world)) {
-            AxisAlignedBB boxAt = BOX.offset(altar.getPos().up()).grow(1);
-
-            Vector3 thisVec = new Vector3(altar).add(0.5, 1.5, 0.5);
-            List<ServerPlayerEntity> players = world.getEntitiesWithinAABB(ServerPlayerEntity.class, boxAt);
-            if (!players.isEmpty()) {
-                ServerPlayerEntity pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
-                if (pl != null && !MiscUtils.isPlayerFakeMP(pl) && !pl.isSneaking()) {
-                    PlayerProgress prog = ResearchHelper.getProgress(pl, LogicalSide.SERVER);
-
-                    return prog.isValid() &&
-                            prog.getAttunedConstellation() == null &&
-                            prog.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) &&
-                            prog.hasConstellationDiscovered(altar.getActiveConstellation());
-                }
-            }
+        if (DayTimeHelper.isNight(world)) {
+            return findEligiblePlayer(altar) != null;
         }
         return false;
     }
 
     @Override
+    @Nonnull
     public ActivePlayerAttunementRecipe createRecipe(TileAttunementAltar altar) {
-        return new ActivePlayerAttunementRecipe(this);
+        ServerPlayerEntity player = findEligiblePlayer(altar);
+        return new ActivePlayerAttunementRecipe(this, (IMajorConstellation) altar.getActiveConstellation(), player.getUniqueID());
     }
 
     @Override
+    @Nonnull
     @OnlyIn(Dist.CLIENT)
     public ActivePlayerAttunementRecipe deserialize(TileAttunementAltar altar, CompoundNBT nbt, @Nullable ActivePlayerAttunementRecipe previousInstance) {
-        ActivePlayerAttunementRecipe recipe =  super.deserialize(altar, nbt, previousInstance);
+        ActivePlayerAttunementRecipe recipe = new ActivePlayerAttunementRecipe(this, nbt);
         if (previousInstance != null) {
             recipe.cameraHack = previousInstance.cameraHack;
         }
         return recipe;
+    }
+
+    @Nullable
+    private static ServerPlayerEntity findEligiblePlayer(TileAttunementAltar altar) {
+        if (!(altar.getActiveConstellation() instanceof IMajorConstellation)) {
+            return null;
+        }
+        AxisAlignedBB boxAt = BOX.offset(altar.getPos().up()).grow(1);
+
+        Vector3 thisVec = new Vector3(altar).add(0.5, 1.5, 0.5);
+        List<ServerPlayerEntity> players = altar.getWorld().getEntitiesWithinAABB(ServerPlayerEntity.class, boxAt);
+        if (!players.isEmpty()) {
+            ServerPlayerEntity pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
+            if (isEligablePlayer(pl, altar.getActiveConstellation())) {
+                return pl;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isEligablePlayer(ServerPlayerEntity player, IConstellation attuneTo) {
+        if (player != null && !MiscUtils.isPlayerFakeMP(player) && !player.isSneaking()) {
+            PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+
+            return prog.isValid() &&
+                    attuneTo instanceof IMajorConstellation &&
+                    prog.getAttunedConstellation() == null &&
+                    prog.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) &&
+                    prog.hasConstellationDiscovered(attuneTo);
+        }
+        return false;
     }
 }

@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.common.crafting.nojson.attunement;
 
-import hellfirepvp.astralsorcery.common.crafting.nojson.AttunementCraftingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.CustomRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import net.minecraft.nbt.CompoundNBT;
@@ -9,6 +8,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -26,8 +26,10 @@ public abstract class AttunementRecipe<T extends AttunementRecipe.Active> extend
 
     public abstract boolean canStartCrafting(TileAttunementAltar altar);
 
+    @Nonnull
     public abstract T createRecipe(TileAttunementAltar altar);
 
+    @Nonnull
     @OnlyIn(Dist.CLIENT)
     public T deserialize(TileAttunementAltar altar, CompoundNBT nbt, @Nullable T previousInstance) {
         T activeRecipe = this.createRecipe(altar);
@@ -35,17 +37,21 @@ public abstract class AttunementRecipe<T extends AttunementRecipe.Active> extend
         return activeRecipe;
     }
 
-    public static abstract class Active {
+    public static abstract class Active<T extends AttunementRecipe<? extends Active<T>>> {
 
-        private AttunementRecipe recipe;
+        private T recipe;
         private int tick = 0;
 
-        public Active(AttunementRecipe recipe) {
+        public Active(T recipe) {
             this.recipe = recipe;
         }
 
-        public final AttunementRecipe getRecipe() {
+        public final T getRecipe() {
             return recipe;
+        }
+
+        protected int getTick() {
+            return tick;
         }
 
         public final void tick(LogicalSide side, TileAttunementAltar altar) {
@@ -59,6 +65,9 @@ public abstract class AttunementRecipe<T extends AttunementRecipe.Active> extend
         //Called on server when this recipe should stop (stop effects, world interactions, ...)
         public abstract void stopCrafting(TileAttunementAltar altar);
 
+        //Called on server when this recipe should create rewards
+        public abstract void finishRecipe(TileAttunementAltar altar);
+
         //Called every tick for both sides
         public abstract void doTick(LogicalSide side, TileAttunementAltar altar);
 
@@ -69,7 +78,7 @@ public abstract class AttunementRecipe<T extends AttunementRecipe.Active> extend
         @OnlyIn(Dist.CLIENT)
         public abstract void stopEffects(TileAttunementAltar altar);
 
-        //Called every tick to test if this recipe can be continued.
+        //Called every tick on server to test if this recipe can be continued.
         public boolean matches(TileAttunementAltar altar) {
             return this.recipe.canStartCrafting(altar);
         }

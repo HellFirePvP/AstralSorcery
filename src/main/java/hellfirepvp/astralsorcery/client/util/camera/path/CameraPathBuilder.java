@@ -68,7 +68,7 @@ public class CameraPathBuilder {
         return this;
     }
 
-    public CameraPath finishAndStart() {
+    public ICameraTransformer finishAndStart() {
         if (this.path.pathPoints.size() <= 0) {
             AstralSorcery.log.warn("Tried to start a camera path without any points! Skipping...");
             return null;
@@ -76,7 +76,7 @@ public class CameraPathBuilder {
 
         CameraTransformerPlayerFocus cameraTransformer = new CameraTransformerPlayerFocus(this.path, this.path);
         ClientCameraManager.INSTANCE.addTransformer(cameraTransformer);
-        return this.path;
+        return cameraTransformer;
     }
 
     public static interface DynamicRadiusGetter {

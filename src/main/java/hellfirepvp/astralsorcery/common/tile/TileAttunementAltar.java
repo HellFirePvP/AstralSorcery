@@ -90,6 +90,12 @@ public class TileAttunementAltar extends TileEntityTick {
                 this.searchAndStartRecipe();
             } else {
                 this.currentRecipe.tick(LogicalSide.SERVER, this);
+                if (!this.currentRecipe.matches(this)) {
+                    this.currentRecipe = null;
+                    this.markForUpdate();
+                } else if (this.currentRecipe.isFinished(this)) {
+                    this.finishActiveRecipe();
+                }
             }
         } else {
             tickEffects();
@@ -116,6 +122,15 @@ public class TileAttunementAltar extends TileEntityTick {
                 this.activeConstellation = null;
                 markForUpdate();
             }
+        }
+    }
+
+    public void finishActiveRecipe() {
+        if (this.currentRecipe != null) {
+            this.currentRecipe.finishRecipe(this);
+            this.currentRecipe.stopCrafting(this);
+            this.currentRecipe = null;
+            this.markForUpdate();
         }
     }
 

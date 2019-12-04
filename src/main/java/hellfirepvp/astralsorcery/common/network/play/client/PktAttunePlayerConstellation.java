@@ -9,7 +9,11 @@
 package hellfirepvp.astralsorcery.common.network.play.client;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunePlayerRecipe;
+import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.active.ActivePlayerAttunementRecipe;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -27,15 +31,15 @@ import javax.annotation.Nonnull;
  * Created by HellFirePvP
  * Date: 02.06.2019 / 11:35
  */
-public class PktAttuneConstellation extends ASPacket<PktAttuneConstellation> {
+public class PktAttunePlayerConstellation extends ASPacket<PktAttunePlayerConstellation> {
 
     private IMajorConstellation attunement = null;
     private DimensionType type = null;
     private BlockPos at = BlockPos.ZERO;
 
-    public PktAttuneConstellation() {}
+    public PktAttunePlayerConstellation() {}
 
-    public PktAttuneConstellation(IMajorConstellation attunement, DimensionType type, BlockPos at) {
+    public PktAttunePlayerConstellation(IMajorConstellation attunement, DimensionType type, BlockPos at) {
         this.attunement = attunement;
         this.type = type;
         this.at = at;
@@ -43,7 +47,7 @@ public class PktAttuneConstellation extends ASPacket<PktAttuneConstellation> {
 
     @Nonnull
     @Override
-    public Encoder<PktAttuneConstellation> encoder() {
+    public Encoder<PktAttunePlayerConstellation> encoder() {
         return (packet, buffer) -> {
             ByteBufUtils.writeRegistryEntry(buffer, packet.attunement);
             ByteBufUtils.writeRegistryEntry(buffer, packet.type);
@@ -53,9 +57,9 @@ public class PktAttuneConstellation extends ASPacket<PktAttuneConstellation> {
 
     @Nonnull
     @Override
-    public Decoder<PktAttuneConstellation> decoder() {
+    public Decoder<PktAttunePlayerConstellation> decoder() {
         return buffer -> {
-            PktAttuneConstellation pkt = new PktAttuneConstellation();
+            PktAttunePlayerConstellation pkt = new PktAttunePlayerConstellation();
 
             pkt.attunement = ByteBufUtils.readRegistryEntry(buffer);
             pkt.type = ByteBufUtils.readRegistryEntry(buffer);
@@ -67,18 +71,21 @@ public class PktAttuneConstellation extends ASPacket<PktAttuneConstellation> {
 
     @Nonnull
     @Override
-    public Handler<PktAttuneConstellation> handler() {
+    public Handler<PktAttunePlayerConstellation> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
                 IMajorConstellation cst = packet.attunement;
                 if (cst != null) {
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
                     World world = srv.getWorld(type);
-                    //TODO attunement altar
-                    //TileAttunementAltar ta = MiscUtils.getTileAt(world, packet.at, TileAttunementAltar.class, false);
-                    //if (ta != null) {
-                    //    ta.askForAttunement(context.getSender(), cst);
-                    //}
+                    TileAttunementAltar ta = MiscUtils.getTileAt(world, packet.at, TileAttunementAltar.class, false);
+                    if (ta != null && ta.getActiveRecipe() instanceof ActivePlayerAttunementRecipe) {
+                        if (context.getSender().getUniqueID().equals(((ActivePlayerAttunementRecipe) ta.getActiveRecipe()).getPlayerUUID()) &&
+                                AttunePlayerRecipe.isEligablePlayer(context.getSender(), ta.getActiveConstellation())) {
+
+                            ta.finishActiveRecipe();
+                        }
+                    }
                 }
             });
         };
