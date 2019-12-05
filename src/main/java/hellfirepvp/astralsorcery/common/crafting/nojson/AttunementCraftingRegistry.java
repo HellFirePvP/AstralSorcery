@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.crafting.nojson;
 
+import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttuneCrystalRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunePlayerRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunementRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -22,5 +23,6 @@ public class AttunementCraftingRegistry extends CustomRecipeRegistry<AttunementR
     @Override
     public void init() {
         this.register(new AttunePlayerRecipe());
+        this.register(new AttuneCrystalRecipe());
     }
 }

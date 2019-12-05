@@ -85,7 +85,7 @@ public class AttunePlayerRecipe extends AttunementRecipe<ActivePlayerAttunementR
     }
 
     public static boolean isEligablePlayer(ServerPlayerEntity player, IConstellation attuneTo) {
-        if (player != null && !MiscUtils.isPlayerFakeMP(player) && !player.isSneaking()) {
+        if (player != null && player.isAlive() && !MiscUtils.isPlayerFakeMP(player) && !player.isSneaking()) {
             PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
 
             return prog.isValid() &&

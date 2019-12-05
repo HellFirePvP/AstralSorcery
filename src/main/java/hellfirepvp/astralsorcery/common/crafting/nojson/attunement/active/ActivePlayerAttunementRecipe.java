@@ -95,6 +95,8 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
 
             this.cameraHack = builder.finishAndStart();
         }
+
+
     }
 
     @OnlyIn(Dist.CLIENT)

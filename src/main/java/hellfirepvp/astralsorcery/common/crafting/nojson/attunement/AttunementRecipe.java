@@ -57,9 +57,6 @@ public abstract class AttunementRecipe<T extends AttunementRecipe.Active> extend
         public final void tick(LogicalSide side, TileAttunementAltar altar) {
             this.doTick(side, altar);
             this.tick++;
-            if (side.isServer() && this.isFinished(altar)) {
-                this.stopCrafting(altar);
-            }
         }
 
         //Called on server when this recipe should stop (stop effects, world interactions, ...)
