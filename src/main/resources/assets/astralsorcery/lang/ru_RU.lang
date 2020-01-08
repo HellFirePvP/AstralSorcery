@@ -802,7 +802,7 @@ perk.DMG_KNOCK.info=Увеличен урон мобам, которые был�
 perk.DMG_BLEED=Тяжелые раны
 perk.DMG_BLEED.info=Применить эффект кровотечения при попадании
 
-perk.CRE_GROWTH=Партия Зелёных
+perk.CRE_GROWTH=Сила растений
 perk.CRE_GROWTH.info=Растения вокруг вас растут немного быстрее
 perk.CRE_BREEDING=Повышение рождаемости
 perk.CRE_BREEDING.info=Животные вокруг вас испытывают потребность в размножении
@@ -1146,7 +1146,7 @@ perk.astralsorcery.key_swim_conversion.desc.1=К скорости плавани
 perk.astralsorcery.key_swim_conversion.desc.2=скорости ходьбы в размере 50%%.
 perk.astralsorcery.key_step_assist.name=Походные ботинки
 perk.astralsorcery.key_step_assist.desc=Подниматься на блок вверх стало попроще.
-perk.astralsorcery.key_spawn_lights.name=Гуманитарная помощь донбасянам
+perk.astralsorcery.key_spawn_lights.name=Отрада шахтёра
 perk.astralsorcery.key_spawn_lights.desc=В пещерах возле вас возникают источники света.
 perk.astralsorcery.key_reduced_food.name=Спасибо, я не голодный
 perk.astralsorcery.key_reduced_food.desc=Уменьшает вашу потребность в еде.
