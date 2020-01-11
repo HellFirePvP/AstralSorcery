@@ -83,7 +83,7 @@ public class ClientMiscEventHandler {
             float bodySwimAngle = MathHelper.lerp(swimAngle, 0.0F, waterPitch);
             GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
             GlStateManager.rotatef(bodySwimAngle, 1F, 0F, 0F);
-            if (player.func_213314_bj()) {
+            if (player.isActualySwimming()) {
                 GlStateManager.translatef(0.0F, -1.0F, 0.3F);
             }
         } else {

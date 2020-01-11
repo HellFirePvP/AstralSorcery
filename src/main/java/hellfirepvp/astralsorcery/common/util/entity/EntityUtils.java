@@ -172,7 +172,7 @@ public class EntityUtils {
             return Collections.emptyList();
         }
 
-        ResourceLocation lootTableKey = entity.func_213346_cF();
+        ResourceLocation lootTableKey = entity.getLootTableResourceLocation();
         LootTable table = srv.getLootTableManager().getLootTableFromLocation(lootTableKey);
         LootContext.Builder builder = new LootContext.Builder(sw)
                 .withRandom(rand)

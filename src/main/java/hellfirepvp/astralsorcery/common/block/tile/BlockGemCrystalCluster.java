@@ -107,7 +107,7 @@ public class BlockGemCrystalCluster extends ContainerBlock {
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.down();
-        return func_220064_c(worldIn, blockpos) || func_220055_a(worldIn, blockpos, Direction.UP);
+        return hasSolidSideOnTop(worldIn, blockpos) || hasEnoughSolidSide(worldIn, blockpos, Direction.UP);
     }
 
     @Override
