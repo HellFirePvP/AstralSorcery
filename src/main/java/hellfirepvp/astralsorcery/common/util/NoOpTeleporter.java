@@ -30,7 +30,7 @@ public class NoOpTeleporter extends Teleporter {
     }
 
     @Override
-    public boolean func_222268_a(Entity entity, float yaw) {
+    public boolean placeInPortal(Entity entity, float yaw) {
         entity.moveToBlockPosAndAngles(targetPos, yaw, entity.rotationPitch);
         return true;
     }
