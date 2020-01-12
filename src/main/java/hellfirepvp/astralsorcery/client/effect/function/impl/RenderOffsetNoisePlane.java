@@ -50,9 +50,9 @@ public class RenderOffsetNoisePlane implements VFXRenderOffsetFunction<EntityVis
         this.targetSample = this.lastSample + randomSampleTime();
     }
 
-    public FXFacingParticle createParticle() {
+    public FXFacingParticle createParticle(Vector3 position) {
         FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                .spawn(new Vector3())
+                .spawn(position)
                 .color(VFXColorFunction.WHITE)
                 .renderOffset(this);
         p.getOrCreateData(KEY_PLANE_DATA, () -> new PlanarRotationData(

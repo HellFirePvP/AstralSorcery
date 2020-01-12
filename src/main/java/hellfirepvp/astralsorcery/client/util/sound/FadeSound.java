@@ -17,40 +17,46 @@ import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Predicate;
 
-/**
- * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
- * Class: PositionedLoopSound
- * Created by HellFirePvP
- * Date: 30.06.2019 / 22:59
- */
-public class PositionedLoopSound extends SimpleSound implements ITickableSound, ISound {
+public class FadeSound extends SimpleSound implements ITickableSound, ISound {
 
-    private Predicate<PositionedLoopSound> func = null;
+    private Predicate<FadeSound> func = null;
     private boolean hasStoppedPlaying = false;
     private float volumeMultiplier = 1F;
 
-    public PositionedLoopSound(CategorizedSoundEvent sound, float volume, float pitch, Vector3 pos, boolean isGlobal) {
+    private float fadeInTicks = 40;
+    private float fadeOutTicks = 1;
+
+    private int tick = 0;
+    private int stopTick = 0;
+
+    public FadeSound(CategorizedSoundEvent sound, float volume, float pitch, Vector3 pos, boolean isGlobal) {
         this(sound, sound.getCategory(), volume, pitch, pos, isGlobal);
     }
 
-    public PositionedLoopSound(SoundEvent sound, SoundCategory category, float volume, float pitch, Vector3 pos, boolean isGlobal) {
+    public FadeSound(SoundEvent sound, SoundCategory category, float volume, float pitch, Vector3 pos, boolean isGlobal) {
         super(sound.getName(), category, volume, pitch, true, 0, AttenuationType.LINEAR, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ(), isGlobal);
     }
 
-    public void setRefreshFunction(Predicate<PositionedLoopSound> func) {
+    public void setRefreshFunction(Predicate<FadeSound> func) {
         this.func = func;
+    }
+
+    public <T extends FadeSound> T setFadeInTicks(float fadeInTicks) {
+        this.fadeInTicks = fadeInTicks;
+        return (T) this;
+    }
+
+    public <T extends FadeSound> T setFadeOutTicks(float fadeOutTicks) {
+        this.fadeOutTicks = fadeOutTicks;
+        return (T) this;
     }
 
     @Override
     public boolean isDonePlaying() {
-        hasStoppedPlaying = func == null || func.test(this);
-        return hasStoppedPlaying;
+        return (this.hasStoppedPlaying = (func == null || func.test(this))) && this.stopTick > this.fadeOutTicks;
     }
 
     public boolean hasStoppedPlaying() {
@@ -63,10 +69,21 @@ public class PositionedLoopSound extends SimpleSound implements ITickableSound, 
 
     @Override
     public float getVolume() {
-        return super.getVolume() * volumeMultiplier;
+        float mulFadeIn = MathHelper.clamp(this.tick / this.fadeInTicks, 0F, 1F);
+        float mulFadeOut = MathHelper.clamp(1F - this.stopTick / this.fadeOutTicks, 0F, 1F);
+        return mulFadeIn * mulFadeOut * super.getVolume()* volumeMultiplier;
     }
 
     @Override
-    public void tick() {}
+    public void tick() {
+        this.tick++;
+        if (this.hasStoppedPlaying) {
+            this.stopTick++;
+        }
+    }
 
+    @Override
+    public boolean canBeSilent() {
+        return true;
+    }
 }

@@ -313,9 +313,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     }
 
                     if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
-                        String loc = perk.getCategory().getLocalizedName();
-                        if (loc != null) {
-                            toolTip.add(new StringTextComponent(String.format("[%s]", loc)).setStyle(tTipInfo));
+                        if (I18n.hasKey(perk.getCategory().getUnlocalizedName())) {
+                            toolTip.add(new StringTextComponent(String.format("[%s]", perk.getCategory().getLocalizedName())).setStyle(tTipInfo));
                         }
                     }
                     Collection<ITextComponent> modInfo = perk.getSource();
@@ -864,8 +863,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     !((ProgressGatedPerk) perk).canSeeClient()) {
                 continue;
             }
-            String catStr = perk.getCategory().getLocalizedName();
-            if (catStr != null && catStr.toLowerCase().contains(matchText)) {
+            if (I18n.hasKey(perk.getCategory().getUnlocalizedName()) && perk.getCategory().getLocalizedName().toLowerCase().contains(matchText)) {
                 this.searchMatches.add(perk);
             } else {
                 for (ITextComponent tooltip : perk.getLocalizedTooltip()) {

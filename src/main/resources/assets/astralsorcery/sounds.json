@@ -1,4 +1,57 @@
 {
+	"attunement_altar_idle_loop": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:attunement/altar_idle_loop",
+				"stream": false
+			}
+		]
+	},
+	"attunement_altar_item_finish": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:attunement/altar_item_finish1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:attunement/altar_item_finish2",
+				"stream": false
+			}
+		]
+	},
+	"attunement_altar_item_loop": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:attunement/altar_item_loop",
+				"stream": false
+			}
+		]
+	},
+	"attunement_altar_item_start": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:attunement/altar_item_start1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:attunement/altar_item_start2",
+				"stream": false
+			}
+		]
+	},
+	"attunement_altar_player_attune": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:attunement/altar_player_attune",
+				"stream": false
+			}
+		]
+	},
 	"infuser_craft_start": {
 		"category": "block",
 		"sounds": [

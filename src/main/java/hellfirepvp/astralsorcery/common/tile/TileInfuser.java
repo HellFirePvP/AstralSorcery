@@ -133,8 +133,8 @@ public class TileInfuser extends TileEntityTick implements WandInteractable {
                         1F,
                         1F,
                         false,
-                        () -> isRemoved() ||
-                                Minecraft.getInstance().gameSettings.getSoundLevel(SoundCategory.BLOCKS) <= 0 ||
+                        (s) -> isRemoved() ||
+                                SoundHelper.getSoundVolume(SoundCategory.BLOCKS) <= 0 ||
                                 this.getActiveRecipe() == null)
                         .setFadeInTicks(30)
                         .setFadeOutTicks(20);

@@ -136,8 +136,8 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
                         1F,
                         1F,
                         false,
-                        () -> isRemoved() ||
-                                Minecraft.getInstance().gameSettings.getSoundLevel(SoundCategory.BLOCKS) <= 0 ||
+                        (s) -> isRemoved() ||
+                                SoundHelper.getSoundVolume(SoundCategory.BLOCKS) <= 0 ||
                                 this.getActiveRecipe() == null)
                         .setFadeInTicks(40)
                         .setFadeOutTicks(20);
@@ -147,8 +147,8 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
                 if (clientWaitSound == null || ((PositionedLoopSound) clientWaitSound).hasStoppedPlaying()) {
                     clientWaitSound = SoundHelper.playSoundLoopFadeInClient(SoundsAS.ALTAR_CRAFT_LOOP_T4_WAITING, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F, false,
-                            () -> isRemoved() ||
-                                    Minecraft.getInstance().gameSettings.getSoundLevel(SoundCategory.BLOCKS) <= 0 ||
+                            (s) -> isRemoved() ||
+                                    SoundHelper.getSoundVolume(SoundCategory.BLOCKS) <= 0 ||
                                     this.getActiveRecipe() == null ||
                                     this.getActiveRecipe().getState() != ActiveSimpleAltarRecipe.CraftingState.WAITING)
                             .setFadeInTicks(30)

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util.sound;
 
 import hellfirepvp.astralsorcery.client.util.sound.FadeLoopSound;
+import hellfirepvp.astralsorcery.client.util.sound.FadeSound;
 import hellfirepvp.astralsorcery.client.util.sound.PositionedLoopSound;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,8 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,7 +57,7 @@ public class SoundHelper {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, PositionedLoopSound.ActivityFunction func) {
+    public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, Predicate<PositionedLoopSound> func) {
         SoundCategory cat = SoundCategory.MASTER;
         if(sound instanceof CategorizedSoundEvent) {
             cat = ((CategorizedSoundEvent) sound).getCategory();
@@ -66,12 +69,24 @@ public class SoundHelper {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static FadeLoopSound playSoundLoopFadeInClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, PositionedLoopSound.ActivityFunction func) {
+    public static FadeLoopSound playSoundLoopFadeInClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, Predicate<PositionedLoopSound> func) {
         SoundCategory cat = SoundCategory.MASTER;
         if(sound instanceof CategorizedSoundEvent) {
             cat = ((CategorizedSoundEvent) sound).getCategory();
         }
         FadeLoopSound posSound = new FadeLoopSound(sound, cat, volume, pitch, pos, isGlobal);
+        posSound.setRefreshFunction(func);
+        Minecraft.getInstance().getSoundHandler().play(posSound);
+        return posSound;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static FadeSound playSoundFadeInClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, Predicate<FadeSound> func) {
+        SoundCategory cat = SoundCategory.MASTER;
+        if(sound instanceof CategorizedSoundEvent) {
+            cat = ((CategorizedSoundEvent) sound).getCategory();
+        }
+        FadeSound posSound = new FadeSound(sound, cat, volume, pitch, pos, isGlobal);
         posSound.setRefreshFunction(func);
         Minecraft.getInstance().getSoundHandler().play(posSound);
         return posSound;

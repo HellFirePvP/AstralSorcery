@@ -325,18 +325,17 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
             this.color = color;
         }
 
-        public String getUnlocalizedName() {
-            return unlocName;
-        }
-
         public TextFormatting getTextFormatting() {
             return color;
         }
 
-        @Nullable
+        public String getUnlocalizedName() {
+            return "perk.category.astralsorcery." + unlocName + ".name";
+        }
+
         @OnlyIn(Dist.CLIENT)
         public String getLocalizedName() {
-            return I18n.format("perk.category.astralsorcery." + unlocName + ".name");
+            return I18n.format(getUnlocalizedName());
         }
 
         @Override
