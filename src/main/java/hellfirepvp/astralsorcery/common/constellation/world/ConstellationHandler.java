@@ -79,7 +79,7 @@ public class ConstellationHandler {
 
         LinkedList<IConstellation> active = new LinkedList<>(this.activeMap.computeIfAbsent(ph, p -> Lists.newLinkedList()));
         for (IConstellationSpecialShowup cst : ConstellationRegistry.getSpecialShowupConstellations()) {
-            if (cst.doesShowUp(world, lastRecordedDay) || cst.equals(ConstellationsAS.horologium)) {
+            if (cst.doesShowUp(world, lastRecordedDay)) {
                 active.add(cst);
                 this.visibleSpecialConstellations.add(cst);
             }
