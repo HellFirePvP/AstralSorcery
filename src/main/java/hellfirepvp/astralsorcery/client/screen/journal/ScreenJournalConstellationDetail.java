@@ -197,7 +197,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         }
         this.activePhases = new LinkedList<>();
         for (MoonPhase phase : MoonPhase.values()) {
-            if (ctx.getConstellationHandler().isActive(this.constellation, phase)) {
+            if (ctx.getConstellationHandler().isActiveInPhase(this.constellation, phase)) {
                 this.activePhases.add(phase);
             }
         }

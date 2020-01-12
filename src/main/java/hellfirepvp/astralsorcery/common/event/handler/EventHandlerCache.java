@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchSyncHelper;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -90,6 +91,7 @@ public class EventHandlerCache {
         StarlightTransmissionHandler.getInstance().clearServer();
         EventHelperRitualFlight.clearServer();
         EventHelperSpawnDeny.clearServer();
+        EventHelperInvulnerability.clearServer();
         ResearchHelper.saveAndClearServerCache();
     }
 

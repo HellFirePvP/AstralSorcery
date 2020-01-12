@@ -42,8 +42,6 @@ import javax.annotation.Nullable;
  */
 public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
 
-    private static final StoneCheck STONE_CHECK = new StoneCheck();
-
     private static final int defaultEnrichmentRadius = 3;
     private static final int defaultChanceToEnrich = 55;
 
@@ -78,7 +76,7 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
                         (rand.nextFloat() * radius * 2) - radius);
                 World world = player.getEntityWorld();
                 BlockPos pos = vec.toBlockPos();
-                if (STONE_CHECK.test(world, pos, world.getBlockState(pos))) {
+                if (Tags.Blocks.STONE.contains(world.getBlockState(pos).getBlock())) {
                     Block block = OreBlockRarityRegistry.STONE_ENRICHMENT.getRandomBlock(rand);
                     if (block != null) {
                         world.setBlockState(pos, block.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
@@ -108,14 +106,5 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
                     .translation(translationKey("chanceToEnrich"))
                     .defineInRange("chanceToEnrich", defaultChanceToEnrich, 2, 512);
         }
-    }
-
-    private static class StoneCheck implements BlockPredicate {
-
-        @Override
-        public boolean test(World world, BlockPos pos, BlockState state) {
-            return Tags.Blocks.STONE.contains(state.getBlock());
-        }
-
     }
 }

@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -52,8 +53,6 @@ import java.util.List;
  */
 public class KeyLightningArc extends KeyPerk {
 
-    private static boolean chainingDamage = false;
-
     private static final float defaultArcChance = 0.6F;
     private static final float defaultArcPercent = 0.6F;
     private static final float defaultArcDistance = 7F;
@@ -82,7 +81,9 @@ public class KeyLightningArc extends KeyPerk {
     }
 
     private void onAttack(LivingHurtEvent event) {
-        if (chainingDamage) return;
+        if (EventFlags.LIGHTNING_ARC.isSet()) {
+            return;
+        }
 
         DamageSource source = event.getSource();
         if (source.getTrueSource() != null && source.getTrueSource() instanceof PlayerEntity) {
@@ -222,9 +223,9 @@ public class KeyLightningArc extends KeyPerk {
 
                 if (visitedEntities.size() > 1) {
                     visitedEntities.forEach((e) -> {
-                        chainingDamage = true;
-                        DamageUtil.attackEntityFrom(e, CommonProxy.DAMAGE_SOURCE_STELLAR, damage, player);
-                        chainingDamage = false;
+                        EventFlags.LIGHTNING_ARC.executeWithFlag(() -> {
+                            DamageUtil.attackEntityFrom(e, CommonProxy.DAMAGE_SOURCE_STELLAR, damage, player);
+                        });
                     });
                 }
             }

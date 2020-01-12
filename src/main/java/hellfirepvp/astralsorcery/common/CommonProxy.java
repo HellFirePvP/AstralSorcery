@@ -34,6 +34,7 @@ import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerInteract;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
@@ -155,6 +156,7 @@ public class CommonProxy {
         EventHandlerInteract.attachListeners(eventBus);
         EventHandlerCache.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
+        EventHelperInvulnerability.attachListeners(eventBus);
         PerkAttributeLimiter.attachListeners(eventBus);
 
         eventBus.addListener(PlayerAmuletHandler::onEnchantmentAdd);
@@ -178,6 +180,7 @@ public class CommonProxy {
 
         EventHelperRitualFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);
+        EventHelperInvulnerability.attachTickListener(registrar);
         PerkCooldownHelper.attachTickListeners(registrar);
     }
 

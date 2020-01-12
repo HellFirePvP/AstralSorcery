@@ -192,10 +192,7 @@ public class Vector3 {
     }
 
     public Vector3 negate() {
-        this.x *= -1;
-        this.y *= -1;
-        this.z *= -1;
-        return this;
+        return this.multiply(-1);
     }
 
     public Vector3 copy(Vector3 vec) {
