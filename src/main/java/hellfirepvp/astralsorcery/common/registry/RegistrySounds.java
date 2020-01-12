@@ -42,6 +42,12 @@ public class RegistrySounds {
         ALTAR_CRAFT_LOOP_T4 = registerSound("altar_craft_loop_t4", SoundCategory.BLOCKS);
         ALTAR_CRAFT_LOOP_T4_WAITING = registerSound("altar_craft_loop_t4_waiting", SoundCategory.BLOCKS);
 
+        ATTUNEMENT_ATLAR_IDLE = registerSound("attunement_altar_idle_loop", SoundCategory.BLOCKS);
+        ATTUNEMENT_ATLAR_PLAYER_ATTUNE = registerSound("attunement_altar_player_attune", SoundCategory.BLOCKS);
+        ATTUNEMENT_ATLAR_ITEM_START = registerSound("attunement_altar_item_start", SoundCategory.BLOCKS);
+        ATTUNEMENT_ATLAR_ITEM_FINISH = registerSound("attunement_altar_item_finish", SoundCategory.BLOCKS);
+        ATTUNEMENT_ATLAR_ITEM_LOOP = registerSound("attunement_altar_item_loop", SoundCategory.BLOCKS);
+
         INFUSER_CRAFT_START = registerSound("infuser_craft_start", SoundCategory.BLOCKS);
         INFUSER_CRAFT_LOOP = registerSound("infuser_craft_loop", SoundCategory.BLOCKS);
         INFUSER_CRAFT_FINISH = registerSound("infuser_craft_finish", SoundCategory.BLOCKS);

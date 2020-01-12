@@ -108,7 +108,6 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         CROP_GROWTH,
         MELT_BLOCK,
         ALTAR_RECIPE_FINISH,
-        ATTUNEMENT_RECIPE_FINISH,
         INFUSER_RECIPE_FINISH,
         TIME_FREEZE_EFFECT;
 
@@ -135,8 +134,6 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return ItemColoredLensFire::playParticles;
                 case ALTAR_RECIPE_FINISH:
                     return TileAltar::finishCraftingEffects;
-                case ATTUNEMENT_RECIPE_FINISH:
-                    return TileAttunementAltar::finishCraftingEffects;
                 case INFUSER_RECIPE_FINISH:
                     return TileInfuser::finishCraftingEffects;
             }

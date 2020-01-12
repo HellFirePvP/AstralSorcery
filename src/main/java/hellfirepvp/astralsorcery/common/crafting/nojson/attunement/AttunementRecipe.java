@@ -10,6 +10,7 @@ import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,6 +39,8 @@ public abstract class AttunementRecipe<T extends AttunementRecipe.Active> extend
     }
 
     public static abstract class Active<T extends AttunementRecipe<? extends Active<T>>> {
+
+        protected final Random rand = new Random();
 
         private T recipe;
         private int tick = 0;

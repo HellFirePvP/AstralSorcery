@@ -77,7 +77,7 @@ public class PktAttunePlayerConstellation extends ASPacket<PktAttunePlayerConste
                 IMajorConstellation cst = packet.attunement;
                 if (cst != null) {
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                    World world = srv.getWorld(type);
+                    World world = srv.getWorld(packet.type);
                     TileAttunementAltar ta = MiscUtils.getTileAt(world, packet.at, TileAttunementAltar.class, false);
                     if (ta != null && ta.getActiveRecipe() instanceof ActivePlayerAttunementRecipe) {
                         if (context.getSender().getUniqueID().equals(((ActivePlayerAttunementRecipe) ta.getActiveRecipe()).getPlayerUUID()) &&

@@ -92,6 +92,7 @@ public class RegistryTextures {
         TEX_COLLECTOR_EFFECT        = loadTexture(EFFECT, "collector_crystal_burst");
         TEX_CRAFT_BURST             = loadTexture(EFFECT, "craft_burst");
         TEX_CRAFT_FLARE             = loadTexture(EFFECT, "craft_flare");
+        TEX_RELAY_FLARE             = loadTexture(EFFECT, "relay_flare");
 
         TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");

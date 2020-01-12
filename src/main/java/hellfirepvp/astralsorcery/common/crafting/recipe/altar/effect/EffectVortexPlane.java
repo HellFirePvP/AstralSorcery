@@ -36,28 +36,26 @@ public class EffectVortexPlane extends AltarRecipeEffect {
             RenderOffsetNoisePlane plane = recipe.getEffectContained(INDEX_NOISE_PLANE_LAYER1,
                     i -> new RenderOffsetNoisePlane(1.2F));
             for (int i = 0; i < 2; i++) {
-                FXFacingParticle p = plane.createParticle();
+                FXFacingParticle p = plane.createParticle(at.clone().add(getFocusRelayOffset(altar.getAltarType())));
                 p.alpha(VFXAlphaFunction.FADE_OUT)
                         .setMotion(new Vector3(
                                 rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1),
                                 rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1),
                                 rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1)))
                         .setScaleMultiplier(0.15F + rand.nextFloat() * 0.1F)
-                        .setPosition(at.clone().add(getFocusRelayOffset(altar.getAltarType())))
                         .setMaxAge(30 + rand.nextInt(15));
             }
 
             plane = recipe.getEffectContained(INDEX_NOISE_PLANE_LAYER2,
                     i -> new RenderOffsetNoisePlane(1.8F));
             for (int i = 0; i < 2; i++) {
-                FXFacingParticle p = plane.createParticle();
+                FXFacingParticle p = plane.createParticle(at.clone().add(getFocusRelayOffset(altar.getAltarType())));
                 p.alpha(VFXAlphaFunction.FADE_OUT)
                         .setMotion(new Vector3(
                                 rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1),
                                 rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1),
                                 rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1)))
                         .setScaleMultiplier(0.15F + rand.nextFloat() * 0.1F)
-                        .setPosition(at.clone().add(getFocusRelayOffset(altar.getAltarType())))
                         .setMaxAge(30 + rand.nextInt(15));
             }
         }
