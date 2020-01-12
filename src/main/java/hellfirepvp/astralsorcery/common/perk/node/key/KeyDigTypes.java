@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.node.key;
 
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -29,8 +30,6 @@ import net.minecraftforge.fml.LogicalSide;
  * Date: 31.08.2019 / 17:30
  */
 public class KeyDigTypes extends KeyPerk {
-
-    private static boolean checkingSpeed = false;
 
     public KeyDigTypes(ResourceLocation name, int x, int y) {
         super(name, x, y);
@@ -64,8 +63,6 @@ public class KeyDigTypes extends KeyPerk {
     }
 
     private void onHarvestSpeed(PlayerEvent.BreakSpeed event) {
-        if (checkingSpeed) return;
-
         PlayerEntity player = event.getPlayer();
         LogicalSide side = this.getSide(player);
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
@@ -76,9 +73,9 @@ public class KeyDigTypes extends KeyPerk {
                 if (playerMainHand.getItem().getToolTypes(playerMainHand).contains(ToolType.PICKAXE)) {
                     if (!broken.isToolEffective(ToolType.PICKAXE) &&
                             (broken.isToolEffective(ToolType.AXE) || broken.isToolEffective(ToolType.SHOVEL))) {
-                        checkingSpeed = true;
-                        event.setNewSpeed(Math.max(event.getNewSpeed(), playerMainHand.getDestroySpeed(Blocks.STONE.getDefaultState())));
-                        checkingSpeed = false;
+                        EventFlags.CHECK_BREAK_SPEED.executeWithFlag(() -> {
+                            event.setNewSpeed(Math.max(event.getNewSpeed(), playerMainHand.getDestroySpeed(Blocks.STONE.getDefaultState())));
+                        });
                     }
                 }
             }

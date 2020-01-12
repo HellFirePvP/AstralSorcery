@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunePlayerRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -97,7 +98,10 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
     @Override
     public void doTick(LogicalSide side, TileAttunementAltar altar) {
         if (side.isServer()) {
-
+            PlayerEntity player = altar.getWorld().getPlayerByUuid(this.playerUUID);
+            if (player != null) {
+                EventHelperInvulnerability.makeInvulnerable(player);
+            }
         } else {
             setupPlanes();
             doClientSetup(altar);
@@ -149,6 +153,7 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
             }
             FXFacingParticle particle = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(offset)
+                    .alpha(VFXAlphaFunction.FADE_OUT)
                     .setGravityStrength(-0.0002F + rand.nextFloat() * -0.0001F)
                     .setScaleMultiplier(0.3F + rand.nextFloat() * 0.15F)
                     .color(VFXColorFunction.WHITE)
@@ -277,11 +282,11 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
             }
         }
 
-        if (tick >= (DURATION_PLAYER_ATTUNEMENT - 4)) {
+        if (tick >= (DURATION_PLAYER_ATTUNEMENT - 10)) {
             for (int i = 0; i < 25; i++) {
                 Vector3 at = new Vector3(altar)
-                        .add(0.5, 1, 0.5)
-                        .addY(rand.nextFloat() * 1);
+                        .add(0.5, 0, 0.5)
+                        .addY(rand.nextFloat() * 15);
 
                 FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                         .spawn(at)

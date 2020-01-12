@@ -13,9 +13,10 @@ import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -35,6 +36,7 @@ public class ConstellationHandler {
     private Map<IConstellation, MoonPhase> directOffsetMap = Maps.newHashMap();
 
     private int lastRecordedDay = -1;
+    private List<IConstellation> visibleSpecialConstellations = Lists.newArrayList();
 
     ConstellationHandler(WorldContext context) {
         this.ctx = context;
@@ -45,11 +47,11 @@ public class ConstellationHandler {
         return this.directOffsetMap.get(cst);
     }
 
-    public boolean isActive(IConstellation cst, IWorld world) {
-        return isActive(cst, MoonPhase.fromWorld(world));
+    public boolean isActiveCurrently(IConstellation cst, MoonPhase phase) {
+        return isActiveInPhase(cst, phase) || this.visibleSpecialConstellations.contains(cst);
     }
 
-    public boolean isActive(IConstellation cst, MoonPhase phase) {
+    public boolean isActiveInPhase(IConstellation cst, MoonPhase phase) {
         return this.activeMap.get(phase).contains(cst);
     }
 
@@ -62,7 +64,7 @@ public class ConstellationHandler {
             initialize();
         }
 
-        int currentDay = (int) (world.getGameTime() / GeneralConfig.CONFIG.dayLength.get());
+        int currentDay = (int) (world.getDayTime() / GeneralConfig.CONFIG.dayLength.get());
 
         int dayDifference = currentDay - lastRecordedDay;
         if (dayDifference != 0) {
@@ -72,12 +74,14 @@ public class ConstellationHandler {
     }
 
     private void updateActiveConstellations(World world) {
+        this.visibleSpecialConstellations.clear();
         MoonPhase ph = MoonPhase.fromWorld(world);
 
         LinkedList<IConstellation> active = new LinkedList<>(this.activeMap.computeIfAbsent(ph, p -> Lists.newLinkedList()));
         for (IConstellationSpecialShowup cst : ConstellationRegistry.getSpecialShowupConstellations()) {
-            if (cst.doesShowUp(world, lastRecordedDay)) {
+            if (cst.doesShowUp(world, lastRecordedDay) || cst.equals(ConstellationsAS.horologium)) {
                 active.add(cst);
+                this.visibleSpecialConstellations.add(cst);
             }
         }
 

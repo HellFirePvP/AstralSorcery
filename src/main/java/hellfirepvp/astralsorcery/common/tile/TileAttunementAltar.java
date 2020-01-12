@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingSprite;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.util.sound.PositionedLoopSound;
+import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
@@ -28,7 +29,6 @@ import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunementRec
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.lib.*;
-import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -52,7 +52,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.*;
 
 /**
@@ -217,7 +216,7 @@ public class TileAttunementAltar extends TileEntityTick {
                     this.playConstellationHighlightParticles(this.activeConstellation, key, night);
                 }
             }
-
+            this.playAltarConstellationHighlightParticles(this.activeConstellation, night);
         } else if (!this.activeStarSprites.isEmpty()) {
             for (BlockPos key : this.activeStarSprites.keySet()) {
                 FXFacingSprite sprite = (FXFacingSprite) this.activeStarSprites.get(key);
@@ -316,7 +315,7 @@ public class TileAttunementAltar extends TileEntityTick {
                 this.doesSeeSky() &&
                 this.getActiveConstellation() != null &&
                 DayTimeHelper.isNight(getWorld()) &&
-                ctx.getConstellationHandler().isActive(getActiveConstellation(), getWorld());
+                ctx.getConstellationHandler().isActiveCurrently(getActiveConstellation(), MoonPhase.fromWorld(getWorld()));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -355,12 +354,13 @@ public class TileAttunementAltar extends TileEntityTick {
             IConstellation cst = ((ItemConstellationPaper) cstPaper.getItem()).getConstellation(cstPaper);
             if (cst != null &&
                     ResearchHelper.getClientProgress().hasConstellationDiscovered(cst) &&
-                    ctx.getConstellationHandler().isActive(cst, getWorld())) {
+                    ctx.getConstellationHandler().isActiveCurrently(cst, MoonPhase.fromWorld(getWorld()))) {
                 float night = DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
                 if (night >= 0.1F) {
                     for (BlockPos pos : this.getConstellationPositions(cst)) {
                         this.playConstellationHighlightParticles(cst, pos, night);
                     }
+                    this.playAltarConstellationHighlightParticles(cst, night);
                 }
             }
         }
@@ -390,6 +390,22 @@ public class TileAttunementAltar extends TileEntityTick {
                     .alpha(VFXAlphaFunction.FADE_OUT)
                     .setMaxAge(60 + rand.nextInt(40));
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void playAltarConstellationHighlightParticles(IConstellation cst, float nightPercent) {
+        Vector3 at = new Vector3(getPos())
+                .add(0.5, 0, 0.5)
+                .add(Vector3.random().setY(0).multiply(0.65F));
+
+        EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                .spawn(at)
+                .color(VFXColorFunction.constant(cst.getConstellationColor().brighter()))
+                .setGravityStrength(-0.0015F)
+                .setMotion(Vector3.random().addY(3).normalize().multiply(0.03 + rand.nextFloat() * 0.015))
+                .setAlphaMultiplier(0.85F * nightPercent)
+                .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F)
+                .alpha(VFXAlphaFunction.FADE_OUT);
     }
 
     @Nullable
@@ -455,7 +471,7 @@ public class TileAttunementAltar extends TileEntityTick {
                 break;
             }
         }
-        if (match != null && cstHandler.isActive(match, getWorld())) {
+        if (match != null && cstHandler.isActiveCurrently(match, MoonPhase.fromWorld(getWorld()))) {
             return match;
         }
         return null;

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.node.key;
 
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
@@ -35,8 +36,6 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class KeyAreaOfEffect extends KeyAddEnchantment {
 
-    private static boolean inSweepAttack = false;
-
     public KeyAreaOfEffect(ResourceLocation name, int x, int y) {
         super(name, x, y);
         this.addEnchantment(Enchantments.SWEEPING, 2);
@@ -49,7 +48,7 @@ public class KeyAreaOfEffect extends KeyAddEnchantment {
     }
 
     private void onDamage(LivingHurtEvent event) {
-        if (inSweepAttack) {
+        if (EventFlags.SWEEP_ATTACK.isSet()) {
             return;
         }
 
@@ -66,17 +65,15 @@ public class KeyAreaOfEffect extends KeyAddEnchantment {
                     sweepPerc = PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, sweepPerc);
                     float toApply = event.getAmount() * sweepPerc;
-                    inSweepAttack = true;
-                    try {
+
+                    EventFlags.SWEEP_ATTACK.executeWithFlag(() -> {
                         for (LivingEntity target : attacked.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class,
                                 attacked.getBoundingBox().grow(1, 0.25, 1))) {
                             if (MiscUtils.canPlayerAttackServer(player, target)) {
                                 DamageUtil.attackEntityFrom(target, source, toApply);
                             }
                         }
-                    } finally {
-                        inSweepAttack = false;
-                    }
+                    });
                 }
             }
         }

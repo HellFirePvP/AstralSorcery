@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk.node.key;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
@@ -84,11 +85,7 @@ public class KeyChainMining extends KeyPerk {
                 event.getWorld() instanceof ServerWorld &&
                 !player.isCreative()) {
 
-            if (chainOngoing) {
-                return;
-            }
-            chainOngoing = true;
-            try {
+            EventFlags.CHAIN_MINING.executeWithFlag(() -> {
                 ServerWorld world = (ServerWorld) event.getWorld();
                 if(doMiningChain(world, event.getPos(), event.getState(), (ServerPlayerEntity) player, side)) {
                     float doubleChance = PerkAttributeHelper.getOrCreateMap(player, side)
@@ -97,9 +94,7 @@ public class KeyChainMining extends KeyPerk {
                         while (doMiningChain(world, event.getPos(), event.getState(), (ServerPlayerEntity) player, side)) {}
                     }
                 }
-            } finally {
-                chainOngoing = false;
-            }
+            });
         }
     }
 

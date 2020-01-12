@@ -53,7 +53,7 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
         if (ctx != null) {
             phases = new ArrayList<>();
             for (MoonPhase phase : MoonPhase.values()) {
-                if (ctx.getConstellationHandler().isActive(this.constellation, phase)) {
+                if (ctx.getConstellationHandler().isActiveInPhase(this.constellation, phase)) {
                     phases.add(phase);
                 }
             }
