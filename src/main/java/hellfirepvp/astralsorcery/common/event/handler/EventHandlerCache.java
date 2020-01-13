@@ -74,6 +74,7 @@ public class EventHandlerCache {
         PerkCooldownHelper.clearCache(LogicalSide.CLIENT);
 
         WorldSeedCache.clearClient();
+        SkyHandler.getInstance().clientClearCache();
         AstralSorcery.log.info("Client cache cleared!");
     }
 

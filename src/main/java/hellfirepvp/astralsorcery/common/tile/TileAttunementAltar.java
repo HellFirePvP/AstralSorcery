@@ -360,7 +360,6 @@ public class TileAttunementAltar extends TileEntityTick {
                     for (BlockPos pos : this.getConstellationPositions(cst)) {
                         this.playConstellationHighlightParticles(cst, pos, night);
                     }
-                    this.playAltarConstellationHighlightParticles(cst, night);
                 }
             }
         }

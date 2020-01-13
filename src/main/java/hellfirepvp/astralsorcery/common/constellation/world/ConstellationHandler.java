@@ -80,10 +80,10 @@ public class ConstellationHandler {
         LinkedList<IConstellation> active = new LinkedList<>(this.activeMap.computeIfAbsent(ph, p -> Lists.newLinkedList()));
         for (IConstellationSpecialShowup cst : ConstellationRegistry.getSpecialShowupConstellations()) {
             if (cst.doesShowUp(world, lastRecordedDay)) {
-                active.add(cst);
                 this.visibleSpecialConstellations.add(cst);
             }
         }
+        active.addAll(this.visibleSpecialConstellations);
 
         this.ctx.getActiveCelestialsHandler().updatePositions(active);
     }

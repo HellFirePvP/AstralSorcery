@@ -25,6 +25,9 @@ public class EventFlags {
     public static BooleanFlag CHAIN_MINING = new BooleanFlag(false);
     public static BooleanFlag CHECK_BREAK_SPEED = new BooleanFlag(false);
 
+    //Rendering stuff
+    public static BooleanFlag SKY_RENDERING = new BooleanFlag(false);
+
     public static class BooleanFlag {
 
         private boolean originalState;
