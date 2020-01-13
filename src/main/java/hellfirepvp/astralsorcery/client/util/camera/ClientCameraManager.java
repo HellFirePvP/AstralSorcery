@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.util.camera;
 
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.TickEvent;
 
 import javax.annotation.Nullable;
@@ -48,7 +49,7 @@ public class ClientCameraManager implements ITickHandler {
                     lastTransformer = null;
                 }
             }
-        } else {
+        } else if (!Minecraft.getInstance().isGamePaused()) {
             //Client Tick
             if (this.hasActiveTransformer()) {
                 this.getActiveTransformer().onClientTick();

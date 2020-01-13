@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.resource;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.sky.astral.AstralSkyRenderer;
 import hellfirepvp.astralsorcery.common.util.object.CacheReference;
 import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.resource.IResourceType;
@@ -63,6 +64,9 @@ public class AssetLibrary implements ISelectiveResourceReloadListener {
             map.values().forEach(BindableResource::invalidateAndReload);
         }
         reloading = false;
+
+        //Reload buffer during next render
+        AstralSkyRenderer.INSTANCE.reset();
 
         AstralSorcery.log.info("[AssetLibrary] Successfully reloaded library.");
     }

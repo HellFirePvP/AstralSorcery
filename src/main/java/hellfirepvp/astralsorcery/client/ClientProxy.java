@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.handler.EffectUpdater;
 import hellfirepvp.astralsorcery.client.event.ConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.EffectRenderEventHandler;
 import hellfirepvp.astralsorcery.client.event.LightbeamRenderHelper;
+import hellfirepvp.astralsorcery.client.event.SkyRenderEventHandler;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
@@ -51,6 +52,7 @@ import net.minecraftforge.client.model.ForgeBlockStateV1;
 import net.minecraftforge.client.model.ModelDynBucket;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
@@ -112,6 +114,8 @@ public class ClientProxy extends CommonProxy {
 
         EffectRenderEventHandler.getInstance().attachEventListeners(eventBus);
         ConnectionEventHandler.getInstance().attachEventListeners(eventBus);
+
+        eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onRender);
     }
 
     @Override
