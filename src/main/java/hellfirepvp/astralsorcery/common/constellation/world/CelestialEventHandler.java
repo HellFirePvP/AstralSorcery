@@ -80,7 +80,7 @@ public class CelestialEventHandler {
         int suggestedDayLength = GeneralConfig.CONFIG.dayLength.get();
 
         int solarTime = (int) ((wTime - offset * suggestedDayLength) % (repeat * suggestedDayLength));
-        dayOfSolarEclipse = solarTime < suggestedDayLength;
+        dayOfSolarEclipse = solarTime >= 0 && solarTime < suggestedDayLength;
         int midSOffset = suggestedDayLength / 4; //Rounding errors are not my fault.
 
         if (wTime > suggestedDayLength &&
@@ -97,7 +97,7 @@ public class CelestialEventHandler {
 
         repeat = 68;
         int lunarTime = (int) (wTime % (repeat * suggestedDayLength));
-        dayOfLunarEclipse = lunarTime < suggestedDayLength;
+        dayOfLunarEclipse = lunarTime >= 0 && lunarTime < suggestedDayLength;
         int midLOffset = Math.round(suggestedDayLength * 0.75F); //Rounding errors are not my fault.
 
         if (wTime > suggestedDayLength &&

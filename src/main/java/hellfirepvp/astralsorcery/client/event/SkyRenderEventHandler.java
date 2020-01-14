@@ -27,10 +27,10 @@ public class SkyRenderEventHandler {
     public static void onRender(RenderWorldLastEvent event) {
         World world = Minecraft.getInstance().world;
         if (world != null && world.getDimension().isSurfaceWorld()) {
-            int dimId = world.getDimension().getType().getId();
-            if (RenderingConfig.CONFIG.skyRenderDimensions.get().contains(dimId)) {
-                IRenderHandler render = world.getDimension().getSkyRenderer();
-                if (!(render instanceof ChainingSkyRenderer)) {
+            IRenderHandler render = world.getDimension().getSkyRenderer();
+            if (!(render instanceof ChainingSkyRenderer)) {
+                int dimId = world.getDimension().getType().getId();
+                if (RenderingConfig.CONFIG.skyRenderDimensions.get().contains(dimId)) {
                     world.getDimension().setSkyRenderer(new ChainingSkyRenderer(world.getDimension().getSkyRenderer()));
                 }
             }

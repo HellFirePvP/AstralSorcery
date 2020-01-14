@@ -30,18 +30,19 @@ import java.util.function.Consumer;
 public class BatchedVertexList {
 
     private final VertexFormat vFormat;
-    private final int vertexLength;
-    private final int vertexStride;
 
     private int glDrawList = -1;
     private VertexBuffer vbo = null;
 
+    private boolean useVbo = true;
     private boolean initialized = false;
 
-    public BatchedVertexList(VertexFormat vFormat, int vertexStrideLength) {
+    public BatchedVertexList(VertexFormat vFormat) {
         this.vFormat = vFormat;
-        this.vertexLength = vFormat.getSize();
-        this.vertexStride = vertexStrideLength;
+    }
+
+    public void setUseVbo(boolean useVbo) {
+        this.useVbo = useVbo;
     }
 
     public void batch(Consumer<BufferBuilder> batchFn) {
@@ -51,7 +52,7 @@ public class BatchedVertexList {
 
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder buf = tes.getBuffer();
-        if (false && GLX.useVbo()) {
+        if (this.useVbo && GLX.useVbo()) {
             this.vbo = new VertexBuffer(this.vFormat);
             batchFn.accept(buf);
             buf.finishDrawing();
@@ -72,10 +73,10 @@ public class BatchedVertexList {
             return;
         }
 
-        if (false && GLX.useVbo()) {
+        if (this.useVbo && GLX.useVbo()) {
             this.vbo.bindBuffer();
             GlStateManager.enableClientState(GL11.GL_VERTEX_ARRAY);
-            GlStateManager.vertexPointer(this.vertexLength, GL11.GL_FLOAT, this.vertexStride, 0);
+            GlStateManager.vertexPointer(3, GL11.GL_FLOAT, 0, 0);
             this.vbo.drawArrays(GL11.GL_QUADS);
             VertexBuffer.unbindBuffer();
             GlStateManager.disableClientState(GL11.GL_VERTEX_ARRAY);

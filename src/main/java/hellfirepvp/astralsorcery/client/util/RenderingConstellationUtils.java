@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.constellation.world.ActiveCelestialsHandler;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -35,6 +36,58 @@ import java.util.function.Supplier;
  * Date: 02.08.2019 / 21:27
  */
 public class RenderingConstellationUtils {
+
+    public static void renderConstellationSky(IConstellation c, ActiveCelestialsHandler.RenderPosition renderPos, Supplier<Float> brightnessFn) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder vb = tessellator.getBuffer();
+
+        Vector3 renderOffset = renderPos.offset;
+        Color rC = c.getTierRenderColor();
+        float r = rC.getRed() / 255F;
+        float g = rC.getGreen() / 255F;
+        float b = rC.getBlue() / 255F;
+
+        //Now we build from the exact UV vectors a 31x31 grid and render the stars & connections.
+        Vector3 dirU = renderPos.incU.clone().subtract(renderOffset).divide(31);
+        Vector3 dirV = renderPos.incV.clone().subtract(renderOffset).divide(31);
+        double uLength = dirU.length();
+        TexturesAS.TEX_STAR_CONNECTION.bindTexture();
+        for (int j = 0; j < 2; j++) {
+            for (StarConnection con : c.getStarConnections()) {
+                vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+                GlStateManager.color4f(r, g, b, Math.max(0, brightnessFn.get()));
+                Vector3 vecA = renderOffset.clone().add(dirU.clone().multiply(con.from.x + 1)).add(dirV.clone().multiply(con.from.y + 1));
+                Vector3 vecB = renderOffset.clone().add(dirU.clone().multiply(con.to.x + 1)).add(dirV.clone().multiply(con.to.y + 1));
+                Vector3 vecCV = vecB.subtract(vecA);
+                Vector3 oPane = dirV.clone().crossProduct(vecCV);
+                Vector3 vecAD = oPane.clone().crossProduct(vecCV).normalize().multiply(uLength);
+                Vector3 offset00 = vecA.subtract(vecAD.clone().multiply(j == 0 ? 1 : -1));
+                Vector3 vecU = vecAD.clone().multiply(j == 0 ? 2 : -2);
+
+                for (int i = 0; i < 4; i++) {
+                    Vector3 pos = offset00.clone().add(vecU.clone().multiply(((i + 1) & 2) >> 1)).add(vecCV.clone().multiply(((i + 2) & 2) >> 1));
+                    vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(((i + 2) & 2) >> 1, ((i + 3) & 2) >> 1).endVertex();
+                }
+                tessellator.draw();
+            }
+        }
+
+        TexturesAS.TEX_STAR_1.bindTexture();
+        for (StarLocation star : c.getStars()) {
+            vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+            GlStateManager.color4f(r, g, b, Math.max(0, brightnessFn.get()));
+            int x = star.x;
+            int y = star.y;
+            Vector3 ofStar = renderOffset.clone().add(dirU.clone().multiply(x)).add(dirV.clone().multiply(y));
+            for (int i = 0; i < 4; i++) {
+                int u = ((i + 1) & 2) >> 1;
+                int v = ((i + 2) & 2) >> 1;
+                Vector3 pos = ofStar.clone().add(dirU.clone().multiply(u << 1)).add(dirV.clone().multiply(v << 1));
+                vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(u, v).endVertex();
+            }
+            tessellator.draw();
+        }
+    }
 
     public static void renderConstellationIntoWorldFlat(IConstellation c, Vector3 offset, double scale, double line, float brightness) {
         renderConstellationIntoWorldFlat(c.getConstellationColor(), c, offset, scale, line, brightness);
