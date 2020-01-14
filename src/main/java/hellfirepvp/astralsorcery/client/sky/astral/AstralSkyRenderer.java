@@ -62,8 +62,8 @@ public class AstralSkyRenderer implements IRenderHandler {
 
     public static AstralSkyRenderer INSTANCE = new AstralSkyRenderer();
 
-    private BatchedVertexList sky = new BatchedVertexList(DefaultVertexFormats.POSITION, 12);
-    private BatchedVertexList skyHorizon = new BatchedVertexList(DefaultVertexFormats.POSITION, 12);
+    private BatchedVertexList sky = new BatchedVertexList(DefaultVertexFormats.POSITION);
+    private BatchedVertexList skyHorizon = new BatchedVertexList(DefaultVertexFormats.POSITION);
     private List<StarDrawList> starLists = new LinkedList<>();
 
     private boolean initialized = false;
@@ -184,6 +184,8 @@ public class AstralSkyRenderer implements IRenderHandler {
             return;
         }
 
+        RAND.setSeed(ctx.getSeed());
+
         PlayerProgress clientProgress = ResearchHelper.getClientProgress();
         Map<IConstellation, ActiveCelestialsHandler.RenderPosition> constellations = ctx.getActiveCelestialsHandler().getCurrentRenderPositions();
         for (IConstellation cst : constellations.keySet()) {
@@ -193,7 +195,8 @@ public class AstralSkyRenderer implements IRenderHandler {
             }
             ActiveCelestialsHandler.RenderPosition pos = constellations.get(cst);
 
-            //TODO heh...
+            RenderingConstellationUtils.renderConstellationSky(cst, pos,
+                    () -> RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 10 + RAND.nextInt(5)) * brightness + 0.05F);
         }
     }
 
@@ -201,7 +204,7 @@ public class AstralSkyRenderer implements IRenderHandler {
         float starBrightness = world.getStarBrightness(pTicks);
         if (starBrightness > 0) {
             this.starLists.forEach((list) -> {
-                float br = RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, list.flickerSpeed) * (starBrightness * 1.5F);
+                float br = RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, list.flickerSpeed) * starBrightness;
                 GlStateManager.color4f(starBrightness, starBrightness, starBrightness, br);
                 list.render();
             });
@@ -345,7 +348,8 @@ public class AstralSkyRenderer implements IRenderHandler {
         private final int flickerSpeed;
 
         private StarDrawList(AbstractRenderableTexture texture, int flickerSpeed) {
-            super(DefaultVertexFormats.POSITION_TEX, 20);
+            super(DefaultVertexFormats.POSITION_TEX);
+            this.setUseVbo(false);
 
             this.texture = texture;
             this.flickerSpeed = flickerSpeed;
