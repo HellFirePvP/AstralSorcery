@@ -180,7 +180,7 @@ public class RenderingDrawUtils {
                     maxWidth = width;
                 }
             }
-            if(x + 15 + maxWidth > Minecraft.getInstance().mainWindow.getScaledWidth()) {
+            if (x + 15 + maxWidth > Minecraft.getInstance().mainWindow.getScaledWidth()) {
                 x -= maxWidth + 24;
             }
 
@@ -282,14 +282,14 @@ public class RenderingDrawUtils {
     }
 
     private static void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
-        float startAlpha = (float)(startColor >> 24 & 255) / 255.0F;
-        float startRed   = (float)(startColor >> 16 & 255) / 255.0F;
-        float startGreen = (float)(startColor >>  8 & 255) / 255.0F;
-        float startBlue  = (float)(startColor       & 255) / 255.0F;
-        float endAlpha   = (float)(endColor   >> 24 & 255) / 255.0F;
-        float endRed     = (float)(endColor   >> 16 & 255) / 255.0F;
-        float endGreen   = (float)(endColor   >>  8 & 255) / 255.0F;
-        float endBlue    = (float)(endColor         & 255) / 255.0F;
+        float startAlpha = (float) (startColor >> 24 & 255) / 255.0F;
+        float startRed   = (float) (startColor >> 16 & 255) / 255.0F;
+        float startGreen = (float) (startColor >>  8 & 255) / 255.0F;
+        float startBlue  = (float) (startColor       & 255) / 255.0F;
+        float endAlpha   = (float) (endColor   >> 24 & 255) / 255.0F;
+        float endRed     = (float) (endColor   >> 16 & 255) / 255.0F;
+        float endGreen   = (float) (endColor   >>  8 & 255) / 255.0F;
+        float endBlue    = (float) (endColor         & 255) / 255.0F;
 
         GlStateManager.disableTexture();
         GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,

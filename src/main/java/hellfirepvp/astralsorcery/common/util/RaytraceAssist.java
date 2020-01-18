@@ -83,15 +83,15 @@ public class RaytraceAssist {
             Vector3 stepVec = prevVec.clone().add(stepAim);
             BlockPos at = stepVec.toBlockPos();
 
-            if(collectEntities) {
+            if (collectEntities) {
                 List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, collectBox.offset(stepVec.getX(), stepVec.getY(), stepVec.getZ()));
                 for (Entity b : entities) {
                     collected.add(b.getEntityId());
                 }
             }
 
-            if(MiscUtils.isChunkLoaded(world, at)) {
-                if(!isStartEnd(at) && !world.isAirBlock(at)) {
+            Boolean isClearFlag = MiscUtils.executeWithChunk(world, at, () -> {
+                if (!isStartEnd(at) && !world.isAirBlock(at)) {
                     if (this.hitFluids && !world.getFluidState(at).isEmpty()) {
                         posHit = at;
                         return false;
@@ -101,6 +101,11 @@ public class RaytraceAssist {
                         return false;
                     }
                 }
+                return true;
+            });
+
+            if (isClearFlag != null && !isClearFlag) {
+                return false;
             }
 
             prevVec = stepVec;
@@ -116,7 +121,7 @@ public class RaytraceAssist {
         List<Entity> entities = new LinkedList<>();
         for (Integer id : collected) {
             Entity e = world.getEntityByID(id);
-            if(e != null && e.isAlive()) {
+            if (e != null && e.isAlive()) {
                 entities.add(e);
             }
         }

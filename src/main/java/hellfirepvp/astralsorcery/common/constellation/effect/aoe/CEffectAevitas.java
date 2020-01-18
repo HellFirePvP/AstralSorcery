@@ -79,31 +79,32 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
         boolean changed = false;
         CropHelper.GrowablePlant plant = getRandomElementChanced();
         if (plant != null) {
-            if (MiscUtils.isChunkLoaded(world, new ChunkPos(plant.getPos()))) {
+            changed = MiscUtils.executeWithChunk(world, plant.getPos(), changed, (changedFlag) -> {
                 if (properties.isCorrupted()) {
-                    if(world instanceof ServerWorld) {
+                    if (world instanceof ServerWorld) {
                         if (BlockUtils.breakBlockWithoutPlayer(((ServerWorld) world), plant.getPos())) {
-                            changed = true;
+                            changedFlag = true;
                         }
                     } else {
                         if (world.removeBlock(plant.getPos(), false)) {
-                            changed = true;
+                            changedFlag = true;
                         }
                     }
                 } else {
-                    if (!plant.isValid(world, true)) {
+                    if (!plant.isValid(world)) {
                         removeElement(plant.getPos());
-                        changed = true;
+                        changedFlag = true;
                     } else {
                         if (plant.tryGrow(world, rand)) {
                             PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.CROP_GROWTH)
                                     .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(plant.getPos())));
                             PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, plant.getPos(), 16));
-                            changed = true;
+                            changedFlag = true;
                         }
                     }
                 }
-            }
+                return changedFlag;
+            });
         }
 
         if (this.findNewPosition(world, pos, properties) != null) changed = true;

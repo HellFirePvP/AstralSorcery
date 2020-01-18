@@ -155,7 +155,7 @@ public class ScreenJournalClusterRenderer {
 
     private void rescale(double newScale) {
         this.mousePointScaled.rescale(newScale);
-        if(this.previousMousePointScaled != null) {
+        if (this.previousMousePointScaled != null) {
             this.previousMousePointScaled.rescale(newScale);
         }
         moveMouse(0, 0);

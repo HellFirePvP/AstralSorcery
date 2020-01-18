@@ -98,7 +98,7 @@ public class ItemTome extends Item {
         LinkedList<IConstellation> out = new LinkedList<>();
         for (int i = 0; i < constellationPapers.size(); i++) {
             IConstellation c = RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(new ResourceLocation(constellationPapers.getString(i)));
-            if(c != null) {
+            if (c != null) {
                 out.add(c);
             }
         }

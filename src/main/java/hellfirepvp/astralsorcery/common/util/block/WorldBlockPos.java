@@ -90,14 +90,6 @@ public class WorldBlockPos extends BlockPos {
         return null;
     }
 
-    public boolean isChunkLoaded() {
-        World world = this.worldReference.getValue();
-        if (world != null) {
-            return MiscUtils.isChunkLoaded(world, new ChunkPos(this));
-        }
-        return false;
-    }
-
     @Nullable
     public World getWorld() {
         return this.worldReference.getValue();

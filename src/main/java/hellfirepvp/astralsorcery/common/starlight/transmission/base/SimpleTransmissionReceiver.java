@@ -46,7 +46,7 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
 
     @Override
     public void notifySourceLink(World world, BlockPos source) {
-        if(!sourcesToThis.contains(source)) sourcesToThis.add(source);
+        if (!sourcesToThis.contains(source)) sourcesToThis.add(source);
     }
 
     @Override

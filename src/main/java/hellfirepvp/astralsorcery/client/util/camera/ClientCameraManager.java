@@ -37,7 +37,7 @@ public class ClientCameraManager implements ITickHandler {
                     prio.onStartTransforming(pTicks);
                     lastTransformer = prio;
                 }
-                prio.transformRenderView(pTicks);
+                prio.transformRenderView(Minecraft.getInstance().isGamePaused() ? 0F : pTicks);
                 if (prio.getPersistencyFunction().isExpired()) {
                     prio.onStopTransforming(pTicks);
                     transformers.remove(prio);

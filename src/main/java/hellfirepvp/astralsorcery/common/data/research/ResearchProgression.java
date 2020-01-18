@@ -52,7 +52,7 @@ public enum ResearchProgression implements IExtensibleEnum {
 
     void addResearchToGroup(ResearchNode res) {
         for (ResearchNode node : researchNodes) {
-            if(node.renderPosX == res.renderPosX &&
+            if (node.renderPosX == res.renderPosX &&
                     node.renderPosZ == res.renderPosZ) {
                 throw new IllegalArgumentException("Tried to register 2 Research Nodes at the same position at x=" + res.renderPosX + ", z=" + res.renderPosZ + "! " +
                         "Present: " + node.getUnLocalizedName() + " - Tried to set: " + res.getUnLocalizedName());
@@ -79,7 +79,7 @@ public enum ResearchProgression implements IExtensibleEnum {
 
     public boolean canStepTo(PlayerEntity player) {
         PlayerProgress progress = ResearchManager.getProgress(player);
-        if(progress == null) return false;
+        if (progress == null) return false;
         List<ResearchProgression> playerResearchProgression = progress.getResearchProgression();
         ProgressionTier playerTier = progress.getTierReached();
         return playerTier.isThisLaterOrEqual(requiredProgress) && playerResearchProgression.containsAll(preConditions);

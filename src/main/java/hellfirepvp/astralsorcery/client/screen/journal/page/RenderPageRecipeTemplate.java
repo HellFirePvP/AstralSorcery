@@ -227,17 +227,17 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
     protected ITextComponent getStarlightAmountDescription(ITextComponent altarName, float amountRequired, float maxAmount) {
         String base = "astralsorcery.journal.recipe.starlight.";
         float perc = amountRequired / maxAmount;
-        if(perc <= 0.1) {
+        if (perc <= 0.1) {
             base += "lowest";
-        } else if(perc <= 0.25) {
+        } else if (perc <= 0.25) {
             base += "low";
-        } else if(perc <= 0.5) {
+        } else if (perc <= 0.5) {
             base += "avg";
-        } else if(perc <= 0.75) {
+        } else if (perc <= 0.75) {
             base += "more";
-        } else if(perc <= 0.9) {
+        } else if (perc <= 0.9) {
             base += "high";
-        } else if(perc > 1) {
+        } else if (perc > 1) {
             base += "toomuch";
         } else {
             base += "highest";

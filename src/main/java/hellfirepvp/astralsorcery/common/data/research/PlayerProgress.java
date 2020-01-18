@@ -92,7 +92,7 @@ public class PlayerProgress {
         if (compound.contains("attuned")) {
             String cst = compound.getString("attuned");
             IConstellation c = ConstellationRegistry.getConstellation(new ResourceLocation(cst));
-            if(c == null || !(c instanceof IMajorConstellation)) {
+            if (c == null || !(c instanceof IMajorConstellation)) {
                 AstralSorcery.log.warn("Failed to load attuned Constellation: " + cst + " - constellation doesn't exist or isn't major.");
             } else {
                 attunedConstellation = (IMajorConstellation) c;
@@ -112,26 +112,26 @@ public class PlayerProgress {
                 }
             }
         } else {
-            if(compound.contains("perks")) {
+            if (compound.contains("perks")) {
                 ListNBT list = compound.getList("perks", 10);
                 for (int i = 0; i < list.size(); i++) {
                     CompoundNBT tag = list.getCompound(i);
                     String perkRegName = tag.getString("perkName");
                     CompoundNBT data = tag.getCompound("perkData");
                     AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
-                    if(perk != null) {
+                    if (perk != null) {
                         appliedPerks.add(perk);
                         appliedPerkData.put(perk, data);
                     }
                 }
             }
-            if(compound.contains("sealedPerks")) {
+            if (compound.contains("sealedPerks")) {
                 ListNBT list = compound.getList("sealedPerks", 10);
                 for (int i = 0; i < list.size(); i++) {
                     CompoundNBT tag = list.getCompound(i);
                     String perkRegName = tag.getString("perkName");
                     AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
-                    if(perk != null) {
+                    if (perk != null) {
                         sealedPerks.add(perk);
                     }
                 }
@@ -205,7 +205,7 @@ public class PlayerProgress {
             researchArray[i] = researchProgression.get(i).ordinal();
         }
         cmp.putIntArray("research", researchArray);
-        if(attunedConstellation != null) {
+        if (attunedConstellation != null) {
             cmp.putString("attuned", attunedConstellation.getRegistryName().toString());
         }
         list = new ListNBT();
@@ -331,7 +331,7 @@ public class PlayerProgress {
     }
 
     protected boolean forceGainResearch(ResearchProgression progression) {
-        if(!researchProgression.contains(progression)) {
+        if (!researchProgression.contains(progression)) {
             researchProgression.add(progression);
             return true;
         }
@@ -502,7 +502,7 @@ public class PlayerProgress {
     }
 
     protected boolean stepTier() {
-        if(getTierReached().hasNextTier()) {
+        if (getTierReached().hasNextTier()) {
             setTierReached(ProgressionTier.values()[getTierReached().ordinal() + 1]);
             return true;
         }
@@ -568,10 +568,10 @@ public class PlayerProgress {
         for (ResourceLocation known : toMergeFrom.knownConstellations) {
             discoverConstellation(known);
         }
-        if(toMergeFrom.wasOnceAttuned) {
+        if (toMergeFrom.wasOnceAttuned) {
             this.wasOnceAttuned = true;
         }
-        if(toMergeFrom.tierReached.isThisLaterOrEqual(this.tierReached)) {
+        if (toMergeFrom.tierReached.isThisLaterOrEqual(this.tierReached)) {
             this.tierReached = toMergeFrom.tierReached;
         }
         for (ResearchProgression prog : toMergeFrom.researchProgression) {

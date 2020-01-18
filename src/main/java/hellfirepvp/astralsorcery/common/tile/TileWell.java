@@ -206,12 +206,12 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
         sbDayDistribution = 0.3 + (0.7 * sbDayDistribution);
         int yLevel = getPos().getY();
         float dstr;
-        if(yLevel > 120) {
+        if (yLevel > 120) {
             dstr = 1F;
         } else {
             dstr = yLevel / 120F;
         }
-        if(posDistribution == -1) {
+        if (posDistribution == -1) {
             posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, getPos());
         }
 

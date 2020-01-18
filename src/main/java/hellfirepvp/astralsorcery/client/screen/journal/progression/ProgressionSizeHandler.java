@@ -42,10 +42,10 @@ public class ProgressionSizeHandler extends SizeHandler {
             int x = node.renderPosX;
             int y = node.renderPosZ;
 
-            if(x < leftMost) leftMost = x;
-            if(x > rightMost) rightMost = x;
-            if(y > lowerMost) lowerMost = y;
-            if(y < upperMost) upperMost = y;
+            if (x < leftMost) leftMost = x;
+            if (x > rightMost) rightMost = x;
+            if (y > lowerMost) lowerMost = y;
+            if (y < upperMost) upperMost = y;
         }
         return new int[] { leftMost, rightMost, upperMost, lowerMost };
     }

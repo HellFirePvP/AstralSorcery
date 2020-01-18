@@ -233,11 +233,11 @@ public class ItemUtils {
     }
 
     /*public static void decrStackInInventory(ItemStack[] stacks, int slot) {
-        if(slot < 0 || slot >= stacks.length) return;
+        if (slot < 0 || slot >= stacks.length) return;
         ItemStack st = stacks[slot];
-        if(st == null) return;
+        if (st == null) return;
         st.getCount()--;
-        if(st.getCount() <= 0) {
+        if (st.getCount() <= 0) {
             stacks[slot] = null;
         }
     }*/

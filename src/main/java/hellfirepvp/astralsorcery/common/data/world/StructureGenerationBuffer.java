@@ -74,7 +74,7 @@ public class StructureGenerationBuffer extends SectionWorldData<StructureGenerat
         for (StructureRegion region : getSections(dstTo.subtract(searchVector), dstTo.add(searchVector))) {
             for (BlockPos position : region.getStructures(type)) {
                 double dst = position.distanceSq(dstTo);
-                if(dst < closest) {
+                if (dst < closest) {
                     closest = dst;
                 }
             }
@@ -90,7 +90,7 @@ public class StructureGenerationBuffer extends SectionWorldData<StructureGenerat
         for (StructureRegion region : getSections(dstTo.subtract(searchVector), dstTo.add(searchVector))) {
             for (BlockPos position : region.getStructures(type)) {
                 double dst = position.distanceSq(dstTo);
-                if(dst < closest) {
+                if (dst < closest) {
                     closest = dst;
                     closestPos = position;
                 }

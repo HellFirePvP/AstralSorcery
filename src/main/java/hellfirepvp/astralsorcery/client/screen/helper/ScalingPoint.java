@@ -24,7 +24,7 @@ public class ScalingPoint {
 
     public static ScalingPoint createPoint(double posX, double posY, double scale, boolean arePositionsScaled) {
         ScalingPoint sp = new ScalingPoint();
-        if(arePositionsScaled) {
+        if (arePositionsScaled) {
             sp.updateScaledPos(posX, posY, scale);
         } else {
             sp.updatePos(posX, posY, scale);

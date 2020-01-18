@@ -139,7 +139,7 @@ public class EntityUtils {
         }
 
         Entity entity = type.create(world);
-        if(entity == null) {
+        if (entity == null) {
             return false;
         }
         entity.setLocationAndAngles(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, world.rand.nextFloat() * 360.0F, 0.0F);
@@ -147,7 +147,7 @@ public class EntityUtils {
             preCheckEntity.accept(entity);
         }
 
-        if(entity instanceof LivingEntity) {
+        if (entity instanceof LivingEntity) {
             if (entity instanceof MobEntity) {
                 MobEntity mobEntity = (MobEntity) entity;
                 Event.Result canSpawn = ForgeEventFactory.canEntitySpawn(mobEntity, world, entity.posX, entity.posY, entity.posZ, null, spawnReason);
@@ -204,43 +204,43 @@ public class EntityUtils {
 
     public static Predicate<? super Entity> selectItemClassInstaceof(Class<?> itemClass) {
         return (Predicate<Entity>) entity -> {
-            if(entity == null || !entity.isAlive()) return false;
-            if(!(entity instanceof ItemEntity)) return false;
+            if (entity == null || !entity.isAlive()) return false;
+            if (!(entity instanceof ItemEntity)) return false;
             ItemStack i = ((ItemEntity) entity).getItem();
-            if(i.isEmpty()) return false;
+            if (i.isEmpty()) return false;
             return itemClass.isAssignableFrom(i.getItem().getClass());
         };
     }
 
     public static Predicate<? super Entity> selectItem(Item item) {
         return (Predicate<Entity>) entity -> {
-            if(entity == null || !entity.isAlive()) return false;
-            if(!(entity instanceof ItemEntity)) return false;
+            if (entity == null || !entity.isAlive()) return false;
+            if (!(entity instanceof ItemEntity)) return false;
             ItemStack i = ((ItemEntity) entity).getItem();
-            if(i.isEmpty()) return false;
+            if (i.isEmpty()) return false;
             return i.getItem().equals(item);
         };
     }
 
     public static Predicate<? super Entity> selectItemStack(Function<ItemStack, Boolean> acceptor) {
         return entity -> {
-            if(entity == null || !entity.isAlive()) return false;
-            if(!(entity instanceof ItemEntity)) return false;
+            if (entity == null || !entity.isAlive()) return false;
+            if (!(entity instanceof ItemEntity)) return false;
             ItemStack i = ((ItemEntity) entity).getItem();
-            if(i.isEmpty()) return false;
+            if (i.isEmpty()) return false;
             return acceptor.apply(i);
         };
     }
 
     @Nullable
     public static <T> T selectClosest(Collection<T> elements, Function<T, Double> dstFunc) {
-        if(elements.isEmpty()) return null;
+        if (elements.isEmpty()) return null;
 
         double dstClosest = Double.MAX_VALUE;
         T closestElement = null;
         for (T element : elements) {
             double dst = dstFunc.apply(element);
-            if(dst < dstClosest) {
+            if (dst < dstClosest) {
                 closestElement = element;
                 dstClosest = dst;
             }

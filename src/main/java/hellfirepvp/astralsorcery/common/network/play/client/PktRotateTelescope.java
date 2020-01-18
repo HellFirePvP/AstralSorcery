@@ -78,7 +78,7 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
                     Optional<World> clWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
                     //TODO telescope
                     //TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
-                    //if(tt != null) {
+                    //if (tt != null) {
                     //    tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
                     //}
                     //if (Minecraft.getInstance().currentScreen instanceof GuiTelescope) {
@@ -94,7 +94,7 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
                     World world = srv.getWorld(packet.type);
                     //TODO telescope
                     //TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
-                    //if(tt != null) {
+                    //if (tt != null) {
                     //    tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
                     //    packet.replyWith(new PktRotateTelescope(packet.isClockwise, packet.type, packet.pos), context);
                     //}

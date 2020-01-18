@@ -59,10 +59,10 @@ public class RecipeChangeWandColor extends SpecialRecipe {
 
         for (int slot = 0; slot < inv.getSizeInventory(); slot++) {
             ItemStack in = inv.getStackInSlot(slot);
-            if(!in.isEmpty()) {
+            if (!in.isEmpty()) {
                 nonEmptyItemsFound++;
 
-                if(in.getItem() instanceof ItemIlluminationWand) {
+                if (in.getItem() instanceof ItemIlluminationWand) {
                     foundWand = true;
                 } else {
                     DyeColor color = DyeColor.getColor(in);

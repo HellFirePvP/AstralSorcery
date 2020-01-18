@@ -93,9 +93,9 @@ public class SkyCollectionHelper {
         return sharedRand.nextFloat();
     }
 
-    private static int simple_hash(int[] is, int count){
+    private static int simple_hash(int[] is, int count) {
         int hash = 80238287;
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             hash = (hash << 4) ^ (hash >> 28) ^ (is[i] * 5449 % 130651);
         }
         return hash % 75327403;

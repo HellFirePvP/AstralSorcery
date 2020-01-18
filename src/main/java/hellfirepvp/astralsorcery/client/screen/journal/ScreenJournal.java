@@ -147,7 +147,7 @@ public class ScreenJournal extends WidthHeightScreen {
 
         Rectangle r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
         if (r.contains(mouseX, mouseY)) {
-            if(mouseOverWidth > width) {
+            if (mouseOverWidth > width) {
                 textureStretched.bindTexture();
             }
             width = mouseOverWidth;

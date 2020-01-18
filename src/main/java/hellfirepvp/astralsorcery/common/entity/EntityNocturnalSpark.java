@@ -134,10 +134,10 @@ public class EntityNocturnalSpark extends ThrowableEntity {
                         .alpha(VFXAlphaFunction.PYRAMID)
                         .setAlphaMultiplier(0.7F)
                         .color(VFXColorFunction.constant(Color.BLACK));
-                if(rand.nextInt(5) == 0) {
+                if (rand.nextInt(5) == 0) {
                     randomizeColor(p);
                 }
-                if(rand.nextInt(3) == 0) {
+                if (rand.nextInt(3) == 0) {
                     Vector3 target = Vector3.atEntityCorner(this);
                     MiscUtils.applyRandomOffset(target, rand, 4);
                     EffectHelper.of(EffectTemplatesAS.LIGHTNING)

@@ -66,7 +66,7 @@ public class DataLightConnections extends AbstractData {
                     continue;
                 }
                 ends.remove(c.getEnd());
-                if(ends.isEmpty()) {
+                if (ends.isEmpty()) {
                     posBufferDim.remove(start);
                 }
             }

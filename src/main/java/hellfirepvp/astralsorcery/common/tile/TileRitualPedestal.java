@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
@@ -34,16 +36,14 @@ import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventoryFiltered;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,10 +53,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -67,9 +64,34 @@ import java.util.stream.Collectors;
  */
 public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitualPedestal> implements CrystalAttributeTile {
 
+    public static final BlockPos RITUAL_ANCHOR_OFFEST = new BlockPos(0, 5, 0);
+    public static final BlockPos RITUAL_LENS_OFFSET = new BlockPos(0, 2, 0);
+    public static final Set<BlockPos> RITUAL_CIRCLE_OFFSETS = ImmutableSet.copyOf(new BlockPos[] {
+            new BlockPos(4, 0, 0),
+            new BlockPos(4, 0, 1),
+            new BlockPos(3, 0, 2),
+            new BlockPos(2, 0, 3),
+            new BlockPos(1, 0, 4),
+            new BlockPos(0, 0, 4),
+            new BlockPos(-1, 0, 4),
+            new BlockPos(-2, 0, 3),
+            new BlockPos(-3, 0, 2),
+            new BlockPos(-4, 0, 1),
+            new BlockPos(-4, 0, 0),
+            new BlockPos(-4, 0, -1),
+            new BlockPos(-3, 0, -2),
+            new BlockPos(-2, 0, -3),
+            new BlockPos(-1, 0, -4),
+            new BlockPos(0, 0, -4),
+            new BlockPos(1, 0, -4),
+            new BlockPos(2, 0, -3),
+            new BlockPos(3, 0, -2),
+            new BlockPos(4, 0, -1)
+    });
     public static final int MAX_MIRROR_COUNT = 5;
 
     private TileInventoryFiltered inventory;
+    private Map<BlockPos, BlockState> offsetConfigurations = new HashMap<>();
 
     //Own sync data
     private UUID ownerUUID = null;
@@ -102,6 +124,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
             this.hasMultiblock();
 
             this.updateLinkTile();
+            this.updateBlockConfigurations();
         }
 
         this.effectWork.update(this.working);
@@ -111,9 +134,32 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         }
     }
 
+    private void updateBlockConfigurations() {
+        if (ticksExisted % 20 == 0) {
+            for (BlockPos offset : RITUAL_CIRCLE_OFFSETS) {
+                BlockPos pos = getPos().add(offset);
+                MiscUtils.executeWithChunk(getWorld(), pos, pos, (at) -> {
+                    BlockState savedState = this.offsetConfigurations.get(offset);
+                    if (getWorld().isAirBlock(at)) {
+                        if (savedState != null) {
+                            this.offsetConfigurations.remove(offset);
+                            this.markForUpdate();
+                        }
+                    } else {
+                        BlockState actualState = getWorld().getBlockState(at);
+                        if (savedState == null || !savedState.equals(actualState)) {
+                            this.offsetConfigurations.put(offset, actualState);
+                            this.markForUpdate();
+                        }
+                    }
+                });
+            }
+        }
+    }
+
     private void updateLinkTile() {
         boolean hasLink = ritualLinkTo != null;
-        BlockPos link = getPos().add(0, 5, 0);
+        BlockPos link = getPos().add(RITUAL_ANCHOR_OFFEST);
         TileRitualLink linkTile = MiscUtils.getTileAt(world, link, TileRitualLink.class, true);
         boolean hasLinkNow;
         if (linkTile != null) {
@@ -132,6 +178,11 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     @Override
     protected StructureType getRequiredStructureType() {
         return StructureTypesAS.PTYPE_RITUAL_PEDESTAL;
+    }
+
+    @Nonnull
+    public Set<BlockState> getConfiguredBlockStates() {
+        return Sets.newHashSet(this.offsetConfigurations.values());
     }
 
     //=========================================================================================
@@ -254,7 +305,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                         .setup(to, 0.8F, 0.8F);
 
                 if (this.ritualLinkTo != null) {
-                    source = new Vector3(this).add(0.5, 5.5, 0.5);
+                    source = new Vector3(this).add(RITUAL_ANCHOR_OFFEST).add(0.5, 0.5, 0.5);
 
                     EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
                             .setOwner(this.ownerUUID)
@@ -453,6 +504,13 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
             CompoundNBT tag = (CompoundNBT) nbt;
             this.offsetMirrors.put(NBTHelper.readBlockPosFromNBT(tag), tag.getBoolean("connect"));
         }
+
+        this.offsetConfigurations.clear();
+        ListNBT tagBlocks = compound.getList("blockConfiguration", Constants.NBT.TAG_COMPOUND);
+        for (INBT nbt : tagBlocks) {
+            CompoundNBT tag = (CompoundNBT) nbt;
+            this.offsetConfigurations.put(NBTHelper.readBlockPosFromNBT(tag), NBTHelper.getBlockState(tag, "state"));
+        }
     }
 
     @Override
@@ -476,6 +534,15 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
             listPositions.add(cmp);
         }
         compound.put("mirrors", listPositions);
+
+        ListNBT listConfigurations = new ListNBT();
+        for (Map.Entry<BlockPos, BlockState> posEntry : this.offsetConfigurations.entrySet()) {
+            CompoundNBT cmp = new CompoundNBT();
+            NBTHelper.writeBlockPosToNBT(posEntry.getKey(), cmp);
+            NBTHelper.setBlockState(cmp, "state", posEntry.getValue());
+            listConfigurations.add(cmp);
+        }
+        compound.put("blockConfiguration", listConfigurations);
     }
 
     @Nonnull

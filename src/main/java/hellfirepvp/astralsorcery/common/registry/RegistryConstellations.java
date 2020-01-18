@@ -464,7 +464,7 @@ public class RegistryConstellations {
             public float getDistribution(World world, long day, boolean showingUp) {
                 if (showingUp) return 1F;
                 MoonPhase current = MoonPhase.fromWorld(world);
-                if(current == MoonPhase.WANING_1_2 || current == MoonPhase.WAXING_1_2) {
+                if (current == MoonPhase.WANING_1_2 || current == MoonPhase.WAXING_1_2) {
                     return 0.3F;
                 }
                 return 0.65F;

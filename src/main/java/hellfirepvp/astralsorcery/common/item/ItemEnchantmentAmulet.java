@@ -65,10 +65,10 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
 
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(!worldIn.isRemote() && !getAmuletColor(stack).isPresent()) {
+        if (!worldIn.isRemote() && !getAmuletColor(stack).isPresent()) {
             freezeAmuletColor(stack);
         }
-        if(!worldIn.isRemote() && getAmuletEnchantments(stack).isEmpty()) {
+        if (!worldIn.isRemote() && getAmuletEnchantments(stack).isEmpty()) {
             AmuletRandomizeHelper.rollAmulet(stack);
         }
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
@@ -89,7 +89,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
     }
 
     public static Optional<Integer> getAmuletColor(ItemStack stack) {
-        if(stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
             return Optional.empty();
         }
         CompoundNBT tag = NBTHelper.getPersistentData(stack);
@@ -100,11 +100,11 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
     }
 
     public static void freezeAmuletColor(ItemStack stack) {
-        if(stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
             return;
         }
         CompoundNBT tag = NBTHelper.getPersistentData(stack);
-        if(tag.contains("amuletColor")) {
+        if (tag.contains("amuletColor")) {
             return;
         }
         if (rand.nextInt(400) == 0) {

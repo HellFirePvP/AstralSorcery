@@ -53,16 +53,16 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     public void updateIgnoreBlockCollisionState(World world, boolean ignoreBlockCollision) {
         this.ignoreBlockCollision = ignoreBlockCollision;
         TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
-        if(handle != null) {
+        if (handle != null) {
             boolean anyChange = false;
             for (PrismNext next : nextNodes.values()) {
                 boolean oldState = next.reachable;
                 next.reachable = ignoreBlockCollision || next.rayAssist.isClear(world);
-                if(next.reachable != oldState) {
+                if (next.reachable != oldState) {
                     anyChange = true;
                 }
             }
-            if(anyChange) {
+            if (anyChange) {
                 handle.notifyTransmissionNodeChange(this);
             }
         }
@@ -91,14 +91,14 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     public boolean notifyBlockChange(World world, BlockPos at) {
         boolean anyChange = false;
         for (PrismNext next : nextNodes.values()) {
-            if(next.notifyBlockPlace(world, thisPos, at)) anyChange = true;
+            if (next.notifyBlockPlace(world, thisPos, at)) anyChange = true;
         }
         return anyChange;
     }
 
     @Override
     public void notifySourceLink(World world, BlockPos source) {
-        if(!sourcesToThis.contains(source)) sourcesToThis.add(source);
+        if (!sourcesToThis.contains(source)) sourcesToThis.add(source);
     }
 
     @Override
@@ -181,7 +181,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
             this.parent = parent;
             this.pos = end;
             this.rayAssist = new RaytraceAssist(start, end);
-            if(doRayTest) {
+            if (doRayTest) {
                 this.reachable = parent.ignoreBlockCollision || rayAssist.isClear(world);
             } else {
                 this.reachable = oldRayState;
@@ -192,7 +192,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
         private boolean notifyBlockPlace(World world, BlockPos connect, BlockPos at) {
             double dstStart = connect.distanceSq(at);
             double dstEnd = pos.distanceSq(at);
-            if(dstStart > distanceSq || dstEnd > distanceSq) return false;
+            if (dstStart > distanceSq || dstEnd > distanceSq) return false;
             boolean oldState = this.reachable;
             this.reachable = parent.ignoreBlockCollision || rayAssist.isClear(world);
             return this.reachable != oldState;

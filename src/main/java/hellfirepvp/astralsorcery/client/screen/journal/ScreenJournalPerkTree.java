@@ -953,7 +953,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
     private void rescaleMouse() {
         this.mousePosition.rescale(this.sizeHandler.getScalingFactor());
-        if(this.previousMousePosition != null) {
+        if (this.previousMousePosition != null) {
             this.previousMousePosition.rescale(this.sizeHandler.getScalingFactor());
         }
         this.moveMouse(0, 0);

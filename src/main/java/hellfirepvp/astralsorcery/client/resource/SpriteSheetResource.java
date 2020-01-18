@@ -36,7 +36,7 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
     }
 
     public SpriteSheetResource(AbstractRenderableTexture resource, int rows, int columns) {
-        if(rows <= 0 || columns <= 0)
+        if (rows <= 0 || columns <= 0)
             throw new IllegalArgumentException("Can't instantiate a sprite sheet without any rows or columns!");
 
         frameCount = rows * columns;

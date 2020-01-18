@@ -53,13 +53,13 @@ public class StructureFinder {
     @Nullable
     public static BlockPos tryFindClosestBiomeType(ServerWorld world, BlockPos playerPos, BiomeDictionary.Type biomeType, int searchRadius) {
         List<Biome> fitting = Lists.newArrayList(BiomeDictionary.getBiomes(biomeType));
-        if(fitting.isEmpty()) {
+        if (fitting.isEmpty()) {
             return null;
         }
         BiomeProvider gen = world.getChunkProvider().getChunkGenerator().getBiomeProvider();
         for (int reach = 64; reach < searchRadius; reach += 128) {
             BlockPos closest = gen.findBiomePosition(playerPos.getX(), playerPos.getZ(), reach, fitting, new Random(world.getSeed()));
-            if(closest != null) {
+            if (closest != null) {
                 return closest;
             }
         }

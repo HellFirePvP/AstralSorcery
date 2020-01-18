@@ -92,18 +92,18 @@ public enum Mods {
 
     @Nullable
     public Class<?> getExtendedPlayerClass() {
-        if(!isPresent()) return null;
+        if (!isPresent()) return null;
 
         //switch (this) {
         //    case GALACTICRAFT_CORE:
-        //        if(gcPlayerClass == null) {
+        //        if (gcPlayerClass == null) {
         //            try {
         //                gcPlayerClass = Class.forName("micdoodle8.mods.galacticraft.core.entities.player.GCServerPlayerEntity");
         //            } catch (Exception ignored) {}
         //        }
         //        return gcPlayerClass;
         //    case UNIVERSALREMOTE:
-        //        if(urPlayerClass == null) {
+        //        if (urPlayerClass == null) {
         //            try {
         //                urPlayerClass = Class.forName("clayborn.universalremote.hooks.entity.HookedServerPlayerEntity");
         //            } catch (Exception ignored) {}

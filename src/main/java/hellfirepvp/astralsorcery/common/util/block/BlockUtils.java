@@ -71,7 +71,7 @@ public class BlockUtils {
     @Nullable
     public static BlockState getMatchingState(Collection<BlockState> applicableStates, @Nullable BlockState test) {
         for (BlockState state : applicableStates) {
-            if(matchStateExact(state, test)) {
+            if (matchStateExact(state, test)) {
                 return state;
             }
         }
@@ -79,13 +79,13 @@ public class BlockUtils {
     }
 
     public static boolean matchStateExact(@Nullable BlockState state, @Nullable BlockState stateToTest) {
-        if(state == null) {
+        if (state == null) {
             return stateToTest == null;
         } else if (stateToTest == null) {
             return false;
         }
 
-        if(!state.getBlock().getRegistryName().equals(stateToTest.getBlock().getRegistryName())) {
+        if (!state.getBlock().getRegistryName().equals(stateToTest.getBlock().getRegistryName())) {
             return false;
         }
 
@@ -93,7 +93,7 @@ public class BlockUtils {
             Comparable<?> original = state.get(prop);
             try {
                 Comparable<?> test = stateToTest.get(prop);
-                if(!original.equals(test)) {
+                if (!original.equals(test)) {
                     return false;
                 }
             } catch (Exception exc) {
@@ -180,7 +180,7 @@ public class BlockUtils {
             return false;
         }
 
-        if(playEffects) {
+        if (playEffects) {
             world.playEvent(null, 2001, pos, Block.getStateId(stateBroken));
         }
 

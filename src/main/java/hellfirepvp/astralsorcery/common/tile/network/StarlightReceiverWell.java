@@ -31,7 +31,7 @@ public class StarlightReceiverWell extends SimpleTransmissionReceiver {
     }
 
     @Override
-    public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
+    public void onStarlightReceive(World world, IWeakConstellation type, double amount) {
         TileWell well = getTileAtPos(world, TileWell.class);
         if (well != null) {
             well.receiveStarlight(amount);

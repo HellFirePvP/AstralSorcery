@@ -61,21 +61,21 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
             playClientEffects();
         } else {
             if (linkedTo != null) {
-                if (MiscUtils.isChunkLoaded(getWorld(), new ChunkPos(linkedTo))) {
+                MiscUtils.executeWithChunk(getWorld(), linkedTo, () -> {
                     TileRitualLink link = MiscUtils.getTileAt(getWorld(), linkedTo, TileRitualLink.class, true);
                     if (link == null) {
                         linkedTo = null;
                         markForUpdate();
                     }
-                }
+                });
             }
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     private void playClientEffects() {
-        if(this.linkedTo != null) {
-            if(ticksExisted % 4 == 0) {
+        if (this.linkedTo != null) {
+            if (ticksExisted % 4 == 0) {
                 Collection<Vector3> positions = MiscUtils.getCirclePositions(
                         new Vector3(this).add(0.5, 0.5, 0.5),
                         Vector3.RotAxis.Y_AXIS, 0.4F - rand.nextFloat() * 0.1F, 10 + rand.nextInt(10));
@@ -115,7 +115,7 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
     public void writeCustomNBT(CompoundNBT compound) {
         super.writeCustomNBT(compound);
 
-        if(this.linkedTo != null) {
+        if (this.linkedTo != null) {
             NBTHelper.setAsSubTag(compound, "posLink", nbt -> NBTHelper.writeBlockPosToNBT(this.linkedTo, nbt));
         }
     }
@@ -124,7 +124,7 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
     public void onLinkCreate(PlayerEntity player, BlockPos other) {
         this.linkedTo = other;
         TileRitualLink otherLink = MiscUtils.getTileAt(player.getEntityWorld(), other, TileRitualLink.class, true);
-        if(otherLink != null) {
+        if (otherLink != null) {
             otherLink.linkedTo = getPos();
             otherLink.markForUpdate();
         }
@@ -141,8 +141,8 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
     @Override
     public boolean tryUnlink(PlayerEntity player, BlockPos other) {
         TileRitualLink otherLink = MiscUtils.getTileAt(player.getEntityWorld(), other, TileRitualLink.class, true);
-        if(otherLink == null || otherLink.linkedTo == null) return false;
-        if(otherLink.linkedTo.equals(getPos())) {
+        if (otherLink == null || otherLink.linkedTo == null) return false;
+        if (otherLink.linkedTo.equals(getPos())) {
             this.linkedTo = null;
             otherLink.linkedTo = null;
             otherLink.markForUpdate();

@@ -94,7 +94,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
                         entity.remove();
                     }
                 }
-            } else if(entity instanceof LivingEntity) {
+            } else if (entity instanceof LivingEntity) {
                 entity.attackEntityFrom(DamageSource.ON_FIRE, 0.5F);
                 entity.setFire(3);
             }

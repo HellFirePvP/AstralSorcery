@@ -98,12 +98,12 @@ public class BlockDiscoverer {
                 for (int zz = -cubeSize; zz <= cubeSize; zz++) {
                     for (int yy = -cubeSize; yy <= cubeSize; yy++) {
                         offset.setPos(origin.getX() + xx, origin.getY() + yy, origin.getZ() + zz);
-                        if (MiscUtils.isChunkLoaded(world, offset)) {
+                        MiscUtils.executeWithChunk(world, offset, () -> {
                             BlockState atState = world.getBlockState(offset);
                             if (match.test(world, offset, atState)) {
                                 out.add(new BlockPos(offset));
                             }
-                        }
+                        });
                     }
                 }
             }
@@ -120,12 +120,12 @@ public class BlockDiscoverer {
                     for (int zz = -r; zz <= r; zz++) {
 
                         BlockPos pos = center.add(xx, yy, zz);
-                        if (MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) {
+                        MiscUtils.executeWithChunk(world, pos, () -> {
                             BlockState state = world.getBlockState(pos);
                             if (acceptor.test(world, pos, state)) {
                                 posList.add(pos);
                             }
-                        }
+                        });
                     }
                 }
             }

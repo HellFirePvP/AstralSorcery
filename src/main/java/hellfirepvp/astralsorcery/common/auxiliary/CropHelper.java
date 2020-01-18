@@ -119,7 +119,7 @@ public class CropHelper {
 
         public String getIdentifier();
 
-        public boolean isValid(IWorld world, boolean forceChunkLoad);
+        public boolean isValid(IWorld world);
 
         public boolean canGrow(IWorld world);
 
@@ -183,10 +183,8 @@ public class CropHelper {
         }
 
         @Override
-        public boolean isValid(IWorld world, boolean forceChunkLoad) {
-            if (!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(getPos()))) return true; //We stall until it's loaded.
-            HarvestablePlant plant = wrapHarvestablePlant(world, getPos());
-            return plant instanceof HarvestableWrapper;
+        public boolean isValid(IWorld world) {
+            return wrapHarvestablePlant(world, getPos()) instanceof HarvestableWrapper;
         }
 
         @Override
@@ -218,8 +216,7 @@ public class CropHelper {
         }
 
         @Override
-        public boolean isValid(IWorld world, boolean forceChunkLoad) {
-            if (!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) return true; //We stall until it's loaded.
+        public boolean isValid(IWorld world) {
             return world.getBlockState(pos).getBlock().equals(Blocks.NETHER_WART);
         }
 
@@ -278,8 +275,7 @@ public class CropHelper {
         }
 
         @Override
-        public boolean isValid(IWorld world, boolean forceChunkLoad) {
-            if (!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) return true; //We stall until it's loaded.
+        public boolean isValid(IWorld world) {
             return world.getBlockState(pos).getBlock().equals(Blocks.CACTUS);
         }
 
@@ -290,7 +286,7 @@ public class CropHelper {
                 BlockPos bp = pos.up(i);
                 BlockState at = world.getBlockState(bp);
                 if (at.getBlock().equals(Blocks.CACTUS)) {
-                    BlockUtils.breakBlockWithoutPlayer((ServerWorld) world, bp);
+                    BlockUtils.breakBlockWithoutPlayer(world, bp);
                 }
             }
             return drops;
@@ -363,8 +359,7 @@ public class CropHelper {
         }
 
         @Override
-        public boolean isValid(IWorld world, boolean forceChunkLoad) {
-            if (!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) return true; //We stall until it's loaded.
+        public boolean isValid(IWorld world) {
             return world.getBlockState(pos).getBlock().equals(Blocks.SUGAR_CANE);
         }
 
@@ -427,12 +422,8 @@ public class CropHelper {
         }
 
         @Override
-        public boolean isValid(IWorld world, boolean forceChunkLoad) {
-            if (!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) {
-                return true; //We stall until it's loaded.
-            }
-            GrowablePlant res = wrapPlant(world, pos);
-            return res instanceof GrowableWrapper;
+        public boolean isValid(IWorld world) {
+            return wrapPlant(world, pos) instanceof GrowableWrapper;
         }
 
         @Override

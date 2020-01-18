@@ -48,10 +48,10 @@ public class ResearchManager {
 
     public static void unsafeForceGiveResearch(ServerPlayerEntity player, ResearchProgression prog) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return;
+        if (!progress.isValid()) return;
 
         ProgressionTier reqTier = prog.getRequiredProgress();
-        if(!progress.getTierReached().isThisLaterOrEqual(reqTier)) {
+        if (!progress.getTierReached().isThisLaterOrEqual(reqTier)) {
             progress.setTierReached(reqTier);
         }
 
@@ -59,7 +59,7 @@ public class ResearchManager {
         progToGive.add(prog);
         while (!progToGive.isEmpty()) {
             ResearchProgression give = progToGive.pop();
-            if(!progress.getResearchProgression().contains(give)) {
+            if (!progress.getResearchProgression().contains(give)) {
                 progress.forceGainResearch(give);
             }
             progToGive.addAll(give.getPreConditions());
@@ -74,15 +74,15 @@ public class ResearchManager {
 
     public static void giveResearchIgnoreFail(PlayerEntity player, ResearchProgression prog) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return;
+        if (!progress.isValid()) return;
 
         ProgressionTier tier = prog.getRequiredProgress();
-        if(!progress.getTierReached().isThisLaterOrEqual(tier)) return;
+        if (!progress.getTierReached().isThisLaterOrEqual(tier)) return;
         for (ResearchProgression other : prog.getPreConditions()) {
-            if(!progress.getResearchProgression().contains(other)) return;
+            if (!progress.getResearchProgression().contains(other)) return;
         }
 
-        if(progress.forceGainResearch(prog)) {
+        if (progress.forceGainResearch(prog)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(prog);
             PacketChannel.CHANNEL.sendToPlayer(player, pkt);
         }
@@ -93,12 +93,12 @@ public class ResearchManager {
 
     public static void giveProgressionIgnoreFail(PlayerEntity player, ProgressionTier tier) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return;
+        if (!progress.isValid()) return;
 
         ProgressionTier t = progress.getTierReached();
-        if(!t.hasNextTier()) return; //No higher tier available anyway.
+        if (!t.hasNextTier()) return; //No higher tier available anyway.
         ProgressionTier next = t.next();
-        if(!next.equals(tier)) return; //Given one is not the next step.
+        if (!next.equals(tier)) return; //Given one is not the next step.
 
         progress.setTierReached(next);
         PktProgressionUpdate pkt = new PktProgressionUpdate(next);
@@ -111,7 +111,7 @@ public class ResearchManager {
 
     public static boolean useSextantTarget(TargetObject to, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.useTarget(to);
 
@@ -122,7 +122,7 @@ public class ResearchManager {
 
     public static boolean discoverConstellations(Collection<IConstellation> csts, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         for (IConstellation c : csts) {
             progress.discoverConstellation(c.getRegistryName());
@@ -137,7 +137,7 @@ public class ResearchManager {
 
     public static boolean discoverConstellation(IConstellation c, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.discoverConstellation(c.getRegistryName());
 
@@ -151,7 +151,7 @@ public class ResearchManager {
 
     public static boolean memorizeConstellation(IConstellation c, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.memorizeConstellation(c.getRegistryName());
 
@@ -162,7 +162,7 @@ public class ResearchManager {
 
     public static boolean maximizeTier(PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.setTierReached(ProgressionTier.values()[ProgressionTier.values().length - 1]);
 
@@ -176,7 +176,7 @@ public class ResearchManager {
 
     public static boolean setAttunedBefore(PlayerEntity player, boolean wasAttunedBefore) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.setAttunedBefore(wasAttunedBefore);
 
@@ -187,7 +187,7 @@ public class ResearchManager {
 
     public static boolean setAttunedConstellation(PlayerEntity player, @Nullable IMajorConstellation constellation) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         if (constellation != null && !progress.getKnownConstellations().contains(constellation.getRegistryName())) {
             return false;
@@ -429,7 +429,7 @@ public class ResearchManager {
             progress.useTarget(to);
         }
 
-        if(progress.getTierReached().isThisLater(before)) {
+        if (progress.getTierReached().isThisLater(before)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(progress.getTierReached());
             PacketChannel.CHANNEL.sendToPlayer(player, pkt);
         }

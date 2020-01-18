@@ -52,7 +52,7 @@ public class AmuletRandomizeHelper {
                 int lvl = getRollLevel();
                 if (type.isEnchantmentSpecific()) {
                     Enchantment e = AmuletEnchantmentRegistry.getRandomEnchant();
-                    if(e != null) {
+                    if (e != null) {
                         ench.add(new AmuletEnchantment(type, e, lvl));
                     }
                 } else {
@@ -69,26 +69,26 @@ public class AmuletRandomizeHelper {
         switch (existing.size()) {
             case 0:
             case 1:
-                if(rand.nextFloat() < chanceToAll.get()) {
+                if (rand.nextFloat() < chanceToAll.get()) {
                     return DynamicEnchantmentType.ADD_TO_EXISTING_ALL;
                 }
-                if(rand.nextFloat() < chanceToNonExisting.get()) {
+                if (rand.nextFloat() < chanceToNonExisting.get()) {
                     return DynamicEnchantmentType.ADD_TO_SPECIFIC;
                 }
                 return DynamicEnchantmentType.ADD_TO_EXISTING_SPECIFIC;
             case 2:
-                if(exAll > 1) {
+                if (exAll > 1) {
                     return null;
-                } else if(exAll == 1) {
-                    if(rand.nextFloat() < chanceToNonExisting.get()) {
+                } else if (exAll == 1) {
+                    if (rand.nextFloat() < chanceToNonExisting.get()) {
                         return DynamicEnchantmentType.ADD_TO_SPECIFIC;
                     }
                     return DynamicEnchantmentType.ADD_TO_EXISTING_SPECIFIC;
                 } else {
-                    if(rand.nextFloat() < chanceToAll.get()) {
+                    if (rand.nextFloat() < chanceToAll.get()) {
                         return DynamicEnchantmentType.ADD_TO_EXISTING_ALL;
                     }
-                    if(rand.nextFloat() < chanceToNonExisting.get()) {
+                    if (rand.nextFloat() < chanceToNonExisting.get()) {
                         return DynamicEnchantmentType.ADD_TO_SPECIFIC;
                     }
                     return DynamicEnchantmentType.ADD_TO_EXISTING_SPECIFIC;
@@ -100,14 +100,14 @@ public class AmuletRandomizeHelper {
     }
 
     private static int getRollLevel() {
-        if(rand.nextFloat() < chance2Level.get()) {
+        if (rand.nextFloat() < chance2Level.get()) {
             return 2;
         }
         return 1;
     }
 
     private static boolean mayGetAdditionalRoll(List<AmuletEnchantment> existing) {
-        if(existing.isEmpty()) return true;
+        if (existing.isEmpty()) return true;
         switch (existing.size()) {
             case 1:
                 return rand.nextFloat() < chance2nd.get();
@@ -122,7 +122,7 @@ public class AmuletRandomizeHelper {
     private static int getAdditionAll(List<AmuletEnchantment> ench) {
         int i = 0;
         for (AmuletEnchantment e : ench) {
-            if(e.getType().equals(DynamicEnchantmentType.ADD_TO_EXISTING_ALL)) {
+            if (e.getType().equals(DynamicEnchantmentType.ADD_TO_EXISTING_ALL)) {
                 i++;
             }
         }
@@ -134,13 +134,13 @@ public class AmuletRandomizeHelper {
         for (AmuletEnchantment e : ench) {
             boolean found = false;
             for (AmuletEnchantment ex : enchantments) {
-                if(ex.canMerge(e)) {
+                if (ex.canMerge(e)) {
                     ex.merge(e);
                     found = true;
                     break;
                 }
             }
-            if(!found) {
+            if (!found) {
                 enchantments.add(e);
             }
         }

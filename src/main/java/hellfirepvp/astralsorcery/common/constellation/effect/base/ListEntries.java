@@ -69,7 +69,7 @@ public class ListEntries {
             } else {
                 applicable.addAll(b.getSpawns(EntityClassification.CREATURE));
             }
-            if(applicable.isEmpty()) {
+            if (applicable.isEmpty()) {
                 return null; //Duh.
             }
             Collections.shuffle(applicable);

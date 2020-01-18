@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,10 +43,19 @@ public abstract class ConstellationEffect {
 
     private final IWeakConstellation cst;
     private final ILocatable pos;
+    private boolean needsChunkToBeLoaded = false;
 
     protected ConstellationEffect(@Nonnull ILocatable origin, @Nonnull IWeakConstellation cst) {
         this.cst = cst;
         this.pos = origin;
+    }
+
+    protected void setChunkNeedsToBeLoaded() {
+        this.needsChunkToBeLoaded = true;
+    }
+
+    public boolean needsChunkToBeLoaded() {
+        return this.needsChunkToBeLoaded;
     }
 
     @OnlyIn(Dist.CLIENT)

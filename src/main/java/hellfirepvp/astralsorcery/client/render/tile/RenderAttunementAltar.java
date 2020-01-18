@@ -63,7 +63,7 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
             if (tile.tesrLocked) {
                 generalAnimationTick = 7.25D;
             } else {
-                if(Math.abs((generalAnimationTick % spinDur) - 7.25D) <= 0.3125) {
+                if (Math.abs((generalAnimationTick % spinDur) - 7.25D) <= 0.3125) {
                     generalAnimationTick = 7.25D;
                     tile.tesrLocked = true;
                 }

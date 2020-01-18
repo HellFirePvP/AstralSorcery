@@ -95,14 +95,14 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
     public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!world.isRemote()) {
             ItemStack heldItem = player.getHeldItem(hand);
-            if(!heldItem.isEmpty()) {
+            if (!heldItem.isEmpty()) {
                 TileWell tw = MiscUtils.getTileAt(world, pos, TileWell.class, false);
-                if(tw == null) {
+                if (tw == null) {
                     return true;
                 }
 
                 WellLiquefaction entry = RecipeTypesAS.TYPE_WELL.findRecipe(new WellLiquefactionContext(heldItem));
-                if(entry != null) {
+                if (entry != null) {
                     ItemStackHandler handle = tw.getInventory();
                     if (!handle.getStackInSlot(0).isEmpty()) {
                         return true;
@@ -116,10 +116,10 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
                             SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,
                             ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 
-                    if(!player.isCreative()) {
+                    if (!player.isCreative()) {
                         heldItem.shrink(1);
                     }
-                    if(heldItem.getCount() <= 0) {
+                    if (heldItem.getCount() <= 0) {
                         player.setHeldItem(hand, ItemStack.EMPTY);
                     }
                 }

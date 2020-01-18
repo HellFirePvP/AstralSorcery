@@ -87,7 +87,7 @@ public class KeyChainMining extends KeyPerk {
 
             EventFlags.CHAIN_MINING.executeWithFlag(() -> {
                 ServerWorld world = (ServerWorld) event.getWorld();
-                if(doMiningChain(world, event.getPos(), event.getState(), (ServerPlayerEntity) player, side)) {
+                if (doMiningChain(world, event.getPos(), event.getState(), (ServerPlayerEntity) player, side)) {
                     float doubleChance = PerkAttributeHelper.getOrCreateMap(player, side)
                             .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN);
                     if (rand.nextFloat() < doubleChance) {

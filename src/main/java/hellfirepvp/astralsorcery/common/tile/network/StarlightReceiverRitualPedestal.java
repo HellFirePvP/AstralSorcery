@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -53,28 +54,6 @@ import java.util.*;
 public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver {
 
     private static final Random rand = new Random();
-    private static final BlockPos[] circleOffsets = new BlockPos[] {
-            new BlockPos( 4, 2,  0),
-            new BlockPos( 4, 2,  1),
-            new BlockPos( 3, 2,  2),
-            new BlockPos( 2, 2,  3),
-            new BlockPos( 1, 2,  4),
-            new BlockPos( 0, 2,  4),
-            new BlockPos(-1, 2,  4),
-            new BlockPos(-2, 2,  3),
-            new BlockPos(-3, 2,  2),
-            new BlockPos(-4, 2,  1),
-            new BlockPos(-4, 2,  0),
-            new BlockPos(-4, 2, -1),
-            new BlockPos(-3, 2, -2),
-            new BlockPos(-2, 2, -3),
-            new BlockPos(-1, 2, -4),
-            new BlockPos( 0, 2, -4),
-            new BlockPos( 1, 2, -4),
-            new BlockPos( 2, 2, -3),
-            new BlockPos( 3, 2, -2),
-            new BlockPos( 4, 2, -1)
-    };
 
     //own receiver data
     private Map<BlockPos, Boolean> offsetMirrors = new HashMap<>();
@@ -130,9 +109,9 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         }
         properties.multiplySize(CrystalCalculations.getRitualEffectRangeFactor(this, this.attributes));
 
-        double maxDrain = 12D;
+        double maxDrain = 18D;
         maxDrain *= CrystalCalculations.getRitualCostReductionFactor(this, this.attributes);
-        maxDrain /= Math.max(1, this.getMirrorCount() - 1);
+        maxDrain /= Math.max(1F, ((float) (this.getMirrorCount() - 1)) * 0.33F);
         collectedStarlight *= properties.getPotency();
         int executeTimes = MathHelper.floor(collectedStarlight / maxDrain);
 
@@ -154,7 +133,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             if (this.effect.getConfig().enabled.get() &&
                     ((ConstellationEffectStatus) this.effect).runEffect(world, to, this.getMirrorCount(), properties, this.channelingTrait)) {
                 for (int i = 0; i < part; i++) {
-                    if(rand.nextFloat() < (fractureChancePer * properties.getEffectAmplifier() / part)) {
+                    if (rand.nextFloat() < (fractureChancePer * properties.getEffectAmplifier() / part)) {
                         fractureCrystal();
                     }
                 }
@@ -170,12 +149,22 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             } else {
                 collectedStarlight = 0F;
             }
-            if (this.effect.getConfig().enabled.get() &&
-                    this.effect.playEffect(world, to, properties, this.channelingTrait)) {
-                if (rand.nextFloat() < (fractureChancePer * properties.getEffectAmplifier() / part)) {
-                    fractureCrystal();
+            if (this.effect.getConfig().enabled.get()) {
+                boolean didEffectExecute;
+                if (this.effect.needsChunkToBeLoaded()) {
+                    didEffectExecute = MiscUtils.executeWithChunk(world, to, to, (pos) -> {
+                        return this.effect.playEffect(world, pos, properties, this.channelingTrait);
+                    });
+                } else {
+                    didEffectExecute = this.effect.playEffect(world, to, properties, this.channelingTrait);
                 }
-                markDirty(world);
+
+                if (didEffectExecute) {
+                    if (rand.nextFloat() < (fractureChancePer * properties.getEffectAmplifier() / part)) {
+                        fractureCrystal();
+                    }
+                    markDirty(world);
+                }
             }
         }
     }
@@ -204,7 +193,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     }
 
     @Override
-    public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
+    public void onStarlightReceive(World world, IWeakConstellation type, double amount) {
         if (this.channelingType != null && this.hasMultiblock && this.channelingType.equals(type)) {
             this.collectedStarlight += amount;
             this.findNextMirror(world);
@@ -276,29 +265,30 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         seed |= this.channelingType.getUnlocalizedName().hashCode() * 31;
         Random r = new Random(seed);
         for (int i = 0; i < this.getMirrorCount(); i++) {
-            r.nextInt(circleOffsets.length);
+            r.nextInt(TileRitualPedestal.RITUAL_CIRCLE_OFFSETS.size());
         }
         BlockPos offset = null;
         int c = 100;
         lblWhile: while (offset == null && c > 0) {
             c--;
 
-            BlockPos test = circleOffsets[r.nextInt(circleOffsets.length)];
+            BlockPos test = MiscUtils.getRandomEntry(TileRitualPedestal.RITUAL_CIRCLE_OFFSETS, r)
+                    .add(TileRitualPedestal.RITUAL_LENS_OFFSET);
             RaytraceAssist ray = new RaytraceAssist(getLocationPos(), getLocationPos().add(test));
             Vector3 from = new Vector3(0.5, 0.7, 0.5);
             Vector3 newDir = new Vector3(test).add(0.5, 0.5, 0.5).subtract(from);
 
             for (BlockPos p : offsetMirrors.keySet()) {
                 Vector3 toDir = new Vector3(p).add(0.5, 0.5, 0.5).subtract(from);
-                if(Math.toDegrees(toDir.angle(newDir)) <= 30) {
+                if (Math.toDegrees(toDir.angle(newDir)) <= 30) {
                     continue lblWhile;
                 }
-                if(test.distanceSq(p) <= 3) {
+                if (test.distanceSq(p) <= 3) {
                     continue lblWhile;
                 }
             }
 
-            if(!ray.isClear(world)) {
+            if (!ray.isClear(world)) {
                 continue;
             }
             offset = test;

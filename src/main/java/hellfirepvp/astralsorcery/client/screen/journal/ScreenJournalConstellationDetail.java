@@ -425,7 +425,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         GlStateManager.pushMatrix();
         GlStateManager.translated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
         float uFrom = 0F, vFrom = 0.5F;
-        if(rectBack.contains(mouseX, mouseY)) {
+        if (rectBack.contains(mouseX, mouseY)) {
             uFrom = 0.5F;
             GlStateManager.scaled(1.1, 1.1, 1.1);
         } else {

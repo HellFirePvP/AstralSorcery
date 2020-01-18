@@ -85,7 +85,7 @@ public class PerkCooldownHelper {
         TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = player.getEntityWorld().isRemote ?
                 perkCooldownsClient : perkCooldowns;
         PlayerWrapperContainer ct = new PlayerWrapperContainer(player);
-        if(!container.getOrCreateList(ct).setTimeout(cooldownTicks, perk.getRegistryName())) {
+        if (!container.getOrCreateList(ct).setTimeout(cooldownTicks, perk.getRegistryName())) {
             setCooldownActiveForPlayer(player, perk, cooldownTicks);
         }
     }
@@ -96,7 +96,7 @@ public class PerkCooldownHelper {
         TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = player.getEntityWorld().isRemote ?
                 perkCooldownsClient : perkCooldowns;
         PlayerWrapperContainer ct = new PlayerWrapperContainer(player);
-        if(!container.hasList(ct)) {
+        if (!container.hasList(ct)) {
             return -1;
         }
         return container.getOrCreateList(ct).getTimeout(perk.getRegistryName());
@@ -107,7 +107,7 @@ public class PerkCooldownHelper {
         @Override
         public void onContainerTimeout(PlayerWrapperContainer plWrapper, ResourceLocation key) {
             AbstractPerk perk = PerkTree.PERK_TREE.getPerk(key);
-            if(perk instanceof CooldownPerk) {
+            if (perk instanceof CooldownPerk) {
                 ((CooldownPerk) perk).onCooldownTimeout(plWrapper.player);
             }
         }
@@ -124,9 +124,9 @@ public class PerkCooldownHelper {
 
         @Override
         public boolean equals(Object obj) {
-            if(this == obj) return true;
-            if(obj == null) return false;
-            if(!(obj instanceof PlayerWrapperContainer)) return false;
+            if (this == obj) return true;
+            if (obj == null) return false;
+            if (!(obj instanceof PlayerWrapperContainer)) return false;
             return ((PlayerWrapperContainer) obj).player.getUniqueID().equals(player.getUniqueID());
         }
 

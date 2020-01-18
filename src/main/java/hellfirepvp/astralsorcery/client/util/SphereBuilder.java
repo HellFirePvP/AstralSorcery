@@ -46,16 +46,16 @@ public class SphereBuilder {
 
             for (int k = 0; k < fractionsCircle; k++) {
                 int prevIndex = shift ? k : k - 1;
-                if(prevIndex < 0) {
+                if (prevIndex < 0) {
                     prevIndex = fractionsCircle - 1;
                 }
                 int nextIndex = shift ? k + 1 : k;
-                if(nextIndex >= fractionsCircle) {
+                if (nextIndex >= fractionsCircle) {
                     nextIndex = 0;
                 }
                 sphereFaces.add(new TriangleFace(prevArray[prevIndex], prevArray[nextIndex], circlePositions[k]));
                 int nextCircle = k + 1;
-                if(nextCircle >= fractionsCircle) {
+                if (nextCircle >= fractionsCircle) {
                     nextCircle = 0;
                 }
                 sphereFaces.add(new TriangleFace(circlePositions[k], prevArray[nextIndex], circlePositions[nextCircle]));

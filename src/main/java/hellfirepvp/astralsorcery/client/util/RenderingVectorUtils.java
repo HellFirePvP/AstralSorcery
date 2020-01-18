@@ -50,7 +50,7 @@ public class RenderingVectorUtils {
     }
 
     public static double interpolate(double oldP, double newP, float partialTicks) {
-        if(oldP == newP) return oldP;
+        if (oldP == newP) return oldP;
         return oldP + ((newP - oldP) * partialTicks);
     }
 

@@ -69,7 +69,7 @@ public class JsonHelper {
         JsonElement el = root.get(key);
         if (verifier.test(el)) {
             consumer.accept(consumerTransformer.apply(el));
-        } else if(el.isJsonArray()) {
+        } else if (el.isJsonArray()) {
             JsonArray objectArray = el.getAsJsonArray();
             for (JsonElement arrayEl : objectArray) {
                 if (!verifier.test(arrayEl)) {

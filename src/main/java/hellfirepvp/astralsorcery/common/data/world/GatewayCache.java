@@ -51,11 +51,11 @@ public class GatewayCache extends GlobalWorldData {
         TileEntity te = world.getTileEntity(pos);
         //TODO gateways
         if (true) {
-        //if(te == null || !(te instanceof TileCelestialGateway)) {
+        //if (te == null || !(te instanceof TileCelestialGateway)) {
             return;
         }
         GatewayNode node = new GatewayNode(pos, display);
-        if(gatewayPositions.contains(node)) {
+        if (gatewayPositions.contains(node)) {
             return;
         }
         gatewayPositions.add(node);
@@ -66,7 +66,7 @@ public class GatewayCache extends GlobalWorldData {
     }
 
     public void removePosition(World world, BlockPos pos) {
-        if(gatewayPositions.remove(pos)) {
+        if (gatewayPositions.remove(pos)) {
             markDirty();
             //TODO gateways
             //CelestialGatewaySystem.instance.removePosition(world, pos);

@@ -80,10 +80,9 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
         while (iterator.hasNext()) {
             Map.Entry<BlockPos, IIndependentStarlightSource> entry = iterator.next();
             BlockPos pos = entry.getKey();
-            ChunkPos chPos = new ChunkPos(pos);
             IIndependentStarlightSource source = entry.getValue();
 
-            if (MiscUtils.isChunkLoaded(world, chPos)) {
+            MiscUtils.executeWithChunk(world, pos, () -> {
                 TileEntity te = world.getTileEntity(pos); //Safe to do now.
                 if (te != null) {
                     if (te instanceof IStarlightSource) {
@@ -107,7 +106,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
                         }
                     }
                 }
-            }
+            });
         }
     }
 
@@ -280,7 +279,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
 
     public void removeSource(BlockPos pos) {
         ChunkNetworkData data = getSection(pos);
-        if(data == null) return; //Uuuuhm. what happened here.
+        if (data == null) return; //Uuuuhm. what happened here.
         data.removeSourceTile(pos);
 
         removeIndependentSource(pos);
@@ -296,7 +295,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
 
     public void removeTransmission(BlockPos pos) {
         ChunkNetworkData data = getSection(pos);
-        if(data == null) return; //Not that i'm sad, it's just... uhm..
+        if (data == null) return; //Not that i'm sad, it's just... uhm..
         data.removeTransmissionTile(pos);
 
         checkIntegrity(pos);
@@ -305,11 +304,11 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
 
     private void checkIntegrity(BlockPos actualPos) {
         ChunkNetworkData data = getSection(actualPos);
-        if(data == null) return;
+        if (data == null) return;
 
         data.checkIntegrity(); //Integrity of sections
 
-        if(data.isEmpty()) {
+        if (data.isEmpty()) {
             queueRemoval.add(actualPos);
         }
     }
@@ -319,7 +318,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
         this.cachedSourceTuples = null;
 
         IPrismTransmissionNode node = source.getNode();
-        if(node instanceof ITransmissionSource) {
+        if (node instanceof ITransmissionSource) {
             IIndependentStarlightSource sourceNode = ((ITransmissionSource) node).provideNewIndependentSource(source);
             this.starlightSources.put(pos, sourceNode);
             return sourceNode;
@@ -376,7 +375,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
             while (iterator.hasNext()) {
                 Integer yLevel = iterator.next();
                 ChunkSectionNetworkData data = sections.get(yLevel);
-                if(data.isEmpty()) iterator.remove();
+                if (data.isEmpty()) iterator.remove();
             }
         }
 
@@ -386,7 +385,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
 
         private ChunkSectionNetworkData getOrCreateSection(int yLevel) {
             ChunkSectionNetworkData section = getSection(yLevel);
-            if(section == null) {
+            if (section == null) {
                 section = new ChunkSectionNetworkData();
                 sections.put(yLevel, section);
             }
@@ -396,14 +395,14 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
         private void removeSourceTile(BlockPos pos) {
             int yLevel = (pos.getY() & 255) >> 4;
             ChunkSectionNetworkData section = getSection(yLevel);
-            if(section == null) return; //Uhm
+            if (section == null) return; //Uhm
             section.removeSourceTile(pos);
         }
 
         private void removeTransmissionTile(BlockPos pos) {
             int yLevel = (pos.getY() & 255) >> 4;
             ChunkSectionNetworkData section = getSection(yLevel);
-            if(section == null) return; //Guess we don't remove anything then?
+            if (section == null) return; //Guess we don't remove anything then?
             section.removeTransmissionTile(pos);
         }
 
@@ -434,7 +433,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
                 CompoundNBT prismComp = nodeComp.getCompound("nodeTag");
                 ResourceLocation nodeIdentifier = new ResourceLocation(prismComp.getString("trNodeId"));
                 TransmissionProvider provider = TransmissionClassRegistry.getProvider(nodeIdentifier);
-                if(provider == null) {
+                if (provider == null) {
                     AstralSorcery.log.warn("Couldn't load node tile at " + pos + " - invalid identifier: " + nodeIdentifier);
                     continue;
                 }

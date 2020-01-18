@@ -97,7 +97,7 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
                         // TODO attunement altar
                         //TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, packet.at, TileAttunementAltar.class, true);
                         //if (ta != null) {
-                        //    if(ta.tryStartCameraFlight()) {
+                        //    if (ta.tryStartCameraFlight()) {
                         //        packet.replyWith(new PktAttunementAltarState(true, packet.type, packet.at), context);
                         //    }
                         //}
@@ -113,7 +113,7 @@ public class PktAttunementAltarState extends ASPacket<PktAttunementAltarState> {
                         World w = srv.getWorld(packet.type);
                         // TODO attunement altar
                         //TileAttunementAltar ta = MiscUtils.getTileAt(w, packet.at, TileAttunementAltar.class, true);
-                        //if(ta != null) {
+                        //if (ta != null) {
                         //    PlayerEntity pl = context.getSender();
                         //    ta.markPlayerStartCameraFlight(pl);
                         //}

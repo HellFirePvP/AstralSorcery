@@ -35,7 +35,7 @@ public class PerkTickHelper implements ITickHandler {
         PlayerEntity ticked = (PlayerEntity) context[0];
         LogicalSide side = (LogicalSide) context[1];
         PlayerProgress prog = ResearchHelper.getProgress(ticked, side);
-        if(prog.isValid()) {
+        if (prog.isValid()) {
             for (AbstractPerk perk : prog.getAppliedPerks()) {
                 if (perk instanceof PlayerTickPerk && prog.hasPerkEffect(perk)) {
                     ((PlayerTickPerk) perk).onPlayerTick(ticked, side);

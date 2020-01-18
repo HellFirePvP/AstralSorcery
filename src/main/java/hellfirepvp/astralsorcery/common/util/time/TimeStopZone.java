@@ -71,11 +71,11 @@ public class TimeStopZone {
         for (int xx = minX; xx <= maxX; ++xx) {
             for (int zz = minZ; zz <= maxZ; ++zz) {
                 Chunk ch = world.getChunk(xx, zz);
-                if(!ch.isEmpty()) {
+                if (!ch.isEmpty()) {
                     Map<BlockPos, TileEntity> map = ch.getTileEntityMap();
                     for (Map.Entry<BlockPos, TileEntity> teEntry : map.entrySet()) {
                         TileEntity te = teEntry.getValue();
-                        if(te instanceof ITickableTileEntity &&
+                        if (te instanceof ITickableTileEntity &&
                                 te.getPos().withinDistance(offset, range) &&
                                 world.tickableTileEntities.contains(te)) {
                             world.tickableTileEntities.remove(te);
@@ -88,10 +88,10 @@ public class TimeStopZone {
     }
 
     private void safeCacheTile(TileEntity te) {
-        if(te == null) return;
+        if (te == null) return;
 
         for (TileEntity tile : cachedTiles) {
-            if(tile.getPos().equals(te.getPos())) {
+            if (tile.getPos().equals(te.getPos())) {
                 return;
             }
         }
@@ -152,9 +152,9 @@ public class TimeStopZone {
             }
         }
 
-        if(e instanceof EnderDragonEntity) {
+        if (e instanceof EnderDragonEntity) {
             IPhase phase = ((EnderDragonEntity) e).getPhaseManager().getCurrentPhase();
-            if(phase.getType() != PhaseType.HOLDING_PATTERN &&
+            if (phase.getType() != PhaseType.HOLDING_PATTERN &&
                     phase.getType() != PhaseType.DYING) {
                 ((EnderDragonEntity) e).getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN);
             }

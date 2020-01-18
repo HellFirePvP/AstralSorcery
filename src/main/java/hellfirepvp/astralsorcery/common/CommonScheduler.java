@@ -41,7 +41,7 @@ public class CommonScheduler implements ITickHandler {
             while (iterator.hasNext()) {
                 Tuple<Runnable, Counter> r = iterator.next();
                 r.getB().decrement();
-                if(r.getB().getValue() <= 0) {
+                if (r.getB().getValue() <= 0) {
                     r.getA().run();
                     iterator.remove();
                 }
@@ -71,7 +71,7 @@ public class CommonScheduler implements ITickHandler {
 
     public void addRunnable(Runnable r, int tickDelay) {
         synchronized (lock) {
-            if(inTick) {
+            if (inTick) {
                 waiting.addLast(new Tuple<>(r, tickDelay));
             } else {
                 queue.addLast(new Tuple<>(r, new Counter(tickDelay)));

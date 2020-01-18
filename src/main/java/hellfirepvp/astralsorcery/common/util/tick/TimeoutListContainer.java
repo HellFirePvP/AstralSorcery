@@ -38,7 +38,7 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
     public TimeoutListContainer(@Nullable ContainerTimeoutDelegate<K, V> delegate, TickEvent.Type... types) {
         this.tickTypes = EnumSet.noneOf(TickEvent.Type.class);
         for (TickEvent.Type type : types) {
-            if(type != null) this.tickTypes.add(type);
+            if (type != null) this.tickTypes.add(type);
         }
         this.delegate = delegate;
     }
@@ -56,7 +56,7 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
 
     public TimeoutList<V> getOrCreateList(K key) {
         TimeoutList<V> list = timeoutListMap.get(key);
-        if(list == null) {
+        if (list == null) {
             list = new TimeoutList<>(new RedirectTimeoutDelegate<>(key, delegate));
             timeoutListMap.put(key, list);
         }
@@ -70,7 +70,7 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
             Map.Entry<K, TimeoutList<V>> entry = it.next();
             TimeoutList<V> list = entry.getValue();
             list.tick(type, context);
-            if(list.isEmpty()) {
+            if (list.isEmpty()) {
                 it.remove();
             }
         }
@@ -107,7 +107,7 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
 
         @Override
         public void onTimeout(V object) {
-            if(delegate != null) {
+            if (delegate != null) {
                 delegate.onContainerTimeout(key, object);
             }
         }

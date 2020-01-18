@@ -73,7 +73,7 @@ public class TransmissionChain {
         TransmissionChain chain = new TransmissionChain(netHandler, null);
 
         IPrismTransmissionNode node = netHandler.getTransmissionNode(at);
-        if(node != null) { //Well otherwise we don't need to do anything huh...
+        if (node != null) { //Well otherwise we don't need to do anything huh...
             chain = new TransmissionChain(netHandler, node);
             chain.recBuildChain(node, 1F, new LinkedList<>());
         }
@@ -85,14 +85,14 @@ public class TransmissionChain {
 
     private void resolveLoadedEndpoints(World world) {
         for (BlockPos pos : uncheckedEndpointsBlock) {
-            if (MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) {
+            MiscUtils.executeWithChunk(world, pos, () -> {
                 BlockState state = world.getBlockState(pos);
                 Block b = state.getBlock();
                 if (b instanceof BlockStarlightRecipient) {
-                    continue;
+                    return;
                 }
                 resolvedNormalBlockPositions.add(pos);
-            }
+            });
         }
     }
 
@@ -106,7 +106,7 @@ public class TransmissionChain {
     }
 
     private void recBuildChain(IPrismTransmissionNode node, float lossMultiplier, LinkedList<BlockPos> prevPath) {
-        if(lossMultiplier <= 0.001F) return; //No. we don't transfer a part less than 0.1% of the starlight.
+        if (lossMultiplier <= 0.001F) return; //No. we don't transfer a part less than 0.1% of the starlight.
 
         float lossPerc = CrystalCalculations.getThroughputMultiplier(node.getTransmissionProperties());
         lossPerc *= node.getAdditionalTransmissionLossMultiplier();
@@ -150,7 +150,7 @@ public class TransmissionChain {
     private void calculateInvolvedChunks() {
         for (BlockPos nodePos : remainMultiplierMap.keySet()) {
             ChunkPos ch = new ChunkPos(nodePos);
-            if(!involvedChunks.contains(ch)) involvedChunks.add(ch);
+            if (!involvedChunks.contains(ch)) involvedChunks.add(ch);
         }
     }
 
@@ -165,7 +165,7 @@ public class TransmissionChain {
     //For rendering purposes.
     private void addIfNonExistentConnection(BlockPos start, BlockPos end) {
         LightConnection newCon = new LightConnection(start, end);
-        if(!foundConnections.contains(newCon)) foundConnections.add(newCon);
+        if (!foundConnections.contains(newCon)) foundConnections.add(newCon);
     }
 
     public Set<IPrismTransmissionNode> getTransmissionUpdateList() {

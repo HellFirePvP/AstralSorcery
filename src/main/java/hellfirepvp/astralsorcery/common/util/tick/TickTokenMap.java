@@ -37,7 +37,7 @@ public class TickTokenMap<K, V extends TickTokenMap.TickMapToken<?>> extends Tok
         while (iteratorEntries.hasNext()) {
             Map.Entry<K, V> entry = iteratorEntries.next();
             entry.getValue().tick();
-            if(entry.getValue().getRemainingTimeout() <= 0) {
+            if (entry.getValue().getRemainingTimeout() <= 0) {
                 entry.getValue().onTimeout();
                 iteratorEntries.remove();
             }

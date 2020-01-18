@@ -39,7 +39,7 @@ public class EffectGatewayEdge extends AltarRecipeEffect {
         for (int amount = 0; amount < 3; amount++) {
 
             Vector3 offset = new Vector3(altar).add(-scale, 0, -scale);
-            if(rand.nextBoolean()) {
+            if (rand.nextBoolean()) {
                 offset.add(edgeScale * (rand.nextBoolean() ? 1 : 0), 0, rand.nextFloat() * edgeScale);
             } else {
                 offset.add(rand.nextFloat() * edgeScale, 0, edgeScale * (rand.nextBoolean() ? 1 : 0));

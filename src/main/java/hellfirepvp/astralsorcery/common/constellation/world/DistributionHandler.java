@@ -67,7 +67,7 @@ public class DistributionHandler {
         Map<IConstellation, Float> distribution = new HashMap<>(this.dayDistributionMap.get(current.ordinal()));
 
         for (IConstellationSpecialShowup special : ConstellationRegistry.getSpecialShowupConstellations()) {
-            if(special.doesShowUp(world, lastRecordedDay)) {
+            if (special.doesShowUp(world, lastRecordedDay)) {
                 distribution.put(special, MathHelper.clamp(
                         special.getDistribution(world, lastRecordedDay, true),
                         0F,

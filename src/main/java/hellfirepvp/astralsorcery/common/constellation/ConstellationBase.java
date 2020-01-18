@@ -247,7 +247,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
             super(name);
             phases = new ArrayList<>(applicablePhases.length);
             for (MoonPhase ph : applicablePhases) {
-                if(ph == null) {
+                if (ph == null) {
                     throw new IllegalArgumentException("null MoonPhase passed to Minor constellation registration for " + name);
                 }
                 phases.add(ph);
@@ -258,7 +258,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
             super(name, color);
             phases = new ArrayList<>(applicablePhases.length);
             for (MoonPhase ph : applicablePhases) {
-                if(ph == null) {
+                if (ph == null) {
                     throw new IllegalArgumentException("null MoonPhase passed to Minor constellation registration for " + name);
                 }
                 phases.add(ph);
@@ -275,7 +275,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
                 }
                 index = MathHelper.clamp(index, 0, MoonPhase.values().length - 1);
                 MoonPhase offset = MoonPhase.values()[index];
-                if(!shifted.contains(offset)) {
+                if (!shifted.contains(offset)) {
                     shifted.add(offset);
                 }
             }

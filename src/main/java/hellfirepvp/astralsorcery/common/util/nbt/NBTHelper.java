@@ -161,7 +161,7 @@ public class NBTHelper {
 
     @Nonnull
     public static CompoundNBT getBlockStateNBTTag(BlockState state) {
-        if(state.getBlock().getRegistryName() == null) {
+        if (state.getBlock().getRegistryName() == null) {
             state = Blocks.AIR.getDefaultState();
         }
         CompoundNBT tag = new CompoundNBT();
@@ -190,7 +190,7 @@ public class NBTHelper {
     public static <T extends Comparable<T>> BlockState getBlockStateFromTag(CompoundNBT cmp, BlockState _default) {
         ResourceLocation key = new ResourceLocation(cmp.getString("registryName"));
         Block block = ForgeRegistries.BLOCKS.getValue(key);
-        if(block == null || block == Blocks.AIR) return _default;
+        if (block == null || block == Blocks.AIR) return _default;
         BlockState state = block.getDefaultState();
         Collection<IProperty<?>> properties = state.getProperties();
         ListNBT list = cmp.getList("properties", Constants.NBT.TAG_COMPOUND);
@@ -199,10 +199,10 @@ public class NBTHelper {
             String valueStr = propertyTag.getString("value");
             String propertyStr = propertyTag.getString("property");
             IProperty<T> match = (IProperty<T>) MiscUtils.iterativeSearch(properties, prop -> prop.getName().equalsIgnoreCase(propertyStr));
-            if(match != null) {
+            if (match != null) {
                 try {
                     Optional<T> opt = match.parseValue(valueStr);
-                    if(opt.isPresent()) {
+                    if (opt.isPresent()) {
                         state = state.with(match, opt.get());
                     }
                 } catch (Throwable tr) {} // Thanks Exu2

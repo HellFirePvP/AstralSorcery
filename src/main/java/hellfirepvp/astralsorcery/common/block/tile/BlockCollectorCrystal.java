@@ -109,7 +109,7 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
                             new TranslationTextComponent(tr.getUnlocalizedName()).setStyle(new Style().setColor(TextFormatting.BLUE)))
                             .setStyle(new Style().setColor(TextFormatting.GRAY)));
 
-                } else if(!addedMissing) {
+                } else if (!addedMissing) {
                     toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
                 }
             }
