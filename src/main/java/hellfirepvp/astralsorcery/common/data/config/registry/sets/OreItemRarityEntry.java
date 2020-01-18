@@ -53,7 +53,7 @@ public class OreItemRarityEntry implements ConfigDataSet {
     @Nullable
     public static OreItemRarityEntry deserialize(String str) throws IllegalArgumentException {
         String[] split = str.split(";");
-        if(split.length != 2) {
+        if (split.length != 2) {
             return null;
         }
         ResourceLocation keyItemTag = new ResourceLocation(split[0]);

@@ -48,7 +48,7 @@ public class TimeStopController implements ITickHandler {
         DimensionType dimType = world.getDimension().getType();
         List<TimeStopZone> zones = activeTimeStopZones.getOrDefault(dimType, Collections.emptyList());
         for (TimeStopZone zone : zones) {
-            if(zone.offset.equals(pos)) {
+            if (zone.offset.equals(pos)) {
                 return zone;
             }
         }

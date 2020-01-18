@@ -113,7 +113,7 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
         TickTokenMap.SimpleTickToken<Double> token = EventHelperSpawnDeny.spawnDenyRegions.get(at);
         if (token != null) {
             int next = token.getRemainingTimeout() + toAdd;
-            if(next > 400) next = 400;
+            if (next > 400) next = 400;
             token.setTimeout(next);
             rememberedTimeout = next;
         } else {
@@ -123,7 +123,7 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
 
         PlayerEntity owner = this.getOwningPlayerInWorld(world, pos);
 
-        if(!properties.isCorrupted()) {
+        if (!properties.isCorrupted()) {
             List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, BOX.offset(pos).grow(properties.getSize()));
             if (!projectiles.isEmpty()) {
                 for (Entity e : projectiles) {

@@ -72,12 +72,12 @@ public class KeyDisarm extends KeyPerk {
                         .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(this.config.dropChance.get()));
                 float currentChance = MathHelper.clamp(chance, 0F, 1F);
                 for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-                    if(rand.nextFloat() >= currentChance) {
+                    if (rand.nextFloat() >= currentChance) {
                         continue;
                     }
                     LivingEntity attacked = event.getEntityLiving();
                     ItemStack stack = attacked.getItemStackFromSlot(slot);
-                    if(!stack.isEmpty()) {
+                    if (!stack.isEmpty()) {
                         attacked.setItemStackToSlot(slot, ItemStack.EMPTY);
                         ItemUtils.dropItemNaturally(attacked.world, attacked.posX, attacked.posY, attacked.posZ, stack);
                         break;

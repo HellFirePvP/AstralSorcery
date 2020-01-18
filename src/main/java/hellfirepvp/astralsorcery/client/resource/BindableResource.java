@@ -55,7 +55,7 @@ public class BindableResource extends AbstractRenderableTexture.Full {
     }
 
     void invalidateAndReload() {
-        if(resource != null) {
+        if (resource != null) {
             GlStateManager.deleteTexture(resource.getGlTextureId());
         }
         resource = null;

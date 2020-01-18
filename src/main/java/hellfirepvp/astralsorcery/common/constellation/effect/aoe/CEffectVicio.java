@@ -55,7 +55,7 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
     @Override
     @OnlyIn(Dist.CLIENT)
     public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float alphaMultiplier, boolean extended) {
-        if(rand.nextInt(3) == 0) {
+        if (rand.nextInt(3) == 0) {
             Vector3 r = new Vector3(
                     pos.getX() + rand.nextFloat() * 4 * (rand.nextBoolean() ? 1 : -1) + 0.5,
                     pos.getY() + rand.nextFloat() * 2 + 0.5,

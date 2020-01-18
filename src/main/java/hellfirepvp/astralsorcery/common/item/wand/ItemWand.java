@@ -114,7 +114,7 @@ public class ItemWand extends Item implements ConstellationItem, OverrideInterac
             return true;
         }
         WandInteractable wandTe = MiscUtils.getTileAt(world, pos, WandInteractable.class, true);
-        if(wandTe != null) {
+        if (wandTe != null) {
             wandTe.onInteract(world, pos, player, face, player.isSneaking());
             return true;
         }

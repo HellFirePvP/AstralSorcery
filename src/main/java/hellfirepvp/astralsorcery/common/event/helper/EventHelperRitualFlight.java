@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 public class EventHelperRitualFlight {
 
     private static TimeoutList<PlayerEntity> ritualFlight = new TimeoutList<>(player -> {
-        if(player instanceof ServerPlayerEntity && ((ServerPlayerEntity) player).interactionManager.getGameType().isSurvivalOrAdventure()) {
+        if (player instanceof ServerPlayerEntity && ((ServerPlayerEntity) player).interactionManager.getGameType().isSurvivalOrAdventure()) {
             player.abilities.allowFlying = false;
             player.abilities.isFlying = false;
             player.sendPlayerAbilities();

@@ -50,13 +50,13 @@ public class SkyHandler implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        if(type == TickEvent.Type.WORLD) {
+        if (type == TickEvent.Type.WORLD) {
             World w = (World) context[0];
             if (!w.isRemote) {
                 int dimId = w.getDimension().getType().getId();
                 skyRevertMap.put(dimId, false);
                 WorldContext ctx = worldHandlersServer.get(dimId);
-                if(ctx == null) {
+                if (ctx == null) {
                     ctx = createContext(MiscUtils.getRandomWorldSeed(w));
                     worldHandlersServer.put(dimId, ctx);
                 }
@@ -73,7 +73,7 @@ public class SkyHandler implements ITickHandler {
         if (w != null) {
             int dimId = w.getDimension().getType().getId();
             WorldContext ctx = worldHandlersClient.get(dimId);
-            if(ctx == null) {
+            if (ctx == null) {
                 Optional<Long> seedOpt = WorldSeedCache.getSeedIfPresent(w);
                 if (!seedOpt.isPresent()) {
                     return;
@@ -110,7 +110,7 @@ public class SkyHandler implements ITickHandler {
     public void revertWorldTimeTick(World world) {
         int dimId = world.getDimension().getType().getId();
         Boolean state = skyRevertMap.get(dimId);
-        if(!world.isRemote && state != null && !state) {
+        if (!world.isRemote && state != null && !state) {
             skyRevertMap.put(dimId, true);
             world.setDayTime(world.getDayTime() - 1);
         }

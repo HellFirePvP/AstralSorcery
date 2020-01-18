@@ -38,7 +38,7 @@ public class EffectRenderEventHandler {
     }
 
     private void onDebugText(RenderGameOverlayEvent.Text event) {
-        if(Minecraft.getInstance().gameSettings.showDebugInfo) {
+        if (Minecraft.getInstance().gameSettings.showDebugInfo) {
             event.getLeft().add("");
             //event.getLeft().add(TextFormatting.BLUE + "[AstralSorcery]" + TextFormatting.RESET + " Use Local persistent data: " + PersistentDataManager.INSTANCE.usePersistent());
             event.getLeft().add(TextFormatting.BLUE + "[AstralSorcery]" + TextFormatting.RESET + " EffectHandler:");

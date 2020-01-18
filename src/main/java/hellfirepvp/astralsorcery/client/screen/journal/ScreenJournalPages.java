@@ -95,7 +95,7 @@ public class ScreenJournalPages extends ScreenJournal {
     public void init() {
         super.init();
 
-        if(origin != null) {
+        if (origin != null) {
             origin.preventRefresh();
             origin.setSize(width, height);
             origin.init();
@@ -143,14 +143,14 @@ public class ScreenJournalPages extends ScreenJournal {
         }
 
         int index = currentPageOffset * 2;
-        if(pages.size() > index) {
+        if (pages.size() > index) {
             GlStateManager.pushMatrix();
             RenderablePage page = pages.get(index);
             page.render    (guiLeft + 30, guiTop + pageYOffset, pTicks, this.blitOffset, mouseX, mouseY);
             GlStateManager.popMatrix();
         }
         index = index + 1;
-        if(pages.size() > index) {
+        if (pages.size() > index) {
             GlStateManager.pushMatrix();
             RenderablePage page = pages.get(index);
             page.render    (guiLeft + 220, guiTop + 20, pTicks, this.blitOffset, mouseX, mouseY);
@@ -161,14 +161,14 @@ public class ScreenJournalPages extends ScreenJournal {
         drawNavArrows(pTicks, mouseX, mouseY);
 
         index = currentPageOffset * 2;
-        if(pages.size() > index) {
+        if (pages.size() > index) {
             GlStateManager.pushMatrix();
             RenderablePage page = pages.get(index);
             page.postRender(guiLeft + 30, guiTop + pageYOffset, pTicks, this.blitOffset, mouseX, mouseY);
             GlStateManager.popMatrix();
         }
         index = index + 1;
-        if(pages.size() > index) {
+        if (pages.size() > index) {
             GlStateManager.pushMatrix();
             RenderablePage page = pages.get(index);
             page.postRender(guiLeft + 220, guiTop + 20, pTicks, this.blitOffset, mouseX, mouseY);
@@ -190,7 +190,7 @@ public class ScreenJournalPages extends ScreenJournal {
         GlStateManager.translated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
 
         float uFrom = 0F, vFrom = 0.5F;
-        if(rectBack.contains(mouseX, mouseY)) {
+        if (rectBack.contains(mouseX, mouseY)) {
             uFrom = 0.5F;
             GlStateManager.scaled(1.1, 1.1, 1.1);
         } else {

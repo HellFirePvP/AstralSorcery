@@ -47,7 +47,7 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
 
     @Override
     public boolean onSelect(PlayerEntity player) {
-        if(player.isSneaking()) {
+        if (player.isSneaking()) {
             for (BlockPos linkTo : Lists.newArrayList(getLinkedPositions())) {
                 tryUnlink(player, linkTo);
             }
@@ -77,7 +77,7 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
         super.readCustomNBT(compound);
         positions.clear();
 
-        if(compound.contains("linked")) {
+        if (compound.contains("linked")) {
             ListNBT list = compound.getList("linked", Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++) {
                 CompoundNBT tag = list.getCompound(i);
@@ -88,9 +88,9 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
 
     @Override
     public void onLinkCreate(PlayerEntity player, BlockPos other) {
-        if(other.equals(getPos())) return;
+        if (other.equals(getPos())) return;
 
-        if(TransmissionNetworkHelper.createTransmissionLink(this, other)) {
+        if (TransmissionNetworkHelper.createTransmissionLink(this, other)) {
             if (this.isSingleLink()) {
                 this.positions.clear();
             }
@@ -121,9 +121,9 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
 
     @Override
     public boolean tryUnlink(PlayerEntity player, BlockPos other) {
-        if(other.equals(getPos())) return false;
+        if (other.equals(getPos())) return false;
 
-        if(TransmissionNetworkHelper.hasTransmissionLink(this, other)) {
+        if (TransmissionNetworkHelper.hasTransmissionLink(this, other)) {
             TransmissionNetworkHelper.removeTransmissionLink(this, other);
             this.positions.remove(other);
             markForUpdate();

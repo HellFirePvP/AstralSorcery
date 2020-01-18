@@ -74,7 +74,7 @@ public abstract class SizeHandler {
         int lowerMost = 0;
 
         int[] requiredRect = buildRequiredRectangle();
-        if(requiredRect != null) {
+        if (requiredRect != null) {
             leftMost =  requiredRect[0];
             rightMost = requiredRect[1];
             upperMost = requiredRect[2];
@@ -135,12 +135,12 @@ public abstract class SizeHandler {
     }
 
     public void handleZoomIn() {
-        if(scalingFactor >= maxScale) return;
+        if (scalingFactor >= maxScale) return;
         scalingFactor = Math.min(maxScale, scalingFactor + scaleSpeed);
     }
 
     public void handleZoomOut() {
-        if(scalingFactor <= minScale) return;
+        if (scalingFactor <= minScale) return;
         scalingFactor = Math.max(minScale, scalingFactor - scaleSpeed);
     }
 
@@ -155,10 +155,10 @@ public abstract class SizeHandler {
     //ensures that the cursor pos never gets too close to a border. (X)
     //scaled or not, widthToBorder and heightToBorder are defined by the real GUI size!
     public double clampX(double centerX) {
-        if((centerX + widthToBorder) > getTotalWidth()) {
+        if ((centerX + widthToBorder) > getTotalWidth()) {
             centerX = getTotalWidth() - widthToBorder;
         }
-        if((centerX - widthToBorder) < 0) {
+        if ((centerX - widthToBorder) < 0) {
             centerX = widthToBorder;
         }
         return centerX;
@@ -166,10 +166,10 @@ public abstract class SizeHandler {
 
     //ensures that the cursor pos never gets too close to a border. (Y)
     public double clampY(double centerY) {
-        if((centerY + heightToBorder) > getTotalHeight()) {
+        if ((centerY + heightToBorder) > getTotalHeight()) {
             centerY = getTotalHeight() - heightToBorder;
         }
-        if((centerY - heightToBorder) < 0) {
+        if ((centerY - heightToBorder) < 0) {
             centerY = heightToBorder;
         }
         return centerY;

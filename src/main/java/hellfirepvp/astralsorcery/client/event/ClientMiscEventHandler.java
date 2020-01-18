@@ -61,7 +61,7 @@ public class ClientMiscEventHandler {
             return;
         }
 
-        if(player.isPassenger() || player.isElytraFlying()) return;
+        if (player.isPassenger() || player.isElytraFlying()) return;
 
         GlStateManager.color4f(1F, 1F, 1F, 1F);
 
@@ -92,7 +92,7 @@ public class ClientMiscEventHandler {
 
         GlStateManager.scaled(0.07, 0.07, 0.07);
         GlStateManager.translated(0, 5.5, 0.7 - (((float) (r / ma)) * (f ? 0.5D : 0.2D)));
-        if(dList == -1) {
+        if (dList == -1) {
             dList = GLAllocation.generateDisplayLists(2);
             GlStateManager.newList(dList, GL11.GL_COMPILE);
             obj.renderOnly(true, "wR");

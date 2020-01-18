@@ -9,11 +9,13 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import com.google.common.collect.Iterables;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.GameRulesAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -36,6 +38,7 @@ import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.*;
+import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
@@ -50,6 +53,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,20 +77,14 @@ public class MiscUtils {
     public static <T> T getTileAt(IBlockReader world, BlockPos pos, Class<T> tileClass, boolean forceChunkLoad) {
         if (world == null || pos == null) return null; //Duh.
         if (world instanceof IWorldReader) {
-            if (!((IWorldReader) world).isBlockLoaded(pos) && !forceChunkLoad) return null;
+            if (!((IWorldReader) world).isBlockLoaded(pos) && !forceChunkLoad) {
+                return null;
+            }
         }
         TileEntity te = world.getTileEntity(pos);
         if (te == null) return null;
         if (tileClass.isInstance(te)) return (T) te;
         return null;
-    }
-
-    public static boolean canEntityTickAt(World world, BlockPos pos) {
-        if (!isChunkLoaded(world, pos)) {
-            return false;
-        }
-        BlockPos test = new BlockPos(pos.getX(), 0, pos.getZ());
-        return world.isAreaLoaded(test, 0);
     }
 
     @Nullable
@@ -132,7 +130,7 @@ public class MiscUtils {
         V max = null;
         for (T element : elements) {
             V val = valueFunction.apply(element);
-            if(max == null || max.compareTo(val) < 0) {
+            if (max == null || max.compareTo(val) < 0) {
                 max = val;
             }
         }
@@ -144,7 +142,7 @@ public class MiscUtils {
             return true;
         }
 
-        if (!isChunkLoaded(world, at) && !loadChunk) {
+        if (!world.isBlockLoaded(at) && !loadChunk) {
             return defaultValue;
         }
         return world.canBlockSeeSky(at);
@@ -154,12 +152,27 @@ public class MiscUtils {
         return () -> func.accept(supply.get());
     }
 
+    public static <T, U> Consumer<T> apply(BiConsumer<T, U> func, Supplier<U> supply) {
+        return (t) -> func.accept(t, supply.get());
+    }
+
+    public static <T, U, V> BiConsumer<T, U> apply(TriConsumer<T, U, V> func, Supplier<V> supply) {
+        return (t, u) -> func.accept(t, u, supply.get());
+    }
+
     public static <T, R> Supplier<R> apply(Function<T, R> func, Supplier<T> supply) {
         return () -> func.apply(supply.get());
     }
 
     public static <T, P, R> Function<P, R> apply(BiFunction<T, P, R> func, Supplier<T> supply) {
         return p -> func.apply(supply.get(), p);
+    }
+
+    public static <T> Supplier<T> nullSupplier(Runnable run) {
+        return () -> {
+            run.run();
+            return null;
+        };
     }
 
     public static <T, V> List<V> transform(List<T> list, Function<T, V> map) {
@@ -201,7 +214,7 @@ public class MiscUtils {
     @Nullable
     public static <T> T iterativeSearch(Collection<T> collection, Predicate<T> matchingFct) {
         for (T element : collection) {
-            if(matchingFct.test(element)) {
+            if (matchingFct.test(element)) {
                 return element;
             }
         }
@@ -394,12 +407,49 @@ public class MiscUtils {
         target.addZ(rand.nextFloat() * multiplier * (rand.nextBoolean() ? 1 : -1));
     }
 
-    public static boolean isChunkLoaded(IWorld world, BlockPos pos) {
-        return world.isBlockLoaded(pos);
+    public static void executeWithChunk(IWorldReader world, ChunkPos pos, Runnable run) {
+        executeWithChunk(world, pos.asBlockPos(), nullSupplier(run));
     }
 
-    public static boolean isChunkLoaded(IWorld world, ChunkPos pos) {
-        return world.isBlockLoaded(new BlockPos(pos.x * 16, 0, pos.z * 16));
+    public static void executeWithChunk(IWorldReader world, BlockPos pos, Runnable run) {
+        executeWithChunk(world, pos, nullSupplier(run));
+    }
+
+    public static <T> T executeWithChunk(IWorldReader world, BlockPos pos, Supplier<T> run) {
+        if (world instanceof ServerWorld && LogCategory.UNINTENDED_CHUNK_LOADING.isEnabled()) {
+            int prev = ((ServerWorld) world).getChunkProvider().getLoadedChunkCount();
+            try {
+                if (world.isBlockLoaded(pos)) {
+                    return run.get();
+                }
+            } finally {
+                int current = ((ServerWorld) world).getChunkProvider().getLoadedChunkCount();
+                if (current > prev) { //We... don't really care about unloading tbh.
+                    AstralSorcery.log.warn("Astral Sorcery loaded a chunk when it intended not to!");
+                    AstralSorcery.log.warn("Previous chunk count: " + prev);
+                    AstralSorcery.log.warn("Current chunk count: " + current);
+                    AstralSorcery.log.warn("Loaded " + (current - prev) + " chunks!");
+                    AstralSorcery.log.warn("Stacktrace:", new Exception());
+                }
+            }
+        } else {
+            if (world.isBlockLoaded(pos)) {
+                return run.get();
+            }
+        }
+        return null;
+    }
+
+    public static <T> void executeWithChunk(IWorldReader world, BlockPos pos, T obj, Consumer<T> run) {
+        executeWithChunk(world, pos, nullSupplier(apply(run, () -> obj)));
+    }
+
+    public static <T, U> void executeWithChunk(IWorldReader world, BlockPos pos, T obj, U obj1, BiConsumer<T, U> run) {
+        executeWithChunk(world, pos, obj, apply(run, () -> obj1));
+    }
+
+    public static <T, R> R executeWithChunk(IWorldReader world, BlockPos pos, T obj, Function<T, R> run) {
+        return executeWithChunk(world, pos, apply(run, () -> obj));
     }
 
     public static boolean isPlayerFakeMP(ServerPlayerEntity player) {
@@ -409,7 +459,7 @@ public class MiscUtils {
 
         boolean isModdedPlayer = false;
         for (Mods mod : Mods.values()) {
-            if(!mod.isPresent()) {
+            if (!mod.isPresent()) {
                 continue;
             }
             Class<?> specificPlayerClass = mod.getExtendedPlayerClass();

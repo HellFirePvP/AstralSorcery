@@ -66,7 +66,7 @@ public class ResearchHelper {
 
     @Nonnull
     private static PlayerProgress getProgressServer(ServerPlayerEntity player) {
-        if(MiscUtils.isPlayerFakeMP(player)) {
+        if (MiscUtils.isPlayerFakeMP(player)) {
             return new PlayerProgressTestAccess();
         }
         return getProgress(player.getUniqueID());
@@ -94,7 +94,7 @@ public class ResearchHelper {
     }
 
     public static void loadPlayerKnowledge(ServerPlayerEntity p) {
-        if(!MiscUtils.isPlayerFakeMP(p)) {
+        if (!MiscUtils.isPlayerFakeMP(p)) {
             loadPlayerKnowledge(p.getUniqueID());
         }
     }
@@ -157,15 +157,15 @@ public class ResearchHelper {
 
     private static void informPlayersAboutProgressionLoss(UUID pUUID) {
         MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-        if(server != null) {
+        if (server != null) {
             ServerPlayerEntity player = server.getPlayerList().getPlayerByUUID(pUUID);
-            if(player != null) {
+            if (player != null) {
                 player.sendMessage(new StringTextComponent("AstralSorcery: Your progression could not be loaded and can't be recovered from backup. Please contact an administrator to lookup what went wrong and/or potentially recover your data from a backup.").setStyle(new Style().setColor(TextFormatting.RED)));
             }
             String resolvedName = player != null ? player.getGameProfile().getName() : pUUID.toString() + " (Not online)";
             for (String opName : server.getPlayerList().getOppedPlayerNames()) {
                 PlayerEntity pl = server.getPlayerList().getPlayerByUsername(opName);
-                if(pl != null) {
+                if (pl != null) {
                     pl.sendMessage(new StringTextComponent("AstralSorcery: The progression of " + resolvedName + " could not be loaded and can't be recovered from backup. Error files might be created from the unloadable progression files, check the console for additional information!").setStyle(new Style().setColor(TextFormatting.RED)));
                 }
             }
@@ -174,7 +174,7 @@ public class ResearchHelper {
 
     public static boolean mergeApplyPlayerprogress(PlayerProgress toMergeFrom, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.acceptMergeFrom(toMergeFrom);
 
@@ -226,7 +226,7 @@ public class ResearchHelper {
 
     public static File getPlayerFile(UUID pUUID) {
         File f = new File(getPlayerDirectory(), pUUID.toString() + ".astral");
-        if(!f.exists()) {
+        if (!f.exists()) {
             try {
                 CompressedStreamTools.write(new CompoundNBT(), f);
             } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
@@ -244,7 +244,7 @@ public class ResearchHelper {
 
     public static File getPlayerBackupFile(UUID pUUID) {
         File f = new File(getPlayerDirectory(), pUUID.toString() + ".astralback");
-        if(!f.exists()) {
+        if (!f.exists()) {
             try {
                 CompressedStreamTools.write(new CompoundNBT(), f);
             } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.

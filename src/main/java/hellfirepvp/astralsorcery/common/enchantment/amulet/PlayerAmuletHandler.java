@@ -40,7 +40,7 @@ public class PlayerAmuletHandler implements ITickHandler {
         }
 
         Tuple<ItemStack, PlayerEntity> linkedAmulet = AmuletEnchantmentHelper.getWornAmulet(event.getEnchantedItemStack());
-        if(linkedAmulet == null ||
+        if (linkedAmulet == null ||
                 linkedAmulet.getA().isEmpty() ||
                 linkedAmulet.getB() == null) {
             return;

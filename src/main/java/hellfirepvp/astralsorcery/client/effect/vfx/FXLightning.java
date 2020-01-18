@@ -64,9 +64,9 @@ public class FXLightning extends EntityVisualFX {
     public FXLightning makeDefault(Vector3 to) {
         double dstLength = to.clone().subtract(this.getPosition()).length();
         float perc = 1F;
-        if(dstLength > optimalLightningLength) {
+        if (dstLength > optimalLightningLength) {
             perc = MathHelper.sqrt(dstLength / optimalLightningLength);
-        } else if(dstLength < optimalLightningLength) {
+        } else if (dstLength < optimalLightningLength) {
             perc = (float) Math.pow(dstLength / optimalLightningLength, 2);
         }
 
@@ -100,7 +100,7 @@ public class FXLightning extends EntityVisualFX {
                     LightningVertex newVertex = new LightningVertex(split);
                     newVertex.next.add(nextVertex);
                     newNext.add(newVertex);
-                    if(lightningSeed.nextFloat() < forkChance) {
+                    if (lightningSeed.nextFloat() < forkChance) {
                         Vector3 dirFork = split.clone().subtract(sourceVertex.offset);
                         float forkAngle = minForkAngle + (maxForkAngle - minForkAngle) * lightningSeed.nextFloat();
                         forkAngle = (float) Math.toRadians(forkAngle);
@@ -178,7 +178,7 @@ public class FXLightning extends EntityVisualFX {
         }
 
         public void calcDepthRec() {
-            if(next.isEmpty()) {
+            if (next.isEmpty()) {
                 this.followingDepth = 0;
             } else {
                 for (LightningVertex vertex : next) {

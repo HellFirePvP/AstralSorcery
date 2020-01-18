@@ -74,6 +74,12 @@ public class StarlightUpdateHandler implements ITickHandler {
         }
     }
 
+    public void clearServer() {
+        synchronized (accessLock) {
+            updateRequired.clear();
+        }
+    }
+
     @Override
     public EnumSet<TickEvent.Type> getHandledTypes() {
         return EnumSet.of(TickEvent.Type.WORLD);

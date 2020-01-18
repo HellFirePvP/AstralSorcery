@@ -152,7 +152,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
             sourcesToThis.add(NBTHelper.readBlockPosFromNBT(list.getCompound(i)));
         }
 
-        if(compound.contains("nextPos")) {
+        if (compound.contains("nextPos")) {
             CompoundNBT tag = compound.getCompound("nextPos");
             BlockPos next = NBTHelper.readBlockPosFromNBT(tag);
             boolean oldRay = tag.getBoolean("rayState");

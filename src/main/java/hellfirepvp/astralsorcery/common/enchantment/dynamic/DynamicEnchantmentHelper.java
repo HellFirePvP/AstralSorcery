@@ -59,17 +59,17 @@ public class DynamicEnchantmentHelper {
             Enchantment target = mod.getEnchantment();
             switch (mod.getType()) {
                 case ADD_TO_SPECIFIC:
-                    if(enchantment.equals(target)) {
+                    if (enchantment.equals(target)) {
                         current += mod.getLevelAddition();
                     }
                     break;
                 case ADD_TO_EXISTING_SPECIFIC:
-                    if(enchantment.equals(target) && current > 0) {
+                    if (enchantment.equals(target) && current > 0) {
                         current += mod.getLevelAddition();
                     }
                     break;
                 case ADD_TO_EXISTING_ALL:
-                    if(current > 0) {
+                    if (current > 0) {
                         current += mod.getLevelAddition();
                     }
                     break;

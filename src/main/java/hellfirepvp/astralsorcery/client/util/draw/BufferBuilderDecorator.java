@@ -260,7 +260,7 @@ public class BufferBuilderDecorator extends BufferBuilder {
         } else if (vType == VertexFormatElement.Type.SHORT) {
             return ((float) (short) data) / (dataMask >> 1);
         } else if (vType == VertexFormatElement.Type.INT) {
-            return (float)((double) (data & 0xFFFFFFFFL) / (0xFFFFFFFF >> 1));
+            return (float) ((double) (data & 0xFFFFFFFFL) / (0xFFFFFFFF >> 1));
         }
         return 0;
     }
@@ -268,7 +268,7 @@ public class BufferBuilderDecorator extends BufferBuilder {
     private int pack(float data, int dataMask, VertexFormatElement.Type vType) {
         if (vType == VertexFormatElement.Type.FLOAT) {
             return Float.floatToRawIntBits(data);
-        } else if(vType == VertexFormatElement.Type.UBYTE ||
+        } else if (vType == VertexFormatElement.Type.UBYTE ||
                         vType == VertexFormatElement.Type.USHORT ||
                         vType == VertexFormatElement.Type.UINT) {
             return Math.round(data * dataMask);

@@ -28,7 +28,7 @@ public class CameraPathBuilder {
     }
 
     public CameraPathBuilder addPoint(Vector3 nextPoint, int ticksToFlyThere) {
-        if(ticksToFlyThere < 0) {
+        if (ticksToFlyThere < 0) {
             AstralSorcery.log.warn("Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
             return this;
         }
@@ -41,7 +41,7 @@ public class CameraPathBuilder {
     }
 
     public CameraPathBuilder addCircularPoints(Vector3 centerOffset, DynamicRadiusGetter radiusFn, int amountOfPointsOnCircle, int ticksBetweenEachPoint) {
-        if(ticksBetweenEachPoint < 0) {
+        if (ticksBetweenEachPoint < 0) {
             AstralSorcery.log.warn("Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
             return this;
         }

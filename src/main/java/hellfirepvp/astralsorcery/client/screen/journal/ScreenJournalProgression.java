@@ -42,7 +42,7 @@ public class ScreenJournalProgression extends ScreenJournal {
     }
 
     public static ScreenJournalProgression getJournalInstance() {
-        if(currentInstance != null) {
+        if (currentInstance != null) {
             return currentInstance;
         }
         return new ScreenJournalProgression();
@@ -50,7 +50,7 @@ public class ScreenJournalProgression extends ScreenJournal {
 
     public static ScreenJournal getOpenJournalInstance() {
         ScreenJournal gui = ScreenJournalPages.getClearOpenGuiInstance();
-        if(gui == null) {
+        if (gui == null) {
             gui = getJournalInstance();
         }
         return gui;
@@ -79,12 +79,12 @@ public class ScreenJournalProgression extends ScreenJournal {
     protected void init() {
         super.init();
 
-        if(expectReinit) {
+        if (expectReinit) {
             expectReinit = false;
             return; //We ASSUME, that the state is valid.
         }
 
-        if(currentInstance == null || progressionRenderer == null) {
+        if (currentInstance == null || progressionRenderer == null) {
             currentInstance = this;
             progressionRenderer = new ScreenJournalProgressionRenderer(currentInstance, guiHeight - 10, guiWidth - 10);
             progressionRenderer.centerMouse();
@@ -94,7 +94,7 @@ public class ScreenJournalProgression extends ScreenJournal {
         progressionRenderer.setBox(10, 10, guiWidth - 10, guiHeight - 10);
         //progressionRenderer.resetOverlayText();
 
-        if(rescaleAndRefresh) {
+        if (rescaleAndRefresh) {
             progressionRenderer.resetZoom();
             progressionRenderer.unfocus();
             progressionRenderer.refreshSize();
@@ -136,7 +136,7 @@ public class ScreenJournalProgression extends ScreenJournal {
     private void drawMouseHighlight(float zLevel, int mouseX, int mouseY, Rectangle starRect) {
         progressionRenderer.drawMouseHighlight(zLevel, mouseX, mouseY);
 
-        if(starRect != null && starRect.contains(mouseX, mouseY)) {
+        if (starRect != null && starRect.contains(mouseX, mouseY)) {
             GlStateManager.disableDepthTest();
             RenderingDrawUtils.renderBlueTooltipString(mouseX, mouseY, new LinkedList<String>() {
                 {
@@ -174,11 +174,11 @@ public class ScreenJournalProgression extends ScreenJournal {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
-        if(scroll < 0) {
+        if (scroll < 0) {
             progressionRenderer.handleZoomOut();
             return true;
         }
-        if(scroll > 0)  {
+        if (scroll > 0)  {
             progressionRenderer.handleZoomIn(mouseX, mouseY);
             return true;
         }
@@ -191,7 +191,7 @@ public class ScreenJournalProgression extends ScreenJournal {
             return true;
         }
 
-        if(mouseButton != 0) {
+        if (mouseButton != 0) {
             return false;
         }
         if (handleBookmarkClick(mouseX, mouseY)) {

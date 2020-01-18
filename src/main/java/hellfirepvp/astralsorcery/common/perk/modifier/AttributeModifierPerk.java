@@ -97,7 +97,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
                 PerkAttributeModifier postMod = mod;
                 LogCategory.PERKS.info(() -> "Applying converted modifier " + postMod.getId());
-                if(!attr.applyModifier(player, mod.getAttributeType(), mod)) {
+                if (!attr.applyModifier(player, mod.getAttributeType(), mod)) {
                     LogCategory.PERKS.warn(() -> "Could not apply modifier " + postMod.getId() + " - already applied!");
                 }
             }
@@ -125,7 +125,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
                 PerkAttributeModifier postMod = mod;
                 LogCategory.PERKS.info(() -> "Removing converted modifier " + postMod.getId());
-                if(!attr.removeModifier(player, mod.getAttributeType(), mod)) {
+                if (!attr.removeModifier(player, mod.getAttributeType(), mod)) {
                     LogCategory.PERKS.warn(() -> "Could not remove modifier " + postMod.getId() + " - not applied!");
                 }
             }

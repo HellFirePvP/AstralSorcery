@@ -49,6 +49,8 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
 
     public CEffectFornax(@Nonnull ILocatable origin) {
         super(origin, ConstellationsAS.fornax, 1, (world, pos, state) -> true);
+        this.excludeRitualPositions();
+        this.setChunkNeedsToBeLoaded();
     }
 
     @Nonnull
@@ -78,7 +80,7 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
 
     @Override
     public boolean playEffect(World world, BlockPos pos, ConstellationEffectProperties properties, @Nullable IMinorConstellation trait) {
-        if (!MiscUtils.isChunkLoaded(world, pos) || !(world instanceof ServerWorld)) {
+        if (!(world instanceof ServerWorld)) {
             return false;
         }
 

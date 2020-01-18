@@ -223,21 +223,21 @@ public class StructureDesertShrine extends StructureBlockArray {
     private void placeBlockCube(IWorld world, BlockPos offset, Function<BlockPos, BlockState> stateProvider, int ox, int oy, int oz, int tx, int ty, int tz) {
         int lx, ly, lz;
         int hx, hy, hz;
-        if(ox < tx) {
+        if (ox < tx) {
             lx = ox;
             hx = tx;
         } else {
             lx = tx;
             hx = ox;
         }
-        if(oy < ty) {
+        if (oy < ty) {
             ly = oy;
             hy = ty;
         } else {
             ly = ty;
             hy = oy;
         }
-        if(oz < tz) {
+        if (oz < tz) {
             lz = oz;
             hz = tz;
         } else {
@@ -256,7 +256,7 @@ public class StructureDesertShrine extends StructureBlockArray {
     }
 
     private void topBlockWithOffset(int x, int y, int z, IWorld world, BlockPos center, double chance) {
-        if(rand.nextFloat() <= chance) {
+        if (rand.nextFloat() <= chance) {
             BlockPos at = center.add(x, y, z);
             world.setBlockState(at, world.getBiome(at).getSurfaceBuilderConfig().getTop(), Constants.BlockFlags.DEFAULT);
         }

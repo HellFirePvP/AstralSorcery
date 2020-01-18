@@ -11,6 +11,9 @@ package hellfirepvp.astralsorcery.common.constellation.effect.base;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
+import hellfirepvp.astralsorcery.common.lib.StructuresAS;
+import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
@@ -29,6 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,6 +42,10 @@ import java.util.List;
  * Date: 11.06.2019 / 19:59
  */
 public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntry> extends ConstellationEffect {
+
+    //Used to disable pedestal whitelisting when finding positions to break blocks at.
+    private boolean isLinkedRitual = false;
+    private boolean excludesRitual = false;
 
     protected final BlockPredicate verifier;
     protected final int maxAmount;
@@ -52,6 +60,14 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         this.positionStrategy = this.createPositionStrategy();
     }
 
+    protected void excludeRitualPositions() {
+        this.setChunkNeedsToBeLoaded();
+        if (!this.excludesRitual) {
+            this.excludesRitual = true;
+            this.positionStrategy.andFilter(this.createExcludeRitualPredicate());
+        }
+    }
+
     @Nullable
     public abstract T recreateElement(CompoundNBT tag, BlockPos pos);
 
@@ -61,6 +77,18 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
     @Nonnull
     protected BlockPositionGenerator createPositionStrategy() {
         return new BlockRandomPositionGenerator();
+    }
+
+    private Predicate<BlockPos> createExcludeRitualPredicate() {
+        return pos ->
+                !pos.equals(BlockPos.ZERO) &&
+                        this.isLinkedRitual || (
+                                !pos.equals(TileRitualPedestal.RITUAL_ANCHOR_OFFEST) && (
+                                        pos.getY() >= 3 || ( //Anything above the ritual is fine aswell
+                                                !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos) && //actual Ritual layer
+                                                        !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down()) && //Pillars & config
+                                                        !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down(2)) &&  //uh... consistency?
+                                                        !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down(3))))); //Lenses
     }
 
     public int getCount() {
@@ -89,12 +117,19 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
 
     @Nullable
     public T peekNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
+        if (this.excludesRitual) {
+            MiscUtils.executeWithChunk(world, pos, () -> {
+                this.isLinkedRitual = MiscUtils.getTileAt(world, pos, TileRitualLink.class, true) != null;
+            });
+        }
         BlockPos at = this.positionStrategy.generateNextPosition(BlockPos.ZERO, prop.getSize());
         BlockPos actual = at.add(pos);
-        if (MiscUtils.isChunkLoaded(world, actual) && this.verifier.test(world, actual, world.getBlockState(actual))) {
-            return this.createElement(world, actual);
-        }
-        return null;
+        return MiscUtils.executeWithChunk(world, actual, () -> {
+            if (this.verifier.test(world, actual, world.getBlockState(actual))) {
+                return this.createElement(world, actual);
+            }
+            return null;
+        });
     }
 
     @Nullable

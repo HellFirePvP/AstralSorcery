@@ -70,14 +70,14 @@ public class RenderOffsetNoisePlane implements VFXRenderOffsetFunction<EntityVis
     }
 
     private void checkRotations() {
-        if(ClientScheduler.getClientTick() >= targetSample) {
+        if (ClientScheduler.getClientTick() >= targetSample) {
             buildRotations();
         }
     }
 
     private void buildRotations() {
         this.lastSample = ClientScheduler.getClientTick();
-        if(this.rotationDeg != null) {
+        if (this.rotationDeg != null) {
             this.prevRotationDeg = this.rotationDeg;
         } else {
             this.prevRotationDeg = Vector3.positiveYRandom();

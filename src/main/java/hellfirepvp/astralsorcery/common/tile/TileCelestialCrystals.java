@@ -121,7 +121,7 @@ public class TileCelestialCrystals extends TileEntityTick implements CrystalAttr
     }
 
     public void grow(int chance) {
-        if(rand.nextInt(Math.max(chance, 1)) == 0) {
+        if (rand.nextInt(Math.max(chance, 1)) == 0) {
             int stage = getGrowth();
             if (stage < 4) {
                 setGrowth(stage + 1);

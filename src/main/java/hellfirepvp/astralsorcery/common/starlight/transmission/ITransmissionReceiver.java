@@ -38,6 +38,6 @@ public interface ITransmissionReceiver extends IPrismTransmissionNode {
         return false;
     }
 
-    public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount);
+    public void onStarlightReceive(World world, IWeakConstellation type, double amount);
 
 }

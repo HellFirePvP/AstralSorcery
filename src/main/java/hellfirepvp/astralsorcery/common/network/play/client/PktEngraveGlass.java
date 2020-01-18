@@ -84,7 +84,7 @@ public class PktEngraveGlass extends ASPacket<PktEngraveGlass> {
                 if (world != null) {
                     //TODO engraving table
                     //TileMapDrawingTable tmt = MiscUtils.getTileAt(world, packet.pos, TileMapDrawingTable.class, false);
-                    //if(tmt != null) {
+                    //if (tmt != null) {
                     //    tmt.tryEngraveGlass(packet.constellations);
                     //}
                 }

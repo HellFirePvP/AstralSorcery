@@ -53,7 +53,7 @@ public class LightbeamRenderHelper implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         ticksExisted++;
-        if(ticksExisted % 40 == 0) {
+        if (ticksExisted % 40 == 0) {
             ticksExisted = 0;
             Entity rView = Minecraft.getInstance().getRenderViewEntity();
             if (rView == null) {

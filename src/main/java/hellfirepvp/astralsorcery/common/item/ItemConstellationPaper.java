@@ -87,10 +87,10 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
-        if(itemStack.isEmpty()) {
+        if (itemStack.isEmpty()) {
             return ActionResult.newResult(ActionResultType.SUCCESS, itemStack);
         }
-        if(world.isRemote() && getConstellation(itemStack) != null) {
+        if (world.isRemote() && getConstellation(itemStack) != null) {
             SoundHelper.playSoundClient(SoundsAS.GUI_JOURNAL_PAGE, 1F, 1F);
             AstralSorcery.getProxy().openGui(player, GuiType.CONSTELLATION_PAPER, getConstellation(itemStack));
         }
@@ -140,13 +140,13 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
 
             for (ResourceLocation strConstellation : progress.getKnownConstellations()) {
                 IConstellation c = ConstellationRegistry.getConstellation(strConstellation);
-                if(c != null) {
+                if (c != null) {
                     constellations.remove(c);
                 }
             }
             for (ResourceLocation strConstellation : progress.getSeenConstellations()) {
                 IConstellation c = ConstellationRegistry.getConstellation(strConstellation);
-                if(c != null) {
+                if (c != null) {
                     constellations.remove(c);
                 }
             }

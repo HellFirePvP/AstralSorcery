@@ -132,7 +132,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
     }
 
     private void drawPageText(int mouseX, int mouseY) {
-        if(nameStrWidth == -1 || valueStrWidth == -1 || suffixStrWidth == -1) {
+        if (nameStrWidth == -1 || valueStrWidth == -1 || suffixStrWidth == -1) {
             buildDisplayWidth();
         }
 

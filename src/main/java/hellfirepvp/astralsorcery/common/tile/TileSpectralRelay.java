@@ -73,14 +73,14 @@ public class TileSpectralRelay extends TileEntityTick {
             }
 
             if (hasMultiblock() && hasGlassLens() && this.altarPos != null) {
-                if (MiscUtils.isChunkLoaded(getWorld(), this.altarPos)) {
+                MiscUtils.executeWithChunk(getWorld(), this.altarPos, () -> {
                     TileAltar ta = MiscUtils.getTileAt(getWorld(), this.altarPos, TileAltar.class, true);
                     if (ta == null) {
                         this.updateAltarLinkState();
                     } else {
                         this.provideStarlight(ta);
                     }
-                }
+                });
             }
         } else {
             if (hasMultiblock() && hasGlassLens()) {

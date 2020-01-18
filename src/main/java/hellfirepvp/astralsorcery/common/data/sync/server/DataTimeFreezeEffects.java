@@ -52,7 +52,7 @@ public class DataTimeFreezeEffects extends AbstractData {
     }
 
     public void removeEffect(DimensionType dimType, TimeStopEffectHelper effectHelper) {
-        if(serverActiveFreezeZones.containsKey(dimType)) {
+        if (serverActiveFreezeZones.containsKey(dimType)) {
             serverActiveFreezeZones.get(dimType).remove(effectHelper);
         }
         scheduledServerSyncChanges.add(new ServerSyncAction(ServerSyncAction.ActionType.REMOVE, dimType, effectHelper));

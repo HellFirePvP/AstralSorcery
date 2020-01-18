@@ -64,7 +64,7 @@ public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
                 PlayerEntity player = context.getSender();
                 //TODO gateway
                 //TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, false);
-                //if(gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
+                //if (gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
                 //    MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
                 //    if (server != null) {
                 //        World to = server.getWorld(packet.type);

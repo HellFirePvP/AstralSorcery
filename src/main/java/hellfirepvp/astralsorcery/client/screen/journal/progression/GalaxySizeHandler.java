@@ -42,16 +42,16 @@ public class GalaxySizeHandler extends SizeHandler {
 
             int x = cluster.x;
             int y = cluster.y;
-            if(x < leftMost) leftMost = x;
-            if(x > rightMost) rightMost = x;
-            if(y > lowerMost) lowerMost = y;
-            if(y < upperMost) upperMost = y;
+            if (x < leftMost) leftMost = x;
+            if (x > rightMost) rightMost = x;
+            if (y > lowerMost) lowerMost = y;
+            if (y < upperMost) upperMost = y;
             x = cluster.maxX;
             y = cluster.maxY;
-            if(x < leftMost) leftMost = x;
-            if(x > rightMost) rightMost = x;
-            if(y > lowerMost) lowerMost = y;
-            if(y < upperMost) upperMost = y;
+            if (x < leftMost) leftMost = x;
+            if (x > rightMost) rightMost = x;
+            if (y > lowerMost) lowerMost = y;
+            if (y < upperMost) upperMost = y;
         }
         return new int[] { leftMost, rightMost, upperMost, lowerMost };
     }

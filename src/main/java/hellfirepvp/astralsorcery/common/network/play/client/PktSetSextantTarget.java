@@ -71,7 +71,7 @@ public class PktSetSextantTarget extends ASPacket<PktSetSextantTarget> {
                 ItemStack held = player.getHeldItem(packet.hand);
                 //TODO sextant
                 if (true) {
-                //if(held.isEmpty() || !(held.getItem() instanceof ItemSextant)) {
+                //if (held.isEmpty() || !(held.getItem() instanceof ItemSextant)) {
                     return;
                 }
                 Thread tr = new Thread(() -> {

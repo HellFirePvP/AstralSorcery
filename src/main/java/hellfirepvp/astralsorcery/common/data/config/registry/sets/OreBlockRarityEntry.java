@@ -53,7 +53,7 @@ public class OreBlockRarityEntry implements ConfigDataSet {
     @Nullable
     public static OreBlockRarityEntry deserialize(String str) throws IllegalArgumentException {
         String[] split = str.split(";");
-        if(split.length != 2) {
+        if (split.length != 2) {
             return null;
         }
         ResourceLocation keyBlockTag = new ResourceLocation(split[0]);

@@ -217,7 +217,7 @@ public class ByteBufUtils {
     public static void writeItemStack(PacketBuffer byteBuf, @Nonnull ItemStack stack) {
         boolean defined = !stack.isEmpty();
         byteBuf.writeBoolean(defined);
-        if(defined) {
+        if (defined) {
             CompoundNBT tag = new CompoundNBT();
             stack.write(tag);
             writeNBTTag(byteBuf, tag);
@@ -227,7 +227,7 @@ public class ByteBufUtils {
     @Nonnull
     public static ItemStack readItemStack(PacketBuffer byteBuf) {
         boolean defined = byteBuf.readBoolean();
-        if(defined) {
+        if (defined) {
             return ItemStack.read(readNBTTag(byteBuf));
         } else {
             return ItemStack.EMPTY;

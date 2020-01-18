@@ -48,7 +48,7 @@ public class FluidRarityEntry implements ConfigDataSet {
     @Nullable
     public static FluidRarityEntry deserialize(String str) throws IllegalArgumentException {
         String[] split = str.split(";");
-        if(split.length != 4) {
+        if (split.length != 4) {
             return null;
         }
         ResourceLocation fluidName = new ResourceLocation(split[0]);

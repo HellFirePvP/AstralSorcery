@@ -103,7 +103,7 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
     private void refreshJournal() {
         Screen open = Minecraft.getInstance().currentScreen;
         if (open != null) {
-            if(open instanceof ScreenJournal && !(open instanceof ScreenJournalPerkTree)) {
+            if (open instanceof ScreenJournal && !(open instanceof ScreenJournalPerkTree)) {
                 Minecraft.getInstance().displayGuiScreen(null);
             }
         }

@@ -74,17 +74,19 @@ public class CEffectBootes extends ConstellationEffectEntityCollect<LivingEntity
                 continue;
             }
 
-            if (rand.nextFloat() < CONFIG.herdingChance.get() &&
-                    MiscUtils.canEntityTickAt(world, entity.getPosition())) {
+            if (rand.nextFloat() < CONFIG.herdingChance.get()) {
+                didEffect = MiscUtils.executeWithChunk(world, entity.getPosition(), didEffect, (didEffectFlag) -> {
 
-                List<ItemStack> drops = EntityUtils.generateLoot(entity, rand, CommonProxy.DAMAGE_SOURCE_STELLAR, null);
-                for (ItemStack drop : drops) {
-                    if (rand.nextFloat() < CONFIG.herdingLootChance.get() &&
-                            ItemUtils.dropItemNaturally(world, entity.posX, entity.posY, entity.posZ, drop) != null) {
+                    List<ItemStack> drops = EntityUtils.generateLoot(entity, rand, CommonProxy.DAMAGE_SOURCE_STELLAR, null);
+                    for (ItemStack drop : drops) {
+                        if (rand.nextFloat() < CONFIG.herdingLootChance.get() &&
+                                ItemUtils.dropItemNaturally(world, entity.posX, entity.posY, entity.posZ, drop) != null) {
 
-                        didEffect = true;
+                            didEffectFlag = true;
+                        }
                     }
-                }
+                    return didEffectFlag;
+                });
             }
         }
 

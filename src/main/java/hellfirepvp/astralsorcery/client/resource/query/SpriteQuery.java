@@ -58,7 +58,7 @@ public class SpriteQuery extends TextureQuery {
     @Nonnull
     @OnlyIn(Dist.CLIENT)
     public SpriteSheetResource resolveSprite() {
-        if(spriteResource == null) {
+        if (spriteResource == null) {
             AbstractRenderableTexture res = resolve();
             spriteResource = new SpriteSheetResource(res, getRows(), getColumns());
         }

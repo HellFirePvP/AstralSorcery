@@ -270,8 +270,8 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
             }
         }
 
-        if(tick >= 600) {
-            if(tick % 10 == 0) {
+        if (tick >= 600) {
+            if (tick % 10 == 0) {
                 Vector3 from = new Vector3(altar).add(0.5, 0, 0.5);
                 MiscUtils.applyRandomOffset(from, rand, 0.25F);
                 EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)

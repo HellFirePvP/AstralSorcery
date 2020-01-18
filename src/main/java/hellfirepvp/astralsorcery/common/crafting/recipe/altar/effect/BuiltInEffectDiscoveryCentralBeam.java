@@ -29,7 +29,7 @@ public class BuiltInEffectDiscoveryCentralBeam extends AltarRecipeEffect {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
-        if(state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE &&
+        if (state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE &&
                 rand.nextInt(10) == 0) {
             Vector3 from = new Vector3(altar).add(0.5, 0.3, 0.5);
             MiscUtils.applyRandomOffset(from, rand, 0.26F);

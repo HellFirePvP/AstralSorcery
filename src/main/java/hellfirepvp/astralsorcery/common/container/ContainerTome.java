@@ -51,7 +51,7 @@ public class ContainerTome extends Container {
             for (int j = 0; j < 9; j++) {
                 int index = j + i * 9 + 9;
 
-                if(index == tomeIndex) {
+                if (index == tomeIndex) {
                     addSlot(new SlotUnclickable(playerInv, index, 8 + j * 18, 84 + i * 18));
                 } else {
                     addSlot(           new Slot(playerInv, index, 8 + j * 18, 84 + i * 18));
@@ -59,7 +59,7 @@ public class ContainerTome extends Container {
             }
         }
         for (int i = 0; i < 9; i++) {
-            if(i == tomeIndex) {
+            if (i == tomeIndex) {
                 addSlot(new SlotUnclickable(playerInv, i, 8 + i * 18, 142));
             } else {
                 addSlot(           new Slot(playerInv, i, 8 + i * 18, 142));
@@ -84,9 +84,9 @@ public class ContainerTome extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if(!itemstack1.isEmpty() && itemstack1.getItem() instanceof ItemConstellationPaper && ((ItemConstellationPaper) itemstack1.getItem()).getConstellation(itemstack1) != null) {
-                if(index >= 0 && index < 36) {
-                    if(!this.mergeItemStack(itemstack1, 36, 63, false)) {
+            if (!itemstack1.isEmpty() && itemstack1.getItem() instanceof ItemConstellationPaper && ((ItemConstellationPaper) itemstack1.getItem()).getConstellation(itemstack1) != null) {
+                if (index >= 0 && index < 36) {
+                    if (!this.mergeItemStack(itemstack1, 36, 63, false)) {
                         return ItemStack.EMPTY;
                     }
                 }

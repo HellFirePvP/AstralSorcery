@@ -58,7 +58,7 @@ public class AmuletEnchantment extends DynamicEnchantment {
     }
 
     public void merge(AmuletEnchantment src) {
-        if(canMerge(src)) {
+        if (canMerge(src)) {
             this.levelAddition += src.levelAddition;
         }
     }
@@ -81,7 +81,7 @@ public class AmuletEnchantment extends DynamicEnchantment {
         if (type.isEnchantmentSpecific()) {
             ResourceLocation res = new ResourceLocation(cmp.getString("ench"));
             Enchantment e = ForgeRegistries.ENCHANTMENTS.getValue(res);
-            if(e != null) {
+            if (e != null) {
                 return new AmuletEnchantment(type, e, level);
             }
         } else {

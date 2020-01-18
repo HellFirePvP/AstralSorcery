@@ -53,21 +53,21 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
 
             boolean addedMissing = result != CrystalAttributes.TooltipResult.ADDED_ALL;
             IWeakConstellation c = getAttunedConstellation(stack);
-            if(c != null) {
-                if(GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
+            if (c != null) {
+                if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
                     toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.info.astralsorcery.attuned", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()))));
-                } else if(!addedMissing) {
+                } else if (!addedMissing) {
                     toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
                     addedMissing = true;
                 }
             }
 
             IMinorConstellation tr = getTraitConstellation(stack);
-            if(tr != null) {
-                if(GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(tr)) {
+            if (tr != null) {
+                if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(tr)) {
                     toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.info.astralsorcery.trait",
                             TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName()))));
-                } else if(!addedMissing) {
+                } else if (!addedMissing) {
                     toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
                 }
             }

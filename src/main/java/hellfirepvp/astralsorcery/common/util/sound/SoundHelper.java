@@ -50,7 +50,7 @@ public class SoundHelper {
     }
 
     public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, double posX, double posY, double posZ, float volume, float pitch) {
-        if(sound instanceof CategorizedSoundEvent) {
+        if (sound instanceof CategorizedSoundEvent) {
             category = ((CategorizedSoundEvent) sound).getCategory();
         }
         world.playSound(null, posX, posY, posZ, sound, category, volume, pitch);
@@ -59,7 +59,7 @@ public class SoundHelper {
     @OnlyIn(Dist.CLIENT)
     public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, Predicate<PositionedLoopSound> func) {
         SoundCategory cat = SoundCategory.MASTER;
-        if(sound instanceof CategorizedSoundEvent) {
+        if (sound instanceof CategorizedSoundEvent) {
             cat = ((CategorizedSoundEvent) sound).getCategory();
         }
         PositionedLoopSound posSound = new PositionedLoopSound(sound, cat, volume, pitch, pos, isGlobal);
@@ -71,7 +71,7 @@ public class SoundHelper {
     @OnlyIn(Dist.CLIENT)
     public static FadeLoopSound playSoundLoopFadeInClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, Predicate<PositionedLoopSound> func) {
         SoundCategory cat = SoundCategory.MASTER;
-        if(sound instanceof CategorizedSoundEvent) {
+        if (sound instanceof CategorizedSoundEvent) {
             cat = ((CategorizedSoundEvent) sound).getCategory();
         }
         FadeLoopSound posSound = new FadeLoopSound(sound, cat, volume, pitch, pos, isGlobal);
@@ -83,7 +83,7 @@ public class SoundHelper {
     @OnlyIn(Dist.CLIENT)
     public static FadeSound playSoundFadeInClient(SoundEvent sound, Vector3 pos, float volume, float pitch, boolean isGlobal, Predicate<FadeSound> func) {
         SoundCategory cat = SoundCategory.MASTER;
-        if(sound instanceof CategorizedSoundEvent) {
+        if (sound instanceof CategorizedSoundEvent) {
             cat = ((CategorizedSoundEvent) sound).getCategory();
         }
         FadeSound posSound = new FadeSound(sound, cat, volume, pitch, pos, isGlobal);
@@ -112,7 +112,7 @@ public class SoundHelper {
 
     @OnlyIn(Dist.CLIENT)
     public static void playSoundClientWorld(SoundEvent sound, SoundCategory cat, BlockPos pos, float volume, float pitch) {
-        if(Minecraft.getInstance().world != null) {
+        if (Minecraft.getInstance().world != null) {
             Minecraft.getInstance().world.playSound(Minecraft.getInstance().player, pos.getX(), pos.getY(), pos.getZ(), sound, cat, volume, pitch);
         }
     }

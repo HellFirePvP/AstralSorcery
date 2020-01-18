@@ -298,10 +298,10 @@ public class AstralSkyRenderer implements IRenderHandler {
         int moonPhase = world.getMoonPhase();
         int l = moonPhase % 4;
         int i1 = moonPhase / 4 % 2;
-        float f13 = (float)(l) / 4.0F;
-        float f14 = (float)(i1) / 2.0F;
-        float f15 = (float)(l + 1) / 4.0F;
-        float f9 =  (float)(i1 + 1) / 2.0F;
+        float f13 = (float) (l) / 4.0F;
+        float f14 = (float) (i1) / 2.0F;
+        float f15 = (float) (l + 1) / 4.0F;
+        float f9 =  (float) (i1 + 1) / 2.0F;
 
         Minecraft.getInstance().getTextureManager().bindTexture(REF_TEX_MOON_PHASES);
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);

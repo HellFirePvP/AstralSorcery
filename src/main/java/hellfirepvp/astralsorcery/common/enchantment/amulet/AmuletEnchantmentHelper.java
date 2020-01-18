@@ -97,7 +97,7 @@ public class AmuletEnchantmentHelper {
             player = resolvePlayerClient(plUUID);
         } else {
             MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-            if(server == null) {
+            if (server == null) {
                 return null;
             }
             player = server.getPlayerList().getPlayerByUUID(plUUID);

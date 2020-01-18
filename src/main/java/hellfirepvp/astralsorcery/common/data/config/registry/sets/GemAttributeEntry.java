@@ -44,7 +44,7 @@ public class GemAttributeEntry implements ConfigDataSet {
     @Nullable
     public static GemAttributeEntry deserialize(String str) {
         String[] split = str.split(";");
-        if(split.length != 2) {
+        if (split.length != 2) {
             return null;
         }
         ResourceLocation keyAttributeType = new ResourceLocation(split[0]);

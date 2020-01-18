@@ -72,7 +72,7 @@ public class PktBurnParchment extends ASPacket<PktBurnParchment> {
             public void handleClient(PktBurnParchment packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
                     //TODO engraving table
-                    //if(Minecraft.getInstance().currentScreen instanceof GuiMapDrawing) {
+                    //if (Minecraft.getInstance().currentScreen instanceof GuiMapDrawing) {
                     //    Minecraft.getInstance().displayGuiScreen(null);
                     //}
                 });
@@ -83,11 +83,11 @@ public class PktBurnParchment extends ASPacket<PktBurnParchment> {
                 context.enqueueWork(() -> {
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
                     World world = srv.getWorld(packet.type);
-                    if(world != null) {
+                    if (world != null) {
                         //TODO engraving table
                         //TileMapDrawingTable tmt = MiscUtils.getTileAt(world, packet.tablePos, TileMapDrawingTable.class, false);
-                        //if(tmt != null) {
-                        //    if(tmt.burnParchment()) {
+                        //if (tmt != null) {
+                        //    if (tmt.burnParchment()) {
                         //        packet.replyWith(new PktBurnParchment(), context);
                         //    }
                         //}

@@ -98,7 +98,7 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
                             }
                         }
                     } else {
-                        if(ResearchManager.breakPerkSeal(player, packet.perk)) {
+                        if (ResearchManager.breakPerkSeal(player, packet.perk)) {
                             packet.replyWith(new PktRequestPerkSealAction(packet.perk, false), context);
                         }
                     }

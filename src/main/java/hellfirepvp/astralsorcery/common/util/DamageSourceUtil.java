@@ -99,25 +99,25 @@ public class DamageSourceUtil {
     }
 
     private static void copy(DamageSource src, DamageSource dest) {
-        if(src.canHarmInCreative()) {
+        if (src.canHarmInCreative()) {
             dest.setDamageAllowedInCreativeMode();
         }
-        if(src.isDamageAbsolute()) {
+        if (src.isDamageAbsolute()) {
             dest.setDamageIsAbsolute();
         }
-        if(src.isProjectile()) {
+        if (src.isProjectile()) {
             dest.setProjectile();
         }
-        if(src.isExplosion()) {
+        if (src.isExplosion()) {
             dest.setExplosion();
         }
-        if(src.isFireDamage()) {
+        if (src.isFireDamage()) {
             dest.setFireDamage();
         }
-        if(src.isMagicDamage()) {
+        if (src.isMagicDamage()) {
             dest.setMagicDamage();
         }
-        if(src.isDifficultyScaled()) {
+        if (src.isDifficultyScaled()) {
             dest.setDifficultyScaled();
         }
     }

@@ -30,7 +30,7 @@ public class StarlightReceiverAltar extends SimpleTransmissionReceiver {
     }
 
     @Override
-    public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
+    public void onStarlightReceive(World world, IWeakConstellation type, double amount) {
         TileAltar well = getTileAtPos(world, TileAltar.class);
         if (well != null) {
             well.receiveStarlight(amount);

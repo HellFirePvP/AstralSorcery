@@ -63,7 +63,7 @@ public class FXBlock extends EntityVisualFX {
     public void tick() {
         super.tick();
 
-        if(this.rotationChange.lengthSquared() > 0) {
+        if (this.rotationChange.lengthSquared() > 0) {
             this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone();
             this.rotationDegreeAxis.add(this.rotationChange);
         }

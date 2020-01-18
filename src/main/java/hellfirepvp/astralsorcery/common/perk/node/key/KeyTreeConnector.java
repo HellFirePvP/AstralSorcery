@@ -71,9 +71,9 @@ public class KeyTreeConnector extends MajorPerk {
 
         ListNBT listTokens = new ListNBT();
         for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(this)) {
-            if(ResearchManager.forceApplyPerk(player, otherPerk)) {
+            if (ResearchManager.forceApplyPerk(player, otherPerk)) {
                 String token = "connector-tk-" + otherPerk.getRegistryName().toString();
-                if(ResearchManager.grantFreePerkPoint(player, token)) {
+                if (ResearchManager.grantFreePerkPoint(player, token)) {
                     listTokens.add(new StringNBT(token));
                 }
             }

@@ -77,7 +77,7 @@ public class ItemKnowledgeShare extends Item {
             tooltip.add(new TranslationTextComponent("astralsorcery.misc.knowledge.missing").setStyle(new Style().setColor(TextFormatting.GRAY)));
         } else {
             String name = getKnowledgeOwnerName(stack);
-            if(name != null) {
+            if (name != null) {
                 tooltip.add(new TranslationTextComponent("astralsorcery.misc.knowledge.inscribed", name).setStyle(new Style().setColor(TextFormatting.BLUE)));
             }
         }
