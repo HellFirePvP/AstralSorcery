@@ -284,7 +284,7 @@ public class EnchantmentUpgradeHelper {
         if(player == null) return null;
 
         if (!ItemUtils.findItemsIndexedInPlayerInventory(player,
-                stack -> stack.getItem().getRegistryName().equals("tombstone:book_of_disenchantment")).isEmpty()) {
+                stack -> stack.getItem().getRegistryName().toString().equals("tombstone:book_of_disenchantment")).isEmpty()) {
             return null;
         }
 
