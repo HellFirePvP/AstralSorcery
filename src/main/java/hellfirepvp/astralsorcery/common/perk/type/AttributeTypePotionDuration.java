@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -53,7 +54,9 @@ public class AttributeTypePotionDuration extends PerkAttributeType {
     }
 
     private void modifyPotionDuration(PlayerEntity player, EffectInstance newSetEffect, EffectInstance addedEffect) {
-        if (player.getEntityWorld().isRemote() || addedEffect.getAmplifier() < newSetEffect.getAmplifier()) {
+        if (player.getEntityWorld().isRemote() ||
+                newSetEffect.getPotion().getEffectType().equals(EffectType.HARMFUL) ||
+                addedEffect.getAmplifier() < newSetEffect.getAmplifier()) {
             return;
         }
 

@@ -40,7 +40,7 @@ public class KeyMagnetDrops extends KeyPerk {
     protected void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
 
-        bus.addListener(EventPriority.LOWEST, this::onEntityLoot);
+        bus.addListener(EventPriority.HIGHEST, this::onEntityLoot);
     }
 
     private void onEntityLoot(LivingDropsEvent event) {

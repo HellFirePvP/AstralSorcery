@@ -32,12 +32,6 @@ public class BlockInfusedWoodTemplate extends Block implements CustomItemBlock {
         super(PropertiesWood.defaultInfusedWood());
     }
 
-    @Nullable
-    @Override
-    public ToolType getHarvestTool(BlockState p_getHarvestTool_1_) {
-        return ToolType.AXE;
-    }
-
     @Override
     public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
         return 60;
