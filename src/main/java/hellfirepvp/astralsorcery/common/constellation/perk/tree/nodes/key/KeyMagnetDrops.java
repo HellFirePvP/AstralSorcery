@@ -40,7 +40,7 @@ public class KeyMagnetDrops extends KeyPerk {
         super(name, x, y);
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onDropLoot(LivingDropsEvent event) {
         DamageSource source = event.getSource();
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
@@ -48,22 +48,12 @@ public class KeyMagnetDrops extends KeyPerk {
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
-                Iterator<EntityItem> iterator = event.getDrops().iterator();
-                while (iterator.hasNext()) {
-                    EntityItem item = iterator.next();
-                    ItemStack drop = item.getItem();
-                    if (drop.isEmpty()) {
-                        continue;
-                    }
-                    if (player.addItemStackToInventory(drop)) {
-                        iterator.remove();
-                    }
-                }
+                event.getDrops().removeIf(item -> this.attemptPickup(player, item));
             }
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onDropHarvest(BlockEvent.HarvestDropsEvent event) {
         World world = event.getWorld();
         if (world.isRemote) {
@@ -79,21 +69,39 @@ public class KeyMagnetDrops extends KeyPerk {
             return;
         }
 
-        List<ItemStack> drops = new ArrayList<>(event.getDrops());
-
         // Simulate normal drop-logic to see what/which drops to try add before
         // setting chances to 1 with remaining not-capturable drops
         Random r = world.rand;
-        for (ItemStack drop : drops) {
+        Iterator<ItemStack> iterator = event.getDrops().iterator();
+        while (iterator.hasNext()) {
+            ItemStack drop = iterator.next();
             if (r.nextFloat() <= event.getDropChance()) {
-                if (player.addItemStackToInventory(drop)) {
-                    event.getDrops().remove(drop);
+                EntityItem i = new EntityItem(world, player.posX, player.posY, player.posZ, drop);
+                if (this.attemptPickup(player, i)) {
+                    iterator.remove();
                 }
             } else {
-                event.getDrops().remove(drop);
+                iterator.remove();
             }
         }
-        event.setDropChance(1F);
+    }
+
+    private boolean attemptPickup(EntityPlayer player, EntityItem item) {
+        if (item.getItem().isEmpty()) {
+            return false;
+        }
+        item.setNoPickupDelay();
+        try {
+            item.onCollideWithPlayer(player);
+        } catch (Exception ignored) {
+            //Guess some mod could run into an issue here...
+        }
+        if (!item.isDead) {
+            item.setDefaultPickupDelay();
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }
