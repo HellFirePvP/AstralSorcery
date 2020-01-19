@@ -121,14 +121,14 @@ public class CEffectArmara extends CEffectEntityCollect<EntityMob> {
             rememberedTimeout = next;
         } else {
             rememberedTimeout = Math.min(400, rememberedTimeout + toAdd);
-            EventHandlerEntity.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>((double) protectionRange, rememberedTimeout));
+            EventHandlerEntity.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>(modified.getSize(), rememberedTimeout));
         }
 
         EntityPlayer owner = getOwningPlayerInWorld(world, pos);
 
         boolean foundEntity = false;
         if(!modified.isCorrupted()) {
-            List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
+            List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(modified.getSize()));
             if(!projectiles.isEmpty()) {
                 for (Entity e : projectiles) {
                     if(!e.isDead && !(e instanceof EntityTechnicalAmbient)) {
@@ -149,7 +149,7 @@ public class CEffectArmara extends CEffectEntityCollect<EntityMob> {
                 }
             }
         }
-        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
+        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(modified.getSize()));
         for (EntityLivingBase entity : entities) {
             if(!entity.isDead && (entity instanceof EntityMob || entity instanceof EntityPlayer)) {
                 if(modified.isCorrupted()) {

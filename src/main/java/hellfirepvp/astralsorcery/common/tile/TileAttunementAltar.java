@@ -654,6 +654,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 activationTick++;
             }
 
+            //TODO this stuff, downwards
             for(Object o : starSprites) {
                 EntityFXFacingSprite p = (EntityFXFacingSprite) o;
                 if(p.isRemoved()) {

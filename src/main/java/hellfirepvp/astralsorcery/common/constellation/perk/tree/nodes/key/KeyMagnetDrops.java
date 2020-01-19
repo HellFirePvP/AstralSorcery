@@ -40,7 +40,7 @@ public class KeyMagnetDrops extends KeyPerk {
         super(name, x, y);
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDropLoot(LivingDropsEvent event) {
         DamageSource source = event.getSource();
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
@@ -63,7 +63,7 @@ public class KeyMagnetDrops extends KeyPerk {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDropHarvest(BlockEvent.HarvestDropsEvent event) {
         World world = event.getWorld();
         if (world.isRemote) {

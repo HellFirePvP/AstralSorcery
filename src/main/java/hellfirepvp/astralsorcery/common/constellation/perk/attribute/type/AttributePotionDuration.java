@@ -48,13 +48,15 @@ public class AttributePotionDuration extends PerkAttributeType {
     }
 
     private void modifyPotionDuration(EntityPlayer player, PotionEffect newSetEffect, PotionEffect addedEffect) {
-        if (player.world.isRemote) {
+        if (player.world.isRemote ||
+                newSetEffect.getPotion().isBadEffect() ||
+                addedEffect.getAmplifier() < newSetEffect.getAmplifier()) {
             return;
         }
 
-        float newDuration = addedEffect.getDuration();
-        newDuration = PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
-                .modifyValue(player, ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION, newDuration);
+        float existingDuration = addedEffect.getDuration();
+        float newDuration = PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
+                .modifyValue(player, ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION, existingDuration);
         newDuration = AttributeEvent.postProcessModded(player, this, newDuration);
 
         if (newSetEffect.getDuration() < newDuration) {

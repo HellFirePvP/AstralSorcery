@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
 import hellfirepvp.astralsorcery.common.util.ItemComparator;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.core.ASMCallHook;
 import net.minecraft.enchantment.Enchantment;
@@ -23,6 +24,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
@@ -280,6 +282,11 @@ public class EnchantmentUpgradeHelper {
             player = server.getPlayerList().getPlayerByUUID(plUUID);
         }
         if(player == null) return null;
+
+        if (!ItemUtils.findItemsIndexedInPlayerInventory(player,
+                stack -> stack.getItem().getRegistryName().equals("tombstone:book_of_disenchantment")).isEmpty()) {
+            return null;
+        }
 
         //Check if the player actually wears/carries the tool
         boolean foundTool = false;

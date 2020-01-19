@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.integrations;
 
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,11 @@ public class ModIntegrationChisel {
                 sendVariantMapping(type.asBlock(), type.asStack(), ChiselGroup.MARBLE);
             }
         }
+        for (BlockBlackMarble.BlackMarbleBlockType type : BlockBlackMarble.BlackMarbleBlockType.values()) {
+            if(type.obtainableInCreative()) {
+                sendVariantMapping(type.asBlock(), type.asStack(), ChiselGroup.SOOTY_MARBLE);
+            }
+        }
     }
 
     private static void sendVariantMapping(IBlockState state, ItemStack stack, ChiselGroup group) {
@@ -43,7 +49,8 @@ public class ModIntegrationChisel {
 
     public static enum ChiselGroup {
 
-        MARBLE("marble");
+        MARBLE("marble"),
+        SOOTY_MARBLE("sooty_marble");
 
         private final String group;
 

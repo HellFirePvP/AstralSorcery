@@ -72,6 +72,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -335,34 +336,34 @@ public class EventHandlerServer {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onHarvest(BlockEvent.HarvestDropsEvent event) {
         if(event.getHarvester() != null && !event.isSilkTouching()) {
             ItemStack main = event.getHarvester().getHeldItemMainhand();
             if(!main.isEmpty()) {
                 if(EnchantmentHelper.getEnchantmentLevel(EnchantmentsAS.enchantmentScorchingHeat, main) > 0) {
                     int fortuneLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, main);
-                    NonNullList<ItemStack> drops = NonNullList.create();
-                    event.getDrops().clear();
-                    event.getState().getBlock().getDrops(drops, event.getWorld(), event.getPos(), event.getState(), fortuneLvl);
-                    for (ItemStack stack : drops) {
+                    NonNullList<ItemStack> newStacks = NonNullList.create();
+                    Iterator<ItemStack> iterator = event.getDrops().iterator();
+                    while (iterator.hasNext()) {
+                        ItemStack stack = iterator.next();
                         ItemStack out = FurnaceRecipes.instance().getSmeltingResult(stack);
-                        if(!out.isEmpty()) {
+                        if (!out.isEmpty()) {
                             ItemStack furnaced = ItemUtils.copyStackWithSize(out, 1);
-                            event.getDrops().add(furnaced);
+                            iterator.remove();
+                            newStacks.add(furnaced);
                             furnaced.onCrafting(event.getWorld(), event.getHarvester(), 1);
                             FMLCommonHandler.instance().firePlayerSmeltedEvent(event.getHarvester(), furnaced);
-                            if(fortuneLvl > 0 && !(out.getItem() instanceof ItemBlock)) {
+                            if (fortuneLvl > 0 && !(out.getItem() instanceof ItemBlock)) {
                                 for (int i = 0; i < fortuneLvl; i++) {
-                                    if(rand.nextFloat() < 0.5F) {
-                                        event.getDrops().add(ItemUtils.copyStackWithSize(out, 1));
+                                    if (rand.nextFloat() < 0.5F) {
+                                        newStacks.add(ItemUtils.copyStackWithSize(out, 1));
                                     }
                                 }
                             }
-                        } else {
-                            event.getDrops().add(stack);
                         }
                     }
+                    event.getDrops().addAll(newStacks);
                 }
             }
         }
