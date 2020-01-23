@@ -116,6 +116,7 @@ public class ClientProxy extends CommonProxy {
         ConnectionEventHandler.getInstance().attachEventListeners(eventBus);
 
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onRender);
+        eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onFog);
     }
 
     @Override

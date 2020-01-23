@@ -62,6 +62,16 @@ public class CelestialEventHandler {
         return lunarEclipseTick;
     }
 
+    public float getSolarEclipsePercent() {
+        if (!this.isSolarEclipseActive()) {
+            return 0F;
+        }
+
+        float tick = ctx.getCelestialHandler().getSolarEclipseTick() - DayTimeHelper.getSolarEclipseHalfDuration();
+        tick /= DayTimeHelper.getSolarEclipseHalfDuration();
+        return Math.abs(tick);
+    }
+
     void tick(World world) {
         Random r = this.ctx.getRandom();
 

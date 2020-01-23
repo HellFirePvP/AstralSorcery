@@ -34,7 +34,7 @@ public interface SkyScreen {
     static final float THRESHOLD_FROM_SHIFT_BLUEGRAD = 0.6F;
     static final float THRESHOLD_FROM_MAX_BLUEGRAD = 0.3F;
 
-    public static Tuple<Color, Color> getRBGFromTo(boolean canSeeSky, float angleTransparency, float partialTicks) {
+    public static Tuple<Color, Color> getSkyGradient(boolean canSeeSky, float angleTransparency, float partialTicks) {
         World renderWorld = Minecraft.getInstance().world;
         if (renderWorld.getDimension().getType().equals(DimensionType.THE_END)) {
             canSeeSky = false; //Only for effect rendering purposes, not functionality.

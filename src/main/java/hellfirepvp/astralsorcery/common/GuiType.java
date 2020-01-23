@@ -12,9 +12,11 @@ import hellfirepvp.astralsorcery.client.screen.ScreenConstellationPaper;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -28,7 +30,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public enum GuiType {
 
     CONSTELLATION_PAPER,
-    TOME;
+    TOME,
+    TELESCOPE;
 
     public CompoundNBT serializeArguments(Object[] data) {
         try {
@@ -36,6 +39,9 @@ public enum GuiType {
             switch (this) {
                 case CONSTELLATION_PAPER:
                     nbt.putString("cst", ((IConstellation) data[0]).getRegistryName().toString());
+                    break;
+                case TELESCOPE:
+                    NBTHelper.writeBlockPosToNBT((BlockPos) data[0], nbt);
                     break;
                 default:
                     break;
@@ -54,6 +60,11 @@ public enum GuiType {
                     return new ScreenConstellationPaper(RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(new ResourceLocation(data.getString("cst"))));
                 case TOME:
                     return ScreenJournalProgression.getOpenJournalInstance();
+                case TELESCOPE:
+                    BlockPos at = NBTHelper.readBlockPosFromNBT(data);
+
+                    //TODO
+                    throw new IllegalArgumentException("Unknown GuiType: " + this.name());
                 default:
                     throw new IllegalArgumentException("Unknown GuiType: " + this.name());
             }

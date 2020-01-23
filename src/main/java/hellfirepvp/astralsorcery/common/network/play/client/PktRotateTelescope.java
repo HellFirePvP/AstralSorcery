@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.common.network.play.client;
 
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.tile.TileTelescope;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -76,11 +79,12 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
             public void handleClient(PktRotateTelescope packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
                     Optional<World> clWorld = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
-                    //TODO telescope
-                    //TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
-                    //if (tt != null) {
-                    //    tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
-                    //}
+                    clWorld.ifPresent(world -> {
+                        TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
+                        if(tt != null) {
+                            tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
+                        }
+                    });
                     //if (Minecraft.getInstance().currentScreen instanceof GuiTelescope) {
                     //    ((GuiTelescope) Minecraft.getInstance().currentScreen).handleRotationChange(packet.isClockwise);
                     //}
@@ -92,12 +96,12 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
                 context.enqueueWork(() -> {
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
                     World world = srv.getWorld(packet.type);
-                    //TODO telescope
-                    //TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
-                    //if (tt != null) {
-                    //    tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
-                    //    packet.replyWith(new PktRotateTelescope(packet.isClockwise, packet.type, packet.pos), context);
-                    //}
+
+                    TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
+                    if(tt != null) {
+                        tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
+                        packet.replyWith(new PktRotateTelescope(packet.isClockwise, packet.type, packet.pos), context);
+                    }
                 });
             }
         };

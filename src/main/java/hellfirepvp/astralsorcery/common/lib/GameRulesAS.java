@@ -21,6 +21,6 @@ public class GameRulesAS {
 
     private GameRulesAS() {}
 
-    public static GameRules.RuleKey<GameRules.BooleanValue> IGNORE_SKYLIGHT_CHECK_RULE;
+    //public static GameRules.RuleKey<GameRules.BooleanValue> IGNORE_SKYLIGHT_CHECK_RULE;
 
 }

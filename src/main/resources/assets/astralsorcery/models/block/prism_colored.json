@@ -2,10 +2,10 @@
   "ambientocclusion": true,
   "parent": "block/block",
   "textures": {
-    "particle": "astralsorcery:model/prism/prism_base1",
-    "prism_color_top": "astralsorcery:model/prism/prism_color_top",
-    "prism_color_side": "astralsorcery:model/prism/prism_color_side",
-    "prism_color_fitting": "astralsorcery:model/prism/prism_color_fitting"
+    "particle": "astralsorcery:block/prism_base1",
+    "prism_color_top": "astralsorcery:block/prism_color_top",
+    "prism_color_side": "astralsorcery:block/prism_color_side",
+    "prism_color_fitting": "astralsorcery:block/prism_color_fitting"
   },
   "elements": [
     {

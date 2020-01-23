@@ -101,13 +101,26 @@ public class AstralSkyRenderer implements IRenderHandler {
         }
 
         Vec3d color = world.getSkyColor(mc.gameRenderer.getActiveRenderInfo().getBlockPos(), pTicks);
+        float skyR = (float) color.x;
+        float skyG = (float) color.y;
+        float skyB = (float) color.z;
+        WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
+
+        if (ctx != null && ctx.getCelestialHandler().isSolarEclipseActive()) {
+            float perc = ctx.getCelestialHandler().getSolarEclipsePercent();
+            perc = 0.05F + (perc * 0.95F);
+
+            skyR *= perc;
+            skyG *= perc;
+            skyB *= perc;
+        }
 
         //Sky
         GlStateManager.disableTexture();
-        GlStateManager.color3f((float) color.x, (float) color.y, (float) color.z);
+        GlStateManager.color3f(skyR, skyG, skyB);
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();
-        GlStateManager.color3f((float) color.x, (float) color.y, (float) color.z);
+        GlStateManager.color3f(skyR, skyG, skyB);
         this.sky.render();
         GlStateManager.disableFog();
 
@@ -131,7 +144,7 @@ public class AstralSkyRenderer implements IRenderHandler {
 
         this.renderCelestials(world, pTicks);
         this.renderStars(world, pTicks);
-        this.renderConstellations(world, pTicks);
+        renderConstellationsSky(world, pTicks);
 
         GlStateManager.popMatrix();
         GlStateManager.disableBlend();
@@ -151,11 +164,11 @@ public class AstralSkyRenderer implements IRenderHandler {
 
         if (world.getDimension().isSkyColored()) {
             GlStateManager.color3f(
-                    (float) color.x * 0.2F + 0.04F,
-                    (float) color.y * 0.2F + 0.04F,
-                    (float) color.z * 0.6F + 0.1F);
+                    skyR * 0.2F + 0.04F,
+                    skyG * 0.2F + 0.04F,
+                    skyB * 0.6F + 0.1F);
         } else {
-            GlStateManager.color3f((float) color.x, (float) color.y, (float) color.z);
+            GlStateManager.color3f(skyR, skyG, skyB);
         }
 
         //Draw viewshield horizon
@@ -167,7 +180,7 @@ public class AstralSkyRenderer implements IRenderHandler {
         GlStateManager.depthMask(true);
     }
 
-    private void renderConstellations(World world, float pTicks) {
+    public static void renderConstellationsSky(World world, float pTicks) {
         WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
         if (ctx == null) {
             return;
@@ -196,7 +209,7 @@ public class AstralSkyRenderer implements IRenderHandler {
             ActiveCelestialsHandler.RenderPosition pos = constellations.get(cst);
 
             RenderingConstellationUtils.renderConstellationSky(cst, pos,
-                    () -> RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 10 + RAND.nextInt(5)) * brightness + 0.05F);
+                    () -> RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 10 + RAND.nextInt(5)) * brightness * 1.25F + 0.05F);
         }
     }
 

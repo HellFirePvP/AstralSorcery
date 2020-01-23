@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "blocktype=telescope": { "model":"astralsorcery:block/base/nothing" },
+        "blocktype=dummy":     { "model":"astralsorcery:block/base/nothing" }
+    }
+}

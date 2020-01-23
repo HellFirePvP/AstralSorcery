@@ -124,6 +124,11 @@ public class BlockLens extends BlockStarlightNetwork implements CustomItemBlock 
     }
 
     @Override
+    public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
+        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
+    }
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     public boolean hasCustomBreakingProgress(BlockState p_190946_1_) {
         return true;

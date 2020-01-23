@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 public class ModelLensColored extends CustomModel {
 
     private static final Supplier<AbstractRenderableTexture> TEX_LENS_COLOR =
-            AssetLibrary.loadReference(AssetLoader.TextureLocation.MODELS, "lens/lens_color");
+            AssetLibrary.loadReference(AssetLoader.TextureLocation.BLOCKS, "entity/lens_color");
 
     public RendererModel glass;
     public RendererModel detail1;

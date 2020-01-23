@@ -3,9 +3,9 @@
 	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "astralsorcery:model/ritual/ritual_link",
-		"texture": "astralsorcery:model/ritual/ritual_link",
-		"texture2": "astralsorcery:model/ritual/ritual_link_glass"
+		"particle": "astralsorcery:block/ritual_link",
+		"texture": "astralsorcery:block/ritual_link",
+		"texture2": "astralsorcery:block/ritual_link_glass"
 	},
 	"elements": [ 	 
 		{

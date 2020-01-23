@@ -3,11 +3,11 @@
   "ambientocclusion": true,
   "parent": "block/block",
   "textures": {
-    "particle": "astralsorcery:model/chalice/chalice_base",
-    "texture": "astralsorcery:model/chalice/chalice_base",
-    "texture1": "astralsorcery:model/chalice/chalice_detail",
-    "texture4": "astralsorcery:model/chalice/chalice_cup_bottom",
-    "texture5": "astralsorcery:model/chalice/chalice_cup_top"
+    "particle": "astralsorcery:block/chalice_base",
+    "texture": "astralsorcery:block/chalice_base",
+    "texture1": "astralsorcery:block/chalice_detail",
+    "texture4": "astralsorcery:block/chalice_cup_bottom",
+    "texture5": "astralsorcery:block/chalice_cup_top"
   },
   "elements": [
     {

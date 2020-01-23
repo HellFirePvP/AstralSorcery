@@ -2,12 +2,12 @@
     "ambientocclusion": true,
 	"parent": "block/block",
     "textures": {
-        "particle": "astralsorcery:model/prism/prism_base1",
-        "prism_frame": "astralsorcery:model/prism/prism_frame",
-        "prism_base1": "astralsorcery:model/prism/prism_base1",
-        "prism_base2": "astralsorcery:model/prism/prism_base2",
-        "prism_top": "astralsorcery:model/prism/prism_top",
-        "prism_side": "astralsorcery:model/prism/prism_side"
+        "particle": "astralsorcery:block/prism_base1",
+        "prism_frame": "astralsorcery:block/prism_frame",
+        "prism_base1": "astralsorcery:block/prism_base1",
+        "prism_base2": "astralsorcery:block/prism_base2",
+        "prism_top": "astralsorcery:block/prism_top",
+        "prism_side": "astralsorcery:block/prism_side"
     },
     "elements": [
         {

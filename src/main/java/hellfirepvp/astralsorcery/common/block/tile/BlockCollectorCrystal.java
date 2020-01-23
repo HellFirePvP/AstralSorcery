@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.observerlib.api.block.BlockStructureObserver;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -36,6 +37,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -118,7 +120,7 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
 
     @Override
     public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
-        return SHAPE;
+        return VoxelShapes.fullCube();
     }
 
     @Override
@@ -134,6 +136,11 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileCollectorCrystal();
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState p_149645_1_) {
+        return BlockRenderType.MODEL;
     }
 
     @Override

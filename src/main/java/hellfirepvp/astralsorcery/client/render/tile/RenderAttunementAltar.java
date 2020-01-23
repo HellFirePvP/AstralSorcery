@@ -31,7 +31,7 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
 
     private static final ModelAttunementAltar MODEL_ATTUNEMENT_ALTAR = new ModelAttunementAltar();
     private static final Supplier<AbstractRenderableTexture> MODEL_TEXTURE =
-            AssetLibrary.loadReference(AssetLoader.TextureLocation.MODELS, "attunement_altar/attunement_altar_tesr");
+            AssetLibrary.loadReference(AssetLoader.TextureLocation.BLOCKS, "entity/attunement_altar");
 
     @Override
     public void render(TileAttunementAltar tile, double x, double y, double z, float pTicks, int destroyStage) {

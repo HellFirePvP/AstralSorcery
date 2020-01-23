@@ -4,11 +4,11 @@
 	"parent": "block/block",
 	"textures": {
 		"particle": "astralsorcery:block/black_marble_raw",
-		"table_tex_top": "astralsorcery:model/altar/altar_4_top",
-		"table_tex_side": "astralsorcery:model/altar/altar_4_side",
-		"table_tex_bottom": "astralsorcery:model/altar/altar_1_bottom",
-		"hovering": "astralsorcery:model/altar/altar_hovering",
-		"base": "astralsorcery:model/altar/altar_4_bottom"
+		"table_tex_top": "astralsorcery:block/altar_4_top",
+		"table_tex_side": "astralsorcery:block/altar_4_side",
+		"table_tex_bottom": "astralsorcery:block/altar_1_bottom",
+		"hovering": "astralsorcery:block/altar_hovering",
+		"base": "astralsorcery:block/altar_4_bottom"
 	},
 	"display": {
 		"gui": {
