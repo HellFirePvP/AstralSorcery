@@ -24,6 +24,7 @@ public class EventFlags {
     //Block breaking
     public static BooleanFlag CHAIN_MINING = new BooleanFlag(false);
     public static BooleanFlag CHECK_BREAK_SPEED = new BooleanFlag(false);
+    public static BooleanFlag PLAY_BLOCK_BREAK_EFFECTS = new BooleanFlag(false);
 
     //Rendering stuff
     public static BooleanFlag SKY_RENDERING = new BooleanFlag(false);

@@ -4,7 +4,7 @@
   "ambientocclusion": true,
   "textures": {
     "particle": "astralsorcery:block/marble_raw",
-    "texture": "astralsorcery:model/attunement_altar/attunement_altar_block"
+    "texture": "astralsorcery:block/attunement_altar"
   },
   "display": {
     "gui": {

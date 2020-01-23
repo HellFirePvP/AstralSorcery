@@ -2,9 +2,9 @@
     "Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
     "parent" : "block/block",
     "textures": {
-        "particle": "astralsorcery:model/spectral_relay/spectral_relay",
-        "texture": "astralsorcery:model/spectral_relay/spectral_relay",
-        "texture2": "astralsorcery:model/spectral_relay/spectral_relay_glass"
+        "particle": "astralsorcery:block/spectral_relay",
+        "texture": "astralsorcery:block/spectral_relay",
+        "texture2": "astralsorcery:block/spectral_relay_glass"
     },
     "elements": [
         {

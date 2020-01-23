@@ -138,9 +138,9 @@ public class MiscUtils {
     }
 
     public static boolean canSeeSky(World world, BlockPos at, boolean loadChunk, boolean defaultValue) {
-        if (world.getGameRules().getBoolean(GameRulesAS.IGNORE_SKYLIGHT_CHECK_RULE)) {
-            return true;
-        }
+        //if (world.getGameRules().getBoolean(GameRulesAS.IGNORE_SKYLIGHT_CHECK_RULE)) {
+        //    return true;
+        //}
 
         if (!world.isBlockLoaded(at) && !loadChunk) {
             return defaultValue;

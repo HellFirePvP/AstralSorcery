@@ -26,10 +26,11 @@ public class RegistryGameRules {
     private RegistryGameRules() {}
 
     public static void init() {
-        IGNORE_SKYLIGHT_CHECK_RULE = ReflectionHelper.registerGameRule("asIgnoreSkylightCheck",
-                ReflectionHelper.newBooleanType(BoolArgumentType::bool,
-                        (p_223574_1_) -> new GameRules.BooleanValue(p_223574_1_, false),
-                        (srv, booleanValue) -> {}));
+        //TODO fck game rules. maybe they get fixed by forge.
+        //IGNORE_SKYLIGHT_CHECK_RULE = ReflectionHelper.registerGameRule("asIgnoreSkylightCheck",
+        //        ReflectionHelper.newBooleanType(BoolArgumentType::bool,
+        //                (p_223574_1_) -> new GameRules.BooleanValue(p_223574_1_, false),
+        //                (srv, booleanValue) -> {}));
     }
 
 }

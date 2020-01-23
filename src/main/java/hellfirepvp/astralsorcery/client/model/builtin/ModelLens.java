@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 public class ModelLens extends CustomModel {
 
     private static final Supplier<AbstractRenderableTexture> TEX_LENS =
-            AssetLibrary.loadReference(AssetLoader.TextureLocation.MODELS, "lens/lens_builtin");
+            AssetLibrary.loadReference(AssetLoader.TextureLocation.BLOCKS, "entity/lens_frame");
 
     public RendererModel base;
     public RendererModel frame1;

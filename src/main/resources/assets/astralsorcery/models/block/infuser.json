@@ -3,9 +3,9 @@
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "particle": "astralsorcery:model/infuser/infuser",
-    "texture": "astralsorcery:model/infuser/infuser",
-    "texture2": "astralsorcery:model/infuser/infuser_glass"
+    "particle": "astralsorcery:block/infuser",
+    "texture": "astralsorcery:block/infuser",
+    "texture2": "astralsorcery:block/infuser_glass"
   },
   "elements": [
     {

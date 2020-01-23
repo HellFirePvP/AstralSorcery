@@ -57,6 +57,11 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
     }
 
     @Override
+    public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
+        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
+    }
+
+    @Override
     public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!world.isRemote) {
             ItemStack held = player.getHeldItem(hand);

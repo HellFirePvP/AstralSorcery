@@ -89,8 +89,10 @@ public class BlocksAS {
     public static BlockInfuser                   INFUSER;
     public static BlockChalice                   CHALICE;
     public static BlockWell                      WELL;
+    public static BlockTelescope                 TELESCOPE;
 
     public static BlockFlareLight                FLARE_LIGHT;
     public static BlockTranslucentBlock          TRANSLUCENT_BLOCK;
+    public static BlockStructural                STRUCTURAL_HELPER;
 
 }

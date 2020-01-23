@@ -3,9 +3,9 @@
 	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "astralsorcery:model/ritual/ritual_pedestal",
-		"texture": "astralsorcery:model/ritual/ritual_pedestal",
-		"texture2": "astralsorcery:model/ritual/ritual_pedestal_glass"
+		"particle": "astralsorcery:block/ritual_pedestal",
+		"texture": "astralsorcery:block/ritual_pedestal",
+		"texture2": "astralsorcery:block/ritual_pedestal_glass"
 	},
 	"elements": [
 		{

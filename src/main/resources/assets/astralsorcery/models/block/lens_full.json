@@ -2,12 +2,12 @@
   "ambientocclusion": true,
   "parent": "block/block",
   "textures": {
-    "particle": "astralsorcery:model/lens/lens_base1",
-    "lens": "astralsorcery:model/lens/lens",
-    "lens_floor": "astralsorcery:model/lens/lens_floor",
-    "lens_frame": "astralsorcery:model/lens/lens_frame",
-    "lens_base1": "astralsorcery:model/lens/lens_base1",
-    "lens_base2": "astralsorcery:model/lens/lens_base2"
+    "particle": "astralsorcery:block/lens_base1",
+    "lens": "astralsorcery:block/lens",
+    "lens_floor": "astralsorcery:block/lens_floor",
+    "lens_frame": "astralsorcery:block/lens_frame",
+    "lens_base1": "astralsorcery:block/lens_base1",
+    "lens_base2": "astralsorcery:block/lens_base2"
   },
   "elements": [
     {

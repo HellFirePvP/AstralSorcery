@@ -1,28 +1,28 @@
 {
   "variants": {
     "against=up": {
-      "model": "astralsorcery:block/hybrid/lens_base",
+      "model": "astralsorcery:block/lens_base",
       "x": 180
     },
     "against=down": {
-      "model": "astralsorcery:block/hybrid/lens_base"
+      "model": "astralsorcery:block/lens_base"
     },
     "against=north": {
-      "model": "astralsorcery:block/hybrid/lens_base",
+      "model": "astralsorcery:block/lens_base",
       "x": 90,
       "y": 180
     },
     "against=south": {
-      "model": "astralsorcery:block/hybrid/lens_base",
+      "model": "astralsorcery:block/lens_base",
       "x": 90
     },
     "against=east": {
-      "model": "astralsorcery:block/hybrid/lens_base",
+      "model": "astralsorcery:block/lens_base",
       "x": 90,
       "y": 270
     },
     "against=west": {
-      "model": "astralsorcery:block/hybrid/lens_base",
+      "model": "astralsorcery:block/lens_base",
       "x": 90,
       "y": 90
     }

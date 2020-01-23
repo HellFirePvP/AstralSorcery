@@ -130,16 +130,14 @@ public class BlockPrism extends BlockStarlightNetwork implements CustomItemBlock
         }
     }
 
-    //YES, we get translucent see-through prisms now until forge fixes or does something about models.
-    // Not going to make my own model classes JUST FOR THIS
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
-    }
-
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
+        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override

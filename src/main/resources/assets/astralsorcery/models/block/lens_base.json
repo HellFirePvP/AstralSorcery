@@ -2,8 +2,8 @@
   "ambientocclusion": false,
   "parent": "block/block",
   "textures": {
-    "particle": "astralsorcery:model/lens/lens_base1",
-    "lens_floor": "astralsorcery:model/lens/lens_floor"
+    "particle": "astralsorcery:block/lens_base1",
+    "lens_floor": "astralsorcery:block/lens_floor"
   },
   "elements": [
     {
