@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.config.registry;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.GemAttributeEntry;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
@@ -32,24 +33,22 @@ public class GemAttributeRegistry extends ConfigDataAdapter<GemAttributeEntry> {
 
     @Override
     public List<GemAttributeEntry> getDefaultValues() {
-        return new ArrayList<GemAttributeEntry>() {
-            {
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_HEALTH,                    2));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MOVESPEED,                 8));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ARMOR,                     8));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_REACH,                     4));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ATTACK_SPEED,              2));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MELEE_DAMAGE,              8));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_PROJ_DAMAGE,               8));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_LIFE_RECOVERY,             2));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_HARVEST_SPEED,         2));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_CHANCE,           4));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_MULTIPLIER,       4));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST,  2));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_DODGE,                 2));
-                add(new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP,              1));
-            }
-        };
+        return Lists.newArrayList(
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_HEALTH,                    2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MOVESPEED,                 8),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ARMOR,                     8),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_REACH,                     4),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ATTACK_SPEED,              2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MELEE_DAMAGE,              8),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_PROJ_DAMAGE,               8),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_LIFE_RECOVERY,             2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_HARVEST_SPEED,         2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_CHANCE,           4),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_MULTIPLIER,       4),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST,  2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_DODGE,                 2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP,              1)
+        );
     }
 
     @Override

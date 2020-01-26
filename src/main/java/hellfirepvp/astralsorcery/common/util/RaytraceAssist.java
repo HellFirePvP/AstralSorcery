@@ -90,7 +90,7 @@ public class RaytraceAssist {
                 }
             }
 
-            Boolean isClearFlag = MiscUtils.executeWithChunk(world, at, () -> {
+            if (!MiscUtils.executeWithChunk(world, at, () -> {
                 if (!isStartEnd(at) && !world.isAirBlock(at)) {
                     if (this.hitFluids && !world.getFluidState(at).isEmpty()) {
                         posHit = at;
@@ -102,9 +102,7 @@ public class RaytraceAssist {
                     }
                 }
                 return true;
-            });
-
-            if (isClearFlag != null && !isClearFlag) {
+            }, false)) {
                 return false;
             }
 

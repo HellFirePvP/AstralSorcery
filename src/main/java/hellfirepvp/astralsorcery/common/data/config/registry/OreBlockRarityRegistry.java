@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.config.registry;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.OreBlockRarityEntry;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -32,7 +33,7 @@ public class OreBlockRarityRegistry extends ConfigDataAdapter<OreBlockRarityEntr
 
     private final String fileName;
 
-    public OreBlockRarityRegistry(String fileName) {
+    private OreBlockRarityRegistry(String fileName) {
         this.fileName = fileName;
     }
 
@@ -61,17 +62,15 @@ public class OreBlockRarityRegistry extends ConfigDataAdapter<OreBlockRarityEntr
 
     @Override
     public List<OreBlockRarityEntry> getDefaultValues() {
-        return new ArrayList<OreBlockRarityEntry>() {
-            {
-                add(new OreBlockRarityEntry(Tags.Blocks.ORES_COAL,     5200));
-                add(new OreBlockRarityEntry(Tags.Blocks.ORES_IRON,     2500));
-                add(new OreBlockRarityEntry(Tags.Blocks.ORES_GOLD,      550));
-                add(new OreBlockRarityEntry(Tags.Blocks.ORES_LAPIS,     360));
-                add(new OreBlockRarityEntry(Tags.Blocks.ORES_REDSTONE,  700));
-                add(new OreBlockRarityEntry(Tags.Blocks.ORES_DIAMOND,   120));
-                add(new OreBlockRarityEntry(Tags.Blocks.ORES_EMERALD,   100));
-            }
-        };
+        return Lists.newArrayList(
+                new OreBlockRarityEntry(Tags.Blocks.ORES_COAL,     5200),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_IRON,     2500),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_GOLD,      550),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_LAPIS,     360),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_REDSTONE,  700),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_DIAMOND,   120),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_EMERALD,   100)
+        );
     }
 
     @Override

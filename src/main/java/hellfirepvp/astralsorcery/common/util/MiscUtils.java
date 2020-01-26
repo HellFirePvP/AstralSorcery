@@ -416,6 +416,10 @@ public class MiscUtils {
     }
 
     public static <T> T executeWithChunk(IWorldReader world, BlockPos pos, Supplier<T> run) {
+        return executeWithChunk(world, pos, run, (T) null);
+    }
+
+    public static <T> T executeWithChunk(IWorldReader world, BlockPos pos, Supplier<T> run, T defaultValue) {
         if (world instanceof ServerWorld && LogCategory.UNINTENDED_CHUNK_LOADING.isEnabled()) {
             int prev = ((ServerWorld) world).getChunkProvider().getLoadedChunkCount();
             try {
@@ -437,7 +441,7 @@ public class MiscUtils {
                 return run.get();
             }
         }
-        return null;
+        return defaultValue;
     }
 
     public static <T> void executeWithChunk(IWorldReader world, BlockPos pos, T obj, Consumer<T> run) {

@@ -160,7 +160,7 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
     private static class EvorsioConfig extends Config {
 
         public EvorsioConfig() {
-            super("evorsio", 6D, 4D);
+            super("evorsio", 6D, 1D);
         }
     }
 }

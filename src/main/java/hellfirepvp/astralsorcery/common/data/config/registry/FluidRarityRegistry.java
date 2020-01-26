@@ -27,6 +27,8 @@ public class FluidRarityRegistry extends ConfigDataAdapter<FluidRarityEntry> {
 
     public static final FluidRarityRegistry INSTANCE = new FluidRarityRegistry();
 
+    private FluidRarityRegistry() {}
+
     @Override
     public List<FluidRarityEntry> getDefaultValues() {
         return Lists.newArrayList(

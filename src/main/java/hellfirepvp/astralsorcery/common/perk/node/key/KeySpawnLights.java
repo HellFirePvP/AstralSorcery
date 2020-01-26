@@ -66,17 +66,15 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
                             rand.nextInt(radius) * (rand.nextBoolean() ? 1 : -1),
                             rand.nextInt(radius) * (rand.nextBoolean() ? 1 : -1),
                             rand.nextInt(radius) * (rand.nextBoolean() ? 1 : -1));
-                    Boolean placedFlare = MiscUtils.executeWithChunk(player.getEntityWorld(), pos, () -> {
+                    if (MiscUtils.executeWithChunk(player.getEntityWorld(), pos, () -> {
                         if (TileIlluminator.ILLUMINATOR_CHECK.test(player.getEntityWorld(), pos, player.getEntityWorld().getBlockState(pos))) {
                             return player.getEntityWorld().setBlockState(pos, BlocksAS.FLARE_LIGHT.getDefaultState());
                         }
                         return false;
-                    });
-
-                    //Unboxing issues with prim types
-                    if (placedFlare != null && placedFlare) {
+                    }, false)) {
                         return;
                     }
+
                     attempts--;
                 }
             }
