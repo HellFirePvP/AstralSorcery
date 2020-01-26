@@ -36,6 +36,7 @@ public class ConstellationEffectRegistry {
         config.addConfigEntry(CEffectDiscidia.CONFIG);
         config.addConfigEntry(CEffectEvorsio.CONFIG);
         config.addConfigEntry(CEffectFornax.CONFIG);
+        config.addConfigEntry(CEffectHorologium.CONFIG);
         config.addConfigEntry(CEffectVicio.CONFIG);
     }
 

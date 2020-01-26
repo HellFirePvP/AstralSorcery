@@ -33,13 +33,14 @@ public class RegistryConstellationEffects {
     private RegistryConstellationEffects() {}
 
     public static void init() {
-        AEVITAS  = register(makeProvider(ConstellationsAS.aevitas,  CEffectAevitas::new));
-        ARMARA   = register(makeProvider(ConstellationsAS.armara,   CEffectArmara::new));
-        BOOTES   = register(makeProvider(ConstellationsAS.bootes,   CEffectBootes::new));
-        DISCIDIA = register(makeProvider(ConstellationsAS.discidia, CEffectDiscidia::new));
-        EVORSIO  = register(makeProvider(ConstellationsAS.evorsio,  CEffectEvorsio::new));
-        FORNAX   = register(makeProvider(ConstellationsAS.fornax,   CEffectFornax::new));
-        VICIO    = register(makeProvider(ConstellationsAS.vicio,    CEffectVicio::new));
+        AEVITAS    = register(makeProvider(ConstellationsAS.aevitas,    CEffectAevitas::new));
+        ARMARA     = register(makeProvider(ConstellationsAS.armara,     CEffectArmara::new));
+        BOOTES     = register(makeProvider(ConstellationsAS.bootes,     CEffectBootes::new));
+        DISCIDIA   = register(makeProvider(ConstellationsAS.discidia,   CEffectDiscidia::new));
+        EVORSIO    = register(makeProvider(ConstellationsAS.evorsio,    CEffectEvorsio::new));
+        FORNAX     = register(makeProvider(ConstellationsAS.fornax,     CEffectFornax::new));
+        HOROLOGIUM = register(makeProvider(ConstellationsAS.horologium, CEffectHorologium::new));
+        VICIO      = register(makeProvider(ConstellationsAS.vicio,      CEffectVicio::new));
     }
 
     private static ConstellationEffectProvider makeProvider(IWeakConstellation cst, Function<ILocatable, ? extends ConstellationEffect> effectProvider) {

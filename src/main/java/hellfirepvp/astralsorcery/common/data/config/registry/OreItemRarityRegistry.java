@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.config.registry;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.OreItemRarityEntry;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -33,7 +34,7 @@ public class OreItemRarityRegistry extends ConfigDataAdapter<OreItemRarityEntry>
 
     private final String fileName;
 
-    public OreItemRarityRegistry(String fileName) {
+    private OreItemRarityRegistry(String fileName) {
         this.fileName = fileName;
     }
 
@@ -62,17 +63,15 @@ public class OreItemRarityRegistry extends ConfigDataAdapter<OreItemRarityEntry>
 
     @Override
     public List<OreItemRarityEntry> getDefaultValues() {
-        return new ArrayList<OreItemRarityEntry>() {
-            {
-                add(new OreItemRarityEntry(Tags.Items.ORES_COAL,     5200));
-                add(new OreItemRarityEntry(Tags.Items.ORES_IRON,     2500));
-                add(new OreItemRarityEntry(Tags.Items.ORES_GOLD,      550));
-                add(new OreItemRarityEntry(Tags.Items.ORES_LAPIS,     360));
-                add(new OreItemRarityEntry(Tags.Items.ORES_REDSTONE,  700));
-                add(new OreItemRarityEntry(Tags.Items.ORES_DIAMOND,   120));
-                add(new OreItemRarityEntry(Tags.Items.ORES_EMERALD,   100));
-            }
-        };
+        return Lists.newArrayList(
+                new OreItemRarityEntry(Tags.Items.ORES_COAL,     5200),
+                new OreItemRarityEntry(Tags.Items.ORES_IRON,     2500),
+                new OreItemRarityEntry(Tags.Items.ORES_GOLD,      550),
+                new OreItemRarityEntry(Tags.Items.ORES_LAPIS,     360),
+                new OreItemRarityEntry(Tags.Items.ORES_REDSTONE,  700),
+                new OreItemRarityEntry(Tags.Items.ORES_DIAMOND,   120),
+                new OreItemRarityEntry(Tags.Items.ORES_EMERALD,   100)
+        );
     }
 
     @Override

@@ -65,7 +65,7 @@ public class ConstellationEffectProperties {
                 size *= 3.5F;
             }
             if (trait.equals(ConstellationsAS.ulteria)) {
-                effectAmplifier *= 3.5F;
+                effectAmplifier *= 3F;
                 size *= 0.2F;
             }
             if (trait.equals(ConstellationsAS.alcara)) {

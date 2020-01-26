@@ -40,6 +40,8 @@ public class TechnicalEntityRegistry extends ConfigDataAdapter<EntityTechnicalEn
         return MiscUtils.contains(this.getConfiguredValues(), e -> e.getEntityType().equals(type));
     }
 
+    private TechnicalEntityRegistry() {}
+
     @Override
     public List<EntityTechnicalEntry> getDefaultValues() {
         return Lists.newArrayList(

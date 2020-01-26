@@ -32,6 +32,8 @@ public class AmuletEnchantmentRegistry extends ConfigDataAdapter<AmuletEnchantme
     private static final Random rand = new Random();
     public static final AmuletEnchantmentRegistry INSTANCE = new AmuletEnchantmentRegistry();
 
+    private AmuletEnchantmentRegistry() {}
+
     @Override
     public List<AmuletEnchantmentEntry> getDefaultValues() {
         List<AmuletEnchantmentEntry> enchantments = new LinkedList<>();
