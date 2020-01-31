@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -34,4 +35,15 @@ public class ClientUtils {
         }
     }
 
+    public static void grabMouseCursor() {
+        if (!Minecraft.IS_RUNNING_ON_MAC || !Mouse.isGrabbed()) {
+            Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+        }
+    }
+
+    public static void ungrabMouseCursor() {
+        if (!Minecraft.IS_RUNNING_ON_MAC || Mouse.isGrabbed()) {
+            Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
+        }
+    }
 }

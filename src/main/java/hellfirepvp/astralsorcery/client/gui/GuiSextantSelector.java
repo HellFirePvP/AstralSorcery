@@ -177,7 +177,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
         }
-        mc.mouseHelper.grabMouseCursor();
+        ClientUtils.grabMouseCursor();
         mc.inGameHasFocus = true;
     }
 
@@ -188,7 +188,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
         }
-        mc.mouseHelper.grabMouseCursor();
+        ClientUtils.grabMouseCursor();
         mc.inGameHasFocus = true;
     }
 
@@ -538,12 +538,12 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             if(!Minecraft.IS_RUNNING_ON_MAC) {
                 KeyBinding.updateKeyBindState();
             }
-            Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+            ClientUtils.grabMouseCursor();
             Minecraft.getMinecraft().inGameHasFocus = true;
             grabCursor = false;
         }
         if (!grabCursor && ctrl) {
-            Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
+            ClientUtils.ungrabMouseCursor();
             Minecraft.getMinecraft().inGameHasFocus = false;
             grabCursor = true;
         }
