@@ -22,9 +22,7 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,10 +33,10 @@ import java.util.List;
  */
 public class LightOreTransmutations {
 
-    public static List<Transmutation> mtTransmutations = new LinkedList<>(); //Minetweaker cache
-    private static List<Transmutation> registeredTransmutations = new LinkedList<>();
+    public static Collection<Transmutation> mtTransmutations = new ArrayList<>(); //Minetweaker cache
+    private static Collection<Transmutation> registeredTransmutations = new ArrayList<>();
 
-    private static List<Transmutation> localFallback = new LinkedList<>();
+    private static Collection<Transmutation> localFallback = new ArrayList<>();
 
     public static void init() {
         registerTransmutation(new Transmutation(Blocks.MAGMA.getDefaultState(),              Blocks.OBSIDIAN.getDefaultState(),     400.0D));
@@ -112,8 +110,8 @@ public class LightOreTransmutations {
         return tr;
     }
 
-    public static List<Transmutation> getRegisteredTransmutations() {
-        return Collections.unmodifiableList(registeredTransmutations);
+    public static Collection<Transmutation> getRegisteredTransmutations() {
+        return Collections.unmodifiableCollection(registeredTransmutations);
     }
 
     @Nullable

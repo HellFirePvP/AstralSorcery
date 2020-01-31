@@ -16,7 +16,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.NonNullList;
 
 import java.util.Set;
@@ -57,6 +61,12 @@ public class ItemCrystalShovel extends ItemCrystalToolBase {
         } else {
             return block == Blocks.SNOW;
         }
+    }
+
+    @Override
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+        boolean effective = Items.DIAMOND_SHOVEL.getDestroySpeed(stack, state) != ToolMaterial.DIAMOND.getEfficiency();
+        return effective ? super.getDestroySpeed(stack, state) : 1F;
     }
 
     @Override

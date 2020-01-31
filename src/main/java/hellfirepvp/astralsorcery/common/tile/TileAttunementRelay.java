@@ -76,10 +76,10 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
         }
 
         ItemStack slotted = getInventoryHandler().getStackInSlot(0);
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             updateMultiblockState();
 
-            if(!slotted.isEmpty()) {
+            if (!slotted.isEmpty()) {
                 if(!world.isAirBlock(pos.up())) {
                     ItemStack in = getInventoryHandler().getStackInSlot(0);
                     ItemStack out = ItemUtils.copyStackWithSize(in, in.getCount());
@@ -88,7 +88,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
                 }
 
                 if (hasGlassLens()) {
-                    if(linked != null) {
+                    if (linked != null && MiscUtils.isChunkLoaded(world, linked)) {
                         TileAltar ta = MiscUtils.getTileAt(world, linked, TileAltar.class, true);
                         if(ta == null) {
                             linked = null;
