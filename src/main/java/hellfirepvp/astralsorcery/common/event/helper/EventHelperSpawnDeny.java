@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.event.helper;
 
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.util.block.WorldBlockPos;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -34,19 +35,10 @@ import java.util.function.Consumer;
  */
 public class EventHelperSpawnDeny {
 
-    private static List<Integer> skipCheckList = new ArrayList<>();
     public static TickTokenMap<WorldBlockPos, TickTokenMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenMap<>(TickEvent.Type.SERVER);
 
     public static void clearServer() {
         spawnDenyRegions.clear();
-    }
-
-    public static void addSkipSpawnCheck(int entityId) {
-        skipCheckList.add(entityId);
-    }
-
-    public static void removeSkipSpawnCheck(int entityId) {
-        skipCheckList.add(entityId);
     }
 
     public static void attachTickListener(Consumer<ITickHandler> registrar) {
@@ -65,7 +57,7 @@ public class EventHelperSpawnDeny {
         }
 
         LivingEntity entity = event.getEntityLiving();
-        if (skipCheckList.contains(entity.getEntityId())) {
+        if (entity.getTags().contains(ConstellationEffectRegistry.LUCERNA_SKIP_ENTITY)) {
             return;
         }
 

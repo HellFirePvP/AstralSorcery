@@ -191,6 +191,8 @@ public class CommonProxy {
         ConfigRegistries.getRegistries().addDataRegistry(GemAttributeRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(OreItemRarityRegistry.VOID_TRASH_REWARD);
         ConfigRegistries.getRegistries().addDataRegistry(OreBlockRarityRegistry.STONE_ENRICHMENT);
+        ConfigRegistries.getRegistries().addDataRegistry(OreBlockRarityRegistry.MINERALIS_RITUAL);
+        ConfigRegistries.getRegistries().addDataRegistry(EntityTransmutationRegistry.INSTANCE);
 
         ToolsConfig.CONFIG.newSubSection(WandsConfig.CONFIG);
 

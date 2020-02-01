@@ -79,8 +79,8 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
         ListEntries.PosEntry entry = this.getRandomElementChanced();
         if (entry != null) {
             if (MiscUtils.executeWithChunk(world, entry.getPos(), () -> {
-                TileEntity tile = world.getTileEntity(entry.getPos());
-                if (TileAccelerationBlacklistRegistry.INSTANCE.canBeAccelerated(tile)) {
+                TileEntity tile = MiscUtils.getTileAt(world, entry.getPos(), TileEntity.class, true);
+                if (tile != null && TileAccelerationBlacklistRegistry.INSTANCE.canBeAccelerated(tile)) {
                     try {
                         long startNs = System.nanoTime();
                         int times = 2 + rand.nextInt(4);

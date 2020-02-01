@@ -15,6 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
@@ -57,7 +58,7 @@ public class BlockPredicates {
         return (world, pos, state) -> {
             if (loadTileWorldAndChunk || srv.forgeGetWorldMap().containsKey(dimType)) {
                 World foundWorld = srv.getWorld(dimType);
-                if (!loadTileWorldAndChunk && !foundWorld.isBlockLoaded(pos)) {
+                if (!loadTileWorldAndChunk && !foundWorld.getChunkProvider().isChunkLoaded(new ChunkPos(pos))) {
                     return true;
                 }
                 return MiscUtils.getTileAt(foundWorld, pos, tileClazz, true) != null;

@@ -11,12 +11,8 @@ package hellfirepvp.astralsorcery.common.util;
 import com.google.common.collect.Iterables;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
-import hellfirepvp.astralsorcery.common.lib.ColorsAS;
-import hellfirepvp.astralsorcery.common.lib.GameRulesAS;
-import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
@@ -25,7 +21,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -36,12 +31,15 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.*;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.*;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
@@ -62,7 +60,6 @@ import java.util.List;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -76,8 +73,8 @@ public class MiscUtils {
     @Nullable
     public static <T> T getTileAt(IBlockReader world, BlockPos pos, Class<T> tileClass, boolean forceChunkLoad) {
         if (world == null || pos == null) return null; //Duh.
-        if (world instanceof IWorldReader) {
-            if (!((IWorldReader) world).isBlockLoaded(pos) && !forceChunkLoad) {
+        if (world instanceof IWorld) {
+            if (!((IWorld) world).getChunkProvider().isChunkLoaded(new ChunkPos(pos)) && !forceChunkLoad) {
                 return null;
             }
         }
@@ -85,6 +82,19 @@ public class MiscUtils {
         if (te == null) return null;
         if (tileClass.isInstance(te)) return (T) te;
         return null;
+    }
+
+    public static boolean canEntityTickAt(IWorld world, BlockPos pos) {
+        if (!world.getChunkProvider().isChunkLoaded(new ChunkPos(pos))) {
+            return false;
+        }
+        BlockPos test = new BlockPos(pos.getX(), 0, pos.getZ());
+        boolean isForced = false;
+        if (world instanceof ServerWorld) {
+            isForced = ((ServerWorld) world).getForcedChunks().contains(new ChunkPos(test).asLong());
+        }
+        int range = isForced ? 0 : 32;
+        return world.isAreaLoaded(test, range);
     }
 
     @Nullable
@@ -142,7 +152,7 @@ public class MiscUtils {
         //    return true;
         //}
 
-        if (!world.isBlockLoaded(at) && !loadChunk) {
+        if (!world.getChunkProvider().isChunkLoaded(new ChunkPos(at)) && !loadChunk) {
             return defaultValue;
         }
         return world.canBlockSeeSky(at);
@@ -421,9 +431,10 @@ public class MiscUtils {
 
     public static <T> T executeWithChunk(IWorldReader world, BlockPos pos, Supplier<T> run, T defaultValue) {
         if (world instanceof ServerWorld && LogCategory.UNINTENDED_CHUNK_LOADING.isEnabled()) {
-            int prev = ((ServerWorld) world).getChunkProvider().getLoadedChunkCount();
+            ServerChunkProvider provider = ((ServerWorld) world).getChunkProvider();
+            int prev = provider.getLoadedChunkCount();
             try {
-                if (world.isBlockLoaded(pos)) {
+                if (provider.isChunkLoaded(new ChunkPos(pos))) {
                     return run.get();
                 }
             } finally {
@@ -435,6 +446,11 @@ public class MiscUtils {
                     AstralSorcery.log.warn("Loaded " + (current - prev) + " chunks!");
                     AstralSorcery.log.warn("Stacktrace:", new Exception());
                 }
+            }
+        } else if (world instanceof IWorld) {
+            AbstractChunkProvider provider = ((IWorld) world).getChunkProvider();
+            if (provider.isChunkLoaded(new ChunkPos(pos))) {
+                return run.get();
             }
         } else {
             if (world.isBlockLoaded(pos)) {

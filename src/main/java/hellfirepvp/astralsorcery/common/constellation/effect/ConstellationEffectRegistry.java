@@ -15,8 +15,6 @@ import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,6 +35,10 @@ public class ConstellationEffectRegistry {
         config.addConfigEntry(CEffectEvorsio.CONFIG);
         config.addConfigEntry(CEffectFornax.CONFIG);
         config.addConfigEntry(CEffectHorologium.CONFIG);
+        config.addConfigEntry(CEffectLucerna.CONFIG);
+        config.addConfigEntry(CEffectMineralis.CONFIG);
+        config.addConfigEntry(CEffectOctans.CONFIG);
+        config.addConfigEntry(CEffectPelotrio.CONFIG);
         config.addConfigEntry(CEffectVicio.CONFIG);
     }
 

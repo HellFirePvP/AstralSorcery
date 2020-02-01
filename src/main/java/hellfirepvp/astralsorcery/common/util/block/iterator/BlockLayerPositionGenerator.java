@@ -11,56 +11,57 @@ package hellfirepvp.astralsorcery.common.util.block.iterator;
 import hellfirepvp.astralsorcery.common.util.block.BlockGeometry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockSpherePositionGenerator
+ * Class: BlockLayerPositionGenerator
  * Created by HellFirePvP
- * Date: 24.11.2019 / 09:11
+ * Date: 01.02.2020 / 10:43
  */
-public class BlockSpherePositionGenerator extends BlockPositionGenerator {
+public class BlockLayerPositionGenerator extends BlockPositionGenerator {
 
-    private int currentRadius = 0;
+    private int layer = 0;
 
-    private List<BlockPos> currentPositions = new ArrayList<>();
+    private LinkedList<BlockPos> currentPositions = new LinkedList<>();
 
     @Override
-    public BlockPos genNext(BlockPos offset, double radius) {
-        if (this.currentRadius > radius) {
-            this.currentPositions.clear();
-        }
+    protected BlockPos genNext(BlockPos offset, double radius) {
+        int size = MathHelper.floor(radius);
 
         while (currentPositions.isEmpty()) {
-            generatePositions(radius);
+            generatePositions(size);
         }
-        return currentPositions.get(0).add(offset);
+        return null;
     }
 
-    private void generatePositions(double maxRadius) {
-        if (maxRadius <= 0) {
+    private void generatePositions(int maxLayers) {
+        if (maxLayers <= 0) {
             this.currentPositions.add(BlockPos.ZERO);
             return;
         }
-        if (this.currentRadius >= maxRadius || this.currentRadius < 0) {
-            this.currentRadius = 0;
+        this.layer++;
+        if (this.layer > maxLayers) {
+            this.layer = -maxLayers;
         }
-        this.currentRadius++;
-
-        this.currentPositions.addAll(BlockGeometry.getHollowSphere(this.currentRadius, this.currentRadius - 1));
+        Collection<BlockPos> positions = BlockGeometry.getHorizontalPlane(maxLayers);
+        positions.forEach(pos -> this.currentPositions.add(pos.add(0, this.layer, 0)));
         Collections.shuffle(this.currentPositions, new Random(0xF518E23A05B27C19L));
     }
 
     @Override
     public void writeToNBT(CompoundNBT nbt) {
-        nbt.putInt("currentRadius", this.currentRadius);
+        nbt.putInt("layer", this.layer);
     }
 
     @Override
     public void readFromNBT(CompoundNBT nbt) {
-        this.currentRadius = nbt.getInt("currentRadius");
+        this.layer = nbt.getInt("layer");
     }
-
 }

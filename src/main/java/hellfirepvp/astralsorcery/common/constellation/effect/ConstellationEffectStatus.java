@@ -23,6 +23,6 @@ import javax.annotation.Nullable;
  */
 public interface ConstellationEffectStatus {
 
-    public abstract boolean runEffect(World world, BlockPos pos, int mirrorAmount, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect);
+    public abstract boolean runStatusEffect(World world, BlockPos pos, int mirrorAmount, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect);
 
 }
