@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class OreBlockRarityRegistry extends ConfigDataAdapter<OreBlockRarityEntry> {
 
     public static final OreBlockRarityRegistry STONE_ENRICHMENT = new OreBlockRarityRegistry("perk_stone_enrichment_ore");
+    public static final OreBlockRarityRegistry MINERALIS_RITUAL = new OreBlockRarityRegistry("mineralis_ritual_ore");
 
     private final String fileName;
 

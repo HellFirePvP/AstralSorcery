@@ -131,7 +131,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         if (this.effect instanceof ConstellationEffectStatus && collectedStarlight > 0) {
             collectedStarlight = 0;
             if (this.effect.getConfig().enabled.get() &&
-                    ((ConstellationEffectStatus) this.effect).runEffect(world, to, this.getMirrorCount(), properties, this.channelingTrait)) {
+                    ((ConstellationEffectStatus) this.effect).runStatusEffect(world, to, this.getMirrorCount(), properties, this.channelingTrait)) {
                 for (int i = 0; i < part; i++) {
                     if (rand.nextFloat() < (fractureChancePer * properties.getEffectAmplifier() / part)) {
                         fractureCrystal();

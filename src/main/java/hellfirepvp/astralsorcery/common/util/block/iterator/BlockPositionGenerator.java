@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.util.block.iterator;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
@@ -22,10 +23,19 @@ import java.util.function.Predicate;
  */
 public abstract class BlockPositionGenerator {
 
-    private Predicate<BlockPos> posFilter = (pos) -> true;
+    private BiPredicate<BlockPos, Double> posFilter = (pos, radius) -> true;
 
     public final BlockPositionGenerator andFilter(Predicate<BlockPos> filter) {
+        return this.andFilter((pos, radius) -> filter.test(pos));
+    }
+
+    public final BlockPositionGenerator andFilter(BiPredicate<BlockPos, Double> filter) {
         this.posFilter = this.posFilter.and(filter);
+        return this;
+    }
+
+    public final BlockPositionGenerator copyFilterFrom(BlockPositionGenerator other) {
+        other.andFilter(this.posFilter);
         return this;
     }
 
@@ -33,7 +43,7 @@ public abstract class BlockPositionGenerator {
         BlockPos next;
         do {
             next = genNext(offset, selectionRadius);
-        } while (!posFilter.test(next));
+        } while (!posFilter.test(next, selectionRadius));
         return next;
     }
 

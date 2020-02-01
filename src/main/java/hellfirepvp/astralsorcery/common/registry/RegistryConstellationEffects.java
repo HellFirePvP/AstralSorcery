@@ -40,6 +40,10 @@ public class RegistryConstellationEffects {
         EVORSIO    = register(makeProvider(ConstellationsAS.evorsio,    CEffectEvorsio::new));
         FORNAX     = register(makeProvider(ConstellationsAS.fornax,     CEffectFornax::new));
         HOROLOGIUM = register(makeProvider(ConstellationsAS.horologium, CEffectHorologium::new));
+        LUCERNA    = register(makeProvider(ConstellationsAS.lucerna,    CEffectLucerna::new));
+        MINERALIS  = register(makeProvider(ConstellationsAS.mineralis,  CEffectMineralis::new));
+        OCTANS     = register(makeProvider(ConstellationsAS.octans,     CEffectOctans::new));
+        PELOTRIO   = register(makeProvider(ConstellationsAS.pelotrio,   CEffectPelotrio::new));
         VICIO      = register(makeProvider(ConstellationsAS.vicio,      CEffectVicio::new));
     }
 

@@ -50,7 +50,7 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
     public CEffectFornax(@Nonnull ILocatable origin) {
         super(origin, ConstellationsAS.fornax, 1, (world, pos, state) -> true);
         this.excludeRitualPositions();
-        this.setChunkNeedsToBeLoaded();
+        this.selectSphericalPositions();
     }
 
     @Nonnull

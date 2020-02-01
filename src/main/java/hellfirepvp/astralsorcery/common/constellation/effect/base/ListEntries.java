@@ -102,6 +102,7 @@ public class ListEntries {
                         return;
                     }
                 }
+                e.addTag(ConstellationEffectRegistry.LUCERNA_SKIP_ENTITY);
                 world.addEntity(e);
                 world.playEvent(2004, e.getPosition(), 0);
                 world.playEvent(2004, e.getPosition(), 0);
@@ -124,6 +125,10 @@ public class ListEntries {
 
         public int getMaxCount() {
             return maxCount;
+        }
+
+        public void setMaxCount(int maxCount) {
+            this.maxCount = maxCount;
         }
 
         @Override

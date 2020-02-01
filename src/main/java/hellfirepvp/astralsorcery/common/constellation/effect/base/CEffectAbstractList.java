@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.block.iterator.BlockPositionGenerator;
 import hellfirepvp.astralsorcery.common.util.block.iterator.BlockRandomPositionGenerator;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
@@ -44,8 +45,9 @@ import java.util.function.Predicate;
 public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntry> extends ConstellationEffect {
 
     //Used to disable pedestal whitelisting when finding positions to break blocks at.
-    private boolean isLinkedRitual = false;
-    private boolean excludesRitual = false;
+    protected boolean isLinkedRitual = false;
+    private boolean excludesRitual = false; //Excludes exclusive ritual positions
+    private boolean excludeRitualColumn = false; //Excludes everything from the pedestal and structure upwards
 
     protected final BlockPredicate verifier;
     protected final int maxAmount;
@@ -68,6 +70,22 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         }
     }
 
+    protected void excludeRitualColumn() {
+        this.setChunkNeedsToBeLoaded();
+        if (!this.excludeRitualColumn) {
+            this.excludeRitualColumn = true;
+            this.positionStrategy.andFilter(this.createExcludeRitualColumnPredicate());
+        }
+    }
+
+    protected void selectSphericalPositions() {
+        this.positionStrategy.andFilter((pos, radius) -> {
+            double dst = new Vector3(this.getPos().getLocationPos()).add(0.5, 0.5, 0.5)
+                    .distanceSquared(new Vector3(pos).add(0.5, 0.5, 0.5));
+            return dst <= radius * radius;
+        });
+    }
+
     @Nullable
     public abstract T recreateElement(CompoundNBT tag, BlockPos pos);
 
@@ -77,6 +95,11 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
     @Nonnull
     protected BlockPositionGenerator createPositionStrategy() {
         return new BlockRandomPositionGenerator();
+    }
+
+    @Nonnull
+    protected BlockPositionGenerator selectPositionStrategy(BlockPositionGenerator defaultGenerator, ConstellationEffectProperties properties) {
+        return defaultGenerator;
     }
 
     private Predicate<BlockPos> createExcludeRitualPredicate() {
@@ -89,6 +112,11 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
                                                         !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down()) && //Pillars & config
                                                         !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down(2)) &&  //uh... consistency?
                                                         !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down(3))))); //Lenses
+    }
+
+    private Predicate<BlockPos> createExcludeRitualColumnPredicate() {
+        return pos -> (this.isLinkedRitual && pos.getX() == 0 && pos.getZ() == 0) ||
+                (!this.isLinkedRitual && StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(new BlockPos(pos.getX(), -1, pos.getZ())));
     }
 
     public int getCount() {
@@ -117,12 +145,16 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
 
     @Nullable
     public T peekNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
-        if (this.excludesRitual) {
+        if (this.excludesRitual || this.excludeRitualColumn) {
             MiscUtils.executeWithChunk(world, pos, () -> {
                 this.isLinkedRitual = MiscUtils.getTileAt(world, pos, TileRitualLink.class, true) != null;
             });
         }
-        BlockPos at = this.positionStrategy.generateNextPosition(BlockPos.ZERO, prop.getSize());
+        BlockPositionGenerator gen = this.selectPositionStrategy(this.positionStrategy, prop);
+        if (gen != this.positionStrategy) {
+            gen.copyFilterFrom(this.positionStrategy);
+        }
+        BlockPos at = gen.generateNextPosition(BlockPos.ZERO, prop.getSize());
         BlockPos actual = at.add(pos);
         return MiscUtils.executeWithChunk(world, actual, () -> {
             if (this.verifier.test(world, actual, world.getBlockState(actual))) {

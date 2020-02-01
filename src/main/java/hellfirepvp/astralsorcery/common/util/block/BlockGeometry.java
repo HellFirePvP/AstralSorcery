@@ -24,6 +24,16 @@ import java.util.Set;
  */
 public class BlockGeometry {
 
+    public static Set<BlockPos> getHorizontalPlane(int radius) {
+        Set<BlockPos> out = new HashSet<>();
+        for (int xx = -radius; xx <= radius; xx++) {
+            for (int zz = -radius; zz <= radius; zz++) {
+                out.add(new BlockPos(xx, 0, zz));
+            }
+        }
+        return out;
+    }
+
     public static Set<BlockPos> getSphere(double radius) {
         Set<BlockPos> out = new HashSet<>();
         Vector3 vFrom = new Vector3(0.5, 0.5, 0.5);
