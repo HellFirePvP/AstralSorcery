@@ -59,9 +59,6 @@ public class EntityTransmutationEntry implements ConfigDataSet {
         if (fromType == null) {
             throw new IllegalArgumentException(split[0] + " is not a known EntityType.");
         }
-        if (!fromType.isSummonable() || fromType.getClassification() == EntityClassification.MISC) {
-            throw new IllegalArgumentException("EntityType " + split[0] + " seems to be not summonable or isn't classified as creature.");
-        }
         ResourceLocation toKey = new ResourceLocation(split[1]);
         EntityType<?> toType = ForgeRegistries.ENTITIES.getValue(toKey);
         if (toType == null) {

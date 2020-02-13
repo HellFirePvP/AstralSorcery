@@ -105,7 +105,7 @@ public class EntityTransmutationRegistry extends ConfigDataAdapter<EntityTransmu
 
     @Override
     public Predicate<Object> getValidator() {
-        return obj -> obj instanceof String && EntityTransmutationEntry.deserialize((String) obj) != null;
+        return obj -> obj instanceof String;
     }
 
     @Nullable
