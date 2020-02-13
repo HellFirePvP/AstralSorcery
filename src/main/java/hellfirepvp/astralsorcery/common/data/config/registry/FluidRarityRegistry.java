@@ -60,6 +60,6 @@ public class FluidRarityRegistry extends ConfigDataAdapter<FluidRarityEntry> {
 
     @Override
     public Predicate<Object> getValidator() {
-        return obj -> obj instanceof String && FluidRarityEntry.deserialize((String) obj) != null;
+        return obj -> obj instanceof String;
     }
 }

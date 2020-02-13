@@ -91,7 +91,7 @@ public class OreItemRarityRegistry extends ConfigDataAdapter<OreItemRarityEntry>
 
     @Override
     public Predicate<Object> getValidator() {
-        return obj -> obj instanceof String && OreItemRarityEntry.deserialize((String) obj) != null;
+        return obj -> obj instanceof String;
     }
 
     @Nullable

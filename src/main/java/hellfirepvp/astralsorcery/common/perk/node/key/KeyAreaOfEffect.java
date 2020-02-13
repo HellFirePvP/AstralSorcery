@@ -66,10 +66,11 @@ public class KeyAreaOfEffect extends KeyAddEnchantment {
                             .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, sweepPerc);
                     float toApply = event.getAmount() * sweepPerc;
 
+                    float range = 2.5F * PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
                     EventFlags.SWEEP_ATTACK.executeWithFlag(() -> {
                         for (LivingEntity target : attacked.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class,
-                                attacked.getBoundingBox().grow(1, 0.25, 1))) {
-                            if (MiscUtils.canPlayerAttackServer(player, target)) {
+                                attacked.getBoundingBox().grow(range, range / 2F, range))) {
+                            if (MiscUtils.canPlayerAttackServer(player, target) && !player.equals(target)) {
                                 DamageUtil.attackEntityFrom(target, source, toApply);
                             }
                         }
