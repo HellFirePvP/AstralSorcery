@@ -111,7 +111,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
         double constellationGap = 12.0;
         constellationGap = Math.sqrt(constellationGap * constellationGap * 2);
 
-        float rPitch = -6.5F + gen.nextFloat() * - 80F;
+        float rPitch = -25F + gen.nextFloat() * - 50F;
         float rYaw = gen.nextFloat() * 360F;
         for (Point.Float point : placed) {
             if (point.distance(rPitch, rYaw) <= constellationGap ||
@@ -152,15 +152,14 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
 
     private void drawObservatoryScreen(float pTicks) {
         boolean canSeeSky = this.canObserverSeeSky(this.getTile().getPos(), 2);
+        double guiFactor = Minecraft.getInstance().mainWindow.getGuiScaleFactor();
         float pitch = Minecraft.getInstance().player.getPitch(pTicks);
         float angleOpacity = 0F;
-        if (pitch < -60F) {
+        if (pitch < -30F) {
             angleOpacity = 1F;
-        } else if (pitch < -10F) {
-            angleOpacity = (Math.abs(pitch) - 10F) / 50F;
-            if (DayTimeHelper.isNight(Minecraft.getInstance().world)) {
-                angleOpacity *= angleOpacity;
-            }
+        } else if (pitch <= -9F) {
+            angleOpacity = 0.2F + 0.8F * ((Math.abs(pitch) - 10F) / 20F);
+            angleOpacity = MathHelper.sqrt(angleOpacity);
         }
         float brMultiplier = angleOpacity;
 
@@ -185,8 +184,6 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
         }
         float playerPitch = Minecraft.getInstance().player.rotationPitch;
         float rainBr = 1F - Minecraft.getInstance().world.getRainStrength(pTicks);
-        float cstSizeX = 55F;
-        float cstSizeY = 35F;
 
         this.blitOffset += 1;
         WorldContext ctx = SkyHandler.getContext(Minecraft.getInstance().world, LogicalSide.CLIENT);
@@ -202,7 +199,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                 float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
                 brightness = this.multiplyStarBrightness(pTicks, brightness);
                 brightness *= brMultiplier;
-                this.drawRect(buf).at(star.x, star.y).dim(size, size).color(brightness, brightness, brightness, brightness).draw();
+                this.drawRect(buf).at(FRAME_TEXTURE_SIZE + star.x, FRAME_TEXTURE_SIZE + star.y).dim(size, size).color(brightness, brightness, brightness, brightness).draw();
             }
             tes.draw();
             this.blitOffset -= 1;
@@ -224,16 +221,18 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                             Math.abs(diffPitch) <= size) {
                         int wPart = MathHelper.floor(this.getGuiWidth() * 0.1F);
                         int hPart = MathHelper.floor(this.getGuiHeight() * 0.1F);
+                        float xFactor = diffYaw   / 8F;
+                        float yFactor = diffPitch / 8F;
 
                         Map<StarLocation, Rectangle> cstRenderInfo = RenderingConstellationUtils.renderConstellationIntoGUI(
                                 cst,
-                                this.getGuiLeft() + wPart + MathHelper.floor((diffYaw / cstSizeX) * this.getGuiWidth()),
-                                this.getGuiTop() + hPart + MathHelper.floor((diffPitch / cstSizeY) * this.getGuiHeight()),
+                                this.getGuiLeft() + wPart + MathHelper.floor((xFactor / guiFactor) * this.getGuiWidth()),
+                                this.getGuiTop() + hPart + MathHelper.floor((yFactor / guiFactor) * this.getGuiHeight()),
                                 this.blitOffset,
                                 MathHelper.floor(this.getGuiHeight() * 0.6F),
-                                 MathHelper.floor(this.getGuiHeight() * 0.6F),
+                                MathHelper.floor(this.getGuiHeight() * 0.6F),
                                 2F,
-                                () -> (0.4F + 0.6F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 5 + gen.nextInt(15))) * rainBr * brMultiplier,
+                                () -> (0.2F + 0.7F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 5 + gen.nextInt(15)) * rainBr) * brMultiplier,
                                 ResearchHelper.getClientProgress().hasConstellationDiscovered(cst),
                                 true
                         );
