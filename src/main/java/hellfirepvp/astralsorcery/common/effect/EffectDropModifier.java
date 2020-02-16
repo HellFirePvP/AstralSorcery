@@ -82,6 +82,6 @@ public class EffectDropModifier extends EffectCustomTexture {
 
     @Override
     public SpriteQuery getSpriteQuery() {
-        return new SpriteQuery(AssetLoader.TextureLocation.GUI, "effect_drop_modifier", 1, 1);
+        return new SpriteQuery(AssetLoader.TextureLocation.GUI, 1, 1, "effect", "drop_modifier");
     }
 }

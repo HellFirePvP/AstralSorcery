@@ -32,6 +32,7 @@ public class TileEntityTypesAS {
     public static TileEntityType<TileGemCrystals> GEM_CRYSTAL_CLUSTER;
     public static TileEntityType<TileInfuser> INFUSER;
     public static TileEntityType<TileLens> LENS;
+    public static TileEntityType<TileObservatory> OBSERVATORY;
     public static TileEntityType<TilePrism> PRISM;
     public static TileEntityType<TileRitualLink> RITUAL_LINK;
     public static TileEntityType<TileRitualPedestal> RITUAL_PEDESTAL;

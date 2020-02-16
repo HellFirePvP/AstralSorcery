@@ -419,7 +419,7 @@ public class TileAttunementAltar extends TileEntityTick {
 
     @Nullable
     @Override
-    protected StructureType getRequiredStructureType() {
+    public StructureType getRequiredStructureType() {
         return StructureTypesAS.PTYPE_ATTUNEMENT_ALTAR;
     }
 

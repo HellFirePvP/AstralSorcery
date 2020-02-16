@@ -232,23 +232,24 @@ public class TileInfuser extends TileEntityTick implements WandInteractable {
         return RecipeTypesAS.TYPE_INFUSION.findRecipe(new LiquidInfusionContext(this, crafter, LogicalSide.SERVER));
     }
 
-    protected void startCrafting(LiquidInfusion recipe, PlayerEntity crafter) {
+    protected boolean startCrafting(LiquidInfusion recipe, PlayerEntity crafter) {
         if (this.getActiveRecipe() != null) {
-            return;
+            return false;
         }
 
         this.activeRecipe = new ActiveLiquidInfusionRecipe(getWorld(), getPos(), recipe, crafter.getUniqueID());
         markForUpdate();
 
         SoundHelper.playSoundAround(SoundsAS.INFUSER_CRAFT_START, SoundCategory.BLOCKS, this.world, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F);
+        return true;
     }
 
     @Override
-    public void onInteract(World world, BlockPos pos, PlayerEntity player, Direction side, boolean sneak) {
+    public boolean onInteract(World world, BlockPos pos, PlayerEntity player, Direction side, boolean sneak) {
         if (!world.isRemote() && this.hasMultiblock() && !this.getItemInput().isEmpty()) {
             if (this.getActiveRecipe() != null) {
                 if (this.getActiveRecipe().matches(this)) {
-                    return;
+                    return true;
                 }
 
                 abortCrafting();
@@ -257,7 +258,9 @@ public class TileInfuser extends TileEntityTick implements WandInteractable {
             if (recipe != null) {
                 this.startCrafting(recipe, player);
             }
+            return true;
         }
+        return false;
     }
 
     @Nonnull

@@ -55,7 +55,7 @@ public class ConstellationHandler {
         return this.activeMap.get(phase).contains(cst);
     }
 
-    int getLastTrackedDay() {
+    public int getLastTrackedDay() {
         return lastRecordedDay;
     }
 

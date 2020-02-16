@@ -22,6 +22,6 @@ import net.minecraft.world.World;
  */
 public interface WandInteractable {
 
-    void onInteract(World world, BlockPos pos, PlayerEntity player, Direction side, boolean sneak);
+    boolean onInteract(World world, BlockPos pos, PlayerEntity player, Direction side, boolean sneak);
 
 }

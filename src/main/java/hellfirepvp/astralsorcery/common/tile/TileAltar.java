@@ -241,9 +241,9 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
                 .setIgnoreStarlightRequirement(false));
     }
 
-    protected void startCrafting(SimpleAltarRecipe recipe, PlayerEntity crafter) {
+    protected boolean startCrafting(SimpleAltarRecipe recipe, PlayerEntity crafter) {
         if (this.getActiveRecipe() != null) {
-            return;
+            return false;
         }
 
         int divisor = Math.max(0, this.getAltarType().ordinal() - recipe.getAltarType().ordinal());
@@ -252,21 +252,25 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
         markForUpdate();
 
         SoundHelper.playSoundAround(SoundsAS.ALTAR_CRAFT_START, SoundCategory.BLOCKS, this.world, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F);
+        return true;
     }
 
     @Override
-    public void onInteract(World world, BlockPos pos, PlayerEntity player, Direction side, boolean sneak) {
-        if (!world.isRemote()) {
+    public boolean onInteract(World world, BlockPos pos, PlayerEntity player, Direction side, boolean sneak) {
+        if (!world.isRemote() && this.hasMultiblock()) {
             if (this.getActiveRecipe() != null) {
-                if (!this.getActiveRecipe().matches(this, false)) {
-                    abortCrafting();
+                if (this.getActiveRecipe().matches(this, false)) {
+                    return true;
                 }
+                abortCrafting();
             }
             SimpleAltarRecipe recipe = this.findRecipe(player);
             if (recipe != null) {
                 this.startCrafting(recipe, player);
             }
+            return true;
         }
+        return false;
     }
 
     private void gatherStarlight() {
@@ -397,7 +401,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
     @Nullable
     @Override
-    protected StructureType getRequiredStructureType() {
+    public StructureType getRequiredStructureType() {
         return this.altarType.getRequiredStructure();
     }
 

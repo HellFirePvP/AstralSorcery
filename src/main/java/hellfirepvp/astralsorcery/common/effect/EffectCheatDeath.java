@@ -72,6 +72,6 @@ public class EffectCheatDeath extends EffectCustomTexture {
 
     @Override
     public SpriteQuery getSpriteQuery() {
-        return new SpriteQuery(AssetLoader.TextureLocation.GUI, "effect_cheat_death", 1, 1);
+        return new SpriteQuery(AssetLoader.TextureLocation.GUI, 1, 1, "effect", "cheat_death");
     }
 }

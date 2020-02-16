@@ -39,7 +39,7 @@ public class PatreonFlareDynamicColor extends PatreonFlare {
     @Nullable
     @Override
     protected SpriteQuery getSpriteQuery() {
-        return new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "patreonflares/gray_mono", 1, 48);
+        return new SpriteQuery(AssetLoader.TextureLocation.EFFECT, 1, 48, "patreonflares", "gray_mono");
     }
 
     @Override

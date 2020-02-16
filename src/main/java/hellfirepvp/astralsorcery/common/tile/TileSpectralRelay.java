@@ -149,7 +149,7 @@ public class TileSpectralRelay extends TileEntityTick {
 
     @Nullable
     @Override
-    protected StructureType getRequiredStructureType() {
+    public StructureType getRequiredStructureType() {
         if (hasGlassLens()) {
             return StructureTypesAS.PTYPE_SPECTRAL_RELAY;
         }

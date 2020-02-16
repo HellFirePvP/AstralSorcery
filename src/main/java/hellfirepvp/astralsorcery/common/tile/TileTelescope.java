@@ -10,7 +10,10 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
+import hellfirepvp.astralsorcery.common.util.tile.NamedInventoryTile;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,7 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
  * Created by HellFirePvP
  * Date: 15.01.2020 / 15:37
  */
-public class TileTelescope extends TileEntitySynchronized {
+public class TileTelescope extends TileEntitySynchronized implements NamedInventoryTile {
 
     private TelescopeRotation rotation = TelescopeRotation.N;
 
@@ -48,6 +51,11 @@ public class TileTelescope extends TileEntitySynchronized {
         super.writeCustomNBT(compound);
 
         compound.putInt("rotation", rotation.ordinal());
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("screen.astralsorcery.telescope");
     }
 
     public static enum TelescopeRotation {

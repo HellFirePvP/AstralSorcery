@@ -197,7 +197,7 @@ public class AstralSkyRenderer implements IRenderHandler {
             return;
         }
 
-        RAND.setSeed(ctx.getSeed());
+        Random gen = ctx.getRandom();
 
         PlayerProgress clientProgress = ResearchHelper.getClientProgress();
         Map<IConstellation, ActiveCelestialsHandler.RenderPosition> constellations = ctx.getActiveCelestialsHandler().getCurrentRenderPositions();
@@ -209,7 +209,7 @@ public class AstralSkyRenderer implements IRenderHandler {
             ActiveCelestialsHandler.RenderPosition pos = constellations.get(cst);
 
             RenderingConstellationUtils.renderConstellationSky(cst, pos,
-                    () -> RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 10 + RAND.nextInt(5)) * brightness * 1.25F + 0.05F);
+                    () -> RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(5)) * brightness * 1.25F + 0.05F);
         }
     }
 

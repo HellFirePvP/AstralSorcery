@@ -47,7 +47,7 @@ public enum FlareColor {
     }
 
     public SpriteQuery getSpriteQuery() {
-        return new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "patreonflares/" + name().toLowerCase(), 1, 48);
+        return new SpriteQuery(AssetLoader.TextureLocation.EFFECT, 1, 48, "patreonflares", name().toLowerCase());
     }
 
 }

@@ -26,19 +26,19 @@ import java.util.function.Supplier;
 public class TextureQuery {
 
     private final AssetLoader.TextureLocation location;
-    private final String name;
+    private final String[] path;
 
     private Supplier<?> resource;
 
-    public TextureQuery(AssetLoader.TextureLocation location, String name) {
+    public TextureQuery(AssetLoader.TextureLocation location, String... path) {
         this.location = location;
-        this.name = name;
+        this.path = path;
     }
 
     @OnlyIn(Dist.CLIENT)
     public AbstractRenderableTexture resolve() {
         if (resource == null) {
-            resource = AssetLibrary.loadReference(location, name);
+            resource = AssetLibrary.loadReference(location, path);
         }
         return (AbstractRenderableTexture) resource.get();
     }

@@ -54,6 +54,6 @@ public class EffectBleed extends EffectCustomTexture {
 
     @Override
     public SpriteQuery getSpriteQuery() {
-        return new SpriteQuery(AssetLoader.TextureLocation.GUI, "effect_bleed", 1, 1);
+        return new SpriteQuery(AssetLoader.TextureLocation.GUI, 1, 1, "effect", "bleed");
     }
 }

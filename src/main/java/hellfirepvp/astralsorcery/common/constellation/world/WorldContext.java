@@ -49,6 +49,12 @@ public class WorldContext {
     }
 
     @Nonnull
+    public Random getDayRandom() {
+        int track = this.getConstellationHandler().getLastTrackedDay();
+        return new Random(this.getSeed() * 31 + track * 31);
+    }
+
+    @Nonnull
     public CelestialEventHandler getCelestialHandler() {
         return celestialHandler;
     }

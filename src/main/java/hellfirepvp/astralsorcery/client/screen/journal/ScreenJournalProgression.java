@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
@@ -111,10 +112,10 @@ public class ScreenJournalProgression extends ScreenJournal {
 
         GlStateManager.pushMatrix();
 
-        MainWindow window = Minecraft.getInstance().mainWindow;
-        int factor = (int) window.getGuiScaleFactor();
+        double guiFactor = Minecraft.getInstance().mainWindow.getGuiScaleFactor();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((guiLeft + 27) * factor, (guiTop + 27) * factor, (guiWidth - 54) * factor, (guiHeight - 54) * factor);
+        GL11.glScissor(MathHelper.floor((guiLeft + 27) * guiFactor), MathHelper.floor((guiTop + 27) * guiFactor),
+                MathHelper.floor((guiWidth - 54) * guiFactor), MathHelper.floor((guiHeight - 54) * guiFactor));
         progressionRenderer.drawProgressionPart(this.blitOffset, mouseX, mouseY);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 

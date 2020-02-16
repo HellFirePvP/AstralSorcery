@@ -16,10 +16,13 @@ import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 import net.minecraftforge.resource.VanillaResourceType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,11 +40,12 @@ public class AssetLibrary implements ISelectiveResourceReloadListener {
 
     private AssetLibrary() {}
 
-    public static Supplier<AbstractRenderableTexture> loadReference(AssetLoader.TextureLocation location, String name) {
-        return new CacheReference<>(() -> loadTexture(location, name));
+    public static Supplier<AbstractRenderableTexture> loadReference(AssetLoader.TextureLocation location, String... path) {
+        return new CacheReference<>(() -> loadTexture(location, path));
     }
 
-    public static AbstractRenderableTexture loadTexture(AssetLoader.TextureLocation location, String name) {
+    public static AbstractRenderableTexture loadTexture(AssetLoader.TextureLocation location, String... path) {
+        String name = String.join("/", path);
         if (name.endsWith(".png")) {
             throw new IllegalArgumentException("Tried to loadTexture with appended .png from the AssetLibrary!");
         }

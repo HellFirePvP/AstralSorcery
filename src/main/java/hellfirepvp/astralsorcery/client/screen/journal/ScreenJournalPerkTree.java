@@ -199,10 +199,10 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         this.drawBackground();
         this.blitOffset += 50;
 
-        MainWindow window = Minecraft.getInstance().mainWindow;
-        int factor = (int) window.getGuiScaleFactor();
+        double guiFactor = Minecraft.getInstance().mainWindow.getGuiScaleFactor();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((guiLeft + 27) * factor, (guiTop + 27) * factor, (guiWidth - 54) * factor, (guiHeight - 54) * factor);
+        GL11.glScissor(MathHelper.floor((guiLeft + 27) * guiFactor), MathHelper.floor((guiTop + 27) * guiFactor),
+                MathHelper.floor((guiWidth - 54) * guiFactor), MathHelper.floor((guiHeight - 54) * guiFactor));
         drawPerkTree(pTicks);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 

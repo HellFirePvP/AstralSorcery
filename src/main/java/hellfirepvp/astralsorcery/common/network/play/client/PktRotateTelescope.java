@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.play.client;
 
+import hellfirepvp.astralsorcery.client.screen.ScreenTelescope;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -85,9 +86,9 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
                             tt.setRotation(packet.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
                         }
                     });
-                    //if (Minecraft.getInstance().currentScreen instanceof GuiTelescope) {
-                    //    ((GuiTelescope) Minecraft.getInstance().currentScreen).handleRotationChange(packet.isClockwise);
-                    //}
+                    if (Minecraft.getInstance().currentScreen instanceof ScreenTelescope) {
+                        ((ScreenTelescope) Minecraft.getInstance().currentScreen).handleRotationChange(packet.isClockwise);
+                    }
                 });
             }
 

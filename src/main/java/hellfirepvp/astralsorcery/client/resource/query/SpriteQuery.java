@@ -29,8 +29,8 @@ public class SpriteQuery extends TextureQuery {
 
     private Object spriteResource;
 
-    public SpriteQuery(AssetLoader.TextureLocation location, String name, int rows, int columns) {
-        super(location, name);
+    public SpriteQuery(AssetLoader.TextureLocation location, int rows, int columns, String... path) {
+        super(location, path);
         this.rows = rows;
         this.columns = columns;
     }

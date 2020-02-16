@@ -8,15 +8,20 @@
 
 package hellfirepvp.astralsorcery.common.block.tile.altar;
 
+import hellfirepvp.astralsorcery.common.block.base.LargeBlock;
 import hellfirepvp.astralsorcery.common.block.tile.BlockAltar;
 import hellfirepvp.astralsorcery.common.util.VoxelUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,13 +30,26 @@ import net.minecraft.world.IBlockReader;
  * Created by HellFirePvP
  * Date: 12.08.2019 / 21:59
  */
-public class BlockAltarConstellation extends BlockAltar {
+public class BlockAltarConstellation extends BlockAltar implements LargeBlock {
+
+    private static final AxisAlignedBB PLACEMENT_BOX = new AxisAlignedBB(-1, 0, -1, 1, 1, 1);
 
     private final VoxelShape shape;
 
     public BlockAltarConstellation() {
         super(AltarType.CONSTELLATION);
         this.shape = createShape();
+    }
+
+    @Override
+    public AxisAlignedBB getBlockSpace() {
+        return PLACEMENT_BOX;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.canPlaceAt(context) ? this.getDefaultState() : null;
     }
 
     protected VoxelShape createShape() {

@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.block.tile;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import net.minecraft.block.*;
@@ -29,6 +31,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.*;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,6 +54,8 @@ public class BlockStructural extends Block {
 
     public static EnumProperty<BlockType> BLOCK_TYPE = EnumProperty.create("blocktype", BlockType.class);
 
+    private static final VoxelShape STRUCT_TELESCOPE = VoxelShapes.create(1D / 16D, -16D / 16D, 1D / 16D, 15D / 16D, 16D / 16D, 15D / 16D);
+
     public BlockStructural() {
         super(Block.Properties.create(Material.BARRIER, MaterialColor.AIR)
                 .sound(SoundType.GLASS)
@@ -63,6 +70,15 @@ public class BlockStructural extends Block {
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(BLOCK_TYPE);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        switch (state.get(BLOCK_TYPE)) {
+            case TELESCOPE:
+                return STRUCT_TELESCOPE;
+        }
+        return super.getShape(state, worldIn, pos, context);
     }
 
     @Nullable
@@ -117,7 +133,10 @@ public class BlockStructural extends Block {
     public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity entity, Hand hand, BlockRayTraceResult rayTraceResult) {
         switch (state.get(BLOCK_TYPE)) {
             case TELESCOPE:
-                return BlockType.TELESCOPE.getSupportedState().onBlockActivated(world, entity, hand, rayTraceResult);
+                if (world.isRemote()) {
+                    AstralSorcery.getProxy().openGui(entity, GuiType.TELESCOPE, pos.down());
+                }
+                return true;
         }
         return super.onBlockActivated(state, world, pos, entity, hand, rayTraceResult);
     }

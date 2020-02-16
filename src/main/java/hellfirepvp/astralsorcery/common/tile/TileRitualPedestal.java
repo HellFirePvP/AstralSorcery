@@ -176,7 +176,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
 
     @Nullable
     @Override
-    protected StructureType getRequiredStructureType() {
+    public StructureType getRequiredStructureType() {
         return StructureTypesAS.PTYPE_RITUAL_PEDESTAL;
     }
 
