@@ -108,6 +108,7 @@ public class RegistryBlocks {
         CHALICE = registerBlock(new BlockChalice());
         WELL = registerBlock(new BlockWell());
         TELESCOPE = registerBlock(new BlockTelescope());
+        OBSERVATORY = registerBlock(new BlockObservatory());
 
         FLARE_LIGHT = registerBlock(new BlockFlareLight());
         TRANSLUCENT_BLOCK = registerBlock(new BlockTranslucentBlock());

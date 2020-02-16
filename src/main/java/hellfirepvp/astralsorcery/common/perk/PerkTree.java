@@ -44,13 +44,13 @@ public class PerkTree {
     private Map<AbstractPerk, Collection<AbstractPerk>> doubleConnections = new HashMap<>();
     private List<Tuple<AbstractPerk, AbstractPerk>> connections = new LinkedList<>();
 
-    private Map<IConstellation, AbstractPerk> rootPerks = new HashMap<>();
+    private Map<IConstellation, RootPerk> rootPerks = new HashMap<>();
 
     private PerkTree() {}
 
     public void addPerk(AbstractPerk perk) {
         if (perk instanceof RootPerk) {
-            rootPerks.put(((RootPerk) perk).getConstellation(), perk);
+            rootPerks.put(((RootPerk) perk).getConstellation(), (RootPerk) perk);
         }
         perk.attachListeners(MinecraftForge.EVENT_BUS);
         ConfigEntry entry = perk.addConfig();
@@ -67,7 +67,7 @@ public class PerkTree {
     }
 
     @Nullable
-    public AbstractPerk getRootPerk(IConstellation constellation) {
+    public RootPerk getRootPerk(IConstellation constellation) {
         return rootPerks.get(constellation);
     }
 

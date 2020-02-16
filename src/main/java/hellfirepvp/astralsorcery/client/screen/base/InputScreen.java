@@ -9,8 +9,13 @@
 package hellfirepvp.astralsorcery.client.screen.base;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.text.ITextComponent;
+import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -33,6 +33,10 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_CONSTELLATION_PAPER;
     public static AbstractRenderableTexture TEX_GUI_KNOWLEDGE_FRAGMENT;
     public static AbstractRenderableTexture TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK;
+    public static AbstractRenderableTexture TEX_GUI_HAND_TELESCOPE;
+    public static AbstractRenderableTexture TEX_GUI_TELESCOPE;
+    public static AbstractRenderableTexture TEX_GUI_OBSERVATORY;
+
     public static AbstractRenderableTexture TEX_GUI_BOOKMARK;
     public static AbstractRenderableTexture TEX_GUI_BOOKMARK_STRETCHED;
     public static AbstractRenderableTexture TEX_GUI_BOOK_ARROWS;

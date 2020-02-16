@@ -90,6 +90,7 @@ public class BlocksAS {
     public static BlockChalice                   CHALICE;
     public static BlockWell                      WELL;
     public static BlockTelescope                 TELESCOPE;
+    public static BlockObservatory               OBSERVATORY;
 
     public static BlockFlareLight                FLARE_LIGHT;
     public static BlockTranslucentBlock          TRANSLUCENT_BLOCK;

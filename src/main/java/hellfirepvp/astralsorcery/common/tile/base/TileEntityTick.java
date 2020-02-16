@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 02.08.2016 / 17:34
  */
-public abstract class TileEntityTick extends TileEntitySynchronized implements ITickableTileEntity {
+public abstract class TileEntityTick extends TileEntitySynchronized implements ITickableTileEntity, TileRequiresMultiblock {
 
     private boolean doesSeeSky = false;
     private int lastUpdateTick = -1;
@@ -52,7 +52,8 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
     }
 
     @Nullable
-    protected StructureType getRequiredStructureType() {
+    @Override
+    public StructureType getRequiredStructureType() {
         return null;
     }
 

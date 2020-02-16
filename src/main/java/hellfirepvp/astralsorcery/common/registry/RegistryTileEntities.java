@@ -45,6 +45,7 @@ public class RegistryTileEntities {
         GEM_CRYSTAL_CLUSTER = registerTile(TileGemCrystals.class, BlocksAS.GEM_CRYSTAL_CLUSTER);
         INFUSER = registerTile(TileInfuser.class, BlocksAS.INFUSER);
         LENS = registerTile(TileLens.class, BlocksAS.LENS);
+        OBSERVATORY = registerTile(TileObservatory.class, BlocksAS.OBSERVATORY);
         PRISM = registerTile(TilePrism.class, BlocksAS.PRISM);
         RITUAL_LINK = registerTile(TileRitualLink.class, BlocksAS.RITUAL_LINK);
         RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class, BlocksAS.RITUAL_PEDESTAL);
@@ -60,6 +61,7 @@ public class RegistryTileEntities {
         ClientRegistry.bindTileEntitySpecialRenderer(TileChalice.class, new RenderChalice());
         ClientRegistry.bindTileEntitySpecialRenderer(TileInfuser.class, new RenderInfuser());
         ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderLens());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileObservatory.class, new RenderObservatory());
         ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderPrism());
         ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
         ClientRegistry.bindTileEntitySpecialRenderer(TileTelescope.class, new RenderTelescope());

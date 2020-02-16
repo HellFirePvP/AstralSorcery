@@ -16,9 +16,7 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -43,7 +41,7 @@ public class ResearchNode {
 
     private Color textureColorHint = new Color(0xFFFFFFFF, true);
 
-    private List<ResearchNode> connectionsTo = new LinkedList<>();
+    private List<ResearchNode> connectionsTo = new ArrayList<>();
     private List<JournalPage> pages = new LinkedList<>();
 
     private ResearchNode(RenderType type, String unlocName, int rPosX, int rPosZ) {

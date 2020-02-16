@@ -25,10 +25,15 @@ import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import hellfirepvp.astralsorcery.common.tile.base.TileRequiresMultiblock;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import hellfirepvp.observerlib.api.structure.MatchableStructure;
+import hellfirepvp.observerlib.api.util.PatternBlockArray;
+import hellfirepvp.observerlib.client.preview.StructurePreview;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -37,10 +42,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
@@ -110,15 +118,47 @@ public class ItemWand extends Item implements ConstellationItem, OverrideInterac
         BlockState state = world.getBlockState(pos);
         Block b = state.getBlock();
         if (b instanceof WandInteractable) {
-            ((WandInteractable) b).onInteract(world, pos, player, face, player.isSneaking());
-            return true;
+            if (((WandInteractable) b).onInteract(world, pos, player, face, player.isSneaking())) {
+                return true;
+            }
         }
         WandInteractable wandTe = MiscUtils.getTileAt(world, pos, WandInteractable.class, true);
         if (wandTe != null) {
-            wandTe.onInteract(world, pos, player, face, player.isSneaking());
-            return true;
+            if (wandTe.onInteract(world, pos, player, face, player.isSneaking())) {
+                return true;
+            }
+        }
+        TileRequiresMultiblock mbTe = MiscUtils.getTileAt(world, pos, TileRequiresMultiblock.class, true);
+        if (mbTe != null) {
+            if (mbTe.getRequiredStructureType() != null &&
+                    mbTe.getRequiredStructureType().getStructure() instanceof MatchableStructure &&
+                    !((MatchableStructure) mbTe.getRequiredStructureType().getStructure()).matches(world, pos)) {
+                if (world.isRemote()) {
+                    this.displayClientStructurePreview(world, pos, mbTe.getRequiredStructureType());
+                }
+                return true;
+            }
         }
         return false;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void displayClientStructurePreview(World world, BlockPos pos, StructureType type) {
+        StructurePreview.newBuilder(world.getDimension().getType(), pos, (MatchableStructure) type.getStructure())
+                .removeIfOutInDifferentWorld()
+                .andPersistOnlyIf((inWorld, at) -> {
+                    return MiscUtils.executeWithChunk(world, pos, () -> {
+                        TileRequiresMultiblock tileFound = MiscUtils.getTileAt(world, pos, TileRequiresMultiblock.class, true);
+                        if (tileFound == null) {
+                            return false;
+                        }
+                        return tileFound.getRequiredStructureType() != null &&
+                                tileFound.getRequiredStructureType().equals(type);
+                    }, true);
+                })
+                .andPersistOnlyIf((inWorld, at) -> !((MatchableStructure) type.getStructure()).matches(world, pos))
+                .showBar(type.getDisplayName())
+                .buildAndSet();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -130,7 +170,7 @@ public class ItemWand extends Item implements ConstellationItem, OverrideInterac
             return;
         }
 
-        float dstr = 0.1F + 0.9F * DayTimeHelper.getCurrentDaytimeDistribution(world);
+        float dstr = 0.4F + 0.6F * DayTimeHelper.getCurrentDaytimeDistribution(world);
         Vector3 plVec = Vector3.atEntityCorner(Minecraft.getInstance().player);
         float dst = (float) at.distance(plVec);
         float dstMul = dst <= 25 ? 1F : (dst >= 50 ? 0F : (1F - (dst - 25F) / 25F));

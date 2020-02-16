@@ -98,6 +98,7 @@ public class RegistryItems {
         WAND = registerItem(new ItemWand());
         LINKING_TOOL = registerItem(new ItemLinkingTool());
         ILLUMINATION_WAND = registerItem(new ItemIlluminationWand());
+        HAND_TELESCOPE = registerItem(new ItemHandTelescope());
 
         NOCTURNAL_POWDER = registerItem(new ItemNocturnalPowder());
         ILLUMINATION_POWDER = registerItem(new ItemIlluminationPowder());

@@ -23,6 +23,7 @@ public class ContainerTypesAS {
     private ContainerTypesAS() {}
 
     public static ContainerType<ContainerTome> TOME;
+    public static ContainerType<ContainerObservatory> OBSERVATORY;
 
     public static ContainerType<ContainerAltarDiscovery> ALTAR_DISCOVERY;
     public static ContainerType<ContainerAltarAttunement> ALTAR_ATTUNEMENT;

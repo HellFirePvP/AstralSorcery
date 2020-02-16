@@ -47,6 +47,7 @@ public class TechnicalEntityRegistry extends ConfigDataAdapter<EntityTechnicalEn
         return Lists.newArrayList(
                 new EntityTechnicalEntry(Mods.MINECRAFT, "ender_pearl"),
                 new EntityTechnicalEntry(Mods.MINECRAFT, "firework_rocket"),
+                new EntityTechnicalEntry(Mods.ASTRAL_SORCERY, "observatory_helper"),
                 new EntityTechnicalEntry(Mods.BOTANIA, "mana_burst"),
                 new EntityTechnicalEntry(Mods.BOTANIA, "spark"),
                 new EntityTechnicalEntry(Mods.BOTANIA, "corporea_spark")

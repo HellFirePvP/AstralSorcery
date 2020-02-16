@@ -98,6 +98,11 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     public void useTarget(TargetObject target) {}
 
     @Override
+    public boolean hasSeenConstellation(ResourceLocation constellation) {
+        return false;
+    }
+
+    @Override
     public boolean hasConstellationDiscovered(ResourceLocation constellation) {
         return false;
     }

@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 public class ModelTelescope extends CustomModel {
 
     private static final Supplier<AbstractRenderableTexture> MODEL_TEXTURE =
-            AssetLibrary.loadReference(AssetLoader.TextureLocation.BLOCKS, "entity/telescope");
+            AssetLibrary.loadReference(AssetLoader.TextureLocation.BLOCKS, "entity", "telescope");
 
     public RendererModel mountpiece;
     public RendererModel opticalTube;
@@ -80,11 +80,4 @@ public class ModelTelescope extends CustomModel {
         this.mountpiece.render(1F);
         this.opticalTube.render(1F);
     }
-
-    public void setRotateAngle(RendererModel modelRenderer, float x, float y, float z) {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
-    }
-
 }

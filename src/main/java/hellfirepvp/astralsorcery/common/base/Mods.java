@@ -32,6 +32,12 @@ public enum Mods {
             return true;
         }
     },
+    ASTRAL_SORCERY(AstralSorcery.MODID) {
+        @Override
+        public boolean isPresent() {
+            return true;
+        }
+    },
     DRACONIC_EVOLUTION("draconicevolution"),
     CURIOS("curios"),
     BOTANIA("botania");

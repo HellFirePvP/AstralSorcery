@@ -9,12 +9,17 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.screen.ScreenObservatory;
 import hellfirepvp.astralsorcery.client.screen.container.*;
+import hellfirepvp.astralsorcery.common.container.ContainerObservatory;
 import hellfirepvp.astralsorcery.common.container.factory.*;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.IContainerFactory;
@@ -34,6 +39,7 @@ public class RegistryContainerTypes {
 
     public static void init() {
         TOME = register("tome", new ContainerTomeProvider.Factory());
+        OBSERVATORY = register("observatory", new ContainerObservatoryProvider.Factory());
 
         ALTAR_DISCOVERY = register("altar_discovery", new ContainerAltarDiscoveryProvider.Factory());
         ALTAR_ATTUNEMENT = register("altar_attunement", new ContainerAltarAttunementProvider.Factory());
@@ -44,6 +50,12 @@ public class RegistryContainerTypes {
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
         ScreenManager.registerFactory(TOME, ScreenContainerTome::new);
+        ScreenManager.registerFactory(OBSERVATORY, new ScreenManager.IScreenFactory<ContainerObservatory, ScreenObservatory>() {
+            @Override
+            public ScreenObservatory create(ContainerObservatory observatory, PlayerInventory plInv, ITextComponent component) {
+                return new ScreenObservatory(observatory);
+            }
+        });
         ScreenManager.registerFactory(ALTAR_DISCOVERY, ScreenContainerAltarDiscovery::new);
         ScreenManager.registerFactory(ALTAR_ATTUNEMENT, ScreenContainerAltarAttunement::new);
         ScreenManager.registerFactory(ALTAR_CONSTELLATION, ScreenContainerAltarConstellation::new);

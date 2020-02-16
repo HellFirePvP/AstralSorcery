@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.model.builtin;
 
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 
@@ -30,4 +31,9 @@ public class CustomModel extends Model {
         }
     }
 
+    protected void setRotateAngle(RendererModel modelPart, float x, float y, float z) {
+        modelPart.rotateAngleX = x;
+        modelPart.rotateAngleY = y;
+        modelPart.rotateAngleZ = z;
+    }
 }

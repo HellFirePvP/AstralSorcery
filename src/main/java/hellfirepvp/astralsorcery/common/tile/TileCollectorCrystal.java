@@ -152,7 +152,7 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
 
     @Nullable
     @Override
-    protected StructureType getRequiredStructureType() {
+    public StructureType getRequiredStructureType() {
         return StructureTypesAS.PTYPE_ENHANCED_COLLECTOR_CRYSTAL;
     }
 

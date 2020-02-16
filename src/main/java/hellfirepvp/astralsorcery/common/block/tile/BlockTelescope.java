@@ -70,7 +70,7 @@ public class BlockTelescope extends ContainerBlock implements CustomItemBlock {
         if (world.isRemote()) {
             AstralSorcery.getProxy().openGui(player, GuiType.TELESCOPE, pos);
         }
-        return false;
+        return true;
     }
 
     @Override

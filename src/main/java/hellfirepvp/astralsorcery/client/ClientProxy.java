@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider;
 import hellfirepvp.astralsorcery.client.util.ColorizationHelper;
+import hellfirepvp.astralsorcery.client.util.MouseUtil;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.CommonProxy;
@@ -38,6 +39,7 @@ import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.ISprite;
@@ -114,6 +116,7 @@ public class ClientProxy extends CommonProxy {
 
         EffectRenderEventHandler.getInstance().attachEventListeners(eventBus);
         ConnectionEventHandler.getInstance().attachEventListeners(eventBus);
+        MouseUtil.attachEventListeners(eventBus);
 
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onRender);
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onFog);
@@ -139,7 +142,10 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void openGuiClient(GuiType type, CompoundNBT data) {
-        Minecraft.getInstance().displayGuiScreen(type.deserialize(data));
+        Screen toOpen = type.deserialize(data);
+        if (toOpen != null) {
+            Minecraft.getInstance().displayGuiScreen(toOpen);
+        }
     }
 
     @Override

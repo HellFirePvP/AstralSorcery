@@ -281,7 +281,7 @@ public class RenderingDrawUtils {
         drawGradientRect(0, pX - 3,           pY + height + 2, pX + width + 3, pY + height + 3,     color, color);
     }
 
-    private static void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
+    public static void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
         float startAlpha = (float) (startColor >> 24 & 255) / 255.0F;
         float startRed   = (float) (startColor >> 16 & 255) / 255.0F;
         float startGreen = (float) (startColor >>  8 & 255) / 255.0F;

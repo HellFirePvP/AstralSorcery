@@ -11,10 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.world;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,6 +35,10 @@ public class ActiveCelestialsHandler {
 
     public Map<IConstellation, RenderPosition> getCurrentRenderPositions() {
         return Collections.unmodifiableMap(activePositions);
+    }
+
+    public Collection<IConstellation> getActiveConstellations() {
+        return Collections.unmodifiableCollection(activePositions.keySet());
     }
 
     //If you found this bit of code:

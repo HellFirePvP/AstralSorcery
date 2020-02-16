@@ -28,6 +28,7 @@ public class EventFlags {
 
     //Rendering stuff
     public static BooleanFlag SKY_RENDERING = new BooleanFlag(false);
+    public static BooleanFlag GUI_CLOSING = new BooleanFlag(false);
 
     public static class BooleanFlag {
 

@@ -521,6 +521,14 @@ public class PlayerProgress {
         return seenConstellations;
     }
 
+    public boolean hasSeenConstellation(IConstellation constellation) {
+        return hasSeenConstellation(constellation.getRegistryName());
+    }
+
+    public boolean hasSeenConstellation(ResourceLocation constellation) {
+        return seenConstellations.contains(constellation);
+    }
+
     public boolean hasConstellationDiscovered(IConstellation constellation) {
         return hasConstellationDiscovered(constellation.getRegistryName());
     }

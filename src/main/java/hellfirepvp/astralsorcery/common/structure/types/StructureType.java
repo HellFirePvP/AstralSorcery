@@ -15,6 +15,8 @@ import hellfirepvp.observerlib.common.change.ChangeObserverStructure;
 import hellfirepvp.observerlib.common.change.ObserverProviderStructure;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -54,6 +56,10 @@ public class StructureType implements IForgeRegistryEntry<StructureType> {
 
     public BlockArray getStructure() {
         return this.structureSupplier.get();
+    }
+
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent(String.format("structure.%s.%s.name", name.getNamespace(), name.getPath()));
     }
 
     public ChangeSubscriber<ChangeObserverStructure> observe(World world, BlockPos pos) {

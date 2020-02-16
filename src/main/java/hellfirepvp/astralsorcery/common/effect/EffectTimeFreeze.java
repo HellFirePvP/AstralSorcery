@@ -54,6 +54,6 @@ public class EffectTimeFreeze extends EffectCustomTexture {
 
     @Override
     public SpriteQuery getSpriteQuery() {
-        return new SpriteQuery(AssetLoader.TextureLocation.GUI, "effect_time_freeze", 1, 1);
+        return new SpriteQuery(AssetLoader.TextureLocation.GUI, 1, 1, "effect", "time_freeze");
     }
 }

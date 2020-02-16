@@ -59,6 +59,7 @@ public class ItemsAS {
     public static ItemWand WAND;
     public static ItemLinkingTool LINKING_TOOL;
     public static ItemIlluminationWand ILLUMINATION_WAND;
+    public static ItemHandTelescope HAND_TELESCOPE;
 
     public static ItemNocturnalPowder NOCTURNAL_POWDER;
     public static ItemIlluminationPowder ILLUMINATION_POWDER;

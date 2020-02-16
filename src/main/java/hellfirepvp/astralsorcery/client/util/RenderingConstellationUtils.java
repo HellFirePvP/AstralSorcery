@@ -231,7 +231,7 @@ public class RenderingConstellationUtils {
                         .color(isKnown ? r : alpha,
                                 isKnown ? g : alpha,
                                 isKnown ? b : alpha,
-                                Math.min(alpha * 1.5F, 1F))
+                                Math.min(alpha * 1.2F + 0.2F, 1F))
                         .endVertex();
             }
 

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "": { "model": "astralsorcery:block/base/nothing" }
+        "": { "model": "astralsorcery:block/telescope" }
     }
 }
