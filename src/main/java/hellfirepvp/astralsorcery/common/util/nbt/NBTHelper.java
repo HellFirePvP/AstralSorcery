@@ -25,6 +25,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegistryManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -221,6 +224,38 @@ public class NBTHelper {
     public static <T> T readFromSubTag(CompoundNBT compound, String tag, Function<CompoundNBT, T> readFct) {
         if (compound.contains(tag, Constants.NBT.TAG_COMPOUND)) {
             return readFct.apply(compound.getCompound(tag));
+        }
+        return null;
+    }
+
+    public static <T extends IForgeRegistryEntry<T>> void setRegistryEntry(CompoundNBT compoundNBT, String tag, T entry) {
+        setResourceLocation(compoundNBT, tag + "_registry", RegistryManager.ACTIVE.getRegistry(entry.getRegistryType()).getRegistryName());
+        setResourceLocation(compoundNBT, tag, entry.getRegistryName());
+    }
+
+    @Nullable
+    public static <T extends IForgeRegistryEntry<T>> T getRegistryEntry(CompoundNBT compoundNBT, String tag) {
+        ResourceLocation registryName = getResourceLocation(compoundNBT, tag + "_registry");
+        if (registryName != null) {
+            ForgeRegistry<T> registry = RegistryManager.ACTIVE.getRegistry(registryName);
+            if (registry != null) {
+                ResourceLocation key = getResourceLocation(compoundNBT, tag);
+                if (key != null) {
+                    return registry.getValue(key);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void setResourceLocation(CompoundNBT compoundNBT, String tag, ResourceLocation key) {
+        compoundNBT.putString(tag, key.toString());
+    }
+
+    @Nullable
+    public static ResourceLocation getResourceLocation(CompoundNBT compoundNBT, String tag) {
+        if (compoundNBT.contains(tag)) {
+            return new ResourceLocation(compoundNBT.getString(tag));
         }
         return null;
     }

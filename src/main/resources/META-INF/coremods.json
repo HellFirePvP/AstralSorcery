@@ -8,5 +8,10 @@
   "add_enchantment_tooltip": "coremods/add_enchantment_tooltip.js",
   "add_missing_tag_enchantment_tooltip": "coremods/add_missing_tag_enchantment_tooltip.js",
   "sun_brightness_client": "coremods/sun_brightness_client.js",
-  "sun_brightness_server": "coremods/sun_brightness_server.js"
+  "sun_brightness_server": "coremods/sun_brightness_server.js",
+  "elytra_start_client_flight": "coremods/elytra_start_client_flight.js",
+  "elytra_start_server_flight": "coremods/elytra_start_server_flight.js",
+  "elytra_living_update_tick": "coremods/elytra_living_update_tick.js",
+  "reach_set_client_renderer": "coremods/reach_set_client_renderer.js",
+  "reach_set_server_entity_interact": "coremods/reach_set_server_entity_interact.js"
 }

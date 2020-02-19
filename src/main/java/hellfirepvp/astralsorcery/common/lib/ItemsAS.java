@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.fluid.ItemLiquidStarlightBucket;
 import hellfirepvp.astralsorcery.common.item.*;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
@@ -60,6 +61,8 @@ public class ItemsAS {
     public static ItemLinkingTool LINKING_TOOL;
     public static ItemIlluminationWand ILLUMINATION_WAND;
     public static ItemHandTelescope HAND_TELESCOPE;
+
+    public static ItemMantle MANTLE;
 
     public static ItemNocturnalPowder NOCTURNAL_POWDER;
     public static ItemIlluminationPowder ILLUMINATION_POWDER;

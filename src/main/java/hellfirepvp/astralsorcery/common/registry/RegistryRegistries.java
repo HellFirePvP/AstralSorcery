@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffectProvider;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
@@ -43,6 +44,13 @@ public class RegistryRegistries {
         REGISTRY_CONSTELLATION_EFFECT = new RegistryBuilder<ConstellationEffectProvider>()
                 .setName(REGISTRY_NAME_CONSTELLATION_EFFECTS)
                 .setType(ConstellationEffectProvider.class)
+                .disableSaving()
+                .disableOverrides()
+                .create();
+
+        REGISTRY_MANTLE_EFFECT = new RegistryBuilder<MantleEffectProvider>()
+                .setName(REGISTRY_NAME_MANTLE_EFFECTS)
+                .setType(MantleEffectProvider.class)
                 .disableSaving()
                 .disableOverrides()
                 .create();

@@ -8,9 +8,10 @@ function initializeCoreMod() {
                 'methodDesc': '()D'
             },
             'transformer': function(method) {
-                print('[AstralSorcery] Adding \'post_process_vanilla\' ASM patch...');
-
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+
+                ASMAPI.log('INFO', 'Adding \'post_process_vanilla\' ASM patch...');
+
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
                 var aReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.DRETURN, 0);
@@ -28,7 +29,7 @@ function initializeCoreMod() {
                     aReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.DRETURN, method.instructions.indexOf(aReturn) + 3);
                 }
 
-                print('[AstralSorcery] Added \'post_process_vanilla\' ASM patch!');
+                ASMAPI.log('INFO', 'Added \'post_process_vanilla\' ASM patch!');
                 return method;
             }
         }

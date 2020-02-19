@@ -14,7 +14,9 @@ import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.event.PotionApplyEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -22,7 +24,9 @@ import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -83,6 +87,21 @@ public class ASMHookEndpoint {
             return 11 - Math.round(ctx.getCelestialHandler().getSolarEclipsePercent() * 11F);
         }
         return prevSkyLight;
+    }
+
+    public static ItemStack transformElytraItem(ItemStack elytraStack, LivingEntity wearingEntity) {
+        if (!elytraStack.isEmpty() && elytraStack.getItem() instanceof ItemMantle) {
+            elytraStack = new ItemStack(Items.ELYTRA);
+        }
+        return elytraStack;
+    }
+
+    public static void fireNewPotionEffectEvent(LivingEntity entity, EffectInstance newEffect) {
+        MinecraftForge.EVENT_BUS.post(new PotionApplyEvent.New(entity, newEffect));
+    }
+
+    public static void fireChangedPotionEffectEvent(LivingEntity entity, EffectInstance previous, EffectInstance newCombinedEffect) {
+        MinecraftForge.EVENT_BUS.post(new PotionApplyEvent.Changed(entity, previous, newCombinedEffect));
     }
 
     public static AbstractAttributeMap markPlayer(AbstractAttributeMap map, LivingEntity entity) {

@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
  */
 public class ConstellationEffectRegistry {
 
-    public static final String LUCERNA_SKIP_ENTITY = "skip.spawn.deny";
+    public static final String ENTITY_TAG_LUCERNA_SKIP_ENTITY = "skip.spawn.deny";
 
     public static void addConfigEntries(ServerConfig config) {
         config.addConfigEntry(CEffectAevitas.CONFIG);

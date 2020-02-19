@@ -10,8 +10,6 @@ package hellfirepvp.astralsorcery.common.constellation.effect.base;
 
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
-import hellfirepvp.astralsorcery.common.crafting.nojson.WorldMeltableRegistry;
-import hellfirepvp.astralsorcery.common.crafting.nojson.meltable.WorldMeltableRecipe;
 import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
 import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -76,7 +74,7 @@ public class ListEntries {
             Biome.SpawnListEntry entry = applicable.get(world.rand.nextInt(applicable.size()));
             EntityType<?> type = entry.entityType;
             if (type != null && EntityUtils.canEntitySpawnHere(world, pos, type, reason,
-                    (e) -> e.addTag(ConstellationEffectRegistry.LUCERNA_SKIP_ENTITY))) {
+                    (e) -> e.addTag(ConstellationEffectRegistry.ENTITY_TAG_LUCERNA_SKIP_ENTITY))) {
                 return new EntitySpawnEntry(pos, type);
             }
             return null;
@@ -102,7 +100,7 @@ public class ListEntries {
                         return;
                     }
                 }
-                e.addTag(ConstellationEffectRegistry.LUCERNA_SKIP_ENTITY);
+                e.addTag(ConstellationEffectRegistry.ENTITY_TAG_LUCERNA_SKIP_ENTITY);
                 world.addEntity(e);
                 world.playEvent(2004, e.getPosition(), 0);
                 world.playEvent(2004, e.getPosition(), 0);

@@ -64,7 +64,8 @@ public class BlockBreakHelper {
 
     public static void clearServerCache() {
         TickManager mgr = AstralSorcery.getProxy().getTickManager();
-        //TODO observerlib, make tickhandlers removable
+        breakMap.values().forEach(mgr::unregister);
+        breakMap.clear();
     }
 
     @OnlyIn(Dist.CLIENT)

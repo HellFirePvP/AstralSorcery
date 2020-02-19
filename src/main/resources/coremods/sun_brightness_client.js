@@ -1,6 +1,6 @@
 function initializeCoreMod() {
     return {
-        'set_player_field': {
+        'sun_brightness_client': {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.World',
@@ -8,9 +8,10 @@ function initializeCoreMod() {
                 'methodDesc': '(F)F'
             },
             'transformer': function(method) {
-                print('[AstralSorcery] Adding \'sun_brightness_client\' ASM patch...');
-
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+
+                ASMAPI.log('INFO', 'Adding \'sun_brightness_client\' ASM patch...');
+
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
                 var fReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.FRETURN, 0);
@@ -26,7 +27,7 @@ function initializeCoreMod() {
                     fReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.FRETURN, method.instructions.indexOf(fReturn) + 2);
                 }
 
-                print('[AstralSorcery] Added \'sun_brightness_client\' ASM patch!');
+                ASMAPI.log('INFO', 'Added \'sun_brightness_client\' ASM patch!');
                 return method;
             }
         }

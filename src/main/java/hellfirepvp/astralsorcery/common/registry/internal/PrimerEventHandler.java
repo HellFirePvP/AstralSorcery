@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.registry.internal;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffectProvider;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
@@ -76,6 +77,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(ObserverProvider.class, this::registerStructureProviders);
         eventBus.addGenericListener(KnowledgeFragment.class, this::registerKnowledgeFragments);
         eventBus.addGenericListener(ConstellationEffectProvider.class, this::registerConstellationEffects);
+        eventBus.addGenericListener(MantleEffectProvider.class, this::registerMantleEffects);
         eventBus.addGenericListener(PerkAttributeType.class, this::registerPerkAttributeTypes);
         eventBus.addGenericListener(PerkAttributeReader.class, this::registerPerkAttributeReaders);
         eventBus.addGenericListener(ContainerType.class, this::registerContainerTypes);
@@ -90,6 +92,7 @@ public class PrimerEventHandler {
         RegistryConstellations.init();
         RegistryConstellations.initConstellationSignatures();
         RegistryConstellationEffects.init();
+        RegistryMantleEffects.init();
 
         RegistryStructures.registerStructures();
         RegistryKnowledgeFragments.init();
@@ -161,6 +164,10 @@ public class PrimerEventHandler {
     }
 
     private void registerConstellationEffects(RegistryEvent.Register<ConstellationEffectProvider> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerMantleEffects(RegistryEvent.Register<MantleEffectProvider> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
