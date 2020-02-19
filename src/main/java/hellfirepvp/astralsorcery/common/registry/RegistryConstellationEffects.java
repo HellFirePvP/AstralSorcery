@@ -13,10 +13,10 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
-import hellfirepvp.astralsorcery.common.constellation.effect.provider.*;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
 import static hellfirepvp.astralsorcery.common.lib.ConstellationEffectsAS.*;
@@ -48,12 +48,16 @@ public class RegistryConstellationEffects {
     }
 
     private static ConstellationEffectProvider makeProvider(IWeakConstellation cst, Function<ILocatable, ? extends ConstellationEffect> effectProvider) {
-        return new DefaultConstellationEffectProvider(cst, effectProvider);
+        return new ConstellationEffectProvider(cst) {
+            @Override
+            public ConstellationEffect createEffect(@Nullable ILocatable origin) {
+                return effectProvider.apply(origin);
+            }
+        };
     }
 
     private static <T extends ConstellationEffectProvider> T register(T effectProvider) {
         AstralSorcery.getProxy().getRegistryPrimer().register(effectProvider);
         return effectProvider;
     }
-
 }

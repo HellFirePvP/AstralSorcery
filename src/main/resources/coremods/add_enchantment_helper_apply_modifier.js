@@ -1,6 +1,6 @@
 function initializeCoreMod() {
     return {
-        'post_process_vanilla': {
+        'add_enchantment_helper_apply_modifier': {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.enchantment.EnchantmentHelper',
@@ -8,9 +8,10 @@ function initializeCoreMod() {
                 'methodDesc': '(Lnet/minecraft/enchantment/EnchantmentHelper$IEnchantmentVisitor;Lnet/minecraft/item/ItemStack;)V'
             },
             'transformer': function(method) {
-                print('[AstralSorcery] Adding \'add_enchantment_helper_apply_modifier\' ASM patch...');
-
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+
+                ASMAPI.log('INFO', 'Adding \'add_enchantment_helper_apply_modifier\' ASM patch...');
+
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
@@ -41,7 +42,7 @@ function initializeCoreMod() {
                             method.instructions.indexOf(methodCall) + 1);
                 }
 
-                print('[AstralSorcery] Added \'add_enchantment_helper_apply_modifier\' ASM patch!');
+                ASMAPI.log('INFO', 'Added \'add_enchantment_helper_apply_modifier\' ASM patch!');
                 return method;
             }
         }

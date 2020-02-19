@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffectProvider;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
@@ -39,6 +40,7 @@ public class RegistriesAS {
     public static final ResourceLocation REGISTRY_NAME_PERKS = AstralSorcery.key("perks");
     public static final ResourceLocation REGISTRY_NAME_SEXTANT_TARGETS = AstralSorcery.key("sextant_targets");
     public static final ResourceLocation REGISTRY_NAME_CONSTELLATION_EFFECTS = AstralSorcery.key("constellation_effect");
+    public static final ResourceLocation REGISTRY_NAME_MANTLE_EFFECTS = AstralSorcery.key("mantle_effect");
     public static final ResourceLocation REGISTRY_NAME_STRUCTURE_TYPES = AstralSorcery.key("structure_types");
     public static final ResourceLocation REGISTRY_NAME_KNOWLEDGE_FRAGMENTS = AstralSorcery.key("knowledge_fragments");
     public static final ResourceLocation REGISTRY_NAME_PERK_ATTRIBUTE_TYPES = AstralSorcery.key("perk_attribute_types");
@@ -48,6 +50,7 @@ public class RegistriesAS {
     public static final ResourceLocation REGISTRY_NAME_ALTAR_EFFECTS = AstralSorcery.key("altar_recipe_effects");
 
     public static IForgeRegistry<ConstellationEffectProvider> REGISTRY_CONSTELLATION_EFFECT;
+    public static IForgeRegistry<MantleEffectProvider> REGISTRY_MANTLE_EFFECT;
     public static IForgeRegistry<IConstellation> REGISTRY_CONSTELLATIONS;
     public static IForgeRegistryModifiable<AbstractPerk> REGISTRY_PERKS;
     public static IForgeRegistry<TargetObject> REGISTRY_SEXTANT_TARGET;

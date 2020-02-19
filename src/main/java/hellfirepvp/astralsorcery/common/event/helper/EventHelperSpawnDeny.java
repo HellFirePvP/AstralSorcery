@@ -21,8 +21,6 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.event.TickEvent;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -57,7 +55,7 @@ public class EventHelperSpawnDeny {
         }
 
         LivingEntity entity = event.getEntityLiving();
-        if (entity.getTags().contains(ConstellationEffectRegistry.LUCERNA_SKIP_ENTITY)) {
+        if (entity.getTags().contains(ConstellationEffectRegistry.ENTITY_TAG_LUCERNA_SKIP_ENTITY)) {
             return;
         }
 

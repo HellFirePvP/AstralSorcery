@@ -522,7 +522,6 @@
   "item.itemshiftingstar.enhanced": "Irradiant Star",
   "item.iteminfusedglass": "Infused Glass",
   "item.iteminfusedglass.active": "Engraved Glass",
-  "item.itemcape": "Mantle of Stars",
   "item.itemskyresonator": "Fosic Resonator",
   "item.itemsextant": "Sextant",
   "item.itemsextant.upgraded": "Augmented",
@@ -568,6 +567,8 @@
   "item.astralsorcery.linking_tool": "Linking Tool",
   "item.astralsorcery.illumination_wand": "Illumination Wand",
   "item.astralsorcery.hand_telescope": "Looking Glass",
+
+  "item.astralsorcery.mantle": "Mantle of Stars",
 
   "item.astralsorcery.illumination_powder": "Illumination Powder",
   "item.astralsorcery.nocturnal_powder": "Nocturnal Powder",

@@ -1,6 +1,6 @@
 function initializeCoreMod() {
     return {
-        'post_process_vanilla': {
+        'add_enchantment_tooltip': {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.item.ItemStack',
@@ -8,9 +8,10 @@ function initializeCoreMod() {
                 'methodDesc': '(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/client/util/ITooltipFlag;)Ljava/util/List;'
             },
             'transformer': function(method) {
-                print('[AstralSorcery] Adding \'add_enchantment_tooltip\' ASM patch...');
-
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+
+                ASMAPI.log('INFO', 'Adding \'add_enchantment_tooltip\' ASM patch...');
+
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
@@ -41,7 +42,7 @@ function initializeCoreMod() {
                             method.instructions.indexOf(methodCall) + 2);
                 }
 
-                print('[AstralSorcery] Added \'add_enchantment_tooltip\' ASM patch!');
+                ASMAPI.log('INFO', 'Added \'add_enchantment_tooltip\' ASM patch!');
                 return method;
             }
         }

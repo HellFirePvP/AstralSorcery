@@ -8,12 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlockProperties;
 import hellfirepvp.astralsorcery.common.item.*;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
+import hellfirepvp.astralsorcery.common.item.armor.ArmorMaterialImbuedLeather;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
@@ -68,7 +69,10 @@ public class RegistryItems {
         }
     };
     public static final Rarity RARITY_CELESTIAL = Rarity.create("AS_CELESTIAL", TextFormatting.BLUE);
-    public static final Rarity RARITY_RELIC = Rarity.create("AS_RELIC", TextFormatting.GOLD);
+    public static final Rarity RARITY_ARTIFACT = Rarity.create("AS_ARTIFACT", TextFormatting.DARK_AQUA);
+    public static final Rarity RARITY_VESTIGE = Rarity.create("AS_VESTIGE", TextFormatting.GOLD);
+
+    public static final IArmorMaterial ARMOR_MATERIAL_IMBUED_LEATHER = new ArmorMaterialImbuedLeather();
 
     private static List<ItemDynamicColor> colorItems = Lists.newArrayList();
 
@@ -99,6 +103,8 @@ public class RegistryItems {
         LINKING_TOOL = registerItem(new ItemLinkingTool());
         ILLUMINATION_WAND = registerItem(new ItemIlluminationWand());
         HAND_TELESCOPE = registerItem(new ItemHandTelescope());
+
+        MANTLE = registerItem(new ItemMantle());
 
         NOCTURNAL_POWDER = registerItem(new ItemNocturnalPowder());
         ILLUMINATION_POWDER = registerItem(new ItemIlluminationPowder());

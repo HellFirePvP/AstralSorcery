@@ -17,12 +17,10 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -71,11 +69,6 @@ public abstract class ItemPerkGem extends Item {
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         return new TranslationTextComponent(this.getTranslationKey(stack)).setStyle(new Style().setColor(this.getRarity(stack).color));
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return RegistryItems.RARITY_RELIC;
     }
 
     @Override

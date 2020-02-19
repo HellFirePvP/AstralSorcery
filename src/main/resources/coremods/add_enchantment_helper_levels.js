@@ -1,6 +1,6 @@
 function initializeCoreMod() {
     return {
-        'post_process_vanilla': {
+        'add_enchantment_helper_levels': {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.enchantment.EnchantmentHelper',
@@ -8,9 +8,10 @@ function initializeCoreMod() {
                 'methodDesc': '(Lnet/minecraft/enchantment/Enchantment;Lnet/minecraft/item/ItemStack;)I'
             },
             'transformer': function(method) {
-                print('[AstralSorcery] Adding \'add_enchantment_helper_levels\' ASM patch...');
-
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+
+                ASMAPI.log('INFO', 'Adding \'add_enchantment_helper_levels\' ASM patch...');
+
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
@@ -28,7 +29,7 @@ function initializeCoreMod() {
                     iReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.IRETURN, method.instructions.indexOf(iReturn) + 1);
                 }
 
-                print('[AstralSorcery] Added \'add_enchantment_helper_levels\' ASM patch!');
+                ASMAPI.log('INFO', 'Added \'add_enchantment_helper_levels\' ASM patch!');
                 return method;
             }
         }

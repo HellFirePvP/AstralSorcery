@@ -21,8 +21,6 @@ import net.minecraftforge.event.entity.living.LivingEvent;
  */
 public class PotionApplyEvent {
 
-    //TODO actually ASM these in
-
     public static class New extends LivingEvent {
 
         private final EffectInstance applied;

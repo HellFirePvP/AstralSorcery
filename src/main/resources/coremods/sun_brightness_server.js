@@ -1,6 +1,6 @@
 function initializeCoreMod() {
     return {
-        'set_player_field': {
+        'sun_brightness_server': {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.World',
@@ -8,9 +8,10 @@ function initializeCoreMod() {
                 'methodDesc': '()V'
             },
             'transformer': function(method) {
-                print('[AstralSorcery] Adding \'sun_brightness_server\' ASM patch...');
-
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+
+                ASMAPI.log('INFO', 'Adding \'sun_brightness_server\' ASM patch...');
+
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
                 var putSkyLight = ASMAPI.findFirstInstructionAfter(method, Opcodes.PUTFIELD, 0);
@@ -26,7 +27,7 @@ function initializeCoreMod() {
                     putSkyLight = ASMAPI.findFirstInstructionAfter(method, Opcodes.PUTFIELD, method.instructions.indexOf(putSkyLight) + 2);
                 }
 
-                print('[AstralSorcery] Added \'sun_brightness_server\' ASM patch!');
+                ASMAPI.log('INFO', 'Added \'sun_brightness_server\' ASM patch!');
                 return method;
             }
         }

@@ -8,9 +8,10 @@ function initializeCoreMod() {
                 'methodDesc': '()Lnet/minecraft/entity/ai/attributes/AbstractAttributeMap;'
             },
             'transformer': function(method) {
-                print('[AstralSorcery] Adding \'set_player_field\' ASM patch...');
-
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+
+                ASMAPI.log('INFO', 'Adding \'set_player_field\' ASM patch...');
+
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
                 var aReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.ARETURN, 0);
@@ -28,7 +29,7 @@ function initializeCoreMod() {
                     aReturn = ASMAPI.findFirstInstructionAfter(method, Opcodes.ARETURN, method.instructions.indexOf(aReturn) + 3);
                 }
 
-                print('[AstralSorcery] Added \'set_player_field\' ASM patch!');
+                ASMAPI.log('INFO', 'Added \'set_player_field\' ASM patch!');
                 return method;
             }
         }
