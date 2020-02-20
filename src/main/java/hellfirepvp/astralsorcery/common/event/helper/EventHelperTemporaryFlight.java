@@ -19,11 +19,11 @@ import java.util.function.Consumer;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: EventHelperRitualFlight
+ * Class: EventHelperTemporaryFlight
  * Created by HellFirePvP
  * Date: 30.06.2019 / 15:36
  */
-public class EventHelperRitualFlight {
+public class EventHelperTemporaryFlight {
 
     private static TimeoutList<PlayerEntity> ritualFlight = new TimeoutList<>(player -> {
         if (player instanceof ServerPlayerEntity && ((ServerPlayerEntity) player).interactionManager.getGameType().isSurvivalOrAdventure()) {
@@ -33,7 +33,7 @@ public class EventHelperRitualFlight {
         }
     }, TickEvent.Type.SERVER);
 
-    private EventHelperRitualFlight() {}
+    private EventHelperTemporaryFlight() {}
 
     public static void clearServer() {
         ritualFlight.clear();
@@ -48,7 +48,7 @@ public class EventHelperRitualFlight {
     }
 
     public static boolean allowFlight(PlayerEntity entity) {
-        return ritualFlight.setOrAddTimeout(40, entity);
+        return ritualFlight.setOrAddTimeout(20, entity);
     }
 
 }

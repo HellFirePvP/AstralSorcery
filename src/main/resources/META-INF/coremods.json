@@ -13,5 +13,6 @@
   "elytra_start_server_flight": "coremods/elytra_start_server_flight.js",
   "elytra_living_update_tick": "coremods/elytra_living_update_tick.js",
   "reach_set_client_renderer": "coremods/reach_set_client_renderer.js",
-  "reach_set_server_entity_interact": "coremods/reach_set_server_entity_interact.js"
+  "reach_set_server_entity_interact": "coremods/reach_set_server_entity_interact.js",
+  "water_movement_slowdown_prevention": "coremods/water_movement_slowdown_prevention.js"
 }

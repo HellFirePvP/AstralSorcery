@@ -21,12 +21,10 @@ public class EventFlags {
     public static BooleanFlag SWEEP_ATTACK = new BooleanFlag(false);
     public static BooleanFlag LIGHTNING_ARC = new BooleanFlag(false);
 
-    //Ongoing effects
-    public static BooleanFlag IN_ELYTRA_CHECK = new BooleanFlag(false);
-
     //Block breaking
     public static BooleanFlag CHAIN_MINING = new BooleanFlag(false);
     public static BooleanFlag CHECK_BREAK_SPEED = new BooleanFlag(false);
+    public static BooleanFlag CHECK_UNDERWATER_BREAK_SPEED = new BooleanFlag(false);
     public static BooleanFlag PLAY_BLOCK_BREAK_EFFECTS = new BooleanFlag(false);
 
     //Rendering stuff
