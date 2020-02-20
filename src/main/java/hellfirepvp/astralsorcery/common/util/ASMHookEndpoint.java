@@ -8,26 +8,24 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectOctans;
+import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectVicio;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
-import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.event.PotionApplyEvent;
-import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
-import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -90,8 +88,10 @@ public class ASMHookEndpoint {
     }
 
     public static ItemStack transformElytraItem(ItemStack elytraStack, LivingEntity wearingEntity) {
-        if (!elytraStack.isEmpty() && elytraStack.getItem() instanceof ItemMantle) {
-            elytraStack = new ItemStack(Items.ELYTRA);
+        if (!elytraStack.isEmpty() && wearingEntity instanceof PlayerEntity) {
+            if (MantleEffectVicio.isUsableElytra(elytraStack, (PlayerEntity) wearingEntity)) {
+                elytraStack = new ItemStack(Items.ELYTRA);
+            }
         }
         return elytraStack;
     }
@@ -102,6 +102,15 @@ public class ASMHookEndpoint {
 
     public static void fireChangedPotionEffectEvent(LivingEntity entity, EffectInstance previous, EffectInstance newCombinedEffect) {
         MinecraftForge.EVENT_BUS.post(new PotionApplyEvent.Changed(entity, previous, newCombinedEffect));
+    }
+
+    public static float getLivingEntityWaterSlowDown(float slowDownIn, LivingEntity entity) {
+        if (entity instanceof PlayerEntity && !entity.getItemStackFromSlot(EquipmentSlotType.CHEST).isEmpty()) {
+            if (MantleEffectOctans.shouldPreventWaterSlowdown(entity.getItemStackFromSlot(EquipmentSlotType.CHEST), (PlayerEntity) entity)) {
+                return 0.92F;
+            }
+        }
+        return slowDownIn;
     }
 
     public static AbstractAttributeMap markPlayer(AbstractAttributeMap map, LivingEntity entity) {

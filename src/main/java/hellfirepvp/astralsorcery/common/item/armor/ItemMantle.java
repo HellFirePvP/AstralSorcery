@@ -8,16 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.item.armor;
 
-import com.google.common.collect.Multimap;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.model.armor.ModelArmorMantle;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
-import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffectProvider;
-import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
-import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -25,15 +21,11 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -42,16 +34,11 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.LogicalSidedProvider;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -62,7 +49,6 @@ import java.util.UUID;
  */
 public class ItemMantle extends ArmorItem implements ItemDynamicColor {
 
-    private static final UUID OCTANS_UNWAVERING = UUID.fromString("845DB25C-C624-495F-8C9F-60210A958B6B");
     private static Object modelArmor = null;
 
     public ItemMantle() {
@@ -84,7 +70,7 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
                 }
 
                 ItemStack stack = new ItemStack(this);
-                this.setConstellation(stack, (IWeakConstellation) cst);
+                setConstellation(stack, (IWeakConstellation) cst);
                 items.add(stack);
             }
         }
@@ -93,7 +79,7 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        IWeakConstellation cst = this.getConstellation(stack);
+        IWeakConstellation cst = getConstellation(stack);
         if (cst != null) {
             tooltip.add(new TranslationTextComponent(cst.getUnlocalizedName()).setStyle(new Style().setColor(TextFormatting.BLUE)));
         }
@@ -110,14 +96,6 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
             return 0xFF000000 | c.getRGB();
         }
         return 0xFF000000;
-    }
-
-    @Override
-    public void setDamage(ItemStack stack, int damage) {
-        if (EventFlags.IN_ELYTRA_CHECK.isSet()) {
-            return;
-        }
-        super.setDamage(stack, damage);
     }
 
     //TODO re-evaluate
@@ -156,17 +134,17 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
     }
 
     @Nullable
-    public <V extends MantleEffect> V getEffect(@Nullable PlayerEntity player) {
-        return this.getEffect(player, null);
+    public static <V extends MantleEffect> V getEffect(@Nullable PlayerEntity player) {
+        return getEffect(player, null);
     }
 
     @Nullable
-    public <V extends MantleEffect> V getEffect(@Nullable PlayerEntity player, @Nullable IWeakConstellation expected) {
+    public static <V extends MantleEffect> V getEffect(@Nullable PlayerEntity player, @Nullable IWeakConstellation expected) {
         if (player == null) {
             return null;
         }
         ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
-        IWeakConstellation cst = this.getConstellation(stack);
+        IWeakConstellation cst = getConstellation(stack);
         if (cst == null) {
             return null;
         }
@@ -177,34 +155,23 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
     }
 
     @Nullable
-    public <V extends MantleEffect> V getEffect(@Nonnull ItemStack stack) {
-        IConstellation cst = this.getConstellation(stack);
+    public static <V extends MantleEffect> V getEffect(@Nonnull ItemStack stack) {
+        IConstellation cst = getConstellation(stack);
         if (cst == null) {
             return null;
         }
-        MantleEffectProvider provider = RegistriesAS.REGISTRY_MANTLE_EFFECT.getValue(cst.getRegistryName());
-        if (provider == null) {
-            return null;
-        }
-        try {
-            CompoundNBT mantleData = NBTHelper.getPersistentData(stack).getCompound("mantleData");
-            V effect = (V) provider.createEffect(mantleData);
-            return effect.getConfig().enabled.get() ? effect : null;
-        } catch (Exception exc) {
-            AstralSorcery.log.error("Unable to create mantle effect!", exc);
-            return null;
-        }
+        return (V) RegistriesAS.REGISTRY_MANTLE_EFFECT.getValue(cst.getRegistryName());
     }
 
     @Nullable
-    public IWeakConstellation getConstellation(ItemStack stack) {
+    public static IWeakConstellation getConstellation(ItemStack stack) {
         if (stack.isEmpty()) {
             return null;
         }
         return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
-    public void setConstellation(ItemStack stack, @Nonnull IWeakConstellation cst) {
+    public static void setConstellation(ItemStack stack, @Nonnull IWeakConstellation cst) {
         if (stack.isEmpty()) {
             return;
         }

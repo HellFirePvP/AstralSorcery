@@ -36,7 +36,7 @@ import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerInteract;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -179,7 +179,7 @@ public class CommonProxy {
         registrar.accept(PerkTickHelper.INSTANCE);
         registrar.accept(PatreonManager.INSTANCE);
 
-        EventHelperRitualFlight.attachTickListener(registrar);
+        EventHelperTemporaryFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);
         EventHelperInvulnerability.attachTickListener(registrar);
         PerkCooldownHelper.attachTickListeners(registrar);

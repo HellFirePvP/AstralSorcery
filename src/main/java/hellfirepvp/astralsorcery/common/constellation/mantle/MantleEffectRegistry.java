@@ -8,33 +8,29 @@
 
 package hellfirepvp.astralsorcery.common.constellation.mantle;
 
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectOctans;
+import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectVicio;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
-import net.minecraft.nbt.CompoundNBT;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
  * Class: MantleEffectRegistry
  * Created by HellFirePvP
- * Date: 17.02.2020 / 20:32
+ * Date: 19.02.2020 / 20:44
  */
 public class MantleEffectRegistry {
 
     public static void addConfigEntries(ServerConfig config) {
-
+        config.addConfigEntry(MantleEffectOctans.CONFIG);
+        config.addConfigEntry(MantleEffectVicio.CONFIG);
     }
 
-    @Nullable
-    public static MantleEffect createInstance(CompoundNBT data, IWeakConstellation constellation) {
-        MantleEffectProvider effect = RegistriesAS.REGISTRY_MANTLE_EFFECT.getValue(constellation.getRegistryName());
-        if (effect != null) {
-            return effect.createEffect(data);
-        }
-        return null;
+    public static void setup(MantleEffect effect) {
+        effect.attachEventListeners(MinecraftForge.EVENT_BUS);
+        effect.attachTickHandlers(AstralSorcery.getProxy().getTickManager()::register);
+        effect.init();
     }
-
 }

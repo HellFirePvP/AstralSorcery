@@ -20,7 +20,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchSyncHelper;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperRitualFlight;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
@@ -89,7 +89,7 @@ public class EventHandlerCache {
 
         StarlightTransmissionHandler.getInstance().clearServer();
         StarlightUpdateHandler.getInstance().clearServer();
-        EventHelperRitualFlight.clearServer();
+        EventHelperTemporaryFlight.clearServer();
         EventHelperSpawnDeny.clearServer();
         EventHelperInvulnerability.clearServer();
         ResearchHelper.saveAndClearServerCache();
@@ -121,7 +121,7 @@ public class EventHandlerCache {
     private static void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
         ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
-        EventHelperRitualFlight.onDisconnect(player);
+        EventHelperTemporaryFlight.onDisconnect(player);
         PerkEffectHelper.onPlayerDisconnectEvent(player);
     }
 
