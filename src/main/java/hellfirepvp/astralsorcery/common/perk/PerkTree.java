@@ -52,7 +52,6 @@ public class PerkTree {
         if (perk instanceof RootPerk) {
             rootPerks.put(((RootPerk) perk).getConstellation(), (RootPerk) perk);
         }
-        perk.attachListeners(MinecraftForge.EVENT_BUS);
         ConfigEntry entry = perk.addConfig();
         if (entry != null) {
             PerkConfig.CONFIG.newSubSection(entry);

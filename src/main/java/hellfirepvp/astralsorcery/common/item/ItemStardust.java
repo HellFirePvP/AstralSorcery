@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item;
 
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import net.minecraft.item.Item;
 
 /**
@@ -22,6 +22,6 @@ public class ItemStardust extends Item {
 
     public ItemStardust() {
         super(new Properties()
-                .group(RegistryItems.ITEM_GROUP_AS));
+                .group(CommonProxy.ITEM_GROUP_AS));
     }
 }

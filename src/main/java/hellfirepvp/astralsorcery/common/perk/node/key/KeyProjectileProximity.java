@@ -44,7 +44,7 @@ public class KeyProjectileProximity extends KeyPerk {
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
+    public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
     }
 

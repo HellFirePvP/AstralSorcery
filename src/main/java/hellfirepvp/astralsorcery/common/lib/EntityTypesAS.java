@@ -28,6 +28,8 @@ public class EntityTypesAS {
 
     public static EntityType<EntityNocturnalSpark> NOCTURNAL_SPARK;
     public static EntityType<EntityIlluminationSpark> ILLUMINATION_SPARK;
+    public static EntityType<EntityFlare> FLARE;
+    public static EntityType<EntitySpectralTool> SPECTRAL_TOOL;
 
     public static EntityType<EntityItemHighlighted> ITEM_HIGHLIGHT;
     public static EntityType<EntityItemExplosionResistant> ITEM_EXPLOSION_RESISTANT;

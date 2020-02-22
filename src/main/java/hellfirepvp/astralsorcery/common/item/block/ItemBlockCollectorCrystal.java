@@ -8,13 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.item.block;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.CrystalPropertyRegistry;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemGroup;
@@ -34,7 +34,7 @@ public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implemen
 
     public ItemBlockCollectorCrystal(Block block, Properties itemProperties) {
         super(block, itemProperties
-                .group(RegistryItems.ITEM_GROUP_AS_CRYSTALS)
+                .group(CommonProxy.ITEM_GROUP_AS_CRYSTALS)
                 .maxStackSize(1));
     }
 

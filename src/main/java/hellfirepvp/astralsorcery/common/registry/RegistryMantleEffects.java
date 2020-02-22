@@ -10,8 +10,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
-import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectOctans;
-import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectVicio;
+import hellfirepvp.astralsorcery.common.constellation.mantle.effect.*;
 
 import static hellfirepvp.astralsorcery.common.lib.MantleEffectsAS.*;
 
@@ -27,7 +26,12 @@ public class RegistryMantleEffects {
     private RegistryMantleEffects() {}
 
     public static void init() {
+        BOOTES = register(new MantleEffectBootes());
+        HOROLOGIUM = register(new MantleEffectHorologium());
+        LUCERNA = register(new MantleEffectLucerna());
+        MINERALIS = register(new MantleEffectMineralis());
         OCTANS = register(new MantleEffectOctans());
+        PELOTRIO = register(new MantleEffectPelotrio());
         VICIO = register(new MantleEffectVicio());
     }
 

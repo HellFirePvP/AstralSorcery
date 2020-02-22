@@ -47,12 +47,12 @@ public class EntityObservatoryHelper extends Entity {
 
     private static DataParameter<BlockPos> FIXED = EntityDataManager.createKey(EntityObservatoryHelper.class, DataSerializers.BLOCK_POS);
 
-    public EntityObservatoryHelper(EntityType<?> entityTypeIn, World worldIn) {
-        super(entityTypeIn, worldIn);
+    public EntityObservatoryHelper(World worldIn) {
+        super(EntityTypesAS.OBSERVATORY_HELPER, worldIn);
     }
 
     public static EntityType.IFactory<EntityObservatoryHelper> factory() {
-        return (spawnEntity, world) -> new EntityObservatoryHelper(EntityTypesAS.OBSERVATORY_HELPER, world);
+        return (spawnEntity, world) -> new EntityObservatoryHelper(world);
     }
 
     @Override

@@ -31,8 +31,6 @@ public class PerkAttributeTypeHelper {
         if (type instanceof VanillaPerkAttributeType) {
             vanillaTypes.put(((VanillaPerkAttributeType) type).getAttribute(), type);
         }
-        type.attachListeners(MinecraftForge.EVENT_BUS);
-        type.init();
     }
 
     @Nullable

@@ -8,10 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.item.block;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
 
 /**
@@ -25,7 +25,7 @@ public class ItemBlockCelestialCollectorCrystal extends ItemBlockCollectorCrysta
 
     public ItemBlockCelestialCollectorCrystal(Block block, Properties itemProperties) {
         super(block, itemProperties
-                .rarity(RegistryItems.RARITY_CELESTIAL));
+                .rarity(CommonProxy.RARITY_CELESTIAL));
     }
 
     @Override

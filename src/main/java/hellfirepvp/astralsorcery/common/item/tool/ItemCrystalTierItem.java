@@ -9,10 +9,10 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
 import com.google.common.collect.Multimap;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalCalculations;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
@@ -49,7 +49,7 @@ public abstract class ItemCrystalTierItem extends Item implements CrystalAttribu
         super(withTool(toolType, prop
                 .maxDamage(CrystalToolTier.getInstance().getMaxUses())
                 .setNoRepair()
-                .group(RegistryItems.ITEM_GROUP_AS)));
+                .group(CommonProxy.ITEM_GROUP_AS)));
         this.effectiveMaterials = effectiveMaterials;
         this.toolType = toolType;
     }

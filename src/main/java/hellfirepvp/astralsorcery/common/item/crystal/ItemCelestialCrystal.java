@@ -8,14 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 import java.awt.*;
 
@@ -30,8 +28,8 @@ public class ItemCelestialCrystal extends ItemCrystalBase implements ItemGatedVi
 
     public ItemCelestialCrystal() {
         super(new Properties()
-                .group(RegistryItems.ITEM_GROUP_AS)
-                .rarity(RegistryItems.RARITY_CELESTIAL));
+                .group(CommonProxy.ITEM_GROUP_AS)
+                .rarity(CommonProxy.RARITY_CELESTIAL));
     }
 
     @Override

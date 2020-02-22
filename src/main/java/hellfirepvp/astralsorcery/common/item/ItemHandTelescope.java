@@ -9,10 +9,8 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
-import hellfirepvp.astralsorcery.common.lib.SoundsAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,7 +31,7 @@ public class ItemHandTelescope extends Item {
     public ItemHandTelescope() {
         super(new Properties()
                 .maxStackSize(1)
-                .group(RegistryItems.ITEM_GROUP_AS));
+                .group(CommonProxy.ITEM_GROUP_AS));
     }
 
     @Override

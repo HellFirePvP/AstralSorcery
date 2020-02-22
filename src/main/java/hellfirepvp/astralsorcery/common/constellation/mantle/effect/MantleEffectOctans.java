@@ -14,11 +14,14 @@ import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tags.FluidTags;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -48,18 +51,28 @@ public class MantleEffectOctans extends MantleEffect {
     }
 
     @Override
-    protected void tickServer(PlayerEntity player, boolean hasMantle) {
-        super.tickServer(player, hasMantle);
+    protected void tickServer(PlayerEntity player) {
+        super.tickServer(player);
 
-        if (hasMantle) {
-            if (player.areEyesInFluid(FluidTags.WATER)) {
-                if (player.getAir() < (player.getMaxAir() - 20)) {
-                    player.setAir(player.getMaxAir());
-                }
-
-                player.heal(CONFIG.healPerTick.get().floatValue());
+        if (player.areEyesInFluid(FluidTags.WATER)) {
+            if (player.getAir() < (player.getMaxAir() - 20)) {
+                player.setAir(player.getMaxAir());
             }
+
+            player.heal(CONFIG.healPerTick.get().floatValue());
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    protected void tickClient(PlayerEntity player) {
+        super.tickClient(player);
+
+        float chance = 0.1F;
+        if (player.areEyesInFluid(FluidTags.WATER)) {
+            chance = 0.3F;
+        }
+        this.playCapeSparkles(player, chance);
     }
 
     private void handleUnderwaterBreakSpeed(PlayerEvent.BreakSpeed event) {
@@ -87,20 +100,25 @@ public class MantleEffectOctans extends MantleEffect {
     }
 
     private void handleUnderwaterUnwavering(LivingKnockBackEvent event) {
-        if (event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().areEyesInFluid(FluidTags.WATER)) {
-            MantleEffectOctans octans = ItemMantle.getEffect((PlayerEntity) event.getEntityLiving(), ConstellationsAS.octans);
+        if (event.getEntityLiving().areEyesInFluid(FluidTags.WATER)) {
+            MantleEffectOctans octans = ItemMantle.getEffect(event.getEntityLiving(), ConstellationsAS.octans);
             if (octans != null) {
                 event.setCanceled(true);
             }
         }
     }
 
-    public static boolean shouldPreventWaterSlowdown(ItemStack elytraStack, PlayerEntity wearingEntity) {
+    public static boolean shouldPreventWaterSlowdown(ItemStack elytraStack, LivingEntity wearingEntity) {
         if (elytraStack.getItem() instanceof ItemMantle) {
             MantleEffect effect = ItemMantle.getEffect(wearingEntity, ConstellationsAS.octans);
             return effect != null;
         }
         return false;
+    }
+
+    @Override
+    public Config getConfig() {
+        return CONFIG;
     }
 
     @Override

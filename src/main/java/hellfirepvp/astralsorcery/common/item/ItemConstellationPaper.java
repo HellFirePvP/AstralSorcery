@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
@@ -20,7 +21,6 @@ import hellfirepvp.astralsorcery.common.entity.item.EntityItemExplosionResistant
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
@@ -56,7 +56,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
     public ItemConstellationPaper() {
         super(new Properties()
                 .maxStackSize(1)
-                .group(RegistryItems.ITEM_GROUP_AS_PAPERS));
+                .group(CommonProxy.ITEM_GROUP_AS_PAPERS));
     }
 
     @Override

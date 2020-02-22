@@ -47,9 +47,7 @@ public class EffectBleed extends EffectCustomTexture {
                 !((MinecraftServer) LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER)).isPVPEnabled()) {
             return;
         }
-        int preTime = entity.hurtResistantTime;
-        DamageUtil.attackEntityFrom(entity, CommonProxy.DAMAGE_SOURCE_BLEED, 0.5F * (amplifier + 1));
-        entity.hurtResistantTime = Math.max(preTime, entity.hurtResistantTime);
+        DamageUtil.shotgunAttack(entity, e -> DamageUtil.attackEntityFrom(e, CommonProxy.DAMAGE_SOURCE_BLEED, 0.5F * (amplifier + 1)));
     }
 
     @Override

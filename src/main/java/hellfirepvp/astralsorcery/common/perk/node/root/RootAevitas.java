@@ -45,7 +45,7 @@ public class RootAevitas extends RootPerk {
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
+    public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
 
         bus.addListener(this::onPlace);

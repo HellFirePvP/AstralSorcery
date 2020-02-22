@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.fluid;
 
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
@@ -34,7 +34,7 @@ public class ItemLiquidStarlightBucket extends BucketItem {
         super(fluidSupplier, new Item.Properties()
                 .containerItem(Items.BUCKET)
                 .maxStackSize(1)
-                .group(RegistryItems.ITEM_GROUP_AS));
+                .group(CommonProxy.ITEM_GROUP_AS));
     }
 
     @Override

@@ -52,9 +52,6 @@ public class RegistryRegistries {
         REGISTRY_MANTLE_EFFECT = new RegistryBuilder<MantleEffect>()
                 .setName(REGISTRY_NAME_MANTLE_EFFECTS)
                 .setType(MantleEffect.class)
-                .add((IForgeRegistry.AddCallback<MantleEffect>) (owner, stage, id, obj, oldObj) -> {
-                    MantleEffectRegistry.setup(obj);
-                })
                 .disableSaving()
                 .disableOverrides()
                 .create();

@@ -12,10 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.data.config.ClientConfig;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectUpdater;
-import hellfirepvp.astralsorcery.client.event.ConnectionEventHandler;
-import hellfirepvp.astralsorcery.client.event.EffectRenderEventHandler;
-import hellfirepvp.astralsorcery.client.event.LightbeamRenderHelper;
-import hellfirepvp.astralsorcery.client.event.SkyRenderEventHandler;
+import hellfirepvp.astralsorcery.client.event.*;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
@@ -131,6 +128,7 @@ public class ClientProxy extends CommonProxy {
         registrar.accept(EffectUpdater.getInstance());
         registrar.accept(PatreonManagerClient.INSTANCE);
         registrar.accept(ClientCameraManager.INSTANCE);
+        registrar.accept(TimeStopEffectClientHandler.INSTANCE);
 
         LightbeamRenderHelper.attachTickListener(registrar);
     }

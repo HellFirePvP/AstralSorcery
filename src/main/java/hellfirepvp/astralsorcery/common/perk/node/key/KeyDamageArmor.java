@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.perk.node.key;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
@@ -48,7 +47,7 @@ public class KeyDamageArmor extends KeyPerk {
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
+    public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.LOW, this::onDamage);

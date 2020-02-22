@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlockProperties;
 import hellfirepvp.astralsorcery.common.item.*;
@@ -28,11 +29,9 @@ import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
-import hellfirepvp.astralsorcery.common.item.armor.ArmorMaterialImbuedLeather;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -49,30 +48,6 @@ import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
  * Date: 01.06.2019 / 13:57
  */
 public class RegistryItems {
-
-    public static final ItemGroup ITEM_GROUP_AS = new ItemGroup(AstralSorcery.MODID) {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(TOME);
-        }
-    };
-    public static final ItemGroup ITEM_GROUP_AS_PAPERS = new ItemGroup(AstralSorcery.MODID + ".papers") {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(CONSTELLATION_PAPER);
-        }
-    };
-    public static final ItemGroup ITEM_GROUP_AS_CRYSTALS = new ItemGroup(AstralSorcery.MODID + ".crystals") {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(ROCK_CRYSTAL);
-        }
-    };
-    public static final Rarity RARITY_CELESTIAL = Rarity.create("AS_CELESTIAL", TextFormatting.BLUE);
-    public static final Rarity RARITY_ARTIFACT = Rarity.create("AS_ARTIFACT", TextFormatting.DARK_AQUA);
-    public static final Rarity RARITY_VESTIGE = Rarity.create("AS_VESTIGE", TextFormatting.GOLD);
-
-    public static final IArmorMaterial ARMOR_MATERIAL_IMBUED_LEATHER = new ArmorMaterialImbuedLeather();
 
     private static List<ItemDynamicColor> colorItems = Lists.newArrayList();
 
@@ -154,7 +129,7 @@ public class RegistryItems {
 
     private static Item.Properties buildItemBlockProperties(Block block) {
         Item.Properties props = new Item.Properties();
-        props.group(ITEM_GROUP_AS);
+        props.group(CommonProxy.ITEM_GROUP_AS);
         if (block instanceof CustomItemBlockProperties) {
             ItemGroup group = ((CustomItemBlockProperties) block).getItemGroup();
             if (group != null) {

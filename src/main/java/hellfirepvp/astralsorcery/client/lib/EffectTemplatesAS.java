@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.lib;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.vfx.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -25,7 +26,7 @@ public class EffectTemplatesAS {
 
     private EffectTemplatesAS() {}
 
-    public static Collection<BatchRenderContext<?>> LIST_ALL_RENDER_CONTEXT = new LinkedList<>();
+    public static Collection<BatchRenderContext<?>> LIST_ALL_RENDER_CONTEXT = new ArrayList<>();
 
     public static BatchRenderContext<FXFacingParticle> GENERIC_PARTICLE;
     public static BatchRenderContext<FXFacingParticle> GENERIC_DEPTH_PARTICLE;

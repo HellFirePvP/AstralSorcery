@@ -81,15 +81,8 @@ public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEnti
                     continue;
                 }
 
-                int hrTime = entity.hurtResistantTime;
-                entity.hurtResistantTime = 0;
-                try {
-                    if (DamageUtil.attackEntityFrom(entity, src, damage)) {
-                        didEffect = true;
-                    }
-                } finally {
-                    entity.hurtResistantTime = hrTime;
-                }
+                DamageUtil.shotgunAttack(entity, e -> DamageUtil.attackEntityFrom(entity, src, damage));
+                didEffect = true;
             }
 
         }

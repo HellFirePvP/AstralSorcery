@@ -29,6 +29,10 @@ import java.util.UUID;
  */
 public final class EffectHelper {
 
+    public static <T extends EntityVisualFX, C extends BatchRenderContext<T>> void refresh(T vfx, C context) {
+        refresh(vfx, of(context));
+    }
+
     public static <T extends EntityVisualFX> void refresh(T vfx, EffectProperties<T> properties) {
         if (vfx.isRemoved()) {
             EffectRegistrar.registerFX(vfx, properties);
