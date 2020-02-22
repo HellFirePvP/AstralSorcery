@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.*;
+import hellfirepvp.astralsorcery.common.item.useables.*;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 
 /**
@@ -44,7 +45,6 @@ public class ItemsAS {
     public static ItemStarmetalIngot STARMETAL_INGOT;
     public static ItemStardust STARDUST;
 
-    public static ItemPerkSeal PERK_SEAL;
     public static ItemPerkGemSky PERK_GEM_SKY;
     public static ItemPerkGemDay PERK_GEM_DAY;
     public static ItemPerkGemNight PERK_GEM_NIGHT;
@@ -64,8 +64,15 @@ public class ItemsAS {
 
     public static ItemMantle MANTLE;
 
+    public static ItemPerkSeal PERK_SEAL;
     public static ItemNocturnalPowder NOCTURNAL_POWDER;
     public static ItemIlluminationPowder ILLUMINATION_POWDER;
+    public static ItemShiftingStar SHIFTING_STAR;
+    public static ItemShiftingStarAevitas SHIFTING_STAR_AEVITAS;
+    public static ItemShiftingStarArmara SHIFTING_STAR_ARMARA;
+    public static ItemShiftingStarDiscidia SHIFTING_STAR_DISCIDIA;
+    public static ItemShiftingStarEvorsio SHIFTING_STAR_EVORSIO;
+    public static ItemShiftingStarVicio SHIFTING_STAR_VICIO;
 
     public static ItemColoredLensFire         COLORED_LENS_FIRE;
     public static ItemColoredLensBreak        COLORED_LENS_BREAK;
