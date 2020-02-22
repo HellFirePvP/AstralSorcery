@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +22,7 @@ public class ItemRockCrystal extends ItemCrystalBase {
 
     public ItemRockCrystal() {
         super(new Properties()
-                .group(RegistryItems.ITEM_GROUP_AS));
+                .group(CommonProxy.ITEM_GROUP_AS));
     }
 
     @Override

@@ -46,7 +46,7 @@ public class KeyCheatDeath extends KeyPerk implements CooldownPerk {
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
+    public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
         bus.addListener(this::onDeath);
     }

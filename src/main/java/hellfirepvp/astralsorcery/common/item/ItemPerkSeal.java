@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.item;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -32,7 +32,7 @@ public class ItemPerkSeal extends Item {
         super(new Properties()
                 .maxDamage(0)
                 .maxStackSize(16)
-                .group(RegistryItems.ITEM_GROUP_AS));
+                .group(CommonProxy.ITEM_GROUP_AS));
     }
 
     public static int getPlayerSealCount(PlayerEntity player) {

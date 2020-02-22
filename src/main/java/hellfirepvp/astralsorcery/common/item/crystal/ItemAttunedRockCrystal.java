@@ -8,12 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -31,7 +31,7 @@ public class ItemAttunedRockCrystal extends ItemAttunedCrystalBase implements It
 
     public ItemAttunedRockCrystal() {
         super(new Properties()
-                .group(RegistryItems.ITEM_GROUP_AS_CRYSTALS));
+                .group(CommonProxy.ITEM_GROUP_AS_CRYSTALS));
     }
 
     @Override

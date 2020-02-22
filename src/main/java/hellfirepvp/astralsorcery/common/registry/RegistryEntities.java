@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityEmpty;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlighted;
+import hellfirepvp.astralsorcery.client.render.entity.RenderEntitySpectralTool;
 import hellfirepvp.astralsorcery.common.entity.*;
 import hellfirepvp.astralsorcery.common.entity.item.EntityCrystal;
 import hellfirepvp.astralsorcery.common.entity.item.EntityItemExplosionResistant;
@@ -55,6 +56,23 @@ public class RegistryEntities {
                         .setTrackingRange(32)
                         .setCustomClientFactory((spawnEntity, world) -> new EntityIlluminationSpark(world))
                         .size(0.1F, 0.1F));
+        FLARE = register("flare",
+                EntityType.Builder.create(EntityFlare.factory(), EntityClassification.MISC)
+                        .immuneToFire()
+                        .setUpdateInterval(1)
+                        .setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(64)
+                        .setCustomClientFactory((spawnEntity, world) -> new EntityFlare(world))
+                        .size(0.4F, 0.4F));
+        SPECTRAL_TOOL = register("spectral_tool",
+                EntityType.Builder.create(EntitySpectralTool.factory(), EntityClassification.MISC)
+                        .disableSummoning()
+                        .immuneToFire()
+                        .setUpdateInterval(1)
+                        .setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(32)
+                        .setCustomClientFactory((spawnEntity, world) -> new EntitySpectralTool(world))
+                        .size(0.6F, 0.8F));
 
         ITEM_HIGHLIGHT = register("item_highlighted",
                 EntityType.Builder.create(EntityItemHighlighted.factoryHighlighted(), EntityClassification.MISC)
@@ -87,7 +105,7 @@ public class RegistryEntities {
                         .immuneToFire()
                         .setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(64)
-                        .setCustomClientFactory((spawnEntity, world) -> new EntityObservatoryHelper(OBSERVATORY_HELPER, world))
+                        .setCustomClientFactory((spawnEntity, world) -> new EntityObservatoryHelper(world))
                         .size(0, 0));
     }
 
@@ -95,6 +113,8 @@ public class RegistryEntities {
     public static void initClient() {
         RenderingRegistry.registerEntityRenderingHandler(EntityNocturnalSpark.class, new RenderEntityEmpty.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityEmpty.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityFlare.class, new RenderEntityEmpty.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntitySpectralTool.class, new RenderEntitySpectralTool.Factory());
 
         RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlighted.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityItemExplosionResistant.class, new RenderEntityItemHighlighted.Factory());

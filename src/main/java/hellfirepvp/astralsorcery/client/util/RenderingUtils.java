@@ -217,7 +217,6 @@ public class RenderingUtils {
 
     public static void renderTranslucentItemStack(ItemStack stack, double x, double y, double z, float pTicks, Color overlayColor, float alpha) {
         GlStateManager.pushMatrix();
-        IBakedModel bakedModel = Minecraft.getInstance().getItemRenderer().getModelWithOverrides(stack);
 
         // EntityItemRenderer entity bobbing
         float sinBobY = MathHelper.sin((ClientScheduler.getClientTick() + pTicks) / 10.0F) * 0.1F + 0.1F;
@@ -225,7 +224,16 @@ public class RenderingUtils {
         float ageRotate = ((ClientScheduler.getClientTick() + pTicks) / 20.0F) * (180F / (float) Math.PI);
         GlStateManager.rotated(ageRotate, 0.0F, 1.0F, 0.0F);
 
+        renderTranslucentItemStackModel(stack, overlayColor, Blending.PREALPHA, alpha);
+
+        GlStateManager.popMatrix();
+    }
+
+    public static void renderTranslucentItemStackModel(ItemStack stack, Color overlayColor, Blending blendMode, float alpha) {
+        IBakedModel bakedModel = Minecraft.getInstance().getItemRenderer().getModelWithOverrides(stack);
         bakedModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GROUND).getLeft();
+
+        GlStateManager.pushMatrix();
 
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
@@ -234,7 +242,7 @@ public class RenderingUtils {
         GlStateManager.enableRescaleNormal();
         GlStateManager.cullFace(GlStateManager.CullFace.FRONT);
         GlStateManager.enableBlend();
-        Blending.PREALPHA.applyStateManager();
+        blendMode.applyStateManager();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
 
         renderItemModelWithColor(stack, bakedModel, overlayColor, alpha);

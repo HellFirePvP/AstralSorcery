@@ -55,7 +55,7 @@ public class KeyVorux extends ConstellationPerk {
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
+    public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
         bus.addListener(this::onExpGain);
     }

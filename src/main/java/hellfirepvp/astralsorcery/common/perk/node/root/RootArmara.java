@@ -46,7 +46,7 @@ public class RootArmara extends RootPerk {
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
+    public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.HIGHEST, this::onHurt);

@@ -8,9 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.item.lens;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileLens;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
@@ -35,7 +35,7 @@ public abstract class ItemColoredLens extends Item implements ItemDynamicColor {
     private final LensColorType lensColorType;
 
     protected ItemColoredLens(LensColorType colorType) {
-        this(colorType, new Properties().group(RegistryItems.ITEM_GROUP_AS));
+        this(colorType, new Properties().group(CommonProxy.ITEM_GROUP_AS));
     }
 
     protected ItemColoredLens(LensColorType colorType, Properties properties) {

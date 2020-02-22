@@ -105,8 +105,8 @@ public class ASMHookEndpoint {
     }
 
     public static float getLivingEntityWaterSlowDown(float slowDownIn, LivingEntity entity) {
-        if (entity instanceof PlayerEntity && !entity.getItemStackFromSlot(EquipmentSlotType.CHEST).isEmpty()) {
-            if (MantleEffectOctans.shouldPreventWaterSlowdown(entity.getItemStackFromSlot(EquipmentSlotType.CHEST), (PlayerEntity) entity)) {
+        if (!entity.getItemStackFromSlot(EquipmentSlotType.CHEST).isEmpty()) {
+            if (MantleEffectOctans.shouldPreventWaterSlowdown(entity.getItemStackFromSlot(EquipmentSlotType.CHEST), entity)) {
                 return 0.92F;
             }
         }

@@ -17,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -48,6 +49,9 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     protected PerkAttributeType(ResourceLocation key, boolean isMultiplicative) {
         this.setRegistryName(key);
         this.isOnlyMultiplicative = isMultiplicative;
+
+        this.init();
+        this.attachListeners(MinecraftForge.EVENT_BUS);
     }
 
     public static PerkAttributeType makeDefault(ResourceLocation name, boolean isMultiplicative) {

@@ -10,10 +10,10 @@ package hellfirepvp.astralsorcery.common.item;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantment;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -49,7 +49,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
     public ItemEnchantmentAmulet() {
         super(new Properties()
                 .maxStackSize(1)
-                .group(RegistryItems.ITEM_GROUP_AS));
+                .group(CommonProxy.ITEM_GROUP_AS));
     }
 
     @Override

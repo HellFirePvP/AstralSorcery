@@ -10,12 +10,13 @@ package hellfirepvp.astralsorcery.common.item.armor;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.model.armor.ModelArmorMantle;
+import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
@@ -47,16 +48,16 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 17.02.2020 / 19:09
  */
-public class ItemMantle extends ArmorItem implements ItemDynamicColor {
+public class ItemMantle extends ArmorItem implements ItemDynamicColor, ConstellationBaseItem {
 
     private static Object modelArmor = null;
 
     public ItemMantle() {
-        super(RegistryItems.ARMOR_MATERIAL_IMBUED_LEATHER,
+        super(CommonProxy.ARMOR_MATERIAL_IMBUED_LEATHER,
                 EquipmentSlotType.CHEST,
                 new Properties()
                     .maxStackSize(1)
-                    .group(RegistryItems.ITEM_GROUP_AS)
+                    .group(CommonProxy.ITEM_GROUP_AS)
         );
     }
 
@@ -70,7 +71,7 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
                 }
 
                 ItemStack stack = new ItemStack(this);
-                setConstellation(stack, (IWeakConstellation) cst);
+                this.setConstellation(stack, cst);
                 items.add(stack);
             }
         }
@@ -79,8 +80,8 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        IWeakConstellation cst = getConstellation(stack);
-        if (cst != null) {
+        IConstellation cst = this.getConstellation(stack);
+        if (cst instanceof IWeakConstellation) {
             tooltip.add(new TranslationTextComponent(cst.getUnlocalizedName()).setStyle(new Style().setColor(TextFormatting.BLUE)));
         }
     }
@@ -97,24 +98,6 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
         }
         return 0xFF000000;
     }
-
-    //TODO re-evaluate
-
-    /*@Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        Multimap<String, AttributeModifier> out = super.getAttributeModifiers(slot, stack);
-        if (slot == EquipmentSlotType.CHEST) {
-            IWeakConstellation cst = this.getConstellation(stack);
-            if (cst != null && cst.equals(ConstellationsAS.octans)) {
-                PlayerEntity player = this.getServerPlayer(stack);
-                if (player != null && player.isInWater()) {
-                    out.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(),
-                            new AttributeModifier(OCTANS_UNWAVERING, OCTANS_UNWAVERING.toString(), 500, AttributeModifier.Operation.ADDITION).setSaved(false));
-                }
-            }
-        }
-        return out;
-    }*/
 
     @Override
     @Nullable
@@ -134,18 +117,21 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
     }
 
     @Nullable
-    public static <V extends MantleEffect> V getEffect(@Nullable PlayerEntity player) {
-        return getEffect(player, null);
+    public static <V extends MantleEffect> V getEffect(@Nullable LivingEntity entity) {
+        return getEffect(entity, null);
     }
 
     @Nullable
-    public static <V extends MantleEffect> V getEffect(@Nullable PlayerEntity player, @Nullable IWeakConstellation expected) {
-        if (player == null) {
+    public static <V extends MantleEffect> V getEffect(@Nullable LivingEntity entity, @Nullable IWeakConstellation expected) {
+        if (entity == null) {
             return null;
         }
-        ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
-        IWeakConstellation cst = getConstellation(stack);
-        if (cst == null) {
+        ItemStack stack = entity.getItemStackFromSlot(EquipmentSlotType.CHEST);
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemMantle)) {
+            return null;
+        }
+        IConstellation cst = ((ItemMantle) stack.getItem()).getConstellation(stack);
+        if (!(cst instanceof IWeakConstellation)) {
             return null;
         }
         if (expected != null && !expected.equals(cst)) {
@@ -156,25 +142,39 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor {
 
     @Nullable
     public static <V extends MantleEffect> V getEffect(@Nonnull ItemStack stack) {
-        IConstellation cst = getConstellation(stack);
-        if (cst == null) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemMantle)) {
             return null;
         }
-        return (V) RegistriesAS.REGISTRY_MANTLE_EFFECT.getValue(cst.getRegistryName());
+        IConstellation cst = ((ItemMantle) stack.getItem()).getConstellation(stack);
+        if (!(cst instanceof IWeakConstellation)) {
+            return null;
+        }
+        MantleEffect effect = RegistriesAS.REGISTRY_MANTLE_EFFECT.getValue(cst.getRegistryName());
+        if (effect == null || !effect.getConfig().enabled.get()) {
+            return null;
+        }
+        return (V) effect;
     }
 
     @Nullable
-    public static IWeakConstellation getConstellation(ItemStack stack) {
+    @Override
+    public IConstellation getConstellation(ItemStack stack) {
         if (stack.isEmpty()) {
             return null;
         }
-        return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
+        return IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
-    public static void setConstellation(ItemStack stack, @Nonnull IWeakConstellation cst) {
+    @Override
+    public boolean setConstellation(ItemStack stack, @Nullable IConstellation cst) {
         if (stack.isEmpty()) {
-            return;
+            return false;
         }
-        cst.writeToNBT(NBTHelper.getPersistentData(stack));
+        if (cst == null) {
+            NBTHelper.getPersistentData(stack).remove(IConstellation.getDefaultSaveKey());
+        } else {
+            cst.writeToNBT(NBTHelper.getPersistentData(stack), IConstellation.getDefaultSaveKey());
+        }
+        return true;
     }
 }

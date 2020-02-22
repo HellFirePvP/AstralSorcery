@@ -25,7 +25,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
@@ -77,7 +76,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         return new PerkTreePoint<>(this, this.getOffset());
     }
 
-    protected void attachListeners(IEventBus bus) {}
+    public void attachListeners(IEventBus bus) {}
 
     @Nullable
     protected ConfigEntry addConfig() {

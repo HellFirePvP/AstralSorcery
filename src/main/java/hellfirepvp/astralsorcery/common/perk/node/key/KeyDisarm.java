@@ -49,7 +49,7 @@ public class KeyDisarm extends KeyPerk {
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
+    public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.HIGH, this::onAttack);

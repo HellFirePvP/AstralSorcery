@@ -8,9 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.item;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.link.IItemLinkingTool;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
@@ -31,7 +31,7 @@ public class ItemLinkingTool extends Item implements IItemLinkingTool {
     public ItemLinkingTool() {
         super(new Properties()
                 .maxStackSize(1)
-                .group(RegistryItems.ITEM_GROUP_AS));
+                .group(CommonProxy.ITEM_GROUP_AS));
     }
 
     @Override

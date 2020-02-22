@@ -39,6 +39,7 @@ import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
+import hellfirepvp.astralsorcery.common.item.armor.ArmorMaterialImbuedLeather;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktOpenGui;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeLimiter;
@@ -54,13 +55,19 @@ import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTrack
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.DamageSourceUtil;
 import hellfirepvp.astralsorcery.common.util.ServerLifecycleListener;
+import hellfirepvp.astralsorcery.common.util.time.TimeStopController;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.observerlib.common.util.tick.TickManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -79,6 +86,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -88,13 +97,37 @@ import java.util.function.Consumer;
  */
 public class CommonProxy {
 
-    private static final UUID FAKEPLAYER_UUID = UUID.fromString("b0c3097f-8391-4b4b-a89a-553ef730b13a");
+    public static final UUID FAKEPLAYER_UUID = UUID.fromString("b0c3097f-8391-4b4b-a89a-553ef730b13a");
 
     public static DamageSource DAMAGE_SOURCE_BLEED   = DamageSourceUtil.newType("astralsorcery.bleed")
             .setDamageBypassesArmor();
     public static DamageSource DAMAGE_SOURCE_STELLAR = DamageSourceUtil.newType("astralsorcery.stellar")
             .setDamageBypassesArmor().setMagicDamage();
     public static DamageSource DAMAGE_SOURCE_REFLECT = DamageSourceUtil.newType("thorns");
+
+    public static final ItemGroup ITEM_GROUP_AS = new ItemGroup(AstralSorcery.MODID) {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(TOME);
+        }
+    };
+    public static final ItemGroup ITEM_GROUP_AS_PAPERS = new ItemGroup(AstralSorcery.MODID + ".papers") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(CONSTELLATION_PAPER);
+        }
+    };
+    public static final ItemGroup ITEM_GROUP_AS_CRYSTALS = new ItemGroup(AstralSorcery.MODID + ".crystals") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ROCK_CRYSTAL);
+        }
+    };
+    public static final Rarity RARITY_CELESTIAL = Rarity.create("AS_CELESTIAL", TextFormatting.BLUE);
+    public static final Rarity RARITY_ARTIFACT = Rarity.create("AS_ARTIFACT", TextFormatting.DARK_AQUA);
+    public static final Rarity RARITY_VESTIGE = Rarity.create("AS_VESTIGE", TextFormatting.GOLD);
+
+    public static final IArmorMaterial ARMOR_MATERIAL_IMBUED_LEATHER = new ArmorMaterialImbuedLeather();
 
     private InternalRegistryPrimer registryPrimer;
     private PrimerEventHandler registryEventHandler;
@@ -178,6 +211,7 @@ public class CommonProxy {
         registrar.accept(PlayerAmuletHandler.INSTANCE);
         registrar.accept(PerkTickHelper.INSTANCE);
         registrar.accept(PatreonManager.INSTANCE);
+        registrar.accept(TimeStopController.INSTANCE);
 
         EventHelperTemporaryFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);

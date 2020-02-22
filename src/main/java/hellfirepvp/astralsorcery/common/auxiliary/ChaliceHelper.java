@@ -35,11 +35,11 @@ import java.util.*;
 public class ChaliceHelper {
 
     @Nonnull
-    public static Set<BlockPos> findNearbyChalices(World world, BlockPos origin, int distance) {
+    public static List<BlockPos> findNearbyChalices(World world, BlockPos origin, int distance) {
         distance = MathHelper.clamp(distance, 0, 16);
         Vector3 thisVector = new Vector3(origin).add(0.5, 0.5, 0.5);
 
-        Set<BlockPos> foundChalices = BlockDiscoverer.searchForBlocksAround(world, origin, distance,
+        List<BlockPos> foundChalices = BlockDiscoverer.searchForBlocksAround(world, origin, distance,
                 (w, pos, state) -> !w.isBlockPowered(pos) && state.getBlock().equals(BlocksAS.CHALICE));
 
         foundChalices.removeIf(pos -> {

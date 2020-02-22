@@ -90,8 +90,8 @@ public class BlockDiscoverer {
         return out;
     }
 
-    public static Set<BlockPos> searchForBlocksAround(World world, BlockPos origin, int cubeSize, BlockPredicate match) {
-        Set<BlockPos> out = new HashSet<>();
+    public static List<BlockPos> searchForBlocksAround(World world, BlockPos origin, int cubeSize, BlockPredicate match) {
+        List<BlockPos> out = new ArrayList<>();
 
         try (BlockPos.PooledMutableBlockPos offset = BlockPos.PooledMutableBlockPos.retain()) {
             for (int xx = -cubeSize; xx <= cubeSize; xx++) {

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
+import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -15,9 +16,14 @@ import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.perk.node.key.KeyMantleFlight;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,21 +41,41 @@ public class MantleEffectVicio extends MantleEffect {
     }
 
     @Override
-    protected void tickServer(PlayerEntity player, boolean hasMantle) {
-        super.tickServer(player, hasMantle);
+    protected void tickServer(PlayerEntity player) {
+        super.tickServer(player);
 
-        if (hasMantle) {
-            PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-            if (prog.hasPerkEffect(p -> p instanceof KeyMantleFlight)) {
-                boolean prev = player.abilities.allowFlying;
-                player.abilities.allowFlying = true;
-                if (!prev) {
-                    player.sendPlayerAbilities();
-                }
-
-                EventHelperTemporaryFlight.allowFlight(player);
+        PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+        if (prog.hasPerkEffect(p -> p instanceof KeyMantleFlight)) {
+            boolean prev = player.abilities.allowFlying;
+            player.abilities.allowFlying = true;
+            if (!prev) {
+                player.sendPlayerAbilities();
             }
+
+            EventHelperTemporaryFlight.allowFlight(player);
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    protected void tickClient(PlayerEntity player) {
+        super.tickClient(player);
+
+        if (player.isElytraFlying() || (!player.isCreative() && player.abilities.isFlying)) {
+            this.playCapeSparkles(player, 0.7F);
+        } else {
+            this.playCapeSparkles(player, 0.15F);
+        }
+    }
+
+    @Nonnull
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    protected FXFacingParticle spawnFacingParticle(PlayerEntity player, Vector3 at) {
+        if (player.isElytraFlying() || (!player.isCreative() && player.abilities.isFlying)) {
+            at.subtract(player.getMotion().mul(1.5, 1.5, 1.5));
+        }
+        return super.spawnFacingParticle(player, at);
     }
 
     public static boolean isUsableElytra(ItemStack elytraStack, PlayerEntity wearingEntity) {
@@ -58,6 +84,11 @@ public class MantleEffectVicio extends MantleEffect {
             return effect != null && !ResearchHelper.getProgress(wearingEntity, LogicalSide.SERVER).hasPerkEffect(p -> p instanceof KeyMantleFlight);
         }
         return false;
+    }
+
+    @Override
+    public Config getConfig() {
+        return CONFIG;
     }
 
     @Override

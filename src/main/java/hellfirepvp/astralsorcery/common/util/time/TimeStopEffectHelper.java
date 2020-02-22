@@ -95,6 +95,7 @@ public class TimeStopEffectHelper {
         EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                 .spawn(new Vector3(x, y, z))
                 .alpha(VFXAlphaFunction.FADE_OUT)
+                .color(VFXColorFunction.WHITE)
                 .setScaleMultiplier(0.3F + rand.nextFloat() * 0.5F)
                 .setMaxAge(40 + rand.nextInt(20));
 
@@ -102,6 +103,7 @@ public class TimeStopEffectHelper {
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(new Vector3(x, y, z))
                     .alpha(VFXAlphaFunction.FADE_OUT)
+                    .color(VFXColorFunction.WHITE)
                     .setScaleMultiplier(0.1F + rand.nextFloat() * 0.2F)
                     .setMaxAge(30 + rand.nextInt(10));
         }
@@ -119,7 +121,7 @@ public class TimeStopEffectHelper {
                 EntityPredicates.withinRange(position.getX(), position.getY(), position.getZ(), range));
 
         for (LivingEntity e : entities) {
-            if (e != null && e.isAlive() && targetController.shouldFreezeEntity(e)) {
+            if (e != null && e.isAlive() && targetController.shouldFreezeEntity(e) && rand.nextInt(3) == 0) {
                 playEntityParticles(e);
             }
         }

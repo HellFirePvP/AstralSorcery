@@ -104,7 +104,7 @@ public final class EffectHandler {
 
         if (this.orderedEffects == null) {
             this.orderedEffects = DependencySorter.getSorted(EffectTemplatesAS.LIST_ALL_RENDER_CONTEXT);
-            this.orderedEffects.forEach(ctx -> this.effectMap.put(ctx, new LinkedList<>()));
+            this.orderedEffects.forEach(ctx -> this.effectMap.put(ctx, new ArrayList<>()));
         }
 
         this.acceptsNewEffects = false;

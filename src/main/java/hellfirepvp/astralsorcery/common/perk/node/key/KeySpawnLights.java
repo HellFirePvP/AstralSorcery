@@ -43,7 +43,7 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
+    public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
     }
 

@@ -24,6 +24,7 @@ public class EntityConfig extends ConfigEntry {
 
     public ForgeConfigSpec.IntValue flareAmbientSpawnChance;
     public ForgeConfigSpec.BooleanValue flareAttackBats;
+    public ForgeConfigSpec.BooleanValue flareAttackPhantoms;
 
     private EntityConfig() {
         super("entities");
@@ -40,6 +41,10 @@ public class EntityConfig extends ConfigEntry {
                 .comment("If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.")
                 .translation(translationKey("flareAttackBats"))
                 .define("flareAttackBats", true);
+        flareAttackPhantoms = cfgBuilder
+                .comment("If this is set to true, occasionally, a spawned flare will (attempt to) kill phantoms close to it.")
+                .translation(translationKey("flareAttackPhantoms"))
+                .define("flareAttackPhantoms", true);
     }
 
 }

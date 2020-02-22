@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item.dust;
 
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,9 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -32,7 +30,7 @@ import net.minecraft.world.World;
 public abstract class ItemUsableDust extends Item implements IDispenseItemBehavior {
 
     public ItemUsableDust() {
-        super(new Properties().group(RegistryItems.ITEM_GROUP_AS));
+        super(new Properties().group(CommonProxy.ITEM_GROUP_AS));
     }
 
     abstract boolean dispense(IBlockSource dispenser);

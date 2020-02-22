@@ -56,9 +56,7 @@ public class EffectLuminescenceFlare extends AltarRecipeEffect {
                                         recipeName.equals(tAltar.getActiveRecipe().getRecipeToCraft().getId())));
             });
 
-            if (spr.isRemoved()) {
-                EffectHelper.refresh(spr, EffectHelper.of(EffectTemplatesAS.TEXTURE_SPRITE));
-            }
+            EffectHelper.refresh(spr, EffectTemplatesAS.TEXTURE_SPRITE);
         }
     }
 

@@ -50,6 +50,7 @@ public class RegistrySprites {
         SPR_ATTUNEMENT_FLARE = new SpriteSheetResource(TEX_ATTUNEMENT_FLARE, 6, 8);
         SPR_RELAY_FLARE = new SpriteSheetResource(TEX_RELAY_FLARE, 6, 8);
         SPR_LIGHTBEAM = new SpriteSheetResource(TEX_LIGHTBEAM, 4, 16);
+        SPR_ENTITY_FLARE = new SpriteSheetResource(TEX_ENTITY_FLARE, 6, 8);
 
         SPR_STARLIGHT_STORE = new SpriteSheetResource(TEX_STARLIGHT_STORE, 16, 4);
     }

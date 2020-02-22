@@ -51,7 +51,7 @@ public class RenderContextGenericParticle extends BatchRenderContext<FXFacingPar
                 },
                 (ctx, pos) -> new FXFacingParticle(pos)
                         .setScaleMultiplier(0.2F)
-                        .setAlphaMultiplier(0.75F)
+                        .setAlphaMultiplier(0.85F)
                         .alpha(VFXAlphaFunction.PYRAMID)
                         .color(defaultColor));
     }

@@ -29,6 +29,9 @@ public class ColorsAS {
     public static final Color EFFECT_LIGHTNING   = new Color(0x0195FF);
     public static final Color EFFECT_CRAFT_FLARE = new Color(0x5066EC);
 
+    public static final Color MANTLE_LUCERNA_SPAWNER = new Color(0x9C0100);
+    public static final Color MANTLE_LUCERNA_INVENTORY = new Color(0x00A903);
+
     public static final Color GEM_SKY   = new Color(0x2561B5);
     public static final Color GEM_DAY   = new Color(0xE04C02);
     public static final Color GEM_NIGHT = new Color(0x808080);
@@ -39,6 +42,7 @@ public class ColorsAS {
     public static final Color ILLUMINATION_POWDER_1 = Color.WHITE;
     public static final Color ILLUMINATION_POWDER_2 = new Color(0xFEFF9E);
     public static final Color ILLUMINATION_POWDER_3 = new Color(0xFFE539);
+    public static final Color SPECTRAL_TOOL         = new Color(0x5C2EEC);
 
     public static final Color CONSTELLATION_TYPE_MAJOR = new Color(40, 67, 204);
     public static final Color CONSTELLATION_TYPE_WEAK  = new Color(67, 44, 176);

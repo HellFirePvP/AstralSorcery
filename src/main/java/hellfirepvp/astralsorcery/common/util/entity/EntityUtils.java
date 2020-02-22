@@ -19,8 +19,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
@@ -189,6 +191,12 @@ public class EntityUtils {
         }
 
         return table.generate(builder.build(LootParameterSets.ENTITY));
+    }
+
+    @Nullable
+    public static <T extends Entity> T getClosestEntity(IWorld world, Class<T> type, AxisAlignedBB box, Vector3 closestTo) {
+        List<T> entities = world.getEntitiesWithinAABB(type, box, Entity::isAlive);
+        return selectClosest(entities, closestTo::distanceSquared);
     }
 
     public static Predicate<? super Entity> selectEntities(Class<? extends Entity>... entities) {

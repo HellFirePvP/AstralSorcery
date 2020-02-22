@@ -41,7 +41,7 @@ public class KeyCleanseBadPotions extends KeyPerk {
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
+    public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.LOW, this::onHeal);

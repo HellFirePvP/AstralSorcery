@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.crafting.nojson.AttunementCraftingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.entity.EntityFlare;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
@@ -156,6 +157,9 @@ public class TileAttunementAltar extends TileEntityTick {
             this.currentRecipe.stopCrafting(this);
             this.currentRecipe = null;
             this.markForUpdate();
+
+            EntityFlare.spawnAmbientFlare(getWorld(), getPos().add(-5 + rand.nextInt(11), 1 + rand.nextInt(3), -5 + rand.nextInt(11)));
+            EntityFlare.spawnAmbientFlare(getWorld(), getPos().add(-5 + rand.nextInt(11), 1 + rand.nextInt(3), -5 + rand.nextInt(11)));
         }
     }
 
@@ -206,10 +210,7 @@ public class TileAttunementAltar extends TileEntityTick {
 
                     this.activeStarSprites.put(key, sprite);
                 } else {
-                    FXFacingSprite sprite = (FXFacingSprite) this.activeStarSprites.get(key);
-                    if (sprite.isRemoved()) {
-                        EffectHelper.refresh(sprite, EffectHelper.of(EffectTemplatesAS.FACING_SPRITE));
-                    }
+                    EffectHelper.refresh((FXFacingSprite) this.activeStarSprites.get(key), EffectTemplatesAS.FACING_SPRITE);
                 }
 
                 if (night >= 0.1F && getActiveRecipe() == null) {

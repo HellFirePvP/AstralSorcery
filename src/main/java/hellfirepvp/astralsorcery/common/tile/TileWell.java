@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefactionContext;
+import hellfirepvp.astralsorcery.common.entity.EntityFlare;
 import hellfirepvp.astralsorcery.common.fluid.BlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
@@ -110,16 +111,14 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
                         if (gain > 0 && tank.getFluidAmount() <= TANK_SIZE) {
 
                             fillAndDiscardRest(runningRecipe, gain);
-                            if (rand.nextInt(1500) == 0) {
-                                // TODO entities
-                                //EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                            if (rand.nextInt(1000) == 0) {
+                                EntityFlare.spawnAmbientFlare(getWorld(), getPos().add(-3 + rand.nextInt(7), 1, -3 + rand.nextInt(7)));
                             }
                         }
                         starlightBuffer = 0;
                         if (rand.nextInt(1 + (int) (1000 * runningRecipe.getShatterMultiplier())) == 0) {
                             breakCatalyst();
-                            // TODO entities
-                            //EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                            EntityFlare.spawnAmbientFlare(getWorld(), getPos().add(-3 + rand.nextInt(7), 1, -3 + rand.nextInt(7)));
                         }
                     } else {
                         breakCatalyst();

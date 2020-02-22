@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
  */
 public class TileChalice extends TileEntityTick {
 
-    private static final int TANK_SIZE = 32 * FluidAttributes.BUCKET_VOLUME;
+    private static final int TANK_SIZE = 64 * FluidAttributes.BUCKET_VOLUME;
 
     private SimpleSingleFluidTank tank;
     private FluidTankAccess access;

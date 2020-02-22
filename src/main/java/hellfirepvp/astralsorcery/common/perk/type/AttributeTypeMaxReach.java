@@ -26,8 +26,6 @@ import java.util.UUID;
  */
 public class AttributeTypeMaxReach extends VanillaAttributeType {
 
-    //TODO hack in entity reach
-
     private static final UUID REACH_ADD_ID = UUID.fromString("E5416922-E446-4E1B-AEE5-04A6B83E17AA");
     private static final UUID REACH_ADD_MULTIPLY_ID = UUID.fromString("E5DD6922-A49F-4E1B-AEE5-04A6B83E17AA");
     private static final UUID REACH_STACK_MULTIPLY_ID = UUID.fromString("E5DD6922-11D4-4E1B-AEE5-04A6B83E17AA");
