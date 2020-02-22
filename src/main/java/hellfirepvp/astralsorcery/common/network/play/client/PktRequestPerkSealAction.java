@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.play.client;
 
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
-import hellfirepvp.astralsorcery.common.item.ItemPerkSeal;
+import hellfirepvp.astralsorcery.common.item.useables.ItemPerkSeal;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;

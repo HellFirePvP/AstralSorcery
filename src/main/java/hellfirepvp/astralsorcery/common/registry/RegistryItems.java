@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.*;
+import hellfirepvp.astralsorcery.common.item.useables.*;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
@@ -61,7 +62,6 @@ public class RegistryItems {
         STARMETAL_INGOT = registerItem(new ItemStarmetalIngot());
         STARDUST = registerItem(new ItemStardust());
 
-        PERK_SEAL = registerItem(new ItemPerkSeal());
         PERK_GEM_SKY = registerItem(new ItemPerkGemSky());
         PERK_GEM_DAY = registerItem(new ItemPerkGemDay());
         PERK_GEM_NIGHT = registerItem(new ItemPerkGemNight());
@@ -81,8 +81,15 @@ public class RegistryItems {
 
         MANTLE = registerItem(new ItemMantle());
 
+        PERK_SEAL = registerItem(new ItemPerkSeal());
         NOCTURNAL_POWDER = registerItem(new ItemNocturnalPowder());
         ILLUMINATION_POWDER = registerItem(new ItemIlluminationPowder());
+        SHIFTING_STAR = registerItem(new ItemShiftingStar());
+        SHIFTING_STAR_AEVITAS = registerItem(new ItemShiftingStarAevitas());
+        SHIFTING_STAR_ARMARA = registerItem(new ItemShiftingStarArmara());
+        SHIFTING_STAR_DISCIDIA = registerItem(new ItemShiftingStarDiscidia());
+        SHIFTING_STAR_EVORSIO = registerItem(new ItemShiftingStarEvorsio());
+        SHIFTING_STAR_VICIO = registerItem(new ItemShiftingStarVicio());
 
         COLORED_LENS_FIRE = registerItem(new ItemColoredLensFire());
         COLORED_LENS_BREAK = registerItem(new ItemColoredLensBreak());

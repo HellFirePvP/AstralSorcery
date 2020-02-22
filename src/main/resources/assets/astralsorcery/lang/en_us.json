@@ -518,8 +518,6 @@
   "item.itemarchitectwand": "Formation Wand",
   "item.itemexchangewand": "Conversion Wand",
   "item.itemgrapplewand": "Impulsion Wand",
-  "item.itemshiftingstar": "Shifting Star",
-  "item.itemshiftingstar.enhanced": "Irradiant Star",
   "item.iteminfusedglass": "Infused Glass",
   "item.iteminfusedglass.active": "Engraved Glass",
   "item.itemskyresonator": "Fosic Resonator",
@@ -550,7 +548,6 @@
   "item.astralsorcery.resonating_gem": "Resonating Gem",
   "item.astralsorcery.parchment": "Parchment",
 
-  "item.astralsorcery.perk_seal": "Sealing Sigil",
   "item.astralsorcery.perk_gem_day": "Ilium Gem",
   "item.astralsorcery.perk_gem_night": "Fengarum Gem",
   "item.astralsorcery.perk_gem_sky": "Ourium Gem",
@@ -570,8 +567,15 @@
 
   "item.astralsorcery.mantle": "Mantle of Stars",
 
+  "item.astralsorcery.perk_seal": "Sealing Sigil",
   "item.astralsorcery.illumination_powder": "Illumination Powder",
   "item.astralsorcery.nocturnal_powder": "Nocturnal Powder",
+  "item.astralsorcery.shifting_star": "Shifting Star",
+  "item.astralsorcery.shifting_star_aevitas": "Irradiant Star",
+  "item.astralsorcery.shifting_star_armara": "Irradiant Star",
+  "item.astralsorcery.shifting_star_discidia": "Irradiant Star",
+  "item.astralsorcery.shifting_star_evorsio": "Irradiant Star",
+  "item.astralsorcery.shifting_star_vicio": "Irradiant Star",
 
   "item.astralsorcery.colored_lens_fire": "Ignition Lens",
   "item.astralsorcery.colored_lens_break": "Break Lens",
