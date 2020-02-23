@@ -65,7 +65,7 @@ public class MantleEffectPelotrio extends MantleEffect {
             }
 
             if (ItemMantle.getEffect((LivingEntity) attacker, ConstellationsAS.pelotrio) != null && rand.nextFloat() < CONFIG.chanceSpawnSword.get()) {
-                world.addEntity(new EntitySpectralTool(world, attacker.getPosition().up(), EntitySpectralTool.ToolTask.createAttackTask()));
+                world.addEntity(new EntitySpectralTool(world, attacker.getPosition().up(), (LivingEntity) attacker, EntitySpectralTool.ToolTask.createAttackTask()));
             }
         }
     }
@@ -86,7 +86,7 @@ public class MantleEffectPelotrio extends MantleEffect {
                     player.getHeldItemMainhand().getToolTypes().contains(ToolType.PICKAXE)) {
 
                 if (rand.nextFloat() < CONFIG.chanceSpawnPickaxe.get()) {
-                    world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), EntitySpectralTool.ToolTask.createPickaxeTask()));
+                    world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), player, EntitySpectralTool.ToolTask.createPickaxeTask()));
                 }
                 return;
             }
@@ -97,7 +97,7 @@ public class MantleEffectPelotrio extends MantleEffect {
                     player.getHeldItemMainhand().getToolTypes().contains(ToolType.AXE)) {
 
                 if (rand.nextFloat() < CONFIG.chanceSpawnAxe.get()) {
-                    world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), EntitySpectralTool.ToolTask.createLogTask()));
+                    world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), player, EntitySpectralTool.ToolTask.createLogTask()));
                 }
             }
         }

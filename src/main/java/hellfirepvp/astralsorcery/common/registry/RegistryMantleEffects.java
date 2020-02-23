@@ -27,6 +27,7 @@ public class RegistryMantleEffects {
 
     public static void init() {
         BOOTES = register(new MantleEffectBootes());
+        FORNAX = register(new MantleEffectFornax());
         HOROLOGIUM = register(new MantleEffectHorologium());
         LUCERNA = register(new MantleEffectLucerna());
         MINERALIS = register(new MantleEffectMineralis());

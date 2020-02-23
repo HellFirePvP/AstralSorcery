@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk.node.key;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -50,17 +51,8 @@ public class KeyMagnetDrops extends KeyPerk {
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
-                Iterator<ItemEntity> iterator = event.getDrops().iterator();
-                while (iterator.hasNext()) {
-                    ItemEntity item = iterator.next();
-                    ItemStack drop = item.getItem();
-                    if (drop.isEmpty()) {
-                        continue;
-                    }
-                    if (player.addItemStackToInventory(drop)) {
-                        iterator.remove();
-                    }
-                }
+                event.getDrops().forEach(stack -> ItemUtils.dropItemToPlayer(player, stack.getItem()));
+                event.getDrops().clear();
             }
         }
     }

@@ -125,7 +125,7 @@ public abstract class MantleEffect extends ForgeRegistryEntry<MantleEffect> impl
     }
 
     @Override
-    public void tick(TickEvent.Type type, Object... context) {
+    public final void tick(TickEvent.Type type, Object... context) {
         if (!this.getConfig().enabled.get()) {
             return;
         }

@@ -39,11 +39,6 @@ public class BlockDropCaptureAssist {
             if (!capturing.isEmpty()) {
                 event.setCanceled(true);
                 if (!itemStack.isEmpty()) {
-                    if (itemStack.getItem() instanceof BlockItem &&
-                            ((BlockItem) itemStack.getItem()).getBlock().equals(Blocks.STONE)) {
-                        event.getEntity().remove();
-                        return;
-                    }
                     //Apparently concurrency sometimes gets us here...
                     if (!capturing.isEmpty()) {
                         capturing.peek().add(itemStack);

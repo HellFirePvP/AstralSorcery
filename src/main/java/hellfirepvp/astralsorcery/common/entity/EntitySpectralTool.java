@@ -54,6 +54,7 @@ public class EntitySpectralTool extends FlyingEntity {
 
     private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntitySpectralTool.class, DataSerializers.ITEMSTACK);
 
+    private LivingEntity owningEntity = null;
     private SpectralToolGoal task = null;
     private BlockPos startPosition = null;
     private int remainingTime = 0;
@@ -65,11 +66,12 @@ public class EntitySpectralTool extends FlyingEntity {
         this.moveController = new FlyingMovementController(this);
     }
 
-    public EntitySpectralTool(World worldIn, BlockPos spawnPos, ToolTask task) {
+    public EntitySpectralTool(World worldIn, BlockPos spawnPos, LivingEntity owner, ToolTask task) {
         this(worldIn);
         this.setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.5, spawnPos.getZ());
         this.setItem(task.displayStack);
         this.startPosition = spawnPos;
+        this.owningEntity = owner;
         this.task = task.createGoal(this);
         this.goalSelector.addGoal(1, this.task);
         this.remainingTime = task.maxAge + rand.nextInt(task.maxAge);
@@ -166,9 +168,12 @@ public class EntitySpectralTool extends FlyingEntity {
         }
     }
 
-    @Nonnull
     public BlockPos getStartPosition() {
         return startPosition;
+    }
+
+    public LivingEntity getOwningEntity() {
+        return owningEntity;
     }
 
     private void setItem(@Nonnull ItemStack tool) {
