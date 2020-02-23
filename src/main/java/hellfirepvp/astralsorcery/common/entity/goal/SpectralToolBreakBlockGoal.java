@@ -10,11 +10,15 @@ package hellfirepvp.astralsorcery.common.entity.goal;
 
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectPelotrio;
 import hellfirepvp.astralsorcery.common.entity.EntitySpectralTool;
+import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.controller.MovementController;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
@@ -129,8 +133,11 @@ public class SpectralToolBreakBlockGoal extends SpectralToolGoal {
 
             if (Vector3.atEntityCorner(this.getEntity()).distance(this.selectedBreakPos) <= 4) {
                 this.actionCooldown++;
-                if (this.actionCooldown >= MantleEffectPelotrio.CONFIG.ticksPerPickaxeBlockBreak.get() &&
-                        world instanceof ServerWorld) {
+                if (this.actionCooldown >= MantleEffectPelotrio.CONFIG.ticksPerPickaxeBlockBreak.get() && world instanceof ServerWorld) {
+                    LivingEntity owner = this.getEntity().getOwningEntity();
+                    if (owner instanceof PlayerEntity) {
+                        BlockDropCaptureAssist.startCapturing();
+                    }
                     if (BlockUtils.breakBlockWithoutPlayer(
                             (ServerWorld) world,
                             this.selectedBreakPos,
@@ -140,6 +147,11 @@ public class SpectralToolBreakBlockGoal extends SpectralToolGoal {
                             true,
                             true)) {
                         resetTimer = true;
+                    }
+                    if (owner instanceof PlayerEntity) {
+                        for (ItemStack dropped : BlockDropCaptureAssist.getCapturedStacksAndStop()) {
+                            ItemUtils.dropItemToPlayer((PlayerEntity) owner, dropped);
+                        }
                     }
                 }
             }

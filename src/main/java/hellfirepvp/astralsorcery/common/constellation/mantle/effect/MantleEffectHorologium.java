@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopController;
@@ -55,7 +56,8 @@ public class MantleEffectHorologium extends MantleEffect {
     }
 
     private void onHurt(LivingHurtEvent event) {
-        if (event.getEntityLiving() instanceof PlayerEntity &&
+        if (ItemMantle.getEffect(event.getEntityLiving(), ConstellationsAS.horologium) != null &&
+                event.getEntityLiving() instanceof PlayerEntity &&
                 !event.getEntityLiving().getEntityWorld().isRemote() &&
                 !event.getSource().isFireDamage()) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();

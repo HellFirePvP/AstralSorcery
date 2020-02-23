@@ -106,6 +106,30 @@ public class ItemUtils {
         }
     }
 
+    public static boolean dropItemToPlayer(PlayerEntity player, ItemStack stack) {
+        World world = player.getEntityWorld();
+        if (world.isRemote() || stack.isEmpty()) {
+            return false;
+        }
+        ItemEntity item = new ItemEntity(world, player.posX, player.posY, player.posZ, stack);
+        if (item.getItem().isEmpty()) {
+            return false;
+        }
+        item.setNoPickupDelay();
+        try {
+            item.onCollideWithPlayer(player);
+        } catch (Exception ignored) {
+            //Guess some mod could run into an issue here...
+        }
+        if (item.isAlive()) {
+            item.setDefaultPickupDelay();
+            applyRandomDropOffset(item);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private static void applyRandomDropOffset(ItemEntity item) {
         item.setMotion(rand.nextFloat() * 0.3F - 0.15D,
                 rand.nextFloat() * 0.3F - 0.15D,

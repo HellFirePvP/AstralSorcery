@@ -22,6 +22,7 @@ public class MantleEffectRegistry {
 
     public static void addConfigEntries(ServerConfig config) {
         config.addConfigEntry(MantleEffectBootes.CONFIG);
+        config.addConfigEntry(MantleEffectFornax.CONFIG);
         config.addConfigEntry(MantleEffectHorologium.CONFIG);
         config.addConfigEntry(MantleEffectLucerna.CONFIG);
         config.addConfigEntry(MantleEffectMineralis.CONFIG);
