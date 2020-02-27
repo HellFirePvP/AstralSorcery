@@ -33,8 +33,10 @@ import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
+import hellfirepvp.astralsorcery.common.event.handler.EventHandlerBlockStorage;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerInteract;
+import hellfirepvp.astralsorcery.common.event.handler.EventHandlerMisc;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
@@ -189,6 +191,8 @@ public class CommonProxy {
 
         EventHandlerInteract.attachListeners(eventBus);
         EventHandlerCache.attachListeners(eventBus);
+        EventHandlerBlockStorage.attachListeners(eventBus);
+        EventHandlerMisc.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
         EventHelperInvulnerability.attachListeners(eventBus);
         PerkAttributeLimiter.attachListeners(eventBus);

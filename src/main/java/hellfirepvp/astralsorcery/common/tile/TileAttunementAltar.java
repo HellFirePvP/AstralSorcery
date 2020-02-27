@@ -349,7 +349,7 @@ public class TileAttunementAltar extends TileEntityTick {
         if (player == null || player.getDistanceSq(new Vec3d(getPos())) >= 256) {
             return;
         }
-        Tuple<Hand, ItemStack> heldTpl = MiscUtils.getMainOrOffHand(player, ItemsAS.CONSTELLATION_PAPER);
+        Tuple<Hand, ItemStack> heldTpl = MiscUtils.getMainOrOffHand(player, stack -> stack.getItem() instanceof ItemConstellationPaper);
         if (heldTpl != null) {
             ItemStack cstPaper = heldTpl.getB();
             IConstellation cst = ((ItemConstellationPaper) cstPaper.getItem()).getConstellation(cstPaper);

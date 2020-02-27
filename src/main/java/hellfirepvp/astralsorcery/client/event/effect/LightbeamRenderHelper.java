@@ -1,12 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- * For further details, see the License file there.
+ *  All rights reserved.
+ *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ *  For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.event;
+package hellfirepvp.astralsorcery.client.event.effect;
 
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
@@ -27,7 +27,6 @@ import net.minecraftforge.event.TickEvent;
 
 import java.awt.*;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;

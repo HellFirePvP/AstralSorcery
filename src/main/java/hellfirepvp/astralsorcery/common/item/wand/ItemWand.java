@@ -14,10 +14,6 @@ import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.ore.BlockRockCrystalOre;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationItem;
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.data.world.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.item.base.OverrideInteractItem;
@@ -30,7 +26,6 @@ import hellfirepvp.astralsorcery.common.tile.base.TileRequiresMultiblock;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
 import hellfirepvp.observerlib.client.preview.StructurePreview;
 import net.minecraft.block.Block;
@@ -51,8 +46,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
-import javax.annotation.Nullable;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -60,9 +53,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 17.08.2019 / 23:03
  */
-public class ItemWand extends Item implements ConstellationItem, OverrideInteractItem {
-
-    //TODO wand augments
+public class ItemWand extends Item implements OverrideInteractItem {
 
     public ItemWand() {
         super(new Properties()
@@ -77,7 +68,6 @@ public class ItemWand extends Item implements ConstellationItem, OverrideInterac
         if (!world.isRemote()) {
             if (active) {
                 if (entity instanceof ServerPlayerEntity) {
-
                     RockCrystalBuffer buf = DataAS.DOMAIN_AS.getData(world, DataAS.KEY_ROCK_CRYSTAL_BUFFER);
 
                     ChunkPos pos = new ChunkPos(entity.getPosition());
@@ -216,37 +206,5 @@ public class ItemWand extends Item implements ConstellationItem, OverrideInterac
                     .setScaleMultiplier(0.3F + 0.3F * random.nextFloat())
                     .setMaxAge(25 + random.nextInt(30));
         }
-    }
-
-    @Override
-    @Nullable
-    public IWeakConstellation getAttunedConstellation(ItemStack stack) {
-        return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
-    }
-
-    @Override
-    public boolean setAttunedConstellation(ItemStack stack, @Nullable IWeakConstellation cst) {
-        if (cst != null) {
-            cst.writeToNBT(NBTHelper.getPersistentData(stack));
-        } else {
-            NBTHelper.getPersistentData(stack).remove(IConstellation.getDefaultSaveKey());
-        }
-        return true;
-    }
-
-    @Override
-    @Nullable
-    public IMinorConstellation getTraitConstellation(ItemStack stack) {
-        return (IMinorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack), "constellationTrait");
-    }
-
-    @Override
-    public boolean setTraitConstellation(ItemStack stack, @Nullable IMinorConstellation cst) {
-        if (cst != null) {
-            cst.writeToNBT(NBTHelper.getPersistentData(stack), "constellationTrait");
-        } else {
-            NBTHelper.getPersistentData(stack).remove("constellationTrait");
-        }
-        return true;
     }
 }
