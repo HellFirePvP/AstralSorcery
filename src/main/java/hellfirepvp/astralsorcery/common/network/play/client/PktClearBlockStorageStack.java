@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.play.client;
 
+import hellfirepvp.astralsorcery.common.item.base.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -40,8 +41,7 @@ public class PktClearBlockStorageStack extends ASPacket<PktClearBlockStorageStac
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
                 if (side == LogicalSide.SERVER) {
-                    //TODO storage items
-                    //ItemBlockStorage.tryClearContainerFor(context.getSender());
+                    ItemBlockStorage.clearContainerFor(context.getSender());
                 }
             });
         };
