@@ -26,11 +26,8 @@ public class WandsConfig extends ConfigEntry {
     public ForgeConfigSpec.DoubleValue architectWandCost;
     public ForgeConfigSpec.DoubleValue exchangeWandCost;
     public ForgeConfigSpec.DoubleValue grappleWandCost;
-    public ForgeConfigSpec.IntValue exchangeWandMaxHardness;
 
-    public ForgeConfigSpec.DoubleValue evorsioWandEffectChance;
-    public ForgeConfigSpec.IntValue discidiaWandStackCap;
-    public ForgeConfigSpec.DoubleValue discidiaWandStackMultiplier;
+    public ForgeConfigSpec.IntValue exchangeWandMaxHardness;
 
     private WandsConfig() {
         super("wands");
@@ -62,21 +59,6 @@ public class WandsConfig extends ConfigEntry {
                 .comment("Sets the max. hardness the exchange wand can swap !from!. If the block you're trying to \"mine\" with the conversion wand is higher than this number, it won't work. (-1 to disable this check)")
                 .translation(translationKey("exchangeWandMaxHardness"))
                 .defineInRange("exchangeWandMaxHardness", -1, -1, 50_000);
-
-        evorsioWandEffectChance = cfgBuilder
-                .comment("Defines the chance per mined block that the effect for holding an evorsio attuned resonating wand will fire.")
-                .translation(translationKey("evorsioWandEffectChance"))
-                .defineInRange("evorsioWandEffectChance", 0.8, 0, 1);
-
-        discidiaWandStackCap = cfgBuilder
-                .comment("Defines the amount of stacks you have to get against the same mob until you reach 100% of the damage multiplier.")
-                .translation(translationKey("discidiaWandStackCap"))
-                .defineInRange("discidiaWandStackCap", 10, 1, 200);
-
-        discidiaWandStackMultiplier = cfgBuilder
-                .comment("Defines the additional damage multiplier gradually increased by gaining attack-stacks against a mob. (Applied multiplier = damage * 1 + (thisConfigOption * (currentStacks / maxStacks)) )")
-                .translation(translationKey("discidiaWandStackMultiplier"))
-                .defineInRange("discidiaWandStackMultiplier", 1.0, 0, 200);
     }
 
 }

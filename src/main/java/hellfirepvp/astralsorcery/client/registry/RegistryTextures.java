@@ -64,6 +64,11 @@ public class RegistryTextures {
         TEX_GUI_CLUSTER_DISCOVERY           = loadTexture(GUI, "book", "cluster_discovery");
         TEX_GUI_CLUSTER_RADIANCE            = loadTexture(GUI, "book", "cluster_radiance");
 
+        TEX_GUI_LINE_CONNECTION             = loadTexture(GUI, "line_connection");
+        TEX_GUI_TEXT_FIELD                  = loadTexture(GUI, "text_field");
+        TEX_GUI_MENU_SLOT_GEM_CONTEXT       = loadTexture(GUI, "menu_slot_gem_context");
+        TEX_GUI_MENU_SLOT                   = loadTexture(GUI, "menu_slot");
+
         TEX_GUI_PERK_INACTIVE               = loadTexture(GUI, "perk", "inactive");
         TEX_GUI_PERK_ACTIVE                 = loadTexture(GUI, "perk", "active");
         TEX_GUI_PERK_ACTIVATEABLE           = loadTexture(GUI, "perk", "activateable");
@@ -75,17 +80,18 @@ public class RegistryTextures {
         TEX_GUI_PERK_SEAL_BREAK             = loadTexture(GUI, "perk", "seal_break");
         TEX_GUI_PERK_UNLOCK                 = loadTexture(GUI, "perk", "unlock");
 
-        TEX_GUI_LINE_CONNECTION             = loadTexture(GUI, "line_connection");
-        TEX_GUI_TEXT_FIELD                  = loadTexture(GUI, "text_field");
-        TEX_GUI_MENU_SLOT_GEM_CONTEXT       = loadTexture(GUI, "menu_slot_gem_context");
-        TEX_GUI_MENU_SLOT                   = loadTexture(GUI, "menu_slot");
+        TEX_OVERLAY_EXP_BAR                 = loadTexture(GUI, "overlay", "exp_bar");
+        TEX_OVERLAY_EXP_FRAME               = loadTexture(GUI, "overlay", "exp_frame");
+        TEX_OVERLAY_ITEM_FRAME              = loadTexture(GUI, "overlay", "item_frame");
+        TEX_OVERLAY_ITEM_FRAME_EXTENSION    = loadTexture(GUI, "overlay", "item_frame_extension");
 
         TEX_SOLAR_ECLIPSE   = loadTexture(ENVIRONMENT, "solar_eclipse");
         TEX_STAR_CONNECTION = loadTexture(ENVIRONMENT, "line");
         TEX_STAR_1          = loadTexture(ENVIRONMENT, "star_1");
         TEX_STAR_2          = loadTexture(ENVIRONMENT, "star_2");
 
-        TEX_STATIC_FLARE            = loadTexture(EFFECT, "flare_light");
+        TEX_PARTICLE_SMALL          = loadTexture(EFFECT, "particle_small");
+        TEX_PARTICLE_LARGE          = loadTexture(EFFECT, "particle_large");
         TEX_CRYSTAL_EFFECT_1        = loadTexture(EFFECT, "crystal_burst_effect_1");
         TEX_CRYSTAL_EFFECT_2        = loadTexture(EFFECT, "crystal_burst_effect_2");
         TEX_CRYSTAL_EFFECT_3        = loadTexture(EFFECT, "crystal_burst_effect_3");
@@ -99,6 +105,7 @@ public class RegistryTextures {
         TEX_RELAY_FLARE             = loadTexture(EFFECT, "relay_flare");
         TEX_ATTUNEMENT_FLARE        = loadTexture(EFFECT, "attunement_flare");
         TEX_ENTITY_FLARE            = loadTexture(EFFECT, "entity_flare");
+        TEX_GRAPPLING_HOOK          = loadTexture(EFFECT, "grappling_hook");
 
         TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");

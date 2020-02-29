@@ -28,6 +28,9 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.*;
+import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
@@ -77,6 +80,9 @@ public class RegistryItems {
         WAND = registerItem(new ItemWand());
         LINKING_TOOL = registerItem(new ItemLinkingTool());
         ILLUMINATION_WAND = registerItem(new ItemIlluminationWand());
+        ARCHITECT_WAND = registerItem(new ItemArchitectWand());
+        EXCHANGE_WAND = registerItem(new ItemExchangeWand());
+        GRAPPLE_WAND = registerItem(new ItemGrappleWand());
         HAND_TELESCOPE = registerItem(new ItemHandTelescope());
 
         MANTLE = registerItem(new ItemMantle());

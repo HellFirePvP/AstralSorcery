@@ -109,13 +109,13 @@ public class RenderingUtils {
     }
 
     //Straight up ripped off of MC code.
-    public static void playBlockBreakParticles(BlockPos pos, BlockState actualState, BlockState particleState) {
+    public static void playBlockBreakParticles(BlockPos pos, @Nullable BlockState actualState, BlockState particleState) {
         World world = Minecraft.getInstance().world;
         ParticleManager mgr = Minecraft.getInstance().particles;
 
         VoxelShape voxelshape;
         try {
-            voxelshape = actualState.getShape(world, pos);
+            voxelshape = actualState == null ? VoxelShapes.fullCube() : actualState.getShape(world, pos);
         } catch (Exception exc) {
             voxelshape = VoxelShapes.fullCube();
         }

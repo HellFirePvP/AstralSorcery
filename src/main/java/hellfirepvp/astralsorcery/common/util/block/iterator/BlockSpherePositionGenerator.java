@@ -36,7 +36,7 @@ public class BlockSpherePositionGenerator extends BlockPositionGenerator {
         while (currentPositions.isEmpty()) {
             generatePositions(radius);
         }
-        return currentPositions.get(0).add(offset);
+        return currentPositions.remove(0).add(offset);
     }
 
     private void generatePositions(double maxRadius) {

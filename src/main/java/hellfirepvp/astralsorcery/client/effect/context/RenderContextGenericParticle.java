@@ -19,8 +19,6 @@ import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -34,7 +32,7 @@ public class RenderContextGenericParticle extends BatchRenderContext<FXFacingPar
             VFXColorFunction.constant(ColorsAS.DEFAULT_GENERIC_PARTICLE);
 
     public RenderContextGenericParticle() {
-        super(TexturesAS.TEX_STATIC_FLARE,
+        super(TexturesAS.TEX_PARTICLE_SMALL,
                 (ctx, pTicks) -> {
                     GlStateManager.disableAlphaTest();
                     GlStateManager.enableBlend();

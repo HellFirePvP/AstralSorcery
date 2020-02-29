@@ -15,9 +15,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
@@ -66,6 +69,18 @@ public class BlockUtils {
             it = it.up();
         }
         return it;
+    }
+
+    public static boolean isReplaceable(World world, BlockPos pos){
+        return isReplaceable(world, pos, world.getBlockState(pos));
+    }
+
+    public static boolean isReplaceable(World world, BlockPos pos, BlockState state) {
+        if (world.isAirBlock(pos)) {
+            return true;
+        }
+        BlockItemUseContext ctx = TestBlockUseContext.getHandContext(world, null, Hand.MAIN_HAND, pos, Direction.UP);
+        return state.isReplaceable(ctx);
     }
 
     @Nullable

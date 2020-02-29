@@ -59,6 +59,10 @@ public class MapStream<K, V> implements Stream<Tuple<K, V>> {
         return new MapStream<>(stream.map(v -> new Tuple<>(keyProvider.apply(v), v)));
     }
 
+    public static <K, V> void forEach(Map<K, V> map, Consumer<? super Tuple<K, V>> forEachFn) {
+        of(map).forEach(forEachFn);
+    }
+
     public Map<K, V> toMap() {
         return decorated.collect(Collectors.toMap(Tuple::getA, Tuple::getB));
     }

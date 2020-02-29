@@ -13,12 +13,15 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
+import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
@@ -124,10 +127,12 @@ public class KeyChainMining extends KeyPerk {
                         if (BlockUtils.breakBlockWithPlayer(at, player)) {
                             broken++;
 
-                            //TODO particles
-                            //PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.ARCHITECT_PLACE, at)
-                            //        .addData(buf -> buf.writeInt(Block.getStateId(prevState)));
-                            //PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 16));
+                            PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
+                                    .addData(buf -> {
+                                        ByteBufUtils.writeVector(buf, new Vector3(at));
+                                        ByteBufUtils.writeBlockState(buf, prevState);
+                                    });
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 32));
                         }
                     } finally {
                         drops = new ArrayList<>(BlockDropCaptureAssist.getCapturedStacksAndStop());

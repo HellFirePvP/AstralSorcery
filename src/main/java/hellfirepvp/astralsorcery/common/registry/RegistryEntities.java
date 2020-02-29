@@ -10,12 +10,14 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityEmpty;
+import hellfirepvp.astralsorcery.client.render.entity.RenderEntityGrapplingHook;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlighted;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntitySpectralTool;
 import hellfirepvp.astralsorcery.common.entity.*;
 import hellfirepvp.astralsorcery.common.entity.item.EntityCrystal;
 import hellfirepvp.astralsorcery.common.entity.item.EntityItemExplosionResistant;
 import hellfirepvp.astralsorcery.common.entity.item.EntityItemHighlighted;
+import hellfirepvp.astralsorcery.common.entity.technical.EntityGrapplingHook;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityObservatoryHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -107,6 +109,15 @@ public class RegistryEntities {
                         .setTrackingRange(64)
                         .setCustomClientFactory((spawnEntity, world) -> new EntityObservatoryHelper(world))
                         .size(0, 0));
+        GRAPPLING_HOOK = register("grappling_hook",
+                EntityType.Builder.create(EntityGrapplingHook.factory(), EntityClassification.MISC)
+                        .disableSummoning()
+                        .setUpdateInterval(1)
+                        .immuneToFire()
+                        .setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(64)
+                        .setCustomClientFactory((spawnEntity, world) -> new EntityGrapplingHook(world))
+                        .size(0.1F, 0.1F));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -121,6 +132,7 @@ public class RegistryEntities {
         RenderingRegistry.registerEntityRenderingHandler(EntityCrystal.class, new RenderEntityItemHighlighted.Factory());
 
         RenderingRegistry.registerEntityRenderingHandler(EntityObservatoryHelper.class, new RenderEntityEmpty.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityGrapplingHook.class, new RenderEntityGrapplingHook.Factory());
     }
 
     private static <E extends Entity> EntityType<E> register(String name, EntityType.Builder<E> typeBuilder) {

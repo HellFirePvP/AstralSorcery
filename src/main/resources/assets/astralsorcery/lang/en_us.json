@@ -87,6 +87,18 @@
   "astralsorcery.misc.fragment.added.cst": "The constellation %s vanishes out of sight.",
   "astralsorcery.misc.fragment.added": "Gained Knowledge about: %s",
 
+  "astralsorcery.misc.exchange.size": "Size: %s",
+  "astralsorcery.misc.exchange.size.3x3": "3 x 3",
+  "astralsorcery.misc.exchange.size.5x5": "5 x 5",
+  "astralsorcery.misc.exchange.size.7x7": "7 x 7",
+  "astralsorcery.misc.architect.mode": "Mode: %s",
+  "astralsorcery.misc.architect.mode.line": "Line from player",
+  "astralsorcery.misc.architect.mode.towards": "Line towards player",
+  "astralsorcery.misc.architect.mode.plane": "Horizontal Plane",
+  "astralsorcery.misc.architect.mode.wall": "Vertical Plane",
+  "astralsorcery.misc.architect.mode.sphere": "Sphere",
+  "astralsorcery.misc.architect.mode.sphere_hollow": "Hollow Sphere",
+
   "effect.astralsorcery.bleed": "Bleeding",
   "effect.astralsorcery.cheat_death": "Phoenix' Blessing",
   "effect.astralsorcery.drop_modifier": "Inner Wealth",
@@ -515,9 +527,6 @@
   "item.itemchargedcrystalaxe": "Infused Crystal Axe",
   "item.itemchargedcrystalsword": "Infused Crystal Sword",
   "item.itemcoloredlens": "Colored Lens",
-  "item.itemarchitectwand": "Formation Wand",
-  "item.itemexchangewand": "Conversion Wand",
-  "item.itemgrapplewand": "Impulsion Wand",
   "item.iteminfusedglass": "Infused Glass",
   "item.iteminfusedglass.active": "Engraved Glass",
   "item.itemskyresonator": "Fosic Resonator",
@@ -564,6 +573,9 @@
   "item.astralsorcery.linking_tool": "Linking Tool",
   "item.astralsorcery.illumination_wand": "Illumination Wand",
   "item.astralsorcery.hand_telescope": "Looking Glass",
+  "item.astralsorcery.architect_wand": "Formation Wand",
+  "item.astralsorcery.exchange_wand": "Conversion Wand",
+  "item.astralsorcery.grapple_wand": "Impulsion Wand",
 
   "item.astralsorcery.mantle": "Mantle of Stars",
 

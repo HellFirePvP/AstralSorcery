@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item.dust;
 
 import hellfirepvp.astralsorcery.common.entity.EntityIlluminationSpark;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IBlockSource;
@@ -56,8 +57,7 @@ public class ItemIlluminationPowder extends ItemUsableDust {
             return false;
         }
 
-        BlockState state = world.getBlockState(pos);
-        if (!state.isReplaceable(new BlockItemUseContext(ctx))) {
+        if (!BlockUtils.isReplaceable(world, pos)) {
             pos = pos.offset(ctx.getFace());
         }
 

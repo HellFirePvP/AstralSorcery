@@ -12,6 +12,7 @@ import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.MapStream;
@@ -358,11 +359,16 @@ public class RenderingDrawUtils {
         GlStateManager.popMatrix();
     }
 
-    public static void renderFacingFullQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, int r, int g, int b, float alpha) {
+    public static void renderFacingFullQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, float r, float g, float b, float alpha) {
         renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, 0, 0, 1, 1, r, g, b, alpha);
     }
 
-    public static void renderFacingQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, double u, double v, double uLength, double vLength, int r, int g, int b, float alpha) {
+    public static void renderFacingSpriteVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, SpriteSheetResource sprite, long spriteTick, float r, float g, float b, float alpha) {
+        Tuple<Double, Double> uv = sprite.getUVOffset(spriteTick);
+        renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, uv.getA(), uv.getB(), sprite.getULength(), sprite.getVLength(), r, g, b, alpha);
+    }
+
+    public static void renderFacingQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, double u, double v, double uLength, double vLength, float r, float g, float b, float alpha) {
         Vector3 pos = new Vector3(px, py, pz);
 
         RenderInfo ri = RenderInfo.getInstance();

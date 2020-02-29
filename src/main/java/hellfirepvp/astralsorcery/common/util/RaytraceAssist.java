@@ -18,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,22 +77,15 @@ public class RaytraceAssist {
     }
 
     public boolean isClear(World world) {
-        Vector3 aim = start.vectorFromHereTo(target);
-        Vector3 stepAim = aim.clone().normalize().multiply(STEP_WIDTH);
-        double distance = aim.length();
-        Vector3 prevVec = start.clone();
-        for (double distancePart = STEP_WIDTH; distancePart <= distance; distancePart += STEP_WIDTH) {
-            Vector3 stepVec = prevVec.clone().add(stepAim);
-            BlockPos at = stepVec.toBlockPos();
-
+        return this.forEachBlockPos(at -> {
             if (collectEntities) {
-                List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, collectBox.offset(stepVec.getX(), stepVec.getY(), stepVec.getZ()));
+                List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, collectBox.offset(at));
                 for (Entity b : entities) {
                     collected.add(b.getEntityId());
                 }
             }
 
-            if (!MiscUtils.executeWithChunk(world, at, () -> {
+            return MiscUtils.executeWithChunk(world, at, () -> {
                 if (!isStartEnd(at) && !world.isAirBlock(at)) {
                     if (this.hitFluids && !world.getFluidState(at).isEmpty()) {
                         posHit = at;
@@ -102,10 +97,26 @@ public class RaytraceAssist {
                     }
                 }
                 return true;
-            }, false)) {
-                return false;
-            }
+            }, false);
+        });
+    }
 
+    public boolean forEachBlockPos(Predicate<BlockPos> raystepFn) {
+        Vector3 aim = start.vectorFromHereTo(target);
+        Vector3 stepAim = aim.clone().normalize().multiply(STEP_WIDTH);
+        double distance = aim.length();
+        Vector3 prevVec = start.clone();
+        BlockPos lastPos = null;
+        for (double distancePart = STEP_WIDTH; distancePart <= distance; distancePart += STEP_WIDTH) {
+            Vector3 stepVec = prevVec.clone().add(stepAim);
+            BlockPos at = stepVec.toBlockPos();
+            if (lastPos == null || !lastPos.equals(at)) {
+                lastPos = at;
+
+                if (!raystepFn.test(at)) {
+                    return false;
+                }
+            }
             prevVec = stepVec;
         }
         return true;

@@ -24,10 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -65,6 +62,31 @@ public interface ItemBlockStorage {
     }
 
     @Nonnull
+    static List<Tuple<ItemStack, Integer>> getInventoryMatchingItemStacks(PlayerEntity player, ItemStack referenceContainer) {
+        Map<BlockState, Tuple<ItemStack, Integer>> storedStates = getInventoryMatching(player, referenceContainer);
+        List<Tuple<ItemStack, Integer>> foundStacks = new ArrayList<>(storedStates.values());
+        foundStacks.sort(Comparator.comparing(tpl -> tpl.getA().getItem().getRegistryName()));
+        return foundStacks;
+    }
+
+    @Nonnull
+    static Map<BlockState, Tuple<ItemStack, Integer>> getInventoryMatching(PlayerEntity player, ItemStack referenceContainer) {
+        Map<BlockState, ItemStack> mappedStacks = ItemBlockStorage.getMappedStoredStates(referenceContainer);
+        Map<BlockState, Tuple<ItemStack, Integer>> foundContents = new HashMap<>();
+        for (BlockState state : mappedStacks.keySet()) {
+            ItemStack stored = mappedStacks.get(state);
+
+            int countDisplay = 0;
+            Collection<ItemStack> stacks = ItemUtils.findItemsInPlayerInventory(player, stored, true);
+            for (ItemStack found : stacks) {
+                countDisplay += found.getCount();
+            }
+            foundContents.put(state, new Tuple<>(stored.copy(), countDisplay));
+        }
+        return foundContents;
+    }
+
+    @Nonnull
     static Map<BlockState, ItemStack> getMappedStoredStates(ItemStack referenceContainer) {
         List<BlockState> blockStates = getStoredStates(referenceContainer);
         Map<BlockState, ItemStack> map = new LinkedHashMap<>();
@@ -93,4 +115,9 @@ public interface ItemBlockStorage {
         return states;
     }
 
+    static Random getPreviewRandomFromWorld(World world) {
+        long tempSeed = 0x6834F10A91B03F15L;
+        tempSeed *= (world.getGameTime() / 40) << 8;
+        return new Random(tempSeed);
+    }
 }

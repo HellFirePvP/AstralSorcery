@@ -217,7 +217,7 @@ public class ItemUtils {
     public static boolean consumeFromPlayerInventory(PlayerEntity player, ItemStack requestingItemStack, ItemStack toConsume, boolean simulate) {
         int consumed = 0;
         ItemStack tryConsume = copyStackWithSize(toConsume, toConsume.getCount() - consumed);
-        return tryConsume.isEmpty() || consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), tryConsume, simulate);
+        return tryConsume.isEmpty() || consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(EMPTY_INVENTORY), tryConsume, simulate);
     }
 
     public static boolean tryConsumeFromInventory(IItemHandler handler, ItemStack toConsume, boolean simulate) {
@@ -337,7 +337,7 @@ public class ItemUtils {
         return s;
     }
 
-    private static class ItemHandlerEmpty implements IItemHandler {
+    private static class ItemHandlerEmpty implements IItemHandlerModifiable {
 
         @Override
         public int getSlots() {
@@ -371,6 +371,9 @@ public class ItemUtils {
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             return false;
         }
+
+        @Override
+        public void setStackInSlot(int slot, @Nonnull ItemStack stack) {}
     }
 
 }

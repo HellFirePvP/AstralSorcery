@@ -110,6 +110,7 @@ public class ClientProxy extends CommonProxy {
         EffectRenderEventHandler.getInstance().attachEventListeners(eventBus);
         ConnectionEventHandler.getInstance().attachEventListeners(eventBus);
         OverlayRenderHelper.INSTANCE.attachEventListeners(eventBus);
+        ItemHeldRenderHelper.INSTANCE.attachEventListeners(eventBus);
         MouseUtil.attachEventListeners(eventBus);
 
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onRender);

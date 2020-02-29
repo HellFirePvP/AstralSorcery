@@ -113,8 +113,7 @@ public class DynamicEnchantmentHelper {
                     continue;
                 }
 
-                EnchantmentType type = ench.type;
-                if (type != null && !type.canEnchantItem(stack.getItem())) {
+                if (!stack.canApplyAtEnchantingTable(ench)) {
                     continue;
                 }
                 String enchName = ench.getRegistryName().toString();
