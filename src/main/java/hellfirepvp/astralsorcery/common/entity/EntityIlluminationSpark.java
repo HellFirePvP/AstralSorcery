@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
+import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -132,8 +133,7 @@ public class EntityIlluminationSpark extends ThrowableEntity {
         BlockItemUseContext bCtx = new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND, brtr));
 
         BlockPos pos = bCtx.getPos();
-        BlockState state = world.getBlockState(pos);
-        if (!state.isReplaceable(bCtx)) {
+        if (!BlockUtils.isReplaceable(world, pos)) {
             pos = pos.offset(bCtx.getFace());
         }
 

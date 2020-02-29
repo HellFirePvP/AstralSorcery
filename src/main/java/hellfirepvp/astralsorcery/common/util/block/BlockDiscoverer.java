@@ -8,13 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.util.block;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -147,4 +150,90 @@ public class BlockDiscoverer {
         }
         return null;
     }
+
+    public static List<BlockPos> discoverBlocksWithSameStateAround(World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
+        return MiscUtils.executeWithChunk(world, origin,
+                () -> {
+                    BlockState state = world.getBlockState(origin);
+                    return discoverBlocksWithSameStateAround(BlockPredicates.isState(state), world, origin, onlyExposed, cubeSize, limit, searchCorners);
+                },
+                Lists.newArrayList());
+    }
+
+    public static List<BlockPos> discoverBlocksWithSameStateAround(BlockPredicate match, World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
+        List<BlockPos> foundResult = new ArrayList<>();
+        foundResult.add(origin);
+        List<BlockPos> visited = new LinkedList<>();
+
+        Deque<BlockPos> searchNext = new LinkedList<>();
+        searchNext.addFirst(origin);
+
+        while (!searchNext.isEmpty()) {
+            Deque<BlockPos> currentSearch = searchNext;
+            searchNext = new LinkedList<>();
+
+            for (BlockPos offsetPos : currentSearch) {
+                if (searchCorners) {
+                    for (int xx = -1; xx <= 1; xx++) {
+                        for (int yy = -1; yy <= 1; yy++) {
+                            for (int zz = -1; zz <= 1; zz++) {
+                                BlockPos search = offsetPos.add(xx, yy, zz);
+                                if (visited.contains(search)) continue;
+                                if (getCubeDistance(search, origin) > cubeSize) continue;
+                                if (limit != -1 && foundResult.size() + 1 > limit) continue;
+
+                                visited.add(search);
+
+                                if (!onlyExposed || isExposedToAir(world, search)) {
+                                    MiscUtils.executeWithChunk(world, search, searchNext, (searchQueue) -> {
+                                        if (match.test(world, search, world.getBlockState(search))) {
+                                            foundResult.add(search);
+
+                                            searchQueue.add(search);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (Direction face : Direction.values()) {
+                        BlockPos search = offsetPos.offset(face);
+                        if (visited.contains(search)) continue;
+                        if (getCubeDistance(search, origin) > cubeSize) continue;
+                        if (limit != -1 && foundResult.size() + 1 > limit) continue;
+
+                        visited.add(search);
+
+                        if (!onlyExposed || isExposedToAir(world, search)) {
+                            MiscUtils.executeWithChunk(world, search, searchNext, (searchQueue) -> {
+                                if (match.test(world, search, world.getBlockState(search))) {
+                                    foundResult.add(search);
+
+                                    searchQueue.add(search);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        return foundResult;
+    }
+
+    private static int getCubeDistance(BlockPos p1, BlockPos p2) {
+        return (int) MathHelper.absMax(MathHelper.absMax(p1.getX() - p2.getX(), p1.getY() - p2.getY()), p1.getZ() - p2.getZ());
+    }
+
+    private static boolean isExposedToAir(World world, BlockPos pos) {
+        for (Direction face : Direction.values()) {
+            BlockPos offset = pos.offset(face);
+            if (MiscUtils.executeWithChunk(world, offset, () -> BlockUtils.isReplaceable(world, offset), false)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

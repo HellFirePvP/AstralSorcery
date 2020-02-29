@@ -78,12 +78,18 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_PERK_SEAL_BREAK;
     public static AbstractRenderableTexture TEX_GUI_PERK_UNLOCK;
 
+    public static AbstractRenderableTexture TEX_OVERLAY_EXP_BAR;
+    public static AbstractRenderableTexture TEX_OVERLAY_EXP_FRAME;
+    public static AbstractRenderableTexture TEX_OVERLAY_ITEM_FRAME;
+    public static AbstractRenderableTexture TEX_OVERLAY_ITEM_FRAME_EXTENSION;
+
     public static AbstractRenderableTexture TEX_SOLAR_ECLIPSE;
     public static AbstractRenderableTexture TEX_STAR_CONNECTION;
     public static AbstractRenderableTexture TEX_STAR_1;
     public static AbstractRenderableTexture TEX_STAR_2;
 
-    public static AbstractRenderableTexture TEX_STATIC_FLARE;
+    public static AbstractRenderableTexture TEX_PARTICLE_SMALL;
+    public static AbstractRenderableTexture TEX_PARTICLE_LARGE;
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_1;
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_2;
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_3;
@@ -97,6 +103,7 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_RELAY_FLARE;
     public static AbstractRenderableTexture TEX_ATTUNEMENT_FLARE;
     public static AbstractRenderableTexture TEX_ENTITY_FLARE;
+    public static AbstractRenderableTexture TEX_GRAPPLING_HOOK;
 
     public static AbstractRenderableTexture TEX_LIGHTNING_PART;
     public static AbstractRenderableTexture TEX_LIGHTBEAM;

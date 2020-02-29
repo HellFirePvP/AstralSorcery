@@ -9,11 +9,12 @@
 package hellfirepvp.astralsorcery.common.util.block;
 
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,26 +25,35 @@ import java.util.Set;
  */
 public class BlockGeometry {
 
-    public static Set<BlockPos> getHorizontalPlane(int radius) {
-        Set<BlockPos> out = new HashSet<>();
-        for (int xx = -radius; xx <= radius; xx++) {
-            for (int zz = -radius; zz <= radius; zz++) {
-                out.add(new BlockPos(xx, 0, zz));
+    public static List<BlockPos> getPlane(Direction direction, int radius) {
+        return getPlane(direction.getAxis(), radius);
+    }
+
+    public static List<BlockPos> getPlane(Direction.Axis axis, int radius) {
+        List<BlockPos> out = new ArrayList<>();
+        int xRadius = axis == Direction.Axis.X ? 0 : radius;
+        int yRadius = axis == Direction.Axis.Y ? 0 : radius;
+        int zRadius = axis == Direction.Axis.Z ? 0 : radius;
+        for (int xx = -xRadius; xx <= xRadius; xx++) {
+            for (int yy = -yRadius; yy <= yRadius; yy++) {
+                for (int zz = -zRadius; zz <= zRadius; zz++) {
+                    out.add(new BlockPos(xx, yy, zz));
+                }
             }
         }
         return out;
     }
 
-    public static Set<BlockPos> getSphere(double radius) {
-        Set<BlockPos> out = new HashSet<>();
+    public static List<BlockPos> getSphere(double radius) {
+        List<BlockPos> out = new ArrayList<>();
         Vector3 vFrom = new Vector3(0.5, 0.5, 0.5);
         double dst = radius * radius;
 
         int toX = MathHelper.ceil(radius);
         int toY = MathHelper.ceil(radius);
         int toZ = MathHelper.ceil(radius);
-        for (int x = MathHelper.floor(-radius); x <= toX; x++) {
-            for (int y = MathHelper.floor(-radius); y <= toY; y++) {
+        for (int y = MathHelper.floor(-radius); y <= toY; y++) {
+            for (int x = MathHelper.floor(-radius); x <= toX; x++) {
                 for (int z = MathHelper.floor(-radius); z <= toZ; z++) {
                     Vector3 result = new Vector3(x, y, z).add(0.5, 0.5, 0.5);
                     if (result.distanceSquared(vFrom) <= dst) {
@@ -55,8 +65,8 @@ public class BlockGeometry {
         return out;
     }
 
-    public static Set<BlockPos> getHollowSphere(double outerRadius, double innerRadius) {
-        Set<BlockPos> out = new HashSet<>();
+    public static List<BlockPos> getHollowSphere(double outerRadius, double innerRadius) {
+        List<BlockPos> out = new ArrayList<>();
         Vector3 vFrom = new Vector3(0.5, 0.5, 0.5);
         double dstOuter = outerRadius * outerRadius;
         double dstInner = innerRadius * innerRadius;

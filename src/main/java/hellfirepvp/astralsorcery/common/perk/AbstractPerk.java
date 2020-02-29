@@ -70,13 +70,14 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     public AbstractPerk(ResourceLocation name, int x, int y) {
         this.setRegistryName(name);
         this.offset = new Point(x, y);
+        this.attachListeners(MinecraftForge.EVENT_BUS);
     }
 
     protected PerkTreePoint<? extends AbstractPerk> initPerkTreePoint() {
         return new PerkTreePoint<>(this, this.getOffset());
     }
 
-    public void attachListeners(IEventBus bus) {}
+    protected void attachListeners(IEventBus bus) {}
 
     @Nullable
     protected ConfigEntry addConfig() {

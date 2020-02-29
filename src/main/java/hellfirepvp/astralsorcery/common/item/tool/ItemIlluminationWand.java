@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucentBlock;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -113,11 +114,9 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor {
         }
 
         ISelectionContext selContext = ISelectionContext.forEntity(player);
-        //TODO eventually actually use the to-be-placed block as item here.
-        BlockItemUseContext bContext = new BlockItemUseContext(context);
         BlockPos placePos = pos;
         BlockState placeState = getPlacingState(stack);
-        if (!state.isReplaceable(bContext)) {
+        if (!BlockUtils.isReplaceable(world, pos)) {
             placePos = placePos.offset(dir);
         }
 

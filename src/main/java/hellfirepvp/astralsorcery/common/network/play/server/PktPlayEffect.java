@@ -15,9 +15,7 @@ import hellfirepvp.astralsorcery.common.item.lens.ItemColoredLensFire;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopEffectHelper;
 import io.netty.buffer.ByteBuf;
@@ -101,6 +99,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
 
         LIGHTNING,
         BEAM_BREAK,
+        BLOCK_EFFECT,
         ROCK_CRYSTAL_COLUMN,
         ROCK_CRYSTAL_SPARKS,
         SMALL_CRYSTAL_BREAK,
@@ -130,6 +129,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return TimeStopEffectHelper::playEntityParticles;
                 case BEAM_BREAK:
                     return BlockBreakHelper::blockBreakAnimation;
+                case BLOCK_EFFECT:
+                    return MiscPlayEffect::playBlockEffects;
                 case MELT_BLOCK:
                     return ItemColoredLensFire::playParticles;
                 case ALTAR_RECIPE_FINISH:

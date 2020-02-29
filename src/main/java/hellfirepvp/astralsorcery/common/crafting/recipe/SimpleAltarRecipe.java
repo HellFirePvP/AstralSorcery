@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.crafting.recipe;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
@@ -41,7 +40,6 @@ import net.minecraftforge.fml.LogicalSide;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -142,7 +140,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
 
     @Nonnull
     public List<ItemStack> getOutputs(TileAltar altar) {
-        return MiscUtils.transform(this.outputs, stack -> ItemUtils.copyStackWithSize(stack, stack.getCount()));
+        return MiscUtils.transformList(this.outputs, stack -> ItemUtils.copyStackWithSize(stack, stack.getCount()));
     }
 
     public void setFocusConstellation(IConstellation focusConstellation) {

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.util.block.iterator;
 
 import hellfirepvp.astralsorcery.common.util.block.BlockGeometry;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -50,7 +51,7 @@ public class BlockLayerPositionGenerator extends BlockPositionGenerator {
         if (this.layer > maxLayers) {
             this.layer = -maxLayers;
         }
-        Collection<BlockPos> positions = BlockGeometry.getHorizontalPlane(maxLayers);
+        Collection<BlockPos> positions = BlockGeometry.getPlane(Direction.UP, maxLayers);
         positions.forEach(pos -> this.currentPositions.add(pos.add(0, this.layer, 0)));
         Collections.shuffle(this.currentPositions, new Random(0xF518E23A05B27C19L));
     }

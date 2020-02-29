@@ -185,7 +185,15 @@ public class MiscUtils {
         };
     }
 
-    public static <T, V> List<V> transform(List<T> list, Function<T, V> map) {
+    public static <T, V> List<V> transformList(List<T> list, Function<T, V> map) {
+        return list.stream().map(map).collect(Collectors.toList());
+    }
+
+    public static <T, V> Set<V> transformSet(Set<T> list, Function<T, V> map) {
+        return list.stream().map(map).collect(Collectors.toSet());
+    }
+
+    public static <T, V> Collection<V> transformCollection(Collection<T> list, Function<T, V> map) {
         return list.stream().map(map).collect(Collectors.toList());
     }
 
@@ -290,7 +298,7 @@ public class MiscUtils {
         return !ev.isCanceled();
     }
 
-    public static boolean canPlayerPlaceBlockPos(PlayerEntity player, Hand withHand, BlockState tryPlace, BlockPos pos, Direction againstSide) {
+    public static boolean canPlayerPlaceBlockPos(PlayerEntity player, BlockState tryPlace, BlockPos pos, Direction againstSide) {
         BlockSnapshot snapshot = new BlockSnapshot(player.getEntityWorld(), pos, tryPlace);
         return !ForgeEventFactory.onBlockPlace(player, snapshot, againstSide);
     }
@@ -395,11 +403,16 @@ public class MiscUtils {
     }
 
     @Nonnull
-    public static RayTraceResult rayTraceLook(LivingEntity entity, double reachDst) {
+    public static RayTraceResult rayTraceLook(PlayerEntity player, double reachDst) {
+        return rayTraceLook(player, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, reachDst);
+    }
+
+    @Nonnull
+    public static RayTraceResult rayTraceLook(Entity entity, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode, double reachDst) {
         Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d lookVec = entity.getLookVec();
         Vec3d end = pos.add(lookVec.x * reachDst, lookVec.y * reachDst, lookVec.z * reachDst);
-        RayTraceContext ctx = new RayTraceContext(pos, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, entity);
+        RayTraceContext ctx = new RayTraceContext(pos, end, blockMode, fluidMode, entity);
         return entity.world.rayTraceBlocks(ctx);
     }
 

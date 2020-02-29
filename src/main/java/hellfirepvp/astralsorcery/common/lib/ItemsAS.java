@@ -23,6 +23,9 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.*;
+import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 
 /**
@@ -60,6 +63,9 @@ public class ItemsAS {
     public static ItemWand WAND;
     public static ItemLinkingTool LINKING_TOOL;
     public static ItemIlluminationWand ILLUMINATION_WAND;
+    public static ItemArchitectWand ARCHITECT_WAND;
+    public static ItemExchangeWand EXCHANGE_WAND;
+    public static ItemGrappleWand GRAPPLE_WAND;
     public static ItemHandTelescope HAND_TELESCOPE;
 
     public static ItemMantle MANTLE;
