@@ -98,6 +98,9 @@
   "astralsorcery.misc.architect.mode.wall": "Vertical Plane",
   "astralsorcery.misc.architect.mode.sphere": "Sphere",
   "astralsorcery.misc.architect.mode.sphere_hollow": "Hollow Sphere",
+  "astralsorcery.misc.blink.mode": "Mode: %s",
+  "astralsorcery.misc.blink.mode.teleport": "Blink",
+  "astralsorcery.misc.blink.mode.launch": "Launch",
 
   "effect.astralsorcery.bleed": "Bleeding",
   "effect.astralsorcery.cheat_death": "Phoenix' Blessing",
@@ -576,6 +579,7 @@
   "item.astralsorcery.architect_wand": "Formation Wand",
   "item.astralsorcery.exchange_wand": "Conversion Wand",
   "item.astralsorcery.grapple_wand": "Impulsion Wand",
+  "item.astralsorcery.blink_wand": "Traversal Wand",
 
   "item.astralsorcery.mantle": "Mantle of Stars",
 

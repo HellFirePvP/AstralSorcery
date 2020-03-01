@@ -23,10 +23,7 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.*;
-import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
-import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
-import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
-import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
+import hellfirepvp.astralsorcery.common.item.wand.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -66,6 +63,7 @@ public class ItemsAS {
     public static ItemArchitectWand ARCHITECT_WAND;
     public static ItemExchangeWand EXCHANGE_WAND;
     public static ItemGrappleWand GRAPPLE_WAND;
+    public static ItemBlinkWand BLINK_WAND;
     public static ItemHandTelescope HAND_TELESCOPE;
 
     public static ItemMantle MANTLE;

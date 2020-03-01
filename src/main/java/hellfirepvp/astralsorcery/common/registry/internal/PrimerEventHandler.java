@@ -90,7 +90,7 @@ public class PrimerEventHandler {
     //So. thanks. this is the result i guess.
     private void registerRemainingData() {
         RegistryConstellations.init();
-        RegistryConstellations.initConstellationSignatures();
+        RegistryConstellations.registerSignatureItems();
         RegistryConstellationEffects.init();
         RegistryMantleEffects.init();
 
