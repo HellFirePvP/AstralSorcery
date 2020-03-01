@@ -344,12 +344,13 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
                 List<BlockPos> line = new ArrayList<>();
                 RaytraceAssist rta = new RaytraceAssist(origin, hit);
                 rta.forEachBlockPos(pos -> {
-                    MiscUtils.executeWithChunk(world, pos, () -> {
+                    return MiscUtils.executeWithChunk(world, pos, () -> {
                         if (BlockUtils.isReplaceable(world, pos)) {
                             line.add(pos);
+                            return true;
                         }
-                    });
-                    return true;
+                        return false;
+                    }, false);
                 });
                 return line;
             }

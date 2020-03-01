@@ -215,7 +215,7 @@ public class Vector3 {
     }
 
     public double distanceSquared(Entity e) {
-        return distanceSquared(Vector3.atEntityCenter(e));
+        return distanceSquared(Vector3.atEntityCorner(e));
     }
 
     public double distance(Vector3 o) {
@@ -420,19 +420,6 @@ public class Vector3 {
         Vector3 rand = random(r);
         return rand.setY(Math.abs(rand.getY()));
     }
-
-    //RIP ChunkCoordinates BibleThump
-    /*public static Vector3 fromCC(ChunkCoordinates cc) {
-        return new Vector3(cc.posX, cc.posY, cc.posZ);
-    }
-
-    public ChunkCoordinates getAsFloatCC() {
-        return new ChunkCoordinates(Float.floatToIntBits((float) this.x), Float.floatToIntBits((float) this.y), Float.floatToIntBits((float) this.z));
-    }
-
-    public static Vector3 getFromFloatCC(ChunkCoordinates cc) {
-        return new Vector3(Float.intBitsToFloat(cc.posX), Float.intBitsToFloat(cc.posY), Float.intBitsToFloat(cc.posZ));
-    }*/
 
     public boolean isInAABB(Vector3 min, Vector3 max) {
         return (this.x >= min.x) && (this.x <= max.x) && (this.y >= min.y) && (this.y <= max.y) && (this.z >= min.z) && (this.z <= max.z);

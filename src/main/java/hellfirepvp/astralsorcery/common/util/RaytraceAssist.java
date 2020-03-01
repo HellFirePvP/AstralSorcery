@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -41,6 +42,7 @@ public class RaytraceAssist {
     private Set<Integer> collected = new HashSet<>();
     private AxisAlignedBB collectBox = null;
     private boolean includeEnd = false, hitBlocks = true, hitFluids = true;
+    private double stepWidth = STEP_WIDTH;
 
     private BlockPos posHit = null;
 
@@ -67,6 +69,11 @@ public class RaytraceAssist {
 
     public RaytraceAssist hitFluidsBeforeBlocks(boolean hitFluids) {
         this.hitFluids = hitFluids;
+        return this;
+    }
+
+    public RaytraceAssist stepWith(double stepWidth) {
+        this.stepWidth = stepWidth;
         return this;
     }
 
@@ -101,25 +108,32 @@ public class RaytraceAssist {
         });
     }
 
-    public boolean forEachBlockPos(Predicate<BlockPos> raystepFn) {
+    public boolean forEachStep(Predicate<Vector3> raystepFn) {
         Vector3 aim = start.vectorFromHereTo(target);
-        Vector3 stepAim = aim.clone().normalize().multiply(STEP_WIDTH);
+        Vector3 stepAim = aim.clone().normalize().multiply(this.stepWidth);
         double distance = aim.length();
         Vector3 prevVec = start.clone();
-        BlockPos lastPos = null;
-        for (double distancePart = STEP_WIDTH; distancePart <= distance; distancePart += STEP_WIDTH) {
-            Vector3 stepVec = prevVec.clone().add(stepAim);
-            BlockPos at = stepVec.toBlockPos();
-            if (lastPos == null || !lastPos.equals(at)) {
-                lastPos = at;
 
-                if (!raystepFn.test(at)) {
-                    return false;
-                }
+        for (double distancePart = this.stepWidth; distancePart <= distance; distancePart += this.stepWidth) {
+            Vector3 stepVec = prevVec.clone().add(stepAim);
+            if (!raystepFn.test(stepVec.clone())) {
+                return false;
             }
             prevVec = stepVec;
         }
         return true;
+    }
+
+    public boolean forEachBlockPos(Predicate<BlockPos> raystepFn) {
+        ObjectReference<BlockPos> lastPos = new ObjectReference<>();
+        return this.forEachStep(vec -> {
+            BlockPos at = vec.toBlockPos();
+            if (lastPos.get() == null || !lastPos.get().equals(at)) {
+                lastPos.set(at);
+                return raystepFn.test(at);
+            }
+            return true;
+        });
     }
 
     public BlockPos positionHit() {
