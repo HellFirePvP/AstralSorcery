@@ -84,7 +84,7 @@ public class ScreenContainerAltarDiscovery extends ScreenContainerAltar<Containe
             spriteStarlight.getResource().bindTexture();
 
             int tick = altar.getTicksExisted();
-            Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(tick);
+            Tuple<Float, Float> uvOffset = spriteStarlight.getUVOffset(tick);
             drawRect(guiLeft + 6, guiTop + 69, (int) (165 * percFilled), 10,
                     uvOffset.getA(), uvOffset.getB(),
                     spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength());

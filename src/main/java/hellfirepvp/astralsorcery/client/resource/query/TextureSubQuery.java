@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.resource.query;
 
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -25,10 +26,10 @@ import java.awt.geom.Point2D;
  */
 public class TextureSubQuery extends TextureQuery {
 
-    private final double uOffset, vOffset;
-    private final double uLength, vLength;
+    private final float uOffset, vOffset;
+    private final float uLength, vLength;
 
-    public TextureSubQuery(AssetLoader.TextureLocation location, String name, double uOffset, double vOffset, double uLength, double vLength) {
+    public TextureSubQuery(AssetLoader.TextureLocation location, String name, float uOffset, float vOffset, float uLength, float vLength) {
         super(location, name);
         this.uOffset = uOffset;
         this.vOffset = vOffset;
@@ -47,18 +48,19 @@ public class TextureSubQuery extends TextureQuery {
                 res.bindTexture();
             }
 
+
             @Override
-            public Point.Double getUVOffset() {
-                return new Point2D.Double(uOffset, vOffset);
+            public Tuple<Float, Float> getUVOffset() {
+                return new Tuple<>(uOffset, vOffset);
             }
 
             @Override
-            public double getUWidth() {
+            public float getUWidth() {
                 return uLength;
             }
 
             @Override
-            public double getVWidth() {
+            public float getVWidth() {
                 return vLength;
             }
 

@@ -98,7 +98,7 @@ public class FXCube extends EntityVisualFX {
 
     @Override
     public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
-        double u, v, uLength, vLength;
+        float u, v, uLength, vLength;
         if (this.tas != null) {
             u = this.tas.getMinU();
             v = this.tas.getMinV();
@@ -106,7 +106,7 @@ public class FXCube extends EntityVisualFX {
             vLength = (this.tas.getMaxV() - v) * this.textureSubSizePercentage;
         } else {
             SpriteSheetResource ssr = ctx.getSprite();
-            Tuple<Double, Double> uv = ssr.getUVOffset(this.getAge());
+            Tuple<Float, Float> uv = ssr.getUVOffset(this.getAge());
             u = uv.getA();
             v = uv.getB();
             uLength = ssr.getULength() * this.textureSubSizePercentage;

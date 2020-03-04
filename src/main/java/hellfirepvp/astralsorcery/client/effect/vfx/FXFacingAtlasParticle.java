@@ -28,8 +28,8 @@ import java.awt.*;
 public class FXFacingAtlasParticle extends EntityVisualFX {
 
     private TextureAtlasSprite sprite;
-    private double minU = 0, minV = 0;
-    private double uLength = 1, vLength = 1;
+    private float minU = 0, minV = 0;
+    private float uLength = 1, vLength = 1;
 
     public FXFacingAtlasParticle(Vector3 pos) {
         super(pos);

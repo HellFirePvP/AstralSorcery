@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.research;
 
+import hellfirepvp.astralsorcery.client.event.PerkExperienceRenderer;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncKnowledge;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,8 +35,7 @@ public class ResearchSyncHelper {
         int currentLvl = ResearchHelper.getClientProgress().getPerkLevel(player);
         ResearchHelper.updateClientResearch(message);
         if (ResearchHelper.getClientProgress().getPerkLevel(player) > currentLvl) {
-            //TODO display client charge
-            //ClientRenderEventHandler.requestPermChargeReveal(160);
+            PerkExperienceRenderer.INSTANCE.revealExperience(160);
         }
     }
 

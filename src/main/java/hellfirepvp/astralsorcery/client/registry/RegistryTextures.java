@@ -80,6 +80,7 @@ public class RegistryTextures {
         TEX_GUI_PERK_SEAL_BREAK             = loadTexture(GUI, "perk", "seal_break");
         TEX_GUI_PERK_UNLOCK                 = loadTexture(GUI, "perk", "unlock");
 
+        TEX_OVERLAY_CHARGE                  = loadTexture(GUI, "overlay", "charge");
         TEX_OVERLAY_EXP_BAR                 = loadTexture(GUI, "overlay", "exp_bar");
         TEX_OVERLAY_EXP_FRAME               = loadTexture(GUI, "overlay", "exp_frame");
         TEX_OVERLAY_ITEM_FRAME              = loadTexture(GUI, "overlay", "item_frame");

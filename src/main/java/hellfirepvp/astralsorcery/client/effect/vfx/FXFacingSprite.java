@@ -50,7 +50,7 @@ public class FXFacingSprite extends EntityVisualFX {
         Color col = this.getColor(pTicks);
 
         ssr.bindTexture();
-        Tuple<Double, Double> uvOffset = ssr.getUVOffset(this);
+        Tuple<Float, Float> uvOffset = ssr.getUVOffset(this);
 
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         RenderingDrawUtils.renderFacingQuadVB(buf,

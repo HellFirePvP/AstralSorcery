@@ -53,6 +53,7 @@ public class RegistrySprites {
         SPR_ENTITY_FLARE = new SpriteSheetResource(TEX_ENTITY_FLARE, 6, 8);
         SPR_GRAPPLING_HOOK = new SpriteSheetResource(TEX_GRAPPLING_HOOK, 4, 8);
 
+        SPR_OVERLAY_CHARGE = new SpriteSheetResource(TEX_OVERLAY_CHARGE, 8, 4);
         SPR_STARLIGHT_STORE = new SpriteSheetResource(TEX_STARLIGHT_STORE, 16, 4);
     }
 

@@ -49,14 +49,13 @@ public class RenderChalice extends CustomTileEntityRenderer<TileChalice> {
         Color color = new Color(ColorUtils.getOverlayColor(stack));
         float percSize = 0.125F + (tile.getTank().getPercentageFilled() * 0.375F);
 
-        double ulength = tas.getMaxU() - tas.getMinU();
-        double vlength = tas.getMaxV() - tas.getMinV();
+        float ulength = tas.getMaxU() - tas.getMinU();
+        float vlength = tas.getMaxV() - tas.getMinV();
 
-        double uPart = ulength * percSize;
-        double vPart = vlength * percSize;
-
-        double uOffset = tas.getMinU() + ulength / 2D - uPart / 2D;
-        double vOffset = tas.getMinV() + vlength / 2D - vPart / 2D;
+        float uPart = ulength * percSize;
+        float vPart = vlength * percSize;
+        float uOffset = tas.getMinU() + ulength / 2F - uPart / 2F;
+        float vOffset = tas.getMinV() + vlength / 2F - vPart / 2F;
 
         GlStateManager.pushMatrix();
         GlStateManager.translated(x + 0.5, y + 1.4, z + 0.5);

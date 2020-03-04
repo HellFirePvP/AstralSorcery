@@ -108,9 +108,11 @@ public class ClientProxy extends CommonProxy {
         super.attachEventHandlers(eventBus);
 
         EffectRenderEventHandler.getInstance().attachEventListeners(eventBus);
-        ConnectionEventHandler.getInstance().attachEventListeners(eventBus);
-        OverlayRenderHelper.INSTANCE.attachEventListeners(eventBus);
-        ItemHeldRenderHelper.INSTANCE.attachEventListeners(eventBus);
+        AlignmentChargeRenderer.INSTANCE.attachEventListeners(eventBus);
+        PerkExperienceRenderer.INSTANCE.attachEventListeners(eventBus);
+        ItemHeldEffectRenderer.INSTANCE.attachEventListeners(eventBus);
+        OverlayRenderer.INSTANCE.attachEventListeners(eventBus);
+
         MouseUtil.attachEventListeners(eventBus);
 
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onRender);
@@ -126,7 +128,9 @@ public class ClientProxy extends CommonProxy {
         registrar.accept(EffectUpdater.getInstance());
         registrar.accept(PatreonManagerClient.INSTANCE);
         registrar.accept(ClientCameraManager.INSTANCE);
-        registrar.accept(TimeStopEffectClientHandler.INSTANCE);
+        registrar.accept(TimeStopEffectHandler.INSTANCE);
+        registrar.accept(AlignmentChargeRenderer.INSTANCE);
+        registrar.accept(PerkExperienceRenderer.INSTANCE);
 
         LightbeamRenderHelper.attachTickListener(registrar);
     }

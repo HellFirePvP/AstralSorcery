@@ -24,11 +24,11 @@ import net.minecraftforge.eventbus.api.IEventBus;
  * Created by HellFirePvP
  * Date: 28.02.2020 / 20:01
  */
-public class ItemHeldRenderHelper {
+public class ItemHeldEffectRenderer {
 
-    public static final ItemHeldRenderHelper INSTANCE = new ItemHeldRenderHelper();
+    public static final ItemHeldEffectRenderer INSTANCE = new ItemHeldEffectRenderer();
 
-    private ItemHeldRenderHelper() {}
+    private ItemHeldEffectRenderer() {}
 
     public void attachEventListeners(IEventBus bus) {
         bus.addListener(EventPriority.LOWEST, this::onHeldRender);

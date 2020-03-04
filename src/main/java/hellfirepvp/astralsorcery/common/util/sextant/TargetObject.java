@@ -81,7 +81,7 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
             this(texLocation, iconName, targetName, advanced, color, 0, 0, 1, 1);
         }
 
-        public ASTargetObject(AssetLoader.TextureLocation texLocation, String iconName, String targetName, boolean advanced, int color, double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
+        public ASTargetObject(AssetLoader.TextureLocation texLocation, String iconName, String targetName, boolean advanced, int color, float iconUOffset, float iconVOffset, float iconULength, float iconVLength) {
             this.query = new TextureSubQuery(texLocation, iconName, iconUOffset, iconVOffset, iconULength, iconVLength);
             this.advanced = advanced;
             this.name = targetName;
@@ -125,7 +125,7 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
         }
 
         public ASStructure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, StructureType type,
-                           double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
+                           float iconUOffset, float iconVOffset, float iconULength, float iconVLength) {
             super(texLocation, iconName, targetName, advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
             this.structureType = type;
         }
@@ -147,7 +147,7 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
         }
 
         public VanillaStructure(AssetLoader.TextureLocation texLocation, String iconName, Structure<?> structure, int color, boolean advanced,
-                         double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
+                                float iconUOffset, float iconVOffset, float iconULength, float iconVLength) {
             super(texLocation, iconName, structure.getRegistryName().getPath(), advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
             this.structure = structure;
         }
@@ -169,7 +169,7 @@ public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
         }
 
         public Biome(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, BiomeDictionary.Type biomeType,
-                     double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
+                     float iconUOffset, float iconVOffset, float iconULength, float iconVLength) {
             super(texLocation, iconName, targetName, advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
             this.biomeType = biomeType;
         }

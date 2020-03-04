@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.resource;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.util.Tuple;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -25,11 +26,11 @@ public abstract class AbstractRenderableTexture {
 
     public abstract void bindTexture();
 
-    public abstract Point.Double getUVOffset();
+    public abstract Tuple<Float, Float> getUVOffset();
 
-    public abstract double getUWidth();
+    public abstract float getUWidth();
 
-    public abstract double getVWidth();
+    public abstract float getVWidth();
 
     @Override
     public abstract boolean equals(Object obj);
@@ -59,18 +60,18 @@ public abstract class AbstractRenderableTexture {
     public static abstract class Full extends AbstractRenderableTexture {
 
         @Override
-        public final Point.Double getUVOffset() {
-            return new Point2D.Double(0, 0);
+        public Tuple<Float, Float> getUVOffset() {
+            return new Tuple<>(0F, 0F);
         }
 
         @Override
-        public final double getUWidth() {
-            return 1.0;
+        public final float getUWidth() {
+            return 1.0F;
         }
 
         @Override
-        public final double getVWidth() {
-            return 1.0;
+        public final float getVWidth() {
+            return 1.0F;
         }
     }
 

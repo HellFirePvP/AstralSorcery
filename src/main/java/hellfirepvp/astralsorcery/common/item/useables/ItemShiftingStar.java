@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.base.PerkExperienceRevealer;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
@@ -51,7 +52,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 22.02.2020 / 21:39
  */
-public class ItemShiftingStar extends Item {
+public class ItemShiftingStar extends Item implements PerkExperienceRevealer {
 
     public ItemShiftingStar() {
         super(new Properties()

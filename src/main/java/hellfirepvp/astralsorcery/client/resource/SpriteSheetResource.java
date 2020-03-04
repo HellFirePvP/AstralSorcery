@@ -25,7 +25,7 @@ import java.util.Objects;
  */
 public class SpriteSheetResource extends AbstractRenderableTexture {
 
-    protected double uPart, vPart;
+    protected float uPart, vPart;
     protected int frameCount;
     protected int rows, columns;
 
@@ -44,8 +44,8 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
         this.columns = columns;
         this.resource = resource;
 
-        this.uPart = 1D / ((double) columns);
-        this.vPart = 1D / ((double) rows);
+        this.uPart = 1F / ((float) columns);
+        this.vPart = 1F / ((float) rows);
     }
 
     @Override
@@ -54,19 +54,18 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
     }
 
     @Override
-    public Point.Double getUVOffset() {
+    public Tuple<Float, Float> getUVOffset() {
         long timer = ClientScheduler.getClientTick();
-        Tuple<Double, Double> offset = getUVOffset(timer);
-        return new Point.Double(offset.getA(), offset.getB());
+        return getUVOffset(timer);
     }
 
     @Override
-    public double getUWidth() {
+    public float getUWidth() {
         return getULength();
     }
 
     @Override
-    public double getVWidth() {
+    public float getVWidth() {
         return getVLength();
     }
 
@@ -74,20 +73,20 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
         return resource;
     }
 
-    public double getULength() {
+    public float getULength() {
         return uPart;
     }
 
-    public double getVLength() {
+    public float getVLength() {
         return vPart;
     }
 
-    public Tuple<Double, Double> getUVOffset(long frameTimer) {
+    public Tuple<Float, Float> getUVOffset(long frameTimer) {
         int frame = (int) (frameTimer % frameCount);
         return new Tuple<>((frame % columns) * uPart, (frame / columns) * vPart);
     }
 
-    public Tuple<Double, Double> getUVOffset(EntityComplexFX fx) {
+    public Tuple<Float, Float> getUVOffset(EntityComplexFX fx) {
         float perc = ((float) fx.getAge()) / ((float) fx.getMaxAge());
         long timer = MathHelper.floor(this.getFrameCount() * perc);
         return getUVOffset(timer);

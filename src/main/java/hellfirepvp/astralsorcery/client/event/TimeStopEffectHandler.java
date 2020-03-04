@@ -25,11 +25,11 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 22.02.2020 / 20:56
  */
-public class TimeStopEffectClientHandler implements ITickHandler {
+public class TimeStopEffectHandler implements ITickHandler {
 
-    public static final TimeStopEffectClientHandler INSTANCE = new TimeStopEffectClientHandler();
+    public static final TimeStopEffectHandler INSTANCE = new TimeStopEffectHandler();
 
-    private TimeStopEffectClientHandler() {}
+    private TimeStopEffectHandler() {}
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {

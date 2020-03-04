@@ -116,11 +116,11 @@ public class FXSpritePlane extends EntityVisualFX {
 
         SpriteSheetResource ssr = this.sprite != null ? this.sprite : ctx.getSprite();
         ssr.bindTexture();
-        Tuple<Double, Double> uvOffset = ssr.getUVOffset(this);
-        double u = uvOffset.getA();
-        double v = uvOffset.getB();
-        double uLength = ssr.getULength();
-        double vLength = ssr.getVLength();
+        Tuple<Float, Float> uvOffset = ssr.getUVOffset(this);
+        float u = uvOffset.getA();
+        float v = uvOffset.getB();
+        float uLength = ssr.getULength();
+        float vLength = ssr.getVLength();
 
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, pos, axis, Math.toRadians(deg), scale, u, v, uLength, vLength, r, g, b, alpha);

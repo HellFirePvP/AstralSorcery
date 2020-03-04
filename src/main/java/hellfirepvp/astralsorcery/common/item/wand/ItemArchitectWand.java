@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.item.base.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHeldRender;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemOverlayRender;
@@ -69,7 +70,7 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 28.02.2020 / 21:28
  */
-public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOverlayRender, ItemHeldRender {
+public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOverlayRender, ItemHeldRender, AlignmentChargeRevealer {
 
     public ItemArchitectWand() {
         super(new Properties()

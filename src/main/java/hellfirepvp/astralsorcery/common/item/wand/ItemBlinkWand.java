@@ -9,13 +9,19 @@
 package hellfirepvp.astralsorcery.common.item.wand;
 
 import com.google.common.collect.Iterables;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
+import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.play.server.PktShootEntity;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
@@ -56,7 +62,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 01.03.2020 / 08:41
  */
-public class ItemBlinkWand extends Item {
+public class ItemBlinkWand extends Item implements AlignmentChargeRevealer {
 
     public ItemBlinkWand() {
         super(new Properties()
@@ -108,7 +114,7 @@ public class ItemBlinkWand extends Item {
             RaytraceAssist rta = new RaytraceAssist(origin, look);
             rta.forEachBlockPos(pos -> {
                 return MiscUtils.executeWithChunk(player.getEntityWorld(), pos, () -> {
-                    if (player.getEntityWorld().isAirBlock(pos) && player.getEntityWorld().isAirBlock(pos.up())) {
+                    if (BlockUtils.isReplaceable(player.getEntityWorld(), pos) && BlockUtils.isReplaceable(player.getEntityWorld(), pos.up())) {
                         blockLine.add(pos);
                         return true;
                     }
@@ -127,8 +133,23 @@ public class ItemBlinkWand extends Item {
             }
         } else if (mode == BlinkMode.LAUNCH) {
             float strength = 0.2F + Math.min(1F, Math.min(50, stack.getUseDuration() - timeLeft) / 50F) * 0.8F;
+            if (strength > 0.3F) {
+                Vector3 motion = new Vector3(player.getLook(1F)).normalize().multiply(strength * 3F);
+                if (motion.getY() > 0) {
+                    motion.setY(MathHelper.clamp(motion.getY() + (0.7F * strength), 0.7F * strength, Float.MAX_VALUE));
+                }
 
-            //TODO launch player & rework packet
+                player.setMotion(motion.toVec3d());
+                player.fallDistance = 0F;
+
+                if (ItemMantle.getEffect(player, ConstellationsAS.vicio) != null) {
+                    AstralSorcery.getProxy().scheduleClientside(player::setElytraFlying, 2);
+                }
+
+                PktShootEntity pkt = new PktShootEntity(player.getEntityId(), motion);
+                pkt.setEffectLength(strength);
+                PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(worldIn, player.getPosition(), 64));
+            }
         }
     }
 
@@ -177,7 +198,7 @@ public class ItemBlinkWand extends Item {
             boolean clearLine = rta.forEachStep(v -> {
                 BlockPos pos = v.toBlockPos();
                 return MiscUtils.executeWithChunk(player.getEntityWorld(), pos, () -> {
-                    if (player.getEntityWorld().isAirBlock(pos) && player.getEntityWorld().isAirBlock(pos.up())) {
+                    if (BlockUtils.isReplaceable(player.getEntityWorld(), pos) && BlockUtils.isReplaceable(player.getEntityWorld(), pos.up())) {
                         line.add(v);
                         return true;
                     }

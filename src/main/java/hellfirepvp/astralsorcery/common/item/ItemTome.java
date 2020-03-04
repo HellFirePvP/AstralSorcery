@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.container.factory.ContainerTomeProvider;
+import hellfirepvp.astralsorcery.common.item.base.PerkExperienceRevealer;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -43,7 +44,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 09.08.2019 / 21:12
  */
-public class ItemTome extends Item {
+public class ItemTome extends Item implements PerkExperienceRevealer {
 
     public ItemTome() {
         super(new Properties()

@@ -65,7 +65,7 @@ public abstract class EffectCustomTexture extends Effect {
         SpriteSheetResource ssr = getSpriteQuery().resolveSprite();
         ssr.bindTexture();
 
-        Tuple<Double, Double> uvTpl = ssr.getUVOffset(ClientScheduler.getClientTick());
+        Tuple<Float, Float> uvTpl = ssr.getUVOffset(ClientScheduler.getClientTick());
         double u = uvTpl.getA();
         double v = uvTpl.getB();
 
@@ -103,7 +103,7 @@ public abstract class EffectCustomTexture extends Effect {
         SpriteSheetResource ssr = getSpriteQuery().resolveSprite();
         ssr.bindTexture();
 
-        Tuple<Double, Double> uvTpl = ssr.getUVOffset(ClientScheduler.getClientTick());
+        Tuple<Float, Float> uvTpl = ssr.getUVOffset(ClientScheduler.getClientTick());
         double u = uvTpl.getA();
         double v = uvTpl.getB();
 

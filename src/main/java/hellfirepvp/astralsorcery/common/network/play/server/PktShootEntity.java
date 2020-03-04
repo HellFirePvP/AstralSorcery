@@ -8,16 +8,23 @@
 
 package hellfirepvp.astralsorcery.common.network.play.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.play.client.CEntityActionPacket;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -92,6 +99,13 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
                     Entity entity = world.map(w -> w.getEntityByID(packet.entityId)).orElse(null);
                     if (entity != null) {
                         entity.setMotion(packet.motionVector.toVec3d());
+
+                        //if (entity instanceof ClientPlayerEntity && ItemMantle.getEffect((LivingEntity) entity, ConstellationsAS.vicio) != null) {
+                        //    AstralSorcery.getProxy().scheduleClientside(() -> {
+                        //        ((ClientPlayerEntity) entity).connection.sendPacket(new CEntityActionPacket(entity, CEntityActionPacket.Action.START_FALL_FLYING));
+                        //    }, 3);
+                        //}
+
                         if (packet.hasEffect) {
                             Vector3 origin = Vector3.atEntityCenter(entity)
                                     .setY(entity.posY + entity.getHeight());
@@ -99,27 +113,26 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
                             Vector3 motionReverse = look.clone().normalize().multiply(-0.4 * packet.effectLength);
 
                             Vector3 perp = look.clone().perpendicular();
-                            for (int i = 0; i < 500 + rand.nextInt(80); i++) {
-                                Vector3 at = look.clone().multiply(0.2 + rand.nextFloat() * 2.5).add(perp.clone().rotate(rand.nextFloat() * 360, look).multiply(rand.nextFloat() * 1.6)).add(origin);
+                            for (int i = 0; i < 300; i++) {
+                                Vector3 at = look.clone()
+                                        .multiply(0.5F + rand.nextFloat() * 2F)
+                                        .add(perp.clone().rotate(rand.nextFloat() * 360, look).multiply(0.5F + rand.nextFloat()))
+                                        .add(origin);
 
                                 FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                                         .spawn(at)
                                         .alpha(VFXAlphaFunction.FADE_OUT)
-                                        .setAlphaMultiplier(1F)
-                                        .setScaleMultiplier(0.35F + rand.nextFloat() * 0.2F)
-                                        .setMaxAge(10 + rand.nextInt(10));
+                                        .setAlphaMultiplier(0.75F)
+                                        .setScaleMultiplier(0.7F + rand.nextFloat() * 0.35F)
+                                        .setMaxAge(20 + rand.nextInt(15));
 
                                 if (rand.nextBoolean()) {
                                     p.color(VFXColorFunction.WHITE)
-                                            .setScaleMultiplier(0.1F + rand.nextFloat() * 0.05F);
+                                            .setScaleMultiplier(0.3F + rand.nextFloat() * 0.15F);
                                 } else {
-                                    p.color(VFXColorFunction.constant(ColorsAS.CELESTIAL_CRYSTAL));
+                                    p.color(VFXColorFunction.constant(ColorsAS.CONSTELLATION_VICIO));
                                 }
-                                if (rand.nextInt(4) != 0) {
-                                    p.setMotion(motionReverse);
-                                } else {
-                                    p.setMotion(new Vector3());
-                                }
+                                p.setMotion(motionReverse);
                             }
                         }
                     }

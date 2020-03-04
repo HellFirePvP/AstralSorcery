@@ -67,7 +67,7 @@ public class PerkTreeMajor<T extends MajorPerk> extends PerkTreePoint<T> {
 
         double uLength = tex.getULength();
         double vLength = tex.getVLength();
-        Tuple<Double, Double> frameUV = tex.getUVOffset(spriteOffsetTick);
+        Tuple<Float, Float> frameUV = tex.getUVOffset(spriteOffsetTick);
 
         for (int i = 0; i < 4; i++) {
             int u = ((i + 1) & 2) >> 1;
