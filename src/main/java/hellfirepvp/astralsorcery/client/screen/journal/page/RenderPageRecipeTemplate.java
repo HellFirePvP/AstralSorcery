@@ -72,7 +72,7 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
 
     public void renderRecipeGrid(float offsetX, float offsetY, float zLevel, AbstractRenderableTexture tex) {
         tex.bindTexture();
-        RenderingGuiUtils.drawRectDetailed(offsetX + 25, offsetY, zLevel, 129, 202);
+        RenderingGuiUtils.drawRect(offsetX + 25, offsetY, zLevel, 129, 202);
     }
 
     public void renderExpectedIngredientInput(float offsetX, float offsetY, float zLevel, double scale, long tickOffset, Ingredient ingredient) {

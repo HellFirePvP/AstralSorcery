@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item.wand;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityGrapplingHook;
+import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,7 +26,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 29.02.2020 / 18:15
  */
-public class ItemGrappleWand extends Item {
+public class ItemGrappleWand extends Item implements AlignmentChargeRevealer {
 
     public ItemGrappleWand() {
         super(new Properties()

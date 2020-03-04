@@ -69,7 +69,7 @@ public class FXLightbeam extends EntityVisualFX {
         Vector3 perpFrom = perp.multiply(fromSize * scale);
 
         SpriteSheetResource ssr = ctx.getSprite();
-        Tuple<Double, Double> uvOffset = ssr.getUVOffset(age);
+        Tuple<Float, Float> uvOffset = ssr.getUVOffset(age);
         double u = uvOffset.getA();
         double v = uvOffset.getB();
         double uWidth = ssr.getULength();

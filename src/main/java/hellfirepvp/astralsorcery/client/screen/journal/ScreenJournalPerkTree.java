@@ -388,8 +388,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
             for (int index = 0; index < found.size(); index++) {
                 int addedX = (index % 5) * scaledSlotSize;
                 int addedY = (index / 5) * scaledSlotSize;
-                RenderingGuiUtils.drawTexturedRect(offsetX + addedX, offsetY + addedY, this.blitOffset, scaledSlotSize, scaledSlotSize,
-                        0, 0, 1, 1);
+                RenderingGuiUtils.drawRect(offsetX + addedX, offsetY + addedY, this.blitOffset, scaledSlotSize, scaledSlotSize);
             }
 
             GlStateManager.enableDepthTest();
@@ -450,7 +449,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         GlStateManager.pushMatrix();
         GlStateManager.translated(guiLeft + 300, guiTop + 16, 0);
         TexturesAS.TEX_GUI_TEXT_FIELD.bindTexture();
-        RenderingGuiUtils.drawTexturedRectAtCurrentPos(88.5, 15, this.blitOffset);
+        RenderingGuiUtils.drawTexturedRectAtCurrentPos(88.5F, 15, this.blitOffset);
 
         String text = this.searchTextEntry.getText();
 
@@ -575,17 +574,16 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         sealBreakSprite.bindTexture();
 
         Vector3 starVec = new Vector3(-width, -width, 0);
-        double uLength = sealBreakSprite.getUWidth();
-        double vLength = sealBreakSprite.getVWidth();
-        Tuple<Double, Double> off = sealBreakSprite.getUVOffset(count);
-        Point.Double frameUV = new Point.Double(off.getA(), off.getB());
+        float uLength = sealBreakSprite.getUWidth();
+        float vLength = sealBreakSprite.getVWidth();
+        Tuple<Float, Float> uv = sealBreakSprite.getUVOffset(count);
 
         for (int i = 0; i < 4; i++) {
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
             Vector3 pos = starVec.clone().addX(width * u * 2).addY(width * v * 2);
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.x + uLength * u, frameUV.y + vLength * v).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(uv.getA() + uLength * u, uv.getB() + vLength * v).endVertex();
         }
 
         GlStateManager.disableAlphaTest();
@@ -622,17 +620,16 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         GlStateManager.translated(offset.x, offset.y, 0);
 
         Vector3 starVec = new Vector3(-width, -width, 0);
-        double uLength = spritePerkUnlock.getUWidth();
-        double vLength = spritePerkUnlock.getVWidth();
-        Tuple<Double, Double> off = spritePerkUnlock.getUVOffset(count);
-        Point.Double frameUV = new Point.Double(off.getA(), off.getB());
+        float uLength = spritePerkUnlock.getUWidth();
+        float vLength = spritePerkUnlock.getVWidth();
+        Tuple<Float, Float> uv = spritePerkUnlock.getUVOffset(count);
 
         for (int i = 0; i < 4; i++) {
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
             Vector3 pos = starVec.clone().addX(width * u * 2).addY(width * v * 2);
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.x + uLength * u, frameUV.y + vLength * v).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(uv.getA() + uLength * u, uv.getB() + vLength * v).endVertex();
         }
 
         GlStateManager.disableAlphaTest();
@@ -699,7 +696,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         double uLength = tex.getULength();
         double vLength = tex.getVLength();
-        Tuple<Double, Double> frameUV = tex.getUVOffset(spriteOffsetTick);
+        Tuple<Float, Float> frameUV = tex.getUVOffset(spriteOffsetTick);
         Vector3 starVec = new Vector3(x - size, y - size, 0);
 
         for (int i = 0; i < 4; i++) {
@@ -724,9 +721,9 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         searchMark.bindTexture();
         Vector3 starVec = new Vector3(x - size, y - size, 0);
-        double uLength = searchMark.getUWidth();
-        double vLength = searchMark.getVWidth();
-        Point.Double frameUV = searchMark.getUVOffset();
+        float uLength = searchMark.getUWidth();
+        float vLength = searchMark.getVWidth();
+        Tuple<Float, Float> frameUV = searchMark.getUVOffset();
 
         for (int i = 0; i < 4; i++) {
             int u = ((i + 1) & 2) >> 1;
@@ -734,7 +731,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
             Vector3 pos = starVec.clone().addX(size * u * 2).addY(size * v * 2);
             batch.pos(pos.getX(), pos.getY(), pos.getZ())
-                    .tex(frameUV.x + uLength * u, frameUV.y + vLength * v)
+                    .tex(frameUV.getA() + uLength * u, frameUV.getB() + vLength * v)
                     .color(0.8F, 0.1F, 0.1F, 1F)
                     .endVertex();
         }

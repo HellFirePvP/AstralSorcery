@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.base.patreon;
 import hellfirepvp.astralsorcery.common.base.patreon.types.provider.ProviderBlockRing;
 import hellfirepvp.astralsorcery.common.base.patreon.types.provider.ProviderFlare;
 import hellfirepvp.astralsorcery.common.base.patreon.types.provider.ProviderFlareDynamicColor;
+import hellfirepvp.astralsorcery.common.base.patreon.types.provider.ProviderWraithWings;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,6 +26,7 @@ public enum PatreonEffectType {
     FLARE(new ProviderFlare()),
     FLARE_DYNAMIC_COLOR(new ProviderFlareDynamicColor()),
 
+    WRAITH_WINGS(new ProviderWraithWings()),
     BLOCK_RING(new ProviderBlockRing());
 
     private final PatreonEffectProvider<?> provider;

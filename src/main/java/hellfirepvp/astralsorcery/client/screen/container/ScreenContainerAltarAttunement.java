@@ -83,7 +83,7 @@ public class ScreenContainerAltarAttunement extends ScreenContainerAltar<Contain
             spriteStarlight.getResource().bindTexture();
 
             int tick = altar.getTicksExisted();
-            Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(tick);
+            Tuple<Float, Float> uvOffset = spriteStarlight.getUVOffset(tick);
             drawRect(guiLeft + 11, guiTop + 104, (int) (232 * percFilled), 10,
                     uvOffset.getA(), uvOffset.getB(),
                     spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength());

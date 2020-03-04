@@ -24,11 +24,11 @@ import net.minecraftforge.eventbus.api.IEventBus;
  * Created by HellFirePvP
  * Date: 23.02.2020 / 17:15
  */
-public class OverlayRenderHelper {
+public class OverlayRenderer {
 
-    public static final OverlayRenderHelper INSTANCE = new OverlayRenderHelper();
+    public static final OverlayRenderer INSTANCE = new OverlayRenderer();
 
-    private OverlayRenderHelper() {}
+    private OverlayRenderer() {}
 
     public void attachEventListeners(IEventBus bus) {
         bus.addListener(EventPriority.LOW, this::onOverlayRender);

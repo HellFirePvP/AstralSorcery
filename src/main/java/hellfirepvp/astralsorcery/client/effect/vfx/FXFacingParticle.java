@@ -40,7 +40,7 @@ public class FXFacingParticle extends EntityVisualFX {
         float alpha = this.getAlpha(pTicks);
         float fScale = this.getScale(pTicks);
         Color col = this.getColor(pTicks);
-        Tuple<Double, Double> uvOffset = ssr.getUVOffset(this.getAge());
+        Tuple<Float, Float> uvOffset = ssr.getUVOffset(this.getAge());
 
         RenderingDrawUtils.renderFacingQuadVB(buf,
                 vec.getX(), vec.getY(), vec.getZ(),

@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.data.config.entry.WandsConfig;
+import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.item.base.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHeldRender;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemOverlayRender;
@@ -71,7 +72,7 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 28.02.2020 / 21:04
  */
-public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOverlayRender, ItemHeldRender {
+public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOverlayRender, ItemHeldRender, AlignmentChargeRevealer {
 
     public ItemExchangeWand() {
         super(new Properties()

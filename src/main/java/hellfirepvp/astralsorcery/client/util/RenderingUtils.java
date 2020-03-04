@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -53,6 +54,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -182,6 +184,14 @@ public class RenderingUtils {
             return false;
         }
         return fx.getPosition().distanceSquared(view) <= RenderingConfig.CONFIG.getMaxEffectRenderDistanceSq();
+    }
+
+    public static void draw(int drawMode, VertexFormat format, Consumer<BufferBuilder> fn) {
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder buf = tes.getBuffer();
+        buf.begin(drawMode, format);
+        fn.accept(buf);
+        tes.draw();
     }
 
     public static void renderItemAsEntity(ItemStack stack, double x, double y, double z, float pTicks, int age) {

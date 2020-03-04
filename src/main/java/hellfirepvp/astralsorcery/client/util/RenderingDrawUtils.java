@@ -360,15 +360,15 @@ public class RenderingDrawUtils {
     }
 
     public static void renderFacingFullQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, float r, float g, float b, float alpha) {
-        renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, 0, 0, 1, 1, r, g, b, alpha);
+        renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, 0F, 0F, 1F, 1F, r, g, b, alpha);
     }
 
     public static void renderFacingSpriteVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, SpriteSheetResource sprite, long spriteTick, float r, float g, float b, float alpha) {
-        Tuple<Double, Double> uv = sprite.getUVOffset(spriteTick);
+        Tuple<Float, Float> uv = sprite.getUVOffset(spriteTick);
         renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, uv.getA(), uv.getB(), sprite.getULength(), sprite.getVLength(), r, g, b, alpha);
     }
 
-    public static void renderFacingQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, double u, double v, double uLength, double vLength, float r, float g, float b, float alpha) {
+    public static void renderFacingQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, float u, float v, float uLength, float vLength, float r, float g, float b, float alpha) {
         Vector3 pos = new Vector3(px, py, pz);
 
         RenderInfo ri = RenderInfo.getInstance();
@@ -426,7 +426,7 @@ public class RenderingDrawUtils {
     }
 
     public static void renderTexturedCubeCentralColor(BufferBuilder buf, double size,
-                                                                  double u, double v, double uLength, double vLength,
+                                                                  float u, float v, float uLength, float vLength,
                                                                   float cR, float cG, float cB, float cA) {
         double half = size / 2D;
 
@@ -462,7 +462,7 @@ public class RenderingDrawUtils {
     }
 
     public static void renderTexturedCubeCentralColorNormal(BufferBuilder buf, double size,
-                                                            double u, double v, double uLength, double vLength,
+                                                            float u, float v, float uLength, float vLength,
                                                             float cR, float cG, float cB, float cA,
                                                             Vector3 normal) {
         double half = size / 2D;
@@ -501,7 +501,7 @@ public class RenderingDrawUtils {
         buf.pos(-half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
     }
 
-    public static void renderAngleRotatedTexturedRectVB(BufferBuilder buf, Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, float r, float g, float b, float a) {
+    public static void renderAngleRotatedTexturedRectVB(BufferBuilder buf, Vector3 renderOffset, Vector3 axis, double angleRad, double scale, float u, float v, float uLength, float vLength, float r, float g, float b, float a) {
         Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
 
         Vector3 vec = renderStart.clone().rotate(Math.toRadians(90), axis).normalize().multiply(scale).add(renderOffset);

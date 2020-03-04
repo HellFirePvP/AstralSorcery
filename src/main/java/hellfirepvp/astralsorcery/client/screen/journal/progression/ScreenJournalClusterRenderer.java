@@ -259,7 +259,7 @@ public class ScreenJournalClusterRenderer {
 
                 SpriteSheetResource res = node.getSpriteTexture().resolveSprite();
                 res.getResource().bindTexture();
-                Tuple<Double, Double> uvTexture = res.getUVOffset(ClientScheduler.getClientTick());
+                Tuple<Float, Float> uvTexture = res.getUVOffset(ClientScheduler.getClientTick());
 
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
                 vb.pos(pxWH, zoomedWH - pxWH, zLevel)
