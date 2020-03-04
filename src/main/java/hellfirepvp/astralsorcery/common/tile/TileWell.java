@@ -200,7 +200,7 @@ public class TileWell extends TileReceiverBaseInventory {
     }
 
     private void fillAndDiscardRest(WellLiquefaction.LiquefactionEntry entry, double gain) {
-        if(tank.getTankFluid() == null) {
+        if(tank.getTankFluid() == null || tank.getFluidAmount() == 0) {
             tank.setFluid(entry.producing);
         } else if(!entry.producing.equals(tank.getTankFluid())) {
             return;
