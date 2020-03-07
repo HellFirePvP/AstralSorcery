@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper.ingredient;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.lib.IngredientSerializersAS;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntComparators;
@@ -16,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -120,6 +124,22 @@ public class FluidIngredient extends Ingredient {
     @Override
     public boolean isSimple() {
         return false;
+    }
+
+    @Override
+    public JsonElement serialize() {
+        JsonObject object = new JsonObject();
+        object.addProperty("type", CraftingHelper.getID(IngredientSerializersAS.FLUID_SERIALIZER).toString());
+
+        JsonArray array = new JsonArray();
+        for (FluidStack stack : this.fluids) {
+            object.addProperty("fluid", stack.getFluid().getRegistryName().toString());
+            object.addProperty("amount", stack.getAmount());
+
+            array.add(object);
+        }
+        object.add("fluid", array);
+        return object;
     }
 
     @Override

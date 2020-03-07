@@ -57,9 +57,26 @@ public class ConstellationBaseItemRecipe extends SimpleAltarRecipe {
             ResourceLocation cstName = new ResourceLocation(JSONUtils.getString(recipeObject, KEY_CONSTELLATION));
             IConstellation cst = RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(cstName);
             if (cst != null) {
-                this.constellation = cst;
+                this.setConstellation(cst);
             }
         }
+    }
+
+    @Override
+    public void serializeAdditionalJson(JsonObject recipeObject) {
+        super.serializeAdditionalJson(recipeObject);
+
+        if (this.getConstellation() != null) {
+            recipeObject.addProperty(KEY_CONSTELLATION, this.getConstellation().getRegistryName().toString());
+        }
+    }
+
+    public void setConstellation(IConstellation constellation) {
+        this.constellation = constellation;
+    }
+
+    public IConstellation getConstellation() {
+        return constellation;
     }
 
     @Override
@@ -81,8 +98,8 @@ public class ConstellationBaseItemRecipe extends SimpleAltarRecipe {
 
     private void setConstellations(ItemStack out) {
         if (out.getItem() instanceof ConstellationBaseItem) {
-            if (this.constellation != null) {
-                ((ConstellationBaseItem) out.getItem()).setConstellation(out, this.constellation);
+            if (this.getConstellation() != null) {
+                ((ConstellationBaseItem) out.getItem()).setConstellation(out, this.getConstellation());
             }
         }
     }
@@ -91,13 +108,13 @@ public class ConstellationBaseItemRecipe extends SimpleAltarRecipe {
     public void writeRecipeSync(PacketBuffer buf) {
         super.writeRecipeSync(buf);
 
-        ByteBufUtils.writeOptional(buf, this.constellation, ByteBufUtils::writeRegistryEntry);
+        ByteBufUtils.writeOptional(buf, this.getConstellation(), ByteBufUtils::writeRegistryEntry);
     }
 
     @Override
     public void readRecipeSync(PacketBuffer buf) {
         super.readRecipeSync(buf);
 
-        this.constellation = ByteBufUtils.readOptional(buf, ByteBufUtils::readRegistryEntry);
+        this.setConstellation(ByteBufUtils.readOptional(buf, ByteBufUtils::readRegistryEntry));
     }
 }

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.crafting.serializer;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import hellfirepvp.astralsorcery.common.crafting.builder.LiquidInfusionBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
@@ -17,6 +18,7 @@ import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
@@ -58,6 +60,11 @@ public class LiquidInfusionSerializer extends CustomRecipeSerializer<LiquidInfus
     @Override
     public LiquidInfusion read(ResourceLocation recipeId, PacketBuffer buffer) {
         return LiquidInfusion.read(recipeId, buffer);
+    }
+
+    @Override
+    public void write(JsonObject object, LiquidInfusion recipe) {
+        recipe.write(object);
     }
 
     @Override

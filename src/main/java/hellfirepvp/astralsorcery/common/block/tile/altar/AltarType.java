@@ -16,11 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -33,30 +30,32 @@ import java.util.function.Supplier;
  */
 public enum AltarType {
 
-    DISCOVERY    (ResearchProgression.BASIC_CRAFT,
+    DISCOVERY    (ResearchProgression.BASIC_CRAFT, 100,
             () -> BlocksAS.ALTAR_DISCOVERY.asItem(),
             () -> StructureTypesAS.EMPTY,
             6, 7, 8, 11, 12, 13, 16, 17, 18),
-    ATTUNEMENT   (ResearchProgression.ATTUNEMENT,
+    ATTUNEMENT   (ResearchProgression.ATTUNEMENT, 200,
             () -> BlocksAS.ALTAR_ATTUNEMENT.asItem(),
             () -> StructureTypesAS.EMPTY,
             0, 4, 6, 7, 8, 11, 12, 13, 16, 17, 18, 20, 23),
-    CONSTELLATION(ResearchProgression.CONSTELLATION,
+    CONSTELLATION(ResearchProgression.CONSTELLATION, 400,
             () -> BlocksAS.ALTAR_CONSTELLATION.asItem(),
             () -> StructureTypesAS.EMPTY,
             (slot) -> slot != 3 && slot != 10 && slot != 14 && slot != 22),
-    RADIANCE     (ResearchProgression.RADIANCE,
+    RADIANCE     (ResearchProgression.RADIANCE, 600,
             () -> BlocksAS.ALTAR_RADIANCE.asItem(),
             () -> StructureTypesAS.EMPTY,
             (slot) -> true);
 
     private final ResearchProgression associatedTier;
+    private final int defaultAltarCraftingDuration;
     private final Supplier<Item> altarItemSupplier;
     private final Supplier<StructureType> structureSupplier;
     private Predicate<Integer> slotValidator;
 
-    AltarType(ResearchProgression progressTier, Supplier<Item> altarItemSupplier, Supplier<StructureType> structureSupplier, int... validSlots) {
+    AltarType(ResearchProgression progressTier, int defaultAltarCraftingDuration, Supplier<Item> altarItemSupplier, Supplier<StructureType> structureSupplier, int... validSlots) {
         this.associatedTier = progressTier;
+        this.defaultAltarCraftingDuration = defaultAltarCraftingDuration;
         this.altarItemSupplier = altarItemSupplier;
         this.structureSupplier = structureSupplier;
         List<Integer> slots = new ArrayList<>();
@@ -66,8 +65,9 @@ public enum AltarType {
         this.slotValidator = slots::contains;
     }
 
-    AltarType(ResearchProgression progressTier, Supplier<Item> altarItemSupplier, Supplier<StructureType> structureSupplier, Predicate<Integer> slotValidator) {
+    AltarType(ResearchProgression progressTier, int defaultAltarCraftingDuration, Supplier<Item> altarItemSupplier, Supplier<StructureType> structureSupplier, Predicate<Integer> slotValidator) {
         this.associatedTier = progressTier;
+        this.defaultAltarCraftingDuration = defaultAltarCraftingDuration;
         this.altarItemSupplier = altarItemSupplier;
         this.structureSupplier = structureSupplier;
         this.slotValidator = slotValidator;
@@ -94,6 +94,10 @@ public enum AltarType {
 
     public int getStarlightCapacity() {
         return (int) (1000 * Math.pow(2, ordinal()));
+    }
+
+    public int getDefaultAltarCraftingDuration() {
+        return defaultAltarCraftingDuration;
     }
 
     public boolean isThisLEThan(AltarType type) {

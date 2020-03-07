@@ -50,6 +50,10 @@ public class CopyConstellation extends LootFunction {
         return stack;
     }
 
+    public static LootFunction.Builder<?> builder() {
+        return builder(CopyConstellation::new);
+    }
+
     public static class Serializer extends LootFunction.Serializer<CopyConstellation> {
 
         public Serializer(ResourceLocation name) {

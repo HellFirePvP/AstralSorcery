@@ -24,8 +24,7 @@ public class PropertiesMisc {
 
     public static Block.Properties defaultAir() {
         return Block.Properties.create(Material.AIR, MaterialColor.AIR)
-                .doesNotBlockMovement()
-                .noDrops();
+                .doesNotBlockMovement();
     }
 
     public static Block.Properties defaultSand() {

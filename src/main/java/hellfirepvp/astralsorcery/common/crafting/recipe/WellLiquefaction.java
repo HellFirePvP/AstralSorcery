@@ -8,11 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe;
 
+import com.google.common.base.Preconditions;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -33,16 +36,16 @@ public class WellLiquefaction extends CustomMatcherRecipe {
 
     private final Color catalystColor;
     private final Ingredient input;
-    private final FluidStack output;
+    private final Fluid output;
 
     private final float productionMultiplier;
     private final float shatterMultiplier;
 
-    public WellLiquefaction(ResourceLocation recipeId, Ingredient input, FluidStack output, float productionMultiplier, float shatterMultiplier) {
+    public WellLiquefaction(ResourceLocation recipeId, Ingredient input, Fluid output, float productionMultiplier, float shatterMultiplier) {
         this(recipeId, input, output, null, productionMultiplier, shatterMultiplier);
     }
 
-    public WellLiquefaction(ResourceLocation recipeId, Ingredient input, FluidStack output, @Nullable Color catalystColor, float productionMultiplier, float shatterMultiplier) {
+    public WellLiquefaction(ResourceLocation recipeId, Ingredient input, Fluid output, @Nullable Color catalystColor, float productionMultiplier, float shatterMultiplier) {
         super(recipeId);
         this.input = input;
         this.output = output;
@@ -61,7 +64,7 @@ public class WellLiquefaction extends CustomMatcherRecipe {
     }
 
     @Nonnull
-    public FluidStack getFluidOutput() {
+    public Fluid getFluidOutput() {
         return output;
     }
 
@@ -84,7 +87,7 @@ public class WellLiquefaction extends CustomMatcherRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public CustomRecipeSerializer<?> getSerializer() {
         return RecipeSerializersAS.WELL_LIQUEFACTION_SERIALIZER;
     }
 }

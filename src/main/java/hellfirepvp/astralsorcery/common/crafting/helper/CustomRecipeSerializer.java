@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
+import com.google.gson.JsonObject;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -23,10 +25,11 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 06.07.2019 / 20:38
  */
-public abstract class CustomRecipeSerializer<T extends IRecipe<IInventory>> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
+public abstract class CustomRecipeSerializer<T extends CustomMatcherRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
 
     public CustomRecipeSerializer(ResourceLocation name) {
         this.setRegistryName(name);
     }
 
+    public abstract void write(JsonObject object, T recipe);
 }

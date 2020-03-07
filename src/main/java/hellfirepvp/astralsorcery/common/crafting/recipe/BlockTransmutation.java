@@ -10,11 +10,12 @@ package hellfirepvp.astralsorcery.common.crafting.recipe;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockMatchInformation;
 import hellfirepvp.astralsorcery.common.util.object.PredicateBuilder;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -78,7 +79,7 @@ public class BlockTransmutation extends CustomMatcherRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public CustomRecipeSerializer<?> getSerializer() {
         return RecipeSerializersAS.BLOCK_TRANSMUTATION_SERIALIZER;
     }
 

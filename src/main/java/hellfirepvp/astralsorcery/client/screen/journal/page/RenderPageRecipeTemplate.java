@@ -26,12 +26,10 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.IngredientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -49,7 +47,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -95,7 +92,7 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
 
         float perc = (ClientScheduler.getClientTick() % 3000) / 3000F;
 
-        List<WrappedIngredient> ingredients = altarRecipe.getTraitInputIngredients();
+        List<WrappedIngredient> ingredients = altarRecipe.getRelayInputs();
         int amt = ingredients.size();
         for (int i = 0; i < ingredients.size(); i++) {
             double part = ((double) i) / ((double) amt) * 2.0 * Math.PI; //Shift by half a period

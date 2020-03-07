@@ -65,9 +65,38 @@ public class ConstellationItemRecipe extends SimpleAltarRecipe {
             ResourceLocation cstName = new ResourceLocation(JSONUtils.getString(recipeObject, KEY_CONSTELLATION_TRAIT));
             IConstellation cst = RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(cstName);
             if (cst instanceof IMinorConstellation) {
+                this.setTraitConstellation((IMinorConstellation) cst);
                 this.traitConstellation = (IMinorConstellation) cst;
             }
         }
+    }
+
+    @Override
+    public void serializeAdditionalJson(JsonObject recipeObject) {
+        super.serializeAdditionalJson(recipeObject);
+
+        if (this.getAttunedConstellation() != null) {
+            recipeObject.addProperty(KEY_CONSTELLATION_ATTUNE, this.getAttunedConstellation().getRegistryName().toString());
+        }
+        if (this.getTraitConstellation() != null) {
+            recipeObject.addProperty(KEY_CONSTELLATION_TRAIT, this.getTraitConstellation().getRegistryName().toString());
+        }
+    }
+
+    public void setAttunedConstellation(IWeakConstellation attunedConstellation) {
+        this.attunedConstellation = attunedConstellation;
+    }
+
+    public void setTraitConstellation(IMinorConstellation traitConstellation) {
+        this.traitConstellation = traitConstellation;
+    }
+
+    public IWeakConstellation getAttunedConstellation() {
+        return attunedConstellation;
+    }
+
+    public IMinorConstellation getTraitConstellation() {
+        return traitConstellation;
     }
 
     @Override
@@ -89,11 +118,11 @@ public class ConstellationItemRecipe extends SimpleAltarRecipe {
 
     private void setConstellations(ItemStack out) {
         if (out.getItem() instanceof ConstellationItem) {
-            if (this.attunedConstellation != null) {
-                ((ConstellationItem) out.getItem()).setAttunedConstellation(out, this.attunedConstellation);
+            if (this.getAttunedConstellation() != null) {
+                ((ConstellationItem) out.getItem()).setAttunedConstellation(out, this.getAttunedConstellation());
             }
-            if (this.traitConstellation != null) {
-                ((ConstellationItem) out.getItem()).setTraitConstellation(out, this.traitConstellation);
+            if (this.getTraitConstellation() != null) {
+                ((ConstellationItem) out.getItem()).setTraitConstellation(out, this.getTraitConstellation());
             }
         }
     }
@@ -102,8 +131,8 @@ public class ConstellationItemRecipe extends SimpleAltarRecipe {
     public void writeRecipeSync(PacketBuffer buf) {
         super.writeRecipeSync(buf);
 
-        ByteBufUtils.writeOptional(buf, this.attunedConstellation, ByteBufUtils::writeRegistryEntry);
-        ByteBufUtils.writeOptional(buf, this.traitConstellation, ByteBufUtils::writeRegistryEntry);
+        ByteBufUtils.writeOptional(buf, this.getAttunedConstellation(), ByteBufUtils::writeRegistryEntry);
+        ByteBufUtils.writeOptional(buf, this.getTraitConstellation(), ByteBufUtils::writeRegistryEntry);
     }
 
     @Override

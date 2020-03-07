@@ -8,9 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper.ingredient;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import hellfirepvp.astralsorcery.common.lib.IngredientSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.StackList;
 
 import java.util.ArrayList;
@@ -63,5 +68,19 @@ public class CrystalIngredient extends Ingredient {
 
     public boolean hasToBeCelestial() {
         return hasToBeCelestial;
+    }
+
+    @Override
+    public JsonElement serialize() {
+        JsonObject object = new JsonObject();
+        object.addProperty("type", CraftingHelper.getID(IngredientSerializersAS.CRYSTAL_SERIALIZER).toString());
+        object.addProperty("hasToBeAttuned", this.hasToBeAttuned());
+        object.addProperty("hasToBeCelestial", this.hasToBeCelestial());
+        return object;
+    }
+
+    @Override
+    public IIngredientSerializer<? extends Ingredient> getSerializer() {
+        return IngredientSerializersAS.CRYSTAL_SERIALIZER;
     }
 }

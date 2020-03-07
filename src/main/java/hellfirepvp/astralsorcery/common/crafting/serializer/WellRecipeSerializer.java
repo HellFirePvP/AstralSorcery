@@ -10,17 +10,21 @@ package hellfirepvp.astralsorcery.common.crafting.serializer;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+import hellfirepvp.astralsorcery.common.crafting.builder.WellRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.awt.*;
 
@@ -39,31 +43,25 @@ public class WellRecipeSerializer extends CustomRecipeSerializer<WellLiquefactio
 
     @Override
     public WellLiquefaction read(ResourceLocation recipeId, JsonObject json) {
-        String grp = JSONUtils.getString(json, "group", "");
         Ingredient input = Ingredient.deserialize(JSONUtils.getJsonObject(json, "input"));
-        Ingredient output = Ingredient.deserialize(JSONUtils.getJsonObject(json, "output"));
-        if (!(output instanceof FluidIngredient)) {
-            throw new JsonParseException("Expected astralsorcery:fluid as 'output'!");
+        String fluidKey = JSONUtils.getString(json, "output");
+        Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidKey));
+        if (fluid == null) {
+            throw new JsonSyntaxException("Unknown fluid: " + fluidKey);
         }
-        if (((FluidIngredient) output).getFluids().size() != 1) {
-            throw new JsonParseException("Expected 'output' to be a single fluid, not multiple!");
-        }
-        FluidStack fluid = ((FluidIngredient) output).getFluids().get(0);
         float productionMultiplier = JSONUtils.getFloat(json, "productionMultiplier");
         float shatterMultiplier = JSONUtils.getFloat(json, "shatterMultiplier");
         Color color = null;
         if (json.has("color")) {
             color = JsonHelper.getColor(json, "color");
         }
-        WellLiquefaction recipe = new WellLiquefaction(recipeId, input, fluid, color, productionMultiplier, shatterMultiplier);
-        recipe.setGroup(grp);
-        return recipe;
+        return new WellLiquefaction(recipeId, input, fluid, color, productionMultiplier, shatterMultiplier);
     }
 
     @Override
     public WellLiquefaction read(ResourceLocation recipeId, PacketBuffer buffer) {
         Ingredient input = Ingredient.read(buffer);
-        FluidStack fluid = ByteBufUtils.readFluidStack(buffer);
+        Fluid fluid = ByteBufUtils.readRegistryEntry(buffer);
         float shatter = buffer.readFloat();
         float production = buffer.readFloat();
         Color color = ByteBufUtils.readOptional(buffer, buf -> new Color(buf.readInt(), true));
@@ -73,9 +71,18 @@ public class WellRecipeSerializer extends CustomRecipeSerializer<WellLiquefactio
     @Override
     public void write(PacketBuffer buffer, WellLiquefaction recipe) {
         recipe.getInput().write(buffer);
-        ByteBufUtils.writeFluidStack(buffer, recipe.getFluidOutput());
+        ByteBufUtils.writeRegistryEntry(buffer, recipe.getFluidOutput());
         buffer.writeFloat(recipe.getShatterMultiplier());
         buffer.writeFloat(recipe.getProductionMultiplier());
         ByteBufUtils.writeOptional(buffer, recipe.getCatalystColor(), (buf, color) -> buf.writeInt(color.getRGB()));
+    }
+
+    @Override
+    public void write(JsonObject object, WellLiquefaction recipe) {
+        object.add("input", recipe.getInput().serialize());
+        object.addProperty("output", recipe.getFluidOutput().getRegistryName().toString());
+        object.addProperty("productionMultiplier", recipe.getProductionMultiplier());
+        object.addProperty("shatterMultiplier", recipe.getShatterMultiplier());
+        object.addProperty("color", recipe.getCatalystColor() == null ? Color.WHITE.getRGB() : recipe.getCatalystColor().getRGB());
     }
 }

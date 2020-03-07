@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "astralsorcery:starmetal_ore"
-  },
-  "result": "astralsorcery:starmetal_ingot",
-  "experience": 2.5,
-  "cookingtime": 100
-}

@@ -41,6 +41,10 @@ public class RandomCrystalProperty extends LootFunction {
         return itemStack;
     }
 
+    public static LootFunction.Builder<?> builder() {
+        return builder(RandomCrystalProperty::new);
+    }
+
     public static class Serializer extends LootFunction.Serializer<RandomCrystalProperty> {
 
         public Serializer(ResourceLocation name) {

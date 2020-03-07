@@ -58,8 +58,7 @@ public class BlockStructural extends Block {
 
     public BlockStructural() {
         super(Block.Properties.create(Material.BARRIER, MaterialColor.AIR)
-                .sound(SoundType.GLASS)
-                .noDrops());
+                .sound(SoundType.GLASS));
 
         this.setDefaultState(this.getDefaultState().with(BLOCK_TYPE, BlockType.TELESCOPE));
     }

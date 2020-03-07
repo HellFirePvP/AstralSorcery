@@ -76,7 +76,7 @@ public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
             GlStateManager.disableAlphaTest();
             GlStateManager.enableBlend();
             if (recipe != null) {
-                List<WrappedIngredient> traitInputs = recipe.getRecipeToCraft().getTraitInputIngredients();
+                List<WrappedIngredient> traitInputs = recipe.getRecipeToCraft().getRelayInputs();
                 int amount = 60 / traitInputs.size();
                 for (int i = 0; i < traitInputs.size(); i++) {
                     WrappedIngredient ingredient = traitInputs.get(i);

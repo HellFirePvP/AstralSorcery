@@ -48,6 +48,10 @@ public class CopyCrystalProperties extends LootFunction {
         return stack;
     }
 
+    public static LootFunction.Builder<?> builder() {
+        return builder(CopyCrystalProperties::new);
+    }
+
     public static class Serializer extends LootFunction.Serializer<CopyCrystalProperties> {
 
         public Serializer(ResourceLocation name) {

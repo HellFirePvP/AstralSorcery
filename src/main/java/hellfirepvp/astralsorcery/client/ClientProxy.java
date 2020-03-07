@@ -15,6 +15,10 @@ import hellfirepvp.astralsorcery.client.effect.handler.EffectUpdater;
 import hellfirepvp.astralsorcery.client.event.*;
 import hellfirepvp.astralsorcery.client.event.effect.EffectRenderEventHandler;
 import hellfirepvp.astralsorcery.client.event.effect.LightbeamRenderHelper;
+import hellfirepvp.astralsorcery.client.registry.RegistryEffectTemplates;
+import hellfirepvp.astralsorcery.client.registry.RegistryEffectTypes;
+import hellfirepvp.astralsorcery.client.registry.RegistrySprites;
+import hellfirepvp.astralsorcery.client.registry.RegistryTextures;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
@@ -33,6 +37,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.registry.*;
+import hellfirepvp.astralsorcery.common.util.object.InitRunnable;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -43,6 +48,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.util.Unit;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ForgeBlockStateV1;
@@ -50,7 +56,8 @@ import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
+import net.minecraftforge.resource.SelectiveReloadStateHandler;
+import net.minecraftforge.resource.VanillaResourceType;
 
 import java.util.function.Consumer;
 
@@ -71,10 +78,19 @@ public class ClientProxy extends CommonProxy {
     public void initialize() {
         this.clientScheduler = new ClientScheduler();
 
-        IReloadableResourceManager resMgr = (IReloadableResourceManager) Minecraft.getInstance().getResourceManager();
-        resMgr.addReloadListener(AssetLibrary.INSTANCE);
-        resMgr.addReloadListener(AssetPreLoader.INSTANCE);
-        resMgr.addReloadListener(ColorizationHelper.onReload());
+        if (!AstralSorcery.isDoingDataGeneration()) {
+            IReloadableResourceManager resMgr = (IReloadableResourceManager) Minecraft.getInstance().getResourceManager();
+            resMgr.addReloadListener(AssetLibrary.INSTANCE);
+            resMgr.addReloadListener(AssetPreLoader.INSTANCE);
+            resMgr.addReloadListener(ColorizationHelper.onReload());
+            resMgr.addReloadListener((stage, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor) ->
+                    stage.markCompleteAwaitingOthers(Unit.INSTANCE).thenRunAsync(() -> {
+                        if (!SelectiveReloadStateHandler.INSTANCE.get().test(VanillaResourceType.LANGUAGES)) {
+                            return;
+                        }
+                        RegistriesAS.REGISTRY_PERKS.forEach(AbstractPerk::clearClientTextCaches);
+                    }));
+        }
 
         OBJLoader.INSTANCE.addDomain(AstralSorcery.MODID);
 
@@ -181,10 +197,6 @@ public class ClientProxy extends CommonProxy {
         RegistryContainerTypes.initClient();
         RegistryEntities.initClient();
         RegistryTileEntities.initClient();
-
-        ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager())
-                .addReloadListener((ISelectiveResourceReloadListener) (resourceManager, resourcePredicate) ->
-                        RegistriesAS.REGISTRY_PERKS.forEach(AbstractPerk::clearClientResourceCaches));
     }
 
     private void addTomeBookmarks() {

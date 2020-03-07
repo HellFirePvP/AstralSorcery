@@ -132,7 +132,11 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
     }
 
     private void fillAndDiscardRest(WellLiquefaction recipe, double gain) {
-        Fluid produced = recipe.getFluidOutput().getFluid();
+        Fluid produced = recipe.getFluidOutput();
+        if (produced == null) {
+            return;
+        }
+
         if (tank.getFluidAmount() < 10) { //Fix fluids never changing on "empty" wells
             tank.setFluid(produced);
         }

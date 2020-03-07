@@ -46,7 +46,7 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
         ActiveSimpleAltarRecipe recipe = altar.getActiveRecipe();
         if (recipe != null) {
-            List<WrappedIngredient> additionalIngredients = recipe.getRecipeToCraft().getTraitInputIngredients();
+            List<WrappedIngredient> additionalIngredients = recipe.getRecipeToCraft().getRelayInputs();
             for (CraftingFocusStack stack : recipe.getFocusStacks()) {
                 if (stack.getStackIndex() < 0 || stack.getStackIndex() >= additionalIngredients.size()) {
                     continue;
@@ -119,7 +119,7 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
     public void onTESR(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state, double x, double y, double z, float pTicks) {
         ActiveSimpleAltarRecipe activeRecipe = altar.getActiveRecipe();
         if (activeRecipe != null) {
-            List<WrappedIngredient> additionalIngredients = activeRecipe.getRecipeToCraft().getTraitInputIngredients();
+            List<WrappedIngredient> additionalIngredients = activeRecipe.getRecipeToCraft().getRelayInputs();
             List<CraftingFocusStack> focusStacks = activeRecipe.getFocusStacks();
             for (CraftingFocusStack stack : focusStacks) {
                 if (stack.getStackIndex() < 0 || stack.getStackIndex() >= additionalIngredients.size()) {

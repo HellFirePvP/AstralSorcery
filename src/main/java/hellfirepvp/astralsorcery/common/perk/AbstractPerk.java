@@ -292,7 +292,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     public void clearCaches(LogicalSide side) {}
 
     @OnlyIn(Dist.CLIENT)
-    public void clearClientResourceCaches() {
+    public void clearClientTextCaches() {
         this.tooltipCache = null;
     }
 

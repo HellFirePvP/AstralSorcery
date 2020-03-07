@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.crafting.builder.BlockTransmutationBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
@@ -84,5 +85,10 @@ public class BlockTransmutationSerializer extends CustomRecipeSerializer<BlockTr
         ByteBufUtils.writeBlockState(buffer, recipe.getOutput());
         buffer.writeDouble(recipe.getStarlightRequired());
         ByteBufUtils.writeOptional(buffer, recipe.getRequiredConstellation(), ByteBufUtils::writeRegistryEntry);
+    }
+
+    @Override
+    public void write(JsonObject object, BlockTransmutation recipe) {
+        //TODO
     }
 }
