@@ -164,6 +164,17 @@ public class JsonHelper {
         return itemstack;
     }
 
+    @Nonnull
+    public static JsonObject serializeItemStack(ItemStack stack) {
+        JsonObject object = new JsonObject();
+        object.addProperty("item", stack.getItem().getRegistryName().toString());
+        object.addProperty("count", stack.getCount());
+        if (stack.hasTag()) {
+            object.addProperty("nbt", stack.getTag().toString());
+        }
+        return object;
+    }
+
     public static Color getColor(JsonObject object, String key) {
         String value = JSONUtils.getString(object, key);
         if (value.startsWith("0x")) { //Assume hex color.

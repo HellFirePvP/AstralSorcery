@@ -8,18 +8,21 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe;
 
+import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
 import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -150,13 +153,23 @@ public class LiquidInfusion extends CustomMatcherRecipe implements GatedRecipe.P
         buffer.writeBoolean(this.acceptsChaliceInput());
     }
 
+    public void write(JsonObject object) {
+        object.addProperty("fluidInput", this.getLiquidInput().getRegistryName().toString());
+        object.add("input", this.getItemInput().serialize());
+        object.add("output", JsonHelper.serializeItemStack(this.output));
+        object.addProperty("consumptionChance", this.getConsumptionChance());
+        object.addProperty("duration", this.getCraftingTickTime());
+        object.addProperty("consumeMultipleFluids", this.doesConsumeMultipleFluids());
+        object.addProperty("acceptChaliceInput", this.acceptsChaliceInput());
+    }
+
     @Override
     public IRecipeType<?> getType() {
         return RecipeTypesAS.TYPE_INFUSION.getType();
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public CustomRecipeSerializer<?> getSerializer() {
         return RecipeSerializersAS.LIQUID_INFUSION_SERIALIZER;
     }
 }

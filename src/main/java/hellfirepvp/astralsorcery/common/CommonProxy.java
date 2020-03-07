@@ -21,7 +21,7 @@ import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffectRegistry;
-import hellfirepvp.astralsorcery.common.crafting.recipe.altar.CustomAltarRecipeHandler;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigRegistries;
 import hellfirepvp.astralsorcery.common.data.config.entry.*;
@@ -151,13 +151,13 @@ public class CommonProxy {
         RegistryData.init();
         RegistryMaterials.init();
         RegistryGameRules.init();
-        RegistryTags.registerTags();
         RegistryStructureTypes.init();
         PacketChannel.registerPackets();
         RegistryLootFunctions.registerLootFunctions();
         RegistryPerkAttributeTypes.init();
         RegistryPerkAttributeReaders.init();
-        CustomAltarRecipeHandler.registerDefaultConverters();
+        RegistryIngredientTypes.init();
+        AltarRecipeTypeHandler.registerDefaultConverters();
 
         this.initializeConfigurations();
         ConfigRegistries.getRegistries().buildDataRegistries(this.serverConfig);
@@ -311,7 +311,6 @@ public class CommonProxy {
         this.serverConfig.buildConfiguration();
 
         RegistryCapabilities.initialize();
-        RegistryIngredientTypes.init();
         StarlightNetworkRegistry.setupRegistry();
 
         RegistryWorldGeneration.registerFeatures();

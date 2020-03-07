@@ -8,18 +8,24 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.util.MapStream;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -37,16 +43,29 @@ public class AltarRecipeGrid {
 
     public static final int GRID_SIZE = 5;
     public static final int MAX_INVENTORY_SIZE = GRID_SIZE * GRID_SIZE;
+    public static final AltarRecipeGrid EMPTY = new AltarRecipeGrid(new HashMap<>(), 0, 0);
 
     private static final Pattern SKIP_CHARS = Pattern.compile("^\\s|_|#$");
 
     private final Map<Integer, Ingredient> gridParts;
     private final int width, height;
 
+    private AltarRecipeGrid(Map<Integer, Ingredient> gridParts) {
+        this(new AltarRecipeGrid(gridParts, -1, -1).minimizeGrid());
+    }
+
+    private AltarRecipeGrid(AltarRecipeGrid other) {
+        this(other.gridParts, other.width, other.height);
+    }
+
     private AltarRecipeGrid(Map<Integer, Ingredient> gridParts, int width, int height) {
         this.gridParts = gridParts;
         this.width = width;
         this.height = height;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public boolean containsInputs(IItemHandlerModifiable itemHandler, boolean testMirrored) {
@@ -110,6 +129,77 @@ public class AltarRecipeGrid {
         return true;
     }
 
+    public void validate(AltarType type) {
+        AltarRecipeGrid centralized = this.centralizeGrid();
+        if (centralized.gridParts.isEmpty()) {
+            throw new IllegalArgumentException("Altar recipe grid cannot be empty!");
+        }
+
+        for (Integer index : centralized.gridParts.keySet()) {
+            if (!type.hasSlot(index)) {
+                throw new IllegalArgumentException("Altar type " + type.name() + " has no slot at " + index);
+            }
+
+            Ingredient input = centralized.gridParts.get(index);
+            if (input.hasNoMatchingItems()){
+                throw new IllegalArgumentException("Input at " + index + " has no matching items!");
+            }
+        }
+    }
+
+    private AltarRecipeGrid centralizeGrid() {
+        int shiftX = (GRID_SIZE - this.getWidth())  / 2;
+        int shiftZ = (GRID_SIZE - this.getHeight()) / 2;
+
+        Map<Integer, Ingredient> copy = Maps.newHashMap();
+        for (Integer slotIndex : this.gridParts.keySet()) {
+            int index = slotIndex + shiftX + (shiftZ * GRID_SIZE);
+            copy.put(index, this.gridParts.get(slotIndex));
+        }
+        return new AltarRecipeGrid(copy, GRID_SIZE, GRID_SIZE);
+    }
+
+    private AltarRecipeGrid minimizeGrid() {
+        Map<Integer, Ingredient> mappedIngredients = new HashMap<>(this.gridParts);
+
+        int firstColumn = GRID_SIZE - 1,
+                firstRow = GRID_SIZE - 1,
+                lastColumn = 0,
+                lastRow = 0;
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int column = 0; column < GRID_SIZE; column++) {
+                int slotIndex = row * GRID_SIZE + column;
+                if (mappedIngredients.containsKey(slotIndex)) {
+                    if (row < firstRow) {
+                        firstRow = row;
+                    }
+                    if (row > lastRow) {
+                        lastRow = row;
+                    }
+                    if (column < firstColumn) {
+                        firstColumn = column;
+                    }
+                    if (column > lastColumn) {
+                        lastColumn = column;
+                    }
+                }
+            }
+        }
+        if (firstColumn > 0) {
+            int xShift = firstColumn;
+            mappedIngredients = MapStream.of(mappedIngredients)
+                    .mapKey(slot -> slot - xShift)
+                    .toMap();
+        }
+        if (firstRow > 0) {
+            int yShift = firstRow * GRID_SIZE;
+            mappedIngredients = MapStream.of(mappedIngredients)
+                    .mapKey(slot -> slot - yShift)
+                    .toMap();
+        }
+        return new AltarRecipeGrid(mappedIngredients, (lastColumn - firstColumn) + 1, (lastRow - firstRow) + 1);
+    }
+
     public void write(PacketBuffer buffer) {
         buffer.writeInt(this.width);
         buffer.writeInt(this.height);
@@ -132,7 +222,48 @@ public class AltarRecipeGrid {
         return new AltarRecipeGrid(ingredientMap, width, height);
     }
 
-    public static AltarRecipeGrid deserialize(AltarType type, JsonArray pattern, JsonObject objKeyElements) throws JsonSyntaxException {
+    public void serialize(JsonObject object) {
+        JsonArray pattern = new JsonArray();
+        JsonObject keys = new JsonObject();
+
+        Map<JsonElement, String> revMap = new HashMap<>();
+        Map<String, JsonElement> ingredientMap = new HashMap<>();
+        Map<Integer, String> patternMap = new HashMap<>();
+        char c = 'A';
+
+        for (Map.Entry<Integer, Ingredient> entry : this.centralizeGrid().gridParts.entrySet()) {
+            Integer slotIndex = entry.getKey();
+            Ingredient value = entry.getValue();
+            JsonElement jsonIngredient = value.serialize();
+            if (!revMap.containsKey(jsonIngredient)) {
+                String strKey = String.valueOf(c);
+                revMap.put(jsonIngredient, strKey);
+                patternMap.put(slotIndex, strKey);
+                ingredientMap.put(strKey, jsonIngredient);
+                c++;
+            } else {
+                patternMap.put(slotIndex, revMap.get(jsonIngredient));
+            }
+        }
+
+        for (int xx = 0; xx < GRID_SIZE; xx++) {
+            StringBuilder line = new StringBuilder();
+            for (int zz = 0; zz < GRID_SIZE; zz++) {
+                int slotIndex = xx * GRID_SIZE + zz;
+                line.append(patternMap.getOrDefault(slotIndex, "_"));
+            }
+            pattern.add(line.toString());
+        }
+        object.add("pattern", pattern);
+
+        ingredientMap.forEach((key, ingredient) -> keys.add(String.valueOf(key), ingredient));
+        object.add("key", keys);
+    }
+
+    public static AltarRecipeGrid deserialize(AltarType type, JsonObject json) throws JsonSyntaxException {
+        JsonArray pattern = JSONUtils.getJsonArray(json, "pattern");
+        JsonObject keys = JSONUtils.getJsonObject(json, "key");
+
         Map<Integer, Character> patternMap = new HashMap<>();
         Set<Character> usedChars = new HashSet<>();
         for (int i = 0; i < MAX_INVENTORY_SIZE; i++) {
@@ -158,7 +289,7 @@ public class AltarRecipeGrid {
         }
 
         Map<Integer, Ingredient> mappedIngredients = new HashMap<>();
-        for (Map.Entry<String, JsonElement> jEntry : objKeyElements.entrySet()) {
+        for (Map.Entry<String, JsonElement> jEntry : keys.entrySet()) {
             String key = jEntry.getKey();
             if (key.length() != 1) {
                 throw new JsonSyntaxException("Invalid Key: '" + key + "'! Keys must only be a single character!");
@@ -193,44 +324,99 @@ public class AltarRecipeGrid {
                 throw new JsonSyntaxException("Slot " + slot + " has an ingredient but cannot be used in altar type " + type.name());
             }
         }
+        return new AltarRecipeGrid(mappedIngredients);
+    }
 
-        int firstColumn = GRID_SIZE - 1,
-            firstRow = GRID_SIZE - 1,
-            lastColumn = 0,
-            lastRow = 0;
-        for (int row = 0; row < GRID_SIZE; row++) {
-            for (int column = 0; column < GRID_SIZE; column++) {
-                int slotIndex = row * GRID_SIZE + column;
-                if (mappedIngredients.containsKey(slotIndex)) {
-                    if (row < firstRow) {
-                        firstRow = row;
-                    }
-                    if (row > lastRow) {
-                        lastRow = row;
-                    }
-                    if (column < firstColumn) {
-                        firstColumn = column;
-                    }
-                    if (column > lastColumn) {
-                        lastColumn = column;
+    public static class Builder {
+
+        private LinkedList<String> pattern = Lists.newLinkedList();
+        private Map<Character, Ingredient> inputMapping = Maps.newHashMap();
+
+        public Builder patternLine(String line) {
+            if (line.length() > GRID_SIZE) {
+                throw new IllegalArgumentException("Altar recipe pattern line must not be more than 5 characters long! Passed line '" + line + "'");
+            }
+            if (this.pattern.size() >= GRID_SIZE) {
+                throw new IllegalArgumentException("Altar recipe pattern must not have more than 5 lines total!");
+            }
+            this.pattern.add(line);
+            return this;
+        }
+
+        public Builder key(Character key, Tag<Item> tagIn) {
+            return this.key(key, Ingredient.fromTag(tagIn));
+        }
+
+        public Builder key(Character key, IItemProvider itemIn) {
+            return this.key(key, Ingredient.fromItems(itemIn));
+        }
+
+        public Builder key(Character key, Ingredient input) {
+            if (this.inputMapping.containsKey(key)) {
+                throw new IllegalArgumentException("Character '" + key + "' is already defined!");
+            }
+            if (key.equals(' ') || key.equals('_')) {
+                throw new IllegalArgumentException("Character ' ' (whitespace) or '_' (underscore) is reserved and cannot be defined!");
+            }
+            this.inputMapping.put(key, input);
+            return this;
+        }
+
+        public AltarRecipeGrid build() {
+            int mostWidth = this.pattern.stream()
+                    .map(String::length)
+                    .max(Integer::compareTo)
+                    .orElseThrow(() -> new IllegalArgumentException("No pattern is defined for altar recipe!"));
+            int mostHeight = (int) this.pattern.stream()
+                    .filter(s -> !s.isEmpty())
+                    .count();
+            if (mostHeight == 0 || mostWidth == 0) {
+                throw new IllegalArgumentException("Altar recipe grid pattern is empty!");
+            }
+            int shiftZ = (GRID_SIZE - mostHeight) / 2;
+            for (int i = 0; i < shiftZ; i++) {
+                this.pattern.addFirst(StringUtils.repeat('_', GRID_SIZE));
+            }
+            for (int i = 0; i < (GRID_SIZE - mostHeight - shiftZ); i++) {
+                this.pattern.add(StringUtils.repeat('_', GRID_SIZE));
+            }
+
+            List<String> patternLines = new LinkedList<>();
+            int shiftX = (GRID_SIZE - mostWidth) / 2;
+            for (String line : this.pattern) {
+                String newLine = StringUtils.repeat("_", shiftX) + line + StringUtils.repeat("_", GRID_SIZE - mostWidth - shiftX);
+                patternLines.add(newLine);
+            }
+
+            HashSet<Character> foundCharacters = new HashSet<>();
+            for (String line : patternLines) {
+                for (char c : line.toCharArray()) {
+                    if (!SKIP_CHARS.matcher(String.valueOf(c)).matches()) {
+                        foundCharacters.add(c);
                     }
                 }
             }
-        }
-        if (firstColumn > 0) {
-            int xShift = firstColumn;
-            mappedIngredients = MapStream.of(mappedIngredients)
-                    .mapKey(slot -> slot - xShift)
-                    .toMap();
-        }
-        if (firstRow > 0) {
-            int yShift = firstRow * GRID_SIZE;
-            mappedIngredients = MapStream.of(mappedIngredients)
-                    .mapKey(slot -> slot - yShift)
-                    .toMap();
-        }
+            if (!this.inputMapping.keySet().containsAll(foundCharacters)) {
+                String missingCharacters = foundCharacters.stream()
+                        .filter(key -> !this.inputMapping.containsKey(key))
+                        .map(String::valueOf)
+                        .collect(Collectors.joining(", "));
+                throw new IllegalArgumentException("No matching input found for characters " + missingCharacters);
+            }
 
-        return new AltarRecipeGrid(mappedIngredients, (lastColumn - firstColumn) + 1, (lastRow - firstRow) + 1);
+            Map<Integer, Ingredient> ingredientMap = new HashMap<>();
+            for (int lineIndex = 0; lineIndex < patternLines.size(); lineIndex++) {
+                char[] charArray = patternLines.get(lineIndex).toCharArray();
+                for (int cIndex = 0; cIndex < charArray.length; cIndex++) {
+                    Character c = charArray[cIndex];
+                    if (!SKIP_CHARS.matcher(String.valueOf(c)).matches()) {
+                        int slotIndex = lineIndex * GRID_SIZE + cIndex;
+                        ingredientMap.put(slotIndex, this.inputMapping.get(c));
+                    }
+                }
+            }
+            return new AltarRecipeGrid(ingredientMap);
+        }
     }
 
 }

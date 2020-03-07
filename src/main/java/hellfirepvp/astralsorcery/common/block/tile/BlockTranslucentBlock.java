@@ -59,8 +59,7 @@ public class BlockTranslucentBlock extends ContainerBlock {
     public BlockTranslucentBlock() {
         super(Properties.create(Material.BARRIER, MaterialColor.AIR)
                 .hardnessAndResistance(-1.0F, 6_000_000.0F)
-                .lightValue(12)
-                .noDrops());
+                .lightValue(12));
     }
 
     @Override

@@ -42,87 +42,87 @@ public class RegistryConstellations {
     }
 
     public static void registerSignatureItems() {
-        discidia.addSignatureItem(new ItemStack(Items.FLINT));
+        aevitas.addSignatureItem(ItemTags.SAPLINGS);
+        aevitas.addSignatureItem(TagsAS.Items.DUSTS_STARDUST);
+        aevitas.addSignatureItem(Tags.Items.SEEDS_WHEAT);
+        aevitas.addSignatureItem(Blocks.SUGAR_CANE);
+
+        discidia.addSignatureItem(Items.FLINT);
         discidia.addSignatureItem(Tags.Items.INGOTS_IRON);
-        discidia.addSignatureItem(new ItemStack(Items.ARROW));
+        discidia.addSignatureItem(ItemTags.ARROWS);
         discidia.addSignatureItem(Tags.Items.DUSTS_REDSTONE);
 
         armara.addSignatureItem(Tags.Items.INGOTS_IRON);
-        armara.addSignatureItem(new ItemStack(Items.LEATHER));
-        armara.addSignatureItem(new ItemStack(Items.CLAY_BALL));
+        armara.addSignatureItem(Tags.Items.LEATHER);
+        armara.addSignatureItem(Items.CLAY_BALL);
         armara.addSignatureItem(Tags.Items.DUSTS_GLOWSTONE);
 
-        vicio.addSignatureItem(new ItemStack(Items.FEATHER));
-        vicio.addSignatureItem(new ItemStack(Items.SUGAR));
-        vicio.addSignatureItem(new ItemStack(Items.STRING));
+        vicio.addSignatureItem(Tags.Items.FEATHERS);
+        vicio.addSignatureItem(Items.SUGAR);
+        vicio.addSignatureItem(Items.STRING);
         vicio.addSignatureItem(ItemTags.FISHES);
 
-        aevitas.addSignatureItem(ItemTags.SAPLINGS);
-        aevitas.addSignatureItem(TagsAS.DUSTS_STARDUST);
-        aevitas.addSignatureItem(new ItemStack(Items.WHEAT_SEEDS));
-        aevitas.addSignatureItem(new ItemStack(Blocks.SUGAR_CANE));
-
         evorsio.addSignatureItem(Tags.Items.COBBLESTONE);
-        evorsio.addSignatureItem(new ItemStack(Items.FLINT));
-        evorsio.addSignatureItem(new ItemStack(Items.GUNPOWDER));
-        evorsio.addSignatureItem(new ItemStack(Blocks.TNT));
+        evorsio.addSignatureItem(Items.FLINT);
+        evorsio.addSignatureItem(Tags.Items.GUNPOWDER);
+        evorsio.addSignatureItem(Blocks.TNT);
 
 
         lucerna.addSignatureItem(Tags.Items.DUSTS_GLOWSTONE);
-        lucerna.addSignatureItem(new ItemStack(Blocks.TORCH));
+        lucerna.addSignatureItem(Blocks.TORCH);
         lucerna.addSignatureItem(Tags.Items.DUSTS_REDSTONE);
-        lucerna.addSignatureItem(new ItemStack(Items.COAL));
+        lucerna.addSignatureItem(ItemTags.COALS);
 
         mineralis.addSignatureItem(Tags.Items.ORES_IRON);
         mineralis.addSignatureItem(Tags.Items.INGOTS_GOLD);
         mineralis.addSignatureItem(Tags.Items.INGOTS_IRON);
         mineralis.addSignatureItem(Tags.Items.DUSTS_REDSTONE);
 
-        horologium.addSignatureItem(TagsAS.DUSTS_STARDUST);
+        horologium.addSignatureItem(TagsAS.Items.DUSTS_STARDUST);
         horologium.addSignatureItem(Tags.Items.GEMS_DIAMOND);
-        horologium.addSignatureItem(new ItemStack(Items.ENDER_PEARL));
-        horologium.addSignatureItem(new ItemStack(Items.CLOCK));
+        horologium.addSignatureItem(Tags.Items.ENDER_PEARLS);
+        horologium.addSignatureItem(Items.CLOCK);
 
         octans.addSignatureItem(ItemTags.FISHES);
-        octans.addSignatureItem(new ItemStack(Items.FISHING_ROD));
+        octans.addSignatureItem(Items.FISHING_ROD);
         octans.addSignatureItem(Tags.Items.DYES_BLUE);
-        octans.addSignatureItem(new ItemStack(Items.CLAY_BALL));
+        octans.addSignatureItem(Items.CLAY_BALL);
 
-        bootes.addSignatureItem(new ItemStack(Items.WHEAT));
-        bootes.addSignatureItem(new ItemStack(Items.BONE));
-        bootes.addSignatureItem(new ItemStack(Items.APPLE));
-        bootes.addSignatureItem(new ItemStack(Items.LEATHER));
+        bootes.addSignatureItem(Tags.Items.CROPS_WHEAT);
+        bootes.addSignatureItem(Tags.Items.BONES);
+        bootes.addSignatureItem(Items.APPLE);
+        bootes.addSignatureItem(Tags.Items.LEATHER);
 
-        fornax.addSignatureItem(new ItemStack(Items.COAL));
+        fornax.addSignatureItem(Items.COAL);
         fornax.addSignatureItem(Tags.Items.DUSTS_REDSTONE);
         fornax.addSignatureItem(Tags.Items.INGOTS_IRON);
-        fornax.addSignatureItem(new ItemStack(Items.GUNPOWDER));
+        fornax.addSignatureItem(Tags.Items.GUNPOWDER);
 
-        pelotrio.addSignatureItem(new ItemStack(Items.ROTTEN_FLESH));
-        pelotrio.addSignatureItem(new ItemStack(Items.BLAZE_POWDER));
-        pelotrio.addSignatureItem(new ItemStack(Items.APPLE));
-        pelotrio.addSignatureItem(new ItemStack(Items.EGG));
+        pelotrio.addSignatureItem(Items.ROTTEN_FLESH);
+        pelotrio.addSignatureItem(Items.BLAZE_POWDER);
+        pelotrio.addSignatureItem(Items.APPLE);
+        pelotrio.addSignatureItem(Tags.Items.EGGS);
 
 
-        gelu.addSignatureItem(new ItemStack(Items.SNOWBALL));
-        gelu.addSignatureItem(new ItemStack(Blocks.ICE));
+        gelu.addSignatureItem(Items.SNOWBALL);
+        gelu.addSignatureItem(Blocks.ICE);
         gelu.addSignatureItem(Tags.Items.GEMS_QUARTZ);
-        gelu.addSignatureItem(new ItemStack(Items.FEATHER));
+        gelu.addSignatureItem(Tags.Items.FEATHERS);
 
-        ulteria.addSignatureItem(TagsAS.INGOTS_STARMETAL);
-        ulteria.addSignatureItem(new ItemStack(Items.LEATHER));
+        ulteria.addSignatureItem(TagsAS.Items.INGOTS_STARMETAL);
+        ulteria.addSignatureItem(Tags.Items.LEATHER);
         ulteria.addSignatureItem(Tags.Items.GEMS_DIAMOND);
         ulteria.addSignatureItem(Tags.Items.RODS_BLAZE);
 
-        alcara.addSignatureItem(new ItemStack(Items.NETHER_WART));
-        alcara.addSignatureItem(new ItemStack(Items.ENDER_PEARL));
-        alcara.addSignatureItem(new ItemStack(Blocks.SOUL_SAND));
-        alcara.addSignatureItem(new ItemStack(Items.COAL));
+        alcara.addSignatureItem(Tags.Items.CROPS_NETHER_WART);
+        alcara.addSignatureItem(Tags.Items.ENDER_PEARLS);
+        alcara.addSignatureItem(Blocks.SOUL_SAND);
+        alcara.addSignatureItem(ItemTags.COALS);
 
-        vorux.addSignatureItem(new ItemStack(Items.BLAZE_POWDER));
-        vorux.addSignatureItem(new ItemStack(ItemsAS.NOCTURNAL_POWDER));
-        vorux.addSignatureItem(new ItemStack(Items.GUNPOWDER));
-        vorux.addSignatureItem(new ItemStack(Items.NETHER_BRICK));
+        vorux.addSignatureItem(Items.BLAZE_POWDER);
+        vorux.addSignatureItem(ItemsAS.NOCTURNAL_POWDER);
+        vorux.addSignatureItem(Tags.Items.GUNPOWDER);
+        vorux.addSignatureItem(Items.NETHER_BRICK);
     }
 
     private static void buildConstellations() {

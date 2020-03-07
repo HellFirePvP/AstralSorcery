@@ -9,14 +9,16 @@
 package hellfirepvp.astralsorcery.common.crafting.recipe;
 
 import com.google.common.collect.Iterables;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
-import hellfirepvp.astralsorcery.common.crafting.recipe.altar.CustomAltarRecipeHandler;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
@@ -25,10 +27,10 @@ import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -51,23 +53,35 @@ import java.util.*;
 public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecipe.Progression {
 
     private final AltarType altarType;
-    private final int starlightRequirement;
-    private final int duration;
-    private final AltarRecipeGrid altarRecipeGrid;
 
+    private int duration;
+    private int starlightRequirement;
+    private AltarRecipeGrid altarRecipeGrid;
     private final List<ItemStack> outputs = new LinkedList<>();
     private ResourceLocation customRecipeType = null;
     private IConstellation focusConstellation = null;
-    private List<WrappedIngredient> inputIngredient = new LinkedList<>();
+    private List<WrappedIngredient> relayInputs = new LinkedList<>();
 
     private Set<AltarRecipeEffect> craftingEffects = new HashSet<>();
 
-    public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, AltarRecipeGrid recipeGrid) {
+    public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType) {
+        this(recipeId, altarType, altarType.getDefaultAltarCraftingDuration());
+    }
+
+    public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType, int duration) {
+        this(recipeId, altarType, duration, 0);
+    }
+
+    public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement) {
+        this(recipeId, altarType, duration, starlightRequirement, AltarRecipeGrid.EMPTY);
+    }
+
+    public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType, int duration, int starlightRequirement, AltarRecipeGrid grid) {
         super(recipeId);
         this.altarType = altarType;
         this.duration = duration;
         this.starlightRequirement = starlightRequirement;
-        this.altarRecipeGrid = recipeGrid;
+        this.altarRecipeGrid = grid;
 
         this.addDefaultEffects();
     }
@@ -108,9 +122,8 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
         return focusConstellation;
     }
 
-    @Nonnull
-    public List<WrappedIngredient> getTraitInputIngredients() {
-        return inputIngredient;
+    public void setInputs(AltarRecipeGrid inputGrid) {
+        this.altarRecipeGrid = inputGrid;
     }
 
     public AltarRecipeGrid getInputs() {
@@ -121,8 +134,16 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
         return craftingEffects;
     }
 
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     public int getDuration() {
         return duration;
+    }
+
+    public void setStarlightRequirement(int starlightRequirement) {
+        this.starlightRequirement = starlightRequirement;
     }
 
     public int getStarlightRequirement() {
@@ -147,8 +168,13 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
         this.focusConstellation = focusConstellation;
     }
 
-    public boolean addTraitInputIngredient(Ingredient i) {
-        return this.inputIngredient.add(new WrappedIngredient(i));
+    @Nonnull
+    public List<WrappedIngredient> getRelayInputs() {
+        return relayInputs;
+    }
+
+    public boolean addRelayInput(Ingredient i) {
+        return this.relayInputs.add(new WrappedIngredient(i));
     }
 
     public void addAltarEffect(AltarRecipeEffect effect) {
@@ -191,6 +217,8 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
 
     public void deserializeAdditionalJson(JsonObject recipeObject) throws JsonSyntaxException {}
 
+    public void serializeAdditionalJson(JsonObject recipeObject) {}
+
     public void writeRecipeSync(PacketBuffer buf) {}
 
     public void readRecipeSync(PacketBuffer buf) {}
@@ -203,14 +231,14 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
         SimpleAltarRecipe recipe = new SimpleAltarRecipe(recipeId, type, duration, starlight, grid);
         ResourceLocation customType = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
         if (customType != null) {
-            recipe = CustomAltarRecipeHandler.convert(recipe, customType);
+            recipe = AltarRecipeTypeHandler.convert(recipe, customType);
             recipe.setCustomRecipeType(customType);
         }
 
         List<ItemStack> outputs = ByteBufUtils.readList(buffer, ByteBufUtils::readItemStack);
         outputs.forEach(recipe::addOutput);
         recipe.setFocusConstellation(ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry));
-        ByteBufUtils.readList(buffer, Ingredient::read).forEach(recipe::addTraitInputIngredient);
+        ByteBufUtils.readList(buffer, Ingredient::read).forEach(recipe::addRelayInput);
         List<AltarRecipeEffect> effects = ByteBufUtils.readList(buffer, ByteBufUtils::readRegistryEntry);
         for (AltarRecipeEffect effect : effects) {
             recipe.addAltarEffect(effect);
@@ -228,9 +256,52 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
 
         ByteBufUtils.writeList(buffer, this.outputs, ByteBufUtils::writeItemStack);
         ByteBufUtils.writeOptional(buffer, this.getFocusConstellation(), ByteBufUtils::writeRegistryEntry);
-        ByteBufUtils.writeList(buffer, this.getTraitInputIngredients(), (buf, ingredient) -> ingredient.getIngredient().write(buf));
+        ByteBufUtils.writeList(buffer, this.getRelayInputs(), (buf, ingredient) -> ingredient.getIngredient().write(buf));
         ByteBufUtils.writeList(buffer, this.getCraftingEffects(), ByteBufUtils::writeRegistryEntry);
         this.writeRecipeSync(buffer);
+    }
+
+    public final void write(JsonObject object) {
+        object.addProperty("altar_type", this.getAltarType().ordinal());
+        object.addProperty("duration", this.getDuration());
+        object.addProperty("starlight", this.getStarlightRequirement());
+        this.getInputs().serialize(object);
+
+        if (this.getCustomRecipeType() != null) {
+            object.addProperty("recipe_class", this.getCustomRecipeType().toString());
+        }
+
+        JsonArray outputs = new JsonArray();
+        for (ItemStack output : this.outputs) {
+            outputs.add(JsonHelper.serializeItemStack(output));
+        }
+        object.add("output", outputs);
+
+        JsonObject options = new JsonObject();
+        this.serializeAdditionalJson(options);
+        if (!options.entrySet().isEmpty()) {
+            object.add("options", options);
+        }
+
+        if (this.getFocusConstellation() != null) {
+            object.addProperty("focus_constellation", this.getFocusConstellation().getRegistryName().toString());
+        }
+
+        if (!this.getRelayInputs().isEmpty()) {
+            JsonArray inputs = new JsonArray();
+            for (WrappedIngredient traitInput : this.getRelayInputs()) {
+                inputs.add(traitInput.getIngredient().serialize());
+            }
+            object.add("relay_inputs", inputs);
+        }
+
+        if (!this.getCraftingEffects().isEmpty()) {
+            JsonArray effects = new JsonArray();
+            for (AltarRecipeEffect effect : this.getCraftingEffects()) {
+                effects.add(effect.getRegistryName().toString());
+            }
+            object.add("effects", effects);
+        }
     }
 
     public AltarType getAltarType() {
@@ -243,7 +314,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public CustomRecipeSerializer<?> getSerializer() {
         return RecipeSerializersAS.ALTAR_RECIPE_SERIALIZER;
     }
 }

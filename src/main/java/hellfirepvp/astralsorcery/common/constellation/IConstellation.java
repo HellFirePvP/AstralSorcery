@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.Tag;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -70,6 +71,10 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
 
     default public IConstellation addSignatureItem(ItemStack item) {
         return this.addSignatureItem(Ingredient.fromStacks(item));
+    }
+
+    default public IConstellation addSignatureItem(IItemProvider item) {
+        return this.addSignatureItem(Ingredient.fromItems(item));
     }
 
     default public IConstellation addSignatureItem(Tag<Item> tag) {

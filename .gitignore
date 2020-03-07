@@ -56,3 +56,7 @@ hs_err_pid*
 *.jks
 gradle.attributes
 gradle.properties
+
+# Do not commit generated resources
+/src/generated/
+/src/main/resources/data/

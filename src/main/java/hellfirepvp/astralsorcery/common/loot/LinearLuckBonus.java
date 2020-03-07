@@ -67,6 +67,10 @@ public class LinearLuckBonus extends LootFunction {
         return itemStack;
     }
 
+    public static LootFunction.Builder<?> builder() {
+        return builder(LinearLuckBonus::new);
+    }
+
     public static class Serializer extends LootFunction.Serializer<LinearLuckBonus> {
 
         public Serializer(ResourceLocation name) {

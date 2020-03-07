@@ -12,10 +12,11 @@ import com.google.gson.*;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.crafting.builder.SimpleAltarRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
-import hellfirepvp.astralsorcery.common.crafting.recipe.altar.CustomAltarRecipeHandler;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
@@ -25,7 +26,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,14 +47,13 @@ public class SimpleAltarRecipeSerializer extends CustomRecipeSerializer<SimpleAl
         int duration = JSONUtils.getInt(json, "duration");
         int starlightRequirement = JSONUtils.getInt(json, "starlight");
 
-        JsonArray pattern = JSONUtils.getJsonArray(json, "pattern");
-        JsonObject keys = JSONUtils.getJsonObject(json, "key");
-        AltarRecipeGrid grid = AltarRecipeGrid.deserialize(type, pattern, keys);
+        AltarRecipeGrid grid = AltarRecipeGrid.deserialize(type, json);
+        grid.validate(type);
 
         SimpleAltarRecipe recipe = new SimpleAltarRecipe(recipeId, type, duration, starlightRequirement, grid);
         if (JSONUtils.hasField(json, "recipe_class")) {
             ResourceLocation key = new ResourceLocation(JSONUtils.getString(json, "recipe_class"));
-            recipe = CustomAltarRecipeHandler.convert(recipe, key);
+            recipe = AltarRecipeTypeHandler.convert(recipe, key);
             recipe.setCustomRecipeType(key);
         }
 
@@ -88,7 +87,7 @@ public class SimpleAltarRecipeSerializer extends CustomRecipeSerializer<SimpleAl
                 JsonElement element = relayIngredients.get(i);
                 Ingredient ingredient = Ingredient.deserialize(element);
                 if (!ingredient.hasNoMatchingItems()) {
-                    recipe.addTraitInputIngredient(ingredient);
+                    recipe.addRelayInput(ingredient);
                 } else {
                     AstralSorcery.log.warn("Skipping relay_inputs[" + i + "] for recipe " + recipeId + " as the ingredient has no matching items!");
                     AstralSorcery.log.warn("Ingredient skipped: " + JSONUtils.toString(element));
@@ -115,6 +114,11 @@ public class SimpleAltarRecipeSerializer extends CustomRecipeSerializer<SimpleAl
     @Override
     public SimpleAltarRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
         return SimpleAltarRecipe.read(recipeId, buffer);
+    }
+
+    @Override
+    public void write(JsonObject object, SimpleAltarRecipe recipe) {
+        recipe.write(object);
     }
 
     @Override

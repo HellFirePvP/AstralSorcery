@@ -13,12 +13,10 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingFocusStack;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RecipeHelper;
-import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,7 +38,6 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -144,7 +141,7 @@ public class ActiveSimpleAltarRecipe {
             return false;
         }
 
-        List<WrappedIngredient> listIngredients = this.getRecipeToCraft().getTraitInputIngredients();
+        List<WrappedIngredient> listIngredients = this.getRecipeToCraft().getRelayInputs();
         for (CraftingFocusStack stack : this.focusStacks) {
             if (stack.getStackIndex() >= 0 && stack.getStackIndex() < listIngredients.size()) {
                 TileSpectralRelay relay = MiscUtils.getTileAt(altar.getWorld(), stack.getRealPosition(), TileSpectralRelay.class, true);
@@ -167,7 +164,7 @@ public class ActiveSimpleAltarRecipe {
             }
         }
 
-        List<WrappedIngredient> iIngredients = this.getRecipeToCraft().getTraitInputIngredients();
+        List<WrappedIngredient> iIngredients = this.getRecipeToCraft().getRelayInputs();
 
         if (!iIngredients.isEmpty()) {
             boolean shouldWait = tickCraftingRelayInputs(altar, iIngredients);

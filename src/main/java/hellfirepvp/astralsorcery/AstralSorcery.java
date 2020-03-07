@@ -15,6 +15,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -38,12 +39,16 @@ public class AstralSorcery {
 
     private static AstralSorcery instance;
     private static ModContainer modContainer;
-
     private final CommonProxy proxy;
+
+    private boolean isDataGeneration = false;
 
     public AstralSorcery() {
         instance = this;
         modContainer = ModList.get().getModContainerById(MODID).get();
+        try {
+            isDataGeneration = ModLoader.get().getDataGeneratorEvent().apply(modContainer) != null;
+        } catch (Exception ignored) {}
 
         this.proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         this.proxy.initialize();
@@ -67,4 +72,7 @@ public class AstralSorcery {
         return new ResourceLocation(AstralSorcery.MODID, path);
     }
 
+    public static boolean isDoingDataGeneration() {
+        return getInstance().isDataGeneration;
+    }
 }
