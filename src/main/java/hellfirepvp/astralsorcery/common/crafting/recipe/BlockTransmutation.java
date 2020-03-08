@@ -12,10 +12,11 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
+import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockMatchInformation;
 import hellfirepvp.astralsorcery.common.util.object.PredicateBuilder;
 import net.minecraft.block.BlockState;
-import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +24,7 @@ import net.minecraft.world.IWorld;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -35,23 +37,24 @@ import java.util.function.Predicate;
  */
 public class BlockTransmutation extends CustomMatcherRecipe {
 
-    private final List<BlockMatchInformation> stateCheck;
-    private final BlockState outState;
+    private final BlockState outputState;
     private final double starlight;
     private final IWeakConstellation constellation;
 
+    private ItemStack outputDisplay;
+    private List<BlockMatchInformation> stateCheck = new ArrayList<>();
     private Predicate<BlockState> matcher = null;
 
-    public BlockTransmutation(ResourceLocation recipeId, List<BlockMatchInformation> stateCheck, BlockState outState, double starlight) {
-        this(recipeId, stateCheck, outState, starlight, null);
+    public BlockTransmutation(ResourceLocation recipeId, BlockState outState, double starlight) {
+        this(recipeId, outState, starlight, null);
     }
 
-    public BlockTransmutation(ResourceLocation recipeId, List<BlockMatchInformation> stateCheck, BlockState outState, double starlight, @Nullable IWeakConstellation constellation) {
+    public BlockTransmutation(ResourceLocation recipeId, BlockState outState, double starlight, @Nullable IWeakConstellation constellation) {
         super(recipeId);
-        this.stateCheck = stateCheck;
-        this.outState = outState;
+        this.outputState = outState;
         this.starlight = starlight;
         this.constellation = constellation;
+        this.outputDisplay = new ItemStack(outState.getBlock());
     }
 
     public boolean matches(@Nonnull IWorld world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IWeakConstellation constellation) {
@@ -61,12 +64,27 @@ public class BlockTransmutation extends CustomMatcherRecipe {
         return this.matcher.test(state) && (this.constellation == null || this.constellation.equals(constellation));
     }
 
+    public void addInputOption(BlockMatchInformation test) {
+        this.matcher = null;
+        this.stateCheck.add(test);
+    }
+
     public List<BlockMatchInformation> getInputOptions() {
         return stateCheck;
     }
 
+    @Nonnull
     public BlockState getOutput() {
-        return outState;
+        return outputState;
+    }
+
+    public void setOutputDisplay(@Nonnull ItemStack outputDisplay) {
+        this.outputDisplay = outputDisplay;
+    }
+
+    @Nonnull
+    public ItemStack getOutputDisplay() {
+        return outputDisplay.copy();
     }
 
     public double getStarlightRequired() {
@@ -85,6 +103,6 @@ public class BlockTransmutation extends CustomMatcherRecipe {
 
     @Override
     public IRecipeType<?> getType() {
-        return null;
+        return RecipeTypesAS.TYPE_BLOCK_TRANSMUTATION.getType();
     }
 }

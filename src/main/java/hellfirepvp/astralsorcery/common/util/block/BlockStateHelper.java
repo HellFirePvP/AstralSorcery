@@ -9,11 +9,18 @@
 package hellfirepvp.astralsorcery.common.util.block;
 
 import com.google.common.base.Splitter;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
+import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.state.IProperty;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -21,7 +28,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -56,8 +62,22 @@ public class BlockStateHelper {
     }
 
     @Nonnull
-    public static BlockMatchInformation deserializeMatcher(@Nonnull String serialized) {
-        return new BlockMatchInformation(deserialize(serialized), !isMissingStateInformation(serialized));
+    public static <V extends Comparable<V>> JsonObject serializeObject(BlockState state, boolean serializeProperties) {
+        JsonObject object = new JsonObject();
+        object.addProperty("block", state.getBlock().getRegistryName().toString());
+        if (serializeProperties && !state.getProperties().isEmpty()) {
+            JsonArray properties = new JsonArray();
+            for (IProperty<?> property : state.getProperties()) {
+                IProperty<V> prop = (IProperty<V>) property;
+
+                JsonObject objProperty = new JsonObject();
+                objProperty.addProperty("name", prop.getName());
+                objProperty.addProperty("value", prop.getName(state.get(prop)));
+                properties.add(objProperty);
+            }
+            object.add("properties", properties);
+        }
+        return object;
     }
 
     @Nonnull
@@ -88,6 +108,39 @@ public class BlockStateHelper {
             }
         }
         return state;
+    }
+
+    @Nonnull
+    public static <T extends Comparable<T>> BlockState deserializeObject(JsonObject object) {
+        String key = JSONUtils.getString(object, "block");
+        Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key));
+        if (b == null || b instanceof AirBlock) {
+            return Blocks.AIR.getDefaultState();
+        }
+        BlockState state = b.getDefaultState();
+        if (isMissingStateInformation(object)) {
+            return state;
+        }
+        if (JSONUtils.hasField(object, "properties")) {
+            JsonArray properties = JSONUtils.getJsonArray(object, "properties");
+            for (JsonElement elemProperty : properties) {
+                JsonObject objProperty = JSONUtils.getJsonObject(elemProperty, "properties[?]");
+                String propName = JSONUtils.getString(objProperty, "name");
+                IProperty<T> property = (IProperty<T>) MiscUtils.iterativeSearch(state.getProperties(), prop -> prop.getName().equalsIgnoreCase(propName));
+                if (property != null) {
+                    String propValue = JSONUtils.getString(objProperty, "value");
+                    Optional<T> value = property.parseValue(propValue);
+                    if (value.isPresent()) {
+                        state = state.with(property, value.get());
+                    }
+                }
+            }
+        }
+        return state;
+    }
+
+    public static boolean isMissingStateInformation(@Nonnull JsonObject serialized) {
+        return serialized.has("properties");
     }
 
     public static boolean isMissingStateInformation(@Nonnull String serialized) {
