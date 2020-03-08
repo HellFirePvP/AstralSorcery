@@ -9,7 +9,9 @@
 package hellfirepvp.astralsorcery.common.util.block;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
 /**
@@ -22,10 +24,22 @@ import java.util.function.Predicate;
 public class BlockMatchInformation implements Predicate<BlockState> {
 
     private final BlockState matchState;
+    private final ItemStack display;
     private final boolean matchExact;
 
     public BlockMatchInformation(BlockState matchState, boolean matchExact) {
         this.matchState = matchState;
+        this.display = new ItemStack(matchState.getBlock());
+        this.matchExact = matchExact;
+
+        if (this.display.isEmpty()) {
+            throw new IllegalArgumentException("No display ItemStack passed, and " + matchState.getBlock().getRegistryName() + " has no associated ItemBlock!");
+        }
+    }
+
+    public BlockMatchInformation(BlockState matchState, ItemStack display, boolean matchExact) {
+        this.matchState = matchState;
+        this.display = display;
         this.matchExact = matchExact;
     }
 
@@ -35,6 +49,11 @@ public class BlockMatchInformation implements Predicate<BlockState> {
 
     public boolean doesMatchExact() {
         return matchExact;
+    }
+
+    @Nonnull
+    public ItemStack getDisplayStack() {
+        return this.display.copy();
     }
 
     @Override

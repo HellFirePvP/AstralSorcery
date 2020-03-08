@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHeldRender;
 import net.minecraft.client.Minecraft;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -41,8 +42,11 @@ public class ItemHeldEffectRenderer {
             return;
         }
 
-        if (!doHeldRender(Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND), pTicks)) {
-            doHeldRender(Minecraft.getInstance().player.getHeldItem(Hand.OFF_HAND), pTicks);
+
+        for (EquipmentSlotType type : EquipmentSlotType.values()) {
+            if (doHeldRender(Minecraft.getInstance().player.getItemStackFromSlot(type), pTicks)) {
+                break;
+            }
         }
     }
 

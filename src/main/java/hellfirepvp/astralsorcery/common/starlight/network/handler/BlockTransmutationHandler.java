@@ -56,6 +56,7 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         }
 
         activeRecipe.acceptStarlight(amount);
+        //TODO effects
 
         if (activeRecipe.isFinished() && activeRecipe.finish(world, pos)) {
             runningTransmutations.remove(at);

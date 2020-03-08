@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.datagen.data.recipe;
 import hellfirepvp.astralsorcery.datagen.data.recipe.altar.DiscoveryAltarRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipe.altar.RadianceAltarRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipe.infuser.InfuserRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipe.transmutation.BlockTransmutationRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipe.vanilla.VanillaTypedRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipe.well.LightwellRecipeProvider;
 import net.minecraft.data.DataGenerator;
@@ -39,6 +40,7 @@ public class AstralRecipeProvider extends RecipeProvider {
 
         InfuserRecipeProvider.registerInfuserRecipes(registrar);
         LightwellRecipeProvider.registerLightwellRecipes(registrar);
+        BlockTransmutationRecipeProvider.registerTransmutationRecipes(registrar);
 
         VanillaTypedRecipeProvider.registerShapedRecipes(registrar);
         VanillaTypedRecipeProvider.registerCookingRecipes(registrar);

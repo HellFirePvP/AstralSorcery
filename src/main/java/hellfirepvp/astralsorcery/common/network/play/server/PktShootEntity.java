@@ -100,19 +100,13 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
                     if (entity != null) {
                         entity.setMotion(packet.motionVector.toVec3d());
 
-                        //if (entity instanceof ClientPlayerEntity && ItemMantle.getEffect((LivingEntity) entity, ConstellationsAS.vicio) != null) {
-                        //    AstralSorcery.getProxy().scheduleClientside(() -> {
-                        //        ((ClientPlayerEntity) entity).connection.sendPacket(new CEntityActionPacket(entity, CEntityActionPacket.Action.START_FALL_FLYING));
-                        //    }, 3);
-                        //}
-
                         if (packet.hasEffect) {
                             Vector3 origin = Vector3.atEntityCenter(entity)
                                     .setY(entity.posY + entity.getHeight());
                             Vector3 look = new Vector3(entity.getLookVec()).normalize().multiply(packet.effectLength * 18);
                             Vector3 motionReverse = look.clone().normalize().multiply(-0.4 * packet.effectLength);
 
-                            Vector3 perp = look.clone().perpendicular();
+                            Vector3 perp = look.clone().perpendicular().normalize().multiply(6F);
                             for (int i = 0; i < 300; i++) {
                                 Vector3 at = look.clone()
                                         .multiply(0.5F + rand.nextFloat() * 2F)
