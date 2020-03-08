@@ -40,6 +40,8 @@ public class RegistryPerkAttributeReaders {
 
         registerDefaultReader(ATTR_TYPE_INC_PERK_EFFECT);
         registerDefaultReader(ATTR_TYPE_INC_PERK_EXP);
+        registerDefaultReader(ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        registerDefaultReader(ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM);
         registerDefaultReader(ATTR_TYPE_INC_CRIT_MULTIPLIER);
         registerDefaultReader(ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
         registerDefaultReader(ATTR_TYPE_PROJ_DAMAGE);

@@ -57,6 +57,8 @@ public class RegistryPerkAttributeTypes {
         ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN, false));
         ATTR_TYPE_INC_THORNS_RANGED = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_INC_THORNS_RANGED, false));
         ATTR_TYPE_ARC_CHAINS = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_ARC_CHAINS, false));
+        ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION, true));
+        ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM, false));
 
         ATTR_TYPE_INC_PERK_EXP = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_INC_PERK_EXP, true));
 

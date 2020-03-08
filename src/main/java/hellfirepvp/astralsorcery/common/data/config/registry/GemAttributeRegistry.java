@@ -34,20 +34,23 @@ public class GemAttributeRegistry extends ConfigDataAdapter<GemAttributeEntry> {
     @Override
     public List<GemAttributeEntry> getDefaultValues() {
         return Lists.newArrayList(
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_HEALTH,                    2),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MOVESPEED,                 8),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ARMOR,                     8),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_REACH,                     4),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ATTACK_SPEED,              2),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MELEE_DAMAGE,              8),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_PROJ_DAMAGE,               8),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_LIFE_RECOVERY,             2),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_HARVEST_SPEED,         2),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_CHANCE,           4),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_MULTIPLIER,       4),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST,  2),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_DODGE,                 2),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP,              1)
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_HEALTH,                        2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MOVESPEED,                     8),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ARMOR,                         8),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_REACH,                         4),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ATTACK_SPEED,                  2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MELEE_DAMAGE,                  8),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_PROJ_DAMAGE,                   8),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_LIFE_RECOVERY,                 2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_HARVEST_SPEED,             2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_CHANCE,               4),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_MULTIPLIER,           4),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST,      2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_DODGE,                     2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_LIFE_RECOVERY,                 2),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM,      3),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION, 3),
+                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP,                  1)
         );
     }
 
