@@ -41,7 +41,6 @@ public class GemAttributeRegistry extends ConfigDataAdapter<GemAttributeEntry> {
                 new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_ATTACK_SPEED,                  2),
                 new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_MELEE_DAMAGE,                  8),
                 new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_PROJ_DAMAGE,                   8),
-                new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_LIFE_RECOVERY,                 2),
                 new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_HARVEST_SPEED,             2),
                 new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_CHANCE,               4),
                 new GemAttributeEntry(PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_MULTIPLIER,           4),
