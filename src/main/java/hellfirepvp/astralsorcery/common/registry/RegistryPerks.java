@@ -394,13 +394,13 @@ public class RegistryPerks {
         register(keyCull)
                 .connect(perkIncCrit);
 
-        AttributeModifierPerk perkCrJ1 = new AttributeModifierPerk(key("crit_inc_chance_proj"), 2, -25);
+        AttributeModifierPerk perkCrJ1 = new AttributeModifierPerk(key("crit_inc_chance_proj"), 2, -26);
         perkCrJ1.addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
         perkCrJ1.addModifier(0.2F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        AttributeModifierPerk perkCrJ2 = new AttributeModifierPerk(key("crit_inc_chance_proj_1"), 1, -24).setNameOverride(perkCrJ1);
+        AttributeModifierPerk perkCrJ2 = new AttributeModifierPerk(key("crit_inc_chance_proj_1"), 1, -25).setNameOverride(perkCrJ1);
         perkCrJ2.addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
         perkCrJ2.addModifier(0.2F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        MajorPerk perkProjMul = new MajorPerk(key("major_crit_proj"), 2, -23);
+        MajorPerk perkProjMul = new MajorPerk(key("major_crit_proj"), 2, -24);
         perkProjMul.addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
         perkProjMul.addModifier(0.3F , ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
 
@@ -739,6 +739,21 @@ public class RegistryPerks {
                 .connect(redFoodPathDodge2);
         register(reducedFoodKey)
                 .connect(redFoodPathDodge3);
+
+        AttributeModifierPerk perkVChargeReg1 = new AttributeModifierPerk(key("major_vic_charge_path_node"), 10, 20);
+        perkVChargeReg1.addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        AttributeModifierPerk perkVChargeReg2 = new AttributeModifierPerk(key("major_vic_charge_path_node_1"), 9, 21).setNameOverride(perkVChargeReg1);
+        perkVChargeReg2.addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        MajorPerk majorReachReg = new MajorPerk(key("major_vic_charge"), 10, 22);
+        majorReachReg.addModifier(0.3F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        majorReachReg.addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH);
+
+        register(perkVChargeReg1)
+                .connect(PERK_TREE.getPerk(key("base_inc_perkeffect_t4_11")));
+        register(perkVChargeReg2)
+                .connect(perkVChargeReg1);
+        register(majorReachReg)
+                .connect(perkVChargeReg2);
     }
 
     private static void initializeArmaraKeyPerks() {
@@ -842,6 +857,21 @@ public class RegistryPerks {
                 .connect(perkNoArmorP1);
         register(noArmorKey)
                 .connect(perkNoArmorP2);
+
+        AttributeModifierPerk perkArmRegenP1 = new AttributeModifierPerk(key("key_charge_generation_balancing_path"), 21, 0);
+        perkArmRegenP1.addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        AttributeModifierPerk perkArmRegenP2 = new AttributeModifierPerk(key("key_charge_generation_balancing_path_1"), 22, -1).setNameOverride(perkArmRegenP1);
+        perkArmRegenP2.addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        KeyChargeBalancing keyBalance = new KeyChargeBalancing(key("key_charge_generation_balancing"), 21, -2);
+        keyBalance.addModifier(0.6F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM);
+        keyBalance.addModifier(0.2F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+
+        register(perkArmRegenP1)
+                .connect(PERK_TREE.getPerk(key("base_inc_perkeffect_t4_6")));
+        register(perkArmRegenP2)
+                .connect(perkArmRegenP1);
+        register(keyBalance)
+                .connect(perkArmRegenP2);
     }
 
     private static void initializeDiscidiaKeyPerks() {
@@ -858,10 +888,10 @@ public class RegistryPerks {
         register(perkBl2)
                 .connect(perkBl1);
 
-        AttributeModifierPerk perkDst1 = new AttributeModifierPerk(key("key_dst_less_dmg"), 17, -15);
-        perkDst1.addModifier(0.9F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        AttributeModifierPerk perkDst2 = new AttributeModifierPerk(key("key_dst_less_dmg_2"), 18, -16).setNameOverride(perkDst1);
-        perkDst2.addModifier(0.9F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDst1 = new AttributeModifierPerk(key("key_dst_inc_dmg"), 17, -15);
+        perkDst1.addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDst2 = new AttributeModifierPerk(key("key_dst_inc_dmg_2"), 18, -16).setNameOverride(perkDst1);
+        perkDst2.addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
         KeyProjectileProximity projectileProximityKey = new KeyProjectileProximity(key("key_projectile_proximity"), 17, -17);
 
         register(perkDst1)
@@ -871,10 +901,10 @@ public class RegistryPerks {
         register(projectileProximityKey)
                 .connect(perkDst2);
 
-        AttributeModifierPerk perkDst3 = new AttributeModifierPerk(key("key_dst_less_dmg_3"), 13, -19).setNameOverride(perkDst1);
-        perkDst3.addModifier(0.9F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        AttributeModifierPerk perkDst4 = new AttributeModifierPerk(key("key_dst_less_dmg_4"), 14, -20).setNameOverride(perkDst1);
-        perkDst4.addModifier(0.9F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDst3 = new AttributeModifierPerk(key("key_dst_inc_dmg_3"), 13, -19).setNameOverride(perkDst1);
+        perkDst3.addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDst4 = new AttributeModifierPerk(key("key_dst_inc_dmg_4"), 14, -20).setNameOverride(perkDst1);
+        perkDst4.addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
         KeyProjectileDistance projectileDistanceKey = new KeyProjectileDistance(key("key_projectile_distance"), 15, -19);
 
         register(perkDst3)
@@ -903,6 +933,22 @@ public class RegistryPerks {
         register(perkRPDmg)
                 .connect(perkRPDmg2)
                 .connect(PERK_TREE.getPerk(key("base_inc_perkeffect_t3_1")));
+
+        AttributeModifierPerk perkDChargeReg1 = new AttributeModifierPerk(key("key_chargereg_path_node"), 4, -23);
+        perkDChargeReg1.addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        AttributeModifierPerk perkDChargeReg2 = new AttributeModifierPerk(key("key_chargereg_path_node_1"), 5, -24).setNameOverride(perkDChargeReg1);
+        perkDChargeReg2.addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        MajorPerk perkChargeBeacon = new MajorPerk(key("major_dsc_charge"), 4, -25);
+        perkChargeBeacon.addModifier(0.2F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        perkChargeBeacon.addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM);
+
+        register(perkDChargeReg1)
+                .connect(PERK_TREE.getPerk(key("base_inc_perkeffect_t4_2")));
+        register(perkDChargeReg2)
+                .connect(perkDChargeReg1);
+        register(perkChargeBeacon)
+                .connect(perkDChargeReg2);
+
 
         AttributeModifierPerk perkLL1 = new AttributeModifierPerk(key("inc_leech_vamp"), -1, -15);
         perkLL1.addModifier(3F, ModifierType.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH);
@@ -1120,6 +1166,21 @@ public class RegistryPerks {
                 .connect(PERK_TREE.getPerk(key("base_inc_perkeffect_t4_15")));
         register(growableKey)
                 .connect(perkGP3);
+
+        AttributeModifierPerk perkAChargeReg1 = new AttributeModifierPerk(key("major_ae_charge_reg_path_node"), -20, 6);
+        perkAChargeReg1.addModifier(0.25F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        AttributeModifierPerk perkAChargeMaxReg1 = new AttributeModifierPerk(key("major_ae_charge_max_path_node"), -21, 7);
+        perkAChargeMaxReg1.addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
+        perkAChargeMaxReg1.addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM);
+        MajorPerk perkChargeCap = new MajorPerk(key("major_aev_charge"), -20, 8);
+        perkChargeCap.addModifier(0.3F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM);
+
+        register(perkAChargeReg1)
+                .connect(PERK_TREE.getPerk(key("base_inc_perkeffect_t4_17")));
+        register(perkAChargeMaxReg1)
+                .connect(perkAChargeReg1);
+        register(perkChargeCap)
+                .connect(perkAChargeMaxReg1);
     }
 
     private static void initializeTreeConnectorPerks() {

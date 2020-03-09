@@ -29,6 +29,9 @@ public class ColorsAS {
     public static final Color EFFECT_LIGHTNING   = new Color(0x0195FF);
     public static final Color EFFECT_CRAFT_FLARE = new Color(0x5066EC);
 
+    public static final Color OVERLAY_CHARGE_MISSING = new Color(0xA20900);
+    public static final Color OVERLAY_CHARGE_USAGE   = new Color(0x00B903);
+
     public static final Color MANTLE_LUCERNA_SPAWNER = new Color(0x9C0100);
     public static final Color MANTLE_LUCERNA_INVENTORY = new Color(0x00A903);
 

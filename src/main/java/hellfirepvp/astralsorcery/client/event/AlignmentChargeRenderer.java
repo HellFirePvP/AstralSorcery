@@ -14,13 +14,17 @@ import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
@@ -28,8 +32,10 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.EnumSet;
 
 /**
@@ -70,21 +76,48 @@ public class AlignmentChargeRenderer implements ITickHandler {
         int offsetLeft = screenWidth / 2 - barWidth / 2;
         int offsetTop = screenHeight + 3 - 81; //*sigh* vanilla
 
-        SpritesAS.SPR_OVERLAY_CHARGE.bindTexture();
+        PlayerEntity player = Minecraft.getInstance().player;
+        float percFilled = AlignmentChargeHandler.INSTANCE.getFilledPercentage(player);
 
-        float percFilled = 1F; //TODO Add charge handling
-        float uLength = SpritesAS.SPR_OVERLAY_CHARGE.getULength() * percFilled;
-        Tuple<Float, Float> uv = SpritesAS.SPR_OVERLAY_CHARGE.getUVOffset();
+        boolean hasEnoughCharge = true;
+        float usagePerc = 0F;
+        for (EquipmentSlotType type : EquipmentSlotType.values()) {
+            ItemStack equipped = player.getItemStackFromSlot(type);
+            if (!equipped.isEmpty() && equipped.getItem() instanceof AlignmentChargeConsumer) {
+                float chargeRequired = ((AlignmentChargeConsumer) equipped.getItem()).getAlignmentChargeCost(player, equipped);
+                float max = AlignmentChargeHandler.INSTANCE.getMaximumCharge(player, LogicalSide.CLIENT);
+                usagePerc = Math.min(chargeRequired / max, percFilled);
+                hasEnoughCharge = percFilled > usagePerc;
+                percFilled -= usagePerc;
+                break;
+            }
+        }
+
+        Tuple<Float, Float> uvColored = SpritesAS.SPR_OVERLAY_CHARGE.getUVOffset();
+        Tuple<Float, Float> uvColorless = SpritesAS.SPR_OVERLAY_CHARGE.getUVOffset();
         float width = barWidth * percFilled;
+        float usageWidth = barWidth * usagePerc;
+        float uLengthCharge = SpritesAS.SPR_OVERLAY_CHARGE.getULength() * percFilled;
+        float uLengthUsage = SpritesAS.SPR_OVERLAY_CHARGE_COLORLESS.getULength() * usagePerc;
+        Color usageColor = hasEnoughCharge ? ColorsAS.OVERLAY_CHARGE_USAGE : ColorsAS.OVERLAY_CHARGE_MISSING;
 
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
         GlStateManager.disableAlphaTest();
 
+        SpritesAS.SPR_OVERLAY_CHARGE.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buf -> {
             RenderingGuiUtils.rect(buf, offsetLeft, offsetTop, 10, width, 54)
-                    .tex(uv.getA(), uv.getB() + 0.002F, uLength, SpritesAS.SPR_OVERLAY_CHARGE.getVWidth() - 0.002F)
+                    .tex(uvColored.getA(), uvColored.getB() + 0.002F, uLengthCharge, SpritesAS.SPR_OVERLAY_CHARGE.getVWidth() - 0.002F)
                     .color(1F, 1F, 1F, this.alphaReveal)
+                    .draw();
+        });
+
+        SpritesAS.SPR_OVERLAY_CHARGE_COLORLESS.bindTexture();
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buf -> {
+            RenderingGuiUtils.rect(buf, offsetLeft + width, offsetTop, 10, usageWidth, 54)
+                    .tex(uvColorless.getA() + uLengthCharge, uvColorless.getB() + 0.002F, uLengthUsage, SpritesAS.SPR_OVERLAY_CHARGE_COLORLESS.getVWidth() - 0.002F)
+                    .color(usageColor.getRed(), usageColor.getGreen(), usageColor.getBlue(), (int) (this.alphaReveal * 255F))
                     .draw();
         });
 
@@ -98,6 +131,10 @@ public class AlignmentChargeRenderer implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         PlayerEntity player = Minecraft.getInstance().player;
         if (player != null) {
+            if (AlignmentChargeHandler.INSTANCE.getFilledPercentage(player) <= 0.95F) {
+                revealCharge(20);
+            }
+
             ItemStack held = player.getHeldItem(Hand.MAIN_HAND);
             if (!held.isEmpty() &&
                     held.getItem() instanceof AlignmentChargeRevealer &&

@@ -1,16 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- * For further details, see the License file there.
+ *  All rights reserved.
+ *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ *  For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item.tool;
+package hellfirepvp.astralsorcery.common.item.wand;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.block.tile.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.tile.BlockTranslucentBlock;
+import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
@@ -38,6 +40,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,7 +53,10 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 28.11.2019 / 20:57
  */
-public class ItemIlluminationWand extends Item implements ItemDynamicColor {
+public class ItemIlluminationWand extends Item implements ItemDynamicColor, AlignmentChargeConsumer {
+
+    private static final float COST_PER_ILLUMINATION = 650F;
+    private static final float COST_PER_FLARE = 300F;
 
     public ItemIlluminationWand() {
         super(new Properties()
@@ -65,6 +71,15 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor {
 
         DyeColor color = getConfiguredColor(stack);
         tooltip.add(ColorUtils.getTranslation(color).setStyle(new Style().setColor(ColorUtils.textFormattingForDye(color))));
+    }
+
+    @Override
+    public float getAlignmentChargeCost(PlayerEntity player, ItemStack stack) {
+        if (player.isSneaking()) {
+            return COST_PER_ILLUMINATION;
+        } else {
+            return COST_PER_FLARE;
+        }
     }
 
     @Override
@@ -90,15 +105,17 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor {
             } else {
                 TileEntity tile = MiscUtils.getTileAt(world, pos, TileEntity.class, true);
                 if (tile == null && !state.hasTileEntity()) {
-                    if (world.setBlockState(pos, BlocksAS.TRANSLUCENT_BLOCK.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
-                        TileTranslucentBlock tb = MiscUtils.getTileAt(world, pos, TileTranslucentBlock.class, true);
-                        if (tb != null) {
-                            tb.setFakedState(state);
-                            tb.setOverlayColor(getConfiguredColor(stack));
-                            tb.setPlayerUUID(player.getUniqueID());
-                        } else {
-                            //Abort, we didn't get a tileentity... for some reason.
-                            world.setBlockState(pos, state, Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                    if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_ILLUMINATION, false)) {
+                        if (world.setBlockState(pos, BlocksAS.TRANSLUCENT_BLOCK.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
+                            TileTranslucentBlock tb = MiscUtils.getTileAt(world, pos, TileTranslucentBlock.class, true);
+                            if (tb != null) {
+                                tb.setFakedState(state);
+                                tb.setOverlayColor(getConfiguredColor(stack));
+                                tb.setPlayerUUID(player.getUniqueID());
+                            } else {
+                                //Abort, we didn't get a tileentity... for some reason.
+                                world.setBlockState(pos, state, Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                            }
                         }
                     }
                 }
@@ -128,11 +145,13 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor {
                     world.playSound(player, placePos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
                 }
             } else if (placeState.isValidPosition(world, placePos) &&
-                    world.func_217350_a(placeState, placePos, selContext) &&
-                    world.setBlockState(placePos, placeState, Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
-
-                SoundType type = placeState.getSoundType(world, placePos, player);
-                world.playSound(player, placePos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
+                    world.func_217350_a(placeState, placePos, selContext)) {
+                if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_FLARE, false)) {
+                    if (world.setBlockState(placePos, placeState, Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
+                        SoundType type = placeState.getSoundType(world, placePos, player);
+                        world.playSound(player, placePos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
+                    }
+                }
             }
         }
 

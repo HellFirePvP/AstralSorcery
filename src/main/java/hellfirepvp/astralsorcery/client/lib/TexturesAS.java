@@ -79,6 +79,7 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_PERK_UNLOCK;
 
     public static AbstractRenderableTexture TEX_OVERLAY_CHARGE;
+    public static AbstractRenderableTexture TEX_OVERLAY_CHARGE_COLORLESS;
     public static AbstractRenderableTexture TEX_OVERLAY_EXP_BAR;
     public static AbstractRenderableTexture TEX_OVERLAY_EXP_FRAME;
     public static AbstractRenderableTexture TEX_OVERLAY_ITEM_FRAME;

@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.custom;
 
-import hellfirepvp.astralsorcery.common.item.tool.ItemIlluminationWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import net.minecraft.inventory.CraftingInventory;

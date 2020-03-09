@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.network.play.server;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -25,24 +28,42 @@ import javax.annotation.Nonnull;
  */
 public class PktSyncCharge extends ASPacket<PktSyncCharge> {
 
-    public float charge = 1F;
+    private float maxCharge = 0;
+    private float charge = 0;
 
     public PktSyncCharge() {}
 
-    public PktSyncCharge(float charge) {
+    private PktSyncCharge(float maxCharge, float charge) {
+        this.maxCharge = maxCharge;
         this.charge = charge;
+    }
+
+    public PktSyncCharge(PlayerEntity player) {
+        this.maxCharge = AlignmentChargeHandler.INSTANCE.getMaximumCharge(player, LogicalSide.SERVER);
+        this.charge = AlignmentChargeHandler.INSTANCE.getCurrentCharge(player, LogicalSide.SERVER);
+    }
+
+    public float getMaxCharge() {
+        return maxCharge;
+    }
+
+    public float getCharge() {
+        return charge;
     }
 
     @Nonnull
     @Override
     public Encoder<PktSyncCharge> encoder() {
-        return (packet, buffer) -> buffer.writeFloat(packet.charge);
+        return (packet, buffer) -> {
+            buffer.writeFloat(packet.maxCharge);
+            buffer.writeFloat(packet.charge);
+        };
     }
 
     @Nonnull
     @Override
     public Decoder<PktSyncCharge> decoder() {
-        return buffer -> new PktSyncCharge(buffer.readFloat());
+        return buffer -> new PktSyncCharge(buffer.readFloat(), buffer.readFloat());
     }
 
     @Nonnull
@@ -53,7 +74,7 @@ public class PktSyncCharge extends ASPacket<PktSyncCharge> {
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktSyncCharge packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
-
+                    AlignmentChargeHandler.INSTANCE.receiveCharge(packet, Minecraft.getInstance().player);
                 });
             }
 

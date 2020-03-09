@@ -47,6 +47,7 @@ public class RegistryPerkAttributeTypes {
         ATTR_TYPE_PROJ_DAMAGE = register(new AttributeTypeProjectileAttackDamage());
         ATTR_TYPE_SWIMSPEED = register(new AttributeTypeSwimSpeed());
         ATTR_TYPE_INC_THORNS = register(new AttributeTypeThorns());
+        ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM = register(new AttributeTypeChargeMaximum());
 
         ATTR_TYPE_BLEED_DURATION = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_BLEED_DURATION, false));
         ATTR_TYPE_BLEED_CHANCE = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_BLEED_CHANCE, false));
@@ -58,7 +59,6 @@ public class RegistryPerkAttributeTypes {
         ATTR_TYPE_INC_THORNS_RANGED = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_INC_THORNS_RANGED, false));
         ATTR_TYPE_ARC_CHAINS = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_ARC_CHAINS, false));
         ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION, true));
-        ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM, false));
 
         ATTR_TYPE_INC_PERK_EXP = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_INC_PERK_EXP, true));
 
