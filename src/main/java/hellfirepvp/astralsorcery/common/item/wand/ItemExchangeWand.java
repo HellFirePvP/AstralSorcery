@@ -19,7 +19,9 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.data.config.entry.WandsConfig;
+import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.item.base.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHeldRender;
@@ -49,6 +51,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -58,6 +61,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -72,7 +76,9 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 28.02.2020 / 21:04
  */
-public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOverlayRender, ItemHeldRender, AlignmentChargeRevealer {
+public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOverlayRender, ItemHeldRender, AlignmentChargeConsumer {
+
+    private static final float COST_PER_EXCHANGE = 5F;
 
     public ItemExchangeWand() {
         super(new Properties()
@@ -112,14 +118,21 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
     }
 
     @Override
+    public float getAlignmentChargeCost(PlayerEntity player, ItemStack stack) {
+        BlockRayTraceResult hitResult = MiscUtils.rayTraceLookBlock(player, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE);
+        if (hitResult == null) {
+            return 0F;
+        }
+        return getPlaceStates(Minecraft.getInstance().player, player.getEntityWorld(), hitResult.getPos(), stack).size() * COST_PER_EXCHANGE;
+    }
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     public boolean renderInHand(ItemStack stack, float pTicks) {
-        RayTraceResult result = Minecraft.getInstance().objectMouseOver;
-        if (result.getType() != RayTraceResult.Type.BLOCK || !(result instanceof BlockRayTraceResult)) {
+        BlockRayTraceResult hitResult = MiscUtils.rayTraceLookBlock(Minecraft.getInstance().player, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE);
+        if (hitResult == null) {
             return true;
         }
-        BlockRayTraceResult hitResult = (BlockRayTraceResult) result;
-
         World world = Minecraft.getInstance().world;
         BlockPos at = hitResult.getPos();
         Map<BlockPos, BlockState> placeRender = getPlaceStates(Minecraft.getInstance().player, world, at, stack);
@@ -199,18 +212,18 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
                 continue;
             }
 
-            //TODO temp charge?
             BlockState prevState = world.getBlockState(placePos);
             if (((ServerPlayerEntity) player).interactionManager.tryHarvestBlock(placePos)) {
                 if (MiscUtils.canPlayerPlaceBlockPos(player, stateToPlace, placePos, Direction.UP)) {
-                    if (world.setBlockState(placePos, stateToPlace)) {
+                    if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_EXCHANGE, false) &&
+                            world.setBlockState(placePos, stateToPlace)) {
                         if (!player.isCreative()) {
                             ItemUtils.consumeFromPlayerInventory(player, stack, extractable, false);
                         }
 
                         PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
                                 .addData(buf -> {
-                                    ByteBufUtils.writeVector(buf, new Vector3(placePos));
+                                    ByteBufUtils.writePos(buf, placePos);
                                     ByteBufUtils.writeBlockState(buf, prevState);
                                 });
                         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 32));
@@ -233,6 +246,7 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
         return ActionResult.newResult(ActionResultType.SUCCESS, held);
     }
 
+    @Nonnull
     private Map<BlockPos, BlockState> getPlaceStates(PlayerEntity placer, World world, BlockPos origin, ItemStack refStack) {
         Map<BlockState, Tuple<ItemStack, Integer>> tplStates = ItemBlockStorage.getInventoryMatching(placer, refStack);
         BlockState atState = world.getBlockState(origin);

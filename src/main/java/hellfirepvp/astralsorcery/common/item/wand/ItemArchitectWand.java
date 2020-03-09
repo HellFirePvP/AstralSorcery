@@ -18,6 +18,8 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
+import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.item.base.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHeldRender;
@@ -48,6 +50,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -56,6 +59,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -70,7 +74,9 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 28.02.2020 / 21:28
  */
-public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOverlayRender, ItemHeldRender, AlignmentChargeRevealer {
+public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOverlayRender, ItemHeldRender, AlignmentChargeConsumer {
+
+    private static final float COST_PER_PLACEMENT = 8F;
 
     public ItemArchitectWand() {
         super(new Properties()
@@ -85,25 +91,17 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
     }
 
     @Override
+    public float getAlignmentChargeCost(PlayerEntity player, ItemStack stack) {
+        PlaceMode mode = getPlaceMode(stack);
+        return getPlayerPlaceableStates(player, stack).size() * COST_PER_PLACEMENT * mode.getPlaceCostMulitplier();
+    }
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     public boolean renderInHand(ItemStack stack, float pTicks) {
-        PlaceMode mode = getPlaceMode(stack);
-
-        RayTraceResult result = Minecraft.getInstance().player.pick(60F, pTicks, false);
-        BlockPos at = null;
-        Direction placingAgainst = null;
-        if (mode.needsOffset()) {
-            if (result.getType() != RayTraceResult.Type.BLOCK || !(result instanceof BlockRayTraceResult)) {
-                return true;
-            } else {
-                at = ((BlockRayTraceResult) result).getPos().offset(((BlockRayTraceResult) result).getFace());
-                placingAgainst = ((BlockRayTraceResult) result).getFace();
-            }
-        }
-
-        World world = Minecraft.getInstance().world;
-        Map<BlockPos, BlockState> placeRender = getPlaceStates(Minecraft.getInstance().player, world, at, placingAgainst, stack);
-        if (placeRender.isEmpty()) {
+        PlayerEntity player = Minecraft.getInstance().player;
+        Map<BlockPos, BlockState> placeStates = getPlayerPlaceableStates(player, stack);
+        if (placeStates.isEmpty()) {
             return true;
         }
 
@@ -122,7 +120,7 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
         GlStateManager.pushMatrix();
         RenderingVectorUtils.removeStandardTranslationFromTESRMatrix(pTicks);
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        placeRender.forEach((pos, state) -> RenderingUtils.renderSimpleBlockModel(state, buf, pos, null, false));
+        placeStates.forEach((pos, state) -> RenderingUtils.renderSimpleBlockModel(state, buf, pos, null, false));
         tes.draw();
         GlStateManager.popMatrix();
 
@@ -171,17 +169,11 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
             return ActionResult.newResult(ActionResultType.SUCCESS, held);
         }
 
-        BlockPos at = null;
-        Direction placingAgainst = null;
-        RayTraceResult result = player.pick(60F, 1F, false);
-        if (result.getType() == RayTraceResult.Type.BLOCK && result instanceof BlockRayTraceResult) {
-            at = ((BlockRayTraceResult) result).getPos().offset(((BlockRayTraceResult) result).getFace());
-            placingAgainst = ((BlockRayTraceResult) result).getFace();
-        } else if (mode.needsOffset()) {
+        Map<BlockPos, BlockState> placeStates = getPlayerPlaceableStates(player, held);
+        if (placeStates.isEmpty()) {
             return ActionResult.newResult(ActionResultType.FAIL, held);
         }
 
-        Map<BlockPos, BlockState> placeStates = getPlaceStates(player, world, at, placingAgainst, held);
         Map<BlockState, Tuple<ItemStack, Integer>> availableStacks = MapStream.of(ItemBlockStorage.getInventoryMatching(player, held))
                 .filter(tpl -> placeStates.containsValue(tpl.getA()))
                 .collect(Collectors.toMap(Tuple::getA, Tuple::getB));
@@ -206,14 +198,15 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
             }
 
             if (MiscUtils.canPlayerPlaceBlockPos(player, stateToPlace, placePos, Direction.UP)) {
-                if (world.setBlockState(placePos, stateToPlace)) {
+                if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_PLACEMENT, false) &&
+                        world.setBlockState(placePos, stateToPlace)) {
                     if (!player.isCreative()) {
                         ItemUtils.consumeFromPlayerInventory(player, held, extractable, false);
                     }
 
                     PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
                             .addData(buf -> {
-                                ByteBufUtils.writeVector(buf, new Vector3(placePos));
+                                ByteBufUtils.writePos(buf, placePos);
                                 ByteBufUtils.writeBlockState(buf, stateToPlace);
                             });
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 32));
@@ -224,6 +217,28 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
         return ActionResult.newResult(ActionResultType.SUCCESS, held);
     }
 
+    @Nonnull
+    private Map<BlockPos, BlockState> getPlayerPlaceableStates(PlayerEntity player, ItemStack stack) {
+        PlaceMode mode = getPlaceMode(stack);
+        World world = player.getEntityWorld();
+
+        BlockRayTraceResult rtr = MiscUtils.rayTraceLookBlock(player, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.ANY, 60F);
+        if (rtr == null && mode.needsOffset()) {
+            return new HashMap<>();
+        }
+
+        Map<BlockPos, BlockState> placeStates;
+        if (rtr != null) {
+            Direction placingAgainst = rtr.getFace();
+            BlockPos at = rtr.getPos().offset(rtr.getFace());
+            placeStates = getPlaceStates(player, world, at, placingAgainst, stack);
+        } else {
+            placeStates = getPlaceStates(player, world, null, null, stack);
+        }
+        return placeStates;
+    }
+
+    @Nonnull
     private Map<BlockPos, BlockState> getPlaceStates(PlayerEntity placer, World world, @Nullable BlockPos origin, @Nullable Direction placingAgainst, ItemStack refStack) {
         Map<BlockState, Tuple<ItemStack, Integer>> tplStates = ItemBlockStorage.getInventoryMatching(placer, refStack);
         PlaceMode placeMode = getPlaceMode(refStack);
@@ -299,7 +314,7 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
 
     public static enum PlaceMode {
 
-        TOWARDS_PLAYER("towards", true) {
+        TOWARDS_PLAYER("towards", true, 3F) {
             @Override
             public List<BlockPos> generatePlacementPositions(World world, PlayerEntity player, Direction placedAgainst, BlockPos center) {
                 List<BlockPos> blocks = new ArrayList<>();
@@ -368,13 +383,13 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
                 return MiscUtils.transformList(BlockGeometry.getPlane(player.getHorizontalFacing(), 5), at -> at.add(center));
             }
         },
-        SPHERE("sphere", true) {
+        SPHERE("sphere", true, 0.2F) {
             @Override
             public List<BlockPos> generatePlacementPositions(World world, PlayerEntity player, Direction placedAgainst, BlockPos center) {
                 return MiscUtils.transformList(BlockGeometry.getSphere(5), at -> at.add(center));
             }
         },
-        SPHERE_HOLLOW("sphere_hollow", true) {
+        SPHERE_HOLLOW("sphere_hollow", true, 0.5F) {
             @Override
             public List<BlockPos> generatePlacementPositions(World world, PlayerEntity player, Direction placedAgainst, BlockPos center) {
                 return MiscUtils.transformList(BlockGeometry.getHollowSphere(5, 4), at -> at.add(center));
@@ -383,10 +398,16 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
 
         private final String name;
         private final boolean needsOffset;
+        private final float placeCostMulitplier;
 
         PlaceMode(String name, boolean needsOffset) {
+            this(name, needsOffset, 1F);
+        }
+
+        PlaceMode(String name, boolean needsOffset, float placeCostMultiplier) {
             this.name = name;
             this.needsOffset = needsOffset;
+            this.placeCostMulitplier = placeCostMultiplier;
         }
 
         public ITextComponent getName() {
@@ -395,6 +416,10 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
 
         public ITextComponent getDisplay() {
             return new TranslationTextComponent("astralsorcery.misc.architect.mode", this.getName());
+        }
+
+        public float getPlaceCostMulitplier() {
+            return placeCostMulitplier;
         }
 
         public boolean needsOffset() {

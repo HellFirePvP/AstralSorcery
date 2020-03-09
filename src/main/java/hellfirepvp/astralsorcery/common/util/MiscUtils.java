@@ -397,14 +397,43 @@ public class MiscUtils {
         return out;
     }
 
+    @Nullable
+    public static BlockRayTraceResult rayTraceLookBlock(PlayerEntity player) {
+        return rayTraceLookBlock(player, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
+    }
+
     @Nonnull
     public static RayTraceResult rayTraceLook(PlayerEntity player) {
         return rayTraceLook(player, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
     }
 
+    @Nullable
+    public static BlockRayTraceResult rayTraceLookBlock(PlayerEntity player, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode) {
+        return rayTraceLookBlock(player, blockMode, fluidMode, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
+    }
+
+    @Nonnull
+    public static RayTraceResult rayTraceLook(PlayerEntity player, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode) {
+        return rayTraceLook(player, blockMode, fluidMode, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
+    }
+
+    @Nullable
+    public static BlockRayTraceResult rayTraceLookBlock(PlayerEntity player, double reachDst) {
+        return rayTraceLookBlock(player, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, reachDst);
+    }
+
     @Nonnull
     public static RayTraceResult rayTraceLook(PlayerEntity player, double reachDst) {
         return rayTraceLook(player, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, reachDst);
+    }
+
+    @Nullable
+    public static BlockRayTraceResult rayTraceLookBlock(Entity entity, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode, double reachDst) {
+        RayTraceResult rtr = rayTraceLook(entity, blockMode, fluidMode, reachDst);
+        if (rtr.getType() == RayTraceResult.Type.BLOCK && rtr instanceof BlockRayTraceResult) {
+            return (BlockRayTraceResult) rtr;
+        }
+        return null;
     }
 
     @Nonnull

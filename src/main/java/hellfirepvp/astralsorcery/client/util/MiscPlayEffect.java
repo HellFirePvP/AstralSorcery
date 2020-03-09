@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,19 +54,20 @@ public class MiscPlayEffect {
 
     @OnlyIn(Dist.CLIENT)
     public static void playBlockEffects(PktPlayEffect event) {
-        Vector3 vec = ByteBufUtils.readVector(event.getExtraData());
+        BlockPos pos = ByteBufUtils.readPos(event.getExtraData());
         BlockState state = ByteBufUtils.readBlockState(event.getExtraData());
+        Vector3 vec = new Vector3(pos).add(0.5F, 0.5F, 0.5F);
 
-        RenderingUtils.playBlockBreakParticles(vec.toBlockPos(), null, state);
+        RenderingUtils.playBlockBreakParticles(pos, null, state);
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 10; i++) {
             Vector3 at = vec.add(
                     rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(at)
-                    .setMotion(Vector3.random().multiply(0.03F))
+                    .setMotion(Vector3.random().multiply(0.045F))
                     .setScaleMultiplier(0.25F + rand.nextFloat() * 0.1F)
                     .color(VFXColorFunction.WHITE);
         }

@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.BlockBreakHelper;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.gateway.CelestialGatewayHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.base.Mods;
@@ -126,8 +127,8 @@ public class CommonProxy {
         }
     };
     public static final Rarity RARITY_CELESTIAL = Rarity.create("AS_CELESTIAL", TextFormatting.BLUE);
-    public static final Rarity RARITY_ARTIFACT = Rarity.create("AS_ARTIFACT", TextFormatting.DARK_AQUA);
-    public static final Rarity RARITY_VESTIGE = Rarity.create("AS_VESTIGE", TextFormatting.GOLD);
+    public static final Rarity RARITY_ARTIFACT = Rarity.create("AS_ARTIFACT", TextFormatting.GOLD);
+    public static final Rarity RARITY_VESTIGE = Rarity.create("AS_VESTIGE", TextFormatting.RED);
 
     public static final IArmorMaterial ARMOR_MATERIAL_IMBUED_LEATHER = new ArmorMaterialImbuedLeather();
 
@@ -216,6 +217,7 @@ public class CommonProxy {
         registrar.accept(PerkTickHelper.INSTANCE);
         registrar.accept(PatreonManager.INSTANCE);
         registrar.accept(TimeStopController.INSTANCE);
+        registrar.accept(AlignmentChargeHandler.INSTANCE);
 
         EventHelperTemporaryFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);

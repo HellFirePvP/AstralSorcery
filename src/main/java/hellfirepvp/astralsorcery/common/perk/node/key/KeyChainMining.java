@@ -129,7 +129,7 @@ public class KeyChainMining extends KeyPerk {
 
                             PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
                                     .addData(buf -> {
-                                        ByteBufUtils.writeVector(buf, new Vector3(at));
+                                        ByteBufUtils.writePos(buf, at);
                                         ByteBufUtils.writeBlockState(buf, prevState);
                                     });
                             PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 32));

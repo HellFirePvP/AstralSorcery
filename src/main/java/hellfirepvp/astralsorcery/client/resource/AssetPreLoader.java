@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.client.registry.RegistryEffectTypes;
 import hellfirepvp.astralsorcery.client.registry.RegistrySprites;
 import hellfirepvp.astralsorcery.client.registry.RegistryTextures;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
-import hellfirepvp.astralsorcery.common.util.object.InitRunnable;
 import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
@@ -32,18 +31,23 @@ public class AssetPreLoader implements ISelectiveResourceReloadListener {
 
     public static final AssetPreLoader INSTANCE = new AssetPreLoader();
 
+    private boolean initialized = false;
+
     private AssetPreLoader() {}
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
         if (resourcePredicate.test(VanillaResourceType.TEXTURES)) {
-            InitRunnable.doOnceNow(() -> {
-                RegistryTextures.loadTextures();
-                RegistrySprites.loadSprites();
-                RegistryEffectTemplates.registerTemplates();
-                RegistryEffectTypes.registerTypes();
-                ScreenJournalPerkTree.initializeDrawBuffer();
-            });
+            if (initialized) {
+                return;
+            }
+            RegistryTextures.loadTextures();
+            RegistrySprites.loadSprites();
+            RegistryEffectTemplates.registerTemplates();
+            RegistryEffectTypes.registerTypes();
+            ScreenJournalPerkTree.initializeDrawBuffer();
+
+            initialized = true;
         }
     }
 
