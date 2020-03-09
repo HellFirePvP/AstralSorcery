@@ -59,4 +59,3 @@ gradle.properties
 
 # Do not commit generated resources
 /src/generated/
-/src/main/resources/data/

@@ -194,5 +194,10 @@ public class BlockGemCrystalCluster extends ContainerBlock {
         public String getName() {
             return name().toLowerCase();
         }
+
+        @Override
+        public String toString() {
+            return this.getName();
+        }
     }
 }

@@ -137,5 +137,10 @@ public class BlockBlackMarblePillar extends BlockBlackMarbleTemplate implements 
         public String getName() {
             return name().toLowerCase();
         }
+
+        @Override
+        public String toString() {
+            return this.getName();
+        }
     }
 }

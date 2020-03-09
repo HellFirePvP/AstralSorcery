@@ -23,6 +23,14 @@ import javax.annotation.Nullable;
  */
 public class NameUtil {
 
+    public static ResourceLocation prefixPath(ResourceLocation key, String prefix) {
+        return new ResourceLocation(key.getNamespace(), prefix + key.getPath());
+    }
+
+    public static ResourceLocation suffixPath(ResourceLocation key, String suffix) {
+        return new ResourceLocation(key.getNamespace(), key.getPath() + suffix);
+    }
+
     public static ResourceLocation fromClass(Object object) {
         return fromClass(object, null);
     }

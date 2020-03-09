@@ -46,8 +46,8 @@ public class BlocksAS {
     public static BlockMarblePillar        MARBLE_PILLAR;
     public static BlockMarbleRaw           MARBLE_RAW;
     public static BlockMarbleRuned         MARBLE_RUNED;
-    public static BlockStairsTemplate      MARBLE_STAIRS;
     public static BlockSlabTemplate        MARBLE_SLAB;
+    public static BlockStairsTemplate      MARBLE_STAIRS;
     public static BlockBlackMarbleArch     BLACK_MARBLE_ARCH;
     public static BlockBlackMarbleBricks   BLACK_MARBLE_BRICKS;
     public static BlockBlackMarbleChiseled BLACK_MARBLE_CHISELED;
@@ -55,8 +55,8 @@ public class BlocksAS {
     public static BlockBlackMarblePillar   BLACK_MARBLE_PILLAR;
     public static BlockBlackMarbleRaw      BLACK_MARBLE_RAW;
     public static BlockBlackMarbleRuned    BLACK_MARBLE_RUNED;
-    public static BlockStairsTemplate      BLACK_MARBLE_STAIRS;
     public static BlockSlabTemplate        BLACK_MARBLE_SLAB;
+    public static BlockStairsTemplate      BLACK_MARBLE_STAIRS;
     public static BlockInfusedWood         INFUSED_WOOD;
     public static BlockInfusedWoodArch     INFUSED_WOOD_ARCH;
     public static BlockInfusedWoodColumn   INFUSED_WOOD_COLUMN;
@@ -94,6 +94,6 @@ public class BlocksAS {
 
     public static BlockFlareLight                FLARE_LIGHT;
     public static BlockTranslucentBlock          TRANSLUCENT_BLOCK;
-    public static BlockStructural                STRUCTURAL_HELPER;
+    public static BlockStructural                STRUCTURAL;
 
 }

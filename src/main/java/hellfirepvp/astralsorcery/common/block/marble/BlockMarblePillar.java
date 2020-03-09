@@ -138,6 +138,11 @@ public class BlockMarblePillar extends BlockMarbleTemplate implements IWaterLogg
         public String getName() {
             return name().toLowerCase();
         }
+
+        @Override
+        public String toString() {
+            return this.getName();
+        }
     }
 
 }
