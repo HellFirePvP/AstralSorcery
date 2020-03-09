@@ -236,5 +236,9 @@ public class BlockStructural extends Block {
             return name().toLowerCase();
         }
 
+        @Override
+        public String toString() {
+            return this.getName();
+        }
     }
 }

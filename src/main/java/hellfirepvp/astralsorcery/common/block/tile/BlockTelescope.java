@@ -34,7 +34,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 
@@ -75,7 +74,7 @@ public class BlockTelescope extends ContainerBlock implements CustomItemBlock {
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        world.setBlockState(pos.up(), BlocksAS.STRUCTURAL_HELPER.getDefaultState().with(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.TELESCOPE));
+        world.setBlockState(pos.up(), BlocksAS.STRUCTURAL.getDefaultState().with(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.TELESCOPE));
         super.onBlockPlacedBy(world, pos, state, placer, stack);
     }
 

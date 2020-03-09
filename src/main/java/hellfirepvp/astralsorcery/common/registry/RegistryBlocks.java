@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.base.BlockDynamicColor;
@@ -112,7 +111,7 @@ public class RegistryBlocks {
 
         FLARE_LIGHT = registerBlock(new BlockFlareLight());
         TRANSLUCENT_BLOCK = registerBlock(new BlockTranslucentBlock());
-        STRUCTURAL_HELPER = registerBlock(new BlockStructural());
+        STRUCTURAL = registerBlock(new BlockStructural());
     }
 
     public static void registerFluidBlocks() {

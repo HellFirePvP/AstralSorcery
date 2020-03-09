@@ -9,11 +9,13 @@
 package hellfirepvp.astralsorcery.datagen;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.datagen.assets.AstralBlockStateMappingProvider;
 import hellfirepvp.astralsorcery.datagen.data.loot.AstralLootTableProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipe.AstralRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.tag.AstralBlockTagsProvider;
 import hellfirepvp.astralsorcery.datagen.data.tag.AstralItemTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
@@ -36,12 +38,17 @@ public class AstralDataGenerator {
         }
 
         DataGenerator gen = event.getGenerator();
+        ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
         if (event.includeServer()) {
             gen.addProvider(new AstralItemTagsProvider(gen));
             gen.addProvider(new AstralBlockTagsProvider(gen));
             gen.addProvider(new AstralLootTableProvider(gen));
             gen.addProvider(new AstralRecipeProvider(gen));
+        }
+
+        if (event.includeClient()) {
+            gen.addProvider(new AstralBlockStateMappingProvider(gen, fileHelper));
         }
     }
 }
