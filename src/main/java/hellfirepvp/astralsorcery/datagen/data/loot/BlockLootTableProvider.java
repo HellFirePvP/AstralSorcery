@@ -188,6 +188,7 @@ public class BlockLootTableProvider extends BlockLootTables {
 
         this.registerLootTable(FLARE_LIGHT, LootTable.builder());
         this.registerLootTable(TRANSLUCENT_BLOCK, LootTable.builder());
+        this.registerLootTable(VANISHING, LootTable.builder());
         this.registerLootTable(STRUCTURAL, LootTable.builder());
     }
 

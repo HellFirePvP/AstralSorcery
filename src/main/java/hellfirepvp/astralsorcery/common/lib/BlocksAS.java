@@ -94,6 +94,7 @@ public class BlocksAS {
 
     public static BlockFlareLight                FLARE_LIGHT;
     public static BlockTranslucentBlock          TRANSLUCENT_BLOCK;
+    public static BlockVanishing                 VANISHING;
     public static BlockStructural                STRUCTURAL;
 
 }

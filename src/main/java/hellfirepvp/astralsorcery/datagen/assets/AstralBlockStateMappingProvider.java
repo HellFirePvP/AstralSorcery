@@ -142,6 +142,7 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
 
         this.getVariantBuilder(BlocksAS.FLARE_LIGHT).forAllStates(state -> ArrayUtils.toArray(new ConfiguredModel(this.modelNothing())));
         this.simpleBlockState(BlocksAS.TRANSLUCENT_BLOCK, this.modelNothing());
+        this.simpleBlockState(BlocksAS.VANISHING, this.modelNothing());
         this.getVariantBuilder(BlocksAS.STRUCTURAL)
                 .partialState().with(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.TELESCOPE)
                 .addModels(new ConfiguredModel(model(BlocksAS.TELESCOPE)))

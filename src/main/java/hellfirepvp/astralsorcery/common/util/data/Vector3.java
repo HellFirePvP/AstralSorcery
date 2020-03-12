@@ -418,6 +418,14 @@ public class Vector3 {
         return new Vector3(rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), rand.nextDouble() * (rand.nextBoolean() ? 1 : -1));
     }
 
+    public static Vector3 positiveRandom() {
+        return new Vector3(RAND.nextDouble(), RAND.nextDouble(), RAND.nextDouble());
+    }
+
+    public static Vector3 positiveRandom(Random rand) {
+        return new Vector3(rand.nextDouble(), rand.nextDouble(), rand.nextDouble());
+    }
+
     public static Vector3 positiveYRandom() {
         Vector3 rand = random();
         return rand.setY(Math.abs(rand.getY()));
