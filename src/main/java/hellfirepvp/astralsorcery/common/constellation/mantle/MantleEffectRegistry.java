@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 public class MantleEffectRegistry {
 
     public static void addConfigEntries(ServerConfig config) {
+        config.addConfigEntry(MantleEffectAevitas.CONFIG);
         config.addConfigEntry(MantleEffectBootes.CONFIG);
         config.addConfigEntry(MantleEffectFornax.CONFIG);
         config.addConfigEntry(MantleEffectHorologium.CONFIG);

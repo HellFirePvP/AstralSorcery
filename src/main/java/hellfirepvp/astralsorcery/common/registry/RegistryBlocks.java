@@ -111,6 +111,7 @@ public class RegistryBlocks {
 
         FLARE_LIGHT = registerBlock(new BlockFlareLight());
         TRANSLUCENT_BLOCK = registerBlock(new BlockTranslucentBlock());
+        VANISHING = registerBlock(new BlockVanishing());
         STRUCTURAL = registerBlock(new BlockStructural());
     }
 

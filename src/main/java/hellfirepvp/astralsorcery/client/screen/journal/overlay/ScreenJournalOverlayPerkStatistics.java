@@ -142,10 +142,21 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         int line = 0;
         GlStateManager.disableDepthTest();
         for (PerkStatistic stat : statistics) {
+            String statName = I18n.format(stat.getUnlocPerkTypeName());
+            List<String> split = font.listFormattedStringToWidth(statName, MathHelper.floor(HEADER_WIDTH / 1.5F));
+            int additionalLines = Math.max(split.size(), 0);
+            for (int i = 0; i < split.size(); i++) {
+                String statPart = split.get(i);
 
-            RenderingDrawUtils.renderStringAtPos(offsetX, offsetY + (line * 10),
-                    this.font, I18n.format(stat.getUnlocPerkTypeName()),
-                    0xEE333333, false);
+                int drawX = offsetX;
+                if (i > 0) {
+                    drawX += 10;
+                }
+                RenderingDrawUtils.renderStringAtPos(drawX, offsetY + ((line + i) * 10),
+                        this.font, statPart,
+                        0xEE333333, false);
+            }
+
             RenderingDrawUtils.renderStringAtPos(offsetX + nameStrWidth, offsetY + (line * 10),
                     this.font, stat.getPerkValue(),
                     0xEE333333, false);
@@ -155,13 +166,13 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
                     strLength, 8);
             valueStrMap.put(rctValue, stat);
 
+            line += additionalLines;
             if (!stat.getSuffix().isEmpty()) {
-                line++;
                 RenderingDrawUtils.renderStringAtPos(offsetX + 25, offsetY + (line * 10),
                         this.font, stat.getSuffix(),
                         0xEE333333, false);
+                line++;
             }
-            line++;
         }
         GlStateManager.enableDepthTest();
 
@@ -215,7 +226,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         suffixStrWidth = -1;
 
         for (PerkStatistic stat : this.statistics) {
-            int nameWidth = font.getStringWidth(I18n.format(stat.getUnlocPerkTypeName()));
+            int nameWidth = Math.min(font.getStringWidth(I18n.format(stat.getUnlocPerkTypeName())), ((int) (HEADER_WIDTH / 1.5F)));
             int valueWidth = font.getStringWidth(stat.getPerkValue());
             int suffixWidth = font.getStringWidth(stat.getSuffix());
 

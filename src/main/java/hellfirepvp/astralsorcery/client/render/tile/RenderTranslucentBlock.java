@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucentBlock;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.observerlib.client.util.BufferBuilderDecorator;
+import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.math.BlockPos;
@@ -30,6 +31,9 @@ public class RenderTranslucentBlock extends CustomFastTileEntityRenderer<TileTra
     @Override
     public void renderTileEntityFast(TileTranslucentBlock tile, double x, double y, double z, float pTicks, int destroyStage, BufferBuilder buf) {
         BlockState fakedState = tile.getFakedState();
+        if (fakedState.getBlock() instanceof AirBlock) {
+            return;
+        }
         Color blendColor = ColorUtils.flareColorFromDye(tile.getOverlayColor());
         int[] color = new int[] { blendColor.getRed(), blendColor.getGreen(), blendColor.getBlue(), 128 };
 

@@ -38,6 +38,7 @@ public class TileEntityTypesAS {
     public static TileEntityType<TileRitualPedestal> RITUAL_PEDESTAL;
     public static TileEntityType<TileTelescope> TELESCOPE;
     public static TileEntityType<TileTranslucentBlock> TRANSLUCENT_BLOCK;
+    public static TileEntityType<TileVanishing> VANISHING;
     public static TileEntityType<TileWell> WELL;
 
 }

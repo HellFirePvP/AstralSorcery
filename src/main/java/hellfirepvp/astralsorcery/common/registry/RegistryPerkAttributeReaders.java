@@ -37,11 +37,11 @@ public class RegistryPerkAttributeReaders {
         register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR_TOUGHNESS, SharedMonsterAttributes.ARMOR_TOUGHNESS));
         register(new ReaderVanillaAttribute(ATTR_TYPE_ATTACK_SPEED, SharedMonsterAttributes.ATTACK_SPEED).formatAsDecimal());
         register(new ReaderVanillaAttribute(ATTR_TYPE_REACH, PlayerEntity.REACH_DISTANCE).formatAsDecimal());
+        register(new ReaderFlatAttribute(ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM, 1000F)).formatAsDecimal();
 
         registerDefaultReader(ATTR_TYPE_INC_PERK_EFFECT);
         registerDefaultReader(ATTR_TYPE_INC_PERK_EXP);
         registerDefaultReader(ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION);
-        registerDefaultReader(ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM);
         registerDefaultReader(ATTR_TYPE_INC_CRIT_MULTIPLIER);
         registerDefaultReader(ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
         registerDefaultReader(ATTR_TYPE_PROJ_DAMAGE);

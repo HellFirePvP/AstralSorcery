@@ -51,6 +51,7 @@ public class RegistryTileEntities {
         RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class, BlocksAS.RITUAL_PEDESTAL);
         TELESCOPE = registerTile(TileTelescope.class, BlocksAS.TELESCOPE);
         TRANSLUCENT_BLOCK = registerTile(TileTranslucentBlock.class, BlocksAS.TRANSLUCENT_BLOCK);
+        VANISHING = registerTile(TileVanishing.class, BlocksAS.VANISHING);
         WELL = registerTile(TileWell.class, BlocksAS.WELL);
     }
 

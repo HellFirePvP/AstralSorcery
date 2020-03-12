@@ -26,6 +26,7 @@ public class RegistryMantleEffects {
     private RegistryMantleEffects() {}
 
     public static void init() {
+        AEVITAS = register(new MantleEffectAevitas());
         BOOTES = register(new MantleEffectBootes());
         FORNAX = register(new MantleEffectFornax());
         HOROLOGIUM = register(new MantleEffectHorologium());
