@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -47,7 +48,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 02.06.2019 / 01:59
  */
-public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
+public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> implements ModifierSource {
 
     protected static final Random rand = new Random();
 
@@ -126,23 +127,27 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
         return event.isPerkDisabled();
     }
 
-    //Reserving application/removal methods to delegate for later pre-application logic
-    final void applyPerk(PlayerEntity player, LogicalSide dist) {
+    @Override
+    public boolean canApplySource(PlayerEntity player, LogicalSide dist) {
+        return !ResearchHelper.getProgress(player, dist).isPerkSealed(this);
+    }
+
+    @Override
+    public final void onApply(PlayerEntity player, LogicalSide dist) {
         if (modifiersDisabled(player, dist)) {
             return;
         }
 
         this.applyPerkLogic(player, dist);
-        PerkAttributeHelper.getOrCreateMap(player, dist).markPerkApplied(this);
     }
 
-    final void removePerk(PlayerEntity player, LogicalSide dist) {
+    @Override
+    public final void onRemove(PlayerEntity player, LogicalSide dist) {
         if (modifiersDisabled(player, dist)) {
             return;
         }
 
         this.removePerkLogic(player, dist);
-        PerkAttributeHelper.getOrCreateMap(player, dist).markPerkRemoved(this);
     }
 
     protected abstract void applyPerkLogic(PlayerEntity player, LogicalSide dist);
@@ -294,6 +299,11 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> {
     @OnlyIn(Dist.CLIENT)
     public void clearClientTextCaches() {
         this.tooltipCache = null;
+    }
+
+    @Override
+    public String toString() {
+        return this.getRegistryName().toString();
     }
 
     @Override

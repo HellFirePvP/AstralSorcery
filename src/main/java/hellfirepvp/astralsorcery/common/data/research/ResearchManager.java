@@ -208,7 +208,7 @@ public class ResearchManager {
             root.onUnlockPerkServer(player, progress, data);
             progress.applyPerk(root, data);
 
-            PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, root, PerkEffectHelper.Action.ADD);
+            PerkEffectHelper.modifySource(player, LogicalSide.SERVER, root, PerkEffectHelper.Action.ADD);
             PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(root, PerkEffectHelper.Action.ADD));
         }
 
@@ -225,9 +225,9 @@ public class ResearchManager {
         if (!progress.isValid()) return false;
         if (!progress.hasPerkEffect(perk)) return false;
 
-        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.REMOVE);
+        PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.REMOVE);
         progress.applyPerk(perk, newData);
-        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
+        PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
 
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, prevoiusData, newData));
 
@@ -246,7 +246,7 @@ public class ResearchManager {
         perk.onUnlockPerkServer(player, progress, data);
         progress.applyPerk(perk, data);
 
-        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
+        PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
@@ -264,7 +264,7 @@ public class ResearchManager {
             return false;
         }
 
-        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.REMOVE);
+        PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.REMOVE);
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.REMOVE));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
@@ -282,15 +282,12 @@ public class ResearchManager {
             return false;
         }
 
-        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
+        PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
 
-        //Send way after research sync...
-        AstralSorcery.getProxy().scheduleDelayed(() -> {
-            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
-        });
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
         return true;
     }
 
@@ -329,7 +326,7 @@ public class ResearchManager {
         perk.onUnlockPerkServer(player, progress, data);
         progress.applyPerk(perk, data);
 
-        PerkEffectHelper.modifySinglePerk(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
+        PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
@@ -372,7 +369,7 @@ public class ResearchManager {
 
     private static void dropPerk(PlayerProgress progress, PlayerEntity player, LogicalSide side, AbstractPerk perk, CompoundNBT data) {
         progress.removePerk(perk);
-        PerkEffectHelper.modifySinglePerk(player, side, perk, PerkEffectHelper.Action.REMOVE);
+        PerkEffectHelper.modifySource(player, side, perk, PerkEffectHelper.Action.REMOVE);
         perk.onRemovePerkServer(player, progress, data);
         progress.removePerkData(perk);
     }

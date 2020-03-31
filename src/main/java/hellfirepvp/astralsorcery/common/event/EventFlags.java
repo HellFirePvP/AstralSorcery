@@ -20,9 +20,11 @@ public class EventFlags {
     //Attack based stuff
     public static BooleanFlag SWEEP_ATTACK = new BooleanFlag(false);
     public static BooleanFlag LIGHTNING_ARC = new BooleanFlag(false);
+    public static BooleanFlag MANTLE_DISCIDIA_ADDED = new BooleanFlag(false);
 
     //Block breaking
     public static BooleanFlag CHAIN_MINING = new BooleanFlag(false);
+    public static BooleanFlag MINING_SIZE_BREAK = new BooleanFlag(false);
     public static BooleanFlag CHECK_BREAK_SPEED = new BooleanFlag(false);
     public static BooleanFlag CHECK_UNDERWATER_BREAK_SPEED = new BooleanFlag(false);
     public static BooleanFlag PLAY_BLOCK_BREAK_EFFECTS = new BooleanFlag(false);

@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.perk;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.perk.source.AttributeConverterProvider;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
@@ -24,7 +26,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 08.08.2019 / 18:09
  */
-public class AttributeConverterPerk extends ProgressGatedPerk implements ConverterPerk {
+public class AttributeConverterPerk extends ProgressGatedPerk implements AttributeConverterProvider {
 
     private List<PerkConverter> converters = Lists.newArrayList();
 
@@ -43,8 +45,11 @@ public class AttributeConverterPerk extends ProgressGatedPerk implements Convert
     }
 
     @Override
-    public List<PerkConverter> provideConverters(PlayerEntity player, LogicalSide side) {
+    public List<PerkConverter> getConverters(PlayerEntity player, LogicalSide side) {
         if (modifiersDisabled(player, side)) {
+            return Collections.emptyList();
+        }
+        if (ResearchHelper.getProgress(player, side).isPerkSealed(this)) {
             return Collections.emptyList();
         }
 

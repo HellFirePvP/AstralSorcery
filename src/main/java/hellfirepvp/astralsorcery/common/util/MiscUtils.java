@@ -209,11 +209,9 @@ public class MiscUtils {
         }
     }
 
-    public static <T> void cutList(List<T> toRemove, List<T> from) {
+    public static <T> void cutList(Collection<? extends T> toRemove, List<T> from) {
         for (T element : toRemove) {
-            if (from.contains(element)) {
-                from.remove(element);
-            }
+            from.remove(element);
         }
     }
 

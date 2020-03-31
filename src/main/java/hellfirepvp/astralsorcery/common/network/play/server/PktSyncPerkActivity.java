@@ -117,7 +117,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
                         return;
                     }
                     if (packet.perk != null) {
-                        PerkEffectHelper.modifySinglePerk(player, LogicalSide.CLIENT, packet.perk, packet.action);
+                        PerkEffectHelper.modifySource(player, LogicalSide.CLIENT, packet.perk, packet.action);
                     }
                 });
             }

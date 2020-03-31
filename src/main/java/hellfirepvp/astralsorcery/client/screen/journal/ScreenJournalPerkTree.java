@@ -670,7 +670,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         double mapDrawSize = 28;
         if (perkPoint.getPerk() instanceof AttributeConverterPerk) {
-            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk()).provideConverters(Minecraft.getInstance().player, LogicalSide.CLIENT)) {
+            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk()).getConverters(Minecraft.getInstance().player, LogicalSide.CLIENT)) {
                 if (converter instanceof PerkConverter.Radius) {
                     double radius = ((PerkConverter.Radius) converter).getRadius();
 

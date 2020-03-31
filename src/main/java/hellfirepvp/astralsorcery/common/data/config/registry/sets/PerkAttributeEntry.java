@@ -19,16 +19,16 @@ import javax.annotation.Nullable;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: GemAttributeEntry
+ * Class: PerkAttributeEntry
  * Created by HellFirePvP
  * Date: 01.09.2019 / 19:22
  */
-public class GemAttributeEntry implements ConfigDataSet {
+public class PerkAttributeEntry implements ConfigDataSet {
 
     private final PerkAttributeType type;
     private final int weight;
 
-    public GemAttributeEntry(PerkAttributeType type, int weight) {
+    public PerkAttributeEntry(PerkAttributeType type, int weight) {
         this.type = type;
         this.weight = weight;
     }
@@ -42,7 +42,7 @@ public class GemAttributeEntry implements ConfigDataSet {
     }
 
     @Nullable
-    public static GemAttributeEntry deserialize(String str) {
+    public static PerkAttributeEntry deserialize(String str) {
         String[] split = str.split(";");
         if (split.length != 2) {
             return null;
@@ -59,7 +59,7 @@ public class GemAttributeEntry implements ConfigDataSet {
         } catch (NumberFormatException exc) {
             return null;
         }
-        return new GemAttributeEntry(type, weight);
+        return new PerkAttributeEntry(type, weight);
     }
 
     @Nonnull

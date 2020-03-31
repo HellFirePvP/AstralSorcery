@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.perk.PlayerTickPerk;
+import hellfirepvp.astralsorcery.common.perk.tick.PlayerTickPerk;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
 import hellfirepvp.astralsorcery.common.auxiliary.CropHelper;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;

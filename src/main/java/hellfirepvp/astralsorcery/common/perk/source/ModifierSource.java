@@ -6,30 +6,24 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.object;
+package hellfirepvp.astralsorcery.common.perk.source;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ObjectReference
+ * Class: ModifierSource
  * Created by HellFirePvP
- * Date: 18.07.2019 / 00:02
+ * Date: 31.03.2020 / 20:45
  */
-public class ObjectReference<T> {
+public interface ModifierSource {
 
-    private T object;
+    boolean canApplySource(PlayerEntity player, LogicalSide dist);
 
-    public ObjectReference(T object) {
-        this.object = object;
-    }
+    void onRemove(PlayerEntity player, LogicalSide dist);
 
-    public ObjectReference() {}
+    void onApply(PlayerEntity player, LogicalSide dist);
 
-    public T get() {
-        return object;
-    }
-
-    public void set(T object) {
-        this.object = object;
-    }
 }

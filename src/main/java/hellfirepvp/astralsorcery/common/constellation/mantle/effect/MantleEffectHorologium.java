@@ -44,6 +44,11 @@ public class MantleEffectHorologium extends MantleEffect {
     }
 
     @Override
+    protected boolean usesTickMethods() {
+        return true;
+    }
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     protected void tickClient(PlayerEntity player) {
         super.tickClient(player);

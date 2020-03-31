@@ -8,11 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.perk;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncPerkActivity;
+import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.source.AttributeConverterProvider;
+import hellfirepvp.astralsorcery.common.perk.source.AttributeModifierProvider;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -54,23 +58,6 @@ public class PerkEffectHelper {
         PacketChannel.CHANNEL.sendToPlayer(newPlayer, new PktSyncPerkActivity(PktSyncPerkActivity.Type.UNLOCKALL));
     }
 
-    //Know that if you apply global converters, you're also responsible for removing and syncing them at the appropriate time!
-    public static void applyGlobalConverters(PlayerEntity player, LogicalSide side, PerkConverter... converters) {
-        applyGlobalConverters(player, side, Arrays.asList(converters));
-    }
-
-    public static void applyGlobalConverters(PlayerEntity player, LogicalSide side, List<PerkConverter> converters) {
-        batchApplyConverters(player, side, converters, null);
-    }
-
-    public static void removeGlobalConverters(PlayerEntity player, LogicalSide side, PerkConverter... converters) {
-        removeGlobalConverters(player, side, Arrays.asList(converters));
-    }
-
-    public static void removeGlobalConverters(PlayerEntity player, LogicalSide side, List<PerkConverter> converters) {
-        batchRemoveConverters(player, side, converters, null);
-    }
-
     /* ****************************************************************************************************
                                        INTERNAL PERK SYNCHRONIZATION
      **************************************************************************************************** */
@@ -84,9 +71,9 @@ public class PerkEffectHelper {
 
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.CLIENT);
         progress.applyPerk(perk, oldData);
-        modifySinglePerk(player, LogicalSide.CLIENT, perk, Action.REMOVE);
+        modifySource(player, LogicalSide.CLIENT, perk, Action.REMOVE);
         progress.applyPerk(perk, newData);
-        modifySinglePerk(player, LogicalSide.CLIENT, perk, Action.ADD);
+        modifySource(player, LogicalSide.CLIENT, perk, Action.ADD);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -95,11 +82,15 @@ public class PerkEffectHelper {
         if (player == null) {
             return;
         }
+        PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.CLIENT);
+        if (!progress.isValid()) {
+            return;
+        }
 
         PerkAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.CLIENT);
-        List<AbstractPerk> copyPerks = new ArrayList<>(attr.getCacheAppliedPerks());
-        for (AbstractPerk perk : copyPerks) {
-            handlePerkRemoval(perk, player, LogicalSide.CLIENT);
+        List<ModifierSource> copySources = new ArrayList<>(attr.getCacheAppliedSources());
+        for (ModifierSource source : copySources) {
+            removeSource(attr, player, LogicalSide.CLIENT, source);
         }
     }
 
@@ -118,82 +109,89 @@ public class PerkEffectHelper {
                                       INTERNAL PERK APPLICATION LOGIC
      **************************************************************************************************** */
 
-    public static void modifySinglePerk(PlayerEntity player, LogicalSide side, AbstractPerk perk, Action action) {
-        PlayerProgress progress = ResearchHelper.getProgress(player, side);
-        if (progress.isValid()) {
-            if (action.isRemove()) {
-                handlePerkRemoval(perk, player, side);
-            } else {
-                handlePerkApplication(perk, player, side);
-            }
-        }
-    }
-
     private static void modifyAllPerks(PlayerEntity player, LogicalSide side, Action action) {
+        ResearchHelper.getProgress(player, side).getAppliedPerks()
+                .forEach(perk -> modifySource(player, side, perk, action));
+    }
+
+    public static void modifySource(PlayerEntity player, LogicalSide side, ModifierSource source, Action action) {
         PlayerProgress progress = ResearchHelper.getProgress(player, side);
-        if (progress.isValid()) {
-            for (AbstractPerk perk : progress.getAppliedPerks()) {
-                if (action.isRemove()) {
-                    handlePerkRemoval(perk, player, side);
-                } else {
-                    handlePerkApplication(perk, player, side);
-                }
+        if (!progress.isValid()) {
+            return;
+        }
+
+        PerkAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
+        if (action.isRemove()) {
+            if (attributeMap.isSourceApplied(source)) {
+                removeSource(attributeMap, player, side, source);
+            }
+        } else {
+            if (!attributeMap.isSourceApplied(source) && source.canApplySource(player, side)) {
+                applySource(attributeMap, player, side, source);
             }
         }
     }
 
-    private static void handlePerkApplication(AbstractPerk perk, PlayerEntity player, LogicalSide side) {
-        Collection<PerkConverter> converters = Lists.newArrayList();
-        if (perk instanceof ConverterPerk) {
-            converters = ((ConverterPerk) perk).provideConverters(player, side);
+    private static void applySource(PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side, ModifierSource add) {
+        //The onlyAdd perk is already on the playerprogress (potentially with other, not-yet-added perks); filter it away.
+        List<ModifierSource> sources = new LinkedList<>(attrMap.getCacheAppliedSources());
+        //List<ModifierSource> sources = new LinkedList<>(prog.getAppliedPerks());
+        //sources = sources.stream().filter(attrMap::isSourceApplied).collect(Collectors.toList());
+
+        sources.forEach(source -> {
+            removeModifiers(source, attrMap, player, side);
+            attrMap.remove(source, player);
+        });
+
+        if (add instanceof AttributeConverterProvider) {
+            ((AttributeConverterProvider) add).getConverters(player, side)
+                    .forEach((c) -> attrMap.applyConverter(player, c));
         }
-        batchApplyConverters(player, side, converters, perk);
+        applyModifiers(add, attrMap, player, side);
+
+        sources.forEach(source -> {
+            applyModifiers(source, attrMap, player, side);
+            attrMap.apply(source, player);
+        });
+        //Add new source.
+        attrMap.apply(add, player);
     }
 
-    private static void handlePerkRemoval(AbstractPerk perk, PlayerEntity player, LogicalSide side) {
-        Collection<PerkConverter> converters = Lists.newArrayList();
-        if (perk instanceof ConverterPerk) {
-            converters = ((ConverterPerk) perk).provideConverters(player, side);
-        }
-        batchRemoveConverters(player, side, converters, perk);
-    }
-
-    private static void batchApplyConverters(PlayerEntity player, LogicalSide side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyAdd) {
-        PlayerProgress prog = ResearchHelper.getProgress(player, side);
-        if (prog.isValid()) {
-            PerkAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
-            List<AbstractPerk> perks = new LinkedList<>(prog.getAppliedPerks());
-            perks = perks.stream().filter(attributeMap::isPerkApplied).collect(Collectors.toList());
-
-            perks.forEach(perk -> perk.removePerk(player, side));
-
-            if (onlyAdd == null || !prog.isPerkSealed(onlyAdd)) {
-                converters.forEach((c) -> attributeMap.applyConverter(player, c));
+    private static void applyModifiers(ModifierSource source, PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side) {
+        if (source instanceof AttributeModifierProvider) {
+            for (PerkAttributeModifier modifier : ((AttributeModifierProvider) source).getModifiers(player, side)) {
+                attrMap.applyModifier(player, modifier, source);
             }
-
-            if (onlyAdd != null && !prog.isPerkSealed(onlyAdd) && !perks.contains(onlyAdd)) {
-               perks.add(onlyAdd);
-            }
-
-            perks.forEach(perk -> perk.applyPerk(player, side));
         }
     }
 
-    private static void batchRemoveConverters(PlayerEntity player, LogicalSide side, Collection<PerkConverter> converters, @Nullable AbstractPerk onlyRemove) {
-        PlayerProgress prog = ResearchHelper.getProgress(player, side);
-        if (prog.isValid()) {
-            PerkAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
-            List<AbstractPerk> perks = new ArrayList<>(attributeMap.getCacheAppliedPerks());
+    private static void removeSource(PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side, ModifierSource remove) {
+        //Drop the old source
+        attrMap.remove(remove, player);
 
-            perks.forEach(perk -> perk.removePerk(player, side));
+        List<ModifierSource> sources = new ArrayList<>(attrMap.getCacheAppliedSources());
+        sources.forEach(source -> {
+            removeModifiers(source, attrMap, player, side);
+            attrMap.remove(source, player);
+        });
 
-            converters.forEach((c) -> attributeMap.removeConverter(player, c));
+        removeModifiers(remove, attrMap, player, side);
+        if (remove instanceof AttributeConverterProvider) {
+            ((AttributeConverterProvider) remove).getConverters(player, side)
+                    .forEach((c) -> attrMap.removeConverter(player, c));
+        }
 
-            if (onlyRemove != null) {
-                perks.remove(onlyRemove);
+        sources.forEach(source -> {
+            applyModifiers(source, attrMap, player, side);
+            attrMap.apply(source, player);
+        });
+    }
+
+    private static void removeModifiers(ModifierSource source, PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side) {
+        if (source instanceof AttributeModifierProvider) {
+            for (PerkAttributeModifier modifier : ((AttributeModifierProvider) source).getModifiers(player, side)) {
+                attrMap.removeModifier(player, modifier, source);
             }
-
-            perks.forEach(perk -> perk.applyPerk(player, side));
         }
     }
 
