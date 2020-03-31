@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.perk.modifier.GemAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.modifier.DynamicAttributeModifier;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -53,7 +53,7 @@ public abstract class ItemPerkGem extends Item {
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         PlayerProgress prog = ResearchHelper.getClientProgress();
         if (prog.wasOnceAttuned()) {
-            for (GemAttributeModifier mod : getModifiers(stack)) {
+            for (DynamicAttributeModifier mod : getModifiers(stack)) {
                 if (mod.hasDisplayString()) {
                     tooltip.add(new StringTextComponent(mod.getLocalizedDisplayString())
                             .setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
@@ -82,25 +82,25 @@ public abstract class ItemPerkGem extends Item {
     }
 
     @Nonnull
-    public static List<GemAttributeModifier> getModifiers(ItemStack stack) {
+    public static List<DynamicAttributeModifier> getModifiers(ItemStack stack) {
         if (stack.isEmpty() || !(stack.getItem() instanceof ItemPerkGem)) {
             return Lists.newArrayList();
         }
-        List<GemAttributeModifier> modifiers = Lists.newArrayList();
+        List<DynamicAttributeModifier> modifiers = Lists.newArrayList();
         ListNBT mods = NBTHelper.getPersistentData(stack).getList("modifiers", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < mods.size(); i++) {
             CompoundNBT tag = mods.getCompound(i);
-            modifiers.add(GemAttributeModifier.deserialize(tag));
+            modifiers.add(DynamicAttributeModifier.deserialize(tag));
         }
         return modifiers;
     }
 
-    public static boolean setModifiers(ItemStack stack, List<GemAttributeModifier> modifiers) {
+    public static boolean setModifiers(ItemStack stack, List<DynamicAttributeModifier> modifiers) {
         if (stack.isEmpty() || !(stack.getItem() instanceof ItemPerkGem)) {
             return false;
         }
         ListNBT mods = new ListNBT();
-        for (GemAttributeModifier modifier : modifiers) {
+        for (DynamicAttributeModifier modifier : modifiers) {
             mods.add(modifier.serialize());
         }
         NBTHelper.getPersistentData(stack).put("modifiers", mods);

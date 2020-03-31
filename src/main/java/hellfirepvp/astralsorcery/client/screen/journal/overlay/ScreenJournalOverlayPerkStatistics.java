@@ -65,7 +65,6 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
     protected void init() {
         super.init();
 
-
         statistics.clear();
 
         PlayerEntity player = Minecraft.getInstance().player;

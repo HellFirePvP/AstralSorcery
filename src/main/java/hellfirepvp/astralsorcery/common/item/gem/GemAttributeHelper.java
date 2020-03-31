@@ -8,9 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.item.gem;
 
-import hellfirepvp.astralsorcery.common.data.config.registry.GemAttributeRegistry;
-import hellfirepvp.astralsorcery.common.data.config.registry.sets.GemAttributeEntry;
-import hellfirepvp.astralsorcery.common.perk.modifier.GemAttributeModifier;
+import hellfirepvp.astralsorcery.common.data.config.registry.WeightedPerkAttributeRegistry;
+import hellfirepvp.astralsorcery.common.data.config.registry.sets.PerkAttributeEntry;
+import hellfirepvp.astralsorcery.common.perk.modifier.DynamicAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -64,20 +64,20 @@ public class GemAttributeHelper {
         }
 
         int rolls = getPotentialMods(random, gemType.countModifier);
-        List<GemAttributeModifier> mods = new ArrayList<>();
-        List<GemAttributeEntry> configuredModifiers = GemAttributeRegistry.INSTANCE.getConfiguredValues();
+        List<DynamicAttributeModifier> mods = new ArrayList<>();
+        List<PerkAttributeEntry> configuredModifiers = WeightedPerkAttributeRegistry.INSTANCE.getConfiguredValues();
 
         for (int i = 0; i < rolls; i++) {
-            GemAttributeEntry entry = null;
+            PerkAttributeEntry entry = null;
             if (allowDuplicateTypes) {
-                entry = MiscUtils.getWeightedRandomEntry(configuredModifiers, random, GemAttributeEntry::getWeight);
+                entry = MiscUtils.getWeightedRandomEntry(configuredModifiers, random, PerkAttributeEntry::getWeight);
             } else {
-                List<GemAttributeEntry> keys = new ArrayList<>(configuredModifiers);
+                List<PerkAttributeEntry> keys = new ArrayList<>(configuredModifiers);
                 while (!keys.isEmpty() && entry == null) {
-                    GemAttributeEntry item = getWeightedResultAndRemove(keys, random);
+                    PerkAttributeEntry item = getWeightedResultAndRemove(keys, random);
                     if (item != null) {
                         boolean foundType = false;
-                        for (GemAttributeModifier m : mods) {
+                        for (DynamicAttributeModifier m : mods) {
                             if (m.getAttributeType().equals(item.getType())) {
                                 foundType = true;
                                 break;
@@ -114,24 +114,24 @@ public class GemAttributeHelper {
 
             PerkAttributeType type = entry.getType();
             if (allowDuplicateTypes) {
-                GemAttributeModifier existing = MiscUtils.iterativeSearch(mods,
+                DynamicAttributeModifier existing = MiscUtils.iterativeSearch(mods,
                         mod -> mod.getAttributeType().equals(type) && mod.getMode().equals(mode));
                 if (existing != null) {
                     mods.remove(existing);
                     float combinedValue;
                     if (isMultiplicative) {
-                        combinedValue = (existing.getFlatValue() - 1F) + (rValue - 1F);
+                        combinedValue = (existing.getRawValue() - 1F) + (rValue - 1F);
                     } else {
-                        combinedValue = existing.getFlatValue() + rValue;
+                        combinedValue = existing.getRawValue() + rValue;
                     }
                     if (combinedValue != 0F) {
-                        mods.add(new GemAttributeModifier(UUID.randomUUID(), type, mode, isMultiplicative ? combinedValue + 1 : combinedValue));
+                        mods.add(new DynamicAttributeModifier(UUID.randomUUID(), type, mode, isMultiplicative ? combinedValue + 1 : combinedValue));
                     } //If == 0 -> don't re-add anything.
                 } else {
-                    mods.add(new GemAttributeModifier(UUID.randomUUID(), type, mode, rValue));
+                    mods.add(new DynamicAttributeModifier(UUID.randomUUID(), type, mode, rValue));
                 }
             } else {
-                mods.add(new GemAttributeModifier(UUID.randomUUID(), type, mode, rValue));
+                mods.add(new DynamicAttributeModifier(UUID.randomUUID(), type, mode, rValue));
             }
         }
 
@@ -140,11 +140,11 @@ public class GemAttributeHelper {
     }
 
     @Nullable
-    private static GemAttributeEntry getWeightedResultAndRemove(List<GemAttributeEntry> list, Random random) {
+    private static PerkAttributeEntry getWeightedResultAndRemove(List<PerkAttributeEntry> list, Random random) {
         if (list.isEmpty()) {
             return null;
         }
-        GemAttributeEntry result = MiscUtils.getWeightedRandomEntry(list, random, GemAttributeEntry::getWeight);
+        PerkAttributeEntry result = MiscUtils.getWeightedRandomEntry(list, random, PerkAttributeEntry::getWeight);
         if (result != null) {
             list.remove(result);
         }

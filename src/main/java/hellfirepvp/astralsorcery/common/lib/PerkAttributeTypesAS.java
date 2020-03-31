@@ -47,6 +47,7 @@ public class PerkAttributeTypesAS {
     public static final ResourceLocation KEY_ATTR_TYPE_ATTACK_LIFE_LEECH =             key("lifeleech");
     public static final ResourceLocation KEY_ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION = key("chargeregeneration");
     public static final ResourceLocation KEY_ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM      = key("chargecap");
+    public static final ResourceLocation KEY_ATTR_TYPE_MINING_SIZE                   = key("miningsize");
     public static final ResourceLocation KEY_ATTR_TYPE_ARC_CHAINS =                    key("archops");
     public static final ResourceLocation KEY_ATTR_TYPE_INC_PERK_EFFECT =               key("perkeffect");
     public static final ResourceLocation KEY_ATTR_TYPE_INC_HARVEST_SPEED =             key("harvestspeed");
@@ -82,6 +83,7 @@ public class PerkAttributeTypesAS {
     public static PerkAttributeType ATTR_TYPE_ATTACK_LIFE_LEECH;
     public static PerkAttributeType ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION;
     public static PerkAttributeType ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM;
+    public static PerkAttributeType ATTR_TYPE_MINING_SIZE;
     public static PerkAttributeType ATTR_TYPE_ARC_CHAINS;
     public static PerkAttributeType ATTR_TYPE_INC_PERK_EFFECT;
     public static PerkAttributeType ATTR_TYPE_INC_HARVEST_SPEED;

@@ -48,6 +48,7 @@ public class RegistryPerkAttributeTypes {
         ATTR_TYPE_SWIMSPEED = register(new AttributeTypeSwimSpeed());
         ATTR_TYPE_INC_THORNS = register(new AttributeTypeThorns());
         ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM = register(new AttributeTypeChargeMaximum());
+        ATTR_TYPE_MINING_SIZE = register(new AttributeTypeMiningSize());
 
         ATTR_TYPE_BLEED_DURATION = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_BLEED_DURATION, false));
         ATTR_TYPE_BLEED_CHANCE = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_BLEED_CHANCE, false));

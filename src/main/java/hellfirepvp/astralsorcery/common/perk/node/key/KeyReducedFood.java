@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node.key;
 
-import hellfirepvp.astralsorcery.common.perk.PlayerTickPerk;
+import hellfirepvp.astralsorcery.common.perk.tick.PlayerTickPerk;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.FoodStats;

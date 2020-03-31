@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.perk;
+package hellfirepvp.astralsorcery.common.perk.tick;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.LogicalSide;

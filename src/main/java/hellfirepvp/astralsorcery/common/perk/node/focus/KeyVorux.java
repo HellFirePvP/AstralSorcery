@@ -44,7 +44,7 @@ public class KeyVorux extends ConstellationPerk {
 
             @Override
             public float getValue(PlayerEntity player, PlayerProgress progress) {
-                return getFlatValue() * (progress.getAppliedPerks().size() - progress.getSealedPerks().size());
+                return getRawValue() * (progress.getAppliedPerks().size() - progress.getSealedPerks().size());
             }
 
             @Override

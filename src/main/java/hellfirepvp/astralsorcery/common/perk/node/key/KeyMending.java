@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.perk.PlayerTickPerk;
+import hellfirepvp.astralsorcery.common.perk.tick.PlayerTickPerk;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

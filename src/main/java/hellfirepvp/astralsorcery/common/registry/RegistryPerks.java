@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.perk.node.focus.KeyUlteria;
 import hellfirepvp.astralsorcery.common.perk.node.focus.KeyVorux;
 import hellfirepvp.astralsorcery.common.perk.node.key.*;
 import hellfirepvp.astralsorcery.common.perk.node.root.*;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
@@ -639,13 +640,13 @@ public class RegistryPerks {
         swimSpeedConversion.addConverter(new PerkConverter() {
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public PerkAttributeModifier convertModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
                 return modifier;
             }
 
             @Nonnull
             @Override
-            public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
                 List<PerkAttributeModifier> modifiers = Lists.newArrayList();
                 if (modifier.getAttributeType().equals(ATTR_TYPE_MOVESPEED)) {
                     PerkAttributeModifier mod;
@@ -765,7 +766,7 @@ public class RegistryPerks {
         keyArmorConversion.addConverter(new PerkConverter() {
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public PerkAttributeModifier convertModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
                 if (modifier.getAttributeType().equals(ATTR_TYPE_ARMOR)) {
                     return modifier.convertModifier(ATTR_TYPE_HEALTH, modifier.getMode(), modifier.getValue(player, progress));
                 }
@@ -774,7 +775,7 @@ public class RegistryPerks {
 
             @Nonnull
             @Override
-            public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            public Collection<PerkAttributeModifier> gainExtraModifiers(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
                 Collection<PerkAttributeModifier> modifiers = Lists.newArrayList();
                 if (modifier.getAttributeType().equals(ATTR_TYPE_ARMOR)) {
                     PerkAttributeModifier mod;

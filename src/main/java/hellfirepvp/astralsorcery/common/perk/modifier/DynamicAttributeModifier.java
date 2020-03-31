@@ -31,18 +31,18 @@ import java.util.UUID;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: GemAttributeModifier
+ * Class: DynamicAttributeModifier
  * Created by HellFirePvP
  * Date: 09.08.2019 / 07:26
  */
-public class GemAttributeModifier extends PerkAttributeModifier {
+public class DynamicAttributeModifier extends PerkAttributeModifier {
 
     private final UUID uuid;
     private PerkAttributeModifier actualModifier = null;
 
     private static Map<UUID, Map<PerkConverter, Table<PerkAttributeType, ModifierType, PerkAttributeModifier>>> gemConverterCache = Maps.newHashMap();
 
-    public GemAttributeModifier(UUID uniqueId, PerkAttributeType type, ModifierType mode, float value) {
+    public DynamicAttributeModifier(UUID uniqueId, PerkAttributeType type, ModifierType mode, float value) {
         super(type, mode, value);
         this.uuid = uniqueId;
     }
@@ -58,7 +58,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     @Override
     public PerkAttributeModifier convertModifier(PerkAttributeType type, ModifierType mode, float value) {
         PerkAttributeModifier mod = super.convertModifier(type, mode, value);
-        GemAttributeModifier gemMod = new GemAttributeModifier(this.getUniqueId(), mod.getAttributeType(), mod.getMode(), mod.getFlatValue());
+        DynamicAttributeModifier gemMod = new DynamicAttributeModifier(this.getUniqueId(), mod.getAttributeType(), mod.getMode(), mod.getRawValue());
         gemMod.setId(mod.getId());
         return gemMod;
     }
@@ -175,7 +175,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     }
 
     @Nullable
-    public static GemAttributeModifier deserialize(CompoundNBT tag) {
+    public static DynamicAttributeModifier deserialize(CompoundNBT tag) {
         PerkAttributeType attrType = RegistriesAS.REGISTRY_PERK_ATTRIBUTE_TYPES.getValue(new ResourceLocation(tag.getString("type")));
         if (attrType == null) {
             return null;
@@ -184,7 +184,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
         ModifierType mode = ModifierType.values()[tag.getInt("mode")];
         float val = tag.getFloat("baseValue");
         long mId = tag.getLong("mId");
-        GemAttributeModifier mod = new GemAttributeModifier(id, attrType, mode, val);
+        DynamicAttributeModifier mod = new DynamicAttributeModifier(id, attrType, mode, val);
         mod.setId(mId);
         return mod;
     }
@@ -193,7 +193,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GemAttributeModifier that = (GemAttributeModifier) o;
+        DynamicAttributeModifier that = (DynamicAttributeModifier) o;
         return this.uuid.equals(that.uuid);
     }
 

@@ -128,12 +128,12 @@ public class PerkAttributeModifier {
     // Should not be accessed directly unless for internal calculation purposes.
     // The actual effect of the modifier might depend on the player's AS-data.
     @Deprecated
-    public final float getFlatValue() {
+    public final float getRawValue() {
         return value;
     }
 
     public float getValue(PlayerEntity player, PlayerProgress progress) {
-        return getFlatValue();
+        return getRawValue();
     }
 
     @OnlyIn(Dist.CLIENT)

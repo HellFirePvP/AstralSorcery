@@ -47,7 +47,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktOpenGui;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeLimiter;
 import hellfirepvp.astralsorcery.common.perk.PerkCooldownHelper;
-import hellfirepvp.astralsorcery.common.perk.PerkTickHelper;
+import hellfirepvp.astralsorcery.common.perk.tick.PerkTickHelper;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
@@ -229,7 +229,7 @@ public class CommonProxy {
         ConfigRegistries.getRegistries().addDataRegistry(FluidRarityRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(TechnicalEntityRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(AmuletEnchantmentRegistry.INSTANCE);
-        ConfigRegistries.getRegistries().addDataRegistry(GemAttributeRegistry.INSTANCE);
+        ConfigRegistries.getRegistries().addDataRegistry(WeightedPerkAttributeRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(OreItemRarityRegistry.VOID_TRASH_REWARD);
         ConfigRegistries.getRegistries().addDataRegistry(OreBlockRarityRegistry.STONE_ENRICHMENT);
         ConfigRegistries.getRegistries().addDataRegistry(OreBlockRarityRegistry.MINERALIS_RITUAL);

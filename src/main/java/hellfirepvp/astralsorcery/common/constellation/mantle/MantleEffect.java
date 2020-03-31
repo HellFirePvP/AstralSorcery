@@ -19,10 +19,15 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -145,6 +150,18 @@ public abstract class MantleEffect extends ForgeRegistryEntry<MantleEffect> impl
         } else {
             this.tickClient(pl);
         }
+    }
+
+    @Nonnull
+    protected CompoundNBT getData(LivingEntity entity) {
+        if (entity == null) {
+            return new CompoundNBT();
+        }
+        ItemStack stack = entity.getItemStackFromSlot(EquipmentSlotType.CHEST);
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemMantle)) {
+            return new CompoundNBT();
+        }
+        return NBTHelper.getPersistentData(stack);
     }
 
     @Override

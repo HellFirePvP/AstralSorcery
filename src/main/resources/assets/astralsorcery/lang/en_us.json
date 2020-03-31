@@ -859,6 +859,7 @@
   "perk.attribute.astralsorcery.lifeleech.name": "Life Leech",
   "perk.attribute.astralsorcery.chargeregeneration.name": "Alignment Charge Regeneration",
   "perk.attribute.astralsorcery.chargecap.name": "Maximum Alignment Charge",
+  "perk.attribute.astralsorcery.miningsize.name": "Mining Size",
 
   "perk.astralsorcery.outer_s_inc_life.name": "Increased Maximum Life",
   "perk.astralsorcery.outer_s_inc_mine.name": "Increased Mining Speed",

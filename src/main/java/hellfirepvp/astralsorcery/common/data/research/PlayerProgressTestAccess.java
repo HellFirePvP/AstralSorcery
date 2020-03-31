@@ -134,7 +134,7 @@ public class PlayerProgressTestAccess extends PlayerProgress {
 
     @Override
     public boolean isPerkSealed(AbstractPerk perk) {
-        return false;
+        return true;
     }
 
     @Override

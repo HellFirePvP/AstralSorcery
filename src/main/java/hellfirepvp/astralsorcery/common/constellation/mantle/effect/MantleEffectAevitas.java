@@ -14,8 +14,12 @@ import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.FoodStats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.function.Consumer;
 
@@ -28,7 +32,7 @@ import java.util.function.Consumer;
  */
 public class MantleEffectAevitas extends MantleEffect {
 
-    public static Config CONFIG = new Config("aevitas");
+    public static AevitasConfig CONFIG = new AevitasConfig();
 
     public MantleEffectAevitas() {
         super(ConstellationsAS.aevitas);
@@ -49,18 +53,76 @@ public class MantleEffectAevitas extends MantleEffect {
             for (int zz = -3; zz <= 3; zz++) {
                 BlockPos at = playerPos.add(xx, -1, zz);
                 MiscUtils.executeWithChunk(world, at, () -> {
-                    if (!World.isOutsideBuildHeight(at) && world.getBlockState(at).isAir(world, at)) {
+                    if (world.getBlockState(at).isAir(world, at)) {
                         world.setBlockState(at, BlocksAS.VANISHING.getDefaultState());
                     }
                 });
             }
         }
 
-        //TODO secondary effect
+        int healChance = CONFIG.healChance.get();
+        int foodChance = CONFIG.feedChance.get();
+        if (healChance > 0 && rand.nextInt(healChance) == 0) {
+            player.heal(CONFIG.healthPerCycle.get().floatValue());
+        }
+        if (foodChance > 0 && rand.nextInt(foodChance) == 0) {
+            FoodStats stats = player.getFoodStats();
+            if (stats.getFoodLevel() < 20 || stats.getSaturationLevel() < 5) {
+                stats.addStats(CONFIG.foodPerCycle.get().intValue() / 2, CONFIG.foodPerCycle.get().floatValue());
+            }
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    protected void tickClient(PlayerEntity player) {
+        super.tickClient(player);
+
+        this.playCapeSparkles(player, 0.1F);
     }
 
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    public static class AevitasConfig extends Config {
+
+        private final int defaultHealChance = 20;
+        private final int defaultFeedChance = 40;
+        private final double defaultHealthPerCycle = 0.25F;
+        private final double defaultFoodPerCycle = 0.5F;
+
+        public ForgeConfigSpec.IntValue healChance;
+        public ForgeConfigSpec.IntValue feedChance;
+        public ForgeConfigSpec.DoubleValue healthPerCycle;
+        public ForgeConfigSpec.DoubleValue foodPerCycle;
+
+        public AevitasConfig() {
+            super("aevitas");
+        }
+
+        @Override
+        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+            super.createEntries(cfgBuilder);
+
+            this.healChance = cfgBuilder
+                    .comment("Set the chance of '1 in <this value>' per tick to do 1 heal cycle. Amount healed per cycle is determined by 'healthPerCycle' config option. Set to 0 to disable.")
+                    .translation(translationKey("healChance"))
+                    .defineInRange("healChance", this.defaultHealChance, 0, Integer.MAX_VALUE);
+            this.feedChance = cfgBuilder
+                    .comment("Set the chance of '1 in <this value>' per tick to do 1 food cycle. Amount fed per cycle is determined by 'foodPerCycle' config option. Set to 0 to disable.")
+                    .translation(translationKey("feedChance"))
+                    .defineInRange("feedChance", this.defaultFeedChance, 0, Integer.MAX_VALUE);
+
+            this.healthPerCycle = cfgBuilder
+                    .comment("Set the amount of health recovered by health cycle.")
+                    .translation(translationKey("healthPerCycle"))
+                    .defineInRange("healthPerCycle", this.defaultHealthPerCycle, 0.0, 100.0);
+            this.foodPerCycle = cfgBuilder
+                    .comment("Set the amount of food recovered by food cycle.")
+                    .translation(translationKey("foodPerCycle"))
+                    .defineInRange("foodPerCycle", this.defaultFoodPerCycle, 0.0, 100.0);
+        }
     }
 }
