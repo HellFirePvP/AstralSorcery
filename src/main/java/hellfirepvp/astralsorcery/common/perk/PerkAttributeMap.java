@@ -66,7 +66,7 @@ public class PerkAttributeMap {
     }
 
     private boolean cacheModifier(PlayerEntity player, PerkAttributeType type, PerkAttributeModifier modifier) {
-        boolean noModifiers = getModifiersByType(player, type, modifier.getMode()).isEmpty();
+        boolean noModifiers = getModifiersByType(type, modifier.getMode()).isEmpty();
         List<PerkAttributeModifier> modifiers = this.modifiers.computeIfAbsent(type, t -> Lists.newArrayList());
         if (modifiers.contains(modifier)) {
             return false;
@@ -104,7 +104,7 @@ public class PerkAttributeMap {
         if (modifiers.computeIfAbsent(type, t -> Lists.newArrayList()).remove(modifier)) {
             boolean completelyRemoved = modifiers.get(type).isEmpty();
             type.onRemove(player, side, completelyRemoved);
-            if (getModifiersByType(player, type, modifier.getMode()).isEmpty()) {
+            if (getModifiersByType(type, modifier.getMode()).isEmpty()) {
                 type.onModeRemove(player, modifier.getMode(), side, completelyRemoved);
             }
             return true;
@@ -197,7 +197,7 @@ public class PerkAttributeMap {
         }
     }
 
-    private List<PerkAttributeModifier> getModifiersByType(PlayerEntity player, PerkAttributeType type, ModifierType mode) {
+    private List<PerkAttributeModifier> getModifiersByType(PerkAttributeType type, ModifierType mode) {
         return modifiers.computeIfAbsent(type, t -> Lists.newArrayList()).stream()
                 .filter(mod -> mod.getMode() == mode)
                 .collect(Collectors.toList());
@@ -220,18 +220,18 @@ public class PerkAttributeMap {
         }
 
         if (applicableModes.contains(ModifierType.ADDITION)) {
-            for (PerkAttributeModifier modifier : getModifiersByType(player, type, ModifierType.ADDITION)) {
+            for (PerkAttributeModifier modifier : getModifiersByType(type, ModifierType.ADDITION)) {
                 mod += (modifier.getValue(player, progress) * perkEffectModifier);
             }
         }
         if (applicableModes.contains(ModifierType.ADDED_MULTIPLY)) {
             float multiply = mod;
-            for (PerkAttributeModifier modifier : getModifiersByType(player, type, ModifierType.ADDED_MULTIPLY)) {
+            for (PerkAttributeModifier modifier : getModifiersByType(type, ModifierType.ADDED_MULTIPLY)) {
                 mod += multiply * (modifier.getValue(player, progress) * perkEffectModifier);
             }
         }
         if (applicableModes.contains(ModifierType.STACKING_MULTIPLY)) {
-            for (PerkAttributeModifier modifier : getModifiersByType(player, type, ModifierType.STACKING_MULTIPLY)) {
+            for (PerkAttributeModifier modifier : getModifiersByType(type, ModifierType.STACKING_MULTIPLY)) {
                 mod *= ((modifier.getValue(player, progress) - 1F) * perkEffectModifier) + 1;
             }
         }
@@ -244,14 +244,14 @@ public class PerkAttributeMap {
             perkEffectModifier = modifyValue(player, progress, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, 1F);
         }
 
-        for (PerkAttributeModifier mod : getModifiersByType(player, type, ModifierType.ADDITION)) {
+        for (PerkAttributeModifier mod : getModifiersByType(type, ModifierType.ADDITION)) {
             value += (mod.getValue(player, progress) * perkEffectModifier);
         }
         float multiply = value;
-        for (PerkAttributeModifier mod : getModifiersByType(player, type, ModifierType.ADDED_MULTIPLY)) {
+        for (PerkAttributeModifier mod : getModifiersByType(type, ModifierType.ADDED_MULTIPLY)) {
             value += multiply * (mod.getValue(player, progress) * perkEffectModifier);
         }
-        for (PerkAttributeModifier mod : getModifiersByType(player, type, ModifierType.STACKING_MULTIPLY)) {
+        for (PerkAttributeModifier mod : getModifiersByType(type, ModifierType.STACKING_MULTIPLY)) {
             value *= ((mod.getValue(player, progress) - 1F) * perkEffectModifier) + 1F;
         }
         return value;
