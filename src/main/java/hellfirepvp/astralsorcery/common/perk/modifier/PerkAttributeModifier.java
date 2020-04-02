@@ -63,10 +63,6 @@ public class PerkAttributeModifier {
         return id;
     }
 
-    protected void setId(long id) {
-        this.id = id;
-    }
-
     protected void initModifier() {}
 
     protected void setAbsolute() {
@@ -91,7 +87,7 @@ public class PerkAttributeModifier {
             return this;
         }
         PerkAttributeModifier mod = this.createModifier(type, mode, value);
-        mod.setId(this.id);
+        mod.id = this.id;
         return mod;
     }
 

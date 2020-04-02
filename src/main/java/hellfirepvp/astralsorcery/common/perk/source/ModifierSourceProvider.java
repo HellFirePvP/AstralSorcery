@@ -63,7 +63,7 @@ public abstract class ModifierSourceProvider<T extends ModifierSource> {
         if (existing != null) {
             if (!existing.isEqual(source)) {
                 PerkEffectHelper.modifySource(player, LogicalSide.SERVER, existing, PerkEffectHelper.Action.REMOVE);
-                PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource());
+                PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(existing, PerkEffectHelper.Action.REMOVE));
             } else {
                 return; //Nothing to do
             }
@@ -71,6 +71,7 @@ public abstract class ModifierSourceProvider<T extends ModifierSource> {
 
         if (source != null) {
             PerkEffectHelper.modifySource(player, LogicalSide.SERVER, source, PerkEffectHelper.Action.ADD);
+            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(source, PerkEffectHelper.Action.ADD));
         }
         this.setModifier(player, identifier, source);
     }

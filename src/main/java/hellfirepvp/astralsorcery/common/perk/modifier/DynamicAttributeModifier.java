@@ -58,9 +58,7 @@ public class DynamicAttributeModifier extends PerkAttributeModifier {
     @Override
     public PerkAttributeModifier convertModifier(PerkAttributeType type, ModifierType mode, float value) {
         PerkAttributeModifier mod = super.convertModifier(type, mode, value);
-        DynamicAttributeModifier gemMod = new DynamicAttributeModifier(this.getUniqueId(), mod.getAttributeType(), mod.getMode(), mod.getRawValue());
-        gemMod.setId(mod.getId());
-        return gemMod;
+        return new DynamicAttributeModifier(this.getUniqueId(), mod.getAttributeType(), mod.getMode(), mod.getRawValue());
     }
 
     @Override
@@ -170,7 +168,6 @@ public class DynamicAttributeModifier extends PerkAttributeModifier {
         tag.putString("type", getAttributeType().getRegistryName().toString());
         tag.putInt("mode", getMode().ordinal());
         tag.putFloat("baseValue", this.value);
-        tag.putLong("mId", this.getId());
         return tag;
     }
 
@@ -183,10 +180,7 @@ public class DynamicAttributeModifier extends PerkAttributeModifier {
         UUID id = tag.getUniqueId("id");
         ModifierType mode = ModifierType.values()[tag.getInt("mode")];
         float val = tag.getFloat("baseValue");
-        long mId = tag.getLong("mId");
-        DynamicAttributeModifier mod = new DynamicAttributeModifier(id, attrType, mode, val);
-        mod.setId(mId);
-        return mod;
+        return new DynamicAttributeModifier(id, attrType, mode, val);
     }
 
     @Override

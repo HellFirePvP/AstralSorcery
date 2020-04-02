@@ -93,11 +93,4 @@ public class ProgressGatedPerk extends AbstractPerk {
     public final boolean canSee(PlayerEntity player, PlayerProgress progress) {
         return unlockFunction.apply(player, progress);
     }
-
-    @Override
-    protected void applyPerkLogic(PlayerEntity player, LogicalSide side) {}
-
-    @Override
-    protected void removePerkLogic(PlayerEntity player, LogicalSide side) {}
-
 }

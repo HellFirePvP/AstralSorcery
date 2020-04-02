@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk.node;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreeGem;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import net.minecraft.entity.player.PlayerEntity;
@@ -50,7 +51,7 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
         if (!modifiersDisabled(player, side)) {
             ItemStack contained = getContainedItem(player, side);
             if (!contained.isEmpty() && contained.getItem() instanceof ItemPerkGem) {
-                mods.addAll(ItemPerkGem.getModifiers(contained));
+                mods.addAll(DynamicModifierHelper.getStaticModifiers(contained));
             }
         }
         return mods;

@@ -152,9 +152,9 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
         this.removePerkLogic(player, dist);
     }
 
-    protected abstract void applyPerkLogic(PlayerEntity player, LogicalSide dist);
+    protected void applyPerkLogic(PlayerEntity player, LogicalSide dist) {}
 
-    protected abstract void removePerkLogic(PlayerEntity player, LogicalSide dist);
+    protected void removePerkLogic(PlayerEntity player, LogicalSide dist) {}
 
     protected LogicalSide getSide(Entity entity) {
         return entity.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;

@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
@@ -147,7 +148,7 @@ public interface GemSlotPerk {
                 tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.empty").setStyle(gray));
 
                 boolean has = !ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getInstance().player,
-                        s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !ItemPerkGem.getModifiers(s).isEmpty()).isEmpty();
+                        s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !DynamicModifierHelper.getStaticModifiers(s).isEmpty()).isEmpty();
                 if (!has) {
                     tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.empty.none")
                             .setStyle(new Style().setColor(TextFormatting.RED)));

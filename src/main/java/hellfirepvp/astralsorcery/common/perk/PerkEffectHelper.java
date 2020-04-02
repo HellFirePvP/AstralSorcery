@@ -119,12 +119,10 @@ public class PerkEffectHelper {
 
         PerkAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
         if (action.isRemove()) {
-            System.out.println("remove: " + ModifierManager.isModifierApplied(player, side, source));
             if (ModifierManager.isModifierApplied(player, side, source)) {
                 removeSource(attributeMap, player, side, source);
             }
         } else {
-            System.out.println("apply: " + !ModifierManager.isModifierApplied(player, side, source) + " AND " + source.canApplySource(player, side));
             if (!ModifierManager.isModifierApplied(player, side, source) && source.canApplySource(player, side)) {
                 applySource(attributeMap, player, side, source);
             }
