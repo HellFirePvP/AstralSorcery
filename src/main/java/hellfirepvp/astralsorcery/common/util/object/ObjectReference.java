@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.util.object;
 
+import java.util.Objects;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -31,5 +33,18 @@ public class ObjectReference<T> {
 
     public void set(T object) {
         this.object = object;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ObjectReference<?> that = (ObjectReference<?>) o;
+        return Objects.equals(object, that.object);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(object);
     }
 }

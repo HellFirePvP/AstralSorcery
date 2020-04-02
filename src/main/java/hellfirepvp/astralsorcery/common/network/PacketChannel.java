@@ -66,6 +66,7 @@ public class PacketChannel {
         registerMessage(PktSyncCharge::new);
         registerMessage(PktSyncData::new);
         registerMessage(PktSyncKnowledge::new);
+        registerMessage(PktSyncModifierSource::new);
         registerMessage(PktSyncPerkActivity::new);
         registerMessage(PktSyncStepAssist::new);
         registerMessage(PktUpdateGateways::new);

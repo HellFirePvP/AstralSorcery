@@ -10,13 +10,11 @@ package hellfirepvp.astralsorcery.common.network.play.server;
 
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
-import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -33,19 +31,16 @@ import javax.annotation.Nonnull;
  */
 public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
 
-    private AbstractPerk perk = null;
-    private PerkEffectHelper.Action action = null;
-    private CompoundNBT newData = null, oldData = null;
     private Type type = null;
+    private AbstractPerk perk = null;
+    private CompoundNBT newData = null, oldData = null;
 
     public PktSyncPerkActivity() {}
 
-    public PktSyncPerkActivity(AbstractPerk perk, PerkEffectHelper.Action action) {
-        this.perk = perk;
-        this.action = action;
-    }
-
     public PktSyncPerkActivity(Type type) {
+        if (type == Type.DATACHANGE) {
+            throw new IllegalArgumentException("Passed Datachange-Type without supplying data!");
+        }
         this.type = type;
     }
 
@@ -60,10 +55,9 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
     @Override
     public Encoder<PktSyncPerkActivity> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeOptional(buffer, packet.action, ByteBufUtils::writeEnumValue);
             ByteBufUtils.writeOptional(buffer, packet.type, ByteBufUtils::writeEnumValue);
-            ByteBufUtils.writeOptional(buffer, packet.perk,
-                    ((byteBuf, perk) -> ByteBufUtils.writeResourceLocation(byteBuf, perk.getRegistryName())));
+
+            ByteBufUtils.writeOptional(buffer, packet.perk, ByteBufUtils::writeRegistryEntry);
             ByteBufUtils.writeOptional(buffer, packet.newData, ByteBufUtils::writeNBTTag);
             ByteBufUtils.writeOptional(buffer, packet.oldData, ByteBufUtils::writeNBTTag);
         };
@@ -75,12 +69,9 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
         return buffer -> {
             PktSyncPerkActivity pkt = new PktSyncPerkActivity();
 
-            pkt.action = ByteBufUtils.readOptional(buffer, (byteBuf) -> ByteBufUtils.readEnumValue(byteBuf, PerkEffectHelper.Action.class));
             pkt.type = ByteBufUtils.readOptional(buffer, (byteBuf) -> ByteBufUtils.readEnumValue(byteBuf, Type.class));
-            ResourceLocation key = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
-            if (key != null) {
-                pkt.perk = PerkTree.PERK_TREE.getPerk(key);
-            }
+
+            pkt.perk = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
             pkt.newData = ByteBufUtils.readOptional(buffer, ByteBufUtils::readNBTTag);
             pkt.oldData = ByteBufUtils.readOptional(buffer, ByteBufUtils::readNBTTag);
             return pkt;
@@ -100,24 +91,18 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
                         return;
                     }
 
-                    if (packet.type != null) {
-                        switch (packet.type) {
-                            case CLEARALL:
-                                PerkEffectHelper.clientClearAllPerks();
-                                break;
-                            case UNLOCKALL:
-                                PerkEffectHelper.clientRefreshAllPerks();
-                                break;
-                            case DATACHANGE:
-                                PerkEffectHelper.clientChangePerkData(packet.perk, packet.oldData, packet.newData);
-                                break;
-                            default:
-                                break;
-                        }
-                        return;
-                    }
-                    if (packet.perk != null) {
-                        PerkEffectHelper.modifySource(player, LogicalSide.CLIENT, packet.perk, packet.action);
+                    switch (packet.type) {
+                        case CLEARALL:
+                            PerkEffectHelper.clientClearAllPerks();
+                            break;
+                        case UNLOCKALL:
+                            PerkEffectHelper.clientRefreshAllPerks();
+                            break;
+                        case DATACHANGE:
+                            PerkEffectHelper.clientChangePerkData(packet.perk, packet.oldData, packet.newData);
+                            break;
+                        default:
+                            break;
                     }
                 });
             }
