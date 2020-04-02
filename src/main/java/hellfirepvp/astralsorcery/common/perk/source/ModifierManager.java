@@ -11,9 +11,10 @@ package hellfirepvp.astralsorcery.common.perk.source;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
 import hellfirepvp.astralsorcery.common.perk.source.provider.PerkSourceProvider;
+import hellfirepvp.astralsorcery.common.perk.source.provider.equipment.EquipmentSourceProvider;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -33,6 +34,7 @@ import java.util.*;
 public class ModifierManager implements ITickHandler {
 
     public static final ResourceLocation PERK_PROVIDER_KEY = AstralSorcery.key("perks");
+    public static final ResourceLocation EQUIPMENT_PROVIDER_KEY = AstralSorcery.key("equipment");
 
     public static final ModifierManager INSTANCE = new ModifierManager();
 
@@ -50,6 +52,8 @@ public class ModifierManager implements ITickHandler {
             //Special dummy handler for perks. They're handled differently.. (and i don't wanna refactor AGAIN)
             sourceProviders.put(PERK_PROVIDER_KEY, new PerkSourceProvider());
 
+            sourceProviders.put(EQUIPMENT_PROVIDER_KEY, new EquipmentSourceProvider());
+
             MinecraftForge.EVENT_BUS.post(new ASRegistryEvents.ModifierSourceRegister(sourceProvider -> {
                 sourceProviders.put(sourceProvider.getKey(), sourceProvider);
             }));
@@ -66,7 +70,14 @@ public class ModifierManager implements ITickHandler {
         PlayerEntity player = (PlayerEntity) context[0];
         LogicalSide side = (LogicalSide) context[1];
 
+        if (!side.isServer() || !(player instanceof ServerPlayerEntity)) {
+            return;
+        }
+        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 
+        for (ModifierSourceProvider<?> sourceProvider : sourceProviders.values()) {
+            sourceProvider.update(serverPlayer);
+        }
     }
 
     @Nonnull

@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.event.PotionApplyEvent;
+import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
+import hellfirepvp.astralsorcery.common.perk.modifier.DynamicAttributeModifier;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -58,7 +60,11 @@ public class ASMHookEndpoint {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void addNoTagTooltip(ItemStack stack, List<ITextComponent> tooltip) {
+    public static void addTooltipPreEnchantments(ItemStack stack, List<ITextComponent> tooltip) {
+        //Add any dynamic modifiers this item has.
+        DynamicModifierHelper.addModifierTooltip(stack, tooltip);
+
+        //Add prism enchantments
         Map<Enchantment, Integer> enchantments;
         if (!stack.hasTag() && !(enchantments = EnchantmentHelper.getEnchantments(stack)).isEmpty()) {
             for (Enchantment e : enchantments.keySet()) {

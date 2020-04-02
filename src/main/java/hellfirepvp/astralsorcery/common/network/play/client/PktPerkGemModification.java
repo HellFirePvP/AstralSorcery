@@ -12,11 +12,11 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
+import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
@@ -92,7 +92,7 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
                         ItemStack toInsert = ItemUtils.copyStackWithSize(stack, 1);
                         if (!toInsert.isEmpty() &&
                                 toInsert.getItem() instanceof ItemPerkGem &&
-                                !ItemPerkGem.getModifiers(toInsert).isEmpty() &&
+                                !DynamicModifierHelper.getStaticModifiers(toInsert).isEmpty() &&
                                 !((GemSlotPerk) packet.perk).hasItem(player, LogicalSide.SERVER) &&
                                 ((GemSlotPerk) packet.perk).setContainedItem(player, LogicalSide.SERVER, toInsert)) {
                             player.inventory.setInventorySlotContents(packet.slotId, ItemUtils.copyStackWithSize(stack, stack.getCount() - 1));

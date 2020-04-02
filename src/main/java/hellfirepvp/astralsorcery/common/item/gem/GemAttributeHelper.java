@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.item.gem;
 import hellfirepvp.astralsorcery.common.data.config.registry.WeightedPerkAttributeRegistry;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.PerkAttributeEntry;
 import hellfirepvp.astralsorcery.common.perk.modifier.DynamicAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -55,7 +56,7 @@ public class GemAttributeHelper {
     }
 
     public static boolean rollGem(ItemStack gem, Random random) {
-        if (!ItemPerkGem.getModifiers(gem).isEmpty()) {
+        if (!DynamicModifierHelper.getStaticModifiers(gem).isEmpty()) {
             return false;
         }
         GemType gemType = ItemPerkGem.getGemType(gem);
@@ -135,7 +136,7 @@ public class GemAttributeHelper {
             }
         }
 
-        ItemPerkGem.setModifiers(gem, mods);
+        DynamicModifierHelper.addModifiers(gem, mods);
         return true;
     }
 

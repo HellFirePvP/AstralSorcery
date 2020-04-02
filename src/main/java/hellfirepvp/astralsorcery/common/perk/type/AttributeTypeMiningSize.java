@@ -58,13 +58,8 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                 return;
             }
             EventFlags.MINING_SIZE_BREAK.executeWithFlag(() -> {
-                int baseSize = 0;
-                if (ItemMantle.getEffect(player, ConstellationsAS.evorsio) != null) {
-                    baseSize += 2; //TODO GOD PLEASE find a better solution for this.
-                }
-
                 float size = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.SERVER)
-                        .modifyValue(player, ResearchHelper.getProgress(player, LogicalSide.SERVER), PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, baseSize);
+                        .modifyValue(player, ResearchHelper.getProgress(player, LogicalSide.SERVER), PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, 0);
                 size = AttributeEvent.postProcessModded(player, PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, size);
                 if (size >= 1F) {
                     BlockRayTraceResult brtr = MiscUtils.rayTraceLookBlock(player, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE);

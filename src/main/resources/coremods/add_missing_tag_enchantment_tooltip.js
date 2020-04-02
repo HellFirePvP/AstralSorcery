@@ -37,7 +37,7 @@ function initializeCoreMod() {
 
                 method.instructions.insertBefore(prev, ASMAPI.buildMethodCall(
                     'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
-                    'addNoTagTooltip',
+                    'addTooltipPreEnchantments',
                     '(Lnet/minecraft/item/ItemStack;Ljava/util/List;)V',
                     ASMAPI.MethodType.STATIC));
 

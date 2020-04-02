@@ -15,8 +15,16 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
+import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectEvorsio;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
+import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
+import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.perk.modifier.DynamicAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.source.AttributeModifierProvider;
+import hellfirepvp.astralsorcery.common.perk.source.provider.equipment.EquipmentAttributeModifierProvider;
+import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
@@ -35,11 +43,15 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,7 +60,10 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 17.02.2020 / 19:09
  */
-public class ItemMantle extends ArmorItem implements ItemDynamicColor, ConstellationBaseItem {
+public class ItemMantle extends ArmorItem implements ItemDynamicColor, ConstellationBaseItem, EquipmentAttributeModifierProvider {
+
+    private static final DynamicAttributeModifier EVORSIO_MANTLE_MINING_SIZE =
+            new DynamicAttributeModifier(UUID.fromString("aae54b9d-e1c8-4e74-8ac6-efa06093bd1a"), PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, ModifierType.ADDITION, 2F);
 
     private static Object modelArmor = null;
 
@@ -75,6 +90,15 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
                 items.add(stack);
             }
         }
+    }
+
+    @Override
+    public Collection<PerkAttributeModifier> getModifiers(ItemStack stack, PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
+        MantleEffectEvorsio evorioMantle = ItemMantle.getEffect(stack, ConstellationsAS.evorsio);
+        if (evorioMantle == null) {
+            return Collections.emptyList();
+        }
+        return Collections.singletonList(EVORSIO_MANTLE_MINING_SIZE);
     }
 
     @Override
@@ -130,23 +154,19 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
         if (stack.isEmpty() || !(stack.getItem() instanceof ItemMantle)) {
             return null;
         }
-        IConstellation cst = ((ItemMantle) stack.getItem()).getConstellation(stack);
-        if (!(cst instanceof IWeakConstellation)) {
-            return null;
-        }
-        if (expected != null && !expected.equals(cst)) {
-            return null;
-        }
-        return getEffect(stack);
+        return getEffect(stack, expected);
     }
 
     @Nullable
-    public static <V extends MantleEffect> V getEffect(@Nonnull ItemStack stack) {
+    public static <V extends MantleEffect> V getEffect(@Nonnull ItemStack stack, @Nullable IWeakConstellation expected) {
         if (stack.isEmpty() || !(stack.getItem() instanceof ItemMantle)) {
             return null;
         }
         IConstellation cst = ((ItemMantle) stack.getItem()).getConstellation(stack);
         if (!(cst instanceof IWeakConstellation)) {
+            return null;
+        }
+        if (expected != null && !expected.equals(cst)) {
             return null;
         }
         MantleEffect effect = RegistriesAS.REGISTRY_MANTLE_EFFECT.getValue(cst.getRegistryName());

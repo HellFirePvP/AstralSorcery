@@ -8,27 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.item.gem;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.perk.modifier.DynamicAttributeModifier;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.client.util.ITooltipFlag;
+import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,62 +36,14 @@ public abstract class ItemPerkGem extends Item {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        PlayerProgress prog = ResearchHelper.getClientProgress();
-        if (prog.wasOnceAttuned()) {
-            for (DynamicAttributeModifier mod : getModifiers(stack)) {
-                if (mod.hasDisplayString()) {
-                    tooltip.add(new StringTextComponent(mod.getLocalizedDisplayString())
-                            .setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
-                }
-            }
-        } else {
-            tooltip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge")
-                    .setStyle(new Style().setColor(TextFormatting.GRAY)));
-        }
-    }
-
-    @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
-        return new TranslationTextComponent(this.getTranslationKey(stack)).setStyle(new Style().setColor(this.getRarity(stack).color));
-    }
-
-    @Override
     public void inventoryTick(ItemStack stack, World world, Entity entityIn, int itemSlot, boolean isSelected) {
         if (world.isRemote()) {
             return;
         }
 
-        if (getModifiers(stack).isEmpty()) {
+        if (DynamicModifierHelper.getStaticModifiers(stack).isEmpty()) {
             GemAttributeHelper.rollGem(stack);
         }
-    }
-
-    @Nonnull
-    public static List<DynamicAttributeModifier> getModifiers(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemPerkGem)) {
-            return Lists.newArrayList();
-        }
-        List<DynamicAttributeModifier> modifiers = Lists.newArrayList();
-        ListNBT mods = NBTHelper.getPersistentData(stack).getList("modifiers", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0; i < mods.size(); i++) {
-            CompoundNBT tag = mods.getCompound(i);
-            modifiers.add(DynamicAttributeModifier.deserialize(tag));
-        }
-        return modifiers;
-    }
-
-    public static boolean setModifiers(ItemStack stack, List<DynamicAttributeModifier> modifiers) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemPerkGem)) {
-            return false;
-        }
-        ListNBT mods = new ListNBT();
-        for (DynamicAttributeModifier modifier : modifiers) {
-            mods.add(modifier.serialize());
-        }
-        NBTHelper.getPersistentData(stack).put("modifiers", mods);
-        return true;
     }
 
     @Nullable
@@ -114,5 +53,4 @@ public abstract class ItemPerkGem extends Item {
         }
         return ((ItemPerkGem) gem.getItem()).type;
     }
-
 }

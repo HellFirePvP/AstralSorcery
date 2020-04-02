@@ -171,7 +171,7 @@ public class MantleEffectArmara extends MantleEffect {
 
     public static class ArmaraConfig extends Config {
 
-        private final int defaultImmunityStacks = 300;
+        private final int defaultImmunityStacks = 3;
         private final int defaultImmunityRechargeTicks = 300;
 
         public ForgeConfigSpec.IntValue immunityStacks;

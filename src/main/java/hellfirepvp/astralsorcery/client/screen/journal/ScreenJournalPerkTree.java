@@ -43,11 +43,12 @@ import hellfirepvp.astralsorcery.common.network.play.client.PktRequestPerkSealAc
 import hellfirepvp.astralsorcery.common.network.play.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
-import hellfirepvp.astralsorcery.common.perk.AttributeConverterPerk;
 import hellfirepvp.astralsorcery.common.perk.ProgressGatedPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
+import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
+import hellfirepvp.astralsorcery.common.perk.source.AttributeConverterProvider;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
@@ -343,7 +344,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         if (socketMenu != null) {
             AbstractPerk sMenuPerk = (AbstractPerk) socketMenu;
             Map<Integer, ItemStack> found = ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getInstance().player,
-                    s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !ItemPerkGem.getModifiers(s).isEmpty());
+                    s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !DynamicModifierHelper.getStaticModifiers(s).isEmpty());
             if (found.isEmpty()) { // Close then.
                 closeSocketMenu();
                 return;
@@ -669,8 +670,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         }
 
         double mapDrawSize = 28;
-        if (perkPoint.getPerk() instanceof AttributeConverterPerk) {
-            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk()).getConverters(Minecraft.getInstance().player, LogicalSide.CLIENT, true)) {
+        if (perkPoint.getPerk() instanceof AttributeConverterProvider) {
+            for (PerkConverter converter : ((AttributeConverterProvider) perkPoint.getPerk()).getConverters(Minecraft.getInstance().player, LogicalSide.CLIENT, true)) {
                 if (converter instanceof PerkConverter.Radius) {
                     double radius = ((PerkConverter.Radius) converter).getRadius();
 
@@ -1008,7 +1009,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                         int slotId = slotsSocketMenu.get(r);
                         ItemStack potentialStack = mc.player.inventory.getStackInSlot(slotId);
                         if (!potentialStack.isEmpty() &&
-                                !ItemPerkGem.getModifiers(potentialStack).isEmpty()) {
+                                !DynamicModifierHelper.getStaticModifiers(potentialStack).isEmpty()) {
                             PktPerkGemModification pkt = PktPerkGemModification.insertItem((AbstractPerk) socketMenu, slotId);
                             PacketChannel.CHANNEL.sendToServer(pkt);
                             closeSocketMenu();
