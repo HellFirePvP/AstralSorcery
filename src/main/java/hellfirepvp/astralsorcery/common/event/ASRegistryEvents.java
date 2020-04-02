@@ -9,9 +9,13 @@
 package hellfirepvp.astralsorcery.common.event;
 
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSourceProvider;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;
+
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -84,6 +88,22 @@ public class ASRegistryEvents {
 
         public void setRemoved(boolean removed) {
             this.removed = removed;
+        }
+    }
+
+    /**
+     * Use this event to register a new modifier source provider to the automatic gathering.
+     */
+    public static class ModifierSourceRegister extends Event {
+
+        private Consumer<ModifierSourceProvider<?>> registrar;
+
+        public ModifierSourceRegister(Consumer<ModifierSourceProvider<?>> registrar) {
+            this.registrar = registrar;
+        }
+
+        public void registerSource(ModifierSourceProvider<?> sourceProvider) {
+            this.registrar.accept(sourceProvider);
         }
     }
 

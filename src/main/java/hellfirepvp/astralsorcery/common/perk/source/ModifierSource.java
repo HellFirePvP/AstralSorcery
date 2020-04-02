@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.perk.source;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 
 /**
@@ -25,5 +26,9 @@ public interface ModifierSource {
     void onRemove(PlayerEntity player, LogicalSide dist);
 
     void onApply(PlayerEntity player, LogicalSide dist);
+
+    boolean isEqual(ModifierSource other);
+
+    ResourceLocation getProviderName();
 
 }

@@ -67,11 +67,11 @@ public class AttributeModifierPerk extends AttributeConverterPerk implements Att
     }
 
     @Override
-    public Collection<PerkAttributeModifier> getModifiers(PlayerEntity player, LogicalSide side) {
+    public Collection<PerkAttributeModifier> getModifiers(PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
         if (modifiersDisabled(player, side)) {
             return Collections.emptyList();
         }
-        if (ResearchHelper.getProgress(player, side).isPerkSealed(this)) {
+        if (!ignoreRequirements && ResearchHelper.getProgress(player, side).isPerkSealed(this)) {
             return Collections.emptyList();
         }
 
@@ -81,7 +81,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk implements Att
     @Override
     @OnlyIn(Dist.CLIENT)
     public boolean addLocalizedTooltip(Collection<ITextComponent> tooltip) {
-        Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getInstance().player, LogicalSide.CLIENT);
+        Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getInstance().player, LogicalSide.CLIENT, true);
         boolean addEmptyLine = !modifiers.isEmpty();
 
         if (canSeeClient()) {

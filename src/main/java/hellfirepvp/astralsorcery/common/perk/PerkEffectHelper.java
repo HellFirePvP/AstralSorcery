@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.source.AttributeConverterProvider;
 import hellfirepvp.astralsorcery.common.perk.source.AttributeModifierProvider;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -25,9 +25,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
-import javax.annotation.Nullable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -88,8 +86,7 @@ public class PerkEffectHelper {
         }
 
         PerkAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.CLIENT);
-        List<ModifierSource> copySources = new ArrayList<>(attr.getCacheAppliedSources());
-        for (ModifierSource source : copySources) {
+        for (ModifierSource source : ModifierManager.getAppliedModifiers(player, LogicalSide.CLIENT)) {
             removeSource(attr, player, LogicalSide.CLIENT, source);
         }
     }
@@ -122,11 +119,13 @@ public class PerkEffectHelper {
 
         PerkAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
         if (action.isRemove()) {
-            if (attributeMap.isSourceApplied(source)) {
+            System.out.println("remove: " + ModifierManager.isModifierApplied(player, side, source));
+            if (ModifierManager.isModifierApplied(player, side, source)) {
                 removeSource(attributeMap, player, side, source);
             }
         } else {
-            if (!attributeMap.isSourceApplied(source) && source.canApplySource(player, side)) {
+            System.out.println("apply: " + !ModifierManager.isModifierApplied(player, side, source) + " AND " + source.canApplySource(player, side));
+            if (!ModifierManager.isModifierApplied(player, side, source) && source.canApplySource(player, side)) {
                 applySource(attributeMap, player, side, source);
             }
         }
@@ -134,32 +133,32 @@ public class PerkEffectHelper {
 
     private static void applySource(PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side, ModifierSource add) {
         //The onlyAdd perk is already on the playerprogress (potentially with other, not-yet-added perks); filter it away.
-        List<ModifierSource> sources = new LinkedList<>(attrMap.getCacheAppliedSources());
+        Collection<ModifierSource> sources = ModifierManager.getAppliedModifiers(player, side);
         //List<ModifierSource> sources = new LinkedList<>(prog.getAppliedPerks());
-        //sources = sources.stream().filter(attrMap::isSourceApplied).collect(Collectors.toList());
+        //sources = sources.stream().filter(attrMap::isModifierApplied).collect(Collectors.toList());
 
         sources.forEach(source -> {
             removeModifiers(source, attrMap, player, side);
-            attrMap.remove(source, player);
+            ModifierManager.removeModifier(player, side, source);
         });
 
         if (add instanceof AttributeConverterProvider) {
-            ((AttributeConverterProvider) add).getConverters(player, side)
+            ((AttributeConverterProvider) add).getConverters(player, side, false)
                     .forEach((c) -> attrMap.applyConverter(player, c));
         }
         applyModifiers(add, attrMap, player, side);
 
         sources.forEach(source -> {
             applyModifiers(source, attrMap, player, side);
-            attrMap.apply(source, player);
+            ModifierManager.addModifier(player, side, source);
         });
         //Add new source.
-        attrMap.apply(add, player);
+        ModifierManager.addModifier(player, side, add);
     }
 
     private static void applyModifiers(ModifierSource source, PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side) {
         if (source instanceof AttributeModifierProvider) {
-            for (PerkAttributeModifier modifier : ((AttributeModifierProvider) source).getModifiers(player, side)) {
+            for (PerkAttributeModifier modifier : ((AttributeModifierProvider) source).getModifiers(player, side, false)) {
                 attrMap.applyModifier(player, modifier, source);
             }
         }
@@ -167,29 +166,29 @@ public class PerkEffectHelper {
 
     private static void removeSource(PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side, ModifierSource remove) {
         //Drop the old source
-        attrMap.remove(remove, player);
+        ModifierManager.removeModifier(player, side, remove);
 
-        List<ModifierSource> sources = new ArrayList<>(attrMap.getCacheAppliedSources());
+        Collection<ModifierSource> sources = ModifierManager.getAppliedModifiers(player, side);
         sources.forEach(source -> {
             removeModifiers(source, attrMap, player, side);
-            attrMap.remove(source, player);
+            ModifierManager.removeModifier(player, side, source);
         });
 
         removeModifiers(remove, attrMap, player, side);
         if (remove instanceof AttributeConverterProvider) {
-            ((AttributeConverterProvider) remove).getConverters(player, side)
+            ((AttributeConverterProvider) remove).getConverters(player, side, false)
                     .forEach((c) -> attrMap.removeConverter(player, c));
         }
 
         sources.forEach(source -> {
             applyModifiers(source, attrMap, player, side);
-            attrMap.apply(source, player);
+            ModifierManager.addModifier(player, side, source);
         });
     }
 
     private static void removeModifiers(ModifierSource source, PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side) {
         if (source instanceof AttributeModifierProvider) {
-            for (PerkAttributeModifier modifier : ((AttributeModifierProvider) source).getModifiers(player, side)) {
+            for (PerkAttributeModifier modifier : ((AttributeModifierProvider) source).getModifiers(player, side, false)) {
                 attrMap.removeModifier(player, modifier, source);
             }
         }

@@ -38,13 +38,11 @@ public class PerkAttributeMap {
     private Map<PerkAttributeType, List<PerkAttributeModifier>> modifiers = new HashMap<>();
     private List<PerkConverter> converters = new ArrayList<>();
 
-    private Set<ModifierSource> cacheAppliedSources = new HashSet<>();
-
     PerkAttributeMap(LogicalSide side) {
         this.side = side;
     }
 
-    public void applyModifier(@Nonnull PlayerEntity player, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
+    void applyModifier(@Nonnull PlayerEntity player, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
         PlayerProgress prog = ResearchHelper.getProgress(player, this.side);
 
         List<PerkAttributeModifier> modify = Lists.newArrayList();
@@ -79,7 +77,7 @@ public class PerkAttributeMap {
         return modifiers.add(modifier);
     }
 
-    public void removeModifier(@Nonnull PlayerEntity player, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
+    void removeModifier(@Nonnull PlayerEntity player, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
         PlayerProgress prog = ResearchHelper.getProgress(player, this.side);
 
         List<PerkAttributeModifier> modify = Lists.newArrayList();
@@ -113,7 +111,7 @@ public class PerkAttributeMap {
     }
 
     @Nonnull
-    public PerkAttributeModifier convertModifier(@Nonnull PlayerEntity player, @Nonnull PlayerProgress progress, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
+    private PerkAttributeModifier convertModifier(@Nonnull PlayerEntity player, @Nonnull PlayerProgress progress, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
         for (PerkConverter converter : converters) {
             modifier = converter.convertModifier(player, progress, modifier, owningSource);
         }
@@ -121,32 +119,12 @@ public class PerkAttributeMap {
     }
 
     @Nonnull
-    public Collection<PerkAttributeModifier> gainModifiers(@Nonnull PlayerEntity player, @Nonnull PlayerProgress progress, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
+    private Collection<PerkAttributeModifier> gainModifiers(@Nonnull PlayerEntity player, @Nonnull PlayerProgress progress, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
         Collection<PerkAttributeModifier> modifiers = Lists.newArrayList();
         for (PerkConverter converter : converters) {
             modifiers.addAll(converter.gainExtraModifiers(player, progress, modifier, owningSource));
         }
         return modifiers;
-    }
-
-    void apply(ModifierSource source, PlayerEntity player) {
-        if (!cacheAppliedSources.contains(source) && cacheAppliedSources.add(source)) {
-            source.onApply(player, this.side);
-        }
-    }
-
-    void remove(ModifierSource source, PlayerEntity player) {
-        if (cacheAppliedSources.remove(source)) {
-            source.onRemove(player, this.side);
-        }
-    }
-
-    boolean isSourceApplied(ModifierSource source) {
-        return cacheAppliedSources.contains(source);
-    }
-
-    Set<ModifierSource> getCacheAppliedSources() {
-        return cacheAppliedSources;
     }
 
     boolean applyConverter(PlayerEntity player, PerkConverter converter) {

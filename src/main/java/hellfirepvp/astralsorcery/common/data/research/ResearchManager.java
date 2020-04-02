@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.infusion.ActiveLiquidInfusionRecipe;
+import hellfirepvp.astralsorcery.common.network.play.server.PktSyncModifierSource;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
@@ -209,7 +210,7 @@ public class ResearchManager {
             progress.applyPerk(root, data);
 
             PerkEffectHelper.modifySource(player, LogicalSide.SERVER, root, PerkEffectHelper.Action.ADD);
-            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(root, PerkEffectHelper.Action.ADD));
+            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(root, PerkEffectHelper.Action.ADD));
         }
 
         //TODO advancements
@@ -247,7 +248,7 @@ public class ResearchManager {
         progress.applyPerk(perk, data);
 
         PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.ADD));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -260,12 +261,16 @@ public class ResearchManager {
         if (!progress.hasPerkUnlocked(perk)) return false;
         if (progress.isPerkSealed(perk)) return false;
 
-        if (!progress.sealPerk(perk)) {
+        if (!progress.canSealPerk(perk)) {
             return false;
         }
 
         PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.REMOVE);
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.REMOVE));
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.REMOVE));
+
+        if (!progress.sealPerk(perk)) {
+            return false;
+        }
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -287,7 +292,7 @@ public class ResearchManager {
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
 
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.ADD));
         return true;
     }
 
@@ -327,7 +332,7 @@ public class ResearchManager {
         progress.applyPerk(perk, data);
 
         PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.ADD));
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.ADD));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -344,7 +349,7 @@ public class ResearchManager {
         }
         dropPerk(progress, player, LogicalSide.SERVER, perk, data);
 
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(perk, PerkEffectHelper.Action.REMOVE));
+        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.REMOVE));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);

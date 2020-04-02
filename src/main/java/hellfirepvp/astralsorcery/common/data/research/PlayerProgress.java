@@ -391,8 +391,12 @@ public class PlayerProgress {
         return appliedPerkData.remove(perk) != null;
     }
 
+    protected boolean canSealPerk(AbstractPerk perk) {
+        return !sealedPerks.contains(perk) && hasPerkUnlocked(perk);
+    }
+
     protected boolean sealPerk(AbstractPerk perk) {
-        if (sealedPerks.contains(perk) || !hasPerkUnlocked(perk)) {
+        if (!canSealPerk(perk)) {
             return false;
         }
         return sealedPerks.add(perk);

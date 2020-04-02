@@ -23,6 +23,6 @@ import java.util.Collection;
  */
 public interface AttributeConverterProvider {
 
-    Collection<PerkConverter> getConverters(PlayerEntity player, LogicalSide side);
+    Collection<PerkConverter> getConverters(PlayerEntity player, LogicalSide side, boolean ignoreRequirements);
 
 }

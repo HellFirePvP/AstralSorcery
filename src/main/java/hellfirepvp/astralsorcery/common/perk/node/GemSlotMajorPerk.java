@@ -45,8 +45,8 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
     }
 
     @Override
-    public Collection<PerkAttributeModifier> getModifiers(PlayerEntity player, LogicalSide side) {
-        Collection<PerkAttributeModifier> mods = super.getModifiers(player, side);
+    public Collection<PerkAttributeModifier> getModifiers(PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
+        Collection<PerkAttributeModifier> mods = super.getModifiers(player, side, ignoreRequirements);
         if (!modifiersDisabled(player, side)) {
             ItemStack contained = getContainedItem(player, side);
             if (!contained.isEmpty() && contained.getItem() instanceof ItemPerkGem) {

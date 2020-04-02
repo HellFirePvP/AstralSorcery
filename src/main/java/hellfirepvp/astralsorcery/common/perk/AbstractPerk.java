@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import net.minecraft.client.Minecraft;
@@ -85,6 +86,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
         return null;
     }
 
+    @Nonnull
     public Point getOffset() {
         return offset;
     }
@@ -302,8 +304,13 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
     }
 
     @Override
-    public String toString() {
-        return this.getRegistryName().toString();
+    public ResourceLocation getProviderName() {
+        return ModifierManager.PERK_PROVIDER_KEY;
+    }
+
+    @Override
+    public boolean isEqual(ModifierSource other) {
+        return this.equals(other);
     }
 
     @Override
