@@ -203,7 +203,8 @@ public class TileWell extends TileReceiverBaseInventory {
         if(tank.getTankFluid() == null) {
             tank.setFluid(entry.producing);
         } else if(!entry.producing.equals(tank.getTankFluid())) {
-            return;
+            tank.drain(tank.getFluidAmount());
+            tank.setFluid(entry.producing);
         }
         tank.addAmount(gain);
     }
