@@ -353,10 +353,10 @@ public class EventHandlerCapeEffects implements ITickHandler {
             boolean hasFlightPerk = ResearchManager.getProgress(spl, Side.CLIENT)
                     .hasPerkEffect(p -> p instanceof KeyMantleFlight);
             if(spl.movementInput.jump && !hasFlightPerk && !spl.onGround && spl.motionY < -0.5 && !spl.capabilities.isFlying && !spl.isInWater() && !spl.isInLava()) {
-                PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
                 if(!spl.isElytraFlying()) {
                     PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.setFlying());
                 }
+                PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
             } else if(spl.isElytraFlying()) {
                 PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
                 if(spl.capabilities.isFlying || hasFlightPerk || spl.onGround || spl.isInWater() || spl.isInLava()) {

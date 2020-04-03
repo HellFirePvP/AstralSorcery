@@ -8,12 +8,18 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectVicio;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key.KeyMantleFlight;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -60,13 +66,25 @@ public class PktElytraCapeState implements IMessageHandler<PktElytraCapeState, I
     public IMessage onMessage(PktElytraCapeState message, MessageContext ctx) {
         FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
             EntityPlayer pl = ctx.getServerHandler().player;
+
+            CapeEffectVicio vic = ItemCape.getCapeEffect(pl, Constellations.vicio);
+            if (vic == null) {
+                return;
+            }
+
+            boolean hasFlightPerk = ResearchManager.getProgress(pl, Side.SERVER).hasPerkEffect(p -> p instanceof KeyMantleFlight);
+
             switch (message.type) {
                 case 0: {
-                    pl.fallDistance = 0F;
+                    if (pl.isElytraFlying()) {
+                        pl.fallDistance = 0F;
+                    }
                     break;
                 }
                 case 1: {
-                    pl.setFlag(7, true);
+                    if (!hasFlightPerk) {
+                        pl.setFlag(7, true);
+                    }
                     break;
                 }
                 case 2: {
