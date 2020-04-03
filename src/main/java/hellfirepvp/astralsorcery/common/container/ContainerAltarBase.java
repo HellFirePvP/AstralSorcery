@@ -15,6 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.ItemStackHandler;
 
 /**
@@ -90,8 +91,13 @@ public abstract class ContainerAltarBase extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
-        return true;
+    public boolean canInteractWith(EntityPlayer player) {
+        BlockPos pos = this.tileAltar.getPos();
+        if (this.tileAltar.getWorld().getTileEntity(pos) != this.tileAltar) {
+            return false;
+        } else {
+            return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+        }
     }
 
 }
