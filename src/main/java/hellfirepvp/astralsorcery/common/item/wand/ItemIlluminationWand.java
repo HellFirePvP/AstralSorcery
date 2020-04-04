@@ -125,8 +125,7 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
 
         TileIlluminator illum = MiscUtils.getTileAt(world, pos, TileIlluminator.class, true);
         if (illum != null) {
-
-            //TODO implement illuminator fully..
+            illum.onWandUsed(stack);
             return ActionResultType.SUCCESS;
         }
 

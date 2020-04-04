@@ -16,7 +16,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorld;
@@ -52,7 +51,7 @@ public class ItemColoredLensPush extends ItemColoredLens {
             if (entity instanceof PlayerEntity) {
                 return;
             }
-            Vector3 dir = target.clone().subtract(origin).normalize().multiply(0.7F * beamStrength);
+            Vector3 dir = target.clone().subtract(origin).normalize().multiply(0.4F * beamStrength);
             Vec3d eMotion = entity.getMotion();
             Vector3 motion = new Vector3(
                     Math.min(1F, eMotion.x + dir.getX()),

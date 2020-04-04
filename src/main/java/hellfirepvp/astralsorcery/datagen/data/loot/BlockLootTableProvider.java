@@ -180,6 +180,7 @@ public class BlockLootTableProvider extends BlockLootTables {
                 .acceptFunction(CopyCrystalProperties.builder()));
         this.registerDropSelfLootTable(RITUAL_LINK);
         this.registerDropSelfLootTable(RITUAL_PEDESTAL);
+        this.registerDropSelfLootTable(ILLUMINATOR);
         this.registerDropSelfLootTable(INFUSER);
         this.registerDropSelfLootTable(CHALICE);
         this.registerDropSelfLootTable(WELL);

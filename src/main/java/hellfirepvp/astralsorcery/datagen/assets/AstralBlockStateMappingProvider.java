@@ -134,6 +134,7 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
 
         this.simpleBlockState(BlocksAS.RITUAL_LINK);
         this.simpleBlockState(BlocksAS.RITUAL_PEDESTAL);
+        this.simpleBlockState(BlocksAS.ILLUMINATOR);
         this.simpleBlockState(BlocksAS.INFUSER);
         this.simpleBlockState(BlocksAS.CHALICE);
         this.simpleBlockState(BlocksAS.TELESCOPE);

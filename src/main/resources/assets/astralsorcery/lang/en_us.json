@@ -520,7 +520,6 @@
   "entity.EntityLiquidSpark.name": "Liquid Spark",
   "entity.EntityShootingStar.name": "Shooting Star",
 
-  "item.itemcoloredlens": "Colored Lens",
   "item.iteminfusedglass": "Infused Glass",
   "item.iteminfusedglass.active": "Engraved Glass",
   "item.itemskyresonator": "Fosic Resonator",
@@ -650,6 +649,7 @@
   "block.astralsorcery.rock_collector_crystal": "Collector Crystal",
   "block.astralsorcery.celestial_collector_crystal": "Celestial Collector Crystal",
   "block.astralsorcery.chalice": "Containment Chalice",
+  "block.astralsorcery.illuminator": "Cave Illuminator",
   "block.astralsorcery.infuser": "Starlight Infuser",
   "block.astralsorcery.lens": "Lens",
   "block.astralsorcery.observatory": "Observatory",
@@ -661,7 +661,6 @@
 
   "__comment": "",
 
-  "block.astralsorcery.blockworldilluminator": "Cave Illuminator",
   "block.astralsorcery.blocktreebeacon": "Tree Beacon",
   "block.astralsorcery.blockmapdrawingtable": "Stellar Refraction Table",
   "block.astralsorcery.blockcelestialgateway": "Celestial Gateway",
@@ -675,12 +674,10 @@
   "block.astralsorcery.blockgemcrystals.stage_2_day": "Gem Crystal Cluster",
   "block.astralsorcery.blockgemcrystals.stage_2_night": "Gem Crystal Cluster",
 
-  "block.astralsorcery.blockflarelight": "Volatile Flare",
   "block.astralsorcery.blockmachine.grindstone": "Grindstone",
-  "block.astralsorcery.blockstructural.telescope_struct": "Telescope",
-  "block.astralsorcery.blockfaketree": "",
-  "block.astralsorcery.blocktranslucentblock": "Translucent Block",
   "block.astralsorcery.blockborehead.ore": "Petromantic Prime",
+
+  "__comment": "",
 
   "astralsorcery.constellation.discidia": "Discidia",
   "astralsorcery.constellation.discidia.info": "Offense",
