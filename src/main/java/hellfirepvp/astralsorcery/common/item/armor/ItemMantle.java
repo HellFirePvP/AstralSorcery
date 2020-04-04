@@ -94,8 +94,7 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
 
     @Override
     public Collection<PerkAttributeModifier> getModifiers(ItemStack stack, PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
-        MantleEffectEvorsio evorioMantle = ItemMantle.getEffect(stack, ConstellationsAS.evorsio);
-        if (evorioMantle == null) {
+        if (ItemMantle.getEffect(stack, ConstellationsAS.evorsio) == null) {
             return Collections.emptyList();
         }
         return Collections.singletonList(EVORSIO_MANTLE_MINING_SIZE);

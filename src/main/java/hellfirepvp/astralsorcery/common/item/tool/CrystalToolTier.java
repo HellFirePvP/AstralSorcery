@@ -30,7 +30,7 @@ public class CrystalToolTier implements IItemTier {
 
     @Override
     public int getMaxUses() {
-        return 512;
+        return 16192;
     }
 
     @Override

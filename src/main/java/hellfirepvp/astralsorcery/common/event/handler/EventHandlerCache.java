@@ -69,6 +69,7 @@ public class EventHandlerCache {
         PerkTree.PERK_TREE.clearCache(LogicalSide.CLIENT);
         PerkAttributeHelper.clearClient();
         PerkAttributeType.clearCache(LogicalSide.CLIENT);
+        PerkEffectHelper.clientClearAllPerks();
         PerkCooldownHelper.clearCache(LogicalSide.CLIENT);
 
         WorldSeedCache.clearClient();

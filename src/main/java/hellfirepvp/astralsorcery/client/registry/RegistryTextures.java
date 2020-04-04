@@ -24,8 +24,12 @@ public class RegistryTextures {
     private RegistryTextures() {}
 
     public static void loadTextures() {
-        TEX_BLACK = loadTexture(MISC, "black");
-        TEX_BLANK = loadTexture(MISC, "blank");
+        TEX_BLACK   = loadTexture(MISC, "black");
+        TEX_BLANK   = loadTexture(MISC, "blank");
+        TEX_SMOKE_1 = loadTexture(MISC, "smoke_1");
+        TEX_SMOKE_2 = loadTexture(MISC, "smoke_2");
+        TEX_SMOKE_3 = loadTexture(MISC, "smoke_3");
+        TEX_SMOKE_4 = loadTexture(MISC, "smoke_4");
 
         TEX_CONTAINER_TOME_STORAGE          = loadTexture(GUI, "container_tome_storage");
         TEX_CONTAINER_ALTAR_DISCOVERY       = loadTexture(GUI, "container_altar_discovery");

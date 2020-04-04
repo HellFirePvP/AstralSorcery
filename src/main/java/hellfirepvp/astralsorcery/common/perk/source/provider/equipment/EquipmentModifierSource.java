@@ -8,13 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.perk.source.provider.equipment;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.source.AttributeModifierProvider;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
-import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -74,11 +73,13 @@ public class EquipmentModifierSource implements ModifierSource, AttributeModifie
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EquipmentModifierSource that = (EquipmentModifierSource) o;
-        return slot == that.slot && ItemComparator.compare(itemStack, that.itemStack, ItemComparator.Clause.Sets.ITEMSTACK_STRICT);
+        return slot == that.slot &&
+                NBTHelper.getPersistentData(itemStack).getUniqueId(EquipmentSourceProvider.KEY_MOD_IDENTIFIER)
+                        .equals(NBTHelper.getPersistentData(that.itemStack).getUniqueId(EquipmentSourceProvider.KEY_MOD_IDENTIFIER));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(slot, itemStack.getItem(), itemStack.getCount(), itemStack.getTag());
+        return Objects.hash(slot, NBTHelper.getPersistentData(itemStack).getUniqueId(EquipmentSourceProvider.KEY_MOD_IDENTIFIER));
     }
 }

@@ -26,6 +26,7 @@ public class CraftingConfig extends ConfigEntry {
 
     public ForgeConfigSpec.BooleanValue liquidStarlightCrystalGrowth;
     public ForgeConfigSpec.BooleanValue liquidStarlightFormCelestialCrystalCluster;
+    public ForgeConfigSpec.BooleanValue liquidStarlightFormGemCrystalCluster;
     public ForgeConfigSpec.BooleanValue liquidStarlightCrystalToolGrowth;
     public ForgeConfigSpec.BooleanValue liquidStarlightCrystalDuplication;
 
@@ -55,6 +56,11 @@ public class CraftingConfig extends ConfigEntry {
                 .comment("Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming")
                 .translation(translationKey("liquidStarlightFormCelestialCrystalCluster"))
                 .define("liquidStarlightFormCelestialCrystalCluster", true);
+
+        liquidStarlightFormGemCrystalCluster = cfgBuilder
+                .comment("Set this to false to disable crystal + illumination powder -> Gem Crystal cluster forming")
+                .translation(translationKey("liquidStarlightFormGemCrystalCluster"))
+                .define("liquidStarlightFormGemCrystalCluster", true);
 
         liquidStarlightCrystalToolGrowth = cfgBuilder
                 .comment("Set this to false to disable Crystal Tool growth in liquid starlight")

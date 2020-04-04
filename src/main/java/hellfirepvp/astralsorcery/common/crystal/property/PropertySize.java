@@ -36,7 +36,7 @@ public class PropertySize extends CrystalProperty {
             value *= 1.0 + (0.3 * thisTier);
         }
         if (context.uses(USE_TOOL_DURABILITY)) {
-            value *= 1.0 + (0.8 * thisTier);
+            value *= 1.0 + (0.4 * thisTier);
         }
         return value;
     }
