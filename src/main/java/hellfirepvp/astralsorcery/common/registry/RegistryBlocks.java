@@ -106,6 +106,7 @@ public class RegistryBlocks {
         INFUSER = registerBlock(new BlockInfuser());
         CHALICE = registerBlock(new BlockChalice());
         WELL = registerBlock(new BlockWell());
+        ILLUMINATOR = registerBlock(new BlockIlluminator());
         TELESCOPE = registerBlock(new BlockTelescope());
         OBSERVATORY = registerBlock(new BlockObservatory());
 

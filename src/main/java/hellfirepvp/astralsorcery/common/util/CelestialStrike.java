@@ -55,7 +55,7 @@ public class CelestialStrike {
     public static void play(@Nullable LivingEntity attacker, World world, Vector3 at, Vector3 displayPosition) {
         double radius = 16D;
         List<LivingEntity> livingEntities = world.getEntitiesWithinAABB(LivingEntity.class,
-                EMPTY.expand(radius, radius / 2, radius)
+                EMPTY.grow(radius, radius / 2, radius)
                         .offset(at.toBlockPos()), EntityPredicates.IS_ALIVE);
         if (attacker != null) {
             livingEntities.remove(attacker);
@@ -68,8 +68,8 @@ public class CelestialStrike {
                 ds = DamageSource.causePlayerDamage((PlayerEntity) attacker);
             }
         }
-        float dmg = 10;
-        dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, at.toBlockPos()) * 60F;
+        float dmg = 15F;
+        dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, at.toBlockPos()) * 30F;
         for (LivingEntity living : livingEntities) {
             if ((living instanceof PlayerEntity) &&
                     (living.isSpectator() || ((PlayerEntity) living).isCreative() ||

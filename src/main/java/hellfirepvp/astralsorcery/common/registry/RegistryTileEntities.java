@@ -43,6 +43,7 @@ public class RegistryTileEntities {
         CHALICE = registerTile(TileChalice.class, BlocksAS.CHALICE);
         COLLECTOR_CRYSTAL = registerTile(TileCollectorCrystal.class, BlocksAS.ROCK_COLLECTOR_CRYSTAL, BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
         GEM_CRYSTAL_CLUSTER = registerTile(TileGemCrystals.class, BlocksAS.GEM_CRYSTAL_CLUSTER);
+        ILLUMINATOR = registerTile(TileIlluminator.class, BlocksAS.ILLUMINATOR);
         INFUSER = registerTile(TileInfuser.class, BlocksAS.INFUSER);
         LENS = registerTile(TileLens.class, BlocksAS.LENS);
         OBSERVATORY = registerTile(TileObservatory.class, BlocksAS.OBSERVATORY);
