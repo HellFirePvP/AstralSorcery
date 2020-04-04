@@ -14,6 +14,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -50,9 +51,9 @@ public class BlockPredicates {
         return (world, pos, state) -> applicable.contains(state);
     }
 
-    public static BlockPredicate doesTileExist(TileEntity tile, boolean loadTileWorldAndChunk) {
+    public static <T extends TileEntity> BlockPredicate doesTileExist(T tile, boolean loadTileWorldAndChunk) {
         DimensionType dimType = tile.getWorld().getDimension().getType();
-        Class<? extends TileEntity> tileClazz = tile.getClass();
+        TileEntityType<?> tileType = tile.getType();
         MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
 
         return (world, pos, state) -> {
@@ -61,7 +62,8 @@ public class BlockPredicates {
                 if (!loadTileWorldAndChunk && !foundWorld.getChunkProvider().isChunkLoaded(new ChunkPos(pos))) {
                     return true;
                 }
-                return MiscUtils.getTileAt(foundWorld, pos, tileClazz, true) != null;
+                TileEntity te = MiscUtils.getTileAt(foundWorld, pos, TileEntity.class, true);
+                return te != null && te.getType().equals(tileType);
             }
             return true;
         };

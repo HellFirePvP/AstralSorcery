@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
+import hellfirepvp.astralsorcery.common.util.CelestialStrike;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopEffectHelper;
 import io.netty.buffer.ByteBuf;
@@ -100,12 +101,14 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         LIGHTNING,
         BEAM_BREAK,
         BLOCK_EFFECT,
+        BLOCK_EFFECT_TUMBLE,
         ROCK_CRYSTAL_COLUMN,
         ROCK_CRYSTAL_SPARKS,
         SMALL_CRYSTAL_BREAK,
         GEM_CRYSTAL_BREAK,
         CROP_GROWTH,
         MELT_BLOCK,
+        CELESTIAL_STRIKE,
         ALTAR_RECIPE_FINISH,
         INFUSER_RECIPE_FINISH,
         TIME_FREEZE_EFFECT;
@@ -131,8 +134,12 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return BlockBreakHelper::blockBreakAnimation;
                 case BLOCK_EFFECT:
                     return MiscPlayEffect::playBlockEffects;
+                case BLOCK_EFFECT_TUMBLE:
+                    return MiscPlayEffect::playTumbleBlockEffects;
                 case MELT_BLOCK:
                     return ItemColoredLensFire::playParticles;
+                case CELESTIAL_STRIKE:
+                    return CelestialStrike::playEffect;
                 case ALTAR_RECIPE_FINISH:
                     return TileAltar::finishCraftingEffects;
                 case INFUSER_RECIPE_FINISH:

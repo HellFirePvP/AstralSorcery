@@ -58,7 +58,7 @@ public abstract class ModifierSourceProvider<T extends ModifierSource> {
         }
     }
 
-    protected void updateSource(ServerPlayerEntity player, ResourceLocation identifier, T source) {
+    protected void updateSource(ServerPlayerEntity player, ResourceLocation identifier, @Nullable T source) {
         T existing = this.getModifier(player, identifier);
         if (existing != null) {
             if (!existing.isEqual(source)) {

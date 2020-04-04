@@ -33,7 +33,7 @@ public class PropertyToolDurability extends CrystalProperty {
     @Override
     public double modify(double value, int thisTier, CalculationContext context) {
         if (context.uses(USE_TOOL_DURABILITY)) {
-            value *= 1.0 + (0.8 * thisTier);
+            value *= 1.0 + (0.4 * thisTier);
         }
         return value;
     }

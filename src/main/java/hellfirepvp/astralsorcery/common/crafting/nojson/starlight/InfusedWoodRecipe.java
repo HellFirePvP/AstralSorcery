@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.data.config.entry.CraftingConfig;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -53,6 +54,9 @@ public class InfusedWoodRecipe extends LiquidStarlightRecipe {
 
     @Override
     public boolean doesStartRecipe(ItemStack item) {
+        if (!CraftingConfig.CONFIG.liquidStarlightDropInfusedWood.get()) {
+            return false;
+        }
         return item.getItem().equals(Blocks.OAK_LOG.asItem());
     }
 

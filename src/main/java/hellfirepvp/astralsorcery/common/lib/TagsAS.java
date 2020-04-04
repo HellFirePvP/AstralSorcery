@@ -32,6 +32,7 @@ public class TagsAS {
     public static class Blocks {
 
         public static final Tag<Block> MARBLE = blockTagForge("marble");
+        public static final Tag<Block> ORES = blockTagForge("ores");
 
     }
 

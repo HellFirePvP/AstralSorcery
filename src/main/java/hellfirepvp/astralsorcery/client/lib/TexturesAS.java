@@ -23,6 +23,10 @@ public class TexturesAS {
 
     public static AbstractRenderableTexture TEX_BLACK;
     public static AbstractRenderableTexture TEX_BLANK;
+    public static AbstractRenderableTexture TEX_SMOKE_1;
+    public static AbstractRenderableTexture TEX_SMOKE_2;
+    public static AbstractRenderableTexture TEX_SMOKE_3;
+    public static AbstractRenderableTexture TEX_SMOKE_4;
 
     public static AbstractRenderableTexture TEX_CONTAINER_TOME_STORAGE;
     public static AbstractRenderableTexture TEX_CONTAINER_ALTAR_DISCOVERY;

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.effect.vfx;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -46,6 +47,10 @@ public class FXSpritePlane extends EntityVisualFX {
 
     public FXSpritePlane(Vector3 pos) {
         super(pos);
+    }
+
+    public FXSpritePlane setSprite(AbstractRenderableTexture tex) {
+        return this.setSprite(new SpriteSheetResource(tex));
     }
 
     public FXSpritePlane setSprite(SpriteSheetResource sprite) {

@@ -8,12 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
-import hellfirepvp.astralsorcery.client.effect.function.VFXScaleFunction;
-import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
-import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.client.util.MiscPlayEffect;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -23,13 +20,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -84,15 +79,7 @@ public class MantleEffectMineralis extends MantleEffect {
 
         BlockPos at = positions.get(index);
         BlockState displayState = player.getEntityWorld().getBlockState(at);
-
-        EffectHelper.of(EffectTemplatesAS.BLOCK_TRANSLUCENT_IGNORE_DEPTH)
-                .setOwner(player.getUniqueID())
-                .spawn(new Vector3(at))
-                .tumble()
-                .setBlockState(displayState)
-                .setMotion(new Vector3(0, 0.035, 0))
-                .scale(VFXScaleFunction.SHRINK_EXP)
-                .setMaxAge(40 + rand.nextInt(10));
+        MiscPlayEffect.playSingleBlockTumbleDepthEffect(new Vector3(at).add(0.5, 0.5, 0.5), displayState);
     }
 
     @Override

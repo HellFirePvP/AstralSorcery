@@ -8,8 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.network.play.server;
 
+import hellfirepvp.astralsorcery.client.util.MiscPlayEffect;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,13 +35,11 @@ import java.util.List;
 public class PktOreScan extends ASPacket<PktOreScan> {
 
     private List<BlockPos> positions = new ArrayList<>();
-    private boolean tumble = false;
 
     public PktOreScan() {}
 
-    public PktOreScan(List<BlockPos> positions, boolean tumble) {
+    public PktOreScan(List<BlockPos> positions) {
         this.positions = positions;
-        this.tumble = tumble;
     }
 
     @Nonnull
@@ -44,17 +47,15 @@ public class PktOreScan extends ASPacket<PktOreScan> {
     public Encoder<PktOreScan> encoder() {
         return (packet, buffer) -> {
             ByteBufUtils.writeList(buffer, packet.positions, ByteBufUtils::writePos);
-            buffer.writeBoolean(packet.tumble);
         };
     }
 
     @Nonnull
     @Override
     public Decoder<PktOreScan> decoder() {
-        return buffer ->
-                new PktOreScan(
-                        ByteBufUtils.readList(buffer, ByteBufUtils::readPos),
-                        buffer.readBoolean());
+        return buffer -> {
+            return new PktOreScan(ByteBufUtils.readList(buffer, ByteBufUtils::readPos));
+        };
     }
 
     @Nonnull
@@ -65,7 +66,23 @@ public class PktOreScan extends ASPacket<PktOreScan> {
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktOreScan packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
+                    PlayerEntity player = Minecraft.getInstance().player;
+                    if (player == null) {
+                        return;
+                    }
 
+                    for (BlockPos at : packet.positions) {
+                        Vector3 atPos = new Vector3(at).add(0.5, 0.5, 0.5);
+                        atPos.add(rand.nextFloat() - rand.nextFloat(), rand.nextFloat() - rand.nextFloat(), rand.nextFloat() - rand.nextFloat());
+                        BlockState state = Minecraft.getInstance().world.getBlockState(at);
+                        //if (Mods.ORESTAGES.isPresent()) {
+                        //    if(changed.contains(state) || !ModIntegrationOreStages.canSeeOreClient(state)) {
+                        //        changed.add(state);
+                        //        continue;
+                        //    }
+                        //}
+                        MiscPlayEffect.playSingleBlockTumbleDepthEffect(atPos, state);
+                    }
                 });
             }
 

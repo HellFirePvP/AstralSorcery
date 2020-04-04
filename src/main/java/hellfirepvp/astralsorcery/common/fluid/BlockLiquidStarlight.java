@@ -13,22 +13,30 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.crafting.nojson.LiquidStarlightCraftingRegistry;
+import hellfirepvp.astralsorcery.common.data.config.entry.CraftingConfig;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.fluid.EmptyFluid;
 import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -67,6 +75,46 @@ public class BlockLiquidStarlight extends FlowingFluidBlock {
                 entity.remove();
             }
         }
+    }
+
+    @Override
+    public boolean reactWithNeighbors(World world, BlockPos pos, BlockState state) {
+        for (Direction dir : Direction.values()) {
+            if (dir == Direction.DOWN) {
+                continue;
+            }
+
+            IFluidState otherState = world.getFluidState(pos.offset(dir));
+            Fluid otherFluid = otherState.getFluid();
+            if (otherFluid instanceof FlowingFluid) {
+                otherFluid = ((FlowingFluid) otherFluid).getStillFluid();
+            }
+            if (otherFluid instanceof EmptyFluid || otherFluid.equals(this.getFluid())) {
+                continue;
+            }
+
+            BlockState generate;
+            boolean isHot = otherFluid.getAttributes().getTemperature(world, pos.offset(dir)) > 600;
+            if (isHot) {
+                if (CraftingConfig.CONFIG.liquidStarlightInteractionSand.get()) {
+                    generate = Blocks.SAND.getDefaultState();
+                    if (CraftingConfig.CONFIG.liquidStarlightInteractionAquamarine.get() && world.rand.nextInt(800) == 0) {
+                        generate = BlocksAS.AQUAMARINE_SAND_ORE.getDefaultState();
+                    }
+                } else {
+                    generate = Blocks.COBBLESTONE.getDefaultState();
+                }
+            } else {
+                if (CraftingConfig.CONFIG.liquidStarlightInteractionIce.get()) {
+                    generate = Blocks.PACKED_ICE.getDefaultState();
+                } else {
+                    generate = Blocks.COBBLESTONE.getDefaultState();
+                }
+            }
+
+            world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, generate));
+        }
+        return true;
     }
 
     @Override

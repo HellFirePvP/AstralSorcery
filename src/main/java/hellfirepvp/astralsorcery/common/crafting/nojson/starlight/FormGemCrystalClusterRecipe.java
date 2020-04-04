@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXMotionController;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngredient;
+import hellfirepvp.astralsorcery.common.data.config.entry.CraftingConfig;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCrystalBase;
 import hellfirepvp.astralsorcery.common.item.dust.ItemIlluminationPowder;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -58,6 +59,9 @@ public class FormGemCrystalClusterRecipe extends LiquidStarlightRecipe {
 
     @Override
     public boolean doesStartRecipe(ItemStack item) {
+        if (!CraftingConfig.CONFIG.liquidStarlightFormGemCrystalCluster.get()) {
+            return false;
+        }
         return item.getItem() instanceof ItemIlluminationPowder;
     }
 

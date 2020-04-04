@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngred
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalGenerator;
+import hellfirepvp.astralsorcery.common.data.config.entry.CraftingConfig;
 import hellfirepvp.astralsorcery.common.item.ItemStardust;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -62,6 +63,9 @@ public class FormCelestialCrystalClusterRecipe extends LiquidStarlightRecipe {
 
     @Override
     public boolean doesStartRecipe(ItemStack item) {
+        if (!CraftingConfig.CONFIG.liquidStarlightFormCelestialCrystalCluster.get()) {
+            return false;
+        }
         return item.getItem() instanceof ItemStardust;
     }
 

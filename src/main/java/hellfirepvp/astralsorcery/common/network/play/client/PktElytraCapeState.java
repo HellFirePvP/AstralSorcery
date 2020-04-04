@@ -8,8 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.network.play.client;
 
+import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectVicio;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
+import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.perk.node.key.KeyMantleFlight;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 
@@ -60,13 +67,26 @@ public class PktElytraCapeState extends ASPacket<PktElytraCapeState> {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
                 ServerPlayerEntity player = context.getSender();
+
+                MantleEffectVicio vic = ItemMantle.getEffect(player, ConstellationsAS.vicio);
+                if (vic == null) {
+                    return;
+                }
+
+                boolean hasFlightPerk = ResearchHelper.getProgress(player, LogicalSide.SERVER)
+                        .hasPerkEffect(p -> p instanceof KeyMantleFlight);
+
                 switch (packet.type) {
                     case 0: {
-                        player.fallDistance = 0F;
+                        if (player.isElytraFlying()) {
+                            player.fallDistance = 0F;
+                        }
                         break;
                     }
                     case 1: {
-                        player.setElytraFlying();
+                        if (!hasFlightPerk) {
+                            player.setElytraFlying();
+                        }
                         break;
                     }
                     case 2: {

@@ -52,6 +52,10 @@ public class ItemsAS {
     public static ItemCrystalPickaxe CRYSTAL_PICKAXE;
     public static ItemCrystalShovel CRYSTAL_SHOVEL;
     public static ItemCrystalSword CRYSTAL_SWORD;
+    public static ItemInfusedCrystalAxe INFUSED_CRYSTAL_AXE;
+    public static ItemInfusedCrystalPickaxe INFUSED_CRYSTAL_PICKAXE;
+    public static ItemInfusedCrystalShovel INFUSED_CRYSTAL_SHOVEL;
+    public static ItemInfusedCrystalSword INFUSED_CRYSTAL_SWORD;
 
     public static ItemTome TOME;
     public static ItemConstellationPaper CONSTELLATION_PAPER;

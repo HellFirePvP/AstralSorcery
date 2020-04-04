@@ -69,6 +69,10 @@ public class RegistryItems {
         CRYSTAL_PICKAXE = registerItem(new ItemCrystalPickaxe());
         CRYSTAL_SHOVEL = registerItem(new ItemCrystalShovel());
         CRYSTAL_SWORD = registerItem(new ItemCrystalSword());
+        INFUSED_CRYSTAL_AXE = registerItem(new ItemInfusedCrystalAxe());
+        INFUSED_CRYSTAL_PICKAXE = registerItem(new ItemInfusedCrystalPickaxe());
+        INFUSED_CRYSTAL_SHOVEL = registerItem(new ItemInfusedCrystalShovel());
+        INFUSED_CRYSTAL_SWORD = registerItem(new ItemInfusedCrystalSword());
 
         TOME = registerItem(new ItemTome());
         CONSTELLATION_PAPER = registerItem(new ItemConstellationPaper());

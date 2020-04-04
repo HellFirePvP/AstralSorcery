@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXScaleFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
@@ -53,14 +54,45 @@ public class MiscPlayEffect {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void playBlockEffects(PktPlayEffect event) {
+    public static void playSingleBlockTumbleDepthEffect(Vector3 at, BlockState displayState) {
+        EffectHelper.of(EffectTemplatesAS.BLOCK_TRANSLUCENT_IGNORE_DEPTH)
+                .spawn(at.clone())
+                .tumble()
+                .setBlockState(displayState)
+                .setMotion(new Vector3(0, 0.035, 0))
+                .scale(VFXScaleFunction.SHRINK_EXP)
+                .setMaxAge(40 + rand.nextInt(10));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void playTumbleBlockEffects(PktPlayEffect event) {
         BlockPos pos = ByteBufUtils.readPos(event.getExtraData());
         BlockState state = ByteBufUtils.readBlockState(event.getExtraData());
         Vector3 vec = new Vector3(pos).add(0.5F, 0.5F, 0.5F);
 
+        playBlockParticles(state, pos);
+
+        EffectHelper.of(EffectTemplatesAS.BLOCK_TRANSLUCENT)
+                .spawn(vec)
+                .tumble()
+                .setBlockState(state)
+                .setMotion(new Vector3(0, 0.035, 0))
+                .scale(VFXScaleFunction.SHRINK_EXP)
+                .setMaxAge(20 + rand.nextInt(15));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void playBlockEffects(PktPlayEffect event) {
+        BlockPos pos = ByteBufUtils.readPos(event.getExtraData());
+        BlockState state = ByteBufUtils.readBlockState(event.getExtraData());
+        playBlockParticles(state, pos);
+    }
+
+    private static void playBlockParticles(BlockState state, BlockPos pos) {
         RenderingUtils.playBlockBreakParticles(pos, null, state);
 
-        for (int i = 0; i < 10; i++) {
+        Vector3 vec = new Vector3(pos).add(0.5F, 0.5F, 0.5F);
+        for (int i = 0; i < 6; i++) {
             Vector3 at = vec.add(
                     rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),

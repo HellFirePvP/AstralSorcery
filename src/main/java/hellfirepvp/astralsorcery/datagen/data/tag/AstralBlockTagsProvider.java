@@ -39,6 +39,11 @@ public class AstralBlockTagsProvider extends BlockTagsProvider {
                 .add(BlocksAS.MARBLE_ENGRAVED)
                 .add(BlocksAS.MARBLE_PILLAR)
                 .add(BlocksAS.MARBLE_RUNED);
+
+        this.tag(ORES)
+                .add(BlocksAS.STARMETAL_ORE)
+                .add(BlocksAS.AQUAMARINE_SAND_ORE)
+                .add(BlocksAS.ROCK_CRYSTAL_ORE);
     }
 
     private Tag.Builder<Block> tag(Tag<Block> tag) {

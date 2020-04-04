@@ -512,6 +512,20 @@ public class MiscUtils {
         return executeWithChunk(world, pos, apply(run, () -> obj));
     }
 
+    public static <T> T eitherOf(Random r, T... selection) {
+        if (selection.length == 0) {
+            return null;
+        }
+        return selection[r.nextInt(selection.length)];
+    }
+
+    public static <T> T eitherOf(Random r, Supplier<T>... selection) {
+        if (selection.length == 0) {
+            return null;
+        }
+        return selection[r.nextInt(selection.length)].get();
+    }
+
     public static boolean isPlayerFakeMP(ServerPlayerEntity player) {
         if (player instanceof FakePlayer) {
             return true;
