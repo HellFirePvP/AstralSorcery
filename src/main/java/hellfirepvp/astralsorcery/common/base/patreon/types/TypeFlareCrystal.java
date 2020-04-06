@@ -8,43 +8,39 @@
 
 package hellfirepvp.astralsorcery.common.base.patreon.types;
 
+import hellfirepvp.astralsorcery.client.resource.query.TextureQuery;
+import hellfirepvp.astralsorcery.common.base.patreon.FlareColor;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffect;
-import hellfirepvp.astralsorcery.common.base.patreon.entity.PatreonFlareDynamicColor;
+import hellfirepvp.astralsorcery.common.base.patreon.entity.PatreonCrystalFlare;
 import hellfirepvp.astralsorcery.common.base.patreon.entity.PatreonPartialEntity;
 
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: TypeFlareColor
+ * Class: TypeFlareCrystal
  * Created by HellFirePvP
- * Date: 31.08.2019 / 11:16
+ * Date: 05.04.2020 / 16:46
  */
-public class TypeFlareColor extends PatreonEffect {
+public class TypeFlareCrystal extends PatreonEffect {
 
-    private Supplier<Color> colorProvider;
+    private final Color colorTheme;
+    private final TextureQuery crystalTexture;
 
-    public TypeFlareColor(UUID uniqueId, Supplier<Color> colorProvider) {
-        super(uniqueId, null);
-        this.colorProvider = colorProvider;
-    }
-
-    public Supplier<Color> getColorProvider() {
-        return colorProvider;
-    }
-
-    @Override
-    public boolean hasPartialEntity() {
-        return true;
+    public TypeFlareCrystal(UUID effectUUID, @Nullable FlareColor flareColor, Color colorTheme, TextureQuery crystalTexture) {
+        super(effectUUID, flareColor);
+        this.colorTheme = colorTheme;
+        this.crystalTexture = crystalTexture;
     }
 
     @Nullable
     @Override
     public PatreonPartialEntity createEntity(UUID playerUUID) {
-        return new PatreonFlareDynamicColor(getEffectUUID(), playerUUID);
+        return new PatreonCrystalFlare(this.getEffectUUID(), playerUUID)
+                .setQueryTexture(this.crystalTexture)
+                .setColorTheme(this.colorTheme);
     }
 }

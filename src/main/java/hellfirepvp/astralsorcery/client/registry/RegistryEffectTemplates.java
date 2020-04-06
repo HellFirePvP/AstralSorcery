@@ -19,6 +19,7 @@ import java.util.List;
 
 import static hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS.*;
 import static hellfirepvp.astralsorcery.client.lib.SpritesAS.*;
+import static hellfirepvp.astralsorcery.client.lib.TexturesAS.TEX_MODEL_CRYSTAL_WHITE;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,6 +41,7 @@ public class RegistryEffectTemplates {
         CRYSTAL_BURST_1         = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_1));
         CRYSTAL_BURST_2         = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_2));
         CRYSTAL_BURST_3         = register(new RenderContextBurst(SPR_CRYSTAL_EFFECT_3));
+        CRYSTAL                 = register(new RenderContextCrystal(TEX_MODEL_CRYSTAL_WHITE));
         COLLECTOR_BURST         = register(new RenderContextBurst(SPR_COLLECTOR_EFFECT));
         GEM_CRYSTAL_BURST       = register(new RenderContextBurst(SPR_GEM_CRYSTAL_BURST));
         GEM_CRYSTAL_BURST_SKY   = register(new RenderContextBurst(SPR_GEM_CRYSTAL_BURST_SKY));
@@ -81,6 +83,7 @@ public class RegistryEffectTemplates {
         generalGrp.add(GEM_CRYSTAL_BURST_DAY);
         generalGrp.add(GEM_CRYSTAL_BURST_NIGHT);
         generalGrp.add(COLLECTOR_BURST);
+        generalGrp.add(CRYSTAL);
         generalGrp.add(LIGHTBEAM);
         generalGrp.add(FACING_SPRITE);
 

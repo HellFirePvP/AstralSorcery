@@ -84,7 +84,7 @@ public class AssetLoader {
         BLOCKS("block"),
         GUI("gui"),
         MISC("misc"),
-        MODELS("model"),
+        MODEL("model"),
         EFFECT("effect"),
         ENVIRONMENT("environment");
 

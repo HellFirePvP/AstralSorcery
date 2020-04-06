@@ -77,7 +77,7 @@ public class ClientPatreonFlares extends ClientData<ClientPatreonFlares> {
                     UUID effectUUID = entityNBT.getUniqueId("id");
                     PatreonEffect effect = PatreonEffectHelper.getPatreonEffects(LogicalSide.CLIENT, playerUUID)
                             .stream()
-                            .filter(eff -> eff.getUUID().equals(effectUUID))
+                            .filter(eff -> eff.getEffectUUID().equals(effectUUID))
                             .findFirst()
                             .orElse(null);
                     if (effect == null) {
@@ -111,7 +111,7 @@ public class ClientPatreonFlares extends ClientData<ClientPatreonFlares> {
                     UUID effectUUID = entityNBT.getUniqueId("id");
                     PatreonEffect effect = PatreonEffectHelper.getPatreonEffects(LogicalSide.CLIENT, playerUUID)
                             .stream()
-                            .filter(eff -> eff.getUUID().equals(effectUUID))
+                            .filter(eff -> eff.getEffectUUID().equals(effectUUID))
                             .findFirst()
                             .orElse(null);
                     if (effect == null) {

@@ -114,6 +114,9 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_LIGHTNING_PART;
     public static AbstractRenderableTexture TEX_LIGHTBEAM;
 
+    public static AbstractRenderableTexture TEX_MODEL_CRYSTAL_WHITE;
+    public static AbstractRenderableTexture TEX_MODEL_CRYSTAL_BLUE;
+
     public static AbstractRenderableTexture TEX_STARLIGHT_STORE;
 
 }
