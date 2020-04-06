@@ -51,8 +51,6 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
         super(TileEntityTypesAS.RITUAL_LINK);
     }
 
-    //TODO structure type for ritual with link?
-
     @Override
     public void tick() {
         super.tick();

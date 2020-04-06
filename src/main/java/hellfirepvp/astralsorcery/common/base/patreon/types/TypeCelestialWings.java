@@ -1,0 +1,201 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.base.patreon.types;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.client.render.ObjModelRender;
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
+import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
+import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
+import hellfirepvp.astralsorcery.common.base.patreon.FlareColor;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffect;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.Effects;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.EnumSet;
+import java.util.UUID;
+import java.util.function.Consumer;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: TypeCelestialWings
+ * Created by HellFirePvP
+ * Date: 04.04.2020 / 20:56
+ */
+public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
+
+    private static Object texWings;
+
+    private final UUID playerUUID;
+
+    public TypeCelestialWings(UUID effectUUID, @Nullable FlareColor flareColor, UUID playerUUID) {
+        super(effectUUID, flareColor);
+        this.playerUUID = playerUUID;
+    }
+
+    @Override
+    public void attachEventListeners(IEventBus bus) {
+        super.attachEventListeners(bus);
+
+        bus.register(this);
+    }
+
+    @Override
+    public void attachTickListeners(Consumer<ITickHandler> registrar) {
+        super.attachTickListeners(registrar);
+
+        registrar.accept(this);
+    }
+
+    @Override
+    public void tick(TickEvent.Type type, Object... context) {
+        PlayerEntity player = (PlayerEntity) context[0];
+        LogicalSide side = (LogicalSide) context[1];
+
+        if (side.isClient() &&
+                shouldDoEffect(player) &&
+                (Minecraft.getInstance().player != null &&
+                        Minecraft.getInstance().player.getUniqueID().equals(playerUUID) &&
+                        Minecraft.getInstance().gameSettings.thirdPersonView != 0)) {
+            playEffects(player);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void playEffects(PlayerEntity player) {
+        float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, 0);
+        float yOffset = 1.3F;
+        if (player.isSneaking()) {
+            yOffset = 1F;
+        }
+        float f = Math.abs((ClientScheduler.getSystemClientTick() % 240) - 120F) / 120F;
+        double offset = Math.cos(f * 2 * Math.PI) * 0.03;
+
+        Vector3 look = new Vector3(1, 0, 0).rotate(Math.toRadians(360F - rot), Vector3.RotAxis.Y_AXIS).normalize();
+        Vector3 pos = Vector3.atEntityCorner(player);
+        pos.setY(player.posY + yOffset + offset);
+
+        for (int i = 0; i < 5; i++) {
+            double height = -0.1 + Math.min(rand.nextFloat() * 1.3, rand.nextFloat() * 1.3);
+            double distance = 1.2F - (rand.nextFloat() * 0.6) * (1 - Math.max(0, height));
+
+            Vector3 dir = look.clone().rotate(Math.toRadians(180 * (rand.nextBoolean() ? 1 : 0)), Vector3.RotAxis.Y_AXIS)
+                    .normalize()
+                    .multiply(distance);
+
+            Vector3 at = pos.clone().addY(height).add(dir);
+
+            Color col = Color.getHSBColor(0.68F, 1, 0.6F - rand.nextFloat() * 0.5F);
+
+            FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(at)
+                    .color(VFXColorFunction.constant(col))
+                    .setScaleMultiplier(0.25F + rand.nextFloat() * 0.1F)
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .setMaxAge(25 + rand.nextInt(25));
+
+            if (rand.nextInt(4) == 0) {
+                p.setScaleMultiplier(0.08F + rand.nextFloat() * 0.02F)
+                        .color(VFXColorFunction.WHITE)
+                        .setMaxAge(10 + rand.nextInt(5));
+            } else {
+                p.setGravityStrength(0.0003F);
+            }
+        }
+    }
+
+    private boolean shouldDoEffect(PlayerEntity player) {
+        return player.getUniqueID().equals(playerUUID) &&
+                !player.isPassenger() &&
+                !player.isElytraFlying() &&
+                !player.isPotionActive(Effects.INVISIBILITY);
+    }
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    void onRender(RenderPlayerEvent.Post event) {
+        PlayerEntity player = event.getPlayer();
+        if (!shouldDoEffect(player)) {
+            return;
+        }
+
+        if (texWings == null) {
+            texWings = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODEL, "celestial_wings_background");
+        }
+
+        ((AbstractRenderableTexture) texWings).bindTexture();
+
+        float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
+        float yOffset = 1.3F;
+        if (player.isSneaking()) {
+            yOffset = 1F;
+        }
+        float f = Math.abs((ClientScheduler.getSystemClientTick() % 240) - 120F) / 120F;
+        double offset = Math.cos(f * 2 * Math.PI) * 0.03;
+
+        GlStateManager.color4f(0.7F, 0.7F, 0.7F, 1F);
+        GlStateManager.disableLighting();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translated(event.getX(), event.getY() + yOffset + offset, event.getZ());
+        GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
+        GlStateManager.scaled(0.02, 0.02, 0.02);
+
+        GlStateManager.translated(-25, 0, 0);
+        ObjModelRender.renderCelestialWings();
+        GlStateManager.rotated(180F, 0F, 1F, 0F);
+        GlStateManager.translated(-50, 0, 0);
+        ObjModelRender.renderCelestialWings();
+
+        GlStateManager.popMatrix();
+
+        GlStateManager.enableLighting();
+        GlStateManager.color4f(1F, 1F, 1F, 1F);
+        TextureHelper.refreshTextureBind();
+    }
+
+    @Override
+    public EnumSet<TickEvent.Type> getHandledTypes() {
+        return EnumSet.of(TickEvent.Type.PLAYER);
+    }
+
+    @Override
+    public boolean canFire(TickEvent.Phase phase) {
+        return phase == TickEvent.Phase.END;
+    }
+
+    @Override
+    public String getName() {
+        return "PatreonEffect - Celestial Wings " + this.playerUUID.toString();
+    }
+}

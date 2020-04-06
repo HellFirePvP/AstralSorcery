@@ -79,13 +79,6 @@ public class TypeBlockRing extends PatreonEffect {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
-
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @Override
     public void attachEventListeners(IEventBus bus) {
         super.attachEventListeners(bus);
 

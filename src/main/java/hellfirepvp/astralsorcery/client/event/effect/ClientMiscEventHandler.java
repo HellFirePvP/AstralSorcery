@@ -38,7 +38,7 @@ public class ClientMiscEventHandler {
 
     private static boolean attemptLoad = false;
     private static WavefrontObject obj;
-    private static ResourceLocation tex = AstralSorcery.key("textures/models/texw.png");
+    private static ResourceLocation tex = AstralSorcery.key("textures/model/texw.png");
     private static int dList = -1;
 
     private ClientMiscEventHandler() {}

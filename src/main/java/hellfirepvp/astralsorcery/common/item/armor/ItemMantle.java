@@ -136,7 +136,7 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
     @Nullable
     @OnlyIn(Dist.CLIENT)
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        return AstralSorcery.key("textures/models/armor/mantle.png").toString();
+        return AstralSorcery.key("textures/model/armor/mantle.png").toString();
     }
 
     @Nullable

@@ -116,6 +116,9 @@ public class RegistryTextures {
         TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");
 
+        TEX_MODEL_CRYSTAL_WHITE = loadTexture(MODEL, "crystal_white");
+        TEX_MODEL_CRYSTAL_BLUE  = loadTexture(MODEL, "crystal_blue");
+
         TEX_STARLIGHT_STORE = loadTexture(EFFECT, "starlight_storage");
     }
 

@@ -62,7 +62,7 @@ public class PatreonManager implements ITickHandler {
                     }
 
                     foundValidOwners.add(playerUUID);
-                    PatreonPartialEntity effectEntity = MiscUtils.iterativeSearch(knownEntities, e -> e.getEffectUUID().equals(effect.getUUID()));
+                    PatreonPartialEntity effectEntity = MiscUtils.iterativeSearch(knownEntities, e -> e.getEffectUUID().equals(effect.getEffectUUID()));
                     if (effectEntity == null) {
                         effectEntity = data.createEntity(player, effect);
                     }

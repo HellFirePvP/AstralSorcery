@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.base.patreon.types;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.render.ObjModelRender;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
@@ -26,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
@@ -41,10 +43,7 @@ import java.util.UUID;
  */
 public class TypeWraithWings extends PatreonEffect {
 
-    public static Object wings;
-    public int wingsDList = -1;
-
-    public final UUID playerUUID;
+    private final UUID playerUUID;
 
     public TypeWraithWings(UUID effectUUID, @Nullable FlareColor flareColor, UUID playerUUID) {
         super(effectUUID, flareColor);
@@ -52,10 +51,10 @@ public class TypeWraithWings extends PatreonEffect {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void attachEventListeners(IEventBus bus) {
+        super.attachEventListeners(bus);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        bus.register(this);
     }
 
     @SubscribeEvent
@@ -64,20 +63,6 @@ public class TypeWraithWings extends PatreonEffect {
         PlayerEntity player = event.getPlayer();
         if (!player.getUniqueID().equals(playerUUID) || player.isPassenger() || player.isElytraFlying()) {
             return;
-        }
-
-        if (wings == null) {
-            wings = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "wraith_wings");
-        }
-
-        if (wingsDList == -1) {
-            wingsDList = GLAllocation.generateDisplayLists(2);
-            GlStateManager.newList(wingsDList, GL11.GL_COMPILE);
-            ((WavefrontObject) wings).renderOnly(true, "Bones");
-            GlStateManager.endList();
-            GlStateManager.newList(wingsDList + 1, GL11.GL_COMPILE);
-            ((WavefrontObject) wings).renderOnly(true, "Wing");
-            GlStateManager.endList();
         }
 
         float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
@@ -117,20 +102,14 @@ public class TypeWraithWings extends PatreonEffect {
         GlStateManager.pushMatrix();
         GlStateManager.translated(-2.3, 0, 0.8);
         GlStateManager.rotatef((float) (10.0 + r), 0, 1, 0);
-        GlStateManager.color4f(0.3F, 0.3F, 0.3F, 1F);
-        GlStateManager.callList(wingsDList);
-        GlStateManager.color4f(0F, 0F, 0F, 1F);
-        GlStateManager.callList(wingsDList + 1);
+        ObjModelRender.renderWraithWings();
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
         GlStateManager.rotated(180F, 0F, 1F, 0F);
         GlStateManager.translated(-2.3, 0, -0.8);
         GlStateManager.rotatef((float) (10.0 + r), 0, -1, 0);
-        GlStateManager.color4f(0.3F, 0.3F, 0.3F, 1F);
-        GlStateManager.callList(wingsDList);
-        GlStateManager.color4f(0F, 0F, 0F, 1F);
-        GlStateManager.callList(wingsDList + 1);
+        ObjModelRender.renderWraithWings();
         GlStateManager.popMatrix();
 
         GlStateManager.popMatrix();

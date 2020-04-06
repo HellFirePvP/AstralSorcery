@@ -75,6 +75,11 @@ public class KeyVoidTrash extends KeyPerk {
         return this.config;
     }
 
+    @Override
+    public boolean mayUnlockPerk(PlayerProgress progress, PlayerEntity player) {
+        return false; //TODO harvest drops still not functional; don't allow allocation.
+    }
+
     //TODO harvest drops non functional
     private void onDrops(BlockEvent.HarvestDropsEvent event) {
         IWorld world = event.getWorld();

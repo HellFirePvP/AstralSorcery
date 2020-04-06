@@ -48,6 +48,7 @@ public class EffectTemplatesAS {
     public static BatchRenderContext<FXLightning> LIGHTNING;
     public static BatchRenderContext<FXLightbeam> LIGHTBEAM;
 
+    public static BatchRenderContext<FXCrystal> CRYSTAL;
     public static BatchRenderContext<FXCube> CUBE_OPAQUE_ATLAS;
     public static BatchRenderContext<FXCube> CUBE_TRANSLUCENT_ATLAS;
     public static BatchRenderContext<FXCube> CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH;

@@ -50,7 +50,7 @@ public class PatreonEffect {
         return this.getFlareColor() != null;
     }
 
-    public UUID getUUID() {
+    public UUID getEffectUUID() {
         return effectUUID;
     }
 
@@ -66,7 +66,7 @@ public class PatreonEffect {
     @Nullable
     public PatreonPartialEntity createEntity(UUID playerUUID) {
         if (this.hasPartialEntity()) {
-            return new PatreonFlare(this.getUUID(), playerUUID);
+            return new PatreonFlare(this.getEffectUUID(), playerUUID);
         }
         return null;
     }
