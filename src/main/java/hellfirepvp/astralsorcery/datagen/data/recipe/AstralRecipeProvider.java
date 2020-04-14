@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.datagen.data.recipe;
 
+import hellfirepvp.astralsorcery.datagen.data.recipe.altar.AttunementAltarRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipe.altar.CelestialAltarRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipe.altar.DiscoveryAltarRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipe.altar.RadianceAltarRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipe.infuser.InfuserRecipeProvider;
@@ -36,6 +38,8 @@ public class AstralRecipeProvider extends RecipeProvider {
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> registrar) {
         DiscoveryAltarRecipeProvider.registerAltarRecipes(registrar);
+        AttunementAltarRecipeProvider.registerAltarRecipes(registrar);
+        CelestialAltarRecipeProvider.registerAltarRecipes(registrar);
         RadianceAltarRecipeProvider.registerAltarRecipes(registrar);
 
         InfuserRecipeProvider.registerInfuserRecipes(registrar);

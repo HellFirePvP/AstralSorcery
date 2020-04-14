@@ -133,10 +133,11 @@ public class FluidIngredient extends Ingredient {
 
         JsonArray array = new JsonArray();
         for (FluidStack stack : this.fluids) {
-            object.addProperty("fluid", stack.getFluid().getRegistryName().toString());
-            object.addProperty("amount", stack.getAmount());
+            JsonObject fluidStackObject = new JsonObject();
+            fluidStackObject.addProperty("fluid", stack.getFluid().getRegistryName().toString());
+            fluidStackObject.addProperty("amount", stack.getAmount());
 
-            array.add(object);
+            array.add(fluidStackObject);
         }
         object.add("fluid", array);
         return object;

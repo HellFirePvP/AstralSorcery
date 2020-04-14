@@ -43,6 +43,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biomes;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.LightUtil;
@@ -242,10 +243,9 @@ public class RenderingUtils {
     public static void renderTranslucentItemStackModel(ItemStack stack, Color overlayColor, Blending blendMode, float alpha) {
         IBakedModel bakedModel = Minecraft.getInstance().getItemRenderer().getModelWithOverrides(stack);
         bakedModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GROUND).getLeft();
+        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
         GlStateManager.pushMatrix();
-
-        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
 
@@ -265,7 +265,45 @@ public class RenderingUtils {
 
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+        GlStateManager.popMatrix();
+    }
 
+    public static void renderTranslucentItemStackModelGUI(ItemStack stack, Color overlayColor, Blending blendMode, float alpha) {
+        IBakedModel bakedModel = Minecraft.getInstance().getItemRenderer().getModelWithOverrides(stack);
+        bakedModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GUI).getLeft();
+        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+
+        GlStateManager.pushMatrix();
+        textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+
+        GlStateManager.enableAlphaTest();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.enableBlend();
+        blendMode.applyStateManager();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        GlStateManager.translatef(8.0F, 8.0F, 0.0F);
+        GlStateManager.scalef(1.0F, -1.0F, 1.0F);
+        GlStateManager.scalef(16.0F, 16.0F, 16.0F);
+        if (bakedModel.isGui3d()) {
+            GlStateManager.enableLighting();
+        } else {
+            GlStateManager.disableLighting();
+        }
+
+        bakedModel = ForgeHooksClient.handleCameraTransforms(bakedModel, ItemCameraTransforms.TransformType.GUI, false);
+        renderItemModelWithColor(stack, bakedModel, overlayColor, alpha);
+
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.01F);
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.disableBlend();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableAlphaTest();
+
+        textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
         GlStateManager.popMatrix();
     }
 

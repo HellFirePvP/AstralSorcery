@@ -14,7 +14,9 @@ import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
+import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 
 /**
@@ -29,7 +31,8 @@ public class RenderPageAltarRecipe extends RenderPageRecipeTemplate {
     private final SimpleAltarRecipe recipe;
     private final AbstractRenderableTexture gridTexture;
 
-    public RenderPageAltarRecipe(SimpleAltarRecipe recipe) {
+    public RenderPageAltarRecipe(@Nullable ResearchNode node, int nodePage, SimpleAltarRecipe recipe) {
+        super(node, nodePage);
         this.recipe = recipe;
         this.gridTexture = this.getGridTexture(recipe);
     }

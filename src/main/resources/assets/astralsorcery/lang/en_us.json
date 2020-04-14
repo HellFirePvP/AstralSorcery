@@ -88,9 +88,10 @@
   "astralsorcery.misc.fragment.added": "Gained Knowledge about: %s",
 
   "astralsorcery.misc.exchange.size": "Size: %s",
-  "astralsorcery.misc.exchange.size.3x3": "3 x 3",
-  "astralsorcery.misc.exchange.size.5x5": "5 x 5",
-  "astralsorcery.misc.exchange.size.7x7": "7 x 7",
+  "astralsorcery.misc.exchange.size.2": "5 x 5",
+  "astralsorcery.misc.exchange.size.3": "7 x 7",
+  "astralsorcery.misc.exchange.size.4": "9 x 9",
+  "astralsorcery.misc.exchange.size.5": "11 x 11",
   "astralsorcery.misc.architect.mode": "Mode: %s",
   "astralsorcery.misc.architect.mode.line": "Line from player",
   "astralsorcery.misc.architect.mode.towards": "Line towards player",

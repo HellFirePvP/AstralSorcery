@@ -70,7 +70,7 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
             }
         }
 
-        GlStateManager.disableLighting();
+        //GlStateManager.disableLighting();
         for (int i = 1; i < 9; i++) {
             float incrementer = (spinDur / 8F) * i;
 
@@ -92,6 +92,6 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
             MODEL_ATTUNEMENT_ALTAR.renderHovering(xOffset, zOffset, rotation);
             GlStateManager.popMatrix();
         }
-        GlStateManager.enableLighting();
+        //GlStateManager.enableLighting();
     }
 }

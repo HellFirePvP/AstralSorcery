@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.crafting.builder;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
+import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +25,8 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,7 +53,7 @@ public class LiquidInfusionBuilder extends CustomRecipeBuilder<LiquidInfusion> {
     }
 
     public static LiquidInfusionBuilder builder(ForgeRegistryEntry<?> nameProvider) {
-        return new LiquidInfusionBuilder(nameProvider.getRegistryName());
+        return new LiquidInfusionBuilder(AstralSorcery.key(nameProvider.getRegistryName().getPath()));
     }
 
     public static LiquidInfusionBuilder builder(ResourceLocation id) {

@@ -235,11 +235,11 @@ public class EntityFlare extends FlyingEntity {
         if (rand.nextBoolean()) {
             FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(Vector3.atEntityCorner(this)
-                            .add(rand.nextFloat() * 0.3 * (rand.nextBoolean() ? 1 : -1),
-                                    this.getHeight() / 2 + rand.nextFloat() * 0.3 * (rand.nextBoolean() ? 1 : -1),
-                                    rand.nextFloat() * 0.3 * (rand.nextBoolean() ? 1 : -1)))
+                            .add(rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                                    this.getHeight() / 2 + rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                                    rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1)))
                     .alpha(VFXAlphaFunction.FADE_OUT)
-                    .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F);
+                    .setScaleMultiplier(0.15F + rand.nextFloat() * 0.1F);
             if (rand.nextBoolean()) {
                 p.color(VFXColorFunction.WHITE);
             }

@@ -8,8 +8,11 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
+import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -18,17 +21,26 @@ import net.minecraft.client.gui.FontRenderer;
  * Created by HellFirePvP
  * Date: 03.08.2019 / 18:53
  */
-public interface RenderablePage {
+public abstract class RenderablePage {
 
-    public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY);
+    @Nullable
+    private final ResearchNode node;
+    private final int nodePage;
 
-    default public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {}
+    public RenderablePage(@Nullable ResearchNode node, int nodePage) {
+        this.node = node;
+        this.nodePage = nodePage;
+    }
 
-    default public boolean propagateMouseClick(double mouseX, double mouseZ) {
+    public abstract void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY);
+
+    public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {}
+
+    public boolean propagateMouseClick(double mouseX, double mouseZ) {
         return false;
     }
 
-    default public boolean propagateMouseDrag(double mouseDX, double mouseDZ) {
+    public boolean propagateMouseDrag(double mouseDX, double mouseDZ) {
         return false;
     }
 
@@ -36,4 +48,12 @@ public interface RenderablePage {
         return Minecraft.getInstance().fontRenderer;
     }
 
+    @Nullable
+    protected final ResearchNode getResearchNode() {
+        return this.node;
+    }
+
+    protected final int getNodePage() {
+        return this.nodePage;
+    }
 }

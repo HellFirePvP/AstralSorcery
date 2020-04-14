@@ -35,10 +35,13 @@ import hellfirepvp.astralsorcery.common.util.world.WorldSeedCache;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 
 /**
@@ -53,14 +56,12 @@ public class EventHandlerCache {
     private EventHandlerCache() {}
 
     public static void attachListeners(IEventBus eventBus) {
-        eventBus.addListener(EventHandlerCache::onUnload);
-        eventBus.addListener(EventHandlerCache::onClientDisconnect);
-        eventBus.addListener(EventHandlerCache::onPlayerConnect);
-        eventBus.addListener(EventHandlerCache::onPlayerDisconnect);
-        eventBus.addListener(EventHandlerCache::onPlayerClone);
+        eventBus.register(EventHandlerCache.class);
     }
 
-    private static void onClientDisconnect(ClientPlayerNetworkEvent.LoggedOutEvent event) {
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onClientDisconnect(ClientPlayerNetworkEvent.LoggedOutEvent event) {
         EffectHandler.cleanUp();
         ScreenJournalProgression.resetJournal();
         ClientCameraManager.INSTANCE.removeAllAndCleanup();
@@ -96,7 +97,8 @@ public class EventHandlerCache {
         ResearchHelper.saveAndClearServerCache();
     }
 
-    private static void onUnload(WorldEvent.Unload event) {
+    @SubscribeEvent
+    public static void onUnload(WorldEvent.Unload event) {
         IWorld w = event.getWorld();
 
         SkyHandler.getInstance().informWorldUnload(w);
@@ -105,7 +107,8 @@ public class EventHandlerCache {
         StarlightTransmissionHandler.getInstance().informWorldUnload(w);
     }
 
-    private static void onPlayerConnect(PlayerEvent.PlayerLoggedInEvent event) {
+    @SubscribeEvent
+    public static void onPlayerConnect(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
@@ -119,14 +122,16 @@ public class EventHandlerCache {
         PerkEffectHelper.onPlayerConnectEvent(player);
     }
 
-    private static void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
+    @SubscribeEvent
+    public static void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
         ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
         EventHelperTemporaryFlight.onDisconnect(player);
         PerkEffectHelper.onPlayerDisconnectEvent(player);
     }
 
-    private static void onPlayerClone(PlayerEvent.Clone event) {
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
         PerkEffectHelper.onPlayerCloneEvent((ServerPlayerEntity) event.getOriginal(), (ServerPlayerEntity) event.getPlayer());
     }
 }

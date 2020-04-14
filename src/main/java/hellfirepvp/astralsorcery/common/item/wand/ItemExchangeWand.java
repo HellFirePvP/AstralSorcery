@@ -22,7 +22,6 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.data.config.entry.WandsConfig;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
-import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.item.base.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHeldRender;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemOverlayRender;
@@ -33,7 +32,6 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.observerlib.client.util.BufferBuilderDecorator;
@@ -52,7 +50,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -123,7 +120,7 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
         if (hitResult == null) {
             return 0F;
         }
-        return getPlaceStates(Minecraft.getInstance().player, player.getEntityWorld(), hitResult.getPos(), stack).size() * COST_PER_EXCHANGE;
+        return getPlaceStates(player, player.getEntityWorld(), hitResult.getPos(), stack).size() * COST_PER_EXCHANGE;
     }
 
     @Override
@@ -318,7 +315,7 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
     @Nonnull
     public static SizeMode getSizeMode(@Nonnull ItemStack stack) {
         if (stack.isEmpty() || !(stack.getItem() instanceof ItemExchangeWand)) {
-            return SizeMode.SMALL;
+            return SizeMode.RANGE_2;
         }
         CompoundNBT nbt = NBTHelper.getPersistentData(stack);
         return MiscUtils.getEnumEntry(SizeMode.class, nbt.getInt("sizeMode"));
@@ -326,16 +323,15 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
 
     public static enum SizeMode {
 
-        SMALL(3, "3x3"),
-        MEDIUM(5, "5x5"),
-        LARGE(7, "7x7");
+        RANGE_2(2),
+        RANGE_3(3),
+        RANGE_4(4),
+        RANGE_5(5);
 
         private final int searchRadius;
-        private final String name;
 
-        SizeMode(int searchRadius, String name) {
+        SizeMode(int searchRadius) {
             this.searchRadius = searchRadius;
-            this.name = name;
         }
 
         public int getSearchRadius() {
@@ -343,7 +339,7 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
         }
 
         public ITextComponent getName() {
-            return new TranslationTextComponent("astralsorcery.misc.exchange.size." + this.name);
+            return new TranslationTextComponent("astralsorcery.misc.exchange.size." + this.searchRadius);
         }
 
         public ITextComponent getDisplay() {

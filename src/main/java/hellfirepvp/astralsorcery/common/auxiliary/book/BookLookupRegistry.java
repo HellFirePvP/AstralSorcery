@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IItemProvider;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
@@ -44,6 +45,10 @@ public class BookLookupRegistry {
             }
         }
         return null;
+    }
+
+    public static void registerItemLookup(IItemProvider item, ResearchNode parentNode, int nodePage, ResearchProgression neededProgression) {
+        registerItemLookup(new ItemStack(item), parentNode, nodePage, neededProgression);
     }
 
     public static void registerItemLookup(ItemStack stack, ResearchNode parentNode, int nodePage, ResearchProgression neededProgression) {

@@ -40,9 +40,11 @@ public class ProviderHelmetRender implements PatreonEffectProvider<TypeHelmetRen
         if (item == null || item == Items.AIR) {
             throw new IllegalArgumentException("Unknown item: " + itemInfo[0]);
         }
-        int data = Integer.parseInt(itemInfo[1]);
         ItemStack stack = new ItemStack(item);
-        stack.setDamage(data);
+        if (itemInfo.length > 1) {
+            int data = Integer.parseInt(itemInfo[1]);
+            stack.setDamage(data);
+        }
         FlareColor flColor = effectParameters.size() > 2 ?
                 FlareColor.valueOf(effectParameters.get(2)) : null;
         return new TypeHelmetRender(effectUniqueId, flColor, playerUUID, stack);

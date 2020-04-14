@@ -59,7 +59,7 @@ public class ItemInfusedCrystalAxe extends ItemCrystalAxe implements EquipmentAt
                     tree.getContents().keySet().forEach(at -> {
                         BlockState currentState = world.getBlockState(at);
                         if (serverPlayer.interactionManager.tryHarvestBlock(at)) {
-                            PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT_TUMBLE)
+                            PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
                                     .addData(buf -> {
                                         ByteBufUtils.writePos(buf, at);
                                         ByteBufUtils.writeBlockState(buf, currentState);

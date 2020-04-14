@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.util.IngredientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -55,11 +56,15 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 12.10.2019 / 10:53
  */
-public abstract class RenderPageRecipeTemplate implements RenderablePage {
+public abstract class RenderPageRecipeTemplate extends RenderablePage {
 
     protected Map<Rectangle, Tuple<ItemStack, Ingredient>> thisFrameInputStacks = new HashMap<>();
     protected Tuple<Rectangle, ItemStack> thisFrameOuputStack = null;
     protected Rectangle thisFrameInfoStar = null;
+
+    protected RenderPageRecipeTemplate(@Nullable ResearchNode node, int nodePage) {
+        super(node, nodePage);
+    }
 
     protected void clearFrameRectangles() {
         this.thisFrameInputStacks.clear();
@@ -135,7 +140,9 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
             if (r.contains(mouseX, mouseZ)) {
                 ItemStack stack = thisFrameInputStacks.get(r).getA();
                 BookLookupInfo info = BookLookupRegistry.findPage(Minecraft.getInstance().player, LogicalSide.CLIENT, stack);
-                if (info != null && info.canSee(ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT))) {
+                if (info != null &&
+                        info.canSee(ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT)) &&
+                        !info.getResearchNode().equals(this.getResearchNode())) {
                     info.openGui();
                     return true;
                 }
@@ -145,7 +152,9 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
             if (this.thisFrameOuputStack.getA().contains(mouseX, mouseZ)) {
                 ItemStack stack = this.thisFrameOuputStack.getB();
                 BookLookupInfo info = BookLookupRegistry.findPage(Minecraft.getInstance().player, LogicalSide.CLIENT, stack);
-                if (info != null && info.canSee(ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT))) {
+                if (info != null &&
+                        info.canSee(ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT)) &&
+                        !info.getResearchNode().equals(this.getResearchNode())) {
                     info.openGui();
                     return true;
                 }
@@ -271,7 +280,9 @@ public abstract class RenderPageRecipeTemplate implements RenderablePage {
             tooltip.add(new TranslationTextComponent("astralsorcery.misc.tooltipError").setStyle(new Style().setColor(TextFormatting.RED)));
         }
         BookLookupInfo info = BookLookupRegistry.findPage(Minecraft.getInstance().player, LogicalSide.CLIENT, stack);
-        if (info != null) {
+        if (info != null &&
+                info.canSee(ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT)) &&
+                !info.getResearchNode().equals(this.getResearchNode())) {
             tooltip.add(new StringTextComponent(""));
             tooltip.add(new TranslationTextComponent("astralsorcery.misc.craftInformation").setStyle(new Style().setColor(TextFormatting.GRAY)));
         }

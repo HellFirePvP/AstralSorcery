@@ -11,8 +11,10 @@ package hellfirepvp.astralsorcery.common.data.research;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.resource.query.SpriteQuery;
 import hellfirepvp.astralsorcery.client.resource.query.TextureQuery;
+import hellfirepvp.astralsorcery.common.auxiliary.book.BookLookupRegistry;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IItemProvider;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -53,9 +55,21 @@ public class ResearchNode {
         this.unlocName = unlocName;
     }
 
+    public ResearchNode(IItemProvider item, String unlocName, int renderPosX, int renderPosZ) {
+        this(new ItemStack(item), unlocName, renderPosX, renderPosZ);
+    }
+
     public ResearchNode(ItemStack itemStack, String unlocName, int renderPosX, int renderPosZ) {
         this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
         this.renderItemStacks = new ItemStack[] { itemStack };
+    }
+
+    public ResearchNode(IItemProvider[] items, String unlocName, int renderPosX, int renderPosZ) {
+        this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
+        this.renderItemStacks = new ItemStack[items.length];
+        for (int i = 0; i < items.length; i++) {
+            this.renderItemStacks[i] = new ItemStack(items[i]);
+        }
     }
 
     public ResearchNode(ItemStack[] stacks, String unlocName, int renderPosX, int renderPosZ) {
@@ -97,6 +111,21 @@ public class ResearchNode {
 
     public ResearchNode setTextureColorHintWithAlpha(Color textureColorHint) {
         this.textureColorHint = textureColorHint;
+        return this;
+    }
+
+    public ResearchNode register(ResearchProgression progression) {
+        progression.getRegistrar().accept(this);
+        return this;
+    }
+
+    public ResearchNode addTomeLookup(IItemProvider item, int nodePage, ResearchProgression progression) {
+        BookLookupRegistry.registerItemLookup(item, this, nodePage, progression);
+        return this;
+    }
+
+    public ResearchNode addTomeLookup(ItemStack item, int nodePage, ResearchProgression progression) {
+        BookLookupRegistry.registerItemLookup(item, this, nodePage, progression);
         return this;
     }
 

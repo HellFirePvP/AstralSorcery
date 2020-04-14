@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -17,6 +18,7 @@ import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,13 +35,14 @@ public class RenderPageRecipe extends RenderPageRecipeTemplate {
     private final ItemStack output;
     private final ResourceLocation recipeId;
 
-    private RenderPageRecipe(Map<Integer, Ingredient> inputs, ItemStack output, ResourceLocation recipeId) {
+    private RenderPageRecipe(@Nullable ResearchNode node, int nodePage, Map<Integer, Ingredient> inputs, ItemStack output, ResourceLocation recipeId) {
+        super(node, nodePage);
         this.inputs = inputs;
         this.output = output;
         this.recipeId = recipeId;
     }
 
-    public static RenderPageRecipe fromRecipe(IRecipe<?> recipe) {
+    public static RenderPageRecipe fromRecipe(@Nullable ResearchNode node, int nodePage, IRecipe<?> recipe) {
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
         Map<Integer, Ingredient> inputs = new HashMap<>();
         for (int i = 0; i < 9; i++) {
@@ -61,7 +64,7 @@ public class RenderPageRecipe extends RenderPageRecipeTemplate {
                 }
             }
         }
-        return new RenderPageRecipe(inputs, recipe.getRecipeOutput(), recipe.getId());
+        return new RenderPageRecipe(node, nodePage, inputs, recipe.getRecipeOutput(), recipe.getId());
     }
 
     @Override

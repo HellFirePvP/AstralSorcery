@@ -186,8 +186,10 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity entity, int count) {
-        float perc = 0.2F + Math.min(1F, Math.min(50, stack.getUseDuration() - count) / 50F) * 0.8F;
-        playUseParticles(stack, entity, count, perc);
+        if (entity.getEntityWorld().isRemote()) {
+            float perc = 0.2F + Math.min(1F, Math.min(50, stack.getUseDuration() - count) / 50F) * 0.8F;
+            playUseParticles(stack, entity, count, perc);
+        }
     }
 
     @OnlyIn(Dist.CLIENT)

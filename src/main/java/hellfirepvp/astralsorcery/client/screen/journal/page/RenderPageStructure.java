@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.screen.journal.page;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
+import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -37,7 +38,7 @@ import java.util.Optional;
  * Created by HellFirePvP
  * Date: 22.08.2019 / 21:18
  */
-public class RenderPageStructure implements RenderablePage {
+public class RenderPageStructure extends RenderablePage {
 
     private final StructureRenderer structureRenderer;
     private final Structure structure;
@@ -49,7 +50,8 @@ public class RenderPageStructure implements RenderablePage {
     private Rectangle switchView = null, sliceUp = null, sliceDown = null;
     private long totalRenderFrame = 0;
 
-    public RenderPageStructure(Structure structure, @Nullable ITextComponent name, @Nonnull Vector3 shift) {
+    public RenderPageStructure(@Nullable ResearchNode node, int nodePage, Structure structure, @Nullable ITextComponent name, @Nonnull Vector3 shift) {
+        super(node, nodePage);
         this.structure = structure;
         this.structureRenderer = new StructureRenderer(this.structure).setIsolateIndividualBlock(true);
         this.name = name;
@@ -65,6 +67,7 @@ public class RenderPageStructure implements RenderablePage {
         this.totalRenderFrame++;
 
         this.renderStructure(offsetX, offsetY, pTicks);
+        GlStateManager.color4f(1F, 1F, 1F, 1F);
         float shift = this.renderSizeDescription(offsetX, offsetY + 5);
 
         if (this.name != null) {
@@ -87,7 +90,7 @@ public class RenderPageStructure implements RenderablePage {
         Vector3 size = new Vector3(this.structure.getMaximumOffset()).subtract(this.structure.getMinimumOffset());
         FontRenderer fr = RenderablePage.getFontRenderer();
         float scale = 1.3F;
-        String desc = size.getX() + " - " + size.getY() + " - " + size.getZ();
+        String desc = (int) size.getX() + " - " + (int) size.getY() + " - " + (int) size.getZ();
         float length = fr.getStringWidth(desc) * scale;
         GlStateManager.pushMatrix();
         GlStateManager.translated(offsetX, offsetY, 0);

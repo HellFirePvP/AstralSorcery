@@ -42,6 +42,7 @@ import java.util.function.Predicate;
  * Created by HellFirePvP
  * Date: 22.09.2018 / 17:57
  */
+@Deprecated
 public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFragment> {
 
     private static final Predicate<PlayerProgress> TRUE = (p) -> true;
@@ -55,10 +56,12 @@ public abstract class KnowledgeFragment extends ForgeRegistryEntry<KnowledgeFrag
         this.unlocPrefix = unlocalizedPrefix;
     }
 
+    @Deprecated
     public static KnowledgeFragment onConstellations(String name, IConstellation... constellations) {
         return onConstellations(AstralSorcery.key(name), constellations);
     }
 
+    @Deprecated
     public static KnowledgeFragment onConstellations(ResourceLocation name, IConstellation... constellations) {
         List<IConstellation> cst = Arrays.asList(constellations);
         IConstellation c = Iterables.getFirst(cst, null);

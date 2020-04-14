@@ -56,11 +56,11 @@ public class ScreenJournalPages extends ScreenJournal {
         this.researchNode = node;
         this.origin = origin;
         this.previous = null;
-        this.pages = new ArrayList<>(node.getPages().size());
-        this.pages.addAll(node.getPages()
-                .stream()
-                .map(JournalPage::buildRenderPage)
-                .collect(Collectors.toList()));
+        List<JournalPage> pageList = node.getPages();
+        this.pages = new ArrayList<>(pageList.size());
+        for (int i = 0; i < pageList.size(); i++) {
+            this.pages.add(pageList.get(i).buildRenderPage(node, i));
+        }
     }
 
     //Use this to use this screen independently of the actual journal.
@@ -69,12 +69,12 @@ public class ScreenJournalPages extends ScreenJournal {
         this.researchNode = detailedInformation;
         this.origin = null;
         this.previous = previous;
-        this.pages = new ArrayList<>(detailedInformation.getPages().size());
-        this.pages.addAll(detailedInformation.getPages()
-                .stream()
-                .map(JournalPage::buildRenderPage)
-                .collect(Collectors.toList()));
         this.currentPageOffset = exactPage / 2;
+        List<JournalPage> pageList = detailedInformation.getPages();
+        this.pages = new ArrayList<>(pageList.size());
+        for (int i = 0; i < pageList.size(); i++) {
+            this.pages.add(pageList.get(i).buildRenderPage(detailedInformation, i));
+        }
     }
 
     public static ScreenJournalPages getClearOpenGuiInstance() {

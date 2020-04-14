@@ -11,9 +11,11 @@ package hellfirepvp.astralsorcery.datagen.data.recipe.altar;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.crafting.builder.SimpleAltarRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngredient;
+import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
@@ -33,11 +35,27 @@ import java.util.function.Consumer;
 public class DiscoveryAltarRecipeProvider {
 
     public static void registerAltarRecipes(Consumer<IFinishedRecipe> registrar) {
+        //TODO Resonator
         registerRecipes(registrar);
         registerBuildingBlockRecipes(registrar);
     }
 
     private static void registerRecipes(Consumer<IFinishedRecipe> registrar) {
+        SimpleAltarRecipeBuilder.ofType(AltarRecipeTypeHandler.ALTAR_UPGRADE_ATTUNEMENT)
+                .createRecipe(BlocksAS.ALTAR_ATTUNEMENT, AltarType.DISCOVERY)
+                .setStarlightRequirement(0.7F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("PCP")
+                        .patternLine("ELE")
+                        .patternLine("P P")
+                        .key('C', new CrystalIngredient(false, false))
+                        .key('L', FluidsAS.LIQUID_STARLIGHT_SOURCE)
+                        .key('E', BlocksAS.MARBLE_CHISELED)
+                        .key('P', BlocksAS.MARBLE_PILLAR)
+                )
+                .addOutput(BlocksAS.ALTAR_ATTUNEMENT)
+                .build(registrar);
+
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(ItemsAS.WAND, AltarType.DISCOVERY)
                 .setStarlightRequirement(0.2F)
@@ -50,6 +68,21 @@ public class DiscoveryAltarRecipeProvider {
                         .key('M', BlocksAS.MARBLE_RAW)
                 )
                 .addOutput(ItemsAS.WAND)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(ItemsAS.HAND_TELESCOPE, AltarType.DISCOVERY)
+                .setStarlightRequirement(0.3F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine(" SL")
+                        .patternLine("SGS")
+                        .patternLine("PS ")
+                        .key('S', Tags.Items.RODS_WOODEN)
+                        .key('L', ItemsAS.GLASS_LENS)
+                        .key('G', Tags.Items.INGOTS_GOLD)
+                        .key('P', ItemTags.PLANKS)
+                )
+                .addOutput(ItemsAS.HAND_TELESCOPE)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
@@ -122,6 +155,20 @@ public class DiscoveryAltarRecipeProvider {
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
+                .createRecipe(BlocksAS.ILLUMINATOR, AltarType.DISCOVERY)
+                .setStarlightRequirement(0.7F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("RIR")
+                        .patternLine("A A")
+                        .patternLine("RIR")
+                        .key('A', ItemsAS.AQUAMARINE)
+                        .key('R', BlocksAS.MARBLE_RUNED)
+                        .key('I', ItemsAS.ILLUMINATION_POWDER)
+                )
+                .addOutput(BlocksAS.ILLUMINATOR)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
                 .createRecipe(ItemsAS.ILLUMINATION_POWDER, AltarType.DISCOVERY)
                 .setStarlightRequirement(0.2F)
                 .multiplyDuration(0.6F)
@@ -159,7 +206,7 @@ public class DiscoveryAltarRecipeProvider {
                         .patternLine("CC")
                         .patternLine("CS")
                         .patternLine(" S")
-                        .key('S', Items.STICK)
+                        .key('S', Tags.Items.RODS_WOODEN)
                         .key('C', new CrystalIngredient(false, false))
                 )
                 .addOutput(ItemsAS.CRYSTAL_AXE)
@@ -173,7 +220,7 @@ public class DiscoveryAltarRecipeProvider {
                         .patternLine("CCC")
                         .patternLine(" S ")
                         .patternLine(" S ")
-                        .key('S', Items.STICK)
+                        .key('S', Tags.Items.RODS_WOODEN)
                         .key('C', new CrystalIngredient(false, false))
                 )
                 .addOutput(ItemsAS.CRYSTAL_PICKAXE)
@@ -187,7 +234,7 @@ public class DiscoveryAltarRecipeProvider {
                         .patternLine("C")
                         .patternLine("S")
                         .patternLine("S")
-                        .key('S', Items.STICK)
+                        .key('S', Tags.Items.RODS_WOODEN)
                         .key('C', new CrystalIngredient(false, false))
                 )
                 .addOutput(ItemsAS.CRYSTAL_SHOVEL)
@@ -201,7 +248,7 @@ public class DiscoveryAltarRecipeProvider {
                         .patternLine("C")
                         .patternLine("C")
                         .patternLine("S")
-                        .key('S', Items.STICK)
+                        .key('S', Tags.Items.RODS_WOODEN)
                         .key('C', new CrystalIngredient(false, false))
                 )
                 .addOutput(ItemsAS.CRYSTAL_SWORD)

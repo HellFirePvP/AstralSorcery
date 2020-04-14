@@ -103,6 +103,7 @@ public class PrimerEventHandler {
 
         RegistryRecipeTypes.init();
         RegistryRecipeSerializers.init();
+        RegistryResearch.init();
 
         TransmissionClassRegistry.setupRegistry();
         SourceClassRegistry.setupRegistry();

@@ -41,6 +41,8 @@ import java.util.function.Function;
 public class RadianceAltarRecipeProvider {
 
     public static void registerAltarRecipes(Consumer<IFinishedRecipe> registrar) {
+        //TODO ichosic, fountain + primes
+        //TODO now: base + attuned mantles, chalice, shifting stars, observatory
         registerConstellationPaperRecipes(registrar);
     }
 
