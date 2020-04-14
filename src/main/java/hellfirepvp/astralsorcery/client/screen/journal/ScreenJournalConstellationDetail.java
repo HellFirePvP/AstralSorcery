@@ -287,7 +287,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
                     this.constellation.equals(ItemsAS.CONSTELLATION_PAPER.getConstellation(stack)));
 
             if (recipe != null) {
-                lastFramePage = new RenderPageAltarRecipe(recipe);
+                lastFramePage = new RenderPageAltarRecipe(null, -1, recipe);
 
                 GlStateManager.pushMatrix();
                 lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);

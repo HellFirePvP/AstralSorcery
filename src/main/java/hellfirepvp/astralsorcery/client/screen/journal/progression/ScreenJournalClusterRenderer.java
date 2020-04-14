@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPages;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
@@ -28,6 +29,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
@@ -104,7 +106,9 @@ public class ScreenJournalClusterRenderer {
                     String name = clickableNodes.get(r).getUnLocalizedName();
                     name = I18n.format(name);
 
+                    GlStateManager.disableDepthTest();
                     RenderingDrawUtils.renderBlueTooltipString(0, 0, Lists.newArrayList(name), Minecraft.getInstance().fontRenderer, false);
+                    GlStateManager.enableDepthTest();
 
                     GlStateManager.popMatrix();
                 }
@@ -168,10 +172,13 @@ public class ScreenJournalClusterRenderer {
     }
 
     private void drawNodesAndConnections(float zLevel) {
-        alpha = (float) Math.sqrt(progressionSizeHandler.getScalingFactor()); //Clamped between 0.1F and 1F
+        alpha = (float) progressionSizeHandler.getScalingFactor(); //between 0.25F and ~1F
+        alpha -= 0.25F;
+        alpha /= 0.75F;
+        alpha = MathHelper.clamp(alpha, 0F, 1F);
 
-        double midX = renderGuiWidth  / 2;
-        double midY = renderGuiHeight / 2;
+        double midX = renderGuiWidth  / 2F;
+        double midY = renderGuiHeight / 2F;
 
         Map<ResearchNode, double[]> displayPositions = new HashMap<>();
         for (ResearchNode node : progression.getResearchNodes()) {
@@ -222,13 +229,11 @@ public class ScreenJournalClusterRenderer {
 
         double pxWH = progressionSizeHandler.getZoomedWHNode() / 16D;
 
-        ItemRenderer ri = Minecraft.getInstance().getItemRenderer();
         Tessellator t = Tessellator.getInstance();
         BufferBuilder vb = t.getBuffer();
 
         switch (node.getRenderType()) {
             case ITEMSTACK:
-                GlStateManager.enableRescaleNormal();
                 RenderHelper.enableGUIStandardItemLighting();
 
                 GlStateManager.pushMatrix();
@@ -237,15 +242,13 @@ public class ScreenJournalClusterRenderer {
                 GlStateManager.scaled(0.75, 0.75, 0.75);
                 GlStateManager.color4f(alpha, alpha, alpha, alpha);
 
-                float oldZ = ri.zLevel;
-                ri.zLevel = zLevel - 5;
-                ri.renderItemIntoGUI(node.getRenderItemStack(ClientScheduler.getClientTick()), 0, 0);
-                ri.zLevel = oldZ;
+                GlStateManager.translated(0, 0, 100);
+                RenderingUtils.renderTranslucentItemStackModelGUI(node.getRenderItemStack(ClientScheduler.getClientTick()), Color.WHITE, Blending.DEFAULT, alpha);
+
                 GlStateManager.color4f(1F, 1F, 1F, 1F);
                 GlStateManager.popMatrix();
 
-                RenderHelper.disableStandardItemLighting();
-                GlStateManager.disableRescaleNormal();
+                GlStateManager.enableBlend();
                 break;
             case TEXTURE_SPRITE:
                 Color col = node.getTextureColorHint();
@@ -370,7 +373,6 @@ public class ScreenJournalClusterRenderer {
         vb.pos(renderOffsetX + xAdd + zoomedWH, renderOffsetY + yAdd,            zLevel).tex(1, 0).color(alpha, alpha, alpha, alpha).endVertex();
         vb.pos(renderOffsetX + xAdd,            renderOffsetY + yAdd,            zLevel).tex(0, 0).color(alpha, alpha, alpha, alpha).endVertex();
         t.draw();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
     }
 
 }

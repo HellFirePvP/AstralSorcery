@@ -8,11 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.crafting.builder;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
 import hellfirepvp.astralsorcery.common.util.block.BlockMatchInformation;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
@@ -52,7 +54,7 @@ public class BlockTransmutationBuilder extends CustomRecipeBuilder<BlockTransmut
     }
 
     public static BlockTransmutationBuilder builder(ForgeRegistryEntry<?> nameProvider) {
-        return new BlockTransmutationBuilder(nameProvider.getRegistryName());
+        return new BlockTransmutationBuilder(AstralSorcery.key(nameProvider.getRegistryName().getPath()));
     }
 
     public static BlockTransmutationBuilder builder(ResourceLocation id) {

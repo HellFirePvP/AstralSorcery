@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.data.journal;
 
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderPageStructure;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
+import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.observerlib.api.util.BlockArray;
 import net.minecraft.util.text.ITextComponent;
@@ -48,7 +49,7 @@ public class JournalPageStructure implements JournalPage {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public RenderablePage buildRenderPage() {
-        return new RenderPageStructure(structure, name, shift.clone());
+    public RenderablePage buildRenderPage(ResearchNode node, int nodePage) {
+        return new RenderPageStructure(node, nodePage, structure, name, shift.clone());
     }
 }

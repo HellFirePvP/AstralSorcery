@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.builder;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeBuilder;
@@ -155,7 +156,7 @@ public class SimpleAltarRecipeBuilder<T extends SimpleAltarRecipe> extends Custo
         }
 
         public SimpleAltarRecipeBuilder<T> createRecipe(ForgeRegistryEntry<?> nameProvider, AltarType altarType) {
-            return this.createRecipe(nameProvider.getRegistryName(), altarType);
+            return this.createRecipe(AstralSorcery.key(nameProvider.getRegistryName().getPath()), altarType);
         }
 
         public SimpleAltarRecipeBuilder<T> createRecipe(ResourceLocation recipeId, AltarType altarType) {

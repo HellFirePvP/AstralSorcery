@@ -9,12 +9,14 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import com.google.gson.JsonObject;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -72,6 +74,7 @@ public abstract class CustomRecipeBuilder<R extends CustomMatcherRecipe> {
 
         @Override
         public void serialize(JsonObject json) {
+            AstralSorcery.log.log(Level.INFO, this.id.toString());
             CustomRecipeBuilder.this.getSerializer().write(json, this.recipe);
         }
 

@@ -24,19 +24,23 @@ public class CrystalIngredientSerializer implements IIngredientSerializer<Crysta
 
     @Override
     public CrystalIngredient parse(JsonObject json) {
-        boolean hasToBeAttuned = JSONUtils.getBoolean(json, "hasToBeAttuned");
-        boolean hasToBeCelestial = JSONUtils.getBoolean(json, "hasToBeCelestial");
-        return new CrystalIngredient(hasToBeAttuned, hasToBeCelestial);
+        boolean hasToBeAttuned = JSONUtils.getBoolean(json, "hasToBeAttuned", false);
+        boolean hasToBeCelestial = JSONUtils.getBoolean(json, "hasToBeCelestial", false);
+        boolean canBeAttuned = JSONUtils.getBoolean(json, "canBeAttuned", true);
+        boolean canBeCelestialCrystal = JSONUtils.getBoolean(json, "canBeCelestialCrystal", true);
+        return new CrystalIngredient(hasToBeAttuned, hasToBeCelestial, canBeAttuned, canBeCelestialCrystal);
     }
 
     @Override
     public CrystalIngredient parse(PacketBuffer buffer) {
-        return new CrystalIngredient(buffer.readBoolean(), buffer.readBoolean());
+        return new CrystalIngredient(buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean());
     }
 
     @Override
     public void write(PacketBuffer buffer, CrystalIngredient ingredient) {
         buffer.writeBoolean(ingredient.hasToBeAttuned());
         buffer.writeBoolean(ingredient.hasToBeCelestial());
+        buffer.writeBoolean(ingredient.canBeAttuned());
+        buffer.writeBoolean(ingredient.canBeCelestialCrystal());
     }
 }

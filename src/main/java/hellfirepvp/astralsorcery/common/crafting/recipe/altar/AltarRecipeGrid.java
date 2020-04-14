@@ -15,7 +15,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
+import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
 import hellfirepvp.astralsorcery.common.util.MapStream;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -24,6 +26,9 @@ import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,6 +46,8 @@ import java.util.stream.Collectors;
  */
 public class AltarRecipeGrid {
 
+    //TODO re-add dynamic size shifting, respecting typed slot filters
+
     public static final int GRID_SIZE = 5;
     public static final int MAX_INVENTORY_SIZE = GRID_SIZE * GRID_SIZE;
     public static final AltarRecipeGrid EMPTY = new AltarRecipeGrid(new HashMap<>(), 0, 0);
@@ -51,7 +58,7 @@ public class AltarRecipeGrid {
     private final int width, height;
 
     private AltarRecipeGrid(Map<Integer, Ingredient> gridParts) {
-        this(new AltarRecipeGrid(gridParts, -1, -1).minimizeGrid());
+        this(new AltarRecipeGrid(gridParts, GRID_SIZE, GRID_SIZE)/*.minimizeGrid()*/);
     }
 
     private AltarRecipeGrid(AltarRecipeGrid other) {
@@ -130,23 +137,24 @@ public class AltarRecipeGrid {
     }
 
     public void validate(AltarType type) {
-        AltarRecipeGrid centralized = this.centralizeGrid();
-        if (centralized.gridParts.isEmpty()) {
+        //AltarRecipeGrid centralized = this.centralizeGrid();
+        if (this.gridParts.isEmpty()) {
             throw new IllegalArgumentException("Altar recipe grid cannot be empty!");
         }
 
-        for (Integer index : centralized.gridParts.keySet()) {
+        for (Integer index : this.gridParts.keySet()) {
             if (!type.hasSlot(index)) {
                 throw new IllegalArgumentException("Altar type " + type.name() + " has no slot at " + index);
             }
 
-            Ingredient input = centralized.gridParts.get(index);
+            Ingredient input = this.gridParts.get(index);
             if (input.hasNoMatchingItems()){
                 throw new IllegalArgumentException("Input at " + index + " has no matching items!");
             }
         }
     }
 
+    /*
     private AltarRecipeGrid centralizeGrid() {
         int shiftX = (GRID_SIZE - this.getWidth())  / 2;
         int shiftZ = (GRID_SIZE - this.getHeight()) / 2;
@@ -197,8 +205,9 @@ public class AltarRecipeGrid {
                     .mapKey(slot -> slot - yShift)
                     .toMap();
         }
-        return new AltarRecipeGrid(mappedIngredients, (lastColumn - firstColumn) + 1, (lastRow - firstRow) + 1);
+        return new AltarRecipeGrid(mappedIngredients, width, height);
     }
+    */
 
     public void write(PacketBuffer buffer) {
         buffer.writeInt(this.width);
@@ -213,8 +222,9 @@ public class AltarRecipeGrid {
     public static AltarRecipeGrid read(PacketBuffer buffer) {
         int width = buffer.readInt();
         int height = buffer.readInt();
+        int gridParts = buffer.readInt();
         Map<Integer, Ingredient> ingredientMap = new HashMap<>();
-        for (int i = 0; i < buffer.readInt(); i++) {
+        for (int i = 0; i < gridParts; i++) {
             int slot = buffer.readInt();
             Ingredient ingredient = Ingredient.read(buffer);
             ingredientMap.put(slot, ingredient);
@@ -231,7 +241,7 @@ public class AltarRecipeGrid {
         Map<Integer, String> patternMap = new HashMap<>();
         char c = 'A';
 
-        for (Map.Entry<Integer, Ingredient> entry : this.centralizeGrid().gridParts.entrySet()) {
+        for (Map.Entry<Integer, Ingredient> entry : this/*.centralizeGrid()*/.gridParts.entrySet()) {
             Integer slotIndex = entry.getKey();
             Ingredient value = entry.getValue();
             JsonElement jsonIngredient = value.serialize();
@@ -349,6 +359,10 @@ public class AltarRecipeGrid {
 
         public Builder key(Character key, IItemProvider itemIn) {
             return this.key(key, Ingredient.fromItems(itemIn));
+        }
+
+        public Builder key(Character key, Fluid fluid) {
+            return this.key(key, new FluidIngredient(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME)));
         }
 
         public Builder key(Character key, Ingredient input) {

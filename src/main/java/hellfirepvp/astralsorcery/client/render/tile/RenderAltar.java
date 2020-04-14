@@ -77,14 +77,19 @@ public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
             GlStateManager.enableBlend();
             if (recipe != null) {
                 List<WrappedIngredient> traitInputs = recipe.getRecipeToCraft().getRelayInputs();
-                int amount = 60 / traitInputs.size();
-                for (int i = 0; i < traitInputs.size(); i++) {
-                    WrappedIngredient ingredient = traitInputs.get(i);
-                    ItemStack traitInput = ingredient.getRandomMatchingStack(ClientScheduler.getClientTick());
-                    Color color = ColorizationHelper.getColor(traitInput)
-                            .orElse(ColorsAS.CELESTIAL_CRYSTAL);
+                if (!traitInputs.isEmpty()) {
+                    int amount = 60 / traitInputs.size();
+                    for (int i = 0; i < traitInputs.size(); i++) {
+                        WrappedIngredient ingredient = traitInputs.get(i);
+                        ItemStack traitInput = ingredient.getRandomMatchingStack(ClientScheduler.getClientTick());
+                        Color color = ColorizationHelper.getColor(traitInput)
+                                .orElse(ColorsAS.CELESTIAL_CRYSTAL);
 
-                    RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, color, 0x1231943167156902L | id | (i * 0x5151L), 20, 2F, amount);
+                        RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, color, 0x1231943167156902L | id | (i * 0x5151L), 20, 2F, amount);
+                    }
+                } else {
+                    RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, Color.WHITE, id * 31L, 15, 1.5F, 35);
+                    RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, ColorsAS.CELESTIAL_CRYSTAL, id * 16L, 10, 1F, 25);
                 }
                 RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, Color.WHITE, id * 31L, 10, 1F, 10);
             } else {

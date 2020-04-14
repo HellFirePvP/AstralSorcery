@@ -15,6 +15,7 @@ import net.minecraftforge.common.IExtensibleEnum;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,6 +51,10 @@ public enum ResearchProgression implements IExtensibleEnum {
         this.unlocName = AstralSorcery.MODID + ".journal.cluster." + name().toLowerCase() + ".name";
     }
 
+    public Consumer<ResearchNode> getRegistrar() {
+        return this::addResearchToGroup;
+    }
+
     void addResearchToGroup(ResearchNode res) {
         for (ResearchNode node : researchNodes) {
             if (node.renderPosX == res.renderPosX &&
@@ -67,10 +72,6 @@ public enum ResearchProgression implements IExtensibleEnum {
 
     public List<ResearchNode> getResearchNodes() {
         return researchNodes;
-    }
-
-    public Registry getRegistry() {
-        return new Registry(this);
     }
 
     /*public boolean tryStepTo(PlayerEntity player, boolean force) {
@@ -129,19 +130,4 @@ public enum ResearchProgression implements IExtensibleEnum {
             BY_NAME.put(progress.name(), progress);
         }
     }
-
-    public static class Registry {
-
-        private final ResearchProgression prog;
-
-        public Registry(ResearchProgression prog) {
-            this.prog = prog;
-        }
-
-        public void register(ResearchNode node) {
-            prog.addResearchToGroup(node);
-        }
-
-    }
-
 }

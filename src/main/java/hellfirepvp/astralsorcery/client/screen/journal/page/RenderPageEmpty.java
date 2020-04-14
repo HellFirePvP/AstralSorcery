@@ -15,11 +15,14 @@ package hellfirepvp.astralsorcery.client.screen.journal.page;
  * Created by HellFirePvP
  * Date: 10.10.2019 / 17:26
  */
-public class RenderPageEmpty implements RenderablePage {
+public class RenderPageEmpty extends RenderablePage {
 
     public static final RenderPageEmpty INSTANCE = new RenderPageEmpty();
 
-    private RenderPageEmpty() {}
+    private RenderPageEmpty() {
+        super(null, -1);
+    }
+
 
     @Override
     public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {}

@@ -31,32 +31,53 @@ import java.util.stream.Stream;
  */
 public class CrystalIngredient extends Ingredient {
 
-    private final boolean hasToBeAttuned, hasToBeCelestial;
+    private final boolean hasToBeAttuned, hasToBeCelestial, canBeAttuned, canBeCelestialCrystal;
 
     public CrystalIngredient(boolean hasToBeAttuned, boolean hasToBeCelestial) {
-        super(getItems(hasToBeAttuned, hasToBeCelestial));
-        this.hasToBeAttuned = hasToBeAttuned;
-        this.hasToBeCelestial = hasToBeCelestial;
+        this(hasToBeAttuned, hasToBeCelestial, true, true);
     }
 
-    private static Stream<IItemList> getItems(boolean hasToBeAttuned, boolean hasToBeCelestial) {
+    public CrystalIngredient(boolean hasToBeAttuned, boolean hasToBeCelestial, boolean canBeAttuned, boolean canBeCelestialCrystal) {
+        super(getItems(hasToBeAttuned, hasToBeCelestial, canBeAttuned, canBeCelestialCrystal));
+        this.hasToBeAttuned = hasToBeAttuned;
+        this.hasToBeCelestial = hasToBeCelestial;
+        this.canBeAttuned = canBeAttuned;
+        this.canBeCelestialCrystal = canBeCelestialCrystal;
+    }
+
+    private static Stream<IItemList> getItems(boolean hasToBeAttuned, boolean hasToBeCelestial, boolean canBeAttuned, boolean canBeCelestialCrystal) {
+        if (hasToBeAttuned) {
+            canBeAttuned = true;
+        }
+        if (hasToBeCelestial) {
+             canBeCelestialCrystal = true;
+        }
+
         List<ItemStack> stacks = new ArrayList<>();
         if (hasToBeAttuned) {
             if (hasToBeCelestial) {
                 stacks.add(new ItemStack(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL));
             } else {
                 stacks.add(new ItemStack(ItemsAS.ATTUNED_ROCK_CRYSTAL));
-                stacks.add(new ItemStack(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL));
+                if (canBeCelestialCrystal) {
+                    stacks.add(new ItemStack(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL));
+                }
             }
         } else {
             if (hasToBeCelestial) {
                 stacks.add(new ItemStack(ItemsAS.CELESTIAL_CRYSTAL));
-                stacks.add(new ItemStack(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL));
+                if (canBeAttuned) {
+                    stacks.add(new ItemStack(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL));
+                }
             } else {
                 stacks.add(new ItemStack(ItemsAS.ROCK_CRYSTAL));
-                stacks.add(new ItemStack(ItemsAS.ATTUNED_ROCK_CRYSTAL));
-                stacks.add(new ItemStack(ItemsAS.CELESTIAL_CRYSTAL));
-                stacks.add(new ItemStack(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL));
+                if (canBeCelestialCrystal) {
+                    stacks.add(new ItemStack(ItemsAS.CELESTIAL_CRYSTAL));
+                }
+                if (canBeAttuned) {
+                    stacks.add(new ItemStack(ItemsAS.ATTUNED_ROCK_CRYSTAL));
+                    stacks.add(new ItemStack(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL));
+                }
             }
         }
         return Stream.of(new StackList(stacks));
@@ -70,12 +91,22 @@ public class CrystalIngredient extends Ingredient {
         return hasToBeCelestial;
     }
 
+    public boolean canBeAttuned() {
+        return canBeAttuned;
+    }
+
+    public boolean canBeCelestialCrystal() {
+        return canBeCelestialCrystal;
+    }
+
     @Override
     public JsonElement serialize() {
         JsonObject object = new JsonObject();
         object.addProperty("type", CraftingHelper.getID(IngredientSerializersAS.CRYSTAL_SERIALIZER).toString());
         object.addProperty("hasToBeAttuned", this.hasToBeAttuned());
         object.addProperty("hasToBeCelestial", this.hasToBeCelestial());
+        object.addProperty("canBeAttuned", this.canBeAttuned());
+        object.addProperty("canBeCelestialCrystal", this.canBeCelestialCrystal());
         return object;
     }
 

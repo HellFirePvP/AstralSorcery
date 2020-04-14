@@ -11,9 +11,11 @@ package hellfirepvp.astralsorcery.client.screen.journal.page;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
+import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 10.10.2019 / 17:31
  */
-public class RenderPageText implements RenderablePage {
+public class RenderPageText extends RenderablePage {
 
     private final FontRenderer fontRenderer;
     private List<String> localizedText;
@@ -34,6 +36,7 @@ public class RenderPageText implements RenderablePage {
     }
 
     public RenderPageText(FontRenderer fontRenderer, String unlocalized) {
+        super(null, -1);
         this.fontRenderer = fontRenderer;
         this.localizedText = buildLines(unlocalized);
     }

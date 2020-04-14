@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.data.journal;
 
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
+import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -25,6 +26,6 @@ public interface JournalPage {
     public static final int DEFAULT_HEIGHT = 220;
 
     @OnlyIn(Dist.CLIENT)
-    public RenderablePage buildRenderPage();
+    public RenderablePage buildRenderPage(ResearchNode node, int page);
 
 }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.builder;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
@@ -49,7 +50,7 @@ public class WellRecipeBuilder extends CustomRecipeBuilder<WellLiquefaction> {
     }
 
     public static WellRecipeBuilder builder(ForgeRegistryEntry<?> nameProvider) {
-        return new WellRecipeBuilder(nameProvider.getRegistryName());
+        return new WellRecipeBuilder(AstralSorcery.key(nameProvider.getRegistryName().getPath()));
     }
 
     public static WellRecipeBuilder builder(ResourceLocation id) {
