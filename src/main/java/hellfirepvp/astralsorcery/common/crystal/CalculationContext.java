@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,7 +25,7 @@ import java.util.HashSet;
 public class CalculationContext {
 
     private Collection<PropertyUsage> usages = new HashSet<>();
-    private PropertySource.SourceInstance<?, ?> source = null;
+    private PropertySource.SourceInstance source = null;
 
     private CalculationContext() {}
 
@@ -37,12 +38,16 @@ public class CalculationContext {
     }
 
     public boolean isSource(PropertySource<?, ?> source) {
-        return hasSource() && this.source.getProperty().equals(source);
+        return this.isSource(source::equals);
     }
 
-    public <T, I extends PropertySource.SourceInstance<T, I>> I getSource(PropertySource<T, I> source) {
-        if (isSource(source)) {
-            return (I) this.source;
+    public boolean isSource(Predicate<PropertySource<?, ?>> sourceTest) {
+        return hasSource() && sourceTest.test(this.source.getSource());
+    }
+
+    public <T extends PropertySource.SourceInstance> T getSource() {
+        if (hasSource()) {
+            return (T) this.source;
         }
         return null;
     }
@@ -60,7 +65,7 @@ public class CalculationContext {
             return this;
         }
 
-        Builder fromSource(PropertySource.SourceInstance<?, ?> source) {
+        Builder fromSource(PropertySource.SourceInstance source) {
             ctx.source = source;
             return this;
         }

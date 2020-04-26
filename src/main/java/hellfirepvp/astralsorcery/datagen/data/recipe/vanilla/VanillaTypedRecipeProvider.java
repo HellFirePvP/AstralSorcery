@@ -91,7 +91,7 @@ public class VanillaTypedRecipeProvider {
                 .key('M', BlocksAS.MARBLE_RAW)
                 .subDirectory("marble")
                 .build(registrar);
-        SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.MARBLE_STAIRS, 6)
+        SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.MARBLE_STAIRS, 8)
                 .patternLine("M  ")
                 .patternLine("MM ")
                 .patternLine("MMM")
@@ -149,7 +149,7 @@ public class VanillaTypedRecipeProvider {
                 .key('M', BlocksAS.BLACK_MARBLE_RAW)
                 .subDirectory("black_marble")
                 .build(registrar);
-        SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.BLACK_MARBLE_STAIRS, 6)
+        SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.BLACK_MARBLE_STAIRS, 8)
                 .patternLine("M  ")
                 .patternLine("MM ")
                 .patternLine("MMM")

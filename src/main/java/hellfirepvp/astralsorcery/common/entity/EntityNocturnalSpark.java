@@ -13,13 +13,20 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.block.tile.BlockFlareLight;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
+import hellfirepvp.astralsorcery.common.util.block.BlockPredicates;
+import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
+import net.minecraft.block.AirBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -95,6 +102,7 @@ public class EntityNocturnalSpark extends ThrowableEntity {
         }
 
         if (!world.isRemote()) {
+            removeLights();
             if (isSpawning()) {
                 ticksSpawning++;
                 spawnCycle();
@@ -106,6 +114,22 @@ public class EntityNocturnalSpark extends ThrowableEntity {
             }
         } else {
             spawnEffects();
+        }
+    }
+
+    private void removeLights() {
+        if (this.getEntityWorld() instanceof ServerWorld) {
+            ServerWorld sWorld = (ServerWorld) this.getEntityWorld();
+            if (this.ticksExisted % 5 == 0) {
+                List<BlockPos> lightPositions = BlockDiscoverer.searchForBlocksAround(
+                        sWorld, this.getPosition(), 8,
+                        (world, pos, state) -> !(state.getBlock() instanceof AirBlock) && state.getLightValue(world, pos) > 3);
+                for (BlockPos light : lightPositions) {
+                    if (!BlockUtils.breakBlockWithoutPlayer(sWorld, light, sWorld.getBlockState(light), ItemStack.EMPTY, true, true, true)) {
+                        sWorld.removeBlock(light, false);
+                    }
+                }
+            }
         }
     }
 

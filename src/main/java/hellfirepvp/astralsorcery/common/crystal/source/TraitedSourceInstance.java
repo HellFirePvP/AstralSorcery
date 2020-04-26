@@ -6,38 +6,30 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.crystal.source.instance;
+package hellfirepvp.astralsorcery.common.crystal.source;
 
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertySource;
-import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
 
 import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: Ritual
+ * Class: TraitedSourceInstance
  * Created by HellFirePvP
- * Date: 02.02.2019 / 16:22
+ * Date: 25.04.2020 / 21:00
  */
-public class Ritual extends PropertySource.SourceInstance<StarlightReceiverRitualPedestal, Ritual> {
+public class TraitedSourceInstance extends AttunedSourceInstance {
 
-    private final IWeakConstellation channelingConstellation;
     private final IMinorConstellation traitConstellation;
 
-    public Ritual(PropertySource<StarlightReceiverRitualPedestal, Ritual> property,
-                  @Nullable IWeakConstellation channelingConstellation,
-                  @Nullable IMinorConstellation traitConstellation) {
-        super(property);
-        this.channelingConstellation = channelingConstellation;
+    public TraitedSourceInstance(PropertySource<?, ?> source,
+                                 @Nullable IWeakConstellation attunedConstellation,
+                                 @Nullable IMinorConstellation traitConstellation) {
+        super(source, attunedConstellation);
         this.traitConstellation = traitConstellation;
-    }
-
-    @Nullable
-    public IWeakConstellation getChannelingConstellation() {
-        return channelingConstellation;
     }
 
     @Nullable

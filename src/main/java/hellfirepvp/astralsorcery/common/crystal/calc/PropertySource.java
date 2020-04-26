@@ -13,6 +13,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,7 +22,7 @@ import java.util.Objects;
  * Created by HellFirePvP
  * Date: 30.01.2019 / 08:20
  */
-public abstract class PropertySource<T, I extends PropertySource.SourceInstance<T, I>> {
+public abstract class PropertySource<T, I extends PropertySource.SourceInstance> {
 
     private final ResourceLocation registryName;
 
@@ -53,16 +54,16 @@ public abstract class PropertySource<T, I extends PropertySource.SourceInstance<
         return Objects.hash(registryName);
     }
 
-    public abstract static class SourceInstance<T, I extends SourceInstance<T, I>> {
+    public abstract static class SourceInstance {
 
-        protected final PropertySource<T, I> property;
+        private final PropertySource<?, ?> source;
 
-        protected SourceInstance(PropertySource<T, I> property) {
-            this.property = property;
+        protected SourceInstance(PropertySource<?, ?> source) {
+            this.source = source;
         }
 
-        public PropertySource<T, I> getProperty() {
-            return property;
+        public PropertySource<?, ?> getSource() {
+            return source;
         }
     }
 

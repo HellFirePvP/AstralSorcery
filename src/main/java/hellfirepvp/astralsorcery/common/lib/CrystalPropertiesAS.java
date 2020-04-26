@@ -10,9 +10,14 @@ package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
+import hellfirepvp.astralsorcery.common.crystal.calc.PropertySource;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
-import hellfirepvp.astralsorcery.common.crystal.source.SourceCollectorCrystal;
-import hellfirepvp.astralsorcery.common.crystal.source.SourceRitualPedestal;
+import hellfirepvp.astralsorcery.common.crystal.source.Crystal;
+import hellfirepvp.astralsorcery.common.crystal.source.Ritual;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
+import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,9 +80,10 @@ public class CrystalPropertiesAS {
 
     public static class Sources {
 
-        public static SourceCollectorCrystal SOURCE_COLLECTOR_CRYSTAL;
-
-        public static SourceRitualPedestal SOURCE_RITUAL_PEDESTAL;
+        public static PropertySource<IndependentCrystalSource, Crystal> SOURCE_COLLECTOR_CRYSTAL;
+        public static PropertySource<TileCollectorCrystal, Crystal> SOURCE_TILE_COLLECTOR_CRYSTAL;
+        public static PropertySource<StarlightReceiverRitualPedestal, Ritual> SOURCE_RITUAL_PEDESTAL;
+        public static PropertySource<TileRitualPedestal, Ritual> SOURCE_TILE_RITUAL_PEDESTAL;
 
     }
 }

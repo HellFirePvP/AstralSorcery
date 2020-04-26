@@ -112,6 +112,7 @@ public class RegistryTextures {
         TEX_ATTUNEMENT_FLARE        = loadTexture(EFFECT, "attunement_flare");
         TEX_ENTITY_FLARE            = loadTexture(EFFECT, "entity_flare");
         TEX_GRAPPLING_HOOK          = loadTexture(EFFECT, "grappling_hook");
+        TEX_AREA_OF_EFFECT_CUBE     = loadTexture(EFFECT, "area_of_effect_cube");
 
         TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");

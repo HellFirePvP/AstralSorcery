@@ -9,10 +9,12 @@
 package hellfirepvp.astralsorcery.common.base;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -78,6 +80,11 @@ public enum Mods {
         return this.isPresent() &&
                 entry.getRegistryName() != null &&
                 entry.getRegistryName().getNamespace().equals(this.modid);
+    }
+
+    @Nonnull
+    public ResourceLocation key(String path) {
+        return new ResourceLocation(this.getModId(), path);
     }
 
     public void sendIMC(String method, Supplier<?> thing) {

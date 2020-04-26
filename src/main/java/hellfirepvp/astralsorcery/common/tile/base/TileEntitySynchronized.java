@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
+import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,13 +31,18 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 11.05.2016 / 18:17
  */
-public abstract class TileEntitySynchronized extends TileEntity {
+public abstract class TileEntitySynchronized extends TileEntity implements ILocatable {
 
     protected static final Random rand = new Random();
     protected static final AxisAlignedBB BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
     protected TileEntitySynchronized(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
+    }
+
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
     }
 
     @Override

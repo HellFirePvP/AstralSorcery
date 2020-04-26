@@ -119,7 +119,9 @@ public class ScreenJournalProgression extends ScreenJournal {
         progressionRenderer.drawProgressionPart(this.blitOffset, mouseX, mouseY);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
+        GlStateManager.disableDepthTest();
         drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
+        GlStateManager.enableDepthTest();
 
         Rectangle guiStar = null;
         if (!ResearchHelper.getClientProgress().wasOnceAttuned()) {

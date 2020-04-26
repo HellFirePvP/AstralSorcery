@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.data.research.GatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.RecipeHelper;
@@ -255,15 +256,20 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         GlStateManager.enableDepthTest();
         GlStateManager.color4f(1F, 1F, 1F, 1F);
 
-        //TODO cape recipe page
-        //CapeAttunementRecipe recipe = RecipesAS.capeCraftingRecipes.get(this.constellation);
-        //if (recipe != null) {
-        //    lastFramePage = new JournalPageTraitRecipe(recipe).buildRenderPage();
-        //    GlStateManager.pushMatrix();
-        //    lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
-        //    lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
-        //    GlStateManager.popMatrix();
-        //}
+        if (GatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchHelper.getClientProgress())) {
+            SimpleAltarRecipe recipe = RecipeHelper.findAltarRecipeResult(stack ->
+                    stack.getItem() instanceof ItemMantle &&
+                            this.constellation.equals(ItemsAS.MANTLE.getConstellation(stack)));
+
+            if (recipe != null) {
+                lastFramePage = new RenderPageAltarRecipe(null, -1, recipe);
+
+                GlStateManager.pushMatrix();
+                lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
+                lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
+                GlStateManager.popMatrix();
+            }
+        }
     }
 
     private void drawEnchantingPotionPaperPageInformation(int mouseX, int mouseY, float partialTicks) {

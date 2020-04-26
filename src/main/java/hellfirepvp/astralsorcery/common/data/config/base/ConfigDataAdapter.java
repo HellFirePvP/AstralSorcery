@@ -9,12 +9,14 @@
 package hellfirepvp.astralsorcery.common.data.config.base;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 
 /**
@@ -66,6 +68,11 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
         }
 
         return configuredValues;
+    }
+
+    @Nullable
+    public synchronized T getRandomValue(Random rand) {
+        return MiscUtils.getRandomEntry(getConfiguredValues(), rand);
     }
 
     public abstract List<T> getDefaultValues();

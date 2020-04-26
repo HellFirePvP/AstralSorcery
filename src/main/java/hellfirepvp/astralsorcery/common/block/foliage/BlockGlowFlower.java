@@ -8,10 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.block.foliage;
 
+import hellfirepvp.astralsorcery.common.block.base.template.BlockFlowerTemplate;
 import hellfirepvp.astralsorcery.common.block.base.template.BlockFoliageTemplate;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMisc;
+import hellfirepvp.astralsorcery.common.lib.EffectsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -24,6 +28,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 
+import javax.annotation.Nonnull;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -31,18 +37,14 @@ import net.minecraftforge.common.PlantType;
  * Created by HellFirePvP
  * Date: 21.07.2019 / 09:23
  */
-public class BlockGlowFlower extends BlockFoliageTemplate implements IPlantable {
+public class BlockGlowFlower extends BlockFlowerTemplate implements IPlantable {
 
     private final VoxelShape shape;
 
     public BlockGlowFlower() {
-        super(PropertiesMisc.defaultTickingPlant().lightValue(5));
+        super(PropertiesMisc.defaultTickingPlant()
+                .lightValue(5));
         this.shape = createShape();
-    }
-
-    @Override
-    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return state.canSustainPlant(worldIn, pos, Direction.UP, this);
     }
 
     private VoxelShape createShape() {
@@ -55,6 +57,17 @@ public class BlockGlowFlower extends BlockFoliageTemplate implements IPlantable 
         return this.shape.withOffset(offset.x, offset.y, offset.z);
     }
 
+    @Nonnull
+    @Override
+    public Effect getStewEffect() {
+        return Effects.LUCK;
+    }
+
+    @Override
+    public int getStewEffectDuration() {
+        return 40;
+    }
+
     @Override
     public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
         if (silktouch == 0) {
@@ -64,11 +77,6 @@ public class BlockGlowFlower extends BlockFoliageTemplate implements IPlantable 
             return fortune * MathHelper.nextInt(RANDOM, 2, 5);
         }
         return MathHelper.nextInt(RANDOM, 1, 2);
-    }
-
-    @Override
-    public OffsetType getOffsetType() {
-        return OffsetType.XZ;
     }
 
     @Override

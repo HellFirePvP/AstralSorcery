@@ -73,6 +73,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -315,7 +316,7 @@ public class CommonProxy {
         this.commonConfig.buildConfiguration();
         this.serverConfig.buildConfiguration();
 
-        RegistryCapabilities.initialize();
+        RegistryCapabilities.init(MinecraftForge.EVENT_BUS);
         StarlightNetworkRegistry.setupRegistry();
 
         RegistryWorldGeneration.registerFeatures();

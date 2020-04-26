@@ -305,12 +305,17 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(world);
         List<BlockPos> srcLinkingToThis = this.getSources();
 
+        boolean needsUpdate = false;
         for (BlockPos pos : new ArrayList<>(this.offsetMirrors.keySet())) {
             BlockPos actualPos = this.getLocationPos().add(pos);
+            boolean existingFlag = this.offsetMirrors.get(pos);
 
             //If the source is not linking to this
             if (!srcLinkingToThis.contains(actualPos)) {
                 this.offsetMirrors.put(pos, false);
+                if (existingFlag) {
+                    needsUpdate = true;
+                }
                 continue;
             }
 
@@ -322,7 +327,11 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             boolean foundLink = false;
             for (NodeConnection<IPrismTransmissionNode> n : other.queryNext(handle)) {
                 if (n.getTo().equals(getLocationPos())) {
-                    this.offsetMirrors.put(pos, n.canConnect());
+                    boolean connect = n.canConnect();
+                    this.offsetMirrors.put(pos, connect);
+                    if (connect != existingFlag) {
+                        needsUpdate = true;
+                    }
                     foundLink = true;
                     break;
                 }
@@ -330,7 +339,13 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
 
             if (!foundLink) {
                 this.offsetMirrors.put(pos, false);
+                if (existingFlag) {
+                    needsUpdate = true;
+                }
             }
+        }
+        if (needsUpdate) {
+            this.needsTileSync = true;
         }
     }
 

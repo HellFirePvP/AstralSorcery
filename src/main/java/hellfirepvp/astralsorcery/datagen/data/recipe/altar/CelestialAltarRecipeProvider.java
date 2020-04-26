@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.datagen.data.recipe.altar;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.crafting.builder.SimpleAltarRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngredient;
+import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -166,6 +167,41 @@ public class CelestialAltarRecipeProvider {
                         .key('I', ItemsAS.ILLUMINATION_POWDER)
                 )
                 .addOutput(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(ItemsAS.ILLUMINATION_WAND, AltarType.CONSTELLATION)
+                .setStarlightRequirement(0.7F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("   I ")
+                        .patternLine("  ISI")
+                        .patternLine("  RI ")
+                        .patternLine(" R   ")
+                        .patternLine("R    ")
+                        .key('R', BlocksAS.MARBLE_RUNED)
+                        .key('I', ItemsAS.ILLUMINATION_POWDER)
+                        .key('S', ItemsAS.SHIFTING_STAR)
+                )
+                .addOutput(ItemsAS.ILLUMINATION_WAND)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(BlocksAS.INFUSER, AltarType.CONSTELLATION)
+                .setStarlightRequirement(0.3F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("     ")
+                        .patternLine("PASAP")
+                        .patternLine(" GLG ")
+                        .patternLine("PRRRP")
+                        .patternLine("PG GP")
+                        .key('P', BlocksAS.MARBLE_PILLAR)
+                        .key('R', BlocksAS.MARBLE_RUNED)
+                        .key('A', ItemsAS.AQUAMARINE)
+                        .key('G', Tags.Items.INGOTS_GOLD)
+                        .key('L', FluidsAS.LIQUID_STARLIGHT_SOURCE)
+                        .key('S', TagsAS.Items.INGOTS_STARMETAL)
+                )
+                .addOutput(BlocksAS.INFUSER)
                 .build(registrar);
     }
 

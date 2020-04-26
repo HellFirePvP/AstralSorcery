@@ -529,13 +529,6 @@
   "item.itemknowledgefragment": "Lucent Scroll",
   "item.itemfragmentcapsule": "Shining Casing",
 
-  "item.itemskyresonator.starlight": "Fosic Resonator",
-  "item.itemskyresonator.liquid": "Ichosic Resonator",
-  "item.itemskyresonator.structure": "Domic Resonator",
-  "item.itemskyresonator.upgrade.starlight": "Fosic",
-  "item.itemskyresonator.upgrade.liquid": "Ichosic",
-  "item.itemskyresonator.upgrade.structure": "Domic",
-
 
   "__comment": "",
 
@@ -575,6 +568,14 @@
   "item.astralsorcery.exchange_wand": "Conversion Wand",
   "item.astralsorcery.grapple_wand": "Impulsion Wand",
   "item.astralsorcery.blink_wand": "Traversal Wand",
+
+  "item.astralsorcery.resonator": "Fosic Resonator",
+  "item.astralsorcery.resonator.starlight": "Fosic Resonator",
+  "item.astralsorcery.resonator.liquid": "Ichosic Resonator",
+  "item.astralsorcery.resonator.structure": "Domic Resonator",
+  "item.astralsorcery.resonator.upgrade.starlight": "Fosic",
+  "item.astralsorcery.resonator.upgrade.liquid": "Ichosic",
+  "item.astralsorcery.resonator.upgrade.structure": "Domic",
 
   "item.astralsorcery.mantle": "Mantle of Stars",
 

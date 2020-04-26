@@ -57,7 +57,6 @@ public class PacketChannel {
         registerLoginMessage(PktLoginAcknowledge::new, PktLoginAcknowledge::new);
 
         // PLAY DEDICATED_SERVER -> CLIENT
-        registerMessage(PktPlayLiquidFountain::new);
         registerMessage(PktOreScan::new);
         registerMessage(PktPlayEffect::new);
         registerMessage(PktPlayLiquidInteraction::new);

@@ -115,7 +115,10 @@ public class RenderPageStructure extends RenderablePage {
     public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
         Rectangle rect = RenderingDrawUtils.drawInfoStar(offsetX + 160, offsetY + 10, zLevel, 15, pTicks);
         if (rect.contains(mouseX, mouseY)) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translated(0, 0, 150);
             RenderingDrawUtils.renderBlueTooltip((int) offsetX + 160, (int) offsetY + 10, this.contentStacks, RenderablePage.getFontRenderer(), false);
+            GlStateManager.popMatrix();
         }
     }
 

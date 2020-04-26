@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemDay;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 import hellfirepvp.astralsorcery.common.item.lens.*;
+import hellfirepvp.astralsorcery.common.item.ItemResonator;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.*;
 import hellfirepvp.astralsorcery.common.item.wand.*;
@@ -79,6 +80,7 @@ public class RegistryItems {
         ENCHANTMENT_AMULET = registerItem(new ItemEnchantmentAmulet());
         KNOWLEDGE_SHARE = registerItem(new ItemKnowledgeShare());
         WAND = registerItem(new ItemWand());
+        RESONATOR = registerItem(new ItemResonator());
         LINKING_TOOL = registerItem(new ItemLinkingTool());
         ILLUMINATION_WAND = registerItem(new ItemIlluminationWand());
         ARCHITECT_WAND = registerItem(new ItemArchitectWand());
