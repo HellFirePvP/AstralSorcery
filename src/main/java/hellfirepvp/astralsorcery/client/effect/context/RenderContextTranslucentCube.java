@@ -30,32 +30,34 @@ import java.util.function.Consumer;
  */
 public class RenderContextTranslucentCube extends RenderContextCube {
 
-    public RenderContextTranslucentCube() {
-        super(before(), after(), (ctx, pos) -> new FXCube(pos));
+    public RenderContextTranslucentCube(Blending blendMode) {
+        super(before(blendMode), after(), (ctx, pos) -> new FXCube(pos));
     }
 
-    public RenderContextTranslucentCube(AbstractRenderableTexture resource) {
-        this(new SpriteSheetResource(resource));
+    public RenderContextTranslucentCube(Blending blendMode, AbstractRenderableTexture resource) {
+        this(blendMode, new SpriteSheetResource(resource));
     }
 
-    public RenderContextTranslucentCube(SpriteSheetResource sprite) {
-        super(sprite, before(), after(), (ctx, pos) -> new FXCube(pos));
+    public RenderContextTranslucentCube(Blending blendMode, SpriteSheetResource sprite) {
+        super(sprite, before(blendMode), after(), (ctx, pos) -> new FXCube(pos));
     }
 
-    private static BiConsumer<BufferContext, Float> before() {
+    private static BiConsumer<BufferContext, Float> before(Blending blendMode) {
         return (ctx, pTicks) -> {
             GlStateManager.pushMatrix();
             RenderingVectorUtils.removeStandardTranslationFromTESRMatrix(pTicks);
             GlStateManager.color4f(1F, 1F, 1F, 1F);
             GlStateManager.enableBlend();
-            Blending.ADDITIVEDARK.applyStateManager();
+            blendMode.applyStateManager();
             GlStateManager.disableCull();
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
+            GlStateManager.depthMask(false);
         };
     }
 
     private static Consumer<Float> after() {
         return (pTicks) -> {
+            GlStateManager.depthMask(true);
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
             GlStateManager.enableCull();
             Blending.DEFAULT.applyStateManager();

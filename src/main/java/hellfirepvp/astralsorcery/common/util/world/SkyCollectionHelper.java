@@ -32,9 +32,7 @@ public class SkyCollectionHelper {
 
     @OnlyIn(Dist.CLIENT)
     public static Optional<Float> getSkyNoiseDistributionClient(World world, BlockPos pos) {
-        Optional<Long> testSeed = WorldSeedCache.getSeedIfPresent(world);
-        if (!testSeed.isPresent()) return Optional.empty();
-        return Optional.of(getDistributionInternal(testSeed.get(), pos));
+        return WorldSeedCache.getSeedIfPresent(world).map(seed -> getDistributionInternal(seed, pos));
     }
 
     public static float getSkyNoiseDistribution(World world, BlockPos pos) {
@@ -52,15 +50,7 @@ public class SkyCollectionHelper {
                 lowerAnchorPoint.add(0, 0, accuracy),
                 lowerAnchorPoint.add(accuracy, 0, accuracy),
                 pos);
-        sharedRand.setSeed(seed);
-        long nextLayerSeed = sharedRand.nextLong();
-        float layer1 = getNoiseDistribution(nextLayerSeed,
-                lowerAnchorPoint,
-                lowerAnchorPoint.add(accuracy, 0, 0),
-                lowerAnchorPoint.add(0, 0, accuracy),
-                lowerAnchorPoint.add(accuracy, 0, accuracy),
-                pos);
-        return layer0 * layer1;
+        return layer0 * layer0;
     }
 
     private static float getNoiseDistribution(long seed, BlockPos lXlZ, BlockPos hXlZ, BlockPos lXhZ, BlockPos hXhZ, BlockPos exact) {

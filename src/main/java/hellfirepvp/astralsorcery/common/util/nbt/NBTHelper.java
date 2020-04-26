@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -96,6 +97,53 @@ public class NBTHelper {
 
     public static void removePersistentData(CompoundNBT base) {
         base.remove(AstralSorcery.MODID);
+    }
+
+    public static void deepMerge(CompoundNBT dst, CompoundNBT src) {
+        for (String s : src.keySet()) {
+            INBT nbtElement = src.get(s);
+            if (nbtElement.getId() == Constants.NBT.TAG_COMPOUND) {
+                if (dst.contains(s, Constants.NBT.TAG_COMPOUND)) {
+                    deepMerge(dst.getCompound(s), (CompoundNBT) nbtElement);
+                } else {
+                    dst.put(s, nbtElement.copy());
+                }
+            } else if (nbtElement.getId() == Constants.NBT.TAG_LIST) {
+                if (dst.contains(s, Constants.NBT.TAG_LIST)) {
+                    ListNBT dstList = (ListNBT) dst.get(s);
+                    ListNBT srcList = (ListNBT) nbtElement;
+                    if (dstList.getTagType() == srcList.getTagType()) {
+                        deepMergeList(dstList, srcList);
+                    } else {
+                        dst.put(s, srcList.copy());
+                    }
+                } else {
+                    dst.put(s, nbtElement.copy());
+                }
+            } else {
+                dst.put(s, nbtElement.copy());
+            }
+        }
+    }
+
+    //Stupid NBT stuff ahead. the iterator and the actual .get returns from 2 different lists.
+    //Don't use the iterator on ListNBT...
+    private static void deepMergeList(ListNBT dst, ListNBT src) {
+        for (int j = 0; j < src.size(); j++) {
+            INBT toAdd = src.get(j);
+
+            boolean found = false;
+            for (int i = 0; i < dst.size(); i++) {
+                INBT existing = dst.get(i);
+                if (existing.equals(toAdd)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                dst.add(toAdd.copy());
+            }
+        }
     }
 
     @Nonnull
@@ -266,6 +314,14 @@ public class NBTHelper {
 
     public static ItemStack getStack(CompoundNBT compound, String tag) {
         return readFromSubTag(compound, tag, ItemStack::read);
+    }
+
+    public static void setFluid(CompoundNBT compound, String tag, FluidStack stack) {
+        setAsSubTag(compound, tag, stack::writeToNBT);
+    }
+
+    public static FluidStack getFluid(CompoundNBT compound, String tag) {
+        return readFromSubTag(compound, tag, FluidStack::loadFluidStackFromNBT);
     }
 
     public static void removeUUID(CompoundNBT compound, String key) {

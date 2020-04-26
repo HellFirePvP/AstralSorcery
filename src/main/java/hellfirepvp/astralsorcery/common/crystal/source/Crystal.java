@@ -6,13 +6,12 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.crystal.source.instance;
+package hellfirepvp.astralsorcery.common.crystal.source;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertySource;
-import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,19 +20,10 @@ import javax.annotation.Nonnull;
  * Created by HellFirePvP
  * Date: 02.02.2019 / 16:03
  */
-public class Crystal extends PropertySource.SourceInstance<IndependentCrystalSource, Crystal> {
+public class Crystal extends AttunedSourceInstance {
 
-    private IWeakConstellation tunedConstellation;
-
-    public Crystal(PropertySource<IndependentCrystalSource, Crystal> property,
-                   IWeakConstellation tunedConstellation) {
-        super(property);
-        this.tunedConstellation = tunedConstellation;
+    public Crystal(PropertySource<?, ?> source,
+                   @Nullable IWeakConstellation attunedConstellation) {
+        super(source, attunedConstellation);
     }
-
-    @Nonnull
-    public IWeakConstellation getTunedConstellation() {
-        return tunedConstellation;
-    }
-
 }

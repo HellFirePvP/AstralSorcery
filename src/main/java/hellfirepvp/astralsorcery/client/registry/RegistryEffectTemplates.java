@@ -12,6 +12,9 @@ import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.*;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.context.base.RenderContextColorSphere;
+import hellfirepvp.astralsorcery.client.lib.SpritesAS;
+import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 
 import java.util.LinkedList;
@@ -53,8 +56,9 @@ public class RegistryEffectTemplates {
         FACING_SPRITE = register(new RenderContextFacingSprite());
 
         CUBE_OPAQUE_ATLAS = register(new RenderContextOpaqueCube());
-        CUBE_TRANSLUCENT_ATLAS = register(new RenderContextTranslucentCube());
-        CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH = register(new RenderContextTranslucentDepthCube());
+        CUBE_TRANSLUCENT_ATLAS = register(new RenderContextTranslucentCube(Blending.ADDITIVEDARK));
+        CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH = register(new RenderContextTranslucentDepthCube(Blending.ADDITIVEDARK));
+        CUBE_AREA_OF_EFFECT = register(new RenderContextTranslucentCube(Blending.DEFAULT, TexturesAS.TEX_AREA_OF_EFFECT_CUBE));
 
         BLOCK_TRANSLUCENT = register(new RenderContextTranslucentBlock());
         BLOCK_TRANSLUCENT_IGNORE_DEPTH = register(new RenderContextTranslucentDepthBlock());
@@ -93,7 +97,8 @@ public class RegistryEffectTemplates {
 
         //L2
         CUBE_OPAQUE_ATLAS.setAfter(generalGrp);
-        CUBE_TRANSLUCENT_ATLAS.setAfter(CUBE_OPAQUE_ATLAS);
+        CUBE_AREA_OF_EFFECT.setAfter(CUBE_OPAQUE_ATLAS);
+        CUBE_TRANSLUCENT_ATLAS.setAfter(CUBE_AREA_OF_EFFECT);
         CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH.setAfter(CUBE_TRANSLUCENT_ATLAS);
 
         BLOCK_TRANSLUCENT.setAfter(CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH);

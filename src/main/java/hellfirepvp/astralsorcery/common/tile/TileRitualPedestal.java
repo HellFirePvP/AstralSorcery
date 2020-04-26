@@ -18,15 +18,18 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationItem;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeTile;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.crystal.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import hellfirepvp.astralsorcery.common.tile.base.TileAreaOfInfluence;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.EffectIncrementer;
@@ -45,6 +48,7 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -53,6 +57,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -62,7 +67,7 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 09.07.2019 / 19:25
  */
-public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitualPedestal> implements CrystalAttributeTile {
+public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitualPedestal> implements CrystalAttributeTile, TileAreaOfInfluence {
 
     public static final BlockPos RITUAL_ANCHOR_OFFEST = new BlockPos(0, 5, 0);
     public static final BlockPos RITUAL_LENS_OFFSET = new BlockPos(0, 2, 0);
@@ -183,6 +188,76 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     @Nonnull
     public Set<BlockState> getConfiguredBlockStates() {
         return Sets.newHashSet(this.offsetConfigurations.values());
+    }
+
+    //=========================================================================================
+    // AoE highlighting effects
+    //=========================================================================================
+
+
+    @Nullable
+    @Override
+    public Color getEffectColor() {
+        if (!this.providesEffect()) {
+            return null;
+        }
+
+        IWeakConstellation running = this.getRitualConstellation();
+        if (running == null) {
+            return null;
+        }
+        return running.getConstellationColor();
+    }
+
+    @Override
+    public float getRadius() {
+        if (!this.providesEffect()) {
+            return 0F;
+        }
+
+        IWeakConstellation running = this.getRitualConstellation();
+        if (running == null) {
+            return 0F;
+        }
+        ConstellationEffect effect = ConstellationEffectRegistry.createInstance(this, running);
+        if (effect == null) {
+            return 0F;
+        }
+        ConstellationEffectProperties properties = effect.createProperties(this.getMirrorCount());
+        if (properties != null) {
+            if (this.getRitualTrait() != null) {
+                properties.modify(this.getRitualTrait());
+            }
+            if (!this.getCurrentCrystal().isEmpty()) {
+                CrystalAttributes attributes = CrystalAttributes.getCrystalAttributes(this.getCurrentCrystal());
+                properties.multiplySize(CrystalCalculations.getRitualEffectRangeFactor(this, attributes));
+            }
+            return (float) properties.getSize();
+        }
+        return 0;
+    }
+
+    @Nonnull
+    @Override
+    public BlockPos getEffectOriginPosition() {
+        return this.getPos();
+    }
+
+    @Nonnull
+    @Override
+    public Vector3 getEffectPosition() {
+        return new Vector3(this.getEffectOriginPosition()).add(0.5F, 0.5F, 0.5F);
+    }
+
+    @Nonnull
+    @Override
+    public DimensionType getDimensionType() {
+        return this.getWorld().getDimension().getType();
+    }
+
+    @Override
+    public boolean providesEffect() {
+        return this.isWorking() && !this.isRemoved();
     }
 
     //=========================================================================================

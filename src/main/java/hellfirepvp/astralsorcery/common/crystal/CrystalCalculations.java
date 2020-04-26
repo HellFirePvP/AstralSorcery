@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.crystal;
 
+import hellfirepvp.astralsorcery.common.crystal.source.Ritual;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
@@ -57,10 +59,17 @@ public class CrystalCalculations {
     }
 
     // Range: 1.0 - 2.73
-    public static double getRitualEffectRangeFactor(StarlightReceiverRitualPedestal pedestal,
-                                                    CrystalAttributes attributes) {
+    public static double getRitualEffectRangeFactor(StarlightReceiverRitualPedestal pedestal, CrystalAttributes attributes) {
+        return getRitualEffectRangeFactor(SOURCE_RITUAL_PEDESTAL.createInstance(pedestal), attributes);
+    }
+
+    public static double getRitualEffectRangeFactor(TileRitualPedestal pedestal, CrystalAttributes attributes) {
+        return getRitualEffectRangeFactor(SOURCE_TILE_RITUAL_PEDESTAL.createInstance(pedestal), attributes);
+    }
+
+    private static double getRitualEffectRangeFactor(Ritual pedestalSrc, CrystalAttributes attributes) {
         CalculationContext ctx = CalculationContext.Builder.newBuilder()
-                .fromSource(SOURCE_RITUAL_PEDESTAL.createInstance(pedestal))
+                .fromSource(pedestalSrc)
                 .addUsage(USE_RITUAL_RANGE)
                 .build();
         return calculate(1.0F, attributes, ctx);

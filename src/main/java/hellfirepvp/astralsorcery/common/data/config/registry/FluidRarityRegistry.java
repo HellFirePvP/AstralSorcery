@@ -9,11 +9,15 @@
 package hellfirepvp.astralsorcery.common.data.config.registry;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.FluidRarityEntry;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 
 /**
@@ -32,9 +36,15 @@ public class FluidRarityRegistry extends ConfigDataAdapter<FluidRarityEntry> {
     @Override
     public List<FluidRarityEntry> getDefaultValues() {
         return Lists.newArrayList(
-                new FluidRarityEntry(new ResourceLocation("minecraft", "water"), 14000, Integer.MAX_VALUE, Integer.MAX_VALUE),
-                new FluidRarityEntry(new ResourceLocation("minecraft", "lava"), 7500, 4_000_000, 1_000_000)
+                new FluidRarityEntry(Mods.MINECRAFT.key("water"), 14000, Integer.MAX_VALUE, Integer.MAX_VALUE),
+                new FluidRarityEntry(Mods.MINECRAFT.key("lava"), 7500, 4_000_000, 1_000_000)
         );
+    }
+
+    @Nullable
+    @Override
+    public synchronized FluidRarityEntry getRandomValue(Random rand) {
+        return MiscUtils.getWeightedRandomEntry(this.getConfiguredValues(), rand, FluidRarityEntry::getRarity);
     }
 
     @Override

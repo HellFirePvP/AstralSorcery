@@ -49,7 +49,7 @@ public class ResearchHelper {
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
     @Nonnull
-    public static PlayerProgress getProgress(PlayerEntity player, LogicalSide side) {
+    public static PlayerProgress getProgress(@Nullable PlayerEntity player, LogicalSide side) {
         if (side.isClient()) {
             return getClientProgress();
         } else if (player instanceof ServerPlayerEntity) {

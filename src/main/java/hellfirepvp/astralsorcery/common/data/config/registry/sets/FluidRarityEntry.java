@@ -15,6 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,7 +27,7 @@ import javax.annotation.Nullable;
 public class FluidRarityEntry implements ConfigDataSet {
 
     private final ResourceLocation fluidName;
-    public final int guaranteedAmount, additionalRandomAmount, rarity;
+    private final int guaranteedAmount, additionalRandomAmount, rarity;
 
     public FluidRarityEntry(ResourceLocation fluidName, int rarity, int guaranteedAmount, int additionalRandomAmount) {
         this.fluidName = fluidName;
@@ -37,6 +38,14 @@ public class FluidRarityEntry implements ConfigDataSet {
 
     public Fluid getFluid() {
         return ForgeRegistries.FLUIDS.getValue(this.fluidName);
+    }
+
+    public int getRarity() {
+        return rarity;
+    }
+
+    public int getRandomAmount(Random rand) {
+        return this.guaranteedAmount + (additionalRandomAmount > 0 ? rand.nextInt(additionalRandomAmount) : 0);
     }
 
     @Nonnull

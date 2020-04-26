@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXScaleFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.source.FXSourceLiquidFountain;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXCube;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.block.tile.BlockGemCrystalCluster;
@@ -24,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;
 import java.util.Random;
@@ -103,6 +106,15 @@ public class MiscPlayEffect {
                     .setScaleMultiplier(0.25F + rand.nextFloat() * 0.1F)
                     .color(VFXColorFunction.WHITE);
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void liquidFountain(PktPlayEffect event) {
+        FluidStack stack = ByteBufUtils.readFluidStack(event.getExtraData());
+        Vector3 at = ByteBufUtils.readVector(event.getExtraData())
+                .add(rand.nextFloat(), 0, rand.nextFloat());
+
+        EffectHelper.spawnSource(new FXSourceLiquidFountain(at, stack));
     }
 
     @OnlyIn(Dist.CLIENT)

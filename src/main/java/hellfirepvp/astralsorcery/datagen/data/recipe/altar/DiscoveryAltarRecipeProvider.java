@@ -14,9 +14,11 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngred
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
+import hellfirepvp.astralsorcery.common.item.ItemResonator;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -83,6 +85,25 @@ public class DiscoveryAltarRecipeProvider {
                         .key('P', ItemTags.PLANKS)
                 )
                 .addOutput(ItemsAS.HAND_TELESCOPE)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(ItemsAS.RESONATOR, AltarType.DISCOVERY)
+                .setStarlightRequirement(0.15F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine(" A ")
+                        .patternLine("MLM")
+                        .patternLine("IGI")
+                        .key('A', ItemsAS.AQUAMARINE)
+                        .key('M', BlocksAS.MARBLE_RAW)
+                        .key('L', FluidsAS.LIQUID_STARLIGHT_SOURCE)
+                        .key('G', Tags.Items.INGOTS_GOLD)
+                        .key('I', BlocksAS.INFUSED_WOOD)
+                )
+                .addOutput(ItemResonator.setCurrentUpgradeUnsafe(
+                        ItemResonator.setUpgradeUnlocked(new ItemStack(ItemsAS.RESONATOR),
+                                ItemResonator.ResonatorUpgrade.STARLIGHT),
+                        ItemResonator.ResonatorUpgrade.STARLIGHT))
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
@@ -341,7 +362,7 @@ public class DiscoveryAltarRecipeProvider {
                         .patternLine("PPP")
                         .key('P', BlocksAS.INFUSED_WOOD_PLANKS)
                 )
-                .addOutput(new ItemStack(BlocksAS.INFUSED_WOOD_STAIRS, 6))
+                .addOutput(new ItemStack(BlocksAS.INFUSED_WOOD_STAIRS, 8))
                 .build(registrar);
 
         /*****************************************************************************
@@ -441,7 +462,7 @@ public class DiscoveryAltarRecipeProvider {
                         .patternLine("MMM")
                         .key('M', BlocksAS.MARBLE_RAW)
                 )
-                .addOutput(new ItemStack(BlocksAS.MARBLE_STAIRS, 6))
+                .addOutput(new ItemStack(BlocksAS.MARBLE_STAIRS, 8))
                 .build(registrar);
 
         /*****************************************************************************
@@ -555,7 +576,7 @@ public class DiscoveryAltarRecipeProvider {
                         .patternLine("MMM")
                         .key('M', BlocksAS.BLACK_MARBLE_RAW)
                 )
-                .addOutput(new ItemStack(BlocksAS.BLACK_MARBLE_STAIRS, 6))
+                .addOutput(new ItemStack(BlocksAS.BLACK_MARBLE_STAIRS, 8))
                 .build(registrar);
     }
 }

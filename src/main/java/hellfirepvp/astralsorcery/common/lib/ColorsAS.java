@@ -28,7 +28,6 @@ public class ColorsAS {
 
     public static final Color EFFECT_LIGHTNING   = new Color(0x0195FF);
     public static final Color EFFECT_CRAFT_FLARE = new Color(0x5066EC);
-
     public static final Color EFFECT_BLUE_LIGHT = new Color(0x5D98D8);
     public static final Color EFFECT_BLUE_DARK = new Color(0x005ABE);
 
@@ -50,6 +49,7 @@ public class ColorsAS {
     public static final Color ILLUMINATION_POWDER_2 = new Color(0xFEFF9E);
     public static final Color ILLUMINATION_POWDER_3 = new Color(0xFFE539);
     public static final Color SPECTRAL_TOOL         = new Color(0x5C2EEC);
+    public static final Color RESONATOR_STARFIELD   = new Color(0x00063A);
 
     public static final Color CONSTELLATION_TYPE_MAJOR = new Color(40, 67, 204);
     public static final Color CONSTELLATION_TYPE_WEAK  = new Color(67, 44, 176);

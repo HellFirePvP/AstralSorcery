@@ -11,10 +11,15 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
+import hellfirepvp.astralsorcery.common.crystal.calc.PropertySource;
 import hellfirepvp.astralsorcery.common.crystal.property.*;
-import hellfirepvp.astralsorcery.common.crystal.source.SourceCollectorCrystal;
-import hellfirepvp.astralsorcery.common.crystal.source.SourceRitualPedestal;
+import hellfirepvp.astralsorcery.common.crystal.source.Crystal;
+import hellfirepvp.astralsorcery.common.crystal.source.Ritual;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
+import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
 
 import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.*;
 import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Properties.*;
@@ -57,8 +62,30 @@ public class RegistryCrystalProperties {
     }
 
     public static void initDefaultAttributes() {
-        SOURCE_RITUAL_PEDESTAL = new SourceRitualPedestal();
-        SOURCE_COLLECTOR_CRYSTAL = new SourceCollectorCrystal();
+        SOURCE_RITUAL_PEDESTAL = new PropertySource<StarlightReceiverRitualPedestal, Ritual>(AstralSorcery.key("ritual_network")) {
+            @Override
+            public Ritual createInstance(StarlightReceiverRitualPedestal obj) {
+                return new Ritual(this, obj.getChannelingType(), obj.getChannelingTrait());
+            }
+        };
+        SOURCE_TILE_RITUAL_PEDESTAL = new PropertySource<TileRitualPedestal, Ritual>(AstralSorcery.key("ritual_tile")) {
+            @Override
+            public Ritual createInstance(TileRitualPedestal obj) {
+                return new Ritual(this, obj.getRitualConstellation(), obj.getRitualTrait());
+            }
+        };
+        SOURCE_COLLECTOR_CRYSTAL = new PropertySource<IndependentCrystalSource, Crystal>(AstralSorcery.key("crystal_network")) {
+            @Override
+            public Crystal createInstance(IndependentCrystalSource obj) {
+                return new Crystal(this, obj.getStarlightType());
+            }
+        };
+        SOURCE_TILE_COLLECTOR_CRYSTAL = new PropertySource<TileCollectorCrystal, Crystal>(AstralSorcery.key("crystal_tile")) {
+            @Override
+            public Crystal createInstance(TileCollectorCrystal obj) {
+                return new Crystal(this, obj.getAttunedConstellation());
+            }
+        };
 
         CREATIVE_CRYSTAL_TOOL_ATTRIBUTES =
                 CrystalAttributes.Builder.newBuilder(false)

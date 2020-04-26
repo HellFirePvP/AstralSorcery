@@ -34,6 +34,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.world.World;
@@ -104,7 +105,10 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
                 }
             } else {
                 TileEntity tile = MiscUtils.getTileAt(world, pos, TileEntity.class, true);
-                if (tile == null && !state.hasTileEntity()) {
+                if (tile == null &&
+                        !state.hasTileEntity() &&
+                        player.canPlayerEdit(pos, dir, stack) &&
+                        VoxelShapes.fullCube().equals(world.getBlockState(pos).getShape(world, pos))) {
                     if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_ILLUMINATION, false)) {
                         if (world.setBlockState(pos, BlocksAS.TRANSLUCENT_BLOCK.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
                             TileTranslucentBlock tb = MiscUtils.getTileAt(world, pos, TileTranslucentBlock.class, true);

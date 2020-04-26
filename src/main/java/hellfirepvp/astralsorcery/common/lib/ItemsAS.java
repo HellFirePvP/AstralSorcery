@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemDay;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemNight;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGemSky;
 import hellfirepvp.astralsorcery.common.item.lens.*;
+import hellfirepvp.astralsorcery.common.item.ItemResonator;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.*;
 import hellfirepvp.astralsorcery.common.item.wand.*;
@@ -62,6 +63,7 @@ public class ItemsAS {
     public static ItemEnchantmentAmulet ENCHANTMENT_AMULET;
     public static ItemKnowledgeShare KNOWLEDGE_SHARE;
     public static ItemWand WAND;
+    public static ItemResonator RESONATOR;
     public static ItemLinkingTool LINKING_TOOL;
     public static ItemIlluminationWand ILLUMINATION_WAND;
     public static ItemArchitectWand ARCHITECT_WAND;

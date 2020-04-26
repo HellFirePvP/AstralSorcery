@@ -111,7 +111,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         CELESTIAL_STRIKE,
         ALTAR_RECIPE_FINISH,
         INFUSER_RECIPE_FINISH,
-        TIME_FREEZE_EFFECT;
+        TIME_FREEZE_EFFECT,
+        LIQUID_FOUNTAIN;
 
         @OnlyIn(Dist.CLIENT)
         private Consumer<PktPlayEffect> runEffect() {
@@ -144,6 +145,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return TileAltar::finishCraftingEffects;
                 case INFUSER_RECIPE_FINISH:
                     return TileInfuser::finishCraftingEffects;
+                case LIQUID_FOUNTAIN:
+                    return MiscPlayEffect::liquidFountain;
             }
             return (pkt) -> {};
         }

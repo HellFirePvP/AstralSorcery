@@ -30,25 +30,25 @@ import java.util.function.Consumer;
  */
 public class RenderContextTranslucentDepthCube extends RenderContextCube {
 
-    public RenderContextTranslucentDepthCube() {
-        super(before(), after(), (ctx, pos) -> new FXCube(pos));
+    public RenderContextTranslucentDepthCube(Blending blendMode) {
+        super(before(blendMode), after(), (ctx, pos) -> new FXCube(pos));
     }
 
-    public RenderContextTranslucentDepthCube(AbstractRenderableTexture resource) {
-        this(new SpriteSheetResource(resource));
+    public RenderContextTranslucentDepthCube(Blending blendMode, AbstractRenderableTexture resource) {
+        this(blendMode, new SpriteSheetResource(resource));
     }
 
-    public RenderContextTranslucentDepthCube(SpriteSheetResource sprite) {
-        super(sprite, before(), after(), (ctx, pos) -> new FXCube(pos));
+    public RenderContextTranslucentDepthCube(Blending blendMode, SpriteSheetResource sprite) {
+        super(sprite, before(blendMode), after(), (ctx, pos) -> new FXCube(pos));
     }
 
-    private static BiConsumer<BufferContext, Float> before() {
+    private static BiConsumer<BufferContext, Float> before(Blending blendMode) {
         return (ctx, pTicks) -> {
             GlStateManager.pushMatrix();
             RenderingVectorUtils.removeStandardTranslationFromTESRMatrix(pTicks);
             GlStateManager.color4f(1F, 1F, 1F, 1F);
             GlStateManager.enableBlend();
-            Blending.ADDITIVEDARK.applyStateManager();
+            blendMode.applyStateManager();
             GlStateManager.disableCull();
             GlStateManager.disableDepthTest();
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);

@@ -52,6 +52,7 @@ public class EffectTemplatesAS {
     public static BatchRenderContext<FXCube> CUBE_OPAQUE_ATLAS;
     public static BatchRenderContext<FXCube> CUBE_TRANSLUCENT_ATLAS;
     public static BatchRenderContext<FXCube> CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH;
+    public static BatchRenderContext<FXCube> CUBE_AREA_OF_EFFECT;
 
     public static BatchRenderContext<FXBlock> BLOCK_TRANSLUCENT;
     public static BatchRenderContext<FXBlock> BLOCK_TRANSLUCENT_IGNORE_DEPTH;

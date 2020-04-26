@@ -241,7 +241,7 @@ public class RenderingUtils {
     }
 
     public static void renderTranslucentItemStackModel(ItemStack stack, Color overlayColor, Blending blendMode, float alpha) {
-        IBakedModel bakedModel = Minecraft.getInstance().getItemRenderer().getModelWithOverrides(stack);
+        IBakedModel bakedModel = getItemModel(stack);
         bakedModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GROUND).getLeft();
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
@@ -269,7 +269,7 @@ public class RenderingUtils {
     }
 
     public static void renderTranslucentItemStackModelGUI(ItemStack stack, Color overlayColor, Blending blendMode, float alpha) {
-        IBakedModel bakedModel = Minecraft.getInstance().getItemRenderer().getModelWithOverrides(stack);
+        IBakedModel bakedModel = getItemModel(stack);
         bakedModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GUI).getLeft();
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
@@ -307,6 +307,16 @@ public class RenderingUtils {
         GlStateManager.popMatrix();
     }
 
+    private static IBakedModel getItemModel(ItemStack stack) {
+        IBakedModel bakedModel;
+        if (Minecraft.getInstance().world != null && Minecraft.getInstance().player != null) {
+            bakedModel = Minecraft.getInstance().getItemRenderer().getModelWithOverrides(stack, Minecraft.getInstance().world, Minecraft.getInstance().player);
+        } else {
+            bakedModel = Minecraft.getInstance().getItemRenderer().getModelWithOverrides(stack);
+        }
+        return bakedModel;
+    }
+
     private static void renderItemModelWithColor(ItemStack stack, IBakedModel model, Color c, float alpha) {
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
@@ -341,7 +351,7 @@ public class RenderingUtils {
     }
 
     private static void renderColoredQuads(BufferBuilder vb, List<BakedQuad> quads, Color color, ItemStack stack) {
-        boolean useOverlayColors = color.equals(Color.WHITE) && !stack.isEmpty();
+        boolean useOverlayColors = (color.getRGB() & 0xFFFFFF) == 0xFFFFFF && !stack.isEmpty();
         int i = 0;
 
         ItemColors itemColors = Minecraft.getInstance().getItemColors();

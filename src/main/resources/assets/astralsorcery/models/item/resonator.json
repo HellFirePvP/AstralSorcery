@@ -1,0 +1,11 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "astralsorcery:item/resonator_starlight"
+  },
+  "overrides": [
+    { "predicate": { "upgrade": 0.00 }, "model": "astralsorcery:item/resonator_starlight" },
+    { "predicate": { "upgrade": 0.33 }, "model": "astralsorcery:item/resonator_liquid" },
+    { "predicate": { "upgrade": 0.66 }, "model": "astralsorcery:item/resonator_structure" }
+  ]
+}

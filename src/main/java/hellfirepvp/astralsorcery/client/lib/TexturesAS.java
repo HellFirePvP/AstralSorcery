@@ -110,6 +110,7 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_ATTUNEMENT_FLARE;
     public static AbstractRenderableTexture TEX_ENTITY_FLARE;
     public static AbstractRenderableTexture TEX_GRAPPLING_HOOK;
+    public static AbstractRenderableTexture TEX_AREA_OF_EFFECT_CUBE;
 
     public static AbstractRenderableTexture TEX_LIGHTNING_PART;
     public static AbstractRenderableTexture TEX_LIGHTBEAM;

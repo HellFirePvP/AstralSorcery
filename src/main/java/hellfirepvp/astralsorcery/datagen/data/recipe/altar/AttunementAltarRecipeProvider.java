@@ -15,7 +15,9 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredie
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
+import hellfirepvp.astralsorcery.common.item.ItemResonator;
 import hellfirepvp.astralsorcery.common.lib.*;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -34,7 +36,7 @@ import java.util.function.Consumer;
 public class AttunementAltarRecipeProvider {
 
     public static void registerAltarRecipes(Consumer<IFinishedRecipe> registrar) {
-        //TODO gateway, domic reso
+        //TODO gateway
         registerRecipes(registrar);
     }
 
@@ -56,6 +58,28 @@ public class AttunementAltarRecipeProvider {
                         .key('P', BlocksAS.MARBLE_PILLAR)
                 )
                 .addOutput(BlocksAS.ALTAR_CONSTELLATION)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.ofType(AltarRecipeTypeHandler.NBT_COPY)
+                .createRecipe(NameUtil.suffixPath(ItemsAS.RESONATOR.getRegistryName(), "_upgrade_domic"), AltarType.ATTUNEMENT)
+                .modify(recipe -> recipe.addNBTCopyMatchIngredient(ItemsAS.RESONATOR))
+                .setStarlightRequirement(0.4F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("I   I")
+                        .patternLine(" I I ")
+                        .patternLine(" GRG ")
+                        .patternLine(" S S ")
+                        .patternLine("S   S")
+                        .key('I', ItemsAS.ILLUMINATION_POWDER)
+                        .key('G', ItemsAS.GLASS_LENS)
+                        .key('S', TagsAS.Items.DUSTS_STARDUST)
+                        .key('R', ItemsAS.RESONATOR)
+                )
+                .addOutput(ItemResonator.setCurrentUpgradeUnsafe(
+                        ItemResonator.setUpgradeUnlocked(new ItemStack(ItemsAS.RESONATOR),
+                                ItemResonator.ResonatorUpgrade.STARLIGHT,
+                                ItemResonator.ResonatorUpgrade.AREA_SIZE),
+                        ItemResonator.ResonatorUpgrade.AREA_SIZE))
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
