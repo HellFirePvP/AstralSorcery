@@ -45,6 +45,7 @@ public class ItemInfusedGlass extends Item {
     public ItemInfusedGlass() {
         super(new Properties()
                 .maxStackSize(1)
+                .maxDamage(5)
                 .group(CommonProxy.ITEM_GROUP_AS));
 
         this.addPropertyOverride(new ResourceLocation("engraved"),

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.engraving;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.common.lib.EffectsAS;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.modifier.DynamicAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
@@ -224,6 +225,9 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
             List<EffectInstance> existing = PotionUtils.getEffectsFromStack(stack);
             existing.add(effectInstance);
+            if (!MiscUtils.contains(existing, effInstance -> effInstance.getPotion().equals(EffectsAS.EFFECT_CHEAT_DEATH)) && rand.nextInt(30) == 0) {
+                existing.add(new EffectInstance(EffectsAS.EFFECT_CHEAT_DEATH, 3 * 60 * 20 + Math.round(rand.nextFloat() * 4 * 60 * 20), 0, true, false, true));
+            }
             PotionUtils.appendEffects(stack, existing);
             stack.getTag().putInt("CustomPotionColor", ColorsAS.DYE_ORANGE.getRGB());
             //TODO meh.. they changed displayname stuff :V RIP
