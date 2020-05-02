@@ -40,6 +40,8 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_HAND_TELESCOPE;
     public static AbstractRenderableTexture TEX_GUI_TELESCOPE;
     public static AbstractRenderableTexture TEX_GUI_OBSERVATORY;
+    public static AbstractRenderableTexture TEX_GUI_REFRACTION_TABLE_EMPTY;
+    public static AbstractRenderableTexture TEX_GUI_REFRACTION_TABLE_PARCHMENT;
 
     public static AbstractRenderableTexture TEX_GUI_BOOKMARK;
     public static AbstractRenderableTexture TEX_GUI_BOOKMARK_STRETCHED;
@@ -111,6 +113,7 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_ENTITY_FLARE;
     public static AbstractRenderableTexture TEX_GRAPPLING_HOOK;
     public static AbstractRenderableTexture TEX_AREA_OF_EFFECT_CUBE;
+    public static AbstractRenderableTexture TEX_HALO_INFUSION;
 
     public static AbstractRenderableTexture TEX_LIGHTNING_PART;
     public static AbstractRenderableTexture TEX_LIGHTBEAM;

@@ -208,7 +208,7 @@ public class RenderingUtils {
         GlStateManager.pushMatrix();
 
         GlStateManager.translatef(0.0F, 0.0F, 32.0F);
-        itemRenderer.zLevel = 200.0F;
+        itemRenderer.zLevel += 200.0F;
         FontRenderer font = stack.getItem().getFontRenderer(stack);
         if (font == null) {
             font = Minecraft.getInstance().fontRenderer;
@@ -216,7 +216,7 @@ public class RenderingUtils {
         itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
         itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y, alternativeText);
 
-        itemRenderer.zLevel = 0.0F;
+        itemRenderer.zLevel -= 200.0F;
 
         GlStateManager.popMatrix();
         RenderHelper.disableStandardItemLighting();

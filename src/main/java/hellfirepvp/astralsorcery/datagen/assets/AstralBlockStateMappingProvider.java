@@ -132,6 +132,7 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
                 .part().modelFile(model(prism)).rotationX(90).rotationY(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.WEST).end()
                 .part().modelFile(model(prismColored)).rotationX(90).rotationY(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.WEST).condition(BlockPrism.HAS_COLORED_LENS, true).end();
 
+        this.simpleBlockState(BlocksAS.REFRACTION_TABLE, this.modelAS("refraction_table_particle"));
         this.simpleBlockState(BlocksAS.RITUAL_LINK);
         this.simpleBlockState(BlocksAS.RITUAL_PEDESTAL);
         this.simpleBlockState(BlocksAS.ILLUMINATOR);

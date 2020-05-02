@@ -8,14 +8,12 @@
 
 package hellfirepvp.astralsorcery.common;
 
-import hellfirepvp.astralsorcery.client.screen.ScreenConstellationPaper;
-import hellfirepvp.astralsorcery.client.screen.ScreenHandTelescope;
-import hellfirepvp.astralsorcery.client.screen.ScreenObservatory;
-import hellfirepvp.astralsorcery.client.screen.ScreenTelescope;
+import hellfirepvp.astralsorcery.client.screen.*;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
+import hellfirepvp.astralsorcery.common.tile.TileRefractionTable;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -42,6 +40,7 @@ public enum GuiType {
 
     CONSTELLATION_PAPER,
     TOME,
+    REFRACTION_TABLE,
     TELESCOPE,
     HAND_TELESCOPE;
 
@@ -52,6 +51,7 @@ public enum GuiType {
                 case CONSTELLATION_PAPER:
                     nbt.putString("cst", ((IConstellation) data[0]).getRegistryName().toString());
                     break;
+                case REFRACTION_TABLE:
                 case TELESCOPE:
                     NBTHelper.writeBlockPosToNBT((BlockPos) data[0], nbt);
                     break;
@@ -80,6 +80,13 @@ public enum GuiType {
                     return new ScreenConstellationPaper(RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(new ResourceLocation(data.getString("cst"))));
                 case TOME:
                     return ScreenJournalProgression.getOpenJournalInstance();
+                case REFRACTION_TABLE:
+                    at = NBTHelper.readBlockPosFromNBT(data);
+                    TileRefractionTable refractionTable = MiscUtils.getTileAt(clWorld, at, TileRefractionTable.class, true);
+                    if (refractionTable != null) {
+                        return new ScreenRefractionTable(refractionTable);
+                    }
+                    return null;
                 case TELESCOPE:
                     at = NBTHelper.readBlockPosFromNBT(data);
                     TileTelescope telescope = MiscUtils.getTileAt(clWorld, at, TileTelescope.class, true);

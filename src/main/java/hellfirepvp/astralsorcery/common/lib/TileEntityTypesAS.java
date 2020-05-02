@@ -35,6 +35,7 @@ public class TileEntityTypesAS {
     public static TileEntityType<TileLens> LENS;
     public static TileEntityType<TileObservatory> OBSERVATORY;
     public static TileEntityType<TilePrism> PRISM;
+    public static TileEntityType<TileRefractionTable> REFRACTION_TABLE;
     public static TileEntityType<TileRitualLink> RITUAL_LINK;
     public static TileEntityType<TileRitualPedestal> RITUAL_PEDESTAL;
     public static TileEntityType<TileTelescope> TELESCOPE;

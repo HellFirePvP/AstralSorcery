@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.registry.internal;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.constellation.engraving.EngravingEffect;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
@@ -78,6 +79,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(KnowledgeFragment.class, this::registerKnowledgeFragments);
         eventBus.addGenericListener(ConstellationEffectProvider.class, this::registerConstellationEffects);
         eventBus.addGenericListener(MantleEffect.class, this::registerMantleEffects);
+        eventBus.addGenericListener(EngravingEffect.class, this::registerEngravingEffects);
         eventBus.addGenericListener(PerkAttributeType.class, this::registerPerkAttributeTypes);
         eventBus.addGenericListener(PerkAttributeReader.class, this::registerPerkAttributeReaders);
         eventBus.addGenericListener(ContainerType.class, this::registerContainerTypes);
@@ -90,11 +92,11 @@ public class PrimerEventHandler {
     //So. thanks. this is the result i guess.
     private void registerRemainingData() {
         RegistryConstellations.init();
-        RegistryConstellations.registerSignatureItems();
         RegistryConstellationEffects.init();
         RegistryMantleEffects.init();
+        RegistryEngravingEffects.init();
 
-        RegistryStructures.registerStructures();
+        RegistryStructures.init();
         RegistryKnowledgeFragments.init();
 
         RegistryCrystalProperties.init();
@@ -151,7 +153,7 @@ public class PrimerEventHandler {
     }
 
     private void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
-        //RegistryEnchantments.init();
+        RegistryEnchantments.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
@@ -169,6 +171,10 @@ public class PrimerEventHandler {
     }
 
     private void registerMantleEffects(RegistryEvent.Register<MantleEffect> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerEngravingEffects(RegistryEvent.Register<EngravingEffect> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

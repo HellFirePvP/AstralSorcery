@@ -47,6 +47,9 @@ public class SoundsAS {
     public static CategorizedSoundEvent PERK_SEAL;
     public static CategorizedSoundEvent PERK_UNSEAL;
     public static CategorizedSoundEvent PERK_UNLOCK;
+    public static CategorizedSoundEvent ILLUMINATION_WAND_HIGHLIGHT;
+    public static CategorizedSoundEvent ILLUMINATION_WAND_UNHIGHLIGHT;
+    public static CategorizedSoundEvent ILLUMINATION_WAND_LIGHT;
 
     public static CategorizedSoundEvent GUI_JOURNAL_CLOSE;
     public static CategorizedSoundEvent GUI_JOURNAL_PAGE;

@@ -99,6 +99,33 @@ public class ColorsAS {
     public static final Color CONSTELLATION_ALCARA     = new Color(0x802952);
     public static final Color CONSTELLATION_VORUX      = new Color(0xA8881E);
 
+    public static final Color REFRACTION_TABLE_R1_RED           = new Color(0xFF0800);
+    public static final Color REFRACTION_TABLE_R1_YELLOW        = new Color(0xFFCC00);
+    public static final Color REFRACTION_TABLE_R1_GREEN         = new Color(0x6FFF00);
+    public static final Color REFRACTION_TABLE_R1_TURQUOISE     = new Color(0x00FCFF);
+    public static final Color REFRACTION_TABLE_R1_BLUE          = new Color(0x0028FF);
+    public static final Color REFRACTION_TABLE_R1_PINK          = new Color(0xFF00FE);
+    public static final Color REFRACTION_TABLE_R2_ORANGE        = new Color(0xF07800);
+    public static final Color REFRACTION_TABLE_R2_YELLOW        = new Color(0xB4F000);
+    public static final Color REFRACTION_TABLE_R2_GREEN         = new Color(0x01F000);
+    public static final Color REFRACTION_TABLE_R2_BLUE          = new Color(0x007AF0);
+    public static final Color REFRACTION_TABLE_R2_DARK_BLUE     = new Color(0x3900F0);
+    public static final Color REFRACTION_TABLE_R2_PINK          = new Color(0xf0007B);
+    public static final Color[] REFRACTION_TABLE_COLORS = new Color[] {
+            REFRACTION_TABLE_R1_RED,
+            REFRACTION_TABLE_R1_YELLOW,
+            REFRACTION_TABLE_R1_GREEN,
+            REFRACTION_TABLE_R1_TURQUOISE,
+            REFRACTION_TABLE_R1_BLUE,
+            REFRACTION_TABLE_R1_PINK,
+            REFRACTION_TABLE_R2_ORANGE,
+            REFRACTION_TABLE_R2_YELLOW,
+            REFRACTION_TABLE_R2_GREEN,
+            REFRACTION_TABLE_R2_BLUE,
+            REFRACTION_TABLE_R2_DARK_BLUE,
+            REFRACTION_TABLE_R2_PINK
+    };
+
     public static final Color DYE_WHITE      = new Color(0xFFFFFF);
     public static final Color DYE_ORANGE     = new Color(0xFF8C1D);
     public static final Color DYE_MAGENTA    = new Color(0xEF0EFF);
@@ -115,5 +142,23 @@ public class ColorsAS {
     public static final Color DYE_GREEN      = new Color(0x00AA00);
     public static final Color DYE_RED        = new Color(0xFF0000);
     public static final Color DYE_BLACK      = new Color(0x000000);
+    public static final Color[] DYE_COLOR_PARTICLES = new Color[] {
+            DYE_WHITE,
+            DYE_ORANGE,
+            DYE_MAGENTA,
+            DYE_LIGHT_BLUE,
+            DYE_YELLOW,
+            DYE_LIME,
+            DYE_PINK,
+            DYE_GRAY,
+            DYE_LIGHT_GRAY,
+            DYE_CYAN,
+            DYE_PURPLE,
+            DYE_BLUE,
+            DYE_BROWN,
+            DYE_GREEN,
+            DYE_RED,
+            DYE_BLACK
+    };
 
 }

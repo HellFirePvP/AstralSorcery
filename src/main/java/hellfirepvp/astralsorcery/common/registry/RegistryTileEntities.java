@@ -48,6 +48,7 @@ public class RegistryTileEntities {
         LENS = registerTile(TileLens.class, BlocksAS.LENS);
         OBSERVATORY = registerTile(TileObservatory.class, BlocksAS.OBSERVATORY);
         PRISM = registerTile(TilePrism.class, BlocksAS.PRISM);
+        REFRACTION_TABLE = registerTile(TileRefractionTable.class, BlocksAS.REFRACTION_TABLE);
         RITUAL_LINK = registerTile(TileRitualLink.class, BlocksAS.RITUAL_LINK);
         RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class, BlocksAS.RITUAL_PEDESTAL);
         TELESCOPE = registerTile(TileTelescope.class, BlocksAS.TELESCOPE);
@@ -65,6 +66,7 @@ public class RegistryTileEntities {
         ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderLens());
         ClientRegistry.bindTileEntitySpecialRenderer(TileObservatory.class, new RenderObservatory());
         ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderPrism());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileRefractionTable.class, new RenderRefractionTable());
         ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
         ClientRegistry.bindTileEntitySpecialRenderer(TileTelescope.class, new RenderTelescope());
         ClientRegistry.bindTileEntitySpecialRenderer(TileTranslucentBlock.class, new RenderTranslucentBlock());

@@ -95,7 +95,7 @@ public class RenderingConstellationUtils {
 
     public static void renderConstellationIntoWorldFlat(Color color, IConstellation c, Vector3 offset, double scale, double line, float brightness) {
         Vector3 thisOffset = offset.clone();
-        double starSize = 1D / ((double) IConstellation.STAR_GRID_SIZE) * scale;
+        double starSize = 1D / ((double) IConstellation.STAR_GRID_WIDTH_HEIGHT) * scale;
         float fRed   = ((float) color.getRed()) / 255F;
         float fGreen = ((float) color.getGreen()) / 255F;
         float fBlue  = ((float) color.getBlue()) / 255F;
@@ -158,8 +158,8 @@ public class RenderingConstellationUtils {
     public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, Supplier<Float> brightness, boolean isKnown, boolean applyStarBrightness) {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
-        double ulength = ((double) width) / IConstellation.STAR_GRID_SIZE;
-        double vlength = ((double) height) / IConstellation.STAR_GRID_SIZE;
+        double ulength = ((double) width) / IConstellation.STAR_GRID_WIDTH_HEIGHT;
+        double vlength = ((double) height) / IConstellation.STAR_GRID_WIDTH_HEIGHT;
 
         float r = col.getRed() / 255F;
         float g = col.getGreen() / 255F;

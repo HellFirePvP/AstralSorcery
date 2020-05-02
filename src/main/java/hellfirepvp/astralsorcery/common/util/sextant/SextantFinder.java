@@ -23,6 +23,7 @@ import java.util.Collection;
  * Created by HellFirePvP
  * Date: 02.06.2019 / 10:52
  */
+@Deprecated
 public class SextantFinder {
 
     @Nonnull

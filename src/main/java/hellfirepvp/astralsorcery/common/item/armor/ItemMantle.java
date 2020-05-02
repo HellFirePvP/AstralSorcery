@@ -168,7 +168,7 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
         if (expected != null && !expected.equals(cst)) {
             return null;
         }
-        MantleEffect effect = RegistriesAS.REGISTRY_MANTLE_EFFECT.getValue(cst.getRegistryName());
+        MantleEffect effect = ((IWeakConstellation) cst).getMantleEffect();
         if (effect == null || !effect.getConfig().enabled.get()) {
             return null;
         }

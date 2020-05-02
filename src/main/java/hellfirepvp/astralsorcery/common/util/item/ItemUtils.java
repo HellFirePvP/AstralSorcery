@@ -12,11 +12,15 @@ import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
@@ -51,7 +55,9 @@ public class ItemUtils {
     private static final Random rand = new Random();
 
     public static ItemEntity dropItem(World world, double x, double y, double z, ItemStack stack) {
-        if (world.isRemote) return null;
+        if (world.isRemote) {
+            return null;
+        }
         ItemEntity ei = new ItemEntity(world, x, y, z, stack);
         ei.setMotion(new Vec3d(0, 0, 0));
         world.addEntity(ei);
@@ -60,7 +66,9 @@ public class ItemUtils {
     }
 
     public static ItemEntity dropItemNaturally(World world, double x, double y, double z, ItemStack stack) {
-        if (world.isRemote) return null;
+        if (world.isRemote) {
+            return null;
+        }
         ItemEntity ei = new ItemEntity(world, x, y, z, stack);
         applyRandomDropOffset(ei);
         world.addEntity(ei);
@@ -106,6 +114,17 @@ public class ItemUtils {
         }
     }
 
+    public static boolean isEquippableArmor(Entity entity, ItemStack stack) {
+        for (EquipmentSlotType type : EquipmentSlotType.values()) {
+            if (type.getSlotType() == EquipmentSlotType.Group.ARMOR) {
+                if (stack.canEquip(type, entity)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static boolean dropItemToPlayer(PlayerEntity player, ItemStack stack) {
         World world = player.getEntityWorld();
         if (world.isRemote() || stack.isEmpty()) {
@@ -134,6 +153,13 @@ public class ItemUtils {
         item.setMotion(rand.nextFloat() * 0.3F - 0.15D,
                 rand.nextFloat() * 0.3F - 0.15D,
                 rand.nextFloat() * 0.3F - 0.15D);
+    }
+
+    @Nonnull
+    public static ItemStack changeItem(@Nonnull ItemStack stack, @Nonnull Item item) {
+        CompoundNBT nbt = stack.write(new CompoundNBT());
+        nbt.putString("id", item.getRegistryName().toString());
+        return ItemStack.read(nbt);
     }
 
     @Nonnull

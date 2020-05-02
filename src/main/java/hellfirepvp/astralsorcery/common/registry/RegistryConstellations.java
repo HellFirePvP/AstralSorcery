@@ -39,9 +39,11 @@ public class RegistryConstellations {
 
     public static void init() {
         buildConstellations();
+
+        registerSignatureItems();
     }
 
-    public static void registerSignatureItems() {
+    private static void registerSignatureItems() {
         aevitas.addSignatureItem(ItemTags.SAPLINGS);
         aevitas.addSignatureItem(TagsAS.Items.DUSTS_STARDUST);
         aevitas.addSignatureItem(Tags.Items.SEEDS_WHEAT);

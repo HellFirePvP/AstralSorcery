@@ -8,12 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import com.google.common.base.CaseFormat;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.effect.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
 import static hellfirepvp.astralsorcery.common.lib.EffectsAS.*;
