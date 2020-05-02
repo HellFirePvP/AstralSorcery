@@ -92,7 +92,7 @@
 		]
 	},
 	"perk_seal": {
-		"category": "block",
+		"category": "player",
 		"sounds": [
 			{
 				"name": "astralsorcery:perk/perk_seal_1",
@@ -105,7 +105,7 @@
 		]
 	},
 	"perk_unseal": {
-		"category": "block",
+		"category": "player",
 		"sounds": [
 			{
 				"name": "astralsorcery:perk/perk_unseal_1",
@@ -118,7 +118,7 @@
 		]
 	},
 	"perk_unlock": {
-		"category": "block",
+		"category": "player",
 		"sounds": [
 			{
 				"name": "astralsorcery:perk/perk_unlock_1",
@@ -126,6 +126,45 @@
 			},
 			{
 				"name": "astralsorcery:perk/perk_unlock_2",
+				"stream": false
+			}
+		]
+	},
+	"illumination_wand_highlight": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:wand/illumination_wand_highlight_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:wand/illumination_wand_highlight_2",
+				"stream": false
+			}
+		]
+	},
+	"illumination_wand_unhighlight": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:wand/illumination_wand_unhighlight_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:wand/illumination_wand_unhighlight_2",
+				"stream": false
+			}
+		]
+	},
+	"illumination_wand_light": {
+		"category": "block",
+		"sounds": [
+			{
+				"name": "astralsorcery:wand/illumination_wand_light_1",
+				"stream": false
+			},
+			{
+				"name": "astralsorcery:wand/illumination_wand_light_2",
 				"stream": false
 			}
 		]

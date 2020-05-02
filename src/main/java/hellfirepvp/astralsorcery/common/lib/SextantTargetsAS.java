@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
  * Created by HellFirePvP
  * Date: 03.06.2019 / 20:36
  */
+@Deprecated
 public class SextantTargetsAS {
 
     private SextantTargetsAS() {}

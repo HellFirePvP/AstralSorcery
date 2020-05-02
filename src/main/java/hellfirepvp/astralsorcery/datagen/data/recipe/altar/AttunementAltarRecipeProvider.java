@@ -11,8 +11,6 @@ package hellfirepvp.astralsorcery.datagen.data.recipe.altar;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.crafting.builder.SimpleAltarRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngredient;
-import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
-import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
 import hellfirepvp.astralsorcery.common.item.ItemResonator;
@@ -20,7 +18,6 @@ import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 

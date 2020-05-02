@@ -14,10 +14,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngred
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.FluidsAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.lib.TagsAS;
+import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
@@ -36,7 +33,7 @@ import java.util.function.Consumer;
 public class CelestialAltarRecipeProvider {
 
     public static void registerAltarRecipes(Consumer<IFinishedRecipe> registrar) {
-        //TODO refaction table, tree beacon, infused glass
+        //TODO tree beacon
         registerRecipes(registrar);
         registerColoredLensRecipes(registrar);
     }
@@ -58,6 +55,41 @@ public class CelestialAltarRecipeProvider {
                         .key('R', BlocksAS.MARBLE_RUNED)
                 )
                 .addOutput(BlocksAS.ALTAR_RADIANCE)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(BlocksAS.REFRACTION_TABLE, AltarType.CONSTELLATION)
+                .setStarlightRequirement(0.7F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("D   D")
+                        .patternLine("PR RP")
+                        .patternLine(" S S ")
+                        .patternLine("PBBBP")
+                        .patternLine("M   M")
+                        .key('S', TagsAS.Items.INGOTS_STARMETAL)
+                        .key('R', ItemsAS.RESONATING_GEM)
+                        .key('M', BlocksAS.MARBLE_RUNED)
+                        .key('B', BlocksAS.BLACK_MARBLE_RUNED)
+                        .key('D', Tags.Items.DYES)
+                        .key('P', BlocksAS.INFUSED_WOOD_COLUMN)
+                )
+                .addOutput(BlocksAS.REFRACTION_TABLE)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(ItemsAS.INFUSED_GLASS, AltarType.CONSTELLATION)
+                .setStarlightRequirement(0.6F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("S   S")
+                        .patternLine("S   S")
+                        .patternLine(" GLG ")
+                        .patternLine("S   S")
+                        .patternLine("S   S")
+                        .key('L', TagsAS.Items.COLORED_LENS)
+                        .key('G', ItemsAS.GLASS_LENS)
+                        .key('S', TagsAS.Items.DUSTS_STARDUST)
+                )
+                .addOutput(ItemsAS.INFUSED_GLASS)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.ofType(AltarRecipeTypeHandler.CONSTELLATION_CRYSTAL_AVERAGE)

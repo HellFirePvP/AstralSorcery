@@ -209,7 +209,18 @@ public class RegistryResearch {
                 .addPage(text("CEL_CRYSTALS.1"))
                 .register(ResearchProgression.CONSTELLATION);
 
-        //TODO drawing table & infused glass
+        ResearchNode nodeRefractionTable = new ResearchNode(BlocksAS.REFRACTION_TABLE, "DRAWING_TABLE", 2, 1)
+                .addPage(text("DRAWING_TABLE.1"))
+                .addPage(text("DRAWING_TABLE.2"))
+                .addPage(recipe(BlocksAS.REFRACTION_TABLE))
+                .addTomeLookup(BlocksAS.REFRACTION_TABLE, 3, ResearchProgression.CONSTELLATION)
+                .addPage(text("DRAWING_TABLE.4"))
+                .addPage(recipe(ItemsAS.INFUSED_GLASS))
+                .addTomeLookup(ItemsAS.INFUSED_GLASS, 4, ResearchProgression.CONSTELLATION)
+                .addPage(text("DRAWING_TABLE.6"))
+                .addPage(text("DRAWING_TABLE.7"))
+                .addPage(text("DRAWING_TABLE.8"))
+                .register(ResearchProgression.CONSTELLATION);
 
         ResearchNode nodeEnchantmentAmulet = new ResearchNode(ItemsAS.ENCHANTMENT_AMULET, "ENCHANTMENT_AMULET", 6, 3)
                 .addPage(text("ENCHANTMENT_AMULET.1"))
@@ -235,7 +246,8 @@ public class RegistryResearch {
         nodeChargedTools.addSourceConnectionFrom(nodeInfuser);
         nodeSpectralLens.addSourceConnectionFrom(nodeColoredLenses);
         nodeEnhancedCollector.addSourceConnectionFrom(nodeCollectorCrystal);
-        //TODO drawing table
+        nodeRefractionTable.addSourceConnectionFrom(nodeColoredLenses);
+        nodeRefractionTable.addSourceConnectionFrom(nodeInfuser);
         nodeEnhancedCollector.addSourceConnectionFrom(nodeCelestialCrystals);
         nodeAltarUpgradeT4.addSourceConnectionFrom(nodeInfuser);
         nodeRitualLink.addSourceConnectionFrom(nodeInfuser);

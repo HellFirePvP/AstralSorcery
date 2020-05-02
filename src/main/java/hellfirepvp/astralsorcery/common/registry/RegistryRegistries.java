@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
+import hellfirepvp.astralsorcery.common.constellation.engraving.EngravingEffect;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffectRegistry;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
@@ -42,6 +43,15 @@ public class RegistryRegistries {
     private RegistryRegistries() {}
 
     public static void buildRegistries(RegistryEvent.NewRegistry event) {
+        REGISTRY_CONSTELLATIONS = new RegistryBuilder<IConstellation>()
+                .setName(REGISTRY_NAME_CONSTELLATIONS)
+                .setType(IConstellation.class)
+                .add((IForgeRegistry.AddCallback<IConstellation>) (owner, stage, id, obj, oldObj) ->
+                        ConstellationRegistry.addConstellation(obj))
+                .disableSaving()
+                .disableOverrides()
+                .create();
+
         REGISTRY_CONSTELLATION_EFFECT = new RegistryBuilder<ConstellationEffectProvider>()
                 .setName(REGISTRY_NAME_CONSTELLATION_EFFECTS)
                 .setType(ConstellationEffectProvider.class)
@@ -56,11 +66,9 @@ public class RegistryRegistries {
                 .disableOverrides()
                 .create();
 
-        REGISTRY_CONSTELLATIONS = new RegistryBuilder<IConstellation>()
-                .setName(REGISTRY_NAME_CONSTELLATIONS)
-                .setType(IConstellation.class)
-                .add((IForgeRegistry.AddCallback<IConstellation>) (owner, stage, id, obj, oldObj) ->
-                        ConstellationRegistry.addConstellation(obj))
+        REGISTRY_ENGRAVING_EFFECT = new RegistryBuilder<EngravingEffect>()
+                .setName(REGISTRY_NAME_ENGRAVING_EFFECT)
+                .setType(EngravingEffect.class)
                 .disableSaving()
                 .disableOverrides()
                 .create();

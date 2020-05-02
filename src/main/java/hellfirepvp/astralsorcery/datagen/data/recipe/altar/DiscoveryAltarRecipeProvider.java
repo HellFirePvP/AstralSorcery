@@ -37,7 +37,6 @@ import java.util.function.Consumer;
 public class DiscoveryAltarRecipeProvider {
 
     public static void registerAltarRecipes(Consumer<IFinishedRecipe> registrar) {
-        //TODO Resonator
         registerRecipes(registrar);
         registerBuildingBlockRecipes(registrar);
     }

@@ -71,6 +71,7 @@ public class ItemsAS {
     public static ItemGrappleWand GRAPPLE_WAND;
     public static ItemBlinkWand BLINK_WAND;
     public static ItemHandTelescope HAND_TELESCOPE;
+    public static ItemInfusedGlass INFUSED_GLASS;
 
     public static ItemMantle MANTLE;
 

@@ -88,6 +88,7 @@ public class RegistryItems {
         GRAPPLE_WAND = registerItem(new ItemGrappleWand());
         BLINK_WAND = registerItem(new ItemBlinkWand());
         HAND_TELESCOPE = registerItem(new ItemHandTelescope());
+        INFUSED_GLASS = registerItem(new ItemInfusedGlass());
 
         MANTLE = registerItem(new ItemMantle());
 

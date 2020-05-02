@@ -1,0 +1,9 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "astralsorcery:item/infused_glass"
+  },
+  "overrides": [
+    { "predicate": { "engraved": 1.00 }, "model": "astralsorcery:item/infused_glass_engraved" }
+  ]
+}

@@ -10,15 +10,12 @@ package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
-import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
-import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +23,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -69,8 +65,8 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
     }
 
     public StarLocation addStar(int x, int y) {
-        x %= (STAR_GRID_SIZE - 1); //31x31
-        y %= (STAR_GRID_SIZE - 1);
+        x %= (STAR_GRID_INDEX - 1); //31x31
+        y %= (STAR_GRID_INDEX - 1);
         StarLocation star = new StarLocation(x, y);
         if (!starLocations.contains(star)) {
             starLocations.add(star);

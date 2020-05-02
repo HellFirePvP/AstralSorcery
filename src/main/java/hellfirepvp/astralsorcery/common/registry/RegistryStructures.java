@@ -28,7 +28,7 @@ public class RegistryStructures {
 
     private RegistryStructures() {}
 
-    public static void registerStructures() {
+    public static void init() {
         EMPTY = register(new PatternBlockArray(AstralSorcery.key("empty")));
 
         STRUCT_RITUAL_PEDESTAL = register(new PatternRitualPedestal());

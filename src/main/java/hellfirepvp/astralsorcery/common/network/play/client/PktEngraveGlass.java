@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.network.play.client;
 
 import hellfirepvp.astralsorcery.common.constellation.DrawnConstellation;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.tile.TileRefractionTable;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -81,13 +83,10 @@ public class PktEngraveGlass extends ASPacket<PktEngraveGlass> {
             context.enqueueWork(() -> {
                 MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
                 World world = srv.getWorld(packet.type);
-                if (world != null) {
-                    //TODO engraving table
-                    //TileMapDrawingTable tmt = MiscUtils.getTileAt(world, packet.pos, TileMapDrawingTable.class, false);
-                    //if (tmt != null) {
-                    // if packet constellations !isempty
-                    //    tmt.tryEngraveGlass(packet.constellations.sublist 0 3);
-                    //}
+                TileRefractionTable tmt = MiscUtils.getTileAt(world, packet.pos, TileRefractionTable.class, false);
+                if (tmt != null && !packet.constellations.isEmpty()) {
+                    List<DrawnConstellation> cstList = packet.constellations.subList(0, Math.min(3, packet.constellations.size()));
+                    tmt.engraveGlass(cstList);
                 }
             });
         };

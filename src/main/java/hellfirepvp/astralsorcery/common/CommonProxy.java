@@ -38,6 +38,7 @@ import hellfirepvp.astralsorcery.common.event.handler.EventHandlerBlockStorage;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerInteract;
 import hellfirepvp.astralsorcery.common.event.handler.EventHandlerMisc;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperEnchantmentTick;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
@@ -222,6 +223,7 @@ public class CommonProxy {
         registrar.accept(TimeStopController.INSTANCE);
         registrar.accept(AlignmentChargeHandler.INSTANCE);
         registrar.accept(ModifierManager.INSTANCE);
+        registrar.accept(EventHelperEnchantmentTick.INSTANCE);
 
         EventHelperTemporaryFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);

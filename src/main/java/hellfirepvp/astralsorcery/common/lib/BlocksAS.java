@@ -92,6 +92,7 @@ public class BlocksAS {
     public static BlockIlluminator               ILLUMINATOR;
     public static BlockTelescope                 TELESCOPE;
     public static BlockObservatory               OBSERVATORY;
+    public static BlockRefractionTable           REFRACTION_TABLE;
 
     public static BlockFlareLight                FLARE_LIGHT;
     public static BlockTranslucentBlock          TRANSLUCENT_BLOCK;

@@ -44,7 +44,7 @@ public class ConstellationEffectRegistry {
 
     @Nullable
     public static ConstellationEffect createInstance(ILocatable origin, IWeakConstellation constellation) {
-        ConstellationEffectProvider effect = RegistriesAS.REGISTRY_CONSTELLATION_EFFECT.getValue(constellation.getRegistryName());
+        ConstellationEffectProvider effect = constellation.getConstellationEffect();
         if (effect != null) {
             return effect.createEffect(origin);
         }

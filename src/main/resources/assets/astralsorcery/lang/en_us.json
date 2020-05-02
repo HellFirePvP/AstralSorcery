@@ -120,6 +120,7 @@
   "screen.astralsorcery.hand_telescope": "Looking Glass",
   "screen.astralsorcery.observatory": "Observatory",
   "screen.astralsorcery.telescope": "Telescope",
+  "screen.astralsorcery.refraction_table": "Stellar Refraction Table",
   "screen.astralsorcery.tome.progression": "Research",
   "screen.astralsorcery.tome.constellations": "Constellations",
   "screen.astralsorcery.tome.perks": "Perks",
@@ -521,9 +522,6 @@
   "entity.EntityLiquidSpark.name": "Liquid Spark",
   "entity.EntityShootingStar.name": "Shooting Star",
 
-  "item.iteminfusedglass": "Infused Glass",
-  "item.iteminfusedglass.active": "Engraved Glass",
-  "item.itemskyresonator": "Fosic Resonator",
   "item.itemsextant": "Sextant",
   "item.itemsextant.upgraded": "Augmented",
   "item.itemknowledgefragment": "Lucent Scroll",
@@ -576,6 +574,10 @@
   "item.astralsorcery.resonator.upgrade.starlight": "Fosic",
   "item.astralsorcery.resonator.upgrade.liquid": "Ichosic",
   "item.astralsorcery.resonator.upgrade.structure": "Domic",
+  "item.astralsorcery.infused_glass": "Infused Glass",
+  "item.astralsorcery.infused_glass.active": "Engraved Glass",
+  "item.astralsorcery.infused_glass.ttip": "- %s%s",
+  "item.astralsorcery.infused_glass.ttip.creative": " (Creative) %s%%",
 
   "item.astralsorcery.mantle": "Mantle of Stars",
 
@@ -656,6 +658,7 @@
   "block.astralsorcery.lens": "Lens",
   "block.astralsorcery.observatory": "Observatory",
   "block.astralsorcery.prism": "PrismLens",
+  "block.astralsorcery.refraction_table": "Stellar Refraction Table",
   "block.astralsorcery.ritual_link": "Ritual Anchor",
   "block.astralsorcery.ritual_pedestal": "Ritual Pedestal",
   "block.astralsorcery.telescope": "Telescope",
@@ -664,7 +667,6 @@
   "__comment": "",
 
   "block.astralsorcery.blocktreebeacon": "Tree Beacon",
-  "block.astralsorcery.blockmapdrawingtable": "Stellar Refraction Table",
   "block.astralsorcery.blockcelestialgateway": "Celestial Gateway",
   "block.astralsorcery.blockbore": "Evershifting Fountain",
   "block.astralsorcery.blockborehead.liquid": "Neromantic Prime",

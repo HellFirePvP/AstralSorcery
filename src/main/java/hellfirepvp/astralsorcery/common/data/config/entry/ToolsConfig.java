@@ -30,6 +30,7 @@ public class ToolsConfig extends ConfigEntry {
     public ForgeConfigSpec.IntValue chargedToolsRevertStart;
     public ForgeConfigSpec.IntValue chargedToolsRevertChance;
 
+    @Deprecated
     public ForgeConfigSpec.IntValue sextantSearchRadius;
 
     private ToolsConfig() {

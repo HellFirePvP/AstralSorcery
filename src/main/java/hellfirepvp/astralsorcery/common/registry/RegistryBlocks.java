@@ -109,6 +109,7 @@ public class RegistryBlocks {
         ILLUMINATOR = registerBlock(new BlockIlluminator());
         TELESCOPE = registerBlock(new BlockTelescope());
         OBSERVATORY = registerBlock(new BlockObservatory());
+        REFRACTION_TABLE = registerBlock(new BlockRefractionTable());
 
         FLARE_LIGHT = registerBlock(new BlockFlareLight());
         TRANSLUCENT_BLOCK = registerBlock(new BlockTranslucentBlock());

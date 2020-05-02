@@ -39,6 +39,7 @@ import java.util.Objects;
  * Created by HellFirePvP
  * Date: 02.06.2019 / 10:51
  */
+@Deprecated
 public abstract class TargetObject extends ForgeRegistryEntry<TargetObject> {
 
     public abstract boolean isSelectable(ItemStack stack, @Nullable PlayerProgress progress);

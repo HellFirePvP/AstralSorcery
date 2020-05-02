@@ -43,6 +43,8 @@ public class RegistryTextures {
         TEX_GUI_HAND_TELESCOPE              = loadTexture(GUI, "hand_telescope_frame");
         TEX_GUI_TELESCOPE                   = loadTexture(GUI, "telescope_frame");
         TEX_GUI_OBSERVATORY                 = loadTexture(GUI, "observatory_frame");
+        TEX_GUI_REFRACTION_TABLE_EMPTY      = loadTexture(GUI, "refraction_table_empty");
+        TEX_GUI_REFRACTION_TABLE_PARCHMENT  = loadTexture(GUI, "refraction_table_parchment");
 
         TEX_GUI_BOOKMARK                    = loadTexture(GUI, "book", "bookmark");
         TEX_GUI_BOOKMARK_STRETCHED          = loadTexture(GUI, "book", "bookmark_stretched");
@@ -113,6 +115,7 @@ public class RegistryTextures {
         TEX_ENTITY_FLARE            = loadTexture(EFFECT, "entity_flare");
         TEX_GRAPPLING_HOOK          = loadTexture(EFFECT, "grappling_hook");
         TEX_AREA_OF_EFFECT_CUBE     = loadTexture(EFFECT, "area_of_effect_cube");
+        TEX_HALO_INFUSION           = loadTexture(EFFECT, "halo_infusion");
 
         TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");

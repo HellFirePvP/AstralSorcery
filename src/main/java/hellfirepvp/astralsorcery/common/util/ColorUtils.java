@@ -37,8 +37,6 @@ import java.util.Map;
  */
 public class ColorUtils {
 
-    private static Map<DyeColor, Color> prettierColorMapping = new HashMap<>();
-
     public static Color blendColors(Color color1, Color color2, float color1Ratio) {
         return new Color(blendColors(color1.getRGB(), color2.getRGB(), color1Ratio), true);
     }
@@ -117,11 +115,7 @@ public class ColorUtils {
 
     @Nonnull
     public static Color flareColorFromDye(DyeColor color) {
-        Color c = prettierColorMapping.get(color);
-        if (c == null) {
-            c = ColorsAS.DYE_WHITE;
-        }
-        return c;
+        return ColorsAS.DYE_COLOR_PARTICLES[color.getId()];
     }
 
     @Nonnull
@@ -162,24 +156,5 @@ public class ColorUtils {
             default:
                 return TextFormatting.WHITE;
         }
-    }
-
-    static {
-        prettierColorMapping.put(DyeColor.WHITE,      ColorsAS.DYE_WHITE);
-        prettierColorMapping.put(DyeColor.ORANGE,     ColorsAS.DYE_ORANGE);
-        prettierColorMapping.put(DyeColor.MAGENTA,    ColorsAS.DYE_MAGENTA);
-        prettierColorMapping.put(DyeColor.LIGHT_BLUE, ColorsAS.DYE_LIGHT_BLUE);
-        prettierColorMapping.put(DyeColor.YELLOW,     ColorsAS.DYE_YELLOW);
-        prettierColorMapping.put(DyeColor.LIME,       ColorsAS.DYE_LIME);
-        prettierColorMapping.put(DyeColor.PINK,       ColorsAS.DYE_PINK);
-        prettierColorMapping.put(DyeColor.GRAY,       ColorsAS.DYE_GRAY);
-        prettierColorMapping.put(DyeColor.LIGHT_GRAY, ColorsAS.DYE_LIGHT_GRAY);
-        prettierColorMapping.put(DyeColor.CYAN,       ColorsAS.DYE_CYAN);
-        prettierColorMapping.put(DyeColor.PURPLE,     ColorsAS.DYE_PURPLE);
-        prettierColorMapping.put(DyeColor.BLUE,       ColorsAS.DYE_BLUE);
-        prettierColorMapping.put(DyeColor.BROWN,      ColorsAS.DYE_BROWN);
-        prettierColorMapping.put(DyeColor.GREEN,      ColorsAS.DYE_GREEN);
-        prettierColorMapping.put(DyeColor.RED,        ColorsAS.DYE_RED);
-        prettierColorMapping.put(DyeColor.BLACK,      ColorsAS.DYE_BLACK);
     }
 }

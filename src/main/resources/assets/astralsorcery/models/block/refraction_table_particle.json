@@ -1,0 +1,6 @@
+{
+  "parent": "astralsorcery:block/base/nothing",
+  "textures": {
+    "particle": "astralsorcery:block/refraction_table_particle"
+  }
+}

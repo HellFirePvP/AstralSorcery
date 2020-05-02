@@ -73,13 +73,11 @@ public class PacketChannel {
 
         // PLAY CLIENT -> DEDICATED_SERVER
         registerMessage(PktAttunePlayerConstellation::new);
-        registerMessage(PktBurnParchment::new);
         registerMessage(PktClearBlockStorageStack::new);
         registerMessage(PktDiscoverConstellation::new);
         registerMessage(PktElytraCapeState::new);
         registerMessage(PktEngraveGlass::new);
         registerMessage(PktPerkGemModification::new);
-        registerMessage(PktRemoveKnowledgeFragment::new);
         registerMessage(PktRequestPerkSealAction::new);
         registerMessage(PktRequestSeed::new);
         registerMessage(PktRequestSextantTarget::new);

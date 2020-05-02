@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
-import hellfirepvp.astralsorcery.common.util.StructureFinder;
 import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.common.BiomeDictionary;
@@ -24,6 +23,7 @@ import static hellfirepvp.astralsorcery.common.lib.SextantTargetsAS.*;
  * Created by HellFirePvP
  * Date: 02.06.2019 / 11:00
  */
+@Deprecated
 public class RegistrySextantTargets {
 
     private RegistrySextantTargets() {}

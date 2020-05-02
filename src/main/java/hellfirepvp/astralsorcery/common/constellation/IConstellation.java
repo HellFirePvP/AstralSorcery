@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.constellation.engraving.EngravingEffect;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,7 +37,10 @@ import java.util.List;
  */
 public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Comparable<IConstellation> {
 
-    public static final int STAR_GRID_SIZE = 31;
+    // 0-indexed
+    public static final int STAR_GRID_INDEX = 31;
+    // 1-indexed
+    public static final int STAR_GRID_WIDTH_HEIGHT = (STAR_GRID_INDEX + 1);
 
     /**
      * Should only be called before registering the Constellation.
@@ -68,6 +73,11 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
     }
 
     public List<Ingredient> getConstellationSignatureItems();
+
+    @Nullable
+    default public EngravingEffect getEngravingEffect() {
+        return RegistriesAS.REGISTRY_ENGRAVING_EFFECT.getValue(this.getRegistryName());
+    }
 
     default public IConstellation addSignatureItem(ItemStack item) {
         return this.addSignatureItem(Ingredient.fromStacks(item));
