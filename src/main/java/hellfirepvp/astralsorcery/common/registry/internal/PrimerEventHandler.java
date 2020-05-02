@@ -23,7 +23,6 @@ import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
-import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import hellfirepvp.observerlib.api.ObserverProvider;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
 import net.minecraft.block.Block;
@@ -70,7 +69,6 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(SoundEvent.class, this::registerSounds);
         eventBus.addGenericListener(IConstellation.class, this::registerConstellations);
         eventBus.addGenericListener(AbstractPerk.class, this::registerPerks);
-        eventBus.addGenericListener(TargetObject.class, this::registerSextantTargets);
         eventBus.addGenericListener(DataSerializerEntry.class, this::registerDataSerializers);
         eventBus.addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
         eventBus.addGenericListener(MatchableStructure.class, this::registerStructures);
@@ -201,15 +199,6 @@ public class PrimerEventHandler {
 
     private void registerAltarRecipeEffects(RegistryEvent.Register<AltarRecipeEffect> event) {
         RegistryRecipeTypes.initAltarEffects();
-        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
-    }
-
-    /**
-     * has to run after {@link net.minecraft.world.gen.feature.Feature}
-     * currently guaranteed by: F before T
-     */
-    private void registerSextantTargets(RegistryEvent.Register<TargetObject> event) {
-        RegistrySextantTargets.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

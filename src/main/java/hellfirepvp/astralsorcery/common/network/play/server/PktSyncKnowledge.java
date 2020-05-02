@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
-import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -49,7 +48,6 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
     public List<ResourceLocation> knownConstellations = new ArrayList<>();
     public List<ResourceLocation> seenConstellations = new ArrayList<>();
     public List<ResearchProgression> researchProgression = new ArrayList<>();
-    public List<TargetObject> usedTargets = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
     public Map<AbstractPerk, CompoundNBT> usedPerks = new HashMap<>();
     public List<String> freePointTokens = Lists.newArrayList();
@@ -75,7 +73,6 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         this.sealedPerks = progress.getSealedPerks();
         this.perkExp = progress.getPerkExp();
         this.wasOnceAttuned = progress.wasOnceAttuned();
-        this.usedTargets = progress.getUsedTargets();
     }
 
     @Nonnull
@@ -90,7 +87,6 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
             ByteBufUtils.writeOptional(buffer, packet.attunedConstellation, ByteBufUtils::writeRegistryEntry);
             ByteBufUtils.writeMap(buffer, packet.usedPerks, ByteBufUtils::writeRegistryEntry, ByteBufUtils::writeNBTTag);
             ByteBufUtils.writeList(buffer, packet.sealedPerks, ByteBufUtils::writeRegistryEntry);
-            ByteBufUtils.writeList(buffer, packet.usedTargets, ByteBufUtils::writeRegistryEntry);
             ByteBufUtils.writeList(buffer, packet.freePointTokens, ByteBufUtils::writeString);
             buffer.writeBoolean(packet.wasOnceAttuned);
             buffer.writeInt(packet.progressTier);
@@ -110,7 +106,6 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
             pkt.attunedConstellation = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
             pkt.usedPerks = ByteBufUtils.readMap(buffer, ByteBufUtils::readRegistryEntry, ByteBufUtils::readNBTTag);
             pkt.sealedPerks = ByteBufUtils.readList(buffer, ByteBufUtils::readRegistryEntry);
-            pkt.usedTargets = ByteBufUtils.readList(buffer, ByteBufUtils::readRegistryEntry);
             pkt.freePointTokens = ByteBufUtils.readList(buffer, ByteBufUtils::readString);
             pkt.wasOnceAttuned = buffer.readBoolean();
             pkt.progressTier = buffer.readInt();

@@ -61,28 +61,28 @@ public class ConstellationEffectProperties {
     public ConstellationEffectProperties modify(IMinorConstellation trait) {
         if (trait != null) {
             if (trait.equals(ConstellationsAS.gelu)) {
-                potency *= 1.1F;
-                size *= 3.5F;
+                potency *= 1.4F;
+                size *= 2F;
             }
             if (trait.equals(ConstellationsAS.ulteria)) {
-                effectAmplifier *= 3F;
-                size *= 0.2F;
+                effectAmplifier *= 2F;
+                size *= 0.4F;
             }
             if (trait.equals(ConstellationsAS.alcara)) {
                 fracturationLower *= 0.015F;
-                fracturationRate *= 50_000F;
+                fracturationRate *= 700F;
 
-                size *= 2F;
-                effectAmplifier *= 2F;
+                size *= 1.5F;
+                effectAmplifier *= 2.5F;
                 corrupted = true;
             }
             if (trait.equals(ConstellationsAS.vorux)) {
-                fracturationLower *= 0.25F;
-                fracturationRate *= 3_000F;
+                fracturationLower *= 0.15F;
+                fracturationRate *= 400F;
 
                 potency *= 1.2F;
                 effectAmplifier *= 5F;
-                size *= 2.25F;
+                size *= 2F;
             }
         }
         return this;

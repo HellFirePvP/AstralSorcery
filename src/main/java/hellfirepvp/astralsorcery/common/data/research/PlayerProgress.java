@@ -19,8 +19,6 @@ import hellfirepvp.astralsorcery.common.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.sextant.SextantFinder;
-import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -47,7 +45,6 @@ public class PlayerProgress {
     private IMajorConstellation attunedConstellation = null;
     private boolean wasOnceAttuned = false;
     private List<ResearchProgression> researchProgression = new LinkedList<>();
-    private List<TargetObject> usedTargets = new LinkedList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
     private List<String> freePointTokens = Lists.newArrayList();
     private Set<AbstractPerk> appliedPerks = new HashSet<>();
@@ -61,7 +58,6 @@ public class PlayerProgress {
         knownConstellations.clear();
         seenConstellations.clear();
         researchProgression.clear();
-        usedTargets.clear();
         attunedConstellation = null;
         tierReached = ProgressionTier.DISCOVERY;
         wasOnceAttuned = false;
@@ -157,17 +153,6 @@ public class PlayerProgress {
             }
         }
 
-        if (compound.contains("sextanttargets")) {
-            ListNBT list = compound.getList("sextanttargets", Constants.NBT.TAG_STRING);
-            for (int i = 0; i < list.size(); i++) {
-                String strTarget = list.getString(i);
-                TargetObject to = SextantFinder.getByName(new ResourceLocation(strTarget));
-                if (to != null && !this.usedTargets.contains(to)) {
-                    this.usedTargets.add(to);
-                }
-            }
-        }
-
         this.wasOnceAttuned = compound.getBoolean("wasAttuned");
 
         if (compound.contains("perkExp")) {
@@ -225,12 +210,6 @@ public class PlayerProgress {
         cmp.put("sealedPerks", list);
         cmp.putInt("perkTreeVersion", PerkTree.PERK_TREE_VERSION);
 
-        list = new ListNBT();
-        for (TargetObject to : usedTargets) {
-            list.add(new StringNBT(to.getRegistryName().toString()));
-        }
-        cmp.put("sextanttargets", list);
-
         cmp.putDouble("perkExp", perkExp);
         cmp.putBoolean("bookReceived", tomeReceived);
     }
@@ -245,13 +224,8 @@ public class PlayerProgress {
         for (ResourceLocation s : seenConstellations) {
             l.add(new StringNBT(s.toString()));
         }
-        ListNBT listTargets = new ListNBT();
-        for (TargetObject to : usedTargets) {
-            listTargets.add(new StringNBT(to.getRegistryName().toString()));
-        }
         cmp.put("constellations", list);
         cmp.put("seenConstellations", l);
-        cmp.put("sextanttargets", listTargets);
         cmp.putInt("tierReached", tierReached.ordinal());
         cmp.putBoolean("wasAttuned", wasOnceAttuned);
         int[] researchArray = new int[researchProgression.size()];
@@ -265,7 +239,6 @@ public class PlayerProgress {
     public void loadKnowledge(CompoundNBT compound) {
         knownConstellations.clear();
         researchProgression.clear();
-        usedTargets.clear();
         attunedConstellation = null;
         tierReached = ProgressionTier.DISCOVERY;
         wasOnceAttuned = false;
@@ -306,16 +279,6 @@ public class PlayerProgress {
             }
         }
 
-        if (compound.contains("sextanttargets")) {
-            ListNBT list = compound.getList("sextanttargets", Constants.NBT.TAG_STRING);
-            for (int i = 0; i < list.size(); i++) {
-                String strTarget = list.getString(i);
-                TargetObject to = SextantFinder.getByName(new ResourceLocation(strTarget));
-                if (to != null && !this.usedTargets.contains(to)) {
-                    this.usedTargets.add(to);
-                }
-            }
-        }
         if (compound.contains("pointTokens")) {
             ListNBT list = compound.getList("pointTokens", Constants.NBT.TAG_STRING);
             for (int i = 0; i < list.size(); i++) {
@@ -412,16 +375,6 @@ public class PlayerProgress {
     public List<ResearchProgression> getResearchProgression() {
         researchProgression.removeIf(Objects::isNull);
         return Lists.newLinkedList(researchProgression);
-    }
-
-    public List<TargetObject> getUsedTargets() {
-        return usedTargets;
-    }
-
-    public void useTarget(TargetObject target) {
-        if (!this.usedTargets.contains(target)) {
-            this.usedTargets.add(target);
-        }
     }
 
     public ProgressionTier getTierReached() {
@@ -557,7 +510,6 @@ public class PlayerProgress {
         this.tierReached = MiscUtils.getEnumEntry(ProgressionTier.class, message.progressTier);
         this.attunedConstellation = message.attunedConstellation;
         this.wasOnceAttuned = message.wasOnceAttuned;
-        this.usedTargets = message.usedTargets;
         this.freePointTokens = message.freePointTokens;
         this.appliedPerks = new HashSet<>(message.usedPerks.keySet());
         this.appliedPerkData = message.usedPerks;
@@ -588,9 +540,6 @@ public class PlayerProgress {
         }
         for (ResearchProgression prog : toMergeFrom.researchProgression) {
             this.forceGainResearch(prog);
-        }
-        for (TargetObject target : toMergeFrom.usedTargets) {
-            this.useTarget(target);
         }
     }
 

@@ -80,10 +80,8 @@ public class PacketChannel {
         registerMessage(PktPerkGemModification::new);
         registerMessage(PktRequestPerkSealAction::new);
         registerMessage(PktRequestSeed::new);
-        registerMessage(PktRequestSextantTarget::new);
         registerMessage(PktRequestTeleport::new);
         registerMessage(PktRotateTelescope::new);
-        registerMessage(PktSetSextantTarget::new);
         registerMessage(PktUnlockPerk::new);
     }
 

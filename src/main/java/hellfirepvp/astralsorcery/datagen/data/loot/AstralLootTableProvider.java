@@ -29,7 +29,7 @@ import java.util.function.Supplier;
  * Created by HellFirePvP
  * Date: 06.03.2020 / 21:42
  */
-public class AstralLootTableProvider extends LootTableProvider {
+public final class AstralLootTableProvider extends LootTableProvider {
 
     public AstralLootTableProvider(DataGenerator dataGeneratorIn) {
         super(dataGeneratorIn);
@@ -39,7 +39,8 @@ public class AstralLootTableProvider extends LootTableProvider {
     protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
         return Lists.newArrayList(
                 Pair.of(BlockLootTableProvider::new, LootParameterSets.BLOCK),
-                Pair.of(EntityLootTableProvider::new, LootParameterSets.ENTITY)
+                Pair.of(EntityLootTableProvider::new, LootParameterSets.ENTITY),
+                Pair.of(ChestLootTableProvider::new, LootParameterSets.CHEST)
         );
     }
 

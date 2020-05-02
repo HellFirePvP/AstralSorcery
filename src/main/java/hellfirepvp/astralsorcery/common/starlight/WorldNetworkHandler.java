@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
@@ -261,11 +262,12 @@ public class WorldNetworkHandler {
     private List<LightNetworkBuffer.ChunkSectionNetworkData> getAffectedChunkSections(BlockPos centralPos) {
         List<LightNetworkBuffer.ChunkSectionNetworkData> dataList = new LinkedList<>();
         ChunkPos central = new ChunkPos(centralPos);
-        int posYLevel = (centralPos.getY() & 255) >> 4;
+        int posYLevel = MathHelper.clamp(centralPos.getY(), 0, 255);
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 for (int yy = -1; yy <= 1; yy++) {
-                    BlockPos pos = new BlockPos(central.x + xx, posYLevel + yy, central.z + zz);
+                    BlockPos pos = central.asBlockPos();
+                    pos = pos.add(xx * 16, MathHelper.clamp(posYLevel + yy * 16, 0, 255), zz * 16);
                     queryData(pos, dataList);
                 }
             }
