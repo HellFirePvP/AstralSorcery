@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -88,14 +87,6 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     public CompoundNBT getPerkData(AbstractPerk perk) {
         return null;
     }
-
-    @Override
-    public List<TargetObject> getUsedTargets() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public void useTarget(TargetObject target) {}
 
     @Override
     public boolean hasSeenConstellation(ResourceLocation constellation) {

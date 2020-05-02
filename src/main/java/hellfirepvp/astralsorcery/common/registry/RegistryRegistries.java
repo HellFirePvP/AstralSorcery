@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProvider;
 import hellfirepvp.astralsorcery.common.constellation.engraving.EngravingEffect;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
-import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffectRegistry;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
@@ -24,7 +23,6 @@ import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeTypeHelper;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
-import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.*;
 
@@ -84,13 +82,6 @@ public class RegistryRegistries {
                 .disableSaving()
                 .disableOverrides()
                 .allowModification()
-                .create();
-
-        REGISTRY_SEXTANT_TARGET = new RegistryBuilder<TargetObject>()
-                .setName(REGISTRY_NAME_SEXTANT_TARGETS)
-                .setType(TargetObject.class)
-                .disableSaving()
-                .disableOverrides()
                 .create();
 
         REGISTRY_STRUCTURE_TYPES = new RegistryBuilder<StructureType>()

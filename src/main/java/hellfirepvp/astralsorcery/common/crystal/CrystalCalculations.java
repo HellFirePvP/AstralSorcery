@@ -28,7 +28,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
  */
 public class CrystalCalculations {
 
-    private static final float ticksPerDay = 24 * 60 * 60 * 20; // 1_728_000
+    private static final float TICKS_PER_HOUR = 60 * 60 * 20; // 72_000
 
     private CrystalCalculations() {}
 
@@ -44,7 +44,7 @@ public class CrystalCalculations {
         if (fractureExecutions <= 0) {
             return 0F;
         }
-        return Math.max(1E-6F, fractureExecutions / ticksPerDay);
+        return Math.max(1E-6F, fractureExecutions / TICKS_PER_HOUR);
     }
 
     // Range: 1.0 - 5.39

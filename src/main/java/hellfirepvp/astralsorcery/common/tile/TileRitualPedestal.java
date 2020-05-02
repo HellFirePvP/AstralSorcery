@@ -59,6 +59,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -518,30 +519,26 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     }
 
     //Stuff sent over from StarlightReceiverRitualPedestal
-    public void setReceiverData(boolean working, Map<BlockPos, Boolean> mirrorData) {
+    public void setReceiverData(boolean working, Map<BlockPos, Boolean> mirrorData, @Nullable CrystalAttributes newAttributes, List<CrystalAttributes> fracturedCrystalStats) {
         boolean needsReSync = false;
 
         this.working = working;
         this.offsetMirrors = new HashMap<>(mirrorData);
 
-        /*
-        TODO fracturing from network node?
-        CrystalAttributes prop = this.getAttributes();
-        if (prop != null) {
-            prop = new CrystalProperties(prop.getSize(), prop.getPurity(),
-                    prop.getCollectiveCapability(), prop.getFracturation() + fractureCount, prop.getSizeOverride());
-
-            if (prop.getFracturation() >= 100) {
-                SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, getWorld(), getPos(), 7.5F, 1.4F);
-
-                this.inventory.setStackInSlot(0, ItemStack.EMPTY);
-            } else {
-                this.setChannelingCrystalProperties(prop);
+        ItemStack crystal = this.getCurrentCrystal();
+        if (!crystal.isEmpty() && crystal.getItem() instanceof CrystalAttributeItem) {
+            for (CrystalAttributes attr : fracturedCrystalStats) {
+                ItemStack newCrystal = new ItemStack(crystal.getItem(), 1);
+                ((CrystalAttributeItem) newCrystal.getItem()).setAttributes(newCrystal, attr);
+                ItemUtils.dropItemNaturally(this.getWorld(), this.getPos().getX() + 0.5, this.getPos().getY() + 0.8, this.getPos().getZ() + 0.5, newCrystal);
             }
 
-            needsReSync = true;
+            if (newAttributes == null) {
+                this.tryPlaceCrystalInPedestal(ItemStack.EMPTY);
+            } else {
+                this.setAttributes(newAttributes.copy());
+            }
         }
-        */
 
         this.markForUpdate();
 

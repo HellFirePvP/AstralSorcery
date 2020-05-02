@@ -108,6 +108,12 @@ public final class CrystalAttributes {
         return this.crystalAttributes.isEmpty();
     }
 
+    public List<CrystalProperty> getProperties() {
+        return this.getCrystalAttributes().stream()
+                .map(Attribute::getProperty)
+                .collect(Collectors.toList());
+    }
+
     @Nonnull
     @OnlyIn(Dist.CLIENT)
     public TooltipResult addTooltip(List<ITextComponent> tooltip) {
@@ -266,7 +272,7 @@ public final class CrystalAttributes {
         return deserialize(tag);
     }
 
-    private CompoundNBT serialize() {
+    public CompoundNBT serialize() {
         CompoundNBT tag = new CompoundNBT();
         ListNBT list = new ListNBT();
         for (Attribute attr : crystalAttributes) {
@@ -276,7 +282,7 @@ public final class CrystalAttributes {
         return tag;
     }
 
-    private static CrystalAttributes deserialize(CompoundNBT tag) {
+    public static CrystalAttributes deserialize(CompoundNBT tag) {
         CrystalAttributes attributes = new CrystalAttributes();
         ListNBT list = tag.getList("attributes", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {

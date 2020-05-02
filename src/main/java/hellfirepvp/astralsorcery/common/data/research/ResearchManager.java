@@ -24,8 +24,6 @@ import hellfirepvp.astralsorcery.common.network.play.server.PktProgressionUpdate
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
-import hellfirepvp.astralsorcery.common.util.sextant.SextantFinder;
-import hellfirepvp.astralsorcery.common.util.sextant.TargetObject;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -108,17 +106,6 @@ public class ResearchManager {
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
-    }
-
-    public static boolean useSextantTarget(TargetObject to, PlayerEntity player) {
-        PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if (!progress.isValid()) return false;
-
-        progress.useTarget(to);
-
-        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
-        ResearchHelper.savePlayerKnowledge(player);
-        return true;
     }
 
     public static boolean discoverConstellations(Collection<IConstellation> csts, PlayerEntity player) {
@@ -427,9 +414,6 @@ public class ResearchManager {
         ResearchManager.maximizeTier(player);
         ResearchManager.forceMaximizeResearch(player);
         ResearchManager.setAttunedBefore(player, true);
-        for (TargetObject to : SextantFinder.getSelectableTargets()) {
-            progress.useTarget(to);
-        }
 
         if (progress.getTierReached().isThisLater(before)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(progress.getTierReached());
