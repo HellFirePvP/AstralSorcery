@@ -216,7 +216,7 @@ public class TileRefractionTable extends TileEntityTick implements NamedInventor
 
     public void engraveGlass(List<DrawnConstellation> constellations) {
         if (this.hasParchment() && this.hasUnengravedGlass()) {
-            this.getInputStack().shrink(1);
+            this.parchmentCount--;
             ItemInfusedGlass.setEngraving(this.getGlassStack(), EngravedStarMap.buildStarMap(this.getWorld(), constellations));
             this.markForUpdate();
         }
