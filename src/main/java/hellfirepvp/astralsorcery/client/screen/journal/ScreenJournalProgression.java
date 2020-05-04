@@ -228,6 +228,33 @@ public class ScreenJournalProgression extends ScreenJournal {
             }
         }
 
+        offsetX = this.getGuiLeft() + 225;
+        offsetY = this.getGuiTop() + 39;
+        entries = this.searchResultPageIndex.getOrDefault(this.searchPageOffset + 1, new ArrayList<>());
+        for (ResearchNode node : entries) {
+            int startOffsetY = offsetY;
+
+            List<String> nodeTitleLines = fr.listFormattedStringToWidth(node.getName().getFormattedText(), searchEntryDrawWidth);
+            int maxLength = 0;
+
+            for (String line : nodeTitleLines) {
+                int length = fr.drawString(line, offsetX, offsetY, 0x00D0D0D0) - offsetX;
+                if (length > maxLength) {
+                    maxLength = length;
+                }
+                offsetY += lineHeight;
+            }
+
+            if (this.searchHoverNode == null) {
+                Rectangle rctDrawn = new Rectangle(offsetX - 2, startOffsetY - 2, maxLength + 4, offsetY - startOffsetY);
+                if (rctDrawn.contains(mouseX, mouseY)) {
+                    fill(rctDrawn.x, rctDrawn.y, rctDrawn.x + rctDrawn.width, rctDrawn.y + rctDrawn.height, boxColor.getRGB());
+                    GlStateManager.enableBlend();
+                    this.searchHoverNode = node;
+                }
+            }
+        }
+
         GlStateManager.enableDepthTest();
         GlStateManager.color4f(1F, 1F, 1F, 1F);
         TextureHelper.refreshTextureBind();
