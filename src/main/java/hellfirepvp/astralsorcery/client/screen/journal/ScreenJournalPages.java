@@ -52,7 +52,7 @@ public class ScreenJournalPages extends ScreenJournal {
     private Rectangle rectBack, rectNext, rectPrev;
 
     public ScreenJournalPages(@Nullable ScreenJournalProgression origin, ResearchNode node) {
-        super(new TranslationTextComponent(node.getUnLocalizedName()), NO_BOOKMARK);
+        super(node.getName(), NO_BOOKMARK);
         this.researchNode = node;
         this.origin = origin;
         this.previous = null;
@@ -65,7 +65,7 @@ public class ScreenJournalPages extends ScreenJournal {
 
     //Use this to use this screen independently of the actual journal.
     public ScreenJournalPages(@Nullable Screen previous, ResearchNode detailedInformation, int exactPage) {
-        super(new TranslationTextComponent(detailedInformation.getUnLocalizedName()), NO_BOOKMARK);
+        super(detailedInformation.getName(), NO_BOOKMARK);
         this.researchNode = detailedInformation;
         this.origin = null;
         this.previous = previous;

@@ -10,8 +10,6 @@ package hellfirepvp.astralsorcery.client.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.fonts.TextInputUtil;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.SharedConstants;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;

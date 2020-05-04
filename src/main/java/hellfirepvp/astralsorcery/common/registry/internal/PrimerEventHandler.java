@@ -16,7 +16,6 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipe
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.registry.*;
@@ -74,7 +73,6 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(MatchableStructure.class, this::registerStructures);
         eventBus.addGenericListener(StructureType.class, this::registerStructureTypes);
         eventBus.addGenericListener(ObserverProvider.class, this::registerStructureProviders);
-        eventBus.addGenericListener(KnowledgeFragment.class, this::registerKnowledgeFragments);
         eventBus.addGenericListener(ConstellationEffectProvider.class, this::registerConstellationEffects);
         eventBus.addGenericListener(MantleEffect.class, this::registerMantleEffects);
         eventBus.addGenericListener(EngravingEffect.class, this::registerEngravingEffects);
@@ -95,7 +93,6 @@ public class PrimerEventHandler {
         RegistryEngravingEffects.init();
 
         RegistryStructures.init();
-        RegistryKnowledgeFragments.init();
 
         RegistryCrystalProperties.init();
         RegistryCrystalPropertyUsages.init();
@@ -220,10 +217,6 @@ public class PrimerEventHandler {
     }
 
     private void registerStructureTypes(RegistryEvent.Register<StructureType> event) {
-        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
-    }
-
-    private void registerKnowledgeFragments(RegistryEvent.Register<KnowledgeFragment> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

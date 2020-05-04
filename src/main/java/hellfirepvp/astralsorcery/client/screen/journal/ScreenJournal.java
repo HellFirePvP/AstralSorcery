@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
 import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -74,16 +73,7 @@ public class ScreenJournal extends WidthHeightScreen {
         this.blitOffset -= 100;
     }
 
-    //TODO knowledge fragments
-    //private void resolveFragments() {
-    //    KnowledgeFragmentData data = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
-    //    this.fragmentList = data.getFragmentsFor(this);
-    //}
-
     private void drawBookmarks(int mouseX, int mouseY) {
-        //if (fragmentList == null) { TODO knowledge fragments
-        //    resolveFragments();
-        //}
         drawnBookmarks.clear();
 
         GlStateManager.pushMatrix();
@@ -112,28 +102,6 @@ public class ScreenJournal extends WidthHeightScreen {
                 offsetY += bookmarkGap;
             }
         }
-
-        offsetY += bookmarkGap / 2;
-
-        /*TODO knowledge fragments
-        this.pageFragments.clear();
-        for (KnowledgeFragment frag : this.fragmentList) {
-            if (frag.isFullyPresent()) {
-                offsetY += bookmarkGap;
-                Rectangle rctFragment = drawBookmark(
-                        offsetX, offsetY,
-                        knBookmarkWidth, bookmarkHeight,
-
-                        TODO check this, it doesn't seem right == 0
-                        knBookmarkWidth + (bookmarkIndex == 0 ? 0 : 5),
-
-                        zLevel,
-                        frag.getUnlocalizedBookmark(), 0xDDDDDDDD,
-                        mousePoint, textureKnBookmark, textureKnBookmarkStr);
-                this.pageFragments.put(rctFragment, frag);
-            }
-        }
-        */
 
         GlStateManager.popMatrix();
     }
@@ -175,7 +143,7 @@ public class ScreenJournal extends WidthHeightScreen {
     }
 
     protected boolean handleBookmarkClick(double mouseX, double mouseY) {
-        return handleJournalNavigationBookmarkClick(mouseX, mouseY);// || handleFragmentClick(mouseX, mouseY); TODO knowledge fragments
+        return handleJournalNavigationBookmarkClick(mouseX, mouseY);
     }
 
     private boolean handleJournalNavigationBookmarkClick(double mouseX, double mouseY) {
@@ -189,22 +157,6 @@ public class ScreenJournal extends WidthHeightScreen {
         }
         return false;
     }
-
-    //TODO knowledge fragments
-    //private boolean handleFragmentClick(Point mouse) {
-    //    for (Rectangle r : this.pageFragments.keySet()) {
-    //        if (r.contains(mouse)) {
-    //            if (this instanceof GuiJournalProgression) {
-    //                ((GuiJournalProgression) this).expectReinit = true;
-    //            }
-    //            KnowledgeFragment frag = this.pageFragments.get(r);
-    //            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalOverlayKnowledge(this, frag));
-    //            SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-    //}
 
     @Override
     public boolean isPauseScreen() {

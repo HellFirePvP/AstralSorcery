@@ -60,7 +60,7 @@ public enum ResearchProgression implements IExtensibleEnum {
             if (node.renderPosX == res.renderPosX &&
                     node.renderPosZ == res.renderPosZ) {
                 throw new IllegalArgumentException("Tried to register 2 Research Nodes at the same position at x=" + res.renderPosX + ", z=" + res.renderPosZ + "! " +
-                        "Present: " + node.getUnLocalizedName() + " - Tried to set: " + res.getUnLocalizedName());
+                        "Present: " + node.getKey() + " - Tried to set: " + res.getKey());
             }
         }
         this.researchNodes.add(res);
@@ -106,7 +106,7 @@ public enum ResearchProgression implements IExtensibleEnum {
     public static ResearchNode findNode(String name) {
         for (ResearchProgression prog : values()) {
             for (ResearchNode node : prog.getResearchNodes()) {
-                if (node.getSimpleName().equals(name)) {
+                if (node.getKey().equals(name)) {
                     return node;
                 }
             }

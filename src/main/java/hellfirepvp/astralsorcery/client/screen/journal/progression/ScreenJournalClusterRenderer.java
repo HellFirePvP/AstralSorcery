@@ -99,12 +99,11 @@ public class ScreenJournalClusterRenderer {
         if (frame.contains(mouseX, mouseY)) {
             for (Rectangle r : clickableNodes.keySet()) {
                 if (r.contains(mouseX, mouseY)) {
+                    String name = clickableNodes.get(r).getName().getFormattedText();
+
                     GlStateManager.pushMatrix();
                     GlStateManager.translated(r.getX(), r.getY(), 0);
                     GlStateManager.scaled(progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor());
-
-                    String name = clickableNodes.get(r).getUnLocalizedName();
-                    name = I18n.format(name);
 
                     GlStateManager.disableDepthTest();
                     RenderingDrawUtils.renderBlueTooltipString(0, 0, Lists.newArrayList(name), Minecraft.getInstance().fontRenderer, false);
@@ -247,6 +246,8 @@ public class ScreenJournalClusterRenderer {
 
                 GlStateManager.color4f(1F, 1F, 1F, 1F);
                 GlStateManager.popMatrix();
+
+                RenderHelper.disableStandardItemLighting();
 
                 GlStateManager.enableBlend();
                 break;

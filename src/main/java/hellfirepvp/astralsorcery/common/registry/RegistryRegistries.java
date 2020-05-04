@@ -19,7 +19,6 @@ import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
-import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeTypeHelper;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
@@ -87,13 +86,6 @@ public class RegistryRegistries {
         REGISTRY_STRUCTURE_TYPES = new RegistryBuilder<StructureType>()
                 .setName(REGISTRY_NAME_STRUCTURE_TYPES)
                 .setType(StructureType.class)
-                .disableSaving()
-                .disableOverrides()
-                .create();
-
-        REGISTRY_KNOWLEDGE_FRAGMENTS = new RegistryBuilder<KnowledgeFragment>()
-                .setName(REGISTRY_NAME_KNOWLEDGE_FRAGMENTS)
-                .setType(KnowledgeFragment.class)
                 .disableSaving()
                 .disableOverrides()
                 .create();

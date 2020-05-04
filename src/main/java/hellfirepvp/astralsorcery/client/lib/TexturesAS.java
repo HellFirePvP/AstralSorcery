@@ -35,8 +35,7 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_CONTAINER_ALTAR_RADIANCE;
 
     public static AbstractRenderableTexture TEX_GUI_CONSTELLATION_PAPER;
-    public static AbstractRenderableTexture TEX_GUI_KNOWLEDGE_FRAGMENT;
-    public static AbstractRenderableTexture TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK;
+    public static AbstractRenderableTexture TEX_GUI_PARCHMENT_BLANK;
     public static AbstractRenderableTexture TEX_GUI_HAND_TELESCOPE;
     public static AbstractRenderableTexture TEX_GUI_TELESCOPE;
     public static AbstractRenderableTexture TEX_GUI_OBSERVATORY;
