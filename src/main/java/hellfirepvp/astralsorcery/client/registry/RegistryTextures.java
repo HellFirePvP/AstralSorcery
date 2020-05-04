@@ -38,8 +38,7 @@ public class RegistryTextures {
         TEX_CONTAINER_ALTAR_RADIANCE        = loadTexture(GUI, "container_altar_radiance");
 
         TEX_GUI_CONSTELLATION_PAPER         = loadTexture(GUI, "constellation_paper");
-        TEX_GUI_KNOWLEDGE_FRAGMENT          = loadTexture(GUI, "knowledge_fragment");
-        TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK    = loadTexture(GUI, "knowledge_fragment_blank");
+        TEX_GUI_PARCHMENT_BLANK             = loadTexture(GUI, "parchment_blank");
         TEX_GUI_HAND_TELESCOPE              = loadTexture(GUI, "hand_telescope_frame");
         TEX_GUI_TELESCOPE                   = loadTexture(GUI, "telescope_frame");
         TEX_GUI_OBSERVATORY                 = loadTexture(GUI, "observatory_frame");

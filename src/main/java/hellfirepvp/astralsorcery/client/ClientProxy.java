@@ -206,12 +206,6 @@ public class ClientProxy extends CommonProxy {
         ScreenJournal.addBookmark(new BookmarkProvider("screen.astralsorcery.tome.perks", 30,
                 ScreenJournalPerkTree::new,
                 () -> ResearchHelper.getClientProgress().getAttunedConstellation() != null));
-        //TODO knowledge fragment gui
-        //ScreenJournal.addBookmark(new BookmarkProvider("screen.astralsorcery.tome.knowledge", 40,
-        //        GuiJournalKnowledgeIndex::new,
-        //        () -> !((KnowledgeFragmentData) PersistentDataManager.INSTANCE
-        //                .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS))
-        //                .getAllFragments().isEmpty()));
     }
 
 }

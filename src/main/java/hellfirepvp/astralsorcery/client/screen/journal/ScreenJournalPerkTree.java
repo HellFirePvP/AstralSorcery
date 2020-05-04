@@ -85,7 +85,6 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private static Rectangle rectSealBox = new Rectangle(29, 16, 16, 16);
     private static Rectangle rectSearchTextEntry = new Rectangle(300, 16, 88, 15);
 
-    //private static final BufferBatch drawBufferConnections = BufferBatch.make();
     private static BatchPerkContext drawBuffer;
     private static BatchPerkContext.TextureObjectGroup searchContext;
     private static BatchPerkContext.TextureObjectGroup sealContext;
@@ -94,8 +93,6 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private ScreenRenderBoundingBox guiBox;
 
     private ScalingPoint mousePosition, previousMousePosition;
-    private int mouseBufferX, mouseBufferY;
-    private boolean mouseDragging = false;
 
     private AbstractPerk unlockPrimed = null;
 

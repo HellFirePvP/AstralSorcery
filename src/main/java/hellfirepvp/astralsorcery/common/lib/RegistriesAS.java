@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipe
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
@@ -42,7 +41,6 @@ public class RegistriesAS {
     public static final ResourceLocation REGISTRY_NAME_ENGRAVING_EFFECT = AstralSorcery.key("engraving_effect");
     public static final ResourceLocation REGISTRY_NAME_PERKS = AstralSorcery.key("perks");
     public static final ResourceLocation REGISTRY_NAME_STRUCTURE_TYPES = AstralSorcery.key("structure_types");
-    public static final ResourceLocation REGISTRY_NAME_KNOWLEDGE_FRAGMENTS = AstralSorcery.key("knowledge_fragments");
     public static final ResourceLocation REGISTRY_NAME_PERK_ATTRIBUTE_TYPES = AstralSorcery.key("perk_attribute_types");
     public static final ResourceLocation REGISTRY_NAME_PERK_ATTRIBUTE_READERS = AstralSorcery.key("perk_attribute_readers");
     public static final ResourceLocation REGISTRY_NAME_CRYSTAL_PROPERTIES = AstralSorcery.key("attribute_crystal_properties");
@@ -55,7 +53,6 @@ public class RegistriesAS {
     public static IForgeRegistry<EngravingEffect> REGISTRY_ENGRAVING_EFFECT;
     public static IForgeRegistryModifiable<AbstractPerk> REGISTRY_PERKS;
     public static IForgeRegistry<StructureType> REGISTRY_STRUCTURE_TYPES;
-    public static IForgeRegistry<KnowledgeFragment> REGISTRY_KNOWLEDGE_FRAGMENTS;
     public static IForgeRegistry<PerkAttributeType> REGISTRY_PERK_ATTRIBUTE_TYPES;
     public static IForgeRegistry<PerkAttributeReader> REGISTRY_PERK_ATTRIBUTE_READERS;
     public static IForgeRegistry<CrystalProperty> REGISTRY_CRYSTAL_PROPERTIES;

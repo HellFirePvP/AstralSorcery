@@ -136,7 +136,7 @@ public class RegistryEntities {
     }
 
     private static <E extends Entity> EntityType<E> register(String name, EntityType.Builder<E> typeBuilder) {
-        EntityType<E> type = typeBuilder.build(name);
+        EntityType<E> type = typeBuilder.build(AstralSorcery.key(name).toString());
         type.setRegistryName(AstralSorcery.key(name));
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
         return type;

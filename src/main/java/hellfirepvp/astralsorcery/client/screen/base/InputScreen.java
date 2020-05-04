@@ -64,6 +64,17 @@ public class InputScreen extends Screen {
         return super.keyReleased(key, scanCode, modifiers);
     }
 
+    public boolean isCurrentlyDragging() {
+        return this.dragging;
+    }
+
+    protected void stopDragging(double mouseX, double mouseY) {
+        if (this.dragging) {
+            this.dragging = false;
+            this.mouseDragStop(mouseX, mouseY, oMouseX, oMouseY);
+        }
+    }
+
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int click) {
         if (click == 0) {
@@ -78,8 +89,7 @@ public class InputScreen extends Screen {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int click) {
         if (click == 0) {
-            this.dragging = false;
-            this.mouseDragStop(mouseX, mouseY, oMouseX, oMouseY);
+            this.stopDragging(mouseX, mouseY);
         }
         return super.mouseReleased(mouseX, mouseY, click);
     }

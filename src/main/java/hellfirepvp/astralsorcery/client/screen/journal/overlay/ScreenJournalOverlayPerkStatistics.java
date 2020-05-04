@@ -30,7 +30,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.awt.*;
@@ -97,9 +96,9 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         int height = 344;
 
         GlStateManager.disableDepthTest();
-        TexturesAS.TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK.bindTexture();
+        TexturesAS.TEX_GUI_PARCHMENT_BLANK.bindTexture();
         RenderingGuiUtils.drawTexturedRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, this.blitOffset,
-                width, height, TexturesAS.TEX_GUI_KNOWLEDGE_FRAGMENT_BLANK);
+                width, height, TexturesAS.TEX_GUI_PARCHMENT_BLANK);
         GlStateManager.enableDepthTest();
 
         drawHeader();
