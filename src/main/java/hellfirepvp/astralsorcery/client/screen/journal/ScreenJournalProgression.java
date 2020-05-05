@@ -429,18 +429,6 @@ public class ScreenJournalProgression extends ScreenJournal {
     }
 
     @Override
-    protected void keyPressedTick(int key) {
-        if (this.inProgressView()) {
-            if (key == Minecraft.getInstance().gameSettings.keyBindForward.getKey().getKeyCode()) {
-                progressionRenderer.handleZoomIn(0, 0); //Doesn't matter for keyboard zooming
-            } else if (key == Minecraft.getInstance().gameSettings.keyBindBack.getKey().getKeyCode()) {
-                progressionRenderer.handleZoomOut();
-            }
-        }
-        super.keyPressedTick(key);
-    }
-
-    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
         if (this.inProgressView()) {
             if (scroll < 0) {
