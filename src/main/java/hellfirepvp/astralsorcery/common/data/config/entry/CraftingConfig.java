@@ -27,14 +27,11 @@ public class CraftingConfig extends ConfigEntry {
     public ForgeConfigSpec.BooleanValue liquidStarlightCrystalGrowth;
     public ForgeConfigSpec.BooleanValue liquidStarlightFormCelestialCrystalCluster;
     public ForgeConfigSpec.BooleanValue liquidStarlightFormGemCrystalCluster;
-    public ForgeConfigSpec.BooleanValue liquidStarlightCrystalToolGrowth;
-    public ForgeConfigSpec.BooleanValue liquidStarlightCrystalDuplication;
+    public ForgeConfigSpec.BooleanValue liquidStarlightDropInfusedWood;
 
     public ForgeConfigSpec.BooleanValue liquidStarlightInteractionAquamarine;
     public ForgeConfigSpec.BooleanValue liquidStarlightInteractionSand;
     public ForgeConfigSpec.BooleanValue liquidStarlightInteractionIce;
-
-    public ForgeConfigSpec.BooleanValue liquidStarlightDropInfusedWood;
 
     private CraftingConfig() {
         super("crafting");
@@ -61,16 +58,6 @@ public class CraftingConfig extends ConfigEntry {
                 .comment("Set this to false to disable crystal + illumination powder -> Gem Crystal cluster forming")
                 .translation(translationKey("liquidStarlightFormGemCrystalCluster"))
                 .define("liquidStarlightFormGemCrystalCluster", true);
-
-        liquidStarlightCrystalToolGrowth = cfgBuilder
-                .comment("Set this to false to disable Crystal Tool growth in liquid starlight")
-                .translation(translationKey("liquidStarlightCrystalToolGrowth"))
-                .define("liquidStarlightCrystalToolGrowth", true);
-
-        liquidStarlightCrystalDuplication = cfgBuilder
-                .comment("Set this to false to disable the chance to get a 2nd crystal when growing a max-sized one in liquid starlight.")
-                .translation(translationKey("liquidStarlightCrystalDuplication"))
-                .define("liquidStarlightCrystalDuplication", true);
 
         liquidStarlightInteractionAquamarine = cfgBuilder
                 .comment("Set this to false to disable that liquid starlight + lava occasionally/rarely produces aquamarine shale instead of sand.")

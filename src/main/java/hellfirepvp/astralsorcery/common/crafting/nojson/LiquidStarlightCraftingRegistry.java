@@ -8,10 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.nojson;
 
-import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.FormCelestialCrystalClusterRecipe;
-import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.FormGemCrystalClusterRecipe;
-import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.InfusedWoodRecipe;
-import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.LiquidStarlightRecipe;
+import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -37,6 +34,7 @@ public class LiquidStarlightCraftingRegistry extends CustomRecipeRegistry<Liquid
     @Override
     public void init() {
         this.register(new InfusedWoodRecipe());
+        this.register(new GrowCrystalSizeRecipe());
         this.register(new FormCelestialCrystalClusterRecipe());
         this.register(new FormGemCrystalClusterRecipe());
     }
