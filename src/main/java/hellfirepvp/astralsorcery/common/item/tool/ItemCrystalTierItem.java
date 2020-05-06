@@ -8,11 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.crystal.CalculationContext;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalCalculations;
+import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
@@ -70,7 +73,10 @@ public abstract class ItemCrystalTierItem extends Item implements CrystalAttribu
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         CrystalAttributes attr = getAttributes(stack);
         if (attr != null) {
-            attr.addTooltip(tooltip);
+            attr.addTooltip(tooltip, CalculationContext.Builder.newBuilder()
+                    .addUsage(CrystalPropertiesAS.Usages.USE_TOOL_DURABILITY)
+                    .addUsage(CrystalPropertiesAS.Usages.USE_TOOL_EFFECTIVENESS)
+                    .build());
         }
         super.addInformation(stack, world, tooltip, flag);
     }

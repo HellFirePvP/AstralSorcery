@@ -68,7 +68,6 @@ public class RecipeChangeWandColor extends SpecialRecipe {
                     DyeColor color = DyeColor.getColor(in);
                     if (color != null) {
                         dyeColorFound = color;
-                        break;
                     }
                 }
             }

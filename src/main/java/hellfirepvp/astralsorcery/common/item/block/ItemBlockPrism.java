@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item.block;
 
+import hellfirepvp.astralsorcery.common.crystal.CalculationContext;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
@@ -43,7 +44,9 @@ public class ItemBlockPrism extends ItemBlockCustom implements CrystalAttributeI
         super.addInformation(stack, worldIn, tooltip, flagIn);
         CrystalAttributes attr = getAttributes(stack);
         if (attr != null) {
-            attr.addTooltip(tooltip);
+            attr.addTooltip(tooltip, CalculationContext.Builder
+                    .withUsage(CrystalPropertiesAS.Usages.USE_LENS_TRANSFER)
+                    .build());
         }
     }
 

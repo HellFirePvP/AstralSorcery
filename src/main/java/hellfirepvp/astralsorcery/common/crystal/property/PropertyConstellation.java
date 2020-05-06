@@ -10,12 +10,12 @@ package hellfirepvp.astralsorcery.common.crystal.property;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.crystal.CalculationContext;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
+import hellfirepvp.astralsorcery.common.crystal.source.AttunedSourceInstance;
 import hellfirepvp.astralsorcery.common.crystal.source.Crystal;
 import hellfirepvp.astralsorcery.common.crystal.source.Ritual;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 
 import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Sources.*;
 
@@ -33,7 +33,30 @@ public class PropertyConstellation extends CrystalProperty {
     public PropertyConstellation(IWeakConstellation cst) {
         super(AstralSorcery.key("constellation." + cst.getSimpleName()));
         this.cst = cst;
-        this.tierRequirement = ProgressionTier.ATTUNEMENT;
+        this.setRequiredResearch(ResearchProgression.ATTUNEMENT);
+
+        this.addUsage(ctx -> (ctx.isSource(SOURCE_COLLECTOR_CRYSTAL) || ctx.isSource(SOURCE_TILE_COLLECTOR_CRYSTAL)) &&
+                cst.equals(((AttunedSourceInstance) ctx.getSource()).getAttunedConstellation()));
+        this.addModifier((value, originalValue, propertyLevel, context) -> {
+            if (context.isSource(SOURCE_COLLECTOR_CRYSTAL) || context.isSource(SOURCE_TILE_COLLECTOR_CRYSTAL)) {
+                Crystal crystal = context.getSource();
+                if (crystal != null && cst.equals(crystal.getAttunedConstellation())) {
+                    return value * (1.0 + (0.15 * propertyLevel));
+                }
+            }
+            return value;
+        });
+        this.addUsage(ctx -> (ctx.isSource(SOURCE_RITUAL_PEDESTAL) || ctx.isSource(SOURCE_TILE_RITUAL_PEDESTAL)) &&
+                cst.equals(((AttunedSourceInstance) ctx.getSource()).getAttunedConstellation()));
+        this.addModifier((value, originalValue, propertyLevel, context) -> {
+            if (context.isSource(SOURCE_RITUAL_PEDESTAL) || context.isSource(SOURCE_TILE_RITUAL_PEDESTAL)) {
+                Ritual ritual = context.getSource();
+                if (ritual != null && cst.equals(ritual.getAttunedConstellation())) {
+                    return value * (1.0 + (0.2 * propertyLevel));
+                }
+            }
+            return value;
+        });
     }
 
     public IWeakConstellation getConstellation() {
@@ -48,22 +71,5 @@ public class PropertyConstellation extends CrystalProperty {
     @Override
     public boolean canSee(PlayerProgress progress) {
         return super.canSee(progress) && progress.hasConstellationDiscovered(this.cst);
-    }
-
-    @Override
-    public double modify(double value, int thisTier, CalculationContext context) {
-        if (context.isSource(SOURCE_COLLECTOR_CRYSTAL) || context.isSource(SOURCE_TILE_COLLECTOR_CRYSTAL)) {
-            Crystal crystal = context.getSource();
-            if (crystal != null && cst.equals(crystal.getAttunedConstellation())) {
-                value *= 1.0 + (0.15 * thisTier);
-            }
-        }
-        if (context.isSource(SOURCE_RITUAL_PEDESTAL) || context.isSource(SOURCE_TILE_RITUAL_PEDESTAL)) {
-            Ritual ritual = context.getSource();
-            if (ritual != null && cst.equals(ritual.getAttunedConstellation())) {
-                value *= 1.0 + (0.2 * thisTier);
-            }
-        }
-        return value;
     }
 }
