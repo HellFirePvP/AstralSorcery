@@ -9,10 +9,8 @@
 package hellfirepvp.astralsorcery.common.crystal.property;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.crystal.CalculationContext;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import net.minecraft.util.ResourceLocation;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 
 import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 
@@ -27,19 +25,19 @@ public class PropertyRitualRange extends CrystalProperty {
 
     public PropertyRitualRange() {
         super(AstralSorcery.key("ritual.range"));
-        this.tierRequirement = ProgressionTier.ATTUNEMENT;
+        this.setRequiredResearch(ResearchProgression.ATTUNEMENT);
+
+        this.addUsage(ctx -> ctx.uses(USE_RITUAL_RANGE));
+        this.addModifier((value, originalValue, propertyLevel, context) -> {
+            if (context.uses(USE_RITUAL_RANGE)) {
+                return value * (1.0 + (0.15 * propertyLevel));
+            }
+            return value;
+        });
     }
 
     @Override
     public int getMaxTier() {
         return 2;
-    }
-
-    @Override
-    public double modify(double value, int thisTier, CalculationContext context) {
-        if (context.uses(USE_RITUAL_RANGE)) {
-            value *= 1.0 + (0.15 * thisTier);
-        }
-        return value;
     }
 }

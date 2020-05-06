@@ -9,10 +9,8 @@
 package hellfirepvp.astralsorcery.common.crystal.property;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.crystal.CalculationContext;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import net.minecraft.util.ResourceLocation;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 
 import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 
@@ -27,14 +25,10 @@ public class PropertyToolDurability extends CrystalProperty {
 
     public PropertyToolDurability() {
         super(AstralSorcery.key("tool.durability"));
-        this.tierRequirement = ProgressionTier.BASIC_CRAFT;
-    }
+        this.setRequiredResearch(ResearchProgression.BASIC_CRAFT);
 
-    @Override
-    public double modify(double value, int thisTier, CalculationContext context) {
-        if (context.uses(USE_TOOL_DURABILITY)) {
-            value *= 1.0 + (0.4 * thisTier);
-        }
-        return value;
+        this.addUsage(ctx -> ctx.uses(USE_TOOL_DURABILITY));
+        this.addModifier((value, originalValue, propertyLevel, context) ->
+                context.withUse(USE_TOOL_DURABILITY, value, () -> value * (1.0 + (0.4 * propertyLevel))));
     }
 }

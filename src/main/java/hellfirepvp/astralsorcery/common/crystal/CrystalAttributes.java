@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.crystal;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
@@ -117,14 +118,26 @@ public final class CrystalAttributes {
     @Nonnull
     @OnlyIn(Dist.CLIENT)
     public TooltipResult addTooltip(List<ITextComponent> tooltip) {
-        return addTooltip(tooltip, ResearchHelper.getClientProgress());
+        return addTooltip(tooltip, CalculationContext.Builder.newBuilder().build());
     }
 
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    private TooltipResult addTooltip(List<ITextComponent> tooltip, PlayerProgress progress) {
+    public TooltipResult addTooltip(List<ITextComponent> tooltip, PlayerProgress progress) {
+        return addTooltip(tooltip, progress, CalculationContext.Builder.newBuilder().build());
+    }
+
+    @Nonnull
+    @OnlyIn(Dist.CLIENT)
+    public TooltipResult addTooltip(List<ITextComponent> tooltip, CalculationContext ctx) {
+        return addTooltip(tooltip, ResearchHelper.getClientProgress(), ctx);
+    }
+
+    @Nonnull
+    @OnlyIn(Dist.CLIENT)
+    private TooltipResult addTooltip(List<ITextComponent> tooltip, PlayerProgress progress, CalculationContext ctx) {
         boolean missing = false;
-        boolean addedLeast = false;
+        boolean addedAtLeastOne = false;
 
         for (Attribute attr : this.getCrystalAttributes()) {
             if (attr.getTier() > 0) {
@@ -134,10 +147,19 @@ public final class CrystalAttributes {
                 } else {
                     ITextComponent enchantmentLevel = new TranslationTextComponent(String.format("enchantment.level.%s", String.valueOf(attr.getTier())))
                             .setStyle(new Style().setColor(TextFormatting.GOLD));
-                    tooltip.add(prop.getName(attr.getTier())
+                    ITextComponent propertyName = prop.getName(attr.getTier());
+                    if (prop.hasUsageFor(ctx)) {
+                        propertyName.applyTextStyle(TextFormatting.AQUA);
+                    } else if (ctx.isEmpty()) {
+                        propertyName.applyTextStyle(TextFormatting.GRAY);
+                    } else {
+                        //Don't add a line for it if it's there, but not used in context
+                        continue;
+                    }
+                    tooltip.add(propertyName
                             .appendSibling(new StringTextComponent(" "))
                             .appendSibling(enchantmentLevel));
-                    addedLeast = true;
+                    addedAtLeastOne = true;
                 }
             }
         }
@@ -146,7 +168,7 @@ public final class CrystalAttributes {
             tooltip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge")
                     .setStyle(new Style().setColor(TextFormatting.GRAY)));
         }
-        return missing && !addedLeast ? TooltipResult.ALL_MISSING :
+        return missing && !addedAtLeastOne ? TooltipResult.ALL_MISSING :
                 missing ?  TooltipResult.ADDED_ALL_WITH_MISSING : TooltipResult.ADDED_ALL;
     }
 

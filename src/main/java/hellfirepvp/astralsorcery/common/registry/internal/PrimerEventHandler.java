@@ -94,8 +94,8 @@ public class PrimerEventHandler {
 
         RegistryStructures.init();
 
-        RegistryCrystalProperties.init();
         RegistryCrystalPropertyUsages.init();
+        RegistryCrystalProperties.init();
         RegistryCrystalProperties.initDefaultAttributes();
 
         RegistryRecipeTypes.init();

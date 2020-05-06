@@ -14,12 +14,15 @@ import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationItem;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.crystal.CalculationContext;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.crystal.source.AttunedSourceInstance;
 import hellfirepvp.astralsorcery.common.data.research.GatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCollectorCrystal;
+import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.observerlib.api.block.BlockStructureObserver;
@@ -84,7 +87,11 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
         CrystalAttributes attr = CrystalAttributes.getCrystalAttributes(stack);
         CrystalAttributes.TooltipResult result = null;
         if (attr != null) {
-            result = attr.addTooltip(toolTip);
+            result = attr.addTooltip(toolTip, CalculationContext.Builder
+                    .withSource(new AttunedSourceInstance(CrystalPropertiesAS.Sources.SOURCE_TILE_COLLECTOR_CRYSTAL, ((ConstellationItem) stack.getItem()).getAttunedConstellation(stack)))
+                    .addUsage(CrystalPropertiesAS.Usages.USE_COLLECTOR_CRYSTAL)
+                    .addUsage(CrystalPropertiesAS.Usages.USE_LENS_TRANSFER)
+                    .build());
         }
 
         if (result != null) {

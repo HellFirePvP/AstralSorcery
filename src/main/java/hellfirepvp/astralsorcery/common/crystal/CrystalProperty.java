@@ -9,16 +9,16 @@
 package hellfirepvp.astralsorcery.common.crystal;
 
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,11 +32,46 @@ public abstract class CrystalProperty extends ForgeRegistryEntry<CrystalProperty
     private static int counter = 0;
     private final int sortingId;
 
-    protected ProgressionTier tierRequirement = null;
+    private ResearchProgression requiredResearch = null;
+    private List<CrystalPropertyModifierFunction> modifiers = new ArrayList<>();
+    private Predicate<CalculationContext> usageTests = (ctx) -> false;
 
     public CrystalProperty(ResourceLocation registryName) {
         this.sortingId = counter++;
         this.setRegistryName(registryName);
+    }
+
+    /**
+     * Sets/Overwrites the research the player needs to obtain to see/understand this property.
+     *
+     * @param requiredResearch the research needed to be reached.
+     * @return self
+     */
+    public CrystalProperty setRequiredResearch(ResearchProgression requiredResearch) {
+        this.requiredResearch = requiredResearch;
+        return this;
+    }
+
+    /**
+     * Add a modifier to this property, influencing certain calculations depending on its source or usage-hints.
+     *
+     * @param modifierFunction the new modifier function
+     * @return self
+     */
+    public CrystalProperty addModifier(CrystalPropertyModifierFunction modifierFunction) {
+        this.modifiers.add(modifierFunction);
+        return this;
+    }
+
+    /**
+     * Add a usage hint that 'this property influences calculations matching the passed context'
+     *
+     * @param usage the case to add
+     * @return self
+     */
+    public CrystalProperty addUsage(Predicate<CalculationContext> usage) {
+        this.usageTests = this.usageTests.or(usage);
+        return this;
     }
 
     public int getMaxTier() {
@@ -44,14 +79,23 @@ public abstract class CrystalProperty extends ForgeRegistryEntry<CrystalProperty
     }
 
     public boolean canSee(PlayerProgress progress) {
-        return tierRequirement == null || progress.getTierReached().isThisLaterOrEqual(this.tierRequirement);
+        return this.requiredResearch == null || progress.getResearchProgression().contains(this.requiredResearch);
     }
 
-    public abstract double modify(double value, int thisTier, CalculationContext context);
+    public boolean hasUsageFor(CalculationContext ctx) {
+        return this.usageTests.test(ctx);
+    }
+
+    public double modify(double value, int tier, CalculationContext context) {
+        double originalValue = value;
+        for (CrystalPropertyModifierFunction fn : modifiers) {
+            value = fn.modify(value, originalValue, tier, context);
+        }
+        return value;
+    }
 
     public ITextComponent getName(int currentTier) {
-        return new TranslationTextComponent(String.format("crystal.property.%s.%s.name", getRegistryName().getNamespace(), getRegistryName().getPath()))
-                    .setStyle(new Style().setColor(TextFormatting.GRAY));
+        return new TranslationTextComponent(String.format("crystal.property.%s.%s.name", getRegistryName().getNamespace(), getRegistryName().getPath()));
     }
 
     @Override

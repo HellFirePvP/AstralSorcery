@@ -9,10 +9,8 @@
 package hellfirepvp.astralsorcery.common.crystal.property;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.crystal.CalculationContext;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import net.minecraft.util.ResourceLocation;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 
 import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 
@@ -27,15 +25,15 @@ public class PropertyRitualEffect extends CrystalProperty {
 
     public PropertyRitualEffect() {
         super(AstralSorcery.key("ritual.effect"));
-        this.tierRequirement = ProgressionTier.ATTUNEMENT;
-    }
+        this.setRequiredResearch(ResearchProgression.ATTUNEMENT);
 
-    @Override
-    public double modify(double value, int thisTier, CalculationContext context) {
-        if (context.uses(USE_RITUAL_EFFECT) ||
-                context.uses(USE_RITUAL_CAPACITY)) {
-            value *= 1.0 + (0.25 * thisTier);
-        }
-        return value;
+        this.addUsage(ctx -> ctx.uses(USE_RITUAL_EFFECT));
+        this.addUsage(ctx -> ctx.uses(USE_RITUAL_CAPACITY));
+        this.addModifier((value, originalValue, propertyLevel, context) -> {
+            if (context.uses(USE_RITUAL_EFFECT) || context.uses(USE_RITUAL_CAPACITY)) {
+                return value * (1.0 + (0.25 * propertyLevel));
+            }
+            return value;
+        });
     }
 }
