@@ -31,7 +31,6 @@ public class RegistryData {
         KEY_GATEWAY_CACHE = DOMAIN_AS.createSaveKey("gateway-cache", GatewayCache::new);
         KEY_STARLIGHT_NETWORK = DOMAIN_AS.createSaveKey("lightnetwork", LightNetworkBuffer::new);
         KEY_STORAGE_NETWORK = DOMAIN_AS.createSaveKey("storagenetwork", StorageNetworkBuffer::new);
-        KEY_STRUCTURE_GENERATION = DOMAIN_AS.createSaveKey("structure-gen", StructureGenerationBuffer::new);
         KEY_ROCK_CRYSTAL_BUFFER = DOMAIN_AS.createSaveKey("rock-crystals", RockCrystalBuffer::new);
     }
 

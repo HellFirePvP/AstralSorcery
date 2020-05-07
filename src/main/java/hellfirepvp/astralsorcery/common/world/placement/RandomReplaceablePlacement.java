@@ -9,13 +9,11 @@
 package hellfirepvp.astralsorcery.common.world.placement;
 
 import com.mojang.datafixers.Dynamic;
-import hellfirepvp.astralsorcery.common.world.placement.config.ReplacingFeaturePlacementConfig;
+import hellfirepvp.astralsorcery.common.world.config.ReplacingFeaturePlacementConfig;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.placement.Placement;
 
 import java.util.*;
@@ -49,7 +47,7 @@ public class RandomReplaceablePlacement extends Placement<ReplacingFeaturePlacem
         BlockPos at = pos.add(random.nextInt(16), 0, random.nextInt(16));
         at = new BlockPos(at.getX(), configIn.getRandomY(random), at.getZ());
 
-        if (configIn.canPlace(worldIn, at, random)) {
+        if (configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), at, random)) {
             result.add(at);
         }
 
@@ -66,7 +64,7 @@ public class RandomReplaceablePlacement extends Placement<ReplacingFeaturePlacem
                     -1 + random.nextInt(3));
             if (!offset.equals(at) &&
                     worldIn.chunkExists(offset.getX() >> 4, offset.getZ() >> 4) &&
-                    configIn.canPlace(worldIn, offset, random)) {
+                    configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), offset, random)) {
                 result.add(offset);
             }
         }

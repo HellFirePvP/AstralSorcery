@@ -33,25 +33,11 @@ import java.util.function.Supplier;
 public class StructureType implements IForgeRegistryEntry<StructureType> {
 
     private final ResourceLocation name;
-    private final int averageDistance;
     private final Supplier<BlockArray> structureSupplier;
 
     public StructureType(ResourceLocation name, Supplier<BlockArray> structureSupplier) {
-        this(name, structureSupplier, -1);
-    }
-
-    public StructureType(ResourceLocation name, Supplier<BlockArray> structureSupplier, int averageDistance) {
         this.name = name;
         this.structureSupplier = structureSupplier;
-        this.averageDistance = averageDistance;
-    }
-
-    public boolean isAverageDistanceRequired() {
-        return averageDistance != -1;
-    }
-
-    public int getAverageDistance() {
-        return averageDistance;
     }
 
     public BlockArray getStructure() {

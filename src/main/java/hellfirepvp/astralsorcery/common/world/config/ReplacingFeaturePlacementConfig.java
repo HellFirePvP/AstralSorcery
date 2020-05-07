@@ -6,14 +6,17 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.world.placement.config;
+package hellfirepvp.astralsorcery.common.world.config;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.util.block.BlockStateHelper;
+import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.biome.provider.BiomeProvider;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 
@@ -36,7 +39,7 @@ public class ReplacingFeaturePlacementConfig extends FeaturePlacementConfig {
     private List<BlockState> replaceableBlockStates = null;
 
     public ReplacingFeaturePlacementConfig(String featureName, boolean defaultWhitelistBiomeSpecification, boolean defaultWhitelistDimensionSpecification,
-                                           List<BiomeDictionary.Type> defaultApplicableBiomeTypes, List<Integer> defaultApplicableDimensions,
+                                           List<BiomeDictionary.Type> defaultApplicableBiomeTypes, List<DimensionType> defaultApplicableDimensions,
                                            int defaultMinY, int defaultMaxY, int defaultGenerationChance, int generationAmount,
                                            List<BlockState> defaultReplaceableBlockstates) {
         super(featureName, defaultWhitelistBiomeSpecification, defaultWhitelistDimensionSpecification,
@@ -53,8 +56,8 @@ public class ReplacingFeaturePlacementConfig extends FeaturePlacementConfig {
     }
 
     @Override
-    public boolean canPlace(IWorld iWorld, BlockPos pos, Random rand) {
-        if (!super.canPlace(iWorld, pos, rand)) {
+    public boolean canPlace(IWorld iWorld, BiomeProvider biomeProvider, BlockPos pos, Random rand) {
+        if (!super.canPlace(iWorld, biomeProvider, pos, rand)) {
             return false;
         }
         BlockState atState = iWorld.getBlockState(pos);
@@ -78,7 +81,7 @@ public class ReplacingFeaturePlacementConfig extends FeaturePlacementConfig {
 
         this.configReplaceableBlockstates = cfgBuilder
                 .comment("List all blockstates here that this feature should be able to replace with its own blocks")
-                .translation("config.world.generation.replaceable")
+                .translation(translationKey("replaceable"))
                 .define("replaceable", this.defaultReplaceableBlockstates.stream()
                         .map(BlockStateHelper::serialize)
                         .collect(Collectors.toList()));

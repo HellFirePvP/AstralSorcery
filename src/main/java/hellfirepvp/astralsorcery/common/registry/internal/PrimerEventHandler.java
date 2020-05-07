@@ -35,6 +35,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DataSerializerEntry;
@@ -63,6 +64,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(TileEntityType.class, this::registerTiles);
         eventBus.addGenericListener(EntityType.class, this::registerEntities);
         eventBus.addGenericListener(Biome.class, this::registerBiomes);
+        eventBus.addGenericListener(Feature.class, this::registerFeatures);
         eventBus.addGenericListener(Effect.class, this::registerEffects);
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
         eventBus.addGenericListener(SoundEvent.class, this::registerSounds);
@@ -139,6 +141,11 @@ public class PrimerEventHandler {
 
     private void registerBiomes(RegistryEvent.Register<Biome> event) {
         //? maybe. one day.
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
+        RegistryWorldGeneration.registerFeatures();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

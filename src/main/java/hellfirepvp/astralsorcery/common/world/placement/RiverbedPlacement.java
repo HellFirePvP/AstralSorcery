@@ -10,13 +10,10 @@ package hellfirepvp.astralsorcery.common.world.placement;
 
 import com.mojang.datafixers.Dynamic;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.world.placement.config.ReplacingFeaturePlacementConfig;
+import hellfirepvp.astralsorcery.common.world.config.ReplacingFeaturePlacementConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Direction;
@@ -55,7 +52,7 @@ public class RiverbedPlacement extends Placement<ReplacingFeaturePlacementConfig
         for (int i = 0; i < configIn.getGenerationAmount(); i++) {
             BlockPos at = pos.add(random.nextInt(16), configIn.getRandomY(random), random.nextInt(16));
 
-            if (!configIn.canPlace(worldIn, at, random)) {
+            if (!configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), at, random)) {
                 continue;
             }
 
