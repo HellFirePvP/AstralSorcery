@@ -321,7 +321,7 @@ public class CommonProxy {
         RegistryCapabilities.init(MinecraftForge.EVENT_BUS);
         StarlightNetworkRegistry.setupRegistry();
 
-        RegistryWorldGeneration.registerFeatures();
+        RegistryWorldGeneration.addFeaturesToBiomes();
 
         PatreonDataManager.loadPatreonEffects();
     }

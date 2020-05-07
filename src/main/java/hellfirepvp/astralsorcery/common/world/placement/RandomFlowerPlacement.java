@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.world.placement;
 
 import com.mojang.datafixers.Dynamic;
-import hellfirepvp.astralsorcery.common.world.placement.config.FeaturePlacementConfig;
+import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -57,7 +57,7 @@ public class RandomFlowerPlacement extends Placement<FeaturePlacementConfig> {
                 count--;
                 at = pos.add(random.nextInt(16), 0, random.nextInt(16));
                 at = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, at);
-                if (configIn.canPlace(worldIn, at, random)) {
+                if (configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), at, random)) {
                     result.add(at);
                 }
             } while (count > 0);

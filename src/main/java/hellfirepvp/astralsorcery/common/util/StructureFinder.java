@@ -35,13 +35,7 @@ public class StructureFinder {
     private StructureFinder() {}
 
     @Nullable
-    public static BlockPos tryFindClosestAstralSorceryStructure(ServerWorld world, BlockPos playerPos, StructureType searchKey, int searchRadius) {
-        return DataAS.DOMAIN_AS.getData(world, DataAS.KEY_STRUCTURE_GENERATION)
-                .getClosest(searchKey, playerPos, searchRadius);
-    }
-
-    @Nullable
-    public static BlockPos tryFindClosestVanillaStructure(ServerWorld world, BlockPos playerPos, Structure<?> structure, int searchRadius) {
+    public static BlockPos tryFindClosestStructure(ServerWorld world, BlockPos playerPos, Structure<?> structure, int searchRadius) {
         ChunkGenerator<?> gen = world.getChunkProvider().getChunkGenerator();
         try {
             return structure.findNearest(world, gen, playerPos, searchRadius, true);

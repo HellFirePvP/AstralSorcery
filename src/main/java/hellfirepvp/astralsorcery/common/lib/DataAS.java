@@ -27,7 +27,6 @@ public class DataAS {
     public static WorldCacheDomain.SaveKey<GatewayCache> KEY_GATEWAY_CACHE;
     public static WorldCacheDomain.SaveKey<LightNetworkBuffer> KEY_STARLIGHT_NETWORK;
     public static WorldCacheDomain.SaveKey<StorageNetworkBuffer> KEY_STORAGE_NETWORK;
-    public static WorldCacheDomain.SaveKey<StructureGenerationBuffer> KEY_STRUCTURE_GENERATION;
     public static WorldCacheDomain.SaveKey<RockCrystalBuffer> KEY_ROCK_CRYSTAL_BUFFER;
 
 }

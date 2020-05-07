@@ -6,19 +6,22 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.world.placement.config;
+package hellfirepvp.astralsorcery.common.world.config;
 
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
-import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.biome.provider.BiomeProvider;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.Random;
@@ -36,7 +39,7 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
     private final boolean defaultWhitelistBiomeSpecification;
     private final boolean defaultWhitelistDimensionSpecification;
     private final List<BiomeDictionary.Type> defaultApplicableBiomeTypes;
-    private final List<Integer> defaultApplicableDimensions;
+    private final List<DimensionType> defaultApplicableDimensionTypes;
     private final int defaultMinY;
     private final int defaultMaxY;
     private final int defaultGenerationChance;
@@ -49,22 +52,23 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
     private ForgeConfigSpec.BooleanValue configWhitelistBiomeCfg;
     private ForgeConfigSpec.BooleanValue configWhitelistDimensionCfg;
     private ForgeConfigSpec.ConfigValue<List<String>> configBiomeTypes;
-    private ForgeConfigSpec.ConfigValue<List<Integer>> configDimensionIds;
+    private ForgeConfigSpec.ConfigValue<List<String>> configDimensionTypes;
 
     private List<BiomeDictionary.Type> convertedBiomeTypes = null;
+    private List<DimensionType> convertedDimensionTypes = null;
 
     public FeaturePlacementConfig(String featureName,
                                   boolean defaultWhitelistBiomeSpecification,
                                   boolean defaultWhitelistDimensionSpecification,
                                   List<BiomeDictionary.Type> defaultApplicableBiomeTypes,
-                                  List<Integer> defaultApplicableDimensions,
+                                  List<DimensionType> defaultApplicableDimensionTypes,
                                   int defaultMinY, int defaultMaxY,
                                   int defaultGenerationChance, int defaultGenerationAmount) {
         super(String.format("world.generation.%s", featureName.toLowerCase()));
         this.defaultWhitelistBiomeSpecification = defaultWhitelistBiomeSpecification;
         this.defaultWhitelistDimensionSpecification = defaultWhitelistDimensionSpecification;
         this.defaultApplicableBiomeTypes = defaultApplicableBiomeTypes;
-        this.defaultApplicableDimensions = defaultApplicableDimensions;
+        this.defaultApplicableDimensionTypes = defaultApplicableDimensionTypes;
         this.defaultMinY = defaultMinY;
         this.defaultMaxY = defaultMaxY;
         this.defaultGenerationChance = defaultGenerationChance;
@@ -77,18 +81,20 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         return minY + rand.nextInt(Math.max(maxY - minY, 1));
     }
 
-    public boolean generatesInWorld(Dimension dim) {
-        int id = dim.getType().getId();
+    public boolean generatesInWorld(DimensionType dimType) {
+        if (this.convertedDimensionTypes == null) {
+            this.convertedDimensionTypes = this.convertDimensionTypeNames();
+        }
         if (this.configWhitelistDimensionCfg.get()) {
-            return this.configDimensionIds.get().contains(id);
+            return this.convertedDimensionTypes.contains(dimType);
         } else {
-            return !this.configDimensionIds.get().contains(id);
+            return !this.convertedDimensionTypes.contains(dimType);
         }
     }
 
     public boolean generatesInBiome(Biome biome) {
         if (this.convertedBiomeTypes == null) {
-            this.convertedBiomeTypes = this.convertNames();
+            this.convertedBiomeTypes = this.convertBiomeTypeNames();
         }
         if (this.configWhitelistBiomeCfg.get()) {
             for (BiomeDictionary.Type type : this.convertedBiomeTypes) {
@@ -107,8 +113,11 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         }
     }
 
-    public boolean canPlace(IWorld iWorld, BlockPos pos, Random rand) {
-        if (!this.generatesInWorld(iWorld.getDimension())) {
+    public boolean canPlace(IWorld iWorld, BiomeProvider biomeProvider, BlockPos pos, Random rand) {
+        if (!this.generatesInWorld(iWorld.getDimension().getType())) {
+            return false;
+        }
+        if (!this.generatesInBiome(biomeProvider.getBiome(pos))) {
             return false;
         }
         int rMinY = this.configMinY.get();
@@ -116,10 +125,17 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         return rMinY <= rMaxY && pos.getY() >= rMinY && pos.getY() <= rMaxY;
     }
 
-    private List<BiomeDictionary.Type> convertNames() {
+    private List<BiomeDictionary.Type> convertBiomeTypeNames() {
         return this.configBiomeTypes.get().stream()
                 .filter(name -> BiomeDictionary.Type.getType(name) != null)
                 .map(name -> BiomeDictionary.Type.getType(name))
+                .collect(Collectors.toList());
+    }
+
+    private List<DimensionType> convertDimensionTypeNames() {
+        return this.configDimensionTypes.get().stream()
+                .filter(name -> DimensionType.byName(new ResourceLocation(name)) != null)
+                .map(name -> DimensionType.byName(new ResourceLocation(name)))
                 .collect(Collectors.toList());
     }
 
@@ -140,37 +156,39 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
     public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
         this.configMinY = cfgBuilder
                 .comment("Set this to the lowest possible Y-level this feature should be able to generate at. Should be lower than 'maxY'")
-                .translation("config.world.generation.miny")
+                .translation(translationKey("miny"))
                 .defineInRange("minY", this.defaultMinY, 1, 186);
         this.configMaxY = cfgBuilder
                 .comment("Set this to the highest possible Y-level this feature should be able to generate at. Should be higher than 'minY'")
-                .translation("config.world.generation.maxy")
+                .translation(translationKey("maxy"))
                 .defineInRange("maxY", this.defaultMaxY, 2, 187);
         this.configGenerationChance = cfgBuilder
                 .comment("Set this to set the overall chance for this feature to generate. The higher, the rarer.")
-                .translation("config.world.generation.generationchance")
+                .translation(translationKey("generationchance"))
                 .defineInRange("generationChance", this.defaultGenerationChance, 5, 200_000);
         this.configGenerationAmount = cfgBuilder
                 .comment("Set the amount this feature tries to generate per chunk")
-                .translation("config.world.generation.generationamount")
+                .translation(translationKey("generationamount"))
                 .defineInRange("generationAmount", this.defaultGenerationAmount, 1, 128);
 
         this.configWhitelistBiomeCfg = cfgBuilder
                 .comment("Set this to true to make the biome-type restrictions a whitelist, false for blacklist")
-                .translation("config.world.generation.whitelistbiomespecification")
+                .translation(translationKey("whitelistbiomespecification"))
                 .define("whitelistBiomeConfigurations", this.defaultWhitelistBiomeSpecification);
         this.configWhitelistDimensionCfg = cfgBuilder
                 .comment("Set this to true to make the dimension-id restrictions a whitelist, false for blacklist")
-                .translation("config.world.generation.whitelistdimensionspecification")
+                .translation("whitelistdimensionspecification")
                 .define("whitelistDimensionConfigurations", this.defaultWhitelistDimensionSpecification);
 
-        this.configDimensionIds = cfgBuilder
+        this.configDimensionTypes = cfgBuilder
                 .comment("List all dimensionIds here that this feature should spawn in")
-                .translation("config.world.generation.dimensions")
-                .define("dimensionids", this.defaultApplicableDimensions);
+                .translation(translationKey("dimensions"))
+                .define("dimensionids", this.defaultApplicableDimensionTypes.stream()
+                        .map(dimType -> dimType.getRegistryName().toString())
+                        .collect(Collectors.toList()));
         this.configBiomeTypes = cfgBuilder
                 .comment("List all biome types here that this feature should be able to spawn in")
-                .translation("config.world.generation.biometypes")
+                .translation(translationKey("biometypes"))
                 .define("biomeTypes", this.defaultApplicableBiomeTypes.stream()
                         .map(BiomeDictionary.Type::getName)
                         .collect(Collectors.toList()));

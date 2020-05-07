@@ -9,30 +9,39 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
-import hellfirepvp.astralsorcery.common.lib.StructuresAS;
+import hellfirepvp.astralsorcery.common.lib.WorldGenerationAS;
 import hellfirepvp.astralsorcery.common.world.feature.AquamarineFeature;
 import hellfirepvp.astralsorcery.common.world.feature.GlowFlowerFeature;
 import hellfirepvp.astralsorcery.common.world.feature.RockCrystalFeature;
-import hellfirepvp.astralsorcery.common.world.feature.StructureGenerationFeature;
-import hellfirepvp.astralsorcery.common.world.placement.EvenStructurePlacement;
 import hellfirepvp.astralsorcery.common.world.placement.RandomReplaceablePlacement;
 import hellfirepvp.astralsorcery.common.world.placement.RiverbedPlacement;
-import hellfirepvp.astralsorcery.common.world.placement.config.EvenStructurePlacementConfig;
-import hellfirepvp.astralsorcery.common.world.placement.config.FeaturePlacementConfig;
+import hellfirepvp.astralsorcery.common.world.config.StructurePlacementConfig;
+import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.placement.RandomFlowerPlacement;
-import hellfirepvp.astralsorcery.common.world.placement.config.ReplacingFeaturePlacementConfig;
+import hellfirepvp.astralsorcery.common.world.config.ReplacingFeaturePlacementConfig;
+import hellfirepvp.astralsorcery.common.world.structure.AncientShrineStructure;
+import hellfirepvp.astralsorcery.common.world.structure.DesertShrineStructure;
+import hellfirepvp.astralsorcery.common.world.structure.SmallShrineStructure;
+import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureAncientShrineStructure;
+import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureDesertShrineStructure;
+import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureSmallShrineStructure;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placement.ConfiguredPlacement;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.NoPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static hellfirepvp.astralsorcery.common.lib.WorldGenerationAS.*;
@@ -49,67 +58,86 @@ public class RegistryWorldGeneration {
     private RegistryWorldGeneration() {}
 
     public static void registerFeatureConfigurations(ServerConfig cfg) {
-        Placement.DESERT_SHRINE = cfg.addConfigEntry(new EvenStructurePlacementConfig(StructureTypesAS.STYPE_DESERT, 4,
-                Lists.newArrayList(BiomeDictionary.Type.SANDY), Lists.newArrayList(0),
-                20, 90, 140));
-        Placement.MOUNTAIN_SHRINE = cfg.addConfigEntry(new EvenStructurePlacementConfig(StructureTypesAS.STYPE_MOUNTAIN, 10,
-                Lists.newArrayList(BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.MOUNTAIN), Lists.newArrayList(0),
-                50, 160, 140));
-        Placement.SMALL_SHRINE = cfg.addConfigEntry(new EvenStructurePlacementConfig(StructureTypesAS.STYPE_SMALL, 4,
-                Lists.newArrayList(BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.FOREST), Lists.newArrayList(0),
-                20, 200, 140));
+        WorldGenerationAS.Placement.DESERT_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig(StructureTypesAS.STYPE_DESERT, 9,
+                Lists.newArrayList(BiomeDictionary.Type.SANDY), Lists.newArrayList(DimensionType.OVERWORLD),
+                20, 90, 140,
+                8, 4));
+        WorldGenerationAS.Placement.MOUNTAIN_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig(StructureTypesAS.STYPE_MOUNTAIN, 19,
+                Lists.newArrayList(BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.MOUNTAIN), Lists.newArrayList(DimensionType.OVERWORLD),
+                50, 160, 140,
+                6, 4));
+        WorldGenerationAS.Placement.SMALL_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig(StructureTypesAS.STYPE_SMALL, 9,
+                Lists.newArrayList(BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.FOREST), Lists.newArrayList(DimensionType.OVERWORLD),
+                20, 200, 140,
+                12, 7));
 
-        Placement.GLOW_FLOWER = cfg.addConfigEntry(new FeaturePlacementConfig("glow_flower", true, true,
-                Lists.newArrayList(BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.COLD), Lists.newArrayList(0),
+        WorldGenerationAS.Placement.GLOW_FLOWER = cfg.addConfigEntry(new FeaturePlacementConfig("glow_flower", true, true,
+                Lists.newArrayList(BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.COLD), Lists.newArrayList(DimensionType.OVERWORLD),
                 50, 210, 40, 1));
-        Placement.ROCK_CRYSTAL = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("rock_crystal", false, true,
-                Lists.newArrayList(), Lists.newArrayList(0),
+        WorldGenerationAS.Placement.ROCK_CRYSTAL = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("rock_crystal", false, true,
+                Lists.newArrayList(), Lists.newArrayList(DimensionType.OVERWORLD),
                 2, 5, 55, 2,
                 Lists.newArrayList(Blocks.STONE.getDefaultState(), Blocks.DIORITE.getDefaultState(), Blocks.GRANITE.getDefaultState(), Blocks.ANDESITE.getDefaultState())));
-        Placement.AQUAMARINE = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("aquamarine", true, true,
-                Lists.newArrayList(BiomeDictionary.Type.RIVER, BiomeDictionary.Type.BEACH), Lists.newArrayList(0),
+        WorldGenerationAS.Placement.AQUAMARINE = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("aquamarine", true, true,
+                Lists.newArrayList(BiomeDictionary.Type.RIVER, BiomeDictionary.Type.BEACH), Lists.newArrayList(DimensionType.OVERWORLD),
                 50, 65, 1, 35,
                 Lists.newArrayList(Blocks.SAND.getDefaultState())));
 
-        Placement.MARBLE = new CountRangeConfig(10, 0, 0, 64);
+        WorldGenerationAS.Placement.MARBLE = new CountRangeConfig(10, 0, 0, 64);
     }
 
     public static void registerFeatures() {
-        registerFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
-                new ConfiguredFeature<>(new StructureGenerationFeature(StructureTypesAS.STYPE_DESERT, StructuresAS.STRUCT_DESERT_SHRINE), NoFeatureConfig.NO_FEATURE_CONFIG),
-                new ConfiguredPlacement<>(new EvenStructurePlacement(Placement.DESERT_SHRINE), Placement.DESERT_SHRINE));
-        registerFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
-                new ConfiguredFeature<>(new StructureGenerationFeature(StructureTypesAS.STYPE_MOUNTAIN, StructuresAS.STRUCT_MOUNTAIN_SHRINE), NoFeatureConfig.NO_FEATURE_CONFIG),
-                new ConfiguredPlacement<>(new EvenStructurePlacement(Placement.MOUNTAIN_SHRINE), Placement.MOUNTAIN_SHRINE));
-        registerFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
-                new ConfiguredFeature<>(new StructureGenerationFeature(StructureTypesAS.STYPE_SMALL, StructuresAS.STRUCT_SMALL_SHRINE), NoFeatureConfig.NO_FEATURE_CONFIG),
-                new ConfiguredPlacement<>(new EvenStructurePlacement(Placement.SMALL_SHRINE), Placement.SMALL_SHRINE));
+        ANCIENT_SHRINE_PIECE = Registry.register(Registry.STRUCTURE_PIECE, KEY_ANCIENT_SHRINE, AncientShrineStructure::new);
+        DESERT_SHRINE_PIECE  = Registry.register(Registry.STRUCTURE_PIECE, KEY_DESERT_SHRINE,  DesertShrineStructure::new);
+        SMALL_SHRINE_PIECE   = Registry.register(Registry.STRUCTURE_PIECE, KEY_SMALL_SHRINE,   SmallShrineStructure::new);
+
+        STRUCTURE_ANCIENT_SHRINE = register(new FeatureAncientShrineStructure(WorldGenerationAS.Placement.MOUNTAIN_SHRINE), KEY_ANCIENT_SHRINE);
+        STRUCTURE_DESERT_SHRINE  = register(new FeatureDesertShrineStructure(WorldGenerationAS.Placement.DESERT_SHRINE), KEY_DESERT_SHRINE);
+        STRUCTURE_SMALL_SHRINE   = register(new FeatureSmallShrineStructure(WorldGenerationAS.Placement.SMALL_SHRINE), KEY_SMALL_SHRINE);
+    }
+
+    private static <FC extends IFeatureConfig, V extends Feature<FC>> V register(V feature, ResourceLocation key) {
+        AstralSorcery.getProxy().getRegistryPrimer().register(feature.setRegistryName(key));
+        return feature;
+    }
+
+    public static void addFeaturesToBiomes() {
+        registerStructure(GenerationStage.Decoration.SURFACE_STRUCTURES, STRUCTURE_ANCIENT_SHRINE, NoFeatureConfig.NO_FEATURE_CONFIG);
+        registerStructure(GenerationStage.Decoration.SURFACE_STRUCTURES, STRUCTURE_DESERT_SHRINE, NoFeatureConfig.NO_FEATURE_CONFIG);
+        registerStructure(GenerationStage.Decoration.SURFACE_STRUCTURES, STRUCTURE_SMALL_SHRINE, NoFeatureConfig.NO_FEATURE_CONFIG);
 
         registerFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                new ConfiguredFeature<>(new GlowFlowerFeature(), NoFeatureConfig.NO_FEATURE_CONFIG),
-                new ConfiguredPlacement<>(new RandomFlowerPlacement(Placement.GLOW_FLOWER), Placement.GLOW_FLOWER));
+                new GlowFlowerFeature(), NoFeatureConfig.NO_FEATURE_CONFIG,
+                new RandomFlowerPlacement(WorldGenerationAS.Placement.GLOW_FLOWER), WorldGenerationAS.Placement.GLOW_FLOWER);
         registerFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
-                new ConfiguredFeature<>(new RockCrystalFeature(), NoFeatureConfig.NO_FEATURE_CONFIG),
-                new ConfiguredPlacement<>(new RandomReplaceablePlacement(Placement.ROCK_CRYSTAL), Placement.ROCK_CRYSTAL));
+                new RockCrystalFeature(), NoFeatureConfig.NO_FEATURE_CONFIG,
+                new RandomReplaceablePlacement(WorldGenerationAS.Placement.ROCK_CRYSTAL), WorldGenerationAS.Placement.ROCK_CRYSTAL);
         registerFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
-                new ConfiguredFeature<>(new AquamarineFeature(), NoFeatureConfig.NO_FEATURE_CONFIG),
-                new ConfiguredPlacement<>(new RiverbedPlacement(Placement.AQUAMARINE), Placement.AQUAMARINE));
+                new AquamarineFeature(), NoFeatureConfig.NO_FEATURE_CONFIG,
+                new RiverbedPlacement(WorldGenerationAS.Placement.AQUAMARINE), WorldGenerationAS.Placement.AQUAMARINE);
 
         registerFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
-                new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BlocksAS.MARBLE_RAW.getDefaultState(), 33)),
-                new ConfiguredPlacement<>(net.minecraft.world.gen.placement.Placement.COUNT_RANGE, Placement.MARBLE));
+                Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BlocksAS.MARBLE_RAW.getDefaultState(), 33),
+                Placement.COUNT_RANGE, WorldGenerationAS.Placement.MARBLE);
     }
 
     private static <FC extends IFeatureConfig, PC extends IPlacementConfig> void registerFeature(
             GenerationStage.Decoration stage,
-            ConfiguredFeature<FC> feature,
-            ConfiguredPlacement<PC> placement) {
+            Feature<FC> feature,
+            FC featureConfig,
+            Placement<PC> placement,
+            PC placementConfig) {
 
-        DeferredWorkQueue.runLater(() -> {
-            for (Biome b : ForgeRegistries.BIOMES) {
-                b.addFeature(stage, Biome.createDecoratedFeature(feature.feature, feature.config, placement.decorator, placement.config));
-            }
-        });
+        for (Biome b : ForgeRegistries.BIOMES) {
+            b.addFeature(stage, Biome.createDecoratedFeature(feature, featureConfig, placement, placementConfig));
+        }
+    }
+
+    private static <FC extends IFeatureConfig> void registerStructure(GenerationStage.Decoration stage, Structure<FC> structure, FC featureConfig) {
+        for (Biome b : ForgeRegistries.BIOMES) {
+            b.addFeature(stage, Biome.createDecoratedFeature(structure, featureConfig, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+            b.addStructure(structure, featureConfig);
+        }
     }
 
 }

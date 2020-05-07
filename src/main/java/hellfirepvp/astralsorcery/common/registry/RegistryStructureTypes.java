@@ -32,9 +32,9 @@ public class RegistryStructureTypes {
     public static void init() {
         EMPTY = registerAS("empty", () -> StructuresAS.EMPTY);
 
-        STYPE_MOUNTAIN = registerAS("struct_mountain", 768, () -> StructuresAS.STRUCT_MOUNTAIN_SHRINE);
-        STYPE_DESERT = registerAS("struct_desert", 1024, () -> StructuresAS.STRUCT_DESERT_SHRINE);
-        STYPE_SMALL = registerAS("struct_small", 512, () -> StructuresAS.STRUCT_SMALL_SHRINE);
+        STYPE_MOUNTAIN = registerAS("struct_mountain", () -> StructuresAS.STRUCT_MOUNTAIN_SHRINE);
+        STYPE_DESERT = registerAS("struct_desert", () -> StructuresAS.STRUCT_DESERT_SHRINE);
+        STYPE_SMALL = registerAS("struct_small", () -> StructuresAS.STRUCT_SMALL_SHRINE);
 
         PTYPE_RITUAL_PEDESTAL = registerAS("pattern_ritual_pedestal", () -> StructuresAS.STRUCT_RITUAL_PEDESTAL);
         PTYPE_INFUSER = registerAS("pattern_infuser", () -> StructuresAS.STRUCT_INFUSER);
@@ -44,15 +44,11 @@ public class RegistryStructureTypes {
     }
 
     private static StructureType registerAS(String name, Supplier<BlockArray> structureSupplier) {
-        return registerAS(name, -1, structureSupplier);
+        return register(AstralSorcery.key(name), structureSupplier);
     }
 
-    private static StructureType registerAS(String name, int averageDistance, Supplier<BlockArray> structureSupplier) {
-        return register(AstralSorcery.key(name), averageDistance, structureSupplier);
-    }
-
-    private static StructureType register(ResourceLocation name, int averageDistance, Supplier<BlockArray> structureSupplier) {
-        StructureType type = new StructureType(name, structureSupplier, averageDistance);
+    private static StructureType register(ResourceLocation name, Supplier<BlockArray> structureSupplier) {
+        StructureType type = new StructureType(name, structureSupplier);
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
         return type;
     }

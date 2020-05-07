@@ -1,3 +1,7 @@
-# Do not commit inserted generated resources
-/data/
+# Do not commit inserted generated resources, except structure NBT templates...
+data/*
+!data/astralsorcery/
+data/astralsorcery/*
+!data/astralsorcery/structures/
+
 /assets/astralsorcery/blockstates/
