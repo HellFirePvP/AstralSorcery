@@ -58,15 +58,15 @@ public class RegistryWorldGeneration {
     private RegistryWorldGeneration() {}
 
     public static void registerFeatureConfigurations(ServerConfig cfg) {
-        WorldGenerationAS.Placement.DESERT_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig(StructureTypesAS.STYPE_DESERT, 9,
+        WorldGenerationAS.Placement.DESERT_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig("struct_desert", 9,
                 Lists.newArrayList(BiomeDictionary.Type.SANDY), Lists.newArrayList(DimensionType.OVERWORLD),
                 20, 90, 140,
                 8, 4));
-        WorldGenerationAS.Placement.MOUNTAIN_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig(StructureTypesAS.STYPE_MOUNTAIN, 19,
+        WorldGenerationAS.Placement.MOUNTAIN_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig("struct_mountain", 19,
                 Lists.newArrayList(BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.MOUNTAIN), Lists.newArrayList(DimensionType.OVERWORLD),
                 50, 160, 140,
                 6, 4));
-        WorldGenerationAS.Placement.SMALL_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig(StructureTypesAS.STYPE_SMALL, 9,
+        WorldGenerationAS.Placement.SMALL_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig("struct_small", 9,
                 Lists.newArrayList(BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.FOREST), Lists.newArrayList(DimensionType.OVERWORLD),
                 20, 200, 140,
                 12, 7));

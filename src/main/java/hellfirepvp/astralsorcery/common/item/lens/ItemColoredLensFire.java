@@ -83,7 +83,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
                 if (random.nextInt(10) != 0) {
                     return;
                 }
-                ItemStack result = RecipeHelper.findSmeltingResult(entity.getEntityWorld(), current);
+                ItemStack result = RecipeHelper.findSmeltingResult(entity.getEntityWorld(), current).orElse(ItemStack.EMPTY);
                 if (!result.isEmpty()) {
                     Vector3 entityPos = Vector3.atEntityCenter(entity);
                     ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, result.getCount()));
@@ -110,7 +110,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
             if (blockStack.isEmpty()) {
                 return;
             }
-            ItemStack result = RecipeHelper.findSmeltingResult((World) world, blockStack);
+            ItemStack result = RecipeHelper.findSmeltingResult((World) world, blockStack).orElse(ItemStack.EMPTY);
             if (result.isEmpty()) {
                 return;
             }

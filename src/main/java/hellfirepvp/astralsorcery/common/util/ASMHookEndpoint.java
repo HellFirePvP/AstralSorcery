@@ -16,7 +16,6 @@ import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHe
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.event.PotionApplyEvent;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
-import hellfirepvp.astralsorcery.common.perk.modifier.DynamicAttributeModifier;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;

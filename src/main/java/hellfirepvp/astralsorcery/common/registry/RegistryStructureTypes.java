@@ -32,10 +32,6 @@ public class RegistryStructureTypes {
     public static void init() {
         EMPTY = registerAS("empty", () -> StructuresAS.EMPTY);
 
-        STYPE_MOUNTAIN = registerAS("struct_mountain", () -> StructuresAS.STRUCT_MOUNTAIN_SHRINE);
-        STYPE_DESERT = registerAS("struct_desert", () -> StructuresAS.STRUCT_DESERT_SHRINE);
-        STYPE_SMALL = registerAS("struct_small", () -> StructuresAS.STRUCT_SMALL_SHRINE);
-
         PTYPE_RITUAL_PEDESTAL = registerAS("pattern_ritual_pedestal", () -> StructuresAS.STRUCT_RITUAL_PEDESTAL);
         PTYPE_INFUSER = registerAS("pattern_infuser", () -> StructuresAS.STRUCT_INFUSER);
         PTYPE_ENHANCED_COLLECTOR_CRYSTAL = registerAS("pattern_enhanced_collector_crystal", () -> StructuresAS.STRUCT_ENHANCED_COLLECTOR_CRYSTAL);

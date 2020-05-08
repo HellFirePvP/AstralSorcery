@@ -55,16 +55,16 @@ public class RecipeHelper {
     }
 
     @Nonnull
-    public static ItemStack findSmeltingResult(World world, BlockState input) {
+    public static Optional<ItemStack> findSmeltingResult(World world, BlockState input) {
         ItemStack stack = ItemUtils.createBlockStack(input);
         if (stack.isEmpty()) {
-            return ItemStack.EMPTY;
+            return Optional.empty();
         }
         return findSmeltingResult(world, stack);
     }
 
     @Nonnull
-    public static ItemStack findSmeltingResult(World world, ItemStack input) {
+    public static Optional<ItemStack> findSmeltingResult(World world, ItemStack input) {
         RecipeManager mgr = world.getRecipeManager();
         IInventory inv = new Inventory(input);
         Optional<IRecipe<IInventory>> optRecipe = (Optional<IRecipe<IInventory>>) ObjectUtils.firstNonNull(
@@ -72,7 +72,7 @@ public class RecipeHelper {
                 mgr.getRecipe(IRecipeType.CAMPFIRE_COOKING, inv, world),
                 mgr.getRecipe(IRecipeType.SMOKING, inv, world),
                 Optional.empty());
-        return optRecipe.map(recipe -> recipe.getCraftingResult(inv)).orElse(ItemStack.EMPTY);
+        return optRecipe.map(recipe -> recipe.getCraftingResult(inv).copy());
     }
 
     @Nullable

@@ -157,7 +157,6 @@ public class CommonProxy {
         RegistryGameRules.init();
         RegistryStructureTypes.init();
         PacketChannel.registerPackets();
-        RegistryLootFunctions.registerLootFunctions();
         RegistryPerkAttributeTypes.init();
         RegistryPerkAttributeReaders.init();
         RegistryIngredientTypes.init();

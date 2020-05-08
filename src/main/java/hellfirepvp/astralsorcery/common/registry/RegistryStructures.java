@@ -36,10 +36,6 @@ public class RegistryStructures {
         STRUCT_ENHANCED_COLLECTOR_CRYSTAL = register(new PatternEnhancedCollectorCrystal());
         STRUCT_SPECTRAL_RELAY = register(new PatternSpectralRelay());
         STRUCT_ATTUNEMENT_ALTAR = register(new PatternAttunementAltar());
-
-        STRUCT_DESERT_SHRINE = register(new StructureDesertShrine());
-        STRUCT_MOUNTAIN_SHRINE = register(new StructureMountainShrine());
-        STRUCT_SMALL_SHRINE = register(new StructureSmallShrine());
     }
 
     private static <T extends MatchableStructure> T register(T struct) {

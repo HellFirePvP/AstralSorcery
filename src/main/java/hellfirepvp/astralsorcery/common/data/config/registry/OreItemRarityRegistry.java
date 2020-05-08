@@ -45,7 +45,7 @@ public class OreItemRarityRegistry extends ConfigDataAdapter<OreItemRarityEntry>
 
         while (visitedEntires.size() < entries.size()) {
             OreItemRarityEntry entry = MiscUtils.getWeightedRandomEntry(entries.stream()
-                    .filter(visitedEntires::contains)
+                    .filter(value -> !visitedEntires.contains(value))
                     .collect(Collectors.toList()), rand, OreItemRarityEntry::getWeight);
 
             if (entry != null) {
