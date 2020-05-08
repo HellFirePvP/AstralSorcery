@@ -1,0 +1,18 @@
+{
+  "type": "astralsorcery:scorching_heat",
+  "conditions": [
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "enchantments": [
+          {
+            "enchantment": "astralsorcery:scorching_heat",
+            "levels": {
+              "min": 1
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

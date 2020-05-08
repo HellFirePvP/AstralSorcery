@@ -27,10 +27,12 @@ public class RegistryEnchantments {
 
     private RegistryEnchantments() {}
 
+    /**
+     * @see hellfirepvp.astralsorcery.common.loot.global.LootModifierScorchingHeat
+     */
     public static void init() {
         NIGHT_VISION = register(new EnchantmentNightVision())
                 .setRegistryName(AstralSorcery.key("night_vision"));
-        //TODO add effect of this once harvest drops is functional again
         SCORCHING_HEAT = register(new Enchantment(Enchantment.Rarity.VERY_RARE, EnchantmentType.DIGGER, new EquipmentSlotType[] { EquipmentSlotType.MAINHAND }) {})
                 .setRegistryName(AstralSorcery.key("scorching_heat"));
     }

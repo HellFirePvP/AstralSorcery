@@ -60,7 +60,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk implements Att
     }
 
     @Override
-    protected void applyEffectMultiplier(double multiplier) {
+    protected void applyEffectMultiplier(float multiplier) {
         super.applyEffectMultiplier(multiplier);
 
         typeModifierList.forEach(t -> t.multiplyValue(multiplier));

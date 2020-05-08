@@ -28,21 +28,19 @@ public class StructurePlacementConfig extends FeaturePlacementConfig {
     private final int defaultStructureSize;
     private final int defaultStructureDistance;
     private final int defaultStructureSeparation;
-    private final StructureType type;
 
     private ForgeConfigSpec.IntValue configStructureSize;
     private ForgeConfigSpec.IntValue configStructureDistance;
     private ForgeConfigSpec.IntValue configStructureSeparation;
 
-    public StructurePlacementConfig(StructureType type, int structureSize,
+    public StructurePlacementConfig(String featureName, int structureSize,
                                     List<BiomeDictionary.Type> applicableBiomeTypes,
                                     List<DimensionType> applicableDimensions,
                                     int minY, int maxY, int generationChance,
                                     int defaultStructureDistance, int defaultStructureSeparation) {
-        super(type.getRegistryName().getPath(), true, true,
+        super(featureName, true, true,
                 applicableBiomeTypes, applicableDimensions,
                 minY, maxY, generationChance, 1);
-        this.type = type;
         this.defaultStructureSize = structureSize;
         this.defaultStructureDistance = defaultStructureDistance;
         this.defaultStructureSeparation = defaultStructureSeparation;
@@ -58,10 +56,6 @@ public class StructurePlacementConfig extends FeaturePlacementConfig {
 
     public int getStructureSeparation() {
         return this.configStructureSeparation.get();
-    }
-
-    public StructureType getType() {
-        return type;
     }
 
     @Override

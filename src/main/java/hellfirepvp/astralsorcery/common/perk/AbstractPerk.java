@@ -67,7 +67,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
 
     private List<ITextComponent> tooltipCache = null;
     private boolean cacheTooltip = true;
-    private double cacheEffectMultiplier = 1.0;
+    private float cacheEffectMultiplier = 1.0F;
 
     public AbstractPerk(ResourceLocation name, int x, int y) {
         this.setRegistryName(name);
@@ -110,7 +110,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
     //    applyEffectMultiplier(multiplier);
     //}
 
-    protected void applyEffectMultiplier(double multiplier) {
+    protected void applyEffectMultiplier(float multiplier) {
         this.cacheEffectMultiplier = multiplier;
     }
 

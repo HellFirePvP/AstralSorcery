@@ -36,6 +36,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DataSerializerEntry;
@@ -68,6 +69,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(Effect.class, this::registerEffects);
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
         eventBus.addGenericListener(SoundEvent.class, this::registerSounds);
+        eventBus.addGenericListener(GlobalLootModifierSerializer.class, this::registerGlobalLootModifierSerializers);
         eventBus.addGenericListener(IConstellation.class, this::registerConstellations);
         eventBus.addGenericListener(AbstractPerk.class, this::registerPerks);
         eventBus.addGenericListener(DataSerializerEntry.class, this::registerDataSerializers);
@@ -156,6 +158,11 @@ public class PrimerEventHandler {
 
     private void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
         RegistryEnchantments.init();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerGlobalLootModifierSerializers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
+        RegistryLoot.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
