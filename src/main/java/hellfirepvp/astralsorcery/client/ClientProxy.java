@@ -88,8 +88,6 @@ public class ClientProxy extends CommonProxy {
                     }));
         }
 
-        OBJLoader.INSTANCE.addDomain(AstralSorcery.MODID);
-
         this.clientConfig = new ClientConfig();
 
         super.initialize();

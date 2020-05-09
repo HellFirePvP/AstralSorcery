@@ -44,7 +44,7 @@ public class RootEvorsio extends RootPerk {
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(10_000, 0.1F, 0.01F, 0.05F);
+        return new DiminishingMultiplier(1_000, 0.1F, 0.005F, 0.15F);
     }
 
     @Override
@@ -75,10 +75,11 @@ public class RootEvorsio extends RootPerk {
         } catch (Exception exc) {
             gainedExp = 0.5F;
         }
-        if (gainedExp <= 0) {
-            return; //Unbreakable lol. you're not getting exp for that.
+        if (gainedExp < 0) {
+            return; //Unbreakable
         }
 
+        gainedExp *= 2.5F;
         gainedExp *= this.getExpMultiplier();
         gainedExp *= this.getDiminishingReturns(player);
         gainedExp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);

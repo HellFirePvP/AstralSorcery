@@ -104,7 +104,7 @@ public interface GemSlotPerk {
             throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
         }
 
-        if (player.getEntityWorld().isRemote) {
+        if (player.getEntityWorld().isRemote()) {
             return;
         }
 
@@ -120,7 +120,7 @@ public interface GemSlotPerk {
         ItemStack contained = getContainedItem(player, LogicalSide.SERVER, data);
         if (!contained.isEmpty()) {
             if (!player.addItemStackToInventory(contained)) {
-                ItemUtils.dropItem(player.world, player.posX, player.posY, player.posZ, contained);
+                ItemUtils.dropItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, contained);
             }
         }
         setContainedItem(player, LogicalSide.SERVER, data, ItemStack.EMPTY);

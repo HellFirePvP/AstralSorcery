@@ -48,7 +48,7 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(5_000L, 0.08F, 0.005F, 0.001F);
+        return new DiminishingMultiplier(10_000L, 0.065F, 0.003F, 0.2F);
     }
 
     @Override
@@ -60,6 +60,7 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
             this.moveTrackMap.computeIfAbsent(Stats.SPRINT_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
             this.moveTrackMap.computeIfAbsent(Stats.FLY_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
             this.moveTrackMap.computeIfAbsent(Stats.AVIATE_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(Stats.SWIM_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
         }
     }
 
@@ -87,11 +88,13 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
         int sprint = mgr.getValue(Stats.CUSTOM.get(Stats.SPRINT_ONE_CM));
         int flown = mgr.getValue(Stats.CUSTOM.get(Stats.FLY_ONE_CM));
         int elytra = mgr.getValue(Stats.CUSTOM.get(Stats.AVIATE_ONE_CM));
+        int swam = mgr.getValue(Stats.CUSTOM.get(Stats.SWIM_ONE_CM));
 
         int lastWalked = this.moveTrackMap.computeIfAbsent(Stats.WALK_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> walked);
         int lastSprint = this.moveTrackMap.computeIfAbsent(Stats.SPRINT_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> sprint);
         int lastFly = this.moveTrackMap.computeIfAbsent(Stats.FLY_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> flown);
         int lastElytra = this.moveTrackMap.computeIfAbsent(Stats.AVIATE_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> elytra);
+        int lastSwam = this.moveTrackMap.computeIfAbsent(Stats.SWIM_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> swam);
 
         float added = 0;
 
@@ -117,12 +120,17 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
         }
         if (elytra > lastElytra) {
             added += Math.min(elytra - lastElytra, 500F);
-            added *= 0.8F;
+            added *= 0.7F;
             this.moveTrackMap.get(Stats.AVIATE_ONE_CM).put(uuid, flown);
+        }
+        if (swam > lastSwam) {
+            added += Math.min(swam - lastSwam, 500F);
+            added *= 1.4F;
+            this.moveTrackMap.get(Stats.SWIM_ONE_CM).put(uuid, swam);
         }
 
         if (added > 0) {
-            added *= 0.025F;
+            added *= 0.05F;
             added *= this.getExpMultiplier();
             added *= this.getDiminishingReturns(player);
             added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
