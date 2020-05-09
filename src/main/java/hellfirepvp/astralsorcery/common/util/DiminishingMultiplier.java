@@ -47,8 +47,8 @@ public class DiminishingMultiplier {
         long now = System.currentTimeMillis();
 
         long diff = now - this.lastGain;
-        long times = (diff * (this.recoveryStack + 1)) % this.gainMsTime;
-        if (times > 0 && multiplier < 1F) {
+        long times = (diff * (this.recoveryStack + 1)) / this.gainMsTime;
+        if (times > 0) {
             this.lastGain = now;
             this.recoveryStack = Math.min(this.recoveryStack + 1, 3);
             this.multiplier = MathHelper.clamp(this.multiplier + times * gainRate, this.min, 1F);

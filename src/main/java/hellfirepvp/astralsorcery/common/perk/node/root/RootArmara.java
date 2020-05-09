@@ -42,7 +42,7 @@ public class RootArmara extends RootPerk {
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(20_000L, 0.1F, 0.05F, 0.001F);
+        return new DiminishingMultiplier(4_000L, 0.2F, 0.125F, 0.01F);
     }
 
     @Override

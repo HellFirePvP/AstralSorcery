@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.perk.node.RootPerk;
 import hellfirepvp.astralsorcery.common.util.DiminishingMultiplier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
@@ -41,7 +42,7 @@ public class RootAevitas extends RootPerk {
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(5_000L, 0.05F, 0.07F, 0.05F);
+        return new DiminishingMultiplier(1_000L, 1F, 1F, 0.01F);
     }
 
     @Override
@@ -66,7 +67,13 @@ public class RootAevitas extends RootPerk {
             return;
         }
 
-        float xp = Math.max(event.getPlacedBlock().getBlockHardness(event.getWorld(), event.getPos()) / 20F, 1);
+        float hardness;
+        try {
+            hardness = Math.max(event.getPlacedBlock().getBlockHardness(event.getWorld(), event.getPos()), 1F);
+        } catch (Exception exc) {
+            hardness = 1F;
+        }
+        float xp = Math.min(MathHelper.sqrt(hardness) * 4.5F, 100F);
         xp *= this.getExpMultiplier();
         xp *= this.getDiminishingReturns(player);
         xp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);

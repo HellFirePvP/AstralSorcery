@@ -74,7 +74,7 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
                     .setTicksPerRotation(20 + rand.nextInt(20)));
         }
 
-        ConstellationEffectProperties prop = this.createProperties(0);
+        ConstellationEffectProperties prop = this.createProperties(pedestal.getMirrorCount());
 
         ItemStack socket = pedestal.getCurrentCrystal();
         if (!socket.isEmpty() && socket.getItem() instanceof ItemAttunedCrystalBase) {
@@ -86,7 +86,7 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
         }
 
         PlayerEntity owner = pedestal.getOwner();
-        List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, BOX.offset(pos).grow(pedestal.getMirrorCount()));
+        List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, BOX.offset(pos).grow(prop.getSize()));
         if (!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
                 if (e.isAlive() && TechnicalEntityRegistry.INSTANCE.canAffect(e)) {
