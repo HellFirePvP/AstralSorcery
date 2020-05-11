@@ -234,7 +234,7 @@ public class RegistryResearch {
                 .addPage(text("ALTAR4.1"))
                 .addPage(recipe(BlocksAS.ALTAR_RADIANCE))
                 .addTomeLookup(BlocksAS.ALTAR_RADIANCE, 1, ResearchProgression.CONSTELLATION)
-                //TODO add altar t4 .addPage(structure(StructureTypesAS.EMPTY))
+                .addPage(structure(StructureTypesAS.PTYPE_ALTAR_TRAIT))
                 .addPage(text("ALTAR4.4"))
                 .register(ResearchProgression.CONSTELLATION);
 
@@ -409,7 +409,7 @@ public class RegistryResearch {
                 .addPage(text("ALTAR3.1"))
                 .addPage(recipe(BlocksAS.ALTAR_CONSTELLATION))
                 .addTomeLookup(BlocksAS.ALTAR_CONSTELLATION, 1, ResearchProgression.ATTUNEMENT)
-                //TODO altar3 structure .addPage(structure(StructureTypesAS.EMPTY))
+                .addPage(structure(StructureTypesAS.PTYPE_ALTAR_CONSTELLATION))
                 .addPage(text("ALTAR3.4"))
                 .register(ResearchProgression.ATTUNEMENT);
 
@@ -548,13 +548,13 @@ public class RegistryResearch {
                 .addPage(text("ALTAR2.1"))
                 .addPage(recipe(BlocksAS.ALTAR_ATTUNEMENT))
                 .addTomeLookup(BlocksAS.ALTAR_ATTUNEMENT, 1, ResearchProgression.BASIC_CRAFT)
-                //TODO altar2 structure .addPage(structure(StructureTypesAS.EMPTY))
+                .addPage(structure(StructureTypesAS.PTYPE_ALTAR_ATTUNEMENT))
                 .addPage(text("ALTAR2.4"))
                 .register(ResearchProgression.BASIC_CRAFT);
 
         nodeTools.addSourceConnectionFrom(nodeCrystals);
         nodeAltarUpgradeT2.addSourceConnectionFrom(nodeWell);
-        //TODO node -> resonator nodeRelay.addSourceConnectionFrom(noderes)
+        nodeRelay.addSourceConnectionFrom(nodeStarlightResonator);
         nodeStarlightResonator.addSourceConnectionFrom(nodeWell);
         nodeCrystalGrowth.addSourceConnectionFrom(nodeWell);
         nodeCrystalGrowth.addSourceConnectionFrom(nodeCrystals);

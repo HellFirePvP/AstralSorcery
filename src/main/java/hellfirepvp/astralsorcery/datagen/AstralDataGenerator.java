@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.datagen;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.datagen.assets.AstralBlockStateMappingProvider;
+import hellfirepvp.astralsorcery.datagen.data.advancements.AstralAdvancementProvider;
 import hellfirepvp.astralsorcery.datagen.data.loot.AstralLootTableProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipe.AstralRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.tag.AstralBlockTagsProvider;
@@ -41,6 +42,7 @@ public class AstralDataGenerator {
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
         if (event.includeServer()) {
+            gen.addProvider(new AstralAdvancementProvider(gen));
             gen.addProvider(new AstralItemTagsProvider(gen));
             gen.addProvider(new AstralBlockTagsProvider(gen));
             gen.addProvider(new AstralLootTableProvider(gen));

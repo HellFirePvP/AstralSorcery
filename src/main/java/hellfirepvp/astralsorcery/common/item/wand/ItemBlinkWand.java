@@ -154,8 +154,6 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
                         if (!player.isCreative()) {
                             player.getCooldownTracker().setCooldown(stack.getItem(), 40);
                         }
-
-                        //TODO particles..?
                     }
                 }
             }

@@ -160,6 +160,7 @@ public class CommonProxy {
         RegistryPerkAttributeTypes.init();
         RegistryPerkAttributeReaders.init();
         RegistryIngredientTypes.init();
+        RegistryAdvancements.init();
         AltarRecipeTypeHandler.registerDefaultConverters();
         ModifierManager.init();
 
