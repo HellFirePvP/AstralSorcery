@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttuneCrystalRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.AdvancementsAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -112,6 +113,9 @@ public class ActiveCrystalAttunementRecipe extends AttunementRecipe.Active<Attun
                     }
                 }
                 crystal.setItem(stack);
+
+                //TODO advancements; keep track of who's crafting
+                //AdvancementsAS.ATTUNE_CRYSTAL.trigger(???, altar.getActiveConstellation());
             }
         }
     }

@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.infusion.ActiveLiquidInfusionRecipe;
+import hellfirepvp.astralsorcery.common.lib.AdvancementsAS;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncModifierSource;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
@@ -108,14 +109,13 @@ public class ResearchManager {
         ResearchHelper.savePlayerKnowledge(player);
     }
 
-    public static boolean discoverConstellations(Collection<IConstellation> csts, PlayerEntity player) {
+    public static boolean discoverConstellations(Collection<IConstellation> constellations, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;
 
-        for (IConstellation c : csts) {
-            progress.discoverConstellation(c.getRegistryName());
-            //TODO advancements
-            //AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
+        for (IConstellation cst : constellations) {
+            progress.discoverConstellation(cst.getRegistryName());
+            AdvancementsAS.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, cst);
         }
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
@@ -123,14 +123,13 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean discoverConstellation(IConstellation c, PlayerEntity player) {
+    public static boolean discoverConstellation(IConstellation constellation, PlayerEntity player) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;
 
-        progress.discoverConstellation(c.getRegistryName());
+        progress.discoverConstellation(constellation.getRegistryName());
 
-        //TODO advancements
-        //AdvancementTriggers.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, c);
+        AdvancementsAS.DISCOVER_CONSTELLATION.trigger((ServerPlayerEntity) player, constellation);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -200,8 +199,7 @@ public class ResearchManager {
             PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(root, PerkEffectHelper.Action.ADD));
         }
 
-        //TODO advancements
-        //AdvancementTriggers.ATTUNE_SELF.trigger((ServerPlayerEntity) player, constellation);
+        AdvancementsAS.ATTUNE_SELF.trigger((ServerPlayerEntity) player, constellation);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -383,8 +381,7 @@ public class ResearchManager {
 
         progress.setExp(exp);
 
-        //TODO advancements
-        //AdvancementTriggers.PERK_LEVEL.trigger((ServerPlayerEntity) player);
+        AdvancementsAS.PERK_LEVEL.trigger((ServerPlayerEntity) player);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -397,8 +394,7 @@ public class ResearchManager {
 
         progress.modifyExp(exp, player);
 
-        //TODO advancements
-        //AdvancementTriggers.PERK_LEVEL.trigger((ServerPlayerEntity) player);
+        AdvancementsAS.PERK_LEVEL.trigger((ServerPlayerEntity) player);
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -461,8 +457,7 @@ public class ResearchManager {
 
         informCrafted(crafter, crafted);
 
-        //TODO advancement trigger altar craft
-        //AdvancementTriggers.ALTAR_CRAFT.trigger((ServerPlayerEntity) crafter, recipeToCraft.getRecipeToCraft());
+        AdvancementsAS.ALTAR_CRAFT.trigger((ServerPlayerEntity) crafter, recipe.getRecipeToCraft(), crafted);
     }
 
     public static void informCrafted(PlayerEntity player, ItemStack out) {
