@@ -36,15 +36,15 @@ public enum AltarType {
             6, 7, 8, 11, 12, 13, 16, 17, 18),
     ATTUNEMENT   (ResearchProgression.ATTUNEMENT, 200,
             () -> BlocksAS.ALTAR_ATTUNEMENT.asItem(),
-            () -> StructureTypesAS.EMPTY,
+            () -> StructureTypesAS.PTYPE_ALTAR_ATTUNEMENT,
             0, 4, 6, 7, 8, 11, 12, 13, 16, 17, 18, 20, 24),
     CONSTELLATION(ResearchProgression.CONSTELLATION, 400,
             () -> BlocksAS.ALTAR_CONSTELLATION.asItem(),
-            () -> StructureTypesAS.EMPTY,
+            () -> StructureTypesAS.PTYPE_ALTAR_CONSTELLATION,
             (slot) -> slot != 2 && slot != 10 && slot != 14 && slot != 22),
     RADIANCE     (ResearchProgression.RADIANCE, 600,
             () -> BlocksAS.ALTAR_RADIANCE.asItem(),
-            () -> StructureTypesAS.EMPTY,
+            () -> StructureTypesAS.PTYPE_ALTAR_TRAIT,
             (slot) -> true);
 
     private final ResearchProgression associatedTier;

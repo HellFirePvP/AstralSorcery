@@ -107,6 +107,14 @@ public class MiscUtils {
     }
 
     @Nullable
+    public static <T> T getRandomEntry(T[] array, Random rand) {
+        if (array == null || array.length <= 0) {
+            return null;
+        }
+        return array[rand.nextInt(array.length)];
+    }
+
+    @Nullable
     public static ModContainer getCurrentlyActiveMod() {
         return ModLoadingContext.get().getActiveContainer();
     }

@@ -50,6 +50,9 @@
   "potion.potency.9": "X",
   "potion.astralsorcery.crafted.name": "Stardew",
 
+  "structure.astralsorcery.pattern_altar_attunement.name": "Starlight Crafting Altar",
+  "structure.astralsorcery.pattern_altar_constellation.name": "Celestial Altar",
+  "structure.astralsorcery.pattern_altar_trait.name": "Iridescent Altar",
   "structure.astralsorcery.pattern_ritual_pedestal.name": "Ritual Pedestal",
   "structure.astralsorcery.pattern_infuser.name": "Starlight Infuser",
   "structure.astralsorcery.pattern_enhanced_collector_crystal.name": "Enhanced Collector Crystal",

@@ -39,21 +39,17 @@ public class FXOrbitalCollector extends FXSourceOrbital<FXFacingParticle, BatchR
 
     @Override
     public void spawnOrbitalParticle(Vector3 pos, Function<Vector3, FXFacingParticle> effectRegistrar) {
-        if (rand.nextInt(3) == 0) {
+        if (rand.nextInt(2) == 0) {
             effectRegistrar.apply(pos)
                     .color(primaryColor)
                     .setScaleMultiplier(0.15F)
                     .setMaxAge(15);
         }
-        if (rand.nextInt(3) == 0) {
+        if (rand.nextInt(5) == 0) {
             effectRegistrar.apply(pos)
                     .color(secondaryColor)
-                    .setMotion(new Vector3(
-                            (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                            (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                            (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1)
-                    ))
-                    .setScaleMultiplier(0.15F)
+                    .setMotion(Vector3.random().normalize().multiply(0.02F + rand.nextFloat() * 0.01F))
+                    .setScaleMultiplier(0.1F + rand.nextFloat() * 0.1F)
                     .setMaxAge(25);
         }
     }

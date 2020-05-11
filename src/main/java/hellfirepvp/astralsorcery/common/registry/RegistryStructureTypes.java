@@ -32,6 +32,9 @@ public class RegistryStructureTypes {
     public static void init() {
         EMPTY = registerAS("empty", () -> StructuresAS.EMPTY);
 
+        PTYPE_ALTAR_ATTUNEMENT = registerAS("pattern_altar_attunement", () -> StructuresAS.STRUCT_ALTAR_ATTUNEMENT);
+        PTYPE_ALTAR_CONSTELLATION = registerAS("pattern_altar_constellation", () -> StructuresAS.STRUCT_ALTAR_CONSTELLATION);
+        PTYPE_ALTAR_TRAIT = registerAS("pattern_altar_trait", () -> StructuresAS.STRUCT_ALTAR_TRAIT);
         PTYPE_RITUAL_PEDESTAL = registerAS("pattern_ritual_pedestal", () -> StructuresAS.STRUCT_RITUAL_PEDESTAL);
         PTYPE_INFUSER = registerAS("pattern_infuser", () -> StructuresAS.STRUCT_INFUSER);
         PTYPE_ENHANCED_COLLECTOR_CRYSTAL = registerAS("pattern_enhanced_collector_crystal", () -> StructuresAS.STRUCT_ENHANCED_COLLECTOR_CRYSTAL);

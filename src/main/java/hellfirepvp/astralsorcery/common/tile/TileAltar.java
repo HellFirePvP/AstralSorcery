@@ -210,15 +210,17 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     }
 
     private void finishRecipe() {
-        ForgeHooks.setCraftingPlayer(this.activeRecipe.tryGetCraftingPlayerServer());
-        this.activeRecipe.createItemOutputs(this, this::dropItemOnTop);
-        this.activeRecipe.consumeInputs(this);
+        ActiveSimpleAltarRecipe finishedRecipe = this.activeRecipe;
+
+        ForgeHooks.setCraftingPlayer(finishedRecipe.tryGetCraftingPlayerServer());
+        finishedRecipe.createItemOutputs(this, this::dropItemOnTop);
+        finishedRecipe.consumeInputs(this);
         ForgeHooks.setCraftingPlayer(null);
 
         boolean isChaining;
-        ResourceLocation recipeName = this.activeRecipe.getRecipeToCraft().getId();
+        ResourceLocation recipeName = finishedRecipe.getRecipeToCraft().getId();
 
-        if (!(isChaining = this.activeRecipe.matches(this, false))) {
+        if (!(isChaining = finishedRecipe.matches(this, false))) {
             this.abortCrafting();
 
             EntityFlare.spawnAmbientFlare(getWorld(), getPos().add(-3 + rand.nextInt(7), 1 + rand.nextInt(3), -3 + rand.nextInt(7)));
