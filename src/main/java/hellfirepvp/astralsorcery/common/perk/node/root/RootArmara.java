@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.perk.node.RootPerk;
 import hellfirepvp.astralsorcery.common.util.DiminishingMultiplier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -68,7 +69,7 @@ public class RootArmara extends RootPerk {
             return;
         }
 
-        float expGain = event.getAmount() * 2F;
+        float expGain = Math.min(MathHelper.sqrt(event.getAmount()) * 5.0F, 70F);
         expGain *= this.getExpMultiplier();
         expGain *= this.getDiminishingReturns(player);
         expGain *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);

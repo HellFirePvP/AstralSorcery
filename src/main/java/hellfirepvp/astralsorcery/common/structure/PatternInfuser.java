@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.structure;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 
@@ -35,7 +36,7 @@ public class PatternInfuser extends PatternBlockArray {
         BlockState chiseled = BlocksAS.MARBLE_CHISELED.getDefaultState();
         BlockState runed = BlocksAS.MARBLE_RUNED.getDefaultState();
         BlockState raw = BlocksAS.MARBLE_RAW.getDefaultState();
-        BlockState pillar = BlocksAS.MARBLE_PILLAR.getDefaultState();
+        Block pillar = BlocksAS.MARBLE_PILLAR;
 
         addBlock(Blocks.LAPIS_BLOCK.getDefaultState(), 0, -1, 0);
 

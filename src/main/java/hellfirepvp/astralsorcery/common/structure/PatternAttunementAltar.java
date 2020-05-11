@@ -66,9 +66,9 @@ public class PatternAttunementAltar extends PatternBlockArray {
 
     private void pillar(int x, int y, int z) {
         addBlock(BlocksAS.MARBLE_RUNED.getDefaultState(), x, y,     z);
-        addBlock(BlocksAS.MARBLE_PILLAR.getDefaultState().with(BlockMarblePillar.PILLAR_TYPE, BlockMarblePillar.PillarType.BOTTOM), x, y + 1, z);
-        addBlock(BlocksAS.MARBLE_PILLAR.getDefaultState(), x, y + 2, z);
-        addBlock(BlocksAS.MARBLE_PILLAR.getDefaultState().with(BlockMarblePillar.PILLAR_TYPE, BlockMarblePillar.PillarType.TOP), x, y + 3, z);
+        addBlock(BlocksAS.MARBLE_PILLAR, x, y + 1, z);
+        addBlock(BlocksAS.MARBLE_PILLAR, x, y + 2, z);
+        addBlock(BlocksAS.MARBLE_PILLAR, x, y + 3, z);
         addBlock(BlocksAS.MARBLE_CHISELED.getDefaultState(), x, y + 4, z);
     }
 }

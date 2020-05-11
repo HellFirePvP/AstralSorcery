@@ -23,6 +23,9 @@ public class StructureTypesAS {
 
     public static StructureType EMPTY;
 
+    public static StructureType PTYPE_ALTAR_ATTUNEMENT;
+    public static StructureType PTYPE_ALTAR_CONSTELLATION;
+    public static StructureType PTYPE_ALTAR_TRAIT;
     public static StructureType PTYPE_RITUAL_PEDESTAL;
     public static StructureType PTYPE_INFUSER;
     public static StructureType PTYPE_ENHANCED_COLLECTOR_CRYSTAL;

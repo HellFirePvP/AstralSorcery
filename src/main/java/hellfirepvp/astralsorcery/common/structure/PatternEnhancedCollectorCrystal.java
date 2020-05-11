@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +38,7 @@ public class PatternEnhancedCollectorCrystal extends PatternBlockArray {
         BlockState raw = BlocksAS.MARBLE_RAW.getDefaultState();
         BlockState runed = BlocksAS.MARBLE_RUNED.getDefaultState();
         BlockState engraved = BlocksAS.MARBLE_ENGRAVED.getDefaultState();
-        BlockState pillar = BlocksAS.MARBLE_PILLAR.getDefaultState();
+        Block pillar = BlocksAS.MARBLE_PILLAR;
 
         addBlockCube(raw, -1, -5, -1, 1, -5, 1);
         addBlockCube(Blocks.AIR.getDefaultState(), 1, 1, 1, -1, -1, -1);

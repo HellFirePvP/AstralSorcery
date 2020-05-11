@@ -8,6 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.source.FXSource;
+import hellfirepvp.astralsorcery.client.effect.source.orbital.FXOrbitalCollector;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationTile;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -22,13 +29,18 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileSourceBase;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.UUID;
 
 /**
@@ -71,12 +83,64 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
             this.doesSeeSky();
             this.hasMultiblock();
         } else {
-            playEffects();
+            this.playEffects();
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void playEffects() {
-        //TODO effects
+        if (this.isEnhanced() &&
+                this.doesSeeSky() &&
+                this.getCollectorType() == CollectorCrystalType.CELESTIAL_CRYSTAL &&
+                this.getAttunedConstellation() != null) {
+
+            Vector3 thisPos = new Vector3(this).add(0.5F, 0.5F, 0.5F);
+            Color c = this.getAttunedConstellation().getConstellationColor();
+
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(thisPos)
+                    .setMotion(Vector3.random().normalize().multiply(0.02F + rand.nextFloat() * 0.01F))
+                    .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F)
+                    .color(VFXColorFunction.constant(c))
+                    .setMaxAge(30 + rand.nextInt(15));
+
+            for (int i = 0; i < this.effectOrbitals.length; i++) {
+                FXOrbitalCollector fxSource = (FXOrbitalCollector) this.effectOrbitals[i];
+                if (fxSource == null) {
+                    FXSource<?, ?> src = new FXOrbitalCollector(new Vector3(this).add(0.5F, 0.5F, 0.5F), c)
+                            .setOrbitAxis(Vector3.random())
+                            .setOrbitRadius(0.8F + rand.nextFloat() * 0.5F)
+                            .setTicksPerRotation(40 + rand.nextInt(30));
+                    EffectHelper.spawnSource(src);
+                    this.effectOrbitals[i] = src;
+                } else {
+                    if (fxSource.canRemove() && fxSource.isRemoved()) {
+                        this.effectOrbitals[i] = null;
+                    }
+                }
+            }
+
+            BlockPos starlightSource = MiscUtils.getRandomEntry(OFFSETS_LIQUID_STARLIGHT, rand).add(this.getPos());
+
+            Vector3 from = new Vector3(starlightSource).add(rand.nextFloat(), 0.85F, rand.nextFloat());
+            Vector3 motion = thisPos.clone().subtract(from).normalize().multiply(0.08F);
+            Color particleColor = MiscUtils.eitherOf(rand, Color.WHITE, c, c.brighter());
+
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(from)
+                    .setMotion(motion)
+                    .alpha(VFXAlphaFunction.proximity(thisPos::clone, 2F).andThen(VFXAlphaFunction.FADE_OUT))
+                    .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F)
+                    .color(VFXColorFunction.constant(particleColor))
+                    .setMaxAge(30 + rand.nextInt(10));
+
+            if (rand.nextInt(80) == 0) {
+                EffectHelper.of(EffectTemplatesAS.LIGHTNING)
+                        .spawn(thisPos)
+                        .makeDefault(from)
+                        .color(VFXColorFunction.constant(c));
+            }
+        }
     }
 
     public boolean isEnhanced() {
