@@ -44,23 +44,24 @@ public class ActiveCelestialsHandler {
     //If you found this bit of code:
     //yes. there's a hard cap of max. 15 constellations in the sky at the same time. these are the positions.
     static {
-        availablePositions.add(RenderPosition.createRenderInfoFor( 0.2,  -0.2,     0,   5));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.2,  -0.2,  -0.05,  5));
-        availablePositions.add(RenderPosition.createRenderInfoFor(   0,  -0.2,  -0.2,   8));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.4,  -0.6,   0.5,  18));
-        availablePositions.add(RenderPosition.createRenderInfoFor( 0.3,  -0.5,   0.5,  19));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.9, -0.40,  0.0, 25));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 1.0, -0.42,  0.9, 30));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.0, -0.43,  1.0, 25));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.8, -0.44,  1.0, 30));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-1.1, -0.41,  0.0, 25));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-1.0, -0.46, -0.9, 30));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.0, -0.38, -1.0, 25));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 1.1, -0.43, -0.9, 30));
 
-        availablePositions.add(RenderPosition.createRenderInfoFor( 0.15, -0.2,  -0.1,   5));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.05, -0.3,   0.4,  10));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.3,  -0.3,   0.1,  10));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.3,  -0.4,  -0.35, 15));
-        availablePositions.add(RenderPosition.createRenderInfoFor( 0.4,  -0.4,   0.2,  15));
-
-        availablePositions.add(RenderPosition.createRenderInfoFor( 0.15, -0.5,   0.2,  15));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.5,  -1.1,  -0.2,  32));
-        availablePositions.add(RenderPosition.createRenderInfoFor( 0.5,  -1.1,  -0.2,  30));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.4,  -1.3,   0.5,  35));
-        availablePositions.add(RenderPosition.createRenderInfoFor(   0,  -1.1,  -0.5,  28));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.6, -0.62, -0.1, 15));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.5, -0.64,  0.4, 20));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.1, -0.62,  0.6, 15));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.4, -0.66,  0.5, 20));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.5, -0.62,  0.1, 15));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.6, -0.67, -0.4, 20));
+        availablePositions.add(RenderPosition.createRenderInfoFor(   0, -0.62, -0.5, 15));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.4, -0.62, -0.6, 20));
+        Collections.shuffle(availablePositions, new Random(0x5F918D128A5A1423L));
     }
 
     public static class RenderPosition {

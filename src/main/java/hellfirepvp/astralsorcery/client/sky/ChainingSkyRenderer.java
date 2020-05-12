@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.sky;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.sky.astral.AstralSkyRenderer;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
@@ -66,26 +67,28 @@ public class ChainingSkyRenderer implements IRenderHandler {
     }
 
     private void renderConstellations(World world, float pTicks) {
+        RenderHelper.disableStandardItemLighting();
+
         GlStateManager.disableAlphaTest();
         GlStateManager.enableBlend();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
-                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.pushMatrix();
-        float alphaSubRain = 1.0F - world.getRainStrength(pTicks);
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, alphaSubRain);
-        GlStateManager.rotatef(-90F, 0F, 1F, 0F);
-        GlStateManager.rotatef(world.getCelestialAngle(pTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+        Blending.ADDITIVE_ALPHA.applyStateManager();
         GlStateManager.enableTexture();
         GlStateManager.depthMask(false);
+        float alphaSubRain = 1.0F - world.getRainStrength(pTicks);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, alphaSubRain);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.rotatef(180F, 1F, 0F, 0F);
 
         AstralSkyRenderer.renderConstellationsSky(world, pTicks);
 
+        GlStateManager.popMatrix();
+
+        GlStateManager.color4f(1F, 1F, 1F, 1F);
         GlStateManager.depthMask(true);
-        GlStateManager.color4f(1.0F, 1.0F, 1F, 1.0F);
+        GlStateManager.disableTexture();
+        Blending.DEFAULT.applyStateManager();
         GlStateManager.disableBlend();
         GlStateManager.enableAlphaTest();
-        GlStateManager.popMatrix();
-        GlStateManager.color4f(0F, 0F, 0F, 0F);
     }
 }

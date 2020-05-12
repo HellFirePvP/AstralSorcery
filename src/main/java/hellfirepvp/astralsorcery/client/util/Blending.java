@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL14;
  * Created by HellFirePvP
  * Date: 08.07.2019 / 20:49
  */
-public enum  Blending {
+public enum Blending {
 
     DEFAULT(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA),
     ALPHA(GL11.GL_ONE, GL11.GL_SRC_ALPHA),
@@ -32,17 +32,22 @@ public enum  Blending {
     CONSTANT_ALPHA(GL11.GL_ONE, GL14.GL_ONE_MINUS_CONSTANT_ALPHA),
     INVERTEDADD(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR);
 
-    public final int sfactor;
-    public final int dfactor;
+    private final int colorSrcFactor, colorDstFactor;
+    private final int alphaSrcFactor, alphaDstFactor;
 
-    private Blending(int s, int d) {
-        sfactor = s;
-        dfactor = d;
+    Blending(int src, int dst) {
+        this(src, dst, GL11.GL_ONE, GL11.GL_ZERO);
     }
 
-    //TODO move to blendFuncSeparate for more controlled alpha blending
+    Blending(int src, int dst, int srcAlpha, int dstAlpha) {
+        this.colorSrcFactor = src;
+        this.colorDstFactor = dst;
+        this.alphaSrcFactor = srcAlpha;
+        this.alphaDstFactor = dstAlpha;
+    }
+
     public void applyStateManager() {
-        GlStateManager.blendFunc(sfactor, dfactor);
+        GlStateManager.blendFuncSeparate(this.colorSrcFactor, this.colorDstFactor, this.alphaSrcFactor, this.alphaDstFactor);
     }
 
 }

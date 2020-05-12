@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.BatchedVertexList;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
 import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
@@ -127,8 +128,7 @@ public class AstralSkyRenderer implements IRenderHandler {
         //Sunrise/Sunset tint
         GlStateManager.disableAlphaTest();
         GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        Blending.DEFAULT.applyStateManager();
         RenderHelper.disableStandardItemLighting();
 
         float[] duskDawnColors = world.getDimension().calcSunriseSunsetColors(world.getCelestialAngle(pTicks), pTicks);
@@ -138,12 +138,19 @@ public class AstralSkyRenderer implements IRenderHandler {
 
         //Prep celestials
         GlStateManager.enableTexture();
+        Blending.ADDITIVE_ALPHA.applyStateManager();
+
         GlStateManager.pushMatrix();
         GlStateManager.rotatef(-90F, 0F, 1F, 0F);
         GlStateManager.rotatef(world.getCelestialAngle(pTicks) * 360F, 1F, 0F, 0F);
 
         this.renderCelestials(world, pTicks);
         this.renderStars(world, pTicks);
+
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.rotatef(180F, 1F, 0F, 0F);
+
         renderConstellationsSky(world, pTicks);
 
         GlStateManager.popMatrix();
@@ -180,6 +187,53 @@ public class AstralSkyRenderer implements IRenderHandler {
         GlStateManager.depthMask(true);
     }
 
+    /*
+    private static void debugRenderSky() {
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.rotatef(180F, 1F, 0F, 0F);
+
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+        GL11.glColor4f(1F, 0, 0, 1F);
+
+        List<double[]> poss = ActiveCelestialsHandler.getDisplayPos();
+
+        for (double[] position : poss) {
+            double x = position[0];
+            double y = position[1];
+            double z = position[2];
+            double size = position[3];
+
+            double fx = x * 100.0D;
+            double fy = y * 100.0D;
+            double fz = z * 100.0D;
+            double d8 = Math.atan2(x, z); // [-PI - PI]
+            double d9 = Math.sin(d8);
+            double d10 = Math.cos(d8);
+            double d11 = Math.atan2(Math.sqrt(x * x + z * z), y); // [-PI - PI]
+            double d12 = Math.sin(d11);
+            double d13 = Math.cos(d11);
+            double rotation = 0;
+            vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+            for (int j = 0; j < 4; ++j) {
+                double d18 = (double) ((j & 2) - 1) * 0.5;
+                double d19 = (double) ((j + 1 & 2) - 1) * 0.5;
+                double d21 = d18 * rotation - d19 * size;
+                double d22 = d19 * rotation + d18 * size;
+                double d23 = d21 * d12;
+                double d24 = -(d21 * d13);
+                double d25 = d24 * d9 - d22 * d10;
+                double d26 = d22 * d9 + d24 * d10;
+                vb.pos(fx + d25, fy + d23, fz + d26).tex(((j + 1) & 2) >> 1, ((j + 2) & 2) >> 1).endVertex();
+            }
+            tes.draw();
+        }
+        TextureHelper.refreshTextureBind();
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+    }
+    */
+
     public static void renderConstellationsSky(World world, float pTicks) {
         WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
         if (ctx == null) {
@@ -209,7 +263,7 @@ public class AstralSkyRenderer implements IRenderHandler {
             ActiveCelestialsHandler.RenderPosition pos = constellations.get(cst);
 
             RenderingConstellationUtils.renderConstellationSky(cst, pos,
-                    () -> RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(5)) * brightness * 1.25F + 0.05F);
+                    () -> RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(5)) * brightness * 1.25F);
         }
     }
 
@@ -228,9 +282,6 @@ public class AstralSkyRenderer implements IRenderHandler {
 
     private void renderCelestials(World world, float pTicks) {
         WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
-
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
-                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
         float rainAlpha = 1F - world.getRainStrength(pTicks);
         GlStateManager.color4f(1F, 1F, 1F, rainAlpha);
