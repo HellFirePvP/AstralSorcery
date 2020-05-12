@@ -102,89 +102,89 @@ public class AstralAdvancementProvider extends AdvancementProvider {
         Advancement foundRockCrystals = Advancement.Builder.builder()
                 .withParent(root)
                 .withDisplay(ItemsAS.ROCK_CRYSTAL, title("rock_crystals"), description("rock_crystals"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("rock_crystal_in_inventory", InventoryChangeTrigger.Instance.forItems(ItemsAS.ROCK_CRYSTAL))
                 .register(registrar, AstralSorcery.key("rock_crystals").toString());
         Advancement foundCelestialCrystals = Advancement.Builder.builder()
                 .withParent(foundRockCrystals)
                 .withDisplay(ItemsAS.CELESTIAL_CRYSTAL, title("celestial_crystals"), description("celestial_crystals"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("celestial_crystal_in_inventory", InventoryChangeTrigger.Instance.forItems(ItemsAS.CELESTIAL_CRYSTAL))
                 .register(registrar, AstralSorcery.key("celestial_crystals").toString());
 
         Advancement craftAltarT2 = Advancement.Builder.builder()
                 .withParent(foundRockCrystals)
                 .withDisplay(BlocksAS.ALTAR_ATTUNEMENT, title("craft_t2_altar"), description("craft_t2_altar"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("altar_craft_t2_altar", AltarRecipeInstance.withOutput(BlocksAS.ALTAR_ATTUNEMENT))
                 .register(registrar, AstralSorcery.key("craft_t2_altar").toString());
         Advancement craftAltarT3 = Advancement.Builder.builder()
                 .withParent(craftAltarT2)
                 .withDisplay(BlocksAS.ALTAR_CONSTELLATION, title("craft_t3_altar"), description("craft_t3_altar"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("altar_craft_t3_altar", AltarRecipeInstance.withOutput(BlocksAS.ALTAR_CONSTELLATION))
                 .register(registrar, AstralSorcery.key("craft_t3_altar").toString());
         Advancement craftAltarT4 = Advancement.Builder.builder()
                 .withParent(craftAltarT3)
                 .withDisplay(BlocksAS.ALTAR_CONSTELLATION, title("craft_t4_altar"), description("craft_t4_altar"),
-                        null, FrameType.CHALLENGE, true, false, false)
+                        null, FrameType.CHALLENGE, true, true, false)
                 .withCriterion("altar_craft_t3_altar", AltarRecipeInstance.withOutput(BlocksAS.ALTAR_CONSTELLATION))
                 .register(registrar, AstralSorcery.key("craft_t4_altar").toString());
 
         Advancement findAnyConstellation = Advancement.Builder.builder()
                 .withParent(root)
                 .withDisplay(BlocksAS.TELESCOPE, title("find_constellation"), description("find_constellation"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("any_constellation_discovered", ConstellationInstance.any(DiscoverConstellationTrigger.ID))
                 .register(registrar, AstralSorcery.key("find_constellation").toString());
         Advancement findWeakConstellation = Advancement.Builder.builder()
                 .withParent(findAnyConstellation)
                 .withDisplay(BlocksAS.TELESCOPE, title("find_weak_constellation"), description("find_weak_constellation"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("weak_constellation_discovered", ConstellationInstance.anyWeak(DiscoverConstellationTrigger.ID))
                 .register(registrar, AstralSorcery.key("find_weak_constellation").toString());
         Advancement findMinorConstellation = Advancement.Builder.builder()
                 .withParent(findWeakConstellation)
                 .withDisplay(BlocksAS.OBSERVATORY, title("find_minor_constellation"), description("find_minor_constellation"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("minor_constellation_discovered", ConstellationInstance.anyMinor(DiscoverConstellationTrigger.ID))
                 .register(registrar, AstralSorcery.key("find_minor_constellation").toString());
 
         Advancement attuneSelf = Advancement.Builder.builder()
                 .withParent(findAnyConstellation)
                 .withDisplay(BlocksAS.ATTUNEMENT_ALTAR, title("attune_self"), description("attune_self"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("attune_self", ConstellationInstance.any(AttuneSelfTrigger.ID))
                 .register(registrar, AstralSorcery.key("attune_self").toString());
         Advancement attuneCrystal = Advancement.Builder.builder()
                 .withParent(attuneSelf)
                 .withDisplay(BlocksAS.RITUAL_PEDESTAL, title("attune_crystal"), description("attune_crystal"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("attune_crystal", ConstellationInstance.anyWeak(AttuneCrystalTrigger.ID))
                 .register(registrar, AstralSorcery.key("attune_crystal").toString());
         Advancement attuneCrystalTrait = Advancement.Builder.builder()
                 .withParent(attuneCrystal)
                 .withDisplay(BlocksAS.RITUAL_PEDESTAL, title("attune_trait"), description("attune_trait"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("attune_trait", ConstellationInstance.anyMinor(AttuneCrystalTrigger.ID))
                 .register(registrar, AstralSorcery.key("attune_trait").toString());
 
         Advancement perkLevelSmall = Advancement.Builder.builder()
                 .withParent(attuneSelf)
                 .withDisplay(BlocksAS.SPECTRAL_RELAY, title("perk_level_small"), description("perk_level_small"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("gain_perk_level_small", PerkLevelInstance.reachLevel(10))
                 .register(registrar, AstralSorcery.key("perk_level_small").toString());
         Advancement perkLevelMedium = Advancement.Builder.builder()
                 .withParent(perkLevelSmall)
                 .withDisplay(BlocksAS.SPECTRAL_RELAY, title("perk_level_medium"), description("perk_level_medium"),
-                        null, FrameType.TASK, true, false, false)
+                        null, FrameType.TASK, true, true, false)
                 .withCriterion("gain_perk_level_medium", PerkLevelInstance.reachLevel(20))
                 .register(registrar, AstralSorcery.key("perk_level_medium").toString());
         Advancement perkLevelLarge = Advancement.Builder.builder()
                 .withParent(perkLevelMedium)
                 .withDisplay(BlocksAS.SPECTRAL_RELAY, title("perk_level_large"), description("perk_level_large"),
-                        null, FrameType.CHALLENGE, true, false, false)
+                        null, FrameType.CHALLENGE, true, true, false)
                 .withCriterion("gain_perk_level_large", PerkLevelInstance.reachLevel(30))
                 .register(registrar, AstralSorcery.key("perk_level_large").toString());
     }
