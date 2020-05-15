@@ -375,6 +375,17 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean togglePerkAbilities(PlayerEntity player) {
+        PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+        if (!progress.isValid()) return false;
+
+        progress.setUsePerkAbilities(!progress.doPerkAbilities());
+
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
+        return true;
+    }
+
     public static boolean setExp(PlayerEntity player, long exp) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;

@@ -34,10 +34,7 @@ import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
-import hellfirepvp.astralsorcery.common.event.handler.EventHandlerBlockStorage;
-import hellfirepvp.astralsorcery.common.event.handler.EventHandlerCache;
-import hellfirepvp.astralsorcery.common.event.handler.EventHandlerInteract;
-import hellfirepvp.astralsorcery.common.event.handler.EventHandlerMisc;
+import hellfirepvp.astralsorcery.common.event.handler.*;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperEnchantmentTick;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
@@ -61,6 +58,7 @@ import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.DamageSourceUtil;
 import hellfirepvp.astralsorcery.common.util.ServerLifecycleListener;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopController;
+import hellfirepvp.observerlib.common.event.BlockChangeNotifier;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.observerlib.common.util.tick.TickManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -208,6 +206,8 @@ public class CommonProxy {
 
         tickManager.attachListeners(eventBus);
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);
+
+        BlockChangeNotifier.addListener(new EventHandlerAutoLink());
     }
 
     public void attachTickListeners(Consumer<ITickHandler> registrar) {

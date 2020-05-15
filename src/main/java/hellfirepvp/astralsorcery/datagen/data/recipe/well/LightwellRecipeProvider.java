@@ -50,32 +50,32 @@ public class LightwellRecipeProvider {
                 .setItemInput(ItemsAS.ROCK_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(new Color(0x00A7FF))
-                .productionMultiplier(0.9F)
-                .shatterMultiplier(30F)
+                .productionMultiplier(0.07F)
+                .shatterMultiplier(2F)
                 .build(registrar);
 
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_attuned_rock_crystal"))
                 .setItemInput(ItemsAS.ATTUNED_ROCK_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(new Color(0x00A7FF))
-                .productionMultiplier(1F)
-                .shatterMultiplier(70F)
+                .productionMultiplier(0.09F)
+                .shatterMultiplier(5F)
                 .build(registrar);
 
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_celestial_crystal"))
                 .setItemInput(ItemsAS.CELESTIAL_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(new Color(0x00A7FF))
-                .productionMultiplier(1.3F)
-                .shatterMultiplier(40F)
+                .productionMultiplier(0.1F)
+                .shatterMultiplier(4F)
                 .build(registrar);
 
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_attuned_celestial_crystal"))
                 .setItemInput(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(new Color(0x00A7FF))
-                .productionMultiplier(1.5F)
-                .shatterMultiplier(100F)
+                .productionMultiplier(0.11F)
+                .shatterMultiplier(8F)
                 .build(registrar);
 
         WellRecipeBuilder.builder(AstralSorcery.key("lava_magma_block"))

@@ -174,16 +174,10 @@ public class ScreenJournalProgression extends ScreenJournal {
         drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
         GlStateManager.enableDepthTest();
 
-        Rectangle guiStar = null;
-        if (!ResearchHelper.getClientProgress().wasOnceAttuned()) {
-            GlStateManager.disableDepthTest();
-            guiStar = RenderingDrawUtils.drawInfoStar( guiLeft + guiWidth - 39, guiTop + 23, this.blitOffset, 15, pTicks);
-            GlStateManager.enableDepthTest();
-        }
         this.drawSearchBox();
 
         this.blitOffset += 150;
-        drawMouseHighlight(this.blitOffset, mouseX, mouseY, guiStar);
+        drawMouseHighlight(this.blitOffset, mouseX, mouseY);
         this.blitOffset -= 150;
     }
 
@@ -260,21 +254,8 @@ public class ScreenJournalProgression extends ScreenJournal {
         TextureHelper.refreshTextureBind();
     }
 
-    private void drawMouseHighlight(float zLevel, int mouseX, int mouseY, Rectangle starRect) {
+    private void drawMouseHighlight(float zLevel, int mouseX, int mouseY) {
         progressionRenderer.drawMouseHighlight(zLevel, mouseX, mouseY);
-
-        if (starRect != null && starRect.contains(mouseX, mouseY)) {
-            GlStateManager.disableDepthTest();
-            RenderingDrawUtils.renderBlueTooltipString(mouseX, mouseY, new LinkedList<String>() {
-                {
-                    add(I18n.format("astralsorcery.misc.journal.info.1"));
-                    add(I18n.format("astralsorcery.misc.journal.info.2",
-                            Minecraft.getInstance().gameSettings.keyBindForward.getLocalizedName(),
-                            Minecraft.getInstance().gameSettings.keyBindBack.getLocalizedName()));
-                }
-            }, font, false);
-            GlStateManager.enableDepthTest();
-        }
     }
 
     private void drawSearchBox() {

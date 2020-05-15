@@ -147,12 +147,8 @@ public final class CrystalAttributes {
                 } else {
                     ITextComponent enchantmentLevel = new TranslationTextComponent(String.format("enchantment.level.%s", String.valueOf(attr.getTier())))
                             .setStyle(new Style().setColor(TextFormatting.GOLD));
-                    ITextComponent propertyName = prop.getName(attr.getTier());
-                    if (prop.hasUsageFor(ctx)) {
-                        propertyName.applyTextStyle(TextFormatting.AQUA);
-                    } else if (ctx.isEmpty()) {
-                        propertyName.applyTextStyle(TextFormatting.GRAY);
-                    } else {
+                    ITextComponent propertyName = prop.getName(attr.getTier()).applyTextStyle(TextFormatting.GRAY);
+                    if (!prop.hasUsageFor(ctx) && !ctx.isEmpty()) {
                         //Don't add a line for it if it's there, but not used in context
                         continue;
                     }

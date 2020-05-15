@@ -77,5 +77,4 @@ public abstract class ASPacket<T extends ASPacket<T>> {
     protected final void replyWith(T packet, NetworkEvent.Context ctx) {
         PacketChannel.CHANNEL.reply(packet, ctx);
     }
-
 }

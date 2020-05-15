@@ -54,7 +54,6 @@ public class KeyChainMining extends KeyPerk {
 
     private static final float defaultChainChance = 0.2F;
     private static final int defaultChainLength = 4;
-    private static boolean chainOngoing = false;
 
     private final Config config;
 
@@ -82,8 +81,8 @@ public class KeyChainMining extends KeyPerk {
         if (side == LogicalSide.SERVER &&
                 player instanceof ServerPlayerEntity &&
                 prog.hasPerkEffect(this) &&
+                prog.doPerkAbilities() &&
                 !MiscUtils.isPlayerFakeMP((ServerPlayerEntity) player) &&
-                !player.isSneaking() &&
                 event.getWorld() instanceof ServerWorld &&
                 !player.isCreative()) {
 

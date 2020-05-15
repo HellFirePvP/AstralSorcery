@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
@@ -207,6 +208,7 @@ public class RenderingDrawUtils {
                     Tuple<ItemStack, List<String>> toolTip = iterator.next();
                     int segmentHeight = 0;
                     if (!toolTip.getA().isEmpty()) {
+                        segmentHeight += 2;
                         segmentHeight += stackBoxSize;
                         segmentHeight += (Math.max(toolTip.getB().size() - 1, 0)) * 10;
                     } else {
@@ -239,6 +241,7 @@ public class RenderingDrawUtils {
                 if (!toolTip.getA().isEmpty()) {
                     RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), toolTip.getA(), pX, pY, null);
                     minYShift = stackBoxSize;
+                    pY += 2;
                 }
                 for (String str : toolTip.getB()) {
                     FontRenderer customFR = toolTip.getA().getItem().getFontRenderer(toolTip.getA());
@@ -256,7 +259,6 @@ public class RenderingDrawUtils {
                     pY += 2;
                 }
                 first = false;
-
             }
         }
     }

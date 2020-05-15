@@ -8,11 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.structure;
 
+import hellfirepvp.astralsorcery.common.block.marble.BlockMarblePillar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
+import hellfirepvp.observerlib.api.block.MatchableState;
+import hellfirepvp.observerlib.api.block.SimpleMatchableBlock;
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +38,6 @@ public class PatternAltarAttunement extends PatternBlockArray {
         BlockState chiseled = BlocksAS.MARBLE_CHISELED.getDefaultState();
         BlockState bricks = BlocksAS.MARBLE_BRICKS.getDefaultState();
         BlockState arch = BlocksAS.MARBLE_ARCH.getDefaultState();
-        Block pillar = BlocksAS.MARBLE_PILLAR;
         BlockState sootyRaw = BlocksAS.BLACK_MARBLE_RAW.getDefaultState();
 
         addBlockCube(sootyRaw,-3, -1, -3, 3, -1, 3);
@@ -59,15 +63,28 @@ public class PatternAltarAttunement extends PatternBlockArray {
         addBlock(bricks,  0, -1,  2);
         addBlock(bricks,  0, -1, -2);
 
-        for (int i = 0; i < 2; i++) {
-            addBlock(pillar,  3, i,  3);
-            addBlock(pillar,  3, i, -3);
-            addBlock(pillar, -3, i,  3);
-            addBlock(pillar, -3, i, -3);
-        }
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM),  3, 0,  3);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM),  3, 0, -3);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM), -3, 0,  3);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM), -3, 0, -3);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP),  3, 1,  3);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP),  3, 1, -3);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP), -3, 1,  3);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP), -3, 1, -3);
+
         addBlock(chiseled, 3, 2,  3);
         addBlock(chiseled, 3, 2, -3);
         addBlock(chiseled,-3, 2,  3);
         addBlock(chiseled,-3, 2, -3);
+    }
+
+    private MatchableState getPillarState(BlockMarblePillar.PillarType type) {
+        return new SimpleMatchableBlock(BlocksAS.MARBLE_PILLAR) {
+            @Nonnull
+            @Override
+            public BlockState getDescriptiveState(long tick) {
+                return BlocksAS.MARBLE_PILLAR.getDefaultState().with(BlockMarblePillar.PILLAR_TYPE, type);
+            }
+        };
     }
 }

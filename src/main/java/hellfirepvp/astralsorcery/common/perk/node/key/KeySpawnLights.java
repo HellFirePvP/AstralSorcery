@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.perk.node.key;
 
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.perk.tick.PlayerTickPerk;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
@@ -56,6 +58,10 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
     @Override
     public void onPlayerTick(PlayerEntity player, LogicalSide side) {
         if (side.isServer()) {
+            PlayerProgress prog = ResearchHelper.getProgress(player, side);
+            if (!prog.isValid() || !prog.doPerkAbilities()) {
+                return;
+            }
             int spawnRate = this.applyMultiplierI(this.config.lightSpawnRate.get());
             spawnRate = Math.max(spawnRate, 1);
             if (player.ticksExisted % spawnRate == 0) {

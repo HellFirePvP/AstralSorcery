@@ -231,7 +231,9 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
             }
             if (!this.getCurrentCrystal().isEmpty()) {
                 CrystalAttributes attributes = CrystalAttributes.getCrystalAttributes(this.getCurrentCrystal());
-                properties.multiplySize(CrystalCalculations.getRitualEffectRangeFactor(this, attributes));
+                if (attributes != null) {
+                    properties.multiplySize(CrystalCalculations.getRitualEffectRangeFactor(this, attributes));
+                }
             }
             return (float) properties.getSize();
         }

@@ -8,12 +8,17 @@
 
 package hellfirepvp.astralsorcery.common.structure;
 
+import hellfirepvp.astralsorcery.common.block.marble.BlockMarblePillar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
+import hellfirepvp.observerlib.api.block.MatchableState;
+import hellfirepvp.observerlib.api.block.SimpleMatchableBlock;
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,13 +68,23 @@ public class PatternInfuser extends PatternBlockArray {
         addBlock(chiseled,  2, -1, -2);
         addBlock(chiseled, -2, -1,  2);
         addBlock(chiseled,  2, -1,  2);
-        addBlock(pillar, -2,  0, -2);
-        addBlock(pillar,  2,  0, -2);
-        addBlock(pillar, -2,  0,  2);
-        addBlock(pillar,  2,  0,  2);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.MIDDLE), -2,  0, -2);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.MIDDLE),  2,  0, -2);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.MIDDLE), -2,  0,  2);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.MIDDLE),  2,  0,  2);
         addBlock(chiseled, -2,  1, -2);
         addBlock(chiseled,  2,  1, -2);
         addBlock(chiseled, -2,  1,  2);
         addBlock(chiseled,  2,  1,  2);
+    }
+
+    private MatchableState getPillarState(BlockMarblePillar.PillarType type) {
+        return new SimpleMatchableBlock(BlocksAS.MARBLE_PILLAR) {
+            @Nonnull
+            @Override
+            public BlockState getDescriptiveState(long tick) {
+                return BlocksAS.MARBLE_PILLAR.getDefaultState().with(BlockMarblePillar.PILLAR_TYPE, type);
+            }
+        };
     }
 }

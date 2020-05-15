@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefactionContext;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.entity.EntityFlare;
 import hellfirepvp.astralsorcery.common.fluid.BlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.fluid.FluidLiquidStarlight;
@@ -95,7 +97,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
                 this.collectStarlight();
             }
 
-            ItemStack stack = this.inventory.getStackInSlot(0);
+            ItemStack stack = this.getInventory().getStackInSlot(0);
             if (!stack.isEmpty()) {
                 if (!getWorld().isAirBlock(getPos().up())) {
                     breakCatalyst();
@@ -105,16 +107,23 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
                     }
 
                     if (runningRecipe != null) {
-                        double gain = Math.sqrt(starlightBuffer) * runningRecipe.getProductionMultiplier();
+                        int statMultiplier = 1;
+                        if (stack.getItem() instanceof CrystalAttributeItem) {
+                            CrystalAttributes attributes = ((CrystalAttributeItem) stack.getItem()).getAttributes(stack);
+                            if (attributes != null) {
+                                statMultiplier = attributes.getTotalTierLevel();
+                            }
+                        }
+                        double gain = Math.sqrt(starlightBuffer) * (statMultiplier * runningRecipe.getProductionMultiplier());
                         if (gain > 0 && tank.getFluidAmount() <= TANK_SIZE) {
 
                             fillAndDiscardRest(runningRecipe, gain);
-                            if (rand.nextInt(1000) == 0) {
+                            if (rand.nextInt(750) == 0) {
                                 EntityFlare.spawnAmbientFlare(getWorld(), getPos().add(-3 + rand.nextInt(7), 1, -3 + rand.nextInt(7)));
                             }
                         }
                         starlightBuffer = 0;
-                        if (rand.nextInt(1 + (int) (1000 * runningRecipe.getShatterMultiplier())) == 0) {
+                        if (rand.nextInt(1 + (int) (1000 * (statMultiplier * runningRecipe.getShatterMultiplier()))) == 0) {
                             breakCatalyst();
                             EntityFlare.spawnAmbientFlare(getWorld(), getPos().add(-3 + rand.nextInt(7), 1, -3 + rand.nextInt(7)));
                         }

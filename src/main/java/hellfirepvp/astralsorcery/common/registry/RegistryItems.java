@@ -80,6 +80,7 @@ public class RegistryItems {
         ENCHANTMENT_AMULET = registerItem(new ItemEnchantmentAmulet());
         KNOWLEDGE_SHARE = registerItem(new ItemKnowledgeShare());
         WAND = registerItem(new ItemWand());
+        CHISEL = registerItem(new ItemChisel());
         RESONATOR = registerItem(new ItemResonator());
         LINKING_TOOL = registerItem(new ItemLinkingTool());
         ILLUMINATION_WAND = registerItem(new ItemIlluminationWand());

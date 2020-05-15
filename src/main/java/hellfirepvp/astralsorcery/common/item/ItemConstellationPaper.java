@@ -105,7 +105,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
         EntityItemExplosionResistant res = new EntityItemExplosionResistant(EntityTypesAS.ITEM_EXPLOSION_RESISTANT, world, location.posX, location.posY, location.posZ, itemstack);
-        res.setDefaultPickupDelay();
+        res.setPickupDelay(20);
         res.setMotion(location.getMotion());
         if (location instanceof ItemEntity) {
             res.setThrowerId(((ItemEntity) location).getThrowerId());

@@ -52,6 +52,7 @@ public class PlayerProgress {
     private List<AbstractPerk> sealedPerks = new ArrayList<>();
     private double perkExp = 0;
     private boolean tomeReceived = false;
+    private boolean usePerkAbilities = true; //Move this out of this class at some point.. this doesn't actually belong here
 
     //Loading from flat-file, persistent data
     public void load(CompoundNBT compound) {
@@ -67,6 +68,7 @@ public class PlayerProgress {
         freePointTokens.clear();
         perkExp = 0;
         tomeReceived = false;
+        usePerkAbilities = true;
 
         if (compound.contains("seenConstellations")) {
             ListNBT list = compound.getList("seenConstellations", Constants.NBT.TAG_STRING);
@@ -164,6 +166,10 @@ public class PlayerProgress {
         } else {
             this.tomeReceived = compound.getBoolean("bookReceived");
         }
+
+        if (compound.contains("usePerkAbilities")) {
+            this.usePerkAbilities = compound.getBoolean("usePerkAbilities");
+        }
     }
 
     //For file saving, persistent saving.
@@ -212,6 +218,7 @@ public class PlayerProgress {
 
         cmp.putDouble("perkExp", perkExp);
         cmp.putBoolean("bookReceived", tomeReceived);
+        cmp.putBoolean("usePerkAbilities", usePerkAbilities);
     }
 
     //For knowledge sharing; some information is not important to be shared.
@@ -399,6 +406,14 @@ public class PlayerProgress {
 
     protected void setTomeReceived() {
         this.tomeReceived = true;
+    }
+
+    public boolean doPerkAbilities() {
+        return this.usePerkAbilities;
+    }
+
+    protected void setUsePerkAbilities(boolean usePerkAbilities) {
+        this.usePerkAbilities = usePerkAbilities;
     }
 
     protected boolean grantFreeAllocationPoint(String freePointToken) {

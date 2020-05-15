@@ -16,11 +16,27 @@
 
 package hellfirepvp.astralsorcery.common.entity.item;
 
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemCrystalBase;
+import hellfirepvp.astralsorcery.common.item.ItemChisel;
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -47,6 +63,87 @@ public class EntityCrystal extends EntityItemExplosionResistant {
 
     public static EntityType.IFactory<EntityCrystal> factoryCrystal() {
         return (spawnEntity, world) -> new EntityCrystal(EntityTypesAS.ITEM_CRYSTAL, world);
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return true;
+    }
+
+    @Override
+    public boolean canBeAttackedWithItem() {
+        return true;
+    }
+
+    @Override
+    public boolean hitByEntity(Entity entity) {
+        if (!this.getEntityWorld().isRemote() && entity instanceof ServerPlayerEntity) {
+            ItemStack held = ((ServerPlayerEntity) entity).getHeldItem(Hand.MAIN_HAND);
+            if (!held.isEmpty() && held.getItem() instanceof ItemChisel) {
+
+                ItemStack thisStack = this.getItem();
+                if (!thisStack.isEmpty() && thisStack.getItem() instanceof ItemCrystalBase) {
+
+                    CrystalAttributes thisAttributes = ((ItemCrystalBase) thisStack.getItem()).getAttributes(thisStack);
+                    if (thisAttributes != null) {
+
+                        //TODO chipping sound ?
+                        boolean doDamage = false;
+                        if (rand.nextFloat() < 0.2F) {
+                            int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, held);
+                            doDamage = this.splitCrystal(thisAttributes, fortuneLevel);
+                        }
+                        if (doDamage || rand.nextFloat() < 0.6F) {
+                            held.damageItem(1, (PlayerEntity) entity, (player) -> player.sendBreakAnimation(Hand.MAIN_HAND));
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean splitCrystal(CrystalAttributes thisAttributes, int fortuneLevel) {
+        ItemCrystalBase newBase = ((ItemCrystalBase) this.getItem().getItem()).getInertDuplicateItem();
+        if (newBase == null) {
+            return false;
+        }
+        ItemStack created = new ItemStack(newBase);
+        if (created.isEmpty()) {
+            return false;
+        }
+        int maxSplit = MathHelper.ceil(thisAttributes.getTotalTierLevel() / 3F);
+        if (maxSplit >= thisAttributes.getTotalTierLevel()) {
+            return false;
+        }
+
+        int lostModifiers = 0;
+        if (maxSplit > 1 && rand.nextFloat() < (0.6F / (fortuneLevel + 1))) {
+            lostModifiers++;
+            if (maxSplit > 2 && rand.nextFloat() < (0.2F / (fortuneLevel + 1))) {
+                lostModifiers++;
+            }
+        }
+
+        CrystalAttributes resultThisAttributes = thisAttributes;
+        CrystalAttributes.Builder resultSplitAttributes = CrystalAttributes.Builder.newBuilder(false);
+        for (int i = 0; i < maxSplit; i++) {
+            CrystalProperty prop = MiscUtils.getRandomEntry(resultThisAttributes.getProperties(), rand);
+            if (prop == null) {
+                break;
+            }
+            resultThisAttributes = resultThisAttributes.modifyLevel(prop, -1);
+            if (lostModifiers > 0) {
+                lostModifiers--;
+            } else {
+                resultSplitAttributes.addProperty(prop, 1);
+            }
+        }
+
+        ((ItemCrystalBase) this.getItem().getItem()).setAttributes(this.getItem(), resultThisAttributes);
+        newBase.setAttributes(created, resultSplitAttributes.build());
+        ItemUtils.dropItemNaturally(getEntityWorld(), this.posX, this.posY + 0.25F, this.posZ, created);
+        return true;
     }
 
     @Override

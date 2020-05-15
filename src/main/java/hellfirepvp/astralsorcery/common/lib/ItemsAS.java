@@ -63,6 +63,7 @@ public class ItemsAS {
     public static ItemEnchantmentAmulet ENCHANTMENT_AMULET;
     public static ItemKnowledgeShare KNOWLEDGE_SHARE;
     public static ItemWand WAND;
+    public static ItemChisel CHISEL;
     public static ItemResonator RESONATOR;
     public static ItemLinkingTool LINKING_TOOL;
     public static ItemIlluminationWand ILLUMINATION_WAND;

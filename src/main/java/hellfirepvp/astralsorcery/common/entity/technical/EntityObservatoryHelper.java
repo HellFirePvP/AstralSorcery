@@ -95,13 +95,16 @@ public class EntityObservatoryHelper extends Entity {
             }
             return;
         }
-        if (!observatory.isUsable()) {
-            this.removePassengers();
-            return;
-        }
+
         Entity riding = Iterables.getFirst(this.getPassengers(), null);
         if (riding instanceof PlayerEntity) {
             this.applyObservatoryRotationsFrom(observatory, (PlayerEntity) riding);
+        } else {
+            this.prevRotationYaw = this.rotationYaw;
+            this.prevRotationPitch = this.rotationPitch;
+        }
+        if (!observatory.isUsable()) {
+            this.removePassengers();
         }
     }
 

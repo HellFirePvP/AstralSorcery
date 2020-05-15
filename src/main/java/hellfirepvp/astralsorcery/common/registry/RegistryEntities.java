@@ -99,7 +99,7 @@ public class RegistryEntities {
                         .setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(16)
                         .setCustomClientFactory((spawnEntity, world) -> new EntityCrystal(ITEM_CRYSTAL, world))
-                        .size(0.25F, 0.25F));
+                        .size(0.5F, 0.5F));
         OBSERVATORY_HELPER = register("observatory_helper",
                 EntityType.Builder.create(EntityObservatoryHelper.factory(), EntityClassification.MISC)
                         .disableSummoning()
