@@ -34,7 +34,7 @@ function initializeCoreMod() {
                             }
                         }
                     }
-                    instanceOfChain = ASMAPI.findFirstInstructionAfter(method, Opcodes.DRETURN, method.instructions.indexOf(instanceOfChain) + 2);
+                    instanceOfChain = ASMAPI.findFirstInstructionAfter(method, Opcodes.INSTANCEOF, method.instructions.indexOf(instanceOfChain) + 2);
                 }
 
                 ASMAPI.log('INFO', 'Added \'allow_crystal_interaction\' ASM patch!');
