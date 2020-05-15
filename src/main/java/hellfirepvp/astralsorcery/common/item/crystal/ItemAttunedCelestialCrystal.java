@@ -50,6 +50,16 @@ public class ItemAttunedCelestialCrystal extends ItemAttunedCrystalBase implemen
     }
 
     @Override
+    public int getGeneratedPropertyTiers() {
+        return 12;
+    }
+
+    @Override
+    public int getMaxPropertyTiers() {
+        return 18;
+    }
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     public boolean isSupposedToSeeInRender(ItemStack stack) {
         return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT);

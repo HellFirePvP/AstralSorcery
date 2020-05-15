@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.handler.EffectUpdater;
 import hellfirepvp.astralsorcery.client.event.*;
 import hellfirepvp.astralsorcery.client.event.effect.EffectRenderEventHandler;
 import hellfirepvp.astralsorcery.client.event.effect.LightbeamRenderHelper;
+import hellfirepvp.astralsorcery.client.registry.RegistryKeyBindings;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
@@ -192,6 +193,7 @@ public class ClientProxy extends CommonProxy {
         RegistryContainerTypes.initClient();
         RegistryEntities.initClient();
         RegistryTileEntities.initClient();
+        RegistryKeyBindings.init();
     }
 
     private void addTomeBookmarks() {

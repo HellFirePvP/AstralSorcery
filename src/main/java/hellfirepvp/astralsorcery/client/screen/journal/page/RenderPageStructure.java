@@ -105,6 +105,7 @@ public class RenderPageStructure extends RenderablePage {
     private void renderStructure(float offsetX, float offsetY, float pTicks) {
         Point.Double renderOffset = renderOffset(offsetX + 8, offsetY);
         this.structureRenderer.render3DSliceGUI(renderOffset.x + shift.getX(), renderOffset.y + shift.getY(), pTicks, drawSlice);
+        GlStateManager.disableLighting();
     }
 
     private Point.Double renderOffset(float stdPageOffsetX, float stdPageOffsetY) {

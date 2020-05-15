@@ -61,7 +61,7 @@ public class ItemUtils {
         ItemEntity ei = new ItemEntity(world, x, y, z, stack);
         ei.setMotion(new Vec3d(0, 0, 0));
         world.addEntity(ei);
-        ei.setDefaultPickupDelay();
+        ei.setPickupDelay(20);
         return ei;
     }
 
@@ -72,7 +72,7 @@ public class ItemUtils {
         ItemEntity ei = new ItemEntity(world, x, y, z, stack);
         applyRandomDropOffset(ei);
         world.addEntity(ei);
-        ei.setDefaultPickupDelay();
+        ei.setPickupDelay(20);
         return ei;
     }
 
@@ -141,7 +141,7 @@ public class ItemUtils {
             //Guess some mod could run into an issue here...
         }
         if (item.isAlive()) {
-            item.setDefaultPickupDelay();
+            item.setPickupDelay(20);
             applyRandomDropOffset(item);
             return false;
         } else {
@@ -151,7 +151,7 @@ public class ItemUtils {
 
     private static void applyRandomDropOffset(ItemEntity item) {
         item.setMotion(rand.nextFloat() * 0.3F - 0.15D,
-                rand.nextFloat() * 0.3F - 0.15D,
+                rand.nextFloat() * 0.3F - 0.05D,
                 rand.nextFloat() * 0.3F - 0.15D);
     }
 

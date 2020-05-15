@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
@@ -54,12 +55,13 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
             return;
         }
         if (player instanceof ServerPlayerEntity) {
-            if (player.isSneaking() || MiscUtils.isPlayerFakeMP((ServerPlayerEntity) player)) {
+            PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+            if (!prog.doPerkAbilities() || MiscUtils.isPlayerFakeMP((ServerPlayerEntity) player)) {
                 return;
             }
             EventFlags.MINING_SIZE_BREAK.executeWithFlag(() -> {
                 float size = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.SERVER)
-                        .modifyValue(player, ResearchHelper.getProgress(player, LogicalSide.SERVER), PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, 0);
+                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, 0);
                 size = AttributeEvent.postProcessModded(player, PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, size);
                 if (size >= 1F) {
                     BlockRayTraceResult brtr = MiscUtils.rayTraceLookBlock(player, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE);

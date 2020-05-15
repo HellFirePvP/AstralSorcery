@@ -61,15 +61,15 @@ public class RegistryWorldGeneration {
         WorldGenerationAS.Placement.DESERT_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig("struct_desert", 9,
                 Lists.newArrayList(BiomeDictionary.Type.SANDY), Lists.newArrayList(DimensionType.OVERWORLD),
                 20, 90, 140,
-                8, 4));
+                12, 5));
         WorldGenerationAS.Placement.MOUNTAIN_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig("struct_mountain", 19,
                 Lists.newArrayList(BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.MOUNTAIN), Lists.newArrayList(DimensionType.OVERWORLD),
                 50, 160, 140,
-                6, 4));
+                12, 5));
         WorldGenerationAS.Placement.SMALL_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig("struct_small", 9,
                 Lists.newArrayList(BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.FOREST), Lists.newArrayList(DimensionType.OVERWORLD),
                 20, 200, 140,
-                12, 7));
+                12, 8));
 
         WorldGenerationAS.Placement.GLOW_FLOWER = cfg.addConfigEntry(new FeaturePlacementConfig("glow_flower", true, true,
                 Lists.newArrayList(BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.COLD), Lists.newArrayList(DimensionType.OVERWORLD),

@@ -137,4 +137,9 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     public boolean didReceiveTome() {
         return true; //Fake players always did get the tome already.
     }
+
+    @Override
+    public boolean doPerkAbilities() {
+        return false;
+    }
 }

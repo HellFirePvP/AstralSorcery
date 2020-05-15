@@ -283,5 +283,21 @@ public class AttunementAltarRecipeProvider {
                 )
                 .addOutput(ItemsAS.SHIFTING_STAR)
                 .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(ItemsAS.CHISEL, AltarType.ATTUNEMENT)
+                .setStarlightRequirement(0.4F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("     ")
+                        .patternLine("  GS ")
+                        .patternLine("  PG ")
+                        .patternLine(" P   ")
+                        .patternLine("G    ")
+                        .key('S', TagsAS.Items.INGOTS_STARMETAL)
+                        .key('G', Tags.Items.NUGGETS_GOLD)
+                        .key('P', BlocksAS.INFUSED_WOOD_PLANKS)
+                )
+                .addOutput(ItemsAS.CHISEL)
+                .build(registrar);
     }
 }

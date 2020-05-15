@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -15,9 +16,12 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.Tags;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,13 +32,23 @@ import javax.annotation.Nullable;
  */
 public class IngredientHelper {
 
+    @OnlyIn(Dist.CLIENT)
     public static ItemStack getRandomMatchingStack(Ingredient ingredient, long tick) {
         if (ingredient.hasNoMatchingItems()) {
             return ItemStack.EMPTY;
         }
-        ItemStack[] stacks = ingredient.getMatchingStacks();
-        int mod = (int) ((tick / 20L) % stacks.length);
-        return stacks[MathHelper.clamp(mod, 0, stacks.length - 1)];
+        List<ItemStack> applicable = new ArrayList<>();
+        for (ItemStack stack : ingredient.getMatchingStacks()) {
+            if (stack.getItem() instanceof ItemGatedVisibility) {
+                if (((ItemGatedVisibility) stack.getItem()).isSupposedToSeeInRender(stack)) {
+                    applicable.add(stack);
+                }
+            } else {
+                applicable.add(stack);
+            }
+        }
+        int mod = (int) ((tick / 20L) % applicable.size());
+        return applicable.get(MathHelper.clamp(mod, 0, applicable.size() - 1));
     }
 
     @Nullable
