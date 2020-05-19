@@ -54,34 +54,8 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
-        EntityPlayer pl = Minecraft.getMinecraft().player;
-        if (pl != null && isValid(pl, stack)) {
-            tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.container.desc"));
-            tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.container.open"));
-        }
-    }
-
-    @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (!worldIn.isRemote && (!(entityIn instanceof EntityPlayer) || !isValid((EntityPlayer) entityIn, stack))) {
-            stack.setCount(0);
-            SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, entityIn.getEntityWorld(), entityIn.getPosition(), 1.4F, 1F);
-        }
-    }
-
-    @Override
-    public boolean onEntityItemUpdate(EntityItem entityItem) {
-        if (!entityItem.world.isRemote) {
-            ItemStack stack = entityItem.getItem();
-            EntityPlayer thrower = entityItem.getThrower() == null ? null : entityItem.world.getPlayerEntityByName(entityItem.getThrower());
-            if (thrower == null || !isValid(thrower, stack)) {
-                SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, entityItem.getEntityWorld(), entityItem.getPosition(), 1.4F, 1F);
-                entityItem.setDead();
-                stack.setCount(0);
-                entityItem.setItem(stack);
-            }
-        }
-        return false;
+        tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.container.desc"));
+        tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.container.open"));
     }
 
     @Override
@@ -111,29 +85,10 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
     }
 
     private void spawnFragment(EntityPlayer player, EnumHand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (isValid(player, stack)) {
-            SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, player.getEntityWorld(), player.getPosition(), 0.75F, 3.5F);
-            ItemStack frag = new ItemStack(ItemsAS.knowledgeFragment);
-            ItemKnowledgeFragment.generateSeed(player, frag);
-            player.setHeldItem(hand, frag);
-        } else {
-            player.setHeldItem(hand, ItemStack.EMPTY);
-        }
-    }
-
-    public static ItemStack generateCapsule(EntityPlayer player) {
-        ItemStack stack = new ItemStack(ItemsAS.fragmentCapsule);
-        NBTHelper.getPersistentData(stack).setUniqueId("pl", player.getUniqueID());
-        return stack;
-    }
-
-    private static boolean isValid(EntityPlayer player, ItemStack capsule) {
-        if (capsule.isEmpty() || !(capsule.getItem() instanceof ItemFragmentCapsule)) {
-            return false;
-        }
-        NBTTagCompound cmp = NBTHelper.getPersistentData(capsule);
-        return cmp.hasUniqueId("pl") && cmp.getUniqueId("pl").equals(player.getUniqueID());
+        SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, player.getEntityWorld(), player.getPosition(), 0.75F, 3.5F);
+        ItemStack frag = new ItemStack(ItemsAS.knowledgeFragment);
+        ItemKnowledgeFragment.generateSeed(player, frag);
+        player.setHeldItem(hand, frag);
     }
 
     @Override

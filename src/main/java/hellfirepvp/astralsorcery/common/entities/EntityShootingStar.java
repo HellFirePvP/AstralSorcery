@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ASDataSerializers;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.LootTableUtil;
@@ -56,7 +57,6 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
     private static final DataParameter<Vector3> SHOOT_CONSTANT = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.VECTOR);
     private static final DataParameter<Long> EFFECT_SEED = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.LONG);
     private static final DataParameter<Long> LAST_UPDATE = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.LONG);
-    private static final DataParameter<String> PLAYER = EntityDataManager.createKey(EntityShootingStar.class, DataSerializers.STRING);
 
     //Not saved or synced value to deny 'capturing' one.
     private boolean removalPending = true;
@@ -65,13 +65,12 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         super(worldIn);
     }
 
-    public EntityShootingStar(World worldIn, double x, double y, double z, Vector3 shot, EntityPlayer reason) {
+    public EntityShootingStar(World worldIn, double x, double y, double z, Vector3 shot) {
         super(worldIn, x, y, z);
         this.setSize(0.1F, 0.1F);
         this.removalPending = false;
         this.dataManager.set(SHOOT_CONSTANT, shot);
         this.dataManager.set(EFFECT_SEED, rand.nextLong());
-        this.dataManager.set(PLAYER, reason.getName());
         this.dataManager.set(LAST_UPDATE, worldIn.getTotalWorldTime());
         correctMovement();
     }
@@ -82,7 +81,6 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
 
         this.dataManager.register(SHOOT_CONSTANT, new Vector3());
         this.dataManager.register(EFFECT_SEED, 0L);
-        this.dataManager.register(PLAYER, "");
         this.dataManager.register(LAST_UPDATE, 0L);
     }
 
@@ -221,41 +219,37 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
             hit = result.entityHit.getPosition();
         }
         if (!world.isRemote && MiscUtils.isChunkLoaded(world, hit)) {
-            EntityPlayer player = world.getPlayerEntityByName(this.dataManager.get(PLAYER));
-            if (player != null) {
-                IBlockState state = world.getBlockState(hit);
-                boolean eligableForExplosion = true;
-                if (MiscUtils.isFluidBlock(state)) {
-                    Fluid f = MiscUtils.tryGetFuild(state);
-                    if (f != null) {
-                        if (f.getTemperature(world, hit) <= 300) { //About room temp; incl. water
-                            eligableForExplosion = false;
-                        }
+
+            IBlockState state = world.getBlockState(hit);
+            boolean eligableForExplosion = true;
+            if (MiscUtils.isFluidBlock(state)) {
+                Fluid f = MiscUtils.tryGetFuild(state);
+                if (f != null) {
+                    if (f.getTemperature(world, hit) <= 300) { //About room temp; incl. water
+                        eligableForExplosion = false;
                     }
                 }
+            }
 
-                Vector3 v = Vector3.atEntityCenter(this);
-                ShootingStarExplosion.play(world, v, !eligableForExplosion, getEffectSeed());
+            Vector3 v = Vector3.atEntityCenter(this);
+            ShootingStarExplosion.play(world, v, !eligableForExplosion, getEffectSeed());
 
-                EntityItem generated = new EntityItem(world, v.getX(), v.getY(), v.getZ(), ItemFragmentCapsule.generateCapsule(player));
-                Vector3 m = new Vector3();
-                MiscUtils.applyRandomOffset(m, rand, 0.25F);
-                generated.motionX = m.getX();
-                generated.motionY = Math.abs(m.getY());
-                generated.motionZ = m.getZ();
-                generated.setDefaultPickupDelay();
-                generated.setThrower(player.getName());
-                generated.setOwner(player.getName());
-                world.spawnEntity(generated);
+            EntityItem generated = new EntityItem(world, v.getX(), v.getY(), v.getZ(), new ItemStack(ItemsAS.fragmentCapsule));
+            Vector3 m = new Vector3();
+            MiscUtils.applyRandomOffset(m, rand, 0.25F);
+            generated.motionX = m.getX();
+            generated.motionY = Math.abs(m.getY());
+            generated.motionZ = m.getZ();
+            generated.setPickupDelay(20);
+            world.spawnEntity(generated);
 
-                LootTable table = world.getLootTableManager().getLootTableFromLocation(LootTableUtil.LOOT_TABLE_SHOOTING_STAR);
-                if (table != null && world instanceof WorldServer) {
-                    LootContext context = new LootContext.Builder((WorldServer) world)
-                            .build();
-                    List<ItemStack> stacks = table.generateLootForPools(rand, context);
-                    for (ItemStack stack : stacks) {
-                        ItemUtils.dropItemNaturally(world, v.getX(), v.getY(), v.getZ(), stack);
-                    }
+            LootTable table = world.getLootTableManager().getLootTableFromLocation(LootTableUtil.LOOT_TABLE_SHOOTING_STAR);
+            if (table != null && world instanceof WorldServer) {
+                LootContext context = new LootContext.Builder((WorldServer) world)
+                        .build();
+                List<ItemStack> stacks = table.generateLootForPools(rand, context);
+                for (ItemStack stack : stacks) {
+                    ItemUtils.dropItemNaturally(world, v.getX(), v.getY(), v.getZ(), stack);
                 }
             }
         }
