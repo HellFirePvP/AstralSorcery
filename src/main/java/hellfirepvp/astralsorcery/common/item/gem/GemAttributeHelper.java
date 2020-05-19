@@ -65,15 +65,15 @@ public class GemAttributeHelper {
 
     private static boolean allowNegativeModifiers = false;
     private static float chanceNegative = 0.25F;
-    private static float decModifierLower = 0.05F;
-    private static float decModifierHigher = 0.08F;
+    private static float decModifierLower = -0.05F;
+    private static float decModifierHigher = -0.08F;
 
     private static boolean allowMoreLessModifiers = false;
     private static float chanceMultiplicative = 0.1F;
     private static float moreModifierLower = 0.05F;
     private static float moreModifierHigher = 0.08F;
-    private static float lessModifierLower = 0.05F;
-    private static float lessModifierHigher = 0.08F;
+    private static float lessModifierLower = -0.05F;
+    private static float lessModifierHigher = -0.08F;
 
     public static boolean rollGem(ItemStack gem) {
         return rollGem(gem, rand);
@@ -224,20 +224,20 @@ public class GemAttributeHelper {
             incModifierHigher = cfg.getFloat("Increased_Higher_Bound", section, incModifierHigher, 0F, 1F,
                     "Defines the lower bound an 'increased' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
 
-            decModifierLower = cfg.getFloat("Decreased_Lower_Bound", section, decModifierLower, 0F, 1F,
-                    "Defines the lower bound an 'decreased' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
-            decModifierHigher = cfg.getFloat("Decreased_Higher_Bound", section, decModifierHigher, 0F, 1F,
-                    "Defines the lower bound an 'decreased' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
+            decModifierLower = cfg.getFloat("Decreased_Lower_Bound", section, decModifierLower, -1F, 0F,
+                    "Defines the lower bound an 'decreased' modifier can roll. Value is in percent (-0.01 means 1% decreased, -0.1 means 10% decreased, ...)");
+            decModifierHigher = cfg.getFloat("Decreased_Higher_Bound", section, decModifierHigher, -1F, 0F,
+                    "Defines the lower bound an 'decreased' modifier can roll. Value is in percent (-0.01 means 1% decreased, -0.1 means 10% decreased, ...)");
 
             moreModifierLower = cfg.getFloat("More_Lower_Bound", section, moreModifierLower, 0F, 1F,
                     "Defines the lower bound an 'more' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
             moreModifierHigher = cfg.getFloat("More_Higher_Bound", section, moreModifierHigher, 0F, 1F,
                     "Defines the lower bound an 'more' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
 
-            lessModifierLower = cfg.getFloat("Less_Lower_Bound", section, lessModifierLower, 0F, 1F,
-                    "Defines the lower bound an 'less' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
-            lessModifierHigher = cfg.getFloat("Less_Higher_Bound", section, lessModifierHigher, 0F, 1F,
-                    "Defines the lower bound an 'less' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
+            lessModifierLower = cfg.getFloat("Less_Lower_Bound", section, lessModifierLower, -1F, 0F,
+                    "Defines the lower bound an 'less' modifier can roll. Value is in percent (-0.01 means 1% less, -0.1 means 10% less, ...)");
+            lessModifierHigher = cfg.getFloat("Less_Higher_Bound", section, lessModifierHigher, -1F, 0F,
+                    "Defines the lower bound an 'less' modifier can roll. Value is in percent (-0.01 means 1% less, -0.1 means 10% less, ...)");
         }
 
         private void fillModifiers(String[] configuredList) {
