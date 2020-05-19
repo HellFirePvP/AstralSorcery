@@ -19,6 +19,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -31,7 +33,7 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
     private CrystalProperties properties;
     private float additionalLoss = 1F;
 
-    public CrystalTransmissionNode(BlockPos thisPos, CrystalProperties properties) {
+    public CrystalTransmissionNode(BlockPos thisPos, @Nullable CrystalProperties properties) {
         super(thisPos);
         this.properties = properties;
     }
@@ -63,6 +65,7 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
     }
 
     @Override
+    @Nullable
     public CrystalProperties getTransmissionProperties() {
         return properties;
     }
@@ -76,7 +79,11 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
 
-        this.properties = CrystalProperties.readFromNBT(compound);
+        if (compound.hasKey("size") && compound.hasKey("purity") && compound.hasKey("collect")) {
+            this.properties = CrystalProperties.readFromNBT(compound);
+        } else {
+            this.properties = null;
+        }
         this.additionalLoss = compound.getFloat("lossMultiplier");
     }
 
@@ -84,7 +91,9 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
     public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
-        this.properties.writeToNBT(compound);
+        if (this.properties != null) {
+            this.properties.writeToNBT(compound);
+        }
         compound.setFloat("lossMultiplier", this.additionalLoss);
     }
 

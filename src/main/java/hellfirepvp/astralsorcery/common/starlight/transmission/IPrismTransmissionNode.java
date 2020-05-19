@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -33,6 +34,7 @@ public interface IPrismTransmissionNode extends ILocatable {
 
     //Get his node's transmission properties to calculate transmission loss and so on
     //Arbitrarily this returns a max. sized Property by default...
+    @Nullable
     default public CrystalProperties getTransmissionProperties() {
         return CrystalProperties.getMaxCelestialProperties();
     }

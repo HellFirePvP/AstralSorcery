@@ -49,7 +49,7 @@ import java.util.List;
  */
 public class TileCrystalLens extends TileTransmissionBase {
 
-    private CrystalProperties properties;
+    private CrystalProperties properties = null;
     private ItemColoredLens.ColorType lensColor;
 
     private int lensEffectTimeout = 0;
@@ -57,11 +57,12 @@ public class TileCrystalLens extends TileTransmissionBase {
     //So we can tell the client to render beams eventhough the actual connection doesn't exist.
     private List<BlockPos> occupiedConnections = new LinkedList<>();
 
+    @Nullable
     public CrystalProperties getCrystalProperties() {
         return properties;
     }
 
-    public void onPlace(CrystalProperties properties) {
+    public void onPlace(@Nullable CrystalProperties properties) {
         this.properties = properties;
         markForUpdate();
     }
@@ -204,7 +205,11 @@ public class TileCrystalLens extends TileTransmissionBase {
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        this.properties = CrystalProperties.readFromNBT(compound);
+        if (compound.hasKey("size") && compound.hasKey("purity") && compound.hasKey("collect")) {
+            this.properties = CrystalProperties.readFromNBT(compound);
+        } else {
+            this.properties = null;
+        }
         int col = compound.getInteger("color");
         if(col >= 0 && col < ItemColoredLens.ColorType.values().length) {
             this.lensColor = ItemColoredLens.ColorType.values()[col];
@@ -225,7 +230,9 @@ public class TileCrystalLens extends TileTransmissionBase {
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        this.properties.writeToNBT(compound);
+        if (this.properties != null) {
+            this.properties.writeToNBT(compound);
+        }
         compound.setInteger("color", lensColor != null ? lensColor.ordinal() : -1);
 
         NBTTagList list = new NBTTagList();

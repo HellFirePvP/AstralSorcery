@@ -192,7 +192,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         ItemStack stack = super.getPickBlock(getActualState(state, world, pos), target, world, pos, player);
         TileCrystalLens lens = MiscUtils.getTileAt(world, pos, TileCrystalLens.class, true);
-        if(lens != null && lens.getCrystalProperties() != null) {
+        if (lens != null && lens.getCrystalProperties() != null) {
             CrystalProperties.applyCrystalProperties(stack, lens.getCrystalProperties());
         } else {
             CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
@@ -211,7 +211,11 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
             }
 
             drop = new ItemStack(BlocksAS.lens);
-            CrystalProperties.applyCrystalProperties(drop, lens.getCrystalProperties());
+            if (lens.getCrystalProperties() != null) {
+                CrystalProperties.applyCrystalProperties(drop, lens.getCrystalProperties());
+            } else {
+                CrystalProperties.applyCrystalProperties(drop, new CrystalProperties(1, 0, 0, 0, -1));
+            }
             ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
         }
 

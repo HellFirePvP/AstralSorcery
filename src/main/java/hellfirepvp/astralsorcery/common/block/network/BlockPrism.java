@@ -193,7 +193,11 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
             }
 
             drop = new ItemStack(BlocksAS.lensPrism);
-            CrystalProperties.applyCrystalProperties(drop, lens.getCrystalProperties());
+            if (lens.getCrystalProperties() != null) {
+                CrystalProperties.applyCrystalProperties(drop, lens.getCrystalProperties());
+            } else {
+                CrystalProperties.applyCrystalProperties(drop, new CrystalProperties(1, 0, 0, 0, -1));
+            }
             ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
         }
 
