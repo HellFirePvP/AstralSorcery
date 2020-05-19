@@ -62,6 +62,20 @@ public class DynamicEnchantment {
         this.levelAddition = levelAddition;
     }
 
+    @Nonnull
+    public DynamicEnchantment copy() {
+        return this.copy(this.getLevelAddition());
+    }
+
+    @Nonnull
+    public DynamicEnchantment copy(int level) {
+        if (this.getType().hasEnchantmentTag()) {
+            return new DynamicEnchantment(this.getType(), this.getEnchantment(), level);
+        } else {
+            return new DynamicEnchantment(this.type, level);
+        }
+    }
+
     //The ordering in the enum defines the order of how the types of enchantments are applied/calculated!
     public enum Type {
 
