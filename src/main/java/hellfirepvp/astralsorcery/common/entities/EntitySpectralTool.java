@@ -255,6 +255,10 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
          * Returns whether the EntityAIBase should begin execution.
          */
         public boolean shouldExecute() {
+            if (this.taskTarget == null) {
+                return false;
+            }
+
             EntityMoveHelper entitymovehelper = this.parentEntity.getMoveHelper();
 
             if (!entitymovehelper.isUpdating()) {
@@ -298,7 +302,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
          * Returns whether an in-progress EntityAIBase should continue executing
          */
         public boolean shouldContinueExecuting() {
-            return designatedAttackTarget != null || designatedBreakTarget != null;
+            return taskTarget != null && (designatedAttackTarget != null || designatedBreakTarget != null);
         }
 
         @Override
@@ -315,7 +319,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
         public void updateTask() {
             super.updateTask();
 
-            if(!shouldContinueExecuting()) {
+            if(!shouldContinueExecuting() || this.taskTarget == null) {
                 return;
             }
 
@@ -421,6 +425,10 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
          * Execute a one shot task or start executing a continuous task
          */
         public void startExecuting() {
+            if (this.taskTarget == null) {
+                return;
+            }
+
             switch (this.taskTarget.type) {
                 case BREAK_BLOCK:
                     BlockPos validStateStone = MiscUtils.searchAreaForFirst(parentEntity.world, parentEntity.getPosition(), 8, Vector3.atEntityCorner(this.parentEntity),
