@@ -26,8 +26,8 @@ public abstract class SizeHandler {
     public final double heightToBorder;
     public final double widthToBorder;
 
-    private int widthHeightNodes = W_H_NODE;
-    private int spaceBetweenNodes = W_H_NODE;
+    private double widthHeightNodes = W_H_NODE;
+    private double spaceBetweenNodes = W_H_NODE;
 
     private double midX;
     private double midY;
@@ -57,23 +57,23 @@ public abstract class SizeHandler {
         this.minScale = minScale;
     }
 
-    public void setWidthHeightNodes(int widthHeightNodes) {
+    public void setWidthHeightNodes(double widthHeightNodes) {
         this.widthHeightNodes = widthHeightNodes;
     }
 
-    public void setSpaceBetweenNodes(int spaceBetweenNodes) {
+    public void setSpaceBetweenNodes(double spaceBetweenNodes) {
         this.spaceBetweenNodes = spaceBetweenNodes;
     }
 
     public void updateSize() {
         resetZoom();
 
-        int leftMost = 0;
-        int rightMost = 0;
-        int upperMost = 0;
-        int lowerMost = 0;
+        double leftMost = 0;
+        double rightMost = 0;
+        double upperMost = 0;
+        double lowerMost = 0;
 
-        int[] requiredRect = buildRequiredRectangle();
+        double[] requiredRect = buildRequiredRectangle();
         if (requiredRect != null) {
             leftMost =  requiredRect[0];
             rightMost = requiredRect[1];
@@ -87,11 +87,11 @@ public abstract class SizeHandler {
         upperMost = Math.abs(upperMost);
         lowerMost = Math.abs(lowerMost);
 
-        int leftAdded  = (leftMost  * this.widthHeightNodes + leftMost  * this.spaceBetweenNodes);
-        int rightAdded = (rightMost * this.widthHeightNodes + rightMost * this.spaceBetweenNodes);
+        double leftAdded  = (leftMost  * this.widthHeightNodes + leftMost  * this.spaceBetweenNodes);
+        double rightAdded = (rightMost * this.widthHeightNodes + rightMost * this.spaceBetweenNodes);
 
-        int upperAdded = (upperMost * this.widthHeightNodes + upperMost * this.spaceBetweenNodes);
-        int lowerAdded = (lowerMost * this.widthHeightNodes + lowerMost * this.spaceBetweenNodes);
+        double upperAdded = (upperMost * this.widthHeightNodes + upperMost * this.spaceBetweenNodes);
+        double lowerAdded = (lowerMost * this.widthHeightNodes + lowerMost * this.spaceBetweenNodes);
 
         midX = widthToBorder + leftAdded;
         totalWidth = widthToBorder + rightAdded + midX;
@@ -100,7 +100,7 @@ public abstract class SizeHandler {
     }
 
     @Nullable
-    public abstract int[] buildRequiredRectangle();
+    public abstract double[] buildRequiredRectangle();
 
     public double getMidX() {
         return midX * scalingFactor;

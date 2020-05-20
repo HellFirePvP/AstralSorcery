@@ -184,8 +184,8 @@ public class ScreenJournalClusterRenderer {
             if (!node.canSee(ResearchHelper.getClientProgress())) {
                 continue;
             }
-            int absX = node.renderPosX;
-            int absZ = node.renderPosZ;
+            double absX = node.renderPosX;
+            double absZ = node.renderPosZ;
             double lX = midX + (absX * (progressionSizeHandler.getZoomedWHNode() + progressionSizeHandler.getZoomedSpaceBetweenNodes()));
             double lZ = midY + (absZ * (progressionSizeHandler.getZoomedWHNode() + progressionSizeHandler.getZoomedSpaceBetweenNodes()));
 
@@ -314,7 +314,7 @@ public class ScreenJournalClusterRenderer {
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
         GlStateManager.disableTexture();
         Blending.DEFAULT.applyStateManager();
-        GlStateManager.lineWidth(3.5F);
+        GlStateManager.lineWidth(4F);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
 
@@ -330,8 +330,8 @@ public class ScreenJournalClusterRenderer {
             double ly = origin.getY();
             origin.add(segmentIter);
 
-            float brightness = 0.4F;
-            brightness += (0.6F * evaluateBrightness(i, activeSegment));
+            float brightness = 0.6F;
+            brightness += (0.4F * evaluateBrightness(i, activeSegment));
 
             drawLinePart(lx, ly, origin.getX(), origin.getY(), zLevel, brightness);
         }

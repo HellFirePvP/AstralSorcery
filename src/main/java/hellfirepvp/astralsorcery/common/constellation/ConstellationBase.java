@@ -52,7 +52,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
 
     public ConstellationBase(String name, Color color) {
         this.id = counter++;
-        this.simpleName = name.toLowerCase();
+        this.simpleName = name;
         ModContainer mod = MiscUtils.getCurrentlyActiveMod();
         if (mod != null) {
             this.setRegistryName(new ResourceLocation(mod.getModId(), name));
@@ -142,8 +142,8 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
     }
 
     @Override
-    public String getUnlocalizedName() {
-        return name;
+    public String getTranslationKey() {
+        return this.name;
     }
 
     @Override
@@ -153,7 +153,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
 
     @Override
     public String toString() {
-        return "Constellation={name:" + getUnlocalizedName() + "}";
+        return "Constellation={name:" + this.name + "}";
     }
 
     @Override
@@ -189,11 +189,6 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
             return true;
         }
 
-        @Override
-        public String getUnlocalizedType() {
-            return "astralsorcery.journal.constellation.type.major";
-        }
-
         //@Override
         //public boolean canDiscover(PlayerEntity player, PlayerProgress progress) {
         //    return !Mods.GAMESTAGES.isPresent() ||
@@ -216,11 +211,6 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
             return super.canDiscover(player, progress) &&
                     progress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) &&
                     progress.wasOnceAttuned();
-        }
-
-        @Override
-        public String getUnlocalizedType() {
-            return "astralsorcery.journal.constellation.type.weak";
         }
     }
 
@@ -283,11 +273,6 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
             return super.canDiscover(player, progress) &&
                     progress.wasOnceAttuned() &&
                     progress.getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT);
-        }
-
-        @Override
-        public String getUnlocalizedType() {
-            return "astralsorcery.journal.constellation.type.minor";
         }
     }
 }

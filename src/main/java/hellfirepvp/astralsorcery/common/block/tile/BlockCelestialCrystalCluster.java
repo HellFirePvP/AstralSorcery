@@ -10,8 +10,10 @@ package hellfirepvp.astralsorcery.common.block.tile;
 
 import hellfirepvp.astralsorcery.common.block.base.BlockCrystalContainer;
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightRecipient;
+import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.item.block.ItemBlockCelestialCrystalCluster;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
@@ -21,6 +23,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -49,7 +52,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 30.09.2019 / 18:00
  */
-public class BlockCelestialCrystalCluster extends BlockCrystalContainer implements BlockStarlightRecipient {
+public class BlockCelestialCrystalCluster extends BlockCrystalContainer implements BlockStarlightRecipient, CustomItemBlock {
 
     private static final VoxelShape GROWTH_STAGE_0 = Block.makeCuboidShape(4, 0, 5, 12, 8, 11);
     private static final VoxelShape GROWTH_STAGE_1 = Block.makeCuboidShape(4, 0, 5, 12, 10, 11);
@@ -66,6 +69,11 @@ public class BlockCelestialCrystalCluster extends BlockCrystalContainer implemen
                 .harvestLevel(1)
                 .sound(SoundType.GLASS)
                 .lightValue(8));
+    }
+
+    @Override
+    public Class<? extends BlockItem> getItemBlockClass() {
+        return ItemBlockCelestialCrystalCluster.class;
     }
 
     @Override

@@ -32,6 +32,11 @@ public class BlockTransmutationRecipeProvider {
                 .addInputCheck(Blocks.IRON_ORE)
                 .setOutput(BlocksAS.STARMETAL_ORE)
                 .build(registrar);
+        BlockTransmutationBuilder.builder(AstralSorcery.key("craftingtable_altar"))
+                .multiplyStarlightCost(0.6F)
+                .addInputCheck(Blocks.CRAFTING_TABLE)
+                .setOutput(BlocksAS.ALTAR_DISCOVERY)
+                .build(registrar);
 
         BlockTransmutationBuilder.builder(AstralSorcery.key("pumpkin_cake"))
                 .multiplyStarlightCost(2.5F)

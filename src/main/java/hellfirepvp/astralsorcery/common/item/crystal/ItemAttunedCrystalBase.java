@@ -55,9 +55,11 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
             IWeakConstellation c = getAttunedConstellation(stack);
             if (c != null) {
                 if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
-                    toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.info.astralsorcery.attuned", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()))));
+                    toolTip.add(new TranslationTextComponent("crystal.info.astralsorcery.attuned",
+                            c.getConstellationName().applyTextStyle(TextFormatting.BLUE))
+                            .applyTextStyle(TextFormatting.GRAY));
                 } else if (!addedMissing) {
-                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").applyTextStyle(TextFormatting.GRAY));
                     addedMissing = true;
                 }
             }
@@ -65,13 +67,23 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
             IMinorConstellation tr = getTraitConstellation(stack);
             if (tr != null) {
                 if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(tr)) {
-                    toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("crystal.info.astralsorcery.trait",
-                            TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName()))));
+                    toolTip.add(new TranslationTextComponent("crystal.info.astralsorcery.trait",
+                            tr.getConstellationName().applyTextStyle(TextFormatting.BLUE))
+                            .applyTextStyle(TextFormatting.GRAY));
                 } else if (!addedMissing) {
-                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").applyTextStyle(TextFormatting.GRAY));
                 }
             }
         }
+    }
+
+    @Override
+    public ITextComponent getDisplayName(ItemStack stack) {
+        IWeakConstellation cst = this.getAttunedConstellation(stack);
+        if (cst != null) {
+            return new TranslationTextComponent(super.getTranslationKey(stack) + ".typed", cst.getConstellationName());
+        }
+        return super.getDisplayName(stack);
     }
 
     @Nullable

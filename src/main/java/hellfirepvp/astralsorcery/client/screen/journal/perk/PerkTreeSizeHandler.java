@@ -26,17 +26,17 @@ public class PerkTreeSizeHandler extends SizeHandler {
 
     public PerkTreeSizeHandler(int height, int width) {
         super(height, width);
-        setWidthHeightNodes(10);
-        setSpaceBetweenNodes(10);
+        setWidthHeightNodes(10.0D);
+        setSpaceBetweenNodes(10.0D);
     }
 
     @Nullable
     @Override
-    public int[] buildRequiredRectangle() {
-        int leftMost = 0;
-        int rightMost = 0;
-        int upperMost = 0;
-        int lowerMost = 0;
+    public double[] buildRequiredRectangle() {
+        double leftMost = 0;
+        double rightMost = 0;
+        double upperMost = 0;
+        double lowerMost = 0;
 
         for (PerkTreePoint<?> point : PerkTree.PERK_TREE.getPerkPoints()) {
             Point offset = point.getOffset();
@@ -47,7 +47,7 @@ public class PerkTreeSizeHandler extends SizeHandler {
             if (y > lowerMost) lowerMost = y;
             if (y < upperMost) upperMost = y;
         }
-        return new int[] { leftMost, rightMost, upperMost, lowerMost };
+        return new double[] { leftMost, rightMost, upperMost, lowerMost };
     }
 
     // --------------------------------------

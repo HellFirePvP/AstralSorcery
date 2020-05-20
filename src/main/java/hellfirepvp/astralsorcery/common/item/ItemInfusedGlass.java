@@ -59,19 +59,16 @@ public class ItemInfusedGlass extends Item {
         if (map != null) {
             for (IConstellation cst : map.getConstellations()) {
                 String format = "item.astralsorcery.infused_glass.ttip";
-                ITextComponent cstName = new TranslationTextComponent(cst.getUnlocalizedName());
-                cstName.setStyle(new Style().setColor(TextFormatting.BLUE));
+                ITextComponent cstName = cst.getConstellationName().applyTextStyle(TextFormatting.BLUE);
 
                 if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isCreative()) {
                     String percent = String.valueOf(Math.round(map.getDistribution(cst) * 100F));
                     ITextComponent creativeHint = new TranslationTextComponent("item.astralsorcery.infused_glass.ttip.creative", percent)
-                            .setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE));
+                            .applyTextStyle(TextFormatting.LIGHT_PURPLE);
 
-                    tooltip.add(new TranslationTextComponent(format, cstName, creativeHint)
-                            .setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    tooltip.add(new TranslationTextComponent(format, cstName, creativeHint).applyTextStyle(TextFormatting.GRAY));
                 } else {
-                    tooltip.add(new TranslationTextComponent(format, cstName, "")
-                            .setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    tooltip.add(new TranslationTextComponent(format, cstName, "").applyTextStyle(TextFormatting.GRAY));
                 }
             }
         }

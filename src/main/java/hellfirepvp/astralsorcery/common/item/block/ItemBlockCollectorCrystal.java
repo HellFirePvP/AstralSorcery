@@ -20,6 +20,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 
@@ -55,6 +57,14 @@ public abstract class ItemBlockCollectorCrystal extends ItemBlockCustom implemen
                 stacks.add(stack);
             }
         }
+    }
+    @Override
+    public ITextComponent getDisplayName(ItemStack stack) {
+        IWeakConstellation cst = this.getAttunedConstellation(stack);
+        if (cst != null) {
+            return new TranslationTextComponent(super.getTranslationKey(stack) + ".typed", cst.getConstellationName());
+        }
+        return super.getDisplayName(stack);
     }
 
     public abstract CollectorCrystalType getCollectorType();

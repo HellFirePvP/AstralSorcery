@@ -36,13 +36,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 
-import javax.xml.soap.Text;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -266,7 +263,7 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
                     () -> DayTimeHelper.getCurrentDaytimeDistribution(world), true, false);
 
             if (rct.contains(mouseX, mouseY)) {
-                tooltip.add(new TranslationTextComponent(cst.getUnlocalizedName()));
+                tooltip.add(cst.getConstellationName());
             }
         }
 

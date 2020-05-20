@@ -36,7 +36,7 @@ public class ResearchNode {
 
     private final int id;
     private final RenderType renderType;
-    public final int renderPosX, renderPosZ;
+    public final double renderPosX, renderPosZ;
     private String unlocName;
 
     private ItemStack[] renderItemStacks;
@@ -48,7 +48,7 @@ public class ResearchNode {
     private List<ResearchNode> connectionsTo = new ArrayList<>();
     private List<JournalPage> pages = new LinkedList<>();
 
-    private ResearchNode(RenderType type, String unlocName, int rPosX, int rPosZ) {
+    private ResearchNode(RenderType type, String unlocName, double rPosX, double rPosZ) {
         this.id = counter;
         counter++;
         this.renderType = type;
@@ -57,16 +57,16 @@ public class ResearchNode {
         this.unlocName = unlocName;
     }
 
-    public ResearchNode(IItemProvider item, String unlocName, int renderPosX, int renderPosZ) {
+    public ResearchNode(IItemProvider item, String unlocName, double renderPosX, double renderPosZ) {
         this(new ItemStack(item), unlocName, renderPosX, renderPosZ);
     }
 
-    public ResearchNode(ItemStack itemStack, String unlocName, int renderPosX, int renderPosZ) {
+    public ResearchNode(ItemStack itemStack, String unlocName, double renderPosX, double renderPosZ) {
         this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
         this.renderItemStacks = new ItemStack[] { itemStack };
     }
 
-    public ResearchNode(IItemProvider[] items, String unlocName, int renderPosX, int renderPosZ) {
+    public ResearchNode(IItemProvider[] items, String unlocName, double renderPosX, double renderPosZ) {
         this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
         this.renderItemStacks = new ItemStack[items.length];
         for (int i = 0; i < items.length; i++) {
@@ -74,12 +74,12 @@ public class ResearchNode {
         }
     }
 
-    public ResearchNode(ItemStack[] stacks, String unlocName, int renderPosX, int renderPosZ) {
+    public ResearchNode(ItemStack[] stacks, String unlocName, double renderPosX, double renderPosZ) {
         this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
         this.renderItemStacks = stacks;
     }
 
-    public ResearchNode(SpriteQuery query, String unlocName, int renderPosX, int renderPosZ) {
+    public ResearchNode(SpriteQuery query, String unlocName, double renderPosX, double renderPosZ) {
         this(RenderType.TEXTURE_SPRITE, unlocName, renderPosX, renderPosZ);
         this.renderSpriteQuery = query;
     }

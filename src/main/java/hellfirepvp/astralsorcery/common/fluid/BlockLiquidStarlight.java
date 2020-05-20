@@ -139,5 +139,4 @@ public class BlockLiquidStarlight extends FlowingFluidBlock {
                     .color(VFXColorFunction.constant(ColorsAS.ROCK_CRYSTAL));
         }
     }
-
 }

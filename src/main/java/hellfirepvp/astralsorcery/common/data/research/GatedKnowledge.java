@@ -32,7 +32,8 @@ public enum GatedKnowledge {
     CONSTELLATION_ENCH_POTION(ProgressionTier.CONSTELLATION_CRAFT),
 
     CONSTELLATION_PAPER_CRAFT(ProgressionTier.TRAIT_CRAFT),
-    CONSTELLATION_CAPE(ProgressionTier.TRAIT_CRAFT);
+    CONSTELLATION_CAPE(ProgressionTier.TRAIT_CRAFT),
+    CONSTELLATION_CORRUPTION(ProgressionTier.TRAIT_CRAFT);
 
     private final ProgressionTier capability;
 

@@ -1,6 +1,6 @@
 function initializeCoreMod() {
     return {
-        'allow_crystal_interaction': {
+        'allow_entity_interaction': {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.network.play.ServerPlayNetHandler',
@@ -10,7 +10,7 @@ function initializeCoreMod() {
             'transformer': function(method) {
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
 
-                ASMAPI.log('INFO', 'Adding \'allow_crystal_interaction\' ASM patch...');
+                ASMAPI.log('INFO', 'Adding \'allow_entity_interaction\' ASM patch...');
 
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
@@ -29,7 +29,7 @@ function initializeCoreMod() {
                                 var loadEntity = method.instructions.get(method.instructions.indexOf(instanceOfChain) - 1);
 
                                 method.instructions.insertBefore(loadEntity, new VarInsnNode(Opcodes.ALOAD, 3));
-                                method.instructions.insertBefore(loadEntity, new TypeInsnNode(Opcodes.INSTANCEOF, 'hellfirepvp/astralsorcery/common/entity/item/EntityCrystal'));
+                                method.instructions.insertBefore(loadEntity, new TypeInsnNode(Opcodes.INSTANCEOF, 'hellfirepvp/astralsorcery/common/entity/InteractableEntity'));
                                 method.instructions.insertBefore(loadEntity, new JumpInsnNode(Opcodes.IFNE, jumpInsnNode.label));
                             }
                         }
@@ -37,7 +37,7 @@ function initializeCoreMod() {
                     instanceOfChain = ASMAPI.findFirstInstructionAfter(method, Opcodes.INSTANCEOF, method.instructions.indexOf(instanceOfChain) + 2);
                 }
 
-                ASMAPI.log('INFO', 'Added \'allow_crystal_interaction\' ASM patch!');
+                ASMAPI.log('INFO', 'Added \'allow_entity_interaction\' ASM patch!');
                 return method;
             }
         }

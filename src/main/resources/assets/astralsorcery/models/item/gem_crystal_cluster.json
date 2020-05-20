@@ -1,0 +1,10 @@
+{
+  "parent": "astralsorcery:block/gem_crystal_cluster_stage_0",
+  "overrides": [
+    { "predicate": { "stage": 0.0 }, "model": "astralsorcery:block/gem_crystal_cluster_stage_0" },
+    { "predicate": { "stage": 0.2 }, "model": "astralsorcery:block/gem_crystal_cluster_stage_1" },
+    { "predicate": { "stage": 0.4 }, "model": "astralsorcery:block/gem_crystal_cluster_stage_2_sky" },
+    { "predicate": { "stage": 0.6 }, "model": "astralsorcery:block/gem_crystal_cluster_stage_2_day" },
+    { "predicate": { "stage": 0.8 }, "model": "astralsorcery:block/gem_crystal_cluster_stage_2_night" }
+  ]
+}

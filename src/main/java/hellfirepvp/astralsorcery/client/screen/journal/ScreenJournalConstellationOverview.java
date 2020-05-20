@@ -147,7 +147,7 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
 
         GlStateManager.color4f(r, g, b, a);
 
-        String trName = I18n.format(display.getUnlocalizedName()).toUpperCase();
+        String trName = display.getConstellationName().getFormattedText().toUpperCase();
         float fullLength = (width / 2) - (((float) font.getStringWidth(trName)) / 2F);
         RenderingDrawUtils.renderStringAtPos(MathHelper.floor(fullLength), 90, font, trName, 0xFFFFFFFF, false);
 

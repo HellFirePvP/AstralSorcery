@@ -416,7 +416,7 @@ public class ScreenJournalProgressionRenderer {
     }
 
     private void drawBackground(float zLevel) {
-        float br = 0.5F;
+        float br = 0.3F;
         GlStateManager.color4f(br, br, br, 1F);
         TexturesAS.TEX_GUI_BACKGROUND_DEFAULT.bindTexture();
 

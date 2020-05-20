@@ -62,4 +62,17 @@ public class DynamicEnchantment {
         this.levelAddition = levelAddition;
     }
 
+    @Nonnull
+    public DynamicEnchantment copy() {
+        return this.copy(this.getLevelAddition());
+    }
+
+    @Nonnull
+    public DynamicEnchantment copy(int level) {
+        if (this.getType().isEnchantmentSpecific()) {
+            return new DynamicEnchantment(this.getType(), this.getEnchantment(), level);
+        } else {
+            return new DynamicEnchantment(this.type, level);
+        }
+    }
 }

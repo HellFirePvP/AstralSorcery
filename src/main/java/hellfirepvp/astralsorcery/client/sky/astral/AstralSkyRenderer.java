@@ -268,7 +268,7 @@ public class AstralSkyRenderer implements IRenderHandler {
     }
 
     private void renderStars(World world, float pTicks) {
-        float starBrightness = world.getStarBrightness(pTicks);
+        float starBrightness = world.getStarBrightness(pTicks) * (1.0F - world.getRainStrength(pTicks));
         if (starBrightness > 0) {
             this.starLists.forEach((list) -> {
                 float br = RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, list.flickerSpeed) * starBrightness;
