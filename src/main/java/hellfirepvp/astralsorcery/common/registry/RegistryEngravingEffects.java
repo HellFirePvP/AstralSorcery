@@ -54,7 +54,7 @@ public class RegistryEngravingEffects {
         FORNAX = newEffect(ConstellationsAS.fornax)
                 .addEffect(new EngravingEffect.PotionEffect(() -> Effects.FIRE_RESISTANCE, 0, 0))
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.FIRE_ASPECT, 1, 3))
-                .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.FIRE_ASPECT, 1, 2))
+                .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.FLAME, 1, 2))
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> EnchantmentsAS.SCORCHING_HEAT, 1, 1));
         HOROLOGIUM = newEffect(ConstellationsAS.horologium)
                 .addEffect(new EngravingEffect.PotionEffect(() -> Effects.LUCK, 3, 5))

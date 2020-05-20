@@ -66,9 +66,9 @@ public class ItemShiftingStar extends Item implements PerkExperienceRevealer {
         IConstellation cst = this.getBaseConstellation();
         if (cst != null) {
             if (ResearchHelper.getClientProgress().hasConstellationDiscovered(cst)) {
-                tooltip.add(new TranslationTextComponent(cst.getUnlocalizedName()).setStyle(new Style().setColor(TextFormatting.BLUE)));
+                tooltip.add(cst.getConstellationName().applyTextStyle(TextFormatting.BLUE));
             } else {
-                tooltip.add(new TranslationTextComponent("astralsorcery.misc.noinformation").setStyle(new Style().setColor(TextFormatting.GRAY)));
+                tooltip.add(new TranslationTextComponent("astralsorcery.misc.noinformation").applyTextStyle(TextFormatting.GRAY));
             }
         }
     }

@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.entity.*;
 import hellfirepvp.astralsorcery.common.entity.item.EntityCrystal;
 import hellfirepvp.astralsorcery.common.entity.item.EntityItemExplosionResistant;
 import hellfirepvp.astralsorcery.common.entity.item.EntityItemHighlighted;
+import hellfirepvp.astralsorcery.common.entity.item.EntityStarmetal;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityGrapplingHook;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityObservatoryHelper;
 import net.minecraft.entity.Entity;
@@ -99,6 +100,14 @@ public class RegistryEntities {
                         .setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(16)
                         .setCustomClientFactory((spawnEntity, world) -> new EntityCrystal(ITEM_CRYSTAL, world))
+                        .size(0.5F, 0.5F));
+        ITEM_STARMETAL_INGOT = register("item_starmetal",
+                EntityType.Builder.create(EntityStarmetal.factoryStarmetalIngot(), EntityClassification.MISC)
+                        .disableSummoning()
+                        .setUpdateInterval(1)
+                        .setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(16)
+                        .setCustomClientFactory((spawnEntity, world) -> new EntityStarmetal(ITEM_STARMETAL_INGOT, world))
                         .size(0.5F, 0.5F));
         OBSERVATORY_HELPER = register("observatory_helper",
                 EntityType.Builder.create(EntityObservatoryHelper.factory(), EntityClassification.MISC)

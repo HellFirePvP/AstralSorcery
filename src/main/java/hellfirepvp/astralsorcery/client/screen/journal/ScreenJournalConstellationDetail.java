@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
@@ -38,7 +39,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
@@ -69,10 +69,10 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
 
     private List<String> locTextMain = new LinkedList<>();
     private List<String> locTextRitualEnch = new LinkedList<>();
-    private List<String> locTextCapeEffect = new LinkedList<>();
+    private List<String> locTextMantleCorruption = new LinkedList<>();
 
     public ScreenJournalConstellationDetail(ScreenJournal origin, IConstellation cst) {
-        super(new TranslationTextComponent(cst.getUnlocalizedName()), NO_BOOKMARK);
+        super(cst.getConstellationName(), NO_BOOKMARK);
         this.origin = origin;
         this.constellation = cst;
 
@@ -101,90 +101,92 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
     }
 
     private void buildCapeText() {
-        if (GatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchHelper.getClientProgress())) {
-            String unlocEnch = constellation.getUnlocalizedName() + ".capeeffect";
-            String textEnch = I18n.format(unlocEnch);
-            if (!unlocEnch.equals(textEnch)) {
-                String head = I18n.format("astralsorcery.journal.constellation.capeeffect");
-                locTextCapeEffect.add(head);
-                locTextCapeEffect.add("");
+        if (this.constellation instanceof IWeakConstellation) {
+            if (GatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchHelper.getClientProgress())) {
+                String textMantle = ((IWeakConstellation) this.constellation).getInfoMantleEffect().getFormattedText();
+
+                String head = I18n.format("astralsorcery.journal.constellation.mantle");
+                locTextMantleCorruption.add(head);
+                locTextMantleCorruption.add("");
 
                 List<String> lines = new LinkedList<>();
-                for (String segment : textEnch.split("<NL>")) {
+                for (String segment : textMantle.split("<NL>")) {
                     lines.addAll(font.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
                     lines.add("");
                 }
-                locTextCapeEffect.addAll(lines);
-                locTextCapeEffect.add("");
+                locTextMantleCorruption.addAll(lines);
+                locTextMantleCorruption.add("");
+            }
+            if (GatedKnowledge.CONSTELLATION_CORRUPTION.canSee(ResearchHelper.getClientProgress())) {
+                String textCorruptedRitual = ((IWeakConstellation) this.constellation).getInfoCorruptedRitualEffect().getFormattedText();
+
+                String head = I18n.format("astralsorcery.journal.constellation.corruption");
+                locTextMantleCorruption.add(head);
+                locTextMantleCorruption.add("");
+
+                List<String> lines = new LinkedList<>();
+                for (String segment : textCorruptedRitual.split("<NL>")) {
+                    lines.addAll(font.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
+                    lines.add("");
+                }
+                locTextMantleCorruption.addAll(lines);
+                locTextMantleCorruption.add("");
             }
         }
     }
 
     private void buildEnchText() {
         if (GatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(ResearchHelper.getClientProgress())) {
-            String unlocEnch = constellation.getUnlocalizedName() + ".enchantments";
-            String textEnch = I18n.format(unlocEnch);
-            if (!unlocEnch.equals(textEnch)) {
-                String head = I18n.format("astralsorcery.journal.constellation.enchantments");
-                locTextRitualEnch.add(head);
-                locTextRitualEnch.add("");
+            String textEnchantments = this.constellation.getConstellationEnchantmentDescription().getFormattedText();
+            String head = I18n.format("astralsorcery.journal.constellation.enchantments");
+            locTextRitualEnch.add(head);
+            locTextRitualEnch.add("");
 
-                List<String> lines = new LinkedList<>();
-                for (String segment : textEnch.split("<NL>")) {
-                    lines.addAll(font.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
-                    lines.add("");
-                }
-                locTextRitualEnch.addAll(lines);
-                locTextRitualEnch.add("");
+            List<String> lines = new LinkedList<>();
+            for (String segment : textEnchantments.split("<NL>")) {
+                lines.addAll(font.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
+                lines.add("");
             }
+            locTextRitualEnch.addAll(lines);
+            locTextRitualEnch.add("");
         }
     }
 
     private void buildRitualText() {
         if (GatedKnowledge.CONSTELLATION_RITUAL.canSee(ResearchHelper.getClientProgress())) {
-            if (constellation instanceof IMinorConstellation) {
-                String unlocRitual = constellation.getUnlocalizedName() + ".trait";
-                String textRitual = I18n.format(unlocRitual);
-                if (!unlocRitual.equals(textRitual)) {
-                    String head = I18n.format("astralsorcery.journal.constellation.ritual.trait");
-                    locTextRitualEnch.add(head);
-                    locTextRitualEnch.add("");
+            if (this.constellation instanceof IMinorConstellation) {
+                String textRitual = ((IMinorConstellation) this.constellation).getInfoTraitEffect().getFormattedText();
+                String head = I18n.format("astralsorcery.journal.constellation.ritual.trait");
+                locTextRitualEnch.add(head);
+                locTextRitualEnch.add("");
 
-                    List<String> lines = new LinkedList<>();
-                    for (String segment : textRitual.split("<NL>")) {
-                        lines.addAll(font.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
-                        lines.add("");
-                    }
-                    locTextRitualEnch.addAll(lines);
+                List<String> lines = new LinkedList<>();
+                for (String segment : textRitual.split("<NL>")) {
+                    lines.addAll(font.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
+                    lines.add("");
                 }
-            } else {
-                String unlocRitual = constellation.getUnlocalizedName() + ".ritual";
-                String textRitual = I18n.format(unlocRitual);
-                if (!unlocRitual.equals(textRitual)) {
-                    String head = I18n.format("astralsorcery.journal.constellation.ritual");
-                    locTextRitualEnch.add(head);
-                    locTextRitualEnch.add("");
+                locTextRitualEnch.addAll(lines);
+            } else if (this.constellation instanceof IWeakConstellation) {
+                String textRitual = ((IWeakConstellation) this.constellation).getInfoRitualEffect().getFormattedText();
+                String head = I18n.format("astralsorcery.journal.constellation.ritual");
+                locTextRitualEnch.add(head);
+                locTextRitualEnch.add("");
 
-                    List<String> lines = new LinkedList<>();
-                    for (String segment : textRitual.split("<NL>")) {
-                        lines.addAll(font.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
-                        lines.add("");
-                    }
-                    locTextRitualEnch.addAll(lines);
+                List<String> lines = new LinkedList<>();
+                for (String segment : textRitual.split("<NL>")) {
+                    lines.addAll(font.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
+                    lines.add("");
                 }
+                locTextRitualEnch.addAll(lines);
             }
         }
     }
 
     private void buildMainText() {
-        String unloc = constellation.getUnlocalizedName() + ".effect";
-        String text = I18n.format(unloc);
-        if (unloc.equals(text)) {
-            return;
-        }
+        String description = this.constellation.getConstellationDescription().getFormattedText();
 
         List<String> lines = new LinkedList<>();
-        for (String segment : text.split("<NL>")) {
+        for (String segment : description.split("<NL>")) {
             lines.addAll(font.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
             lines.add("");
         }
@@ -247,8 +249,8 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
 
         GlStateManager.pushMatrix();
         GlStateManager.translated(guiLeft + 30, guiTop + 30, 0);
-        for (int i = 0; i < locTextCapeEffect.size(); i++) {
-            String line = locTextCapeEffect.get(i);
+        for (int i = 0; i < locTextMantleCorruption.size(); i++) {
+            String line = locTextMantleCorruption.get(i);
             RenderingDrawUtils.renderStringAtPos(0, i * 10, font, line, 0xCCDDDDDD, true);
         }
         GlStateManager.popMatrix();
@@ -308,7 +310,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         GlStateManager.color4f(brightness, brightness, brightness, 0.85F);
         GlStateManager.disableDepthTest();
 
-        String info = I18n.format(this.constellation.getUnlocalizedInfo()).toUpperCase();
+        String info = this.constellation.getConstellationTag().getFormattedText().toUpperCase();
         info = detailed ? info : "? ? ?";
 
         double width = font.getStringWidth(info);
@@ -386,7 +388,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         GlStateManager.color4f(br, br, br, 0.8F);
         GlStateManager.disableDepthTest();
 
-        String name = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
+        String name = this.constellation.getConstellationName().getFormattedText().toUpperCase();
         double width = font.getStringWidth(name);
         double offsetX = 305 - (width * 1.8 / 2);
 
@@ -397,7 +399,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         GlStateManager.enableDepthTest();
         GlStateManager.popMatrix();
 
-        String dstInfo = I18n.format(constellation.getUnlocalizedType());
+        String dstInfo = constellation.getConstellationTypeDescription().getFormattedText();
         if (!detailed) {
             dstInfo = "???";
         }

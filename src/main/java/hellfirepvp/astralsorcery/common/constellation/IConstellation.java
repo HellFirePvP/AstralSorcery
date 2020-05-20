@@ -22,6 +22,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
@@ -60,12 +62,34 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
 
     public String getSimpleName();
 
-    public String getUnlocalizedName();
+    public String getTranslationKey();
 
-    public String getUnlocalizedType();
+    default public ITextComponent getConstellationName() {
+        return new TranslationTextComponent(this.getTranslationKey());
+    }
 
-    default public String getUnlocalizedInfo() {
-        return getUnlocalizedName() + ".info";
+    default public ITextComponent getConstellationTypeDescription() {
+        String type = "unknown";
+        if (this instanceof IMajorConstellation) {
+            type = "major";
+        } else if (this instanceof IWeakConstellation) {
+            type = "weak";
+        } else if (this instanceof IMinorConstellation) {
+            type = "minor";
+        }
+        return new TranslationTextComponent(String.format("astralsorcery.journal.constellation.type.%s", type));
+    }
+
+    default public ITextComponent getConstellationTag() {
+        return new TranslationTextComponent(this.getTranslationKey() + ".tag");
+    }
+
+    default public ITextComponent getConstellationDescription() {
+        return new TranslationTextComponent(this.getTranslationKey() + ".description");
+    }
+
+    default public ITextComponent getConstellationEnchantmentDescription() {
+        return new TranslationTextComponent(this.getTranslationKey() + ".enchantments");
     }
 
     public static String getDefaultSaveKey() {

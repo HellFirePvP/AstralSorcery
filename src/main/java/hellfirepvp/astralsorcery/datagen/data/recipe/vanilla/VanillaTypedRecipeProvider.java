@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
+import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
@@ -47,6 +48,14 @@ public class VanillaTypedRecipeProvider {
                 .patternLine(" P ")
                 .key('A', ItemsAS.AQUAMARINE)
                 .key('P', Items.PAPER)
+                .build(registrar);
+        SimpleShapedRecipeBuilder.shapedRecipe(ItemsAS.WAND)
+                .patternLine(" AE")
+                .patternLine(" MA")
+                .patternLine("M  ")
+                .key('A', ItemsAS.AQUAMARINE)
+                .key('M', BlocksAS.MARBLE_RAW)
+                .key('E', Tags.Items.ENDER_PEARLS)
                 .build(registrar);
 
         SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.MARBLE_ARCH, 2)

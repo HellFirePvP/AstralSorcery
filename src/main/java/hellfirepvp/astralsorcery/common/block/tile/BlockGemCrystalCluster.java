@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.block.tile;
 
+import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
+import hellfirepvp.astralsorcery.common.item.block.ItemBlockGemCrystalCluster;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
@@ -19,6 +21,7 @@ import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItem;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -46,7 +49,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 16.11.2019 / 10:06
  */
-public class BlockGemCrystalCluster extends ContainerBlock {
+public class BlockGemCrystalCluster extends ContainerBlock implements CustomItemBlock {
 
     private static final VoxelShape STAGE_0       = Block.makeCuboidShape(4, 0, 4, 12,  6, 12);
     private static final VoxelShape STAGE_1       = Block.makeCuboidShape(4, 0, 4, 12,  8, 12);
@@ -63,6 +66,11 @@ public class BlockGemCrystalCluster extends ContainerBlock {
                 .harvestLevel(1)
                 .sound(SoundType.GLASS)
                 .lightValue(6));
+    }
+
+    @Override
+    public Class<? extends BlockItem> getItemBlockClass() {
+        return ItemBlockGemCrystalCluster.class;
     }
 
     @Override

@@ -22,8 +22,6 @@ import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.ArrayList;
@@ -43,7 +41,7 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
     private List<MoonPhase> phases = null;
 
     public ScreenConstellationPaper(IConstellation cst) {
-        super(new TranslationTextComponent(cst.getUnlocalizedName()), 344, 275);
+        super(cst.getConstellationName(), 344, 275);
         this.constellation = cst;
         resolvePhases();
     }
@@ -90,7 +88,7 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
     }
 
     private void drawHeader() {
-        String locName = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
+        String locName = this.constellation.getConstellationName().getFormattedText().toUpperCase();
         double length = font.getStringWidth(locName) * 1.8;
         double offsetLeft = (width >> 1) - (length / 2);
         int offsetTop = guiTop + 45;

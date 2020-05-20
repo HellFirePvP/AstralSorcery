@@ -226,7 +226,7 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         }
         if (altarRecipe.getFocusConstellation() != null) {
             toolTip.add(new TranslationTextComponent("astralsorcery.journal.recipe.constellation",
-                    new TranslationTextComponent(altarRecipe.getFocusConstellation().getUnlocalizedName())));
+                    altarRecipe.getFocusConstellation().getConstellationName()));
         }
     }
 

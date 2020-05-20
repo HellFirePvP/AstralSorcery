@@ -41,15 +41,15 @@ public class GemAttributeHelper {
 
     private static boolean allowNegativeModifiers = false;
     private static float chanceNegative = 0.25F;
-    private static float decModifierLower = 0.05F;
-    private static float decModifierHigher = 0.08F;
+    private static float decModifierLower = -0.05F;
+    private static float decModifierHigher = -0.08F;
 
     private static boolean allowMoreLessModifiers = false;
     private static float chanceMultiplicative = 0.1F;
     private static float moreModifierLower = 0.05F;
     private static float moreModifierHigher = 0.08F;
-    private static float lessModifierLower = 0.05F;
-    private static float lessModifierHigher = 0.08F;
+    private static float lessModifierLower = -0.05F;
+    private static float lessModifierHigher = -0.08F;
 
     public static boolean rollGem(ItemStack gem) {
         return rollGem(gem, rand);

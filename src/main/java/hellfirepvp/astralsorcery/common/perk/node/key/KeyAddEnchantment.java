@@ -67,7 +67,7 @@ public class KeyAddEnchantment extends KeyPerk {
                 if (added != null) {
                     added.setLevelAddition(added.getLevelAddition() + ench.getLevelAddition());
                 } else {
-                    listedEnchantments.add(ench);
+                    listedEnchantments.add(ench.copy());
                 }
             }
         }

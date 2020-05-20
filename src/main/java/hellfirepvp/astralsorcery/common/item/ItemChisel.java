@@ -25,7 +25,7 @@ public class ItemChisel extends Item {
 
     public ItemChisel() {
         super(new Properties()
-                .maxDamage(48)
+                .maxDamage(72)
                 .group(CommonProxy.ITEM_GROUP_AS));
     }
 

@@ -18,6 +18,7 @@ package hellfirepvp.astralsorcery.common.entity.item;
 
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
+import hellfirepvp.astralsorcery.common.entity.InteractableEntity;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCrystalBase;
 import hellfirepvp.astralsorcery.common.item.ItemChisel;
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
@@ -47,7 +48,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
  * Created by HellFirePvP
  * Date: 21.08.2019 / 21:57
  */
-public class EntityCrystal extends EntityItemExplosionResistant {
+public class EntityCrystal extends EntityItemExplosionResistant implements InteractableEntity {
 
     public EntityCrystal(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
@@ -89,11 +90,11 @@ public class EntityCrystal extends EntityItemExplosionResistant {
 
                         //TODO chipping sound ?
                         boolean doDamage = false;
-                        if (rand.nextFloat() < 0.2F) {
+                        if (rand.nextFloat() < 0.35F) {
                             int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, held);
                             doDamage = this.splitCrystal(thisAttributes, fortuneLevel);
                         }
-                        if (doDamage || rand.nextFloat() < 0.6F) {
+                        if (doDamage || rand.nextFloat() < 0.35F) {
                             held.damageItem(1, (PlayerEntity) entity, (player) -> player.sendBreakAnimation(Hand.MAIN_HAND));
                         }
                     }
@@ -112,7 +113,7 @@ public class EntityCrystal extends EntityItemExplosionResistant {
         if (created.isEmpty()) {
             return false;
         }
-        int maxSplit = MathHelper.ceil(thisAttributes.getTotalTierLevel() / 3F);
+        int maxSplit = MathHelper.ceil(thisAttributes.getTotalTierLevel() / 2F);
         if (maxSplit >= thisAttributes.getTotalTierLevel()) {
             return false;
         }

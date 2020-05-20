@@ -77,9 +77,9 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> toolTip, ITooltipFlag flag) {
         IConstellation c = getConstellation(stack);
         if (c != null && c.canDiscover(Minecraft.getInstance().player, ResearchHelper.getClientProgress())) {
-            toolTip.add(new StringTextComponent(TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
+            toolTip.add(c.getConstellationName().applyTextStyle(TextFormatting.BLUE));
         } else {
-            toolTip.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("astralsorcery.misc.noinformation")));
+            toolTip.add(new TranslationTextComponent("astralsorcery.misc.noinformation").applyTextStyle(TextFormatting.GRAY));
         }
     }
 
@@ -173,13 +173,12 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
                 if (cst.canDiscover((PlayerEntity) entity, progress) && ResearchManager.memorizeConstellation(cst, (PlayerEntity) entity)) {
                     entity.sendMessage(
                             new TranslationTextComponent("astralsorcery.progress.constellation.seen.chat",
-                                    new TranslationTextComponent(cst.getUnlocalizedName())
-                                            .setStyle(new Style().setColor(TextFormatting.GRAY)))
-                                    .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                                    cst.getConstellationName().applyTextStyle(TextFormatting.GRAY))
+                                    .applyTextStyle(TextFormatting.BLUE));
                     if (ResearchHelper.getClientProgress().getSeenConstellations().size() == 1) {
                         entity.sendMessage(
                                 new TranslationTextComponent("astralsorcery.progress.constellation.seen.track")
-                                        .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                                        .applyTextStyle(TextFormatting.BLUE));
                     }
                 }
             }

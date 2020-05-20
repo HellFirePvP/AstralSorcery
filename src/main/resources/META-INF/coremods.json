@@ -15,5 +15,5 @@
   "reach_set_client_renderer": "coremods/reach_set_client_renderer.js",
   "reach_set_server_entity_interact": "coremods/reach_set_server_entity_interact.js",
   "water_movement_slowdown_prevention": "coremods/water_movement_slowdown_prevention.js",
-  "allow_crystal_interaction": "coremods/allow_crystal_interaction.js"
+  "allow_entity_interaction": "coremods/allow_entity_interaction.js"
 }

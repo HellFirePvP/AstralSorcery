@@ -53,7 +53,7 @@ public class RenderPageText extends RenderablePage {
 
     @Override
     public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        int iX = (int) offsetX + 5;
+        int iX = (int) offsetX;
         int iY = (int) offsetY;
 
         GlStateManager.color4f(0.9F, 0.9F, 0.9F, 1F);
