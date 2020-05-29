@@ -19,7 +19,6 @@ import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
-import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -51,8 +50,9 @@ public class LiquidInfusion extends CustomMatcherRecipe implements GatedRecipe.P
     private final float consumptionChance;
     private final boolean consumeMultipleFluids;
     private final boolean acceptChaliceInput;
+    private final boolean copyNBTToOutputs;
 
-    public LiquidInfusion(ResourceLocation recipeId, int craftingTickTime, Fluid liquidInput, Ingredient itemInput, ItemStack itemOutput, float consumptionChance, boolean consumeMultipleFluids, boolean acceptChaliceInput) {
+    public LiquidInfusion(ResourceLocation recipeId, int craftingTickTime, Fluid liquidInput, Ingredient itemInput, ItemStack itemOutput, float consumptionChance, boolean consumeMultipleFluids, boolean acceptChaliceInput, boolean copyNBTToOutputs) {
         super(recipeId);
         this.craftingTickTime = craftingTickTime;
         this.liquidInput = liquidInput;
@@ -61,6 +61,7 @@ public class LiquidInfusion extends CustomMatcherRecipe implements GatedRecipe.P
         this.consumptionChance = consumptionChance;
         this.consumeMultipleFluids = consumeMultipleFluids;
         this.acceptChaliceInput = acceptChaliceInput;
+        this.copyNBTToOutputs = copyNBTToOutputs;
     }
 
     public boolean matches(TileInfuser infuser, PlayerEntity crafter, LogicalSide side) {
@@ -116,7 +117,7 @@ public class LiquidInfusion extends CustomMatcherRecipe implements GatedRecipe.P
     }
 
     @Nonnull
-    public ItemStack getOutput(TileInfuser infuser) {
+    public ItemStack getOutput(ItemStack itemInput) {
         return ItemUtils.copyStackWithSize(this.output, this.output.getCount());
     }
 
@@ -132,6 +133,10 @@ public class LiquidInfusion extends CustomMatcherRecipe implements GatedRecipe.P
         return acceptChaliceInput;
     }
 
+    public boolean doesCopyNBTToOutputs() {
+        return copyNBTToOutputs;
+    }
+
     public static LiquidInfusion read(ResourceLocation recipeId, PacketBuffer buffer) {
         Fluid fluidIn = ByteBufUtils.readRegistryEntry(buffer);
         Ingredient itemIn = Ingredient.read(buffer);
@@ -140,7 +145,8 @@ public class LiquidInfusion extends CustomMatcherRecipe implements GatedRecipe.P
         int duration = buffer.readInt();
         boolean consumeMultiple = buffer.readBoolean();
         boolean acceptChalice = buffer.readBoolean();
-        return new LiquidInfusion(recipeId, duration, fluidIn, itemIn, output, consumptionChance, consumeMultiple, acceptChalice);
+        boolean copyNBTToOutputs = buffer.readBoolean();
+        return new LiquidInfusion(recipeId, duration, fluidIn, itemIn, output, consumptionChance, consumeMultiple, acceptChalice, copyNBTToOutputs);
     }
 
     public final void write(PacketBuffer buffer) {
@@ -151,6 +157,7 @@ public class LiquidInfusion extends CustomMatcherRecipe implements GatedRecipe.P
         buffer.writeInt(this.getCraftingTickTime());
         buffer.writeBoolean(this.doesConsumeMultipleFluids());
         buffer.writeBoolean(this.acceptsChaliceInput());
+        buffer.writeBoolean(this.doesCopyNBTToOutputs());
     }
 
     public void write(JsonObject object) {
@@ -161,6 +168,7 @@ public class LiquidInfusion extends CustomMatcherRecipe implements GatedRecipe.P
         object.addProperty("duration", this.getCraftingTickTime());
         object.addProperty("consumeMultipleFluids", this.doesConsumeMultipleFluids());
         object.addProperty("acceptChaliceInput", this.acceptsChaliceInput());
+        object.addProperty("copyNBTToOutputs", this.doesCopyNBTToOutputs());
     }
 
     @Override

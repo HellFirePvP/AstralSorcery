@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.source.FXSource;
 import hellfirepvp.astralsorcery.client.effect.source.orbital.FXOrbitalCollector;
-import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.CollectorCrystalType;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationTile;
@@ -65,7 +64,7 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
 
     private UUID playerUUID = null;
     private CrystalAttributes crystalAttributes;
-    private CollectorCrystalType collectorType;
+    private CollectorCrystalType collectorType = CollectorCrystalType.ROCK_CRYSTAL;
     private IWeakConstellation constellationType;
     private IMinorConstellation constellationTrait;
 
@@ -89,20 +88,23 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
 
     @OnlyIn(Dist.CLIENT)
     private void playEffects() {
+        Vector3 thisPos = new Vector3(this).add(0.5F, 0.5F, 0.5F);
+        Vector3 particlePos = thisPos.clone();
+        MiscUtils.applyRandomOffset(particlePos, rand, 0.75F);
+
         if (this.isEnhanced() &&
                 this.doesSeeSky() &&
                 this.getCollectorType() == CollectorCrystalType.CELESTIAL_CRYSTAL &&
                 this.getAttunedConstellation() != null) {
 
-            Vector3 thisPos = new Vector3(this).add(0.5F, 0.5F, 0.5F);
             Color c = this.getAttunedConstellation().getConstellationColor();
 
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                    .spawn(thisPos)
-                    .setMotion(Vector3.random().normalize().multiply(0.02F + rand.nextFloat() * 0.01F))
+                    .spawn(particlePos)
                     .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F)
+                    .setAlphaMultiplier(0.8F)
                     .color(VFXColorFunction.constant(c))
-                    .setMaxAge(30 + rand.nextInt(15));
+                    .setMaxAge(20 + rand.nextInt(10));
 
             for (int i = 0; i < this.effectOrbitals.length; i++) {
                 FXOrbitalCollector fxSource = (FXOrbitalCollector) this.effectOrbitals[i];
@@ -139,6 +141,17 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
                         .spawn(thisPos)
                         .makeDefault(from)
                         .color(VFXColorFunction.constant(c));
+            }
+        } else {
+            if (rand.nextBoolean()) {
+                Color c = this.getCollectorType().getDisplayColor();
+
+                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                        .spawn(particlePos)
+                        .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F)
+                        .setAlphaMultiplier(0.8F)
+                        .color(VFXColorFunction.constant(c))
+                        .setMaxAge(20 + rand.nextInt(10));
             }
         }
     }
@@ -210,6 +223,9 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
     public void updateData(UUID playerUUID, CollectorCrystalType collectorType) {
         this.playerUUID = playerUUID;
         this.collectorType = collectorType;
+        if (this.collectorType == null) {
+            this.collectorType = CollectorCrystalType.ROCK_CRYSTAL;
+        }
 
         this.markForUpdate();
     }
@@ -239,8 +255,8 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
             return null;
         });
         setAttributes(CrystalAttributes.getCrystalAttributes(compound));
-        this.crystalAttributes = CrystalAttributes.getCrystalAttributes(compound);
-        this.collectorType = NBTHelper.readOptional(compound, "collectorType", (nbt) -> CollectorCrystalType.values()[nbt.getInt("collectorType")]);
+        this.crystalAttributes = CrystalAttributes.getCrystalAttributes(compound);;
+        this.collectorType = NBTHelper.readEnum(compound, "collectorType", CollectorCrystalType.class);
         this.playerUUID = NBTHelper.readOptional(compound, "playerUUID", (nbt) -> nbt.getUniqueId("playerUUID"));
     }
 
@@ -253,7 +269,7 @@ public class TileCollectorCrystal extends TileSourceBase<SimpleTransmissionSourc
         }
         NBTHelper.writeOptional(compound, "constellationType", this.constellationType, (nbt, cst) -> cst.writeToNBT(nbt));
         NBTHelper.writeOptional(compound, "constellationTrait", this.constellationTrait, (nbt, cst) -> cst.writeToNBT(nbt));
-        NBTHelper.writeOptional(compound, "collectorType", this.collectorType, (nbt, type) -> nbt.putInt("collectorType", type.ordinal()));
+        NBTHelper.writeEnum(compound, "collectorType", this.collectorType);
         NBTHelper.writeOptional(compound, "playerUUID", this.playerUUID, (nbt, uuid) -> nbt.putUniqueId("playerUUID", uuid));
     }
 

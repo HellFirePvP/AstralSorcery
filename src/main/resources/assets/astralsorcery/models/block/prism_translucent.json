@@ -1,0 +1,24 @@
+{
+    "ambientocclusion": true,
+	"parent": "block/block",
+    "textures": {
+        "particle": "astralsorcery:block/prism_base1",
+        "prism_top": "astralsorcery:block/prism_top",
+        "prism_side": "astralsorcery:block/prism_side"
+    },
+    "elements": [
+        {
+            "Name": "Prism",
+            "from": [ 3, 2, 3 ],
+            "to": [ 13, 14, 13 ],
+            "shade": false,
+            "faces": {
+                "up": { "uv": [ 3, 3, 13, 13 ], "texture": "#prism_top"},
+                "north": { "uv": [ 3, 2, 13, 14 ], "texture": "#prism_side"},
+                "south": { "uv": [ 3, 2, 13, 14 ], "texture": "#prism_side"},
+                "west": { "uv": [ 3, 2, 13, 14 ], "texture": "#prism_side"},
+                "east": { "uv": [ 3, 2, 13, 14 ], "texture": "#prism_side"}
+            }
+        }
+    ]
+}

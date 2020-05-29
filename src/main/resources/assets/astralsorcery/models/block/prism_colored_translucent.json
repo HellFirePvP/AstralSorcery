@@ -1,0 +1,24 @@
+{
+  "ambientocclusion": true,
+  "parent": "block/block",
+  "textures": {
+    "particle": "astralsorcery:block/prism_base1",
+    "prism_color_top": "astralsorcery:block/prism_color_top",
+    "prism_color_side": "astralsorcery:block/prism_color_side"
+  },
+  "elements": [
+    {
+      "Name": "Glass",
+      "from": [ 2, 2, 2 ],
+      "to": [ 14, 16, 14 ],
+      "shade": false,
+      "faces": {
+        "up": { "uv": [ 2, 2, 14, 14 ], "texture": "#prism_color_top", "tintindex": 3  },
+        "north": { "uv": [ 2, 1, 14, 15 ], "texture": "#prism_color_side", "tintindex": 3  },
+        "south": { "uv": [ 2, 1, 14, 15 ], "texture": "#prism_color_side", "tintindex": 3  },
+        "west": { "uv": [ 2, 1, 14, 15 ], "texture": "#prism_color_side", "tintindex": 3  },
+        "east": { "uv": [ 2, 1, 14, 15 ], "texture": "#prism_color_side", "tintindex": 3  }
+      }
+    }
+  ]
+}

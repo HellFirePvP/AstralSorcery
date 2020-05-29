@@ -51,6 +51,9 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_BOOK_FRAME_LEFT;
     public static AbstractRenderableTexture TEX_GUI_BOOK_STRUCTURE_ICONS;
     public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_SLOT;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_RECIPE;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_TRANSMUTATION;
+    public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_INFUSION;
     public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_T1;
     public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_T2;
     public static AbstractRenderableTexture TEX_GUI_BOOK_GRID_T3;

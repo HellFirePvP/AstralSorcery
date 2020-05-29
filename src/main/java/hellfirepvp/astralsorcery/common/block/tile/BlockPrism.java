@@ -149,7 +149,7 @@ public class BlockPrism extends BlockStarlightNetwork implements CustomItemBlock
     @Override
     @OnlyIn(Dist.CLIENT)
     public int getColor(BlockState state, @Nullable IEnviromentBlockReader world, @Nullable BlockPos pos, int tintIndex) {
-        if (tintIndex != 3) { //prism_colored.json
+        if (tintIndex != 3) { //prism_colored_all.json
             return 0xFFFFFFFF;
         }
         TilePrism prism = MiscUtils.getTileAt(world, pos, TilePrism.class, false);

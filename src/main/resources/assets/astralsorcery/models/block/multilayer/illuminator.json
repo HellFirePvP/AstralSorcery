@@ -1,0 +1,15 @@
+{
+  "parent": "block/block",
+  "loader": "forge:new-multi-layer",
+  "layers": {
+    "Solid": {
+      "parent": "astralsorcery:block/illuminator_solid"
+    },
+    "Translucent": {
+      "parent": "astralsorcery:block/illuminator_translucent"
+    }
+  },
+  "textures": {
+    "particle": "astralsorcery:block/illuminator_glass"
+  }
+}

@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.crafting.serializer;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import hellfirepvp.astralsorcery.common.crafting.builder.LiquidInfusionBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
@@ -18,7 +17,6 @@ import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
@@ -54,7 +52,8 @@ public class LiquidInfusionSerializer extends CustomRecipeSerializer<LiquidInfus
 
         boolean consumeMultipleFluids = JSONUtils.getBoolean(json, "consumeMultipleFluids", false);
         boolean acceptChaliceInput = JSONUtils.getBoolean(json, "acceptChaliceInput", true);
-        return new LiquidInfusion(recipeId, duration, fluidInput, input, output, consumptionChance, consumeMultipleFluids, acceptChaliceInput);
+        boolean copyNBTToOutputs = JSONUtils.getBoolean(json, "copyNBTToOutputs", false);
+        return new LiquidInfusion(recipeId, duration, fluidInput, input, output, consumptionChance, consumeMultipleFluids, acceptChaliceInput, copyNBTToOutputs);
     }
 
     @Override

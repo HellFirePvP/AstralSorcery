@@ -135,7 +135,7 @@ public class ScreenJournalPages extends ScreenJournal {
 
             TexturesAS.TEX_GUI_BOOK_UNDERLINE.bindTexture();
             GlStateManager.pushMatrix();
-            GlStateManager.translated(guiLeft + 30, guiTop + 35, this.blitOffset);
+            GlStateManager.translated(guiLeft + 30, guiTop + 35, 0);
             RenderingGuiUtils.drawTexturedRectAtCurrentPos(175, 6, this.blitOffset);
             GlStateManager.popMatrix();
 
@@ -278,12 +278,12 @@ public class ScreenJournalPages extends ScreenJournal {
             if (saveSite) {
                 openGuiInstance = this;
                 ScreenJournalProgression.getJournalInstance().preventRefresh();
+                Minecraft.getInstance().displayGuiScreen(null);
             } else {
                 saveSite = true;
                 openGuiInstance = null;
+                Minecraft.getInstance().displayGuiScreen(origin);
             }
-
-            Minecraft.getInstance().displayGuiScreen(origin);
         } else {
             if (previous != null && informPreviousClose) {
                 previous.onClose();

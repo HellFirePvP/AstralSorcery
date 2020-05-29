@@ -1,0 +1,59 @@
+{
+	"comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+    "ambientocclusion": false,
+	"parent": "block/block",
+	"textures": {
+		"particle": "astralsorcery:block/crystal/gem_cluster_stage_0_crystal",
+		"stone": "block/stone"
+	},
+	"elements": [
+		{
+			"from": [ 5, 0.01, 4 ],
+			"to": [ 8, 2.01, 7 ],
+			"faces": {
+				"down": { "uv": [ 5, 9, 8, 12 ], "texture": "#stone" },
+				"up": { "uv": [ 5, 4, 8, 7 ], "texture": "#stone" },
+				"north": { "uv": [ 8, 13.99, 11, 15.99 ], "texture": "#stone" },
+				"south": { "uv": [ 5, 13.99, 8, 15.99 ], "texture": "#stone" },
+				"west": { "uv": [ 4, 13.99, 7, 15.99 ], "texture": "#stone" },
+				"east": { "uv": [ 9, 13.99, 12, 15.99 ], "texture": "#stone" }
+			}
+		},
+		{
+			"from": [ 9, 0.01, 5 ],
+			"to": [ 12, 2.01, 8 ],
+			"faces": {
+				"down": { "uv": [ 9, 8, 12, 11 ], "texture": "#stone" },
+				"up": { "uv": [ 9, 5, 12, 8 ], "texture": "#stone" },
+				"north": { "uv": [ 4, 13.99, 7, 15.99 ], "texture": "#stone" },
+				"south": { "uv": [ 9, 13.99, 12, 15.99 ], "texture": "#stone" },
+				"west": { "uv": [ 5, 13.99, 8, 15.99 ], "texture": "#stone" },
+				"east": { "uv": [ 8, 13.99, 11, 15.99 ], "texture": "#stone" }
+			}
+		},
+		{
+			"from": [ 8, 0.01, 9 ],
+			"to": [ 11, 2.01, 12 ],
+			"faces": {
+				"down": { "uv": [ 8, 4, 11, 7 ], "texture": "#stone" },
+				"up": { "uv": [ 8, 9, 11, 12 ], "texture": "#stone" },
+				"north": { "uv": [ 5, 13.99, 8, 15.99 ], "texture": "#stone" },
+				"south": { "uv": [ 8, 13.99, 11, 15.99 ], "texture": "#stone" },
+				"west": { "uv": [ 9, 13.99, 12, 15.99 ], "texture": "#stone" },
+				"east": { "uv": [ 4, 13.99, 7, 15.99 ], "texture": "#stone" }
+			}
+		},
+		{
+			"from": [ 4, 0.01, 8 ],
+			"to": [ 7, 2.01, 11 ],
+			"faces": {
+				"down": { "uv": [ 4, 5, 7, 8 ], "texture": "#stone" },
+				"up": { "uv": [ 4, 8, 7, 11 ], "texture": "#stone" },
+				"north": { "uv": [ 9, 13.99, 12, 15.99 ], "texture": "#stone" },
+				"south": { "uv": [ 4, 13.99, 7, 15.99 ], "texture": "#stone" },
+				"west": { "uv": [ 8, 13.99, 11, 15.99 ], "texture": "#stone" },
+				"east": { "uv": [ 5, 13.99, 8, 15.99 ], "texture": "#stone" }
+			}
+		}
+	]
+}

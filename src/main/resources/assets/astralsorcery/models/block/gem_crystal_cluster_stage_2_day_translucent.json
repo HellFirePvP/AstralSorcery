@@ -1,0 +1,59 @@
+{
+	"comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+    "ambientocclusion": false,
+	"parent": "block/block",
+	"textures": {
+		"particle": "astralsorcery:block/crystal/gem_cluster_stage_2_sun_crystal",
+		"texture": "astralsorcery:block/crystal/gem_cluster_stage_2_sun_crystal"
+	},
+	"elements": [ 	 
+		{
+			"from": [ 4, 0, 4 ],
+			"to": [ 12, 10, 4.005 ],
+			"faces": {
+				"north": { "uv": [ 0, 6, 8, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 0, 6, 8, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 4, 0, 11.995 ],
+			"to": [ 12, 10, 12 ],
+			"faces": {
+				"north": { "uv": [ 0, 6, 8, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 0, 6, 8, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 4, 0, 4 ],
+			"to": [ 4.005, 10, 12 ],
+			"faces": {
+				"west": { "uv": [ 0, 6, 8, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 0, 6, 8, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 11.995, 0, 4 ],
+			"to": [ 12, 10, 12 ],
+			"faces": {
+				"west": { "uv": [ 0, 6, 8, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 0, 6, 8, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 4, 9.995, 4 ],
+			"to": [ 12, 10, 12 ],
+			"faces": {
+				"down": { "uv": [ 8, 0, 16, 8 ], "texture": "#texture" },
+				"up": { "uv": [ 8, 0, 16, 8 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 4, 0, 4 ],
+			"to": [ 12, 0.005, 12 ],
+			"faces": {
+				"down": { "uv": [ 8, 0, 16, 8 ], "texture": "#texture" },
+				"up": { "uv": [ 8, 0, 16, 8 ], "texture": "#texture" }
+			}
+		}
+	]
+}

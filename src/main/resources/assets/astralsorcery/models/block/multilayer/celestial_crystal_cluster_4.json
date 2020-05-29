@@ -1,0 +1,15 @@
+{
+  "parent": "block/block",
+  "loader": "forge:new-multi-layer",
+  "layers": {
+    "Solid": {
+      "parent": "astralsorcery:block/celestial_crystal_cluster_4_solid"
+    },
+    "Translucent": {
+      "parent": "astralsorcery:block/celestial_crystal_cluster_4_translucent"
+    }
+  },
+  "textures": {
+    "particle": "astralsorcery:block/crystal/celestial_cluster_stage_5"
+  }
+}

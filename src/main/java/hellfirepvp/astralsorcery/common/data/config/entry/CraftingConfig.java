@@ -28,6 +28,7 @@ public class CraftingConfig extends ConfigEntry {
     public ForgeConfigSpec.BooleanValue liquidStarlightFormCelestialCrystalCluster;
     public ForgeConfigSpec.BooleanValue liquidStarlightFormGemCrystalCluster;
     public ForgeConfigSpec.BooleanValue liquidStarlightDropInfusedWood;
+    public ForgeConfigSpec.BooleanValue liquidStarlightMergeCrystals;
 
     public ForgeConfigSpec.BooleanValue liquidStarlightInteractionAquamarine;
     public ForgeConfigSpec.BooleanValue liquidStarlightInteractionSand;
@@ -78,5 +79,10 @@ public class CraftingConfig extends ConfigEntry {
                 .comment("Set this to false to disable the functionality that wood logs will be converted to infused wood when thrown into liquid starlight.")
                 .translation(translationKey("liquidStarlightDropInfusedWood"))
                 .define("liquidStarlightDropInfusedWood", true);
+
+        liquidStarlightMergeCrystals = cfgBuilder
+                .comment("Set this to false to disable the functionality that two crystals can merge and combine stats when thrown into liquid starlight.")
+                .translation(translationKey("liquidStarlightMergeCrystals"))
+                .define("liquidStarlightMergeCrystals", true);
     }
 }

@@ -69,6 +69,14 @@ public class RenderingUtils {
     private static final Random rand = new Random();
     private static IEnviromentBlockReader plainRenderWorld = null;
 
+    public static long getPositionSeed(BlockPos pos) {
+        long seed = 1553015L;
+        seed ^= (long) pos.getX();
+        seed ^= (long) pos.getY();
+        seed ^= (long) pos.getZ();
+        return seed;
+    }
+
     @Nullable
     public static TextureAtlasSprite getParticleTexture(FluidStack stack) {
         if (stack.isEmpty()) {

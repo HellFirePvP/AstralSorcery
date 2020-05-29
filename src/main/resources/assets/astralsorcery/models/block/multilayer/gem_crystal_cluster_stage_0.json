@@ -1,0 +1,15 @@
+{
+  "parent": "block/block",
+  "loader": "forge:new-multi-layer",
+  "layers": {
+    "Solid": {
+      "parent": "astralsorcery:block/gem_crystal_cluster_stage_0_solid"
+    },
+    "Translucent": {
+      "parent": "astralsorcery:block/gem_crystal_cluster_stage_0_translucent"
+    }
+  },
+  "textures": {
+    "particle": "astralsorcery:block/crystal/gem_cluster_stage_0_crystal"
+  }
+}

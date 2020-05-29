@@ -1,0 +1,15 @@
+{
+  "parent": "block/block",
+  "loader": "forge:new-multi-layer",
+  "layers": {
+    "Solid": {
+      "parent": "astralsorcery:block/infuser_solid"
+    },
+    "Translucent": {
+      "parent": "astralsorcery:block/infuser_translucent"
+    }
+  },
+  "textures": {
+    "particle": "astralsorcery:block/infuser"
+  }
+}

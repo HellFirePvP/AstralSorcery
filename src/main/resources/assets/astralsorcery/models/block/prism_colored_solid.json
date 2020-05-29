@@ -1,0 +1,114 @@
+{
+  "ambientocclusion": true,
+  "parent": "block/block",
+  "textures": {
+    "particle": "astralsorcery:block/prism_base1",
+    "prism_color_fitting": "astralsorcery:block/prism_color_fitting"
+  },
+  "elements": [
+    {
+      "Name": "Fitting1",
+      "from": [ 0, 2, 6 ],
+      "to": [ 2, 4, 7 ],
+      "faces": {
+        "down": { "uv": [ 1, 4, 3, 5 ], "texture": "#prism_color_fitting" },
+        "up": { "uv": [ 3, 4, 5, 5 ], "texture": "#prism_color_fitting" },
+        "north": { "uv": [ 1, 5, 3, 7 ], "texture": "#prism_color_fitting" },
+        "south": { "uv": [ 3, 5, 5, 7 ], "texture": "#prism_color_fitting" },
+        "west": { "uv": [ 0, 5, 1, 7 ], "texture": "#prism_color_fitting" },
+        "east": { "uv": [ 5, 5, 6, 7 ], "texture": "#prism_color_fitting" }
+      }
+    },
+    {
+      "Name": "Fitting2",
+      "from": [ 0, 2, 9 ],
+      "to": [ 2, 4, 10 ],
+      "faces": {
+        "down": { "uv": [ 1, 4, 3, 5 ], "texture": "#prism_color_fitting" },
+        "up": { "uv": [ 3, 4, 5, 5 ], "texture": "#prism_color_fitting" },
+        "north": { "uv": [ 1, 5, 3, 7 ], "texture": "#prism_color_fitting" },
+        "south": { "uv": [ 3, 5, 5, 7 ], "texture": "#prism_color_fitting" },
+        "west": { "uv": [ 0, 5, 1, 7 ], "texture": "#prism_color_fitting" },
+        "east": { "uv": [ 5, 5, 6, 7 ], "texture": "#prism_color_fitting" }
+      }
+    },
+    {
+      "Name": "Fitting3",
+      "from": [ 14, 2, 6 ],
+      "to": [ 16, 4, 7 ],
+      "faces": {
+        "down": { "uv": [ 1, 4, 3, 5 ], "texture": "#prism_color_fitting" },
+        "up": { "uv": [ 3, 4, 5, 5 ], "texture": "#prism_color_fitting" },
+        "north": { "uv": [ 1, 5, 3, 7 ], "texture": "#prism_color_fitting" },
+        "south": { "uv": [ 3, 5, 5, 7 ], "texture": "#prism_color_fitting" },
+        "west": { "uv": [ 0, 5, 1, 7 ], "texture": "#prism_color_fitting" },
+        "east": { "uv": [ 5, 5, 6, 7 ], "texture": "#prism_color_fitting" }
+      }
+    },
+    {
+      "Name": "Fitting4",
+      "from": [ 14, 2, 9 ],
+      "to": [ 16, 4, 10 ],
+      "faces": {
+        "down": { "uv": [ 1, 4, 3, 5 ], "texture": "#prism_color_fitting" },
+        "up": { "uv": [ 3, 4, 5, 5 ], "texture": "#prism_color_fitting" },
+        "north": { "uv": [ 1, 5, 3, 7 ], "texture": "#prism_color_fitting" },
+        "south": { "uv": [ 3, 5, 5, 7 ], "texture": "#prism_color_fitting" },
+        "west": { "uv": [ 0, 5, 1, 7 ], "texture": "#prism_color_fitting" },
+        "east": { "uv": [ 5, 5, 6, 7 ], "texture": "#prism_color_fitting" }
+      }
+    },
+    {
+      "Name": "Fitting5",
+      "from": [ 6, 2, 0 ],
+      "to": [ 7, 4, 2 ],
+      "faces": {
+        "down": { "uv": [ 2, 0, 3, 2 ], "texture": "#prism_color_fitting" },
+        "up": { "uv": [ 3, 0, 4, 2 ], "texture": "#prism_color_fitting" },
+        "north": { "uv": [ 2, 2, 3, 4 ], "texture": "#prism_color_fitting" },
+        "south": { "uv": [ 3, 2, 4, 4 ], "texture": "#prism_color_fitting" },
+        "west": { "uv": [ 0, 2, 2, 4 ], "texture": "#prism_color_fitting" },
+        "east": { "uv": [ 4, 2, 6, 4 ], "texture": "#prism_color_fitting" }
+      }
+    },
+    {
+      "Name": "Fitting6",
+      "from": [ 9, 2, 0 ],
+      "to": [ 10, 4, 2 ],
+      "faces": {
+        "down": { "uv": [ 2, 0, 3, 2 ], "texture": "#prism_color_fitting" },
+        "up": { "uv": [ 3, 0, 4, 2 ], "texture": "#prism_color_fitting" },
+        "north": { "uv": [ 2, 2, 3, 4 ], "texture": "#prism_color_fitting" },
+        "south": { "uv": [ 3, 2, 4, 4 ], "texture": "#prism_color_fitting" },
+        "west": { "uv": [ 0, 2, 2, 4 ], "texture": "#prism_color_fitting" },
+        "east": { "uv": [ 4, 2, 6, 4 ], "texture": "#prism_color_fitting" }
+      }
+    },
+    {
+      "Name": "Fitting7",
+      "from": [ 6, 2, 14 ],
+      "to": [ 7, 4, 16 ],
+      "faces": {
+        "down": { "uv": [ 2, 0, 3, 2 ], "texture": "#prism_color_fitting" },
+        "up": { "uv": [ 3, 0, 4, 2 ], "texture": "#prism_color_fitting" },
+        "north": { "uv": [ 2, 2, 3, 4 ], "texture": "#prism_color_fitting" },
+        "south": { "uv": [ 3, 2, 4, 4 ], "texture": "#prism_color_fitting" },
+        "west": { "uv": [ 0, 2, 2, 4 ], "texture": "#prism_color_fitting" },
+        "east": { "uv": [ 4, 2, 6, 4 ], "texture": "#prism_color_fitting" }
+      }
+    },
+    {
+      "Name": "Fitting8",
+      "from": [ 9, 2, 14 ],
+      "to": [ 10, 4, 16 ],
+      "faces": {
+        "down": { "uv": [ 2, 0, 3, 2 ], "texture": "#prism_color_fitting" },
+        "up": { "uv": [ 3, 0, 4, 2 ], "texture": "#prism_color_fitting" },
+        "north": { "uv": [ 2, 2, 3, 4 ], "texture": "#prism_color_fitting" },
+        "south": { "uv": [ 3, 2, 4, 4 ], "texture": "#prism_color_fitting" },
+        "west": { "uv": [ 0, 2, 2, 4 ], "texture": "#prism_color_fitting" },
+        "east": { "uv": [ 4, 2, 6, 4 ], "texture": "#prism_color_fitting" }
+      }
+    }
+  ]
+}

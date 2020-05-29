@@ -1,0 +1,24 @@
+{
+	"comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+    "ambientocclusion": false,
+	"parent": "block/block",
+    "textures": {
+        "particle": "astralsorcery:block/illuminator_glass",
+        "core": "astralsorcery:block/illuminator_core"
+    },
+    "elements": [
+		{
+			"name": "core",
+			"from": [ 6, 6, 6 ],
+			"to": [ 10, 10, 10 ],
+			"faces": {
+				"down": { "uv": [ 6, 6, 10, 10 ], "texture": "#core" },
+				"up": { "uv": [ 6, 6, 10, 10 ], "texture": "#core" },
+				"north": { "uv": [ 6, 6, 10, 10 ], "texture": "#core" },
+				"south": { "uv": [ 6, 6, 10, 10 ], "texture": "#core" },
+				"west": { "uv": [ 6, 6, 10, 10 ], "texture": "#core" },
+				"east": { "uv": [ 6, 6, 10, 10 ], "texture": "#core" }
+			}
+		}
+	]
+}

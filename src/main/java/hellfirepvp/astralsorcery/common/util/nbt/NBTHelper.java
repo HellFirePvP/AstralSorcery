@@ -193,11 +193,27 @@ public class NBTHelper {
 
     @Nullable
     public static <T> T readOptional(CompoundNBT nbt, String key, Function<CompoundNBT, T> reader) {
+        return readOptional(nbt, key, reader, null);
+    }
+
+    @Nullable
+    public static <T> T readOptional(CompoundNBT nbt, String key, Function<CompoundNBT, T> reader, T _default) {
         if (nbt.getBoolean(key + "_present")) {
             CompoundNBT read = nbt.getCompound(key);
             return reader.apply(read);
         }
-        return null;
+        return _default;
+    }
+
+    public static <T extends Enum<T>> void writeEnum(CompoundNBT nbt, String key, T enumValue) {
+        nbt.putInt(key, enumValue.ordinal());
+    }
+
+    public static <T extends Enum<T>> T readEnum(CompoundNBT nbt, String key, Class<T> enumClazz) {
+        if (!enumClazz.isEnum()) {
+            throw new IllegalArgumentException("Passed class is not an enum!");
+        }
+        return enumClazz.getEnumConstants()[nbt.getInt(key)];
     }
 
     public static void setBlockState(CompoundNBT cmp, String key, BlockState state) {

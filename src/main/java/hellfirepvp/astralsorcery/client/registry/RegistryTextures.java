@@ -54,6 +54,9 @@ public class RegistryTextures {
         TEX_GUI_BOOK_FRAME_LEFT             = loadTexture(GUI, "book", "frame_left");
         TEX_GUI_BOOK_STRUCTURE_ICONS        = loadTexture(GUI, "book", "structure_icons");
         TEX_GUI_BOOK_GRID_SLOT              = loadTexture(GUI, "book", "grid_slot");
+        TEX_GUI_BOOK_GRID_RECIPE            = loadTexture(GUI, "book", "grid_recipe");
+        TEX_GUI_BOOK_GRID_TRANSMUTATION     = loadTexture(GUI, "book", "grid_transmutation");
+        TEX_GUI_BOOK_GRID_INFUSION          = loadTexture(GUI, "book", "grid_infusion");
         TEX_GUI_BOOK_GRID_T1                = loadTexture(GUI, "book", "grid_t1");
         TEX_GUI_BOOK_GRID_T2                = loadTexture(GUI, "book", "grid_t2");
         TEX_GUI_BOOK_GRID_T3                = loadTexture(GUI, "book", "grid_t3");

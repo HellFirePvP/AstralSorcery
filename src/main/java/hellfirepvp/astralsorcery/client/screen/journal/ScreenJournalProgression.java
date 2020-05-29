@@ -450,12 +450,18 @@ public class ScreenJournalProgression extends ScreenJournal {
                 return true;
             }
             if (this.searchHoverNode != null) {
+                this.searchTextEntry.setText("");
                 Minecraft.getInstance().displayGuiScreen(new ScreenJournalPages(this, this.searchHoverNode));
                 SoundHelper.playSoundClient(SoundsAS.GUI_JOURNAL_PAGE, 1F, 1F);
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    protected boolean shouldRightClickCloseScreen(double mouseX, double mouseY) {
+        return true;
     }
 
     @Override

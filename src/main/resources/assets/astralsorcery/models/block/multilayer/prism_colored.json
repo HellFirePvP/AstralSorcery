@@ -1,0 +1,15 @@
+{
+  "parent": "block/block",
+  "loader": "forge:new-multi-layer",
+  "layers": {
+    "Solid": {
+      "parent": "astralsorcery:block/prism_colored_solid"
+    },
+    "Translucent": {
+      "parent": "astralsorcery:block/prism_colored_translucent"
+    }
+  },
+  "textures": {
+    "particle": "astralsorcery:block/prism_base1"
+  }
+}

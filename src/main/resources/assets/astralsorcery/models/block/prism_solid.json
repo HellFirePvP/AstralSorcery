@@ -1,0 +1,77 @@
+{
+    "ambientocclusion": true,
+	"parent": "block/block",
+    "textures": {
+        "particle": "astralsorcery:block/prism_base1",
+        "prism_frame": "astralsorcery:block/prism_frame",
+        "prism_base1": "astralsorcery:block/prism_base1",
+        "prism_base2": "astralsorcery:block/prism_base2"
+    },
+    "elements": [
+        {
+            "Name": "Base",
+            "from": [ 2, 0, 2 ],
+            "to": [ 14, 2, 14 ],
+            "faces": {
+                "down": { "uv": [ 0, 0, 12, 12 ], "texture": "#prism_base2" },
+                "up": { "uv": [ 0, 0, 12, 12 ], "texture": "#prism_base1" },
+                "north": { "uv": [ 0, 12, 12, 14 ], "texture": "#prism_base2" },
+                "south": { "uv": [ 0, 12, 12, 14 ], "texture": "#prism_base1" },
+                "west": { "uv": [ 0, 12, 12, 14 ], "texture": "#prism_base1" },
+                "east": { "uv": [ 0, 12, 12, 14 ], "texture": "#prism_base2" }
+            }
+        },
+        {
+            "Name": "Cube1",
+            "from": [ 0, 0, 7 ],
+            "to": [ 2, 4, 9 ],
+            "faces": {
+                "down": { "uv": [ 12, 0, 14, 2 ], "texture": "#prism_frame" },
+                "up": { "uv": [ 10, 0, 12, 2 ], "texture": "#prism_frame" },
+                "north": { "uv": [ 14, 2, 16, 6 ], "texture": "#prism_frame" },
+                "south": { "uv": [ 12, 2, 14, 6 ], "texture": "#prism_frame" },
+                "west": { "uv": [ 10, 2, 12, 6 ], "texture": "#prism_frame" },
+                "east": { "uv": [ 8, 2, 10, 6 ], "texture": "#prism_frame" }
+            }
+        },
+        {
+            "Name": "Cube1",
+            "from": [ 14, 0, 7 ],
+            "to": [ 16, 4, 9 ],
+            "faces": {
+                "down": { "uv": [ 12, 0, 14, 2 ], "texture": "#prism_frame" },
+                "up": { "uv": [ 10, 0, 12, 2 ], "texture": "#prism_frame" },
+                "north": { "uv": [ 14, 2, 16, 6 ], "texture": "#prism_frame" },
+                "south": { "uv": [ 12, 2, 14, 6 ], "texture": "#prism_frame" },
+                "west": { "uv": [ 10, 2, 12, 6 ], "texture": "#prism_frame" },
+                "east": { "uv": [ 8, 2, 10, 6 ], "texture": "#prism_frame" }
+            }
+        },
+        {
+            "Name": "Cube1",
+            "from": [ 7, 0, 0 ],
+            "to": [ 9, 4, 2 ],
+            "faces": {
+                "down": { "uv": [ 12, 0, 14, 2 ], "texture": "#prism_frame" },
+                "up": { "uv": [ 10, 0, 12, 2 ], "texture": "#prism_frame" },
+                "north": { "uv": [ 14, 2, 16, 6 ], "texture": "#prism_frame" },
+                "south": { "uv": [ 12, 2, 14, 6 ], "texture": "#prism_frame" },
+                "west": { "uv": [ 10, 2, 12, 6 ], "texture": "#prism_frame" },
+                "east": { "uv": [ 8, 2, 10, 6 ], "texture": "#prism_frame" }
+            }
+        },
+        {
+            "Name": "Cube1",
+            "from": [ 7, 0, 14 ],
+            "to": [ 9, 4, 16 ],
+            "faces": {
+                "down": { "uv": [ 12, 0, 14, 2 ], "texture": "#prism_frame" },
+                "up": { "uv": [ 10, 0, 12, 2 ], "texture": "#prism_frame" },
+                "north": { "uv": [ 14, 2, 16, 6 ], "texture": "#prism_frame" },
+                "south": { "uv": [ 12, 2, 14, 6 ], "texture": "#prism_frame" },
+                "west": { "uv": [ 10, 2, 12, 6 ], "texture": "#prism_frame" },
+                "east": { "uv": [ 8, 2, 10, 6 ], "texture": "#prism_frame" }
+            }
+        }
+    ]
+}
