@@ -1,0 +1,19 @@
+{
+    "Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+    "parent" : "block/block",
+    "textures": {
+        "particle": "astralsorcery:block/spectral_relay",
+        "texture2": "astralsorcery:block/spectral_relay_glass"
+    },
+    "elements": [
+        {
+            "__comment": "glass",
+            "from": [ 5, 1.995, 5 ],
+            "to": [ 11, 2, 11 ],
+            "faces": {
+                "down": { "uv": [ 1, 1, 7, 7 ], "texture": "#texture2" },
+                "up": { "uv": [ 1, 1, 7, 7 ], "texture": "#texture2" }
+            }
+        }
+    ]
+}

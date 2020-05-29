@@ -23,7 +23,6 @@ import net.minecraft.block.StairsBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -94,14 +93,16 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
         this.simpleBlockState(BlocksAS.STARMETAL_ORE);
         this.simpleBlockState(BlocksAS.GLOW_FLOWER);
 
-        this.simpleBlockState(BlocksAS.SPECTRAL_RELAY);
+        this.multiLayerBlockState(BlocksAS.SPECTRAL_RELAY);
         this.simpleBlockState(BlocksAS.ALTAR_DISCOVERY);
         this.simpleBlockState(BlocksAS.ALTAR_ATTUNEMENT);
         this.simpleBlockState(BlocksAS.ALTAR_CONSTELLATION);
         this.simpleBlockState(BlocksAS.ALTAR_RADIANCE);
         this.simpleBlockState(BlocksAS.ATTUNEMENT_ALTAR);
-        this.allStateSuffixModel(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER);
-        this.allStateSuffixModel(BlocksAS.GEM_CRYSTAL_CLUSTER);
+        this.allStateSuffixMultiLayerModel(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER);
+        this.allStateSuffixMultiLayerModel(BlocksAS.GEM_CRYSTAL_CLUSTER);
+        this.multiLayerBlockState(BlocksAS.ROCK_COLLECTOR_CRYSTAL);
+        this.multiLayerBlockState(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
         this.getVariantBuilder(BlocksAS.LENS)
                 .partialState().with(BlockLens.PLACED_AGAINST, Direction.UP)
                     .addModels(new ConfiguredModel(model(AstralSorcery.key("lens_base")), 180, 0, false))
@@ -119,24 +120,24 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
         ResourceLocation prism = BlocksAS.PRISM.getRegistryName();
         ResourceLocation prismColored = suffixPath(prism, "_colored");
         this.getMultipartBuilder(BlocksAS.PRISM)
-                .part().modelFile(model(prism)).rotationX(180).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.UP).end()
-                .part().modelFile(model(prismColored)).rotationX(180).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.UP).condition(BlockPrism.HAS_COLORED_LENS, true).end()
-                .part().modelFile(model(prism)).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.DOWN).end()
-                .part().modelFile(model(prismColored)).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.DOWN).condition(BlockPrism.HAS_COLORED_LENS, true).end()
-                .part().modelFile(model(prism)).rotationX(90).rotationY(180).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.NORTH).end()
-                .part().modelFile(model(prismColored)).rotationX(90).rotationY(180).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.NORTH).condition(BlockPrism.HAS_COLORED_LENS, true).end()
-                .part().modelFile(model(prism)).rotationX(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.SOUTH).end()
-                .part().modelFile(model(prismColored)).rotationX(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.SOUTH).condition(BlockPrism.HAS_COLORED_LENS, true).end()
-                .part().modelFile(model(prism)).rotationX(90).rotationY(270).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.EAST).end()
-                .part().modelFile(model(prismColored)).rotationX(90).rotationY(270).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.EAST).condition(BlockPrism.HAS_COLORED_LENS, true).end()
-                .part().modelFile(model(prism)).rotationX(90).rotationY(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.WEST).end()
-                .part().modelFile(model(prismColored)).rotationX(90).rotationY(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.WEST).condition(BlockPrism.HAS_COLORED_LENS, true).end();
+                .part().modelFile(multiLayerModel(prism)).rotationX(180).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.UP).end()
+                .part().modelFile(multiLayerModel(prismColored)).rotationX(180).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.UP).condition(BlockPrism.HAS_COLORED_LENS, true).end()
+                .part().modelFile(multiLayerModel(prism)).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.DOWN).end()
+                .part().modelFile(multiLayerModel(prismColored)).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.DOWN).condition(BlockPrism.HAS_COLORED_LENS, true).end()
+                .part().modelFile(multiLayerModel(prism)).rotationX(90).rotationY(180).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.NORTH).end()
+                .part().modelFile(multiLayerModel(prismColored)).rotationX(90).rotationY(180).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.NORTH).condition(BlockPrism.HAS_COLORED_LENS, true).end()
+                .part().modelFile(multiLayerModel(prism)).rotationX(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.SOUTH).end()
+                .part().modelFile(multiLayerModel(prismColored)).rotationX(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.SOUTH).condition(BlockPrism.HAS_COLORED_LENS, true).end()
+                .part().modelFile(multiLayerModel(prism)).rotationX(90).rotationY(270).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.EAST).end()
+                .part().modelFile(multiLayerModel(prismColored)).rotationX(90).rotationY(270).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.EAST).condition(BlockPrism.HAS_COLORED_LENS, true).end()
+                .part().modelFile(multiLayerModel(prism)).rotationX(90).rotationY(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.WEST).end()
+                .part().modelFile(multiLayerModel(prismColored)).rotationX(90).rotationY(90).addModel().condition(BlockPrism.PLACED_AGAINST, Direction.WEST).condition(BlockPrism.HAS_COLORED_LENS, true).end();
 
         this.simpleBlockState(BlocksAS.REFRACTION_TABLE, this.modelAS("refraction_table_particle"));
-        this.simpleBlockState(BlocksAS.RITUAL_LINK);
-        this.simpleBlockState(BlocksAS.RITUAL_PEDESTAL);
-        this.simpleBlockState(BlocksAS.ILLUMINATOR);
-        this.simpleBlockState(BlocksAS.INFUSER);
+        this.multiLayerBlockState(BlocksAS.RITUAL_LINK);
+        this.multiLayerBlockState(BlocksAS.RITUAL_PEDESTAL);
+        this.multiLayerBlockState(BlocksAS.ILLUMINATOR);
+        this.multiLayerBlockState(BlocksAS.INFUSER);
         this.simpleBlockState(BlocksAS.CHALICE);
         this.simpleBlockState(BlocksAS.TELESCOPE);
         this.simpleBlockState(BlocksAS.OBSERVATORY);
@@ -178,6 +179,21 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
         }
     }
 
+    private <T extends Comparable<T>> void allStateSuffixMultiLayerModel(Block b) {
+        Collection<IProperty<?>> properties = b.getStateContainer().getProperties();
+        if (properties.size() != 1) {
+            throw new IllegalArgumentException("Can only make path-suffix enumeration for blockstates with exactly 1 property!");
+        }
+
+        ResourceLocation key = b.getRegistryName();
+        IProperty<T> property = (IProperty<T>) Iterables.getFirst(properties, null);
+        VariantBlockStateBuilder builder = this.getVariantBuilder(b);
+        for (T value : property.getAllowedValues()) {
+            builder.partialState().with(property, value)
+                    .addModels(new ConfiguredModel(multiLayerModel(suffixPath(key, "_" + value.toString()))));
+        }
+    }
+
     private void simpleSlabs(SlabBlock b, ModelFile doubleSlabModel) {
         ResourceLocation key = b.getRegistryName();
         this.slabBlock(b, model(key), model(suffixPath(key, "_top")), doubleSlabModel);
@@ -186,6 +202,10 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
     private void simpleStairs(StairsBlock b) {
         ResourceLocation key = b.getRegistryName();
         this.stairsBlock(b, model(key), model(suffixPath(key, "_inner")), model(suffixPath(key, "_outer")));
+    }
+
+    private void multiLayerBlockState(Block b) {
+        this.simpleBlockState(b, multiLayerModel(b.getRegistryName()));
     }
 
     private void simpleBlockState(Block b) {
@@ -210,5 +230,9 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
 
     private ModelFile model(ResourceLocation name) {
         return new ModelFile.UncheckedModelFile(prefixPath(name, "block/"));
+    }
+
+    private ModelFile multiLayerModel(ResourceLocation name) {
+        return new ModelFile.UncheckedModelFile(prefixPath(name, "block/multilayer/"));
     }
 }

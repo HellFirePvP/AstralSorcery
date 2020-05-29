@@ -1,0 +1,24 @@
+{
+	"__comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "astralsorcery:block/crystal/celestial_cluster_stage_2",
+		"core": "astralsorcery:block/crystal/celestial_cluster_core"
+	},
+	"elements": [
+		{
+			"__comment": "core",
+			"from": [ 7, 1, 7 ],
+			"to": [ 9, 9, 9 ],
+			"faces": {
+				"down": { "uv": [ 6, 0, 8, 2 ], "texture": "#core" },
+				"up": { "uv": [ 8, 0, 10, 2 ], "texture": "#core" },
+				"north": { "uv": [ 6, 8, 8, 16 ], "texture": "#core" },
+				"south": { "uv": [ 6, 8, 8, 16 ], "texture": "#core" },
+				"west": { "uv": [ 6, 8, 8, 16 ], "texture": "#core" },
+				"east": { "uv": [ 6, 8, 8, 16 ], "texture": "#core" }
+			}
+		}
+	]
+}

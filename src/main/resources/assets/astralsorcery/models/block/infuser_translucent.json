@@ -1,0 +1,59 @@
+{
+  "Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+  "parent": "block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "astralsorcery:block/infuser",
+    "texture2": "astralsorcery:block/infuser_glass"
+  },
+  "elements": [
+    {
+      "__comment": "column_7",
+      "from": [ 0, 8, 0 ],
+      "to": [ 4, 12, 4 ],
+      "faces": {
+        "up": { "uv": [ 0, 0, 2, 2 ], "texture": "#texture2" },
+        "north": { "uv": [ 0, 0, 2, 2 ], "texture": "#texture2" },
+        "south": { "uv": [ 4, 0, 6, 2 ], "texture": "#texture2" },
+        "west": { "uv": [ 2, 0, 4, 2 ], "texture": "#texture2" },
+        "east": { "uv": [ 6, 0, 8, 2 ], "texture": "#texture2" }
+      }
+    },
+    {
+      "__comment": "column_7",
+      "from": [ 12, 8, 0 ],
+      "to": [ 16, 12, 4 ],
+      "faces": {
+        "up": { "uv": [ 0, 0, 2, 2 ], "texture": "#texture2" },
+        "north": { "uv": [ 0, 0, 2, 2 ], "texture": "#texture2" },
+        "south": { "uv": [ 4, 0, 6, 2 ], "texture": "#texture2" },
+        "west": { "uv": [ 2, 0, 4, 2 ], "texture": "#texture2" },
+        "east": { "uv": [ 6, 0, 8, 2 ], "texture": "#texture2" }
+      }
+    },
+    {
+      "__comment": "column_7",
+      "from": [ 12, 8, 12 ],
+      "to": [ 16, 12, 16 ],
+      "faces": {
+        "up": { "uv": [ 0, 0, 2, 2 ], "texture": "#texture2" },
+        "north": { "uv": [ 0, 0, 2, 2 ], "texture": "#texture2" },
+        "south": { "uv": [ 4, 0, 6, 2 ], "texture": "#texture2" },
+        "west": { "uv": [ 2, 0, 4, 2 ], "texture": "#texture2" },
+        "east": { "uv": [ 6, 0, 8, 2 ], "texture": "#texture2" }
+      }
+    },
+    {
+      "__comment": "column_7",
+      "from": [ 0, 8, 12 ],
+      "to": [ 4, 12, 16 ],
+      "faces": {
+        "up": { "uv": [ 0, 0, 2, 2 ], "texture": "#texture2" },
+        "north": { "uv": [ 0, 0, 2, 2 ], "texture": "#texture2" },
+        "south": { "uv": [ 4, 0, 6, 2 ], "texture": "#texture2" },
+        "west": { "uv": [ 2, 0, 4, 2 ], "texture": "#texture2" },
+        "east": { "uv": [ 6, 0, 8, 2 ], "texture": "#texture2" }
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "parent": "block/block",
+  "loader": "forge:new-multi-layer",
+  "layers": {
+    "Solid": {
+      "parent": "astralsorcery:block/rock_collector_crystal_solid"
+    },
+    "Translucent": {
+      "parent": "astralsorcery:block/rock_collector_crystal_translucent"
+    }
+  },
+  "textures": {
+    "particle": "astralsorcery:block/rock_collector_crystal"
+  }
+}

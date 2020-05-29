@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
-import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,11 +21,8 @@ import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,6 +43,7 @@ public class LiquidInfusionBuilder extends CustomRecipeBuilder<LiquidInfusion> {
     private float consumptionChance = 0.3F;
     private boolean consumeMultipleFluids = false;
     private boolean acceptChaliceInput = true;
+    private boolean copyNBTToOutputs = false;
 
     private LiquidInfusionBuilder(ResourceLocation id) {
         this.id = id;
@@ -114,6 +111,11 @@ public class LiquidInfusionBuilder extends CustomRecipeBuilder<LiquidInfusion> {
         return this;
     }
 
+    public LiquidInfusionBuilder setCopyNBTToOutputs(boolean copyNBTToOutputs) {
+        this.copyNBTToOutputs = copyNBTToOutputs;
+        return this;
+    }
+
     @Nonnull
     @Override
     protected LiquidInfusion validateAndGet() {
@@ -129,7 +131,7 @@ public class LiquidInfusionBuilder extends CustomRecipeBuilder<LiquidInfusion> {
         if (this.craftingTickTime <= 0) {
             throw new IllegalArgumentException("No duration defined!");
         }
-        return new LiquidInfusion(this.id, craftingTickTime, liquidInput, itemInput, output, consumptionChance, consumeMultipleFluids, acceptChaliceInput);
+        return new LiquidInfusion(this.id, craftingTickTime, liquidInput, itemInput, output, consumptionChance, consumeMultipleFluids, acceptChaliceInput, copyNBTToOutputs);
     }
 
     @Override

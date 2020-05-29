@@ -1,0 +1,37 @@
+{
+	"Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "astralsorcery:block/ritual_link",
+		"texture": "astralsorcery:block/ritual_link"
+	},
+	"elements": [ 	 
+		{
+			"__comment": "Element",
+			"from": [ 7, 3, 7 ],
+			"to": [ 9, 11, 9 ],
+			"faces": {
+				"down": { "uv": [ 6, 8, 8, 10 ], "texture": "#texture" },
+				"up": { "uv": [ 6, 8, 8, 10 ], "texture": "#texture" },
+				"north": { "uv": [ 4, 8, 6, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 0, 8, 2, 16 ], "texture": "#texture" },
+				"west": { "uv": [ 6, 8, 8, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 2, 8, 4, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"__comment": "Element",
+			"from": [ 6, 12, 6 ],
+			"to": [ 10, 14, 10 ],
+			"faces": {
+				"down": { "uv": [ 8, 8, 12, 12 ], "texture": "#texture" },
+				"up": { "uv": [ 8, 8, 12, 12 ], "texture": "#texture" },
+				"north": { "uv": [ 12, 8, 16, 10 ], "texture": "#texture" },
+				"south": { "uv": [ 12, 8, 16, 10 ], "texture": "#texture" },
+				"west": { "uv": [ 12, 8, 16, 10 ], "texture": "#texture" },
+				"east": { "uv": [ 12, 8, 16, 10 ], "texture": "#texture" }
+			}
+		}
+	]
+}

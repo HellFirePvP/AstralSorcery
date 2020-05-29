@@ -1,0 +1,73 @@
+{
+	"comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+    "ambientocclusion": false,
+	"parent": "block/block",
+	"textures": {
+		"particle": "astralsorcery:block/crystal/gem_cluster_stage_2_sun_crystal",
+		"stone": "block/stone",
+		"core": "astralsorcery:block/crystal/gem_cluster_stage_2_sun"
+	},
+	"elements": [
+		{
+			"__comment": "core",
+			"from": [ 5, 3, 5 ],
+			"to": [ 11, 9, 11 ],
+			"faces": {
+				"down": { "uv": [ 5, 5, 11, 11 ], "texture": "#core" },
+				"up": { "uv": [ 5, 5, 11, 11 ], "texture": "#core" },
+				"north": { "uv": [ 5, 5, 11, 11 ], "texture": "#core" },
+				"south": { "uv": [ 5, 5, 11, 11 ], "texture": "#core" },
+				"west": { "uv": [ 5, 5, 11, 11 ], "texture": "#core" },
+				"east": { "uv": [ 5, 5, 11, 11 ], "texture": "#core" }
+			}
+		},
+		{
+			"from": [ 6, 0, 3 ],
+			"to": [ 9, 2, 6 ],
+			"faces": {
+				"down": { "uv": [ 6, 10, 9, 13 ], "texture": "#stone" },
+				"up": { "uv": [ 6, 3, 9, 6 ], "texture": "#stone" },
+				"north": { "uv": [ 7, 14, 10, 16 ], "texture": "#stone" },
+				"south": { "uv": [ 6, 14, 9, 16 ], "texture": "#stone" },
+				"west": { "uv": [ 3, 14, 6, 16 ], "texture": "#stone" },
+				"east": { "uv": [ 10, 14, 13, 16 ], "texture": "#stone" }
+			}
+		},
+		{
+			"from": [ 10, 0, 6 ],
+			"to": [ 13, 2, 9 ],
+			"faces": {
+				"down": { "uv": [ 10, 7, 13, 10 ], "texture": "#stone" },
+				"up": { "uv": [ 10, 6, 13, 9 ], "texture": "#stone" },
+				"north": { "uv": [ 3, 14, 6, 16 ], "texture": "#stone" },
+				"south": { "uv": [ 10, 14, 13, 16 ], "texture": "#stone" },
+				"west": { "uv": [ 6, 14, 9, 16 ], "texture": "#stone" },
+				"east": { "uv": [ 7, 14, 10, 16 ], "texture": "#stone" }
+			}
+		},
+		{
+			"from": [ 7, 0, 10 ],
+			"to": [ 10, 2, 13 ],
+			"faces": {
+				"down": { "uv": [ 7, 3, 10, 6 ], "texture": "#stone" },
+				"up": { "uv": [ 7, 10, 10, 13 ], "texture": "#stone" },
+				"north": { "uv": [ 6, 14, 9, 16 ], "texture": "#stone" },
+				"south": { "uv": [ 7, 14, 10, 16 ], "texture": "#stone" },
+				"west": { "uv": [ 10, 14, 13, 16 ], "texture": "#stone" },
+				"east": { "uv": [ 3, 14, 6, 16 ], "texture": "#stone" }
+			}
+		},
+		{
+			"from": [ 3, 0, 7 ],
+			"to": [ 6, 2, 10 ],
+			"faces": {
+				"down": { "uv": [ 3, 6, 6, 9 ], "texture": "#stone" },
+				"up": { "uv": [ 3, 7, 6, 10 ], "texture": "#stone" },
+				"north": { "uv": [ 10, 14, 13, 16 ], "texture": "#stone" },
+				"south": { "uv": [ 3, 14, 6, 16 ], "texture": "#stone" },
+				"west": { "uv": [ 7, 14, 10, 16 ], "texture": "#stone" },
+				"east": { "uv": [ 6, 14, 9, 16 ], "texture": "#stone" }
+			}
+		}
+	]
+}

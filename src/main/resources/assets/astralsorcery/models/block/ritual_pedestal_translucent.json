@@ -1,0 +1,55 @@
+{
+	"Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "astralsorcery:block/ritual_pedestal",
+		"texture2": "astralsorcery:block/ritual_pedestal_glass"
+	},
+	"elements": [
+		{
+			"from": [ 11, 2, 11 ],
+			"to": [ 15, 8, 15 ],
+			"faces": {
+				"up": { "uv": [ 8, 7, 10, 9 ], "texture": "#texture2" },
+				"north": { "uv": [ 10, 9, 12, 12 ], "texture": "#texture2" },
+				"south": { "uv": [ 14, 9, 16, 12 ], "texture": "#texture2" },
+				"west": { "uv": [ 12, 9, 14, 12 ], "texture": "#texture2" },
+				"east": { "uv": [ 8, 9, 10, 12 ], "texture": "#texture2" }
+			}
+		},
+		{
+			"from": [ 11, 2, 1 ],
+			"to": [ 15, 8, 5 ],
+			"faces": {
+				"up": { "uv": [ 8, 7, 10, 9 ], "texture": "#texture2" },
+				"north": { "uv": [ 8, 9, 10, 12 ], "texture": "#texture2" },
+				"south": { "uv": [ 12, 9, 14, 12 ], "texture": "#texture2" },
+				"west": { "uv": [ 10, 9, 12, 12 ], "texture": "#texture2" },
+				"east": { "uv": [ 14, 9, 16, 12 ], "texture": "#texture2" }
+			}
+		},
+		{
+			"from": [ 1, 2, 11 ],
+			"to": [ 5, 8, 15 ],
+			"faces": {
+				"up": { "uv": [ 8, 7, 10, 9 ], "texture": "#texture2" },
+				"north": { "uv": [ 12, 9, 14, 12 ], "texture": "#texture2" },
+				"south": { "uv": [ 8, 9, 10, 12 ], "texture": "#texture2" },
+				"west": { "uv": [ 14, 9, 16, 12 ], "texture": "#texture2" },
+				"east": { "uv": [ 10, 9, 12, 12 ], "texture": "#texture2" }
+			}
+		},
+		{
+			"from": [ 1, 2, 1 ],
+			"to": [ 5, 8, 5 ],
+			"faces": {
+				"up": { "uv": [ 8, 7, 10, 9 ], "texture": "#texture2" },
+				"north": { "uv": [ 14, 9, 16, 12 ], "texture": "#texture2" },
+				"south": { "uv": [ 10, 9, 12, 12 ], "texture": "#texture2" },
+				"west": { "uv": [ 8, 9, 10, 12 ], "texture": "#texture2" },
+				"east": { "uv": [ 12, 9, 14, 12 ], "texture": "#texture2" }
+			}
+		}
+	]
+}

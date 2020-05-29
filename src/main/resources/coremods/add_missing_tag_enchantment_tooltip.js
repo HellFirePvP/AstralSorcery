@@ -24,7 +24,7 @@ function initializeCoreMod() {
                         callGetEnchantmentTagList,
                         '()Lnet/minecraft/nbt/ListNBT;');
 
-                var methodHasTag = ASMAPI.findFirstMethodCallBefore(method,
+                var methodHasTag = findFirstMethodCallBefore(method,
                         ASMAPI.MethodType.VIRTUAL,
                         'net/minecraft/item/ItemStack',
                         callHasTag,
@@ -46,4 +46,20 @@ function initializeCoreMod() {
             }
         }
     }
+}
+
+function findFirstMethodCallBefore(method, methodType, owner, name, descriptor, startIndex) {
+    var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
+
+    for (i = 0; i < Math.min(method.instructions.size() - 1, startIndex); i++) {
+        node = method.instructions.get(i);
+        if (node instanceof MethodInsnNode && node.getOpcode() == methodType.toOpcode()) {
+            if (node.owner === owner &&
+                    node.name === name &&
+                    node.desc === descriptor) {
+                return node;
+            }
+        }
+    }
+    return null;
 }

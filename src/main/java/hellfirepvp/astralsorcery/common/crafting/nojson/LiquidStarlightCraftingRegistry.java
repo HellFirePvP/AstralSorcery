@@ -37,6 +37,7 @@ public class LiquidStarlightCraftingRegistry extends CustomRecipeRegistry<Liquid
         this.register(new GrowCrystalSizeRecipe());
         this.register(new FormCelestialCrystalClusterRecipe());
         this.register(new FormGemCrystalClusterRecipe());
+        this.register(new MergeCrystalsRecipe());
     }
 
     @Nullable

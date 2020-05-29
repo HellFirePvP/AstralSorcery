@@ -1,0 +1,23 @@
+{
+	"Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "astralsorcery:block/ritual_link",
+		"texture2": "astralsorcery:block/ritual_link_glass"
+	},
+	"elements": [
+		{
+			"__comment": "Element",
+			"from": [ 6, 2, 6 ],
+			"to": [ 10, 12, 10 ],
+			"faces": {
+				"down": { "uv": [ 12, 0, 16, 4 ], "texture": "#texture2" },
+				"north": { "uv": [ 8, 0, 12, 10 ], "texture": "#texture2" },
+				"south": { "uv": [ 0, 0, 4, 10 ], "texture": "#texture2" },
+				"west": { "uv": [ 12, 0, 16, 10 ], "texture": "#texture2" },
+				"east": { "uv": [ 4, 0, 8, 10 ], "texture": "#texture2" }
+			}
+		}
+	]
+}

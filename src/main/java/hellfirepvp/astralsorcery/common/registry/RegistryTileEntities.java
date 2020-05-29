@@ -62,11 +62,13 @@ public class RegistryTileEntities {
         ClientRegistry.bindTileEntitySpecialRenderer(TileAltar.class, new RenderAltar());
         ClientRegistry.bindTileEntitySpecialRenderer(TileAttunementAltar.class, new RenderAttunementAltar());
         ClientRegistry.bindTileEntitySpecialRenderer(TileChalice.class, new RenderChalice());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileCollectorCrystal.class, new RenderCollectorCrystal());
         ClientRegistry.bindTileEntitySpecialRenderer(TileInfuser.class, new RenderInfuser());
         ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderLens());
         ClientRegistry.bindTileEntitySpecialRenderer(TileObservatory.class, new RenderObservatory());
         ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderPrism());
         ClientRegistry.bindTileEntitySpecialRenderer(TileRefractionTable.class, new RenderRefractionTable());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileRitualPedestal.class, new RenderRitualPedestal());
         ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
         ClientRegistry.bindTileEntitySpecialRenderer(TileTelescope.class, new RenderTelescope());
         ClientRegistry.bindTileEntitySpecialRenderer(TileTranslucentBlock.class, new RenderTranslucentBlock());

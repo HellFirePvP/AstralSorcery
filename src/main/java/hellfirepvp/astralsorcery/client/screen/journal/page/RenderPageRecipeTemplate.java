@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -82,12 +83,19 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         if (!expected.isEmpty()) {
             TextureHelper.bindBlockAtlas();
 
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(offsetX, offsetY, zLevel + 60);
-            GlStateManager.scaled(scale, scale, scale);
-            RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), expected, 0, 0, null);
+            this.renderItemStack(offsetX, offsetY, zLevel, scale, expected);
             this.thisFrameInputStacks.put(new Rectangle((int) offsetX, (int) offsetY, (int) (16 * scale), (int) (16 * scale)), new Tuple<>(expected, ingredient));
-            GlStateManager.popMatrix();
+        }
+    }
+
+    public void renderExpectedIngredientInput(float offsetX, float offsetY, float zLevel, double scale, long tickOffset, List<ItemStack> displayOptions) {
+        int mod = (int) (((ClientScheduler.getClientTick() + tickOffset) / 20L) % displayOptions.size());
+        ItemStack expected = displayOptions.get(MathHelper.clamp(mod, 0, displayOptions.size() - 1));
+        if (!expected.isEmpty()) {
+            TextureHelper.bindBlockAtlas();
+
+            this.renderItemStack(offsetX, offsetY, zLevel, scale, expected);
+            this.thisFrameInputStacks.put(new Rectangle((int) offsetX, (int) offsetY, (int) (16 * scale), (int) (16 * scale)), new Tuple<>(expected, null));
         }
     }
 
@@ -114,13 +122,17 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         if (!stack.isEmpty()) {
             TextureHelper.bindBlockAtlas();
 
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(offsetX, offsetY, zLevel + 60);
-            GlStateManager.scaled(scale, scale, scale);
-            RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), stack, 0, 0, null);
+            this.renderItemStack(offsetX, offsetY, zLevel, scale, stack);
             this.thisFrameOuputStack = new Tuple<>(new Rectangle((int) offsetX, (int) offsetY, (int) (16 * scale), (int) (16 * scale)), stack);
-            GlStateManager.popMatrix();
         }
+    }
+
+    protected void renderItemStack(float offsetX, float offsetY, float zLevel, double scale, ItemStack stack) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translated(offsetX, offsetY, zLevel + 60);
+        GlStateManager.scaled(scale, scale, scale);
+        RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), stack, 0, 0, null);
+        GlStateManager.popMatrix();
     }
 
     public boolean handleRecipeNameCopyClick(double mouseX, double mouseZ, SimpleAltarRecipe recipe) {
@@ -167,21 +179,23 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         this.thisFrameInfoStar = RenderingDrawUtils.drawInfoStar(offsetX + 140, offsetY + 20, zLevel, 15F, pTicks);
     }
 
-    public void renderRequiredConstellation(float offsetX, float offsetY, float zLevel, SimpleAltarRecipe altarRecipe) {
-        if (altarRecipe.getFocusConstellation() != null) {
-            IConstellation focus = altarRecipe.getFocusConstellation();
+    public void renderRequiredConstellation(float offsetX, float offsetY, float zLevel, @Nullable IConstellation constellation) {
+        if (constellation != null) {
             GlStateManager.disableAlphaTest();
-            RenderingConstellationUtils.renderConstellationIntoGUI(new Color(0xEEEEEE), focus,
+            RenderingConstellationUtils.renderConstellationIntoGUI(new Color(0xEEEEEE), constellation,
                     Math.round(offsetX + 30), Math.round(offsetY + 78), zLevel,
                     125, 125, 2F, () -> 0.4F, true, false);
             GlStateManager.enableAlphaTest();
         }
     }
 
-    public void renderInfoStarTooltips(float offsetX, float offsetY, float mouseX, float mouseY, SimpleAltarRecipe altarRecipe) {
-        List<ITextComponent> toolTip = new LinkedList<>();
-        addInfoTooltip(altarRecipe, toolTip);
+    public void renderInfoStarTooltips(float offsetX, float offsetY, float mouseX, float mouseY, Consumer<List<ITextComponent>> tooltipProvider) {
+        if (this.thisFrameInfoStar == null) {
+            return;
+        }
 
+        List<ITextComponent> toolTip = new LinkedList<>();
+        tooltipProvider.accept(toolTip);
         if (!toolTip.isEmpty() && this.thisFrameInfoStar.contains(mouseX, mouseY)) {
             GlStateManager.disableDepthTest();
             RenderingDrawUtils.renderBlueTooltipComponents((int) offsetX, (int) offsetY, toolTip, RenderablePage.getFontRenderer(), false);
@@ -200,7 +214,7 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         }
     }
 
-    protected void addInfoTooltip(SimpleAltarRecipe altarRecipe, List<ITextComponent> toolTip) {
+    protected void addAltarRecipeTooltip(SimpleAltarRecipe altarRecipe, List<ITextComponent> toolTip) {
         if (altarRecipe.getStarlightRequirement() > 0) {
             AltarType highestPossible = null;
             ProgressionTier reached = ResearchHelper.getClientProgress().getTierReached();
@@ -214,24 +228,26 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
                 long indexSel = (ClientScheduler.getClientTick() / 30) % (highestPossible.ordinal() + 1);
                 AltarType typeSelected = AltarType.values()[((int) indexSel)];
                 ITextComponent itemName = typeSelected.getAltarItemRepresentation().getDisplayName();
-                ITextComponent starlightRequired = getStarlightAmountDescription(itemName, altarRecipe.getStarlightRequirement(), typeSelected.getStarlightCapacity());
-                ITextComponent starlightRequirementDescription = new TranslationTextComponent("astralsorcery.journal.recipe.starlight.desc");
+                ITextComponent starlightRequired = getAltarStarlightAmountDescription(itemName, altarRecipe.getStarlightRequirement(), typeSelected.getStarlightCapacity());
+                ITextComponent starlightRequirementDescription = new TranslationTextComponent("astralsorcery.journal.recipe.altar.starlight.desc");
 
                 toolTip.add(starlightRequirementDescription);
                 toolTip.add(starlightRequired);
             }
         }
         if (altarRecipe instanceof AltarUpgradeRecipe) {
-            toolTip.add(new TranslationTextComponent("astralsorcery.journal.recipe.upgrade"));
-        }
-        if (altarRecipe.getFocusConstellation() != null) {
-            toolTip.add(new TranslationTextComponent("astralsorcery.journal.recipe.constellation",
-                    altarRecipe.getFocusConstellation().getConstellationName()));
+            toolTip.add(new TranslationTextComponent("astralsorcery.journal.recipe.altar.upgrade"));
         }
     }
 
-    protected ITextComponent getStarlightAmountDescription(ITextComponent altarName, float amountRequired, float maxAmount) {
-        String base = "astralsorcery.journal.recipe.starlight.";
+    protected void addConstellationInfoTooltip(@Nullable IConstellation cst, List<ITextComponent> toolTip) {
+        if (cst != null) {
+            toolTip.add(new TranslationTextComponent("astralsorcery.journal.recipe.constellation", cst.getConstellationName()));
+        }
+    }
+
+    protected ITextComponent getAltarStarlightAmountDescription(ITextComponent altarName, float amountRequired, float maxAmount) {
+        String base = "astralsorcery.journal.recipe.altar.starlight.";
         float perc = amountRequired / maxAmount;
         if (perc <= 0.1) {
             base += "lowest";
@@ -248,9 +264,23 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         } else {
             base += "highest";
         }
-        return new TranslationTextComponent("astralsorcery.journal.recipe.starlight.format",
+        return new TranslationTextComponent("astralsorcery.journal.recipe.altar.starlight.format",
                 altarName,
                 new TranslationTextComponent(base));
+    }
+
+    protected ITextComponent getInfuserChanceDescription(float chance) {
+        String base = "astralsorcery.journal.recipe.infusion.chance.";
+        if (chance <= 0.3) {
+            base += "low";
+        } else if (chance <= 0.7) {
+            base += "average";
+        } else if (chance < 1) {
+            base += "high";
+        } else {
+            base += "always";
+        }
+        return new TranslationTextComponent(base);
     }
 
     protected void addStackTooltip(float mouseX, float mouseY, ResourceLocation recipeName, List<ITextComponent> tooltip) {

@@ -1,10 +1,10 @@
 {
-  "parent": "astralsorcery:block/celestial_crystal_cluster_0",
+  "parent": "astralsorcery:block/celestial_crystal_cluster_0_all",
   "overrides": [
-    { "predicate": { "stage": 0.0 }, "model": "astralsorcery:block/celestial_crystal_cluster_0" },
-    { "predicate": { "stage": 0.2 }, "model": "astralsorcery:block/celestial_crystal_cluster_1" },
-    { "predicate": { "stage": 0.4 }, "model": "astralsorcery:block/celestial_crystal_cluster_2" },
-    { "predicate": { "stage": 0.6 }, "model": "astralsorcery:block/celestial_crystal_cluster_3" },
-    { "predicate": { "stage": 0.8 }, "model": "astralsorcery:block/celestial_crystal_cluster_4" }
+    { "predicate": { "stage": 0.0 }, "model": "astralsorcery:block/celestial_crystal_cluster_0_all" },
+    { "predicate": { "stage": 0.2 }, "model": "astralsorcery:block/celestial_crystal_cluster_1_all" },
+    { "predicate": { "stage": 0.4 }, "model": "astralsorcery:block/celestial_crystal_cluster_2_all" },
+    { "predicate": { "stage": 0.6 }, "model": "astralsorcery:block/celestial_crystal_cluster_3_all" },
+    { "predicate": { "stage": 0.8 }, "model": "astralsorcery:block/celestial_crystal_cluster_4_all" }
   ]
 }

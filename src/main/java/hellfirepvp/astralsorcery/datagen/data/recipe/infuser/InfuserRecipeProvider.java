@@ -194,6 +194,7 @@ public class InfuserRecipeProvider {
                 .setOutput(ItemsAS.INFUSED_CRYSTAL_AXE)
                 .setConsumeMultipleFluids(true)
                 .setAcceptChaliceInput(false)
+                .setCopyNBTToOutputs(true)
                 .setFluidConsumptionChance(1F)
                 .build(registrar);
 
@@ -203,6 +204,7 @@ public class InfuserRecipeProvider {
                 .setOutput(ItemsAS.INFUSED_CRYSTAL_PICKAXE)
                 .setConsumeMultipleFluids(true)
                 .setAcceptChaliceInput(false)
+                .setCopyNBTToOutputs(true)
                 .setFluidConsumptionChance(1F)
                 .build(registrar);
 
@@ -212,6 +214,7 @@ public class InfuserRecipeProvider {
                 .setOutput(ItemsAS.INFUSED_CRYSTAL_SHOVEL)
                 .setConsumeMultipleFluids(true)
                 .setAcceptChaliceInput(false)
+                .setCopyNBTToOutputs(true)
                 .setFluidConsumptionChance(1F)
                 .build(registrar);
 
@@ -221,6 +224,7 @@ public class InfuserRecipeProvider {
                 .setOutput(ItemsAS.INFUSED_CRYSTAL_SWORD)
                 .setConsumeMultipleFluids(true)
                 .setAcceptChaliceInput(false)
+                .setCopyNBTToOutputs(true)
                 .setFluidConsumptionChance(1F)
                 .build(registrar);
     }

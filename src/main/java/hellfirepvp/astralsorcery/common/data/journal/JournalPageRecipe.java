@@ -63,7 +63,7 @@ public class JournalPageRecipe implements JournalPage {
         });
     }
 
-    public static JournalPageRecipe fromOutput(Predicate<ItemStack> outputTest) {
+    public static JournalPageRecipe fromOutputPreferAltarRecipes(Predicate<ItemStack> outputTest) {
         return new JournalPageRecipe(() -> {
             RecipeManager mgr = RecipeHelper.getRecipeManager();
             if (mgr == null) {
@@ -83,6 +83,35 @@ public class JournalPageRecipe implements JournalPage {
             recipe = mgr.getRecipes(IRecipeType.CRAFTING).values()
                     .stream()
                     .filter(r -> outputTest.test(r.getRecipeOutput()))
+                    .findFirst()
+                    .orElse(null);
+            if (recipe != null) {
+                return recipe;
+            }
+            return null;
+        });
+    }
+
+    public static JournalPageRecipe fromOutputPreferVanillaRecipes(Predicate<ItemStack> outputTest) {
+        return new JournalPageRecipe(() -> {
+            RecipeManager mgr = RecipeHelper.getRecipeManager();
+            if (mgr == null) {
+                throw new IllegalStateException("Not connected to a server, but calling GUI code?");
+            }
+
+            IRecipe<?> recipe = mgr.getRecipes(IRecipeType.CRAFTING).values()
+                    .stream()
+                    .filter(r -> outputTest.test(r.getRecipeOutput()))
+                    .findFirst()
+                    .orElse(null);
+            if (recipe != null) {
+                return recipe;
+            }
+
+            recipe = mgr.getRecipes(RecipeTypesAS.TYPE_ALTAR.getType()).values()
+                    .stream()
+                    .map(r -> (SimpleAltarRecipe) r)
+                    .filter(r -> outputTest.test(r.getOutputForRender(Collections.emptyList())))
                     .findFirst()
                     .orElse(null);
             if (recipe != null) {

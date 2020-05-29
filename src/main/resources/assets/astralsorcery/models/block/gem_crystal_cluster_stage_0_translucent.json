@@ -1,0 +1,23 @@
+{
+	"comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+    "ambientocclusion": false,
+	"parent": "block/block",
+	"textures": {
+		"particle": "astralsorcery:block/crystal/gem_cluster_stage_0_crystal",
+		"texture": "astralsorcery:block/crystal/gem_cluster_stage_0_crystal"
+	},
+	"elements": [ 	 
+		{
+			"from": [ 7, 0, 7 ],
+			"to": [ 9, 6, 9 ],
+			"faces": {
+				"down": { "uv": [ 14, 0, 16, 2 ], "texture": "#texture" },
+				"up": { "uv": [ 14, 0, 16, 2 ], "texture": "#texture" },
+				"north": { "uv": [ 2, 10, 4, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 6, 10, 8, 16 ], "texture": "#texture" },
+				"west": { "uv": [ 0, 10, 2, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 4, 10, 6, 16 ], "texture": "#texture" }
+			}
+		}
+	]
+}

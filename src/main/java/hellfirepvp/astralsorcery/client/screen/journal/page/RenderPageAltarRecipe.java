@@ -60,7 +60,7 @@ public class RenderPageAltarRecipe extends RenderPageRecipeTemplate {
         this.renderExpectedItemStackOutput(offsetX + 78, offsetY + 25, zLevel, 1.4F,
                 this.recipe.getOutputForRender(Collections.emptyList()));
         this.renderInfoStar(offsetX, offsetY, zLevel, pTicks);
-        this.renderRequiredConstellation(offsetX, offsetY, zLevel, this.recipe);
+        this.renderRequiredConstellation(offsetX, offsetY, zLevel, this.recipe.getFocusConstellation());
 
         int widthShift  = (AltarRecipeGrid.GRID_SIZE - recipe.getInputs().getWidth())  / 2;
         int heightShift = (AltarRecipeGrid.GRID_SIZE - recipe.getInputs().getHeight()) / 2;
@@ -96,6 +96,9 @@ public class RenderPageAltarRecipe extends RenderPageRecipeTemplate {
     @Override
     public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
         this.renderHoverTooltips(mouseX, mouseY, this.recipe.getId());
-        this.renderInfoStarTooltips(offsetX, offsetY, mouseX, mouseY, this.recipe);
+        this.renderInfoStarTooltips(offsetX, offsetY, mouseX, mouseY, (toolTip) -> {
+            this.addAltarRecipeTooltip(this.recipe, toolTip);
+            this.addConstellationInfoTooltip(this.recipe.getFocusConstellation(), toolTip);
+        });
     }
 }

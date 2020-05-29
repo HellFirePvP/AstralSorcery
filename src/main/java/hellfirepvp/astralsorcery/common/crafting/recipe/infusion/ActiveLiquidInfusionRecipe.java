@@ -235,8 +235,12 @@ public class ActiveLiquidInfusionRecipe {
     public void createItemOutputs(TileInfuser infuser, Consumer<ItemStack> output) {
         Consumer<ItemStack> informer = stack -> ResearchManager.informCraftedInfuser(infuser, this, stack);
 
+        ItemStack inputStack = infuser.getItemInput();
         Consumer<ItemStack> handleCrafted = informer.andThen(output);
-        handleCrafted.accept(this.getRecipeToCraft().getOutput(infuser));
+        if (this.recipeToCraft.doesCopyNBTToOutputs()) {
+            handleCrafted = ((Consumer<ItemStack>) stack -> stack.setTag(inputStack.getTag())).andThen(handleCrafted);
+        }
+        handleCrafted.accept(this.getRecipeToCraft().getOutput(inputStack));
         this.getRecipeToCraft().onRecipeCompletion(infuser);
     }
 

@@ -37,6 +37,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -127,7 +128,7 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
 
     @Override
     public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
-        return VoxelShapes.fullCube();
+        return SHAPE;
     }
 
     @Override
@@ -151,6 +152,11 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
     }
 
     @Override
+    public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
+        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
+    }
+
+    @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         TileCollectorCrystal tcc = MiscUtils.getTileAt(world, pos, TileCollectorCrystal.class, true);
         Item i = stack.getItem();
@@ -165,17 +171,5 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
         }
 
         super.onBlockPlacedBy(world, pos, state, entity, stack);
-    }
-
-    @Override
-    public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBlockHarvested(world, pos, state, player);
-
-        TileCollectorCrystal tcc = MiscUtils.getTileAt(world, pos, TileCollectorCrystal.class, true);
-        if (tcc != null && !world.isRemote()) {
-            //TODO collector burst effect
-            //PktPlayEffect pkt = new PktPlayEffect(null);
-            //PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 32));
-        }
     }
 }
