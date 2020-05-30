@@ -21,6 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -57,6 +58,7 @@ public class IngredientHelper {
         if (stacks.length == 0) {
             return null;
         }
+        List<Tag<Item>> applicableTags = new ArrayList<>();
         ItemStack first = stacks[0];
         for (ResourceLocation key : first.getItem().getTags()) {
             Tag<Item> wrapper = new ItemTags.Wrapper(key);
@@ -69,10 +71,13 @@ public class IngredientHelper {
                 }
             }
             if (containsAllItems) {
-                return wrapper;
+                applicableTags.add(wrapper);
             }
         }
-        return null;
+
+        return applicableTags.stream()
+                .max(Comparator.comparingInt(tag -> tag.getAllElements().size()))
+                .orElse(null);
     }
 
 }

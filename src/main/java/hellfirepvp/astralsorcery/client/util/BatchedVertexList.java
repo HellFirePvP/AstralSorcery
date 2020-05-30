@@ -93,5 +93,7 @@ public class BatchedVertexList {
         if (this.vbo != null) {
             this.vbo.deleteGlBuffers();
         }
+
+        this.initialized = false;
     }
 }

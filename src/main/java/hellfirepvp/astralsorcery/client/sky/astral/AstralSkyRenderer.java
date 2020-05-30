@@ -97,7 +97,10 @@ public class AstralSkyRenderer implements IRenderHandler {
 
     @Override
     public void render(int ticks, float pTicks, ClientWorld world, Minecraft mc) {
-        if (!initialized && !AssetLibrary.isReloading()) {
+        if (AssetLibrary.isReloading()) {
+            return;
+        }
+        if (!initialized) {
             initialize();
         }
 

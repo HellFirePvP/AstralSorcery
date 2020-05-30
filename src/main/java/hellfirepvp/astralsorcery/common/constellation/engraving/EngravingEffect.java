@@ -64,8 +64,10 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
     }
 
     public ItemStack applyEffects(@Nonnull ItemStack stack, float percent, Random rand) {
+        boolean hasExistingModifiers = !DynamicModifierHelper.getStaticModifiers(stack).isEmpty();
+
         for (ApplicableEffect effect : this.effects) {
-            if (effect.supports(stack)) {
+            if (effect.supports(stack) && (!(effect instanceof ModifierEffect) || !hasExistingModifiers)) {
                 stack = effect.apply(stack, percent, rand);
             }
         }
@@ -87,6 +89,7 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
         private final float min, max;
 
         private final List<EnchantmentType> applicableTypes = new ArrayList<>();
+        private boolean formatToInteger = false;
 
         public ModifierEffect(Supplier<PerkAttributeType> modifier, ModifierType type, float min, float max) {
             this.modifier = modifier;
@@ -97,6 +100,11 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
         public ModifierEffect addApplicableType(EnchantmentType type) {
             this.applicableTypes.add(type);
+            return this;
+        }
+
+        public ModifierEffect formatResultAsInteger() {
+            this.formatToInteger = true;
             return this;
         }
 
@@ -121,12 +129,12 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
             if (!supports(stack)) {
                 return stack;
             }
-            if (!DynamicModifierHelper.getStaticModifiers(stack).isEmpty()) {
-                return stack;
-            }
 
-            float value = this.min + percent * (Math.min(0, this.max - this.min));
-            DynamicModifierHelper.addModifier(stack, UUID.randomUUID(), this.modifier.get(), this.type, value);
+            float rValue = percent * (Math.min(0, this.max - this.min));
+            if (this.formatToInteger) {
+                rValue = Math.round(rValue);
+            }
+            DynamicModifierHelper.addModifier(stack, UUID.randomUUID(), this.modifier.get(), this.type, this.min + rValue);
             return stack;
         }
     }
