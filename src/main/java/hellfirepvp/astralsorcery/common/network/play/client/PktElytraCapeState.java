@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.play.client;
 
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectVicio;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
@@ -73,8 +74,11 @@ public class PktElytraCapeState extends ASPacket<PktElytraCapeState> {
                     return;
                 }
 
-                boolean hasFlightPerk = ResearchHelper.getProgress(player, LogicalSide.SERVER)
-                        .hasPerkEffect(p -> p instanceof KeyMantleFlight);
+                PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+                boolean hasFlightPerk = progress.hasPerkEffect(p -> p instanceof KeyMantleFlight);
+                if (!progress.doPerkAbilities()) {
+                    hasFlightPerk = false;
+                }
 
                 switch (packet.type) {
                     case 0: {
