@@ -56,17 +56,9 @@ public class AlignmentChargeHandler implements ITickHandler {
         maximumCharge.computeIfAbsent(side, s -> new HashMap<>()).put(player.getUniqueID(), cap);
     }
 
-    public float getMaximumCharge(PlayerEntity player) {
-        return this.getMaximumCharge(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER);
-    }
-
     public float getMaximumCharge(PlayerEntity player, LogicalSide side) {
         return maximumCharge.computeIfAbsent(side, s -> new HashMap<>())
                 .computeIfAbsent(player.getUniqueID(), uuid -> MAX_CHARGE);
-    }
-
-    public float getCurrentCharge(PlayerEntity player) {
-        return this.getCurrentCharge(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER);
     }
 
     public float getCurrentCharge(PlayerEntity player, LogicalSide side) {
@@ -75,10 +67,6 @@ public class AlignmentChargeHandler implements ITickHandler {
         }
         return currentCharge.computeIfAbsent(side, s -> new HashMap<>())
                 .computeIfAbsent(player.getUniqueID(), uuid -> MAX_CHARGE);
-    }
-
-    public float getFilledPercentage(PlayerEntity player) {
-        return this.getFilledPercentage(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER);
     }
 
     public float getFilledPercentage(PlayerEntity player, LogicalSide side) {
@@ -90,20 +78,12 @@ public class AlignmentChargeHandler implements ITickHandler {
         return MathHelper.clamp(current / max, 0F, 1F);
     }
 
-    public boolean hasCharge(PlayerEntity player, float charge) {
-        return this.hasCharge(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER, charge);
-    }
-
     public boolean hasCharge(PlayerEntity player, LogicalSide side, float charge) {
         if (player.isCreative()) {
             return true;
         }
         float current = this.getCurrentCharge(player, side);
         return current >= charge;
-    }
-
-    public boolean drainCharge(PlayerEntity player, float charge, boolean simulate) {
-        return this.drainCharge(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER, charge, simulate);
     }
 
     public boolean drainCharge(PlayerEntity player, LogicalSide side, float charge, boolean simulate) {

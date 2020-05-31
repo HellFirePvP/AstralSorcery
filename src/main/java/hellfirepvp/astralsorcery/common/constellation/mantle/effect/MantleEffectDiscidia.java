@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
@@ -29,6 +30,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -83,14 +85,19 @@ public class MantleEffectDiscidia extends MantleEffect {
             if (attacked instanceof ServerPlayerEntity && MiscUtils.isPlayerFakeMP((ServerPlayerEntity) attacked)) {
                 return;
             }
+            PlayerEntity player = (PlayerEntity) attacker;
 
-            MantleEffectDiscidia eff = ItemMantle.getEffect((LivingEntity) attacker, ConstellationsAS.discidia);
+            MantleEffectDiscidia eff = ItemMantle.getEffect(player, ConstellationsAS.discidia);
             if (eff != null) {
                 EventFlags.MANTLE_DISCIDIA_ADDED.executeWithFlag(() -> {
-                    float added = this.getLastAttackDamage((LivingEntity) attacker);
+                    float added = this.getLastAttackDamage(player);
 
-                    DamageUtil.attackEntityFrom(attacked, CommonProxy.DAMAGE_SOURCE_STELLAR, added / 2F);
-                    DamageUtil.attackEntityFrom(attacked, DamageSource.causePlayerDamage((PlayerEntity) attacker), added / 2F, attacker);
+                    if (added > 0.1F && AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAttack.get())) {
+                        DamageUtil.attackEntityFrom(attacked, CommonProxy.DAMAGE_SOURCE_STELLAR, added / 2F);
+                        DamageUtil.attackEntityFrom(attacked, DamageSource.causePlayerDamage(player), added / 2F, player);
+
+                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAttack.get(), false);
+                    }
                 });
             }
         }
@@ -126,7 +133,11 @@ public class MantleEffectDiscidia extends MantleEffect {
 
         private final double defaultDamageMultiplier = 1.5F;
 
+        private final int defaultChargeCostPerAttack = 40;
+
         public ForgeConfigSpec.DoubleValue damageMultiplier;
+
+        public ForgeConfigSpec.IntValue chargeCostPerAttack;
 
         public DiscidiaConfig() {
             super("discidia");
@@ -140,6 +151,11 @@ public class MantleEffectDiscidia extends MantleEffect {
                     .comment("Sets the multiplier for how much of the received damage is converted into additional damage.")
                     .translation(translationKey("damageMultiplier"))
                     .defineInRange("damageMultiplier", this.defaultDamageMultiplier, 0.0, 100.0);
+
+            this.chargeCostPerAttack = cfgBuilder
+                    .comment("Set the amount alignment charge consumed per attack enhanced by the mantle")
+                    .translation(translationKey("chargeCostPerAttack"))
+                    .defineInRange("chargeCostPerAttack", this.defaultChargeCostPerAttack, 0, 1000);
         }
     }
 }

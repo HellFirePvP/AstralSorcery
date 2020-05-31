@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.entity.EntityFlare;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
@@ -32,6 +33,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,13 +74,16 @@ public class MantleEffectBootes extends MantleEffect {
         World world = player.getEntityWorld();
         List<EntityFlare> flares = gatherFlares(world, mantle);
         if (flares.size() < CONFIG.maxFlareCount.get()) {
-            if (player.ticksExisted % 80 == 0 && rand.nextInt(4) == 0) {
-                EntityFlare flare = EntityTypesAS.FLARE.create(player.getEntityWorld());
-                flare.setPosition(player.posX, player.posY, player.posZ);
-                flare.setFollowingTarget(player);
-                world.addEntity(flare);
-
-                flares.add(flare);
+            if (player.ticksExisted % 80 == 0) {
+                if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerFlare.get()) && rand.nextInt(4) == 0) {
+                    EntityFlare flare = EntityTypesAS.FLARE.create(player.getEntityWorld());
+                    flare.setPosition(player.posX, player.posY, player.posZ);
+                    flare.setFollowingTarget(player);
+                    if (world.addEntity(flare)) {
+                        flares.add(flare);
+                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerFlare.get(), false);
+                    }
+                }
             }
         }
 
@@ -171,7 +176,11 @@ public class MantleEffectBootes extends MantleEffect {
 
         private final int defaultMaxFlareCount = 3;
 
+        private final int defaultChargeCostPerFlare = 400;
+
         public ForgeConfigSpec.IntValue maxFlareCount;
+
+        public ForgeConfigSpec.IntValue chargeCostPerFlare;
 
         public BootesConfig() {
             super("bootes");
@@ -185,6 +194,11 @@ public class MantleEffectBootes extends MantleEffect {
                     .comment("Defines the maximum flare count the mantle can summon and keep following the wearer.")
                     .translation(translationKey("maxFlareCount"))
                     .defineInRange("maxFlareCount", this.defaultMaxFlareCount, 0, 6);
+
+            this.chargeCostPerFlare = cfgBuilder
+                    .comment("Set the amount alignment charge consumed per created flare")
+                    .translation(translationKey("chargeCostPerFlare"))
+                    .defineInRange("chargeCostPerFlare", this.defaultChargeCostPerFlare, 0, 1000);
         }
     }
 }

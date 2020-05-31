@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
@@ -21,6 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,7 +56,7 @@ public class MantleEffectHorologium extends MantleEffect {
         super.tickClient(player);
 
         if (!player.getCooldownTracker().hasCooldown(ItemsAS.MANTLE)) {
-            this.playCapeSparkles(player, 0.35F);
+            this.playCapeSparkles(player, 0.4F);
         } else {
             this.playCapeSparkles(player, 0.2F);
         }
@@ -67,7 +69,8 @@ public class MantleEffectHorologium extends MantleEffect {
                 !event.getSource().isFireDamage()) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 
-            if (!player.getCooldownTracker().hasCooldown(ItemsAS.MANTLE)) {
+            if (!player.getCooldownTracker().hasCooldown(ItemsAS.MANTLE) &&
+                    AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerFreeze.get())) {
                 TimeStopController.freezeWorldAt(
                         TimeStopZone.EntityTargetController.allExcept(player),
                         player.getEntityWorld(),
@@ -75,6 +78,7 @@ public class MantleEffectHorologium extends MantleEffect {
                         CONFIG.effectRange.get().floatValue(),
                         CONFIG.effectDuration.get());
                 player.getCooldownTracker().setCooldown(ItemsAS.MANTLE, CONFIG.cooldown.get());
+                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerFreeze.get(), false);
             }
         }
     }
@@ -90,9 +94,14 @@ public class MantleEffectHorologium extends MantleEffect {
         private final int defaultEffectDuration = 180;
         private final int defaultCooldown = 1000;
 
+        private final int defaultChargeCostPerFreeze = 400;
+
         public ForgeConfigSpec.DoubleValue effectRange;
         public ForgeConfigSpec.IntValue effectDuration;
         public ForgeConfigSpec.IntValue cooldown;
+
+        public ForgeConfigSpec.IntValue chargeCostPerFreeze;
+
 
         public HorologiumConfig() {
             super("horologium");
@@ -110,11 +119,15 @@ public class MantleEffectHorologium extends MantleEffect {
                     .comment("Defines the duration of the time-freeze bubble.")
                     .translation(translationKey("effectDuration"))
                     .defineInRange("effectDuration", this.defaultEffectDuration, 40, 1000);
-
             this.cooldown = cfgBuilder
                     .comment("Defines the cooldown for the time-freeze effect after it triggered (should be longer than duration maybe)")
                     .translation(translationKey("cooldown"))
                     .defineInRange("cooldown", this.defaultCooldown, 40, 20_000);
+
+            this.chargeCostPerFreeze = cfgBuilder
+                    .comment("Set the amount alignment charge consumed per created time stop zone")
+                    .translation(translationKey("chargeCostPerFreeze"))
+                    .defineInRange("chargeCostPerFreeze", this.defaultChargeCostPerFreeze, 0, 1000);
         }
     }
 }
