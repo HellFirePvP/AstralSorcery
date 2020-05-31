@@ -118,6 +118,7 @@ public class RegistryTextures {
         TEX_GRAPPLING_HOOK          = loadTexture(EFFECT, "grappling_hook");
         TEX_AREA_OF_EFFECT_CUBE     = loadTexture(EFFECT, "area_of_effect_cube");
         TEX_HALO_INFUSION           = loadTexture(EFFECT, "halo_infusion");
+        TEX_HALO_RITUAL             = loadTexture(EFFECT, "halo_ritual");
 
         TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");

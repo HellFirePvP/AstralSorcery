@@ -116,6 +116,7 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GRAPPLING_HOOK;
     public static AbstractRenderableTexture TEX_AREA_OF_EFFECT_CUBE;
     public static AbstractRenderableTexture TEX_HALO_INFUSION;
+    public static AbstractRenderableTexture TEX_HALO_RITUAL;
 
     public static AbstractRenderableTexture TEX_LIGHTNING_PART;
     public static AbstractRenderableTexture TEX_LIGHTBEAM;

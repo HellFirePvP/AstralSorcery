@@ -8,18 +8,24 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.AnimalHelper;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ConstellationEffectEntityCollect;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.EffectsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.entity.LivingEntity;
@@ -27,6 +33,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
@@ -50,8 +58,32 @@ public class CEffectBootes extends ConstellationEffectEntityCollect<LivingEntity
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float alphaMultiplier, boolean extended) {
-        //TODO effects
+        if (rand.nextInt(3) == 0) {
+            ConstellationEffectProperties prop = this.createProperties(pedestal.getMirrorCount());
+
+            Vector3 playAt = new Vector3(pos).add(0.5, 0.5, 0.5).add(
+                    rand.nextFloat() * (prop.getSize() / 2F) * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * (prop.getSize() / 4F),
+                    rand.nextFloat() * (prop.getSize() / 2F) * (rand.nextBoolean() ? 1 : -1));
+            Vector3 motion = Vector3.random().multiply(0.015);
+
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(playAt)
+                    .setMotion(motion)
+                    .color(VFXColorFunction.constant(ColorsAS.CONSTELLATION_BOOTES))
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .setScaleMultiplier(0.5F)
+                    .setMaxAge(30 + rand.nextInt(20));
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(playAt)
+                    .setMotion(motion.clone().negate())
+                    .color(VFXColorFunction.constant(ColorsAS.CONSTELLATION_BOOTES))
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .setScaleMultiplier(0.5F)
+                    .setMaxAge(30 + rand.nextInt(20));
+        }
     }
 
     @Override
@@ -86,7 +118,7 @@ public class CEffectBootes extends ConstellationEffectEntityCollect<LivingEntity
                         }
                     }
                     return didEffectFlag;
-                });
+                }, false);
             }
         }
 

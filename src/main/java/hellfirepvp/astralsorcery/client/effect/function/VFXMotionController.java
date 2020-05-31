@@ -34,6 +34,28 @@ public interface VFXMotionController<T extends EntityVisualFX> {
         return new VectorTarget<>(targetSupplier, velocityMultiplier);
     }
 
+    public static <T extends EntityVisualFX> VFXMotionController<T> accelerate(Supplier<Vector3> originalMotion) {
+        return new VFXMotionController<T>() {
+            @Nonnull
+            @Override
+            public Vector3 updateMotion(@Nonnull T fx, @Nonnull Vector3 motion) {
+                float perc = (float) fx.getAge() / (float) fx.getMaxAge();
+                return originalMotion.get().clone().multiply(perc);
+            }
+        };
+    }
+
+    public static <T extends EntityVisualFX> VFXMotionController<T> decelerate(Supplier<Vector3> originalMotion) {
+        return new VFXMotionController<T>() {
+            @Nonnull
+            @Override
+            public Vector3 updateMotion(@Nonnull T fx, @Nonnull Vector3 motion) {
+                float perc = 1F - ((float) fx.getAge() / (float) fx.getMaxAge());
+                return originalMotion.get().clone().multiply(perc);
+            }
+        };
+    }
+
     @Nonnull
     public Vector3 updateMotion(@Nonnull T fx, @Nonnull Vector3 motion);
 

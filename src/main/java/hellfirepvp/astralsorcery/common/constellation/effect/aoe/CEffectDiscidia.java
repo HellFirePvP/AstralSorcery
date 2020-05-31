@@ -8,18 +8,25 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXMotionController;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ConstellationEffectEntityCollect;
 import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegistry;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.DamageSourceUtil;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,6 +35,8 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
@@ -52,8 +61,24 @@ public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEnti
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float alphaMultiplier, boolean extended) {
-        //TODO effects
+        Vector3 playAt = new Vector3(pos).add(0.5, 0.5, 0.5);
+        if (pos.equals(pedestal.getPos())) {
+            playAt.add(
+                    rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 5,
+                    rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+        }
+        Vector3 motion = Vector3.random().setY(0).multiply(0.05);
+
+        EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                .spawn(playAt)
+                .alpha(VFXAlphaFunction.FADE_OUT)
+                .motion(VFXMotionController.decelerate(() -> motion))
+                .color(VFXColorFunction.constant(ColorsAS.CONSTELLATION_DISCIDIA))
+                .setScaleMultiplier(0.4F)
+                .setMaxAge(35);
     }
 
     @Override

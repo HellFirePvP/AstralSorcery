@@ -10,10 +10,13 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXSpritePlane;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationItem;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
@@ -110,6 +113,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     //client data
     private EffectIncrementer effectWork = new EffectIncrementer(64);
     private ConstellationEffect clientEffectInstance = null;
+    private Object ritualHaloEffect = null;
 
     public TileRitualPedestal() {
         super(TileEntityTypesAS.RITUAL_PEDESTAL);
@@ -235,7 +239,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                     properties.multiplySize(CrystalCalculations.getRitualEffectRangeFactor(this, attributes));
                 }
             }
-            return (float) properties.getSize();
+            return (float) properties.getSize() * 1.3F;
         }
         return 0;
     }
@@ -321,6 +325,35 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                 }
             }
 
+            if (this.ritualHaloEffect == null) {
+                this.ritualHaloEffect = EffectHelper.of(EffectTemplatesAS.TEXTURE_SPRITE)
+                        .spawn(new Vector3(this).add(0.5, 0.05, 0.5))
+                        .setSprite(SpritesAS.SPR_HALO_RITUAL)
+                        .setAxis(Vector3.RotAxis.Y_AXIS)
+                        .setNoRotation(25)
+                        .setScaleMultiplier(6.5F)
+                        .refresh(RefreshFunction.tileExistsAnd(this, (tile, effect) -> tile.isWorking() && !tile.getCurrentCrystal().isEmpty()));
+            }
+
+            if (this.ritualHaloEffect != null) {
+                FXSpritePlane effectPlane = ((FXSpritePlane) this.ritualHaloEffect);
+                EffectHelper.refresh(effectPlane, EffectTemplatesAS.TEXTURE_SPRITE);
+
+                float dayTimeMul = DayTimeHelper.getCurrentDaytimeDistribution(this.getWorld());
+                effectPlane.setAlphaMultiplier(Math.max(0.05F, dayTimeMul * 0.75F));
+            }
+
+            Vector3 offset = Vector3.random().setY(0).normalize().multiply(rand.nextFloat() * 4 * (rand.nextBoolean() ? 1 : -1));
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .setOwner(this.ownerUUID)
+                    .spawn(new Vector3(this).add(0.5, 0.02, 0.5).add(offset))
+                    .setAlphaMultiplier(1F)
+                    .setGravityStrength(-0.001F)
+                    .color(VFXColorFunction.constant(ritualConstellation.getConstellationColor()))
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .setScaleMultiplier(0.3F + rand.nextFloat() * 0.15F)
+                    .setMaxAge(25 + rand.nextInt(15));
+
             if (this.clientEffectInstance != null && !this.clientEffectInstance.getConstellation().equals(ritualConstellation)) {
                 this.clientEffectInstance = null;
             }
@@ -329,7 +362,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
             }
             if (this.clientEffectInstance != null) {
                 clientEffectInstance.playClientEffect(getWorld(), getPos(), this, percRunning, this.isFullyEnhanced());
-                if (this.ritualLinkTo != null) {
+                if (this.ritualLinkTo != null && getWorld().isBlockPresent(this.ritualLinkTo)) {
                     clientEffectInstance.playClientEffect(getWorld(), this.ritualLinkTo, this, percRunning, this.isFullyEnhanced());
                 }
             }

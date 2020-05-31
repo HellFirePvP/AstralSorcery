@@ -98,15 +98,6 @@ public class TimeStopEffectHelper {
                 .color(VFXColorFunction.WHITE)
                 .setScaleMultiplier(0.3F + rand.nextFloat() * 0.5F)
                 .setMaxAge(40 + rand.nextInt(20));
-
-        if (rand.nextFloat() < 0.9F) {
-            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                    .spawn(new Vector3(x, y, z))
-                    .alpha(VFXAlphaFunction.FADE_OUT)
-                    .color(VFXColorFunction.WHITE)
-                    .setScaleMultiplier(0.1F + rand.nextFloat() * 0.2F)
-                    .setMaxAge(30 + rand.nextInt(10));
-        }
     }
 
     @OnlyIn(Dist.CLIENT)

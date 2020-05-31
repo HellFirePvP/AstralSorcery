@@ -62,12 +62,14 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
     @OnlyIn(Dist.CLIENT)
     public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float alphaMultiplier, boolean extended) {
         if (rand.nextBoolean()) {
+            ConstellationEffectProperties prop = this.createProperties(pedestal.getMirrorCount());
+
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(new Vector3(
-                            pos.getX() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5,
-                            pos.getY() + rand.nextFloat() * 2 + 0.5,
-                            pos.getZ() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5))
-                    .setGravityStrength(-0.008F)
+                            pos.getX() + rand.nextFloat() * (prop.getSize() / 2F) * (rand.nextBoolean() ? 1 : -1) + 0.5,
+                            pos.getY() + rand.nextFloat() * (prop.getSize() / 4F) + 0.5,
+                            pos.getZ() + rand.nextFloat() * (prop.getSize() / 2F) * (rand.nextBoolean() ? 1 : -1) + 0.5))
+                    .setGravityStrength(-0.005F)
                     .setScaleMultiplier(0.45F)
                     .color(VFXColorFunction.constant(ColorsAS.RITUAL_CONSTELLATION_AEVITAS))
                     .setMaxAge(35);
@@ -104,7 +106,7 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
                     }
                 }
                 return changedFlag;
-            });
+            }, false);
         }
 
         if (this.findNewPosition(world, pos, properties) != null) changed = true;
