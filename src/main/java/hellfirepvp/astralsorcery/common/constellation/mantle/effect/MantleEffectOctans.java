@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
@@ -26,6 +27,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -78,8 +80,9 @@ public class MantleEffectOctans extends MantleEffect {
     private void handleUnderwaterBreakSpeed(PlayerEvent.BreakSpeed event) {
         PlayerEntity player = event.getPlayer();
         if (player.areEyesInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(player)) {
+            LogicalSide side = player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
             MantleEffectOctans octans = ItemMantle.getEffect(player, ConstellationsAS.octans);
-            if (octans != null) {
+            if (octans != null && AlignmentChargeHandler.INSTANCE.hasCharge(player, side, CONFIG.chargeCostPerBreakSpeed.get())) {
                 //Grab helmet
                 ItemStack existing = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
 
@@ -91,6 +94,7 @@ public class MantleEffectOctans extends MantleEffect {
                 //Recalc breakspeed
                 EventFlags.CHECK_UNDERWATER_BREAK_SPEED.executeWithFlag(() -> {
                     event.setNewSpeed(player.getDigSpeed(event.getState(), event.getPos()));
+                    AlignmentChargeHandler.INSTANCE.drainCharge(player, side, CONFIG.chargeCostPerBreakSpeed.get(), false);
                 });
 
                 //Reset helmet
@@ -130,7 +134,12 @@ public class MantleEffectOctans extends MantleEffect {
 
         private final double defaultHealPerTick = 0.01F;
 
+        private final int defaultChargeCostPerBreakSpeed = 30;
+
         public ForgeConfigSpec.DoubleValue healPerTick;
+
+        public ForgeConfigSpec.IntValue chargeCostPerBreakSpeed;
+
 
         public OctansConfig() {
             super("octans");
@@ -144,6 +153,11 @@ public class MantleEffectOctans extends MantleEffect {
                     .comment("Defines the amount of health that is healed while the wearer is in water. Can be set to 0 to disable this.")
                     .translation(translationKey("healPerTick"))
                     .defineInRange("healPerTick", this.defaultHealPerTick, 0.0, 5.0);
+
+            this.chargeCostPerBreakSpeed = cfgBuilder
+                    .comment("Set the amount alignment charge consumed per accelerated underwater block breaking")
+                    .translation(translationKey("chargeCostPerBreakSpeed"))
+                    .defineInRange("chargeCostPerBreakSpeed", this.defaultChargeCostPerBreakSpeed, 0, 1000);
         }
     }
 }

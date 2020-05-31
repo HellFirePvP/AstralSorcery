@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectEvorsio;
+import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
@@ -60,7 +61,7 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 17.02.2020 / 19:09
  */
-public class ItemMantle extends ArmorItem implements ItemDynamicColor, ConstellationBaseItem, EquipmentAttributeModifierProvider {
+public class ItemMantle extends ArmorItem implements ItemDynamicColor, ConstellationBaseItem, EquipmentAttributeModifierProvider, AlignmentChargeConsumer {
 
     private static final DynamicAttributeModifier EVORSIO_MANTLE_MINING_SIZE =
             new DynamicAttributeModifier(UUID.fromString("aae54b9d-e1c8-4e74-8ac6-efa06093bd1a"), PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, ModifierType.ADDITION, 2F);
@@ -181,7 +182,7 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
         if (stack.isEmpty()) {
             return null;
         }
-        return IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
+        return IConstellation.readFromNBT(NBTHelper.getPersistentData(stack), IConstellation.getDefaultSaveKey());
     }
 
     @Override
@@ -195,5 +196,10 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
             cst.writeToNBT(NBTHelper.getPersistentData(stack), IConstellation.getDefaultSaveKey());
         }
         return true;
+    }
+
+    @Override
+    public float getAlignmentChargeCost(PlayerEntity player, ItemStack stack) {
+        return 0;
     }
 }

@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
@@ -27,6 +28,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.awt.*;
 import java.util.Random;
@@ -69,8 +71,11 @@ public class MantleEffectArmara extends MantleEffect {
         int tick = getCurrentImmunityRechargeTick(player);
         tick--;
         if (tick <= 0) {
-            setCurrentImmunityRechargeTick(player, CONFIG.immunityRechargeTicks.get());
-            setCurrentImmunityStacks(player, getCurrentImmunityStacks(player) + 1);
+            if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerStack.get())) {
+                setCurrentImmunityRechargeTick(player, CONFIG.immunityRechargeTicks.get());
+                setCurrentImmunityStacks(player, getCurrentImmunityStacks(player) + 1);
+                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerStack.get(), false);
+            }
         } else {
             setCurrentImmunityRechargeTick(player, tick);
         }
@@ -174,8 +179,12 @@ public class MantleEffectArmara extends MantleEffect {
         private final int defaultImmunityStacks = 3;
         private final int defaultImmunityRechargeTicks = 300;
 
+        private final int defaultChargeCostPerStack = 750;
+
         public ForgeConfigSpec.IntValue immunityStacks;
         public ForgeConfigSpec.IntValue immunityRechargeTicks;
+
+        public ForgeConfigSpec.IntValue chargeCostPerStack;
 
         public ArmaraConfig() {
             super("armara");
@@ -193,6 +202,11 @@ public class MantleEffectArmara extends MantleEffect {
                     .comment("Sets the amount of ticks between immunity stack recharges.")
                     .translation(translationKey("immunityRechargeTicks"))
                     .defineInRange("immunityRechargeTicks", this.defaultImmunityRechargeTicks, 20, 1_000_000);
+
+            this.chargeCostPerStack = cfgBuilder
+                    .comment("Set the amount alignment charge consumed per created immunity stack")
+                    .translation(translationKey("chargeCostPerStack"))
+                    .defineInRange("chargeCostPerStack", this.defaultChargeCostPerStack, 0, 1000);
         }
     }
 }

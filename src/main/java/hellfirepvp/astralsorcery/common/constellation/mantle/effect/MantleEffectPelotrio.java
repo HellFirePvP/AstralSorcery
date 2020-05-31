@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.entity.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
@@ -28,6 +29,7 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,13 +61,18 @@ public class MantleEffectPelotrio extends MantleEffect {
 
         LivingEntity attacked = event.getEntityLiving();
         Entity attacker = event.getSource().getTrueSource();
-        if (attacker instanceof LivingEntity) {
+        if (attacker instanceof PlayerEntity) {
             if (attacked instanceof ServerPlayerEntity && MiscUtils.isPlayerFakeMP((ServerPlayerEntity) attacked)) {
                 return;
             }
+            PlayerEntity player = (PlayerEntity) attacker;
 
-            if (ItemMantle.getEffect((LivingEntity) attacker, ConstellationsAS.pelotrio) != null && rand.nextFloat() < CONFIG.chanceSpawnSword.get()) {
-                world.addEntity(new EntitySpectralTool(world, attacker.getPosition().up(), (LivingEntity) attacker, EntitySpectralTool.ToolTask.createAttackTask()));
+            if (ItemMantle.getEffect(player, ConstellationsAS.pelotrio) != null && rand.nextFloat() < CONFIG.chanceSpawnSword.get()) {
+                if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerSword.get())) {
+                    if (world.addEntity(new EntitySpectralTool(world, player.getPosition().up(), player, EntitySpectralTool.ToolTask.createAttackTask()))) {
+                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerSword.get(), false);
+                    }
+                }
             }
         }
     }
@@ -86,7 +93,11 @@ public class MantleEffectPelotrio extends MantleEffect {
                     player.getHeldItemMainhand().getToolTypes().contains(ToolType.PICKAXE)) {
 
                 if (rand.nextFloat() < CONFIG.chanceSpawnPickaxe.get()) {
-                    world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), player, EntitySpectralTool.ToolTask.createPickaxeTask()));
+                    if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerPickaxe.get())) {
+                        if (world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), player, EntitySpectralTool.ToolTask.createPickaxeTask()))) {
+                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerPickaxe.get(), false);
+                        }
+                    }
                 }
                 return;
             }
@@ -97,7 +108,11 @@ public class MantleEffectPelotrio extends MantleEffect {
                     player.getHeldItemMainhand().getToolTypes().contains(ToolType.AXE)) {
 
                 if (rand.nextFloat() < CONFIG.chanceSpawnAxe.get()) {
-                    world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), player, EntitySpectralTool.ToolTask.createLogTask()));
+                    if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAxe.get())) {
+                        if (world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), player, EntitySpectralTool.ToolTask.createLogTask()))) {
+                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAxe.get(), false);
+                        }
+                    }
                 }
             }
         }
@@ -141,6 +156,10 @@ public class MantleEffectPelotrio extends MantleEffect {
         private final int defaultTicksPerPickaxeBlockBreak = 4;
         private final int defaultTicksPerAxeLogBreak = 2;
 
+        private final int defaultChargeCostPerSword = 250;
+        private final int defaultChargeCostPerPickaxe = 250;
+        private final int defaultChargeCostPerAxe = 250;
+
         public ForgeConfigSpec.DoubleValue chanceSpawnSword;
         public ForgeConfigSpec.DoubleValue chanceSpawnPickaxe;
         public ForgeConfigSpec.DoubleValue chanceSpawnAxe;
@@ -158,6 +177,10 @@ public class MantleEffectPelotrio extends MantleEffect {
         public ForgeConfigSpec.IntValue ticksPerSwordAttack;
         public ForgeConfigSpec.IntValue ticksPerPickaxeBlockBreak;
         public ForgeConfigSpec.IntValue ticksPerAxeLogBreak;
+
+        public ForgeConfigSpec.IntValue chargeCostPerSword;
+        public ForgeConfigSpec.IntValue chargeCostPerPickaxe;
+        public ForgeConfigSpec.IntValue chargeCostPerAxe;
 
         public PelotrioConfig() {
             super("pelotrio");
@@ -223,6 +246,19 @@ public class MantleEffectPelotrio extends MantleEffect {
                     .comment("Defines how long an axe is going to need to break a leaf or log.")
                     .translation(translationKey("ticksPerAxeLogBreak"))
                     .defineInRange("ticksPerAxeLogBreak", this.defaultTicksPerAxeLogBreak, 1, 100);
+
+            this.chargeCostPerSword = cfgBuilder
+                    .comment("Set the amount alignment charge consumed per created spectral sword")
+                    .translation(translationKey("chargeCostPerSword"))
+                    .defineInRange("chargeCostPerSword", this.defaultChargeCostPerSword, 0, 1000);
+            this.chargeCostPerPickaxe = cfgBuilder
+                    .comment("Set the amount alignment charge consumed per created spectral sword")
+                    .translation(translationKey("chargeCostPerPickaxe"))
+                    .defineInRange("chargeCostPerPickaxe", this.defaultChargeCostPerAxe, 0, 1000);
+            this.chargeCostPerAxe = cfgBuilder
+                    .comment("Set the amount alignment charge consumed per created spectral sword")
+                    .translation(translationKey("chargeCostPerAxe"))
+                    .defineInRange("chargeCostPerAxe", this.defaultChargeCostPerPickaxe, 0, 1000);
         }
     }
 }

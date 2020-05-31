@@ -170,12 +170,10 @@ public class MantleEffectLucerna extends MantleEffect {
                     .comment("Sets the maximum range of where the lucerna cape effect will get entities (and potentially other stuff given the config option for that is enabled) to highlight.")
                     .translation(translationKey("range"))
                     .defineInRange("range", this.defaultRange, 0, 512);
-
             this.findSpawners = cfgBuilder
                     .comment("If this is set to true, particles spawned by the lucerna cape effect will also highlight spawners nearby.")
                     .translation(translationKey("findSpawners"))
                     .define("findSpawners", this.defaultFindSpawners);
-
             this.findChests = cfgBuilder
                     .comment("If this is set to true, particles spawned by the lucerna cape effect will also highlight chests nearby.")
                     .translation(translationKey("findChests"))

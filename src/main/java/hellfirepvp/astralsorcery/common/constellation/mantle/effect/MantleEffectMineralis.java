@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
 import hellfirepvp.astralsorcery.client.util.MiscPlayEffect;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
@@ -23,6 +24,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.List;
 
@@ -39,6 +44,21 @@ public class MantleEffectMineralis extends MantleEffect {
 
     public MantleEffectMineralis() {
         super(ConstellationsAS.mineralis);
+    }
+
+    @Override
+    protected void attachEventListeners(IEventBus bus) {
+        super.attachEventListeners(bus);
+        bus.addListener(EventPriority.LOWEST, this::onBreak);
+    }
+
+    private void onBreak(BlockEvent.BreakEvent event) {
+        PlayerEntity player = event.getPlayer();
+        LogicalSide side = player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
+        if (side.isServer()) {
+            float charge = Math.min(AlignmentChargeHandler.INSTANCE.getCurrentCharge(player, side), CONFIG.chargeCostPerBreak.get());
+            AlignmentChargeHandler.INSTANCE.drainCharge(player, side, charge, false);
+        }
     }
 
     @Override
@@ -96,7 +116,11 @@ public class MantleEffectMineralis extends MantleEffect {
 
         private final int defaultHighlightRange = 10;
 
+        private final int defaultChargeCostPerBreak = 2;
+
         public ForgeConfigSpec.IntValue highlightRange;
+
+        public ForgeConfigSpec.IntValue chargeCostPerBreak;
 
         public MineralisConfig() {
             super("mineralis");
@@ -110,6 +134,11 @@ public class MantleEffectMineralis extends MantleEffect {
                     .comment("Sets the highlight radius in which the cape effect will search for the block you're holding. Set to 0 to disable this effect.")
                     .translation(translationKey("range"))
                     .defineInRange("range", this.defaultHighlightRange, 0, 32);
+
+            this.chargeCostPerBreak = cfgBuilder
+                    .comment("Set the amount alignment charge consumed per block break enhanced by the mantle effect")
+                    .translation(translationKey("chargeCostPerBreak"))
+                    .defineInRange("chargeCostPerBreak", this.defaultChargeCostPerBreak, 0, 1000);
         }
 
     }

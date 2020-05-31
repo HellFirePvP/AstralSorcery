@@ -77,7 +77,7 @@ public class AlignmentChargeRenderer implements ITickHandler {
         int offsetTop = screenHeight + 3 - 81; //*sigh* vanilla
 
         PlayerEntity player = Minecraft.getInstance().player;
-        float percFilled = AlignmentChargeHandler.INSTANCE.getFilledPercentage(player);
+        float percFilled = AlignmentChargeHandler.INSTANCE.getFilledPercentage(player, LogicalSide.CLIENT);
 
         boolean hasEnoughCharge = true;
         float usagePerc = 0F;
@@ -131,22 +131,17 @@ public class AlignmentChargeRenderer implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         PlayerEntity player = Minecraft.getInstance().player;
         if (player != null) {
-            if (AlignmentChargeHandler.INSTANCE.getFilledPercentage(player) <= 0.95F) {
+            if (AlignmentChargeHandler.INSTANCE.getFilledPercentage(player, LogicalSide.CLIENT) <= 0.95F) {
                 revealCharge(20);
             }
 
-            ItemStack held = player.getHeldItem(Hand.MAIN_HAND);
-            if (!held.isEmpty() &&
-                    held.getItem() instanceof AlignmentChargeRevealer &&
-                    ((AlignmentChargeRevealer) held.getItem()).shouldReveal(held)) {
-                revealCharge(20);
-            }
-
-            held = player.getHeldItem(Hand.OFF_HAND);
-            if (!held.isEmpty() &&
-                    held.getItem() instanceof AlignmentChargeRevealer &&
-                    ((AlignmentChargeRevealer) held.getItem()).shouldReveal(held)) {
-                revealCharge(20);
+            for (EquipmentSlotType slot : EquipmentSlotType.values()) {
+                ItemStack stack = player.getItemStackFromSlot(slot);
+                if (!stack.isEmpty() && stack.getItem() instanceof AlignmentChargeRevealer &&
+                        ((AlignmentChargeRevealer) stack.getItem()).shouldReveal(stack)) {
+                    revealCharge(20);
+                    break;
+                }
             }
         }
 
