@@ -81,7 +81,7 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
     protected void selectSphericalPositions() {
         this.positionStrategy.andFilter((pos, radius) -> {
             double dst = new Vector3(this.getPos().getLocationPos()).add(0.5, 0.5, 0.5)
-                    .distanceSquared(new Vector3(pos).add(0.5, 0.5, 0.5));
+                    .distanceSquared(new Vector3(pos).add(this.getPos().getLocationPos()).add(0.5, 0.5, 0.5));
             return dst <= radius * radius;
         });
     }
@@ -129,7 +129,7 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
 
     @Nullable
     public T getRandomElement() {
-        return this.elements.isEmpty() ? null : this.elements.get(rand.nextInt(this.getCount()));
+        return MiscUtils.getRandomEntry(this.elements, rand);
     }
 
     @Nullable

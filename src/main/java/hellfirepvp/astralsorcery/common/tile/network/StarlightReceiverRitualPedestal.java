@@ -154,7 +154,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
                 if (this.effect.needsChunkToBeLoaded()) {
                     didEffectExecute = MiscUtils.executeWithChunk(world, to, to, (pos) -> {
                         return this.effect.playEffect(world, pos, properties, this.channelingTrait);
-                    });
+                    }, false);
                 } else {
                     didEffectExecute = this.effect.playEffect(world, to, properties, this.channelingTrait);
                 }

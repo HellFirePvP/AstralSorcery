@@ -520,6 +520,10 @@ public class MiscUtils {
         return executeWithChunk(world, pos, apply(run, () -> obj));
     }
 
+    public static <T, R> R executeWithChunk(IWorldReader world, BlockPos pos, T obj, Function<T, R> run, R _default) {
+        return executeWithChunk(world, pos, apply(run, () -> obj), _default);
+    }
+
     public static <T> T eitherOf(Random r, T... selection) {
         if (selection.length == 0) {
             return null;

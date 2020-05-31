@@ -49,6 +49,7 @@ public class SpritesAS {
     public static SpriteSheetResource SPR_ENTITY_FLARE;
     public static SpriteSheetResource SPR_GRAPPLING_HOOK;
     public static SpriteSheetResource SPR_HALO_INFUSION;
+    public static SpriteSheetResource SPR_HALO_RITUAL;
 
     public static SpriteSheetResource SPR_OVERLAY_CHARGE;
     public static SpriteSheetResource SPR_OVERLAY_CHARGE_COLORLESS;

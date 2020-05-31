@@ -8,6 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXMotionController;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
@@ -17,6 +22,7 @@ import hellfirepvp.astralsorcery.common.crafting.nojson.WorldFreezingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.WorldMeltableRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.freezing.WorldFreezingRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.meltable.WorldMeltableRecipe;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -24,16 +30,20 @@ import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.block.iterator.BlockPositionGenerator;
 import hellfirepvp.astralsorcery.common.util.block.iterator.BlockRandomPositionGenerator;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.function.Consumer;
 
 /**
@@ -74,8 +84,27 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float alphaMultiplier, boolean extended) {
-
+        Vector3 motion = Vector3.random().multiply(0.04);
+        if (pos.equals(pedestal.getPos())) {
+            motion.setY(0);
+        } else {
+            motion.setY(Math.abs(motion.getY()) * -1);
+        }
+        Color c = MiscUtils.eitherOf(rand,
+                () -> ColorsAS.CONSTELLATION_FORNAX.brighter(),
+                () -> ColorsAS.CONSTELLATION_FORNAX.darker(),
+                () -> ColorsAS.CONSTELLATION_FORNAX.darker(),
+                () -> ColorsAS.CONSTELLATION_FORNAX.darker().darker());
+        EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                .spawn(new Vector3(pos).add(0.5, 0.2, 0.5))
+                .alpha(VFXAlphaFunction.FADE_OUT)
+                .color(VFXColorFunction.constant(c))
+                .setScaleMultiplier(0.3F + rand.nextFloat() * 0.4F)
+                .setMotion(motion)
+                .setGravityStrength(-0.0015F)
+                .setMaxAge(60 + rand.nextInt(30));
     }
 
     @Override

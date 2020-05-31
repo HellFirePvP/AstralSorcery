@@ -8,11 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstractList;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ListEntries;
 import hellfirepvp.astralsorcery.common.fluid.BlockLiquidStarlight;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -32,10 +37,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.*;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,8 +83,25 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float alphaMultiplier, boolean extended) {
+        ConstellationEffectProperties prop = this.createProperties(pedestal.getMirrorCount());
 
+        Vector3 at = new Vector3(pos).add(0.5, 0.5, 0.5);
+        at.addY(prop.getSize() * 0.75F);
+        at.add(Vector3.random().setY(0).multiply(rand.nextFloat() * prop.getSize()));
+
+        Color c = MiscUtils.eitherOf(rand,
+                () -> ColorsAS.CONSTELLATION_OCTANS,
+                () -> ColorsAS.CONSTELLATION_OCTANS.darker(),
+                () -> ColorsAS.CONSTELLATION_OCTANS.darker().darker());
+        EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                .spawn(at)
+                .alpha(VFXAlphaFunction.FADE_OUT)
+                .color(VFXColorFunction.constant(c))
+                .setScaleMultiplier(0.5F + rand.nextFloat() * 0.2F)
+                .setGravityStrength(0.0025F)
+                .setMaxAge(50 + rand.nextInt(20));
     }
 
     @Override
