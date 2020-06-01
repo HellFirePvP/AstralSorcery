@@ -108,7 +108,7 @@ public class EngravedStarMap {
     public boolean canAffect(@Nonnull ItemStack stack) {
         for (IConstellation cst : this.getConstellations()) {
             EngravingEffect effect = cst.getEngravingEffect();
-            if (effect != null && effect.canApplyEffects(stack)) {
+            if (effect != null && !effect.getApplicableEffects(stack).isEmpty()) {
                 return true;
             }
         }
@@ -117,10 +117,21 @@ public class EngravedStarMap {
 
     @Nonnull
     public ItemStack applyEffects(@Nonnull ItemStack stack) {
+        Map<IConstellation, List<EngravingEffect.ApplicableEffect>> effects = new HashMap<>();
         for (IConstellation cst : this.getConstellations()) {
             EngravingEffect effect = cst.getEngravingEffect();
-            if (effect != null && effect.canApplyEffects(stack)) {
-                stack = effect.applyEffects(stack, this.getDistribution(cst), rand);
+            if (effect != null) {
+                List<EngravingEffect.ApplicableEffect> applicable = effect.getApplicableEffects(stack);
+                if (!applicable.isEmpty()) {
+                    effects.put(cst, applicable);
+                }
+            }
+        }
+        for (IConstellation cst : effects.keySet()) {
+            List<EngravingEffect.ApplicableEffect> applicable = effects.get(cst);
+            float distribution = this.getDistribution(cst);
+            for (EngravingEffect.ApplicableEffect effect : applicable) {
+                stack = effect.apply(stack, distribution, rand);
             }
         }
         return stack;

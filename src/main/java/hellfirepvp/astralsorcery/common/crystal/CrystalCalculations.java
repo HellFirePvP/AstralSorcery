@@ -152,25 +152,4 @@ public class CrystalCalculations {
         return efficiency;
     }
 
-    /*
-    Legacy fracturing data.. Might use later?
-    private static Map<IConstellation, Float> fractureModifierMap = new HashMap<IConstellation, Float>() {
-        {
-            put(Constellations.aevitas,     0.001F);
-            put(Constellations.discidia,    0.005F);
-            put(Constellations.evorsio,     0.001F);
-            put(Constellations.armara,      0.001F);
-            put(Constellations.vicio,       0.001F);
-
-            put(Constellations.lucerna,     0.0007F);
-            put(Constellations.bootes,      0.1F);
-            put(Constellations.mineralis,   0.007F);
-            put(Constellations.octans,      0.1F);
-            put(Constellations.pelotrio,    4F);
-            put(Constellations.horologium,  0.0007F);
-            put(Constellations.fornax,      0.009F);
-        }
-    };
-     */
-
 }
