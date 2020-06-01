@@ -280,12 +280,16 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     }
 
     private void gatherStarlight() {
+        if (this.storedStarlight > 0) {
+            this.storedStarlight *= 0.95;
+            this.markForUpdate();
+        }
+
         WorldContext ctx = SkyHandler.getContext(getWorld());
         if (ctx == null || !this.doesSeeSky()) {
             return;
         }
 
-        this.storedStarlight *= 0.95;
         int yLevel = getPos().getY();
         if (yLevel > 40) {
             float collect = 160;
@@ -306,8 +310,8 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
             collect *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
 
             this.storedStarlight = Math.min(getAltarType().getStarlightCapacity(), (int) (this.storedStarlight + collect));
+            this.markForUpdate();
         }
-        this.markForUpdate();
     }
 
     @Nonnull

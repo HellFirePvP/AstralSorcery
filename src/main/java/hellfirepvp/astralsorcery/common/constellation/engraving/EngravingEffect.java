@@ -33,6 +33,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,24 +55,10 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
         return this;
     }
 
-    public boolean canApplyEffects(@Nonnull ItemStack stack) {
-        for (ApplicableEffect effect : this.effects) {
-            if (effect.supports(stack)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public ItemStack applyEffects(@Nonnull ItemStack stack, float percent, Random rand) {
-        boolean hasExistingModifiers = !DynamicModifierHelper.getStaticModifiers(stack).isEmpty();
-
-        for (ApplicableEffect effect : this.effects) {
-            if (effect.supports(stack) && (!(effect instanceof ModifierEffect) || !hasExistingModifiers)) {
-                stack = effect.apply(stack, percent, rand);
-            }
-        }
-        return stack;
+    public List<ApplicableEffect> getApplicableEffects(@Nonnull ItemStack stack) {
+        return this.effects.stream()
+                .filter(effects -> effects.supports(stack))
+                .collect(Collectors.toList());
     }
 
     public static interface ApplicableEffect {
@@ -113,6 +100,9 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
             if (stack.isEmpty()) {
                 return false;
             }
+            if (!DynamicModifierHelper.getStaticModifiers(stack).isEmpty()) {
+                return false;
+            }
             if (this.applicableTypes.isEmpty()) {
                 return EnchantmentType.ALL.canEnchantItem(stack.getItem());
             }
@@ -126,10 +116,6 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
         @Override
         public ItemStack apply(@Nonnull ItemStack stack, float percent, Random rand) {
-            if (!supports(stack)) {
-                return stack;
-            }
-
             float rValue = percent * (Math.min(0, this.max - this.min));
             if (this.formatToInteger) {
                 rValue = Math.round(rValue);
@@ -176,7 +162,7 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
                 if (this.ignoreCompat) {
                     continue;
                 }
-                if (toApply.isCompatibleWith(applied)) {
+                if (toApply.isCompatibleWith(applied) && !(stack.getItem() instanceof EnchantedBookItem)) {
                     return false;
                 }
             }
@@ -185,9 +171,6 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
         @Override
         public ItemStack apply(@Nonnull ItemStack stack, float percent, Random rand) {
-            if (!supports(stack)) {
-                return stack;
-            }
             int level = this.min + Math.round(percent * (Math.min(0, this.max - this.min)));
             if (stack.getItem() instanceof BookItem) {
                 stack = ItemUtils.changeItem(stack, Items.ENCHANTED_BOOK);
@@ -223,10 +206,6 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
         @Override
         public ItemStack apply(@Nonnull ItemStack stack, float percent, Random rand) {
-            if (!supports(stack)) {
-                return stack;
-            }
-
             int amp = this.min + Math.round(percent * (Math.min(0, this.max - this.min)));
             int dur = 3 * 60 * 20 + Math.round(rand.nextFloat() * 4 * 60 * 20);
             EffectInstance effectInstance = new EffectInstance(this.effect.get(), dur, amp, true, false, true);

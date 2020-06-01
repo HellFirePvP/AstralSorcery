@@ -100,9 +100,9 @@ public class MantleEffectAevitas extends MantleEffect {
         private final double defaultHealthPerCycle = 0.25F;
         private final double defaultFoodPerCycle = 0.5F;
 
-        private final int defaultChargeCostPerBlock = 4;
-        private final int defaultChargeCostPerHeal = 6;
-        private final int defaultChargeCostPerFood = 2;
+        private final int defaultChargeCostPerBlock = 2;
+        private final int defaultChargeCostPerHeal = 15;
+        private final int defaultChargeCostPerFood = 15;
 
         public ForgeConfigSpec.IntValue healChance;
         public ForgeConfigSpec.IntValue feedChance;
