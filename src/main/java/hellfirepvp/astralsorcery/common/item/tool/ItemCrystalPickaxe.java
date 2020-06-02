@@ -95,16 +95,6 @@ public class ItemCrystalPickaxe extends ItemCrystalToolBase {
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        float str = super.getDestroySpeed(stack, state);
-        Material m = state.getMaterial();
-        if(m != Material.ROCK && m != Material.ANVIL && m != Material.IRON && m != Material.PISTON) {
-            str /= this.efficiency;
-        }
-        return str;
-    }
-
-    @Override
     public Set<String> getToolClasses(ItemStack stack) {
         return Sets.newHashSet("pickaxe");
     }

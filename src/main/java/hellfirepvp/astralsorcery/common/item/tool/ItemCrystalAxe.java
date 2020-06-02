@@ -48,16 +48,6 @@ public class ItemCrystalAxe extends ItemCrystalToolBase {
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        float str = super.getDestroySpeed(stack, state);
-        Material m = state.getMaterial();
-        if(m != Material.WOOD && m != Material.PLANTS && m != Material.VINE && m != Material.PISTON && m != Material.LEAVES) {
-            str /= this.efficiency;
-        }
-        return str;
-    }
-
-    @Override
     public Set<String> getToolClasses(ItemStack stack) {
         return Sets.newHashSet("axe");
     }

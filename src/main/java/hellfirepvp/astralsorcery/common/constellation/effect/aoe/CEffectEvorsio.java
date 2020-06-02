@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
+import hellfirepvp.astralsorcery.common.block.BlockRitualLink;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
@@ -60,7 +61,7 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
     private static boolean isAllowedToBreak(@Nullable ILocatable origin, World world, BlockPos pos) {
         if(!MiscUtils.isChunkLoaded(world, pos)) return false;
         float hardness = world.getBlockState(pos).getBlockHardness(world, pos);
-        if(world.isAirBlock(pos) || hardness < 0 || hardness > 75) {
+        if(world.isAirBlock(pos) || world.getBlockState(pos).getBlock() instanceof BlockRitualLink || hardness < 0 || hardness > 75) {
             return false;
         }
         if(origin != null && MiscUtils.isChunkLoaded(world, origin.getLocationPos())) {

@@ -34,8 +34,10 @@ import java.util.Set;
  */
 public class ItemCrystalShovel extends ItemCrystalToolBase {
 
+    private static final Set<Block> EFFECTIVE_SET = Sets.newHashSet(Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SNOW_LAYER, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.CONCRETE_POWDER);
+
     public ItemCrystalShovel() {
-        super(1);
+        super(1, EFFECTIVE_SET);
         setDamageVsEntity(3F);
         setAttackSpeed(-1.5F);
         setHarvestLevel("shovel", 3);
@@ -61,12 +63,6 @@ public class ItemCrystalShovel extends ItemCrystalToolBase {
         } else {
             return block == Blocks.SNOW;
         }
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        boolean effective = Items.DIAMOND_SHOVEL.getDestroySpeed(stack, state) != ToolMaterial.DIAMOND.getEfficiency();
-        return effective ? super.getDestroySpeed(stack, state) : 1F;
     }
 
     @Override
