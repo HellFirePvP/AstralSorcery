@@ -1,0 +1,53 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 1400,
+  "pattern": [
+    "A___A",
+    "_BCB_",
+    "_DED_",
+    "_FFF_",
+    "D___D"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:ingots/gold"
+    },
+    "B": {
+      "item": "astralsorcery:marble_chiseled"
+    },
+    "C": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    },
+    "D": {
+      "item": "astralsorcery:marble_pillar"
+    },
+    "E": {
+      "type": "astralsorcery:fluid",
+      "fluid": [
+        {
+          "fluid": "astralsorcery:liquid_starlight",
+          "amount": 1000
+        }
+      ]
+    },
+    "F": {
+      "item": "astralsorcery:marble_runed"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:ritual_pedestal",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

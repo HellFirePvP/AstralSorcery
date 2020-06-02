@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "item": "astralsorcery:marble_raw"
+    },
+    "C": {
+      "tag": "minecraft:coals"
+    }
+  },
+  "result": {
+    "item": "astralsorcery:black_marble_raw",
+    "count": 8
+  }
+}

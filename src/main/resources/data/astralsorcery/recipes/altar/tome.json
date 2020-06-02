@@ -1,0 +1,33 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 100,
+  "starlight": 200,
+  "pattern": [
+    "_____",
+    "__B__",
+    "_ACA_",
+    "__A__",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "B": {
+      "item": "astralsorcery:parchment"
+    },
+    "C": {
+      "item": "minecraft:book"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:tome",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:infuser",
+  "fluidInput": "astralsorcery:liquid_starlight",
+  "input": {
+    "tag": "forge:ender_pearls"
+  },
+  "output": {
+    "item": "minecraft:ender_eye",
+    "count": 1
+  },
+  "consumptionChance": 0.1,
+  "duration": 100,
+  "consumeMultipleFluids": false,
+  "acceptChaliceInput": true,
+  "copyNBTToOutputs": false
+}

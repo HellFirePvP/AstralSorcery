@@ -1,0 +1,37 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 1200,
+  "pattern": [
+    "_____",
+    "__C__",
+    "_CAD_",
+    "_AB__",
+    "A____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:marble_runed"
+    },
+    "B": {
+      "tag": "forge:gems/diamond"
+    },
+    "C": {
+      "tag": "forge:ender_pearls"
+    },
+    "D": {
+      "tag": "astralsorcery:stardust"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:blink_wand",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

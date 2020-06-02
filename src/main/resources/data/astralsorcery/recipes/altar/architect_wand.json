@@ -1,0 +1,34 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 1200,
+  "pattern": [
+    "_____",
+    "__BC_",
+    "_CAB_",
+    "_A___",
+    "A____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:marble_runed"
+    },
+    "B": {
+      "tag": "astralsorcery:stardust"
+    },
+    "C": {
+      "tag": "forge:dyes/purple"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:architect_wand",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

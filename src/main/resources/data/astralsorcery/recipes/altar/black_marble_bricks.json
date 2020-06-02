@@ -1,0 +1,27 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 40,
+  "starlight": 200,
+  "pattern": [
+    "_____",
+    "_AA__",
+    "_AA__",
+    "_____",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:black_marble_raw"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:black_marble_bricks",
+      "count": 4
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}

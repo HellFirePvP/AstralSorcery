@@ -1,0 +1,30 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 40,
+  "starlight": 200,
+  "pattern": [
+    "_____",
+    "_AAA_",
+    "_ABA_",
+    "_AAA_",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:marble_raw"
+    },
+    "B": {
+      "tag": "minecraft:coals"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:black_marble_raw",
+      "count": 8
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}

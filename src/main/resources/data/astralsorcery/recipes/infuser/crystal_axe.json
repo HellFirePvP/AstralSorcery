@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:infuser",
+  "fluidInput": "astralsorcery:liquid_starlight",
+  "input": {
+    "item": "astralsorcery:crystal_axe"
+  },
+  "output": {
+    "item": "astralsorcery:infused_crystal_axe",
+    "count": 1
+  },
+  "consumptionChance": 1.0,
+  "duration": 200,
+  "consumeMultipleFluids": true,
+  "acceptChaliceInput": false,
+  "copyNBTToOutputs": true
+}

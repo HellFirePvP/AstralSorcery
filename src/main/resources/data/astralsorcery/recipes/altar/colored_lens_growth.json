@@ -1,0 +1,42 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 2000,
+  "pattern": [
+    "AB_BA",
+    "__A__",
+    "_DED_",
+    "_____",
+    "AC_CA"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "B": {
+      "item": "minecraft:sugar_cane"
+    },
+    "C": {
+      "tag": "forge:seeds"
+    },
+    "D": {
+      "tag": "forge:crops/carrot"
+    },
+    "E": {
+      "item": "astralsorcery:glass_lens"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:colored_lens_growth",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

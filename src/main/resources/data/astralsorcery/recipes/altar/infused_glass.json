@@ -1,0 +1,36 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 2400,
+  "pattern": [
+    "A___A",
+    "A___A",
+    "_BCB_",
+    "A___A",
+    "A___A"
+  ],
+  "key": {
+    "A": {
+      "tag": "astralsorcery:stardust"
+    },
+    "B": {
+      "item": "astralsorcery:glass_lens"
+    },
+    "C": {
+      "tag": "astralsorcery:colored_lens"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:infused_glass",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 100,
+  "starlight": 300,
+  "pattern": [
+    "_____",
+    "_B_B_",
+    "_CDC_",
+    "_ABA_",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "B": {
+      "item": "astralsorcery:marble_runed"
+    },
+    "C": {
+      "item": "astralsorcery:marble_chiseled"
+    },
+    "D": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:well",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}

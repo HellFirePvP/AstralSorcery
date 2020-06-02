@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "astralsorcery:block/multilayer/celestial_crystal_cluster_0"
+    },
+    "stage=1": {
+      "model": "astralsorcery:block/multilayer/celestial_crystal_cluster_1"
+    },
+    "stage=2": {
+      "model": "astralsorcery:block/multilayer/celestial_crystal_cluster_2"
+    },
+    "stage=3": {
+      "model": "astralsorcery:block/multilayer/celestial_crystal_cluster_3"
+    },
+    "stage=4": {
+      "model": "astralsorcery:block/multilayer/celestial_crystal_cluster_4"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "astralsorcery:rock_crystals",
+  "display": {
+    "icon": {
+      "item": "astralsorcery:altar_attunement"
+    },
+    "title": {
+      "translate": "advancements.astralsorcery.craft_t2_altar.title"
+    },
+    "description": {
+      "translate": "advancements.astralsorcery.craft_t2_altar.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "altar_craft_t2_altar": {
+      "trigger": "astralsorcery:altar_craft",
+      "conditions": {
+        "recipeOutputs": [
+          {
+            "item": "astralsorcery:altar_attunement"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "altar_craft_t2_altar"
+    ]
+  ]
+}

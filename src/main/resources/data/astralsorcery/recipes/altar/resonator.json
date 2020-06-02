@@ -1,0 +1,46 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 100,
+  "starlight": 150,
+  "pattern": [
+    "_____",
+    "__C__",
+    "_DED_",
+    "_ABA_",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:infused_wood"
+    },
+    "B": {
+      "tag": "forge:ingots/gold"
+    },
+    "C": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "D": {
+      "item": "astralsorcery:marble_raw"
+    },
+    "E": {
+      "type": "astralsorcery:fluid",
+      "fluid": [
+        {
+          "fluid": "astralsorcery:liquid_starlight",
+          "amount": 1000
+        }
+      ]
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:resonator",
+      "count": 1,
+      "nbt": "{astralsorcery:{selected_upgrade:0,upgrades:[0]}}"
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}

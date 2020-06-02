@@ -1,0 +1,43 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 1600,
+  "pattern": [
+    "A___A",
+    "_B_B_",
+    "_CDC_",
+    "_B_B_",
+    "A___A"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "B": {
+      "tag": "astralsorcery:stardust"
+    },
+    "C": {
+      "item": "astralsorcery:illumination_powder"
+    },
+    "D": {
+      "type": "astralsorcery:fluid",
+      "fluid": [
+        {
+          "fluid": "astralsorcery:liquid_starlight",
+          "amount": 1000
+        }
+      ]
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:shifting_star",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

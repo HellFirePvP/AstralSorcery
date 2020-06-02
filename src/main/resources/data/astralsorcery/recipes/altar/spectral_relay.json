@@ -1,0 +1,36 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 100,
+  "starlight": 400,
+  "pattern": [
+    "_____",
+    "_ABA_",
+    "_CDC_",
+    "_____",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:nuggets/gold"
+    },
+    "B": {
+      "item": "astralsorcery:glass_lens"
+    },
+    "C": {
+      "tag": "minecraft:planks"
+    },
+    "D": {
+      "item": "astralsorcery:marble_raw"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:spectral_relay",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}

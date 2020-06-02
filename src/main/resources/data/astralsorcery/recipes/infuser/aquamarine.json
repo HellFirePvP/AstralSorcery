@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:infuser",
+  "fluidInput": "astralsorcery:liquid_starlight",
+  "input": {
+    "item": "astralsorcery:aquamarine"
+  },
+  "output": {
+    "item": "astralsorcery:resonating_gem",
+    "count": 1
+  },
+  "consumptionChance": 0.3,
+  "duration": 200,
+  "consumeMultipleFluids": false,
+  "acceptChaliceInput": true,
+  "copyNBTToOutputs": false
+}

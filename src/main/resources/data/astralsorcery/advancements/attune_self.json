@@ -1,0 +1,29 @@
+{
+  "parent": "astralsorcery:find_constellation",
+  "display": {
+    "icon": {
+      "item": "astralsorcery:attunement_altar"
+    },
+    "title": {
+      "translate": "advancements.astralsorcery.attune_self.title"
+    },
+    "description": {
+      "translate": "advancements.astralsorcery.attune_self.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "attune_self": {
+      "trigger": "astralsorcery:attune_self",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "attune_self"
+    ]
+  ]
+}

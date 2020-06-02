@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "astralsorcery:aquamarine_sand_ore"
+  },
+  "result": {
+    "item": "astralsorcery:aquamarine",
+    "count": 3
+  },
+  "experience": 0.2,
+  "cookingtime": 40
+}

@@ -1,0 +1,61 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 3,
+  "duration": 600,
+  "starlight": 6400,
+  "pattern": [
+    "__B__",
+    "A_D_A",
+    "_AEA_",
+    "__A__",
+    "_CCC_"
+  ],
+  "key": {
+    "A": {
+      "tag": "astralsorcery:stardust"
+    },
+    "B": {
+      "item": "astralsorcery:illumination_powder"
+    },
+    "C": {
+      "item": "astralsorcery:resonating_gem"
+    },
+    "D": {
+      "item": "astralsorcery:resonator"
+    },
+    "E": {
+      "type": "astralsorcery:fluid",
+      "fluid": [
+        {
+          "fluid": "astralsorcery:liquid_starlight",
+          "amount": 1000
+        }
+      ]
+    }
+  },
+  "recipe_class": "astralsorcery:nbt_copy",
+  "output": [
+    {
+      "item": "astralsorcery:resonator",
+      "count": 1,
+      "nbt": "{astralsorcery:{selected_upgrade:1,upgrades:[0,1]}}"
+    }
+  ],
+  "options": {
+    "copy_nbt_from_items_matching": [
+      {
+        "item": "astralsorcery:resonator"
+      }
+    ]
+  },
+  "focus_constellation": "astralsorcery:octans",
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_trait_relay_highlight",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_trait_focus_circle",
+    "astralsorcery:altar_default_sparkle",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

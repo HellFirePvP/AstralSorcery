@@ -1,0 +1,72 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 3,
+  "duration": 600,
+  "starlight": 3200,
+  "pattern": [
+    "__ABC",
+    "_ABDB",
+    "ABCBA",
+    "E_BA_",
+    "EEE__"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:nuggets/gold"
+    },
+    "B": {
+      "item": "astralsorcery:marble_runed"
+    },
+    "C": {
+      "item": "astralsorcery:glass_lens"
+    },
+    "D": {
+      "item": "astralsorcery:infused_glass"
+    },
+    "E": {
+      "tag": "forge:ingots/gold"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:observatory",
+      "count": 1
+    }
+  ],
+  "focus_constellation": "astralsorcery:lucerna",
+  "relay_inputs": [
+    {
+      "item": "astralsorcery:illumination_powder"
+    },
+    {
+      "item": "astralsorcery:nocturnal_powder"
+    },
+    {
+      "item": "astralsorcery:illumination_powder"
+    },
+    {
+      "tag": "astralsorcery:stardust"
+    },
+    {
+      "item": "astralsorcery:illumination_powder"
+    },
+    {
+      "item": "astralsorcery:nocturnal_powder"
+    },
+    {
+      "item": "astralsorcery:illumination_powder"
+    },
+    {
+      "tag": "astralsorcery:stardust"
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_trait_relay_highlight",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_trait_focus_circle",
+    "astralsorcery:altar_default_sparkle",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

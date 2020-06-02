@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:infuser",
+  "fluidInput": "astralsorcery:liquid_starlight",
+  "input": {
+    "item": "astralsorcery:infused_wood"
+  },
+  "output": {
+    "item": "astralsorcery:infused_wood_infused",
+    "count": 1
+  },
+  "consumptionChance": 0.1,
+  "duration": 100,
+  "consumeMultipleFluids": false,
+  "acceptChaliceInput": true,
+  "copyNBTToOutputs": false
+}

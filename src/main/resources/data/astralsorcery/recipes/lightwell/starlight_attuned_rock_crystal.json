@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:lightwell",
+  "input": {
+    "item": "astralsorcery:attuned_rock_crystal"
+  },
+  "output": "astralsorcery:liquid_starlight",
+  "productionMultiplier": 0.09,
+  "shatterMultiplier": 5.0,
+  "color": -16734209
+}

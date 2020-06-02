@@ -1,0 +1,31 @@
+{
+  "parent": "astralsorcery:attune_self",
+  "display": {
+    "icon": {
+      "item": "astralsorcery:ritual_pedestal"
+    },
+    "title": {
+      "translate": "advancements.astralsorcery.attune_crystal.title"
+    },
+    "description": {
+      "translate": "advancements.astralsorcery.attune_crystal.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "attune_crystal": {
+      "trigger": "astralsorcery:attune_crystal",
+      "conditions": {
+        "weak": true
+      }
+    }
+  },
+  "requirements": [
+    [
+      "attune_crystal"
+    ]
+  ]
+}

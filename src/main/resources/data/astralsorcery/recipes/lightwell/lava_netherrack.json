@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:lightwell",
+  "input": {
+    "item": "minecraft:netherrack"
+  },
+  "output": "minecraft:lava",
+  "productionMultiplier": 0.5,
+  "shatterMultiplier": 10.0,
+  "color": -51956
+}

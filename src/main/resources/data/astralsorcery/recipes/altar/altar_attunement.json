@@ -1,0 +1,48 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 100,
+  "starlight": 700,
+  "pattern": [
+    "_____",
+    "_ABA_",
+    "_CDC_",
+    "_A_A_",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:marble_pillar"
+    },
+    "B": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    },
+    "C": {
+      "item": "astralsorcery:marble_chiseled"
+    },
+    "D": {
+      "type": "astralsorcery:fluid",
+      "fluid": [
+        {
+          "fluid": "astralsorcery:liquid_starlight",
+          "amount": 1000
+        }
+      ]
+    }
+  },
+  "recipe_class": "astralsorcery:attunement_upgrade",
+  "output": [
+    {
+      "item": "astralsorcery:altar_attunement",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:upgrade_altar"
+  ]
+}

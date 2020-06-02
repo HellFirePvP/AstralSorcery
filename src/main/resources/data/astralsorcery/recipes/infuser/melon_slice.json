@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:infuser",
+  "fluidInput": "astralsorcery:liquid_starlight",
+  "input": {
+    "item": "minecraft:melon_slice"
+  },
+  "output": {
+    "item": "minecraft:glistering_melon_slice",
+    "count": 1
+  },
+  "consumptionChance": 0.1,
+  "duration": 100,
+  "consumeMultipleFluids": false,
+  "acceptChaliceInput": true,
+  "copyNBTToOutputs": false
+}

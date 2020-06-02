@@ -1,0 +1,49 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 1400,
+  "pattern": [
+    "A___A",
+    "_E_E_",
+    "_DFD_",
+    "_BCB_",
+    "D___D"
+  ],
+  "key": {
+    "A": {
+      "tag": "astralsorcery:stardust"
+    },
+    "B": {
+      "item": "astralsorcery:marble_pillar"
+    },
+    "C": {
+      "tag": "astralsorcery:starmetal"
+    },
+    "D": {
+      "item": "astralsorcery:marble_chiseled"
+    },
+    "E": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "F": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    }
+  },
+  "recipe_class": "astralsorcery:constellation_upgrade",
+  "output": [
+    {
+      "item": "astralsorcery:altar_constellation",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:upgrade_altar",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

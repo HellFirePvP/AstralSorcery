@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:lightwell",
+  "input": {
+    "item": "astralsorcery:attuned_celestial_crystal"
+  },
+  "output": "astralsorcery:liquid_starlight",
+  "productionMultiplier": 0.11,
+  "shatterMultiplier": 8.0,
+  "color": -16734209
+}

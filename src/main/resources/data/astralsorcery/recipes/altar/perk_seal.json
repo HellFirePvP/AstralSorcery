@@ -1,0 +1,34 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 200,
+  "pattern": [
+    "A___A",
+    "_____",
+    "_BCB_",
+    "_____",
+    "A___A"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:nocturnal_powder"
+    },
+    "B": {
+      "tag": "astralsorcery:stardust"
+    },
+    "C": {
+      "item": "astralsorcery:glass_lens"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:perk_seal",
+      "count": 4
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

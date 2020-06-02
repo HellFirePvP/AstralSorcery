@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:infuser",
+  "fluidInput": "astralsorcery:liquid_starlight",
+  "input": {
+    "tag": "forge:rods/blaze"
+  },
+  "output": {
+    "item": "minecraft:blaze_powder",
+    "count": 4
+  },
+  "consumptionChance": 0.1,
+  "duration": 100,
+  "consumeMultipleFluids": false,
+  "acceptChaliceInput": true,
+  "copyNBTToOutputs": false
+}

@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:infuser",
+  "fluidInput": "astralsorcery:liquid_starlight",
+  "input": {
+    "tag": "forge:ores/iron"
+  },
+  "output": {
+    "item": "minecraft:iron_ingot",
+    "count": 3
+  },
+  "consumptionChance": 0.1,
+  "duration": 100,
+  "consumeMultipleFluids": false,
+  "acceptChaliceInput": true,
+  "copyNBTToOutputs": false
+}

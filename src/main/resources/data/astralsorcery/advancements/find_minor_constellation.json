@@ -1,0 +1,31 @@
+{
+  "parent": "astralsorcery:find_weak_constellation",
+  "display": {
+    "icon": {
+      "item": "astralsorcery:observatory"
+    },
+    "title": {
+      "translate": "advancements.astralsorcery.find_minor_constellation.title"
+    },
+    "description": {
+      "translate": "advancements.astralsorcery.find_minor_constellation.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "minor_constellation_discovered": {
+      "trigger": "astralsorcery:find_constellation",
+      "conditions": {
+        "minor": true
+      }
+    }
+  },
+  "requirements": [
+    [
+      "minor_constellation_discovered"
+    ]
+  ]
+}

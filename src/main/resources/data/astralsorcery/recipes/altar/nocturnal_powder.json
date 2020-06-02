@@ -1,0 +1,36 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 100,
+  "starlight": 400,
+  "pattern": [
+    "_____",
+    "__B__",
+    "_CDC_",
+    "__A__",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:dyes/blue"
+    },
+    "B": {
+      "tag": "forge:dyes/black"
+    },
+    "C": {
+      "tag": "minecraft:coals"
+    },
+    "D": {
+      "item": "astralsorcery:illumination_powder"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:nocturnal_powder",
+      "count": 4
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}

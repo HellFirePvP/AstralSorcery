@@ -1,0 +1,42 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 2000,
+  "pattern": [
+    "A___A",
+    "__D__",
+    "__E__",
+    "C_B_C",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "B": {
+      "tag": "forge:gems/diamond"
+    },
+    "C": {
+      "tag": "astralsorcery:stardust"
+    },
+    "D": {
+      "item": "minecraft:ghast_tear"
+    },
+    "E": {
+      "item": "astralsorcery:glass_lens"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:colored_lens_regeneration",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

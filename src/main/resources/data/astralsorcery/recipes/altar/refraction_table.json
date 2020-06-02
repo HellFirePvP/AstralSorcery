@@ -1,0 +1,45 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 2800,
+  "pattern": [
+    "A___A",
+    "BC_CB",
+    "_D_D_",
+    "BEEEB",
+    "F___F"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:dyes"
+    },
+    "B": {
+      "item": "astralsorcery:infused_wood_column"
+    },
+    "C": {
+      "item": "astralsorcery:resonating_gem"
+    },
+    "D": {
+      "tag": "astralsorcery:starmetal"
+    },
+    "E": {
+      "item": "astralsorcery:black_marble_runed"
+    },
+    "F": {
+      "item": "astralsorcery:marble_runed"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:refraction_table",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

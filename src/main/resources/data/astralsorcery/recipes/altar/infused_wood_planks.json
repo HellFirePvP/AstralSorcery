@@ -1,0 +1,27 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 40,
+  "starlight": 200,
+  "pattern": [
+    "_____",
+    "_____",
+    "__A__",
+    "_____",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:infused_wood"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:infused_wood_planks",
+      "count": 4
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 3,
+  "duration": 600,
+  "starlight": 4800,
+  "pattern": [
+    "_____",
+    "A_B_A",
+    "ACDCA",
+    "EC_CE",
+    "E___E"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:resonating_gem"
+    },
+    "B": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    },
+    "C": {
+      "item": "astralsorcery:illumination_powder"
+    },
+    "D": {
+      "item": "minecraft:leather_chestplate"
+    },
+    "E": {
+      "tag": "astralsorcery:stardust"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:mantle",
+      "count": 1
+    }
+  ],
+  "relay_inputs": [
+    {
+      "tag": "astralsorcery:starmetal"
+    },
+    {
+      "tag": "astralsorcery:stardust"
+    },
+    {
+      "tag": "forge:feathers"
+    },
+    {
+      "tag": "forge:ender_pearls"
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_trait_relay_highlight",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_trait_focus_circle",
+    "astralsorcery:altar_default_sparkle",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

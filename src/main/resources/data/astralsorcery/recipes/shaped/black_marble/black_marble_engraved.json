@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " M ",
+    "MMM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "item": "astralsorcery:black_marble_raw"
+    }
+  },
+  "result": {
+    "item": "astralsorcery:black_marble_engraved",
+    "count": 5
+  }
+}

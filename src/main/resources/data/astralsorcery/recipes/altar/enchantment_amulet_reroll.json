@@ -1,0 +1,45 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 2800,
+  "pattern": [
+    "_____",
+    "__C__",
+    "__D__",
+    "AABAA",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "tag": "astralsorcery:stardust"
+    },
+    "B": {
+      "type": "astralsorcery:fluid",
+      "fluid": [
+        {
+          "fluid": "astralsorcery:liquid_starlight",
+          "amount": 1000
+        }
+      ]
+    },
+    "C": {
+      "item": "astralsorcery:resonating_gem"
+    },
+    "D": {
+      "item": "astralsorcery:enchantment_amulet"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:enchantment_amulet",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

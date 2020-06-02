@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "pillartype=top": {
+      "model": "astralsorcery:block/infused_wood_column_top"
+    },
+    "pillartype=middle": {
+      "model": "astralsorcery:block/infused_wood_column"
+    },
+    "pillartype=bottom": {
+      "model": "astralsorcery:block/infused_wood_column_bottom"
+    }
+  }
+}

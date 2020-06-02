@@ -1,0 +1,63 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 3,
+  "duration": 600,
+  "starlight": 4800,
+  "pattern": [
+    "__B__",
+    "__A__",
+    "BCDCB",
+    "__A__",
+    "__B__"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:feathers"
+    },
+    "B": {
+      "tag": "astralsorcery:stardust"
+    },
+    "C": {
+      "tag": "astralsorcery:starmetal"
+    },
+    "D": {
+      "item": "astralsorcery:shifting_star"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:shifting_star_vicio",
+      "count": 1
+    }
+  ],
+  "focus_constellation": "astralsorcery:vicio",
+  "relay_inputs": [
+    {
+      "tag": "forge:feathers"
+    },
+    {
+      "item": "astralsorcery:illumination_powder"
+    },
+    {
+      "tag": "astralsorcery:stardust"
+    },
+    {
+      "tag": "forge:feathers"
+    },
+    {
+      "item": "astralsorcery:illumination_powder"
+    },
+    {
+      "tag": "astralsorcery:stardust"
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_trait_relay_highlight",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_trait_focus_circle",
+    "astralsorcery:altar_default_sparkle",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

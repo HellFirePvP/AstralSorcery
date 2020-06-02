@@ -1,0 +1,45 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 1600,
+  "pattern": [
+    "A___A",
+    "__D__",
+    "_E_E_",
+    "_BCB_",
+    "B___B"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "B": {
+      "item": "astralsorcery:marble_runed"
+    },
+    "C": {
+      "item": "astralsorcery:spectral_relay"
+    },
+    "D": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    },
+    "E": {
+      "tag": "astralsorcery:starmetal"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:attunement_altar",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:pillar_lightbeams",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}
