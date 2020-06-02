@@ -8,16 +8,31 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network.handler;
 
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutationContext;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import hellfirepvp.astralsorcery.common.util.block.WorldBlockPos;
+import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -56,11 +71,29 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         }
 
         activeRecipe.acceptStarlight(amount);
-        //TODO effects
+
+        PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.BLOCK_TRANSMUTATION_TICK)
+                .addData(buf -> ByteBufUtils.writePos(buf, pos));
+        PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 24));
 
         if (activeRecipe.isFinished() && activeRecipe.finish(world, pos)) {
             runningTransmutations.remove(at);
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void playTransmutation(PktPlayEffect effect) {
+        Random rand = new Random();
+        BlockPos pos = ByteBufUtils.readPos(effect.getExtraData());
+
+        EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                .spawn(new Vector3(pos).add(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()))
+                .setAlphaMultiplier(1F)
+                .alpha(VFXAlphaFunction.FADE_OUT)
+                .color(VFXColorFunction.constant(ColorsAS.ROCK_CRYSTAL))
+                .setScaleMultiplier(0.2F + rand.nextFloat() * 0.15F)
+                .setGravityStrength(-0.0014F)
+                .setMaxAge(40 + rand.nextInt(20));
     }
 
     private static class ActiveTransmutation {
@@ -92,7 +125,15 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         }
 
         private boolean finish(IWorld world, BlockPos pos) {
-            if (world.setBlockState(pos, this.recipe.getOutput(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
+            BlockState out = this.recipe.getOutput();
+            if (world.setBlockState(pos, out, Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
+
+                ItemStack stack = ItemUtils.createBlockStack(out);
+                if (!stack.isEmpty()) {
+                    world.getPlayers().stream()
+                            .filter(player -> player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 144)
+                            .forEach(player -> ResearchManager.informCrafted(player, stack));
+                }
                 return true;
             }
             //Retry a bit later

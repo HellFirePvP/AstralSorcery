@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
@@ -150,7 +151,7 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
         return starlightRequirement;
     }
 
-    public void onRecipeCompletion(TileAltar altar) {}
+    public void onRecipeCompletion(TileAltar altar, ActiveSimpleAltarRecipe activeRecipe) {}
 
     @Nonnull
     @OnlyIn(Dist.CLIENT)

@@ -10,11 +10,11 @@ package hellfirepvp.astralsorcery.common.crafting.recipe.altar.builtin;
 
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -57,10 +57,10 @@ public class ConstellationUpgradeRecipe extends SimpleAltarRecipe {
     }
 
     @Override
-    public void onRecipeCompletion(TileAltar altar) {
-        super.onRecipeCompletion(altar);
+    public void onRecipeCompletion(TileAltar altar, ActiveSimpleAltarRecipe activeRecipe) {
+        super.onRecipeCompletion(altar, activeRecipe);
 
-        ResearchManager.informCraftedAltar(altar, altar.getActiveRecipe(), new ItemStack(BlocksAS.ALTAR_CONSTELLATION));
+        ResearchManager.informCraftedAltar(altar, activeRecipe, new ItemStack(BlocksAS.ALTAR_CONSTELLATION));
         altar.getWorld().setBlockState(altar.getPos(), BlocksAS.ALTAR_CONSTELLATION.getDefaultState(), Constants.BlockFlags.DEFAULT);
     }
 }

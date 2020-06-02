@@ -20,6 +20,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -58,8 +59,8 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
     @Override
     public Encoder<PktProgressionUpdate> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeOptional(buffer, this.tier, ByteBufUtils::writeEnumValue);
-            ByteBufUtils.writeOptional(buffer, this.prog, ByteBufUtils::writeEnumValue);
+            ByteBufUtils.writeOptional(buffer, packet.tier, ByteBufUtils::writeEnumValue);
+            ByteBufUtils.writeOptional(buffer, packet.prog, ByteBufUtils::writeEnumValue);
         };
     }
 
@@ -80,15 +81,15 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktProgressionUpdate packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
-                    if (packet.prog != null) {
-                        String out = TextFormatting.BLUE + I18n.format("astralsorcery.progress.gain.progress.chat");
-                        Minecraft.getInstance().player.sendMessage(new StringTextComponent(out));
-                    }
                     if (packet.tier != null) {
-                        String tr = I18n.format(packet.prog.getUnlocalizedName());
-                        String out = I18n.format("astralsorcery.progress.gain.research.chat", tr);
-                        out = TextFormatting.AQUA + out;
-                        Minecraft.getInstance().player.sendMessage(new StringTextComponent(out));
+                        Minecraft.getInstance().player.sendMessage(
+                                new TranslationTextComponent("astralsorcery.progress.gain.progress.chat")
+                                        .applyTextStyle(TextFormatting.BLUE));
+                    }
+                    if (packet.prog != null) {
+                        Minecraft.getInstance().player.sendMessage(
+                                new TranslationTextComponent("astralsorcery.progress.gain.research.chat", packet.prog.getName())
+                                        .applyTextStyle(TextFormatting.AQUA));
                     }
                     packet.refreshJournal();
                 });

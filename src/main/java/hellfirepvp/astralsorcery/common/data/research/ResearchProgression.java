@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.data.research;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.IExtensibleEnum;
 
 import javax.annotation.Nonnull;
@@ -39,8 +41,6 @@ public enum ResearchProgression implements IExtensibleEnum {
     private final ProgressionTier requiredProgress;
     private final String unlocName;
 
-    private static final Map<String, ResearchProgression> BY_NAME = new HashMap<>();
-
     private ResearchProgression(ProgressionTier requiredProgress, ResearchProgression... preConditions) {
         this(requiredProgress, Arrays.asList(preConditions));
     }
@@ -48,7 +48,7 @@ public enum ResearchProgression implements IExtensibleEnum {
     private ResearchProgression(ProgressionTier requiredProgress, List<ResearchProgression> preConditions) {
         this.preConditions.addAll(preConditions);
         this.requiredProgress = requiredProgress;
-        this.unlocName = AstralSorcery.MODID + ".journal.cluster." + name().toLowerCase() + ".name";
+        this.unlocName = AstralSorcery.MODID + ".journal.research." + name().toLowerCase();
     }
 
     public Consumer<ResearchNode> getRegistrar() {
@@ -94,12 +94,8 @@ public enum ResearchProgression implements IExtensibleEnum {
         return Collections.unmodifiableList(preConditions);
     }
 
-    public String getUnlocalizedName() {
-        return unlocName;
-    }
-
-    public static ResearchProgression getByEnumName(String name) {
-        return BY_NAME.get(name);
+    public ITextComponent getName() {
+        return new TranslationTextComponent(this.unlocName);
     }
 
     @Nullable
@@ -123,11 +119,5 @@ public enum ResearchProgression implements IExtensibleEnum {
             }
         }
         return progressions;
-    }
-
-    static {
-        for (ResearchProgression progress : values()) {
-            BY_NAME.put(progress.name(), progress);
-        }
     }
 }

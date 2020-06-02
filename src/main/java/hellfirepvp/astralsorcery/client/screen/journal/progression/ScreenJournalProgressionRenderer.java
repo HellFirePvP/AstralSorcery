@@ -284,7 +284,7 @@ public class ScreenJournalProgressionRenderer {
                 br = (float) (1F - ((scale - 6) / 2));
             }
 
-            String name = I18n.format(focusedClusterMouse.getUnlocalizedName());
+            String name = focusedClusterMouse.getName().getFormattedText();
             double length = Minecraft.getInstance().fontRenderer.getStringWidth(name) * 1.4;
 
             GlStateManager.pushMatrix();
