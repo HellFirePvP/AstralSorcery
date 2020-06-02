@@ -28,12 +28,15 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.LogicalSide;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -60,16 +63,23 @@ public class ASMHookEndpoint {
 
     @OnlyIn(Dist.CLIENT)
     public static void addTooltipPreEnchantments(ItemStack stack, List<ITextComponent> tooltip) {
-        //Add any dynamic modifiers this item has.
-        DynamicModifierHelper.addModifierTooltip(stack, tooltip);
+        List<ITextComponent> addition = new ArrayList<>();
+        try {
+            //Add any dynamic modifiers this item has.
+            DynamicModifierHelper.addModifierTooltip(stack, addition);
 
-        //Add prism enchantments
-        Map<Enchantment, Integer> enchantments;
-        if (!stack.hasTag() && !(enchantments = EnchantmentHelper.getEnchantments(stack)).isEmpty()) {
-            for (Enchantment e : enchantments.keySet()) {
-                tooltip.add(e.getDisplayName(enchantments.get(e)));
+            //Add prism enchantments
+            Map<Enchantment, Integer> enchantments;
+            if (!stack.hasTag() && !(enchantments = EnchantmentHelper.getEnchantments(stack)).isEmpty()) {
+                for (Enchantment e : enchantments.keySet()) {
+                    addition.add(e.getDisplayName(enchantments.get(e)));
+                }
             }
+        } catch (Exception exc) {
+            addition.clear();
+            tooltip.add(new TranslationTextComponent("astralsorcery.misc.tooltipError").applyTextStyle(TextFormatting.GRAY));
         }
+        tooltip.addAll(addition);
     }
 
     @OnlyIn(Dist.CLIENT)

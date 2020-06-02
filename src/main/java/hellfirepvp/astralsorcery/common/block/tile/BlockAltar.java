@@ -13,6 +13,10 @@ import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.container.factory.*;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
@@ -21,6 +25,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -28,6 +33,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 
@@ -63,6 +69,11 @@ public abstract class BlockAltar extends BlockStarlightNetwork implements Custom
                 switch (altar.getAltarType()) {
                     case DISCOVERY:
                         provider = new ContainerAltarDiscoveryProvider(altar);
+
+                        if (!ResearchHelper.getProgress(player, LogicalSide.SERVER)
+                                .getTierReached().isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT)) {
+                            ResearchManager.informCrafted(player, new ItemStack(BlocksAS.ALTAR_DISCOVERY));
+                        }
                         break;
                     case ATTUNEMENT:
                         provider = new ContainerAltarAttunementProvider(altar);

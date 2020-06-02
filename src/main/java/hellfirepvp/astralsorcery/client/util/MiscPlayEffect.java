@@ -91,6 +91,7 @@ public class MiscPlayEffect {
         playBlockParticles(state, pos);
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static void playBlockParticles(BlockState state, BlockPos pos) {
         RenderingUtils.playBlockBreakParticles(pos, null, state);
 

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.crafting.recipe.altar.builtin;
 
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
@@ -56,10 +57,10 @@ public class TraitUpgradeRecipe extends SimpleAltarRecipe {
     }
 
     @Override
-    public void onRecipeCompletion(TileAltar altar) {
-        super.onRecipeCompletion(altar);
+    public void onRecipeCompletion(TileAltar altar, ActiveSimpleAltarRecipe activeRecipe) {
+        super.onRecipeCompletion(altar, activeRecipe);
 
-        ResearchManager.informCraftedAltar(altar, altar.getActiveRecipe(), new ItemStack(BlocksAS.ALTAR_RADIANCE));
+        ResearchManager.informCraftedAltar(altar, activeRecipe, new ItemStack(BlocksAS.ALTAR_RADIANCE));
         altar.getWorld().setBlockState(altar.getPos(), BlocksAS.ALTAR_RADIANCE.getDefaultState(), Constants.BlockFlags.DEFAULT);
     }
 }

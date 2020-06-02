@@ -447,7 +447,7 @@ public class ResearchManager {
         return true;
     }
 
-    public static void informCraftedInfuser(TileInfuser infuser, ActiveLiquidInfusionRecipe recipe, ItemStack crafted) {
+    public static void informCraftedInfuser(@Nonnull TileInfuser infuser, @Nonnull ActiveLiquidInfusionRecipe recipe, @Nonnull ItemStack crafted) {
         PlayerEntity crafter = recipe.tryGetCraftingPlayerServer();
         if (!(crafter instanceof ServerPlayerEntity)) {
             AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
@@ -458,7 +458,7 @@ public class ResearchManager {
         informCrafted(crafter, crafted);
     }
 
-    public static void informCraftedAltar(TileAltar altar, ActiveSimpleAltarRecipe recipe, ItemStack crafted) {
+    public static void informCraftedAltar(@Nonnull TileAltar altar, @Nonnull ActiveSimpleAltarRecipe recipe, @Nonnull ItemStack crafted) {
         PlayerEntity crafter = recipe.tryGetCraftingPlayerServer();
         if (!(crafter instanceof ServerPlayerEntity)) {
             AstralSorcery.log.warn("Crafting finished, player that initialized crafting could not be found!");
@@ -471,32 +471,30 @@ public class ResearchManager {
         AdvancementsAS.ALTAR_CRAFT.trigger((ServerPlayerEntity) crafter, recipe.getRecipeToCraft(), crafted);
     }
 
-    public static void informCrafted(PlayerEntity player, ItemStack out) {
+    public static void informCrafted(@Nonnull PlayerEntity player, @Nonnull ItemStack out) {
         if (!out.isEmpty()) {
             informCraftCompletion(player, out, out.getItem(), Block.getBlockFromItem(out.getItem()));
         }
     }
 
-    private static void informCraftCompletion(PlayerEntity crafter, ItemStack crafted, Item itemCrafted, @Nullable Block blockCrafted) {
-        if (blockCrafted != null) {
-            if (blockCrafted instanceof BlockAltar) {
-                giveProgressionIgnoreFail(crafter, ProgressionTier.BASIC_CRAFT);
-                giveResearchIgnoreFail(crafter, ResearchProgression.BASIC_CRAFT);
+    private static void informCraftCompletion(@Nonnull PlayerEntity crafter, @Nonnull ItemStack crafted, @Nonnull Item itemCrafted, @Nonnull Block blockCrafted) {
+        if (blockCrafted instanceof BlockAltar) {
+            giveProgressionIgnoreFail(crafter, ProgressionTier.BASIC_CRAFT);
+            giveResearchIgnoreFail(crafter, ResearchProgression.BASIC_CRAFT);
 
-                //Fallthrough switch to lower tiers
-                switch (((BlockAltar) blockCrafted).getAltarType()) {
-                    case RADIANCE:
-                        giveProgressionIgnoreFail(crafter, ProgressionTier.TRAIT_CRAFT);
-                        giveResearchIgnoreFail(crafter, ResearchProgression.RADIANCE);
-                    case CONSTELLATION:
-                        giveProgressionIgnoreFail(crafter, ProgressionTier.CONSTELLATION_CRAFT);
-                        giveResearchIgnoreFail(crafter, ResearchProgression.CONSTELLATION);
-                    case ATTUNEMENT:
-                        giveProgressionIgnoreFail(crafter, ProgressionTier.ATTUNEMENT);
-                        giveResearchIgnoreFail(crafter, ResearchProgression.ATTUNEMENT);
-                    default:
-                        break;
-                }
+            //Fallthrough switch to lower tiers
+            switch (((BlockAltar) blockCrafted).getAltarType()) {
+                case RADIANCE:
+                    giveProgressionIgnoreFail(crafter, ProgressionTier.TRAIT_CRAFT);
+                    giveResearchIgnoreFail(crafter, ResearchProgression.RADIANCE);
+                case CONSTELLATION:
+                    giveProgressionIgnoreFail(crafter, ProgressionTier.CONSTELLATION_CRAFT);
+                    giveResearchIgnoreFail(crafter, ResearchProgression.CONSTELLATION);
+                case ATTUNEMENT:
+                    giveProgressionIgnoreFail(crafter, ProgressionTier.ATTUNEMENT);
+                    giveResearchIgnoreFail(crafter, ResearchProgression.ATTUNEMENT);
+                default:
+                    break;
             }
         }
     }

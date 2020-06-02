@@ -65,33 +65,6 @@ public class ASRegistryEvents {
     }
 
     /**
-     * Use this event to remove perks at AS' post-init
-     * Removed associated connections aswell
-     */
-    //TODO post remove
-    public static class PerkPostRemove extends Event {
-
-        private boolean removed;
-        private final AbstractPerk perk;
-
-        public PerkPostRemove(AbstractPerk perk) {
-            this.perk = perk;
-        }
-
-        public AbstractPerk getPerk() {
-            return perk;
-        }
-
-        public boolean isRemoved() {
-            return removed;
-        }
-
-        public void setRemoved(boolean removed) {
-            this.removed = removed;
-        }
-    }
-
-    /**
      * Use this event to register a new modifier source provider to the automatic gathering.
      */
     public static class ModifierSourceRegister extends Event {

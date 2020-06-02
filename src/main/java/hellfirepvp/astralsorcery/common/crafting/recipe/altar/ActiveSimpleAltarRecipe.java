@@ -117,7 +117,7 @@ public class ActiveSimpleAltarRecipe {
 
         Consumer<ItemStack> handleCrafted = informer.andThen(output);
         this.getRecipeToCraft().getOutputs(altar).forEach(handleCrafted);
-        this.getRecipeToCraft().onRecipeCompletion(altar);
+        this.getRecipeToCraft().onRecipeCompletion(altar, this);
     }
 
     public void consumeInputs(TileAltar altar) {
