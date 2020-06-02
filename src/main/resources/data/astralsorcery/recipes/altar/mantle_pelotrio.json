@@ -1,0 +1,63 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 3,
+  "duration": 720,
+  "starlight": 6400,
+  "pattern": [
+    "__B__",
+    "__A__",
+    "BACAB",
+    "__A__",
+    "__B__"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:rotten_flesh"
+    },
+    "B": {
+      "tag": "astralsorcery:stardust"
+    },
+    "C": {
+      "item": "astralsorcery:mantle"
+    }
+  },
+  "recipe_class": "astralsorcery:constellation_base_nbt_copy",
+  "output": [
+    {
+      "item": "astralsorcery:mantle",
+      "count": 1
+    }
+  ],
+  "options": {
+    "copy_nbt_from_items_matching": [
+      {
+        "item": "astralsorcery:mantle"
+      }
+    ],
+    "constellation": "astralsorcery:pelotrio"
+  },
+  "focus_constellation": "astralsorcery:pelotrio",
+  "relay_inputs": [
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:apple"
+    },
+    {
+      "tag": "forge:eggs"
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_trait_relay_highlight",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_trait_focus_circle",
+    "astralsorcery:altar_default_sparkle",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

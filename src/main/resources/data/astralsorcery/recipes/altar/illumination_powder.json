@@ -1,0 +1,30 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 60,
+  "starlight": 200,
+  "pattern": [
+    "_____",
+    "__A__",
+    "_ABA_",
+    "__A__",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "B": {
+      "item": "astralsorcery:aquamarine"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:illumination_powder",
+      "count": 16
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}

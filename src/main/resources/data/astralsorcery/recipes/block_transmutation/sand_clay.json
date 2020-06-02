@@ -1,0 +1,20 @@
+{
+  "type": "astralsorcery:block_transmutation",
+  "input": [
+    {
+      "block": "minecraft:sand",
+      "display": {
+        "item": "minecraft:sand",
+        "count": 1
+      }
+    }
+  ],
+  "output": {
+    "block": "minecraft:clay"
+  },
+  "display": {
+    "item": "minecraft:clay",
+    "count": 1
+  },
+  "starlight": 200.0
+}

@@ -1,0 +1,20 @@
+{
+  "type": "astralsorcery:block_transmutation",
+  "input": [
+    {
+      "block": "minecraft:diamond_ore",
+      "display": {
+        "item": "minecraft:diamond_ore",
+        "count": 1
+      }
+    }
+  ],
+  "output": {
+    "block": "minecraft:emerald_ore"
+  },
+  "display": {
+    "item": "minecraft:emerald_ore",
+    "count": 1
+  },
+  "starlight": 1000.0
+}

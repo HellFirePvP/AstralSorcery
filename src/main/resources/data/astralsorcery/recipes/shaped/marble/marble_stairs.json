@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "M  ",
+    "MM ",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "item": "astralsorcery:marble_raw"
+    }
+  },
+  "result": {
+    "item": "astralsorcery:marble_stairs",
+    "count": 8
+  }
+}

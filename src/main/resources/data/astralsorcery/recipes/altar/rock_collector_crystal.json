@@ -1,0 +1,44 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 3200,
+  "pattern": [
+    "AB_BA",
+    "C___C",
+    "__D__",
+    "C___C",
+    "AB_BA"
+  ],
+  "key": {
+    "A": {
+      "tag": "astralsorcery:stardust"
+    },
+    "B": {
+      "item": "astralsorcery:illumination_powder"
+    },
+    "C": {
+      "item": "astralsorcery:resonating_gem"
+    },
+    "D": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": true,
+      "hasToBeCelestial": false,
+      "canBeAttuned": false,
+      "canBeCelestialCrystal": false
+    }
+  },
+  "recipe_class": "astralsorcery:constellation_base_average",
+  "output": [
+    {
+      "item": "astralsorcery:rock_collector_crystal",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

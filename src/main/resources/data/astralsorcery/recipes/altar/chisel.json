@@ -1,0 +1,34 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 800,
+  "pattern": [
+    "_____",
+    "__BC_",
+    "__AB_",
+    "_A___",
+    "B____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:infused_wood_planks"
+    },
+    "B": {
+      "tag": "forge:nuggets/gold"
+    },
+    "C": {
+      "tag": "astralsorcery:starmetal"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:chisel",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

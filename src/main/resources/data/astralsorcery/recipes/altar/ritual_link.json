@@ -1,0 +1,45 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 1600,
+  "pattern": [
+    "_A_A_",
+    "_ABA_",
+    "_CDC_",
+    "_EFE_",
+    "_E_E_"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:nuggets/gold"
+    },
+    "B": {
+      "tag": "forge:ingots/gold"
+    },
+    "C": {
+      "item": "astralsorcery:glass_lens"
+    },
+    "D": {
+      "item": "astralsorcery:resonating_gem"
+    },
+    "E": {
+      "tag": "forge:glass_panes"
+    },
+    "F": {
+      "tag": "astralsorcery:stardust"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:ritual_link",
+      "count": 2
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

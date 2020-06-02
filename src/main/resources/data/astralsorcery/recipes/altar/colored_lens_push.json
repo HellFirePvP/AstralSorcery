@@ -1,0 +1,39 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 2000,
+  "pattern": [
+    "A___A",
+    "BC_CB",
+    "__D__",
+    "_____",
+    "A___A"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "B": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "C": {
+      "tag": "forge:feathers"
+    },
+    "D": {
+      "item": "astralsorcery:glass_lens"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:colored_lens_push",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

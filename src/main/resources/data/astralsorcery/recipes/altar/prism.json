@@ -1,0 +1,56 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 1600,
+  "pattern": [
+    "_A_A_",
+    "BCDCB",
+    "_EFE_",
+    "GCDCG",
+    "HH_HH"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:resonating_gem"
+    },
+    "B": {
+      "tag": "forge:ingots/gold"
+    },
+    "C": {
+      "tag": "forge:glass_panes"
+    },
+    "D": {
+      "tag": "astralsorcery:stardust"
+    },
+    "E": {
+      "item": "astralsorcery:glass_lens"
+    },
+    "F": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    },
+    "G": {
+      "item": "astralsorcery:infused_wood_engraved"
+    },
+    "H": {
+      "item": "astralsorcery:marble_runed"
+    }
+  },
+  "recipe_class": "astralsorcery:constellation_base_average",
+  "output": [
+    {
+      "item": "astralsorcery:prism",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

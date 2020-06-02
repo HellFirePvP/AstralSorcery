@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": {
+        "min": 3.0,
+        "max": 6.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "astralsorcery:random_crystal_property"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "astralsorcery:rock_crystal"
+        }
+      ]
+    }
+  ]
+}

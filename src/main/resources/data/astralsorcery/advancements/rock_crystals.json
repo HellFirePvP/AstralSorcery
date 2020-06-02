@@ -1,0 +1,35 @@
+{
+  "parent": "astralsorcery:root",
+  "display": {
+    "icon": {
+      "item": "astralsorcery:rock_crystal"
+    },
+    "title": {
+      "translate": "advancements.astralsorcery.rock_crystals.title"
+    },
+    "description": {
+      "translate": "advancements.astralsorcery.rock_crystals.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "rock_crystal_in_inventory": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "astralsorcery:rock_crystal"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "rock_crystal_in_inventory"
+    ]
+  ]
+}

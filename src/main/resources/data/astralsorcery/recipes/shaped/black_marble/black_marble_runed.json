@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MCM"
+  ],
+  "key": {
+    "M": {
+      "item": "astralsorcery:black_marble_raw"
+    },
+    "C": {
+      "item": "astralsorcery:black_marble_chiseled"
+    }
+  },
+  "result": {
+    "item": "astralsorcery:black_marble_runed",
+    "count": 3
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "astralsorcery:starmetal_ore"
+  },
+  "result": {
+    "item": "astralsorcery:starmetal_ingot",
+    "count": 1
+  },
+  "experience": 1.8,
+  "cookingtime": 200
+}

@@ -1,0 +1,36 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 2800,
+  "pattern": [
+    "___B_",
+    "__BCB",
+    "__AB_",
+    "_A___",
+    "A____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:marble_runed"
+    },
+    "B": {
+      "item": "astralsorcery:illumination_powder"
+    },
+    "C": {
+      "item": "astralsorcery:shifting_star"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:illumination_wand",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

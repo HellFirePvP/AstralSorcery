@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "ABA",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:aquamarine"
+    },
+    "B": {
+      "item": "minecraft:book"
+    },
+    "P": {
+      "item": "astralsorcery:parchment"
+    }
+  },
+  "result": {
+    "item": "astralsorcery:tome",
+    "count": 1
+  }
+}

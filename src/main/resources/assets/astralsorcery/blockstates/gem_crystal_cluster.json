@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "stage=stage_0": {
+      "model": "astralsorcery:block/multilayer/gem_crystal_cluster_stage_0"
+    },
+    "stage=stage_1": {
+      "model": "astralsorcery:block/multilayer/gem_crystal_cluster_stage_1"
+    },
+    "stage=stage_2_sky": {
+      "model": "astralsorcery:block/multilayer/gem_crystal_cluster_stage_2_sky"
+    },
+    "stage=stage_2_day": {
+      "model": "astralsorcery:block/multilayer/gem_crystal_cluster_stage_2_day"
+    },
+    "stage=stage_2_night": {
+      "model": "astralsorcery:block/multilayer/gem_crystal_cluster_stage_2_night"
+    }
+  }
+}

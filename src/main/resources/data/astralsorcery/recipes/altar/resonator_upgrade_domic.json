@@ -1,0 +1,46 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 800,
+  "pattern": [
+    "A___A",
+    "_A_A_",
+    "_CDC_",
+    "_B_B_",
+    "B___B"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:illumination_powder"
+    },
+    "B": {
+      "tag": "astralsorcery:stardust"
+    },
+    "C": {
+      "item": "astralsorcery:glass_lens"
+    },
+    "D": {
+      "item": "astralsorcery:resonator"
+    }
+  },
+  "recipe_class": "astralsorcery:nbt_copy",
+  "output": [
+    {
+      "item": "astralsorcery:resonator",
+      "count": 1,
+      "nbt": "{astralsorcery:{selected_upgrade:2,upgrades:[0,2]}}"
+    }
+  ],
+  "options": {
+    "copy_nbt_from_items_matching": [
+      {
+        "item": "astralsorcery:resonator"
+      }
+    ]
+  },
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

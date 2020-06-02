@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "color=white": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=orange": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=magenta": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=light_blue": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=yellow": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=lime": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=pink": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=gray": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=light_gray": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=cyan": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=purple": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=blue": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=brown": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=green": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=red": {
+      "model": "astralsorcery:block/base/nothing"
+    },
+    "color=black": {
+      "model": "astralsorcery:block/base/nothing"
+    }
+  }
+}

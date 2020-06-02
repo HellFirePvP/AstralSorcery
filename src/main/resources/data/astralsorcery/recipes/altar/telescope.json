@@ -1,0 +1,37 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 800,
+  "pattern": [
+    "_____",
+    "__B__",
+    "_CDC_",
+    "_AAA_",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:rods/wooden"
+    },
+    "B": {
+      "item": "astralsorcery:hand_telescope"
+    },
+    "C": {
+      "tag": "forge:ingots/gold"
+    },
+    "D": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:telescope",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

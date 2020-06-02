@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "astralsorcery:colored_lens_break",
+    "astralsorcery:colored_lens_damage",
+    "astralsorcery:colored_lens_fire",
+    "astralsorcery:colored_lens_growth",
+    "astralsorcery:colored_lens_push",
+    "astralsorcery:colored_lens_regeneration",
+    "astralsorcery:colored_lens_spectral"
+  ]
+}

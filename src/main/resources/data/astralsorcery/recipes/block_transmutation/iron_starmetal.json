@@ -1,0 +1,20 @@
+{
+  "type": "astralsorcery:block_transmutation",
+  "input": [
+    {
+      "block": "minecraft:iron_ore",
+      "display": {
+        "item": "minecraft:iron_ore",
+        "count": 1
+      }
+    }
+  ],
+  "output": {
+    "block": "astralsorcery:starmetal_ore"
+  },
+  "display": {
+    "item": "astralsorcery:starmetal_ore",
+    "count": 1
+  },
+  "starlight": 100.0
+}

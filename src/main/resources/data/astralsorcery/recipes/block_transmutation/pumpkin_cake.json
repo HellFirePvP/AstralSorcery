@@ -1,0 +1,26 @@
+{
+  "type": "astralsorcery:block_transmutation",
+  "input": [
+    {
+      "block": "minecraft:pumpkin",
+      "display": {
+        "item": "minecraft:pumpkin",
+        "count": 1
+      }
+    }
+  ],
+  "output": {
+    "block": "minecraft:cake",
+    "properties": [
+      {
+        "name": "bites",
+        "value": "0"
+      }
+    ]
+  },
+  "display": {
+    "item": "minecraft:cake",
+    "count": 1
+  },
+  "starlight": 500.0
+}

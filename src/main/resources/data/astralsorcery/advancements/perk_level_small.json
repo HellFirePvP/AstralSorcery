@@ -1,0 +1,31 @@
+{
+  "parent": "astralsorcery:attune_self",
+  "display": {
+    "icon": {
+      "item": "astralsorcery:spectral_relay"
+    },
+    "title": {
+      "translate": "advancements.astralsorcery.perk_level_small.title"
+    },
+    "description": {
+      "translate": "advancements.astralsorcery.perk_level_small.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "gain_perk_level_small": {
+      "trigger": "astralsorcery:perk_level",
+      "conditions": {
+        "levelNeeded": 10
+      }
+    }
+  },
+  "requirements": [
+    [
+      "gain_perk_level_small"
+    ]
+  ]
+}

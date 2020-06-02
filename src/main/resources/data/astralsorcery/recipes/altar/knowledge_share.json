@@ -1,0 +1,40 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 1400,
+  "pattern": [
+    "A___A",
+    "__C__",
+    "_DED_",
+    "__B__",
+    "A___A"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:illumination_powder"
+    },
+    "B": {
+      "tag": "forge:dyes/black"
+    },
+    "C": {
+      "tag": "forge:feathers"
+    },
+    "D": {
+      "tag": "astralsorcery:stardust"
+    },
+    "E": {
+      "item": "astralsorcery:parchment"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:knowledge_share",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

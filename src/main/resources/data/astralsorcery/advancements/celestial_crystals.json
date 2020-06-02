@@ -1,0 +1,35 @@
+{
+  "parent": "astralsorcery:rock_crystals",
+  "display": {
+    "icon": {
+      "item": "astralsorcery:celestial_crystal"
+    },
+    "title": {
+      "translate": "advancements.astralsorcery.celestial_crystals.title"
+    },
+    "description": {
+      "translate": "advancements.astralsorcery.celestial_crystals.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "celestial_crystal_in_inventory": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "astralsorcery:celestial_crystal"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "celestial_crystal_in_inventory"
+    ]
+  ]
+}

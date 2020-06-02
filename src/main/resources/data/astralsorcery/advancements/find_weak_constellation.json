@@ -1,0 +1,31 @@
+{
+  "parent": "astralsorcery:find_constellation",
+  "display": {
+    "icon": {
+      "item": "astralsorcery:telescope"
+    },
+    "title": {
+      "translate": "advancements.astralsorcery.find_weak_constellation.title"
+    },
+    "description": {
+      "translate": "advancements.astralsorcery.find_weak_constellation.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "weak_constellation_discovered": {
+      "trigger": "astralsorcery:find_constellation",
+      "conditions": {
+        "weak": true
+      }
+    }
+  },
+  "requirements": [
+    [
+      "weak_constellation_discovered"
+    ]
+  ]
+}

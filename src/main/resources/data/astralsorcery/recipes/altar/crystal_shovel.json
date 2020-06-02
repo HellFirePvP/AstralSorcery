@@ -1,0 +1,35 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 0,
+  "duration": 175,
+  "starlight": 500,
+  "pattern": [
+    "_____",
+    "__B__",
+    "__A__",
+    "__A__",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:rods/wooden"
+    },
+    "B": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    }
+  },
+  "recipe_class": "astralsorcery:constellation_base_merge",
+  "output": [
+    {
+      "item": "astralsorcery:crystal_shovel",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam"
+  ]
+}
