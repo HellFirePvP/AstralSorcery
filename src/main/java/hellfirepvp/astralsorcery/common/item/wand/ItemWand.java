@@ -77,12 +77,12 @@ public class ItemWand extends Item implements OverrideInteractItem {
                             buf.removeOre(rPos);
                             continue;
                         }
-                        if (!DayTimeHelper.isDay(world) && random.nextInt(30) == 0) {
+                        if (!DayTimeHelper.isDay(world) && random.nextInt(600) == 0) {
                             PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_COLUMN)
                                     .addData(b -> ByteBufUtils.writeVector(b, new Vector3(rPos.up())));
                             PacketChannel.CHANNEL.sendToPlayer((PlayerEntity) entity, pkt);
                         }
-                        if (random.nextInt(14) == 0) {
+                        if (random.nextInt(800) == 0) {
                             PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.ROCK_CRYSTAL_SPARKS)
                                     .addData(b -> ByteBufUtils.writeVector(b, new Vector3(rPos.up())));
                             PacketChannel.CHANNEL.sendToPlayer((PlayerEntity) entity, pkt);
