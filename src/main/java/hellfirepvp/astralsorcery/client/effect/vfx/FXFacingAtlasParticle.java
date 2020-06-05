@@ -8,10 +8,11 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.MathHelper;
@@ -54,18 +55,20 @@ public class FXFacingAtlasParticle extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
-        if (this.sprite != null) {
-            Vector3 vec = this.getRenderPosition(pTicks);
-            float alpha = this.getAlpha(pTicks);
-            float fScale = this.getScale(pTicks);
-            Color col = this.getColor(pTicks);
-
-            RenderingDrawUtils.renderFacingQuadVB(buf,
-                    vec.getX(), vec.getY(), vec.getZ(),
-                    pTicks, fScale, 0F,
-                    this.minU, this.minV, this.uLength, this.vLength,
-                    col.getRed(), col.getGreen(), col.getBlue(), alpha);
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {
+        if (this.sprite == null) {
+            return;
         }
+
+        Vector3 vec = this.getRenderPosition(pTicks);
+        int alpha = this.getAlpha(pTicks);
+        float fScale = this.getScale(pTicks);
+        Color col = this.getColor(pTicks);
+
+        RenderingDrawUtils.renderFacingQuadVB(vb,
+                vec.getX(), vec.getY(), vec.getZ(),
+                pTicks, fScale, 0F,
+                this.minU, this.minV, this.uLength, this.vLength,
+                col.getRed(), col.getGreen(), col.getBlue(), alpha);
     }
 }

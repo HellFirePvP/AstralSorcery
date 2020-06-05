@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
@@ -119,17 +121,17 @@ public class FXLightning extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {
         if (root == null) {
             return;
         }
 
         Color c = this.getColor(pTicks);
         bufRenderDepth = Math.min(1F, (age + pTicks) / (buildSpeed * 20F));
-        renderRec(this.root, buf, c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F);
+        renderRec(this.root, vb, c.getRed(), c.getGreen(), c.getBlue());
     }
 
-    private void renderRec(LightningVertex root, BufferBuilder vb, float r, float g, float b) {
+    private void renderRec(LightningVertex root, IVertexBuilder vb, float r, float g, float b) {
         int allDepth = root.followingDepth;
         boolean mayRenderNext = 1F - (((float) root.followingDepth) / ((float) allDepth)) <= bufRenderDepth;
         for (LightningVertex next : root.next) {
@@ -140,12 +142,12 @@ public class FXLightning extends EntityVisualFX {
         }
     }
 
-    private void drawLine(Vector3 from, Vector3 to, BufferBuilder vb, float r, float g, float b) {
+    private void drawLine(Vector3 from, Vector3 to, IVertexBuilder vb, float r, float g, float b) {
         renderCurrentTextureAroundAxis(from, to, Math.toRadians(0F),  0.035F, vb, r, g, b);
         renderCurrentTextureAroundAxis(from, to, Math.toRadians(90F), 0.035F, vb, r, g, b);
     }
 
-    private void renderCurrentTextureAroundAxis(Vector3 from, Vector3 to, double angle, double size, BufferBuilder buf, float r, float g, float b) {
+    private void renderCurrentTextureAroundAxis(Vector3 from, Vector3 to, double angle, double size, IVertexBuilder buf, float r, float g, float b) {
         Vector3 aim = to.clone().subtract(from).normalize();
         Vector3 aimPerp = aim.clone().perpendicular().normalize();
         Vector3 perp = aimPerp.clone().rotate(angle, aim).normalize();
@@ -153,13 +155,13 @@ public class FXLightning extends EntityVisualFX {
         Vector3 perpTo = perp.multiply(size);
 
         Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
-        vec.drawPos(buf).tex(1, 1).color(r, g, b, 1F).endVertex();
+        vec.drawPos(buf).color(r, g, b, 1F).tex(1, 1).endVertex();
         vec = from.clone().add(perpFrom);
-        vec.drawPos(buf).tex(1, 0).color(r, g, b, 1F).endVertex();
+        vec.drawPos(buf).color(r, g, b, 1F).tex(1, 0).endVertex();
         vec = to.clone().add(perpTo);
-        vec.drawPos(buf).tex(0, 0).color(r, g, b, 1F).endVertex();
+        vec.drawPos(buf).color(r, g, b, 1F).tex(0, 0).endVertex();
         vec = to.clone().add(perpTo.clone().multiply(-1));
-        vec.drawPos(buf).tex(0, 1).color(r, g, b, 1F).endVertex();
+        vec.drawPos(buf).color(r, g, b, 1F).tex(0, 1).endVertex();
     }
 
     @Override

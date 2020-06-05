@@ -8,14 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.effect.context;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXBlock;
-import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
-import hellfirepvp.astralsorcery.client.resource.BlockAtlasTextureResource;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,24 +22,6 @@ import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 public class RenderContextTranslucentDepthBlock extends BatchRenderContext<FXBlock> {
 
     public RenderContextTranslucentDepthBlock() {
-        super(BlockAtlasTextureResource.getInstance(),
-                (ctx, pTicks) -> {
-                    GlStateManager.pushMatrix();
-                    RenderingVectorUtils.removeStandardTranslationFromTESRMatrix(pTicks);
-                    GlStateManager.disableDepthTest();
-                    GlStateManager.enableBlend();
-                    Blending.ADDITIVEDARK.applyStateManager();
-                    GlStateManager.disableCull();
-                },
-                (pTicks) -> {
-                    GlStateManager.enableCull();
-                    Blending.DEFAULT.applyStateManager();
-                    GlStateManager.disableBlend();
-                    GlStateManager.enableDepthTest();
-                    GlStateManager.color4f(1F, 1F, 1F, 1F);
-                    GlStateManager.popMatrix();
-                },
-                (ctx, pos) -> new FXBlock(pos));
+        super(RenderTypesAS.EFFECT_FX_BLOCK_TRANSLUCENT_DEPTH, (ctx, pos) -> new FXBlock(pos));
     }
-
 }

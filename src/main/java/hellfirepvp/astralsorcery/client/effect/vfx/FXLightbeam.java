@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
@@ -47,42 +49,42 @@ public class FXLightbeam extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {
         Color c = this.getColor(pTicks);
-        float r = c.getRed() / 255F;
-        float g = c.getGreen() / 255F;
-        float b = c.getBlue() / 255F;
-        float a = this.getAlpha(pTicks);
+        int r = c.getRed();
+        int g = c.getGreen();
+        int b = c.getBlue();
+        int a = this.getAlpha(pTicks);
         r *= a;
         g *= a;
         b *= a;
         float scale = this.getScale(pTicks);
 
-        renderCurrentTextureAroundAxis(buf, ctx, Math.toRadians(0F), scale, r, g, b, a);
-        renderCurrentTextureAroundAxis(buf, ctx, Math.toRadians(120F), scale, r, g, b, a);
-        renderCurrentTextureAroundAxis(buf, ctx, Math.toRadians(240F), scale, r, g, b, a);
+        renderCurrentTextureAroundAxis(vb, ctx, Math.toRadians(0F), scale, r, g, b, a);
+        renderCurrentTextureAroundAxis(vb, ctx, Math.toRadians(120F), scale, r, g, b, a);
+        renderCurrentTextureAroundAxis(vb, ctx, Math.toRadians(240F), scale, r, g, b, a);
     }
 
-    private <T extends EntityVisualFX> void renderCurrentTextureAroundAxis(BufferBuilder buf, BatchRenderContext<T> ctx, double angle, float scale, float r, float g, float b, float a) {
+    private <T extends EntityVisualFX> void renderCurrentTextureAroundAxis(IVertexBuilder vb, BatchRenderContext<T> ctx, double angle, float scale, int r, int g, int b, int a) {
         Vector3 perp = aimPerp.clone().rotate(angle, aim).normalize();
         Vector3 perpTo = perp.clone().multiply(toSize * scale);
         Vector3 perpFrom = perp.multiply(fromSize * scale);
 
         SpriteSheetResource ssr = ctx.getSprite();
         Tuple<Float, Float> uvOffset = ssr.getUVOffset(age);
-        double u = uvOffset.getA();
-        double v = uvOffset.getB();
-        double uWidth = ssr.getULength();
-        double vHeight = ssr.getVLength();
+        float u = uvOffset.getA();
+        float v = uvOffset.getB();
+        float uWidth = ssr.getULength();
+        float vHeight = ssr.getVLength();
 
         Vector3 vec = to.clone().add(perpTo.clone().multiply(-1));
-        vec.drawPos(buf).tex(u,          v + vHeight)            .color(r, g, b, a).endVertex();
+        vec.drawPos(vb).color(r, g, b, a).tex(u, v + vHeight).endVertex();
         vec = to.clone().add(perpTo);
-        vec.drawPos(buf).tex(u + uWidth, v + vHeight).color(r, g, b, a).endVertex();
+        vec.drawPos(vb).color(r, g, b, a).tex(u + uWidth, v + vHeight).endVertex();
         vec = from.clone().add(perpFrom);
-        vec.drawPos(buf).tex(u + uWidth, v)                      .color(r, g, b, a).endVertex();
+        vec.drawPos(vb).color(r, g, b, a).tex(u + uWidth, v).endVertex();
         vec = from.clone().add(perpFrom.clone().multiply(-1));
-        vec.drawPos(buf).tex(u,          v)                                  .color(r, g, b, a).endVertex();
+        vec.drawPos(vb).color(r, g, b, a).tex(u, v).endVertex();
     }
 
 }

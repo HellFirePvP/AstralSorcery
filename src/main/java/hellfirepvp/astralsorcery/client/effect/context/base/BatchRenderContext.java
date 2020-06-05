@@ -13,6 +13,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHandler;
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
@@ -48,6 +49,12 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
         this(new SpriteSheetResource(BlockAtlasTexture.getInstance()), renderType, particleCreator);
     }
 
+    public BatchRenderContext(AbstractRenderableTexture texture,
+                              RenderType renderType,
+                              BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator) {
+        this(new SpriteSheetResource(texture), renderType, particleCreator);
+    }
+
     public BatchRenderContext(SpriteSheetResource sprite,
                               RenderType renderType,
                               BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator) {
@@ -73,9 +80,7 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
 
     public void renderAll(List<EffectHandler.PendingEffect> effects, MatrixStack renderStack, IRenderTypeBuffer.Impl renderTypeBuffer, float pTicks) {
         IVertexBuilder buf = renderTypeBuffer.getBuffer(this.getRenderType());
-        effects.stream()
-                .filter(effect -> !(effect.getEffect() instanceof EntityDynamicFX))
-                .forEach(effect -> effect.getEffect().render(this, renderStack, buf, pTicks));
+        effects.forEach(effect -> effect.getEffect().render(this, renderStack, buf, pTicks));
         this.drawBatched(buf, renderTypeBuffer);
 
         //Erase type due to impossible typing

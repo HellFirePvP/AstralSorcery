@@ -35,6 +35,16 @@ public class RenderStateBuilder {
         return this;
     }
 
+    public RenderStateBuilder disableDepth() {
+        this.builder.depthTest(new RenderState.DepthTestState(GL11.GL_ALWAYS));
+        return this;
+    }
+
+    public RenderStateBuilder disableDepthMask() {
+        this.builder.writeMask(new RenderState.WriteMaskState(true, false));
+        return this;
+    }
+
     public RenderStateBuilder enableLighting() {
         this.builder.lightmap(new RenderState.LightmapState(true));
         return this;
@@ -52,11 +62,6 @@ public class RenderStateBuilder {
 
     public RenderStateBuilder defaultAlpha() {
         this.builder.alpha(new RenderState.AlphaState(1F / 255F));
-        return this;
-    }
-
-    public RenderStateBuilder noAlpha() {
-        this.builder.alpha(new RenderState.AlphaState(0F));
         return this;
     }
 

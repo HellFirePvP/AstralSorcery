@@ -8,13 +8,8 @@
 
 package hellfirepvp.astralsorcery.client.effect.context.base;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXColorEffectSphere;
-import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.lwjgl.opengl.GL11;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,21 +21,6 @@ import org.lwjgl.opengl.GL11;
 public class RenderContextColorSphere extends BatchRenderContext<FXColorEffectSphere> {
 
     public RenderContextColorSphere() {
-        super(AbstractRenderableTexture.wrap(TextureHelper.getMissingTexture()),
-                (ctx, pTicks) -> {
-                    GlStateManager.enableBlend();
-                    Blending.DEFAULT.applyStateManager();
-                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0001F);
-                    GlStateManager.disableTexture();
-                    GlStateManager.depthMask(false);
-                    ctx.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-                },
-                (pTicks) -> {
-                    GlStateManager.depthMask(true);
-                    GlStateManager.enableTexture();
-                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-                    GlStateManager.disableBlend();
-                },
-                (ctx, pos) -> new FXColorEffectSphere(pos));
+        super(RenderTypesAS.EFFECT_FX_COLOR_SPHERE, (ctx, pos) -> new FXColorEffectSphere(pos));
     }
 }
