@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  * Created by HellFirePvP
  * Date: 27.05.2019 / 22:18
  */
-public abstract class EntityComplexFX implements IComplexEffect {
+public abstract class EntityComplexFX {
 
     protected static final Random rand = new Random();
     private static long counter = 0;
@@ -100,7 +100,6 @@ public abstract class EntityComplexFX implements IComplexEffect {
         return (T) this.customData.get(str);
     }
 
-    @Override
     public void tick() {
         this.age++;
 
@@ -118,7 +117,6 @@ public abstract class EntityComplexFX implements IComplexEffect {
         return ageRefreshCount;
     }
 
-    @Override
     public boolean canRemove() {
         return this.age >= this.maxAge || removeRequested;
     }

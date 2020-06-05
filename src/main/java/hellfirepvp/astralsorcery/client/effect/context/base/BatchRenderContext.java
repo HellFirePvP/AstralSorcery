@@ -8,17 +8,22 @@
 
 package hellfirepvp.astralsorcery.client.effect.context.base;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHandler;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
-import hellfirepvp.astralsorcery.client.util.draw.BufferBatchHelper;
-import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.order.OrderSortable;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.function.BiConsumer;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -31,31 +36,24 @@ import java.util.function.Consumer;
  */
 public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable {
 
-    private static BufferContext ctx = BufferBatchHelper.make();
     private static int counter = 0;
 
     private final int id;
     private final SpriteSheetResource sprite;
-    protected BiConsumer<BufferContext, Float> before;
-    protected Consumer<Float> after;
+    protected RenderType renderType;
     protected BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator;
-    private RenderTarget renderTarget = RenderTarget.RENDERLOOP;
 
-    public BatchRenderContext(AbstractRenderableTexture resource,
-                              BiConsumer<BufferContext, Float> before,
-                              Consumer<Float> after,
+    public BatchRenderContext(RenderType renderType,
                               BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator) {
-        this(new SpriteSheetResource(resource), before, after, particleCreator);
+        this(new SpriteSheetResource(BlockAtlasTexture.getInstance()), renderType, particleCreator);
     }
 
     public BatchRenderContext(SpriteSheetResource sprite,
-                              BiConsumer<BufferContext, Float> before,
-                              Consumer<Float> after,
+                              RenderType renderType,
                               BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator) {
         this.id = counter++;
         this.sprite = sprite;
-        this.before = before;
-        this.after = after;
+        this.renderType = renderType;
         this.particleCreator = particleCreator.andThen(fx -> {
             int frames = this.sprite.getFrameCount();
             if (frames > 1) {
@@ -73,26 +71,39 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
         return sprite;
     }
 
-    public BufferContext prepare(float pTicks) {
-        sprite.bindTexture();
-        before.accept(ctx, pTicks);
-        return ctx;
+    public void renderAll(List<EffectHandler.PendingEffect> effects, MatrixStack renderStack, IRenderTypeBuffer.Impl renderTypeBuffer, float pTicks) {
+        IVertexBuilder buf = renderTypeBuffer.getBuffer(this.getRenderType());
+        effects.stream()
+                .filter(effect -> !(effect.getEffect() instanceof EntityDynamicFX))
+                .forEach(effect -> effect.getEffect().render(this, renderStack, buf, pTicks));
+        this.drawBatched(buf, renderTypeBuffer);
+
+        //Erase type due to impossible typing
+        BatchRenderContext blankCtx = this;
+        Consumer<Consumer<IVertexBuilder>> draw = drawNow(renderTypeBuffer);
+        effects.stream()
+                .filter(effect -> effect.getEffect() instanceof EntityDynamicFX)
+                .forEach(effect -> ((EntityDynamicFX) effect.getEffect()).renderNow(blankCtx, renderStack, draw, pTicks));
     }
 
-    public void draw(float pTicks) {
-        Vec3d view = RenderInfo.getInstance().getARI().getProjectedView();
-        ctx.sortVertexData((float) view.x, (float) view.y, (float) view.z);
-        ctx.draw();
-        after.accept(pTicks);
+    private Consumer<Consumer<IVertexBuilder>> drawNow(IRenderTypeBuffer.Impl renderTypeBuffer) {
+        IVertexBuilder buf = renderTypeBuffer.getBuffer(this.getRenderType());
+        return renderCall -> {
+            renderCall.accept(buf);
+            renderTypeBuffer.finish();
+        };
     }
 
-    public BatchRenderContext setRenderTarget(RenderTarget renderTarget) {
-        this.renderTarget = renderTarget;
-        return this;
+    private void drawBatched(IVertexBuilder buf, IRenderTypeBuffer.Impl renderTypeBuffer) {
+        if (buf instanceof BufferBuilder) {
+            Vec3d view = RenderInfo.getInstance().getARI().getProjectedView();
+            ((BufferBuilder) buf).sortVertexData((float) view.x, (float) view.y, (float) view.z);
+        }
+        renderTypeBuffer.finish(this.getRenderType());
     }
 
-    public RenderTarget getRenderTarget() {
-        return renderTarget;
+    public RenderType getRenderType() {
+        return renderType;
     }
 
     @Override
@@ -106,11 +117,5 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
     @Override
     public int hashCode() {
         return this.id;
-    }
-
-    public static enum RenderTarget {
-
-        RENDERLOOP
-
     }
 }

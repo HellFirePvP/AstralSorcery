@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util.obj;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -23,35 +24,20 @@ import java.util.ArrayList;
  * GroupObject
  */
 public class GroupObject {
+
     public String name;
-    public ArrayList<Face> faces = new ArrayList<Face>();
-    public int glDrawingMode;
+    public ArrayList<Face> faces = new ArrayList<>();
 
     public GroupObject() {
         this("");
     }
 
     public GroupObject(String name) {
-        this(name, -1);
-    }
-
-    public GroupObject(String name, int glDrawingMode) {
         this.name = name;
-        this.glDrawingMode = glDrawingMode;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void render(VertexFormat vf) {
-        if (faces.size() > 0) {
-            BufferBuilder vb = Tessellator.getInstance().getBuffer();
-            vb.begin(glDrawingMode, vf);
-            render(vb);
-            Tessellator.getInstance().draw();
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void render(BufferBuilder vb) {
+    public void render(IVertexBuilder vb) {
         if (faces.size() > 0) {
             for (Face face : faces) {
                 face.addFaceForRender(vb);

@@ -8,10 +8,16 @@
 
 package hellfirepvp.astralsorcery.client.render;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
+import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -24,58 +30,68 @@ import org.lwjgl.opengl.GL11;
 public class ObjModelRender {
 
     private static WavefrontObject crystalModel;
-    private static int crystalDList = -1;
+    private static VertexBuffer vboCrystal;
 
     private static WavefrontObject celestialWingsModel;
-    private static int celestialWingsDList = -1;
+    private static VertexBuffer vboCelestialWings;
 
     private static WavefrontObject wraithWingsModel;
-    private static int wraithWingsDList = -1;
+    private static VertexBuffer wraithWingsBones, wraithWingsWing;
 
-    public static void renderCrystal() {
+    public static void renderCrystal(MatrixStack renderStack) {
         if (crystalModel == null) {
             crystalModel = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "crystal");
         }
-        if (crystalDList == -1) {
-            crystalDList = GLAllocation.generateDisplayLists(1);
-            GlStateManager.newList(crystalDList, GL11.GL_COMPILE);
-            crystalModel.renderAll(true);
-            GlStateManager.endList();
+        if (vboCrystal == null) {
+            vboCrystal = crystalModel.batch(Tessellator.getInstance().getBuffer());
         }
-        GlStateManager.callList(crystalDList);
+        vboCrystal.bindBuffer();
+        DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0L);
+        vboCrystal.draw(renderStack.getLast().getMatrix(), crystalModel.getGLDrawingMode());
     }
 
-    public static void renderCelestialWings() {
+    public static void renderCelestialWings(MatrixStack renderStack) {
         if (celestialWingsModel == null) {
             celestialWingsModel = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "celestial_wings");
         }
-        if (celestialWingsDList == -1) {
-            celestialWingsDList = GLAllocation.generateDisplayLists(1);
-            GlStateManager.newList(celestialWingsDList, GL11.GL_COMPILE);
-            celestialWingsModel.renderAll(true);
-            GlStateManager.endList();
+        if (vboCelestialWings == null) {
+            int[] lightGray = new int[] { 178, 178, 77, 178 };
+            new BufferDecoratorBuilder()
+                    .setColorDecorator((r, g, b, a) -> lightGray)
+                    .decorate(Tessellator.getInstance().getBuffer(),
+                            (BufferBuilder decorated) -> vboCelestialWings = celestialWingsModel.batch(decorated));
         }
-        GlStateManager.callList(celestialWingsDList);
+        vboCelestialWings.bindBuffer();
+        DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0L);
+        vboCelestialWings.draw(renderStack.getLast().getMatrix(), crystalModel.getGLDrawingMode());
     }
 
-    public static void renderWraithWings() {
+    public static void renderWraithWings(MatrixStack renderStack) {
         if (wraithWingsModel == null) {
             wraithWingsModel = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "wraith_wings");
         }
 
-        if (wraithWingsDList == -1) {
-            wraithWingsDList = GLAllocation.generateDisplayLists(2);
-            GlStateManager.newList(wraithWingsDList, GL11.GL_COMPILE);
-            wraithWingsModel.renderOnly(true, "Bones");
-            GlStateManager.endList();
-            GlStateManager.newList(wraithWingsDList + 1, GL11.GL_COMPILE);
-            wraithWingsModel.renderOnly(true, "Wing");
-            GlStateManager.endList();
+        if (wraithWingsBones == null) {
+            int[] gray = new int[] { 77, 77, 77, 255 };
+            new BufferDecoratorBuilder()
+                    .setColorDecorator((r, g, b, a) -> gray)
+                    .decorate(Tessellator.getInstance().getBuffer(),
+                            (BufferBuilder decorated) -> wraithWingsBones = wraithWingsModel.batchOnly(decorated, "Bones"));
         }
-        GlStateManager.color4f(0.3F, 0.3F, 0.3F, 1F);
-        GlStateManager.callList(wraithWingsDList);
-        GlStateManager.color4f(0F, 0F, 0F, 1F);
-        GlStateManager.callList(wraithWingsDList + 1);
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
+        if (wraithWingsWing == null) {
+            int[] black = new int[] { 0, 0, 0, 255 };
+            new BufferDecoratorBuilder()
+                    .setColorDecorator((r, g, b, a) -> black)
+                    .decorate(Tessellator.getInstance().getBuffer(),
+                            (BufferBuilder decorated) -> wraithWingsWing = wraithWingsModel.batchOnly(decorated, "Wing"));
+        }
+
+        wraithWingsBones.bindBuffer();
+        DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0L);
+        wraithWingsBones.draw(renderStack.getLast().getMatrix(), wraithWingsModel.getGLDrawingMode());
+
+        wraithWingsWing.bindBuffer();
+        DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0L);
+        wraithWingsWing.draw(renderStack.getLast().getMatrix(), wraithWingsModel.getGLDrawingMode());
     }
 }

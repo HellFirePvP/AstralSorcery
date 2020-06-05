@@ -8,23 +8,27 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.client.util.LightmapUtil;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.BufferBuilder;
+import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +37,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 18.07.2019 / 14:07
  */
-public class FXCube extends EntityVisualFX {
+public class FXCube extends EntityVisualFX implements EntityDynamicFX {
 
     private TextureAtlasSprite tas = null;
 
@@ -97,7 +101,10 @@ public class FXCube extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {}
+
+    @Override
+    public <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, Consumer<Consumer<IVertexBuilder>> draw, float pTicks) {
         float u, v, uLength, vLength;
         if (this.tas != null) {
             u = this.tas.getMinU();
@@ -113,30 +120,26 @@ public class FXCube extends EntityVisualFX {
             vLength = ssr.getVLength() * this.textureSubSizePercentage;
         }
 
-        float alpha = this.getAlpha(pTicks);
-        float scale = this.getScale(pTicks);
+        int alpha = (int) (this.getAlpha(pTicks) * 255F);
         Color c = this.getColor(pTicks);
-        float r = c.getRed() / 255F;
-        float g = c.getGreen() / 255F;
-        float b = c.getBlue() / 255F;
-
-        GlStateManager.pushMatrix();
-
         Vector3 translateTo = this.getRenderPosition(pTicks);
-        GlStateManager.translated(translateTo.getX(), translateTo.getY(), translateTo.getZ());
         Vector3 rotation = getInterpolatedRotation(pTicks);
-        GlStateManager.rotated(((float) rotation.getX()), 1, 0, 0);
-        GlStateManager.rotated(((float) rotation.getY()), 0, 1, 0);
-        GlStateManager.rotated(((float) rotation.getZ()), 0, 0, 1);
+        float scale = this.getScale(pTicks);
 
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        RenderingDrawUtils.drawWithBlockLight(15, () -> {
-            RenderingDrawUtils.renderTexturedCubeCentralColor(buf, scale,
+        renderStack.push();
+        renderStack.translate(translateTo.getX(), translateTo.getY(), translateTo.getZ());
+        renderStack.rotate(Vector3f.XP.rotationDegrees((float) rotation.getX()));
+        renderStack.rotate(Vector3f.YP.rotationDegrees((float) rotation.getY()));
+        renderStack.rotate(Vector3f.ZP.rotationDegrees((float) rotation.getZ()));
+        renderStack.scale(scale, scale, scale);
+
+        draw.accept(buf -> {
+            RenderingDrawUtils.renderTexturedCubeCentralColorLighted(buf,
                     u, v, uLength, vLength,
-                    r, g, b, alpha);
+                    c.getRed(), c.getGreen(), c.getBlue(), alpha,
+                    LightmapUtil.getPackedFullbrightCoords());
         });
-        buf.draw();
 
-        GlStateManager.popMatrix();
+        renderStack.pop();
     }
 }

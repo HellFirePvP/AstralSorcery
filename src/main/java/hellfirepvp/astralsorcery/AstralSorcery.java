@@ -33,7 +33,7 @@ public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";
     public static final String NAME = "Astral Sorcery";
-    public static final String VERSION = "1.11.0";
+    public static final String VERSION = "1.12.0";
 
     public static Logger log = LogManager.getLogger(NAME);
 
@@ -50,7 +50,7 @@ public class AstralSorcery {
             isDataGeneration = ModLoader.get().getDataGeneratorEvent().apply(modContainer) != null;
         } catch (Exception ignored) {}
 
-        this.proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+        this.proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         this.proxy.initialize();
         this.proxy.attachLifecycle(FMLJavaModLoadingContext.get().getModEventBus());
         this.proxy.attachEventHandlers(MinecraftForge.EVENT_BUS);

@@ -8,12 +8,11 @@
 
 package hellfirepvp.astralsorcery.client.resource;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.RenderState;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 
-import java.awt.*;
-import java.awt.geom.Point2D;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,7 +23,19 @@ import java.awt.geom.Point2D;
  */
 public abstract class AbstractRenderableTexture {
 
+    private final ResourceLocation key;
+
+    protected AbstractRenderableTexture(ResourceLocation key) {
+        this.key = key;
+    }
+
+    public final ResourceLocation getKey() {
+        return key;
+    }
+
     public abstract void bindTexture();
+
+    public abstract RenderState.TextureState asState();
 
     public abstract Tuple<Float, Float> getUVOffset();
 
@@ -33,31 +44,23 @@ public abstract class AbstractRenderableTexture {
     public abstract float getVWidth();
 
     @Override
-    public abstract boolean equals(Object obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BlockAtlasTexture that = (BlockAtlasTexture) o;
+        return Objects.equals(this.getKey(), that.getKey());
+    }
 
     @Override
-    public abstract int hashCode();
-
-    public static Full wrap(ITextureObject obj) {
-        return new Full() {
-            @Override
-            public void bindTexture() {
-                GlStateManager.bindTexture(obj.getGlTextureId());
-            }
-
-            @Override
-            public boolean equals(Object obj) {
-                return false;
-            }
-
-            @Override
-            public int hashCode() {
-                return 0;
-            }
-        };
+    public int hashCode() {
+        return Objects.hash(this.getKey());
     }
 
     public static abstract class Full extends AbstractRenderableTexture {
+
+        public Full(ResourceLocation key) {
+            super(key);
+        }
 
         @Override
         public Tuple<Float, Float> getUVOffset() {
@@ -74,5 +77,4 @@ public abstract class AbstractRenderableTexture {
             return 1.0F;
         }
     }
-
 }
