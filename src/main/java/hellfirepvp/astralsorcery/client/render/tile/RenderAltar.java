@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.util.*;
@@ -19,7 +20,9 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarR
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
@@ -33,6 +36,15 @@ import java.util.List;
  * Date: 28.09.2019 / 22:05
  */
 public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
+
+    public RenderAltar(TileEntityRendererDispatcher rendererDispatcher) {
+        super(rendererDispatcher);
+    }
+
+    @Override
+    public void render(TileAltar tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
+        renderTypeBuffer.getBuffer()
+    }
 
     @Override
     public void render(TileAltar altar, double x, double y, double z, float pTicks, int destroyStage) {

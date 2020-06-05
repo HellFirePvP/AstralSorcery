@@ -123,6 +123,7 @@ public class TexturesAS {
 
     public static AbstractRenderableTexture TEX_MODEL_CRYSTAL_WHITE;
     public static AbstractRenderableTexture TEX_MODEL_CRYSTAL_BLUE;
+    public static AbstractRenderableTexture TEX_MODEL_CELESTIAL_WINGS;
 
     public static AbstractRenderableTexture TEX_STARLIGHT_STORE;
 

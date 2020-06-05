@@ -11,12 +11,10 @@ package hellfirepvp.astralsorcery.client.effect.source;
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
-import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
-import java.util.Random;
 import java.util.function.Function;
 
 /**

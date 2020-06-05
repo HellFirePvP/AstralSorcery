@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.effect.handler;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
@@ -18,16 +19,17 @@ import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.source.FXSource;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.order.DependencySorter;
 import hellfirepvp.observerlib.common.util.AlternatingSet;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderTypeBuffers;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -70,17 +72,16 @@ public final class EffectHandler {
         }
 
         float pTicks = event.getPartialTicks();
+        MatrixStack renderStack = event.getMatrixStack();
+        IRenderTypeBuffer.Impl renderTypeBuffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         this.acceptsNewEffects = false;
 
         for (BatchRenderContext<?> ctx : this.orderedEffects) {
             List<PendingEffect> effects = this.effectMap.get(ctx);
             if (!effects.isEmpty()) {
-                BufferContext buf = ctx.prepare(pTicks);
-                effects.forEach(p -> p.effect.render(ctx, buf, pTicks));
-                ctx.draw(pTicks);
+                ctx.renderAll(effects, renderStack, renderTypeBuffer, pTicks);
             }
         }
-        TextureHelper.refreshTextureBind();
 
         this.acceptsNewEffects = true;
     }
@@ -198,7 +199,7 @@ public final class EffectHandler {
         }
     }
 
-    static class PendingEffect {
+    public static class PendingEffect {
 
         private final EntityVisualFX effect;
         private final EffectProperties<?> runProperties;
@@ -212,7 +213,7 @@ public final class EffectHandler {
             return runProperties;
         }
 
-        EntityVisualFX getEffect() {
+        public EntityVisualFX getEffect() {
             return effect;
         }
     }

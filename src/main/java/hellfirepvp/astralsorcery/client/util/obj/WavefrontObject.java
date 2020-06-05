@@ -8,11 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.util.obj;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,6 +57,7 @@ public class WavefrontObject {
     public ArrayList<GroupObject> groupObjects = new ArrayList<GroupObject>();
     private GroupObject currentGroupObject;
     private String fileName;
+    private int gLDrawingMode;
 
     public WavefrontObject(ResourceLocation resource) throws ModelFormatException {
         this.fileName = resource.toString();
@@ -73,6 +77,10 @@ public class WavefrontObject {
 
     public static WavefrontObject load(ResourceLocation modelLoc) throws ModelFormatException {
         return new WavefrontObject(modelLoc);
+    }
+
+    public int getGLDrawingMode() {
+        return gLDrawingMode;
     }
 
     private void loadObjModel(InputStream inputStream) throws ModelFormatException {
@@ -148,118 +156,51 @@ public class WavefrontObject {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderAll(boolean expectTexture) {
-        BufferBuilder vb = Tessellator.getInstance().getBuffer();
-
-        VertexFormat vf;
-        if (expectTexture) {
-            vf = DefaultVertexFormats.POSITION_TEX;
-        } else {
-            vf = DefaultVertexFormats.POSITION;
-        }
-        if (currentGroupObject != null) {
-            vb.begin(currentGroupObject.glDrawingMode, vf);
-        } else {
-            vb.begin(GL11.GL_TRIANGLES, vf);
-        }
-        tessellateAll(vb);
-
-        Tessellator.getInstance().draw();
+    public VertexBuffer batch(BufferBuilder buf) {
+        VertexBuffer vbo = new VertexBuffer(DefaultVertexFormats.POSITION_COLOR_TEX);
+        this.render(buf);
+        buf.finishDrawing();
+        vbo.upload(buf);
+        return vbo;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderOnly(boolean expectTexture, String... groupNames) {
-        BufferBuilder vb = Tessellator.getInstance().getBuffer();
-
-        VertexFormat vf;
-        if (expectTexture) {
-            vf = DefaultVertexFormats.POSITION_TEX;
-        } else {
-            vf = DefaultVertexFormats.POSITION;
-        }
-        if (currentGroupObject != null) {
-            vb.begin(currentGroupObject.glDrawingMode, vf);
-        } else {
-            vb.begin(GL11.GL_TRIANGLES, vf);
-        }
-
-        for (GroupObject groupObject : groupObjects) {
-            for (String groupName : groupNames)
-            {
-                if (groupName.equalsIgnoreCase(groupObject.name))
-                {
-                    groupObject.render(vb);
-                }
-            }
-        }
-
-        Tessellator.getInstance().draw();
+    public VertexBuffer batchOnly(BufferBuilder buf, String... groups) {
+        VertexBuffer vbo = new VertexBuffer(DefaultVertexFormats.POSITION_COLOR_TEX);
+        this.renderOnly(buf, groups);
+        buf.finishDrawing();
+        vbo.upload(buf);
+        return vbo;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void tessellateAll(BufferBuilder vb) {
+    public VertexBuffer batchExcept(BufferBuilder buf, String... excludedGroupNames) {
+        VertexBuffer vbo = new VertexBuffer(DefaultVertexFormats.POSITION_COLOR_TEX);
+        this.renderExcept(buf, excludedGroupNames);
+        buf.finishDrawing();
+        vbo.upload(buf);
+        return vbo;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void render(IVertexBuilder vb) {
         for (GroupObject groupObject : groupObjects) {
             groupObject.render(vb);
         }
     }
 
-    /*@SideOnly(Side.CLIENT)
-    public void renderOnly(String... groupNames) {
+    @OnlyIn(Dist.CLIENT)
+    public void renderOnly(BufferBuilder vb, String... groups) {
+        List<String> groupList = Arrays.asList(groups);
         for (GroupObject groupObject : groupObjects) {
-            for (String groupName : groupNames) {
-                if (groupName.equalsIgnoreCase(groupObject.name)) {
-                    groupObject.render();
-                }
-            }
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void tessellateOnly(BufferBuilder vb, String... groupNames) {
-        for (GroupObject groupObject : groupObjects) {
-            for (String groupName : groupNames) {
-                if (groupName.equalsIgnoreCase(groupObject.name)) {
-                    groupObject.render(vb);
-                }
-            }
-        }
-    }*/
-
-    /*@SideOnly(Side.CLIENT)
-    public void renderPart(String partName) {
-        for (GroupObject groupObject : groupObjects) {
-            if (partName.equalsIgnoreCase(groupObject.name)) {
-                groupObject.render();
-            }
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void tessellatePart(BufferBuilder vb, String partName) {
-        for (GroupObject groupObject : groupObjects) {
-            if (partName.equalsIgnoreCase(groupObject.name)) {
+            if (groupList.contains(groupObject.name)) {
                 groupObject.render(vb);
             }
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public void renderAllExcept(String... excludedGroupNames) {
-        for (GroupObject groupObject : groupObjects) {
-            boolean skipPart = false;
-            for (String excludedGroupName : excludedGroupNames) {
-                if (excludedGroupName.equalsIgnoreCase(groupObject.name)) {
-                    skipPart = true;
-                }
-            }
-            if (!skipPart) {
-                groupObject.render();
-            }
-        }
-    }*/
-
     @OnlyIn(Dist.CLIENT)
-    public void tessellateAllExcept(BufferBuilder vb, String... excludedGroupNames) {
+    public void renderExcept(BufferBuilder vb, String... excludedGroupNames) {
         boolean exclude;
         for (GroupObject groupObject : groupObjects) {
             exclude = false;
@@ -275,8 +216,6 @@ public class WavefrontObject {
     }
 
     private Vertex parseVertex(String line, int lineCount) throws ModelFormatException {
-        Vertex vertex = null;
-
         if (isValidVertexLine(line)) {
             line = line.substring(line.indexOf(" ") + 1);
             String[] tokens = line.split(" ");
@@ -293,13 +232,10 @@ public class WavefrontObject {
         } else {
             throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
         }
-
-        return vertex;
+        return null;
     }
 
     private Vertex parseVertexNormal(String line, int lineCount) throws ModelFormatException {
-        Vertex vertexNormal = null;
-
         if (isValidVertexNormalLine(line)) {
             line = line.substring(line.indexOf(" ") + 1);
             String[] tokens = line.split(" ");
@@ -313,13 +249,10 @@ public class WavefrontObject {
         } else {
             throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
         }
-
-        return vertexNormal;
+        return null;
     }
 
     private TextureCoordinate parseTextureCoordinate(String line, int lineCount) throws ModelFormatException {
-        TextureCoordinate textureCoordinate = null;
-
         if (isValidTextureCoordinateLine(line)) {
             line = line.substring(line.indexOf(" ") + 1);
             String[] tokens = line.split(" ");
@@ -335,30 +268,27 @@ public class WavefrontObject {
         } else {
             throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
         }
-
-        return textureCoordinate;
+        return null;
     }
 
     private Face parseFace(String line, int lineCount) throws ModelFormatException {
-        Face face = null;
-
         if (isValidFaceLine(line)) {
-            face = new Face();
+            Face face = new Face();
 
             String trimmedLine = line.substring(line.indexOf(" ") + 1);
             String[] tokens = trimmedLine.split(" ");
             String[] subTokens = null;
 
             if (tokens.length == 3) {
-                if (currentGroupObject.glDrawingMode == -1) {
-                    currentGroupObject.glDrawingMode = GL11.GL_TRIANGLES;
-                } else if (currentGroupObject.glDrawingMode != GL11.GL_TRIANGLES) {
+                if (this.gLDrawingMode == -1) {
+                    this.gLDrawingMode = GL11.GL_TRIANGLES;
+                } else if (this.gLDrawingMode != GL11.GL_TRIANGLES) {
                     throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Invalid number of points for face (expected 4, found " + tokens.length + ")");
                 }
             } else if (tokens.length == 4) {
-                if (currentGroupObject.glDrawingMode == -1) {
-                    currentGroupObject.glDrawingMode = GL11.GL_QUADS;
-                } else if (currentGroupObject.glDrawingMode != GL11.GL_QUADS) {
+                if (this.gLDrawingMode == -1) {
+                    this.gLDrawingMode = GL11.GL_QUADS;
+                } else if (this.gLDrawingMode != GL11.GL_QUADS) {
                     throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Invalid number of points for face (expected 3, found " + tokens.length + ")");
                 }
             }
@@ -367,14 +297,12 @@ public class WavefrontObject {
             if (isValidFace_V_VT_VN_Line(line)) {
                 face.vertices = new Vertex[tokens.length];
                 face.textureCoordinates = new TextureCoordinate[tokens.length];
-                face.vertexNormals = new Vertex[tokens.length];
 
                 for (int i = 0; i < tokens.length; ++i) {
                     subTokens = tokens[i].split("/");
 
                     face.vertices[i] = vertices.get(Integer.parseInt(subTokens[0]) - 1);
                     face.textureCoordinates[i] = textureCoordinates.get(Integer.parseInt(subTokens[1]) - 1);
-                    face.vertexNormals[i] = vertexNormals.get(Integer.parseInt(subTokens[2]) - 1);
                 }
 
                 //face.faceNormal = face.calculateFaceNormal();
@@ -396,13 +324,11 @@ public class WavefrontObject {
             // f v1//vn1 v2//vn2 v3//vn3 ...
             else if (isValidFace_V_VN_Line(line)) {
                 face.vertices = new Vertex[tokens.length];
-                face.vertexNormals = new Vertex[tokens.length];
 
                 for (int i = 0; i < tokens.length; ++i) {
                     subTokens = tokens[i].split("//");
 
                     face.vertices[i] = vertices.get(Integer.parseInt(subTokens[0]) - 1);
-                    face.vertexNormals[i] = vertexNormals.get(Integer.parseInt(subTokens[1]) - 1);
                 }
 
                 //face.faceNormal = face.calculateFaceNormal();
@@ -422,8 +348,7 @@ public class WavefrontObject {
         } else {
             throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
         }
-
-        return face;
+        return null;
     }
 
     private GroupObject parseGroupObject(String line, int lineCount) throws ModelFormatException {

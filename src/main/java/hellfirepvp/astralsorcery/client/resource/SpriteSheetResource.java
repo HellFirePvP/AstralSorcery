@@ -10,10 +10,11 @@ package hellfirepvp.astralsorcery.client.resource;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
+import net.minecraft.client.renderer.RenderState;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 
-import java.awt.*;
 import java.util.Objects;
 
 /**
@@ -36,6 +37,7 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
     }
 
     public SpriteSheetResource(AbstractRenderableTexture resource, int rows, int columns) {
+        super(NameUtil.suffixPath(resource.getKey(), "_sprite"));
         if (rows <= 0 || columns <= 0)
             throw new IllegalArgumentException("Can't instantiate a sprite sheet without any rows or columns!");
 
@@ -51,6 +53,11 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
     @Override
     public void bindTexture() {
         this.resource.bindTexture();
+    }
+
+    @Override
+    public RenderState.TextureState asState() {
+        return this.resource.asState();
     }
 
     @Override
@@ -102,18 +109,5 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
 
     public int getColumns() {
         return columns;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SpriteSheetResource that = (SpriteSheetResource) o;
-        return Objects.equals(resource, that.resource);
-    }
-
-    @Override
-    public int hashCode() {
-        return this.resource.hashCode();
     }
 }

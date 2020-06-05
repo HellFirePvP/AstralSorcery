@@ -9,6 +9,9 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import net.minecraft.client.renderer.RenderState;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
@@ -21,33 +24,44 @@ import org.lwjgl.opengl.GL14;
  */
 public enum Blending {
 
-    DEFAULT(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA),
-    ALPHA(GL11.GL_ONE, GL11.GL_SRC_ALPHA),
-    PREALPHA(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA),
-    MULTIPLY(GL11.GL_DST_COLOR, GL11.GL_ONE_MINUS_SRC_ALPHA),
-    ADDITIVE(GL11.GL_ONE, GL11.GL_ONE),
-    ADDITIVEDARK(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_COLOR),
-    OVERLAYDARK(GL11.GL_SRC_COLOR, GL11.GL_ONE),
-    ADDITIVE_ALPHA(GL11.GL_SRC_ALPHA, GL11.GL_ONE),
-    CONSTANT_ALPHA(GL11.GL_ONE, GL14.GL_ONE_MINUS_CONSTANT_ALPHA),
-    INVERTEDADD(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR);
+    DEFAULT(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA),
+    ALPHA(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.SRC_ALPHA),
+    PREALPHA(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA),
+    MULTIPLY(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA),
+    ADDITIVE(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE),
+    ADDITIVEDARK(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR),
+    OVERLAYDARK(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE),
+    ADDITIVE_ALPHA(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE),
+    CONSTANT_ALPHA(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_ALPHA),
+    INVERTEDADD(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR);
 
-    private final int colorSrcFactor, colorDstFactor;
-    private final int alphaSrcFactor, alphaDstFactor;
+    private final GlStateManager.SourceFactor colorSrcFactor, alphaSrcFactor;
+    private final GlStateManager.DestFactor colorDstFactor, alphaDstFactor;
 
-    Blending(int src, int dst) {
-        this(src, dst, GL11.GL_ONE, GL11.GL_ZERO);
+    Blending(GlStateManager.SourceFactor src, GlStateManager.DestFactor dst) {
+        this(src, dst, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
     }
 
-    Blending(int src, int dst, int srcAlpha, int dstAlpha) {
+    Blending(GlStateManager.SourceFactor src, GlStateManager.DestFactor dst, GlStateManager.SourceFactor srcAlpha, GlStateManager.DestFactor dstAlpha) {
         this.colorSrcFactor = src;
         this.colorDstFactor = dst;
         this.alphaSrcFactor = srcAlpha;
         this.alphaDstFactor = dstAlpha;
     }
 
-    public void applyStateManager() {
-        GlStateManager.blendFuncSeparate(this.colorSrcFactor, this.colorDstFactor, this.alphaSrcFactor, this.alphaDstFactor);
+    private void apply() {
+        RenderSystem.blendFuncSeparate(this.colorSrcFactor, this.colorDstFactor, this.alphaSrcFactor, this.alphaDstFactor);
     }
 
+    public RenderState.TransparencyState asState() {
+        return new RenderState.TransparencyState(AstralSorcery.key("blending_" + this.name().toLowerCase()).toString(), () -> {
+            RenderSystem.enableBlend();
+            if (this != DEFAULT) {
+                this.apply();
+            }
+        }, () -> {
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.disableBlend();
+        });
+    }
 }

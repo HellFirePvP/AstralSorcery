@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.base.patreon.types;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -29,7 +30,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
@@ -91,12 +91,16 @@ public class TypeBlockRing extends PatreonEffect {
         PlayerEntity pl = Minecraft.getInstance().player;
         if (Minecraft.getInstance().gameSettings.thirdPersonView == 0 && //First person
                 pl != null && pl.getUniqueID().equals(playerUUID)) {
+            MatrixStack renderStack = event.getMatrixStack();
 
             float alpha = 1F;
             if (pl.rotationPitch >= 35F) {
                 alpha = Math.max(0, (55F - pl.rotationPitch) / 20F);
             }
-            renderRingAt(new Vector3(0, 0.2, 0), alpha, event.getPartialTicks());
+            renderStack.push();
+            renderStack.translate(0, 0.2, 0);
+            renderRingAt(renderStack, alpha, event.getPartialTicks());
+            renderStack.pop();
         }
     }
 
@@ -108,13 +112,12 @@ public class TypeBlockRing extends PatreonEffect {
             return;
         }
 
-        renderRingAt(new Vector3(ev.getX(), ev.getY(), ev.getZ()), 1F, ev.getPartialRenderTick());
+        renderRingAt(ev.getMatrixStack(), 1F, ev.getPartialRenderTick());
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void renderRingAt(Vector3 vec, float alphaMultiplier, float pTicks) {
+    private void renderRingAt(MatrixStack renderStack, float alphaMultiplier, float pTicks) {
         float addedRotationAngle = 0;
-        TextureHelper.bindBlockAtlas();
 
         if (rotationSpeed > 1) {
             float rot = ClientScheduler.getSystemClientTick() % rotationSpeed;
@@ -150,7 +153,7 @@ public class TypeBlockRing extends PatreonEffect {
                 GlStateManager.scaled(0.09, 0.09, 0.09);
 
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-                RenderingDrawUtils.renderTexturedCubeCentralColor(vb, 1F,
+                RenderingDrawUtils.renderTexturedCubeCentralColorLighted(vb, 1F,
                         tas.getMinU(), tas.getMinV(),
                         tas.getMaxU() - tas.getMinU(), tas.getMaxV() - tas.getMinV(),
                         1F, 1F, 1F, alphaMultiplier);

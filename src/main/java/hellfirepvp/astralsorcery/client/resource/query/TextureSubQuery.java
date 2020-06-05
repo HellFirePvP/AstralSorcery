@@ -14,9 +14,6 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.awt.*;
-import java.awt.geom.Point2D;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -41,7 +38,7 @@ public class TextureSubQuery extends TextureQuery {
     @OnlyIn(Dist.CLIENT)
     public AbstractRenderableTexture resolve() {
         AbstractRenderableTexture res = super.resolve();
-        return new AbstractRenderableTexture() {
+        return new AbstractRenderableTexture(res.getKey()) {
 
             @Override
             public void bindTexture() {

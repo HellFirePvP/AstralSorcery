@@ -129,14 +129,14 @@ public class RegistryWorldGeneration {
             PC placementConfig) {
 
         for (Biome b : ForgeRegistries.BIOMES) {
-            b.addFeature(stage, Biome.createDecoratedFeature(feature, featureConfig, placement, placementConfig));
+            b.addFeature(stage, feature.withConfiguration(featureConfig).withPlacement(placement.configure(placementConfig)));
         }
     }
 
     private static <FC extends IFeatureConfig> void registerStructure(GenerationStage.Decoration stage, Structure<FC> structure, FC featureConfig) {
         for (Biome b : ForgeRegistries.BIOMES) {
-            b.addFeature(stage, Biome.createDecoratedFeature(structure, featureConfig, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-            b.addStructure(structure, featureConfig);
+            b.addFeature(stage, structure.withConfiguration(featureConfig).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+            b.addStructure(structure.withConfiguration(featureConfig));
         }
     }
 

@@ -8,26 +8,22 @@
 
 package hellfirepvp.astralsorcery.common.base.patreon.types;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.ObjModelRender;
-import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
-import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
-import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
-import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.common.base.patreon.FlareColor;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffect;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,7 +33,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -53,8 +48,6 @@ import java.util.function.Consumer;
  * Date: 04.04.2020 / 20:56
  */
 public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
-
-    private static Object texWings;
 
     private final UUID playerUUID;
 
@@ -103,7 +96,7 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
 
         Vector3 look = new Vector3(1, 0, 0).rotate(Math.toRadians(360F - rot), Vector3.RotAxis.Y_AXIS).normalize();
         Vector3 pos = Vector3.atEntityCorner(player);
-        pos.setY(player.posY + yOffset + offset);
+        pos.setY(player.getPosY() + yOffset + offset);
 
         for (int i = 0; i < 5; i++) {
             double height = -0.1 + Math.min(rand.nextFloat() * 1.3, rand.nextFloat() * 1.3);
@@ -148,12 +141,8 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
         if (!shouldDoEffect(player)) {
             return;
         }
-
-        if (texWings == null) {
-            texWings = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODEL, "celestial_wings_background");
-        }
-
-        ((AbstractRenderableTexture) texWings).bindTexture();
+        MatrixStack renderStack = event.getMatrixStack();
+        TexturesAS.TEX_MODEL_CELESTIAL_WINGS.bindTexture();
 
         float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
         float yOffset = 1.3F;
@@ -163,25 +152,17 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
         float f = Math.abs((ClientScheduler.getSystemClientTick() % 240) - 120F) / 120F;
         double offset = Math.cos(f * 2 * Math.PI) * 0.03;
 
-        GlStateManager.color4f(0.7F, 0.7F, 0.7F, 1F);
-        GlStateManager.disableLighting();
+        renderStack.push();
+        renderStack.translate(0, yOffset + offset, 0);
+        renderStack.rotate(Vector3f.YP.rotationDegrees(180F - rot));
+        renderStack.scale(0.02F, 0.02F, 0.02F);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(event.getX(), event.getY() + yOffset + offset, event.getZ());
-        GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
-        GlStateManager.scaled(0.02, 0.02, 0.02);
-
-        GlStateManager.translated(-25, 0, 0);
-        ObjModelRender.renderCelestialWings();
-        GlStateManager.rotated(180F, 0F, 1F, 0F);
-        GlStateManager.translated(-50, 0, 0);
-        ObjModelRender.renderCelestialWings();
-
-        GlStateManager.popMatrix();
-
-        GlStateManager.enableLighting();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        TextureHelper.refreshTextureBind();
+        renderStack.translate(-25, 0, 0);
+        ObjModelRender.renderCelestialWings(renderStack);
+        renderStack.rotate(Vector3f.YP.rotationDegrees(180F));
+        renderStack.translate(-50, 0, 0);
+        ObjModelRender.renderCelestialWings(renderStack);
+        renderStack.pop();
     }
 
     @Override

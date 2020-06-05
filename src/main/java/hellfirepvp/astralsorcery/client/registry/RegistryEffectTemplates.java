@@ -12,6 +12,9 @@ import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.*;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.context.base.RenderContextColorSphere;
+import hellfirepvp.astralsorcery.client.effect.context.base.RenderContextCube;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXCube;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -35,7 +38,7 @@ public class RegistryEffectTemplates {
 
     private RegistryEffectTemplates() {}
 
-    public static void registerTemplates() {
+    public static void init() {
         GENERIC_DEPTH_PARTICLE = register(new RenderContextGenericDepthParticle());
         GENERIC_PARTICLE       = register(new RenderContextGenericParticle());
         GENERIC_ATLAS_PARTICLE = register(new RenderContextAtlasParticle());
@@ -55,7 +58,7 @@ public class RegistryEffectTemplates {
         TEXTURE_SPRITE = register(new RenderContextSpritePlaneDynamic());
         FACING_SPRITE = register(new RenderContextFacingSprite());
 
-        CUBE_OPAQUE_ATLAS = register(new RenderContextOpaqueCube());
+        CUBE_OPAQUE_ATLAS = register(new RenderContextCube(RenderTypesAS.EFFECT_FX_CUBE_OPAQUE_ATLAS, (ctx, pos) -> new FXCube(pos)));
         CUBE_TRANSLUCENT_ATLAS = register(new RenderContextTranslucentCube(Blending.ADDITIVEDARK));
         CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH = register(new RenderContextTranslucentDepthCube(Blending.ADDITIVEDARK));
         CUBE_AREA_OF_EFFECT = register(new RenderContextTranslucentCube(Blending.DEFAULT, TexturesAS.TEX_AREA_OF_EFFECT_CUBE));

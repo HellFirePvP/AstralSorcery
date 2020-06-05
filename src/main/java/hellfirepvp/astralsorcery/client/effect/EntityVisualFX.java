@@ -8,12 +8,15 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.*;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
@@ -100,7 +103,7 @@ public abstract class EntityVisualFX extends EntityComplexFX {
         this.pos = newPos;
     }
 
-    public abstract <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks);
+    public abstract <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks);
 
     public float getAlpha(float pTicks) {
         return this.alphaFunction.getAlpha(this, this.getAlphaMultiplier(), pTicks);

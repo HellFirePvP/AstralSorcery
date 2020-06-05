@@ -8,8 +8,11 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -21,19 +24,11 @@ import net.minecraft.tileentity.TileEntity;
  */
 public abstract class CustomTileEntityRenderer<T extends TileEntity> extends TileEntityRenderer<T> {
 
+    public CustomTileEntityRenderer(TileEntityRendererDispatcher rendererDispatcher) {
+        super(rendererDispatcher);
+    }
+
     @Override
-    public abstract void render(T tile, double x, double y, double z, float pTicks, int destroyStage);
-
-    protected void bind(AbstractRenderableTexture texture) {
-        this.bindDamaged(texture, -1);
-    }
-
-    protected void bindDamaged(AbstractRenderableTexture texture, int destroyStage) {
-        if (destroyStage >= 0) {
-            this.bindTexture(DESTROY_STAGES[destroyStage]);
-        } else {
-            texture.bindTexture();
-        }
-    }
+    public abstract void render(T tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay);
 
 }

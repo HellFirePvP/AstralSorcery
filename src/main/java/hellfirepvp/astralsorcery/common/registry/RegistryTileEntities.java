@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
@@ -59,20 +60,20 @@ public class RegistryTileEntities {
 
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAltar.class, new RenderAltar());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAttunementAltar.class, new RenderAttunementAltar());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileChalice.class, new RenderChalice());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileCollectorCrystal.class, new RenderCollectorCrystal());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileInfuser.class, new RenderInfuser());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileLens.class, new RenderLens());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileObservatory.class, new RenderObservatory());
-        ClientRegistry.bindTileEntitySpecialRenderer(TilePrism.class, new RenderPrism());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileRefractionTable.class, new RenderRefractionTable());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileRitualPedestal.class, new RenderRitualPedestal());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileSpectralRelay.class, new RenderSpectralRelay());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTelescope.class, new RenderTelescope());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTranslucentBlock.class, new RenderTranslucentBlock());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileWell.class, new RenderWell());
+        ClientRegistry.bindTileEntityRenderer(ALTAR, RenderAltar::new);
+        ClientRegistry.bindTileEntityRenderer(ATTUNEMENT_ALTAR, RenderAttunementAltar::new);
+        ClientRegistry.bindTileEntityRenderer(CHALICE, RenderChalice::new);
+        ClientRegistry.bindTileEntityRenderer(COLLECTOR_CRYSTAL, RenderCollectorCrystal::new);
+        ClientRegistry.bindTileEntityRenderer(INFUSER, RenderInfuser::new);
+        ClientRegistry.bindTileEntityRenderer(LENS, RenderLens::new);
+        ClientRegistry.bindTileEntityRenderer(OBSERVATORY, RenderObservatory::new);
+        ClientRegistry.bindTileEntityRenderer(PRISM, RenderPrism::new);
+        ClientRegistry.bindTileEntityRenderer(REFRACTION_TABLE, RenderRefractionTable::new);
+        ClientRegistry.bindTileEntityRenderer(RITUAL_PEDESTAL, RenderRitualPedestal::new);
+        ClientRegistry.bindTileEntityRenderer(SPECTRAL_RELAY, RenderSpectralRelay::new);
+        ClientRegistry.bindTileEntityRenderer(TELESCOPE, RenderTelescope::new);
+        ClientRegistry.bindTileEntityRenderer(TRANSLUCENT_BLOCK, RenderTranslucentBlock::new);
+        ClientRegistry.bindTileEntityRenderer(WELL, RenderWell::new);
     }
 
     private static <T extends TileEntity> TileEntityType<T> registerTile(Class<T> tileClass, Block... validBlocks) {

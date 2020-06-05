@@ -21,7 +21,7 @@ public class RegistryEffectTypes {
 
     private RegistryEffectTypes() {}
 
-    public static void registerTypes() {
+    public static void init() {
 
     }
 

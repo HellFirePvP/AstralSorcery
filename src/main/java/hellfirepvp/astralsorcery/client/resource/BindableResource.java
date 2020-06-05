@@ -8,12 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.resource;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.client.renderer.texture.MissingTextureSprite;
+import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.Texture;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,10 +30,11 @@ import java.util.Objects;
 @OnlyIn(Dist.CLIENT)
 public class BindableResource extends AbstractRenderableTexture.Full {
 
-    private ITextureObject resource = null;
+    private Texture resource = null;
     private String path;
 
     public BindableResource(String path) {
+        super(AstralSorcery.key(path.replaceAll("[^a-zA-Z0-9\\.\\-]", "_")));
         this.path = path;
         allocateGlId();
     }
@@ -43,11 +44,11 @@ public class BindableResource extends AbstractRenderableTexture.Full {
     }
 
     public boolean isInitialized() {
-        return resource != null;
+        return this.resource != null;
     }
 
-    public ITextureObject getResource() {
-        return resource;
+    public Texture getResource() {
+        return this.resource;
     }
 
     public SpriteSheetResource asSpriteSheet(int rows, int columns) {
@@ -55,22 +56,19 @@ public class BindableResource extends AbstractRenderableTexture.Full {
     }
 
     void invalidateAndReload() {
-        if (resource != null) {
-            GlStateManager.deleteTexture(resource.getGlTextureId());
-        }
-        resource = null;
+        Minecraft.getInstance().getTextureManager().deleteTexture(this.getKey());
+        this.resource = null;
     }
 
     private void allocateGlId() {
-        if (resource != null || AssetLibrary.isReloading()) return;
-        resource = new SimpleTexture(new ResourceLocation(path));
-        try {
-            resource.loadTexture(Minecraft.getInstance().getResourceManager());
-        } catch (Exception exc) {
-            AstralSorcery.log.warn("[AssetLibrary] Failed to load texture " + path);
-            AstralSorcery.log.warn("[AssetLibrary] Please report this issue; include the message above, the following stacktrace as well as instructions on how to reproduce this!");
-            exc.printStackTrace();
-            resource = MissingTextureSprite.getDynamicTexture();
+        if (this.resource != null || AssetLibrary.isReloading()) {
+            return;
+        }
+        TextureManager mgr = Minecraft.getInstance().getTextureManager();
+        this.resource = mgr.getTexture(this.getKey());
+        if (this.resource == null) {
+            mgr.loadTexture(this.getKey(), new SimpleTexture(new ResourceLocation(this.getPath())));
+            this.resource = mgr.getTexture(this.getKey());
         }
     }
 
@@ -79,22 +77,14 @@ public class BindableResource extends AbstractRenderableTexture.Full {
         if (AssetLibrary.isReloading()) {
             return; //we do nothing but wait.
         }
-        if (resource == null) {
+        if (this.resource == null) {
             allocateGlId();
         }
-        GlStateManager.bindTexture(resource.getGlTextureId());
+        this.resource.bindTexture();
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        BindableResource that = (BindableResource) obj;
-        return Objects.equals(path, that.path);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(path);
+    public RenderState.TextureState asState() {
+        return new RenderState.TextureState(this.getKey(), false, false);
     }
 }
