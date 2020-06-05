@@ -8,15 +8,19 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
@@ -70,38 +74,33 @@ public class FXBlock extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {
         if (this.blockState == null) {
             return;
         }
-        float alpha = this.getAlpha(pTicks);
-        float scale = this.getScale(pTicks);
+
+        int alpha = this.getAlpha(pTicks);
         Color c = this.getColor(pTicks);
-        float r = c.getRed() / 255F;
-        float g = c.getGreen() / 255F;
-        float b = c.getBlue() / 255F;
+        int[] colorOverride = new int[] { c.getRed(), c.getGreen(), c.getBlue(), alpha };
 
-        GlStateManager.pushMatrix();
-        GlStateManager.color4f(r, g, b, alpha);
-
-        Vector3 translateTo = this.getRenderPosition(pTicks);
-        GlStateManager.translated(translateTo.getX(), translateTo.getY(), translateTo.getZ());
-
-        GlStateManager.translated(0.5, 0.5, 0.5);
-        GlStateManager.scalef(scale, scale, scale);
-        GlStateManager.translated(-0.5, -0.5, -0.5);
-
+        Vector3 translate = this.getRenderPosition(pTicks);
         Vector3 rotation = this.getInterpolatedRotation(pTicks);
-        GlStateManager.translated(0.5, 0.5, 0.5);
-        GlStateManager.rotated(rotation.getX(), 1, 0, 0);
-        GlStateManager.rotated(rotation.getY(), 0, 1, 0);
-        GlStateManager.rotated(rotation.getZ(), 0, 0, 1);
-        GlStateManager.translated(-0.5, -0.5, -0.5);
+        float scale = this.getScale(pTicks);
 
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        RenderingUtils.renderSimpleBlockModel(this.blockState, buf);
-        buf.draw();
+        renderStack.push();
+        renderStack.translate(translate.getX(), translate.getY(), translate.getZ());
 
-        GlStateManager.popMatrix();
+        renderStack.translate(0.5, 0.5, 0.5);
+        renderStack.scale(scale, scale, scale);
+        renderStack.rotate(Vector3f.XP.rotationDegrees((float) rotation.getX()));
+        renderStack.rotate(Vector3f.YP.rotationDegrees((float) rotation.getY()));
+        renderStack.rotate(Vector3f.ZP.rotationDegrees((float) rotation.getZ()));
+        renderStack.translate(-0.5, -0.5, -0.5);
+
+        new BufferDecoratorBuilder()
+                .setColorDecorator((r, g, b, a) -> colorOverride)
+                .decorate(vb, decorated -> RenderingUtils.renderSimpleBlockModel(this.blockState, renderStack, decorated));
+
+        renderStack.pop();
     }
 }

@@ -8,17 +8,16 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.Tuple;
 
 import java.awt.*;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,15 +33,15 @@ public class FXFacingParticle extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {
         SpriteSheetResource ssr = ctx.getSprite();
         Vector3 vec = this.getRenderPosition(pTicks);
-        float alpha = this.getAlpha(pTicks);
+        int alpha = this.getAlpha(pTicks);
         float fScale = this.getScale(pTicks);
         Color col = this.getColor(pTicks);
         Tuple<Float, Float> uvOffset = ssr.getUVOffset(this.getAge());
 
-        RenderingDrawUtils.renderFacingQuadVB(buf,
+        RenderingDrawUtils.renderFacingQuadVB(vb,
                 vec.getX(), vec.getY(), vec.getZ(),
                 pTicks, fScale, 0F,
                 uvOffset.getA(), uvOffset.getB(), ssr.getULength(), ssr.getVLength(),

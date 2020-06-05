@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
@@ -41,6 +43,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.ILightReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -67,7 +70,7 @@ import java.util.function.Consumer;
 public class RenderingUtils {
 
     private static final Random rand = new Random();
-    private static IEnviromentBlockReader plainRenderWorld = null;
+    private static ILightReader plainRenderWorld = null;
 
     public static long getPositionSeed(BlockPos pos) {
         long seed = 1553015L;
@@ -373,15 +376,16 @@ public class RenderingUtils {
             col &= 0x00FFFFFF;
             col |= (color.getAlpha() << 24);
 
+            LightUtil.putBakedQuad(vb, bakedquad);
             LightUtil.renderQuadColor(vb, bakedquad, col);
         }
     }
 
-    public static void renderSimpleBlockModel(BlockState state, BufferBuilder buf) {
-        renderSimpleBlockModel(state, buf, BlockPos.ZERO, null, false);
+    public static void renderSimpleBlockModel(BlockState state, MatrixStack renderStack, IVertexBuilder vb) {
+        renderSimpleBlockModel(state, renderStack, vb, BlockPos.ZERO, null, false);
     }
 
-    public static void renderSimpleBlockModel(BlockState state, BufferBuilder buf, BlockPos pos, @Nullable TileEntity te, boolean checkRenderSide) {
+    public static void renderSimpleBlockModel(BlockState state, MatrixStack renderStack, IVertexBuilder vb, BlockPos pos, @Nullable TileEntity te, boolean checkRenderSide) {
         if (plainRenderWorld == null) {
             plainRenderWorld = new EmptyRenderWorld(Biomes.PLAINS);
         }
@@ -395,10 +399,7 @@ public class RenderingUtils {
         if (te != null) {
             data = te.getModelData();
         }
-        if (brt == BlockRenderType.MODEL) {
-            IBakedModel model = brd.getModelForState(state);
-            brd.getBlockModelRenderer().renderModel(plainRenderWorld, model, state, pos, buf, checkRenderSide, rand, state.getPositionRandom(pos), data);
-        }
+        brd.renderModel(state, pos, plainRenderWorld, renderStack, vb, checkRenderSide, rand, data);
     }
 
     public static void renderSimpleBlockModelCurrentWorld(BlockState state, BufferBuilder buf) {

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
@@ -76,7 +77,7 @@ public class Vector3 {
     }
 
     public static Vector3 atEntityCorner(Entity entity) {
-        return new Vector3(entity.posX, entity.posY, entity.posZ);
+        return new Vector3(entity.getPosX(), entity.getPosY(), entity.getPosZ());
     }
 
     public static Vector3 atEntityCenter(Entity entity) {
@@ -150,9 +151,9 @@ public class Vector3 {
     }
 
     public Vector3 subtract(Entity e) {
-        this.x -= e.posX;
-        this.y -= e.posY;
-        this.z -= e.posZ;
+        this.x -= e.getPosX();
+        this.y -= e.getPosY();
+        this.z -= e.getPosZ();
         return this;
     }
 
@@ -486,7 +487,7 @@ public class Vector3 {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public BufferBuilder drawPos(BufferBuilder buf) {
+    public IVertexBuilder drawPos(IVertexBuilder buf) {
         buf.pos(this.x, this.y, this.z);
         return buf;
     }

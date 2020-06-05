@@ -105,8 +105,8 @@ public abstract class EntityVisualFX extends EntityComplexFX {
 
     public abstract <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks);
 
-    public float getAlpha(float pTicks) {
-        return this.alphaFunction.getAlpha(this, this.getAlphaMultiplier(), pTicks);
+    public int getAlpha(float pTicks) {
+        return (int) (this.alphaFunction.getAlpha(this, this.getAlphaMultiplier(), pTicks) * 255F);
     }
 
     public float getScale(float pTicks) {

@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
@@ -89,25 +91,22 @@ public class FXColorEffectSphere extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
-        float alpha = this.getAlpha(pTicks);
-        Vector3 pos = this.getRenderPosition(pTicks);
-        Color c = this.getColor(pTicks);
-        float r = c.getRed() / 255F;
-        float g = c.getGreen() / 255F;
-        float b = c.getBlue() / 255F;
-
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {
+        int alpha = this.getAlpha(pTicks);
         if (this.removeIfInvisible && alpha <= 0) {
             this.requestRemoval();
+            return;
         }
+        Color c = this.getColor(pTicks);
+        int r = c.getRed();
+        int g = c.getGreen();
+        int b = c.getBlue();
 
-        Vector3 offset = RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks);
-        offset.add(pos);
+        Vector3 pos = this.getRenderPosition(pTicks);
         for (SphereBuilder.TriangleFace face : this.sphereFaces) {
-            offset.clone().add(face.getV1()).drawPos(buf).color(r, g, b, alpha).endVertex();
-            offset.clone().add(face.getV2()).drawPos(buf).color(r, g, b, alpha).endVertex();
-            offset.clone().add(face.getV3()).drawPos(buf).color(r, g, b, alpha).endVertex();
+            pos.clone().add(face.getV1()).drawPos(vb).color(r, g, b, alpha).endVertex();
+            pos.clone().add(face.getV2()).drawPos(vb).color(r, g, b, alpha).endVertex();
+            pos.clone().add(face.getV3()).drawPos(vb).color(r, g, b, alpha).endVertex();
         }
     }
-
 }

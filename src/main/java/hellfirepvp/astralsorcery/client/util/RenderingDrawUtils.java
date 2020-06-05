@@ -359,16 +359,16 @@ public class RenderingDrawUtils {
         GlStateManager.popMatrix();
     }
 
-    public static void renderFacingFullQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, float r, float g, float b, float alpha) {
+    public static void renderFacingFullQuadVB(IVertexBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, int r, int g, int b, int alpha) {
         renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, 0F, 0F, 1F, 1F, r, g, b, alpha);
     }
 
-    public static void renderFacingSpriteVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, SpriteSheetResource sprite, long spriteTick, float r, float g, float b, float alpha) {
+    public static void renderFacingSpriteVB(IVertexBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, SpriteSheetResource sprite, long spriteTick, int r, int g, int b, int alpha) {
         Tuple<Float, Float> uv = sprite.getUVOffset(spriteTick);
         renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, uv.getA(), uv.getB(), sprite.getULength(), sprite.getVLength(), r, g, b, alpha);
     }
 
-    public static void renderFacingQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, float u, float v, float uLength, float vLength, float r, float g, float b, float alpha) {
+    public static void renderFacingQuadVB(IVertexBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, float u, float v, float uLength, float vLength, int r, int g, int b, int alpha) {
         Vector3 pos = new Vector3(px, py, pz);
 
         RenderInfo ri = RenderInfo.getInstance();
@@ -382,10 +382,6 @@ public class RenderingDrawUtils {
 
         Vec3d view = ari.getProjectedView();
         Vector3f look = ari.getViewVector();
-
-        float cR = MathHelper.clamp(r / 255F, 0F, 1F);
-        float cG = MathHelper.clamp(g / 255F, 0F, 1F);
-        float cB = MathHelper.clamp(b / 255F, 0F, 1F);
 
         Vector3 iPos = new Vector3(view);
         Vector3 v1 = new Vector3(-arX * scale - arYZ * scale, -arXZ * scale, -arZ * scale - arXY * scale);
@@ -419,10 +415,10 @@ public class RenderingDrawUtils {
                     .add(vAngle.clone().crossProduct(v4.clone().multiply(2 * cAngle)));
         }
 
-        pos.clone().add(v1).subtract(iPos).drawPos(vb).tex(u + uLength,           v + vLength).color(cR, cG, cB, alpha).endVertex();
-        pos.clone().add(v2).subtract(iPos).drawPos(vb).tex(u + uLength, v).color(cR, cG, cB, alpha).endVertex();
-        pos.clone().add(v3).subtract(iPos).drawPos(vb).tex(u, v          ).color(cR, cG, cB, alpha).endVertex();
-        pos.clone().add(v4).subtract(iPos).drawPos(vb).tex(u,           v + vLength).color(cR, cG, cB, alpha).endVertex();
+        pos.clone().add(v1).subtract(iPos).drawPos(vb).color(r, g, b, alpha).tex(u + uLength, v + vLength).endVertex();
+        pos.clone().add(v2).subtract(iPos).drawPos(vb).color(r, g, b, alpha).tex(u + uLength, v).endVertex();
+        pos.clone().add(v3).subtract(iPos).drawPos(vb).color(r, g, b, alpha).tex(u, v ).endVertex();
+        pos.clone().add(v4).subtract(iPos).drawPos(vb).color(r, g, b, alpha).tex(u, v + vLength).endVertex();
     }
 
     public static void renderTexturedCubeCentralColorLighted(IVertexBuilder buf,

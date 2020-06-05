@@ -8,13 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.effect.context;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingAtlasParticle;
-import hellfirepvp.astralsorcery.client.resource.BlockAtlasTextureResource;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.lwjgl.opengl.GL11;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,22 +22,7 @@ import org.lwjgl.opengl.GL11;
 public class RenderContextAtlasParticle extends BatchRenderContext<FXFacingAtlasParticle> {
 
     public RenderContextAtlasParticle() {
-        super(BlockAtlasTextureResource.getInstance(),
-                (ctx, pTicks) -> {
-                    GlStateManager.disableAlphaTest();
-                    GlStateManager.enableBlend();
-                    Blending.DEFAULT.applyStateManager();
-                    GlStateManager.disableCull();
-                    GlStateManager.depthMask(false);
-                    ctx.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-                },
-                (pTicks) -> {
-                    GlStateManager.depthMask(true);
-                    GlStateManager.enableCull();
-                    GlStateManager.disableBlend();
-                    GlStateManager.enableAlphaTest();
-                },
-                (ctx, pos) -> new FXFacingAtlasParticle(pos));
+        super(RenderTypesAS.EFFECT_FX_GENERIC_PARTICLE_ATLAS, (ctx, pos) -> new FXFacingAtlasParticle(pos));
     }
 
 }

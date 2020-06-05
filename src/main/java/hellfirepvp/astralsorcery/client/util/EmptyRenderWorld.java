@@ -8,15 +8,18 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.observerlib.api.client.StructureRenderLightManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.ILightReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.ColorResolver;
+import net.minecraft.world.lighting.WorldLightManager;
 
 import javax.annotation.Nullable;
 
@@ -27,7 +30,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 18.07.2019 / 16:35
  */
-public class EmptyRenderWorld implements IEnviromentBlockReader {
+public class EmptyRenderWorld implements ILightReader {
 
     private final Biome biome;
 
@@ -36,8 +39,13 @@ public class EmptyRenderWorld implements IEnviromentBlockReader {
     }
 
     @Override
-    public Biome getBiome(BlockPos blockPos) {
-        return this.biome;
+    public WorldLightManager getLightManager() {
+        return new StructureRenderLightManager(this.getMaxLightLevel());
+    }
+
+    @Override
+    public int getBlockColor(BlockPos blockPosIn, ColorResolver colorResolverIn) {
+        return colorResolverIn.getColor(biome, (double) blockPosIn.getX(), (double) blockPosIn.getZ());
     }
 
     @Override

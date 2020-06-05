@@ -171,7 +171,7 @@ public class AreaOfInfluencePreview implements ITickHandler {
     }
 
     private boolean canRefresh(FXCube cube) {
-        return cube.getAlpha(1F) >= 0.01F;
+        return cube.getAlpha(1F) > 0F;
     }
 
     @Override
