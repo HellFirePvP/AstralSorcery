@@ -8,13 +8,14 @@
 
 package hellfirepvp.astralsorcery.client.render.entity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,12 +31,11 @@ public class RenderEntityEmpty extends EntityRenderer<Entity> {
     }
 
     @Override
-    public void doRender(Entity entity, double x, double y, double z, float yaw, float pTicks) { }
+    public void render(Entity entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {}
 
-    @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
-        return null;
+    public ResourceLocation getEntityTexture(Entity entity) {
+        return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
     }
 
     public static class Factory implements IRenderFactory<Entity> {

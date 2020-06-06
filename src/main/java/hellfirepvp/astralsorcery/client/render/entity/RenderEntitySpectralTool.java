@@ -8,13 +8,17 @@
 
 package hellfirepvp.astralsorcery.client.render.entity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.entity.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -37,32 +41,28 @@ public class RenderEntitySpectralTool extends EntityRenderer<EntitySpectralTool>
     }
 
     @Override
-    public void doRender(EntitySpectralTool entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void render(EntitySpectralTool entity, float entityYaw, float partialTicks, MatrixStack renderStack, IRenderTypeBuffer buffer, int packedLight) {
         ItemStack stack = entity.getItem();
         if (stack.isEmpty() || !entity.isAlive()) {
             return;
         }
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(x, y + entity.getHeight() / 2, z);
-        GlStateManager.rotatef(-entityYaw - 90, 0, 1, 0);
+        renderStack.push();
+        renderStack.translate(0, entity.getHeight() / 2, 0);
+        renderStack.rotate(Vector3f.YP.rotationDegrees(-entityYaw - 90));
         if (stack.getItem() instanceof AxeItem) {
-            GlStateManager.rotatef(180, 1, 0, 0);
-            GlStateManager.rotatef(270, 0, 0, 1);
+            renderStack.rotate(Vector3f.XP.rotationDegrees(180));
+            renderStack.rotate(Vector3f.ZP.rotationDegrees(270));
         }
-        GlStateManager.disableCull();
 
-        RenderingUtils.renderTranslucentItemStackModel(stack, ColorsAS.SPECTRAL_TOOL, Blending.CONSTANT_ALPHA, 0.25F);
+        RenderingUtils.renderTranslucentItemStackModel(stack, renderStack, ColorsAS.SPECTRAL_TOOL, Blending.CONSTANT_ALPHA, 63);
 
-        GlStateManager.enableCull();
-
-        GlStateManager.popMatrix();
+        renderStack.pop();
     }
 
-    @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntitySpectralTool entity) {
-        return null;
+    public ResourceLocation getEntityTexture(EntitySpectralTool entity) {
+        return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
     }
 
     public static class Factory implements IRenderFactory<EntitySpectralTool> {

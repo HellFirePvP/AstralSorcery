@@ -108,10 +108,9 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
 
     //0 = none, 1=basically gone
     public float despawnPercentage(float partial) {
-        int tick = despawning;
-        float p = tick - (1 - partial);
+        float p = despawning - (1 - partial);
         p /= 10;
-        return Math.min(1, Math.max(0, p));
+        return MathHelper.clamp(p, 0, 1);
     }
 
     public boolean isDespawning() {
