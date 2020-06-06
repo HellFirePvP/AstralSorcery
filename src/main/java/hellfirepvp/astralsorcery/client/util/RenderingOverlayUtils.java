@@ -16,6 +16,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
@@ -39,8 +40,7 @@ public class RenderingOverlayUtils {
         int offsetX =  30;
         int offsetY =  15;
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
         ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 
@@ -61,7 +61,8 @@ public class RenderingOverlayUtils {
                 buf.pos(offsetX + width, tempY + heightSplit, 10).tex(1, 0.5F).endVertex();
                 buf.pos(offsetX + width,    tempY,               10).tex(1, 0)  .endVertex();
                 buf.pos(offsetX,               tempY,               10).tex(0, 0)  .endVertex();
-                tes.draw();
+                buf.finishDrawing();
+                WorldVertexBufferUploader.draw(buf);
                 tempY += heightSplit;
             } else {
                 //Draw lower half and upper next half of the sequence
@@ -71,7 +72,8 @@ public class RenderingOverlayUtils {
                 buf.pos(offsetX + width, tempY + heightNormal, 10).tex(1, 1).endVertex();
                 buf.pos(offsetX + width,    tempY,                10).tex(1, 0).endVertex();
                 buf.pos(offsetX,               tempY,                10).tex(0, 0).endVertex();
-                tes.draw();
+                buf.finishDrawing();
+                WorldVertexBufferUploader.draw(buf);
                 tempY += heightNormal;
             }
             if (last) {
@@ -82,7 +84,8 @@ public class RenderingOverlayUtils {
                 buf.pos(offsetX + width, tempY + heightSplit, 10).tex(1, 1)  .endVertex();
                 buf.pos(offsetX + width,    tempY,               10).tex(1, 0.5F).endVertex();
                 buf.pos(offsetX,               tempY,               10).tex(0, 0.5F).endVertex();
-                tes.draw();
+                buf.finishDrawing();
+                WorldVertexBufferUploader.draw(buf);
                 tempY += heightSplit;
             }
         }

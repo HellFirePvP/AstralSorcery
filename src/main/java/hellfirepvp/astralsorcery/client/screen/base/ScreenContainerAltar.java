@@ -8,17 +8,29 @@
 
 package hellfirepvp.astralsorcery.client.screen.base;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import hellfirepvp.astralsorcery.client.lib.SpritesAS;
+import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipeContext;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.LogicalSide;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,6 +56,66 @@ public abstract class ScreenContainerAltar<T extends ContainerAltarBase> extends
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.renderGuiBackground(partialTicks, mouseX, mouseY);
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+    }
+
+    protected void renderStarlightBar(int offsetX, int offsetZ, int width, int height) {
+        TileAltar altar = this.getContainer().getTileEntity();
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+
+        RenderSystem.disableAlphaTest();
+
+        TexturesAS.TEX_BLACK.bindTexture();
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+        RenderingGuiUtils.rect(buf, guiLeft + offsetX, guiTop + offsetZ, this.getBlitOffset(), width, height).draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
+
+        float percFilled;
+        Color barColor = Color.WHITE;
+        if (altar.hasMultiblock()) {
+            percFilled = altar.getAmbientStarlightPercent();
+        } else {
+            barColor = Color.RED;
+            percFilled = 1.0F;
+        }
+
+        if (percFilled > 0) {
+            SpriteSheetResource spriteStarlight = SpritesAS.SPR_STARLIGHT_STORE;
+            spriteStarlight.getResource().bindTexture();
+
+            int tick = altar.getTicksExisted();
+            Tuple<Float, Float> uvOffset = spriteStarlight.getUVOffset(tick);
+            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+            RenderingGuiUtils.rect(buf, guiLeft + offsetX, guiTop + offsetZ, this.getBlitOffset(), (int) (width * percFilled), height)
+                    .tex(uvOffset.getA(), uvOffset.getB(), spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength())
+                    .color(barColor)
+                    .draw();
+            buf.finishDrawing();
+            WorldVertexBufferUploader.draw(buf);
+
+            if (altar.hasMultiblock()) {
+                SimpleAltarRecipe aar = findRecipe(true);
+                if (aar != null) {
+                    int req = aar.getStarlightRequirement();
+                    int has = altar.getStoredStarlight();
+                    if (has < req) {
+                        int max = altar.getAltarType().getStarlightCapacity();
+                        float percReq = (float) (req - has) / (float) max;
+                        int from = (int) (width * percFilled);
+                        int to = (int) (width * percReq);
+
+                        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+                        RenderingGuiUtils.rect(buf, guiLeft + offsetX + from, guiTop + offsetZ, this.getBlitOffset(), to, height)
+                                .tex(uvOffset.getA() + spriteStarlight.getULength() * percFilled, uvOffset.getB(), spriteStarlight.getULength() * percReq, spriteStarlight.getVLength())
+                                .color(0.2F, 0.5F, 1.0F, 0.4F)
+                                .draw();
+                        buf.finishDrawing();
+                        WorldVertexBufferUploader.draw(buf);
+                    }
+                }
+            }
+        }
+        RenderSystem.enableAlphaTest();
     }
 
     public abstract void renderGuiBackground(float partialTicks, int mouseX, int mouseY);

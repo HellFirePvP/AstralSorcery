@@ -9,12 +9,12 @@
 package hellfirepvp.astralsorcery.client.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.base.TileEntityScreen;
 import hellfirepvp.astralsorcery.client.util.*;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.constellation.DrawnConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
@@ -30,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -84,8 +85,6 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             this.dragging = null;
         }
 
-        TextureHelper.refreshTextureBind();
-
         List<ITextComponent> tooltip = new ArrayList<>();
         FontRenderer tooltipRenderer = Minecraft.getInstance().fontRenderer;
 
@@ -101,9 +100,9 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             List<String> localized = tooltip.stream()
                     .map(ITextComponent::getFormattedText)
                     .collect(Collectors.toList());
-            GlStateManager.disableDepthTest();
+            RenderSystem.disableDepthTest();
             RenderingDrawUtils.renderBlueTooltipString(mouseX, mouseY, localized, tooltipRenderer, true);
-            GlStateManager.enableDepthTest();
+            RenderSystem.enableDepthTest();
         }
     }
 
@@ -116,11 +115,9 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         Point offset = new Point(mouseX, mouseY);
         offset.translate(-whDrawn, -whDrawn);
 
-        RenderingConstellationUtils.renderConstellationIntoGUI(dragging, offset.x, offset.y, this.blitOffset,
+        RenderingConstellationUtils.renderConstellationIntoGUI(dragging, offset.x, offset.y, this.getGuiZLevel(),
                 whDrawn * 2, whDrawn * 2, 1.4F,
                 () -> DayTimeHelper.getCurrentDaytimeDistribution(this.getTile().getWorld()), true, false);
-
-        TextureHelper.refreshTextureBind();
 
         this.renderBox(offset.x, offset.y, whDrawn * 2, whDrawn * 2, dragging.getTierRenderColor());
         Rectangle r = new Rectangle(PLACEMENT_GRID);
@@ -137,12 +134,10 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             offset.translate(PLACEMENT_GRID.x, PLACEMENT_GRID.y);
             offset.translate(-whDrawn, -whDrawn);
 
-            RenderingConstellationUtils.renderConstellationIntoGUI(dragged.getConstellation(), offset.x, offset.y, this.blitOffset,
+            RenderingConstellationUtils.renderConstellationIntoGUI(dragged.getConstellation(), offset.x, offset.y, this.getGuiZLevel(),
                     whDrawn * 2, whDrawn * 2, 1.4F,
                     () -> DayTimeHelper.getCurrentDaytimeDistribution(this.getTile().getWorld()), true, false);
         }
-
-        TextureHelper.refreshTextureBind();
     }
 
     private void renderInputItem() {
@@ -150,22 +145,22 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             return;
         }
 
-        this.blitOffset += 100;
+        this.changeZLevel(100);
         this.itemRenderer.zLevel += 100;
 
         ItemStack input = this.getTile().getInputStack();
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(guiLeft + 63 + 16.25, guiTop + 42 + 16.25, 0); //-> +130, +130
-        GlStateManager.scaled(6, 6, 1);
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(guiLeft + 63 + 16.25, guiTop + 42 + 16.25, 0); //-> +130, +130
+        RenderSystem.scaled(6, 6, 1);
         GlStateManager.disableDepthTest();
 
         RenderingUtils.renderItemStack(this.itemRenderer, input, 0, 0, null);
 
         GlStateManager.enableDepthTest();
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
 
-        this.blitOffset -= 100;
+        this.changeZLevel(-100);
         this.itemRenderer.zLevel -= 100;
     }
 
@@ -176,30 +171,29 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
 
             float scale = 160F;
 
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(guiWidth / 2, guiHeight / 2 + 10, 0);
-            GlStateManager.translated(-scale / 2, -scale / 2, 0);
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
+            RenderSystem.disableAlphaTest();
 
-            GlStateManager.enableBlend();
-            Blending.DEFAULT.applyStateManager();
-            GlStateManager.disableAlphaTest();
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(guiWidth / 2, guiHeight / 2 + 10, 0);
+            RenderSystem.translated(-scale / 2, -scale / 2, 0);
 
-            Tessellator tes = Tessellator.getInstance();
-            BufferBuilder buf = tes.getBuffer();
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+            BufferBuilder buf = Tessellator.getInstance().getBuffer();
+            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
             drawRect(buf)
                     .dim(scale, scale)
                     .color(1F, 1F, 1F, this.getTile().getRunProgress())
                     .tex(uvFrame.getA(), uvFrame.getB(), SpritesAS.SPR_HALO_INFUSION.getUWidth(), SpritesAS.SPR_HALO_INFUSION.getVWidth())
                     .draw();
-            tes.draw();
+            buf.finishDrawing();
+            WorldVertexBufferUploader.draw(buf);
 
-            GlStateManager.enableAlphaTest();
-            GlStateManager.disableBlend();
+            RenderSystem.popMatrix();
 
-            GlStateManager.popMatrix();
-
-            TextureHelper.refreshTextureBind();
+            RenderSystem.enableAlphaTest();
+            Blending.DEFAULT.apply();
+            RenderSystem.disableBlend();
         }
     }
 
@@ -225,12 +219,10 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             offset.translate(PLACEMENT_GRID.x, PLACEMENT_GRID.y);
             offset.translate(-whDrawn, -whDrawn);
 
-            RenderingConstellationUtils.renderConstellationIntoGUI(cst.getConstellation(), offset.x, offset.y, this.blitOffset,
+            RenderingConstellationUtils.renderConstellationIntoGUI(cst.getConstellation(), offset.x, offset.y, this.getGuiZLevel(),
                     whDrawn * 2, whDrawn * 2, 1.6F,
                     () -> DayTimeHelper.getCurrentDaytimeDistribution(world) * 0.8F, true, false);
         }
-
-        TextureHelper.refreshTextureBind();
     }
 
     private void renderConstellationOptions(int mouseX, int mouseY, List<ITextComponent> tooltip) {
@@ -258,7 +250,7 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             this.mapRenderedConstellations.put(rct, cst);
 
             RenderingConstellationUtils.renderConstellationIntoGUI(Color.WHITE, cst,
-                    offsetX, offsetY, this.blitOffset,
+                    offsetX, offsetY, this.getGuiZLevel(),
                     16, 16, 0.5,
                     () -> DayTimeHelper.getCurrentDaytimeDistribution(world), true, false);
 
@@ -266,12 +258,10 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
                 tooltip.add(cst.getConstellationName());
             }
         }
-
-        TextureHelper.refreshTextureBind();
     }
 
     private FontRenderer renderTileItems(int mouseX, int mouseY, List<ITextComponent> tooltip, FontRenderer tooltipRenderer) {
-        this.blitOffset += 100;
+        this.changeZLevel(100);
         this.itemRenderer.zLevel += 100;
 
         ItemStack input = this.getTile().getInputStack();
@@ -301,7 +291,7 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             }
         }
 
-        this.blitOffset -= 100;
+        this.changeZLevel(-100);
         this.itemRenderer.zLevel -= 100;
         return tooltipRenderer;
     }
@@ -313,15 +303,14 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         float b = c.getBlue() / 255F;
         Supplier<Float> alpha = () -> 0.1F + 0.4F * ((MathHelper.sin(rand.nextInt(200) + ClientScheduler.getClientTick() / 20F) + 1F) / 2F);
 
-        GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.disableAlphaTest();
-        GlStateManager.lineWidth(2.0F);
-        GlStateManager.disableTexture();
-        GlStateManager.disableDepthTest();
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.lineWidth(2F);
+        RenderSystem.disableTexture();
+        RenderSystem.disableDepthTest();
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
         buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
         buf.pos(offsetX, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
@@ -336,12 +325,14 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         buf.pos(offsetX, offsetY + height, 0).color(r, g, b, alpha.get()).endVertex();
         buf.pos(offsetX, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
 
-        tes.draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
 
-        GlStateManager.enableDepthTest();
-        GlStateManager.enableTexture();
-        GlStateManager.enableAlphaTest();
-        GlStateManager.disableBlend();
+        RenderSystem.enableDepthTest();
+        RenderSystem.enableTexture();
+        RenderSystem.enableAlphaTest();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
     }
 
     @Override

@@ -11,14 +11,17 @@ package hellfirepvp.astralsorcery.client.screen.journal;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
 import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
@@ -65,24 +68,20 @@ public class ScreenJournal extends WidthHeightScreen {
     }
 
     protected void drawDefault(AbstractRenderableTexture texture, int mouseX, int mouseY) {
-        this.blitOffset += 100;
-
+        this.changeZLevel(100);
         drawWHRect(texture);
         drawBookmarks(mouseX, mouseY);
-
-        this.blitOffset -= 100;
+        this.changeZLevel(-100);
     }
 
     private void drawBookmarks(int mouseX, int mouseY) {
         drawnBookmarks.clear();
 
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
 
         double bookmarkWidth =  67;
         double bookmarkHeight = 15;
         double bookmarkGap = 18;
-
-        double knBookmarkWidth =  83;
 
         double offsetX = guiLeft + guiWidth - 17.25;
         double offsetY = guiTop  + 20;
@@ -95,7 +94,7 @@ public class ScreenJournal extends WidthHeightScreen {
                         offsetX, offsetY,
                         bookmarkWidth, bookmarkHeight,
                         bookmarkWidth + (bookmarkIndex == bookmarkProvider.getIndex() ? 0 : 5),
-                        this.blitOffset,
+                        this.getGuiZLevel(),
                         bookmarkProvider.getUnlocalizedName(), 0xDDDDDDDD, mouseX, mouseY,
                         bookmarkProvider.getTextureBookmark(), bookmarkProvider.getTextureBookmarkStretched());
                 drawnBookmarks.put(r, bookmarkProvider);
@@ -103,14 +102,13 @@ public class ScreenJournal extends WidthHeightScreen {
             }
         }
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
     private Rectangle drawBookmark(double offsetX, double offsetY, double width, double height, double mouseOverWidth,
                                    float zLevel, String title, int titleRGBColor, int mouseX, int mouseY,
                                    AbstractRenderableTexture texture, AbstractRenderableTexture textureStretched) {
-        GlStateManager.pushMatrix();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
+        RenderSystem.pushMatrix();
         texture.bindTexture();
 
         Rectangle r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
@@ -122,22 +120,21 @@ public class ScreenJournal extends WidthHeightScreen {
             r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
         }
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,         offsetY + height, zLevel).tex(0, 1).endVertex();
-        vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();
-        vb.pos(offsetX + width, offsetY,          zLevel).tex(1, 0).endVertex();
-        vb.pos(offsetX,         offsetY,          zLevel).tex(0, 0).endVertex();
-        tes.draw();
+        double actualWidth = width;
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
+            buf.pos(offsetX,         offsetY + height, zLevel).tex(0, 1).endVertex();
+            buf.pos(offsetX + actualWidth, offsetY + height, zLevel).tex(1, 1).endVertex();
+            buf.pos(offsetX + actualWidth, offsetY,          zLevel).tex(1, 0).endVertex();
+            buf.pos(offsetX,         offsetY,          zLevel).tex(0, 0).endVertex();
+        });
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(offsetX + 2, offsetY + 4, zLevel + 50);
-        GlStateManager.scaled(0.7, 0.7, 0.7);
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(offsetX + 2, offsetY + 4, zLevel + 50);
+        RenderSystem.scaled(0.7, 0.7, 0.7);
         RenderingDrawUtils.renderStringAtCurrentPos(null, I18n.format(title), titleRGBColor);
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
 
         return r;
     }

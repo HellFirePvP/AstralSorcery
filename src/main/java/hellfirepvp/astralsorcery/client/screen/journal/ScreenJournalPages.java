@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.screen.journal;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
@@ -20,7 +21,12 @@ import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -104,10 +110,7 @@ public class ScreenJournalPages extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
-        GlStateManager.enableBlend();
         super.render(mouseX, mouseY, pTicks);
-
-        GlStateManager.pushMatrix();
 
         if (origin != null) {
             drawDefault(TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
@@ -115,46 +118,37 @@ public class ScreenJournalPages extends ScreenJournal {
             drawWHRect(TexturesAS.TEX_GUI_BOOK_BLANK);
         }
 
-        this.blitOffset += 100;
+        this.changeZLevel(100);
         int pageYOffset = 20;
 
         //Draw headline
         if (this.currentPageOffset == 0) {
-            GlStateManager.pushMatrix();
-            GlStateManager.disableDepthTest();
+            RenderSystem.pushMatrix();
 
             String headline = this.getTitle().getFormattedText();
             double width = font.getStringWidth(headline);
-            GlStateManager.translated(guiLeft + 117, guiTop + 22, 0);
-            GlStateManager.scaled(1.3, 1.3, 1.3);
-            GlStateManager.translated(-(width / 2), 0, 0);
+            RenderSystem.translated(guiLeft + 117, guiTop + 22, 0);
+            RenderSystem.scaled(1.3, 1.3, 1.3);
+            RenderSystem.translated(-(width / 2), 0, 0);
             RenderingDrawUtils.renderStringAtCurrentPos(font, headline, 0x00DDDDDD);
 
-            GlStateManager.enableDepthTest();
-            GlStateManager.popMatrix();
+            RenderSystem.popMatrix();
 
             TexturesAS.TEX_GUI_BOOK_UNDERLINE.bindTexture();
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(guiLeft + 30, guiTop + 35, 0);
-            RenderingGuiUtils.drawTexturedRectAtCurrentPos(175, 6, this.blitOffset);
-            GlStateManager.popMatrix();
+            RenderingGuiUtils.drawRect(guiLeft + 30, guiTop + 35, this.getGuiZLevel(), 175, 6);
 
             pageYOffset += 30;
         }
 
         int index = currentPageOffset * 2;
         if (pages.size() > index) {
-            GlStateManager.pushMatrix();
             RenderablePage page = pages.get(index);
-            page.render    (guiLeft + 30, guiTop + pageYOffset, pTicks, this.blitOffset, mouseX, mouseY);
-            GlStateManager.popMatrix();
+            page.render    (guiLeft + 30, guiTop + pageYOffset, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
         index = index + 1;
         if (pages.size() > index) {
-            GlStateManager.pushMatrix();
             RenderablePage page = pages.get(index);
-            page.render    (guiLeft + 220, guiTop + 20, pTicks, this.blitOffset, mouseX, mouseY);
-            GlStateManager.popMatrix();
+            page.render    (guiLeft + 220, guiTop + 20, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
 
         drawBackArrow(pTicks, mouseX, mouseY);
@@ -162,55 +156,54 @@ public class ScreenJournalPages extends ScreenJournal {
 
         index = currentPageOffset * 2;
         if (pages.size() > index) {
-            GlStateManager.pushMatrix();
             RenderablePage page = pages.get(index);
-            page.postRender(guiLeft + 30, guiTop + pageYOffset, pTicks, this.blitOffset, mouseX, mouseY);
-            GlStateManager.popMatrix();
+            page.postRender(guiLeft + 30, guiTop + pageYOffset, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
         index = index + 1;
         if (pages.size() > index) {
-            GlStateManager.pushMatrix();
             RenderablePage page = pages.get(index);
-            page.postRender(guiLeft + 220, guiTop + 20, pTicks, this.blitOffset, mouseX, mouseY);
-            GlStateManager.popMatrix();
+            page.postRender(guiLeft + 220, guiTop + 20, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
-        this.blitOffset -= 100;
-
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GlStateManager.popMatrix();
+        this.changeZLevel(-100);
     }
 
     private void drawBackArrow(float partialTicks, int mouseX, int mouseY) {
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+
         int width = 30;
         int height = 15;
         rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
 
         GlStateManager.disableDepthTest();
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
+
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
 
         float uFrom = 0F, vFrom = 0.5F;
         if (rectBack.contains(mouseX, mouseY)) {
             uFrom = 0.5F;
-            GlStateManager.scaled(1.1, 1.1, 1.1);
+            RenderSystem.scaled(1.1, 1.1, 1.1);
         } else {
             double t = ClientScheduler.getClientTick() + partialTicks;
             float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-            GlStateManager.scaled(sin, sin, sin);
+            RenderSystem.scaled(sin, sin, sin);
         }
-        GlStateManager.color4f(1F, 1F, 1F, 0.8F);
-        GlStateManager.translated(-(width / 2), -(height / 2), 0);
+        RenderSystem.translated(-(width / 2), -(height / 2), 0);
         TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-        RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+        this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
 
-        GlStateManager.popMatrix();
-        GlStateManager.enableDepthTest();
+        RenderSystem.popMatrix();
+
+        RenderSystem.enableDepthTest();
     }
 
     private void drawNavArrows(float partialTicks, int mouseX, int mouseY) {
-        GlStateManager.disableDepthTest();
-        GlStateManager.color4f(1F, 1F, 1F, 0.8F);
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        RenderSystem.disableDepthTest();
+
         int cIndex = currentPageOffset * 2;
         rectNext = null;
         rectPrev = null;
@@ -219,46 +212,51 @@ public class ScreenJournalPages extends ScreenJournal {
             int width = 30;
             int height = 15;
             rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
             float uFrom = 0F, vFrom = 0.5F;
             if (rectPrev.contains(mouseX, mouseY)) {
                 uFrom = 0.5F;
-                GlStateManager.scaled(1.1, 1.1, 1.1);
+                RenderSystem.scaled(1.1, 1.1, 1.1);
             } else {
                 double t = ClientScheduler.getClientTick() + partialTicks;
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                GlStateManager.scaled(sin, sin, sin);
+                RenderSystem.scaled(sin, sin, sin);
             }
-            GlStateManager.color4f(1F, 1F, 1F, 0.8F);
-            GlStateManager.translated(-(width / 2), -(height / 2), 0);
+            RenderSystem.translated(-(width / 2), -(height / 2), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
-            GlStateManager.popMatrix();
+            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+            this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
+            buf.finishDrawing();
+            WorldVertexBufferUploader.draw(buf);
+            RenderSystem.popMatrix();
         }
         int nextIndex = cIndex + 2;
         if (pages.size() >= (nextIndex + 1)) {
             int width = 30;
             int height = 15;
             rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
             float uFrom = 0F, vFrom = 0F;
             if (rectNext.contains(mouseX, mouseY)) {
                 uFrom = 0.5F;
-                GlStateManager.scaled(1.1, 1.1, 1.1);
+                RenderSystem.scaled(1.1, 1.1, 1.1);
             } else {
                 double t = ClientScheduler.getClientTick() + partialTicks;
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                GlStateManager.scaled(sin, sin, sin);
+                RenderSystem.scaled(sin, sin, sin);
             }
-            GlStateManager.translated(-(width / 2), -(height / 2), 0);
+            RenderSystem.translated(-(width / 2), -(height / 2), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
-            GlStateManager.popMatrix();
+            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+            this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
+            buf.finishDrawing();
+            WorldVertexBufferUploader.draw(buf);
+            RenderSystem.popMatrix();
         }
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GlStateManager.enableDepthTest();
+
+        RenderSystem.enableDepthTest();
     }
 
     @Override

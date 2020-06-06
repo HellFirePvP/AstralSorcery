@@ -56,15 +56,9 @@ public class RenderPageText extends RenderablePage {
         int iX = (int) offsetX;
         int iY = (int) offsetY;
 
-        GlStateManager.color4f(0.9F, 0.9F, 0.9F, 1F);
-        GlStateManager.disableDepthTest();
-
         for (int i = 0; i < this.localizedText.size(); i++) {
             String line = this.localizedText.get(i);
-            RenderingDrawUtils.renderStringAtPos(iX, iY + (i * 10), this.fontRenderer, line, 0x00DDDDDD, false);
+            RenderingDrawUtils.renderStringAtPos(iX, iY + (i * 10), this.fontRenderer, line, 0x00CCCCCC, false);
         }
-
-        GlStateManager.enableDepthTest();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
     }
 }

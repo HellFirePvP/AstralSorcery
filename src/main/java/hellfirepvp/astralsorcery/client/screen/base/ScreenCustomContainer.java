@@ -10,17 +10,16 @@ package hellfirepvp.astralsorcery.client.screen.base;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -65,28 +64,11 @@ public abstract class ScreenCustomContainer<T extends Container> extends Contain
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.getBackgroundTexture().bindTexture();
-        this.drawRect(this.guiLeft, this.guiTop, this.sWidth, this.sHeight);
-    }
 
-    protected void drawRect(int offsetX, int offsetY, int width, int height, double u, double v, double uLength, double vLength) {
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,            offsetY + height, this.blitOffset).tex(u,               v + vLength).endVertex();
-        vb.pos(offsetX + width, offsetY + height, this.blitOffset).tex(u + uLength, v + vLength).endVertex();
-        vb.pos(offsetX + width,    offsetY,          this.blitOffset).tex(u + uLength,    v          ).endVertex();
-        vb.pos(offsetX,               offsetY,          this.blitOffset).tex(u,                  v          ).endVertex();
-        tes.draw();
-    }
-
-    protected void drawRect(int offsetX, int offsetY, int width, int height) {
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,            offsetY + height, this.blitOffset).tex(0, 1).endVertex();
-        vb.pos(offsetX + width, offsetY + height, this.blitOffset).tex(1, 1).endVertex();
-        vb.pos(offsetX + width, offsetY,             this.blitOffset).tex(1, 0).endVertex();
-        vb.pos(offsetX,            offsetY,             this.blitOffset).tex(0, 0).endVertex();
-        tes.draw();
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+        RenderingGuiUtils.rect(buf, this.guiLeft, this.guiTop, this.getBlitOffset(), this.sWidth, this.sHeight).draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
     }
 }
