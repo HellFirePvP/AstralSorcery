@@ -14,7 +14,7 @@ import net.minecraft.world.ILightReader;
 public class LightmapUtil {
 
     public static int getPackedFullbrightCoords() {
-        return getPackedLightCoords(15);
+        return 0xF000F0;
     }
 
     public static int getPackedLightCoords(int lightValue) {

@@ -15,11 +15,18 @@ public interface IDrawRenderTypeBuffer extends IRenderTypeBuffer {
 
     public void draw();
 
+    public void draw(RenderType type);
+
     public static IDrawRenderTypeBuffer of(IRenderTypeBuffer.Impl drawBuffer) {
         return new IDrawRenderTypeBuffer() {
             @Override
             public void draw() {
                 drawBuffer.finish();
+            }
+
+            @Override
+            public void draw(RenderType type) {
+                drawBuffer.finish(type);
             }
 
             @Override

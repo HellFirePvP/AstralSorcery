@@ -8,16 +8,14 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
-import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
-import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -31,15 +29,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,83 +54,71 @@ public class RenderingDrawUtils {
             fr = Minecraft.getInstance().fontRenderer;
         }
 
-        double strLength = fr.getStringWidth(str) * scale;
-        double offsetLeft = x - strLength;
+        float strLength = fr.getStringWidth(str) * scale;
+        float offsetLeft = x - strLength;
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(offsetLeft, y, 0);
-        GlStateManager.scaled(scale, scale, scale);
+        RenderSystem.pushMatrix();
+        RenderSystem.translatef(offsetLeft, y, 0);
+        RenderSystem.scalef(scale, scale, scale);
         renderStringAtCurrentPos(fr, str, color);
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
-    public static void renderStringAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
-        renderStringAtPos(0, 0, fr, str, color, false);
+    public static int renderStringAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
+        return renderStringAtPos(0, 0, fr, str, color, false);
     }
 
-    public static void renderStringWithShadowAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
-        renderStringAtPos(0, 0, fr, str, color, true);
+    public static int renderStringWithShadowAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
+        return renderStringAtPos(0, 0, fr, str, color, true);
     }
 
-    public static void renderStringAtPos(int x, int y, @Nullable FontRenderer fr, String str, int color, boolean dropShadow) {
+    public static int renderStringAtPos(int x, int y, @Nullable FontRenderer fr, String str, int color, boolean dropShadow) {
         if (fr == null) {
             fr = Minecraft.getInstance().fontRenderer;
         }
-
-        //FontRenderer always enables alpha test, so we disable it afterwards if necessary.
-        boolean alphaTest = GL11.glGetBoolean(GL11.GL_ALPHA_TEST);
-
+        int length;
         if (dropShadow) {
-            fr.drawStringWithShadow(str, x, y, color);
+            length = fr.drawStringWithShadow(str, x, y, color);
         } else {
-            fr.drawString(str, x, y, color);
+            length = fr.drawString(str, x, y, color);
         }
-
-        if (!alphaTest) {
-            GlStateManager.disableAlphaTest();
-        }
+        RenderSystem.disableAlphaTest();
+        return length;
     }
 
-    public static void drawWithBlockLight(int lightLevel, Runnable run) {
-        float brX = GLX.lastBrightnessX;
-        float brY = GLX.lastBrightnessY;
-        int lightCoord = lightLevel << 20 | lightLevel << 4;
-        int x = lightCoord % 65536;
-        int y = lightCoord / 65536;
-        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, x, y);
-        run.run();
-        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, brX, brY);
-    }
+    public static Rectangle drawInfoStar(MatrixStack renderStack, IDrawRenderTypeBuffer buffer, float offsetX, float offsetY, float zLevel, float widthHeightBase, float pTicks) {
+        IVertexBuilder vb = buffer.getBuffer(RenderTypesAS.GUI_MISC_INFO_STAR);
 
-    public static Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeightBase, float pTicks) {
+        renderStack.push();
+        renderStack.translate(offsetX, offsetY, zLevel);
+
         float tick = ClientScheduler.getClientTick() + pTicks;
         float deg = (tick * 2) % 360F;
         float wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick) * 4) % 360F)) + 1F);
-        drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
+        drawInfoStarSingle(renderStack, vb, wh, Math.toRadians(deg));
 
         deg = ((tick + 22.5F) * 2) % 360F;
         wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick + 45F) * 4) % 360F)) + 1F);
-        drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
+        drawInfoStarSingle(renderStack, vb, wh, Math.toRadians(deg));
 
+        buffer.draw(RenderTypesAS.GUI_MISC_INFO_STAR);
+
+        renderStack.pop();
         return new Rectangle(MathHelper.floor(offsetX - widthHeightBase / 2F), MathHelper.floor(offsetY - widthHeightBase / 2F),
                 MathHelper.floor(widthHeightBase), MathHelper.floor(widthHeightBase));
     }
 
-    public static void drawInfoStarSingle(float offsetX, float offsetY, float zLevel, float widthHeight, double deg) {
-        TexturesAS.TEX_STAR_1.bindTexture();
+    private static void drawInfoStarSingle(MatrixStack renderStack, IVertexBuilder vb, float widthHeight, double deg) {
         Vector3 offset = new Vector3(-widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
         Vector3 uv01   = new Vector3(-widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
         Vector3 uv11   = new Vector3( widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
         Vector3 uv10   = new Vector3( widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX + uv01.getX(),   offsetY + uv01.getY(),   zLevel).tex(0, 1).endVertex();
-        vb.pos(offsetX + uv11.getX(),   offsetY + uv11.getY(),   zLevel).tex(1, 1).endVertex();
-        vb.pos(offsetX + uv10.getX(),   offsetY + uv10.getY(),   zLevel).tex(1, 0).endVertex();
-        vb.pos(offsetX + offset.getX(), offsetY + offset.getY(), zLevel).tex(0, 0).endVertex();
-        tes.draw();
+        Matrix4f matr = renderStack.getLast().getMatrix();
+        vb.pos(matr, (float) uv01.getX(),   (float) uv01.getY(),   0).tex(0, 1).endVertex();
+        vb.pos(matr, (float) uv11.getX(),   (float) uv11.getY(),   0).tex(1, 1).endVertex();
+        vb.pos(matr, (float) uv10.getX(),   (float) uv10.getY(),   0).tex(1, 0).endVertex();
+        vb.pos(matr, (float) offset.getX(), (float) offset.getY(), 0).tex(0, 0).endVertex();
     }
 
     public static void renderBlueTooltipString(int x, int y, List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
@@ -182,7 +167,7 @@ public class RenderingDrawUtils {
                     maxWidth = width;
                 }
             }
-            if (x + 15 + maxWidth > Minecraft.getInstance().mainWindow.getScaledWidth()) {
+            if (x + 15 + maxWidth > Minecraft.getInstance().getMainWindow().getScaledWidth()) {
                 x -= maxWidth + 24;
             }
 
@@ -248,7 +233,7 @@ public class RenderingDrawUtils {
                     if (customFR == null) {
                         customFR = fontRenderer;
                     }
-                    RenderingDrawUtils.renderStringAtPos(pX + offset, pY, customFR, str, strColor.getRGB(), false);
+                    renderStringAtPos(pX + offset, pY, customFR, str, strColor.getRGB(), false);
                     pY += 10;
                     minYShift -= 10;
                 }
@@ -294,10 +279,10 @@ public class RenderingDrawUtils {
         float endGreen   = (float) (endColor   >>  8 & 255) / 255.0F;
         float endBlue    = (float) (endColor         & 255) / 255.0F;
 
-        GlStateManager.disableTexture();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+        RenderSystem.disableTexture();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
                 GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        RenderSystem.shadeModel(GL11.GL_SMOOTH);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
@@ -308,8 +293,8 @@ public class RenderingDrawUtils {
         buffer.pos(right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
         tessellator.draw();
 
-        GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.enableTexture();
+        RenderSystem.shadeModel(GL11.GL_FLAT);
+        RenderSystem.enableTexture();
     }
 
     public static void renderLightRayFan(MatrixStack renderStack, IVertexBuilder vb, Color color, long seed, int minScale, float scale, int count) {
@@ -443,44 +428,43 @@ public class RenderingDrawUtils {
         buf.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
     }
 
-    public static void renderTexturedCubeCentralColorNormal(BufferBuilder buf, double size,
+    public static void renderTexturedCubeCentralColorNormal(IVertexBuilder vb,
                                                             float u, float v, float uLength, float vLength,
-                                                            float cR, float cG, float cB, float cA,
+                                                            int r, int g, int b, int a,
                                                             Vector3 normal) {
-        double half = size / 2D;
         float nX = (float) normal.getX();
         float nY = (float) normal.getY();
         float nZ = (float) normal.getZ();
 
-        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half, -half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos(-half, -half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
 
-        buf.pos(-half,  half,  half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half,  half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
 
-        buf.pos(-half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos(-half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos(-half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos(-half, -half, -half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
 
-        buf.pos( half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half, -half,  half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
 
-        buf.pos( half, -half, -half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos(-half, -half, -half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos(-half,  half, -half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half,  half, -half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
 
-        buf.pos(-half, -half,  half).tex(u, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half, -half,  half).tex(u + uLength, v).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos( half,  half,  half).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
-        buf.pos(-half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
     }
 
     public static void renderAngleRotatedTexturedRectVB(IVertexBuilder vb, Vector3 renderOffset, Vector3 axis, double angleRad, double scale, float u, float v, float uLength, float vLength, float r, float g, float b, float a) {

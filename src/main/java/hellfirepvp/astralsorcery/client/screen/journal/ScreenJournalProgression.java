@@ -205,7 +205,7 @@ public class ScreenJournalProgression extends ScreenJournal {
             int maxLength = 0;
 
             for (String line : nodeTitleLines) {
-                int length = fr.drawString(line, offsetX, offsetY, 0x00D0D0D0) - offsetX;
+                int length = RenderingDrawUtils.renderStringAtPos(offsetX, offsetY, fr, line, 0x00D0D0D0, false) - offsetX;
                 if (length > maxLength) {
                     maxLength = length;
                 }
@@ -232,7 +232,7 @@ public class ScreenJournalProgression extends ScreenJournal {
             int maxLength = 0;
 
             for (String line : nodeTitleLines) {
-                int length = fr.drawString(line, offsetX, offsetY, 0x00D0D0D0) - offsetX;
+                int length = RenderingDrawUtils.renderStringAtPos(offsetX, offsetY, fr, line, 0x00D0D0D0, false) - offsetX;
                 if (length > maxLength) {
                     maxLength = length;
                 }

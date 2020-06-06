@@ -32,7 +32,7 @@ public class RenderTypesAS {
     //Misc Effects
     public static RenderType EFFECT_LIGHTRAY_FAN;
 
-    public static RenderType CONSTELLATION_STARS_IN_WORLD;
-    public static RenderType CONSTELLATION_LINES_IN_WORLD;
+    //GUI
+    public static RenderType GUI_MISC_INFO_STAR;
 
 }

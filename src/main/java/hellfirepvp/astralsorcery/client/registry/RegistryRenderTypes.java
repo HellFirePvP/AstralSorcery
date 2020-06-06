@@ -25,11 +25,7 @@ public class RegistryRenderTypes {
     public static void init() {
         initEffectTypes();
         initEffects();
-
-        CONSTELLATION_STARS_IN_WORLD = createType("constellation_stars_in_world", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder().texture(TexturesAS.TEX_STAR_1).build());
-        CONSTELLATION_LINES_IN_WORLD = createType("constellation_lines_in_world", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder().texture(TexturesAS.TEX_STAR_CONNECTION).build());
+        initGuiTypes();
     }
 
     private static void initEffectTypes() {
@@ -164,6 +160,15 @@ public class RegistryRenderTypes {
                         .smoothShade()
                         .disableDepthMask()
                         .enableItemRendering()
+                        .build());
+    }
+
+    private static void initGuiTypes() {
+        GUI_MISC_INFO_STAR = createType("gui_misc_info_star", DefaultVertexFormats.POSITION_TEX,
+                RenderStateBuilder.builder()
+                        .texture(TexturesAS.TEX_STAR_1)
+                        .blend(Blending.DEFAULT)
+                        .defaultAlpha()
                         .build());
     }
 

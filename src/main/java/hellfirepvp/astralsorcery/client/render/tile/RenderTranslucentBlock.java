@@ -8,13 +8,17 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucentBlock;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
-import hellfirepvp.observerlib.client.util.BufferBuilderDecorator;
+import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
@@ -26,10 +30,10 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 28.11.2019 / 19:52
  */
-public class RenderTranslucentBlock extends CustomFastTileEntityRenderer<TileTranslucentBlock> {
+public class RenderTranslucentBlock extends CustomTileEntityRenderer<TileTranslucentBlock> {
 
     @Override
-    public void renderTileEntityFast(TileTranslucentBlock tile, double x, double y, double z, float pTicks, int destroyStage, BufferBuilder buf) {
+    public void render(TileTranslucentBlock tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
         BlockState fakedState = tile.getFakedState();
         if (fakedState.getBlock() instanceof AirBlock) {
             return;
@@ -37,11 +41,8 @@ public class RenderTranslucentBlock extends CustomFastTileEntityRenderer<TileTra
         Color blendColor = ColorUtils.flareColorFromDye(tile.getOverlayColor());
         int[] color = new int[] { blendColor.getRed(), blendColor.getGreen(), blendColor.getBlue(), 128 };
 
-        BufferBuilderDecorator overlay = BufferBuilderDecorator.decorate(buf);
-        overlay.setColorDecorator((r, g, b, a) -> color);
-
-        BlockPos offset = tile.getPos();
-        overlay.withTranslation(x - offset.getX(), y - offset.getY(), z - offset.getZ(), () ->
-                RenderingUtils.renderSimpleBlockModelCurrentWorld(fakedState, overlay, offset, null, true));
+        RenderType type = RenderTypeLookup.getRenderType(fakedState);
+        BufferDecoratorBuilder decorator = BufferDecoratorBuilder.withColor(((r, g, b, a) -> color));
+        RenderingUtils.renderSimpleBlockModel(fakedState, renderStack, decorator.decorate(renderTypeBuffer.getBuffer(type)), tile.getPos(), tile, true);
     }
 }
