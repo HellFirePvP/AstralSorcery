@@ -8,8 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
@@ -28,7 +32,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 30.08.2019 / 21:24
  */
-public class FXFacingSprite extends EntityVisualFX {
+public class FXFacingSprite extends EntityVisualFX implements EntityDynamicFX {
 
     private SpriteSheetResource sprite = null;
 
@@ -42,22 +46,27 @@ public class FXFacingSprite extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
-        SpriteSheetResource ssr = this.sprite != null ? this.sprite : ctx.getSprite();
-        Vector3 vec = this.getRenderPosition(pTicks);
-        float alpha = this.getAlpha(pTicks);
-        float fScale = this.getScale(pTicks);
-        Color col = this.getColor(pTicks);
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {}
 
-        ssr.bindTexture();
+    @Override
+    public <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, IDrawRenderTypeBuffer drawBuffer, float pTicks) {
+        SpriteSheetResource ssr = this.sprite != null ? this.sprite : ctx.getSprite();
         Tuple<Float, Float> uvOffset = ssr.getUVOffset(this);
 
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        RenderingDrawUtils.renderFacingQuadVB(buf,
-                vec.getX(), vec.getY(), vec.getZ(),
-                pTicks, fScale, 0F,
+        int alpha = this.getAlpha(pTicks);
+        Color col = this.getColor(pTicks);
+
+        Vector3 vec = this.getRenderPosition(pTicks);
+        float scale = this.getScale(pTicks);
+
+        ssr.bindTexture();
+
+        IVertexBuilder buf = drawBuffer.getBuffer(ctx.getRenderType());
+        RenderingDrawUtils.renderFacingQuadVB(buf, vec.getX(), vec.getY(), vec.getZ(),
+                pTicks, scale, 0F,
                 uvOffset.getA(), uvOffset.getB(), ssr.getULength(), ssr.getVLength(),
                 col.getRed(), col.getGreen(), col.getBlue(), alpha);
-        buf.draw();
+
+        drawBuffer.draw();
     }
 }

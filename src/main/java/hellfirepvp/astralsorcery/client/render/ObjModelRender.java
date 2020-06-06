@@ -55,7 +55,7 @@ public class ObjModelRender {
             celestialWingsModel = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "celestial_wings");
         }
         if (vboCelestialWings == null) {
-            int[] lightGray = new int[] { 178, 178, 77, 178 };
+            int[] lightGray = new int[] { 178, 178, 178, 255 };
             new BufferDecoratorBuilder()
                     .setColorDecorator((r, g, b, a) -> lightGray)
                     .decorate(Tessellator.getInstance().getBuffer(),

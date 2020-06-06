@@ -39,17 +39,13 @@ import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.ISprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.Unit;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ForgeBlockStateV1;
-import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -171,20 +167,20 @@ public class ClientProxy extends CommonProxy {
 
     // Append custom textures otherwise not referenced
     private void stitchBucketTextures(TextureStitchEvent.Pre event) {
-        if (event.getMap().getBasePath().equals("textures")) {
+        if (event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
             event.addSprite(AstralSorcery.key("fluid/bucket_mask"));
         }
     }
 
     private void onModelBake(ModelBakeEvent event) {
         //Returns actually a SimpleModelState, which is however both an IModelState and ISprite
-        ISprite bucketTransforms = (ISprite) ForgeBlockStateV1.Transforms.get("forge:default-item")
-                .orElseThrow(() -> new IllegalStateException("Forge ModelTransforms not initialized!"));
-
-        RegistryFluids.registerFluidBucketRender((bucketModel, modelName) -> {
-            IBakedModel baked = bucketModel.bake(event.getModelLoader(), Minecraft.getInstance().getTextureMap()::getSprite, bucketTransforms, DefaultVertexFormats.ITEM);
-            event.getModelRegistry().put(modelName, baked);
-        });
+        //ISprite bucketTransforms = (ISprite) ForgeBlockStateV1.Transforms.get("forge:default-item")
+        //        .orElseThrow(() -> new IllegalStateException("Forge ModelTransforms not initialized!"));
+        //RegistryFluids.registerFluidBucketRender((bucketModel, modelName) -> {
+        //    bucketModel.bakeModel()
+        //    IBakedModel baked = bucketModel.bake(event.getModelLoader(), Minecraft.getInstance().getTextureMap()::getSprite, bucketTransforms, DefaultVertexFormats.ITEM);
+        //    event.getModelRegistry().put(modelName, baked);
+        //});
     }
 
     private void onClientSetup(FMLClientSetupEvent event) {

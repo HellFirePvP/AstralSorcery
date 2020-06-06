@@ -9,10 +9,12 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
@@ -310,53 +312,37 @@ public class RenderingDrawUtils {
         GlStateManager.enableTexture();
     }
 
-    public static void renderLightRayFan(double x, double y, double z, Color color, long seed, int minScale, float scale, int count) {
+    public static void renderLightRayFan(MatrixStack renderStack, IVertexBuilder vb, Color color, long seed, int minScale, float scale, int count) {
         rand.setSeed(seed);
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(x, y, z);
-
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
 
         float f1 = ClientScheduler.getClientTick() / 400.0F;
         float f2 = 0.0F;
 
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableTexture();
-        GlStateManager.shadeModel(GL11.GL_SMOOTH);
-        Blending.ADDITIVE_ALPHA.applyStateManager();
-        GlStateManager.depthMask(false);
-
-        GlStateManager.pushMatrix();
+        renderStack.push();
         for (int i = 0; i < count; i++) {
-            GlStateManager.rotatef(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotatef(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-            GlStateManager.rotatef(rand.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.rotatef(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotatef(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-            GlStateManager.rotatef(rand.nextFloat() * 360.0F + f1 * 360.0F, 0.0F, 0.0F, 1.0F);
-            vb.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+            renderStack.push();
+            renderStack.rotate(Vector3f.XP.rotationDegrees(rand.nextFloat() * 360.0F));
+            renderStack.rotate(Vector3f.YP.rotationDegrees(rand.nextFloat() * 360.0F));
+            renderStack.rotate(Vector3f.ZP.rotationDegrees(rand.nextFloat() * 360.0F));
+            renderStack.rotate(Vector3f.XP.rotationDegrees(rand.nextFloat() * 360.0F));
+            renderStack.rotate(Vector3f.YP.rotationDegrees(rand.nextFloat() * 360.0F));
+            renderStack.rotate(Vector3f.ZP.rotationDegrees(rand.nextFloat() * 360.0F + f1 * 360.0F));
+            Matrix4f matr = renderStack.getLast().getMatrix();
+
             float fa = rand.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
             float f4 = rand.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
             fa /= 30.0F / (Math.min(minScale, 10 * scale) / 10.0F);
             f4 /= 30.0F / (Math.min(minScale, 10 * scale) / 10.0F);
-            vb.pos(0, 0, 0).color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
-            vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
-            vb.pos( 0.7D * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
-            vb.pos( 0.0D,      fa,    1.0F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
-            vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
-            tes.draw();
+
+            vb.pos(matr, 0, 0, 0).color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
+            vb.pos(matr, -0.7F * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(matr,  0.7F * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(matr,  0.0F,      fa,    1.0F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(matr, -0.7F * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+
+            renderStack.pop();
         }
-        GlStateManager.popMatrix();
-
-        GlStateManager.depthMask(true);
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.enableTexture();
-        RenderHelper.enableStandardItemLighting();
-
-        GlStateManager.popMatrix();
+        renderStack.pop();
     }
 
     public static void renderFacingFullQuadVB(IVertexBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, int r, int g, int b, int alpha) {
@@ -497,20 +483,20 @@ public class RenderingDrawUtils {
         buf.pos(-half,  half,  half).tex(u, v + vLength).color(cR, cG, cB, cA).normal(nX, nY, nZ).endVertex();
     }
 
-    public static void renderAngleRotatedTexturedRectVB(BufferBuilder buf, Vector3 renderOffset, Vector3 axis, double angleRad, double scale, float u, float v, float uLength, float vLength, float r, float g, float b, float a) {
+    public static void renderAngleRotatedTexturedRectVB(IVertexBuilder vb, Vector3 renderOffset, Vector3 axis, double angleRad, double scale, float u, float v, float uLength, float vLength, float r, float g, float b, float a) {
         Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
 
         Vector3 vec = renderStart.clone().rotate(Math.toRadians(90), axis).normalize().multiply(scale).add(renderOffset);
-        vec.drawPos(buf).tex(u,           v + vLength).color(r, g, b, a).endVertex();
+        vec.drawPos(vb).color(r, g, b, a).tex(u, v + vLength).endVertex();
 
         vec = renderStart.clone().multiply(-1).normalize().multiply(scale).add(renderOffset);
-        vec.drawPos(buf).tex(u + uLength, v + vLength).color(r, g, b, a).endVertex();
+        vec.drawPos(vb).color(r, g, b, a).tex(u + uLength, v + vLength).endVertex();
 
         vec = renderStart.clone().rotate(Math.toRadians(270), axis).normalize().multiply(scale).add(renderOffset);
-        vec.drawPos(buf).tex(u + uLength, v          ).color(r, g, b, a).endVertex();
+        vec.drawPos(vb).color(r, g, b, a).tex(u + uLength, v).endVertex();
 
         vec = renderStart.clone().normalize().multiply(scale).add(renderOffset);
-        vec.drawPos(buf).tex(u,           v          ).color(r, g, b, a).endVertex();
+        vec.drawPos(vb).color(r, g, b, a).tex(u, v).endVertex();
     }
 
 }

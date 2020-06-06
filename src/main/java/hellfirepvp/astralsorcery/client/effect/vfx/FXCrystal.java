@@ -8,9 +8,15 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
+import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.render.ObjModelRender;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
@@ -22,9 +28,11 @@ import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +41,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 05.04.2020 / 09:53
  */
-public class FXCrystal extends EntityVisualFX {
+public class FXCrystal extends EntityVisualFX implements EntityDynamicFX {
 
     private AbstractRenderableTexture alternativeTexture = null;
     private Color lightRayColor = null;
@@ -59,38 +67,44 @@ public class FXCrystal extends EntityVisualFX {
     }
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {}
+
+    @Override
+    public <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, IDrawRenderTypeBuffer drawBuffer, float pTicks) {
         if (this.alternativeTexture != null) {
             this.alternativeTexture.bindTexture();
         }
 
+        int alpha = this.getAlpha(pTicks);
+        Color c = this.getColor(pTicks);
+
         Vector3 vec = this.getRenderPosition(pTicks);
-        float alpha = this.getAlpha(pTicks);
         float scale = this.getScale(pTicks);
-        Color col = this.getColor(pTicks);
-        float r = col.getRed() / 255F;
-        float g = col.getGreen() / 255F;
-        float b = col.getBlue() / 255F;
 
         if (this.lightRayColor != null) {
+            IVertexBuilder buf = drawBuffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN);
             long seed = 0x515F1EB654AB915EL;
-            RenderingDrawUtils.renderLightRayFan(vec.getX(), vec.getY(), vec.getZ(),
-                    this.lightRayColor, seed, 5, 1F, 50);
-            RenderHelper.enableGUIStandardItemLighting();
+
+            renderStack.push();
+            renderStack.translate(vec.getX(), vec.getY(), vec.getZ());
+            RenderingDrawUtils.renderLightRayFan(renderStack, buf, this.lightRayColor, seed, 5, 1F, 50);
+            renderStack.pop();
         }
 
-        GlStateManager.pushMatrix();
-        GlStateManager.color4f(r, g, b, alpha);
+        RenderSystem.color4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha / 255F);
 
-        GlStateManager.translated(vec.getX(), vec.getY() - 0.125, vec.getZ());
-        GlStateManager.scalef(scale, scale, scale);
-        GlStateManager.rotated(rotation.getX(), 1, 0, 0);
-        GlStateManager.rotated(rotation.getY(), 0, 1, 0);
-        GlStateManager.rotated(rotation.getZ(), 0, 0, 1);
+        renderStack.push();
+        renderStack.translate(vec.getX(), vec.getY() - 0.125F, vec.getZ());
+        renderStack.scale(scale, scale, scale);
+        renderStack.rotate(Vector3f.XP.rotationDegrees((float) rotation.getX()));
+        renderStack.rotate(Vector3f.YP.rotationDegrees((float) rotation.getY()));
+        renderStack.rotate(Vector3f.ZP.rotationDegrees((float) rotation.getZ()));
 
-        ObjModelRender.renderCrystal();
+        ObjModelRender.renderCrystal(renderStack);
 
-        GlStateManager.popMatrix();
+        renderStack.pop();
+
+        RenderSystem.color4f(1F, 1F, 1F, 1F);
 
         if (this.alternativeTexture != null) {
             ctx.getSprite().bindTexture();

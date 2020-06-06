@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.source.FXSource;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -74,12 +75,13 @@ public final class EffectHandler {
         float pTicks = event.getPartialTicks();
         MatrixStack renderStack = event.getMatrixStack();
         IRenderTypeBuffer.Impl renderTypeBuffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        IDrawRenderTypeBuffer drawBuffer = IDrawRenderTypeBuffer.of(renderTypeBuffer);
         this.acceptsNewEffects = false;
 
         for (BatchRenderContext<?> ctx : this.orderedEffects) {
             List<PendingEffect> effects = this.effectMap.get(ctx);
             if (!effects.isEmpty()) {
-                ctx.renderAll(effects, renderStack, renderTypeBuffer, pTicks);
+                ctx.renderAll(effects, renderStack, drawBuffer, pTicks);
             }
         }
 

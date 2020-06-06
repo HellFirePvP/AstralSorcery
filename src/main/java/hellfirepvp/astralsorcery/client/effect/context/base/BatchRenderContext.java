@@ -13,6 +13,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHandler;
+import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
@@ -78,33 +79,24 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
         return sprite;
     }
 
-    public void renderAll(List<EffectHandler.PendingEffect> effects, MatrixStack renderStack, IRenderTypeBuffer.Impl renderTypeBuffer, float pTicks) {
-        IVertexBuilder buf = renderTypeBuffer.getBuffer(this.getRenderType());
-        effects.forEach(effect -> effect.getEffect().render(this, renderStack, buf, pTicks));
-        this.drawBatched(buf, renderTypeBuffer);
-
+    public void renderAll(List<EffectHandler.PendingEffect> effects, MatrixStack renderStack, IDrawRenderTypeBuffer drawBuffer, float pTicks) {
         //Erase type due to impossible typing
         BatchRenderContext blankCtx = this;
-        Consumer<Consumer<IVertexBuilder>> draw = drawNow(renderTypeBuffer);
         effects.stream()
                 .filter(effect -> effect.getEffect() instanceof EntityDynamicFX)
-                .forEach(effect -> ((EntityDynamicFX) effect.getEffect()).renderNow(blankCtx, renderStack, draw, pTicks));
+                .forEach(effect -> ((EntityDynamicFX) effect.getEffect()).renderNow(blankCtx, renderStack, drawBuffer, pTicks));
+
+        IVertexBuilder buf = drawBuffer.getBuffer(this.getRenderType());
+        effects.forEach(effect -> effect.getEffect().render(this, renderStack, buf, pTicks));
+        this.drawBatched(buf, drawBuffer);
     }
 
-    private Consumer<Consumer<IVertexBuilder>> drawNow(IRenderTypeBuffer.Impl renderTypeBuffer) {
-        IVertexBuilder buf = renderTypeBuffer.getBuffer(this.getRenderType());
-        return renderCall -> {
-            renderCall.accept(buf);
-            renderTypeBuffer.finish();
-        };
-    }
-
-    private void drawBatched(IVertexBuilder buf, IRenderTypeBuffer.Impl renderTypeBuffer) {
+    private void drawBatched(IVertexBuilder buf, IDrawRenderTypeBuffer renderTypeBuffer) {
         if (buf instanceof BufferBuilder) {
             Vec3d view = RenderInfo.getInstance().getARI().getProjectedView();
             ((BufferBuilder) buf).sortVertexData((float) view.x, (float) view.y, (float) view.z);
         }
-        renderTypeBuffer.finish(this.getRenderType());
+        renderTypeBuffer.draw();
     }
 
     public RenderType getRenderType() {
