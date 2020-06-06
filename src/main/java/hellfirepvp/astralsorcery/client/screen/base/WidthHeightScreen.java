@@ -56,6 +56,10 @@ public class WidthHeightScreen extends InputScreen {
         return this.getBlitOffset();
     }
 
+    public void changeZLevel(int change) {
+        this.setBlitOffset(this.getBlitOffset() + change);
+    }
+
     public int getGuiWidth() {
         return this.guiWidth;
     }
@@ -116,10 +120,6 @@ public class WidthHeightScreen extends InputScreen {
      */
     protected boolean shouldRightClickCloseScreen(double mouseX, double mouseY) {
         return false;
-    }
-
-    protected RenderingGuiUtils.DrawBuilder drawRect() {
-        return RenderingGuiUtils.rect(this);
     }
 
     protected RenderingGuiUtils.DrawBuilder drawRect(BufferBuilder buf) {

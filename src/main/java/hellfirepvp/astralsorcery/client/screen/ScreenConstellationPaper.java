@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
@@ -76,14 +77,9 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
-        GlStateManager.enableBlend();
-
         drawWHRect(TexturesAS.TEX_GUI_CONSTELLATION_PAPER);
-
         drawHeader();
-
         drawConstellation();
-
         drawPhaseInformation();
     }
 
@@ -93,21 +89,23 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
         double offsetLeft = (width >> 1) - (length / 2);
         int offsetTop = guiTop + 45;
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(offsetLeft + 2, offsetTop, 0);
-        GlStateManager.scaled(1.8, 1.8, 1.8);
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(offsetLeft + 2, offsetTop, 0);
+        RenderSystem.scaled(1.8, 1.8, 1.8);
         RenderingDrawUtils.renderStringAtCurrentPos(font, locName, 0xAA4D4D4D);
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
     private void drawConstellation() {
+        GlStateManager.enableBlend();
         RenderingConstellationUtils.renderConstellationIntoGUI(
                 ColorsAS.CONSTELLATION_TYPE_BLANK,
                 constellation,
                 width / 2 - 145 / 2, guiTop + 84,
-                this.blitOffset,
+                this.getGuiZLevel(),
                 145, 145, 2F, () -> 0.5F,
                 true, false);
+        GlStateManager.disableBlend();
     }
 
     private void drawPhaseInformation() {
@@ -126,7 +124,9 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
             int offsetY = guiTop + 237;
             for (int i = 0; i < phases.size(); i++) {
                 phases.get(i).getTexture().bindTexture();
-                RenderingGuiUtils.drawRect(offsetX + (i * (size + 2)), offsetY, this.blitOffset, size, size);
+                GlStateManager.enableBlend();
+                RenderingGuiUtils.drawRect(offsetX + (i * (size + 2)), offsetY, this.getGuiZLevel(), size, size);
+                GlStateManager.disableBlend();
             }
         }
     }

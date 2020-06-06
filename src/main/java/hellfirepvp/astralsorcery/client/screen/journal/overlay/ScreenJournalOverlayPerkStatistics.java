@@ -11,11 +11,13 @@ package hellfirepvp.astralsorcery.client.screen.journal.overlay;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeMap;
@@ -26,11 +28,13 @@ import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.LogicalSide;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -90,16 +94,13 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
     public void render(int mouseX, int mouseY, float pTicks) {
         super.render(mouseX, mouseY, pTicks);
 
-        Blending.DEFAULT.applyStateManager();
-
         int width = 275;
         int height = 344;
 
-        GlStateManager.disableDepthTest();
+        this.changeZLevel(150);
         TexturesAS.TEX_GUI_PARCHMENT_BLANK.bindTexture();
-        RenderingGuiUtils.drawTexturedRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, this.blitOffset,
-                width, height, TexturesAS.TEX_GUI_PARCHMENT_BLANK);
-        GlStateManager.enableDepthTest();
+        RenderingGuiUtils.drawRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, this.getGuiZLevel(), width, height);
+        this.changeZLevel(-150);
 
         drawHeader();
         drawPageText(mouseX, mouseY);
@@ -112,21 +113,19 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
 
         int offsetTop = guiTop + 15 - (split.size() * step) / 2;
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(0, offsetTop, 0);
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(0, offsetTop, 0);
         for (int i = 0; i < split.size(); i++) {
             String s = split.get(i);
 
             double offsetLeft = width / 2 - (font.getStringWidth(s) * 1.4) / 2;
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(offsetLeft, i * step, 0);
-            GlStateManager.scaled(1.4, 1.4, 1.4);
-            GlStateManager.disableDepthTest();
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(offsetLeft, i * step, 0);
+            RenderSystem.scaled(1.4, 1.4, 1.4);
             RenderingDrawUtils.renderStringAtCurrentPos(font, s, 0xEE333333);
-            GlStateManager.enableDepthTest();
-            GlStateManager.popMatrix();
+            RenderSystem.popMatrix();
         }
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
     private void drawPageText(int mouseX, int mouseY) {
@@ -138,7 +137,6 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         int offsetY = guiTop + 40;
         int offsetX = guiLeft + guiWidth / 2 - DEFAULT_WIDTH / 2;
         int line = 0;
-        GlStateManager.disableDepthTest();
         for (PerkStatistic stat : statistics) {
             String statName = I18n.format(stat.getUnlocPerkTypeName());
             List<String> split = font.listFormattedStringToWidth(statName, MathHelper.floor(HEADER_WIDTH / 1.5F));
@@ -172,7 +170,6 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
                 line++;
             }
         }
-        GlStateManager.enableDepthTest();
 
         for (Rectangle rct : valueStrMap.keySet()) {
             if (rct.contains(mouseX, mouseY)) {

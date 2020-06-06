@@ -110,8 +110,7 @@ public class RenderingConstellationUtils {
         int connAlpha = (int) ((brightness * 0.8F) * 255F);
         int starAlpha = (int) (brightness * 255F);
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
 
         Vector3 drawOffset = new Vector3(-15.5D * starSize, 0, -15.5D * starSize);
 
@@ -140,7 +139,8 @@ public class RenderingConstellationUtils {
             pos.drawPos(buf).color(r, g, b, connAlpha).tex(1, 1).endVertex();
 
         }
-        tes.draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
 
         Vector3 dirU = new Vector3(starSize * 2, 0, 0);
         Vector3 dirV = new Vector3(0, 0, starSize * 2);
@@ -161,7 +161,8 @@ public class RenderingConstellationUtils {
             pos =         offsetRender.clone().add(dirU.clone().multiply(0)).add(dirV.clone().multiply(0));
             pos.drawPos(buf).color(r, g, b, starAlpha).tex(1, 1).endVertex();
         }
-        tes.draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
     }
 
     public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, Supplier<Float> brightness, boolean isKnown, boolean applyStarBrightness) {
@@ -169,8 +170,7 @@ public class RenderingConstellationUtils {
     }
 
     public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, Supplier<Float> brightness, boolean isKnown, boolean applyStarBrightness) {
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
         double ulength = ((double) width) / IConstellation.STAR_GRID_WIDTH_HEIGHT;
         double vlength = ((double) height) / IConstellation.STAR_GRID_WIDTH_HEIGHT;
 
@@ -190,7 +190,7 @@ public class RenderingConstellationUtils {
         }
 
         TexturesAS.TEX_STAR_CONNECTION.bindTexture();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
         if (isKnown) {
             for (int j = 0; j < 2; j++) {
                 for (StarConnection sc : c.getStarConnections()) {
@@ -210,7 +210,7 @@ public class RenderingConstellationUtils {
                         int v = ((i + 2) & 2) >> 1;
 
                         Vector3 pos = vec00.clone().add(dir.clone().multiply(u)).add(vecV.clone().multiply(v));
-                        vb.pos(pos.getX(), pos.getY(), pos.getZ())
+                        buf.pos(pos.getX(), pos.getY(), pos.getZ())
                                 .color(r, g, b, alpha)
                                 .tex(u, v)
                                 .endVertex();
@@ -218,12 +218,13 @@ public class RenderingConstellationUtils {
                 }
             }
         }
-        tes.draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
 
         Map<StarLocation, Rectangle> starRectangles = new HashMap<>();
 
         TexturesAS.TEX_STAR_1.bindTexture();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
         for (StarLocation sl : c.getStars()) {
             int alpha = MathHelper.clamp((int) (brightness.get() * starBrightness * 255F), 0, 255);
 
@@ -238,7 +239,7 @@ public class RenderingConstellationUtils {
                 int v = ((i + 2) & 2) >> 1;
 
                 Vector3 pos = starVec.clone().addX(ulength * u * 2).addY(vlength * v * 2);
-                vb.pos(pos.getX(), pos.getY(), pos.getZ())
+                buf.pos(pos.getX(), pos.getY(), pos.getZ())
                         .tex(u, v)
                         .color(isKnown ? r : alpha,
                                 isKnown ? g : alpha,
@@ -249,7 +250,8 @@ public class RenderingConstellationUtils {
 
             starRectangles.put(sl, new Rectangle(upperLeft.x, upperLeft.y, (int) (ulength * 2), (int) (vlength * 2)));
         }
-        tes.draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
 
         return starRectangles;
     }

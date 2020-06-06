@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.screen;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.base.ConstellationDiscoveryScreen;
@@ -29,6 +30,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
@@ -95,9 +97,9 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
 
         this.drawWHRect(TexturesAS.TEX_GUI_HAND_TELESCOPE);
 
-        this.blitOffset -= 10;
+        this.changeZLevel(-10);
         this.drawTelescopeCell(pTicks);
-        this.blitOffset += 10;
+        this.changeZLevel(10);
     }
 
     private void drawTelescopeCell(float pTicks) {
@@ -114,24 +116,24 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
         }
         float brMultiplier = angleOpacity;
 
-        GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.disableAlphaTest();
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableAlphaTest();
 
         this.drawSkyBackground(pTicks, canSeeSky, angleOpacity);
 
         if (!this.isInitialized()) {
-            GlStateManager.enableAlphaTest();
-            GlStateManager.disableBlend();
+            RenderSystem.enableAlphaTest();
+            Blending.DEFAULT.apply();
+            RenderSystem.disableBlend();
             return;
         }
 
         WorldContext ctx = SkyHandler.getContext(Minecraft.getInstance().world, LogicalSide.CLIENT);
         if (ctx != null && canSeeSky) {
             Random gen = ctx.getDayRandom();
-            Tessellator tes = Tessellator.getInstance();
-            BufferBuilder buf = tes.getBuffer();
-            double guiFactor = Minecraft.getInstance().mainWindow.getGuiScaleFactor();
+            BufferBuilder buf = Tessellator.getInstance().getBuffer();
+            double guiFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
 
             float playerYaw = Minecraft.getInstance().player.rotationYaw % 360F;
             if (playerYaw < 0) {
@@ -142,21 +144,26 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
             }
             float playerPitch = Minecraft.getInstance().player.rotationPitch;
 
-            this.blitOffset += 1;
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+            this.changeZLevel(1);
             TexturesAS.TEX_STAR_1.bindTexture();
+            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
             float starSize = 5F;
             for (Point.Float pos : this.usedStars) {
                 float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
                 brightness = this.multiplyStarBrightness(pTicks, brightness);
                 brightness *= brMultiplier;
-                Color rColor = new Color(brightness, brightness, brightness, brightness);
-                this.drawRect(buf).at(pos.x + this.getGuiLeft(), pos.y + this.getGuiTop()).dim(starSize, starSize).color(rColor).draw();
-            }
-            tes.draw();
-            this.blitOffset -= 1;
 
-            this.blitOffset += 3;
+                this.drawRect(buf)
+                        .at(pos.x + this.getGuiLeft(), pos.y + this.getGuiTop())
+                        .dim(starSize, starSize)
+                        .color(brightness, brightness, brightness, brightness)
+                        .draw();
+            }
+            buf.finishDrawing();
+            WorldVertexBufferUploader.draw(buf);
+            this.changeZLevel(-1);
+
+            this.changeZLevel(3);
             for (DrawArea areas : this.getVisibleDrawAreas()) {
                 for (IConstellation cst : areas.getDisplayMap().keySet()) {
                     ConstellationDisplayInformation info = areas.getDisplayMap().get(cst);
@@ -188,7 +195,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
                                 cst,
                                 this.getGuiLeft() + wPart + MathHelper.floor((xFactor / guiFactor) * this.getGuiWidth()),
                                 this.getGuiTop() + hPart + MathHelper.floor((yFactor / guiFactor) * this.getGuiHeight()),
-                                this.blitOffset,
+                                this.getGuiZLevel(),
                                 this.getGuiWidth() - MathHelper.floor(wPart * 1.5F),
                                 this.getGuiHeight() - MathHelper.floor(hPart * 1.5F),
                                 2F,
@@ -203,15 +210,16 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
                     }
                 }
             }
-            this.blitOffset -= 3;
+            this.changeZLevel(-3);
 
-            this.blitOffset += 5;
+            this.changeZLevel(5);
             this.renderDrawnLines(gen, pTicks);
-            this.blitOffset -= 5;
+            this.changeZLevel(-5);
         }
 
-        GlStateManager.enableAlphaTest();
-        GlStateManager.disableBlend();
+        RenderSystem.enableAlphaTest();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
     }
 
     @Override
@@ -224,8 +232,8 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
         int width = guiWidth - 12, height = guiHeight - 12;
 
         Minecraft mc = Minecraft.getInstance();
-        double xDiff = mc.mouseHelper.getMouseX() - (xPos / ((double) mc.mainWindow.getScaledWidth()  / mc.mainWindow.getWidth()));
-        double yDiff = mc.mouseHelper.getMouseY() - (yPos / ((double) mc.mainWindow.getScaledHeight() / mc.mainWindow.getHeight()));
+        double xDiff = mc.mouseHelper.getMouseX() - (xPos / ((double) mc.getMainWindow().getScaledWidth()  / mc.getMainWindow().getWidth()));
+        double yDiff = mc.mouseHelper.getMouseY() - (yPos / ((double) mc.getMainWindow().getScaledHeight() / mc.getMainWindow().getHeight()));
         if (Minecraft.getInstance().player != null &&
                 Minecraft.getInstance().player.getPitch(1.0F) <= -89.99F && yDiff > 0) {
             yDiff = 0;

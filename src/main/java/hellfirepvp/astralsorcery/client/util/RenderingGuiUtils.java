@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -60,16 +61,8 @@ public class RenderingGuiUtils {
         });
     }
 
-    public static DrawBuilder rect(WidthHeightScreen screen) {
-        return rect(screen.getGuiLeft(), screen.getGuiTop(), screen.getGuiZLevel(), screen.getGuiWidth(), screen.getGuiHeight());
-    }
-
     public static DrawBuilder rect(BufferBuilder buf, WidthHeightScreen screen) {
         return rect(buf, screen.getGuiLeft(), screen.getGuiTop(), screen.getGuiZLevel(), screen.getGuiWidth(), screen.getGuiHeight());
-    }
-
-    public static DrawBuilder rect(float offsetX, float offsetY, float offsetZ, float width, float height) {
-        return rect(Tessellator.getInstance().getBuffer(), offsetX, offsetY, offsetZ, width, height);
     }
 
     public static DrawBuilder rect(BufferBuilder buf, float offsetX, float offsetY, float offsetZ, float width, float height) {
@@ -117,6 +110,11 @@ public class RenderingGuiUtils {
         public DrawBuilder tex(AbstractRenderableTexture texture) {
             Tuple<Float, Float> uv = texture.getUVOffset();
             return this.tex(uv.getA(), uv.getB(), texture.getUWidth(), texture.getVWidth());
+        }
+
+        public DrawBuilder tex(SpriteSheetResource sprite, long tick) {
+            Tuple<Float, Float> uv = sprite.getUVOffset(tick);
+            return this.tex(uv.getA(), uv.getB(), sprite.getUWidth(), sprite.getVWidth());
         }
 
         public DrawBuilder tex(float u, float v, float uWidth, float vWidth) {

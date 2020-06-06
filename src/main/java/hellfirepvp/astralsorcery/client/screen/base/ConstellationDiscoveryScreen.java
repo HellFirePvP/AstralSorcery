@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -149,9 +150,8 @@ public abstract class ConstellationDiscoveryScreen<D extends ConstellationDiscov
         Supplier<Float> brightnessFn = () -> RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 5 + rand.nextInt(10));
         TexturesAS.TEX_STAR_CONNECTION.bindTexture();
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
 
         for (DrawnLine line : drawnLines) {
             drawLine(buf, pTicks, line.from, line.to, brightnessFn, lineBreadth);
@@ -163,7 +163,8 @@ public abstract class ConstellationDiscoveryScreen<D extends ConstellationDiscov
             drawLine(buf, pTicks, adjStart, adjEnd, () -> 0.8F, lineBreadth);
         }
 
-        tes.draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
     }
 
     private void drawLine(BufferBuilder buf, float pTicks, Point from, Point to, Supplier<Float> brightnessFn, float lineBreadth) {
@@ -174,8 +175,8 @@ public abstract class ConstellationDiscoveryScreen<D extends ConstellationDiscov
         }
         starBr = starBr * 0.75F + 0.25F;
 
-        Vector3 fromStar = new Vector3(guiLeft + from.getX(), guiTop + from.getY(), blitOffset);
-        Vector3 toStar = new Vector3(guiLeft + to.getX(), guiTop + to.getY(), blitOffset);
+        Vector3 fromStar = new Vector3(guiLeft + from.getX(), guiTop + from.getY(), this.getGuiZLevel());
+        Vector3 toStar = new Vector3(guiLeft + to.getX(), guiTop + to.getY(), this.getGuiZLevel());
 
         Vector3 dir = toStar.clone().subtract(fromStar);
         Vector3 degLot = dir.clone().crossProduct(Vector3.RotAxis.Z_AXIS).normalize().multiply(lineBreadth);//.multiply(j == 0 ? 1 : -1);
@@ -188,7 +189,7 @@ public abstract class ConstellationDiscoveryScreen<D extends ConstellationDiscov
             int v = ((i + 2) & 2) >> 1;
 
             Vector3 pos = vec00.clone().add(dir.clone().multiply(u)).add(vecV.clone().multiply(v));
-            pos.drawPos(buf).tex(u, v).color(starBr, starBr, starBr, Math.max(0, starBr)).endVertex();
+            pos.drawPos(buf).color(starBr, starBr, starBr, Math.max(0, starBr)).tex(u, v).endVertex();
         }
     }
 

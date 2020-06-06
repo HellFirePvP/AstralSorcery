@@ -194,11 +194,11 @@ public class RenderingUtils {
     }
 
     public static void draw(int drawMode, VertexFormat format, Consumer<BufferBuilder> fn) {
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
         buf.begin(drawMode, format);
         fn.accept(buf);
-        tes.draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
     }
 
     public static void renderItemAsEntity(ItemStack stack, MatrixStack renderStack, double x, double y, double z, int combinedLight, float pTicks, int age) {
@@ -263,7 +263,8 @@ public class RenderingUtils {
         BufferBuilder buf = Tessellator.getInstance().getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.ENTITY);
         renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> buf, LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, alpha);
-        Tessellator.getInstance().draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
         renderStack.pop();
 
         Blending.DEFAULT.apply();
@@ -296,7 +297,8 @@ public class RenderingUtils {
         BufferBuilder buf = Tessellator.getInstance().getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.ENTITY);
         renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> buf, LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, alpha);
-        Tessellator.getInstance().draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
 
         if (!bakedModel.func_230044_c_()) {
             RenderHelper.setupGui3DDiffuseLighting();
