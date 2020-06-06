@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.render.entity;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.common.entity.item.EntityItemHighlighted;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -32,18 +34,14 @@ public class RenderEntityItemHighlighted extends ItemRenderer {
     }
 
     @Override
-    public void doRender(ItemEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void render(ItemEntity entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
         if (entity instanceof EntityItemHighlighted && ((EntityItemHighlighted) entity).hasColor()) {
-            GlStateManager.enableBlend();
-            GlStateManager.disableAlphaTest();
-            RenderingDrawUtils.renderLightRayFan(x, y + 0.35, z,
+            RenderingDrawUtils.renderLightRayFan(matrixStack, buffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN),
                     ((EntityItemHighlighted) entity).getHighlightColor(), 160420L + entity.getEntityId(),
                     16, 12, 15);
-            GlStateManager.enableAlphaTest();
-            GlStateManager.disableBlend();
         }
 
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
+        super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
     }
 
     public static class Factory implements IRenderFactory<EntityItemHighlighted> {

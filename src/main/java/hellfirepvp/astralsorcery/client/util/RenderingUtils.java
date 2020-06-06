@@ -256,6 +256,7 @@ public class RenderingUtils {
 
         RenderType rType = RenderTypeLookup.getRenderType(stack);
         rType.setupRenderState();
+        RenderSystem.enableBlend();
         blendMode.apply();
 
         renderStack.push();
@@ -265,6 +266,8 @@ public class RenderingUtils {
         Tessellator.getInstance().draw();
         renderStack.pop();
 
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
         rType.clearRenderState();
     }
 
@@ -277,6 +280,7 @@ public class RenderingUtils {
 
         RenderType rType = RenderTypeLookup.getRenderType(stack);
         rType.setupRenderState();
+        RenderSystem.enableBlend();
         blendMode.apply();
 
         renderStack.push();
@@ -298,6 +302,8 @@ public class RenderingUtils {
             RenderHelper.setupGui3DDiffuseLighting();
         }
 
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
         rType.clearRenderState();
         renderStack.pop();
     }

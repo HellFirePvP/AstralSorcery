@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.render.entity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
@@ -18,11 +20,15 @@ import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityGrapplingHook;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import org.lwjgl.opengl.GL11;
 
@@ -43,63 +49,60 @@ public class RenderEntityGrapplingHook extends EntityRenderer<EntityGrapplingHoo
     }
 
     @Override
-    public void doRender(EntityGrapplingHook entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        float alphaMultiplier = 1;
+    public void render(EntityGrapplingHook entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+        int alphaMultiplier = 255;
         if (entity.isDespawning()) {
-            alphaMultiplier = Math.max(0, 0.5F - entity.despawnPercentage(partialTicks));
+            alphaMultiplier = MathHelper.clamp(127 - ((int) (entity.despawnPercentage(partialTicks) * 255F)), 0, 255);
         }
         if (alphaMultiplier <= 1E-4) {
             return;
         }
 
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+
         Vector3 entityPos = RenderingVectorUtils.interpolatePosition(entity, partialTicks);
         List<Vector3> line = entity.buildLine(partialTicks);
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
-
-        GlStateManager.disableAlphaTest();
-        GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.disableCull();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableCull();
 
         //Main grappling hook sprite
         SpritesAS.SPR_GRAPPLING_HOOK.bindTexture();
 
-        GlStateManager.pushMatrix();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
         RenderingDrawUtils.renderFacingSpriteVB(buf,
                 entityPos.getX(), entityPos.getY(), entityPos.getZ(),
                 partialTicks, 1.3F, 0F,
                 SpritesAS.SPR_GRAPPLING_HOOK, ClientScheduler.getClientTick() + entity.ticksExisted,
-                255F, 255F, 255F, alphaMultiplier);
-        tes.draw();
-        GlStateManager.popMatrix();
+                255, 255, 255, alphaMultiplier);
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
 
         //Small line of particles
         TexturesAS.TEX_PARTICLE_LARGE.bindTexture();
+        Blending.ADDITIVE_ALPHA.apply();
 
-        Blending.ADDITIVE_ALPHA.applyStateManager();
-
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
         for (Vector3 pos : line) {
             RenderingDrawUtils.renderFacingFullQuadVB(buf,
                     entityPos.getX() + pos.getX(), entityPos.getY() + pos.getY(), entityPos.getZ() + pos.getZ(),
                     partialTicks, 0.3F, 0F,
-                    50F, 40F, 180F, 0.8F * alphaMultiplier);
+                    50, 40, 180, (int) (alphaMultiplier * 0.8F));
         }
-        tes.draw();
+        buf.finishDrawing();
+        WorldVertexBufferUploader.draw(buf);
 
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.enableCull();
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlphaTest();
+        RenderSystem.enableCull();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
+        RenderSystem.enableAlphaTest();
     }
 
-    @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntityGrapplingHook entity) {
-        return null;
+    public ResourceLocation getEntityTexture(EntityGrapplingHook entity) {
+        return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
     }
 
     public static class Factory implements IRenderFactory<EntityGrapplingHook> {
