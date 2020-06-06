@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.client.effect;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 
 import java.util.function.Consumer;
@@ -16,6 +17,6 @@ import java.util.function.Consumer;
  */
 public interface EntityDynamicFX {
 
-    public abstract <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, Consumer<Consumer<IVertexBuilder>> draw, float pTicks);
+    public abstract <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, IDrawRenderTypeBuffer drawBuffer, float pTicks);
 
 }

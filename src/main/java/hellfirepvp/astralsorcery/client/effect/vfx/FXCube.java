@@ -14,6 +14,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.LightmapUtil;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
@@ -104,7 +105,7 @@ public class FXCube extends EntityVisualFX implements EntityDynamicFX {
     public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {}
 
     @Override
-    public <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, Consumer<Consumer<IVertexBuilder>> draw, float pTicks) {
+    public <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, IDrawRenderTypeBuffer drawBuffer, float pTicks) {
         float u, v, uLength, vLength;
         if (this.tas != null) {
             u = this.tas.getMinU();
@@ -133,12 +134,11 @@ public class FXCube extends EntityVisualFX implements EntityDynamicFX {
         renderStack.rotate(Vector3f.ZP.rotationDegrees((float) rotation.getZ()));
         renderStack.scale(scale, scale, scale);
 
-        draw.accept(buf -> {
-            RenderingDrawUtils.renderTexturedCubeCentralColorLighted(buf,
-                    u, v, uLength, vLength,
-                    c.getRed(), c.getGreen(), c.getBlue(), alpha,
-                    LightmapUtil.getPackedFullbrightCoords());
-        });
+        IVertexBuilder buf = drawBuffer.getBuffer(ctx.getRenderType());
+        RenderingDrawUtils.renderTexturedCubeCentralColorLighted(buf,
+                u, v, uLength, vLength,
+                c.getRed(), c.getGreen(), c.getBlue(), alpha,
+                LightmapUtil.getPackedFullbrightCoords());
 
         renderStack.pop();
     }

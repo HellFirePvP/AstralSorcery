@@ -17,11 +17,20 @@ public class RenderTypesAS {
     public static RenderType EFFECT_FX_GENERIC_PARTICLE_ATLAS;
     public static RenderType EFFECT_FX_LIGHTNING;
     public static RenderType EFFECT_FX_LIGHTBEAM;
-
+    public static RenderType EFFECT_FX_CRYSTAL;
+    public static RenderType EFFECT_FX_BURST;
+    public static RenderType EFFECT_FX_DYNAMIC_TEXTURE_SPRITE;
+    public static RenderType EFFECT_FX_TEXTURE_SPRITE;
     public static RenderType EFFECT_FX_CUBE_OPAQUE_ATLAS;
     public static RenderType EFFECT_FX_BLOCK_TRANSLUCENT;
     public static RenderType EFFECT_FX_BLOCK_TRANSLUCENT_DEPTH;
+    public static RenderType EFFECT_FX_CUBE_TRANSLUCENT_ATLAS;
+    public static RenderType EFFECT_FX_CUBE_TRANSLUCENT_ATLAS_DEPTH;
+    public static RenderType EFFECT_FX_CUBE_AREA_OF_EFFECT;
     public static RenderType EFFECT_FX_COLOR_SPHERE;
+
+    //Misc Effects
+    public static RenderType EFFECT_LIGHTRAY_FAN;
 
     public static RenderType CONSTELLATION_STARS_IN_WORLD;
     public static RenderType CONSTELLATION_LINES_IN_WORLD;

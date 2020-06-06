@@ -24,9 +24,8 @@ import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
  */
 public class RenderContextLightbeam extends BatchRenderContext<FXLightbeam> {
 
-    public RenderContextLightbeam(ObjectReference<Boolean> lightingRef) {
-        super(SpritesAS.SPR_LIGHTBEAM, RenderTypesAS.EFFECT_FX_LIGHTBEAM,
-                (ctx, pos) -> new FXLightbeam(pos).alpha(VFXAlphaFunction.PYRAMID));
+    public RenderContextLightbeam() {
+        super(SpritesAS.SPR_LIGHTBEAM, RenderTypesAS.EFFECT_FX_LIGHTBEAM, (ctx, pos) -> new FXLightbeam(pos).alpha(VFXAlphaFunction.PYRAMID));
     }
 
 }

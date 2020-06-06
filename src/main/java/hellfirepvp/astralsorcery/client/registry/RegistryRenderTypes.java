@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.registry;
 
+import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.RenderStateBuilder;
@@ -23,6 +24,7 @@ public class RegistryRenderTypes {
 
     public static void init() {
         initEffectTypes();
+        initEffects();
 
         CONSTELLATION_STARS_IN_WORLD = createType("constellation_stars_in_world", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder().texture(TexturesAS.TEX_STAR_1).build());
@@ -48,7 +50,7 @@ public class RegistryRenderTypes {
                         .build());
         EFFECT_FX_GENERIC_PARTICLE_ATLAS = createType("effect_fx_generic_particle_atlas", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
-                        .texture(BlockAtlasTexture.getInstance())
+                        .altasTexture()
                         .blend(Blending.DEFAULT)
                         .disableCull()
                         .disableDepthMask()
@@ -68,21 +70,84 @@ public class RegistryRenderTypes {
                         .disableCull()
                         .disableDepthMask()
                         .build());
-
+        EFFECT_FX_CRYSTAL = createType("effect_fx_crystal",
+                RenderStateBuilder.builder()
+                        .texture(TexturesAS.TEX_MODEL_CRYSTAL_WHITE)
+                        .blend(Blending.DEFAULT)
+                        .defaultAlpha()
+                        .disableCull()
+                        .disableDepthMask()
+                        .build());
+        EFFECT_FX_BURST = createType("effect_fx_burst", DefaultVertexFormats.POSITION_COLOR_TEX,
+                RenderStateBuilder.builder()
+                        .altasTexture()
+                        .blend(Blending.DEFAULT)
+                        .disableCull()
+                        .disableDepthMask()
+                        .build());
+        EFFECT_FX_DYNAMIC_TEXTURE_SPRITE = createType("effect_fx_dynamic_texture_sprite", DefaultVertexFormats.POSITION_COLOR_TEX,
+                RenderStateBuilder.builder()
+                        .altasTexture()
+                        .blend(Blending.DEFAULT)
+                        .alpha(0.0001F)
+                        .disableCull()
+                        .disableDepthMask()
+                        .build());
+        EFFECT_FX_TEXTURE_SPRITE = createType("effect_fx_texture_sprite", DefaultVertexFormats.POSITION_COLOR_TEX,
+                RenderStateBuilder.builder()
+                        .altasTexture()
+                        .blend(Blending.DEFAULT)
+                        .alpha(0.0001F)
+                        .disableCull()
+                        .disableDepthMask()
+                        .build());
+        EFFECT_FX_CUBE_OPAQUE_ATLAS = createType("effect_fx_cube_opaque_atlas", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP,
+                RenderStateBuilder.builder()
+                        .altasTexture()
+                        .blend(Blending.DEFAULT)
+                        .defaultAlpha()
+                        .disableCull()
+                        .enableLighting()
+                        .build());
         EFFECT_FX_BLOCK_TRANSLUCENT = createType("effect_fx_block_translucent", DefaultVertexFormats.BLOCK,
                 RenderStateBuilder.builder()
-                        .texture(BlockAtlasTexture.getInstance())
+                        .altasTexture()
                         .blend(Blending.ADDITIVEDARK)
                         .defaultAlpha()
                         .disableCull()
                         .build());
         EFFECT_FX_BLOCK_TRANSLUCENT_DEPTH = createType("effect_fx_block_translucent_depth", DefaultVertexFormats.BLOCK,
                 RenderStateBuilder.builder()
-                        .texture(BlockAtlasTexture.getInstance())
+                        .altasTexture()
                         .blend(Blending.ADDITIVEDARK)
                         .defaultAlpha()
                         .disableCull()
                         .disableDepth()
+                        .build());
+        EFFECT_FX_CUBE_TRANSLUCENT_ATLAS = createType("effect_fx_cube_translucent_atlas", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP,
+                RenderStateBuilder.builder()
+                        .altasTexture()
+                        .blend(Blending.ADDITIVEDARK)
+                        .defaultAlpha()
+                        .disableCull()
+                        .disableDepthMask()
+                        .build());
+        EFFECT_FX_CUBE_TRANSLUCENT_ATLAS_DEPTH = createType("effect_fx_cube_translucent_atlas_depth", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP,
+                RenderStateBuilder.builder()
+                        .altasTexture()
+                        .blend(Blending.ADDITIVEDARK)
+                        .defaultAlpha()
+                        .disableCull()
+                        .disableDepthMask()
+                        .disableDepth()
+                        .build());
+        EFFECT_FX_CUBE_AREA_OF_EFFECT = createType("effect_fx_cube_area_of_effect", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP,
+                RenderStateBuilder.builder()
+                        .texture(TexturesAS.TEX_AREA_OF_EFFECT_CUBE)
+                        .blend(Blending.DEFAULT)
+                        .defaultAlpha()
+                        .disableCull()
+                        .disableDepthMask()
                         .build());
         EFFECT_FX_COLOR_SPHERE = createType("effect_fx_color_sphere", DefaultVertexFormats.POSITION_COLOR, GL11.GL_TRIANGLES, 32768,
                 RenderStateBuilder.builder()
@@ -90,15 +155,20 @@ public class RegistryRenderTypes {
                         .alpha(0.00001F)
                         .disableDepthMask()
                         .build());
+    }
 
-        EFFECT_FX_CUBE_OPAQUE_ATLAS = createType("effect_fx_cube_opaque_atlas", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP,
+    private static void initEffects() {
+        EFFECT_LIGHTRAY_FAN = createType("effect_lightray_fan", DefaultVertexFormats.POSITION_COLOR, GL11.GL_TRIANGLE_FAN, 32768,
                 RenderStateBuilder.builder()
-                        .texture(BlockAtlasTexture.getInstance())
-                        .blend(Blending.DEFAULT)
-                        .defaultAlpha()
-                        .disableCull()
-                        .enableLighting()
+                        .blend(Blending.ADDITIVE_ALPHA)
+                        .smoothShade()
+                        .disableDepthMask()
+                        .enableItemRendering()
                         .build());
+    }
+
+    private static RenderType createType(String name, RenderType.State state) {
+        return createType(name, new VertexFormat(ImmutableList.of()), GL11.GL_QUADS, 32768, state);
     }
 
     private static RenderType createType(String name, VertexFormat vertexFormat, RenderType.State state) {

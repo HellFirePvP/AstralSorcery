@@ -8,9 +8,13 @@
 
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
+import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
@@ -34,10 +38,9 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 18.07.2019 / 00:25
  */
-public class FXSpritePlane extends EntityVisualFX {
+public class FXSpritePlane extends EntityVisualFX implements EntityDynamicFX {
 
     private float lastRenderDegree = 0F;
-    private boolean alphaGradient = false;
 
     private Vector3 axis = Vector3.RotAxis.Y_AXIS;
     private int ticksPerFullRot = 100;
@@ -74,34 +77,19 @@ public class FXSpritePlane extends EntityVisualFX {
         return this;
     }
 
-    public FXSpritePlane setAlphaOverDistance(boolean alphaGradient) {
-        this.alphaGradient = alphaGradient;
-        return this;
-    }
-
-    public float getAlphaDistanceMultiplier(double dstSq) {
-        double maxSqDst = RenderingConfig.CONFIG.getMaxEffectRenderDistanceSq();
-        return 1F - (float) (dstSq / maxSqDst);
-    }
+    @Override
+    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {}
 
     @Override
-    public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, BufferContext buf, float pTicks) {
-        if (!RenderingUtils.canEffectExist(this)) {
-            return;
-        }
-        Entity rView = Minecraft.getInstance().getRenderViewEntity();
-        if (rView == null) {
-            rView = Minecraft.getInstance().player;
-        }
+    public <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, IDrawRenderTypeBuffer drawBuffer, float pTicks) {
+        SpriteSheetResource ssr = this.sprite != null ? this.sprite : ctx.getSprite();
+        Tuple<Float, Float> uvOffset = ssr.getUVOffset(this);
 
-        Vector3 pos = this.getRenderPosition(pTicks);
-        double dst = rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
-
+        Vector3 vec = this.getRenderPosition(pTicks);
         float scale = this.getScale(pTicks);
-        float alpha = this.getAlpha(pTicks);
-        if (this.alphaGradient) {
-            alpha *= this.getAlphaDistanceMultiplier(dst);
-        }
+
+        int alpha = this.getAlpha(pTicks);
+        Color color = this.getColor(pTicks);
 
         Vector3 axis = this.axis.clone();
         float deg;
@@ -114,22 +102,14 @@ public class FXSpritePlane extends EntityVisualFX {
             deg = fixDegree;
         }
 
-        Color c = this.getColor(pTicks);
-        float r = c.getRed() / 255F;
-        float g = c.getGreen() / 255F;
-        float b = c.getBlue() / 255F;
-
-        SpriteSheetResource ssr = this.sprite != null ? this.sprite : ctx.getSprite();
         ssr.bindTexture();
-        Tuple<Float, Float> uvOffset = ssr.getUVOffset(this);
-        float u = uvOffset.getA();
-        float v = uvOffset.getB();
-        float uLength = ssr.getULength();
-        float vLength = ssr.getVLength();
 
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, pos, axis, Math.toRadians(deg), scale, u, v, uLength, vLength, r, g, b, alpha);
-        buf.draw();
+        IVertexBuilder buf = drawBuffer.getBuffer(ctx.getRenderType());
+        RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, vec,
+                axis, Math.toRadians(deg), scale,
+                uvOffset.getA(), uvOffset.getB(), ssr.getULength(), ssr.getVLength(),
+                color.getRed(), color.getGreen(), color.getBlue(), alpha);
+
+        drawBuffer.draw();
     }
-
 }

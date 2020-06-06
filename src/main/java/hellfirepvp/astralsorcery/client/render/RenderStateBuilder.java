@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.render;
 
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
@@ -30,8 +31,23 @@ public class RenderStateBuilder {
         return this;
     }
 
+    public RenderStateBuilder altasTexture() {
+        this.builder.texture(BlockAtlasTexture.getInstance().asState());
+        return this;
+    }
+
     public RenderStateBuilder blend(Blending blendMode) {
         this.builder.transparency(blendMode.asState());
+        return this;
+    }
+
+    public RenderStateBuilder smoothShade() {
+        this.builder.shadeModel(new RenderState.ShadeModelState(true));
+        return this;
+    }
+
+    public RenderStateBuilder enableItemRendering() {
+        this.builder.diffuseLighting(new RenderState.DiffuseLightingState(true));
         return this;
     }
 
