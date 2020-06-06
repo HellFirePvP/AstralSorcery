@@ -8,14 +8,13 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
@@ -23,7 +22,6 @@ import net.minecraft.util.Tuple;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,11 +44,8 @@ public class RenderingOverlayUtils {
         ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 
-        GlStateManager.pushMatrix();
-
-        GlStateManager.disableAlphaTest();
-        GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
 
         //Draw background frame
         int tempY = offsetY;
@@ -62,8 +57,8 @@ public class RenderingOverlayUtils {
                 //Draw upper half of the 1st slot
                 buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
                 TexturesAS.TEX_OVERLAY_ITEM_FRAME.bindTexture();
-                buf.pos(offsetX,            tempY + heightSplit, 10).tex(0, 0.5).endVertex();
-                buf.pos(offsetX + width, tempY + heightSplit, 10).tex(1, 0.5).endVertex();
+                buf.pos(offsetX,            tempY + heightSplit, 10).tex(0, 0.5F).endVertex();
+                buf.pos(offsetX + width, tempY + heightSplit, 10).tex(1, 0.5F).endVertex();
                 buf.pos(offsetX + width,    tempY,               10).tex(1, 0)  .endVertex();
                 buf.pos(offsetX,               tempY,               10).tex(0, 0)  .endVertex();
                 tes.draw();
@@ -85,16 +80,15 @@ public class RenderingOverlayUtils {
                 TexturesAS.TEX_OVERLAY_ITEM_FRAME.bindTexture();
                 buf.pos(offsetX,            tempY + heightSplit, 10).tex(0, 1)  .endVertex();
                 buf.pos(offsetX + width, tempY + heightSplit, 10).tex(1, 1)  .endVertex();
-                buf.pos(offsetX + width,    tempY,               10).tex(1, 0.5).endVertex();
-                buf.pos(offsetX,               tempY,               10).tex(0, 0.5).endVertex();
+                buf.pos(offsetX + width,    tempY,               10).tex(1, 0.5F).endVertex();
+                buf.pos(offsetX,               tempY,               10).tex(0, 0.5F).endVertex();
                 tes.draw();
                 tempY += heightSplit;
             }
         }
 
-        GlStateManager.enableAlphaTest();
-        TextureHelper.bindBlockAtlas();
-        RenderHelper.enableGUIStandardItemLighting();
+        RenderSystem.disableBlend();
+        BlockAtlasTexture.getInstance().bindTexture();
 
         //Draw itemstacks on frame
         tempY = offsetY;
@@ -103,12 +97,9 @@ public class RenderingOverlayUtils {
             tempY += heightNormal;
         }
 
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableDepthTest();
-
         //Draw itemstack counts
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(offsetX + 14, offsetY + 16, 0);
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(offsetX + 14, offsetY + 16, 0);
         int txtColor = 0x00DDDDDD;
         for (Tuple<ItemStack, Integer> stackTpl : itemStacks) {
             ItemStack stack = stackTpl.getA();
@@ -121,24 +112,19 @@ public class RenderingOverlayUtils {
                 amountStr = "\u221E"; //+Inf
             }
 
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(-fontRenderer.getStringWidth(amountStr) / 3, 0, 0);
-            GlStateManager.scaled(0.7, 0.7, 0.7);
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(-fontRenderer.getStringWidth(amountStr) / 3, 0, 0);
+            RenderSystem.scaled(0.7, 0.7, 0.7);
             if (amountStr.length() > 3) {
-                GlStateManager.scaled(0.9, 0.9, 0.9);
+                RenderSystem.scaled(0.9, 0.9, 0.9);
             }
-            fr.drawStringWithShadow(amountStr, 0, 0, txtColor);
-            GlStateManager.popMatrix();
+            RenderingDrawUtils.renderStringAtCurrentPos(fr, amountStr, txtColor);
+            RenderSystem.popMatrix();
 
-            GlStateManager.translated(0, heightNormal, 0);
+            RenderSystem.translated(0, heightNormal, 0);
         }
 
-        GlStateManager.popMatrix();
-
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GlStateManager.enableDepthTest();
-        GlStateManager.disableBlend();
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
 }

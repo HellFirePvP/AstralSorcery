@@ -53,7 +53,7 @@ public class WidthHeightScreen extends InputScreen {
     }
 
     public int getGuiZLevel() {
-        return this.blitOffset;
+        return this.getBlitOffset();
     }
 
     public int getGuiWidth() {
@@ -75,7 +75,7 @@ public class WidthHeightScreen extends InputScreen {
 
     protected void drawWHRect(AbstractRenderableTexture resource) {
         resource.bindTexture();
-        RenderingGuiUtils.drawRect(guiLeft, guiTop, this.blitOffset, guiWidth, guiHeight);
+        RenderingGuiUtils.drawRect(guiLeft, guiTop, this.getBlitOffset(), guiWidth, guiHeight);
     }
 
     @Override

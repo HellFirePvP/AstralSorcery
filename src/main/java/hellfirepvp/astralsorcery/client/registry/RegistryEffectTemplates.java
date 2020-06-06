@@ -11,15 +11,10 @@ package hellfirepvp.astralsorcery.client.registry;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.*;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
-import hellfirepvp.astralsorcery.client.effect.context.base.RenderContextColorSphere;
-import hellfirepvp.astralsorcery.client.effect.context.base.RenderContextCube;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXBlock;
+import hellfirepvp.astralsorcery.client.effect.vfx.FXColorEffectSphere;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXCube;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
-import hellfirepvp.astralsorcery.client.lib.SpritesAS;
-import hellfirepvp.astralsorcery.client.lib.TexturesAS;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -59,15 +54,15 @@ public class RegistryEffectTemplates {
         TEXTURE_SPRITE = register(new RenderContextSpritePlaneDynamic());
         FACING_SPRITE = register(new RenderContextFacingSprite());
 
-        CUBE_OPAQUE_ATLAS = register(new RenderContextCube(RenderTypesAS.EFFECT_FX_CUBE_OPAQUE_ATLAS, (ctx, pos) -> new FXCube(pos)));
-        CUBE_TRANSLUCENT_ATLAS = register(new RenderContextCube(RenderTypesAS.EFFECT_FX_CUBE_TRANSLUCENT_ATLAS, (ctx, pos) -> new FXCube(pos)));
-        CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH = register(new RenderContextCube(RenderTypesAS.EFFECT_FX_CUBE_TRANSLUCENT_ATLAS_DEPTH, (ctx, pos) -> new FXCube(pos)));
-        CUBE_AREA_OF_EFFECT = register(new RenderContextCube(RenderTypesAS.EFFECT_FX_CUBE_AREA_OF_EFFECT, (ctx, pos) -> new FXCube(pos)));
+        CUBE_OPAQUE_ATLAS = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_CUBE_OPAQUE_ATLAS, (ctx, pos) -> new FXCube(pos)));
+        CUBE_TRANSLUCENT_ATLAS = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_CUBE_TRANSLUCENT_ATLAS, (ctx, pos) -> new FXCube(pos)));
+        CUBE_TRANSLUCENT_ATLAS_IGNORE_DEPTH = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_CUBE_TRANSLUCENT_ATLAS_DEPTH, (ctx, pos) -> new FXCube(pos)));
+        CUBE_AREA_OF_EFFECT = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_CUBE_AREA_OF_EFFECT, (ctx, pos) -> new FXCube(pos)));
 
         BLOCK_TRANSLUCENT = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_BLOCK_TRANSLUCENT, (ctx, pos) -> new FXBlock(pos)));
         BLOCK_TRANSLUCENT_IGNORE_DEPTH = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_BLOCK_TRANSLUCENT_DEPTH, (ctx, pos) -> new FXBlock(pos)));
 
-        COLOR_SPHERE = register(new RenderContextColorSphere());
+        COLOR_SPHERE = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_COLOR_SPHERE, (ctx, pos) -> new FXColorEffectSphere(pos)));
         GENERIC_GATEWAY_PARTICLE = register(new RenderContextGenericParticle());
 
         setupRenderOrder();

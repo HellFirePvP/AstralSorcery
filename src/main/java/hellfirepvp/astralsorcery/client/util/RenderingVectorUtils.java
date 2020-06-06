@@ -35,9 +35,9 @@ public class RenderingVectorUtils {
 
     public static Vector3 interpolatePosition(Entity e, float partialTicks) {
         return new Vector3(
-                interpolate(e.prevPosX, e.posX, partialTicks),
-                interpolate(e.prevPosY, e.posY, partialTicks),
-                interpolate(e.prevPosZ, e.posZ, partialTicks)
+                interpolate(e.prevPosX, e.getPosX(), partialTicks),
+                interpolate(e.prevPosY, e.getPosY(), partialTicks),
+                interpolate(e.prevPosZ, e.getPosZ(), partialTicks)
         );
     }
 

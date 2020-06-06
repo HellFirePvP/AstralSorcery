@@ -250,7 +250,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
 
     private void drawSkyBackground(float pTicks, boolean canSeeSky, float angleOpacity) {
         Tuple<Color, Color> rgbFromTo = SkyScreen.getSkyGradient(canSeeSky, angleOpacity, pTicks);
-        RenderingDrawUtils.drawGradientRect(this.blitOffset,
+        RenderingDrawUtils.drawGradientRect(this.getGuiZLevel(),
                 this.guiLeft + 4, this.guiTop + 4,
                 this.guiLeft + this.guiWidth - 8, this.guiTop + this.guiHeight - 8,
                 rgbFromTo.getA().getRGB(), rgbFromTo.getB().getRGB());

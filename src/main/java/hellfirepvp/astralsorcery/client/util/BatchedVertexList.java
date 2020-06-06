@@ -8,11 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -30,19 +28,11 @@ import java.util.function.Consumer;
 public class BatchedVertexList {
 
     private final VertexFormat vFormat;
-
-    private int glDrawList = -1;
     private VertexBuffer vbo = null;
-
-    private boolean useVbo = true;
     private boolean initialized = false;
 
     public BatchedVertexList(VertexFormat vFormat) {
         this.vFormat = vFormat;
-    }
-
-    public void setUseVbo(boolean useVbo) {
-        this.useVbo = useVbo;
     }
 
     public void batch(Consumer<BufferBuilder> batchFn) {
@@ -50,48 +40,30 @@ public class BatchedVertexList {
             return;
         }
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
-        if (this.useVbo && GLX.useVbo()) {
-            this.vbo = new VertexBuffer(this.vFormat);
-            batchFn.accept(buf);
-            buf.finishDrawing();
-            buf.reset();
-            this.vbo.bufferData(buf.getByteBuffer());
-        } else {
-            this.glDrawList = GLAllocation.generateDisplayLists(1);
-            GlStateManager.newList(this.glDrawList, GL11.GL_COMPILE);
-            batchFn.accept(buf);
-            tes.draw();
-            GlStateManager.endList();
-        }
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        this.vbo = new VertexBuffer(this.vFormat);
+        batchFn.accept(buf);
+        buf.finishDrawing();
+        this.vbo.upload(buf);
+
         this.initialized = true;
     }
 
-    public void render() {
+    public void render(MatrixStack renderStack) {
         if (!this.initialized) {
             return;
         }
 
-        if (this.useVbo && GLX.useVbo()) {
-            this.vbo.bindBuffer();
-            GlStateManager.enableClientState(GL11.GL_VERTEX_ARRAY);
-            GlStateManager.vertexPointer(3, GL11.GL_FLOAT, 0, 0);
-            this.vbo.drawArrays(GL11.GL_QUADS);
-            VertexBuffer.unbindBuffer();
-            GlStateManager.disableClientState(GL11.GL_VERTEX_ARRAY);
-        } else {
-            GlStateManager.callList(this.glDrawList);
-        }
+        this.vbo.bindBuffer();
+        this.vFormat.setupBufferState(0L);
+        this.vbo.draw(renderStack.getLast().getMatrix(), GL11.GL_QUADS);
+        this.vFormat.clearBufferState();
+        VertexBuffer.unbindBuffer();
     }
 
     public void reset() {
-        if (this.glDrawList >= 0) {
-            GLAllocation.deleteDisplayLists(this.glDrawList);
-            this.glDrawList = -1;
-        }
         if (this.vbo != null) {
-            this.vbo.deleteGlBuffers();
+            this.vbo.close();
         }
 
         this.initialized = false;

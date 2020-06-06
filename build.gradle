@@ -111,8 +111,8 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:1.15.2-31.2.8'
 
-    compileOnly 'hellfirepvp.observerlib:observerlib:1.15.2-1.2.0.v52'
-    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.15.2-1.2.0.v52:deobf'
+    compileOnly 'hellfirepvp.observerlib:observerlib:1.15.2-1.2.0.v53'
+    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.15.2-1.2.0.v53:deobf'
 
     compileOnly 'top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.4:api'
     runtimeOnly 'top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.4:deobf'

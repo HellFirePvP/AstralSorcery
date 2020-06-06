@@ -34,7 +34,7 @@ public class RenderingGuiUtils {
     }
     
     public static void drawTexturedRectAtCurrentPos(float width, float height, float zLevel, float uFrom, float vFrom, float uWidth, float vWidth) {
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buf -> {
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             rect(buf, 0, 0, zLevel, width, height)
                     .tex(uFrom, vFrom, uWidth, vWidth)
                     .draw();
@@ -46,14 +46,14 @@ public class RenderingGuiUtils {
     }
 
     public static void drawRect(float offsetX, float offsetY, float zLevel, int width, int height) {
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buf -> {
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             rect(buf, offsetX, offsetY, zLevel, width, height)
                     .draw();
         });
     }
 
     public static void drawTexturedRect(float offsetX, float offsetY, float zLevel, float width, float height, float uFrom, float vFrom, float uWidth, float vWidth) {
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buf -> {
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             rect(buf, offsetX, offsetY, zLevel, width, height)
                     .tex(uFrom, vFrom, uWidth, vWidth)
                     .draw();
@@ -149,10 +149,10 @@ public class RenderingGuiUtils {
             int g = this.color.getGreen();
             int b = this.color.getBlue();
             int a = this.color.getAlpha();
-            buf.pos(offsetX,         offsetY + height, offsetZ).tex(u, v + vWidth).color(r, g, b, a).endVertex();
-            buf.pos(offsetX + width, offsetY + height, offsetZ).tex(u + uWidth, v + vWidth).color(r, g, b, a).endVertex();
-            buf.pos(offsetX + width, offsetY,          offsetZ).tex(u + uWidth, v).color(r, g, b, a).endVertex();
-            buf.pos(offsetX,         offsetY,          offsetZ).tex(u, v).color(r, g, b, a).endVertex();
+            buf.pos(offsetX,         offsetY + height, offsetZ).color(r, g, b, a).tex(u, v + vWidth).endVertex();
+            buf.pos(offsetX + width, offsetY + height, offsetZ).color(r, g, b, a).tex(u + uWidth, v + vWidth).endVertex();
+            buf.pos(offsetX + width, offsetY,          offsetZ).color(r, g, b, a).tex(u + uWidth, v).endVertex();
+            buf.pos(offsetX,         offsetY,          offsetZ).color(r, g, b, a).tex(u, v).endVertex();
             return this;
         }
 

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -24,8 +25,8 @@ import net.minecraft.tileentity.TileEntity;
  */
 public abstract class CustomTileEntityRenderer<T extends TileEntity> extends TileEntityRenderer<T> {
 
-    public CustomTileEntityRenderer(TileEntityRendererDispatcher rendererDispatcher) {
-        super(rendererDispatcher);
+    public CustomTileEntityRenderer() {
+        super(TileEntityRendererDispatcher.instance);
     }
 
     @Override

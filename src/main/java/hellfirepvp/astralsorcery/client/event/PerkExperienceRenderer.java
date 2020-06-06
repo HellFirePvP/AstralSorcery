@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.event;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
@@ -108,7 +109,7 @@ public class PerkExperienceRenderer implements ITickHandler {
         int c = 0x00DDDDDD;
         c |= ((int) (255F * visibilityReveal)) << 24;
         if (visibilityReveal > 0.1E-4) {
-            Minecraft.getInstance().fontRenderer.drawStringWithShadow(strLevel, 0, 0, c);
+            RenderingDrawUtils.renderStringAtCurrentPos(Minecraft.getInstance().fontRenderer, strLevel, c);
         }
         GlStateManager.popMatrix();
 

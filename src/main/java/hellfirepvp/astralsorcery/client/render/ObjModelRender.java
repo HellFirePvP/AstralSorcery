@@ -48,6 +48,8 @@ public class ObjModelRender {
         vboCrystal.bindBuffer();
         DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0L);
         vboCrystal.draw(renderStack.getLast().getMatrix(), crystalModel.getGLDrawingMode());
+        DefaultVertexFormats.POSITION_COLOR_TEX.clearBufferState();
+        VertexBuffer.unbindBuffer();
     }
 
     public static void renderCelestialWings(MatrixStack renderStack) {
@@ -64,6 +66,8 @@ public class ObjModelRender {
         vboCelestialWings.bindBuffer();
         DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0L);
         vboCelestialWings.draw(renderStack.getLast().getMatrix(), crystalModel.getGLDrawingMode());
+        DefaultVertexFormats.POSITION_COLOR_TEX.clearBufferState();
+        VertexBuffer.unbindBuffer();
     }
 
     public static void renderWraithWings(MatrixStack renderStack) {
@@ -89,9 +93,13 @@ public class ObjModelRender {
         wraithWingsBones.bindBuffer();
         DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0L);
         wraithWingsBones.draw(renderStack.getLast().getMatrix(), wraithWingsModel.getGLDrawingMode());
+        DefaultVertexFormats.POSITION_COLOR_TEX.clearBufferState();
+        VertexBuffer.unbindBuffer();
 
         wraithWingsWing.bindBuffer();
         DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0L);
         wraithWingsWing.draw(renderStack.getLast().getMatrix(), wraithWingsModel.getGLDrawingMode());
+        DefaultVertexFormats.POSITION_COLOR_TEX.clearBufferState();
+        VertexBuffer.unbindBuffer();
     }
 }

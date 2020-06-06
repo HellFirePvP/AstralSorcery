@@ -49,7 +49,7 @@ public enum Blending {
         this.alphaDstFactor = dstAlpha;
     }
 
-    private void apply() {
+    public void apply() {
         RenderSystem.blendFuncSeparate(this.colorSrcFactor, this.colorDstFactor, this.alphaSrcFactor, this.alphaDstFactor);
     }
 
