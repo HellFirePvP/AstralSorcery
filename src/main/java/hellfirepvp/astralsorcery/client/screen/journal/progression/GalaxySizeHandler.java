@@ -30,11 +30,11 @@ public class GalaxySizeHandler extends SizeHandler {
 
     @Nullable
     @Override
-    public double[] buildRequiredRectangle() {
-        double leftMost = 0;
-        double rightMost = 0;
-        double upperMost = 0;
-        double lowerMost = 0;
+    public float[] buildRequiredRectangle() {
+        float leftMost = 0;
+        float rightMost = 0;
+        float upperMost = 0;
+        float lowerMost = 0;
 
         PlayerProgress progress = ResearchHelper.getClientProgress();
         for (ResearchProgression resProgress : progress.getResearchProgression()) {
@@ -53,6 +53,6 @@ public class GalaxySizeHandler extends SizeHandler {
             if (y > lowerMost) lowerMost = y;
             if (y < upperMost) upperMost = y;
         }
-        return new double[] { leftMost, rightMost, upperMost, lowerMost };
+        return new float[] { leftMost, rightMost, upperMost, lowerMost };
     }
 }

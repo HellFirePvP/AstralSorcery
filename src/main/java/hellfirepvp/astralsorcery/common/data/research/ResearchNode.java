@@ -35,8 +35,8 @@ public class ResearchNode {
     private static int counter = 0;
 
     private final int id;
-    private final RenderType renderType;
-    public final double renderPosX, renderPosZ;
+    private final NodeRenderType nodeRenderType;
+    public final float renderPosX, renderPosZ;
     private String unlocName;
 
     private ItemStack[] renderItemStacks;
@@ -48,39 +48,39 @@ public class ResearchNode {
     private List<ResearchNode> connectionsTo = new ArrayList<>();
     private List<JournalPage> pages = new LinkedList<>();
 
-    private ResearchNode(RenderType type, String unlocName, double rPosX, double rPosZ) {
+    private ResearchNode(NodeRenderType type, String unlocName, float rPosX, float rPosZ) {
         this.id = counter;
         counter++;
-        this.renderType = type;
+        this.nodeRenderType = type;
         this.renderPosX = rPosX;
         this.renderPosZ = rPosZ;
         this.unlocName = unlocName;
     }
 
-    public ResearchNode(IItemProvider item, String unlocName, double renderPosX, double renderPosZ) {
+    public ResearchNode(IItemProvider item, String unlocName, float renderPosX, float renderPosZ) {
         this(new ItemStack(item), unlocName, renderPosX, renderPosZ);
     }
 
-    public ResearchNode(ItemStack itemStack, String unlocName, double renderPosX, double renderPosZ) {
-        this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
+    public ResearchNode(ItemStack itemStack, String unlocName, float renderPosX, float renderPosZ) {
+        this(NodeRenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
         this.renderItemStacks = new ItemStack[] { itemStack };
     }
 
-    public ResearchNode(IItemProvider[] items, String unlocName, double renderPosX, double renderPosZ) {
-        this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
+    public ResearchNode(IItemProvider[] items, String unlocName, float renderPosX, float renderPosZ) {
+        this(NodeRenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
         this.renderItemStacks = new ItemStack[items.length];
         for (int i = 0; i < items.length; i++) {
             this.renderItemStacks[i] = new ItemStack(items[i]);
         }
     }
 
-    public ResearchNode(ItemStack[] stacks, String unlocName, double renderPosX, double renderPosZ) {
-        this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
+    public ResearchNode(ItemStack[] stacks, String unlocName, float renderPosX, float renderPosZ) {
+        this(NodeRenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
         this.renderItemStacks = stacks;
     }
 
-    public ResearchNode(SpriteQuery query, String unlocName, double renderPosX, double renderPosZ) {
-        this(RenderType.TEXTURE_SPRITE, unlocName, renderPosX, renderPosZ);
+    public ResearchNode(SpriteQuery query, String unlocName, float renderPosX, float renderPosZ) {
+        this(NodeRenderType.TEXTURE_SPRITE, unlocName, renderPosX, renderPosZ);
         this.renderSpriteQuery = query;
     }
 
@@ -135,8 +135,8 @@ public class ResearchNode {
         return textureColorHint;
     }
 
-    public RenderType getRenderType() {
-        return renderType;
+    public NodeRenderType getNodeRenderType() {
+        return nodeRenderType;
     }
 
     public ItemStack getRenderItemStack() {
@@ -181,7 +181,7 @@ public class ResearchNode {
         return id;
     }
 
-    public static enum RenderType {
+    public static enum NodeRenderType {
 
         ITEMSTACK, TEXTURE_SPRITE
 

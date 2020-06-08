@@ -14,9 +14,7 @@ import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.base.SkyScreen;
 import hellfirepvp.astralsorcery.client.screen.base.TileConstellationDiscoveryScreen;
 import hellfirepvp.astralsorcery.client.screen.telescope.TelescopeRotationDrawArea;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
@@ -130,47 +128,50 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
 
         RenderSystem.disableDepthTest();
 
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
-
         float width = 30F;
         float height = 15F;
         rectArrowCCW = new Rectangle(guiLeft - 40, guiTop + (guiHeight / 2), (int) width, (int) height);
         RenderSystem.pushMatrix();
         RenderSystem.translated(rectArrowCCW.getX() + (width / 2), rectArrowCCW.getY() + (height / 2), 0);
-        float uFrom = 0F, vFrom = 0.5F;
+        float uFromCCW;
+        float vFromCCW = 0.5F;
         if (rectArrowCCW.contains(mouseX, mouseY)) {
-            uFrom = 0.5F;
+            uFromCCW = 0.5F;
             RenderSystem.scaled(1.1, 1.1, 1.1);
         } else {
+            uFromCCW = 0F;
             double t = ClientScheduler.getClientTick() + pTicks;
             float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
             RenderSystem.scaled(sin, sin, sin);
         }
         RenderSystem.translated(-(width / 2), -(height / 2), 0);
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-        this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            RenderingGuiUtils.rect(buf, this).at(0, 0).dim(width, height)
+                    .tex(uFromCCW, vFromCCW, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
+        });
         RenderSystem.popMatrix();
 
         rectArrowCW = new Rectangle(guiLeft + guiWidth + 10, guiTop + (guiHeight / 2), (int) width, (int) height);
         RenderSystem.pushMatrix();
         RenderSystem.translated(rectArrowCW.getX() + (width / 2), rectArrowCW.getY() + (height / 2), 0);
-        uFrom = 0F;
-        vFrom = 0F;
+        float uFromCW;
+        float vFromCW = 0F;
         if (rectArrowCW.contains(mouseX, mouseY)) {
-            uFrom = 0.5F;
+            uFromCW = 0.5F;
             RenderSystem.scaled(1.1, 1.1, 1.1);
         } else {
+            uFromCW = 0F;
             double t = ClientScheduler.getClientTick() + pTicks;
             float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
             RenderSystem.scaled(sin, sin, sin);
         }
         RenderSystem.translated(-(width / 2), -(height / 2), 0);
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-        this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            RenderingGuiUtils.rect(buf, this).at(0, 0).dim(width, height)
+                    .tex(uFromCW, vFromCW, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
+        });
+        RenderSystem.popMatrix();
+
         RenderSystem.popMatrix();
 
         RenderSystem.enableDepthTest();
@@ -213,7 +214,7 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                 float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
                 brightness = this.multiplyStarBrightness(pTicks, brightness);
 
-                this.drawRect(buf)
+                RenderingGuiUtils.rect(buf, this)
                         .at(innerOffsetX, innerOffsetY)
                         .dim(starSize, starSize)
                         .color(brightness, brightness, brightness, brightness)

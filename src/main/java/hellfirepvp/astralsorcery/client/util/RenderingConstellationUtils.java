@@ -240,11 +240,11 @@ public class RenderingConstellationUtils {
 
                 Vector3 pos = starVec.clone().addX(ulength * u * 2).addY(vlength * v * 2);
                 buf.pos(pos.getX(), pos.getY(), pos.getZ())
-                        .tex(u, v)
                         .color(isKnown ? r : alpha,
                                 isKnown ? g : alpha,
                                 isKnown ? b : alpha,
                                 MathHelper.clamp((int) (alpha * 1.2F + 0.2F), 0, 255))
+                        .tex(u, v)
                         .endVertex();
             }
 

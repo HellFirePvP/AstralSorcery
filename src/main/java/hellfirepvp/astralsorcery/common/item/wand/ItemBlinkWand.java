@@ -110,7 +110,7 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
         } else if (!player.getCooldownTracker().hasCooldown(this)) {
             player.setActiveHand(hand);
         }
-        return ActionResult.newResult(ActionResultType.SUCCESS, held);
+        return ActionResult.resultConsume(held);
     }
 
     @Override
@@ -171,7 +171,7 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
                     player.fallDistance = 0F;
 
                     if (ItemMantle.getEffect(player, ConstellationsAS.vicio) != null) {
-                        AstralSorcery.getProxy().scheduleClientside(player::setElytraFlying, 2);
+                        AstralSorcery.getProxy().scheduleClientside(player::startFallFlying, 2);
                     }
 
                     PktShootEntity pkt = new PktShootEntity(player.getEntityId(), motion);

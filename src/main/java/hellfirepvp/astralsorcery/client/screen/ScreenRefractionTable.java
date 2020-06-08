@@ -179,15 +179,13 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             RenderSystem.translated(guiWidth / 2, guiHeight / 2 + 10, 0);
             RenderSystem.translated(-scale / 2, -scale / 2, 0);
 
-            BufferBuilder buf = Tessellator.getInstance().getBuffer();
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-            drawRect(buf)
-                    .dim(scale, scale)
-                    .color(1F, 1F, 1F, this.getTile().getRunProgress())
-                    .tex(uvFrame.getA(), uvFrame.getB(), SpritesAS.SPR_HALO_INFUSION.getUWidth(), SpritesAS.SPR_HALO_INFUSION.getVWidth())
-                    .draw();
-            buf.finishDrawing();
-            WorldVertexBufferUploader.draw(buf);
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                RenderingGuiUtils.rect(buf, this)
+                        .dim(scale, scale)
+                        .color(1F, 1F, 1F, this.getTile().getRunProgress())
+                        .tex(uvFrame.getA(), uvFrame.getB(), SpritesAS.SPR_HALO_INFUSION.getUWidth(), SpritesAS.SPR_HALO_INFUSION.getVWidth())
+                        .draw();
+            });
 
             RenderSystem.popMatrix();
 

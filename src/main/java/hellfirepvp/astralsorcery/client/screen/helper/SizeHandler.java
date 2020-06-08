@@ -23,57 +23,57 @@ public abstract class SizeHandler {
     private static final int W_H_NODE = 18;
 
     //Space between outermost nodes and border.
-    public final double heightToBorder;
-    public final double widthToBorder;
+    public final float heightToBorder;
+    public final float widthToBorder;
 
-    private double widthHeightNodes = W_H_NODE;
-    private double spaceBetweenNodes = W_H_NODE;
+    private float widthHeightNodes = W_H_NODE;
+    private float spaceBetweenNodes = W_H_NODE;
 
-    private double midX;
-    private double midY;
+    private float midX;
+    private float midY;
 
-    private double totalWidth;
-    private double totalHeight;
+    private float totalWidth;
+    private float totalHeight;
 
-    private double scalingFactor = 1.0D;
-    private double maxScale = 10.0D;
-    private double minScale = 1.0D;
-    private double scaleSpeed = 0.2D;
+    private float scalingFactor = 1F;
+    private float maxScale = 10F;
+    private float minScale = 1F;
+    private float scaleSpeed = 0.2F;
 
     public SizeHandler(int height, int width) {
         this.heightToBorder = height / 2;
         this.widthToBorder = width / 2;
     }
 
-    public void setMaxScale(double maxScale) {
+    public void setMaxScale(float maxScale) {
         this.maxScale = maxScale;
     }
 
-    public void setScaleSpeed(double scaleSpeed) {
+    public void setScaleSpeed(float scaleSpeed) {
         this.scaleSpeed = scaleSpeed;
     }
 
-    public void setMinScale(double minScale) {
+    public void setMinScale(float minScale) {
         this.minScale = minScale;
     }
 
-    public void setWidthHeightNodes(double widthHeightNodes) {
+    public void setWidthHeightNodes(float widthHeightNodes) {
         this.widthHeightNodes = widthHeightNodes;
     }
 
-    public void setSpaceBetweenNodes(double spaceBetweenNodes) {
+    public void setSpaceBetweenNodes(float spaceBetweenNodes) {
         this.spaceBetweenNodes = spaceBetweenNodes;
     }
 
     public void updateSize() {
         resetZoom();
 
-        double leftMost = 0;
-        double rightMost = 0;
-        double upperMost = 0;
-        double lowerMost = 0;
+        float leftMost = 0;
+        float rightMost = 0;
+        float upperMost = 0;
+        float lowerMost = 0;
 
-        double[] requiredRect = buildRequiredRectangle();
+        float[] requiredRect = buildRequiredRectangle();
         if (requiredRect != null) {
             leftMost =  requiredRect[0];
             rightMost = requiredRect[1];
@@ -87,11 +87,11 @@ public abstract class SizeHandler {
         upperMost = Math.abs(upperMost);
         lowerMost = Math.abs(lowerMost);
 
-        double leftAdded  = (leftMost  * this.widthHeightNodes + leftMost  * this.spaceBetweenNodes);
-        double rightAdded = (rightMost * this.widthHeightNodes + rightMost * this.spaceBetweenNodes);
+        float leftAdded  = (leftMost  * this.widthHeightNodes + leftMost  * this.spaceBetweenNodes);
+        float rightAdded = (rightMost * this.widthHeightNodes + rightMost * this.spaceBetweenNodes);
 
-        double upperAdded = (upperMost * this.widthHeightNodes + upperMost * this.spaceBetweenNodes);
-        double lowerAdded = (lowerMost * this.widthHeightNodes + lowerMost * this.spaceBetweenNodes);
+        float upperAdded = (upperMost * this.widthHeightNodes + upperMost * this.spaceBetweenNodes);
+        float lowerAdded = (lowerMost * this.widthHeightNodes + lowerMost * this.spaceBetweenNodes);
 
         midX = widthToBorder + leftAdded;
         totalWidth = widthToBorder + rightAdded + midX;
@@ -100,37 +100,37 @@ public abstract class SizeHandler {
     }
 
     @Nullable
-    public abstract double[] buildRequiredRectangle();
+    public abstract float[] buildRequiredRectangle();
 
-    public double getMidX() {
+    public float getMidX() {
         return midX * scalingFactor;
     }
 
-    public double getMidY() {
+    public float getMidY() {
         return midY * scalingFactor;
     }
 
-    public double getTotalWidth() {
+    public float getTotalWidth() {
         return totalWidth * scalingFactor;
     }
 
-    public double getTotalHeight() {
+    public float getTotalHeight() {
         return totalHeight * scalingFactor;
     }
 
-    public double getScalingFactor() {
+    public float getScalingFactor() {
         return scalingFactor;
     }
 
-    public double getZoomedWHNode() {
+    public float getZoomedWHNode() {
         return this.widthHeightNodes * scalingFactor;
     }
 
-    public double getZoomedSpaceBetweenNodes() {
+    public float getZoomedSpaceBetweenNodes() {
         return this.spaceBetweenNodes * scalingFactor;
     }
 
-    public double scaleAccordingly(double toScale) {
+    public float scaleAccordingly(float toScale) {
         return toScale * scalingFactor;
     }
 
@@ -144,17 +144,17 @@ public abstract class SizeHandler {
         scalingFactor = Math.max(minScale, scalingFactor - scaleSpeed);
     }
 
-    public void forceScaleTo(double scale) {
+    public void forceScaleTo(float scale) {
         this.scalingFactor = scale;
     }
 
     public void resetZoom() {
-        this.scalingFactor = 1.0D;
+        this.scalingFactor = 1F;
     }
 
     //ensures that the cursor pos never gets too close to a border. (X)
     //scaled or not, widthToBorder and heightToBorder are defined by the real GUI size!
-    public double clampX(double centerX) {
+    public float clampX(float centerX) {
         if ((centerX + widthToBorder) > getTotalWidth()) {
             centerX = getTotalWidth() - widthToBorder;
         }
@@ -165,7 +165,7 @@ public abstract class SizeHandler {
     }
 
     //ensures that the cursor pos never gets too close to a border. (Y)
-    public double clampY(double centerY) {
+    public float clampY(float centerY) {
         if ((centerY + heightToBorder) > getTotalHeight()) {
             centerY = getTotalHeight() - heightToBorder;
         }
@@ -176,15 +176,15 @@ public abstract class SizeHandler {
     }
 
     //Translates a renderPos into a gui-valid renderPosition (zoomed)
-    public double evRelativePosX(int relativeX) {
+    public float evRelativePosX(int relativeX) {
         return getMidX() + (relativeX * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
     }
 
-    public double evRelativePosY(int relativeY) {
+    public float evRelativePosY(int relativeY) {
         return getMidY() + (relativeY * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
     }
 
-    public Point.Double evRelativePos(Point offset) {
-        return new Point.Double(evRelativePosX(offset.x), evRelativePosY(offset.y));
+    public Point.Float evRelativePos(Point offset) {
+        return new Point.Float(evRelativePosX(offset.x), evRelativePosY(offset.y));
     }
 }

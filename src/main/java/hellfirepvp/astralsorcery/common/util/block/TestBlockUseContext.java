@@ -79,7 +79,7 @@ public class TestBlockUseContext extends BlockItemUseContext {
     }
 
     @Override
-    public boolean isPlacerSneaking() {
+    public boolean func_225518_g_() {
         return false;
     }
 

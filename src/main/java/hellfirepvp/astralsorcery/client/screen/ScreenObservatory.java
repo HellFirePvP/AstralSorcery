@@ -18,9 +18,7 @@ import hellfirepvp.astralsorcery.client.screen.base.SkyScreen;
 import hellfirepvp.astralsorcery.client.screen.base.TileConstellationDiscoveryScreen;
 import hellfirepvp.astralsorcery.client.screen.telescope.FullScreenDrawArea;
 import hellfirepvp.astralsorcery.client.screen.telescope.PlayerAngledConstellationInformation;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
@@ -202,7 +200,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                 brightness = this.multiplyStarBrightness(pTicks, brightness);
                 brightness *= brMultiplier;
 
-                this.drawRect(buf)
+                RenderingGuiUtils.rect(buf, this)
                         .at(FRAME_TEXTURE_SIZE + star.x, FRAME_TEXTURE_SIZE + star.y)
                         .dim(size, size)
                         .color(brightness, brightness, brightness, brightness)
@@ -264,29 +262,25 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
     private void drawFrame() {
         TexturesAS.TEX_GUI_OBSERVATORY.bindTexture();
 
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            RenderingGuiUtils.rect(buf, this).at(0, 0).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
+                    .tex(0, 0, 8F / 20F, 8F / 20F).draw();
+            RenderingGuiUtils.rect(buf, this).at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, 0).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
+                    .tex(8F / 20F, 0, 8F / 20F, 8F / 20F).draw();
+            RenderingGuiUtils.rect(buf, this).at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
+                    .tex(8F / 20F, 8F / 20F, 8F / 20F, 8F / 20F).draw();
+            RenderingGuiUtils.rect(buf, this).at(0, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
+                    .tex(0, 8F / 20F, 8F / 20F, 8F / 20F).draw();
 
-        this.drawRect(buf).at(0, 0).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
-                .tex(0, 0, 8F / 20F, 8F / 20F).draw();
-        this.drawRect(buf).at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, 0).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
-                .tex(8F / 20F, 0, 8F / 20F, 8F / 20F).draw();
-        this.drawRect(buf).at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
-                .tex(8F / 20F, 8F / 20F, 8F / 20F, 8F / 20F).draw();
-        this.drawRect(buf).at(0, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
-                .tex(0, 8F / 20F, 8F / 20F, 8F / 20F).draw();
-
-        this.drawRect(buf).at(FRAME_TEXTURE_SIZE, 0).dim(this.getGuiWidth(), FRAME_TEXTURE_SIZE)
-                .tex(16F / 20F, 0, 1F / 20F, 8F / 20F).draw();
-        this.drawRect(buf).at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, this.getGuiHeight())
-                .tex(0, 17F / 20F, 8F / 20F, 1F / 20F).draw();
-        this.drawRect(buf).at(FRAME_TEXTURE_SIZE, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(this.getGuiWidth(), FRAME_TEXTURE_SIZE)
-                .tex(17F / 20F, 0, 1F / 20F, 8F / 20F).draw();
-        this.drawRect(buf).at(0, FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, this.getGuiHeight())
-                .tex(0, 16F / 20F, 8F / 20F, 1F / 20F).draw();
-
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+            RenderingGuiUtils.rect(buf, this).at(FRAME_TEXTURE_SIZE, 0).dim(this.getGuiWidth(), FRAME_TEXTURE_SIZE)
+                    .tex(16F / 20F, 0, 1F / 20F, 8F / 20F).draw();
+            RenderingGuiUtils.rect(buf, this).at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, this.getGuiHeight())
+                    .tex(0, 17F / 20F, 8F / 20F, 1F / 20F).draw();
+            RenderingGuiUtils.rect(buf, this).at(FRAME_TEXTURE_SIZE, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(this.getGuiWidth(), FRAME_TEXTURE_SIZE)
+                    .tex(17F / 20F, 0, 1F / 20F, 8F / 20F).draw();
+            RenderingGuiUtils.rect(buf, this).at(0, FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, this.getGuiHeight())
+                    .tex(0, 16F / 20F, 8F / 20F, 1F / 20F).draw();
+        });
     }
 
     private void drawSkyBackground(float pTicks, boolean canSeeSky, float angleOpacity) {

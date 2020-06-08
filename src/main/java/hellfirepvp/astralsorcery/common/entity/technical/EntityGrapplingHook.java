@@ -173,9 +173,7 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
             if (isAlive() && isPulling()) {
                 if (getPulling() != null) {
                     LivingEntity at = getPulling();
-                    this.posX = at.posX;
-                    this.posY = at.posY;
-                    this.posZ = at.posZ;
+                    this.setPosition(at.getPosX(), at.getPosY(), at.getPosZ());
                 }
 
                 if (((getPulling() != null && ticksExisted > 60 && dist < 2) || (getPulling() == null && ticksExisted > 15 && dist < 2)) || timeout > 15) {
@@ -183,9 +181,9 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
                 } else {
                     getThrower().fallDistance = -5F;
 
-                    double mx = this.posX - getThrower().posX;
-                    double my = this.posY - getThrower().posY;
-                    double mz = this.posZ - getThrower().posZ;
+                    double mx = this.getPosX() - getThrower().getPosX();
+                    double my = this.getPosY() - getThrower().getPosY();
+                    double mz = this.getPosZ() - getThrower().getPosZ();
                     mx /= dist * 5.0D;
                     my /= dist * 5.0D;
                     mz /= dist * 5.0D;
@@ -325,9 +323,7 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
                 break;
         }
         this.setMotion(0, 0, 0);
-        this.posX = hit.x;
-        this.posY = hit.y;
-        this.posZ = hit.z;
+        this.setPosition(hit.x, hit.y, hit.z);
     }
 
     @Override

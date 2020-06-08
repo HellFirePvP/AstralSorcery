@@ -32,21 +32,21 @@ public class ProgressionSizeHandler extends SizeHandler {
 
     @Override
     @Nullable
-    public double[] buildRequiredRectangle() {
-        double leftMost = 0;
-        double rightMost = 0;
-        double upperMost = 0;
-        double lowerMost = 0;
+    public float[] buildRequiredRectangle() {
+        float leftMost = 0;
+        float rightMost = 0;
+        float upperMost = 0;
+        float lowerMost = 0;
 
         for (ResearchNode node : part.getResearchNodes()) {
-            double x = node.renderPosX;
-            double y = node.renderPosZ;
+            float x = node.renderPosX;
+            float y = node.renderPosZ;
 
             if (x < leftMost) leftMost = x;
             if (x > rightMost) rightMost = x;
             if (y > lowerMost) lowerMost = y;
             if (y < upperMost) upperMost = y;
         }
-        return new double[] { leftMost, rightMost, upperMost, lowerMost };
+        return new float[] { leftMost, rightMost, upperMost, lowerMost };
     }
 }

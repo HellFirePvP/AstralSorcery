@@ -143,7 +143,7 @@ public class EntityCrystal extends EntityItemExplosionResistant implements Inter
 
         ((ItemCrystalBase) this.getItem().getItem()).setAttributes(this.getItem(), resultThisAttributes);
         newBase.setAttributes(created, resultSplitAttributes.build());
-        ItemUtils.dropItemNaturally(getEntityWorld(), this.posX, this.posY + 0.25F, this.posZ, created);
+        ItemUtils.dropItemNaturally(getEntityWorld(), this.getPosX(), this.getPosY() + 0.25F, this.getPosZ(), created);
         return true;
     }
 

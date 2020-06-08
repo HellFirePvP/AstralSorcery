@@ -93,7 +93,7 @@ public class EntityStarmetal extends ItemEntity implements InteractableEntity {
 
     private boolean createStardust(int fortuneLevel) {
         ItemStack created = new ItemStack(ItemsAS.STARDUST);
-        ItemUtils.dropItemNaturally(getEntityWorld(), this.posX, this.posY + 0.25F, this.posZ, created);
+        ItemUtils.dropItemNaturally(getEntityWorld(), this.getPosX(), this.getPosY() + 0.25F, this.getPosZ(), created);
 
         float breakIngot = 0.90F;
         breakIngot -= MathHelper.clamp(fortuneLevel, 0, 10) * 0.06F;

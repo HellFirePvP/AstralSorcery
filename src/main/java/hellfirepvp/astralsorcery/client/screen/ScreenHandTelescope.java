@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.client.screen.telescope.PlayerAngledConstellati
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
@@ -153,7 +154,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
                 brightness = this.multiplyStarBrightness(pTicks, brightness);
                 brightness *= brMultiplier;
 
-                this.drawRect(buf)
+                RenderingGuiUtils.rect(buf, this)
                         .at(pos.x + this.getGuiLeft(), pos.y + this.getGuiTop())
                         .dim(starSize, starSize)
                         .color(brightness, brightness, brightness, brightness)
