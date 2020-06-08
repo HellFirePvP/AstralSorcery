@@ -86,11 +86,8 @@ public class RenderingDrawUtils {
         return length;
     }
 
-    public static Rectangle drawInfoStar(MatrixStack renderStack, IDrawRenderTypeBuffer buffer, float offsetX, float offsetY, float zLevel, float widthHeightBase, float pTicks) {
+    public static Rectangle drawInfoStar(MatrixStack renderStack, IDrawRenderTypeBuffer buffer, float widthHeightBase, float pTicks) {
         IVertexBuilder vb = buffer.getBuffer(RenderTypesAS.GUI_MISC_INFO_STAR);
-
-        renderStack.push();
-        renderStack.translate(offsetX, offsetY, zLevel);
 
         float tick = ClientScheduler.getClientTick() + pTicks;
         float deg = (tick * 2) % 360F;
@@ -102,9 +99,7 @@ public class RenderingDrawUtils {
         drawInfoStarSingle(renderStack, vb, wh, Math.toRadians(deg));
 
         buffer.draw(RenderTypesAS.GUI_MISC_INFO_STAR);
-
-        renderStack.pop();
-        return new Rectangle(MathHelper.floor(offsetX - widthHeightBase / 2F), MathHelper.floor(offsetY - widthHeightBase / 2F),
+        return new Rectangle(MathHelper.floor(-widthHeightBase / 2F), MathHelper.floor(-widthHeightBase / 2F),
                 MathHelper.floor(widthHeightBase), MathHelper.floor(widthHeightBase));
     }
 
@@ -284,14 +279,12 @@ public class RenderingDrawUtils {
                 GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         RenderSystem.shadeModel(GL11.GL_SMOOTH);
 
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        buf.pos(right,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
-        buf.pos( left,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
-        buf.pos( left, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
-        buf.pos(right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR, buf -> {
+            buf.pos(right,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+            buf.pos( left,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+            buf.pos( left, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+            buf.pos(right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+        });
 
         RenderSystem.shadeModel(GL11.GL_FLAT);
         RenderSystem.enableTexture();

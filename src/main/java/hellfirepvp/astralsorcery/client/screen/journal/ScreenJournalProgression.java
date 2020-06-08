@@ -9,12 +9,11 @@
 package hellfirepvp.astralsorcery.client.screen.journal;
 
 import com.google.common.collect.Maps;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.progression.ScreenJournalProgressionRenderer;
 import hellfirepvp.astralsorcery.client.util.*;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
@@ -23,7 +22,7 @@ import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
@@ -135,7 +134,6 @@ public class ScreenJournalProgression extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
-        GlStateManager.enableBlend();
         super.render(mouseX, mouseY, pTicks);
 
         this.searchPrevRct = null;
@@ -157,36 +155,31 @@ public class ScreenJournalProgression extends ScreenJournal {
         this.drawSearchResults(mouseX, mouseY, pTicks);
         this.drawSearchBox();
 
-        this.blitOffset += 150;
+        this.changeZLevel(150);
         this.drawSearchPageNavArrows(mouseX, mouseY, pTicks);
-        this.blitOffset -= 150;
+        this.changeZLevel(-150);
     }
 
     private void renderProgressView(int mouseX, int mouseY, float pTicks) {
-        double guiFactor = Minecraft.getInstance().mainWindow.getGuiScaleFactor();
+        double guiFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor(MathHelper.floor((guiLeft + 27) * guiFactor), MathHelper.floor((guiTop + 27) * guiFactor),
                 MathHelper.floor((guiWidth - 54) * guiFactor), MathHelper.floor((guiHeight - 54) * guiFactor));
-        progressionRenderer.drawProgressionPart(this.blitOffset, mouseX, mouseY);
+        progressionRenderer.drawProgressionPart(this.getGuiZLevel(), mouseX, mouseY);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
-        GlStateManager.disableDepthTest();
+        RenderSystem.disableDepthTest();
         drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
-        GlStateManager.enableDepthTest();
+        RenderSystem.enableDepthTest();
 
         this.drawSearchBox();
 
-        this.blitOffset += 150;
-        drawMouseHighlight(this.blitOffset, mouseX, mouseY);
-        this.blitOffset -= 150;
+        this.changeZLevel(150);
+        drawMouseHighlight(this.getGuiZLevel(), mouseX, mouseY);
+        this.changeZLevel(-150);
     }
 
     private void drawSearchResults(int mouseX, int mouseY, float pTicks) {
-        GlStateManager.color4f(0.875F, 0.875F, 0.875F, 1F);
-        GlStateManager.disableDepthTest();
-        Blending.DEFAULT.applyStateManager();
-        TextureHelper.bindBlockAtlas();
-
         FontRenderer fr = Minecraft.getInstance().fontRenderer;
         int lineHeight = 12;
         int offsetX = this.getGuiLeft() + 35;
@@ -216,7 +209,6 @@ public class ScreenJournalProgression extends ScreenJournal {
                 Rectangle rctDrawn = new Rectangle(offsetX - 2, startOffsetY - 2, maxLength + 4, offsetY - startOffsetY);
                 if (rctDrawn.contains(mouseX, mouseY)) {
                     fill(rctDrawn.x, rctDrawn.y, rctDrawn.x + rctDrawn.width, rctDrawn.y + rctDrawn.height, boxColor.getRGB());
-                    GlStateManager.enableBlend();
                     this.searchHoverNode = node;
                 }
             }
@@ -243,15 +235,10 @@ public class ScreenJournalProgression extends ScreenJournal {
                 Rectangle rctDrawn = new Rectangle(offsetX - 2, startOffsetY - 2, maxLength + 4, offsetY - startOffsetY);
                 if (rctDrawn.contains(mouseX, mouseY)) {
                     fill(rctDrawn.x, rctDrawn.y, rctDrawn.x + rctDrawn.width, rctDrawn.y + rctDrawn.height, boxColor.getRGB());
-                    GlStateManager.enableBlend();
                     this.searchHoverNode = node;
                 }
             }
         }
-
-        GlStateManager.enableDepthTest();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        TextureHelper.refreshTextureBind();
     }
 
     private void drawMouseHighlight(float zLevel, int mouseX, int mouseY) {
@@ -259,12 +246,12 @@ public class ScreenJournalProgression extends ScreenJournal {
     }
 
     private void drawSearchBox() {
-        GlStateManager.disableAlphaTest();
-        GlStateManager.disableDepthTest();
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(guiLeft + 300, guiTop + 16, 0);
         TexturesAS.TEX_GUI_TEXT_FIELD.bindTexture();
-        RenderingGuiUtils.drawTexturedRectAtCurrentPos(88.5F, 15, this.blitOffset);
+        RenderSystem.enableBlend();
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            RenderingGuiUtils.rect(buf, guiLeft + 300, guiTop + 16, this.getGuiZLevel(), 88.5F, 15).draw();
+        });
+        RenderSystem.disableBlend();
 
         String text = this.searchTextEntry.getText();
 
@@ -282,62 +269,67 @@ public class ScreenJournalProgression extends ScreenJournal {
             text += "_";
         }
 
-        GlStateManager.translated(4, 4, 0);
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(guiLeft + 304, guiTop + 20, this.getGuiZLevel());
         RenderingDrawUtils.renderStringAtCurrentPos(font, text, 0xCCCCCC);
-
-        GlStateManager.popMatrix();
-        GlStateManager.enableDepthTest();
-        GlStateManager.enableAlphaTest();
+        RenderSystem.popMatrix();
     }
 
     private void drawSearchPageNavArrows(int mouseX, int mouseY, float pTicks) {
-        GlStateManager.disableDepthTest();
-        GlStateManager.color4f(1F, 1F, 1F, 0.8F);
-
         if (this.searchPageOffset > 0) {
             int width = 30;
             int height = 15;
             this.searchPrevRct = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(this.searchPrevRct.getX() + (width / 2), this.searchPrevRct.getY() + (height / 2), 0);
-            float uFrom = 0F, vFrom = 0.5F;
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(this.searchPrevRct.getX() + (width / 2F), this.searchPrevRct.getY() + (height / 2F), 0);
+            float uFrom, vFrom = 0.5F;
             if (this.searchPrevRct.contains(mouseX, mouseY)) {
                 uFrom = 0.5F;
-                GlStateManager.scaled(1.1, 1.1, 1.1);
+                RenderSystem.scaled(1.1, 1.1, 1.1);
             } else {
+                uFrom = 0F;
                 double t = ClientScheduler.getClientTick() + pTicks;
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                GlStateManager.scaled(sin, sin, sin);
+                RenderSystem.scaled(sin, sin, sin);
             }
-            GlStateManager.color4f(1F, 1F, 1F, 0.8F);
-            GlStateManager.translated(-(width / 2), -(height / 2), 0);
+            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
-            GlStateManager.popMatrix();
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
+                        .tex(uFrom, vFrom, 0.5F, 0.5F)
+                        .color(1F, 1F, 1F, 0.8F)
+                        .draw();
+            });
+            RenderSystem.popMatrix();
         }
+
         int nextDoublePageIndex = (this.searchPageOffset * 2) + 2;
         if (this.searchResultPageIndex.size() >= nextDoublePageIndex + 1) {
             int width = 30;
             int height = 15;
             this.searchNextRct = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(this.searchNextRct.getX() + (width / 2), this.searchNextRct.getY() + (height / 2), 0);
-            float uFrom = 0F, vFrom = 0F;
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(this.searchNextRct.getX() + (width / 2F), this.searchNextRct.getY() + (height / 2F), 0);
+            float uFrom, vFrom = 0F;
             if (this.searchNextRct.contains(mouseX, mouseY)) {
                 uFrom = 0.5F;
-                GlStateManager.scaled(1.1, 1.1, 1.1);
+                RenderSystem.scaled(1.1, 1.1, 1.1);
             } else {
+                uFrom = 0F;
                 double t = ClientScheduler.getClientTick() + pTicks;
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                GlStateManager.scaled(sin, sin, sin);
+                RenderSystem.scaled(sin, sin, sin);
             }
-            GlStateManager.translated(-(width / 2), -(height / 2), 0);
+            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
-            GlStateManager.popMatrix();
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
+                        .tex(uFrom, vFrom, 0.5F, 0.5F)
+                        .color(1F, 1F, 1F, 0.8F)
+                        .draw();
+            });
+            RenderSystem.popMatrix();
         }
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GlStateManager.enableDepthTest();
     }
 
     private void onSearchTextInput() {
@@ -396,7 +388,7 @@ public class ScreenJournalProgression extends ScreenJournal {
         super.mouseDragTick(mouseX, mouseY, mouseDiffX, mouseDiffY, mouseOffsetX, mouseOffsetY);
 
         if (this.inProgressView()) {
-            progressionRenderer.moveMouse(mouseDiffX, mouseDiffY);
+            progressionRenderer.moveMouse((float) mouseDiffX, (float) mouseDiffY);
         }
     }
 
@@ -417,7 +409,7 @@ public class ScreenJournalProgression extends ScreenJournal {
                 return true;
             }
             if (scroll > 0)  {
-                progressionRenderer.handleZoomIn(mouseX, mouseY);
+                progressionRenderer.handleZoomIn((float) mouseX, (float) mouseY);
                 return true;
             }
         }
@@ -437,7 +429,7 @@ public class ScreenJournalProgression extends ScreenJournal {
             return true;
         }
         if (this.inProgressView()) {
-            return progressionRenderer.propagateClick(mouseX, mouseY);
+            return progressionRenderer.propagateClick((float) mouseX, (float) mouseY);
         } else {
             if (this.searchPrevRct != null && this.searchPrevRct.contains(mouseX, mouseY)) {
                 this.searchPageOffset -= 1;

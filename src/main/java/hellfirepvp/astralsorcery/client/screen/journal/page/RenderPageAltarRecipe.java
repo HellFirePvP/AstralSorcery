@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
@@ -55,7 +54,6 @@ public class RenderPageAltarRecipe extends RenderPageRecipeTemplate {
     public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
         this.clearFrameRectangles();
 
-        GlStateManager.enableBlend();
         this.renderRecipeGrid(offsetX, offsetY, zLevel, this.gridTexture);
         this.renderExpectedItemStackOutput(offsetX + 78, offsetY + 25, zLevel, 1.4F,
                 this.recipe.getOutputForRender(Collections.emptyList()));

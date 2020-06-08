@@ -8,8 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -67,7 +71,6 @@ public class RenderPageStructure extends RenderablePage {
         this.totalRenderFrame++;
 
         this.renderStructure(offsetX, offsetY, pTicks);
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
         float shift = this.renderSizeDescription(offsetX, offsetY + 5);
 
         if (this.name != null) {
@@ -77,13 +80,16 @@ public class RenderPageStructure extends RenderablePage {
 
     private void renderHeadline(float offsetX, float offsetY, ITextComponent title) {
         float scale = 1.3F;
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(offsetX, offsetY, 0);
-        GlStateManager.scaled(scale, scale, scale);
-        GlStateManager.disableDepthTest();
+
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(offsetX, offsetY, 0);
+        RenderSystem.scaled(scale, scale, scale);
+        RenderSystem.disableDepthTest();
+
         RenderingDrawUtils.renderStringAtPos(0, 0, null, title.getFormattedText(), 0x00DDDDDD, true);
-        GlStateManager.enableDepthTest();
-        GlStateManager.popMatrix();
+
+        RenderSystem.enableDepthTest();
+        RenderSystem.popMatrix();
     }
 
     private float renderSizeDescription(float offsetX, float offsetY) {
@@ -92,20 +98,22 @@ public class RenderPageStructure extends RenderablePage {
         float scale = 1.3F;
         String desc = (int) size.getX() + " - " + (int) size.getY() + " - " + (int) size.getZ();
         float length = fr.getStringWidth(desc) * scale;
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(offsetX, offsetY, 0);
-        GlStateManager.scaled(scale, scale, scale);
-        GlStateManager.disableDepthTest();
+
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(offsetX, offsetY, 0);
+        RenderSystem.scaled(scale, scale, scale);
+        RenderSystem.disableDepthTest();
+
         RenderingDrawUtils.renderStringAtPos(0, 0, fr, desc, 0x00DDDDDD, true);
-        GlStateManager.enableDepthTest();
-        GlStateManager.popMatrix();
+
+        RenderSystem.enableDepthTest();
+        RenderSystem.popMatrix();
         return length + 8F;
     }
 
     private void renderStructure(float offsetX, float offsetY, float pTicks) {
         Point.Double renderOffset = renderOffset(offsetX + 8, offsetY);
-        this.structureRenderer.render3DSliceGUI(renderOffset.x + shift.getX(), renderOffset.y + shift.getY(), pTicks, drawSlice);
-        GlStateManager.disableLighting();
+        this.structureRenderer.render3DSliceGUI(new MatrixStack(), renderOffset.x + shift.getX(), renderOffset.y + shift.getY(), pTicks, drawSlice);
     }
 
     private Point.Double renderOffset(float stdPageOffsetX, float stdPageOffsetY) {
@@ -114,12 +122,14 @@ public class RenderPageStructure extends RenderablePage {
 
     @Override
     public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        Rectangle rect = RenderingDrawUtils.drawInfoStar(offsetX + 160, offsetY + 10, zLevel, 15, pTicks);
+        MatrixStack renderStack = new MatrixStack();
+        renderStack.translate(offsetX + 160, offsetY + 10, zLevel);
+        Rectangle rect = RenderingDrawUtils.drawInfoStar(renderStack, IDrawRenderTypeBuffer.defaultBuffer(), 15, pTicks);
         if (rect.contains(mouseX, mouseY)) {
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(0, 0, 150);
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(0, 0, 150);
             RenderingDrawUtils.renderBlueTooltip((int) offsetX + 160, (int) offsetY + 10, this.contentStacks, RenderablePage.getFontRenderer(), false);
-            GlStateManager.popMatrix();
+            RenderSystem.popMatrix();
         }
     }
 

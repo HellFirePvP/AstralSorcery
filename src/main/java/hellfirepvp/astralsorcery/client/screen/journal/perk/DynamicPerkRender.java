@@ -20,6 +20,6 @@ import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
 public interface DynamicPerkRender {
 
     public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks,
-                         double x, double y, double scale);
+                         float x, float y, float zLevel, float scale);
 
 }

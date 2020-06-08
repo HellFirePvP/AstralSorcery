@@ -31,8 +31,8 @@ public interface PerkRender {
     // Rendered with pos_tex_color
     @Nullable
     @OnlyIn(Dist.CLIENT)
-    public Rectangle.Double renderPerkAtBatch(BatchPerkContext drawCtx,
+    public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx,
                                               AllocationStatus status, long spriteOffsetTick, float pTicks,
-                                              double x, double y, double scale);
+                                              float x, float y, float zLevel, float scale);
 
 }

@@ -9,14 +9,12 @@
 package hellfirepvp.astralsorcery.client.screen.journal;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderPageAltarRecipe;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
@@ -35,8 +33,6 @@ import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.RecipeHelper;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.LogicalSide;
@@ -218,12 +214,10 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             drawDefault(TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
         }
 
-        this.blitOffset += 250;
-        GlStateManager.color4f(1F, 1F, 1F, 0.8F);
+        this.changeZLevel(250);
         TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
         drawBackArrow(pTicks, mouseX, mouseY);
         drawNavArrows(pTicks, mouseX, mouseY);
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
 
         switch (doublePageID) {
             case 0:
@@ -240,23 +234,14 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             default:
                 break;
         }
-        this.blitOffset -= 250;
+        this.changeZLevel(-250);
     }
 
     private void drawCapeInformationPages(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.color4f(0.86F, 0.86F, 0.86F, 0.8F);
-        GlStateManager.disableDepthTest();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(guiLeft + 30, guiTop + 30, 0);
         for (int i = 0; i < locTextMantleCorruption.size(); i++) {
             String line = locTextMantleCorruption.get(i);
-            RenderingDrawUtils.renderStringAtPos(0, i * 10, font, line, 0xCCDDDDDD, true);
+            RenderingDrawUtils.renderStringAtPos(guiLeft + 30, guiTop + 30 + i * 10, font, line, 0xBBCCCCCC, true);
         }
-        GlStateManager.popMatrix();
-
-        GlStateManager.enableDepthTest();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
 
         if (GatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchHelper.getClientProgress())) {
             SimpleAltarRecipe recipe = RecipeHelper.findAltarRecipeResult(stack ->
@@ -265,29 +250,17 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
 
             if (recipe != null) {
                 lastFramePage = new RenderPageAltarRecipe(null, -1, recipe);
-
-                GlStateManager.pushMatrix();
-                lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
-                lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
-                GlStateManager.popMatrix();
+                lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
+                lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
             }
         }
     }
 
     private void drawEnchantingPotionPaperPageInformation(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.color4f(0.86F, 0.86F, 0.86F, 0.8F);
-        GlStateManager.disableDepthTest();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(guiLeft + 30, guiTop + 30, 0);
         for (int i = 0; i < locTextRitualEnch.size(); i++) {
             String line = locTextRitualEnch.get(i);
-            RenderingDrawUtils.renderStringAtPos(0, i * 10, font, line, 0xCCDDDDDD, true);
+            RenderingDrawUtils.renderStringAtPos(guiLeft + 30, guiTop + 30 + i * 10, font, line, 0xBBCCCCCC, true);
         }
-        GlStateManager.popMatrix();
-
-        GlStateManager.enableDepthTest();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
 
         if (GatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(ResearchHelper.getClientProgress())) {
             SimpleAltarRecipe recipe = RecipeHelper.findAltarRecipeResult(stack ->
@@ -296,40 +269,27 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
 
             if (recipe != null) {
                 lastFramePage = new RenderPageAltarRecipe(null, -1, recipe);
-
-                GlStateManager.pushMatrix();
-                lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
-                lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, this.blitOffset, mouseX, mouseY);
-                GlStateManager.popMatrix();
+                lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
+                lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
             }
         }
     }
 
     private void drawPageExtendedInformation() {
-        float brightness = 0.85F;
-        GlStateManager.color4f(brightness, brightness, brightness, 0.85F);
-        GlStateManager.disableDepthTest();
-
         String info = this.constellation.getConstellationTag().getFormattedText().toUpperCase();
         info = detailed ? info : "? ? ?";
 
-        double width = font.getStringWidth(info);
-        double chX = 305 - (width / 2);
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(guiLeft + chX, guiTop + 44, 0);
-        RenderingDrawUtils.renderStringWithShadowAtCurrentPos(font, info, 0xCCDDDDDD);
-        GlStateManager.popMatrix();
+        int width = font.getStringWidth(info);
+        int chX = 305 - (width / 2);
+        RenderingDrawUtils.renderStringAtPos(guiLeft + chX, guiTop + 44, font, info, 0xBBCCCCCC, true);
 
         if (detailed && !locTextMain.isEmpty()) {
             int offsetX = 220, offsetY = 77;
             for (String s : locTextMain) {
-                RenderingDrawUtils.renderStringAtPos(guiLeft + offsetX, guiTop + offsetY, font, s, 0xCCDDDDDD, true);
+                RenderingDrawUtils.renderStringAtPos(guiLeft + offsetX, guiTop + offsetY, font, s, 0xBBCCCCCC, true);
                 offsetY += 13;
             }
         }
-
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GlStateManager.enableDepthTest();
     }
 
     private void drawPagePhaseInformation() {
@@ -349,13 +309,11 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             double offsetLeft = guiLeft + 296 - length / 2;
             int offsetTop = guiTop + 199;
 
-            GlStateManager.disableDepthTest();
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(offsetLeft + 10, offsetTop, 0);
-            GlStateManager.scaled(scale, scale, scale);
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(offsetLeft + 10, offsetTop, 0);
+            RenderSystem.scaled(scale, scale, scale);
             RenderingDrawUtils.renderStringWithShadowAtCurrentPos(font, none, 0xCCDDDDDD);
-            GlStateManager.popMatrix();
-            GlStateManager.enableDepthTest();
+            RenderSystem.popMatrix();
         } else {
             boolean known = ResearchHelper.getClientProgress().hasConstellationDiscovered(this.constellation);
 
@@ -363,41 +321,42 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             int offsetX = 95 + (width / 2) - (MoonPhase.values().length * (size + 2)) / 2;
             int offsetY = 199 + guiTop;
 
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
             MoonPhase[] mPhases = MoonPhase.values();
             for (int i = 0; i < mPhases.length; i++) {
                 MoonPhase phase = mPhases[i];
+                int index = i;
 
+                float brightness;
                 phase.getTexture().bindTexture();
                 if (known && this.activePhases.contains(phase)) {
-                    Blending.PREALPHA.applyStateManager();
-                    GlStateManager.color4f(1F, 1F, 1F, 1F);
+                    Blending.PREALPHA.apply();
+                    brightness = 1F;
                 } else {
-                    Blending.DEFAULT.applyStateManager();
-                    GlStateManager.color4f(0.7F, 0.7F, 0.7F, 0.6F);
+                    Blending.DEFAULT.apply();
+                    brightness = 0.7F;
                 }
-                RenderingGuiUtils.drawRect(offsetX + (i * (size + 2)), offsetY, this.blitOffset, size, size);
+                RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                    RenderingGuiUtils.rect(buf, offsetX + (index * (size + 2)), offsetY, this.getGuiZLevel(), size, size)
+                            .color(brightness, brightness, brightness, brightness)
+                            .draw();
+                });
             }
-            Blending.DEFAULT.applyStateManager();
-
-            GlStateManager.color4f(1F, 1F, 1F, 1F);
+            Blending.DEFAULT.apply();
+            RenderSystem.disableBlend();
         }
     }
 
     private void drawPageConstellation(float partial) {
-        float br = 0.866F;
-        GlStateManager.color4f(br, br, br, 0.8F);
-        GlStateManager.disableDepthTest();
-
         String name = this.constellation.getConstellationName().getFormattedText().toUpperCase();
-        double width = font.getStringWidth(name);
-        double offsetX = 305 - (width * 1.8 / 2);
+        int width = font.getStringWidth(name);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(guiLeft + offsetX, guiTop + 26, 0);
-        GlStateManager.scaled(1.8, 1.8, 1.8);
-        RenderingDrawUtils.renderStringWithShadowAtCurrentPos(font, name, 0xEEDDDDDD);
-        GlStateManager.enableDepthTest();
-        GlStateManager.popMatrix();
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(guiLeft + (305 - (width * 1.8F / 2F)), guiTop + 26, 0);
+        RenderSystem.scaled(1.8, 1.8, 1.8);
+        RenderingDrawUtils.renderStringWithShadowAtCurrentPos(font, name, 0xBBC3C3C3);
+        RenderSystem.popMatrix();
 
         String dstInfo = constellation.getConstellationTypeDescription().getFormattedText();
         if (!detailed) {
@@ -405,50 +364,45 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         }
         dstInfo = I18n.format(dstInfo);
         width = font.getStringWidth(dstInfo);
-        offsetX = 305 - (width / 2);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(guiLeft + offsetX, guiTop + 219, 0);
-        RenderingDrawUtils.renderStringWithShadowAtCurrentPos(font, dstInfo, 0x99DDDDDD);
-        GlStateManager.popMatrix();
-
-        GlStateManager.enableDepthTest();
+        RenderingDrawUtils.renderStringAtPos(guiLeft + (305 - (width / 2)), guiTop + 219, font, dstInfo, 0x99DDDDDD, true);
 
         Random rand = new Random(0x4196A15C91A5E199L);
-
         boolean known = ResearchHelper.getClientProgress().hasConstellationDiscovered(constellation);
         RenderingConstellationUtils.renderConstellationIntoGUI(known ? constellation.getConstellationColor() : constellation.getTierRenderColor(), constellation,
-                guiLeft + 40, guiTop + 60, this.blitOffset,
+                guiLeft + 40, guiTop + 60, this.getGuiZLevel(),
                 150, 150, 2F,
                 () -> 0.6F + 0.4F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10)),
                 true, false);
-
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
     }
 
     private void drawBackArrow(float partialTicks, int mouseX, int mouseY) {
         int width = 30;
         int height = 15;
         rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
-        float uFrom = 0F, vFrom = 0.5F;
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(rectBack.getX() + (width / 2F), rectBack.getY() + (height / 2F), 0);
+        float uFrom, vFrom = 0.5F;
         if (rectBack.contains(mouseX, mouseY)) {
             uFrom = 0.5F;
-            GlStateManager.scaled(1.1, 1.1, 1.1);
+            RenderSystem.scaled(1.1, 1.1, 1.1);
         } else {
+            uFrom = 0F;
             double t = ClientScheduler.getClientTick() + partialTicks;
             float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-            GlStateManager.scaled(sin, sin, sin);
+            RenderSystem.scaled(sin, sin, sin);
         }
-        GlStateManager.translated(-(width / 2), -(height / 2), 0);
-        RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
-        GlStateManager.popMatrix();
+        RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
+                    .tex(uFrom, vFrom, 0.5F, 0.5F)
+                    .color(1F, 1F, 1F, 0.8F)
+                    .draw();
+        });
+        RenderSystem.popMatrix();
     }
 
     private void drawNavArrows(float partialTicks, int mouseX, int mouseY) {
-        GlStateManager.disableDepthTest();
-
         rectNext = null;
         rectPrev = null;
 
@@ -456,69 +410,74 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             int width = 30;
             int height = 15;
             rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
-            float uFrom = 0F, vFrom = 0.5F;
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(rectPrev.getX() + (width / 2F), rectPrev.getY() + (height / 2F), 0);
+            float uFrom, vFrom = 0.5F;
             if (rectPrev.contains(mouseX, mouseY)) {
                 uFrom = 0.5F;
-                GlStateManager.scaled(1.1, 1.1, 1.1);
+                RenderSystem.scaled(1.1, 1.1, 1.1);
             } else {
+                uFrom = 0F;
                 double t = ClientScheduler.getClientTick() + partialTicks;
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                GlStateManager.scaled(sin, sin, sin);
+                RenderSystem.scaled(sin, sin, sin);
             }
 
-            GlStateManager.translated(-(width / 2), -(height / 2), 0);
-            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
-            GlStateManager.popMatrix();
+            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
+                        .tex(uFrom, vFrom, 0.5F, 0.5F)
+                        .color(1F, 1F, 1F, 0.8F)
+                        .draw();
+            });
+            RenderSystem.popMatrix();
         }
 
         if (doublePageID + 1 <= doublePages) {
             int width = 30;
             int height = 15;
             rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
-            float uFrom = 0F, vFrom = 0F;
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(rectNext.getX() + (width / 2F), rectNext.getY() + (height / 2F), 0);
+            float uFrom, vFrom = 0F;
             if (rectNext.contains(mouseX, mouseY)) {
                 uFrom = 0.5F;
-                GlStateManager.scaled(1.1, 1.1, 1.1);
+                RenderSystem.scaled(1.1, 1.1, 1.1);
             } else {
+                uFrom = 0F;
                 double t = ClientScheduler.getClientTick() + partialTicks;
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                GlStateManager.scaled(sin, sin, sin);
+                RenderSystem.scaled(sin, sin, sin);
             }
-            GlStateManager.translated(-(width / 2), -(height / 2), 0);
-            RenderingGuiUtils.drawTexturedRectAtCurrentPos(width, height, this.blitOffset, uFrom, vFrom, 0.5F, 0.5F);
-            GlStateManager.popMatrix();
+            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
+                        .tex(uFrom, vFrom, 0.5F, 0.5F)
+                        .color(1F, 1F, 1F, 0.8F)
+                        .draw();
+            });
+            RenderSystem.popMatrix();
         }
-        GlStateManager.enableDepthTest();
     }
 
     private void drawCstBackground() {
         TexturesAS.TEX_BLACK.bindTexture();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder bb = tes.getBuffer();
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            buf.pos(guiLeft + 15,  guiTop + 240, this.getGuiZLevel()).color(1F, 1F, 1F, 1F).tex(0, 1).endVertex();
+            buf.pos(guiLeft + 200, guiTop + 240, this.getGuiZLevel()).color(1F, 1F, 1F, 1F).tex(1, 1).endVertex();
+            buf.pos(guiLeft + 200, guiTop + 10,  this.getGuiZLevel()).color(1F, 1F, 1F, 1F).tex(1, 0).endVertex();
+            buf.pos(guiLeft + 15,  guiTop + 10,  this.getGuiZLevel()).color(1F, 1F, 1F, 1F).tex(0, 0).endVertex();
+        });
 
-        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        bb.pos(guiLeft + 15,  guiTop + 240, this.blitOffset).tex(0, 1).endVertex();
-        bb.pos(guiLeft + 200, guiTop + 240, this.blitOffset).tex(1, 1).endVertex();
-        bb.pos(guiLeft + 200, guiTop + 10,  this.blitOffset).tex(1, 0).endVertex();
-        bb.pos(guiLeft + 15,  guiTop + 10,  this.blitOffset).tex(0, 0).endVertex();
-        tes.draw();
-
-        GlStateManager.color4f(0.8F, 0.8F, 1F, 0.7F);
-
+        RenderSystem.enableBlend();
         TexturesAS.TEX_GUI_BACKGROUND_CONSTELLATIONS.bindTexture();
-        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        bb.pos(guiLeft + 35,       guiTop + guiHeight - 10, this.blitOffset).tex(0.3, 0.9).endVertex();
-        bb.pos(guiLeft + 35 + 170, guiTop + guiHeight - 10, this.blitOffset).tex(0.7, 0.9).endVertex();
-        bb.pos(guiLeft + 35 + 170, guiTop + 10,             this.blitOffset).tex(0.7, 0.1).endVertex();
-        bb.pos(guiLeft + 35,       guiTop + 10,             this.blitOffset).tex(0.3, 0.1).endVertex();
-        tes.draw();
-
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            buf.pos(guiLeft + 15,  guiTop + 240, this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.7F).tex(0, 1).endVertex();
+            buf.pos(guiLeft + 200, guiTop + 240, this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.7F).tex(1, 1).endVertex();
+            buf.pos(guiLeft + 200, guiTop + 10,  this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.7F).tex(1, 0).endVertex();
+            buf.pos(guiLeft + 15,  guiTop + 10,  this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.7F).tex(0, 0).endVertex();
+        });
+        RenderSystem.disableBlend();
     }
 
     @Override

@@ -26,17 +26,17 @@ public class PerkTreeSizeHandler extends SizeHandler {
 
     public PerkTreeSizeHandler(int height, int width) {
         super(height, width);
-        setWidthHeightNodes(10.0D);
-        setSpaceBetweenNodes(10.0D);
+        setWidthHeightNodes(10F);
+        setSpaceBetweenNodes(10F);
     }
 
     @Nullable
     @Override
-    public double[] buildRequiredRectangle() {
-        double leftMost = 0;
-        double rightMost = 0;
-        double upperMost = 0;
-        double lowerMost = 0;
+    public float[] buildRequiredRectangle() {
+        float leftMost = 0;
+        float rightMost = 0;
+        float upperMost = 0;
+        float lowerMost = 0;
 
         for (PerkTreePoint<?> point : PerkTree.PERK_TREE.getPerkPoints()) {
             Point offset = point.getOffset();
@@ -47,14 +47,15 @@ public class PerkTreeSizeHandler extends SizeHandler {
             if (y > lowerMost) lowerMost = y;
             if (y < upperMost) upperMost = y;
         }
-        return new double[] { leftMost, rightMost, upperMost, lowerMost };
+        return new float[] { leftMost, rightMost, upperMost, lowerMost };
     }
 
     // --------------------------------------
     //  Temporary fix to scaling position issues :P
     // --------------------------------------
 
-    public double clampX(double centerX) {
+    @Override
+    public float clampX(float centerX) {
         if ((centerX + widthToBorder) > getTotalWidth()) {
             centerX = getTotalWidth() - widthToBorder;
         }
@@ -64,7 +65,8 @@ public class PerkTreeSizeHandler extends SizeHandler {
         return centerX;
     }
 
-    public double clampY(double centerY) {
+    @Override
+    public float clampY(float centerY) {
         if ((centerY + heightToBorder) > getTotalHeight()) {
             centerY = getTotalHeight() - heightToBorder;
         }

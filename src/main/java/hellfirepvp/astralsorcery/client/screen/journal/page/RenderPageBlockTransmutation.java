@@ -8,28 +8,24 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockMatchInformation;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,28 +66,31 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
         this.renderExpectedIngredientInput(renderX, renderY + 80, zLevel, 1.2F, 0, this.inputOptions);
 
         SpritesAS.SPR_LIGHTBEAM.bindTexture();
-        Blending.ADDITIVE_ALPHA.applyStateManager();
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        RenderingGuiUtils.rect(renderX - 15, renderY + 10, zLevel, 50, 120)
-                .tex(SpritesAS.SPR_LIGHTBEAM)
-                .draw();
-        tes.draw();
+        RenderSystem.enableBlend();
+        Blending.ADDITIVE_ALPHA.apply();
 
-        Blending.DEFAULT.applyStateManager();
-        TextureHelper.bindBlockAtlas();
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            RenderingGuiUtils.rect(buf, renderX - 15, renderY + 10, zLevel, 50, 120)
+                    .tex(SpritesAS.SPR_LIGHTBEAM)
+                    .draw();
+        });
 
-        GlStateManager.disableDepthTest();
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(renderX + 11, renderY + 11, 0);
-        GlStateManager.scaled(40, 40, 40);
-        RenderingDrawUtils.renderLightRayFan(0, 0, 0, ColorsAS.ROCK_CRYSTAL, getNodePage(), 9, 9, 20);
-        GlStateManager.popMatrix();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
+
+        RenderSystem.disableDepthTest();
+
+        MatrixStack renderStack = new MatrixStack();
+        renderStack.translate(renderX + 11, renderY + 11, 0);
+        renderStack.scale(40, 40, 40);
+
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR, buf -> {
+            RenderingDrawUtils.renderLightRayFan(renderStack, null, ColorsAS.ROCK_CRYSTAL, getNodePage(), 9, 9, 20);
+        });
 
         this.renderItemStack(renderX - 4, renderY - 4, zLevel, 1.75F, new ItemStack(BlocksAS.ROCK_COLLECTOR_CRYSTAL));
-        GlStateManager.enableDepthTest();
+        RenderSystem.enableDepthTest();
     }
 
     @Override

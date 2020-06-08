@@ -54,6 +54,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -194,11 +195,16 @@ public class RenderingUtils {
     }
 
     public static void draw(int drawMode, VertexFormat format, Consumer<BufferBuilder> fn) {
+        draw(drawMode, format, (object) -> fn);
+    }
+
+    public static <R> R draw(int drawMode, VertexFormat format, Function<BufferBuilder, R> fn) {
         BufferBuilder buf = Tessellator.getInstance().getBuffer();
         buf.begin(drawMode, format);
-        fn.accept(buf);
+        R result = fn.apply(buf);
         buf.finishDrawing();
         WorldVertexBufferUploader.draw(buf);
+        return result;
     }
 
     public static void renderItemAsEntity(ItemStack stack, MatrixStack renderStack, double x, double y, double z, int combinedLight, float pTicks, int age) {

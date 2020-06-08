@@ -17,12 +17,12 @@ package hellfirepvp.astralsorcery.client.screen.helper;
  */
 public class ScalingPoint {
 
-    private double posX, posY;
-    private double scaledX, scaledY;
+    private float posX, posY;
+    private float scaledX, scaledY;
 
     private ScalingPoint() {}
 
-    public static ScalingPoint createPoint(double posX, double posY, double scale, boolean arePositionsScaled) {
+    public static ScalingPoint createPoint(float posX, float posY, float scale, boolean arePositionsScaled) {
         ScalingPoint sp = new ScalingPoint();
         if (arePositionsScaled) {
             sp.updateScaledPos(posX, posY, scale);
@@ -32,37 +32,37 @@ public class ScalingPoint {
         return sp;
     }
 
-    public void updatePos(double posX, double posY, double scale) {
+    public void updatePos(float posX, float posY, float scale) {
         this.posX = posX;
         this.posY = posY;
         this.scaledX = scale * this.posX;
         this.scaledY = scale * this.posY;
     }
 
-    public void updateScaledPos(double scaledX, double scaledY, double scale) {
+    public void updateScaledPos(float scaledX, float scaledY, float scale) {
         this.scaledX = scaledX;
         this.scaledY = scaledY;
         this.posX = this.scaledX / scale;
         this.posY = this.scaledY / scale;
     }
 
-    public double getPosY() {
+    public float getPosY() {
         return posY;
     }
 
-    public double getPosX() {
+    public float getPosX() {
         return posX;
     }
 
-    public double getScaledPosX() {
+    public float getScaledPosX() {
         return scaledX;
     }
 
-    public double getScaledPosY() {
+    public float getScaledPosY() {
         return scaledY;
     }
 
-    public void rescale(double newScale) {
+    public void rescale(float newScale) {
         this.scaledX = this.posX * newScale;
         this.scaledY = this.posY * newScale;
     }

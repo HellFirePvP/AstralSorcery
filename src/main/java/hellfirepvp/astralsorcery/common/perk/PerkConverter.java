@@ -83,7 +83,7 @@ public abstract class PerkConverter {
         };
     }
 
-    public Radius asRangedConverter(Point.Double offset, double radius) {
+    public Radius asRangedConverter(Point.Float offset, float radius) {
         PerkConverter thisConverter = this;
         return new Radius(offset, radius) {
             @Nonnull
@@ -110,23 +110,23 @@ public abstract class PerkConverter {
 
     public static abstract class Radius extends PerkConverter {
 
-        private final double radius;
-        private final Point.Double offset;
+        private final float radius;
+        private final Point.Float offset;
 
-        public Radius(Point.Double point, double radius) {
+        public Radius(Point.Float point, float radius) {
             this.offset = point;
             this.radius = radius;
         }
 
-        public double getRadius() {
+        public float getRadius() {
             return radius;
         }
 
-        public Point.Double getOffset() {
+        public Point.Float getOffset() {
             return offset;
         }
 
-        public Radius withNewRadius(double radius) {
+        public Radius withNewRadius(float radius) {
             Radius thisRadius = this;
             return new Radius(thisRadius.getOffset(), radius) {
                 @Nonnull

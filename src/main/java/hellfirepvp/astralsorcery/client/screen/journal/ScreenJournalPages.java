@@ -8,13 +8,13 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -25,14 +25,12 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -168,32 +166,33 @@ public class ScreenJournalPages extends ScreenJournal {
     }
 
     private void drawBackArrow(float partialTicks, int mouseX, int mouseY) {
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
-
         int width = 30;
         int height = 15;
         rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
 
-        GlStateManager.disableDepthTest();
-
         RenderSystem.pushMatrix();
-        RenderSystem.translated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
+        RenderSystem.translated(rectBack.getX() + (width / 2F), rectBack.getY() + (height / 2F), 0);
 
-        float uFrom = 0F, vFrom = 0.5F;
+        float uFrom, vFrom = 0.5F;
         if (rectBack.contains(mouseX, mouseY)) {
             uFrom = 0.5F;
             RenderSystem.scaled(1.1, 1.1, 1.1);
         } else {
+            uFrom = 0F;
             double t = ClientScheduler.getClientTick() + partialTicks;
             float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
             RenderSystem.scaled(sin, sin, sin);
         }
-        RenderSystem.translated(-(width / 2), -(height / 2), 0);
+        RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
         TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-        this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            RenderingGuiUtils.rect(buf, this)
+                    .at(0, 0)
+                    .dim(width, height)
+                    .tex(uFrom, vFrom, 0.5F, 0.5F)
+                    .color(1F, 1F, 1F, 0.8F)
+                    .draw();
+        });
 
         RenderSystem.popMatrix();
 
@@ -213,7 +212,7 @@ public class ScreenJournalPages extends ScreenJournal {
             int height = 15;
             rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
             RenderSystem.pushMatrix();
-            RenderSystem.translated(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
+            RenderSystem.translated(rectPrev.getX() + (width / 2F), rectPrev.getY() + (height / 2F), 0);
             float uFrom = 0F, vFrom = 0.5F;
             if (rectPrev.contains(mouseX, mouseY)) {
                 uFrom = 0.5F;
@@ -223,7 +222,7 @@ public class ScreenJournalPages extends ScreenJournal {
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
                 RenderSystem.scaled(sin, sin, sin);
             }
-            RenderSystem.translated(-(width / 2), -(height / 2), 0);
+            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
             buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
             this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
@@ -237,7 +236,7 @@ public class ScreenJournalPages extends ScreenJournal {
             int height = 15;
             rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
             RenderSystem.pushMatrix();
-            RenderSystem.translated(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
+            RenderSystem.translated(rectNext.getX() + (width / 2F), rectNext.getY() + (height / 2F), 0);
             float uFrom = 0F, vFrom = 0F;
             if (rectNext.contains(mouseX, mouseY)) {
                 uFrom = 0.5F;
@@ -247,7 +246,7 @@ public class ScreenJournalPages extends ScreenJournal {
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
                 RenderSystem.scaled(sin, sin, sin);
             }
-            RenderSystem.translated(-(width / 2), -(height / 2), 0);
+            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
             TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
             buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
             this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();

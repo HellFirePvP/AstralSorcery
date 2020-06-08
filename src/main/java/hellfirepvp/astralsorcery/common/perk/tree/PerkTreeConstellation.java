@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.screen.journal.perk.DynamicPerkRender;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRenderGroup;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.group.PerkPointHaloRenderGroup;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -62,7 +63,7 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
     }
 
     @Override
-    public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y, double scale) {
+    public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, float x, float y, float zLevel, float scale) {
         if (this.associatedConstellation == null) {
             return;
         }
@@ -88,8 +89,8 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
         }
 
         int size = MathHelper.floor(perkSpriteSize * 0.85 * scale);
-        int fX = (int) Math.round(x);
-        int fY = (int) Math.round(y);
+        int fX = Math.round(x);
+        int fY = Math.round(y);
 
         RenderingConstellationUtils.renderConstellationIntoGUI(overlay, this.associatedConstellation,
                 fX - size, fY - size, 0,
@@ -99,41 +100,32 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
 
     @Nullable
     @Override
-    public Rectangle2D.Double renderPerkAtBatch(BatchPerkContext drawCtx,
+    public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx,
                                                 AllocationStatus status,
                                                 long spriteOffsetTick, float pTicks,
-                                                double x, double y, double scale) {
+                                                float x, float y, float zLevel, float scale) {
         SpriteSheetResource tex = getHaloSprite(status);
         BatchPerkContext.TextureObjectGroup grp = PerkPointHaloRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
-            return new Rectangle.Double();
+            return new Rectangle.Float();
         }
-        BufferContext vb = drawCtx.getContext(grp);
+        BufferContext buf = drawCtx.getContext(grp);
 
-        double haloSize = perkSpriteSize * scale;
+        float haloSize = perkSpriteSize * scale;
         if (status == AllocationStatus.ALLOCATED) {
-            haloSize *= 1.3;
+            haloSize *= 1.3F;
         }
 
-        Vector3 starVec = new Vector3(x - haloSize, y - haloSize, 0);
-
-        double uLength = tex.getULength();
-        double vLength = tex.getVLength();
         Tuple<Float, Float> frameUV = tex.getUVOffset(spriteOffsetTick);
 
-        for (int i = 0; i < 4; i++) {
-            int u = ((i + 1) & 2) >> 1;
-            int v = ((i + 2) & 2) >> 1;
+        RenderingGuiUtils.rect(buf, x - haloSize, y - haloSize, zLevel, haloSize * 2F, haloSize * 2F)
+                .color(1F, 1F, 1F, 0.85F)
+                .tex(frameUV.getA(), frameUV.getB(), tex.getULength(), tex.getVLength())
+                .draw();
 
-            Vector3 pos = starVec.clone().addX(haloSize * u * 2).addY(haloSize * v * 2);
-            vb.pos(pos.getX(), pos.getY(), pos.getZ())
-                    .tex(frameUV.getA() + uLength * u, frameUV.getB() + vLength * v)
-                    .color(1F, 1F, 1F, 1F).endVertex();
-        }
+        super.renderPerkAtBatch(drawCtx, status, spriteOffsetTick, pTicks, x, y, zLevel, scale);
 
-        super.renderPerkAtBatch(drawCtx, status, spriteOffsetTick, pTicks, x, y, scale);
-
-        double actualSize = perkSpriteSize * scale;
-        return new Rectangle.Double(-actualSize, -actualSize, actualSize * 2, actualSize * 2);
+        float actualSize = perkSpriteSize * scale;
+        return new Rectangle.Float(-actualSize, -actualSize, actualSize * 2, actualSize * 2);
     }
 }

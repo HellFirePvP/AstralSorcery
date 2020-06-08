@@ -14,9 +14,9 @@ import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRender;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRenderGroup;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.group.PerkPointRenderGroup;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.api.distmarker.Dist;
@@ -73,35 +73,23 @@ public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
-    public Rectangle.Double renderPerkAtBatch(BatchPerkContext drawCtx,
+    public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx,
                                               AllocationStatus status, long spriteOffsetTick, float pTicks,
-                                              double x, double y, double scale) {
+                                              float x, float y, float zLevel, float scale) {
         SpriteSheetResource tex = getFlareSprite(status);
         BatchPerkContext.TextureObjectGroup grp = PerkPointRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
-            return new Rectangle.Double();
+            return new Rectangle.Float();
         }
         BufferBuilder buf = drawCtx.getContext(grp);
 
-        double size = renderSize * scale;
-        Vector3 starVec = new Vector3(x - size, y - size, 0);
-
-        double uLength = tex.getULength();
-        double vLength = tex.getVLength();
+        float size = renderSize * scale;
         Tuple<Float, Float> frameUV = tex.getUVOffset(spriteOffsetTick);
 
-        for (int i = 0; i < 4; i++) {
-            int u = ((i + 1) & 2) >> 1;
-            int v = ((i + 2) & 2) >> 1;
-
-            Vector3 pos = starVec.clone().addX(size * u * 2).addY(size * v * 2);
-            buf.pos(pos.getX(), pos.getY(), pos.getZ())
-                    .tex(frameUV.getA() + uLength * u, frameUV.getB() + vLength * v)
-                    .color(1F, 1F, 1F, 1F)
-                    .endVertex();
-        }
-
-        return new Rectangle.Double(-size, -size, size * 2, size * 2);
+        RenderingGuiUtils.rect(buf, x - size, y - size, zLevel, size * 2F, size * 2F)
+                .tex(frameUV.getA(), frameUV.getB(), tex.getULength(), tex.getVLength())
+                .draw();
+        return new Rectangle.Float(-size, -size, size * 2, size * 2);
     }
 
     @OnlyIn(Dist.CLIENT)
