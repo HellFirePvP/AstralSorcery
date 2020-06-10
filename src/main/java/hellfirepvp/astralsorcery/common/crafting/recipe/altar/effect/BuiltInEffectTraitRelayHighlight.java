@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
@@ -24,6 +25,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
@@ -116,7 +118,7 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onTESR(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state, double x, double y, double z, float pTicks) {
+    public void onTESR(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state, MatrixStack renderStack, IRenderTypeBuffer buffer, float pTicks, int combinedLight) {
         ActiveSimpleAltarRecipe activeRecipe = altar.getActiveRecipe();
         if (activeRecipe != null) {
             List<WrappedIngredient> additionalIngredients = activeRecipe.getRecipeToCraft().getRelayInputs();
@@ -133,11 +135,11 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
 
                 if (relay == null || (!match.getIngredient().test(relay.getInventory().getStackInSlot(0)))) {
                     ItemStack potential = match.getRandomMatchingStack(getClientTick());
-                    GlStateManager.pushMatrix();
-                    GlStateManager.translated(x + 0.5  + offset.getX(), y + 0.35 + offset.getY(), z + 0.5  + offset.getZ());
-                    GlStateManager.scaled(0.5, 0.5, 0.5);
-                    RenderingUtils.renderTranslucentItemStack(potential, 0, 0, 0, pTicks);
-                    GlStateManager.popMatrix();
+                    renderStack.push();
+                    renderStack.translate(0.5 + offset.getX(), 0.35 + offset.getY(), 0.5  + offset.getZ());
+                    renderStack.scale(0.5F, 0.5F, 0.5F);
+                    RenderingUtils.renderTranslucentItemStack(potential, renderStack, pTicks);
+                    renderStack.pop();
                 }
             }
         }

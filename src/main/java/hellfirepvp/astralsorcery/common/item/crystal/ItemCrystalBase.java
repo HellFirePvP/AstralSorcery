@@ -91,7 +91,7 @@ public abstract class ItemCrystalBase extends Item implements CrystalAttributeGe
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        EntityCrystal res = new EntityCrystal(EntityTypesAS.ITEM_CRYSTAL, world, location.posX, location.posY, location.posZ, itemstack);
+        EntityCrystal res = new EntityCrystal(EntityTypesAS.ITEM_CRYSTAL, world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
         res.setPickupDelay(20);
         res.setMotion(location.getMotion());
         if (location instanceof ItemEntity) {

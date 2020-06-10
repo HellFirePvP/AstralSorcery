@@ -51,7 +51,7 @@ public abstract class EntityCameraRenderView extends ClientPlayerEntity {
     }
 
     public void transformToFocusOnPoint(Vector3 toFocus, float pTicks, boolean propagate) {
-        Vector3 angles = new Vector3(posX, posY, posZ).subtract(toFocus).copyToPolar();
+        Vector3 angles = Vector3.atEntityCorner(this).subtract(toFocus).copyToPolar();
         Vector3 prevAngles = new Vector3(prevPosX, prevPosY, prevPosZ).subtract(toFocus).copyToPolar();
         double pitch = 90 - angles.getY();
         double pitchPrev = 90 - prevAngles.getY();
@@ -59,7 +59,7 @@ public abstract class EntityCameraRenderView extends ClientPlayerEntity {
         double yawPrev = -prevAngles.getZ();
 
         if (propagate) {
-            ClientCameraUtil.positionCamera(this, pTicks, posX, posY, posZ, prevPosX, prevPosY, prevPosZ, yaw, yawPrev, pitch, pitchPrev);
+            ClientCameraUtil.positionCamera(this, pTicks, getPosX(), getPosY(), getPosZ(), prevPosX, prevPosY, prevPosZ, yaw, yawPrev, pitch, pitchPrev);
         }
     }
 

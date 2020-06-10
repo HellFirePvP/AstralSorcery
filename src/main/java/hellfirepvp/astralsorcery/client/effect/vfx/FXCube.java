@@ -135,7 +135,7 @@ public class FXCube extends EntityVisualFX implements EntityDynamicFX {
         renderStack.scale(scale, scale, scale);
 
         IVertexBuilder buf = drawBuffer.getBuffer(ctx.getRenderType());
-        RenderingDrawUtils.renderTexturedCubeCentralColorLighted(buf,
+        RenderingDrawUtils.renderTexturedCubeCentralColorLighted(buf, renderStack,
                 u, v, uLength, vLength,
                 c.getRed(), c.getGreen(), c.getBlue(), alpha,
                 LightmapUtil.getPackedFullbrightCoords());

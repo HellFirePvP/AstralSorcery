@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -113,11 +114,11 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         }
     }
 
-    public boolean canPlace(IWorld iWorld, BiomeProvider biomeProvider, BlockPos pos, Random rand) {
+    public boolean canPlace(IWorld iWorld, BiomeManager biomeManager, BlockPos pos, Random rand) {
         if (!this.generatesInWorld(iWorld.getDimension().getType())) {
             return false;
         }
-        if (!this.generatesInBiome(biomeProvider.getBiome(pos))) {
+        if (!this.generatesInBiome(biomeManager.getBiome(pos))) {
             return false;
         }
         int rMinY = this.configMinY.get();

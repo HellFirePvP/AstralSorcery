@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,8 +40,8 @@ public class AttributeConverterPerk extends ProgressGatedPerk implements Attribu
         return (T) this;
     }
 
-    public <T> T addRangedConverter(double radius, PerkConverter converter) {
-        this.converters.add(converter.asRangedConverter(new Point.Double(this.getOffset().getX(), this.getOffset().getY()), radius));
+    public <T> T addRangedConverter(float radius, PerkConverter converter) {
+        this.converters.add(converter.asRangedConverter(new Point.Float(this.getOffset().x, this.getOffset().y), radius));
         return (T) this;
     }
 

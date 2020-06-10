@@ -134,7 +134,7 @@ public class PatreonPartialEntity {
 
     public void placeNear(PlayerEntity player) {
         this.pos = Vector3.atEntityCenter(player)
-                .setY(player.posY)
+                .setY(player.getPosY())
                 .addY(player.getHeight())
                 .add(Vector3.random().setY(0).normalize());
         this.prevPos = this.pos.clone();

@@ -142,7 +142,7 @@ public class KeyChainMining extends KeyPerk {
                         if (!player.inventory.addItemStackToInventory(drop)) {
                             ItemUtils.dropItemNaturally(player.getEntityWorld(),
                                     plPos.getX() + rand.nextFloat() - rand.nextFloat(),
-                                    player.posY,
+                                    player.getPosY(),
                                     plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
                                     drop);
                         }

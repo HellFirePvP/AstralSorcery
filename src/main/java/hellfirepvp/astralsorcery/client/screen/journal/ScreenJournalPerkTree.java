@@ -330,7 +330,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 return;
             }
 
-            Point offset = sMenuPerk.getPoint().getOffset();
+            Point.Float offset = sMenuPerk.getPoint().getOffset();
             float x = this.sizeHandler.evRelativePosX(offset.x);
             float y = this.sizeHandler.evRelativePosY(offset.y);
             Point.Float scaledOffset = shift2DOffset(x, y);
@@ -461,11 +461,11 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     status = AllocationStatus.UNALLOCATED;
                 }
 
-                Point offsetOne = perkConnection.getA().getPoint().getOffset();
-                Point offsetTwo = perkConnection.getB().getPoint().getOffset();
+                Point.Float offsetOne = perkConnection.getA().getPoint().getOffset();
+                Point.Float offsetTwo = perkConnection.getB().getPoint().getOffset();
                 Point.Float shiftOne = this.sizeHandler.evRelativePos(offsetOne);
                 Point.Float shiftTwo = this.sizeHandler.evRelativePos(offsetTwo);
-                drawConnection(buf, status, shiftOne, shiftTwo, ClientScheduler.getClientTick() + offsetOne.x + offsetOne.y + offsetTwo.x + offsetTwo.y);
+                drawConnection(buf, status, shiftOne, shiftTwo, ClientScheduler.getClientTick() + (int) offsetOne.x + (int) offsetOne.y + (int) offsetTwo.x + (int) offsetTwo.y);
             }
         });
 
@@ -473,12 +473,12 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         List<Runnable> renderDynamic = Lists.newArrayList();
         for (PerkTreePoint perkPoint : PerkTree.PERK_TREE.getPerkPoints()) {
-            Point offset = perkPoint.getOffset();
+            Point.Float offset = perkPoint.getOffset();
             float x = this.sizeHandler.evRelativePosX(offset.x);
             float y = this.sizeHandler.evRelativePosY(offset.y);
             Rectangle.Float perkRect = drawPerk(drawBuffer, perkPoint,
                     x, y,
-                    partialTicks, ClientScheduler.getClientTick() + offset.x + offset.y,
+                    partialTicks, ClientScheduler.getClientTick() + (int) offset.x + (int) offset.y,
                     progress.isPerkSealed(perkPoint.getPerk()),
                     renderDynamic);
             if (perkRect != null) {
@@ -513,8 +513,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         SpritesAS.SPR_PERK_SEAL.bindTexture();
         RenderSystem.enableBlend();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            Point pOffset = perk.getPoint().getOffset();
-            drawSeal(buf, sealWidth, offset.x, offset.y, ClientScheduler.getClientTick() + pOffset.x + pOffset.y, sealFade * 0.75F);
+            Point.Float pOffset = perk.getPoint().getOffset();
+            drawSeal(buf, sealWidth, offset.x, offset.y, ClientScheduler.getClientTick() + (int) pOffset.x + (int) pOffset.y, sealFade * 0.75F);
         });
         RenderSystem.disableBlend();
 

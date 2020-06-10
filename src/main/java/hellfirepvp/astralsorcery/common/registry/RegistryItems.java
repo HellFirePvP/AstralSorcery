@@ -162,7 +162,7 @@ public class RegistryItems {
             props.maxStackSize(((CustomItemBlockProperties) block).getItemMaxStackSize());
             props.defaultMaxDamage(((CustomItemBlockProperties) block).getItemMaxDamage());
             props.containerItem(((CustomItemBlockProperties) block).getContainerItem());
-            props.setTEISR(((CustomItemBlockProperties) block).getItemTEISR());
+            props.setISTER(((CustomItemBlockProperties) block).getItemTEISR());
 
             ((CustomItemBlockProperties) block).getItemToolLevels().forEach(props::addToolType);
         }

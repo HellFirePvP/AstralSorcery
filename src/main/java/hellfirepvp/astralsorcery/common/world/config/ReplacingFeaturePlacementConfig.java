@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -56,8 +57,8 @@ public class ReplacingFeaturePlacementConfig extends FeaturePlacementConfig {
     }
 
     @Override
-    public boolean canPlace(IWorld iWorld, BiomeProvider biomeProvider, BlockPos pos, Random rand) {
-        if (!super.canPlace(iWorld, biomeProvider, pos, rand)) {
+    public boolean canPlace(IWorld iWorld, BiomeManager biomeManager, BlockPos pos, Random rand) {
+        if (!super.canPlace(iWorld, biomeManager, pos, rand)) {
             return false;
         }
         BlockState atState = iWorld.getBlockState(pos);

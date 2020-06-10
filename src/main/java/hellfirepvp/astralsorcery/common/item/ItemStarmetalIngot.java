@@ -41,7 +41,7 @@ public class ItemStarmetalIngot extends Item {
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        EntityStarmetal res = new EntityStarmetal(EntityTypesAS.ITEM_STARMETAL_INGOT, world, location.posX, location.posY, location.posZ, itemstack);
+        EntityStarmetal res = new EntityStarmetal(EntityTypesAS.ITEM_STARMETAL_INGOT, world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
         res.setPickupDelay(20);
         res.setMotion(location.getMotion());
         if (location instanceof ItemEntity) {

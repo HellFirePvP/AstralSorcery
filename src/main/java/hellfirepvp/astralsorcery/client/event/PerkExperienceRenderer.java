@@ -8,13 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.event;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
-import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.item.base.PerkExperienceRevealer;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
@@ -71,12 +70,11 @@ public class PerkExperienceRenderer implements ITickHandler {
         float frameOffsetX =   0F;
         float frameOffsetY =   5F;
 
-        GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.disableAlphaTest();
+        RenderSystem.enableBlend();
+        RenderSystem.disableAlphaTest();
 
         TexturesAS.TEX_OVERLAY_EXP_FRAME.bindTexture();
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buf -> {
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             RenderingGuiUtils.rect(buf, frameOffsetX, frameOffsetY, 10, frameWidth, frameHeight)
                     .color(1F, 1F, 1F, visibilityReveal * 0.9F)
                     .draw();
@@ -89,34 +87,32 @@ public class PerkExperienceRenderer implements ITickHandler {
         float expOffsetY =   27.5F + (1F - perc) * 78F;
 
         TexturesAS.TEX_OVERLAY_EXP_BAR.bindTexture();
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buf -> {
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             RenderingGuiUtils.rect(buf, expOffsetX, expOffsetY, 10, expWidth, expHeight)
                     .color(1F, 0.9F, 0F, visibilityReveal * 0.9F)
                     .tex(0, 0, 1, 1 - perc)
                     .draw();
         });
 
-        GlStateManager.enableAlphaTest();
-        GlStateManager.disableDepthTest();
-        GlStateManager.color4f(0.86F, 0.86F, 0.86F, visibilityReveal);
+        RenderSystem.enableAlphaTest();
+        RenderSystem.disableDepthTest();
 
         String strLevel = String.valueOf(ResearchHelper.getClientProgress().getPerkLevel(player));
         int strLength = Minecraft.getInstance().fontRenderer.getStringWidth(strLevel);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(15 - (strLength / 2), 94, 0);
-        GlStateManager.scaled(1.2, 1.2, 1.2);
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(15 - (strLength / 2), 94, 0);
+        RenderSystem.scaled(1.2, 1.2, 1.2);
         int c = 0x00DDDDDD;
         c |= ((int) (255F * visibilityReveal)) << 24;
         if (visibilityReveal > 0.1E-4) {
             RenderingDrawUtils.renderStringAtCurrentPos(Minecraft.getInstance().fontRenderer, strLevel, c);
         }
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
 
-        GlStateManager.enableDepthTest();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GlStateManager.disableBlend();
-        TextureHelper.bindBlockAtlas();
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
+        BlockAtlasTexture.getInstance().bindTexture();
     }
 
     @Override

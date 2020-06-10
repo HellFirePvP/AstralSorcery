@@ -8,14 +8,16 @@
 
 package hellfirepvp.astralsorcery.client.event.effect;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -39,7 +41,7 @@ public class ClientMiscEventHandler {
     private static boolean attemptLoad = false;
     private static WavefrontObject obj;
     private static ResourceLocation tex = AstralSorcery.key("textures/model/texw.png");
-    private static int dList = -1;
+    private static VertexBuffer vboR, vboL;
 
     private ClientMiscEventHandler() {}
 
@@ -63,58 +65,50 @@ public class ClientMiscEventHandler {
 
         if (player.isPassenger() || player.isElytraFlying()) return;
 
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(event.getX(), event.getY(), event.getZ());
         Minecraft.getInstance().textureManager.bindTexture(tex);
         Vec3d motion = player.getMotion();
 
         boolean f = player.abilities.isFlying;
-        double ma = f ? 15 : 5;
-        double r = (ma * (Math.abs((ClientScheduler.getClientTick() % 80) - 40) / 40D)) +
-                ((65 - ma) * Math.max(0, Math.min(1, new Vector3(motion.x, 0, motion.z).length())));
+        float ma = f ? 15 : 5;
+        float r = (ma * (Math.abs((ClientScheduler.getClientTick() % 80) - 40) / 40F)) +
+                ((65 - ma) * Math.max(0, Math.min(1, (float) new Vector3(motion.x, 0, motion.z).length())));
         float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
 
-
+        MatrixStack renderStack = event.getMatrixStack();
+        renderStack.push();
         float swimAngle = player.getSwimAnimation(event.getPartialRenderTick());
         if (swimAngle > 0) {
             float waterPitch = player.isInWater() ? -90.0F - player.rotationPitch : -90.0F;
             float bodySwimAngle = MathHelper.lerp(swimAngle, 0.0F, waterPitch);
-            GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
-            GlStateManager.rotatef(bodySwimAngle, 1F, 0F, 0F);
+            renderStack.rotate(Vector3f.YP.rotationDegrees(180 - rot));
+            renderStack.rotate(Vector3f.XP.rotationDegrees(bodySwimAngle));
             if (player.isActualySwimming()) {
-                GlStateManager.translatef(0.0F, -1.0F, 0.3F);
+                renderStack.translate(0, -1, 0.3F);
             }
         } else {
-            GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
+            renderStack.rotate(Vector3f.YP.rotationDegrees(180 - rot));
         }
 
-        GlStateManager.scaled(0.07, 0.07, 0.07);
-        GlStateManager.translated(0, 5.5, 0.7 - (((float) (r / ma)) * (f ? 0.5D : 0.2D)));
-        if (dList == -1) {
-            dList = GLAllocation.generateDisplayLists(2);
-            GlStateManager.newList(dList, GL11.GL_COMPILE);
-            obj.renderOnly(true, "wR");
-            GlStateManager.endList();
-            GlStateManager.newList(dList + 1, GL11.GL_COMPILE);
-            obj.renderOnly(true, "wL");
-            GlStateManager.endList();
+        renderStack.scale(0.07F, 0.07F, 0.07F);
+        renderStack.translate(0, 5.5, 0.7 - (((float) (r / ma)) * (f ? 0.5D : 0.2D)));
+
+        if (vboR == null) {
+            vboR = obj.batchOnly(Tessellator.getInstance().getBuffer(), "wR");
+        }
+        if (vboL == null) {
+            vboL = obj.batchOnly(Tessellator.getInstance().getBuffer(), "wL");
         }
 
-        GlStateManager.disableLighting();
+        renderStack.push();
+        renderStack.rotate(Vector3f.YN.rotationDegrees(20 + r));
+        vboR.draw(renderStack.getLast().getMatrix(), GL11.GL_QUADS);
+        renderStack.pop();
+        renderStack.push();
+        renderStack.rotate(Vector3f.YP.rotationDegrees(20 + r));
+        vboL.draw(renderStack.getLast().getMatrix(), GL11.GL_QUADS);
+        renderStack.pop();
 
-        GlStateManager.pushMatrix();
-        GlStateManager.rotatef((float) (20.0 + r), 0, -1, 0);
-        GlStateManager.callList(dList);
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
-        GlStateManager.rotatef((float) (20.0 + r), 0, 1, 0);
-        GlStateManager.callList(dList + 1);
-        GlStateManager.popMatrix();
-        GlStateManager.popMatrix();
-
-        GlStateManager.enableLighting();
+        renderStack.pop();
     }
 
 }

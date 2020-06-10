@@ -12,12 +12,12 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingOverlayUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.data.config.entry.WandsConfig;
@@ -34,10 +34,9 @@ import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.observerlib.client.util.BufferBuilderDecorator;
+import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -125,41 +124,36 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean renderInHand(ItemStack stack, float pTicks) {
+    public boolean renderInHand(ItemStack stack, MatrixStack renderStack, float pTicks) {
         BlockRayTraceResult hitResult = MiscUtils.rayTraceLookBlock(Minecraft.getInstance().player, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE);
         if (hitResult == null) {
             return true;
         }
         World world = Minecraft.getInstance().world;
         BlockPos at = hitResult.getPos();
-        Map<BlockPos, BlockState> placeRender = getPlaceStates(Minecraft.getInstance().player, world, at, stack);
-        if (placeRender.isEmpty()) {
+        Map<BlockPos, BlockState> placeStates = getPlaceStates(Minecraft.getInstance().player, world, at, stack);
+        if (placeStates.isEmpty()) {
             return true;
         }
 
-        TextureHelper.bindBlockAtlas();
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilderDecorator buf = BufferBuilderDecorator.decorate(tes.getBuffer());
+        BlockAtlasTexture.getInstance().bindTexture();
 
-        float[] fullBright = new float[] { 15F, 15F };
-        buf.setLightmapDecorator((skyLight, blockLight) -> fullBright);
+        int[] fullBright = new int[] { 15, 15 };
+        BufferDecoratorBuilder decorator = BufferDecoratorBuilder.withLightmap((skyLight, blockLight) -> fullBright);
 
-        GlStateManager.enableBlend();
-        Blending.ADDITIVEDARK.applyStateManager();
-        GlStateManager.disableDepthTest();
-        GlStateManager.disableAlphaTest();
+        RenderSystem.enableBlend();
+        Blending.ADDITIVEDARK.apply();
+        RenderSystem.disableDepthTest();
+        RenderSystem.disableAlphaTest();
 
-        GlStateManager.pushMatrix();
-        RenderingVectorUtils.removeStandardTranslationFromTESRMatrix(pTicks);
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        placeRender.forEach((pos, state) -> RenderingUtils.renderSimpleBlockModel(state, buf, pos, null, false));
-        tes.draw();
-        GlStateManager.popMatrix();
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.BLOCK, buf -> {
+            placeStates.forEach((pos, state) -> RenderingUtils.renderSimpleBlockModel(state, renderStack, decorator.decorate(buf), pos, null, false));
+        });
 
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableDepthTest();
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.disableBlend();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableDepthTest();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
         return true;
     }
 
@@ -240,7 +234,7 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
             setSizeMode(held, nextMode);
             playerIn.sendStatusMessage(nextMode.getDisplay(), true);
         }
-        return ActionResult.newResult(ActionResultType.SUCCESS, held);
+        return ActionResult.resultSuccess(held);
     }
 
     @Nonnull

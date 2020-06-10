@@ -120,7 +120,7 @@ public interface GemSlotPerk {
         ItemStack contained = getContainedItem(player, LogicalSide.SERVER, data);
         if (!contained.isEmpty()) {
             if (!player.addItemStackToInventory(contained)) {
-                ItemUtils.dropItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, contained);
+                ItemUtils.dropItem(player.getEntityWorld(), player.getPosX(), player.getPosY(), player.getPosZ(), contained);
             }
         }
         setContainedItem(player, LogicalSide.SERVER, data, ItemStack.EMPTY);

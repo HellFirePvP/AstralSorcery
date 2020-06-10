@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.base.patreon.types;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.ObjModelRender;
@@ -20,6 +22,7 @@ import hellfirepvp.astralsorcery.common.base.patreon.PatreonDataManager;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffect;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -64,57 +67,54 @@ public class TypeWraithWings extends PatreonEffect {
         if (!player.getUniqueID().equals(playerUUID) || player.isPassenger() || player.isElytraFlying()) {
             return;
         }
+        MatrixStack renderStack = event.getMatrixStack();
 
         float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
         Vec3d motion = player.getMotion();
-        double ma = 5;
-        double r = (ma * (Math.abs((ClientScheduler.getClientTick() % 200) - 100) / 100D)) +
-                ((15 - ma) * Math.max(0, Math.min(1, new Vector3(motion.x, 0, motion.z).length())));
+        float ma = 5;
+        float r = (ma * (Math.abs((ClientScheduler.getClientTick() % 200) - 100) / 100F)) +
+                ((15 - ma) * Math.max(0, Math.min(1, (float) new Vector3(motion.x, 0, motion.z).length())));
 
         float yOffset = 1.2F;
         if (player.isSneaking() && player.onGround) {
             yOffset = 1F;
         }
 
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GlStateManager.disableTexture();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(event.getX(), event.getY(), event.getZ());
-
+        renderStack.push();
 
         float swimAngle = player.getSwimAnimation(event.getPartialRenderTick());
         if (swimAngle > 0) {
             float waterPitch = player.isInWater() ? -90.0F - player.rotationPitch : -90.0F;
             float bodySwimAngle = MathHelper.lerp(swimAngle, 0.0F, waterPitch);
-            GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
-            GlStateManager.rotatef(bodySwimAngle, 1F, 0F, 0F);
+            renderStack.rotate(Vector3f.YP.rotationDegrees(180 - rot));
+            renderStack.rotate(Vector3f.XP.rotationDegrees(bodySwimAngle));
             if (player.isActualySwimming()) {
-                GlStateManager.translatef(0.0F, -1.0F, 0.3F);
+                renderStack.translate(0, -1, 0.3);
             }
         } else {
-            GlStateManager.rotated(180F - rot, 0F, 1F, 0F);
+            renderStack.rotate(Vector3f.YP.rotationDegrees(180 - rot));
         }
 
-        GlStateManager.translated(0, yOffset, 0);
-        GlStateManager.scaled(0.32, 0.22, 0.32);
+        renderStack.translate(0, yOffset, 0);
+        renderStack.scale(0.32F, 0.32F, 0.32F);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(-2.3, 0, 0.8);
-        GlStateManager.rotatef((float) (10.0 + r), 0, 1, 0);
-        ObjModelRender.renderWraithWings();
-        GlStateManager.popMatrix();
+        RenderSystem.disableTexture();
 
-        GlStateManager.pushMatrix();
-        GlStateManager.rotated(180F, 0F, 1F, 0F);
-        GlStateManager.translated(-2.3, 0, -0.8);
-        GlStateManager.rotatef((float) (10.0 + r), 0, -1, 0);
-        ObjModelRender.renderWraithWings();
-        GlStateManager.popMatrix();
+        renderStack.push();
+        renderStack.translate(-2.3, 0, 0.8);
+        renderStack.rotate(Vector3f.YP.rotationDegrees(10 + r));
+        ObjModelRender.renderWraithWings(renderStack);
+        renderStack.pop();
 
-        GlStateManager.popMatrix();
+        renderStack.push();
+        renderStack.rotate(Vector3f.YP.rotationDegrees(180));
+        renderStack.translate(-2.3, 0, 0.8);
+        renderStack.rotate(Vector3f.YN.rotationDegrees(10 + r));
+        ObjModelRender.renderWraithWings(renderStack);
+        renderStack.pop();
 
-        GlStateManager.enableTexture();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
+        RenderSystem.enableTexture();
+
+        renderStack.pop();
     }
 }

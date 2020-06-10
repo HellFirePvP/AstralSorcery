@@ -96,9 +96,9 @@ public abstract class MantleEffect extends ForgeRegistryEntry<MantleEffect> impl
             Color c = this.getAssociatedConstellation().getConstellationColor();
             if (c != null) {
                 float width = player.getWidth() * 0.8F;
-                double x = player.posX + rand.nextFloat() * width * (rand.nextBoolean() ? 1 : -1);
-                double y = player.posY + rand.nextFloat() * (player.getHeight() / 3);
-                double z = player.posZ + rand.nextFloat() * width * (rand.nextBoolean() ? 1 : -1);
+                double x = player.getPosX() + rand.nextFloat() * width * (rand.nextBoolean() ? 1 : -1);
+                double y = player.getPosY() + rand.nextFloat() * (player.getHeight() / 3);
+                double z = player.getPosZ() + rand.nextFloat() * width * (rand.nextBoolean() ? 1 : -1);
                 Vector3 pos = new Vector3(x, y, z);
 
                 FXFacingParticle fx = this.spawnFacingParticle(player, pos)

@@ -176,12 +176,16 @@ public abstract class SizeHandler {
     }
 
     //Translates a renderPos into a gui-valid renderPosition (zoomed)
-    public float evRelativePosX(int relativeX) {
+    public float evRelativePosX(float relativeX) {
         return getMidX() + (relativeX * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
     }
 
-    public float evRelativePosY(int relativeY) {
+    public float evRelativePosY(float relativeY) {
         return getMidY() + (relativeY * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
+    }
+
+    public Point.Float evRelativePos(Point.Float offset) {
+        return new Point.Float(evRelativePosX(offset.x), evRelativePosY(offset.y));
     }
 
     public Point.Float evRelativePos(Point offset) {

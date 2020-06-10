@@ -13,16 +13,11 @@ import hellfirepvp.astralsorcery.common.world.config.StructurePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.structure.AncientShrineStructure;
 import hellfirepvp.astralsorcery.common.world.structure.ConfiguredStructureStart;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,8 +44,8 @@ public class FeatureAncientShrineStructure extends ConfiguredStructureFeature {
 
     public static class Start extends ConfiguredStructureStart {
 
-        public Start(Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox structureBox, int referenceIn, long seed) {
-            super(structure, chunkX, chunkZ, biome, structureBox, referenceIn, seed);
+        public Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox structureBox, int referenceIn, long seed) {
+            super(structure, chunkX, chunkZ, structureBox, referenceIn, seed);
         }
 
         @Override

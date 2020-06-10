@@ -31,8 +31,8 @@ public abstract class ConfiguredStructureStart extends StructureStart {
 
     private StructurePlacement<?> placementStrategy;
 
-    public ConfiguredStructureStart(Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox structureBox, int referenceIn, long seed) {
-        super(structure, chunkX, chunkZ, biome, structureBox, referenceIn, seed);
+    public ConfiguredStructureStart(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox structureBox, int referenceIn, long seed) {
+        super(structure, chunkX, chunkZ, structureBox, referenceIn, seed);
     }
 
     public ConfiguredStructureStart setPlacementStrategy(StructurePlacement<?> placementStrategy) {
@@ -55,7 +55,7 @@ public abstract class ConfiguredStructureStart extends StructureStart {
 
     public static interface IConfiguredStartFactory {
 
-        ConfiguredStructureStart create(Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox structureBox, int referenceIn, long seed);
+        ConfiguredStructureStart create(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox structureBox, int referenceIn, long seed);
 
     }
 }

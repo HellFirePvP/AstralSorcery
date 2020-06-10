@@ -30,12 +30,10 @@ public class CameraPath extends EntityCameraRenderView implements ICameraPersist
     CameraPath(Vector3 startPoint, Vector3 focusPoint, @Nullable ICameraTickListener tick) {
         this.startVector = startPoint;
         this.focus = focusPoint;
-        this.posX = startPoint.getX();
-        this.posY = startPoint.getY();
-        this.posZ = startPoint.getZ();
-        this.prevPosX = posX;
-        this.prevPosY = posY;
-        this.prevPosZ = posZ;
+        this.setRawPosition(startPoint.getX(), startPoint.getY(), startPoint.getZ());
+        this.prevPosX = getPosX();
+        this.prevPosY = getPosY();
+        this.prevPosZ = getPosZ();
         this.delegate = tick;
         setCameraFocus(focusPoint);
         transformToFocusOnPoint(focusPoint, 0, false);
@@ -65,12 +63,10 @@ public class CameraPath extends EntityCameraRenderView implements ICameraPersist
             this.expired = true;
         } else {
             Vector3 position = queryByTicks(ticksExisted);
-            this.prevPosX = this.posX;
-            this.prevPosY = this.posY;
-            this.prevPosZ = this.posZ;
-            this.posX = position.getX();
-            this.posY = position.getY();
-            this.posZ = position.getZ();
+            this.prevPosX = this.getPosX();
+            this.prevPosY = this.getPosY();
+            this.prevPosZ = this.getPosZ();
+            this.setRawPosition(position.getX(), position.getY(), position.getZ());
         }
     }
 
