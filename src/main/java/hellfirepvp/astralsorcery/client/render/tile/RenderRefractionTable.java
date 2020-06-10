@@ -8,13 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelRefractionTable;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.tile.TileRefractionTable;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 
@@ -30,37 +29,32 @@ public class RenderRefractionTable extends CustomTileEntityRenderer<TileRefracti
     private static final ModelRefractionTable MODEL_REFRACTION_TABLE = new ModelRefractionTable();
 
     @Override
-    public void render(TileRefractionTable tile, double x, double y, double z, float pTicks, int destroyStage) {
-        GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
-
+    public void render(TileRefractionTable tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
         if (!tile.hasParchment() && !tile.getInputStack().isEmpty()) {
             ItemStack input = tile.getInputStack();
 
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(x + 0.5, y + 0.85, z + 0.5);
-            GlStateManager.scaled(0.625F, 0.625F, 0.625F);
+            renderStack.push();
+            renderStack.translate(0.5F, 0.85F, 0.5F);
+            renderStack.scale(0.625F, 0.625F, 0.625F);
 
-            Minecraft.getInstance().getItemRenderer().renderItem(input, ItemCameraTransforms.TransformType.GROUND);
-            GlStateManager.enableBlend();
+            Minecraft.getInstance().getItemRenderer().renderItem(input, ItemCameraTransforms.TransformType.GROUND, combinedLight, combinedOverlay, renderStack, renderTypeBuffer);
 
-            GlStateManager.popMatrix();
+            renderStack.pop();
         }
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(x + 0.5, y + 1.5, z + 0.5);
-        GlStateManager.rotated(180, 1, 0, 0);
-        GlStateManager.scaled(0.0625, 0.0625, 0.0625);
+        renderStack.push();
+        renderStack.translate(0.5F, 1.5F, 0.5F);
+        renderStack.rotate(Vector3f.XP.rotationDegrees(180F));
+        renderStack.scale(0.0625F, 0.0625F, 0.0625F);
 
-        MODEL_REFRACTION_TABLE.render(tile.hasParchment(), destroyStage);
+        MODEL_REFRACTION_TABLE.renderFrame(renderStack, renderTypeBuffer.getBuffer(MODEL_REFRACTION_TABLE.getGeneralType()),
+                combinedLight, combinedOverlay, 1F, 1F, 1F, 1F, tile.hasParchment());
 
         if (!tile.getGlassStack().isEmpty()) {
-            GlStateManager.depthMask(false);
-            MODEL_REFRACTION_TABLE.renderGlass(destroyStage);
-            GlStateManager.depthMask(true);
+            MODEL_REFRACTION_TABLE.renderGlass(renderStack, renderTypeBuffer.getBuffer(MODEL_REFRACTION_TABLE.getGeneralType()),
+                    combinedLight, combinedOverlay, 1F, 1F, 1F, 1F);
         }
 
-        GlStateManager.popMatrix();
-        TextureHelper.refreshTextureBind();
+        renderStack.pop();
     }
 }

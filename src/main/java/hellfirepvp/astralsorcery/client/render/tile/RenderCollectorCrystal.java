@@ -8,10 +8,13 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 
 import java.awt.*;
 
@@ -25,23 +28,25 @@ import java.awt.*;
 public class RenderCollectorCrystal extends CustomTileEntityRenderer<TileCollectorCrystal> {
 
     @Override
-    public void render(TileCollectorCrystal tile, double x, double y, double z, float pTicks, int destroyStage) {
+    public void render(TileCollectorCrystal tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
         if (!tile.doesSeeSky()) {
             return;
         }
-        GlStateManager.enableBlend();
-
-        Color c = tile.getCollectorType().getDisplayColor();
-
+        IVertexBuilder lightRayBuf = renderTypeBuffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN);
+        Color color = tile.getCollectorType().getDisplayColor();
         long seed = RenderingUtils.getPositionSeed(tile.getPos());
-        RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 0.5, z + 0.5, c, seed, 24, 24, 12);
+
+        renderStack.push();
+        renderStack.translate(0.5F, 0.5F, 0.5F);
+
+        RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, color, seed, 24, 24, 12);
 
         seed ^= 0x54FF129A4B11C382L;
         if (tile.isEnhanced()) {
-            c = tile.getAttunedConstellation().getConstellationColor();
+            color = tile.getAttunedConstellation().getConstellationColor();
         }
-        RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 0.5, z + 0.5, c, seed, 24, 24, 12);
 
-        GlStateManager.disableBlend();
+        RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, color, seed, 24, 24, 12);
+        renderStack.pop();
     }
 }

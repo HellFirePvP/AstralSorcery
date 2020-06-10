@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.RenderStateBuilder;
+import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import net.minecraft.client.renderer.RenderType;
@@ -26,6 +28,7 @@ public class RegistryRenderTypes {
         initEffectTypes();
         initEffects();
         initGuiTypes();
+        initModels();
     }
 
     private static void initEffectTypes() {
@@ -169,6 +172,49 @@ public class RegistryRenderTypes {
                         .texture(TexturesAS.TEX_STAR_1)
                         .blend(Blending.DEFAULT)
                         .defaultAlpha()
+                        .build());
+    }
+
+    private static void initModels() {
+        MODEL_ATTUNEMENT_ALTAR = createType("mode_attunement_altar", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "attunement_altar"))
+                        .build());
+
+        MODEL_LENS = createType("mode_lens", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_frame"))
+                        .build());
+
+        MODEL_LENS_COLORED = createType("mode_lens_colored", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_color"))
+                        .blend(Blending.DEFAULT)
+                        .build());
+
+        MODEL_OBSERVATORY = createType("mode_observatory", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "observatory"))
+                        .blend(Blending.DEFAULT)
+                        .disableCull()
+                        .disableDepthMask()
+                        .build());
+
+        MODEL_REFRACTION_TABLE = createType("mode_refraction_table", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "refraction_table"))
+                        .build());
+
+        MODEL_REFRACTION_TABLE_GLASS = createType("mode_refraction_table_glass", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "refraction_table"))
+                        .blend(Blending.DEFAULT)
+                        .disableDepthMask()
+                        .build());
+
+        MODEL_TELESCOPE = createType("mode_telescope", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "telescope"))
                         .build());
     }
 

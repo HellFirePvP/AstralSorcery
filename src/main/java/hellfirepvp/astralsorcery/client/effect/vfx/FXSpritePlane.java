@@ -105,8 +105,8 @@ public class FXSpritePlane extends EntityVisualFX implements EntityDynamicFX {
         ssr.bindTexture();
 
         IVertexBuilder buf = drawBuffer.getBuffer(ctx.getRenderType());
-        RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, vec,
-                axis, Math.toRadians(deg), scale,
+        RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, renderStack, vec,
+                axis, (float) Math.toRadians(deg), scale,
                 uvOffset.getA(), uvOffset.getB(), ssr.getULength(), ssr.getVLength(),
                 color.getRed(), color.getGreen(), color.getBlue(), alpha);
 

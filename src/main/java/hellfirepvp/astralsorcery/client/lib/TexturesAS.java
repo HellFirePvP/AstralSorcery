@@ -86,6 +86,8 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_GUI_PERK_SEAL_BREAK;
     public static AbstractRenderableTexture TEX_GUI_PERK_UNLOCK;
 
+    public static AbstractRenderableTexture TEX_MODEL_ATTUNEMENT_ALTAR;
+
     public static AbstractRenderableTexture TEX_OVERLAY_CHARGE;
     public static AbstractRenderableTexture TEX_OVERLAY_CHARGE_COLORLESS;
     public static AbstractRenderableTexture TEX_OVERLAY_EXP_BAR;

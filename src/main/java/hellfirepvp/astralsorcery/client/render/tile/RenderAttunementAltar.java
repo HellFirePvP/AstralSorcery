@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelAttunementAltar;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
@@ -16,6 +18,8 @@ import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.function.Supplier;
@@ -30,19 +34,17 @@ import java.util.function.Supplier;
 public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttunementAltar> {
 
     private static final ModelAttunementAltar MODEL_ATTUNEMENT_ALTAR = new ModelAttunementAltar();
-    private static final Supplier<AbstractRenderableTexture> MODEL_TEXTURE =
-            AssetLibrary.loadReference(AssetLoader.TextureLocation.BLOCKS, "entity", "attunement_altar");
 
     @Override
-    public void render(TileAttunementAltar tile, double x, double y, double z, float pTicks, int destroyStage) {
-        this.bindDamaged(MODEL_TEXTURE.get(), destroyStage);
+    public void render(TileAttunementAltar tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
+        IVertexBuilder buf = renderTypeBuffer.getBuffer(MODEL_ATTUNEMENT_ALTAR.getGeneralType());
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(x + 0.5, y + 0.5, z + 0.5);
-        GlStateManager.scaled(0.0625, 0.0625, 0.0625);
-        GlStateManager.rotated(180, 1, 0, 0);
-        MODEL_ATTUNEMENT_ALTAR.renderBase();
-        GlStateManager.popMatrix();
+        renderStack.push();
+        renderStack.translate(0.5, 0.5, 0.5);
+        renderStack.scale(0.0625F, 0.0625F, 0.0625F);
+        renderStack.rotate(Vector3f.XP.rotationDegrees(180));
+        MODEL_ATTUNEMENT_ALTAR.render(renderStack, buf, combinedLight, combinedOverlay);
+        renderStack.pop();
 
         float spinDur = TileAttunementAltar.MAX_START_ANIMATION_SPIN;
         float spinStart = TileAttunementAltar.MAX_START_ANIMATION_TICK;
@@ -52,7 +54,7 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
         float tickPartY = (endY - startY) / spinStart;
         float prevPosY = endY + (tile.prevActivationTick * tickPartY);
         float posY     = endY + (tile.activationTick     * tickPartY);
-        double framePosY = RenderingVectorUtils.interpolate(prevPosY, posY, pTicks);
+        float framePosY = RenderingVectorUtils.interpolate(prevPosY, posY, pTicks);
 
         double generalAnimationTick = (ClientScheduler.getClientTick() + pTicks) / 4D;
         if (tile.animate) {
@@ -70,7 +72,6 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
             }
         }
 
-        //GlStateManager.disableLighting();
         for (int i = 1; i < 9; i++) {
             float incrementer = (spinDur / 8F) * i;
 
@@ -83,15 +84,14 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
 
             float xOffset = MathHelper.cos(normalized);
             float zOffset = MathHelper.sin(normalized);
-            float rotation = (float) RenderingVectorUtils.interpolate(tile.prevActivationTick / spinStart, tile.activationTick / spinStart, pTicks);
+            float rotation = RenderingVectorUtils.interpolate(tile.prevActivationTick / spinStart, tile.activationTick / spinStart, pTicks);
 
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(x + 0.5, y + framePosY, z + 0.5);
-            GlStateManager.scaled(0.0625, 0.0625, 0.0625);
-            GlStateManager.rotated(180, 1, 0, 0);
-            MODEL_ATTUNEMENT_ALTAR.renderHovering(xOffset, zOffset, rotation);
-            GlStateManager.popMatrix();
+            renderStack.push();
+            renderStack.translate(0.5, framePosY, 0.5);
+            renderStack.scale(0.0625F, 0.0625F, 0.0625F);
+            renderStack.rotate(Vector3f.XP.rotationDegrees(180));
+            MODEL_ATTUNEMENT_ALTAR.renderHovering(renderStack, buf, combinedLight, combinedOverlay, 1F, 1F, 1F, 1F, xOffset, zOffset, rotation);
+            renderStack.pop();
         }
-        //GlStateManager.enableLighting();
     }
 }

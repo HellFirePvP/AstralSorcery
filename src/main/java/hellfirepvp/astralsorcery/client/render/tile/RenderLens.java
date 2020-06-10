@@ -8,14 +8,16 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelLens;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelLensColored;
 import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.tile.TileLens;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
@@ -35,21 +37,17 @@ public class RenderLens extends CustomTileEntityRenderer<TileLens> {
     private static final ModelLensColored MODEL_LENS_COLORED = new ModelLensColored();
 
     @Override
-    public void render(TileLens lens, double x, double y, double z, float pTicks, int destroyStage) {
-        GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.15F);
-        GlStateManager.pushMatrix();
-
-        List<BlockPos> linked = lens.getLinkedPositions();
+    public void render(TileLens tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
+        List<BlockPos> linked = tile.getLinkedPositions();
         float degYaw = 0;
         float degPitch = 0;
 
-        switch (lens.getPlacedAgainst()) {
+        renderStack.push();
+        switch (tile.getPlacedAgainst()) {
             case DOWN:
                 if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
-                    BlockPos from = lens.getTrPos();
+                    BlockPos from = tile.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
                     degPitch = (float) Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ()));
@@ -60,25 +58,22 @@ public class RenderLens extends CustomTileEntityRenderer<TileLens> {
                     degPitch = (float) Math.toDegrees(degPitch);
                 }
 
-                GlStateManager.translated(x + 0.5, y + 1.335, z + 0.5);
-                GlStateManager.scaled(0.055, 0.055, 0.055);
+                renderStack.translate(0.5F, 1.335F, 0.5F);
+                renderStack.scale(0.055F, 0.055F, 0.055F);
 
-                GlStateManager.rotated(180, 1, 0, 0);
-                GlStateManager.rotated(degYaw % 360, 0, 1, 0);
+                renderStack.rotate(Vector3f.XP.rotationDegrees(180));
+                renderStack.rotate(Vector3f.YP.rotationDegrees(degYaw % 360));
 
-                renderLens(degPitch, destroyStage);
-                if (lens.getColorType() != null) {
-                    GlStateManager.rotated(180, 0, 1, 0);
-                    Color c = lens.getColorType().getColor();
-                    GlStateManager.color4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
-                    renderLensColored(-degPitch, destroyStage);
-                    GlStateManager.color4f(1F, 1F, 1F, 1F);
+                renderLens(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, degPitch);
+                if (tile.getColorType() != null) {
+                    renderStack.rotate(Vector3f.YP.rotationDegrees(180));
+                    renderLensColored(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, tile.getColorType().getColor(), -degPitch);
                 }
                 break;
             case UP:
                 if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
-                    BlockPos from = lens.getTrPos();
+                    BlockPos from = tile.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
                     degPitch = (float) Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ()));
@@ -89,24 +84,21 @@ public class RenderLens extends CustomTileEntityRenderer<TileLens> {
                     degPitch = (float) Math.toDegrees(degPitch);
                 }
 
-                GlStateManager.translated(x + 0.5, y - 0.335, z + 0.5);
-                GlStateManager.scaled(0.055, 0.055, 0.055);
+                renderStack.translate(0.5F, -0.335F, 0.5F);
+                renderStack.scale(0.055F, 0.055F, 0.055F);
 
-                GlStateManager.rotated((-degYaw + 180) % 360, 0, 1, 0);
+                renderStack.rotate(Vector3f.YP.rotationDegrees((-degYaw + 180) % 360));
 
-                renderLens(-degPitch, destroyStage);
-                if (lens.getColorType() != null) {
-                    GlStateManager.rotated(180, 0, 1, 0);
-                    Color c = lens.getColorType().getColor();
-                    GlStateManager.color4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
-                    renderLensColored(degPitch, destroyStage);
-                    GlStateManager.color4f(1F, 1F, 1F, 1F);
+                renderLens(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, -degPitch);
+                if (tile.getColorType() != null) {
+                    renderStack.rotate(Vector3f.YP.rotationDegrees(180));
+                    renderLensColored(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, tile.getColorType().getColor(), degPitch);
                 }
                 break;
             case NORTH:
                 if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
-                    BlockPos from = lens.getTrPos();
+                    BlockPos from = tile.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
                     degPitch = (float) Math.atan2(dir.getZ(), Math.sqrt(dir.getX() * dir.getX() + dir.getY() * dir.getY()));
@@ -116,25 +108,23 @@ public class RenderLens extends CustomTileEntityRenderer<TileLens> {
                     degYaw = 180F + (float) Math.toDegrees(-degYaw);
                     degPitch = (float) Math.toDegrees(degPitch);
                 }
-                GlStateManager.translated(x + 0.5, y + 0.5, z + 1.335);
-                GlStateManager.scaled(0.055, 0.055, 0.055);
 
-                GlStateManager.rotated(270, 1, 0, 0);
-                GlStateManager.rotated((-degYaw + 180) % 360, 0, 1, 0);
+                renderStack.translate(0.5F, 0.5F, 1.335F);
+                renderStack.scale(0.055F, 0.055F, 0.055F);
 
-                renderLens(degPitch, destroyStage);
-                if (lens.getColorType() != null) {
-                    GlStateManager.rotated(180, 0, 1, 0);
-                    Color c = lens.getColorType().getColor();
-                    GlStateManager.color4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
-                    renderLensColored(-degPitch, destroyStage);
-                    GlStateManager.color4f(1F, 1F, 1F, 1F);
+                renderStack.rotate(Vector3f.XP.rotationDegrees(270));
+                renderStack.rotate(Vector3f.YP.rotationDegrees((-degYaw + 180) % 360));
+
+                renderLens(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, degPitch);
+                if (tile.getColorType() != null) {
+                    renderStack.rotate(Vector3f.YP.rotationDegrees(180));
+                    renderLensColored(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, tile.getColorType().getColor(), -degPitch);
                 }
                 break;
             case SOUTH:
                 if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
-                    BlockPos from = lens.getTrPos();
+                    BlockPos from = tile.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
                     degPitch = (float) Math.atan2(dir.getZ(), Math.sqrt(dir.getX() * dir.getX() + dir.getY() * dir.getY()));
@@ -144,25 +134,23 @@ public class RenderLens extends CustomTileEntityRenderer<TileLens> {
                     degYaw = 180F + (float) Math.toDegrees(-degYaw);
                     degPitch = (float) Math.toDegrees(degPitch);
                 }
-                GlStateManager.translated(x + 0.5, y + 0.5, z - 0.335);
-                GlStateManager.scaled(0.055, 0.055, 0.055);
 
-                GlStateManager.rotated(90, 1, 0, 0);
-                GlStateManager.rotated(degYaw % 360, 0, 1, 0);
+                renderStack.translate(0.5F, 0.5F, -0.335F);
+                renderStack.scale(0.055F, 0.055F, 0.055F);
 
-                renderLens(-degPitch, destroyStage);
-                if (lens.getColorType() != null) {
-                    GlStateManager.rotated(180, 0, 1, 0);
-                    Color c = lens.getColorType().getColor();
-                    GlStateManager.color4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
-                    renderLensColored(degPitch, destroyStage);
-                    GlStateManager.color4f(1F, 1F, 1F, 1F);
+                renderStack.rotate(Vector3f.XP.rotationDegrees(90));
+                renderStack.rotate(Vector3f.YP.rotationDegrees(degYaw % 360));
+
+                renderLens(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, -degPitch);
+                if (tile.getColorType() != null) {
+                    renderStack.rotate(Vector3f.YP.rotationDegrees(180));
+                    renderLensColored(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, tile.getColorType().getColor(), degPitch);
                 }
                 break;
             case WEST:
                 if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
-                    BlockPos from = lens.getTrPos();
+                    BlockPos from = tile.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
                     degPitch = (float) Math.atan2(dir.getX(), Math.sqrt(dir.getZ() * dir.getZ() + dir.getY() * dir.getY()));
@@ -172,25 +160,23 @@ public class RenderLens extends CustomTileEntityRenderer<TileLens> {
                     degYaw = 180F + (float) Math.toDegrees(-degYaw);
                     degPitch = (float) Math.toDegrees(degPitch);
                 }
-                GlStateManager.translated(x + 1.335, y + 0.5, z + 0.5);
-                GlStateManager.scaled(0.055, 0.055, 0.055);
 
-                GlStateManager.rotated(90, 0, 0, 1);
-                GlStateManager.rotated((degYaw + 270 % 360), 0, 1, 0);
+                renderStack.translate(1.335F, 0.5F, 0.5F);
+                renderStack.scale(0.055F, 0.055F, 0.055F);
 
-                renderLens(degPitch, destroyStage);
-                if (lens.getColorType() != null) {
-                    GlStateManager.rotated(180, 0, 1, 0);
-                    Color c = lens.getColorType().getColor();
-                    GlStateManager.color4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
-                    renderLensColored(-degPitch, destroyStage);
-                    GlStateManager.color4f(1F, 1F, 1F, 1F);
+                renderStack.rotate(Vector3f.ZP.rotationDegrees(90));
+                renderStack.rotate(Vector3f.YP.rotationDegrees((degYaw + 270 % 360)));
+
+                renderLens(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, degPitch);
+                if (tile.getColorType() != null) {
+                    renderStack.rotate(Vector3f.YP.rotationDegrees(180));
+                    renderLensColored(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, tile.getColorType().getColor(), -degPitch);
                 }
                 break;
             case EAST:
                 if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
-                    BlockPos from = lens.getTrPos();
+                    BlockPos from = tile.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
                     degPitch = (float) Math.atan2(dir.getX(), Math.sqrt(dir.getZ() * dir.getZ() + dir.getY() * dir.getY()));
@@ -200,51 +186,45 @@ public class RenderLens extends CustomTileEntityRenderer<TileLens> {
                     degYaw = 180F + (float) Math.toDegrees(-degYaw);
                     degPitch = (float) Math.toDegrees(degPitch);
                 }
-                GlStateManager.translated(x - 0.335, y + 0.5, z + 0.5);
-                GlStateManager.scaled(0.055, 0.055, 0.055);
 
-                GlStateManager.rotated(270, 0, 0, 1);
-                GlStateManager.rotated((-degYaw + 90 % 360), 0, 1, 0);
+                renderStack.translate(-0.335F, 0.5F, 0.5F);
+                renderStack.scale(0.055F, 0.055F, 0.055F);
 
-                renderLens(-degPitch, destroyStage);
-                if (lens.getColorType() != null) {
-                    GlStateManager.rotated(180, 0, 1, 0);
-                    Color c = lens.getColorType().getColor();
-                    GlStateManager.color4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
-                    renderLensColored(degPitch, destroyStage);
-                    GlStateManager.color4f(1F, 1F, 1F, 1F);
+                renderStack.rotate(Vector3f.ZP.rotationDegrees(270));
+                renderStack.rotate(Vector3f.YP.rotationDegrees((-degYaw + 90 % 360)));
+
+                renderLens(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, -degPitch);
+                if (tile.getColorType() != null) {
+                    renderStack.rotate(Vector3f.YP.rotationDegrees(180));
+                    renderLensColored(renderStack, renderTypeBuffer, combinedLight, combinedOverlay, tile.getColorType().getColor(), degPitch);
                 }
                 break;
             default:
                 break;
         }
-
-        TextureHelper.refreshTextureBind();
-        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-        GlStateManager.popMatrix();
+        renderStack.pop();
     }
 
-    private void renderLensColored(float pitch, int destroyStage) {
+    private void renderLensColored(MatrixStack renderStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, Color c, float pitch) {
         MODEL_LENS_COLORED.glass.    rotateAngleX = pitch * 0.017453292F;
         MODEL_LENS_COLORED.fitting1. rotateAngleX = pitch * 0.017453292F;
         MODEL_LENS_COLORED.fitting2. rotateAngleX = pitch * 0.017453292F;
         MODEL_LENS_COLORED.detail1_1.rotateAngleX = pitch * 0.017453292F;
         MODEL_LENS_COLORED.detail1.  rotateAngleX = pitch * 0.017453292F;
 
-        MODEL_LENS_COLORED.renderGlass(1, destroyStage);
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        MODEL_LENS_COLORED.renderFrame(1, destroyStage);
+        IVertexBuilder buf = buffer.getBuffer(MODEL_LENS_COLORED.getGeneralType());
+        MODEL_LENS_COLORED.renderGlass(renderStack, buf, combinedLight, combinedOverlay, c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
+        MODEL_LENS_COLORED.render(renderStack, buf, combinedLight, combinedOverlay);
     }
 
-    private void renderLens(float pitch, int destroyStage) {
-        GlStateManager.pushMatrix();
-        GlStateManager.rotated(-30.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotated(165.0F, 1.0F, 0.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.popMatrix();
+    private void renderLens(MatrixStack renderStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, float pitch) {
+        renderStack.push();
+        renderStack.rotate(Vector3f.YP.rotationDegrees(-30F));
+        renderStack.rotate(Vector3f.XP.rotationDegrees(165F));
 
         MODEL_LENS.lens.rotateAngleX = pitch * 0.017453292F;
-        MODEL_LENS.render(1, destroyStage);
-        RenderHelper.disableStandardItemLighting();
+        MODEL_LENS.render(renderStack, buffer.getBuffer(MODEL_LENS.getGeneralType()), combinedLight, combinedOverlay);
+
+        renderStack.pop();
     }
 }

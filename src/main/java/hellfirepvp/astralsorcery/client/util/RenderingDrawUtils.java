@@ -424,56 +424,54 @@ public class RenderingDrawUtils {
     public static void renderTexturedCubeCentralColorNormal(IVertexBuilder vb,
                                                             float u, float v, float uLength, float vLength,
                                                             int r, int g, int b, int a,
-                                                            Vector3 normal) {
-        float nX = (float) normal.getX();
-        float nY = (float) normal.getY();
-        float nZ = (float) normal.getZ();
+                                                            Matrix3f normalMatr) {
 
-        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
-        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
-        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
-        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
-        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
-        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
-        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
-        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(nX, nY, nZ).endVertex();
-        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(nX, nY, nZ).endVertex();
-        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(nX, nY, nZ).endVertex();
+        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
     }
 
-    public static void renderAngleRotatedTexturedRectVB(IVertexBuilder vb, Vector3 renderOffset, Vector3 axis, double angleRad, double scale, float u, float v, float uLength, float vLength, float r, float g, float b, float a) {
+    public static void renderAngleRotatedTexturedRectVB(IVertexBuilder vb, MatrixStack renderStack, Vector3 renderOffset, Vector3 axis, float angleRad, float scale, float u, float v, float uLength, float vLength, float r, float g, float b, float a) {
         Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
+        Matrix4f matr = renderStack.getLast().getMatrix();
 
         Vector3 vec = renderStart.clone().rotate(Math.toRadians(90), axis).normalize().multiply(scale).add(renderOffset);
-        vec.drawPos(vb).color(r, g, b, a).tex(u, v + vLength).endVertex();
+        vec.drawPos(matr, vb).color(r, g, b, a).tex(u, v + vLength).endVertex();
 
         vec = renderStart.clone().multiply(-1).normalize().multiply(scale).add(renderOffset);
-        vec.drawPos(vb).color(r, g, b, a).tex(u + uLength, v + vLength).endVertex();
+        vec.drawPos(matr, vb).color(r, g, b, a).tex(u + uLength, v + vLength).endVertex();
 
         vec = renderStart.clone().rotate(Math.toRadians(270), axis).normalize().multiply(scale).add(renderOffset);
-        vec.drawPos(vb).color(r, g, b, a).tex(u + uLength, v).endVertex();
+        vec.drawPos(matr, vb).color(r, g, b, a).tex(u + uLength, v).endVertex();
 
         vec = renderStart.clone().normalize().multiply(scale).add(renderOffset);
-        vec.drawPos(vb).color(r, g, b, a).tex(u, v).endVertex();
+        vec.drawPos(matr, vb).color(r, g, b, a).tex(u, v).endVertex();
     }
 
 }

@@ -8,20 +8,20 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.tile.TileChalice;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -35,7 +35,7 @@ import java.awt.*;
 public class RenderChalice extends CustomTileEntityRenderer<TileChalice> {
 
     @Override
-    public void render(TileChalice tile, double x, double y, double z, float pTicks, int destroyStage) {
+    public void render(TileChalice tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
         FluidStack stack = tile.getTank().getFluid();
         if (stack.isEmpty()) {
             return;
@@ -57,27 +57,20 @@ public class RenderChalice extends CustomTileEntityRenderer<TileChalice> {
         float uOffset = tas.getMinU() + ulength / 2F - uPart / 2F;
         float vOffset = tas.getMinV() + vlength / 2F - vPart / 2F;
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(x + 0.5, y + 1.4, z + 0.5);
-        GlStateManager.rotated((float) rotation.getX(), 1, 0, 0);
-        GlStateManager.rotated((float) rotation.getY(), 0, 1, 0);
-        GlStateManager.rotated((float) rotation.getZ(), 0, 0, 1);
-        this.setLightmapDisabled(true);
-        GlStateManager.disableLighting();
+        renderStack.push();
+        renderStack.translate(0.5F, 1.4F, 0.5F);
+        renderStack.rotate(Vector3f.XP.rotationDegrees((float) rotation.getX()));
+        renderStack.rotate(Vector3f.YP.rotationDegrees((float) rotation.getY()));
+        renderStack.rotate(Vector3f.ZP.rotationDegrees((float) rotation.getZ()));
+        renderStack.scale(percSize, percSize, percSize);
 
-        TextureHelper.bindBlockAtlas();
-
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-        RenderingDrawUtils.renderTexturedCubeCentralColorNormal(buf, percSize,
+        BlockAtlasTexture.getInstance().bindTexture();
+        IVertexBuilder buf = renderTypeBuffer.getBuffer(RenderTypesAS.TER_CHALICE_LIQUID);
+        RenderingDrawUtils.renderTexturedCubeCentralColorNormal(buf,
                 uOffset, vOffset, uPart, vPart,
-                color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F,
-                rotation);
-        tes.draw();
+                color.getRed(), color.getGreen(), color.getBlue(), 255,
+                renderStack.getLast().getNormal());
 
-        GlStateManager.enableLighting();
-        this.setLightmapDisabled(false);
-        GlStateManager.popMatrix();
+        renderStack.pop();
     }
 }

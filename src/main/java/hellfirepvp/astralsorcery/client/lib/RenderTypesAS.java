@@ -32,6 +32,23 @@ public class RenderTypesAS {
     //Misc Effects
     public static RenderType EFFECT_LIGHTRAY_FAN;
 
+    //Constellations
+    public static RenderType CONSTELLATION_WORLD_STAR;
+    public static RenderType CONSTELLATION_WORLD_CONNECTION;
+
+    //Models
+    public static RenderType MODEL_ATTUNEMENT_ALTAR;
+    public static RenderType MODEL_LENS;
+    public static RenderType MODEL_LENS_COLORED;
+    public static RenderType MODEL_OBSERVATORY;
+    public static RenderType MODEL_REFRACTION_TABLE;
+    public static RenderType MODEL_REFRACTION_TABLE_GLASS;
+    public static RenderType MODEL_TELESCOPE;
+
+    //TER stuff
+    public static RenderType TER_WELL_LIQUID;
+    public static RenderType TER_CHALICE_LIQUID;
+
     //GUI
     public static RenderType GUI_MISC_INFO_STAR;
 

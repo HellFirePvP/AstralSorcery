@@ -8,11 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -106,7 +108,7 @@ public abstract class AltarRecipeEffect extends ForgeRegistryEntry<AltarRecipeEf
     public abstract void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state);
 
     @OnlyIn(Dist.CLIENT)
-    public abstract void onTESR(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state, double x, double y, double z, float pTicks);
+    public abstract void onTESR(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state, MatrixStack renderStack, IRenderTypeBuffer buffer, float pTicks, int combinedLight);
 
     @OnlyIn(Dist.CLIENT)
     public abstract void onCraftingFinish(TileAltar altar, boolean isChaining);

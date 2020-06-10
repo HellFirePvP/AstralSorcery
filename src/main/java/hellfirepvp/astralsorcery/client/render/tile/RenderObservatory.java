@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelObservatory;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -16,6 +17,8 @@ import hellfirepvp.astralsorcery.common.entity.technical.EntityObservatoryHelper
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -31,11 +34,7 @@ public class RenderObservatory extends CustomTileEntityRenderer<TileObservatory>
     private static final ModelObservatory MODEL_OBSERVATORY = new ModelObservatory();
 
     @Override
-    public void render(TileObservatory tile, double x, double y, double z, float pTicks, int destroyStage) {
-        if (new Vector3(x, y, z).length() >= 64) {
-            return;
-        }
-
+    public void render(TileObservatory tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
         Entity ridden;
         PlayerEntity player = Minecraft.getInstance().player;
         if (player != null &&
@@ -50,32 +49,19 @@ public class RenderObservatory extends CustomTileEntityRenderer<TileObservatory>
         float prevPitch = tile.prevObservatoryPitch;
         float pitch = tile.observatoryPitch;
 
-        float iYaw = RenderingVectorUtils.interpolateRotation(prevYaw + 180, yaw + 180, pTicks);
-        float iPitch = RenderingVectorUtils.interpolateRotation(prevPitch, pitch, pTicks);
+        float iYawDegree = RenderingVectorUtils.interpolateRotation(prevYaw + 180, yaw + 180, pTicks);
+        float iPitchDegree = RenderingVectorUtils.interpolateRotation(prevPitch, pitch, pTicks);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(x + 0.5, y + 1.5, z + 0.5);
-        GlStateManager.rotated(180, 1, 0, 0);
-        GlStateManager.rotated(180, 0, 1, 0);
-        GlStateManager.scaled(0.0625, 0.0625, 0.0625);
 
-        renderObservatory(iYaw, iPitch, destroyStage);
-        GlStateManager.popMatrix();
-    }
+        renderStack.push();
+        renderStack.translate(0.5F, 1.5F, 0.5F);
+        renderStack.rotate(Vector3f.XP.rotationDegrees(180F));
+        renderStack.rotate(Vector3f.YP.rotationDegrees(180F));
+        renderStack.scale(0.0625F, 0.0625F, 0.0625F);
 
-    private void renderObservatory(float iYaw, float iPitch, int destoryStage) {
-        GlStateManager.disableCull();
-        GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
+        MODEL_OBSERVATORY.setupRotations(iYawDegree, iPitchDegree);
+        MODEL_OBSERVATORY.render(renderStack, renderTypeBuffer.getBuffer(MODEL_OBSERVATORY.getGeneralType()), combinedLight, combinedOverlay);
 
-        MODEL_OBSERVATORY.render(iYaw, iPitch, destoryStage);
-
-        GlStateManager.disableBlend();
-        GlStateManager.enableCull();
-    }
-
-    @Override
-    public boolean isGlobalRenderer(TileObservatory te) {
-        return true;
+        renderStack.pop();
     }
 }
