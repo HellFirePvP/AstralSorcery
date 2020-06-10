@@ -39,6 +39,10 @@ import java.util.List;
  */
 public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
 
+    public RenderAltar(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
+
     @Override
     public void render(TileAltar tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
         if (tile.getAltarType().isThisGEThan(AltarType.RADIANCE) && tile.hasMultiblock()) {

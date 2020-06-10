@@ -85,16 +85,16 @@ public class ItemKnowledgeShare extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (stack.isEmpty() || world.isRemote() || !(stack.getItem() instanceof ItemKnowledgeShare)) {
-            return ActionResult.newResult(ActionResultType.SUCCESS, stack);
+        ItemStack held = player.getHeldItem(hand);
+        if (held.isEmpty() || world.isRemote() || !(held.getItem() instanceof ItemKnowledgeShare)) {
+            return ActionResult.resultSuccess(held);
         }
-        if (!isCreative(stack) && (player.isSneaking() || getKnowledge(stack) == null)) {
-            tryInscribeKnowledge(stack, player);
+        if (!isCreative(held) && (player.isSneaking() || getKnowledge(held) == null)) {
+            tryInscribeKnowledge(held, player);
         } else {
-            tryGiveKnowledge(stack, player);
+            tryGiveKnowledge(held, player);
         }
-        return ActionResult.newResult(ActionResultType.SUCCESS, stack);
+        return ActionResult.resultSuccess(held);
     }
 
     @Override

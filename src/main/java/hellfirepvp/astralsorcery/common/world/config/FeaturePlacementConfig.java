@@ -114,11 +114,11 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         }
     }
 
-    public boolean canPlace(IWorld iWorld, BiomeManager biomeManager, BlockPos pos, Random rand) {
+    public boolean canPlace(IWorld iWorld, BiomeProvider biomeProvider, BlockPos pos, Random rand) {
         if (!this.generatesInWorld(iWorld.getDimension().getType())) {
             return false;
         }
-        if (!this.generatesInBiome(biomeManager.getBiome(pos))) {
+        if (!this.generatesInBiome(biomeProvider.getNoiseBiome(pos.getX(), pos.getY(), pos.getZ()))) {
             return false;
         }
         int rMinY = this.configMinY.get();

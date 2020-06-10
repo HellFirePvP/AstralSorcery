@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "loader": "forge:new-multi-layer",
+  "loader": "forge:multi-layer",
   "layers": {
     "Solid": {
       "parent": "astralsorcery:block/gem_crystal_cluster_stage_2_day_solid"

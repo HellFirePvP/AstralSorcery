@@ -74,7 +74,7 @@ public class KeyTreeConnector extends MajorPerk {
             if (ResearchManager.forceApplyPerk(player, otherPerk)) {
                 String token = "connector-tk-" + otherPerk.getRegistryName().toString();
                 if (ResearchManager.grantFreePerkPoint(player, token)) {
-                    listTokens.add(new StringNBT(token));
+                    listTokens.add(StringNBT.valueOf(token));
                 }
             }
         }

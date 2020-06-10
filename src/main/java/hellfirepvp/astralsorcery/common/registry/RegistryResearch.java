@@ -51,7 +51,7 @@ public class RegistryResearch {
                 .addPage(text("ATT_TRAIT.2"))
                 .register(ResearchProgression.RADIANCE);
 
-        ResearchNode resObservatory = new ResearchNode(BlocksAS.OBSERVATORY, "OBSERVATORY", 1.5, 0.25)
+        ResearchNode resObservatory = new ResearchNode(BlocksAS.OBSERVATORY, "OBSERVATORY", 1.5F, 0.25F)
                 .addPage(text("OBSERVATORY.1"))
                 .addPage(recipe(BlocksAS.OBSERVATORY))
                 .addTomeLookup(BlocksAS.OBSERVATORY, 1, ResearchProgression.RADIANCE)
@@ -64,7 +64,7 @@ public class RegistryResearch {
                 ItemsAS.SHIFTING_STAR_DISCIDIA,
                 ItemsAS.SHIFTING_STAR_EVORSIO,
                 ItemsAS.SHIFTING_STAR_VICIO
-        }, "ENH_SHIFTING_STAR", 3.25, 0.5)
+        }, "ENH_SHIFTING_STAR", 3.25F, 0.5F)
                 .addPage(text("ENH_SHIFTING_STAR.1"))
                 .addPage(recipe(ItemsAS.SHIFTING_STAR_AEVITAS))
                 .addTomeLookup(ItemsAS.SHIFTING_STAR_AEVITAS, 1, ResearchProgression.RADIANCE)
@@ -78,13 +78,13 @@ public class RegistryResearch {
                 .addTomeLookup(ItemsAS.SHIFTING_STAR_VICIO, 5, ResearchProgression.RADIANCE)
                 .register(ResearchProgression.RADIANCE);
 
-        ResearchNode resRelayCrafting = new ResearchNode(BlocksAS.ALTAR_RADIANCE, "CRAFTING_FOCUS_HINT", 2.5, 2)
+        ResearchNode resRelayCrafting = new ResearchNode(BlocksAS.ALTAR_RADIANCE, "CRAFTING_FOCUS_HINT", 2.5F, 2F)
                 .addPage(text("CRAFTING_FOCUS_HINT.1"))
                 .addPage(text("CRAFTING_FOCUS_HINT.2"))
                 .addPage(text("CRAFTING_FOCUS_HINT.3"))
                 .register(ResearchProgression.RADIANCE);
 
-        ResearchNode resMantle = new ResearchNode(ItemsAS.MANTLE, "ATT_CAPE", 1.25, 2.5)
+        ResearchNode resMantle = new ResearchNode(ItemsAS.MANTLE, "ATT_CAPE", 1.25F, 2.5F)
                 .addPage(text("ATT_CAPE.1"))
                 .addPage(recipe(stack -> ItemsAS.MANTLE.equals(stack.getItem()) && ItemsAS.MANTLE.getConstellation(stack) == null))
                 .addTomeLookup(ItemsAS.MANTLE, 1, ResearchProgression.RADIANCE)
@@ -101,13 +101,13 @@ public class RegistryResearch {
                 .register(ResearchProgression.RADIANCE);
 
         //TODO evershifting fountain
-        ResearchNode resFountain = new ResearchNode(Items.APPLE, "BORE_CORE", 2.25, 4)
+        ResearchNode resFountain = new ResearchNode(Items.APPLE, "BORE_CORE", 2.25F, 4F)
                 .addPage(text("BORE_CORE.1"))
                 .addPage(text("BORE_CORE.2"))
                 .register(ResearchProgression.RADIANCE);
 
         //TODO neromantic prime
-        ResearchNode resLiquidBore = new ResearchNode(Items.APPLE, "BORE_HEAD_LIQUID", 1.5, 5)
+        ResearchNode resLiquidBore = new ResearchNode(Items.APPLE, "BORE_HEAD_LIQUID", 1.5F, 5F)
                 .addPage(text("BORE_HEAD_LIQUID.1"))
                 .addPage(text("BORE_HEAD_LIQUID.2"))
                 .addPage(text("BORE_HEAD_LIQUID.4"))
@@ -115,13 +115,13 @@ public class RegistryResearch {
 
         ItemStack liquidResonator = ItemResonator.setUpgradeUnlocked(new ItemStack(ItemsAS.RESONATOR), ItemResonator.ResonatorUpgrade.STARLIGHT, ItemResonator.ResonatorUpgrade.FLUID_FIELDS);
         ItemResonator.setCurrentUpgradeUnsafe(liquidResonator, ItemResonator.ResonatorUpgrade.FLUID_FIELDS);
-        ResearchNode resLiquidResonator = new ResearchNode(liquidResonator, "ICHOSIC", 0, 4.5)
+        ResearchNode resLiquidResonator = new ResearchNode(liquidResonator, "ICHOSIC", 0, 4.5F)
                 .addPage(text("ICHOSIC.1"))
                 .addPage(recipe(stack -> ItemsAS.RESONATOR.equals(stack.getItem()) && ItemResonator.getCurrentUpgrade(null, stack) == ItemResonator.ResonatorUpgrade.FLUID_FIELDS))
                 .register(ResearchProgression.RADIANCE);
 
         //TODO fysallidic prime
-        ResearchNode resVortexBore = new ResearchNode(Items.APPLE, "BORE_HEAD_VORTEX", 3.5, 4.75)
+        ResearchNode resVortexBore = new ResearchNode(Items.APPLE, "BORE_HEAD_VORTEX", 3.5F, 4.75F)
                 .addPage(text("BORE_HEAD_VORTEX.1"))
                 .addPage(text("BORE_HEAD_VORTEX.3"))
                 .register(ResearchProgression.RADIANCE);
@@ -138,54 +138,54 @@ public class RegistryResearch {
     }
 
     private static void registerConstellation() {
-        ResearchNode resLenses = new ResearchNode(ItemsAS.GLASS_LENS, "LENSES_EFFECTS", 6.25, 1.75)
+        ResearchNode resLenses = new ResearchNode(ItemsAS.GLASS_LENS, "LENSES_EFFECTS", 6.25F, 1.75F)
                 .addPage(text("LENSES_EFFECTS.1"))
                 .addPage(text("LENSES_EFFECTS.2"))
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resColoredLensFire = new ResearchNode(ItemsAS.COLORED_LENS_FIRE, "IGNITION_LENS", 5.5, 0.5)
+        ResearchNode resColoredLensFire = new ResearchNode(ItemsAS.COLORED_LENS_FIRE, "IGNITION_LENS", 5.5F, 0.5F)
                 .addPage(text("IGNITION_LENS.1"))
                 .addPage(recipe(ItemsAS.COLORED_LENS_FIRE))
                 .addTomeLookup(ItemsAS.COLORED_LENS_FIRE, 1, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resColoredLensBreak = new ResearchNode(ItemsAS.COLORED_LENS_BREAK, "BREAK_LENS", 6.75, 0.25)
+        ResearchNode resColoredLensBreak = new ResearchNode(ItemsAS.COLORED_LENS_BREAK, "BREAK_LENS", 6.75F, 0.25F)
                 .addPage(text("BREAK_LENS.1"))
                 .addPage(recipe(ItemsAS.COLORED_LENS_BREAK))
                 .addTomeLookup(ItemsAS.COLORED_LENS_BREAK, 1, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resColoredLensDamage = new ResearchNode(ItemsAS.COLORED_LENS_DAMAGE, "DAMAGE_LENS", 7.5, 1.25)
+        ResearchNode resColoredLensDamage = new ResearchNode(ItemsAS.COLORED_LENS_DAMAGE, "DAMAGE_LENS", 7.5F, 1.25F)
                 .addPage(text("DAMAGE_LENS.1"))
                 .addPage(recipe(ItemsAS.COLORED_LENS_DAMAGE))
                 .addTomeLookup(ItemsAS.COLORED_LENS_DAMAGE, 1, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resColoredLensPush = new ResearchNode(ItemsAS.COLORED_LENS_PUSH, "PUSH_LENS", 7.25, 2.25)
+        ResearchNode resColoredLensPush = new ResearchNode(ItemsAS.COLORED_LENS_PUSH, "PUSH_LENS", 7.25F, 2.25F)
                 .addPage(text("PUSH_LENS.1"))
                 .addPage(recipe(ItemsAS.COLORED_LENS_PUSH))
                 .addTomeLookup(ItemsAS.COLORED_LENS_PUSH, 1, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resColoredLensRegeneration = new ResearchNode(ItemsAS.COLORED_LENS_REGENERATION, "REGENERATION_LENS", 6.75, 3)
+        ResearchNode resColoredLensRegeneration = new ResearchNode(ItemsAS.COLORED_LENS_REGENERATION, "REGENERATION_LENS", 6.75F, 3F)
                 .addPage(text("REGENERATION_LENS.1"))
                 .addPage(recipe(ItemsAS.COLORED_LENS_REGENERATION))
                 .addTomeLookup(ItemsAS.COLORED_LENS_REGENERATION, 1, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resColoredLensGrowth = new ResearchNode(ItemsAS.COLORED_LENS_GROWTH, "GROWTH_LENS", 5.75, 2.75)
+        ResearchNode resColoredLensGrowth = new ResearchNode(ItemsAS.COLORED_LENS_GROWTH, "GROWTH_LENS", 5.75F, 2.75F)
                 .addPage(text("GROWTH_LENS.1"))
                 .addPage(recipe(ItemsAS.COLORED_LENS_GROWTH))
                 .addTomeLookup(ItemsAS.COLORED_LENS_GROWTH, 1, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resColoredLensSpectral = new ResearchNode(ItemsAS.COLORED_LENS_SPECTRAL, "SPECTRAL_LENS", 4.75, 2)
+        ResearchNode resColoredLensSpectral = new ResearchNode(ItemsAS.COLORED_LENS_SPECTRAL, "SPECTRAL_LENS", 4.75F, 2)
                 .addPage(text("SPECTRAL_LENS.1"))
                 .addPage(recipe(ItemsAS.COLORED_LENS_SPECTRAL))
                 .addTomeLookup(ItemsAS.COLORED_LENS_SPECTRAL, 1, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resInfuser = new ResearchNode(BlocksAS.INFUSER, "INFUSER", 2,1.75)
+        ResearchNode resInfuser = new ResearchNode(BlocksAS.INFUSER, "INFUSER", 2, 1.75F)
                 .addPage(text("INFUSER.1"))
                 .addPage(recipe(BlocksAS.INFUSER))
                 .addTomeLookup(BlocksAS.INFUSER, 1, ResearchProgression.CONSTELLATION)
@@ -195,7 +195,7 @@ public class RegistryResearch {
                 .addTomeLookup(ItemsAS.RESONATING_GEM, 4, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resEnchantmentAmulet = new ResearchNode(ItemsAS.ENCHANTMENT_AMULET, "ENCHANTMENT_AMULET", 1.75, 3.25)
+        ResearchNode resEnchantmentAmulet = new ResearchNode(ItemsAS.ENCHANTMENT_AMULET, "ENCHANTMENT_AMULET", 1.75F, 3.25F)
                 .addPage(text("ENCHANTMENT_AMULET.1"))
                 .addPage(JournalPageRecipe.fromName(AstralSorcery.key("altar/enchantment_amulet_init")))
                 .addTomeLookup(ItemsAS.ENCHANTMENT_AMULET, 1, ResearchProgression.CONSTELLATION)
@@ -203,13 +203,13 @@ public class RegistryResearch {
                 .addPage(JournalPageRecipe.fromName(AstralSorcery.key("altar/enchantment_amulet_reroll")))
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resRitualLink = new ResearchNode(BlocksAS.RITUAL_LINK, "RITUAL_LINK", 0.5, 3.5)
+        ResearchNode resRitualLink = new ResearchNode(BlocksAS.RITUAL_LINK, "RITUAL_LINK", 0.5F, 3.5F)
                 .addPage(text("RITUAL_LINK.1"))
                 .addPage(recipe(BlocksAS.RITUAL_LINK))
                 .addTomeLookup(BlocksAS.RITUAL_LINK, 1, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resIlluminationWand = new ResearchNode(ItemsAS.ILLUMINATION_WAND, "ILLUMINATION_WAND", 0.25, 2.5)
+        ResearchNode resIlluminationWand = new ResearchNode(ItemsAS.ILLUMINATION_WAND, "ILLUMINATION_WAND", 0.25F, 2.5F)
                 .addPage(text("ILLUMINATION_WAND.1"))
                 .addPage(recipe(ItemsAS.ILLUMINATION_WAND))
                 .addTomeLookup(ItemsAS.ILLUMINATION_WAND, 1, ResearchProgression.CONSTELLATION)
@@ -221,7 +221,7 @@ public class RegistryResearch {
                 ItemsAS.INFUSED_CRYSTAL_PICKAXE,
                 ItemsAS.INFUSED_CRYSTAL_AXE,
                 ItemsAS.INFUSED_CRYSTAL_SHOVEL
-        }, "CHARGED_TOOLS", 0.25, 1.25)
+        }, "CHARGED_TOOLS", 0.25F, 1.25F)
                 .addPage(text("CHARGED_TOOLS.1"))
                 .addPage(text("CHARGED_TOOLS.2"))
                 .addPage(recipeInfusion(ItemsAS.INFUSED_CRYSTAL_SWORD))
@@ -235,20 +235,20 @@ public class RegistryResearch {
                 .register(ResearchProgression.CONSTELLATION);
 
         //TODO tree beacon
-        ResearchNode resTreeBeacon = new ResearchNode(Items.APPLE, "TREEBEACON", 1.25, 0.5)
+        ResearchNode resTreeBeacon = new ResearchNode(Items.APPLE, "TREEBEACON", 1.25F, 0.5F)
                 .addPage(text("TREEBEACON.1"))
                 //.addPage(recipe(BlocksAS.TREE_BEACON))
                 //.addTomeLookup(BlocksAS.TREE_BEACON, 1, ResearchProgression.ATTUNEMENT)
                 .addPage(text("TREEBEACON.3"))
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resPrism = new ResearchNode(BlocksAS.PRISM, "PRISM", 2.75, 0)
+        ResearchNode resPrism = new ResearchNode(BlocksAS.PRISM, "PRISM", 2.75F, 0)
                 .addPage(text("PRISM.1"))
                 .addPage(recipe(BlocksAS.PRISM))
                 .addTomeLookup(BlocksAS.PRISM, 1, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resEngravingTable = new ResearchNode(BlocksAS.REFRACTION_TABLE, "DRAWING_TABLE", 3.5, 1)
+        ResearchNode resEngravingTable = new ResearchNode(BlocksAS.REFRACTION_TABLE, "DRAWING_TABLE", 3.5F, 1)
                 .addPage(text("DRAWING_TABLE.1"))
                 .addPage(recipe(BlocksAS.REFRACTION_TABLE))
                 .addTomeLookup(BlocksAS.REFRACTION_TABLE, 1, ResearchProgression.CONSTELLATION)
@@ -259,7 +259,7 @@ public class RegistryResearch {
                 .addPage(text("DRAWING_TABLE.6"))
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resAltar4 = new ResearchNode(BlocksAS.ALTAR_RADIANCE, "ALTAR4", 3.5, 3)
+        ResearchNode resAltar4 = new ResearchNode(BlocksAS.ALTAR_RADIANCE, "ALTAR4", 3.5F, 3)
                 .addPage(text("ALTAR4.1"))
                 .addPage(recipe(BlocksAS.ALTAR_RADIANCE))
                 .addTomeLookup(BlocksAS.ALTAR_RADIANCE, 1, ResearchProgression.CONSTELLATION)
@@ -267,7 +267,7 @@ public class RegistryResearch {
                 .addPage(text("ALTAR4.4"))
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resCollectorCrystal = new ResearchNode(BlocksAS.ROCK_COLLECTOR_CRYSTAL, "COLL_CRYSTAL", 2.75, 3.75)
+        ResearchNode resCollectorCrystal = new ResearchNode(BlocksAS.ROCK_COLLECTOR_CRYSTAL, "COLL_CRYSTAL", 2.75F, 3.75F)
                 .addPage(text("COLL_CRYSTAL.1"))
                 .addPage(recipe(BlocksAS.ROCK_COLLECTOR_CRYSTAL))
                 .addTomeLookup(BlocksAS.ROCK_COLLECTOR_CRYSTAL, 1, ResearchProgression.CONSTELLATION)
@@ -277,7 +277,7 @@ public class RegistryResearch {
 
         ItemStack celestialCrystalCluster = new ItemStack(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER);
         celestialCrystalCluster.setDamage(4); //Growth stage 4
-        ResearchNode resCelestialCrystalCluster = new ResearchNode(celestialCrystalCluster, "CEL_CRYSTAL_GROW", 6.25, 4)
+        ResearchNode resCelestialCrystalCluster = new ResearchNode(celestialCrystalCluster, "CEL_CRYSTAL_GROW", 6.25F, 4)
                 .addPage(text("CEL_CRYSTAL_GROW.1"))
                 .addPage(text("CEL_CRYSTAL_GROW.2"))
                 .addPage(text("CEL_CRYSTAL_GROW.3"))
@@ -285,12 +285,12 @@ public class RegistryResearch {
                 .addTomeLookup(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER, 0, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resCelestialCrystals = new ResearchNode(ItemsAS.CELESTIAL_CRYSTAL, "CEL_CRYSTALS", 5, 3.75)
+        ResearchNode resCelestialCrystals = new ResearchNode(ItemsAS.CELESTIAL_CRYSTAL, "CEL_CRYSTALS", 5, 3.75F)
                 .addPage(text("CEL_CRYSTALS.1"))
                 .addTomeLookup(ItemsAS.CELESTIAL_CRYSTAL, 0, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        ResearchNode resEnhancedCollectorCrystal = new ResearchNode(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL, "ENHANCED_COLLECTOR", 4, 4.5)
+        ResearchNode resEnhancedCollectorCrystal = new ResearchNode(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL, "ENHANCED_COLLECTOR", 4, 4.5F)
                 .addPage(text("ENHANCED_COLLECTOR.1"))
                 .addPage(structure(StructureTypesAS.PTYPE_ENHANCED_COLLECTOR_CRYSTAL))
                 .register(ResearchProgression.CONSTELLATION);
@@ -322,20 +322,20 @@ public class RegistryResearch {
     }
 
     private static void registerAttunement() {
-        ResearchNode resTelescope = new ResearchNode(BlocksAS.TELESCOPE, "TELESCOPE", 0.5, 0)
+        ResearchNode resTelescope = new ResearchNode(BlocksAS.TELESCOPE, "TELESCOPE", 0.5F, 0)
                 .addPage(text("TELESCOPE.1"))
                 .addPage(recipe(BlocksAS.TELESCOPE))
                 .addTomeLookup(BlocksAS.TELESCOPE, 1, ResearchProgression.ATTUNEMENT)
                 .addPage(text("TELESCOPE.3"))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resKnowledgeShare = new ResearchNode(ItemsAS.KNOWLEDGE_SHARE, "KNOWLEDGE_SHARE", 2.5, 0.25)
+        ResearchNode resKnowledgeShare = new ResearchNode(ItemsAS.KNOWLEDGE_SHARE, "KNOWLEDGE_SHARE", 2.5F, 0.25F)
                 .addPage(text("KNOWLEDGE_SHARE.1"))
                 .addPage(recipe(ItemsAS.KNOWLEDGE_SHARE))
                 .addTomeLookup(ItemsAS.KNOWLEDGE_SHARE, 1, ResearchProgression.ATTUNEMENT)
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resLens = new ResearchNode(BlocksAS.LENS, "LENS", 0, 1.25)
+        ResearchNode resLens = new ResearchNode(BlocksAS.LENS, "LENS", 0, 1.25F)
                 .addPage(text("LENS.1"))
                 .addPage(recipe(BlocksAS.LENS))
                 .addTomeLookup(BlocksAS.LENS, 1, ResearchProgression.ATTUNEMENT)
@@ -343,7 +343,7 @@ public class RegistryResearch {
                 .addPage(text("LENS.4"))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resLinkingTool = new ResearchNode(ItemsAS.LINKING_TOOL, "LINKTOOL", 0.25, 2.25)
+        ResearchNode resLinkingTool = new ResearchNode(ItemsAS.LINKING_TOOL, "LINKTOOL", 0.25F, 2.25F)
                 .addPage(text("LINKTOOL.1"))
                 .addPage(recipe(ItemsAS.LINKING_TOOL))
                 .addTomeLookup(ItemsAS.LINKING_TOOL, 1, ResearchProgression.ATTUNEMENT)
@@ -351,7 +351,7 @@ public class RegistryResearch {
                 .addPage(text("LINKTOOL.4"))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resStarlightNetwork = new ResearchNode(BlocksAS.LENS, "STARLIGHT_NETWORK", 1.5, 1)
+        ResearchNode resStarlightNetwork = new ResearchNode(BlocksAS.LENS, "STARLIGHT_NETWORK", 1.5F, 1)
                 .addPage(text("STARLIGHT_NETWORK.1"))
                 .register(ResearchProgression.ATTUNEMENT);
 
@@ -362,7 +362,7 @@ public class RegistryResearch {
                 Blocks.NETHER_WART_BLOCK,
                 Blocks.PUMPKIN,
                 Blocks.SANDSTONE
-        }, "TRANSMUTATION_ORES", 2.75, 1.5)
+        }, "TRANSMUTATION_ORES", 2.75F, 1.5F)
                 .addPage(text("TRANSMUTATION_ORES.1"))
                 .addPage(recipeTransmutation(Blocks.CLAY))
                 .addPage(recipeTransmutation(Blocks.EMERALD_ORE))
@@ -371,7 +371,7 @@ public class RegistryResearch {
                 .addPage(recipeTransmutation(Blocks.END_STONE))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resStarmetalOre = new ResearchNode(BlocksAS.STARMETAL_ORE, "STARMETAL_ORE", 4.25, 1.75)
+        ResearchNode resStarmetalOre = new ResearchNode(BlocksAS.STARMETAL_ORE, "STARMETAL_ORE", 4.25F, 1.75F)
                 .addPage(text("STARMETAL_ORE.1"))
                 .addPage(recipeTransmutation(BlocksAS.STARMETAL_ORE))
                 .addTomeLookup(ItemsAS.STARMETAL_INGOT, 0, ResearchProgression.ATTUNEMENT)
@@ -385,7 +385,7 @@ public class RegistryResearch {
                 .addPage(text("CUTTING_TOOL.3"))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resStardust = new ResearchNode(ItemsAS.STARDUST, "STARDUST", 6, 0.5)
+        ResearchNode resStardust = new ResearchNode(ItemsAS.STARDUST, "STARDUST", 6, 0.5F)
                 .addPage(text("STARDUST.1"))
                 .addPage(text("STARDUST.2"))
                 .addTomeLookup(ItemsAS.STARDUST, 0, ResearchProgression.ATTUNEMENT)
@@ -393,13 +393,13 @@ public class RegistryResearch {
 
         ItemStack structureResonator = ItemResonator.setUpgradeUnlocked(new ItemStack(ItemsAS.RESONATOR), ItemResonator.ResonatorUpgrade.STARLIGHT, ItemResonator.ResonatorUpgrade.AREA_SIZE);
         ItemResonator.setCurrentUpgradeUnsafe(structureResonator, ItemResonator.ResonatorUpgrade.AREA_SIZE);
-        ResearchNode resResonatorStructure = new ResearchNode(structureResonator, "RESONATOR_AREA_SIZE", 6.5, 2)
+        ResearchNode resResonatorStructure = new ResearchNode(structureResonator, "RESONATOR_AREA_SIZE", 6.5F, 2)
                 .addPage(text("RESONATOR_AREA_SIZE.1"))
                 .addPage(recipe(stack -> ItemsAS.RESONATOR.equals(stack.getItem()) && ItemResonator.getCurrentUpgrade(null, stack) == ItemResonator.ResonatorUpgrade.AREA_SIZE))
                 .register(ResearchProgression.ATTUNEMENT);
 
         //TODO celestial gateway
-        ResearchNode resCelestialGateway = new ResearchNode(Items.APPLE, "CELESTIAL_GATEWAY", 7.5, 1.5)
+        ResearchNode resCelestialGateway = new ResearchNode(Items.APPLE, "CELESTIAL_GATEWAY", 7.5F, 1.5F)
                 .addPage(text("CELESTIAL_GATEWAY.1"))
                 //.addPage(recipe(BlocksAS.CELESTIAL_GATEWAY))
                 //.addTomeLookup(BlocksAS.CELESTIAL_GATEWAY, 1, ResearchProgression.ATTUNEMENT)
@@ -407,7 +407,7 @@ public class RegistryResearch {
                 //.addPage(structure(StructureTypesAS.PTYPE_CELESTIAL_GATEWAY))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resAltar3 = new ResearchNode(BlocksAS.ALTAR_CONSTELLATION, "ALTAR3", 7.25, 0)
+        ResearchNode resAltar3 = new ResearchNode(BlocksAS.ALTAR_CONSTELLATION, "ALTAR3", 7.25F, 0)
                 .addPage(text("ALTAR3.1"))
                 .addPage(recipe(BlocksAS.ALTAR_CONSTELLATION))
                 .addTomeLookup(BlocksAS.ALTAR_CONSTELLATION, 1, ResearchProgression.ATTUNEMENT)
@@ -415,7 +415,7 @@ public class RegistryResearch {
                 .addPage(text("ALTAR3.4"))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resAttunePlayer = new ResearchNode(BlocksAS.ATTUNEMENT_ALTAR, "ATT_PLAYER", 3.75, 2.75)
+        ResearchNode resAttunePlayer = new ResearchNode(BlocksAS.ATTUNEMENT_ALTAR, "ATT_PLAYER", 3.75F, 2.75F)
                 .addPage(text("ATT_PLAYER.1"))
                 .addPage(text("ATT_PLAYER.2"))
                 .addPage(recipe(BlocksAS.ATTUNEMENT_ALTAR))
@@ -425,20 +425,20 @@ public class RegistryResearch {
                 .addPage(text("ATT_PLAYER.6"))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resPerks = new ResearchNode(BlocksAS.SPECTRAL_RELAY, "ATT_PERKS", 4.5, 3.5)
+        ResearchNode resPerks = new ResearchNode(BlocksAS.SPECTRAL_RELAY, "ATT_PERKS", 4.5F, 3.5F)
                 .addPage(text("ATT_PERKS.1"))
                 .addPage(text("ATT_PERKS.2"))
                 .addPage(text("ATT_PERKS.3"))
                 .addPage(text("ATT_PERKS.4"))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resShiftingStar = new ResearchNode(ItemsAS.SHIFTING_STAR, "SHIFT_STAR", 5.75, 3.25)
+        ResearchNode resShiftingStar = new ResearchNode(ItemsAS.SHIFTING_STAR, "SHIFT_STAR", 5.75F, 3.25F)
                 .addPage(text("SHIFT_STAR.1"))
                 .addPage(recipe(ItemsAS.SHIFTING_STAR))
                 .addTomeLookup(ItemsAS.SHIFTING_STAR, 1, ResearchProgression.ATTUNEMENT)
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resPerkSeal = new ResearchNode(ItemsAS.PERK_SEAL, "ATT_PERKS_SEAL", 5.5, 4.5)
+        ResearchNode resPerkSeal = new ResearchNode(ItemsAS.PERK_SEAL, "ATT_PERKS_SEAL", 5.5F, 4.5F)
                 .addPage(text("ATT_PERKS_SEAL.1"))
                 .addPage(recipe(ItemsAS.PERK_SEAL))
                 .addTomeLookup(ItemsAS.PERK_SEAL, 1, ResearchProgression.ATTUNEMENT)
@@ -448,7 +448,7 @@ public class RegistryResearch {
                 ItemsAS.PERK_GEM_DAY,
                 ItemsAS.PERK_GEM_NIGHT,
                 ItemsAS.PERK_GEM_SKY
-        }, "ATT_PERK_GEMS", 4.75, 5.25)
+        }, "ATT_PERK_GEMS", 4.75F, 5.25F)
                 .addPage(text("ATT_PERK_GEMS.1"))
                 .addPage(text("ATT_PERK_GEMS.2"))
                 .addPage(text("ATT_PERK_GEMS.3"))
@@ -457,7 +457,7 @@ public class RegistryResearch {
                 .addTomeLookup(ItemsAS.PERK_GEM_SKY, 1, ResearchProgression.ATTUNEMENT)
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resAttuneCrystal = new ResearchNode(ItemsAS.ROCK_CRYSTAL, "ATT_CRYSTAL", 3.5, 4)
+        ResearchNode resAttuneCrystal = new ResearchNode(ItemsAS.ROCK_CRYSTAL, "ATT_CRYSTAL", 3.5F, 4)
                 .addPage(text("ATT_CRYSTAL.1"))
                 .addPage(text("ATT_CRYSTAL.2"))
                 .addTomeLookup(ItemsAS.ATTUNED_ROCK_CRYSTAL, 0, ResearchProgression.ATTUNEMENT)
@@ -471,7 +471,7 @@ public class RegistryResearch {
                 .addPage(structure(StructureTypesAS.PTYPE_RITUAL_PEDESTAL))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resRitualPedestalAcceleration = new ResearchNode(BlocksAS.RITUAL_PEDESTAL, "PED_ACCEL", 1.75, 5.5)
+        ResearchNode resRitualPedestalAcceleration = new ResearchNode(BlocksAS.RITUAL_PEDESTAL, "PED_ACCEL", 1.75F, 5.5F)
                 .addPage(text("PED_ACCEL.1"))
                 .addPage(text("PED_ACCEL.2"))
                 .addPage(text("PED_ACCEL.3"))
@@ -479,23 +479,23 @@ public class RegistryResearch {
                 .register(ResearchProgression.ATTUNEMENT);
 
         ResearchNode resAlignmentCharge = new ResearchNode(new SpriteQuery(AssetLoader.TextureLocation.EFFECT, 6, 8, "relay_flare"),
-                "QUICK_CHARGE", 0.75, 4.5)
+                "QUICK_CHARGE", 0.75F, 4.5F)
                 .addPage(text("QUICK_CHARGE.1"))
                 .addPage(text("QUICK_CHARGE.2"))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resToolChanneling = new ResearchNode(BlocksAS.SPECTRAL_RELAY, "TOOL_CHANNEL", 1.25, 3.25)
+        ResearchNode resToolChanneling = new ResearchNode(BlocksAS.SPECTRAL_RELAY, "TOOL_CHANNEL", 1.25F, 3.25F)
                 .addPage(text("TOOL_CHANNEL.1"))
                 .addPage(text("TOOL_CHANNEL.2"))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resBlinkWand = new ResearchNode(ItemsAS.BLINK_WAND, "TRAVERSAL_WAND", 2.25, 3.5)
+        ResearchNode resBlinkWand = new ResearchNode(ItemsAS.BLINK_WAND, "TRAVERSAL_WAND", 2.25F, 3.5F)
                 .addPage(text("TRAVERSAL_WAND.1"))
                 .addPage(recipe(ItemsAS.BLINK_WAND))
                 .addTomeLookup(ItemsAS.BLINK_WAND, 1, ResearchProgression.ATTUNEMENT)
                 .register(ResearchProgression.ATTUNEMENT);
 
-        ResearchNode resGrappleWand = new ResearchNode(ItemsAS.GRAPPLE_WAND, "GRAPPLE_WAND", 2.5, 2.5)
+        ResearchNode resGrappleWand = new ResearchNode(ItemsAS.GRAPPLE_WAND, "GRAPPLE_WAND", 2.5F, 2.5F)
                 .addPage(text("GRAPPLE_WAND.1"))
                 .addPage(recipe(ItemsAS.GRAPPLE_WAND))
                 .addTomeLookup(ItemsAS.GRAPPLE_WAND, 1, ResearchProgression.ATTUNEMENT)
@@ -504,7 +504,7 @@ public class RegistryResearch {
         ResearchNode resToolWands = new ResearchNode(new IItemProvider[] {
                 ItemsAS.ARCHITECT_WAND,
                 ItemsAS.EXCHANGE_WAND
-        }, "TOOL_WANDS", 1.5, 2.25)
+        }, "TOOL_WANDS", 1.5F, 2.25F)
                 .addPage(text("TOOL_WANDS.1"))
                 .addPage(recipe(ItemsAS.ARCHITECT_WAND))
                 .addTomeLookup(ItemsAS.ARCHITECT_WAND, 1, ResearchProgression.ATTUNEMENT)
@@ -555,25 +555,25 @@ public class RegistryResearch {
                 .addTomeLookup(ItemsAS.ILLUMINATION_POWDER, 1, ResearchProgression.BASIC_CRAFT)
                 .register(ResearchProgression.BASIC_CRAFT);
 
-        ResearchNode resNocturnalPowder = new ResearchNode(ItemsAS.NOCTURNAL_POWDER, "NOC_POWDER", 0, 2.5)
+        ResearchNode resNocturnalPowder = new ResearchNode(ItemsAS.NOCTURNAL_POWDER, "NOC_POWDER", 0, 2.5F)
                 .addPage(text("NOC_POWDER.1"))
                 .addPage(recipe(ItemsAS.NOCTURNAL_POWDER))
                 .addTomeLookup(ItemsAS.NOCTURNAL_POWDER, 1, ResearchProgression.BASIC_CRAFT)
                 .addPage(text("NOC_POWDER.3"))
                 .register(ResearchProgression.BASIC_CRAFT);
 
-        ResearchNode resIlluminator = new ResearchNode(BlocksAS.ILLUMINATOR, "ILLUMINATOR", 0.75, 3)
+        ResearchNode resIlluminator = new ResearchNode(BlocksAS.ILLUMINATOR, "ILLUMINATOR", 0.75F, 3)
                 .addPage(text("ILLUMINATOR.1"))
                 .addPage(recipe(BlocksAS.ILLUMINATOR))
                 .addTomeLookup(BlocksAS.ILLUMINATOR, 1, ResearchProgression.BASIC_CRAFT)
                 .register(ResearchProgression.BASIC_CRAFT);
 
-        ResearchNode resRockCrystals = new ResearchNode(ItemsAS.ROCK_CRYSTAL, "ROCK_CRYSTALS", 2, 1.5)
+        ResearchNode resRockCrystals = new ResearchNode(ItemsAS.ROCK_CRYSTAL, "ROCK_CRYSTALS", 2, 1.5F)
                 .addPage(text("ROCK_CRYSTALS.1"))
                 .addPage(text("ROCK_CRYSTALS.2"))
                 .register(ResearchProgression.BASIC_CRAFT);
 
-        ResearchNode resCrystalGrowth = new ResearchNode(ItemsAS.ROCK_CRYSTAL, "CRYSTAL_GROWTH", 3, 2.5)
+        ResearchNode resCrystalGrowth = new ResearchNode(ItemsAS.ROCK_CRYSTAL, "CRYSTAL_GROWTH", 3, 2.5F)
                 .addPage(text("CRYSTAL_GROWTH.1"))
                 .addPage(text("CRYSTAL_GROWTH.2"))
                 .register(ResearchProgression.BASIC_CRAFT);
@@ -583,7 +583,7 @@ public class RegistryResearch {
                 ItemsAS.CRYSTAL_PICKAXE,
                 ItemsAS.CRYSTAL_AXE,
                 ItemsAS.CRYSTAL_SHOVEL
-        }, "TOOLS", 4.5, 3)
+        }, "TOOLS", 4.5F, 3)
                 .addPage(text("TOOLS.1"))
                 .addPage(text("TOOLS.3"))
                 .addPage(recipe(ItemsAS.CRYSTAL_SWORD))
@@ -633,7 +633,7 @@ public class RegistryResearch {
                 .addTomeLookup(BlocksAS.INFUSED_WOOD_SLAB, 7, ResearchProgression.BASIC_CRAFT)
                 .register(ResearchProgression.BASIC_CRAFT);
 
-        ResearchNode resAltar2 = new ResearchNode(BlocksAS.ALTAR_ATTUNEMENT, "ALTAR2", 4, 1.5)
+        ResearchNode resAltar2 = new ResearchNode(BlocksAS.ALTAR_ATTUNEMENT, "ALTAR2", 4, 1.5F)
                 .addPage(text("ALTAR2.1"))
                 .addPage(recipe(BlocksAS.ALTAR_ATTUNEMENT))
                 .addTomeLookup(BlocksAS.ALTAR_ATTUNEMENT, 1, ResearchProgression.BASIC_CRAFT)
@@ -643,7 +643,7 @@ public class RegistryResearch {
 
         ItemStack starlightResonator = ItemResonator.setUpgradeUnlocked(new ItemStack(ItemsAS.RESONATOR), ItemResonator.ResonatorUpgrade.STARLIGHT);
         ItemResonator.setCurrentUpgradeUnsafe(starlightResonator, ItemResonator.ResonatorUpgrade.STARLIGHT);
-        ResearchNode resResonator = new ResearchNode(starlightResonator, "SKY_RESO", 5, 0.5)
+        ResearchNode resResonator = new ResearchNode(starlightResonator, "SKY_RESO", 5, 0.5F)
                 .addPage(text("SKY_RESO.1"))
                 .addPage(recipe(stack -> ItemsAS.RESONATOR.equals(stack.getItem()) && ItemResonator.getCurrentUpgrade(null, stack) == ItemResonator.ResonatorUpgrade.STARLIGHT))
                 .addPage(text("SKY_RESO.2"))
@@ -731,7 +731,7 @@ public class RegistryResearch {
                 BlocksAS.MARBLE_RUNED,
                 BlocksAS.MARBLE_SLAB,
                 BlocksAS.MARBLE_STAIRS
-        }, "MARBLETYPES", 0, 2.5)
+        }, "MARBLETYPES", 0, 2.5F)
                 .addPage(text("MARBLETYPES.1"))
                 .addPage(text("MARBLETYPES.2"))
                 .addTomeLookup(BlocksAS.MARBLE_RAW, 1, ResearchProgression.DISCOVERY)

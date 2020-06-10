@@ -67,11 +67,6 @@ public class BlockAttunementAltar extends ContainerBlock implements CustomItemBl
         return ATTUNEMENT_ALTAR_COLLISION;
     }
 
-    @Override
-    public boolean hasCustomBreakingProgress(BlockState state) {
-        return true;
-    }
-
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {

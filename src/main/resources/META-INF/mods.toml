@@ -43,18 +43,18 @@ description='''Magic mod that draws power from stars and their constellations'''
 [[dependencies.astralsorcery]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.astralsorcery]]
     modId="observerlib"
     mandatory=true
-    versionRange="[1.14.4-1,)"
+    versionRange="[1.15.2-1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.astralsorcery]]
     modId="curios"
     mandatory=true
-    versionRange="[FORGE-1.14.4-,)"
+    versionRange="[FORGE-1.15.2-,)"
     ordering="NONE"
     side="BOTH"

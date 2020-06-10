@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;
@@ -33,6 +34,10 @@ import java.awt.*;
  * Date: 11.11.2019 / 20:27
  */
 public class RenderChalice extends CustomTileEntityRenderer<TileChalice> {
+
+    public RenderChalice(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileChalice tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

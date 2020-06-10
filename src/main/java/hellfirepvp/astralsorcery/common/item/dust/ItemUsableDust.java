@@ -53,15 +53,16 @@ public abstract class ItemUsableDust extends Item implements IDispenseItemBehavi
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (!stack.isEmpty() && !world.isRemote()) {
-            if (this.rightClickAir(world, player, stack)) {
+        ItemStack held = player.getHeldItem(hand);
+        if (!held.isEmpty() && !world.isRemote()) {
+            if (this.rightClickAir(world, player, held)) {
                 if (!player.isCreative()) {
-                    stack.shrink(1);
+                    held.shrink(1);
                 }
             }
         }
-        return ActionResult.newResult(ActionResultType.SUCCESS, stack);
+
+        return ActionResult.resultSuccess(held);
     }
 
     @Override

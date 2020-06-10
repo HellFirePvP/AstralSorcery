@@ -27,6 +27,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -61,7 +62,7 @@ public abstract class BlockAltar extends BlockStarlightNetwork implements Custom
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!world.isRemote() && player instanceof ServerPlayerEntity) {
             TileAltar altar = MiscUtils.getTileAt(world, pos, TileAltar.class, true);
             if (altar != null) {
@@ -94,7 +95,7 @@ public abstract class BlockAltar extends BlockStarlightNetwork implements Custom
                 }
             }
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override

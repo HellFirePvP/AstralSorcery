@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.tile.PrecisionSingleFluidTank;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -32,6 +33,10 @@ import java.awt.*;
  * Date: 22.09.2019 / 15:54
  */
 public class RenderWell extends CustomTileEntityRenderer<TileWell> {
+
+    public RenderWell(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileWell tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

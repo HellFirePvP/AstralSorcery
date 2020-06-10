@@ -39,9 +39,9 @@ public class PerkTreeSizeHandler extends SizeHandler {
         float lowerMost = 0;
 
         for (PerkTreePoint<?> point : PerkTree.PERK_TREE.getPerkPoints()) {
-            Point offset = point.getOffset();
-            int x = offset.x;
-            int y = offset.y;
+            Point.Float offset = point.getOffset();
+            float x = offset.x;
+            float y = offset.y;
             if (x < leftMost) leftMost = x;
             if (x > rightMost) rightMost = x;
             if (y > lowerMost) lowerMost = y;

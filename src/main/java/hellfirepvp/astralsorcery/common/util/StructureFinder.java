@@ -52,7 +52,7 @@ public class StructureFinder {
         }
         BiomeProvider gen = world.getChunkProvider().getChunkGenerator().getBiomeProvider();
         for (int reach = 64; reach < searchRadius; reach += 128) {
-            BlockPos closest = gen.findBiomePosition(playerPos.getX(), playerPos.getZ(), reach, fitting, new Random(world.getSeed()));
+            BlockPos closest = gen.func_225531_a_(playerPos.getX(), playerPos.getY(), playerPos.getZ(), reach, fitting, new Random(world.getSeed()));
             if (closest != null) {
                 return closest;
             }

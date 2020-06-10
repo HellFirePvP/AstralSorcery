@@ -65,7 +65,7 @@ public class EffectCheatDeath extends EffectCustomTexture {
                 lb.knockBack(le, 2F, lb.getPosX() - le.getPosX(), lb.getPosZ() - le.getPosZ());
             }
             //TODO particles
-            //PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.PHOENIX_PROC, new Vector3(le.posX, le.posY, le.posZ));
+            //PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.PHOENIX_PROC, new Vector3(le.getPosX(), le.getPosY(), le.getPosZ()));
             //PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(le.world, le.getPosition(), 32));
         }
     }

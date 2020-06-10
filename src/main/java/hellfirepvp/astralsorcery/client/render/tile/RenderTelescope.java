@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 
 import java.util.function.Supplier;
 
@@ -31,6 +32,10 @@ import java.util.function.Supplier;
 public class RenderTelescope extends CustomTileEntityRenderer<TileTelescope> {
 
     private static final ModelTelescope MODEL_TELESCOPE = new ModelTelescope();
+
+    public RenderTelescope(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileTelescope tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

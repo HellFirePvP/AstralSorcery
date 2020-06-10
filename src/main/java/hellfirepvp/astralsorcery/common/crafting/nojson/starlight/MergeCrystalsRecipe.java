@@ -115,7 +115,7 @@ public class MergeCrystalsRecipe extends LiquidStarlightRecipe {
                 }
 
                 resultCrystal.setAttributes(resultStack, resultBuilder.build());
-                ItemUtils.dropItemNaturally(world, trigger.posX, trigger.posY, trigger.posZ, resultStack);
+                ItemUtils.dropItemNaturally(world, trigger.getPosX(), trigger.getPosY(), trigger.getPosZ(), resultStack);
             }
         }
     }

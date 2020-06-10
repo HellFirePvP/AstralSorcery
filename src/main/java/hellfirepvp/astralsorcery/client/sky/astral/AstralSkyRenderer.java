@@ -168,8 +168,6 @@ public class AstralSkyRenderer implements IRenderHandler {
         RenderSystem.enableAlphaTest();
         RenderSystem.enableFog();
 
-        renderStack.pop();
-
         //Draw horizon
         RenderSystem.disableTexture();
 

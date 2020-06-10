@@ -180,7 +180,7 @@ public class VanillaTypedRecipeProvider {
     }
 
     public static void registerCustomRecipes(Consumer<IFinishedRecipe> registrar) {
-        CustomRecipeBuilder.func_218656_a(RecipeSerializersAS.CUSTOM_CHANGE_WAND_COLOR_SERIALIZER).build(registrar, AstralSorcery.key("change_wand_color").toString());
+        CustomRecipeBuilder.customRecipe(RecipeSerializersAS.CUSTOM_CHANGE_WAND_COLOR_SERIALIZER).build(registrar, AstralSorcery.key("change_wand_color").toString());
     }
 
 }

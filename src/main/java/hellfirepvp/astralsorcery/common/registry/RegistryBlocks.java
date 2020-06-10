@@ -84,37 +84,37 @@ public class RegistryBlocks {
         INFUSED_WOOD_STAIRS   = makeStairs(INFUSED_WOOD_PLANKS.getDefaultState(), "infused_wood_stairs");
         INFUSED_WOOD_SLAB     = makeSlab(INFUSED_WOOD_PLANKS.getDefaultState(), "infused_wood_slab");
 
-        AQUAMARINE_SAND_ORE = registerBlock(new BlockAquamarineSandOre());
-        ROCK_CRYSTAL_ORE    = registerBlock(new BlockRockCrystalOre());
-        STARMETAL_ORE       = registerBlock(new BlockStarmetalOre());
-        GLOW_FLOWER         = registerBlock(new BlockGlowFlower());
+        AQUAMARINE_SAND_ORE   = registerBlock(new BlockAquamarineSandOre());
+        ROCK_CRYSTAL_ORE      = registerBlock(new BlockRockCrystalOre());
+        STARMETAL_ORE         = registerBlock(new BlockStarmetalOre());
+        GLOW_FLOWER           = registerBlock(new BlockGlowFlower());
 
-        SPECTRAL_RELAY = registerBlock(new BlockSpectralRelay());
-        ALTAR_DISCOVERY = registerBlock(new BlockAltarDiscovery());
-        ALTAR_ATTUNEMENT = registerBlock(new BlockAltarAttunement());
-        ALTAR_CONSTELLATION = registerBlock(new BlockAltarConstellation());
-        ALTAR_RADIANCE = registerBlock(new BlockAltarRadiance());
-        ATTUNEMENT_ALTAR = registerBlock(new BlockAttunementAltar());
-        CELESTIAL_CRYSTAL_CLUSTER = registerBlock(new BlockCelestialCrystalCluster());
-        GEM_CRYSTAL_CLUSTER = registerBlock(new BlockGemCrystalCluster());
-        ROCK_COLLECTOR_CRYSTAL = registerBlock(new BlockRockCollectorCrystal());
+        SPECTRAL_RELAY              = registerBlock(new BlockSpectralRelay());
+        ALTAR_DISCOVERY             = registerBlock(new BlockAltarDiscovery());
+        ALTAR_ATTUNEMENT            = registerBlock(new BlockAltarAttunement());
+        ALTAR_CONSTELLATION         = registerBlock(new BlockAltarConstellation());
+        ALTAR_RADIANCE              = registerBlock(new BlockAltarRadiance());
+        ATTUNEMENT_ALTAR            = registerBlock(new BlockAttunementAltar());
+        CELESTIAL_CRYSTAL_CLUSTER   = registerBlock(new BlockCelestialCrystalCluster());
+        GEM_CRYSTAL_CLUSTER         = registerBlock(new BlockGemCrystalCluster());
+        ROCK_COLLECTOR_CRYSTAL      = registerBlock(new BlockRockCollectorCrystal());
         CELESTIAL_COLLECTOR_CRYSTAL = registerBlock(new BlockCelestialCollectorCrystal());
-        LENS = registerBlock(new BlockLens());
-        PRISM = registerBlock(new BlockPrism());
-        RITUAL_LINK = registerBlock(new BlockRitualLink());
-        RITUAL_PEDESTAL = registerBlock(new BlockRitualPedestal());
-        INFUSER = registerBlock(new BlockInfuser());
-        CHALICE = registerBlock(new BlockChalice());
-        WELL = registerBlock(new BlockWell());
-        ILLUMINATOR = registerBlock(new BlockIlluminator());
-        TELESCOPE = registerBlock(new BlockTelescope());
-        OBSERVATORY = registerBlock(new BlockObservatory());
-        REFRACTION_TABLE = registerBlock(new BlockRefractionTable());
+        LENS                        = registerBlock(new BlockLens());
+        PRISM                       = registerBlock(new BlockPrism());
+        RITUAL_LINK                 = registerBlock(new BlockRitualLink());
+        RITUAL_PEDESTAL             = registerBlock(new BlockRitualPedestal());
+        INFUSER                     = registerBlock(new BlockInfuser());
+        CHALICE                     = registerBlock(new BlockChalice());
+        WELL                        = registerBlock(new BlockWell());
+        ILLUMINATOR                 = registerBlock(new BlockIlluminator());
+        TELESCOPE                   = registerBlock(new BlockTelescope());
+        OBSERVATORY                 = registerBlock(new BlockObservatory());
+        REFRACTION_TABLE            = registerBlock(new BlockRefractionTable());
 
-        FLARE_LIGHT = registerBlock(new BlockFlareLight());
-        TRANSLUCENT_BLOCK = registerBlock(new BlockTranslucentBlock());
-        VANISHING = registerBlock(new BlockVanishing());
-        STRUCTURAL = registerBlock(new BlockStructural());
+        FLARE_LIGHT         = registerBlock(new BlockFlareLight());
+        TRANSLUCENT_BLOCK   = registerBlock(new BlockTranslucentBlock());
+        VANISHING           = registerBlock(new BlockVanishing());
+        STRUCTURAL          = registerBlock(new BlockStructural());
     }
 
     public static void registerFluidBlocks() {

@@ -21,7 +21,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -29,7 +29,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -57,7 +56,7 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!world.isRemote) {
             ItemStack held = player.getHeldItem(hand);
             TileSpectralRelay tar = MiscUtils.getTileAt(world, pos, TileSpectralRelay.class, true);
@@ -72,7 +71,7 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
                     }
 
                     if (!world.isAirBlock(pos.up())) {
-                        return false;
+                        return ActionResultType.PASS;
                     }
 
                     inv.setStackInSlot(0, ItemUtils.copyStackWithSize(held, 1));
@@ -92,7 +91,7 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
                 }
             }
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -112,11 +111,6 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
     @Override
     public BlockRenderType getRenderType(BlockState p_149645_1_) {
         return BlockRenderType.MODEL;
-    }
-
-    @Override
-    public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
 
     @Nullable

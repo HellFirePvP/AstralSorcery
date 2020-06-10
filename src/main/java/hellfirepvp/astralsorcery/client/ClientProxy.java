@@ -170,6 +170,8 @@ public class ClientProxy extends CommonProxy {
         RegistryEntities.initClient();
         RegistryTileEntities.initClient();
         RegistryKeyBindings.init();
+        RegistryBlockRenderTypes.initBlocks();
+        RegistryBlockRenderTypes.initFluids();
     }
 
     private void addTomeBookmarks() {

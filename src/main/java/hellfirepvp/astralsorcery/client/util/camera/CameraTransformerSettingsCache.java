@@ -31,7 +31,7 @@ public abstract class CameraTransformerSettingsCache implements ICameraTransform
         this.thirdPersonView = mc.gameSettings.thirdPersonView;
         PlayerEntity player = mc.player;
         this.flying = player.abilities.isFlying;
-        this.startPosition = new Vector3(player.posX, player.posY, player.posZ);
+        this.startPosition = new Vector3(player.getPosX(), player.getPosY(), player.getPosZ());
         this.startYaw = player.rotationYaw;
         this.startPitch = player.rotationPitch;
         player.setVelocity(0, 0, 0);

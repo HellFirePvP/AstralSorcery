@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -32,6 +33,10 @@ import net.minecraft.entity.player.PlayerEntity;
 public class RenderObservatory extends CustomTileEntityRenderer<TileObservatory> {
 
     private static final ModelObservatory MODEL_OBSERVATORY = new ModelObservatory();
+
+    public RenderObservatory(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileObservatory tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

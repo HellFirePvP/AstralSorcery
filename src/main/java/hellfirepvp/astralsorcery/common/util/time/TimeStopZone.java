@@ -132,9 +132,9 @@ public class TimeStopZone {
         if (e.hurtResistantTime > 0) {
             e.hurtResistantTime--;
         }
-        e.prevPosX = e.posX;
-        e.prevPosY = e.posY;
-        e.prevPosZ = e.posZ;
+        e.prevPosX = e.getPosX();
+        e.prevPosY = e.getPosY();
+        e.prevPosZ = e.getPosZ();
         e.prevLimbSwingAmount = e.limbSwingAmount;
         e.prevRenderYawOffset = e.renderYawOffset;
         e.prevRotationPitch = e.rotationPitch;
@@ -145,7 +145,7 @@ public class TimeStopZone {
 
         if (e.isPotionActive(EffectsAS.EFFECT_TIME_FREEZE)) {
             EffectInstance eff = e.getActivePotionEffect(EffectsAS.EFFECT_TIME_FREEZE);
-            if (!eff.tick(e)) {
+            if (!eff.tick(e, () -> {})) {
                 if (!e.world.isRemote()) {
                     e.removePotionEffect(EffectsAS.EFFECT_TIME_FREEZE);
                 }

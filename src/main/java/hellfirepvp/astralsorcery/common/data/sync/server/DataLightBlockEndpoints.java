@@ -115,7 +115,7 @@ public class DataLightBlockEndpoints extends AbstractData {
     public void writeDiffDataToPacket(CompoundNBT compound) {
         ListNBT clearList = new ListNBT();
         for (DimensionType dimType : this.dimensionClearBuffer) {
-            clearList.add(new StringNBT(dimType.getRegistryName().toString()));
+            clearList.add(StringNBT.valueOf(dimType.getRegistryName().toString()));
         }
         compound.put("clear", clearList);
 

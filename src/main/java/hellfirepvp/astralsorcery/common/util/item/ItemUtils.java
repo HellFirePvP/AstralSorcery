@@ -130,7 +130,7 @@ public class ItemUtils {
         if (world.isRemote() || stack.isEmpty()) {
             return false;
         }
-        ItemEntity item = new ItemEntity(world, player.posX, player.posY, player.posZ, stack);
+        ItemEntity item = new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack);
         if (item.getItem().isEmpty()) {
             return false;
         }

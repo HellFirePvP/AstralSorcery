@@ -50,9 +50,9 @@ public class ItemInfusedCrystalPickaxe extends ItemCrystalPickaxe implements Equ
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (this.doOreScan(world, player.getPosition(), player, stack)) {
-            return ActionResult.newResult(ActionResultType.SUCCESS, stack);
+        ItemStack held = player.getHeldItem(hand);
+        if (this.doOreScan(world, player.getPosition(), player, held)) {
+            return ActionResult.resultSuccess(held);
         }
         return super.onItemRightClick(world, player, hand);
     }

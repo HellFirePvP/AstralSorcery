@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.event.effect;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
@@ -65,7 +66,6 @@ public class ClientMiscEventHandler {
 
         if (player.isPassenger() || player.isElytraFlying()) return;
 
-        Minecraft.getInstance().textureManager.bindTexture(tex);
         Vec3d motion = player.getMotion();
 
         boolean f = player.abilities.isFlying;
@@ -89,8 +89,8 @@ public class ClientMiscEventHandler {
             renderStack.rotate(Vector3f.YP.rotationDegrees(180 - rot));
         }
 
-        renderStack.scale(0.07F, 0.07F, 0.07F);
-        renderStack.translate(0, 5.5, 0.7 - (((float) (r / ma)) * (f ? 0.5D : 0.2D)));
+        //renderStack.scale(0.07F, 0.07F, 0.07F);
+        renderStack.translate(0, 5.5, 0.7 - ((r / ma) * (f ? 0.5D : 0.2D)));
 
         if (vboR == null) {
             vboR = obj.batchOnly(Tessellator.getInstance().getBuffer(), "wR");
@@ -98,6 +98,9 @@ public class ClientMiscEventHandler {
         if (vboL == null) {
             vboL = obj.batchOnly(Tessellator.getInstance().getBuffer(), "wL");
         }
+
+        RenderSystem.enableTexture();
+        Minecraft.getInstance().textureManager.bindTexture(tex);
 
         renderStack.push();
         renderStack.rotate(Vector3f.YN.rotationDegrees(20 + r));
@@ -107,6 +110,8 @@ public class ClientMiscEventHandler {
         renderStack.rotate(Vector3f.YP.rotationDegrees(20 + r));
         vboL.draw(renderStack.getLast().getMatrix(), GL11.GL_QUADS);
         renderStack.pop();
+
+        RenderSystem.disableTexture();
 
         renderStack.pop();
     }

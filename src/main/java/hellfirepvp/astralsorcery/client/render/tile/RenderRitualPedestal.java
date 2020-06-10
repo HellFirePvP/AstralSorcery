@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
@@ -33,6 +34,10 @@ import java.awt.*;
  * Date: 28.05.2020 / 21:33
  */
 public class RenderRitualPedestal extends CustomTileEntityRenderer<TileRitualPedestal> {
+
+    public RenderRitualPedestal(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileRitualPedestal tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

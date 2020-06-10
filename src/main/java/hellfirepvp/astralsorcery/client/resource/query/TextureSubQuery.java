@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.resource.query;
 
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
+import net.minecraft.client.renderer.RenderState;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -45,6 +46,10 @@ public class TextureSubQuery extends TextureQuery {
                 res.bindTexture();
             }
 
+            @Override
+            public RenderState.TextureState asState() {
+                return res.asState();
+            }
 
             @Override
             public Tuple<Float, Float> getUVOffset() {

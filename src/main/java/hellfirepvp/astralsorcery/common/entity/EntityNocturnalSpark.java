@@ -174,7 +174,7 @@ public class EntityNocturnalSpark extends ThrowableEntity {
             FXFacingParticle p;
             for (int i = 0; i < 6; i++) {
                 p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                        .spawn(new Vector3(posX, posY, posZ))
+                        .spawn(Vector3.atEntityCorner(this))
                         .setMotion(new Vector3(
                             0.04F - rand.nextFloat() * 0.08F,
                             0.04F - rand.nextFloat() * 0.08F,
@@ -185,12 +185,12 @@ public class EntityNocturnalSpark extends ThrowableEntity {
             }
 
             p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                    .spawn(new Vector3(posX, posY, posZ));
+                    .spawn(Vector3.atEntityCorner(this));
             p.setScaleMultiplier(0.6F);
             randomizeColor(p);
 
             p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                    .spawn(new Vector3(posX, posY, posZ).add(getMotion().mul(0.5, 0.5, 0.5)));
+                    .spawn(Vector3.atEntityCorner(this).add(getMotion().mul(0.5, 0.5, 0.5)));
             p.setScaleMultiplier(0.6F);
             randomizeColor(p);
         }
@@ -203,7 +203,7 @@ public class EntityNocturnalSpark extends ThrowableEntity {
                     rand.nextInt(1) - rand.nextInt(1),
                     rand.nextInt(2) - rand.nextInt(2));
 
-            EntityUtils.performWorldSpawningAt(world, pos, EntityClassification.MONSTER, SpawnReason.SPAWNER, true);
+            EntityUtils.performWorldSpawningAt((ServerWorld) world, pos, EntityClassification.MONSTER, SpawnReason.SPAWNER, true);
         }
     }
 
@@ -231,9 +231,7 @@ public class EntityNocturnalSpark extends ThrowableEntity {
         }
         Vec3d hit = result.getHitVec();
         this.setSpawning();
-        this.posX = hit.x;
-        this.posY = hit.y;
-        this.posZ = hit.z;
+        this.setPosition(hit.x, hit.y, hit.z);
     }
 
     @Override

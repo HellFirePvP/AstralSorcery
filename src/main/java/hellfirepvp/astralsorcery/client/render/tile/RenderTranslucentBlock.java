@@ -19,6 +19,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
@@ -31,6 +32,10 @@ import java.awt.*;
  * Date: 28.11.2019 / 19:52
  */
 public class RenderTranslucentBlock extends CustomTileEntityRenderer<TileTranslucentBlock> {
+
+    public RenderTranslucentBlock(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileTranslucentBlock tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

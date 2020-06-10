@@ -22,7 +22,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,7 +29,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 
 /**
@@ -49,7 +47,7 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
 
     private final int perkSpriteSize;
 
-    public PerkTreeConstellation(T perk, Point offset, IConstellation associatedConstellation, int perkSpriteSize) {
+    public PerkTreeConstellation(T perk, Point.Float offset, IConstellation associatedConstellation, int perkSpriteSize) {
         super(perk, offset);
         this.associatedConstellation = associatedConstellation;
         this.perkSpriteSize = perkSpriteSize;

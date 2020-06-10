@@ -20,11 +20,17 @@ import hellfirepvp.astralsorcery.common.entity.item.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entity.item.EntityStarmetal;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityGrapplingHook;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityObservatoryHelper;
+import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import static hellfirepvp.astralsorcery.common.lib.EntityTypesAS.*;
@@ -131,17 +137,18 @@ public class RegistryEntities {
 
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityNocturnalSpark.class, new RenderEntityEmpty.Factory());
-        RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityEmpty.Factory());
-        RenderingRegistry.registerEntityRenderingHandler(EntityFlare.class, new RenderEntityEmpty.Factory());
-        RenderingRegistry.registerEntityRenderingHandler(EntitySpectralTool.class, new RenderEntitySpectralTool.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(NOCTURNAL_SPARK, new RenderEntityEmpty.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(ILLUMINATION_SPARK, new RenderEntityEmpty.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(FLARE, new RenderEntityEmpty.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(SPECTRAL_TOOL, new RenderEntitySpectralTool.Factory());
 
-        RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlighted.Factory());
-        RenderingRegistry.registerEntityRenderingHandler(EntityItemExplosionResistant.class, new RenderEntityItemHighlighted.Factory());
-        RenderingRegistry.registerEntityRenderingHandler(EntityCrystal.class, new RenderEntityItemHighlighted.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(ITEM_HIGHLIGHT, new RenderEntityItemHighlighted.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(ITEM_EXPLOSION_RESISTANT, new RenderEntityItemHighlighted.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(ITEM_CRYSTAL, new RenderEntityItemHighlighted.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(ITEM_STARMETAL_INGOT, manager -> new ItemRenderer(manager, Minecraft.getInstance().getItemRenderer()));
 
-        RenderingRegistry.registerEntityRenderingHandler(EntityObservatoryHelper.class, new RenderEntityEmpty.Factory());
-        RenderingRegistry.registerEntityRenderingHandler(EntityGrapplingHook.class, new RenderEntityGrapplingHook.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(OBSERVATORY_HELPER, new RenderEntityEmpty.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(GRAPPLING_HOOK, new RenderEntityGrapplingHook.Factory());
     }
 
     private static <E extends Entity> EntityType<E> register(String name, EntityType.Builder<E> typeBuilder) {

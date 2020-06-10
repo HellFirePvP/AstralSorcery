@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.function.Supplier;
@@ -34,6 +35,10 @@ import java.util.function.Supplier;
 public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttunementAltar> {
 
     private static final ModelAttunementAltar MODEL_ATTUNEMENT_ALTAR = new ModelAttunementAltar();
+
+    public RenderAttunementAltar(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileAttunementAltar tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

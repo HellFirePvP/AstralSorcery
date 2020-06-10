@@ -196,9 +196,9 @@ public class CropHelper {
         @Override
         public boolean tryGrow(IWorld world, Random rand) {
             BlockState at = world.getBlockState(pos);
-            if (at.getBlock() instanceof IGrowable) {
-                if (((IGrowable) at.getBlock()).canGrow(world, pos, at, false) && world instanceof World) {
-                    ((IGrowable) at.getBlock()).grow((World) world, rand, pos, at);
+            if (at.getBlock() instanceof IGrowable && world instanceof ServerWorld) {
+                if (((IGrowable) at.getBlock()).canGrow(world, pos, at, false)) {
+                    ((IGrowable) at.getBlock()).grow((ServerWorld) world, rand, pos, at);
                     return true;
                 }
             }
@@ -448,19 +448,19 @@ public class CropHelper {
         @Override
         public boolean tryGrow(IWorld world, Random rand) {
             BlockState at = world.getBlockState(pos);
-            if (at.getBlock() instanceof IGrowable && world instanceof World) {
+            if (at.getBlock() instanceof IGrowable && world instanceof ServerWorld) {
                 if (((IGrowable) at.getBlock()).canGrow(world, pos, at, false)) {
                     if (!((IGrowable) at.getBlock()).canUseBonemeal((World) world, rand, pos, at)) {
                         if (rand.nextInt(20) != 0) {
                             return true; //Returning true to say it could've been potentially grown - So this doesn't invalidate caches.
                         }
                     }
-                    ((IGrowable) at.getBlock()).grow((World) world, rand, pos, at);
+                    ((IGrowable) at.getBlock()).grow((ServerWorld) world, rand, pos, at);
                     return true;
                 }
                 if (at.getBlock() instanceof StemBlock) {
                     for (int i = 0; i < 10; i++) {
-                        at.tick((World) world, pos, rand);
+                        at.tick((ServerWorld) world, pos, rand);
                     }
                     return true;
                 }

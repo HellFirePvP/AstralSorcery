@@ -158,6 +158,10 @@ public class WavefrontObject {
     @OnlyIn(Dist.CLIENT)
     public VertexBuffer batch(BufferBuilder buf) {
         VertexBuffer vbo = new VertexBuffer(DefaultVertexFormats.POSITION_COLOR_TEX);
+        if (this.getGLDrawingMode() == 0) {
+            return vbo;
+        }
+        buf.begin(this.getGLDrawingMode(), DefaultVertexFormats.POSITION_COLOR_TEX);
         this.render(buf);
         buf.finishDrawing();
         vbo.upload(buf);
@@ -167,6 +171,10 @@ public class WavefrontObject {
     @OnlyIn(Dist.CLIENT)
     public VertexBuffer batchOnly(BufferBuilder buf, String... groups) {
         VertexBuffer vbo = new VertexBuffer(DefaultVertexFormats.POSITION_COLOR_TEX);
+        if (this.getGLDrawingMode() == 0) {
+            return vbo;
+        }
+        buf.begin(this.getGLDrawingMode(), DefaultVertexFormats.POSITION_COLOR_TEX);
         this.renderOnly(buf, groups);
         buf.finishDrawing();
         vbo.upload(buf);
@@ -176,6 +184,10 @@ public class WavefrontObject {
     @OnlyIn(Dist.CLIENT)
     public VertexBuffer batchExcept(BufferBuilder buf, String... excludedGroupNames) {
         VertexBuffer vbo = new VertexBuffer(DefaultVertexFormats.POSITION_COLOR_TEX);
+        if (this.getGLDrawingMode() == 0) {
+            return vbo;
+        }
+        buf.begin(this.getGLDrawingMode(), DefaultVertexFormats.POSITION_COLOR_TEX);
         this.renderExcept(buf, excludedGroupNames);
         buf.finishDrawing();
         vbo.upload(buf);
@@ -280,13 +292,13 @@ public class WavefrontObject {
             String[] subTokens = null;
 
             if (tokens.length == 3) {
-                if (this.gLDrawingMode == -1) {
+                if (this.gLDrawingMode == 0) {
                     this.gLDrawingMode = GL11.GL_TRIANGLES;
                 } else if (this.gLDrawingMode != GL11.GL_TRIANGLES) {
                     throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Invalid number of points for face (expected 4, found " + tokens.length + ")");
                 }
             } else if (tokens.length == 4) {
-                if (this.gLDrawingMode == -1) {
+                if (this.gLDrawingMode == 0) {
                     this.gLDrawingMode = GL11.GL_QUADS;
                 } else if (this.gLDrawingMode != GL11.GL_QUADS) {
                     throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Invalid number of points for face (expected 3, found " + tokens.length + ")");

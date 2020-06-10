@@ -24,10 +24,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -129,13 +126,13 @@ public class BlockStructural extends Block {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity entity, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity entity, Hand hand, BlockRayTraceResult rayTraceResult) {
         switch (state.get(BLOCK_TYPE)) {
             case TELESCOPE:
                 if (world.isRemote()) {
                     AstralSorcery.getProxy().openGui(entity, GuiType.TELESCOPE, pos.down());
                 }
-                return true;
+                return ActionResultType.SUCCESS;
         }
         return super.onBlockActivated(state, world, pos, entity, hand, rayTraceResult);
     }

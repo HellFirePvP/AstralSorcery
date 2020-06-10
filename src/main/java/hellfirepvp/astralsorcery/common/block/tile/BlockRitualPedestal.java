@@ -11,8 +11,6 @@ package hellfirepvp.astralsorcery.common.block.tile;
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
-import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCrystalBase;
-import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.VoxelUtils;
@@ -21,11 +19,10 @@ import hellfirepvp.observerlib.api.block.BlockStructureObserver;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -33,7 +30,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -86,13 +82,13 @@ public class BlockRitualPedestal extends BlockStarlightNetwork implements Custom
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rtr) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rtr) {
         if (world.isRemote()) {
-            return true;
+            return ActionResultType.PASS;
         }
         TileRitualPedestal pedestal = MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, true);
         if (pedestal == null) {
-            return false;
+            return ActionResultType.PASS;
         }
 
         ItemStack heldItem = player.getHeldItem(hand);
@@ -108,7 +104,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork implements Custom
         } else {
             player.setHeldItem(hand, pedestal.tryPlaceCrystalInPedestal(heldItem));
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -134,11 +130,6 @@ public class BlockRitualPedestal extends BlockStarlightNetwork implements Custom
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
-    }
-
-    @Override
-    public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override
