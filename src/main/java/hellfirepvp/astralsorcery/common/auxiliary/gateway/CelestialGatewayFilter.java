@@ -82,7 +82,7 @@ public class CelestialGatewayFilter {
         try {
             ListNBT list = new ListNBT();
             for (ResourceLocation dimType : cache) {
-                list.add(new StringNBT(dimType.toString()));
+                list.add(StringNBT.valueOf(dimType.toString()));
             }
             CompoundNBT cmp = new CompoundNBT();
             cmp.put("list", list);

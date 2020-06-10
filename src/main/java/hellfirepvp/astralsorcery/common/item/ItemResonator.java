@@ -172,7 +172,7 @@ public class ItemResonator extends Item implements OverrideInteractItem {
             BlockPos center = player.getPosition();
             int offsetX = center.getX();
             int offsetZ = center.getZ();
-            try (BlockPos.PooledMutableBlockPos pool = BlockPos.PooledMutableBlockPos.retain()) {
+            try (BlockPos.PooledMutable pool = BlockPos.PooledMutable.retain()) {
 
                 for (int xx = -30; xx <= 30; xx++) {
                     for (int zz = -30; zz <= 30; zz++) {
@@ -233,10 +233,10 @@ public class ItemResonator extends Item implements OverrideInteractItem {
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         if (!world.isRemote() && player.isSneaking()) {
             if (cycleUpgrade(player, player.getHeldItem(hand))) {
-                return ActionResult.newResult(ActionResultType.SUCCESS, player.getHeldItem(hand));
+                return ActionResult.resultSuccess(player.getHeldItem(hand));
             }
         }
-        return ActionResult.newResult(ActionResultType.PASS, player.getHeldItem(hand));
+        return ActionResult.resultPass(player.getHeldItem(hand));
     }
 
     public static boolean cycleUpgrade(@Nonnull PlayerEntity player, ItemStack stack) {
@@ -386,7 +386,7 @@ public class ItemResonator extends Item implements OverrideInteractItem {
                 cmp.put("upgrades", new ListNBT());
             }
             ListNBT list = cmp.getList("upgrades", Constants.NBT.TAG_INT);
-            list.add(new IntNBT(ordinal()));
+            list.add(IntNBT.valueOf(ordinal()));
         }
     }
 }

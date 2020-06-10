@@ -112,7 +112,7 @@ public class CEffectBootes extends ConstellationEffectEntityCollect<LivingEntity
                     List<ItemStack> drops = EntityUtils.generateLoot(entity, rand, CommonProxy.DAMAGE_SOURCE_STELLAR, null);
                     for (ItemStack drop : drops) {
                         if (rand.nextFloat() < CONFIG.herdingLootChance.get() &&
-                                ItemUtils.dropItemNaturally(world, entity.posX, entity.posY, entity.posZ, drop) != null) {
+                                ItemUtils.dropItemNaturally(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), drop) != null) {
 
                             didEffectFlag = true;
                         }

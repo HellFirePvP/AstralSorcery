@@ -50,7 +50,12 @@ public class RegistryContainerTypes {
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
         ScreenManager.registerFactory(TOME, ScreenContainerTome::new);
-        ScreenManager.registerFactory(OBSERVATORY, (observatory, plInv, component) -> new ScreenObservatory(observatory));
+        ScreenManager.registerFactory(OBSERVATORY, new ScreenManager.IScreenFactory<ContainerObservatory, ScreenObservatory>() {
+            @Override
+            public ScreenObservatory create(ContainerObservatory observatory, PlayerInventory playerInventory, ITextComponent name) {
+                return new ScreenObservatory(observatory);
+            }
+        });
         ScreenManager.registerFactory(ALTAR_DISCOVERY, ScreenContainerAltarDiscovery::new);
         ScreenManager.registerFactory(ALTAR_ATTUNEMENT, ScreenContainerAltarAttunement::new);
         ScreenManager.registerFactory(ALTAR_CONSTELLATION, ScreenContainerAltarConstellation::new);

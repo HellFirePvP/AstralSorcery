@@ -53,14 +53,14 @@ public class ItemTome extends Item implements PerkExperienceRevealer {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
-        if (worldIn.isRemote() && !playerIn.isSneaking()) {
-            AstralSorcery.getProxy().openGui(playerIn, GuiType.TOME);
-        } else if (!worldIn.isRemote() && playerIn.isSneaking() && hand == Hand.MAIN_HAND && playerIn instanceof ServerPlayerEntity) {
-            new ContainerTomeProvider(playerIn.getHeldItem(hand), playerIn.inventory.currentItem)
-                    .openFor((ServerPlayerEntity) playerIn);
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+        if (world.isRemote() && !player.isSneaking()) {
+            AstralSorcery.getProxy().openGui(player, GuiType.TOME);
+        } else if (!world.isRemote() && player.isSneaking() && hand == Hand.MAIN_HAND && player instanceof ServerPlayerEntity) {
+            new ContainerTomeProvider(player.getHeldItem(hand), player.inventory.currentItem)
+                    .openFor((ServerPlayerEntity) player);
         }
-        return ActionResult.newResult(ActionResultType.SUCCESS, playerIn.getHeldItem(hand));
+        return ActionResult.resultSuccess(player.getHeldItem(hand));
     }
 
     public static IInventory getTomeStorage(ItemStack stack) {
@@ -104,7 +104,7 @@ public class ItemTome extends Item implements PerkExperienceRevealer {
         CompoundNBT cmp = NBTHelper.getPersistentData(parentJournal);
         ListNBT list = new ListNBT();
         for (IConstellation c : saveConstellations) {
-            list.add(new StringNBT(c.getRegistryName().toString()));
+            list.add(StringNBT.valueOf(c.getRegistryName().toString()));
         }
         cmp.put("constellations", list);
     }

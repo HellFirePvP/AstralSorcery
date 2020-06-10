@@ -18,6 +18,7 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -59,7 +60,7 @@ public class BlockChalice extends ContainerBlock implements CustomItemBlock {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult brtr) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult brtr) {
         ItemStack interact = player.getHeldItem(hand);
         TileChalice tc = MiscUtils.getTileAt(world, pos, TileChalice.class, true);
         if (tc != null) {
@@ -89,10 +90,10 @@ public class BlockChalice extends ContainerBlock implements CustomItemBlock {
                         }
                     }
                 }
-                return true;
+                return ActionResultType.SUCCESS;
             }
         }
-        return false;
+        return ActionResultType.PASS;
     }
 
     @Override

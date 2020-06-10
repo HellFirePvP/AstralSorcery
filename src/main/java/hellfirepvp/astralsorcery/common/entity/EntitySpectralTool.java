@@ -63,7 +63,7 @@ public class EntitySpectralTool extends FlyingEntity {
 
     public EntitySpectralTool(World worldIn) {
         super(EntityTypesAS.SPECTRAL_TOOL, worldIn);
-        this.moveController = new FlyingMovementController(this);
+        this.moveController = new FlyingMovementController(this, 10, false);
     }
 
     public EntitySpectralTool(World worldIn, BlockPos spawnPos, LivingEntity owner, ToolTask task) {

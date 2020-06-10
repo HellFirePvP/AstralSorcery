@@ -30,6 +30,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -98,7 +99,7 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         ItemStack held = player.getHeldItem(hand);
         if (world.isRemote()) {
             if (!player.isSneaking()) {
@@ -106,7 +107,7 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
                 if (tft != null) {
                     if (!held.isEmpty() && (held.getItem() instanceof ItemParchment || tft.getInputStack().isEmpty() ||
                             (TileRefractionTable.isValidGlassStack(held) && tft.getGlassStack().isEmpty()))) {
-                        return true;
+                        return ActionResultType.PASS;
                     }
                     AstralSorcery.getProxy().openGui(player, GuiType.REFRACTION_TABLE, pos);
                 }
@@ -117,11 +118,11 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
                 if (player.isSneaking()) {
                     if (!tft.getInputStack().isEmpty()) {
                         ItemUtils.dropItemToPlayer(player, tft.setInputStack(ItemStack.EMPTY));
-                        return true;
+                        return ActionResultType.SUCCESS;
                     }
                     if (!tft.getGlassStack().isEmpty()) {
                         ItemUtils.dropItemToPlayer(player, tft.setGlassStack(ItemStack.EMPTY));
-                        return true;
+                        return ActionResultType.SUCCESS;
                     }
                 } else if (!held.isEmpty()) {
                     if (held.getItem() instanceof ItemParchment) {
@@ -166,7 +167,7 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
                 }
             }
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -177,16 +178,6 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
         }
 
         super.onReplaced(state, world, pos, newState, isMoving);
-    }
-
-    @Override
-    public boolean isSolid(BlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean hasCustomBreakingProgress(BlockState state) {
-        return true;
     }
 
     @Nullable

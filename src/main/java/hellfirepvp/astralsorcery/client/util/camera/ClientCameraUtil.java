@@ -18,10 +18,6 @@ import net.minecraft.util.math.MathHelper;
 public class ClientCameraUtil {
 
     public static void positionCamera(PlayerEntity renderView, float pTicks, double x, double y, double z, double prevX, double prevY, double prevZ, double yaw, double yawPrev, double pitch, double pitchPrev) {
-        TileEntityRendererDispatcher.staticPlayerX = x;
-        TileEntityRendererDispatcher.staticPlayerY = y;
-        TileEntityRendererDispatcher.staticPlayerZ = z;
-
         float iYaw = MathHelper.lerp(pTicks, (float) yawPrev, (float) yaw);
         float iPitch = MathHelper.lerp(pTicks, (float) pitchPrev, (float) pitch);
 
@@ -33,9 +29,7 @@ public class ClientCameraUtil {
         }
         PlayerEntity render = (PlayerEntity) rv;
 
-        render.posX = x;
-        render.posY = y;
-        render.posZ = z;
+        render.setRawPosition(x, y, z);
         render.prevPosX = prevX;
         render.prevPosY = prevY;
         render.prevPosZ = prevZ;
@@ -56,9 +50,7 @@ public class ClientCameraUtil {
 
         render = Minecraft.getInstance().player;
 
-        render.posX = x;
-        render.posY = y;
-        render.posZ = z;
+        render.setRawPosition(x, y, z);
         render.prevPosX = prevX;
         render.prevPosY = prevY;
         render.prevPosZ = prevZ;
@@ -83,15 +75,11 @@ public class ClientCameraUtil {
         if (mc.player != null) {
             PlayerEntity player = mc.player;
             mc.setRenderViewEntity(player);
-            double x = player.posX;
-            double y = player.posY;
-            double z = player.posZ;
-            EntityRendererManager rm = mc.getRenderManager();
-            rm.setRenderPosition(x, y, z);
-
-            TileEntityRendererDispatcher.staticPlayerX = x;
-            TileEntityRendererDispatcher.staticPlayerY = y;
-            TileEntityRendererDispatcher.staticPlayerZ = z;
+            //double x = player.getPosX();
+            //double y = player.getPosY();
+            //double z = player.getPosZ();
+            //EntityRendererManager rm = mc.getRenderManager();
+            //rm.setRenderPosition(x, y, z);
 
             if (mc.currentScreen != null) {
                 mc.displayGuiScreen(null);

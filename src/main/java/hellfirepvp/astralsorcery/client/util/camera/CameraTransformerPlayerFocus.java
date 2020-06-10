@@ -47,7 +47,7 @@ public class CameraTransformerPlayerFocus extends CameraTransformerSettingsCache
 
         if (mc.player != null) {
             PlayerEntity player = mc.player;
-            player.setPositionAndRotation(this.clientEntity.posX, this.clientEntity.posY, this.clientEntity.posZ, this.clientEntity.rotationYaw, this.clientEntity.rotationPitch);
+            player.setPositionAndRotation(this.clientEntity.getPosX(), this.clientEntity.getPosY(), this.clientEntity.getPosZ(), this.clientEntity.rotationYaw, this.clientEntity.rotationPitch);
             player.setVelocity(0, 0, 0);
         }
 

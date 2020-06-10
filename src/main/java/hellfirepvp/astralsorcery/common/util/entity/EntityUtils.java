@@ -75,7 +75,7 @@ public class EntityUtils {
     }
 
     @Nullable
-    public static LivingEntity performWorldSpawningAt(World world, BlockPos pos, EntityClassification category, SpawnReason reason, boolean ignoreWeighting) {
+    public static LivingEntity performWorldSpawningAt(ServerWorld world, BlockPos pos, EntityClassification category, SpawnReason reason, boolean ignoreWeighting) {
         List<Biome.SpawnListEntry> spawnList = world.getChunkProvider().getChunkGenerator().getPossibleCreatures(EntityClassification.MONSTER, pos);
         spawnList = ForgeEventFactory.getPotentialSpawns(world, category, pos, spawnList);
         spawnList.removeIf(s -> !s.entityType.isSummonable());
@@ -136,7 +136,7 @@ public class EntityUtils {
         if (!EntitySpawnPlacementRegistry.func_223515_a(type, world, spawnReason, at, world.rand)) {
             return false;
         }
-        if (!world.areCollisionShapesEmpty(type.func_220328_a(at.getX() + 0.5, at.getY(), at.getZ() + 0.5))) {
+        if (world.hasNoCollisions(type.func_220328_a(at.getX() + 0.5, at.getY(), at.getZ() + 0.5))) {
             return false;
         }
 
@@ -152,7 +152,7 @@ public class EntityUtils {
         if (entity instanceof LivingEntity) {
             if (entity instanceof MobEntity) {
                 MobEntity mobEntity = (MobEntity) entity;
-                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn(mobEntity, world, entity.posX, entity.posY, entity.posZ, null, spawnReason);
+                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn(mobEntity, world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), null, spawnReason);
                 if (canSpawn == Event.Result.DENY) {
                     return false;
                 } else if (canSpawn == Event.Result.DEFAULT) {

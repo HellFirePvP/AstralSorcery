@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.block.ore;
 
 import hellfirepvp.astralsorcery.common.block.base.template.BlockRockTemplate;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
@@ -27,15 +26,5 @@ public class BlockRockCrystalOre extends BlockRockTemplate {
     @Override
     public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
         return fortune * MathHelper.nextInt(RANDOM, 8, 14);
-    }
-
-    @Override
-    public boolean isSolid(BlockState p_200124_1_) {
-        return true;
-    }
-
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
     }
 }

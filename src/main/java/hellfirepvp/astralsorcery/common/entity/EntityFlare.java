@@ -260,9 +260,9 @@ public class EntityFlare extends FlyingEntity {
     private void doMovement() {
         if (this.currentMoveTarget != null) {
             Vec3d motion = this.getMotion();
-            double motionX = (Math.signum(this.currentMoveTarget.getX() - this.posX) * 0.5D - motion.getX()) * (this.isAmbient() ? 0.01D : 0.025D);
-            double motionY = (Math.signum(this.currentMoveTarget.getY() - this.posY) * 0.7D - motion.getY()) * (this.isAmbient() ? 0.01D : 0.025D);
-            double motionZ = (Math.signum(this.currentMoveTarget.getZ() - this.posZ) * 0.5D - motion.getZ()) * (this.isAmbient() ? 0.01D : 0.025D);
+            double motionX = (Math.signum(this.currentMoveTarget.getX() - this.getPosX()) * 0.5D - motion.getX()) * (this.isAmbient() ? 0.01D : 0.025D);
+            double motionY = (Math.signum(this.currentMoveTarget.getY() - this.getPosY()) * 0.7D - motion.getY()) * (this.isAmbient() ? 0.01D : 0.025D);
+            double motionZ = (Math.signum(this.currentMoveTarget.getZ() - this.getPosZ()) * 0.5D - motion.getZ()) * (this.isAmbient() ? 0.01D : 0.025D);
             this.setMotion(motion.add(motionX, motionY, motionZ));
             this.moveForward = 0.2F;
         }

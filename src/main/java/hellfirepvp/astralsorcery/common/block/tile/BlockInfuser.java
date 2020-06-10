@@ -19,7 +19,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -57,7 +57,7 @@ public class BlockInfuser extends BlockInventory implements CustomItemBlock {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!world.isRemote) {
             ItemStack held = player.getHeldItem(hand);
             TileInfuser ti = MiscUtils.getTileAt(world, pos, TileInfuser.class, true);
@@ -71,7 +71,7 @@ public class BlockInfuser extends BlockInventory implements CustomItemBlock {
                     }
 
                     if (!world.isAirBlock(pos.up())) {
-                        return false;
+                        return ActionResultType.PASS;
                     }
 
                     ti.setItemInput(ItemUtils.copyStackWithSize(held, 1));
@@ -89,7 +89,7 @@ public class BlockInfuser extends BlockInventory implements CustomItemBlock {
                 }
             }
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -109,11 +109,6 @@ public class BlockInfuser extends BlockInventory implements CustomItemBlock {
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
-    }
-
-    @Override
-    public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
 
     @Nullable

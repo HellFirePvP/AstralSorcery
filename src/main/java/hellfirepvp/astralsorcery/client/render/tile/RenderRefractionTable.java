@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -27,6 +28,10 @@ import net.minecraft.item.ItemStack;
 public class RenderRefractionTable extends CustomTileEntityRenderer<TileRefractionTable> {
 
     private static final ModelRefractionTable MODEL_REFRACTION_TABLE = new ModelRefractionTable();
+
+    public RenderRefractionTable(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileRefractionTable tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

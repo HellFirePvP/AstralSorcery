@@ -444,7 +444,7 @@ public class MiscUtils {
 
     @Nonnull
     public static RayTraceResult rayTraceLook(Entity entity, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode, double reachDst) {
-        Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
+        Vec3d pos = new Vec3d(entity.getPosX(), entity.getPosY() + entity.getEyeHeight(), entity.getPosZ());
         Vec3d lookVec = entity.getLookVec();
         Vec3d end = pos.add(lookVec.x * reachDst, lookVec.y * reachDst, lookVec.z * reachDst);
         RayTraceContext ctx = new RayTraceContext(pos, end, blockMode, fluidMode, entity);

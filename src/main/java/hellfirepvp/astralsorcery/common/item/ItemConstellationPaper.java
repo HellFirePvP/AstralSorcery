@@ -85,15 +85,15 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getHeldItem(hand);
-        if (itemStack.isEmpty()) {
-            return ActionResult.newResult(ActionResultType.SUCCESS, itemStack);
+        ItemStack held = player.getHeldItem(hand);
+        if (held.isEmpty()) {
+            return ActionResult.resultSuccess(held);
         }
-        if (world.isRemote() && getConstellation(itemStack) != null) {
+        if (world.isRemote() && getConstellation(held) != null) {
             SoundHelper.playSoundClient(SoundsAS.GUI_JOURNAL_PAGE, 1F, 1F);
-            AstralSorcery.getProxy().openGui(player, GuiType.CONSTELLATION_PAPER, getConstellation(itemStack));
+            AstralSorcery.getProxy().openGui(player, GuiType.CONSTELLATION_PAPER, getConstellation(held));
         }
-        return ActionResult.newResult(ActionResultType.SUCCESS, itemStack);
+        return ActionResult.resultSuccess(held);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        EntityItemExplosionResistant res = new EntityItemExplosionResistant(EntityTypesAS.ITEM_EXPLOSION_RESISTANT, world, location.posX, location.posY, location.posZ, itemstack);
+        EntityItemExplosionResistant res = new EntityItemExplosionResistant(EntityTypesAS.ITEM_EXPLOSION_RESISTANT, world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
         res.setPickupDelay(20);
         res.setMotion(location.getMotion());
         if (location instanceof ItemEntity) {

@@ -91,15 +91,15 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
             for (Entity e : projectiles) {
                 if (e.isAlive() && TechnicalEntityRegistry.INSTANCE.canAffect(e)) {
                     if (e instanceof IProjectile) {
-                        double xRatio = (pos.getX() + 0.5) - e.posX;
-                        double zRatio = (pos.getZ() + 0.5) - e.posZ;
+                        double xRatio = (pos.getX() + 0.5) - e.getPosX();
+                        double zRatio = (pos.getZ() + 0.5) - e.getPosZ();
                         float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
                         Vector3 motion = new Vector3(e.getMotion());
                         motion.multiply(new Vector3(0.5, 1, 0.5));
                         motion.subtract(xRatio / f * 0.4, 0, zRatio / f * 0.4);
                         ((IProjectile) e).shoot(motion.getX(), motion.getY(), motion.getZ(), 1.5F, 0F);
                     } else if (e instanceof MobEntity) {
-                        ((LivingEntity) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.posX, (pos.getZ() + 0.5) - e.posZ);
+                        ((LivingEntity) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.getPosX(), (pos.getZ() + 0.5) - e.getPosZ());
                     }
                 }
             }
@@ -129,15 +129,15 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
                 for (Entity e : projectiles) {
                     if (e.isAlive() && TechnicalEntityRegistry.INSTANCE.canAffect(e)) {
                         if (e instanceof IProjectile) {
-                            double xRatio = (pos.getX() + 0.5) - e.posX;
-                            double zRatio = (pos.getZ() + 0.5) - e.posZ;
+                            double xRatio = (pos.getX() + 0.5) - e.getPosX();
+                            double zRatio = (pos.getZ() + 0.5) - e.getPosZ();
                             float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
                             Vector3 motion = new Vector3(e.getMotion());
                             motion.multiply(new Vector3(0.5, 1, 0.5));
                             motion.subtract(xRatio / f * 0.4, 0, zRatio / f * 0.4);
                             ((IProjectile) e).shoot(motion.getX(), motion.getY(), motion.getZ(), 1.5F, 0F);
                         } else if (e instanceof MobEntity) {
-                            ((LivingEntity) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.posX, (pos.getZ() + 0.5) - e.posZ);
+                            ((LivingEntity) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.getPosX(), (pos.getZ() + 0.5) - e.getPosZ());
                         }
                     }
                 }

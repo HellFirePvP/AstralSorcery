@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.tile.TileLens;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
@@ -35,6 +36,10 @@ public class RenderLens extends CustomTileEntityRenderer<TileLens> {
 
     private static final ModelLens MODEL_LENS = new ModelLens();
     private static final ModelLensColored MODEL_LENS_COLORED = new ModelLensColored();
+
+    public RenderLens(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileLens tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

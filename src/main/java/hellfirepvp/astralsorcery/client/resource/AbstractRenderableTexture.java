@@ -47,7 +47,7 @@ public abstract class AbstractRenderableTexture {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BlockAtlasTexture that = (BlockAtlasTexture) o;
+        AbstractRenderableTexture that = (AbstractRenderableTexture) o;
         return Objects.equals(this.getKey(), that.getKey());
     }
 

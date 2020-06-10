@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.client.screen.journal.perk.group.PerkPointHaloR
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
 import hellfirepvp.astralsorcery.common.perk.node.MajorPerk;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,7 +33,7 @@ import java.util.Collection;
  */
 public class PerkTreeMajor<T extends MajorPerk> extends PerkTreePoint<T> {
 
-    public PerkTreeMajor(T perk, Point offset) {
+    public PerkTreeMajor(T perk, Point.Float offset) {
         super(perk, offset);
         this.setRenderSize((int) (this.getRenderSize() * 1.4));
     }

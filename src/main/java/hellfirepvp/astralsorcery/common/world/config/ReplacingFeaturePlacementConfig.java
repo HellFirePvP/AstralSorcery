@@ -57,8 +57,8 @@ public class ReplacingFeaturePlacementConfig extends FeaturePlacementConfig {
     }
 
     @Override
-    public boolean canPlace(IWorld iWorld, BiomeManager biomeManager, BlockPos pos, Random rand) {
-        if (!super.canPlace(iWorld, biomeManager, pos, rand)) {
+    public boolean canPlace(IWorld iWorld, BiomeProvider biomeProvider, BlockPos pos, Random rand) {
+        if (!super.canPlace(iWorld, biomeProvider, pos, rand)) {
             return false;
         }
         BlockState atState = iWorld.getBlockState(pos);

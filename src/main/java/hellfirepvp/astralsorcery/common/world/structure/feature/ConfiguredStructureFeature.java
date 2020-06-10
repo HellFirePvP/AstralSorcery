@@ -81,7 +81,7 @@ public abstract class ConfiguredStructureFeature extends ScatteredStructure<NoFe
             Biome biome = biomeManagerIn.getBiome(at);
 
             return chunkGenerator.hasStructure(biome, this) &&
-                    this.getPlacementConfig().canPlace(chunkGenerator.world, biomeManagerIn, at, rand);
+                    this.getPlacementConfig().canPlace(chunkGenerator.world, chunkGenerator.getBiomeProvider(), at, rand);
         }
 
         return false;

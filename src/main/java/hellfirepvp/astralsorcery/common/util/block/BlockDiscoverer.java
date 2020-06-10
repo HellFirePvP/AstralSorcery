@@ -96,7 +96,7 @@ public class BlockDiscoverer {
     public static List<BlockPos> searchForBlocksAround(World world, BlockPos origin, int cubeSize, BlockPredicate match) {
         List<BlockPos> out = new ArrayList<>();
 
-        try (BlockPos.PooledMutableBlockPos offset = BlockPos.PooledMutableBlockPos.retain()) {
+        try (BlockPos.PooledMutable offset = BlockPos.PooledMutable.retain()) {
             for (int xx = -cubeSize; xx <= cubeSize; xx++) {
                 for (int zz = -cubeSize; zz <= cubeSize; zz++) {
                     for (int yy = -cubeSize; yy <= cubeSize; yy++) {

@@ -25,8 +25,8 @@ import net.minecraft.tileentity.TileEntity;
  */
 public abstract class CustomTileEntityRenderer<T extends TileEntity> extends TileEntityRenderer<T> {
 
-    public CustomTileEntityRenderer() {
-        super(TileEntityRendererDispatcher.instance);
+    public CustomTileEntityRenderer(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
     }
 
     @Override

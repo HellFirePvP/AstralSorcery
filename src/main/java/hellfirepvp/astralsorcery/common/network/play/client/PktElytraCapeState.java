@@ -89,12 +89,12 @@ public class PktElytraCapeState extends ASPacket<PktElytraCapeState> {
                     }
                     case 1: {
                         if (!hasFlightPerk) {
-                            player.setElytraFlying();
+                            player.startFallFlying();
                         }
                         break;
                     }
                     case 2: {
-                        player.clearElytraFlying();
+                        player.stopFallFlying();
                         break;
                     }
                 }

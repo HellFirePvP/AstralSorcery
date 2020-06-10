@@ -129,7 +129,6 @@ public class CelestialStrike {
                 .setAxis(Vector3.RotAxis.Y_AXIS.clone().negate())
                 .setSprite(tex)
                 .setNoRotation(r.nextFloat() * 360F)
-                .setAlphaOverDistance(false)
                 .setAlphaMultiplier(0.4F)
                 .alpha(VFXAlphaFunction.FADE_OUT)
                 .color(VFXColorFunction.WHITE)

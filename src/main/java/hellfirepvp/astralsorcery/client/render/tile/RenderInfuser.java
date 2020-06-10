@@ -12,6 +12,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -22,6 +23,10 @@ import net.minecraft.item.ItemStack;
  * Date: 09.11.2019 / 21:51
  */
 public class RenderInfuser extends CustomTileEntityRenderer<TileInfuser> {
+
+    public RenderInfuser(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileInfuser tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

@@ -77,7 +77,7 @@ public class MantleEffectBootes extends MantleEffect {
             if (player.ticksExisted % 80 == 0) {
                 if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerFlare.get()) && rand.nextInt(4) == 0) {
                     EntityFlare flare = EntityTypesAS.FLARE.create(player.getEntityWorld());
-                    flare.setPosition(player.posX, player.posY, player.posZ);
+                    flare.setPosition(player.getPosX(), player.getPosY(), player.getPosZ());
                     flare.setFollowingTarget(player);
                     if (world.addEntity(flare)) {
                         flares.add(flare);
@@ -89,7 +89,7 @@ public class MantleEffectBootes extends MantleEffect {
 
         for (EntityFlare flare : flares) {
             if (flare.getFollowingTarget() != null && (flare.getAttackTarget() == null ? player.getDistance(flare) >= 12 : player.getDistance(flare) >= 35)) {
-                flare.setPositionAndRotation(player.posX, player.posY, player.posZ, 0, 0);
+                flare.setPositionAndRotation(player.getPosX(), player.getPosY(), player.getPosZ(), 0, 0);
             }
         }
         setEntityIds(mantle, flares.stream().map(Entity::getEntityId).collect(Collectors.toList()));
@@ -149,7 +149,7 @@ public class MantleEffectBootes extends MantleEffect {
 
     protected void setEntityIds(ItemStack mantleStack, List<Integer> ids) {
         ListNBT list = new ListNBT();
-        ids.forEach(i -> list.add(new IntNBT(i)));
+        ids.forEach(i -> list.add(IntNBT.valueOf(i)));
         NBTHelper.getPersistentData(mantleStack).put("flareIds", list);
     }
 

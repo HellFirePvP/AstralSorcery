@@ -52,7 +52,7 @@ public class TileVanishing extends TileEntityTick {
             List<PlayerEntity> players = getWorld().getEntitiesWithinAABB(PlayerEntity.class, SEARCH_BOX.offset(getPos()));
             for (PlayerEntity player : players) {
                 if (ItemMantle.getEffect(player, ConstellationsAS.aevitas) != null) {
-                    double yDiff = player.posY - this.getPos().getY();
+                    double yDiff = player.getPosY() - this.getPos().getY();
 
                     //Standing on top of this block
                     if (player.onGround && yDiff >= 0.95 && yDiff <= 1.15) {

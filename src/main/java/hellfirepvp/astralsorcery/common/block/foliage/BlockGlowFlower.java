@@ -9,15 +9,11 @@
 package hellfirepvp.astralsorcery.common.block.foliage;
 
 import hellfirepvp.astralsorcery.common.block.base.template.BlockFlowerTemplate;
-import hellfirepvp.astralsorcery.common.block.base.template.BlockFoliageTemplate;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMisc;
-import hellfirepvp.astralsorcery.common.lib.EffectsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -84,8 +80,4 @@ public class BlockGlowFlower extends BlockFlowerTemplate implements IPlantable {
         return PlantType.Cave;
     }
 
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
 }

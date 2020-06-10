@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 
 import java.awt.*;
 
@@ -26,6 +27,10 @@ import java.awt.*;
  * Date: 28.05.2020 / 18:37
  */
 public class RenderCollectorCrystal extends CustomTileEntityRenderer<TileCollectorCrystal> {
+
+    public RenderCollectorCrystal(TileEntityRendererDispatcher tileRenderer) {
+        super(tileRenderer);
+    }
 
     @Override
     public void render(TileCollectorCrystal tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {

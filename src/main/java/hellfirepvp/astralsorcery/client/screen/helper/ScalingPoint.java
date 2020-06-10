@@ -35,8 +35,8 @@ public class ScalingPoint {
     public void updatePos(float posX, float posY, float scale) {
         this.posX = posX;
         this.posY = posY;
-        this.scaledX = scale * this.posX;
-        this.scaledY = scale * this.posY;
+        this.scaledX = scale * this.getPosX();
+        this.scaledY = scale * this.getPosY();
     }
 
     public void updateScaledPos(float scaledX, float scaledY, float scale) {
@@ -63,7 +63,7 @@ public class ScalingPoint {
     }
 
     public void rescale(float newScale) {
-        this.scaledX = this.posX * newScale;
-        this.scaledY = this.posY * newScale;
+        this.scaledX = this.getPosX() * newScale;
+        this.scaledY = this.getPosY() * newScale;
     }
 }

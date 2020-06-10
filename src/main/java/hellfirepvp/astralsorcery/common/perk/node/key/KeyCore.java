@@ -50,7 +50,7 @@ public class KeyCore extends KeyPerk {
         for (int i = 0; i < AMT_PERK_POINTS; i++) {
             String token = "core-root-tk-" + i;
             if (ResearchManager.grantFreePerkPoint(player, token)) {
-                listTokens.add(new StringNBT(token));
+                listTokens.add(StringNBT.valueOf(token));
             }
         }
         dataStorage.put("tokens", listTokens);

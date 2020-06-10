@@ -26,6 +26,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -87,28 +88,23 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
     }
 
     @Override
-    public boolean hasCustomBreakingProgress(BlockState p_190946_1_) {
-        return true;
-    }
-
-    @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!world.isRemote()) {
             ItemStack heldItem = player.getHeldItem(hand);
             if (!heldItem.isEmpty()) {
                 TileWell tw = MiscUtils.getTileAt(world, pos, TileWell.class, false);
                 if (tw == null) {
-                    return true;
+                    return ActionResultType.PASS;
                 }
 
                 WellLiquefaction entry = RecipeTypesAS.TYPE_WELL.findRecipe(new WellLiquefactionContext(heldItem));
                 if (entry != null) {
                     ItemStackHandler handle = tw.getInventory();
                     if (!handle.getStackInSlot(0).isEmpty()) {
-                        return true;
+                        return ActionResultType.PASS;
                     }
                     if (!world.isAirBlock(pos.up())) {
-                        return true;
+                        return ActionResultType.PASS;
                     }
 
                     handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
@@ -136,7 +132,7 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
                         });
             }
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override

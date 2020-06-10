@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.perk.tree;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
@@ -21,7 +20,6 @@ import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
 import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
@@ -31,7 +29,6 @@ import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 
 /**
@@ -43,7 +40,7 @@ import java.util.Collection;
  */
 public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreePoint<T> implements DynamicPerkRender {
 
-    public PerkTreeGem(T perk, Point offset) {
+    public PerkTreeGem(T perk, Point.Float offset) {
         super(perk, offset);
         this.setRenderSize((int) (this.getRenderSize() * 1.4));
     }
