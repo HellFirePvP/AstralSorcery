@@ -10,7 +10,9 @@ package hellfirepvp.astralsorcery.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -37,21 +39,12 @@ import java.util.List;
  */
 public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
 
-    public RenderAltar(TileEntityRendererDispatcher rendererDispatcher) {
-        super(rendererDispatcher);
-    }
-
     @Override
     public void render(TileAltar tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
-        renderTypeBuffer.getBuffer()
-    }
-
-    @Override
-    public void render(TileAltar altar, double x, double y, double z, float pTicks, int destroyStage) {
-        if (altar.getAltarType().isThisGEThan(AltarType.RADIANCE) && altar.hasMultiblock()) {
-            IConstellation cst = altar.getFocusedConstellation();
+        if (tile.getAltarType().isThisGEThan(AltarType.RADIANCE) && tile.hasMultiblock()) {
+            IConstellation cst = tile.getFocusedConstellation();
             if (cst != null) {
-                float dayAlpha = DayTimeHelper.getCurrentDaytimeDistribution(altar.getWorld()) * 0.6F;
+                float dayAlpha = DayTimeHelper.getCurrentDaytimeDistribution(tile.getWorld()) * 0.6F;
 
                 int max = 3000;
                 int t = (int) (ClientScheduler.getClientTick() % max);
@@ -59,34 +52,27 @@ public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
                 float tr = 1F - (Math.abs(halfAge - t) / halfAge);
                 tr *= 1.3;
 
-                GlStateManager.disableAlphaTest();
-                GlStateManager.enableBlend();
-                Blending.DEFAULT.applyStateManager();
-                RenderHelper.enableGUIStandardItemLighting();
-
                 RenderingConstellationUtils.renderConstellationIntoWorldFlat(
-                        cst,
-                        new Vector3(x, y, z).add(0.5, 0.03, 0.5),
+                        cst, renderStack, renderTypeBuffer,
+                        new Vector3(0.5, 0.03, 0.5),
                         5.5 + tr,
                         2,
                         0.1F + dayAlpha);
-
-                RenderHelper.disableStandardItemLighting();
-                GlStateManager.disableBlend();
-                GlStateManager.enableAlphaTest();
             }
         }
 
-        ActiveSimpleAltarRecipe recipe = altar.getActiveRecipe();
+        ActiveSimpleAltarRecipe recipe = tile.getActiveRecipe();
         if (recipe != null) {
             recipe.getRecipeToCraft().getCraftingEffects()
-                    .forEach(effect -> effect.onTESR(altar, recipe.getState(), x, y, z, pTicks));
-
+                    .forEach(effect -> effect.onTESR(tile, recipe.getState(), renderStack, renderTypeBuffer, pTicks, combinedLight));
         }
-        if (altar.getAltarType().isThisGEThan(AltarType.RADIANCE)) {
-            long id = altar.getPos().toLong();
-            GlStateManager.disableAlphaTest();
-            GlStateManager.enableBlend();
+
+        if (tile.getAltarType().isThisGEThan(AltarType.RADIANCE)) {
+            renderStack.push();
+            renderStack.translate(0.5F, 4.5F, 0.5F);
+
+            IVertexBuilder lightRayBuf = renderTypeBuffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN);
+            long id = tile.getPos().toLong();
             if (recipe != null) {
                 List<WrappedIngredient> traitInputs = recipe.getRecipeToCraft().getRelayInputs();
                 if (!traitInputs.isEmpty()) {
@@ -97,18 +83,19 @@ public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
                         Color color = ColorizationHelper.getColor(traitInput)
                                 .orElse(ColorsAS.CELESTIAL_CRYSTAL);
 
-                        RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, color, 0x1231943167156902L | id | (i * 0x5151L), 20, 2F, amount);
+                        RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, color, 0x1231943167156902L | id | (i * 0x5151L), 20, 2F, amount);
                     }
                 } else {
-                    RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, Color.WHITE, id * 31L, 15, 1.5F, 35);
-                    RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, ColorsAS.CELESTIAL_CRYSTAL, id * 16L, 10, 1F, 25);
+                    RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, Color.WHITE, id * 31L, 15, 1.5F, 35);
+                    RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, ColorsAS.CELESTIAL_CRYSTAL, id * 16L, 10, 1F, 25);
                 }
-                RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, Color.WHITE, id * 31L, 10, 1F, 10);
+                RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, Color.WHITE, id * 31L, 10, 1F, 10);
             } else {
-                RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, Color.WHITE, id * 31L, 15, 1.5F, 35);
-                RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 4.5, z + 0.5, ColorsAS.CELESTIAL_CRYSTAL, id * 16L, 10, 1F, 25);
+                RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, Color.WHITE, id * 31L, 15, 1.5F, 35);
+                RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, ColorsAS.CELESTIAL_CRYSTAL, id * 16L, 10, 1F, 25);
             }
-            GlStateManager.enableAlphaTest();
+
+            renderStack.pop();
         }
     }
 }

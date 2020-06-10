@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.common.tile.TilePrism;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,5 +22,6 @@ import hellfirepvp.astralsorcery.common.tile.TilePrism;
 public class RenderPrism extends CustomTileEntityRenderer<TilePrism> {
 
     @Override
-    public void render(TilePrism prism, double x, double y, double z, float pTicks, int destroyStage) {}
+    public void render(TilePrism tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {}
+
 }

@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -17,6 +20,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
@@ -31,33 +35,39 @@ import java.awt.*;
 public class RenderRitualPedestal extends CustomTileEntityRenderer<TileRitualPedestal> {
 
     @Override
-    public void render(TileRitualPedestal pedestal, double x, double y, double z, float pTicks, int destroyStage) {
-        ItemStack stack = pedestal.getCurrentCrystal();
-        if (!stack.isEmpty()) {
-            ItemStack display = stack;
-            if (display.getItem() instanceof ItemAttunedRockCrystal) {
-                display = new ItemStack(BlocksAS.ROCK_COLLECTOR_CRYSTAL);
-            }
-            if (display.getItem() instanceof ItemAttunedCelestialCrystal) {
-                display = new ItemStack(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
-            }
+    public void render(TileRitualPedestal tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
+        ItemStack stack = tile.getCurrentCrystal();
+        if (stack.isEmpty()) {
+            return;
+        }
 
-            GlStateManager.pushMatrix();
-            GlStateManager.translated(x + 0.5, y + 1.2, z + 0.5);
-            GlStateManager.scaled(0.6F, 0.6F, 0.6F);
-            RenderingUtils.renderTranslucentItemStackModel(display, Color.WHITE, Blending.DEFAULT, 1F);
-            GlStateManager.popMatrix();
+        ItemStack display = stack;
+        if (display.getItem() instanceof ItemAttunedRockCrystal) {
+            display = new ItemStack(BlocksAS.ROCK_COLLECTOR_CRYSTAL);
+        }
+        if (display.getItem() instanceof ItemAttunedCelestialCrystal) {
+            display = new ItemStack(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
+        }
 
-            IWeakConstellation ritualConstellation = pedestal.getRitualConstellation();
-            if (ritualConstellation != null) {
-                long seed = RenderingUtils.getPositionSeed(pedestal.getPos());
-                int scales = pedestal.isWorking() ? 24 : 12;
-                int count = pedestal.isWorking() ? 16 : 12;
+        renderStack.push();
+        renderStack.translate(0.5F, 1.2F, 0.5F);
+        renderStack.scale(0.6F, 0.6F, 0.6F);
+        RenderingUtils.renderTranslucentItemStackModel(display, renderStack, Color.WHITE, Blending.DEFAULT, 255);
+        renderStack.pop();
 
-                GlStateManager.enableBlend();
-                RenderingDrawUtils.renderLightRayFan(x + 0.5, y + 1.2, z + 0.5, ritualConstellation.getConstellationColor(), seed, scales, scales, count);
-                GlStateManager.disableBlend();
-            }
+        IWeakConstellation ritualConstellation = tile.getRitualConstellation();
+        if (ritualConstellation != null) {
+            long seed = RenderingUtils.getPositionSeed(tile.getPos());
+            int scales = tile.isWorking() ? 24 : 12;
+            int count = tile.isWorking() ? 16 : 12;
+
+            renderStack.push();
+            renderStack.translate(0.5F, 1.2F, 0.5F);
+
+            IVertexBuilder buf = renderTypeBuffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN);
+            RenderingDrawUtils.renderLightRayFan(renderStack, buf, ritualConstellation.getConstellationColor(), seed, scales, scales, count);
+
+            renderStack.pop();
         }
     }
 }

@@ -62,7 +62,7 @@ public class EffectCheatDeath extends EffectCustomTexture {
                     le.getBoundingBox().grow(3), (e) -> e.isAlive() && e != le);
             for (LivingEntity lb : others) {
                 lb.setFire(10);
-                lb.knockBack(le, 2F, lb.posX - le.posX, lb.posZ - le.posZ);
+                lb.knockBack(le, 2F, lb.getPosX() - le.getPosX(), lb.getPosZ() - le.getPosZ());
             }
             //TODO particles
             //PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.PHOENIX_PROC, new Vector3(le.posX, le.posY, le.posZ));

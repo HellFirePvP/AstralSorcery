@@ -8,21 +8,19 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.tile.PrecisionSingleFluidTank;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -36,36 +34,25 @@ import java.awt.*;
 public class RenderWell extends CustomTileEntityRenderer<TileWell> {
 
     @Override
-    public void render(TileWell well, double x, double y, double z, float pTicks, int destroyStage) {
-        PrecisionSingleFluidTank tank = well.getTank();
+    public void render(TileWell tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
+        PrecisionSingleFluidTank tank = tile.getTank();
         if (!tank.getFluid().isEmpty() && tank.getFluidAmount() > 0) {
             FluidStack contained = tank.getFluid();
-            Color fluidColor = new Color(contained.getFluid().getAttributes().getColor(well.getWorld(), well.getPos()));
-
-            Vector3 offset = new Vector3(x, y, z).add(0.5D, 0.32D, 0.5D);
-            offset.addY(tank.getPercentageFilled() * 0.6);
             TextureAtlasSprite tas = RenderingUtils.getParticleTexture(contained);
+            Color fluidColor = new Color(contained.getFluid().getAttributes().getColor(tile.getWorld(), tile.getPos()));
+            IVertexBuilder buf = renderTypeBuffer.getBuffer(RenderTypesAS.TER_WELL_LIQUID);
 
-            Tessellator tes = Tessellator.getInstance();
-            BufferBuilder buf = tes.getBuffer();
+            Vector3 offset = new Vector3(0.5D, 0.32D, 0.5D).addY(tank.getPercentageFilled() * 0.6);
 
-            GlStateManager.disableAlphaTest();
-            RenderHelper.disableStandardItemLighting();
-
-            TextureHelper.bindBlockAtlas();
-
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, offset, Vector3.RotAxis.Y_AXIS.clone(), Math.toRadians(45), 0.54,
+            BlockAtlasTexture.getInstance().bindTexture();
+            RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, renderStack, offset, Vector3.RotAxis.Y_AXIS, (float) Math.toRadians(45F), 0.54F,
                     tas.getMinU(), tas.getMinV(), tas.getMaxU() - tas.getMinU(), tas.getMaxV() - tas.getMinV(),
                     fluidColor.getRed() / 255F, fluidColor.getGreen() / 255F, fluidColor.getBlue() / 255F, 1F);
-            tes.draw();
-
-            RenderHelper.enableStandardItemLighting();
-            GlStateManager.enableAlphaTest();
         }
-        ItemStack catalyst = well.getInventory().getStackInSlot(0);
-        if (destroyStage < 0 && !catalyst.isEmpty()) {
-            RenderingUtils.renderItemAsEntity(catalyst, x + 0.5, y + 0.75, z + 0.5, pTicks, well.getTicksExisted());
+
+        ItemStack catalyst = tile.getInventory().getStackInSlot(0);
+        if (!catalyst.isEmpty()) {
+            RenderingUtils.renderItemAsEntity(catalyst, renderStack, 0.5F, 0.75F, 0.5F, combinedLight, pTicks, tile.getTicksExisted());
         }
     }
 }

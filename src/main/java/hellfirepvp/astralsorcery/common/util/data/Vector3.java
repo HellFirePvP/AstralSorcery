@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.util.data;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.*;
@@ -488,7 +490,13 @@ public class Vector3 {
 
     @OnlyIn(Dist.CLIENT)
     public IVertexBuilder drawPos(IVertexBuilder buf) {
-        buf.pos(this.x, this.y, this.z);
+        buf.pos((float) this.x, (float) this.y, (float) this.z);
+        return buf;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public IVertexBuilder drawPos(Matrix4f renderMatrix, IVertexBuilder buf) {
+        buf.pos(renderMatrix, (float) this.x, (float) this.y, (float) this.z);
         return buf;
     }
 

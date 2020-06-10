@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
@@ -25,7 +25,7 @@ public class RenderingVectorUtils {
 
     public static void removeStandardTranslationFromTESRMatrix(float partialTicks) {
         Vector3 v = getStandardTranslationRemovalVector(partialTicks);
-        GlStateManager.translated(-v.getX(), -v.getY(), -v.getZ());
+        RenderSystem.translated(-v.getX(), -v.getY(), -v.getZ());
     }
 
     public static Vector3 getStandardTranslationRemovalVector(float partialTicks) {
@@ -50,6 +50,11 @@ public class RenderingVectorUtils {
     }
 
     public static double interpolate(double oldP, double newP, float partialTicks) {
+        if (oldP == newP) return oldP;
+        return oldP + ((newP - oldP) * partialTicks);
+    }
+
+    public static float interpolate(float oldP, float newP, float partialTicks) {
         if (oldP == newP) return oldP;
         return oldP + ((newP - oldP) * partialTicks);
     }
