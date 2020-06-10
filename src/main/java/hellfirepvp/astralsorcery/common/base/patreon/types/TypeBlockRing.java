@@ -9,19 +9,17 @@
 package hellfirepvp.astralsorcery.common.base.patreon.types;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.LightmapUtil;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.base.patreon.FlareColor;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffect;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
@@ -93,13 +91,13 @@ public class TypeBlockRing extends PatreonEffect {
                 pl != null && pl.getUniqueID().equals(playerUUID)) {
             MatrixStack renderStack = event.getMatrixStack();
 
-            float alpha = 1F;
+            int alpha = 255;
             if (pl.rotationPitch >= 35F) {
-                alpha = Math.max(0, (55F - pl.rotationPitch) / 20F);
+                alpha *= Math.max(0, (55F - pl.rotationPitch) / 20F);
             }
             renderStack.push();
             renderStack.translate(0, 0.2, 0);
-            renderRingAt(renderStack, alpha, event.getPartialTicks());
+            renderRingAt(renderStack, pl, alpha, event.getPartialTicks());
             renderStack.pop();
         }
     }
@@ -112,11 +110,11 @@ public class TypeBlockRing extends PatreonEffect {
             return;
         }
 
-        renderRingAt(ev.getMatrixStack(), 1F, ev.getPartialRenderTick());
+        renderRingAt(ev.getMatrixStack(), player, 255, ev.getPartialRenderTick());
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void renderRingAt(MatrixStack renderStack, float alphaMultiplier, float pTicks) {
+    private void renderRingAt(MatrixStack renderStack, PlayerEntity player, int alphaMultiplier, float pTicks) {
         float addedRotationAngle = 0;
 
         if (rotationSpeed > 1) {
@@ -124,13 +122,10 @@ public class TypeBlockRing extends PatreonEffect {
             addedRotationAngle = (rot / ((float) (rotationSpeed))) * 360F + this.rotationPart * pTicks;
         }
 
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder vb = tes.getBuffer();
-
-        GlStateManager.disableAlphaTest();
-        GlStateManager.disableCull();
-        GlStateManager.enableBlend();
-        Blending.ADDITIVE_ALPHA.applyStateManager();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.disableCull();
+        RenderSystem.enableBlend();
+        Blending.ADDITIVE_ALPHA.apply();
 
         for (int rotation = 0; rotation < 360; rotation += (360 / repetition)) {
             for (BlockPos offset : pattern.keySet()) {
@@ -146,25 +141,24 @@ public class TypeBlockRing extends PatreonEffect {
                 Vector3 dir = new Vector3(offset.getX() - distance, offset.getY(), 0);
                 dir.rotate(Math.toRadians(angle), Vector3.RotAxis.Y_AXIS);
                 dir.multiply(new Vector3(0.2F, 0.1F, 0.2F));
-                dir.add(vec);
 
-                GlStateManager.pushMatrix();
-                GlStateManager.translated(dir.getX(), dir.getY(), dir.getZ());
-                GlStateManager.scaled(0.09, 0.09, 0.09);
+                renderStack.push();
+                renderStack.translate(dir.getX(), dir.getY(), dir.getZ());
+                renderStack.scale(0.09F, 0.09F, 0.09F);
 
-                vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-                RenderingDrawUtils.renderTexturedCubeCentralColorLighted(vb, 1F,
-                        tas.getMinU(), tas.getMinV(),
-                        tas.getMaxU() - tas.getMinU(), tas.getMaxV() - tas.getMinV(),
-                        1F, 1F, 1F, alphaMultiplier);
-                tes.draw();
-
-                GlStateManager.popMatrix();
+                RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP, buf -> {
+                    RenderingDrawUtils.renderTexturedCubeCentralColorLighted(buf, renderStack,
+                            tas.getMinU(), tas.getMinV(),
+                            tas.getMaxU() - tas.getMinU(), tas.getMaxV() - tas.getMinV(),
+                            255, 255, 255, alphaMultiplier, LightmapUtil.getPackedLightCoords(player.getEntityWorld(), player.getPosition()));
+                });
+                renderStack.pop();
             }
         }
 
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.enableCull();
-        GlStateManager.enableAlphaTest();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
+        RenderSystem.enableCull();
+        RenderSystem.enableAlphaTest();
     }
 }

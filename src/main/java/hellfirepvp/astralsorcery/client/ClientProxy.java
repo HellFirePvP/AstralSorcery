@@ -106,8 +106,6 @@ public class ClientProxy extends CommonProxy {
         modEventBus.addListener(RegistryItems::registerColors);
         modEventBus.addListener(RegistryBlocks::registerColors);
         modEventBus.addListener(this::onClientSetup);
-        modEventBus.addListener(this::stitchBucketTextures);
-        modEventBus.addListener(this::onModelBake);
     }
 
     @Override
@@ -163,24 +161,6 @@ public class ClientProxy extends CommonProxy {
             return;
         }
         super.openGui(player, type, data);
-    }
-
-    // Append custom textures otherwise not referenced
-    private void stitchBucketTextures(TextureStitchEvent.Pre event) {
-        if (event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
-            event.addSprite(AstralSorcery.key("fluid/bucket_mask"));
-        }
-    }
-
-    private void onModelBake(ModelBakeEvent event) {
-        //Returns actually a SimpleModelState, which is however both an IModelState and ISprite
-        //ISprite bucketTransforms = (ISprite) ForgeBlockStateV1.Transforms.get("forge:default-item")
-        //        .orElseThrow(() -> new IllegalStateException("Forge ModelTransforms not initialized!"));
-        //RegistryFluids.registerFluidBucketRender((bucketModel, modelName) -> {
-        //    bucketModel.bakeModel()
-        //    IBakedModel baked = bucketModel.bake(event.getModelLoader(), Minecraft.getInstance().getTextureMap()::getSprite, bucketTransforms, DefaultVertexFormats.ITEM);
-        //    event.getModelRegistry().put(modelName, baked);
-        //});
     }
 
     private void onClientSetup(FMLClientSetupEvent event) {

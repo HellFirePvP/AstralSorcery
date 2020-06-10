@@ -1,3 +1,5 @@
 {
-  "parent": "item/bucket"
+  "parent": "forge:item/bucket_drip",
+  "loader": "forge:bucket",
+  "fluid": "astralsorcery:liquid_starlight"
 }

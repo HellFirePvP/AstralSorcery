@@ -232,7 +232,7 @@ public class RenderingUtils {
         RenderSystem.popMatrix();
     }
 
-    public static void renderTranslucentItemStack(ItemStack stack, MatrixStack renderStack, int pTicks) {
+    public static void renderTranslucentItemStack(ItemStack stack, MatrixStack renderStack, float pTicks) {
         renderTranslucentItemStack(stack, renderStack, pTicks, Color.WHITE, 25);
     }
 

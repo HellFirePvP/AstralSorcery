@@ -14,7 +14,9 @@ import hellfirepvp.astralsorcery.common.world.structure.ConfiguredStructureStart
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -47,8 +49,8 @@ public abstract class ConfiguredStructureFeature extends ScatteredStructure<NoFe
     }
 
     protected IStartFactory configuredStart(ConfiguredStructureStart.IConfiguredStartFactory factory) {
-        return (structure, chunkX, chunkZ, biome, structureBoundingBox, reference, seed) -> {
-            ConfiguredStructureStart start = factory.create(structure, chunkX, chunkZ, biome, structureBoundingBox, reference, seed);
+        return (structure, chunkX, chunkZ, structureBoundingBox, reference, seed) -> {
+            ConfiguredStructureStart start = factory.create(structure, chunkX, chunkZ, structureBoundingBox, reference, seed);
             start.setPlacementStrategy(ConfiguredStructureFeature.this.placement);
             return start;
         };
@@ -70,16 +72,16 @@ public abstract class ConfiguredStructureFeature extends ScatteredStructure<NoFe
     }
 
     @Override
-    public boolean hasStartAt(ChunkGenerator<?> chunkGen, Random rand, int chunkPosX, int chunkPosZ) {
-        ChunkPos chunkpos = this.getStartPositionForPosition(chunkGen, rand, chunkPosX, chunkPosZ, 0, 0);
-        if (chunkPosX == chunkpos.x && chunkPosZ == chunkpos.z) {
-            BlockPos at = new BlockPos(chunkPosX * 16 + 9, 0, chunkPosZ * 16 + 9);
-            int yLevel = chunkGen.func_222531_c(at.getX(), at.getZ(), Heightmap.Type.OCEAN_FLOOR_WG);
+    public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> chunkGenerator, Random rand, int chunkX, int chunkZ, Biome biomeIn) {
+        ChunkPos chunkpos = this.getStartPositionForPosition(chunkGenerator, rand, chunkX, chunkZ, 0, 0);
+        if (chunkX == chunkpos.x && chunkZ == chunkpos.z) {
+            BlockPos at = new BlockPos(chunkX * 16 + 9, 0, chunkZ * 16 + 9);
+            int yLevel = chunkGenerator.func_222531_c(at.getX(), at.getZ(), Heightmap.Type.OCEAN_FLOOR_WG);
             at = new BlockPos(at.getX(), yLevel, at.getZ());
-            Biome biome = chunkGen.getBiomeProvider().getBiome(at);
+            Biome biome = biomeManagerIn.getBiome(at);
 
-            return chunkGen.hasStructure(biome, this) &&
-                    this.getPlacementConfig().canPlace(chunkGen.world, chunkGen.getBiomeProvider(), at, rand);
+            return chunkGenerator.hasStructure(biome, this) &&
+                    this.getPlacementConfig().canPlace(chunkGenerator.world, biomeManagerIn, at, rand);
         }
 
         return false;

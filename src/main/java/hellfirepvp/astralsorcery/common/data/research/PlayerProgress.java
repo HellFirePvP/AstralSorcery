@@ -176,11 +176,11 @@ public class PlayerProgress {
     public void store(CompoundNBT cmp) {
         ListNBT list = new ListNBT();
         for (ResourceLocation s : knownConstellations) {
-            list.add(new StringNBT(s.toString()));
+            list.add(StringNBT.valueOf(s.toString()));
         }
         ListNBT l = new ListNBT();
         for (ResourceLocation s : seenConstellations) {
-            l.add(new StringNBT(s.toString()));
+            l.add(StringNBT.valueOf(s.toString()));
         }
         cmp.put("constellations", list);
         cmp.put("seenConstellations", l);
@@ -188,7 +188,7 @@ public class PlayerProgress {
         cmp.putBoolean("wasAttuned", wasOnceAttuned);
         ListNBT listTokens = new ListNBT();
         for (String s : freePointTokens) {
-            listTokens.add(new StringNBT(s));
+            listTokens.add(StringNBT.valueOf(s));
         }
         cmp.put("pointTokens", listTokens);
         int[] researchArray = new int[researchProgression.size()];
@@ -225,11 +225,11 @@ public class PlayerProgress {
     public void storeKnowledge(CompoundNBT cmp) {
         ListNBT list = new ListNBT();
         for (ResourceLocation s : knownConstellations) {
-            list.add(new StringNBT(s.toString()));
+            list.add(StringNBT.valueOf(s.toString()));
         }
         ListNBT l = new ListNBT();
         for (ResourceLocation s : seenConstellations) {
-            l.add(new StringNBT(s.toString()));
+            l.add(StringNBT.valueOf(s.toString()));
         }
         cmp.put("constellations", list);
         cmp.put("seenConstellations", l);

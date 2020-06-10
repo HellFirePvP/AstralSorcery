@@ -11,16 +11,17 @@ package hellfirepvp.astralsorcery.common.item.wand;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingOverlayUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
-import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.item.base.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHeldRender;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemOverlayRender;
@@ -32,10 +33,9 @@ import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.block.BlockGeometry;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.observerlib.client.util.BufferBuilderDecorator;
+import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -98,36 +98,31 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean renderInHand(ItemStack stack, float pTicks) {
+    public boolean renderInHand(ItemStack stack, MatrixStack renderStack, float pTicks) {
         PlayerEntity player = Minecraft.getInstance().player;
         Map<BlockPos, BlockState> placeStates = getPlayerPlaceableStates(player, stack);
         if (placeStates.isEmpty()) {
             return true;
         }
 
-        TextureHelper.bindBlockAtlas();
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilderDecorator buf = BufferBuilderDecorator.decorate(tes.getBuffer());
+        BlockAtlasTexture.getInstance().bindTexture();
 
-        float[] fullBright = new float[] { 15F, 15F };
-        buf.setLightmapDecorator((skyLight, blockLight) -> fullBright);
+        int[] fullBright = new int[] { 15, 15 };
+        BufferDecoratorBuilder decorator = BufferDecoratorBuilder.withLightmap((skyLight, blockLight) -> fullBright);
 
-        GlStateManager.enableBlend();
-        Blending.ADDITIVEDARK.applyStateManager();
-        GlStateManager.disableDepthTest();
-        GlStateManager.disableAlphaTest();
+        RenderSystem.enableBlend();
+        Blending.ADDITIVEDARK.apply();
+        RenderSystem.disableDepthTest();
+        RenderSystem.disableAlphaTest();
 
-        GlStateManager.pushMatrix();
-        RenderingVectorUtils.removeStandardTranslationFromTESRMatrix(pTicks);
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        placeStates.forEach((pos, state) -> RenderingUtils.renderSimpleBlockModel(state, buf, pos, null, false));
-        tes.draw();
-        GlStateManager.popMatrix();
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.BLOCK, buf -> {
+            placeStates.forEach((pos, state) -> RenderingUtils.renderSimpleBlockModel(state, renderStack, decorator.decorate(buf), pos, null, false));
+        });
 
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableDepthTest();
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.disableBlend();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableDepthTest();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
         return true;
     }
 
@@ -163,15 +158,15 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
             PlaceMode nextMode = mode.next();
             setPlaceMode(held, nextMode);
             player.sendStatusMessage(nextMode.getDisplay(), true);
-            return ActionResult.newResult(ActionResultType.SUCCESS, held);
+            return ActionResult.resultSuccess(held);
         }
         if (world.isRemote()) {
-            return ActionResult.newResult(ActionResultType.SUCCESS, held);
+            return ActionResult.resultSuccess(held);
         }
 
         Map<BlockPos, BlockState> placeStates = getPlayerPlaceableStates(player, held);
         if (placeStates.isEmpty()) {
-            return ActionResult.newResult(ActionResultType.FAIL, held);
+            return ActionResult.resultFail(held);
         }
 
         Map<BlockState, Tuple<ItemStack, Integer>> availableStacks = MapStream.of(ItemBlockStorage.getInventoryMatching(player, held))
@@ -214,7 +209,7 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
             }
         }
 
-        return ActionResult.newResult(ActionResultType.SUCCESS, held);
+        return ActionResult.resultSuccess(held);
     }
 
     @Nonnull
@@ -322,15 +317,15 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
                 switch (placedAgainst.getAxis()) {
                     case X:
                         cmpFrom = center.getX();
-                        cmpTo = player.posX;
+                        cmpTo = player.getPosX();
                         break;
                     case Y:
                         cmpFrom = center.getY();
-                        cmpTo = player.posY;
+                        cmpTo = player.getPosY();
                         break;
                     case Z:
                         cmpFrom = center.getZ();
-                        cmpTo = player.posZ;
+                        cmpTo = player.getPosZ();
                         break;
                     default:
                         return Lists.newLinkedList();

@@ -8,14 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.event;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
-import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.draw.TextureHelper;
 import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
@@ -26,7 +24,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
@@ -69,7 +66,7 @@ public class AlignmentChargeRenderer implements ITickHandler {
             return;
         }
 
-        MainWindow window = Minecraft.getInstance().mainWindow;
+        MainWindow window = event.getWindow();
         int screenWidth = window.getScaledWidth();
         int screenHeight = window.getScaledHeight();
         int barWidth = 194;
@@ -101,30 +98,28 @@ public class AlignmentChargeRenderer implements ITickHandler {
         float uLengthUsage = SpritesAS.SPR_OVERLAY_CHARGE_COLORLESS.getULength() * usagePerc;
         Color usageColor = hasEnoughCharge ? ColorsAS.OVERLAY_CHARGE_USAGE : ColorsAS.OVERLAY_CHARGE_MISSING;
 
-        GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
-        GlStateManager.disableAlphaTest();
+        RenderSystem.enableBlend();
+        RenderSystem.disableAlphaTest();
 
         SpritesAS.SPR_OVERLAY_CHARGE.bindTexture();
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buf -> {
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             RenderingGuiUtils.rect(buf, offsetLeft, offsetTop, 10, width, 54)
-                    .tex(uvColored.getA(), uvColored.getB() + 0.002F, uLengthCharge, SpritesAS.SPR_OVERLAY_CHARGE.getVWidth() - 0.002F)
                     .color(1F, 1F, 1F, this.alphaReveal)
+                    .tex(uvColored.getA(), uvColored.getB() + 0.002F, uLengthCharge, SpritesAS.SPR_OVERLAY_CHARGE.getVWidth() - 0.002F)
                     .draw();
         });
 
         SpritesAS.SPR_OVERLAY_CHARGE_COLORLESS.bindTexture();
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buf -> {
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             RenderingGuiUtils.rect(buf, offsetLeft + width, offsetTop, 10, usageWidth, 54)
-                    .tex(uvColorless.getA() + uLengthCharge, uvColorless.getB() + 0.002F, uLengthUsage, SpritesAS.SPR_OVERLAY_CHARGE_COLORLESS.getVWidth() - 0.002F)
                     .color(usageColor.getRed(), usageColor.getGreen(), usageColor.getBlue(), (int) (this.alphaReveal * 255F))
+                    .tex(uvColorless.getA() + uLengthCharge, uvColorless.getB() + 0.002F, uLengthUsage, SpritesAS.SPR_OVERLAY_CHARGE_COLORLESS.getVWidth() - 0.002F)
                     .draw();
         });
 
-        GlStateManager.enableAlphaTest();
-        GlStateManager.disableBlend();
-
-        TextureHelper.bindBlockAtlas();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.disableBlend();
+        BlockAtlasTexture.getInstance().bindTexture();
     }
 
     @Override

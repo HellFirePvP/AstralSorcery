@@ -36,13 +36,13 @@ import java.util.Objects;
  */
 public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
 
-    private Point offset;
+    private Point.Float offset;
     private final T perk;
     private int renderSize;
 
     private static final int spriteSize = 11;
 
-    public PerkTreePoint(T perk, Point offset) {
+    public PerkTreePoint(T perk, Point.Float offset) {
         this.offset = offset;
         this.perk = perk;
         this.renderSize = spriteSize;
@@ -66,7 +66,7 @@ public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
         return perk;
     }
 
-    public Point getOffset() {
+    public Point.Float getOffset() {
         return offset;
     }
 

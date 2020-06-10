@@ -8,12 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.event;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHeldRender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -37,6 +37,7 @@ public class ItemHeldEffectRenderer {
 
     private void onHeldRender(RenderWorldLastEvent event) {
         float pTicks = event.getPartialTicks();
+        MatrixStack renderStack = event.getMatrixStack();
 
         if (Minecraft.getInstance().player == null || Minecraft.getInstance().world == null) {
             return;
@@ -44,19 +45,19 @@ public class ItemHeldEffectRenderer {
 
 
         for (EquipmentSlotType type : EquipmentSlotType.values()) {
-            if (doHeldRender(Minecraft.getInstance().player.getItemStackFromSlot(type), pTicks)) {
+            if (doHeldRender(Minecraft.getInstance().player.getItemStackFromSlot(type), renderStack, pTicks)) {
                 break;
             }
         }
     }
 
-    private boolean doHeldRender(ItemStack heldItem, float pTicks) {
+    private boolean doHeldRender(ItemStack heldItem, MatrixStack renderStack, float pTicks) {
         if (heldItem.isEmpty()) {
             return false;
         }
         Item held = heldItem.getItem();
         if (held instanceof ItemHeldRender) {
-            return ((ItemHeldRender) held).renderInHand(heldItem, pTicks);
+            return ((ItemHeldRender) held).renderInHand(heldItem, renderStack, pTicks);
         }
         return false;
     }

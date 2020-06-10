@@ -385,40 +385,42 @@ public class RenderingDrawUtils {
         pos.clone().add(v4).subtract(iPos).drawPos(vb).color(r, g, b, alpha).tex(u, v + vLength).endVertex();
     }
 
-    public static void renderTexturedCubeCentralColorLighted(IVertexBuilder buf,
+    public static void renderTexturedCubeCentralColorLighted(IVertexBuilder buf, MatrixStack renderStack,
                                                              float u, float v, float uLength, float vLength,
                                                              int r, int g, int b, int a,
                                                              int combinedLight) {
 
-        buf.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
-        buf.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
+        Matrix4f matr = renderStack.getLast().getMatrix();
 
-        buf.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
-        buf.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
 
-        buf.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
-        buf.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
-        buf.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
-        buf.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
 
-        buf.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
 
-        buf.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
-        buf.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
-        buf.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
 
-        buf.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
-        buf.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
-        buf.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
+
+        buf.pos(matr, -0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v).lightmap(combinedLight).endVertex();
+        buf.pos(matr,  0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).lightmap(combinedLight).endVertex();
+        buf.pos(matr, -0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
     }
 
     public static void renderTexturedCubeCentralColorNormal(IVertexBuilder vb,

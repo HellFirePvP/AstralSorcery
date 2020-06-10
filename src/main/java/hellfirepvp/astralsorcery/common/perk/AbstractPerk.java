@@ -60,7 +60,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
     public static final PerkCategory CATEGORY_EPIPHANY = new PerkCategory("epiphany", TextFormatting.GOLD);
     public static final PerkCategory CATEGORY_FOCUS = new PerkCategory("focus", TextFormatting.GOLD);
 
-    protected final Point offset;
+    protected final Point.Float offset;
     private PerkCategory category = CATEGORY_BASE;
     protected String ovrUnlocalizedNamePrefix = null;
     private PerkTreePoint<? extends AbstractPerk> treePoint = null;
@@ -71,7 +71,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
 
     public AbstractPerk(ResourceLocation name, int x, int y) {
         this.setRegistryName(name);
-        this.offset = new Point(x, y);
+        this.offset = new Point.Float(x, y);
         this.attachListeners(MinecraftForge.EVENT_BUS);
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
     }
 
     @Nonnull
-    public Point getOffset() {
+    public Point.Float getOffset() {
         return offset;
     }
 

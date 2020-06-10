@@ -45,8 +45,8 @@ public class FeatureSmallShrineStructure extends ConfiguredStructureFeature {
 
     public static class Start extends ConfiguredStructureStart {
 
-        public Start(Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox structureBox, int referenceIn, long seed) {
-            super(structure, chunkX, chunkZ, biome, structureBox, referenceIn, seed);
+        public Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox structureBox, int referenceIn, long seed) {
+            super(structure, chunkX, chunkZ, structureBox, referenceIn, seed);
         }
 
         @Override

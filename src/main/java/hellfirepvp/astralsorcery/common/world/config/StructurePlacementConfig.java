@@ -8,8 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.world.config;
 
-import hellfirepvp.astralsorcery.common.structure.types.StructureType;
-import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;

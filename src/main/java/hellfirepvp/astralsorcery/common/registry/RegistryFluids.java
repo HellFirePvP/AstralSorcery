@@ -8,37 +8,27 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import com.google.common.base.CaseFormat;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.fluid.BlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.fluid.ItemLiquidStarlightBucket;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.ISprite;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ModelDynBucket;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -66,22 +56,6 @@ public class RegistryFluids {
 
         FLUID_BLOCKS.add(BlocksAS.FLUID_LIQUID_STARLIGHT = new BlockLiquidStarlight(() -> LIQUID_STARLIGHT_SOURCE));
         FLUID_HOLDER_ITEMS.add(ItemsAS.BUCKET_LIQUID_STARLIGHT = new ItemLiquidStarlightBucket(() -> LIQUID_STARLIGHT_SOURCE));
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void registerFluidBucketRender(BiConsumer<IUnbakedModel, ModelResourceLocation> modelBakery) {
-        makeBucketModel(ItemsAS.BUCKET_LIQUID_STARLIGHT, LIQUID_STARLIGHT_SOURCE, modelBakery);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private static void makeBucketModel(Item bucketItem, Fluid fluid, BiConsumer<IUnbakedModel, ModelResourceLocation> modelBakery) {
-        ModelResourceLocation modelName = new ModelResourceLocation(bucketItem.getRegistryName(), "inventory");
-        ResourceLocation vanillaBucket = new ResourceLocation("item/bucket");
-        ResourceLocation fluidOverlay = AstralSorcery.key("fluid/bucket_mask");
-
-        ModelDynBucket bucket = new ModelDynBucket(vanillaBucket, fluidOverlay, null,
-                fluid, true, false);
-        modelBakery.accept(bucket, modelName);
     }
 
     private static void makeProperties() {
