@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -55,8 +54,8 @@ public class RenderRitualPedestal extends CustomTileEntityRenderer<TileRitualPed
         }
 
         renderStack.push();
-        renderStack.translate(0.5F, 1.2F, 0.5F);
-        renderStack.scale(0.6F, 0.6F, 0.6F);
+        renderStack.translate(0.5F, 0.9F, 0.5F);
+        renderStack.scale(1.5F, 1.5F, 1.5F);
         RenderingUtils.renderTranslucentItemStackModel(display, renderStack, Color.WHITE, Blending.DEFAULT, 255);
         renderStack.pop();
 
@@ -69,8 +68,7 @@ public class RenderRitualPedestal extends CustomTileEntityRenderer<TileRitualPed
             renderStack.push();
             renderStack.translate(0.5F, 1.2F, 0.5F);
 
-            IVertexBuilder buf = renderTypeBuffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN);
-            RenderingDrawUtils.renderLightRayFan(renderStack, buf, ritualConstellation.getConstellationColor(), seed, scales, scales, count);
+            RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, ritualConstellation.getConstellationColor(), seed, scales, scales, count);
 
             renderStack.pop();
         }

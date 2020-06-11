@@ -123,7 +123,7 @@ public class FXCube extends EntityVisualFX implements EntityDynamicFX {
 
         int alpha = this.getAlpha(pTicks);
         Color c = this.getColor(pTicks);
-        Vector3 translateTo = this.getRenderPosition(pTicks);
+        Vector3 translateTo = this.getRenderPosition(pTicks).subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
         Vector3 rotation = getInterpolatedRotation(pTicks);
         float scale = this.getScale(pTicks);
 

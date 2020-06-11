@@ -67,7 +67,7 @@ public class RenderingConstellationUtils {
                 for (int i = 0; i < 4; i++) {
                     Vector3 pos = offset00.clone().add(vecU.clone().multiply(((i + 1) & 2) >> 1)).add(vecCV.clone().multiply(((i + 2) & 2) >> 1));
                     vb.pos(matr, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ())
-                            .color(r, g, b, MathHelper.clamp(brightnessFn.get() * 255, 0, 255))
+                            .color(r, g, b, MathHelper.clamp((int) (brightnessFn.get() * 255), 0, 255))
                             .tex(((i + 2) & 2) >> 1, ((i + 3) & 2) >> 1)
                             .endVertex();
                 }
@@ -87,7 +87,7 @@ public class RenderingConstellationUtils {
                 int v = ((i + 2) & 2) >> 1;
                 Vector3 pos = ofStar.clone().add(dirU.clone().multiply(u << 1)).add(dirV.clone().multiply(v << 1));
                 vb.pos(matr, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ())
-                        .color(r, g, b, MathHelper.clamp(brightnessFn.get() * 255, 0, 255))
+                        .color(r, g, b, MathHelper.clamp((int) (brightnessFn.get() * 255), 0, 255))
                         .tex(u, v)
                         .endVertex();
             }

@@ -75,7 +75,6 @@ public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
             renderStack.push();
             renderStack.translate(0.5F, 4.5F, 0.5F);
 
-            IVertexBuilder lightRayBuf = renderTypeBuffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN);
             long id = tile.getPos().toLong();
             if (recipe != null) {
                 List<WrappedIngredient> traitInputs = recipe.getRecipeToCraft().getRelayInputs();
@@ -84,19 +83,18 @@ public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
                     for (int i = 0; i < traitInputs.size(); i++) {
                         WrappedIngredient ingredient = traitInputs.get(i);
                         ItemStack traitInput = ingredient.getRandomMatchingStack(ClientScheduler.getClientTick());
-                        Color color = ColorizationHelper.getColor(traitInput)
-                                .orElse(ColorsAS.CELESTIAL_CRYSTAL);
+                        Color color = ColorizationHelper.getColor(traitInput).orElse(ColorsAS.CELESTIAL_CRYSTAL);
 
-                        RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, color, 0x1231943167156902L | id | (i * 0x5151L), 20, 2F, amount);
+                        RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, color, 0x1231943167156902L | id | (i * 0x5151L), 20, 2F, amount);
                     }
                 } else {
-                    RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, Color.WHITE, id * 31L, 15, 1.5F, 35);
-                    RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, ColorsAS.CELESTIAL_CRYSTAL, id * 16L, 10, 1F, 25);
+                    RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, Color.WHITE, id * 31L, 15, 1.5F, 35);
+                    RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, ColorsAS.CELESTIAL_CRYSTAL, id * 16L, 10, 1F, 25);
                 }
-                RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, Color.WHITE, id * 31L, 10, 1F, 10);
+                RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, Color.WHITE, id * 31L, 10, 1F, 10);
             } else {
-                RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, Color.WHITE, id * 31L, 15, 1.5F, 35);
-                RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, ColorsAS.CELESTIAL_CRYSTAL, id * 16L, 10, 1F, 25);
+                RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, Color.WHITE, id * 31L, 15, 1.5F, 35);
+                RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, ColorsAS.CELESTIAL_CRYSTAL, id * 16L, 10, 1F, 25);
             }
 
             renderStack.pop();

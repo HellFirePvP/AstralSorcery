@@ -72,9 +72,9 @@ public class RenderEntityGrapplingHook extends EntityRenderer<EntityGrapplingHoo
         SpritesAS.SPR_GRAPPLING_HOOK.bindTexture();
 
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-        RenderingDrawUtils.renderFacingSpriteVB(buf,
+        RenderingDrawUtils.renderFacingSpriteVB(buf, matrixStack,
                 entityPos.getX(), entityPos.getY(), entityPos.getZ(),
-                partialTicks, 1.3F, 0F,
+                1.3F, 0F,
                 SpritesAS.SPR_GRAPPLING_HOOK, ClientScheduler.getClientTick() + entity.ticksExisted,
                 255, 255, 255, alphaMultiplier);
         buf.finishDrawing();
@@ -86,9 +86,9 @@ public class RenderEntityGrapplingHook extends EntityRenderer<EntityGrapplingHoo
 
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
         for (Vector3 pos : line) {
-            RenderingDrawUtils.renderFacingFullQuadVB(buf,
+            RenderingDrawUtils.renderFacingFullQuadVB(buf, matrixStack,
                     entityPos.getX() + pos.getX(), entityPos.getY() + pos.getY(), entityPos.getZ() + pos.getZ(),
-                    partialTicks, 0.3F, 0F,
+                    0.3F, 0F,
                     50, 40, 180, (int) (alphaMultiplier * 0.8F));
         }
         buf.finishDrawing();

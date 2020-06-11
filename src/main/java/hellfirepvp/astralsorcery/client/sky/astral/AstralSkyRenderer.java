@@ -129,7 +129,7 @@ public class AstralSkyRenderer implements IRenderHandler {
         FogRenderer.applyFog();
         RenderSystem.depthMask(false);
         RenderSystem.enableFog();
-        RenderSystem.color3f(skyR, skyG, skyB);
+        RenderSystem.color4f(skyR, skyG, skyB, 1F);
         this.sky.render(renderStack);
         RenderSystem.disableFog();
 
@@ -138,10 +138,12 @@ public class AstralSkyRenderer implements IRenderHandler {
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
 
+        RenderSystem.shadeModel(GL11.GL_SMOOTH);
         float[] duskDawnColors = world.getDimension().calcSunriseSunsetColors(world.getCelestialAngle(pTicks), pTicks);
         if (duskDawnColors != null) {
             this.renderDuskDawn(duskDawnColors, renderStack, world, pTicks);
         }
+        RenderSystem.shadeModel(GL11.GL_FLAT);
 
         //Prep celestials
         RenderSystem.enableTexture();
@@ -171,7 +173,7 @@ public class AstralSkyRenderer implements IRenderHandler {
         //Draw horizon
         RenderSystem.disableTexture();
 
-        RenderSystem.color3f(0F, 0F, 0F);
+        RenderSystem.color4f(0F, 0F, 0F, 1F);
         double horizonDiff = Minecraft.getInstance().player.getEyePosition(pTicks).y - world.getHorizonHeight();
         if (horizonDiff < 0D) {
             renderStack.push();
@@ -179,15 +181,7 @@ public class AstralSkyRenderer implements IRenderHandler {
             this.skyHorizon.render(renderStack);
             renderStack.pop();
         }
-
-        if (world.getDimension().isSkyColored()) {
-            RenderSystem.color3f(
-                    skyR * 0.2F + 0.04F,
-                    skyG * 0.2F + 0.04F,
-                    skyB * 0.6F + 0.1F);
-        } else {
-            RenderSystem.color3f(skyR, skyG, skyB);
-        }
+        RenderSystem.color4f(1F, 1F, 1F, 1F);
 
         RenderSystem.enableTexture();
         RenderSystem.depthMask(true);
@@ -310,10 +304,10 @@ public class AstralSkyRenderer implements IRenderHandler {
             float perc = ((float) eclTick) / DayTimeHelper.getLunarEclipseHalfDuration();
             RenderSystem.color4f(1F, 0.4F + (0.6F * perc), 0.4F + (0.6F * perc), rainAlpha);
             this.renderMoon(renderStack, world);
-            RenderSystem.color4f(1F, 1F, 1F, 1F);
         } else {
             this.renderMoon(renderStack, world);
         }
+        RenderSystem.color4f(1F, 1F, 1F, 1F);
     }
 
     private void renderSolarEclipseSun(MatrixStack renderStack, int eclipseTick) {
@@ -391,9 +385,6 @@ public class AstralSkyRenderer implements IRenderHandler {
     private void renderDuskDawn(float[] duskDawnColors, MatrixStack renderStack, ClientWorld world, float pTicks) {
         BufferBuilder buf = Tessellator.getInstance().getBuffer();
 
-        RenderSystem.disableTexture();
-        RenderSystem.shadeModel(GL11.GL_SMOOTH);
-
         renderStack.push();
         renderStack.rotate(Vector3f.XP.rotationDegrees(90.0F));
         float f3 = MathHelper.sin(world.getCelestialAngleRadians(pTicks)) < 0.0F ? 180.0F : 0.0F;
@@ -417,7 +408,6 @@ public class AstralSkyRenderer implements IRenderHandler {
         WorldVertexBufferUploader.draw(buf);
 
         renderStack.pop();
-        RenderSystem.shadeModel(GL11.GL_FLAT);
     }
 
     private static class StarDrawList extends BatchedVertexList {

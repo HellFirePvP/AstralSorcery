@@ -83,7 +83,7 @@ public class FXBlock extends EntityVisualFX {
         Color c = this.getColor(pTicks);
         int[] colorOverride = new int[] { c.getRed(), c.getGreen(), c.getBlue(), alpha };
 
-        Vector3 translate = this.getRenderPosition(pTicks);
+        Vector3 translate = this.getRenderPosition(pTicks).subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
         Vector3 rotation = this.getInterpolatedRotation(pTicks);
         float scale = this.getScale(pTicks);
 

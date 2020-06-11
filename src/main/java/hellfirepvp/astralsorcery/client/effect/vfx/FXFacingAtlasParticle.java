@@ -12,6 +12,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -65,9 +66,9 @@ public class FXFacingAtlasParticle extends EntityVisualFX {
         float fScale = this.getScale(pTicks);
         Color col = this.getColor(pTicks);
 
-        RenderingDrawUtils.renderFacingQuadVB(vb,
+        RenderingDrawUtils.renderFacingQuadVB(vb, renderStack,
                 vec.getX(), vec.getY(), vec.getZ(),
-                pTicks, fScale, 0F,
+                fScale, 0F,
                 this.minU, this.minV, this.uLength, this.vLength,
                 col.getRed(), col.getGreen(), col.getBlue(), alpha);
     }

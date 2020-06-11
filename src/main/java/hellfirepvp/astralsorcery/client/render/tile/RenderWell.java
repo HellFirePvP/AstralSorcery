@@ -57,7 +57,7 @@ public class RenderWell extends CustomTileEntityRenderer<TileWell> {
 
         ItemStack catalyst = tile.getInventory().getStackInSlot(0);
         if (!catalyst.isEmpty()) {
-            RenderingUtils.renderItemAsEntity(catalyst, renderStack, 0.5F, 0.75F, 0.5F, combinedLight, pTicks, tile.getTicksExisted());
+            RenderingUtils.renderItemAsEntity(catalyst, renderStack, renderTypeBuffer, 0.5F, 0.75F, 0.5F, combinedLight, pTicks, tile.getTicksExisted());
         }
     }
 }

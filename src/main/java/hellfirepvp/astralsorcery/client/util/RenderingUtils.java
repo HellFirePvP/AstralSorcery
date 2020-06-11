@@ -195,25 +195,49 @@ public class RenderingUtils {
     }
 
     public static void draw(int drawMode, VertexFormat format, Consumer<BufferBuilder> fn) {
-        draw(drawMode, format, (object) -> fn);
+        draw(drawMode, format, bufferBuilder -> {
+            fn.accept(bufferBuilder);
+            return null;
+        });
     }
 
     public static <R> R draw(int drawMode, VertexFormat format, Function<BufferBuilder, R> fn) {
         BufferBuilder buf = Tessellator.getInstance().getBuffer();
         buf.begin(drawMode, format);
         R result = fn.apply(buf);
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        finishDrawing(buf);
         return result;
     }
 
-    public static void renderItemAsEntity(ItemStack stack, MatrixStack renderStack, double x, double y, double z, int combinedLight, float pTicks, int age) {
+    public static void finishDrawing(BufferBuilder buf) {
+        finishDrawing(buf, null);
+    }
+
+    public static void finishDrawing(BufferBuilder buf, @Nullable RenderType type) {
+        if (buf.isDrawing()) {
+            if (type != null) {
+                type.finish(buf, 0, 0, 0);
+            } else {
+                buf.finishDrawing();
+                WorldVertexBufferUploader.draw(buf);
+            }
+        }
+    }
+
+    public static void refreshDrawing(IVertexBuilder vb, RenderType type) {
+        if (vb instanceof BufferBuilder) {
+            type.finish((BufferBuilder) vb, 0, 0, 0);
+            ((BufferBuilder) vb).begin(type.getDrawMode(), type.getVertexFormat());
+        }
+    }
+
+    public static void renderItemAsEntity(ItemStack stack, MatrixStack renderStack, IRenderTypeBuffer buffers, double x, double y, double z, int combinedLight, float pTicks, int age) {
         ItemEntity ei = new ItemEntity(Minecraft.getInstance().world, x, y, z, stack);
         ei.age = age;
         ei.hoverStart = 0;
         renderStack.push();
         renderStack.translate(x, y, z);
-        Minecraft.getInstance().getRenderManager().renderEntityStatic(ei, 0, 0, 0, 0F, pTicks, renderStack, null, combinedLight);
+        Minecraft.getInstance().getRenderManager().renderEntityStatic(ei, 0, 0, 0, 0F, pTicks, renderStack, buffers, combinedLight);
         renderStack.pop();
     }
 
@@ -251,10 +275,8 @@ public class RenderingUtils {
     }
 
     public static void renderTranslucentItemStackModel(ItemStack stack, MatrixStack renderStack, Color overlayColor, Blending blendMode, int alpha) {
-        alpha = MathHelper.clamp(alpha, 0, 255);
-
         IBakedModel bakedModel = getItemModel(stack);
-        bakedModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GROUND, renderStack);
+        ForgeHooksClient.handleCameraTransforms(renderStack, bakedModel, ItemCameraTransforms.TransformType.GROUND, false);
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
@@ -266,11 +288,9 @@ public class RenderingUtils {
         blendMode.apply();
 
         renderStack.push();
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.ENTITY);
-        renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> buf, LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, alpha);
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.ENTITY, buf -> {
+            renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> buf, LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, alpha);
+        });
         renderStack.pop();
 
         Blending.DEFAULT.apply();

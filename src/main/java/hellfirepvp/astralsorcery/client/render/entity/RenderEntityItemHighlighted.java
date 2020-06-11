@@ -34,14 +34,17 @@ public class RenderEntityItemHighlighted extends ItemRenderer {
     }
 
     @Override
-    public void render(ItemEntity entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+    public void render(ItemEntity entity, float entityYaw, float partialTicks, MatrixStack renderStack, IRenderTypeBuffer buffer, int packedLight) {
         if (entity instanceof EntityItemHighlighted && ((EntityItemHighlighted) entity).hasColor()) {
-            RenderingDrawUtils.renderLightRayFan(matrixStack, buffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN),
+            renderStack.push();
+            renderStack.translate(0, 0.35F, 0);
+            RenderingDrawUtils.renderLightRayFan(renderStack, buffer,
                     ((EntityItemHighlighted) entity).getHighlightColor(), 160420L + entity.getEntityId(),
                     16, 12, 15);
+            renderStack.pop();
         }
 
-        super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
+        super.render(entity, entityYaw, partialTicks, renderStack, buffer, packedLight);
     }
 
     public static class Factory implements IRenderFactory<EntityItemHighlighted> {
