@@ -86,7 +86,7 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
         renderStack.scale(40, 40, 40);
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR, buf -> {
-            RenderingDrawUtils.renderLightRayFan(renderStack, null, ColorsAS.ROCK_CRYSTAL, getNodePage(), 9, 9, 20);
+            RenderingDrawUtils.renderLightRayFan(renderStack, (renderType) -> buf, ColorsAS.ROCK_CRYSTAL, getNodePage(), 9, 9, 20);
         });
 
         this.renderItemStack(renderX - 4, renderY - 4, zLevel, 1.75F, new ItemStack(BlocksAS.ROCK_COLLECTOR_CRYSTAL));

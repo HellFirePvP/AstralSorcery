@@ -261,9 +261,9 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
                             speed *= 4;
                             age *= 0.7F;
                             if (!clearLine) {
-                                colorFn = VFXColorFunction.constant(ColorsAS.CONSTELLATION_EVORSIO);
-                            } else {
                                 colorFn = VFXColorFunction.constant(ColorsAS.CONSTELLATION_AEVITAS);
+                            } else {
+                                colorFn = VFXColorFunction.constant(ColorsAS.CONSTELLATION_EVORSIO);
                             }
                             if (random.nextInt(5) == 0) {
                                 colorFn = VFXColorFunction.WHITE;

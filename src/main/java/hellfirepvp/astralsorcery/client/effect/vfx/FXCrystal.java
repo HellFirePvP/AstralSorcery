@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.resource.query.TextureQuery;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -78,16 +79,15 @@ public class FXCrystal extends EntityVisualFX implements EntityDynamicFX {
         int alpha = this.getAlpha(pTicks);
         Color c = this.getColor(pTicks);
 
-        Vector3 vec = this.getRenderPosition(pTicks);
+        Vector3 vec = this.getRenderPosition(pTicks).subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
         float scale = this.getScale(pTicks);
 
         if (this.lightRayColor != null) {
-            IVertexBuilder buf = drawBuffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN);
             long seed = 0x515F1EB654AB915EL;
 
             renderStack.push();
             renderStack.translate(vec.getX(), vec.getY(), vec.getZ());
-            RenderingDrawUtils.renderLightRayFan(renderStack, buf, this.lightRayColor, seed, 5, 1F, 50);
+            RenderingDrawUtils.renderLightRayFan(renderStack, drawBuffer, this.lightRayColor, seed, 5, 1F, 50);
             renderStack.pop();
         }
 

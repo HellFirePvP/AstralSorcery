@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
@@ -102,11 +103,12 @@ public class FXColorEffectSphere extends EntityVisualFX {
         int g = c.getGreen();
         int b = c.getBlue();
 
+        Matrix4f matr = renderStack.getLast().getMatrix();
         Vector3 pos = this.getRenderPosition(pTicks);
         for (SphereBuilder.TriangleFace face : this.sphereFaces) {
-            pos.clone().add(face.getV1()).drawPos(vb).color(r, g, b, alpha).endVertex();
-            pos.clone().add(face.getV2()).drawPos(vb).color(r, g, b, alpha).endVertex();
-            pos.clone().add(face.getV3()).drawPos(vb).color(r, g, b, alpha).endVertex();
+            pos.clone().add(face.getV1()).drawPos(matr, vb).color(r, g, b, alpha).endVertex();
+            pos.clone().add(face.getV2()).drawPos(matr, vb).color(r, g, b, alpha).endVertex();
+            pos.clone().add(face.getV3()).drawPos(matr, vb).color(r, g, b, alpha).endVertex();
         }
     }
 }

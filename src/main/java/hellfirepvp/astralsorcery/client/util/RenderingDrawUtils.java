@@ -290,11 +290,14 @@ public class RenderingDrawUtils {
         RenderSystem.enableTexture();
     }
 
-    public static void renderLightRayFan(MatrixStack renderStack, IVertexBuilder vb, Color color, long seed, int minScale, float scale, int count) {
+    public static void renderLightRayFan(MatrixStack renderStack, IRenderTypeBuffer buffer, Color color, long seed, int minScale, float scale, int count) {
         rand.setSeed(seed);
 
         float f1 = ClientScheduler.getClientTick() / 400.0F;
         float f2 = 0.0F;
+        int alpha = (int) (255.0F * (1.0F - f2));
+
+        IVertexBuilder vb = buffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN);
 
         renderStack.push();
         for (int i = 0; i < count; i++) {
@@ -312,27 +315,36 @@ public class RenderingDrawUtils {
             fa /= 30.0F / (Math.min(minScale, 10 * scale) / 10.0F);
             f4 /= 30.0F / (Math.min(minScale, 10 * scale) / 10.0F);
 
-            vb.pos(matr, 0, 0, 0).color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
-            vb.pos(matr, -0.7F * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
-            vb.pos(matr,  0.7F * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
-            vb.pos(matr,  0.0F,      fa,    1.0F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
-            vb.pos(matr, -0.7F * f4, fa,   -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(matr, 0F,      0F, 0F)        .color(color.getRed(), color.getGreen(), color.getBlue(), alpha).endVertex();
+            vb.pos(matr, 0F,      0F, 0F)        .color(color.getRed(), color.getGreen(), color.getBlue(), alpha).endVertex();
+            vb.pos(matr, -0.7F * f4, fa, -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(matr,  0.7F * f4, fa, -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(matr, 0F,     0F, 0F)        .color(color.getRed(), color.getGreen(), color.getBlue(), alpha).endVertex();
+            vb.pos(matr, 0F,     0F, 0F)        .color(color.getRed(), color.getGreen(), color.getBlue(), alpha).endVertex();
+            vb.pos(matr, 0.7F * f4, fa, -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(matr, 0F,        fa,    1F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(matr, 0F,      0F, 0F)        .color(color.getRed(), color.getGreen(), color.getBlue(), alpha).endVertex();
+            vb.pos(matr, 0F,      0F, 0F)        .color(color.getRed(), color.getGreen(), color.getBlue(), alpha).endVertex();
+            vb.pos(matr, 0F,         fa,    1F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
+            vb.pos(matr, -0.7F * f4, fa, -0.5F * f4).color(color.getRed(), color.getGreen(), color.getBlue(), 0).endVertex();
 
             renderStack.pop();
         }
         renderStack.pop();
+
+        RenderingUtils.refreshDrawing(vb, RenderTypesAS.EFFECT_LIGHTRAY_FAN);
     }
 
-    public static void renderFacingFullQuadVB(IVertexBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, int r, int g, int b, int alpha) {
-        renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, 0F, 0F, 1F, 1F, r, g, b, alpha);
+    public static void renderFacingFullQuadVB(IVertexBuilder vb, MatrixStack renderStack, double px, double py, double pz, float scale, float angle, int r, int g, int b, int alpha) {
+        renderFacingQuadVB(vb, renderStack, px, py, pz, scale, angle, 0F, 0F, 1F, 1F, r, g, b, alpha);
     }
 
-    public static void renderFacingSpriteVB(IVertexBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, SpriteSheetResource sprite, long spriteTick, int r, int g, int b, int alpha) {
+    public static void renderFacingSpriteVB(IVertexBuilder vb, MatrixStack renderStack, double px, double py, double pz, float scale, float angle, SpriteSheetResource sprite, long spriteTick, int r, int g, int b, int alpha) {
         Tuple<Float, Float> uv = sprite.getUVOffset(spriteTick);
-        renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, uv.getA(), uv.getB(), sprite.getULength(), sprite.getVLength(), r, g, b, alpha);
+        renderFacingQuadVB(vb, renderStack, px, py, pz, scale, angle, uv.getA(), uv.getB(), sprite.getULength(), sprite.getVLength(), r, g, b, alpha);
     }
 
-    public static void renderFacingQuadVB(IVertexBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, float u, float v, float uLength, float vLength, int r, int g, int b, int alpha) {
+    public static void renderFacingQuadVB(IVertexBuilder vb, MatrixStack renderStack, double px, double py, double pz, float scale, float angle, float u, float v, float uLength, float vLength, int r, int g, int b, int alpha) {
         Vector3 pos = new Vector3(px, py, pz);
 
         RenderInfo ri = RenderInfo.getInstance();
@@ -379,10 +391,11 @@ public class RenderingDrawUtils {
                     .add(vAngle.clone().crossProduct(v4.clone().multiply(2 * cAngle)));
         }
 
-        pos.clone().add(v1).subtract(iPos).drawPos(vb).color(r, g, b, alpha).tex(u + uLength, v + vLength).endVertex();
-        pos.clone().add(v2).subtract(iPos).drawPos(vb).color(r, g, b, alpha).tex(u + uLength, v).endVertex();
-        pos.clone().add(v3).subtract(iPos).drawPos(vb).color(r, g, b, alpha).tex(u, v ).endVertex();
-        pos.clone().add(v4).subtract(iPos).drawPos(vb).color(r, g, b, alpha).tex(u, v + vLength).endVertex();
+        Matrix4f matr = renderStack.getLast().getMatrix();
+        pos.clone().add(v1).subtract(iPos).drawPos(matr, vb).color(r, g, b, alpha).tex(u + uLength, v + vLength).endVertex();
+        pos.clone().add(v2).subtract(iPos).drawPos(matr, vb).color(r, g, b, alpha).tex(u + uLength, v).endVertex();
+        pos.clone().add(v3).subtract(iPos).drawPos(matr, vb).color(r, g, b, alpha).tex(u, v ).endVertex();
+        pos.clone().add(v4).subtract(iPos).drawPos(matr, vb).color(r, g, b, alpha).tex(u, v + vLength).endVertex();
     }
 
     public static void renderTexturedCubeCentralColorLighted(IVertexBuilder buf, MatrixStack renderStack,

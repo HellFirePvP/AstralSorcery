@@ -64,8 +64,7 @@ public class RegistryRenderTypes {
         EFFECT_FX_LIGHTBEAM = createType("effect_fx_lightbeam", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
                         .texture(TexturesAS.TEX_LIGHTBEAM)
-                        .blend(Blending.PREALPHA)
-                        .defaultAlpha()
+                        .blend(Blending.ADDITIVE_ALPHA)
                         .disableCull()
                         .disableDepthMask()
                         .build());

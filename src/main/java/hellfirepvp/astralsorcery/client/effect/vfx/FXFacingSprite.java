@@ -14,10 +14,12 @@ import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
@@ -59,14 +61,13 @@ public class FXFacingSprite extends EntityVisualFX implements EntityDynamicFX {
         Vector3 vec = this.getRenderPosition(pTicks);
         float scale = this.getScale(pTicks);
 
-        ssr.bindTexture();
-
-        IVertexBuilder buf = drawBuffer.getBuffer(ctx.getRenderType());
-        RenderingDrawUtils.renderFacingQuadVB(buf, vec.getX(), vec.getY(), vec.getZ(),
-                pTicks, scale, 0F,
+        RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(ctx.getRenderType(), ssr::bindTexture, BlockAtlasTexture.getInstance()::bindTexture);
+        IVertexBuilder buf = drawBuffer.getBuffer(decorated);
+        RenderingDrawUtils.renderFacingQuadVB(buf, renderStack,
+                vec.getX(), vec.getY(), vec.getZ(),
+                scale, 0F,
                 uvOffset.getA(), uvOffset.getB(), ssr.getULength(), ssr.getVLength(),
                 col.getRed(), col.getGreen(), col.getBlue(), alpha);
-
         drawBuffer.draw();
     }
 }

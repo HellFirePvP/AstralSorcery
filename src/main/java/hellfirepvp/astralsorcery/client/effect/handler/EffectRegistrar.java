@@ -47,7 +47,7 @@ public final class EffectRegistrar {
             return;
         }
 
-        if (!Thread.currentThread().getName().contains("Client thread")) {
+        if (!Thread.currentThread().getName().contains("Render thread")) {
             AstralSorcery.getProxy().scheduleClientside(() -> register(src));
             return;
         }
@@ -64,7 +64,7 @@ public final class EffectRegistrar {
             return;
         }
 
-        if (!Thread.currentThread().getName().contains("Client thread")) {
+        if (!Thread.currentThread().getName().contains("Render thread")) {
             AstralSorcery.getProxy().scheduleClientside(() -> register(effect, properties));
             return;
         }

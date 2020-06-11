@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
@@ -128,40 +129,41 @@ public class FXLightning extends EntityVisualFX {
 
         Color c = this.getColor(pTicks);
         bufRenderDepth = Math.min(1F, (age + pTicks) / (buildSpeed * 20F));
-        renderRec(this.root, vb, c.getRed(), c.getGreen(), c.getBlue());
+        renderRec(this.root, vb, renderStack, c.getRed(), c.getGreen(), c.getBlue());
     }
 
-    private void renderRec(LightningVertex root, IVertexBuilder vb, float r, float g, float b) {
+    private void renderRec(LightningVertex root, IVertexBuilder vb, MatrixStack renderStack, float r, float g, float b) {
         int allDepth = root.followingDepth;
         boolean mayRenderNext = 1F - (((float) root.followingDepth) / ((float) allDepth)) <= bufRenderDepth;
         for (LightningVertex next : root.next) {
-            drawLine(root.offset, next.offset, vb, r, g, b);
+            drawLine(root.offset, next.offset, vb, renderStack, r, g, b);
             if (mayRenderNext) {
-                renderRec(next, vb, r, g, b);
+                renderRec(next, vb, renderStack, r, g, b);
             }
         }
     }
 
-    private void drawLine(Vector3 from, Vector3 to, IVertexBuilder vb, float r, float g, float b) {
-        renderCurrentTextureAroundAxis(from, to, Math.toRadians(0F),  0.035F, vb, r, g, b);
-        renderCurrentTextureAroundAxis(from, to, Math.toRadians(90F), 0.035F, vb, r, g, b);
+    private void drawLine(Vector3 from, Vector3 to, IVertexBuilder vb, MatrixStack renderStack, float r, float g, float b) {
+        renderCurrentTextureAroundAxis(from, to, Math.toRadians(0F),  0.035F, vb, renderStack, r, g, b);
+        renderCurrentTextureAroundAxis(from, to, Math.toRadians(90F), 0.035F, vb, renderStack, r, g, b);
     }
 
-    private void renderCurrentTextureAroundAxis(Vector3 from, Vector3 to, double angle, double size, IVertexBuilder buf, float r, float g, float b) {
+    private void renderCurrentTextureAroundAxis(Vector3 from, Vector3 to, double angle, double size, IVertexBuilder buf, MatrixStack renderStack, float r, float g, float b) {
         Vector3 aim = to.clone().subtract(from).normalize();
         Vector3 aimPerp = aim.clone().perpendicular().normalize();
         Vector3 perp = aimPerp.clone().rotate(angle, aim).normalize();
         Vector3 perpFrom = perp.clone().multiply(size);
         Vector3 perpTo = perp.multiply(size);
 
+        Matrix4f matr = renderStack.getLast().getMatrix();
         Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
-        vec.drawPos(buf).color(r, g, b, 1F).tex(1, 1).endVertex();
+        vec.drawPos(matr, buf).color(r, g, b, 1F).tex(1, 1).endVertex();
         vec = from.clone().add(perpFrom);
-        vec.drawPos(buf).color(r, g, b, 1F).tex(1, 0).endVertex();
+        vec.drawPos(matr, buf).color(r, g, b, 1F).tex(1, 0).endVertex();
         vec = to.clone().add(perpTo);
-        vec.drawPos(buf).color(r, g, b, 1F).tex(0, 0).endVertex();
+        vec.drawPos(matr, buf).color(r, g, b, 1F).tex(0, 0).endVertex();
         vec = to.clone().add(perpTo.clone().multiply(-1));
-        vec.drawPos(buf).color(r, g, b, 1F).tex(0, 1).endVertex();
+        vec.drawPos(matr, buf).color(r, g, b, 1F).tex(0, 1).endVertex();
     }
 
     @Override

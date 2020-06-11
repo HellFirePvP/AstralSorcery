@@ -84,7 +84,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork implements Custom
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rtr) {
         if (world.isRemote()) {
-            return ActionResultType.PASS;
+            return ActionResultType.SUCCESS;
         }
         TileRitualPedestal pedestal = MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, true);
         if (pedestal == null) {

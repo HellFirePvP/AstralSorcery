@@ -37,21 +37,20 @@ public class RenderCollectorCrystal extends CustomTileEntityRenderer<TileCollect
         if (!tile.doesSeeSky()) {
             return;
         }
-        IVertexBuilder lightRayBuf = renderTypeBuffer.getBuffer(RenderTypesAS.EFFECT_LIGHTRAY_FAN);
         Color color = tile.getCollectorType().getDisplayColor();
         long seed = RenderingUtils.getPositionSeed(tile.getPos());
 
         renderStack.push();
         renderStack.translate(0.5F, 0.5F, 0.5F);
 
-        RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, color, seed, 24, 24, 12);
+        RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, color, seed, 24, 24, 12);
 
         seed ^= 0x54FF129A4B11C382L;
         if (tile.isEnhanced()) {
             color = tile.getAttunedConstellation().getConstellationColor();
         }
 
-        RenderingDrawUtils.renderLightRayFan(renderStack, lightRayBuf, color, seed, 24, 24, 12);
+        RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, color, seed, 24, 24, 12);
         renderStack.pop();
     }
 }

@@ -2,10 +2,10 @@
   "parent": "block/block",
   "loader": "forge:multi-layer",
   "layers": {
-    "Solid": {
+    "solid": {
       "parent": "astralsorcery:block/prism_colored_solid"
     },
-    "Translucent": {
+    "translucent": {
       "parent": "astralsorcery:block/prism_colored_translucent"
     }
   },
