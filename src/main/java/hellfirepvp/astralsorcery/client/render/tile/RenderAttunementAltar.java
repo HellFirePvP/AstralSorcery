@@ -46,7 +46,6 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
 
         renderStack.push();
         renderStack.translate(0.5, 0.5, 0.5);
-        renderStack.scale(0.0625F, 0.0625F, 0.0625F);
         renderStack.rotate(Vector3f.XP.rotationDegrees(180));
         MODEL_ATTUNEMENT_ALTAR.render(renderStack, buf, combinedLight, combinedOverlay);
         renderStack.pop();
@@ -93,7 +92,6 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
 
             renderStack.push();
             renderStack.translate(0.5, framePosY, 0.5);
-            renderStack.scale(0.0625F, 0.0625F, 0.0625F);
             renderStack.rotate(Vector3f.XP.rotationDegrees(180));
             MODEL_ATTUNEMENT_ALTAR.renderHovering(renderStack, buf, combinedLight, combinedOverlay, 1F, 1F, 1F, 1F, xOffset, zOffset, rotation);
             renderStack.pop();

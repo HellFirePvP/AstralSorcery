@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.render.tile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucentBlock;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
@@ -49,8 +50,15 @@ public class RenderTranslucentBlock extends CustomTileEntityRenderer<TileTranslu
         int[] color = new int[] { blendColor.getRed(), blendColor.getGreen(), blendColor.getBlue(), 128 };
 
         RenderType type = RenderTypeLookup.getRenderType(fakedState);
-        RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(type, RenderSystem::enableBlend, RenderSystem::disableBlend);
+        RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(type, () -> {
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+        }, () -> {
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.disableBlend();
+        });
         BufferDecoratorBuilder decorator = BufferDecoratorBuilder.withColor(((r, g, b, a) -> color));
-        RenderingUtils.renderSimpleBlockModel(fakedState, renderStack, decorator.decorate(renderTypeBuffer.getBuffer(decorated)), tile.getPos(), tile, true);
+        IVertexBuilder buf = renderTypeBuffer.getBuffer(decorated);
+        RenderingUtils.renderSimpleBlockModel(fakedState, renderStack, decorator.decorate(buf), tile.getPos(), tile, true);
     }
 }

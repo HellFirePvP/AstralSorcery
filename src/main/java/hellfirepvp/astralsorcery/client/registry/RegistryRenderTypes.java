@@ -183,6 +183,7 @@ public class RegistryRenderTypes {
         MODEL_LENS = createType("mode_lens", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_frame"))
+                        .blend(Blending.DEFAULT)
                         .build());
 
         MODEL_LENS_COLORED = createType("mode_lens_colored", DefaultVertexFormats.ENTITY,
@@ -196,7 +197,6 @@ public class RegistryRenderTypes {
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "observatory"))
                         .blend(Blending.DEFAULT)
                         .disableCull()
-                        .disableDepthMask()
                         .build());
 
         MODEL_REFRACTION_TABLE = createType("mode_refraction_table", DefaultVertexFormats.ENTITY,
@@ -214,6 +214,8 @@ public class RegistryRenderTypes {
         MODEL_TELESCOPE = createType("mode_telescope", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "telescope"))
+                        .blend(Blending.DEFAULT)
+                        .disableCull()
                         .build());
     }
 

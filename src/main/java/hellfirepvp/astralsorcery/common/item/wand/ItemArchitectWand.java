@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.block.BlockGeometry;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
@@ -109,6 +110,7 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
 
         int[] fullBright = new int[] { 15, 15 };
         BufferDecoratorBuilder decorator = BufferDecoratorBuilder.withLightmap((skyLight, blockLight) -> fullBright);
+        Vector3 offset = RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks);
 
         RenderSystem.enableBlend();
         Blending.ADDITIVEDARK.apply();
@@ -116,7 +118,13 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
         RenderSystem.disableAlphaTest();
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.BLOCK, buf -> {
-            placeStates.forEach((pos, state) -> RenderingUtils.renderSimpleBlockModel(state, renderStack, decorator.decorate(buf), pos, null, false));
+            placeStates.forEach((pos, state) -> {
+                renderStack.push();
+                renderStack.translate(pos.getX() - offset.getX() + 0.1F, pos.getY() - offset.getY() + 0.1F, pos.getZ() - offset.getZ() + 0.1F);
+                renderStack.scale(0.8F, 0.8F, 0.8F);
+                RenderingUtils.renderSimpleBlockModel(state, renderStack, decorator.decorate(buf), pos, null, false);
+                renderStack.pop();
+            });
         });
 
         RenderSystem.enableAlphaTest();

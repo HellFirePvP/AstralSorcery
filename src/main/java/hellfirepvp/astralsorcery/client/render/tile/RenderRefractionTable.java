@@ -9,10 +9,14 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelRefractionTable;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileRefractionTable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -50,14 +54,19 @@ public class RenderRefractionTable extends CustomTileEntityRenderer<TileRefracti
         renderStack.push();
         renderStack.translate(0.5F, 1.5F, 0.5F);
         renderStack.rotate(Vector3f.XP.rotationDegrees(180F));
-        renderStack.scale(0.0625F, 0.0625F, 0.0625F);
 
-        MODEL_REFRACTION_TABLE.renderFrame(renderStack, renderTypeBuffer.getBuffer(MODEL_REFRACTION_TABLE.getGeneralType()),
+        RenderType type = MODEL_REFRACTION_TABLE.getGeneralType();
+        IVertexBuilder vb = renderTypeBuffer.getBuffer(type);
+        MODEL_REFRACTION_TABLE.renderFrame(renderStack, vb,
                 combinedLight, combinedOverlay, 1F, 1F, 1F, 1F, tile.hasParchment());
+        RenderingUtils.refreshDrawing(vb, type);
 
         if (!tile.getGlassStack().isEmpty()) {
-            MODEL_REFRACTION_TABLE.renderGlass(renderStack, renderTypeBuffer.getBuffer(MODEL_REFRACTION_TABLE.getGeneralType()),
+            type = RenderTypesAS.MODEL_REFRACTION_TABLE_GLASS;
+            vb = renderTypeBuffer.getBuffer(type);
+            MODEL_REFRACTION_TABLE.renderGlass(renderStack, vb,
                     combinedLight, combinedOverlay, 1F, 1F, 1F, 1F);
+            RenderingUtils.refreshDrawing(vb, type);
         }
 
         renderStack.pop();

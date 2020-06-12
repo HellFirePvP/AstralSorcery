@@ -56,9 +56,7 @@ public enum Blending {
     public RenderState.TransparencyState asState() {
         return new RenderState.TransparencyState(AstralSorcery.key("blending_" + this.name().toLowerCase()).toString(), () -> {
             RenderSystem.enableBlend();
-            if (this != DEFAULT) {
-                this.apply();
-            }
+            this.apply();
         }, () -> {
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableBlend();
