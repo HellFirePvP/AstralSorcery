@@ -62,7 +62,7 @@ public class RenderObservatory extends CustomTileEntityRenderer<TileObservatory>
         renderStack.translate(0.5F, 1.5F, 0.5F);
         renderStack.rotate(Vector3f.XP.rotationDegrees(180F));
         renderStack.rotate(Vector3f.YP.rotationDegrees(180F));
-        renderStack.scale(0.0625F, 0.0625F, 0.0625F);
+        //renderStack.scale(0.0625F, 0.0625F, 0.0625F);
 
         MODEL_OBSERVATORY.setupRotations(iYawDegree, iPitchDegree);
         MODEL_OBSERVATORY.render(renderStack, renderTypeBuffer.getBuffer(MODEL_OBSERVATORY.getGeneralType()), combinedLight, combinedOverlay);

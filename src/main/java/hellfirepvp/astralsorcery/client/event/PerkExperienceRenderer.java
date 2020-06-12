@@ -84,7 +84,7 @@ public class PerkExperienceRenderer implements ITickHandler {
         float expHeight  =  78F * perc;
         float expWidth   =  32F;
         float expOffsetX =   0F;
-        float expOffsetY =   27.5F + (1F - perc) * 78F;
+        float expOffsetY =  27.5F + (1F - perc) * 78F;
 
         TexturesAS.TEX_OVERLAY_EXP_BAR.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
@@ -94,24 +94,19 @@ public class PerkExperienceRenderer implements ITickHandler {
                     .draw();
         });
 
-        RenderSystem.enableAlphaTest();
-        RenderSystem.disableDepthTest();
-
         String strLevel = String.valueOf(ResearchHelper.getClientProgress().getPerkLevel(player));
         int strLength = Minecraft.getInstance().fontRenderer.getStringWidth(strLevel);
 
         RenderSystem.pushMatrix();
-        RenderSystem.translated(15 - (strLength / 2), 94, 0);
+        RenderSystem.translated(15 - (strLength / 2), 94, 20);
         RenderSystem.scaled(1.2, 1.2, 1.2);
         int c = 0x00DDDDDD;
         c |= ((int) (255F * visibilityReveal)) << 24;
         if (visibilityReveal > 0.1E-4) {
-            RenderingDrawUtils.renderStringAtCurrentPos(Minecraft.getInstance().fontRenderer, strLevel, c);
+            RenderingDrawUtils.renderStringAtPos(0, 0, Minecraft.getInstance().fontRenderer, strLevel, c, true);
         }
         RenderSystem.popMatrix();
 
-        RenderSystem.enableDepthTest();
-        RenderSystem.disableBlend();
         BlockAtlasTexture.getInstance().bindTexture();
     }
 
