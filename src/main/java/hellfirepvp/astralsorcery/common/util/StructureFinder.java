@@ -9,14 +9,12 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.lib.DataAS;
-import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 
 import javax.annotation.Nullable;

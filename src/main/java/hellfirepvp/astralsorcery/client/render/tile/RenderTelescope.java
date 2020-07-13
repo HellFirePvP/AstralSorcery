@@ -9,18 +9,11 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelTelescope;
-import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
-import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
-import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-
-import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod

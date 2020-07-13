@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.overlay;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
@@ -45,7 +44,6 @@ public abstract class ScreenJournalOverlay extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
-        GlStateManager.enableBlend();
         super.render(mouseX, mouseY, pTicks);
 
         origin.render(0, 0, pTicks);

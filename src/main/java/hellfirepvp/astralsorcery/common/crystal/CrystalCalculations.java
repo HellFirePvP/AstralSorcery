@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPede
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
-import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Properties.*;
+import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Properties.PROPERTY_SIZE;
 import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Sources.*;
 import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
 

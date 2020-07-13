@@ -17,9 +17,9 @@ import hellfirepvp.astralsorcery.common.data.sync.server.DataLightBlockEndpoints
 import hellfirepvp.astralsorcery.common.data.sync.server.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.sync.server.DataPatreonFlares;
 import hellfirepvp.astralsorcery.common.data.sync.server.DataTimeFreezeEffects;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncData;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;

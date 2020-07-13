@@ -16,7 +16,10 @@ import net.minecraft.block.Block;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 

@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.world.structure.feature;
 import hellfirepvp.astralsorcery.common.lib.WorldGenerationAS;
 import hellfirepvp.astralsorcery.common.world.config.StructurePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.structure.ConfiguredStructureStart;
-import hellfirepvp.astralsorcery.common.world.structure.DesertShrineStructure;
 import hellfirepvp.astralsorcery.common.world.structure.SmallShrineStructure;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;

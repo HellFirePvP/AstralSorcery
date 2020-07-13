@@ -9,14 +9,12 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.capability.ChunkFluidEntry;
-import hellfirepvp.astralsorcery.common.lib.CapabilitiesAS;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -27,7 +25,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import static hellfirepvp.astralsorcery.common.lib.CapabilitiesAS.*;
+import static hellfirepvp.astralsorcery.common.lib.CapabilitiesAS.CHUNK_FLUID;
+import static hellfirepvp.astralsorcery.common.lib.CapabilitiesAS.CHUNK_FLUID_KEY;
 
 /**
  * This class is part of the Astral Sorcery Mod

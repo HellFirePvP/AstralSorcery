@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimplePrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
-import hellfirepvp.astralsorcery.common.tile.TileLens;
 import hellfirepvp.astralsorcery.common.tile.TilePrism;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.nbt.CompoundNBT;

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.base.patreon.types;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.LightmapUtil;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
@@ -91,12 +92,13 @@ public class TypeBlockRing extends PatreonEffect {
                 pl != null && pl.getUniqueID().equals(playerUUID)) {
             MatrixStack renderStack = event.getMatrixStack();
 
-            int alpha = 255;
+            int alpha = 88;
             if (pl.rotationPitch >= 35F) {
                 alpha *= Math.max(0, (55F - pl.rotationPitch) / 20F);
             }
             renderStack.push();
-            renderStack.translate(0, 0.2, 0);
+            renderStack.translate(0, -0.5, 0);
+            renderStack.scale(0.5F, 0.5F, 0.5F);
             renderRingAt(renderStack, pl, alpha, event.getPartialTicks());
             renderStack.pop();
         }
@@ -110,7 +112,7 @@ public class TypeBlockRing extends PatreonEffect {
             return;
         }
 
-        renderRingAt(ev.getMatrixStack(), player, 255, ev.getPartialRenderTick());
+        renderRingAt(ev.getMatrixStack(), player, 88, ev.getPartialRenderTick());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -121,6 +123,9 @@ public class TypeBlockRing extends PatreonEffect {
             float rot = ClientScheduler.getSystemClientTick() % rotationSpeed;
             addedRotationAngle = (rot / ((float) (rotationSpeed))) * 360F + this.rotationPart * pTicks;
         }
+
+        RenderSystem.enableTexture();
+        BlockAtlasTexture.getInstance().bindTexture();
 
         RenderSystem.disableAlphaTest();
         RenderSystem.disableCull();
@@ -160,5 +165,7 @@ public class TypeBlockRing extends PatreonEffect {
         RenderSystem.disableBlend();
         RenderSystem.enableCull();
         RenderSystem.enableAlphaTest();
+
+        RenderSystem.disableTexture();
     }
 }

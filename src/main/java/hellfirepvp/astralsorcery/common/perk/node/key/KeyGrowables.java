@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node.key;
 
+import hellfirepvp.astralsorcery.common.auxiliary.CropHelper;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -15,9 +16,8 @@ import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.perk.tick.PlayerTickPerk;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
-import hellfirepvp.astralsorcery.common.auxiliary.CropHelper;
+import hellfirepvp.astralsorcery.common.perk.tick.PlayerTickPerk;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
@@ -80,7 +80,7 @@ public class KeyGrowables extends KeyPerk implements PlayerTickPerk {
             } else {
                 BlockState at = w.getBlockState(pos);
                 if (at.getBlock().equals(Blocks.DIRT)) {
-                    if (w.setBlockState(pos, Blocks.GRASS.getDefaultState())) {
+                    if (w.setBlockState(pos, Blocks.GRASS_BLOCK.getDefaultState())) {
                         pkt = new PktPlayEffect(PktPlayEffect.Type.CROP_GROWTH)
                                 .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(pos)));
                     }

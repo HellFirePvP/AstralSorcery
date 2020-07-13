@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.tile.PrecisionSingleFluidTank;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
@@ -49,10 +50,9 @@ public class RenderWell extends CustomTileEntityRenderer<TileWell> {
 
             Vector3 offset = new Vector3(0.5D, 0.32D, 0.5D).addY(tank.getPercentageFilled() * 0.6);
 
-            BlockAtlasTexture.getInstance().bindTexture();
             RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, renderStack, offset, Vector3.RotAxis.Y_AXIS, (float) Math.toRadians(45F), 0.54F,
                     tas.getMinU(), tas.getMinV(), tas.getMaxU() - tas.getMinU(), tas.getMaxV() - tas.getMinV(),
-                    fluidColor.getRed() / 255F, fluidColor.getGreen() / 255F, fluidColor.getBlue() / 255F, 1F);
+                    fluidColor.getRed(), fluidColor.getGreen(), fluidColor.getBlue(), 255);
         }
 
         ItemStack catalyst = tile.getInventory().getStackInSlot(0);

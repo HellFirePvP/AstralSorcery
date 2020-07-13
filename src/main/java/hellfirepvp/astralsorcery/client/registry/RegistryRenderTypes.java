@@ -1,12 +1,10 @@
 package hellfirepvp.astralsorcery.client.registry;
 
-import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.RenderStateBuilder;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -28,6 +26,7 @@ public class RegistryRenderTypes {
         initEffectTypes();
         initEffects();
         initGuiTypes();
+        initTERTypes();
         initModels();
     }
 
@@ -68,7 +67,7 @@ public class RegistryRenderTypes {
                         .disableCull()
                         .disableDepthMask()
                         .build());
-        EFFECT_FX_CRYSTAL = createType("effect_fx_crystal",
+        EFFECT_FX_CRYSTAL = createType("effect_fx_crystal", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
                         .texture(TexturesAS.TEX_MODEL_CRYSTAL_WHITE)
                         .blend(Blending.DEFAULT)
@@ -174,6 +173,23 @@ public class RegistryRenderTypes {
                         .build());
     }
 
+    private static void initTERTypes() {
+        TER_WELL_LIQUID = createType("ter_well_liquid", DefaultVertexFormats.POSITION_COLOR_TEX,
+                RenderStateBuilder.builder()
+                        .altasTexture()
+                        .blend(Blending.DEFAULT)
+                        .alpha(0.00001F)
+                        .disableDepthMask()
+                        .build());
+        TER_CHALICE_LIQUID = createType("ter_chalice_liquid", POSITION_COLOR_TEX_NORMAL,
+                RenderStateBuilder.builder()
+                        .altasTexture()
+                        .blend(Blending.DEFAULT)
+                        .alpha(0.00001F)
+                        .disableDepthMask()
+                        .build());
+    }
+
     private static void initModels() {
         MODEL_ATTUNEMENT_ALTAR = createType("mode_attunement_altar", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
@@ -217,10 +233,6 @@ public class RegistryRenderTypes {
                         .blend(Blending.DEFAULT)
                         .disableCull()
                         .build());
-    }
-
-    private static RenderType createType(String name, RenderType.State state) {
-        return createType(name, new VertexFormat(ImmutableList.of()), GL11.GL_QUADS, 32768, state);
     }
 
     private static RenderType createType(String name, VertexFormat vertexFormat, RenderType.State state) {

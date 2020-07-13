@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.data.world;
 
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.astralsorcery.common.util.log.LogUtil;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;

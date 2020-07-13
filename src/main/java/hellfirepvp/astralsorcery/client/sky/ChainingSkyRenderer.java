@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.sky;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.sky.astral.AstralSkyRenderer;
@@ -17,11 +16,8 @@ import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.client.IRenderHandler;
 
 /**

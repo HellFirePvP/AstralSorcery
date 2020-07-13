@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
-import hellfirepvp.observerlib.api.util.StructureBlockArray;
 
 /**
  * This class is part of the Astral Sorcery Mod

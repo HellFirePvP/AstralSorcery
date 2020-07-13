@@ -13,7 +13,6 @@ import com.google.gson.GsonBuilder;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -89,18 +88,20 @@ public class PatreonDataManager {
             }
             AstralSorcery.log.info("Patreon effect loading finished.");
 
-            //UUID hellfire = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1");
-            //try {
-            //    PatreonEffect effect = PatreonEffectType.FLARE_CRYSTAL.getProvider().buildEffect(hellfire,
-            //            Arrays.asList("777971c5-fb58-4519-a975-b1b5766e44d1", "WATER", "11997609", "crystal_big_magenta"));
-            //    effect.initialize();
-            //    effect.attachEventListeners(MinecraftForge.EVENT_BUS);
-            //    effect.attachTickListeners(AstralSorcery.getProxy().getTickManager()::register);
-            //    PatreonEffectHelper.playerEffectMap.computeIfAbsent(hellfire, uuid -> new ArrayList<>()).add(effect);
-            //    PatreonEffectHelper.effectMap.put(UUID.fromString("777971c5-fb58-4519-a975-b1b5766e44d1"), effect);
-            //} catch (Exception e) {
-            //    e.printStackTrace();
-            //}
+            UUID hellfire = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1");
+            try {
+                PatreonEffect effect = PatreonEffectType.CRYSTAL_FOOTPRINTS.getProvider().buildEffect(hellfire,
+                        Arrays.asList("777971c5-fb58-4519-a975-b1b5766e44d1",
+                                "DARK_GREEN",
+                                "7865553"));
+                effect.initialize();
+                effect.attachEventListeners(MinecraftForge.EVENT_BUS);
+                effect.attachTickListeners(AstralSorcery.getProxy().getTickManager()::register);
+                PatreonEffectHelper.playerEffectMap.computeIfAbsent(hellfire, uuid -> new ArrayList<>()).add(effect);
+                PatreonEffectHelper.effectMap.put(UUID.fromString("777971c5-fb58-4519-a975-b1b5766e44d1"), effect);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             PatreonEffectHelper.loadingFinished = true;
         });

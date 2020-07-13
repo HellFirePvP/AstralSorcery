@@ -10,9 +10,7 @@ package hellfirepvp.astralsorcery.common.util.data;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Matrix4f;
-import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.*;

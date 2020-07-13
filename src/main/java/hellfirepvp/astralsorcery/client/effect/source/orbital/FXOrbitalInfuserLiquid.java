@@ -16,12 +16,10 @@ import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.source.FXSourceOrbital;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingAtlasParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
-import hellfirepvp.astralsorcery.client.util.ColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;

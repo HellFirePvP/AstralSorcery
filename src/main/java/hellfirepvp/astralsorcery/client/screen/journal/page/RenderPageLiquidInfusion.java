@@ -90,8 +90,8 @@ public class RenderPageLiquidInfusion extends RenderPageRecipeTemplate {
 
     @Override
     public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        this.renderHoverTooltips(mouseX, mouseY, this.recipe.getId());
-        this.renderInfoStarTooltips(offsetX, offsetY, mouseX, mouseY, (toolTip) -> {
+        this.renderHoverTooltips(mouseX, mouseY, zLevel, this.recipe.getId());
+        this.renderInfoStarTooltips(offsetX, offsetY, zLevel, mouseX, mouseY, (toolTip) -> {
             toolTip.add(new TranslationTextComponent("astralsorcery.journal.recipe.infusion.liquid",
                     this.recipe.getLiquidInput().getAttributes().getDisplayName(new FluidStack(this.recipe.getLiquidInput(), FluidAttributes.BUCKET_VOLUME))));
             toolTip.add(new TranslationTextComponent("astralsorcery.journal.recipe.infusion.chance.format",

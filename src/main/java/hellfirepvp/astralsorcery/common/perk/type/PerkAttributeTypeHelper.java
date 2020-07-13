@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeType;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

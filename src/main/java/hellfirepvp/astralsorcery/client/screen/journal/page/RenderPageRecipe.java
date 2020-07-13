@@ -13,8 +13,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
@@ -94,6 +92,6 @@ public class RenderPageRecipe extends RenderPageRecipeTemplate {
 
     @Override
     public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        this.renderHoverTooltips(mouseX, mouseY, this.recipeId);
+        this.renderHoverTooltips(mouseX, mouseY, zLevel, this.recipeId);
     }
 }

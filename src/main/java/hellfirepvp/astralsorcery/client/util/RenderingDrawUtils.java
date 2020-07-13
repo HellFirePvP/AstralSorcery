@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
@@ -64,26 +63,24 @@ public class RenderingDrawUtils {
         RenderSystem.popMatrix();
     }
 
-    public static int renderStringAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
-        return renderStringAtPos(0, 0, fr, str, color, false);
+    public static float renderStringAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
+        return renderStringAtPos(0, 0, 0, fr, str, color, false);
     }
 
-    public static int renderStringWithShadowAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
-        return renderStringAtPos(0, 0, fr, str, color, true);
+    public static float renderStringWithShadowAtCurrentPos(@Nullable FontRenderer fr, String str, int color) {
+        return renderStringAtPos(0, 0, 0, fr, str, color, true);
     }
 
-    public static int renderStringAtPos(int x, int y, @Nullable FontRenderer fr, String str, int color, boolean dropShadow) {
+    public static float renderStringAtPos(float x, float y, float zLevel, @Nullable FontRenderer fr, String str, int color, boolean dropShadow) {
         if (fr == null) {
             fr = Minecraft.getInstance().fontRenderer;
         }
-        int length;
-        if (dropShadow) {
-            length = fr.drawStringWithShadow(str, x, y, color);
-        } else {
-            length = fr.drawString(str, x, y, color);
-        }
-        RenderSystem.disableAlphaTest();
-        return length;
+        IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        MatrixStack renderStack = new MatrixStack();
+        renderStack.translate(x, y, zLevel);
+        int length = fr.renderString(str, 0, 0, color, dropShadow, renderStack.getLast().getMatrix(), buffer, false, 0, LightmapUtil.getPackedFullbrightCoords());
+        buffer.finish();
+        return x + length;
     }
 
     public static Rectangle drawInfoStar(MatrixStack renderStack, IDrawRenderTypeBuffer buffer, float widthHeightBase, float pTicks) {
@@ -116,30 +113,30 @@ public class RenderingDrawUtils {
         vb.pos(matr, (float) offset.getX(), (float) offset.getY(), 0).tex(0, 0).endVertex();
     }
 
-    public static void renderBlueTooltipString(int x, int y, List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+    public static void renderBlueTooltipString(float x, float y, float zLevel, List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         List<Tuple<ItemStack, ITextComponent>> stackTooltip = MapStream.ofValues(tooltipData, t -> ItemStack.EMPTY)
                 .mapValue(tip -> (ITextComponent) new StringTextComponent(tip))
                 .toTupleList();
-        renderBlueTooltip(x, y, stackTooltip, fontRenderer, isFirstLineHeadline);
+        renderBlueTooltip(x, y, zLevel, stackTooltip, fontRenderer, isFirstLineHeadline);
     }
 
-    public static void renderBlueTooltipComponents(int x, int y, List<ITextComponent> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+    public static void renderBlueTooltipComponents(float x, float y, float zLevel, List<ITextComponent> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         List<Tuple<ItemStack, ITextComponent>> stackTooltip = MapStream.ofValues(tooltipData, t -> ItemStack.EMPTY).toTupleList();
-        renderBlueTooltip(x, y, stackTooltip, fontRenderer, isFirstLineHeadline);
+        renderBlueTooltip(x, y, zLevel, stackTooltip, fontRenderer, isFirstLineHeadline);
     }
 
-    public static void renderBlueTooltip(int x, int y, List<Tuple<ItemStack, ITextComponent>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        renderTooltip(x, y, tooltipData, 0xFF000027, 0xFF000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
+    public static void renderBlueTooltip(float x, float y, float zLevel, List<Tuple<ItemStack, ITextComponent>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+        renderTooltip(x, y, zLevel, tooltipData, 0xFF000027, 0xFF000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
     }
 
-    public static void renderBlueStackTooltip(int x, int y, List<Tuple<ItemStack, String>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+    public static void renderBlueStackTooltip(float x, float y, float zLevel, List<Tuple<ItemStack, String>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         List<Tuple<ItemStack, ITextComponent>> stackTooltip = MapStream.of(tooltipData)
                 .mapValue(str -> (ITextComponent) new StringTextComponent(str))
                 .toTupleList();
-        renderTooltip(x, y, stackTooltip, 0xFF000027, 0xFF000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
+        renderTooltip(x, y, zLevel, stackTooltip, 0xFF000027, 0xFF000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
     }
 
-    public static void renderTooltip(int x, int y, List<Tuple<ItemStack, ITextComponent>> tooltipData, int color, int colorFade, Color strColor, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+    public static void renderTooltip(float x, float y, float zLevel, List<Tuple<ItemStack, ITextComponent>> tooltipData, int color, int colorFade, Color strColor, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         int stackBoxSize = 18;
 
         if (!tooltipData.isEmpty()) {
@@ -176,8 +173,8 @@ public class RenderingDrawUtils {
                 lengthLimitedToolTip.add(new Tuple<>(toolTip.getA(), customFR.listFormattedStringToWidth(toolTip.getB().getFormattedText(), formatWidth)));
             }
 
-            int pX = x + 12;
-            int pY = y - 12;
+            float pX = x + 12;
+            float pY = y - 12;
             int sumLineHeight = 0;
             if (!lengthLimitedToolTip.isEmpty()) {
                 if (lengthLimitedToolTip.size() > 1 && isFirstLineHeadline) {
@@ -201,17 +198,17 @@ public class RenderingDrawUtils {
                 }
             }
 
-            drawGradientRect(0, pX - 3,           pY - 4,                 pX + maxWidth + 3, pY - 3,                 color, colorFade);
-            drawGradientRect(0, pX - 3,           pY + sumLineHeight + 3, pX + maxWidth + 3, pY + sumLineHeight + 4, color, colorFade);
-            drawGradientRect(0, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY + sumLineHeight + 3, color, colorFade);
-            drawGradientRect(0, pX - 4,           pY - 3,                 pX - 3,           pY + sumLineHeight + 3, color, colorFade);
-            drawGradientRect(0, pX + maxWidth + 3,pY - 3,                 pX + maxWidth + 4, pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(zLevel, pX - 3,           pY - 4,                 pX + maxWidth + 3, pY - 3,                 color, colorFade);
+            drawGradientRect(zLevel, pX - 3,           pY + sumLineHeight + 3, pX + maxWidth + 3, pY + sumLineHeight + 4, color, colorFade);
+            drawGradientRect(zLevel, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(zLevel, pX - 4,           pY - 3,                 pX - 3,           pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(zLevel, pX + maxWidth + 3,pY - 3,                 pX + maxWidth + 4, pY + sumLineHeight + 3, color, colorFade);
 
             int col = (color & 0x00FFFFFF) | color & 0xFF000000;
-            drawGradientRect(0, pX - 3,           pY - 3 + 1,             pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, col);
-            drawGradientRect(0, pX + maxWidth + 2,pY - 3 + 1,             pX + maxWidth + 3, pY + sumLineHeight + 3 - 1, color, col);
-            drawGradientRect(0, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY - 3 + 1,                 col,   col);
-            drawGradientRect(0, pX - 3,           pY + sumLineHeight + 2, pX + maxWidth + 3, pY + sumLineHeight + 3,     color, color);
+            drawGradientRect(zLevel, pX - 3,           pY - 3 + 1,             pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, col);
+            drawGradientRect(zLevel, pX + maxWidth + 2,pY - 3 + 1,             pX + maxWidth + 3, pY + sumLineHeight + 3 - 1, color, col);
+            drawGradientRect(zLevel, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY - 3 + 1,                 col,   col);
+            drawGradientRect(zLevel, pX - 3,           pY + sumLineHeight + 2, pX + maxWidth + 3, pY + sumLineHeight + 3,     color, color);
 
             int offset = anyItemFound ? stackBoxSize : 0;
 
@@ -219,7 +216,7 @@ public class RenderingDrawUtils {
             for (Tuple<ItemStack, List<String>> toolTip : lengthLimitedToolTip) {
                 int minYShift = 10;
                 if (!toolTip.getA().isEmpty()) {
-                    RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), toolTip.getA(), pX, pY, null);
+                    RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), toolTip.getA(), Math.round(pX), Math.round(pY), null);
                     minYShift = stackBoxSize;
                     pY += 2;
                 }
@@ -228,7 +225,7 @@ public class RenderingDrawUtils {
                     if (customFR == null) {
                         customFR = fontRenderer;
                     }
-                    renderStringAtPos(pX + offset, pY, customFR, str, strColor.getRGB(), false);
+                    renderStringAtPos(pX + offset, pY, zLevel, customFR, str, strColor.getRGB(), false);
                     pY += 10;
                     minYShift -= 10;
                 }
@@ -243,6 +240,7 @@ public class RenderingDrawUtils {
         }
     }
 
+    //TODO zlevel layer offset
     public static void renderBlueTooltipBox(int x, int y, int width, int height) {
         renderTooltipBox(x, y, width, height, 0x000027, 0x000044);
     }
@@ -264,7 +262,7 @@ public class RenderingDrawUtils {
         drawGradientRect(0, pX - 3,           pY + height + 2, pX + width + 3, pY + height + 3,     color, color);
     }
 
-    public static void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
+    public static void drawGradientRect(float zLevel, float left, float top, float right, float bottom, int startColor, int endColor) {
         float startAlpha = (float) (startColor >> 24 & 255) / 255.0F;
         float startRed   = (float) (startColor >> 16 & 255) / 255.0F;
         float startGreen = (float) (startColor >>  8 & 255) / 255.0F;
@@ -275,8 +273,7 @@ public class RenderingDrawUtils {
         float endBlue    = (float) (endColor         & 255) / 255.0F;
 
         RenderSystem.disableTexture();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        Blending.DEFAULT.apply();
         RenderSystem.shadeModel(GL11.GL_SMOOTH);
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR, buf -> {
@@ -436,43 +433,44 @@ public class RenderingDrawUtils {
         buf.pos(matr, -0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u, v + vLength).lightmap(combinedLight).endVertex();
     }
 
-    public static void renderTexturedCubeCentralColorNormal(IVertexBuilder vb,
+    public static void renderTexturedCubeCentralColorNormal(MatrixStack renderStack, IVertexBuilder vb,
                                                             float u, float v, float uLength, float vLength,
                                                             int r, int g, int b, int a,
                                                             Matrix3f normalMatr) {
 
-        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        Matrix4f offset = renderStack.getLast().getMatrix();
+        vb.pos(offset, -0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos( 0.5, -0.5, -0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos(-0.5, -0.5, -0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos(-0.5,  0.5, -0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5,  0.5, -0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F, -0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F,  0.5F, -0.5F).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
 
-        vb.pos(-0.5, -0.5,  0.5).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5, -0.5,  0.5).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos( 0.5,  0.5,  0.5).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
-        vb.pos(-0.5,  0.5,  0.5).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F, -0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset,  0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u + uLength, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
+        vb.pos(offset, -0.5F,  0.5F,  0.5F).color(r, g, b, a).tex(u, v + vLength).normal(normalMatr, 0, 0, 0).endVertex();
     }
 
-    public static void renderAngleRotatedTexturedRectVB(IVertexBuilder vb, MatrixStack renderStack, Vector3 renderOffset, Vector3 axis, float angleRad, float scale, float u, float v, float uLength, float vLength, float r, float g, float b, float a) {
+    public static void renderAngleRotatedTexturedRectVB(IVertexBuilder vb, MatrixStack renderStack, Vector3 renderOffset, Vector3 axis, float angleRad, float scale, float u, float v, float uLength, float vLength, int r, int g, int b, int a) {
         Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
         Matrix4f matr = renderStack.getLast().getMatrix();
 

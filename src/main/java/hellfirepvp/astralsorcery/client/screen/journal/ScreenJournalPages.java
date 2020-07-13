@@ -9,23 +9,18 @@
 package hellfirepvp.astralsorcery.client.screen.journal;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.screen.base.NavigationArrowScreen;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -39,7 +34,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 03.08.2019 / 16:54
  */
-public class ScreenJournalPages extends ScreenJournal {
+public class ScreenJournalPages extends ScreenJournal implements NavigationArrowScreen {
 
     private static ScreenJournalPages openGuiInstance;
     private static boolean saveSite = true;
@@ -113,7 +108,10 @@ public class ScreenJournalPages extends ScreenJournal {
         if (origin != null) {
             drawDefault(TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
         } else {
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
             drawWHRect(TexturesAS.TEX_GUI_BOOK_BLANK);
+            RenderSystem.disableBlend();
         }
 
         this.changeZLevel(100);
@@ -132,8 +130,11 @@ public class ScreenJournalPages extends ScreenJournal {
 
             RenderSystem.popMatrix();
 
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
             TexturesAS.TEX_GUI_BOOK_UNDERLINE.bindTexture();
             RenderingGuiUtils.drawRect(guiLeft + 30, guiTop + 35, this.getGuiZLevel(), 175, 6);
+            RenderSystem.disableBlend();
 
             pageYOffset += 30;
         }
@@ -149,8 +150,9 @@ public class ScreenJournalPages extends ScreenJournal {
             page.render    (guiLeft + 220, guiTop + 20, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
 
-        drawBackArrow(pTicks, mouseX, mouseY);
+        this.changeZLevel(20);
         drawNavArrows(pTicks, mouseX, mouseY);
+        this.changeZLevel(-20);
 
         index = currentPageOffset * 2;
         if (pages.size() > index) {
@@ -165,97 +167,24 @@ public class ScreenJournalPages extends ScreenJournal {
         this.changeZLevel(-100);
     }
 
-    private void drawBackArrow(float partialTicks, int mouseX, int mouseY) {
-        int width = 30;
-        int height = 15;
-        rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
-
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(rectBack.getX() + (width / 2F), rectBack.getY() + (height / 2F), 0);
-
-        float uFrom, vFrom = 0.5F;
-        if (rectBack.contains(mouseX, mouseY)) {
-            uFrom = 0.5F;
-            RenderSystem.scaled(1.1, 1.1, 1.1);
-        } else {
-            uFrom = 0F;
-            double t = ClientScheduler.getClientTick() + partialTicks;
-            float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-            RenderSystem.scaled(sin, sin, sin);
-        }
-        RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
-        TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, this)
-                    .at(0, 0)
-                    .dim(width, height)
-                    .tex(uFrom, vFrom, 0.5F, 0.5F)
-                    .color(1F, 1F, 1F, 0.8F)
-                    .draw();
-        });
-
-        RenderSystem.popMatrix();
-
-        RenderSystem.enableDepthTest();
-    }
-
     private void drawNavArrows(float partialTicks, int mouseX, int mouseY) {
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
-        RenderSystem.disableDepthTest();
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+
+        this.rectNext = null;
+        this.rectPrev = null;
+        this.rectBack = this.drawArrow(guiLeft + 197, guiTop + 230, this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, partialTicks);
 
         int cIndex = currentPageOffset * 2;
-        rectNext = null;
-        rectPrev = null;
-
         if (cIndex > 0) {
-            int width = 30;
-            int height = 15;
-            rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(rectPrev.getX() + (width / 2F), rectPrev.getY() + (height / 2F), 0);
-            float uFrom = 0F, vFrom = 0.5F;
-            if (rectPrev.contains(mouseX, mouseY)) {
-                uFrom = 0.5F;
-                RenderSystem.scaled(1.1, 1.1, 1.1);
-            } else {
-                double t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                RenderSystem.scaled(sin, sin, sin);
-            }
-            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
-            TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-            this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
-            buf.finishDrawing();
-            WorldVertexBufferUploader.draw(buf);
-            RenderSystem.popMatrix();
+            this.rectPrev = this.drawArrow(guiLeft + 25, guiTop + 220, this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, partialTicks);
         }
         int nextIndex = cIndex + 2;
         if (pages.size() >= (nextIndex + 1)) {
-            int width = 30;
-            int height = 15;
-            rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(rectNext.getX() + (width / 2F), rectNext.getY() + (height / 2F), 0);
-            float uFrom = 0F, vFrom = 0F;
-            if (rectNext.contains(mouseX, mouseY)) {
-                uFrom = 0.5F;
-                RenderSystem.scaled(1.1, 1.1, 1.1);
-            } else {
-                double t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                RenderSystem.scaled(sin, sin, sin);
-            }
-            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
-            TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-            this.drawRect(buf).at(0, 0).dim(width, height).tex(uFrom, vFrom, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
-            buf.finishDrawing();
-            WorldVertexBufferUploader.draw(buf);
-            RenderSystem.popMatrix();
+            this.rectNext = this.drawArrow(guiLeft + 367, guiTop + 220, this.getGuiZLevel(), Type.RIGHT, mouseX, mouseY, partialTicks);
         }
 
-        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
     }
 
     @Override

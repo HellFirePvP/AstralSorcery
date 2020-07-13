@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHe
 import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import hellfirepvp.astralsorcery.common.item.ItemEnchantmentAmulet;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;

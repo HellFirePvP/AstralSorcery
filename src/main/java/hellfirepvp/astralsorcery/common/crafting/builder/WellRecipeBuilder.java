@@ -20,9 +20,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnull;
 import java.awt.*;

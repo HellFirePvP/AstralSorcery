@@ -11,10 +11,14 @@ package hellfirepvp.astralsorcery.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.screen.base.NavigationArrowScreen;
 import hellfirepvp.astralsorcery.client.screen.base.SkyScreen;
 import hellfirepvp.astralsorcery.client.screen.base.TileConstellationDiscoveryScreen;
 import hellfirepvp.astralsorcery.client.screen.telescope.TelescopeRotationDrawArea;
-import hellfirepvp.astralsorcery.client.util.*;
+import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
@@ -45,7 +49,7 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 15.01.2020 / 17:16
  */
-public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelescope, TelescopeRotationDrawArea> implements SkyScreen {
+public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelescope, TelescopeRotationDrawArea> implements SkyScreen, NavigationArrowScreen {
 
     private TileTelescope.TelescopeRotation rotation;
 
@@ -121,60 +125,13 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
     }
 
     private void drawNavArrows(int mouseX, int mouseY, float pTicks) {
-        this.rectArrowCW = null;
-        this.rectArrowCCW = null;
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
 
-        TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
+        this.rectArrowCCW = this.drawArrow(guiLeft - 40, guiTop + (guiHeight / 2), this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, pTicks);
+        this.rectArrowCW = this.drawArrow(guiLeft + guiWidth + 10, guiTop + (guiHeight / 2), this.getGuiZLevel(), Type.RIGHT, mouseX, mouseY, pTicks);
 
-        RenderSystem.disableDepthTest();
-
-        float width = 30F;
-        float height = 15F;
-        rectArrowCCW = new Rectangle(guiLeft - 40, guiTop + (guiHeight / 2), (int) width, (int) height);
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(rectArrowCCW.getX() + (width / 2), rectArrowCCW.getY() + (height / 2), 0);
-        float uFromCCW;
-        float vFromCCW = 0.5F;
-        if (rectArrowCCW.contains(mouseX, mouseY)) {
-            uFromCCW = 0.5F;
-            RenderSystem.scaled(1.1, 1.1, 1.1);
-        } else {
-            uFromCCW = 0F;
-            double t = ClientScheduler.getClientTick() + pTicks;
-            float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-            RenderSystem.scaled(sin, sin, sin);
-        }
-        RenderSystem.translated(-(width / 2), -(height / 2), 0);
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, this).at(0, 0).dim(width, height)
-                    .tex(uFromCCW, vFromCCW, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
-        });
-        RenderSystem.popMatrix();
-
-        rectArrowCW = new Rectangle(guiLeft + guiWidth + 10, guiTop + (guiHeight / 2), (int) width, (int) height);
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(rectArrowCW.getX() + (width / 2), rectArrowCW.getY() + (height / 2), 0);
-        float uFromCW;
-        float vFromCW = 0F;
-        if (rectArrowCW.contains(mouseX, mouseY)) {
-            uFromCW = 0.5F;
-            RenderSystem.scaled(1.1, 1.1, 1.1);
-        } else {
-            uFromCW = 0F;
-            double t = ClientScheduler.getClientTick() + pTicks;
-            float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-            RenderSystem.scaled(sin, sin, sin);
-        }
-        RenderSystem.translated(-(width / 2), -(height / 2), 0);
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, this).at(0, 0).dim(width, height)
-                    .tex(uFromCW, vFromCW, 0.5F, 0.5F).color(1F, 1F, 1F, 0.8F).draw();
-        });
-        RenderSystem.popMatrix();
-
-        RenderSystem.popMatrix();
-
-        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
     }
 
     private void drawConstellationCell(float pTicks) {

@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network;
 
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightRecipient;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.network.handler.BlockTransmutationHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

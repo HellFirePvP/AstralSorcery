@@ -69,9 +69,8 @@ public class RenderChalice extends CustomTileEntityRenderer<TileChalice> {
         renderStack.rotate(Vector3f.ZP.rotationDegrees((float) rotation.getZ()));
         renderStack.scale(percSize, percSize, percSize);
 
-        BlockAtlasTexture.getInstance().bindTexture();
         IVertexBuilder buf = renderTypeBuffer.getBuffer(RenderTypesAS.TER_CHALICE_LIQUID);
-        RenderingDrawUtils.renderTexturedCubeCentralColorNormal(buf,
+        RenderingDrawUtils.renderTexturedCubeCentralColorNormal(renderStack, buf,
                 uOffset, vOffset, uPart, vPart,
                 color.getRed(), color.getGreen(), color.getBlue(), 255,
                 renderStack.getLast().getNormal());

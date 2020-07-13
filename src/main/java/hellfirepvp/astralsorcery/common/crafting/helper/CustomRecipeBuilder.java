@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;

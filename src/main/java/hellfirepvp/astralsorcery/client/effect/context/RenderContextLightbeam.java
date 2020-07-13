@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXLightbeam;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
-import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 
 /**
  * This class is part of the Astral Sorcery Mod

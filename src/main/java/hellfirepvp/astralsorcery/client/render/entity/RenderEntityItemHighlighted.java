@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.render.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.common.entity.item.EntityItemHighlighted;
 import net.minecraft.client.Minecraft;

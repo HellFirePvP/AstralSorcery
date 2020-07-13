@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "astralsorcery:block/starmetal_ore"
+      "model": "astralsorcery:block/multilayer/starmetal_ore"
     }
   }
 }

@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.crafting.helper.ResolvingRecipeType;
 import hellfirepvp.astralsorcery.common.crafting.recipe.*;
-import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraftforge.items.IItemHandler;
 
 /**

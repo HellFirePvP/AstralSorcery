@@ -50,6 +50,7 @@ public class BlockObservatory extends ContainerBlock implements LargeBlock, Cust
         super(PropertiesMisc.defaultGoldMachinery()
                 .harvestTool(ToolType.PICKAXE)
                 .harvestLevel(1)
+                .notSolid()
                 .hardnessAndResistance(3F, 4F));
     }
 

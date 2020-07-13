@@ -30,7 +30,8 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Collection;
 
-import static hellfirepvp.astralsorcery.common.util.NameUtil.*;
+import static hellfirepvp.astralsorcery.common.util.NameUtil.prefixPath;
+import static hellfirepvp.astralsorcery.common.util.NameUtil.suffixPath;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -88,9 +89,9 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
         this.simpleSlabs(BlocksAS.INFUSED_WOOD_SLAB, model(BlocksAS.INFUSED_WOOD_PLANKS));
         this.simpleStairs(BlocksAS.INFUSED_WOOD_STAIRS);
 
-        this.simpleBlockState(BlocksAS.AQUAMARINE_SAND_ORE);
-        this.simpleBlockState(BlocksAS.ROCK_CRYSTAL_ORE);
-        this.simpleBlockState(BlocksAS.STARMETAL_ORE);
+        this.multiLayerBlockState(BlocksAS.AQUAMARINE_SAND_ORE);
+        this.multiLayerBlockState(BlocksAS.ROCK_CRYSTAL_ORE);
+        this.multiLayerBlockState(BlocksAS.STARMETAL_ORE);
         this.simpleBlockState(BlocksAS.GLOW_FLOWER);
 
         this.multiLayerBlockState(BlocksAS.SPECTRAL_RELAY);

@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary.book;
 
-import hellfirepvp.astralsorcery.common.data.research.*;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.item.ItemComparator;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

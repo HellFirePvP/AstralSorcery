@@ -10,19 +10,16 @@ package hellfirepvp.astralsorcery.client.screen.journal;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
 import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
@@ -70,7 +67,11 @@ public class ScreenJournal extends WidthHeightScreen {
 
     protected void drawDefault(AbstractRenderableTexture texture, int mouseX, int mouseY) {
         this.changeZLevel(100);
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
         drawWHRect(texture);
+        RenderSystem.disableBlend();
+
         drawBookmarks(mouseX, mouseY);
         this.changeZLevel(-100);
     }
@@ -116,10 +117,13 @@ public class ScreenJournal extends WidthHeightScreen {
             r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
         }
 
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
         float actualWidth = width;
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
             RenderingGuiUtils.rect(buf, offsetX, offsetY, zLevel, actualWidth, height).draw();
         });
+        RenderSystem.disableBlend();
 
         RenderSystem.pushMatrix();
         RenderSystem.translated(offsetX + 2, offsetY + 4, zLevel + 50);

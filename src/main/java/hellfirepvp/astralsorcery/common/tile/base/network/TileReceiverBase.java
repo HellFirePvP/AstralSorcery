@@ -10,8 +10,6 @@ package hellfirepvp.astralsorcery.common.tile.base.network;
 
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkableTileEntity;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightReceiver;
-import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
-import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 

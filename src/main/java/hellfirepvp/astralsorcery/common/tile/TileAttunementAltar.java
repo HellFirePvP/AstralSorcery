@@ -53,7 +53,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -210,7 +213,10 @@ public class TileAttunementAltar extends TileEntityTick {
 
                     this.activeStarSprites.put(key, sprite);
                 } else {
-                    EffectHelper.refresh((FXFacingSprite) this.activeStarSprites.get(key), EffectTemplatesAS.FACING_SPRITE);
+                    FXFacingSprite spr = (FXFacingSprite) this.activeStarSprites.get(key);
+                    if (spr.isRemoved()) {
+                        EffectHelper.refresh(spr, EffectTemplatesAS.FACING_SPRITE);
+                    }
                 }
 
                 if (night >= 0.1F && getActiveRecipe() == null) {

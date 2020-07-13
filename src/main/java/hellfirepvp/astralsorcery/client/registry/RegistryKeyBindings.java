@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
-import static hellfirepvp.astralsorcery.client.lib.KeyBindingsAS.*;
+import static hellfirepvp.astralsorcery.client.lib.KeyBindingsAS.DISABLE_PERK_ABILITIES;
 
 /**
  * This class is part of the Astral Sorcery Mod

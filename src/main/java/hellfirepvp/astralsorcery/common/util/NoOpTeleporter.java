@@ -10,8 +10,8 @@ package hellfirepvp.astralsorcery.common.util;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.Teleporter;
+import net.minecraft.world.server.ServerWorld;
 
 /**
  * This class is part of the Astral Sorcery Mod

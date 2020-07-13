@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.world.structure.feature;
 
 import hellfirepvp.astralsorcery.common.lib.WorldGenerationAS;
 import hellfirepvp.astralsorcery.common.world.config.StructurePlacementConfig;
-import hellfirepvp.astralsorcery.common.world.structure.AncientShrineStructure;
 import hellfirepvp.astralsorcery.common.world.structure.ConfiguredStructureStart;
 import hellfirepvp.astralsorcery.common.world.structure.DesertShrineStructure;
 import net.minecraft.util.math.BlockPos;

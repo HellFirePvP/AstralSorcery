@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.container.factory;
 
 import hellfirepvp.astralsorcery.common.container.ContainerTome;
-import hellfirepvp.astralsorcery.common.item.ItemTome;
 import hellfirepvp.astralsorcery.common.lib.ContainerTypesAS;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +18,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.IContainerFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

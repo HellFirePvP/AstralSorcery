@@ -15,8 +15,8 @@ import hellfirepvp.astralsorcery.common.network.play.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.source.AttributeConverterProvider;
 import hellfirepvp.astralsorcery.common.perk.source.AttributeModifierProvider;
-import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
-import java.util.*;
+import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,11 +8,13 @@
 
 package hellfirepvp.astralsorcery.common;
 
-import hellfirepvp.astralsorcery.client.screen.*;
+import hellfirepvp.astralsorcery.client.screen.ScreenConstellationPaper;
+import hellfirepvp.astralsorcery.client.screen.ScreenHandTelescope;
+import hellfirepvp.astralsorcery.client.screen.ScreenRefractionTable;
+import hellfirepvp.astralsorcery.client.screen.ScreenTelescope;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
-import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.tile.TileRefractionTable;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;

@@ -21,7 +21,6 @@ import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
-import hellfirepvp.astralsorcery.common.util.block.iterator.BlockPositionGenerator;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.DyeColor;
@@ -37,7 +36,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

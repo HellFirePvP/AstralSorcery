@@ -19,7 +19,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**

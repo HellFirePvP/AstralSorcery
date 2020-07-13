@@ -9,11 +9,9 @@
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -71,14 +69,14 @@ public class RenderPageStructure extends RenderablePage {
         this.totalRenderFrame++;
 
         this.renderStructure(offsetX, offsetY, pTicks);
-        float shift = this.renderSizeDescription(offsetX, offsetY + 5);
+        float shift = this.renderSizeDescription(offsetX, offsetY + 5, zLevel);
 
         if (this.name != null) {
-            renderHeadline(offsetX + shift, offsetY + 5, this.name);
+            renderHeadline(offsetX + shift, offsetY + 5, zLevel, this.name);
         }
     }
 
-    private void renderHeadline(float offsetX, float offsetY, ITextComponent title) {
+    private void renderHeadline(float offsetX, float offsetY, float zLevel, ITextComponent title) {
         float scale = 1.3F;
 
         RenderSystem.pushMatrix();
@@ -86,13 +84,13 @@ public class RenderPageStructure extends RenderablePage {
         RenderSystem.scaled(scale, scale, scale);
         RenderSystem.disableDepthTest();
 
-        RenderingDrawUtils.renderStringAtPos(0, 0, null, title.getFormattedText(), 0x00DDDDDD, true);
+        RenderingDrawUtils.renderStringAtPos(0, 0, zLevel, null, title.getFormattedText(), 0x00DDDDDD, true);
 
         RenderSystem.enableDepthTest();
         RenderSystem.popMatrix();
     }
 
-    private float renderSizeDescription(float offsetX, float offsetY) {
+    private float renderSizeDescription(float offsetX, float offsetY, float zLevel) {
         Vector3 size = new Vector3(this.structure.getMaximumOffset()).subtract(this.structure.getMinimumOffset());
         FontRenderer fr = RenderablePage.getFontRenderer();
         float scale = 1.3F;
@@ -104,7 +102,7 @@ public class RenderPageStructure extends RenderablePage {
         RenderSystem.scaled(scale, scale, scale);
         RenderSystem.disableDepthTest();
 
-        RenderingDrawUtils.renderStringAtPos(0, 0, fr, desc, 0x00DDDDDD, true);
+        RenderingDrawUtils.renderStringAtPos(0, 0, zLevel, fr, desc, 0x00DDDDDD, true);
 
         RenderSystem.enableDepthTest();
         RenderSystem.popMatrix();
@@ -125,11 +123,9 @@ public class RenderPageStructure extends RenderablePage {
         MatrixStack renderStack = new MatrixStack();
         renderStack.translate(offsetX + 160, offsetY + 10, zLevel);
         Rectangle rect = RenderingDrawUtils.drawInfoStar(renderStack, IDrawRenderTypeBuffer.defaultBuffer(), 15, pTicks);
+        rect.translate((int) (offsetX + 160), (int) (offsetY + 10));
         if (rect.contains(mouseX, mouseY)) {
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(0, 0, 150);
-            RenderingDrawUtils.renderBlueTooltip((int) offsetX + 160, (int) offsetY + 10, this.contentStacks, RenderablePage.getFontRenderer(), false);
-            RenderSystem.popMatrix();
+            RenderingDrawUtils.renderBlueTooltip(offsetX + 160, offsetY + 10, zLevel + 150, this.contentStacks, RenderablePage.getFontRenderer(), false);
         }
     }
 

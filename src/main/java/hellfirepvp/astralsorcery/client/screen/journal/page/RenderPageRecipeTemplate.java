@@ -14,10 +14,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
-import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.common.auxiliary.book.BookLookupInfo;
 import hellfirepvp.astralsorcery.common.auxiliary.book.BookLookupRegistry;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
@@ -76,8 +73,11 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
     }
 
     public void renderRecipeGrid(float offsetX, float offsetY, float zLevel, AbstractRenderableTexture tex) {
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
         tex.bindTexture();
         RenderingGuiUtils.drawRect(offsetX + 25, offsetY, zLevel, 129, 202);
+        RenderSystem.disableBlend();
     }
 
     public void renderExpectedIngredientInput(float offsetX, float offsetY, float zLevel, double scale, long tickOffset, Ingredient ingredient) {
@@ -181,17 +181,21 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         MatrixStack renderStack = new MatrixStack();
         renderStack.translate(offsetX + 140, offsetY + 20, zLevel);
         this.thisFrameInfoStar = RenderingDrawUtils.drawInfoStar(renderStack, IDrawRenderTypeBuffer.defaultBuffer(), 15F, pTicks);
+        this.thisFrameInfoStar.translate((int) (offsetX + 140), (int) (offsetY + 20));
     }
 
     public void renderRequiredConstellation(float offsetX, float offsetY, float zLevel, @Nullable IConstellation constellation) {
         if (constellation != null) {
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
             RenderingConstellationUtils.renderConstellationIntoGUI(new Color(0xEEEEEE), constellation,
                     Math.round(offsetX + 30), Math.round(offsetY + 78), zLevel,
                     125, 125, 2F, () -> 0.4F, true, false);
+            RenderSystem.disableBlend();
         }
     }
 
-    public void renderInfoStarTooltips(float offsetX, float offsetY, float mouseX, float mouseY, Consumer<List<ITextComponent>> tooltipProvider) {
+    public void renderInfoStarTooltips(float offsetX, float offsetY, float zLevel, float mouseX, float mouseY, Consumer<List<ITextComponent>> tooltipProvider) {
         if (this.thisFrameInfoStar == null) {
             return;
         }
@@ -199,16 +203,20 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         List<ITextComponent> toolTip = new LinkedList<>();
         tooltipProvider.accept(toolTip);
         if (!toolTip.isEmpty() && this.thisFrameInfoStar.contains(mouseX, mouseY)) {
-            RenderingDrawUtils.renderBlueTooltipComponents((int) offsetX, (int) offsetY, toolTip, RenderablePage.getFontRenderer(), false);
+            zLevel += 200;
+            RenderingDrawUtils.renderBlueTooltipComponents(offsetX, offsetY, zLevel, toolTip, RenderablePage.getFontRenderer(), false);
+            zLevel -= 200;
         }
     }
 
-    public void renderHoverTooltips(float mouseX, float mouseY, ResourceLocation recipeName) {
+    public void renderHoverTooltips(float mouseX, float mouseY, float zLevel, ResourceLocation recipeName) {
         List<ITextComponent> toolTip = new LinkedList<>();
         addStackTooltip(mouseX, mouseY, recipeName, toolTip);
 
         if (!toolTip.isEmpty()) {
-            RenderingDrawUtils.renderBlueTooltipComponents((int) mouseX, (int) mouseY, toolTip, RenderablePage.getFontRenderer(), true);
+            zLevel += 800;
+            RenderingDrawUtils.renderBlueTooltipComponents(mouseX, mouseY, zLevel, toolTip, RenderablePage.getFontRenderer(), true);
+            zLevel -= 800;
         }
     }
 

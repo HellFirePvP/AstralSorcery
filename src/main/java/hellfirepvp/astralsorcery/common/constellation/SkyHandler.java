@@ -9,10 +9,10 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import com.google.common.collect.Maps;
-import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.world.WorldSeedCache;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;

@@ -9,8 +9,6 @@
 package hellfirepvp.astralsorcery.common.block.marble;
 
 import hellfirepvp.astralsorcery.common.block.base.template.BlockMarbleTemplate;
-import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
-import net.minecraft.block.Block;
 
 /**
  * This class is part of the Astral Sorcery Mod

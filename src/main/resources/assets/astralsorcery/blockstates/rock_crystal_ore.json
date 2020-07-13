@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "astralsorcery:block/rock_crystal_ore"
+      "model": "astralsorcery:block/multilayer/rock_crystal_ore"
     }
   }
 }

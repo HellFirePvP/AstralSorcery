@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 
-import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.*;
+import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.USE_TOOL_EFFECTIVENESS;
 
 /**
  * This class is part of the Astral Sorcery Mod

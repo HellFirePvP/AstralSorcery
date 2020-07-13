@@ -12,13 +12,11 @@ import hellfirepvp.astralsorcery.common.world.placement.StructurePlacement;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

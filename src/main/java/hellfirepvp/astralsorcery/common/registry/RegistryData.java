@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.data.world.*;
+import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
+import hellfirepvp.astralsorcery.common.data.world.LightNetworkBuffer;
+import hellfirepvp.astralsorcery.common.data.world.RockCrystalBuffer;
+import hellfirepvp.astralsorcery.common.data.world.StorageNetworkBuffer;
 import hellfirepvp.observerlib.common.data.WorldCacheManager;
 
 import static hellfirepvp.astralsorcery.common.lib.DataAS.*;

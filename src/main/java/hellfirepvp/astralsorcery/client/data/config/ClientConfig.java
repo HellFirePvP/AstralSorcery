@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.client.data.config;
 
 import hellfirepvp.astralsorcery.common.data.config.base.BaseConfiguration;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
-
-import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod

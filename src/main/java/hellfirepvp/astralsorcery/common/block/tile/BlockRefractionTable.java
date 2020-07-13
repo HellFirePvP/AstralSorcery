@@ -43,7 +43,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.Random;
 
 /**
@@ -59,7 +58,8 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
     private static final AxisAlignedBB PLACEMENT_BOX = new AxisAlignedBB(-1, 0, -1, 1, 1, 1);
 
     public BlockRefractionTable() {
-        super(PropertiesWood.defaultInfusedWood());
+        super(PropertiesWood.defaultInfusedWood()
+                .notSolid());
     }
 
     @Override

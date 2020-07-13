@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.data.config.registry.sets.EntityTechnica
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.List;

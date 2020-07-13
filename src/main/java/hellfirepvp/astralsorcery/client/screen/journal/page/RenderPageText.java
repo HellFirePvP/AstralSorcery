@@ -50,12 +50,9 @@ public class RenderPageText extends RenderablePage {
 
     @Override
     public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        int iX = (int) offsetX;
-        int iY = (int) offsetY;
-
         for (int i = 0; i < this.localizedText.size(); i++) {
             String line = this.localizedText.get(i);
-            RenderingDrawUtils.renderStringAtPos(iX, iY + (i * 10), this.fontRenderer, line, 0x00CCCCCC, false);
+            RenderingDrawUtils.renderStringAtPos(offsetX, offsetY + (i * 10), zLevel, this.fontRenderer, line, 0x00CCCCCC, false);
         }
     }
 }

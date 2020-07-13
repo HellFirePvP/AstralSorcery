@@ -10,14 +10,11 @@ package hellfirepvp.astralsorcery.common.world.config;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.util.block.BlockStateHelper;
-import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 

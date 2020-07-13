@@ -16,7 +16,6 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXLightning;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
-import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -131,7 +130,6 @@ public class CelestialStrike {
                 .setNoRotation(r.nextFloat() * 360F)
                 .setAlphaMultiplier(0.4F)
                 .alpha(VFXAlphaFunction.FADE_OUT)
-                .color(VFXColorFunction.WHITE)
                 .setScaleMultiplier(17F)
                 .setMaxAge(30 + r.nextInt(10));
 

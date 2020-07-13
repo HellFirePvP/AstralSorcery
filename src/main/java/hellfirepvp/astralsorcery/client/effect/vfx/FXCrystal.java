@@ -9,31 +9,21 @@
 package hellfirepvp.astralsorcery.client.effect.vfx;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
-import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.render.ObjModelRender;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
-import hellfirepvp.astralsorcery.client.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.resource.query.TextureQuery;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
-import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Vector3f;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -89,6 +79,7 @@ public class FXCrystal extends EntityVisualFX implements EntityDynamicFX {
             renderStack.translate(vec.getX(), vec.getY(), vec.getZ());
             RenderingDrawUtils.renderLightRayFan(renderStack, drawBuffer, this.lightRayColor, seed, 5, 1F, 50);
             renderStack.pop();
+            drawBuffer.draw();
         }
 
         RenderSystem.color4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha / 255F);

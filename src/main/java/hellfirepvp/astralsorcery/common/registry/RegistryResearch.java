@@ -26,8 +26,6 @@ import net.minecraft.util.IItemProvider;
 
 import java.util.function.Predicate;
 
-import static hellfirepvp.astralsorcery.common.auxiliary.book.BookLookupRegistry.registerItemLookup;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.

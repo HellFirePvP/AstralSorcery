@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 

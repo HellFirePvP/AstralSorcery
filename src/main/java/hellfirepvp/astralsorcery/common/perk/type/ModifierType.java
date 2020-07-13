@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod

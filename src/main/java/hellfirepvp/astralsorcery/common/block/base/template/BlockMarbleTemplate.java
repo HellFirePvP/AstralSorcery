@@ -10,14 +10,8 @@ package hellfirepvp.astralsorcery.common.block.base.template;
 
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
-import hellfirepvp.astralsorcery.common.lib.MaterialsAS;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.BlockState;
-import net.minecraft.fluid.IFluidState;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;

@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.world.structure;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.LootTablesAS;
 import hellfirepvp.astralsorcery.common.lib.WorldGenerationAS;
-import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;

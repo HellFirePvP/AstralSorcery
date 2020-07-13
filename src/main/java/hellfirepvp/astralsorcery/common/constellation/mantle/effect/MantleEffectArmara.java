@@ -30,7 +30,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
-import java.awt.*;
 import java.util.Random;
 
 /**

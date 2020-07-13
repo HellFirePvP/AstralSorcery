@@ -19,14 +19,13 @@ import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.source.FXSource;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
-import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
+import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.order.DependencySorter;
 import hellfirepvp.observerlib.common.util.AlternatingSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderTypeBuffers;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -68,7 +67,7 @@ public final class EffectHandler {
     }
 
     public void render(RenderWorldLastEvent event) {
-        if (this.orderedEffects == null) {
+        if (this.orderedEffects == null || AssetLibrary.isReloading()) {
             return;
         }
 

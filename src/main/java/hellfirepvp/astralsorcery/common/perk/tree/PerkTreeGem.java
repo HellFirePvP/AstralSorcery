@@ -57,8 +57,8 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
     public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, float x, float y, float zLevel, float scale) {
         ItemStack stack = this.getPerk().getContainedItem(Minecraft.getInstance().player, LogicalSide.CLIENT);
         if (!stack.isEmpty()) {
-            int posX = Math.round(x - (8 * scale));
-            int posY = Math.round(y - (8 * scale));
+            float posX = x - (8 * scale);
+            float posY = y - (8 * scale);
 
             RenderSystem.pushMatrix();
             RenderSystem.translated(posX, posY, zLevel);

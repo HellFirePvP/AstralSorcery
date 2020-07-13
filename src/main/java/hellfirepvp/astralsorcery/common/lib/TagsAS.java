@@ -16,7 +16,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 
-import static hellfirepvp.astralsorcery.common.base.Mods.*;
+import static hellfirepvp.astralsorcery.common.base.Mods.ASTRAL_SORCERY;
+import static hellfirepvp.astralsorcery.common.base.Mods.CURIOS;
 
 /**
  * This class is part of the Astral Sorcery Mod

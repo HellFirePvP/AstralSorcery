@@ -10,15 +10,10 @@ package hellfirepvp.astralsorcery.common.crafting.nojson;
 
 import hellfirepvp.astralsorcery.common.crafting.nojson.starlight.*;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
