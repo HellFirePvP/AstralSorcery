@@ -1,7 +1,0 @@
-{
-  "parent": "astralsorcery:block/base/ore",
-  "textures": {
-    "base": "block/stone",
-    "ore": "astralsorcery:block/ore_starmetal"
-  }
-}

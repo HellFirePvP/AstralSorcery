@@ -8,12 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import com.mojang.brigadier.arguments.BoolArgumentType;
-import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
-import net.minecraft.world.GameRules;
-
-import static hellfirepvp.astralsorcery.common.lib.GameRulesAS.*;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.

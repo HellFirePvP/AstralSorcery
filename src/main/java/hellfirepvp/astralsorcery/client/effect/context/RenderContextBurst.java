@@ -25,5 +25,4 @@ public class RenderContextBurst extends BatchRenderContext<FXFacingParticle> {
     public RenderContextBurst(SpriteSheetResource sprite) {
         super(sprite, RenderTypesAS.EFFECT_FX_BURST, (ctx, pos) -> new FXFacingParticle(pos));
     }
-
 }

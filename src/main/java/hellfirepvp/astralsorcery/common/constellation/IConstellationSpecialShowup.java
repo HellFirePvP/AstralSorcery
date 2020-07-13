@@ -11,8 +11,6 @@ package hellfirepvp.astralsorcery.common.constellation;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.

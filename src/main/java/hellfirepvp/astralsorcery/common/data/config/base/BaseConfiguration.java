@@ -16,7 +16,6 @@ import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod

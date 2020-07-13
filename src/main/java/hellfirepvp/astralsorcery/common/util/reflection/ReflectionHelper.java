@@ -10,15 +10,14 @@ package hellfirepvp.astralsorcery.common.util.reflection;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameRules;
-import net.minecraftforge.fml.network.NetworkInstance;
-import net.minecraftforge.fml.network.NetworkRegistry;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.function.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod

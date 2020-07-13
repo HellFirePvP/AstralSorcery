@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.base.patreon.types;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
@@ -17,6 +18,7 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.ObjModelRender;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.common.base.patreon.FlareColor;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffect;
@@ -141,12 +143,13 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
         if (!shouldDoEffect(player)) {
             return;
         }
-        MatrixStack renderStack = event.getMatrixStack();
-        TexturesAS.TEX_MODEL_CELESTIAL_WINGS.bindTexture();
+        this.renderWings(player, event.getMatrixStack(), event.getPartialRenderTick());
+    }
 
-        float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
+    private void renderWings(PlayerEntity player, MatrixStack renderStack, float pTicks) {
+        float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, pTicks);
         float yOffset = 1.3F;
-        if (player.isSneaking()) {
+        if (player.isSneaking() && !player.abilities.isFlying) {
             yOffset = 1F;
         }
         float f = Math.abs((ClientScheduler.getSystemClientTick() % 240) - 120F) / 120F;
@@ -157,12 +160,20 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
         renderStack.rotate(Vector3f.YP.rotationDegrees(180F - rot));
         renderStack.scale(0.02F, 0.02F, 0.02F);
 
+        RenderSystem.disableBlend();
+        RenderSystem.enableTexture();
+        TexturesAS.TEX_MODEL_CELESTIAL_WINGS.bindTexture();
+
         renderStack.translate(-25, 0, 0);
         ObjModelRender.renderCelestialWings(renderStack);
         renderStack.rotate(Vector3f.YP.rotationDegrees(180F));
         renderStack.translate(-50, 0, 0);
         ObjModelRender.renderCelestialWings(renderStack);
         renderStack.pop();
+
+        BlockAtlasTexture.getInstance().bindTexture();
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
     }
 
     @Override

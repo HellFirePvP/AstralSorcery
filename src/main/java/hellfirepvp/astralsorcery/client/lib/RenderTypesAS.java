@@ -1,6 +1,10 @@
 package hellfirepvp.astralsorcery.client.lib;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.vertex.VertexFormat;
+
+import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -10,6 +14,8 @@ import net.minecraft.client.renderer.RenderType;
  * Date: 05.06.2020 / 15:50
  */
 public class RenderTypesAS {
+
+    public static VertexFormat POSITION_COLOR_TEX_NORMAL = new VertexFormat(ImmutableList.of(POSITION_3F, COLOR_4UB, TEX_2F, NORMAL_3B));
 
     //Effects/FX/VFX
     public static RenderType EFFECT_FX_GENERIC_PARTICLE;

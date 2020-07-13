@@ -19,7 +19,6 @@ import net.minecraft.world.dimension.DimensionType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
 /**

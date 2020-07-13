@@ -101,7 +101,7 @@ public class ScreenJournalClusterRenderer {
                     RenderSystem.translated(r.getX(), r.getY(), 0);
                     RenderSystem.scaled(progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor());
 
-                    RenderingDrawUtils.renderBlueTooltipString(0, 0, Lists.newArrayList(name), Minecraft.getInstance().fontRenderer, false);
+                    RenderingDrawUtils.renderBlueTooltipString(0, 0, zLevel, Lists.newArrayList(name), Minecraft.getInstance().fontRenderer, false);
 
                     RenderSystem.popMatrix();
                 }

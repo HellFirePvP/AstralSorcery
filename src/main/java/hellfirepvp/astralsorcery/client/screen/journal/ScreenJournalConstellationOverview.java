@@ -11,9 +11,10 @@ package hellfirepvp.astralsorcery.client.screen.journal;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.screen.base.NavigationArrowScreen;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 04.08.2019 / 09:36
  */
-public class ScreenJournalConstellationOverview extends ScreenJournal {
+public class ScreenJournalConstellationOverview extends ScreenJournal implements NavigationArrowScreen {
 
     private static final int CONSTELLATIONS_PER_PAGE = 4;
 
@@ -90,6 +91,7 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
         });
 
         RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
         TexturesAS.TEX_GUI_BACKGROUND_CONSTELLATIONS.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             buf.pos(guiLeft + 15,            guiTop + guiHeight - 10, this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.7F).tex(0.1F, 0.9F).endVertex();
@@ -121,6 +123,9 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
         }
         RenderSystem.translated(-(width / 2F), -(width / 2F), zLevel);
 
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+
         Random rand = new Random(0x4196A15C91A5E199L);
         RenderingConstellationUtils.renderConstellationIntoGUI(display.getConstellationColor(), display,
                 0, 0, 0,
@@ -128,73 +133,33 @@ public class ScreenJournalConstellationOverview extends ScreenJournal {
                 () -> 0.5F + 0.5F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10)),
                 true, false);
 
+        RenderSystem.disableBlend();
+
         String trName = display.getConstellationName().getFormattedText().toUpperCase();
         float fullLength = (width / 2F) - (((float) font.getStringWidth(trName)) / 2F);
-        RenderingDrawUtils.renderStringAtPos(MathHelper.floor(fullLength), 90, font, trName, 0xBBDDDDDD, false);
+        RenderingDrawUtils.renderStringAtPos(fullLength, 90, this.getGuiZLevel(), font, trName, 0xBBDDDDDD, false);
 
         RenderSystem.popMatrix();
         return rect;
     }
 
     private void drawNavArrows(float partialTicks, int mouseX, int mouseY) {
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+
+        this.rectNext = null;
+        this.rectPrev = null;
+
         int cIndex = pageId * CONSTELLATIONS_PER_PAGE;
-        rectNext = null;
-        rectPrev = null;
-
         if (cIndex > 0) {
-            int width = 30;
-            int height = 15;
-            rectPrev = new Rectangle(guiLeft + 15, guiTop + 127, width, height);
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(rectPrev.getX() + (width / 2F), rectPrev.getY() + (height / 2F), 0);
-            float uFrom, vFrom = 0.5F;
-            if (rectPrev.contains(mouseX, mouseY)) {
-                uFrom = 0.5F;
-                RenderSystem.scaled(1.1, 1.1, 1.1);
-            } else {
-                uFrom = 0F;
-                double t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                RenderSystem.scaled(sin, sin, sin);
-            }
-
-            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
-            TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-                RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
-                        .tex(uFrom, vFrom, 0.5F, 0.5F)
-                        .color(1F, 1F, 1F, 0.8F)
-                        .draw();
-            });
-            RenderSystem.popMatrix();
+            this.rectPrev = this.drawArrow(guiLeft + 15, guiTop + 127, this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, partialTicks);
         }
         int nextIndex = cIndex + CONSTELLATIONS_PER_PAGE;
         if (constellations.size() >= (nextIndex + 1)) {
-            int width = 30;
-            int height = 15;
-            rectNext = new Rectangle(guiLeft + 367, guiTop + 127, width, height);
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(rectNext.getX() + (width / 2F), rectNext.getY() + (height / 2F), 0);
-            float uFrom, vFrom = 0F;
-            if (rectNext.contains(mouseX, mouseY)) {
-                uFrom = 0.5F;
-                RenderSystem.scaled(1.1, 1.1, 1.1);
-            } else {
-                uFrom = 0F;
-                double t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                RenderSystem.scaled(sin, sin, sin);
-            }
-            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
-            TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-                RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
-                        .tex(uFrom, vFrom, 0.5F, 0.5F)
-                        .color(1F, 1F, 1F, 0.8F)
-                        .draw();
-            });
-            RenderSystem.popMatrix();
+            this.rectNext = this.drawArrow(guiLeft + 367, guiTop + 127, this.getGuiZLevel(), Type.RIGHT, mouseX, mouseY, partialTicks);
         }
+
+        RenderSystem.disableBlend();
     }
 
     @Override

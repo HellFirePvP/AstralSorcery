@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.data.sync.base;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -14,7 +14,8 @@ import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.Tag;
 
-import static hellfirepvp.astralsorcery.common.lib.TagsAS.Blocks.*;
+import static hellfirepvp.astralsorcery.common.lib.TagsAS.Blocks.MARBLE;
+import static hellfirepvp.astralsorcery.common.lib.TagsAS.Blocks.ORES;
 
 /**
  * This class is part of the Astral Sorcery Mod

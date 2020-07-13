@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.client;
 
-import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.util.Counter;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.event.TickEvent;
 

@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.crystal.CalculationContext;

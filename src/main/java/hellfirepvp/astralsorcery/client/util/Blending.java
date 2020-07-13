@@ -12,8 +12,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.client.renderer.RenderState;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
 
 /**
  * This class is part of the Astral Sorcery Mod

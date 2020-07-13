@@ -13,7 +13,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Objects;
-import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod

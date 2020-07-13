@@ -1,12 +1,8 @@
 package hellfirepvp.astralsorcery.client.effect;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-
-import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod

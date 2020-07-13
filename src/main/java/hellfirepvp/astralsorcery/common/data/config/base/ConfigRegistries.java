@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.data.config.base;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;

@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.crafting.builder.BlockTransmutationBuild
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
 
 import java.util.function.Consumer;
 

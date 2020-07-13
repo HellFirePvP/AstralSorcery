@@ -9,17 +9,8 @@
 package hellfirepvp.astralsorcery.common.crafting.nojson.freezing;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.crafting.nojson.WorldFreezingRegistry;
-import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
-import hellfirepvp.astralsorcery.common.util.block.WorldBlockPos;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidAttributes;
-
-import java.util.function.BiFunction;
 
 /**
  * This class is part of the Astral Sorcery Mod

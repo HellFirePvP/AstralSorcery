@@ -8,11 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.perk.tree;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.DynamicPerkRender;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRenderGroup;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.group.PerkPointHaloRenderGroup;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
@@ -90,10 +92,13 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
         int fX = Math.round(x);
         int fY = Math.round(y);
 
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
         RenderingConstellationUtils.renderConstellationIntoGUI(overlay, this.associatedConstellation,
                 fX - size, fY - size, 0,
                 size * 2, size * 2, 1.5 * scale,
                 () -> 0.75F, true, false);
+        RenderSystem.disableBlend();
     }
 
     @Nullable

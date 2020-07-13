@@ -100,8 +100,8 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
 
     @Override
     public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        this.renderHoverTooltips(mouseX, mouseY, this.recipe.getId());
-        this.renderInfoStarTooltips(offsetX, offsetY, mouseX, mouseY, (toolTip) -> {
+        this.renderHoverTooltips(mouseX, mouseY, zLevel, this.recipe.getId());
+        this.renderInfoStarTooltips(offsetX, offsetY, zLevel, mouseX, mouseY, (toolTip) -> {
             this.addConstellationInfoTooltip(this.recipe.getRequiredConstellation(), toolTip);
         });
     }

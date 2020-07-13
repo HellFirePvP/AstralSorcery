@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.effect.*;
+import hellfirepvp.astralsorcery.common.effect.EffectBleed;
+import hellfirepvp.astralsorcery.common.effect.EffectCheatDeath;
+import hellfirepvp.astralsorcery.common.effect.EffectDropModifier;
+import hellfirepvp.astralsorcery.common.effect.EffectTimeFreeze;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.*;
 import net.minecraft.tileentity.TileEntityType;
 

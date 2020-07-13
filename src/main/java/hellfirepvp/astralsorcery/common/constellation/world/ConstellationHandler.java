@@ -13,10 +13,7 @@ import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
-import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nullable;
 import java.util.*;

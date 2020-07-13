@@ -13,7 +13,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hellfirepvp.astralsorcery.common.base.patreon.FlareColor;
-import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectProvider;
 import hellfirepvp.astralsorcery.common.base.patreon.types.TypeBlockRing;
 import net.minecraft.block.Block;

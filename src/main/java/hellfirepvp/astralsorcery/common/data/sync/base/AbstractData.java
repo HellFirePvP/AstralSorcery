@@ -9,13 +9,9 @@
 package hellfirepvp.astralsorcery.common.data.sync.base;
 
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
-import hellfirepvp.astralsorcery.common.data.sync.SyncDataRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

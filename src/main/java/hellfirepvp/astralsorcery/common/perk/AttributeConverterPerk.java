@@ -16,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.List;
 

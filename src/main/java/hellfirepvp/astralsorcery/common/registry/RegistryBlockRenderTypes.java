@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.common.registry;
 
-import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -10,7 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static hellfirepvp.astralsorcery.common.lib.BlocksAS.*;
-import static hellfirepvp.astralsorcery.common.lib.FluidsAS.*;
+import static hellfirepvp.astralsorcery.common.lib.FluidsAS.LIQUID_STARLIGHT_FLOWING;
+import static hellfirepvp.astralsorcery.common.lib.FluidsAS.LIQUID_STARLIGHT_SOURCE;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -52,9 +52,9 @@ public class RegistryBlockRenderTypes {
         setRenderLayer(INFUSED_WOOD_STAIRS,   RenderType.getSolid());
         setRenderLayer(INFUSED_WOOD_SLAB,     RenderType.getSolid());
 
-        setRenderLayer(AQUAMARINE_SAND_ORE, RenderType.getCutout());
-        setRenderLayer(ROCK_CRYSTAL_ORE,    RenderType.getCutout());
-        setRenderLayer(STARMETAL_ORE,       RenderType.getCutout());
+        setRenderLayer(AQUAMARINE_SAND_ORE, RenderType.getSolid(), RenderType.getTranslucent());
+        setRenderLayer(ROCK_CRYSTAL_ORE,    RenderType.getSolid(), RenderType.getTranslucent());
+        setRenderLayer(STARMETAL_ORE,       RenderType.getSolid(), RenderType.getTranslucent());
         setRenderLayer(GLOW_FLOWER,         RenderType.getCutout());
 
         setRenderLayer(SPECTRAL_RELAY,              RenderType.getSolid(), RenderType.getTranslucent());

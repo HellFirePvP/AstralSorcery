@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
+import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -282,20 +283,18 @@ public class RenderingUtils {
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
 
-        RenderType rType = RenderTypeLookup.getRenderType(stack);
-        rType.setupRenderState();
-        RenderSystem.enableBlend();
-        blendMode.apply();
-
-        renderStack.push();
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.ENTITY, buf -> {
-            renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> buf, LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, alpha);
-        });
-        renderStack.pop();
-
-        Blending.DEFAULT.apply();
-        RenderSystem.disableBlend();
-        rType.clearRenderState();
+        IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> {
+            RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(renderType, () -> {
+                RenderSystem.enableBlend();
+                blendMode.apply();
+            }, () -> {
+                Blending.DEFAULT.apply();
+                RenderSystem.disableBlend();
+            });
+            return buffer.getBuffer(decorated);
+        }, LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, alpha);
+        buffer.finish();
     }
 
     public static void renderTranslucentItemStackModelGUI(ItemStack stack, MatrixStack renderStack, Color overlayColor, Blending blendMode, int alpha) {

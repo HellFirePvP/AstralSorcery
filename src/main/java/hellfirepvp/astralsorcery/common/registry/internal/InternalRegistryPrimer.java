@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.registry.internal;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 

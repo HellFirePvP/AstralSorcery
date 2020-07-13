@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.item.dust;
 
 import hellfirepvp.astralsorcery.common.entity.EntityNocturnalSpark;
-import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.player.PlayerEntity;

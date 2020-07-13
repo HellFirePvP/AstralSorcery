@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.screen.base;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import net.minecraft.client.gui.IHasContainer;
@@ -56,7 +55,6 @@ public abstract class ScreenCustomContainer<T extends Container> extends Contain
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
         this.renderBackground();
-        GlStateManager.enableBlend();
         super.render(mouseX, mouseY, pTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }

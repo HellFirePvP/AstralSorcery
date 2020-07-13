@@ -9,11 +9,9 @@
 package hellfirepvp.astralsorcery.common.data.config.entry;
 
 import com.google.common.base.Predicates;
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

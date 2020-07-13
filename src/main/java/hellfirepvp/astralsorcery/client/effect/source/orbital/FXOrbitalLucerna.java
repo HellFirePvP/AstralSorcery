@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.client.effect.source.orbital;
 
 import hellfirepvp.astralsorcery.client.effect.EffectProperties;
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
-import hellfirepvp.astralsorcery.client.effect.context.RenderContextGenericParticle;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
-import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.source.FXSourceOrbital;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
@@ -20,8 +17,6 @@ import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
-import javax.annotation.Nonnull;
-import java.awt.*;
 import java.util.function.Function;
 
 /**

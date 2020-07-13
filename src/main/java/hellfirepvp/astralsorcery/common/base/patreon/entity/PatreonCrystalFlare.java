@@ -13,11 +13,8 @@ import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXCrystal;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.resource.query.SpriteQuery;
 import hellfirepvp.astralsorcery.client.resource.query.TextureQuery;
-import net.minecraft.world.IWorld;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.UUID;
 

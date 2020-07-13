@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.client.util.obj;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.resources.IResource;
@@ -357,10 +356,10 @@ public class WavefrontObject {
             } else {
                 throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
             }
+            return face;
         } else {
             throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
         }
-        return null;
     }
 
     private GroupObject parseGroupObject(String line, int lineCount) throws ModelFormatException {

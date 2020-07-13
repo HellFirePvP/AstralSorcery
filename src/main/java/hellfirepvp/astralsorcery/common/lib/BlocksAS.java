@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.common.block.base.template.BlockSlabTemplate;
 import hellfirepvp.astralsorcery.common.block.base.template.BlockStairsTemplate;
 import hellfirepvp.astralsorcery.common.block.blackmarble.*;
-import hellfirepvp.astralsorcery.common.fluid.BlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.foliage.BlockGlowFlower;
 import hellfirepvp.astralsorcery.common.block.infusedwood.*;
 import hellfirepvp.astralsorcery.common.block.marble.*;
@@ -25,6 +24,7 @@ import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarDiscovery;
 import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarRadiance;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockCelestialCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockRockCollectorCrystal;
+import hellfirepvp.astralsorcery.common.fluid.BlockLiquidStarlight;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -9,15 +9,14 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.world.config.StructurePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.config.ReplacingFeaturePlacementConfig;
+import hellfirepvp.astralsorcery.common.world.config.StructurePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureAncientShrineStructure;
 import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureDesertShrineStructure;
 import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureSmallShrineStructure;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 
 /**

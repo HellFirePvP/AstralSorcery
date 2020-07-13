@@ -8,10 +8,10 @@
 
 package hellfirepvp.astralsorcery.client.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
@@ -97,7 +97,9 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
     }
 
     private void drawConstellation() {
-        GlStateManager.enableBlend();
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+
         RenderingConstellationUtils.renderConstellationIntoGUI(
                 ColorsAS.CONSTELLATION_TYPE_BLANK,
                 constellation,
@@ -105,7 +107,8 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
                 this.getGuiZLevel(),
                 145, 145, 2F, () -> 0.5F,
                 true, false);
-        GlStateManager.disableBlend();
+
+        RenderSystem.disableBlend();
     }
 
     private void drawPhaseInformation() {
@@ -124,9 +127,10 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
             int offsetY = guiTop + 237;
             for (int i = 0; i < phases.size(); i++) {
                 phases.get(i).getTexture().bindTexture();
-                GlStateManager.enableBlend();
+                RenderSystem.enableBlend();
+                Blending.DEFAULT.apply();
                 RenderingGuiUtils.drawRect(offsetX + (i * (size + 2)), offsetY, this.getGuiZLevel(), size, size);
-                GlStateManager.disableBlend();
+                RenderSystem.disableBlend();
             }
         }
     }

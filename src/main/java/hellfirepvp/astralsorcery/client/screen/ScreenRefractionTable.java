@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
@@ -42,8 +41,8 @@ import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -100,9 +99,9 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             List<String> localized = tooltip.stream()
                     .map(ITextComponent::getFormattedText)
                     .collect(Collectors.toList());
-            RenderSystem.disableDepthTest();
-            RenderingDrawUtils.renderBlueTooltipString(mouseX, mouseY, localized, tooltipRenderer, true);
-            RenderSystem.enableDepthTest();
+            this.changeZLevel(510);
+            RenderingDrawUtils.renderBlueTooltipString(mouseX, mouseY, this.getGuiZLevel(), localized, tooltipRenderer, true);
+            this.changeZLevel(-510);
         }
     }
 
@@ -115,9 +114,12 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         Point offset = new Point(mouseX, mouseY);
         offset.translate(-whDrawn, -whDrawn);
 
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
         RenderingConstellationUtils.renderConstellationIntoGUI(dragging, offset.x, offset.y, this.getGuiZLevel(),
                 whDrawn * 2, whDrawn * 2, 1.4F,
                 () -> DayTimeHelper.getCurrentDaytimeDistribution(this.getTile().getWorld()), true, false);
+        RenderSystem.disableBlend();
 
         this.renderBox(offset.x, offset.y, whDrawn * 2, whDrawn * 2, dragging.getTierRenderColor());
         Rectangle r = new Rectangle(PLACEMENT_GRID);
@@ -134,9 +136,12 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             offset.translate(PLACEMENT_GRID.x, PLACEMENT_GRID.y);
             offset.translate(-whDrawn, -whDrawn);
 
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
             RenderingConstellationUtils.renderConstellationIntoGUI(dragged.getConstellation(), offset.x, offset.y, this.getGuiZLevel(),
                     whDrawn * 2, whDrawn * 2, 1.4F,
                     () -> DayTimeHelper.getCurrentDaytimeDistribution(this.getTile().getWorld()), true, false);
+            RenderSystem.disableBlend();
         }
     }
 
@@ -153,11 +158,11 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         RenderSystem.pushMatrix();
         RenderSystem.translated(guiLeft + 63 + 16.25, guiTop + 42 + 16.25, 0); //-> +130, +130
         RenderSystem.scaled(6, 6, 1);
-        GlStateManager.disableDepthTest();
+        RenderSystem.disableDepthTest();
 
         RenderingUtils.renderItemStack(this.itemRenderer, input, 0, 0, null);
 
-        GlStateManager.enableDepthTest();
+        RenderSystem.enableDepthTest();
         RenderSystem.popMatrix();
 
         this.changeZLevel(-100);
@@ -217,9 +222,12 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             offset.translate(PLACEMENT_GRID.x, PLACEMENT_GRID.y);
             offset.translate(-whDrawn, -whDrawn);
 
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
             RenderingConstellationUtils.renderConstellationIntoGUI(cst.getConstellation(), offset.x, offset.y, this.getGuiZLevel(),
                     whDrawn * 2, whDrawn * 2, 1.6F,
                     () -> DayTimeHelper.getCurrentDaytimeDistribution(world) * 0.8F, true, false);
+            RenderSystem.disableBlend();
         }
     }
 
@@ -247,10 +255,13 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             Rectangle rct = new Rectangle(offsetX, offsetY, 16, 16);
             this.mapRenderedConstellations.put(rct, cst);
 
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
             RenderingConstellationUtils.renderConstellationIntoGUI(Color.WHITE, cst,
                     offsetX, offsetY, this.getGuiZLevel(),
                     16, 16, 0.5,
                     () -> DayTimeHelper.getCurrentDaytimeDistribution(world), true, false);
+            RenderSystem.disableBlend();
 
             if (rct.contains(mouseX, mouseY)) {
                 tooltip.add(cst.getConstellationName());

@@ -10,14 +10,12 @@ package hellfirepvp.astralsorcery.client.screen.journal.overlay;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeMap;
@@ -28,13 +26,11 @@ import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.LogicalSide;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -99,7 +95,10 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
 
         this.changeZLevel(150);
         TexturesAS.TEX_GUI_PARCHMENT_BLANK.bindTexture();
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
         RenderingGuiUtils.drawRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, this.getGuiZLevel(), width, height);
+        RenderSystem.disableBlend();
         this.changeZLevel(-150);
 
         drawHeader();
@@ -148,12 +147,12 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
                 if (i > 0) {
                     drawX += 10;
                 }
-                RenderingDrawUtils.renderStringAtPos(drawX, offsetY + ((line + i) * 10),
+                RenderingDrawUtils.renderStringAtPos(drawX, offsetY + ((line + i) * 10), this.getGuiZLevel(),
                         this.font, statPart,
                         0xEE333333, false);
             }
 
-            RenderingDrawUtils.renderStringAtPos(offsetX + nameStrWidth, offsetY + (line * 10),
+            RenderingDrawUtils.renderStringAtPos(offsetX + nameStrWidth, offsetY + (line * 10), this.getGuiZLevel(),
                     this.font, stat.getPerkValue(),
                     0xEE333333, false);
 
@@ -164,7 +163,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
 
             line += additionalLines;
             if (!stat.getSuffix().isEmpty()) {
-                RenderingDrawUtils.renderStringAtPos(offsetX + 25, offsetY + (line * 10),
+                RenderingDrawUtils.renderStringAtPos(offsetX + 25, offsetY + (line * 10), this.getGuiZLevel(),
                         this.font, stat.getSuffix(),
                         0xEE333333, false);
                 line++;
@@ -212,7 +211,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
             information.add(stat.getPostProcessInfo());
         }
 
-        RenderingDrawUtils.renderBlueTooltipString(x, y, information, this.font, false);
+        RenderingDrawUtils.renderBlueTooltipString(x, y, this.getGuiZLevel(), information, this.font, false);
     }
 
     private void buildDisplayWidth() {

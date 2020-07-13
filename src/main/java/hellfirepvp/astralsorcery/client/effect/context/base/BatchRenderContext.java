@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.effect.context.base;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
@@ -20,14 +21,13 @@ import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.order.OrderSortable;
+import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -86,7 +86,14 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
                 .filter(effect -> effect.getEffect() instanceof EntityDynamicFX)
                 .forEach(effect -> ((EntityDynamicFX) effect.getEffect()).renderNow(blankCtx, renderStack, drawBuffer, pTicks));
 
-        IVertexBuilder buf = drawBuffer.getBuffer(this.getRenderType());
+        RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(this.getRenderType(), () -> {
+            RenderSystem.enableTexture();
+            this.getSprite().bindTexture();
+        }, () -> {
+            BlockAtlasTexture.getInstance().bindTexture();
+            RenderSystem.disableTexture();
+        });
+        IVertexBuilder buf = drawBuffer.getBuffer(decorated);
         effects.forEach(effect -> effect.getEffect().render(this, renderStack, buf, pTicks));
         this.drawBatched(buf, drawBuffer);
     }

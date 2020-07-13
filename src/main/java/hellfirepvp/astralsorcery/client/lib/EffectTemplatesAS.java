@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.client.effect.vfx.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "astralsorcery:block/aquamarine_sand_ore"
+      "model": "astralsorcery:block/multilayer/aquamarine_sand_ore"
     }
   }
 }

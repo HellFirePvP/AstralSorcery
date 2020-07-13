@@ -13,7 +13,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.progression.ScreenJournalProgressionRenderer;
-import hellfirepvp.astralsorcery.client.util.*;
+import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.ScreenTextEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
@@ -28,8 +31,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -195,10 +200,10 @@ public class ScreenJournalProgression extends ScreenJournal {
             int startOffsetY = offsetY;
 
             List<String> nodeTitleLines = fr.listFormattedStringToWidth(node.getName().getFormattedText(), searchEntryDrawWidth);
-            int maxLength = 0;
+            float maxLength = 0;
 
             for (String line : nodeTitleLines) {
-                int length = RenderingDrawUtils.renderStringAtPos(offsetX, offsetY, fr, line, 0x00D0D0D0, false) - offsetX;
+                float length = RenderingDrawUtils.renderStringAtPos(offsetX, offsetY, this.getGuiZLevel(), fr, line, 0x00D0D0D0, false) - offsetX;
                 if (length > maxLength) {
                     maxLength = length;
                 }
@@ -206,7 +211,7 @@ public class ScreenJournalProgression extends ScreenJournal {
             }
 
             if (this.searchHoverNode == null) {
-                Rectangle rctDrawn = new Rectangle(offsetX - 2, startOffsetY - 2, maxLength + 4, offsetY - startOffsetY);
+                Rectangle rctDrawn = new Rectangle(offsetX - 2, startOffsetY - 2, (int) (maxLength + 4), offsetY - startOffsetY);
                 if (rctDrawn.contains(mouseX, mouseY)) {
                     fill(rctDrawn.x, rctDrawn.y, rctDrawn.x + rctDrawn.width, rctDrawn.y + rctDrawn.height, boxColor.getRGB());
                     this.searchHoverNode = node;
@@ -221,10 +226,10 @@ public class ScreenJournalProgression extends ScreenJournal {
             int startOffsetY = offsetY;
 
             List<String> nodeTitleLines = fr.listFormattedStringToWidth(node.getName().getFormattedText(), searchEntryDrawWidth);
-            int maxLength = 0;
+            float maxLength = 0;
 
             for (String line : nodeTitleLines) {
-                int length = RenderingDrawUtils.renderStringAtPos(offsetX, offsetY, fr, line, 0x00D0D0D0, false) - offsetX;
+                float length = RenderingDrawUtils.renderStringAtPos(offsetX, offsetY, this.getGuiZLevel(), fr, line, 0x00D0D0D0, false) - offsetX;
                 if (length > maxLength) {
                     maxLength = length;
                 }
@@ -232,7 +237,7 @@ public class ScreenJournalProgression extends ScreenJournal {
             }
 
             if (this.searchHoverNode == null) {
-                Rectangle rctDrawn = new Rectangle(offsetX - 2, startOffsetY - 2, maxLength + 4, offsetY - startOffsetY);
+                Rectangle rctDrawn = new Rectangle(offsetX - 2, startOffsetY - 2,  (int) (maxLength + 4), offsetY - startOffsetY);
                 if (rctDrawn.contains(mouseX, mouseY)) {
                     fill(rctDrawn.x, rctDrawn.y, rctDrawn.x + rctDrawn.width, rctDrawn.y + rctDrawn.height, boxColor.getRGB());
                     this.searchHoverNode = node;

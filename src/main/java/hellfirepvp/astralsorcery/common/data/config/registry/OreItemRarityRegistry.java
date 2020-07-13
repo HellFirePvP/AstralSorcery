@@ -13,11 +13,13 @@ import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.OreItemRarityEntry;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.item.Item;
-import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 

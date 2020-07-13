@@ -27,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.JsonUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

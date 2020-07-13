@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.item.tool;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -32,7 +31,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 /**

@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
-import java.awt.*;
 import java.util.function.Function;
 
 /**

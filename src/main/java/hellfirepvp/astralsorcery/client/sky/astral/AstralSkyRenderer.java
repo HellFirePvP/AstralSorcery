@@ -190,9 +190,9 @@ public class AstralSkyRenderer implements IRenderHandler {
 
     /*
     private static void debugRenderSky() {
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
-        GlStateManager.rotatef(180F, 1F, 0F, 0F);
+        RenderSystem.popMatrix();
+        RenderSystem.pushMatrix();
+        RenderSystem.rotatef(180F, 1F, 0F, 0F);
 
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();

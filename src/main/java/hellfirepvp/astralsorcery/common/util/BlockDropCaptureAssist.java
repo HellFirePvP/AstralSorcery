@@ -8,9 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.server.ServerWorld;

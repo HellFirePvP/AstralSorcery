@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.util.tile;
 
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
@@ -20,7 +19,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

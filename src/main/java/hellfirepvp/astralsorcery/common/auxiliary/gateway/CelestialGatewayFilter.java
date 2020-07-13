@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.common.auxiliary.gateway;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 

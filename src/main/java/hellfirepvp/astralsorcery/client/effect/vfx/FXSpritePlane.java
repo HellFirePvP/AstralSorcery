@@ -10,24 +10,18 @@ package hellfirepvp.astralsorcery.client.effect.vfx;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
+import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
 import net.minecraft.util.Tuple;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -86,6 +80,7 @@ public class FXSpritePlane extends EntityVisualFX implements EntityDynamicFX {
         Tuple<Float, Float> uvOffset = ssr.getUVOffset(this);
 
         Vector3 vec = this.getRenderPosition(pTicks);
+        vec.subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
         float scale = this.getScale(pTicks);
 
         int alpha = this.getAlpha(pTicks);
@@ -102,9 +97,8 @@ public class FXSpritePlane extends EntityVisualFX implements EntityDynamicFX {
             deg = fixDegree;
         }
 
-        ssr.bindTexture();
-
-        IVertexBuilder buf = drawBuffer.getBuffer(ctx.getRenderType());
+        RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(ctx.getRenderType(), ssr::bindTexture, () -> BlockAtlasTexture.getInstance().bindTexture());
+        IVertexBuilder buf = drawBuffer.getBuffer(decorated);
         RenderingDrawUtils.renderAngleRotatedTexturedRectVB(buf, renderStack, vec,
                 axis, (float) Math.toRadians(deg), scale,
                 uvOffset.getA(), uvOffset.getB(), ssr.getULength(), ssr.getVLength(),

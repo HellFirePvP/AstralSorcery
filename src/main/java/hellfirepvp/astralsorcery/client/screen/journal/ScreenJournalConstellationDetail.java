@@ -8,10 +8,10 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
+import hellfirepvp.astralsorcery.client.screen.base.NavigationArrowScreen;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderPageAltarRecipe;
 import hellfirepvp.astralsorcery.client.screen.journal.page.RenderablePage;
 import hellfirepvp.astralsorcery.client.util.*;
@@ -50,7 +50,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 04.08.2019 / 10:54
  */
-public class ScreenJournalConstellationDetail extends ScreenJournal {
+public class ScreenJournalConstellationDetail extends ScreenJournal implements NavigationArrowScreen {
 
     private final ScreenJournal origin;
     private final IConstellation constellation;
@@ -204,7 +204,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
-        GlStateManager.enableBlend();
         this.lastFramePage = null;
 
         if (this.doublePageID == 0) {
@@ -214,9 +213,6 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             drawDefault(TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
         }
 
-        this.changeZLevel(250);
-        TexturesAS.TEX_GUI_BOOK_ARROWS.bindTexture();
-        drawBackArrow(pTicks, mouseX, mouseY);
         drawNavArrows(pTicks, mouseX, mouseY);
 
         switch (doublePageID) {
@@ -234,13 +230,12 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
             default:
                 break;
         }
-        this.changeZLevel(-250);
     }
 
     private void drawCapeInformationPages(int mouseX, int mouseY, float partialTicks) {
         for (int i = 0; i < locTextMantleCorruption.size(); i++) {
             String line = locTextMantleCorruption.get(i);
-            RenderingDrawUtils.renderStringAtPos(guiLeft + 30, guiTop + 30 + i * 10, font, line, 0xBBCCCCCC, true);
+            RenderingDrawUtils.renderStringAtPos(guiLeft + 30, guiTop + 30 + i * 10, this.getGuiZLevel(), font, line, 0xFFCCCCCC, true);
         }
 
         if (GatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchHelper.getClientProgress())) {
@@ -259,7 +254,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
     private void drawEnchantingPotionPaperPageInformation(int mouseX, int mouseY, float partialTicks) {
         for (int i = 0; i < locTextRitualEnch.size(); i++) {
             String line = locTextRitualEnch.get(i);
-            RenderingDrawUtils.renderStringAtPos(guiLeft + 30, guiTop + 30 + i * 10, font, line, 0xBBCCCCCC, true);
+            RenderingDrawUtils.renderStringAtPos(guiLeft + 30, guiTop + 30 + i * 10, this.getGuiZLevel(), font, line, 0xFFCCCCCC, true);
         }
 
         if (GatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(ResearchHelper.getClientProgress())) {
@@ -281,12 +276,12 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
 
         int width = font.getStringWidth(info);
         int chX = 305 - (width / 2);
-        RenderingDrawUtils.renderStringAtPos(guiLeft + chX, guiTop + 44, font, info, 0xBBCCCCCC, true);
+        RenderingDrawUtils.renderStringAtPos(guiLeft + chX, guiTop + 44, this.getGuiZLevel(), font, info, 0xFFCCCCCC, true);
 
         if (detailed && !locTextMain.isEmpty()) {
             int offsetX = 220, offsetY = 77;
             for (String s : locTextMain) {
-                RenderingDrawUtils.renderStringAtPos(guiLeft + offsetX, guiTop + offsetY, font, s, 0xBBCCCCCC, true);
+                RenderingDrawUtils.renderStringAtPos(guiLeft + offsetX, guiTop + offsetY, this.getGuiZLevel(), font, s, 0xFFCCCCCC, true);
                 offsetY += 13;
             }
         }
@@ -355,7 +350,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         RenderSystem.pushMatrix();
         RenderSystem.translated(guiLeft + (305 - (width * 1.8F / 2F)), guiTop + 26, 0);
         RenderSystem.scaled(1.8, 1.8, 1.8);
-        RenderingDrawUtils.renderStringWithShadowAtCurrentPos(font, name, 0xBBC3C3C3);
+        RenderingDrawUtils.renderStringWithShadowAtCurrentPos(font, name, 0xFFC3C3C3);
         RenderSystem.popMatrix();
 
         String dstInfo = constellation.getConstellationTypeDescription().getFormattedText();
@@ -365,8 +360,10 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
         dstInfo = I18n.format(dstInfo);
         width = font.getStringWidth(dstInfo);
 
-        RenderingDrawUtils.renderStringAtPos(guiLeft + (305 - (width / 2)), guiTop + 219, font, dstInfo, 0x99DDDDDD, true);
+        RenderingDrawUtils.renderStringAtPos(guiLeft + (305 - (width / 2)), guiTop + 219, this.getGuiZLevel(), font, dstInfo, 0xFFDDDDDD, true);
 
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
         Random rand = new Random(0x4196A15C91A5E199L);
         boolean known = ResearchHelper.getClientProgress().hasConstellationDiscovered(constellation);
         RenderingConstellationUtils.renderConstellationIntoGUI(known ? constellation.getConstellationColor() : constellation.getTierRenderColor(), constellation,
@@ -374,90 +371,26 @@ public class ScreenJournalConstellationDetail extends ScreenJournal {
                 150, 150, 2F,
                 () -> 0.6F + 0.4F * RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10)),
                 true, false);
-    }
-
-    private void drawBackArrow(float partialTicks, int mouseX, int mouseY) {
-        int width = 30;
-        int height = 15;
-        rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(rectBack.getX() + (width / 2F), rectBack.getY() + (height / 2F), 0);
-        float uFrom, vFrom = 0.5F;
-        if (rectBack.contains(mouseX, mouseY)) {
-            uFrom = 0.5F;
-            RenderSystem.scaled(1.1, 1.1, 1.1);
-        } else {
-            uFrom = 0F;
-            double t = ClientScheduler.getClientTick() + partialTicks;
-            float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-            RenderSystem.scaled(sin, sin, sin);
-        }
-        RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
-                    .tex(uFrom, vFrom, 0.5F, 0.5F)
-                    .color(1F, 1F, 1F, 0.8F)
-                    .draw();
-        });
-        RenderSystem.popMatrix();
+        RenderSystem.disableBlend();
     }
 
     private void drawNavArrows(float partialTicks, int mouseX, int mouseY) {
-        rectNext = null;
-        rectPrev = null;
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+
+        this.rectNext = null;
+        this.rectPrev = null;
+        this.rectBack = this.drawArrow(guiLeft + 197, guiTop + 230, this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, partialTicks);
 
         if (doublePageID - 1 >= 0) {
-            int width = 30;
-            int height = 15;
-            rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(rectPrev.getX() + (width / 2F), rectPrev.getY() + (height / 2F), 0);
-            float uFrom, vFrom = 0.5F;
-            if (rectPrev.contains(mouseX, mouseY)) {
-                uFrom = 0.5F;
-                RenderSystem.scaled(1.1, 1.1, 1.1);
-            } else {
-                uFrom = 0F;
-                double t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                RenderSystem.scaled(sin, sin, sin);
-            }
-
-            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
-            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-                RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
-                        .tex(uFrom, vFrom, 0.5F, 0.5F)
-                        .color(1F, 1F, 1F, 0.8F)
-                        .draw();
-            });
-            RenderSystem.popMatrix();
+            this.rectPrev = this.drawArrow(guiLeft + 25, guiTop + 220, this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, partialTicks);
         }
 
         if (doublePageID + 1 <= doublePages) {
-            int width = 30;
-            int height = 15;
-            rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(rectNext.getX() + (width / 2F), rectNext.getY() + (height / 2F), 0);
-            float uFrom, vFrom = 0F;
-            if (rectNext.contains(mouseX, mouseY)) {
-                uFrom = 0.5F;
-                RenderSystem.scaled(1.1, 1.1, 1.1);
-            } else {
-                uFrom = 0F;
-                double t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                RenderSystem.scaled(sin, sin, sin);
-            }
-            RenderSystem.translated(-(width / 2F), -(height / 2F), 0);
-            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-                RenderingGuiUtils.rect(buf, 0, 0, this.getGuiZLevel(), width, height)
-                        .tex(uFrom, vFrom, 0.5F, 0.5F)
-                        .color(1F, 1F, 1F, 0.8F)
-                        .draw();
-            });
-            RenderSystem.popMatrix();
+            this.rectNext = this.drawArrow(guiLeft + 367, guiTop + 220, this.getGuiZLevel(), Type.RIGHT, mouseX, mouseY, partialTicks);
         }
+
+        RenderSystem.disableBlend();
     }
 
     private void drawCstBackground() {

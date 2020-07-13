@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.crafting.helper;
 import hellfirepvp.astralsorcery.common.util.IngredientHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod

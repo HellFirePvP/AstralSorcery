@@ -23,7 +23,6 @@ import net.minecraft.world.World;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod

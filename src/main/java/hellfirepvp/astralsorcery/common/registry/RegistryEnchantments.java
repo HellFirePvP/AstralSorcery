@@ -14,7 +14,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
-import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.*;
+import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.NIGHT_VISION;
+import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.SCORCHING_HEAT;
 
 /**
  * This class is part of the Astral Sorcery Mod

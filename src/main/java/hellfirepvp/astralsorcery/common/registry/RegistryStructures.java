@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.structure.*;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
 import hellfirepvp.observerlib.common.change.ObserverProviderStructure;
-import net.minecraft.util.ResourceLocation;
 
 import static hellfirepvp.astralsorcery.common.lib.StructuresAS.*;
 

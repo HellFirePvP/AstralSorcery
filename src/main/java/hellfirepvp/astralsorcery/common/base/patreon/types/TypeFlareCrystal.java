@@ -39,6 +39,7 @@ public class TypeFlareCrystal extends PatreonEffect {
     @Nullable
     @Override
     public PatreonPartialEntity createEntity(UUID playerUUID) {
+        //TODO fix layering flare before crystal
         return new PatreonCrystalFlare(this.getEffectUUID(), playerUUID)
                 .setQueryTexture(this.crystalTexture)
                 .setColorTheme(this.colorTheme);
