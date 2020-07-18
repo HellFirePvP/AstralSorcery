@@ -46,6 +46,7 @@ public class SpritesAS {
     public static SpriteSheetResource SPR_ATTUNEMENT_FLARE;
     public static SpriteSheetResource SPR_RELAY_FLARE;
     public static SpriteSheetResource SPR_LIGHTBEAM;
+    public static SpriteSheetResource SPR_LIGHTBEAM_TRANSFER;
     public static SpriteSheetResource SPR_ENTITY_FLARE;
     public static SpriteSheetResource SPR_GRAPPLING_HOOK;
     public static SpriteSheetResource SPR_HALO_INFUSION;

@@ -67,7 +67,7 @@ public class RegistryRenderTypes {
                         .disableCull()
                         .disableDepthMask()
                         .build());
-        EFFECT_FX_CRYSTAL = createType("effect_fx_crystal", DefaultVertexFormats.POSITION_COLOR_TEX,
+        EFFECT_FX_CRYSTAL = createType("effect_fx_crystal", POSITION_COLOR_TEX_NORMAL, GL11.GL_TRIANGLES, 32768,
                 RenderStateBuilder.builder()
                         .texture(TexturesAS.TEX_MODEL_CRYSTAL_WHITE)
                         .blend(Blending.DEFAULT)
@@ -160,7 +160,7 @@ public class RegistryRenderTypes {
                         .blend(Blending.ADDITIVE_ALPHA)
                         .smoothShade()
                         .disableDepthMask()
-                        .enableItemRendering()
+                        .enableDiffuseLighting()
                         .build());
     }
 
@@ -191,47 +191,89 @@ public class RegistryRenderTypes {
     }
 
     private static void initModels() {
-        MODEL_ATTUNEMENT_ALTAR = createType("mode_attunement_altar", DefaultVertexFormats.ENTITY,
+        MODEL_ATTUNEMENT_ALTAR = createType("model_attunement_altar", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "attunement_altar"))
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
                         .build());
 
-        MODEL_LENS = createType("mode_lens", DefaultVertexFormats.ENTITY,
+        MODEL_LENS = createType("model_lens", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_frame"))
                         .blend(Blending.DEFAULT)
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
                         .build());
 
-        MODEL_LENS_COLORED = createType("mode_lens_colored", DefaultVertexFormats.ENTITY,
+        MODEL_LENS_COLORED = createType("model_lens_colored", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_color"))
                         .blend(Blending.DEFAULT)
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
                         .build());
 
-        MODEL_OBSERVATORY = createType("mode_observatory", DefaultVertexFormats.ENTITY,
+        MODEL_OBSERVATORY = createType("model_observatory", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "observatory"))
                         .blend(Blending.DEFAULT)
                         .disableCull()
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
                         .build());
 
-        MODEL_REFRACTION_TABLE = createType("mode_refraction_table", DefaultVertexFormats.ENTITY,
+        MODEL_REFRACTION_TABLE = createType("model_refraction_table", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "refraction_table"))
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
                         .build());
 
-        MODEL_REFRACTION_TABLE_GLASS = createType("mode_refraction_table_glass", DefaultVertexFormats.ENTITY,
+        MODEL_REFRACTION_TABLE_GLASS = createType("model_refraction_table_glass", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "refraction_table"))
                         .blend(Blending.DEFAULT)
                         .disableDepthMask()
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
                         .build());
 
-        MODEL_TELESCOPE = createType("mode_telescope", DefaultVertexFormats.ENTITY,
+        MODEL_TELESCOPE = createType("model_telescope", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "telescope"))
                         .blend(Blending.DEFAULT)
                         .disableCull()
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
+                        .build());
+
+        MODEL_DEMON_WINGS = createType("model_demon_wings", POSITION_COLOR_TEX_NORMAL,
+                RenderStateBuilder.builder()
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .smoothShade()
+                        .build());
+
+        MODEL_CELESTIAL_WINGS = createType("model_celestial_wings", POSITION_COLOR_TEX_NORMAL,
+                RenderStateBuilder.builder()
+                        .texture(TexturesAS.TEX_MODEL_CELESTIAL_WINGS)
+                        .enableDiffuseLighting()
+                        .smoothShade()
+                        .build());
+
+        MODEL_WRAITH_WINGS = createType("model_wraith_wings", POSITION_COLOR_TEX_NORMAL,
+                RenderStateBuilder.builder()
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .smoothShade()
                         .build());
     }
 

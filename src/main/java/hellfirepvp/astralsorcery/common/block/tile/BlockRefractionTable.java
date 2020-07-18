@@ -117,11 +117,17 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
             if (tft != null) {
                 if (player.isSneaking()) {
                     if (!tft.getInputStack().isEmpty()) {
-                        ItemUtils.dropItemToPlayer(player, tft.setInputStack(ItemStack.EMPTY));
+                        ItemStack remaining = ItemUtils.dropItemToPlayer(player, tft.setInputStack(ItemStack.EMPTY));
+                        if (!remaining.isEmpty()) {
+                            ItemUtils.dropItemNaturally(world, player.getPosX(), player.getPosY(), player.getPosZ(), remaining);
+                        }
                         return ActionResultType.SUCCESS;
                     }
                     if (!tft.getGlassStack().isEmpty()) {
-                        ItemUtils.dropItemToPlayer(player, tft.setGlassStack(ItemStack.EMPTY));
+                        ItemStack remaining = ItemUtils.dropItemToPlayer(player, tft.setGlassStack(ItemStack.EMPTY));
+                        if (!remaining.isEmpty()) {
+                            ItemUtils.dropItemNaturally(world, player.getPosX(), player.getPosY(), player.getPosZ(), remaining);
+                        }
                         return ActionResultType.SUCCESS;
                     }
                 } else if (!held.isEmpty()) {

@@ -32,9 +32,11 @@ public class ProviderHelmetRender implements PatreonEffectProvider<TypeHelmetRen
     @Override
     public TypeHelmetRender buildEffect(UUID playerUUID, List<String> effectParameters) throws Exception {
         UUID effectUniqueId = UUID.fromString(effectParameters.get(0));
+
         if (effectParameters.get(1).equals("astralsorcery:blockaltar;3")) {
             effectParameters.set(1, "astralsorcery:altar_radiance");
         }
+
         String[] itemInfo = effectParameters.get(1).split(";");
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemInfo[0]));
         if (item == null || item == Items.AIR) {

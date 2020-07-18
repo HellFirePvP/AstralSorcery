@@ -149,7 +149,10 @@ public class SpectralToolBreakLogGoal extends SpectralToolGoal {
                     }
                     if (owner instanceof PlayerEntity) {
                         for (ItemStack dropped : BlockDropCaptureAssist.getCapturedStacksAndStop()) {
-                            ItemUtils.dropItemToPlayer((PlayerEntity) owner, dropped);
+                            ItemStack remainder = ItemUtils.dropItemToPlayer((PlayerEntity) owner, dropped);
+                            if (!remainder.isEmpty()) {
+                                ItemUtils.dropItemNaturally(world, owner.getPosX(), owner.getPosY(), owner.getPosZ(), remainder);
+                            }
                         }
                     }
                 }

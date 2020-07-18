@@ -190,7 +190,7 @@ public class ModelObservatory extends CustomModel {
         this.tube12 = new ModelRenderer(this, 44, 32);
         this.tube12.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.tube12.addBox(-4.0F, -10.0F, 14.0F, 2, 2, 6, 0.0F);
-        this.tube13 = new ModelRenderer(this, 32, 50);
+        this.tube13 = new ModelRenderer(this, 0, 48);
         this.tube13.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.tube13.addBox(2.0F, -12.0F, 12.0F, 6, 6, 4, 0.0F);
         this.tube14 = new ModelRenderer(this, 92, 0);

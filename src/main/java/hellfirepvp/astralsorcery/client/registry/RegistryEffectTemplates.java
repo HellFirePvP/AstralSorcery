@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXBlock;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXColorEffectSphere;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXCube;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
+import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -49,7 +50,8 @@ public class RegistryEffectTemplates {
         GEM_CRYSTAL_BURST_SKY   = register(new RenderContextBurst(SPR_GEM_CRYSTAL_BURST_SKY));
         GEM_CRYSTAL_BURST_DAY   = register(new RenderContextBurst(SPR_GEM_CRYSTAL_BURST_DAY));
         GEM_CRYSTAL_BURST_NIGHT = register(new RenderContextBurst(SPR_GEM_CRYSTAL_BURST_NIGHT));
-        LIGHTBEAM               = register(new RenderContextLightbeam());
+        LIGHTBEAM               = register(new RenderContextLightbeam(SPR_LIGHTBEAM));
+        LIGHTBEAM_TRANSFER      = register(new RenderContextLightbeam(SPR_LIGHTBEAM_TRANSFER));
 
         TEXTURE_SPRITE = register(new RenderContextSpritePlaneDynamic());
         FACING_SPRITE = register(new RenderContextFacingSprite());
@@ -88,6 +90,7 @@ public class RegistryEffectTemplates {
         generalGrp.add(COLLECTOR_BURST);
         generalGrp.add(CRYSTAL);
         generalGrp.add(LIGHTBEAM);
+        generalGrp.add(LIGHTBEAM_TRANSFER);
         generalGrp.add(FACING_SPRITE);
 
         generalGrp.forEach(c -> c.setAfter(LIGHTNING));

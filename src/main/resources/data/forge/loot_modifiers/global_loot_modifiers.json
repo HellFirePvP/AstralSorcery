@@ -2,6 +2,7 @@
   "replace": false,
   "entries": [
     "astralsorcery:perk_void_trash",
-    "astralsorcery:scorching_heat"
+    "astralsorcery:scorching_heat",
+    "astralsorcery:magnet_drops"
   ]
 }

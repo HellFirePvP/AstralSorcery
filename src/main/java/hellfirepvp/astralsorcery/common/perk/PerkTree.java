@@ -27,6 +27,7 @@ import net.minecraftforge.fml.LogicalSide;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,6 +64,14 @@ public class PerkTree {
     public AbstractPerk getPerk(ResourceLocation key) {
         AbstractPerk perk = RegistriesAS.REGISTRY_PERKS.getValue(key);
         return perk != null ? perk : AstralSorcery.getProxy().getRegistryPrimer().getCached(RegistriesAS.REGISTRY_PERKS, key);
+    }
+
+    @Nullable
+    public AbstractPerk getPerk(Predicate<AbstractPerk> test) {
+        return RegistriesAS.REGISTRY_PERKS.getValues().stream()
+                .filter(test)
+                .findFirst()
+                .orElse(null);
     }
 
     @Nullable

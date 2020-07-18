@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.ObjModelRender;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
@@ -100,7 +101,7 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
         Vector3 pos = Vector3.atEntityCorner(player);
         pos.setY(player.getPosY() + yOffset + offset);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             double height = -0.1 + Math.min(rand.nextFloat() * 1.3, rand.nextFloat() * 1.3);
             double distance = 1.2F - (rand.nextFloat() * 0.6) * (1 - Math.max(0, height));
 
@@ -115,14 +116,14 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
             FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(at)
                     .color(VFXColorFunction.constant(col))
-                    .setScaleMultiplier(0.25F + rand.nextFloat() * 0.1F)
+                    .setScaleMultiplier(0.27F + rand.nextFloat() * 0.1F)
                     .alpha(VFXAlphaFunction.FADE_OUT)
-                    .setMaxAge(25 + rand.nextInt(25));
+                    .setMaxAge(25 + rand.nextInt(20));
 
             if (rand.nextInt(4) == 0) {
-                p.setScaleMultiplier(0.08F + rand.nextFloat() * 0.02F)
+                p.setScaleMultiplier(0.09F + rand.nextFloat() * 0.02F)
                         .color(VFXColorFunction.WHITE)
-                        .setMaxAge(10 + rand.nextInt(5));
+                        .setMaxAge(10 + rand.nextInt(8));
             } else {
                 p.setGravityStrength(0.0003F);
             }
@@ -160,9 +161,7 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
         renderStack.rotate(Vector3f.YP.rotationDegrees(180F - rot));
         renderStack.scale(0.02F, 0.02F, 0.02F);
 
-        RenderSystem.disableBlend();
-        RenderSystem.enableTexture();
-        TexturesAS.TEX_MODEL_CELESTIAL_WINGS.bindTexture();
+        RenderTypesAS.MODEL_CELESTIAL_WINGS.setupRenderState();
 
         renderStack.translate(-25, 0, 0);
         ObjModelRender.renderCelestialWings(renderStack);
@@ -171,9 +170,7 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
         ObjModelRender.renderCelestialWings(renderStack);
         renderStack.pop();
 
-        BlockAtlasTexture.getInstance().bindTexture();
-        RenderSystem.disableTexture();
-        RenderSystem.enableBlend();
+        RenderTypesAS.MODEL_CELESTIAL_WINGS.clearRenderState();
     }
 
     @Override

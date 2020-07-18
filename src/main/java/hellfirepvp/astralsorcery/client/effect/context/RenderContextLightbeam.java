@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXLightbeam;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
+import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,8 +24,8 @@ import hellfirepvp.astralsorcery.client.lib.SpritesAS;
  */
 public class RenderContextLightbeam extends BatchRenderContext<FXLightbeam> {
 
-    public RenderContextLightbeam() {
-        super(SpritesAS.SPR_LIGHTBEAM, RenderTypesAS.EFFECT_FX_LIGHTBEAM, (ctx, pos) -> new FXLightbeam(pos).alpha(VFXAlphaFunction.PYRAMID));
+    public RenderContextLightbeam(SpriteSheetResource sprite) {
+        super(sprite, RenderTypesAS.EFFECT_FX_LIGHTBEAM, (ctx, pos) -> new FXLightbeam(pos).alpha(VFXAlphaFunction.PYRAMID));
     }
 
 }

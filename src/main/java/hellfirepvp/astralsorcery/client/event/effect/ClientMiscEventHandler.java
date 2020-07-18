@@ -12,14 +12,13 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -101,31 +100,31 @@ public class ClientMiscEventHandler {
             vboL = obj.batchOnly(Tessellator.getInstance().getBuffer(), "wL");
         }
 
+
+        RenderTypesAS.MODEL_DEMON_WINGS.setupRenderState();
         RenderSystem.enableTexture();
-        Minecraft.getInstance().textureManager.bindTexture(tex);
-        RenderSystem.enableDepthTest();
+        Minecraft.getInstance().getTextureManager().bindTexture(tex);
 
         renderStack.push();
         renderStack.rotate(Vector3f.YN.rotationDegrees(20 + r));
         vboR.bindBuffer();
-        DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0);
+        RenderTypesAS.POSITION_COLOR_TEX_NORMAL.setupBufferState(0);
         vboR.draw(renderStack.getLast().getMatrix(), GL11.GL_QUADS);
-        DefaultVertexFormats.POSITION_COLOR_TEX.clearBufferState();
+        RenderTypesAS.POSITION_COLOR_TEX_NORMAL.clearBufferState();
         VertexBuffer.unbindBuffer();
         renderStack.pop();
 
         renderStack.push();
         renderStack.rotate(Vector3f.YP.rotationDegrees(20 + r));
         vboL.bindBuffer();
-        DefaultVertexFormats.POSITION_COLOR_TEX.setupBufferState(0);
+        RenderTypesAS.POSITION_COLOR_TEX_NORMAL.setupBufferState(0);
         vboL.draw(renderStack.getLast().getMatrix(), GL11.GL_QUADS);
-        DefaultVertexFormats.POSITION_COLOR_TEX.clearBufferState();
+        RenderTypesAS.POSITION_COLOR_TEX_NORMAL.clearBufferState();
         VertexBuffer.unbindBuffer();
         renderStack.pop();
 
-        RenderSystem.disableDepthTest();
         BlockAtlasTexture.getInstance().bindTexture();
-        RenderSystem.disableTexture();
+        RenderTypesAS.MODEL_DEMON_WINGS.clearRenderState();
 
         renderStack.pop();
     }

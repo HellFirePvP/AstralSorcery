@@ -125,7 +125,7 @@ public class EntityObservatoryHelper extends Entity {
         double xComp = 0.5F + Math.sin(yawRad) * xOffset - Math.cos(yawRad) * zOffset;
         double zComp = 0.5F + Math.cos(yawRad) * xOffset + Math.sin(yawRad) * zOffset;
         Vector3 pos = new Vector3(to.getPos()).add(xComp, 0.4F, zComp);
-        this.setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
+        this.forceSetPosition(pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override

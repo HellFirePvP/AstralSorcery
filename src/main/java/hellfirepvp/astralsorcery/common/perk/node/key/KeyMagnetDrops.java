@@ -12,13 +12,18 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,8 +52,17 @@ public class KeyMagnetDrops extends KeyPerk {
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
-                event.getDrops().forEach(stack -> ItemUtils.dropItemToPlayer(player, stack.getItem()));
+                List<ItemEntity> remaining = new ArrayList<>();
+                for (ItemEntity drop : event.getDrops()) {
+                    ItemStack remain = ItemUtils.dropItemToPlayer(player, drop.getItem());
+                    if (!remain.isEmpty()) {
+                        ItemEntity newDrop = new ItemEntity(drop.getEntityWorld(), drop.getPosX(), drop.getPosY(), drop.getPosZ());
+                        newDrop.copyDataFromOld(drop);
+                        remaining.add(newDrop);
+                    }
+                }
                 event.getDrops().clear();
+                event.getDrops().addAll(remaining);
             }
         }
     }
