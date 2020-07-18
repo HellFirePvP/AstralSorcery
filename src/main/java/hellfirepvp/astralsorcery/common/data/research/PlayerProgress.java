@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkLevelManager;
@@ -333,7 +334,7 @@ public class PlayerProgress {
 
     public boolean hasPerkEffect(Predicate<AbstractPerk> perkMatch) {
         AbstractPerk perk = MiscUtils.iterativeSearch(appliedPerks, perkMatch);
-        return perk != null && hasPerkEffect(perk);
+        return perk != null && RegistriesAS.REGISTRY_PERKS.containsValue(perk) && hasPerkEffect(perk);
     }
 
     public boolean hasPerkEffect(AbstractPerk perk) {

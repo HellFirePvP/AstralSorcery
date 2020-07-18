@@ -50,6 +50,7 @@ public class RegistrySprites {
         SPR_ATTUNEMENT_FLARE = new SpriteSheetResource(TEX_ATTUNEMENT_FLARE, 6, 8);
         SPR_RELAY_FLARE = new SpriteSheetResource(TEX_RELAY_FLARE, 6, 8);
         SPR_LIGHTBEAM = new SpriteSheetResource(TEX_LIGHTBEAM, 4, 16);
+        SPR_LIGHTBEAM_TRANSFER = new SpriteSheetResource(TEX_LIGHTBEAM_TRANSFER, 4, 16);
         SPR_ENTITY_FLARE = new SpriteSheetResource(TEX_ENTITY_FLARE, 6, 8);
         SPR_GRAPPLING_HOOK = new SpriteSheetResource(TEX_GRAPPLING_HOOK, 4, 8);
         SPR_HALO_INFUSION = new SpriteSheetResource(TEX_HALO_INFUSION, 8, 8);

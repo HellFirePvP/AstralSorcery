@@ -51,6 +51,10 @@ public class RenderTypesAS {
     public static RenderType MODEL_REFRACTION_TABLE_GLASS;
     public static RenderType MODEL_TELESCOPE;
 
+    public static RenderType MODEL_DEMON_WINGS;
+    public static RenderType MODEL_CELESTIAL_WINGS;
+    public static RenderType MODEL_WRAITH_WINGS;
+
     //TER stuff
     public static RenderType TER_WELL_LIQUID;
     public static RenderType TER_CHALICE_LIQUID;

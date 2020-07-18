@@ -9,14 +9,13 @@
 package hellfirepvp.astralsorcery.common.loot.global;
 
 import com.google.gson.JsonObject;
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.registry.OreItemRarityRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.node.key.KeyVoidTrash;
 import hellfirepvp.astralsorcery.common.util.loot.LootUtil;
 import net.minecraft.entity.Entity;
@@ -64,8 +63,8 @@ public class LootModifierPerkVoidTrash extends LootModifier {
         if (!prog.isValid() || !prog.hasPerkEffect(perk -> perk instanceof KeyVoidTrash)) {
             return generatedLoot;
         }
-        AbstractPerk registeredPerk = RegistriesAS.REGISTRY_PERKS.getValue(AstralSorcery.key("key_void_trash"));
-        if (!(registeredPerk instanceof KeyVoidTrash)) {
+        AbstractPerk registeredPerk = PerkTree.PERK_TREE.getPerk(perk -> perk instanceof KeyVoidTrash);
+        if (registeredPerk == null) {
             return generatedLoot;
         }
         KeyVoidTrash voidTrashPerk = (KeyVoidTrash) registeredPerk;

@@ -53,7 +53,7 @@ public class RenderRitualPedestal extends CustomTileEntityRenderer<TileRitualPed
 
         renderStack.push();
         renderStack.translate(0.5F, 0.9F, 0.5F);
-        renderStack.scale(1.5F, 1.5F, 1.5F);
+        renderStack.scale(2F, 2F, 2F);
         RenderingUtils.renderTranslucentItemStackModel(display, renderStack, Color.WHITE, Blending.DEFAULT, 255);
         renderStack.pop();
 

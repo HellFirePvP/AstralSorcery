@@ -52,7 +52,7 @@ public class LightbeamRenderHelper implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         ticksExisted++;
-        if (ticksExisted % 40 == 0) {
+        if (ticksExisted % 35 == 0) {
             ticksExisted = 0;
             Entity rView = Minecraft.getInstance().getRenderViewEntity();
             if (rView == null) {
@@ -77,9 +77,10 @@ public class LightbeamRenderHelper implements ITickHandler {
                             }
                             for (BlockPos dst : entry.getValue()) {
                                 Vector3 to = new Vector3(dst).add(0.5, 0.5, 0.5);
-                                FXLightbeam beam = EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
+                                FXLightbeam beam = EffectHelper.of(EffectTemplatesAS.LIGHTBEAM_TRANSFER)
                                         .spawn(source)
-                                        .setup(to, 0.6, 0.6);
+                                        .setup(to, 0.4, 0.4)
+                                        .setAlphaMultiplier(0.4F);
                                 if (overlay != null) {
                                     beam.color(VFXColorFunction.constant(overlay));
                                 }

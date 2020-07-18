@@ -66,6 +66,16 @@ public class RenderStateBuilder {
         return this;
     }
 
+    public RenderStateBuilder enableDiffuseLighting() {
+        this.builder.diffuseLighting(new RenderState.DiffuseLightingState(true));
+        return this;
+    }
+
+    public RenderStateBuilder enableOverlay() {
+        this.builder.overlay(new RenderState.OverlayState(true));
+        return this;
+    }
+
     public RenderStateBuilder disableCull() {
         this.builder.cull(new RenderState.CullState(false));
         return this;

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.util.obj;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,6 +22,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class Face {
 
     Vertex[] vertices;
+    Vertex[] vertexNormals;
+    Vertex faceNormal;
     TextureCoordinate[] textureCoordinates;
 
     @OnlyIn(Dist.CLIENT)
@@ -55,7 +58,16 @@ public class Face {
             vb.pos(vertices[i].x, vertices[i].y, vertices[i].z)
                     .color(255, 255, 255, 255)
                     .tex(textureCoordinates[i].u + offsetU, textureCoordinates[i].v + offsetV)
+                    .normal(faceNormal.x, faceNormal.y, faceNormal.z)
                     .endVertex();
         }
+    }
+
+    Vertex calculateFaceNormal() {
+        Vector3 v1 = new Vector3(vertices[1].x - vertices[0].x, vertices[1].y - vertices[0].y, vertices[1].z - vertices[0].z);
+        Vector3 v2 = new Vector3(vertices[2].x - vertices[0].x, vertices[2].y - vertices[0].y, vertices[2].z - vertices[0].z);
+        Vector3 normalVector = v1.crossProduct(v2).normalize();
+
+        return new Vertex((float) normalVector.getX(), (float) normalVector.getY(), (float) normalVector.getZ());
     }
 }

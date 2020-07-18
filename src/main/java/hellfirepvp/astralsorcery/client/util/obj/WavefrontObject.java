@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.util.obj;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -25,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -83,84 +85,68 @@ public class WavefrontObject {
     }
 
     private void loadObjModel(InputStream inputStream) throws ModelFormatException {
-        BufferedReader reader = null;
-
-        String currentLine = null;
+        String currentLine;
         int lineCount = 0;
 
-        try {
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             while ((currentLine = reader.readLine()) != null) {
                 lineCount++;
                 currentLine = currentLine.replaceAll("\\s+", " ").trim();
 
-                if (currentLine.startsWith("#") || currentLine.length() == 0) {
-                    continue;
-                } else if (currentLine.startsWith("v ")) {
-                    Vertex vertex = parseVertex(currentLine, lineCount);
-                    if (vertex != null) {
-                        vertices.add(vertex);
-                    }
-                } else if (currentLine.startsWith("vn ")) {
-                    Vertex vertex = parseVertexNormal(currentLine, lineCount);
-                    if (vertex != null) {
-                        vertexNormals.add(vertex);
-                    }
-                } else if (currentLine.startsWith("vt ")) {
-                    TextureCoordinate textureCoordinate = parseTextureCoordinate(currentLine, lineCount);
-                    if (textureCoordinate != null) {
-                        textureCoordinates.add(textureCoordinate);
-                    }
-                } else if (currentLine.startsWith("f ")) {
-
-                    if (currentGroupObject == null) {
-                        currentGroupObject = new GroupObject("Default");
-                    }
-
-                    Face face = parseFace(currentLine, lineCount);
-
-                    if (face != null) {
-                        currentGroupObject.faces.add(face);
-                    }
-                } else if (currentLine.startsWith("g ") | currentLine.startsWith("o ")) {
-                    GroupObject group = parseGroupObject(currentLine, lineCount);
-
-                    if (group != null) {
-                        if (currentGroupObject != null) {
-                            groupObjects.add(currentGroupObject);
+                if (!currentLine.startsWith("#") && currentLine.length() != 0) {
+                    if (currentLine.startsWith("v ")) {
+                        Vertex vertex = parseVertex(currentLine, lineCount);
+                        if (vertex != null) {
+                            vertices.add(vertex);
                         }
-                    }
+                    } else if (currentLine.startsWith("vn ")) {
+                        Vertex vertex = parseVertexNormal(currentLine, lineCount);
+                        if (vertex != null) {
+                            vertexNormals.add(vertex);
+                        }
+                    } else if (currentLine.startsWith("vt ")) {
+                        TextureCoordinate textureCoordinate = parseTextureCoordinate(currentLine, lineCount);
+                        if (textureCoordinate != null) {
+                            textureCoordinates.add(textureCoordinate);
+                        }
+                    } else if (currentLine.startsWith("f ")) {
 
-                    currentGroupObject = group;
+                        if (currentGroupObject == null) {
+                            currentGroupObject = new GroupObject("Default");
+                        }
+
+                        Face face = parseFace(currentLine, lineCount);
+
+                        if (face != null) {
+                            currentGroupObject.faces.add(face);
+                        }
+                    } else if (currentLine.startsWith("g ") | currentLine.startsWith("o ")) {
+                        GroupObject group = parseGroupObject(currentLine, lineCount);
+
+                        if (group != null) {
+                            if (currentGroupObject != null) {
+                                groupObjects.add(currentGroupObject);
+                            }
+                        }
+
+                        currentGroupObject = group;
+                    }
                 }
             }
 
             groupObjects.add(currentGroupObject);
         } catch (IOException e) {
             throw new ModelFormatException("IO Exception reading model format", e);
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                // hush
-            }
-
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                // hush
-            }
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     public VertexBuffer batch(BufferBuilder buf) {
-        VertexBuffer vbo = new VertexBuffer(DefaultVertexFormats.POSITION_COLOR_TEX);
+        VertexBuffer vbo = new VertexBuffer(RenderTypesAS.POSITION_COLOR_TEX_NORMAL);
         if (this.getGLDrawingMode() == 0) {
             return vbo;
         }
-        buf.begin(this.getGLDrawingMode(), DefaultVertexFormats.POSITION_COLOR_TEX);
+        buf.begin(this.getGLDrawingMode(), RenderTypesAS.POSITION_COLOR_TEX_NORMAL);
         this.render(buf);
         buf.finishDrawing();
         vbo.upload(buf);
@@ -169,11 +155,11 @@ public class WavefrontObject {
 
     @OnlyIn(Dist.CLIENT)
     public VertexBuffer batchOnly(BufferBuilder buf, String... groups) {
-        VertexBuffer vbo = new VertexBuffer(DefaultVertexFormats.POSITION_COLOR_TEX);
+        VertexBuffer vbo = new VertexBuffer(RenderTypesAS.POSITION_COLOR_TEX_NORMAL);
         if (this.getGLDrawingMode() == 0) {
             return vbo;
         }
-        buf.begin(this.getGLDrawingMode(), DefaultVertexFormats.POSITION_COLOR_TEX);
+        buf.begin(this.getGLDrawingMode(), RenderTypesAS.POSITION_COLOR_TEX_NORMAL);
         this.renderOnly(buf, groups);
         buf.finishDrawing();
         vbo.upload(buf);
@@ -182,11 +168,11 @@ public class WavefrontObject {
 
     @OnlyIn(Dist.CLIENT)
     public VertexBuffer batchExcept(BufferBuilder buf, String... excludedGroupNames) {
-        VertexBuffer vbo = new VertexBuffer(DefaultVertexFormats.POSITION_COLOR_TEX);
+        VertexBuffer vbo = new VertexBuffer(RenderTypesAS.POSITION_COLOR_TEX_NORMAL);
         if (this.getGLDrawingMode() == 0) {
             return vbo;
         }
-        buf.begin(this.getGLDrawingMode(), DefaultVertexFormats.POSITION_COLOR_TEX);
+        buf.begin(this.getGLDrawingMode(), RenderTypesAS.POSITION_COLOR_TEX_NORMAL);
         this.renderExcept(buf, excludedGroupNames);
         buf.finishDrawing();
         vbo.upload(buf);
@@ -308,15 +294,17 @@ public class WavefrontObject {
             if (isValidFace_V_VT_VN_Line(line)) {
                 face.vertices = new Vertex[tokens.length];
                 face.textureCoordinates = new TextureCoordinate[tokens.length];
+                face.vertexNormals = new Vertex[tokens.length];
 
                 for (int i = 0; i < tokens.length; ++i) {
                     subTokens = tokens[i].split("/");
 
                     face.vertices[i] = vertices.get(Integer.parseInt(subTokens[0]) - 1);
                     face.textureCoordinates[i] = textureCoordinates.get(Integer.parseInt(subTokens[1]) - 1);
+                    face.vertexNormals[i] = vertexNormals.get(Integer.parseInt(subTokens[2]) - 1);
                 }
 
-                //face.faceNormal = face.calculateFaceNormal();
+                face.faceNormal = face.calculateFaceNormal();
             }
             // f v1/vt1 v2/vt2 v3/vt3 ...
             else if (isValidFace_V_VT_Line(line)) {
@@ -330,19 +318,21 @@ public class WavefrontObject {
                     face.textureCoordinates[i] = textureCoordinates.get(Integer.parseInt(subTokens[1]) - 1);
                 }
 
-                //face.faceNormal = face.calculateFaceNormal();
+                face.faceNormal = face.calculateFaceNormal();
             }
             // f v1//vn1 v2//vn2 v3//vn3 ...
             else if (isValidFace_V_VN_Line(line)) {
                 face.vertices = new Vertex[tokens.length];
+                face.vertexNormals = new Vertex[tokens.length];
 
                 for (int i = 0; i < tokens.length; ++i) {
                     subTokens = tokens[i].split("//");
 
                     face.vertices[i] = vertices.get(Integer.parseInt(subTokens[0]) - 1);
+                    face.vertexNormals[i] = vertexNormals.get(Integer.parseInt(subTokens[2]) - 1);
                 }
 
-                //face.faceNormal = face.calculateFaceNormal();
+                face.faceNormal = face.calculateFaceNormal();
             }
             // f v1 v2 v3 ...
             else if (isValidFace_V_Line(line)) {
@@ -352,7 +342,7 @@ public class WavefrontObject {
                     face.vertices[i] = vertices.get(Integer.parseInt(tokens[i]) - 1);
                 }
 
-                //face.faceNormal = face.calculateFaceNormal();
+                face.faceNormal = face.calculateFaceNormal();
             } else {
                 throw new ModelFormatException("Error parsing entry ('" + line + "'" + ", line " + lineCount + ") in file '" + fileName + "' - Incorrect format");
             }

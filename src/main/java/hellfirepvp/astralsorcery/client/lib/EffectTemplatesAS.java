@@ -46,6 +46,7 @@ public class EffectTemplatesAS {
     public static BatchRenderContext<FXFacingParticle> COLLECTOR_BURST;
     public static BatchRenderContext<FXLightning> LIGHTNING;
     public static BatchRenderContext<FXLightbeam> LIGHTBEAM;
+    public static BatchRenderContext<FXLightbeam> LIGHTBEAM_TRANSFER;
 
     public static BatchRenderContext<FXCrystal> CRYSTAL;
     public static BatchRenderContext<FXCube> CUBE_OPAQUE_ATLAS;

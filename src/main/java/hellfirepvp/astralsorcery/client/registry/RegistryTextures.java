@@ -120,8 +120,9 @@ public class RegistryTextures {
         TEX_HALO_INFUSION           = loadTexture(EFFECT, "halo_infusion");
         TEX_HALO_RITUAL             = loadTexture(EFFECT, "halo_ritual");
 
-        TEX_LIGHTNING_PART = loadTexture(EFFECT, "lightning_part");
-        TEX_LIGHTBEAM      = loadTexture(EFFECT, "lightbeam");
+        TEX_LIGHTNING_PART      = loadTexture(EFFECT, "lightning_part");
+        TEX_LIGHTBEAM           = loadTexture(EFFECT, "lightbeam");
+        TEX_LIGHTBEAM_TRANSFER  = loadTexture(EFFECT, "lightbeam_transfer");
 
         TEX_MODEL_CRYSTAL_WHITE = loadTexture(MODEL, "crystal_white");
         TEX_MODEL_CRYSTAL_BLUE  = loadTexture(MODEL, "crystal_blue");

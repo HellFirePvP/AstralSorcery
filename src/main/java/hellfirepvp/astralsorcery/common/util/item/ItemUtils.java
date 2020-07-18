@@ -123,14 +123,14 @@ public class ItemUtils {
         return false;
     }
 
-    public static boolean dropItemToPlayer(PlayerEntity player, ItemStack stack) {
+    public static ItemStack dropItemToPlayer(PlayerEntity player, ItemStack stack) {
         World world = player.getEntityWorld();
         if (world.isRemote() || stack.isEmpty()) {
-            return false;
+            return stack;
         }
         ItemEntity item = new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack);
         if (item.getItem().isEmpty()) {
-            return false;
+            return stack;
         }
         item.setNoPickupDelay();
         try {
@@ -139,11 +139,9 @@ public class ItemUtils {
             //Guess some mod could run into an issue here...
         }
         if (item.isAlive()) {
-            item.setPickupDelay(20);
-            applyRandomDropOffset(item);
-            return false;
+            return item.getItem().copy();
         } else {
-            return true;
+            return ItemStack.EMPTY;
         }
     }
 
