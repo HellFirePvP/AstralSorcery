@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.BatchedVertexList;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
@@ -27,7 +28,10 @@ import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.ResourceLocation;
@@ -311,7 +315,6 @@ public class AstralSkyRenderer implements IRenderHandler {
     }
 
     private void renderSolarEclipseSun(MatrixStack renderStack, int eclipseTick) {
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
         float sunSize = 30F;
 
         float part = ((float) DayTimeHelper.getSolarEclipseHalfDuration() * 2) / 7F;
@@ -321,43 +324,38 @@ public class AstralSkyRenderer implements IRenderHandler {
             tick -= part;
             u += 1;
         }
+        float uOffset = u;
 
         TexturesAS.TEX_SOLAR_ECLIPSE.bindTexture();
         renderStack.push();
         renderStack.rotate(Vector3f.YP.rotationDegrees(-90F));
         Matrix4f matr = renderStack.getLast().getMatrix();
 
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buf.pos(matr, -sunSize, 100, -sunSize).tex( u      / 7F, 0).endVertex();
-        buf.pos(matr,  sunSize, 100, -sunSize).tex((u + 1) / 7F, 0).endVertex();
-        buf.pos(matr,  sunSize, 100,  sunSize).tex((u + 1) / 7F, 1).endVertex();
-        buf.pos(matr, -sunSize, 100,  sunSize).tex( u      / 7F, 1).endVertex();
-
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
+            buf.pos(matr, -sunSize, 100, -sunSize).tex( uOffset      / 7F, 0).endVertex();
+            buf.pos(matr,  sunSize, 100, -sunSize).tex((uOffset + 1) / 7F, 0).endVertex();
+            buf.pos(matr,  sunSize, 100,  sunSize).tex((uOffset + 1) / 7F, 1).endVertex();
+            buf.pos(matr, -sunSize, 100,  sunSize).tex( uOffset      / 7F, 1).endVertex();
+        });
 
         renderStack.pop();
     }
 
     private void renderSun(MatrixStack renderStack) {
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
         float sunSize = 30F;
 
         Matrix4f matr = renderStack.getLast().getMatrix();
 
         Minecraft.getInstance().getTextureManager().bindTexture(REF_TEX_SUN);
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buf.pos(matr, -sunSize, 100, -sunSize).tex(0, 0).endVertex();
-        buf.pos(matr,  sunSize, 100, -sunSize).tex(1, 0).endVertex();
-        buf.pos(matr,  sunSize, 100,  sunSize).tex(1, 1).endVertex();
-        buf.pos(matr, -sunSize, 100,  sunSize).tex(0, 1).endVertex();
-
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
+            buf.pos(matr, -sunSize, 100, -sunSize).tex(0, 0).endVertex();
+            buf.pos(matr,  sunSize, 100, -sunSize).tex(1, 0).endVertex();
+            buf.pos(matr,  sunSize, 100,  sunSize).tex(1, 1).endVertex();
+            buf.pos(matr, -sunSize, 100,  sunSize).tex(0, 1).endVertex();
+        });
     }
 
     private void renderMoon(MatrixStack renderStack, World world) {
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
         float moonSize = 20F;
 
         //Don't ask me.. i'm just copying this and be done with it
@@ -372,22 +370,19 @@ public class AstralSkyRenderer implements IRenderHandler {
         Matrix4f matr = renderStack.getLast().getMatrix();
 
         Minecraft.getInstance().getTextureManager().bindTexture(REF_TEX_MOON_PHASES);
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buf.pos(matr, -moonSize, -100,  moonSize).tex(maxU, maxV).endVertex();
-        buf.pos(matr,  moonSize, -100,  moonSize).tex(minU, maxV).endVertex();
-        buf.pos(matr,  moonSize, -100, -moonSize).tex(minU, minV).endVertex();
-        buf.pos(matr, -moonSize, -100, -moonSize).tex(maxU, minV).endVertex();
-
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
+            buf.pos(matr, -moonSize, -100,  moonSize).tex(maxU, maxV).endVertex();
+            buf.pos(matr,  moonSize, -100,  moonSize).tex(minU, maxV).endVertex();
+            buf.pos(matr,  moonSize, -100, -moonSize).tex(minU, minV).endVertex();
+            buf.pos(matr, -moonSize, -100, -moonSize).tex(maxU, minV).endVertex();
+        });
     }
 
     private void renderDuskDawn(float[] duskDawnColors, MatrixStack renderStack, ClientWorld world, float pTicks) {
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        float f3 = MathHelper.sin(world.getCelestialAngleRadians(pTicks)) < 0.0F ? 180.0F : 0.0F;
 
         renderStack.push();
         renderStack.rotate(Vector3f.XP.rotationDegrees(90.0F));
-        float f3 = MathHelper.sin(world.getCelestialAngleRadians(pTicks)) < 0.0F ? 180.0F : 0.0F;
         renderStack.rotate(Vector3f.ZP.rotationDegrees(f3));
         renderStack.rotate(Vector3f.ZP.rotationDegrees(90.0F));
 
@@ -396,16 +391,15 @@ public class AstralSkyRenderer implements IRenderHandler {
         float b = duskDawnColors[2];
         float a = duskDawnColors[3];
 
-        buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
-        buf.pos(0, 100, 0).color(r, g, b, a).endVertex();
-        for (int i = 0; i <= 16; i++) {
-            float f6 = (float) i * ((float) Math.PI * 2F) / 16F;
-            float f7 = MathHelper.sin(f6);
-            float f8 = MathHelper.cos(f6);
-            buf.pos(f7 * 120F, f8 * 120F, -f8 * 40F * a).color(r, g, b, 0F).endVertex();
-        }
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR, buf -> {
+            buf.pos(0, 100, 0).color(r, g, b, a).endVertex();
+            for (int i = 0; i <= 16; i++) {
+                float f6 = (float) i * ((float) Math.PI * 2F) / 16F;
+                float f7 = MathHelper.sin(f6);
+                float f8 = MathHelper.cos(f6);
+                buf.pos(f7 * 120F, f8 * 120F, -f8 * 40F * a).color(r, g, b, 0F).endVertex();
+            }
+        });
 
         renderStack.pop();
     }

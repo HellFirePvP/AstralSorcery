@@ -78,13 +78,11 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
 
             float brightness = 0.3F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + rand.nextInt(20))) * 0.6F;
 
-            BufferBuilder buf = Tessellator.getInstance().getBuffer();
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-            RenderingGuiUtils.rect(buf, 15 + x, 39 + y, this.getBlitOffset(), 5, 5)
-                    .color(brightness, brightness, brightness, brightness)
-                    .draw();
-            buf.finishDrawing();
-            WorldVertexBufferUploader.draw(buf);
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                RenderingGuiUtils.rect(buf, 15 + x, 39 + y, this.getBlitOffset(), 5, 5)
+                        .color(brightness, brightness, brightness, brightness)
+                        .draw();
+            });
         }
 
         TileAltar altar = this.getContainer().getTileEntity();

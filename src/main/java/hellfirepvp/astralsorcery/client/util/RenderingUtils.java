@@ -298,8 +298,6 @@ public class RenderingUtils {
     }
 
     public static void renderTranslucentItemStackModelGUI(ItemStack stack, MatrixStack renderStack, Color overlayColor, Blending blendMode, int alpha) {
-        alpha = MathHelper.clamp(alpha, 0, 255);
-
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
@@ -313,17 +311,15 @@ public class RenderingUtils {
         renderStack.translate(8.0F, 8.0F, 0.0F);
         renderStack.scale(16.0F, -16.0F, 16.0F);
 
-        IBakedModel bakedModel = getItemModel(stack);
-        bakedModel = ForgeHooksClient.handleCameraTransforms(renderStack, bakedModel, ItemCameraTransforms.TransformType.GUI, false);
+        IBakedModel bakedModel = ForgeHooksClient.handleCameraTransforms(renderStack, getItemModel(stack), ItemCameraTransforms.TransformType.GUI, false);
         if (!bakedModel.func_230044_c_()) {
             RenderHelper.setupGuiFlatDiffuseLighting();
         }
 
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.ENTITY);
-        renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> buf, LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, alpha);
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.ENTITY, buf -> {
+            renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> buf,
+                    LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, MathHelper.clamp(alpha, 0, 255));
+        });
 
         if (!bakedModel.func_230044_c_()) {
             RenderHelper.setupGui3DDiffuseLighting();

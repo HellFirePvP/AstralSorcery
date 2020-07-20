@@ -15,13 +15,11 @@ import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityGrapplingHook;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -48,15 +46,15 @@ public class RenderEntityGrapplingHook extends EntityRenderer<EntityGrapplingHoo
 
     @Override
     public void render(EntityGrapplingHook entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
-        int alphaMultiplier = 255;
+        int alphaMultiplier;
         if (entity.isDespawning()) {
             alphaMultiplier = MathHelper.clamp(127 - ((int) (entity.despawnPercentage(partialTicks) * 255F)), 0, 255);
+        } else {
+            alphaMultiplier = 255;
         }
         if (alphaMultiplier <= 1E-4) {
             return;
         }
-
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
 
         Vector3 entityPos = RenderingVectorUtils.interpolatePosition(entity, partialTicks);
         List<Vector3> line = entity.buildLine(partialTicks);
@@ -69,28 +67,26 @@ public class RenderEntityGrapplingHook extends EntityRenderer<EntityGrapplingHoo
         //Main grappling hook sprite
         SpritesAS.SPR_GRAPPLING_HOOK.bindTexture();
 
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-        RenderingDrawUtils.renderFacingSpriteVB(buf, matrixStack,
-                entityPos.getX(), entityPos.getY(), entityPos.getZ(),
-                1.3F, 0F,
-                SpritesAS.SPR_GRAPPLING_HOOK, ClientScheduler.getClientTick() + entity.ticksExisted,
-                255, 255, 255, alphaMultiplier);
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            RenderingDrawUtils.renderFacingSpriteVB(buf, matrixStack,
+                    entityPos.getX(), entityPos.getY(), entityPos.getZ(),
+                    1.3F, 0F,
+                    SpritesAS.SPR_GRAPPLING_HOOK, ClientScheduler.getClientTick() + entity.ticksExisted,
+                    255, 255, 255, alphaMultiplier);
+        });
 
         //Small line of particles
         TexturesAS.TEX_PARTICLE_LARGE.bindTexture();
         Blending.ADDITIVE_ALPHA.apply();
 
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-        for (Vector3 pos : line) {
-            RenderingDrawUtils.renderFacingFullQuadVB(buf, matrixStack,
-                    entityPos.getX() + pos.getX(), entityPos.getY() + pos.getY(), entityPos.getZ() + pos.getZ(),
-                    0.3F, 0F,
-                    50, 40, 180, (int) (alphaMultiplier * 0.8F));
-        }
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            for (Vector3 pos : line) {
+                RenderingDrawUtils.renderFacingFullQuadVB(buf, matrixStack,
+                        entityPos.getX() + pos.getX(), entityPos.getY() + pos.getY(), entityPos.getZ() + pos.getZ(),
+                        0.3F, 0F,
+                        50, 40, 180, (int) (alphaMultiplier * 0.8F));
+            }
+        });
 
         RenderSystem.enableCull();
         Blending.DEFAULT.apply();
