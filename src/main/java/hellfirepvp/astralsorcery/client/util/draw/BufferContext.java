@@ -21,7 +21,6 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
  */
 public class BufferContext extends BufferBuilder {
 
-    private static final WorldVertexBufferUploader upload = new WorldVertexBufferUploader();
     private boolean inDrawing = false;
 
     BufferContext(int size) {
@@ -45,7 +44,7 @@ public class BufferContext extends BufferBuilder {
     public void draw() {
         if (this.inDrawing) {
             this.finishDrawing();
-            upload.draw(this);
+            WorldVertexBufferUploader.draw(this);
             this.inDrawing = false;
         }
     }
