@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util.draw;
 
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -43,8 +44,7 @@ public class BufferContext extends BufferBuilder {
 
     public void draw() {
         if (this.inDrawing) {
-            this.finishDrawing();
-            WorldVertexBufferUploader.draw(this);
+            RenderingUtils.finishDrawing(this);
             this.inDrawing = false;
         }
     }

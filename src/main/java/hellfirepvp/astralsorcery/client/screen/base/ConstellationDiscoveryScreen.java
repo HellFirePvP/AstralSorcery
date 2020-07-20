@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.MouseUtil;
 import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
@@ -150,21 +151,17 @@ public abstract class ConstellationDiscoveryScreen<D extends ConstellationDiscov
         Supplier<Float> brightnessFn = () -> RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, 5 + rand.nextInt(10));
         TexturesAS.TEX_STAR_CONNECTION.bindTexture();
 
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            for (DrawnLine line : drawnLines) {
+                drawLine(buf, pTicks, line.from, line.to, brightnessFn, lineBreadth);
+            }
 
-        for (DrawnLine line : drawnLines) {
-            drawLine(buf, pTicks, line.from, line.to, brightnessFn, lineBreadth);
-        }
-
-        if (this.dragStart != null && this.dragEnd != null) {
-            Point adjStart = new Point(this.dragStart.x - guiLeft, this.dragStart.y - guiTop);
-            Point adjEnd = new Point(this.dragEnd.x - guiLeft, this.dragEnd.y - guiTop);
-            drawLine(buf, pTicks, adjStart, adjEnd, () -> 0.8F, lineBreadth);
-        }
-
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+            if (this.dragStart != null && this.dragEnd != null) {
+                Point adjStart = new Point(this.dragStart.x - guiLeft, this.dragStart.y - guiTop);
+                Point adjEnd = new Point(this.dragEnd.x - guiLeft, this.dragEnd.y - guiTop);
+                drawLine(buf, pTicks, adjStart, adjEnd, () -> 0.8F, lineBreadth);
+            }
+        });
     }
 
     private void drawLine(BufferBuilder buf, float pTicks, Point from, Point to, Supplier<Float> brightnessFn, float lineBreadth) {

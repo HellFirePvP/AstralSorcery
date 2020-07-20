@@ -319,23 +319,19 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         RenderSystem.disableTexture();
         RenderSystem.disableDepthTest();
 
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
-        buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        RenderingUtils.draw(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR, buf -> {
+            buf.pos(offsetX, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
+            buf.pos(offsetX +width, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
 
-        buf.pos(offsetX, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
-        buf.pos(offsetX +width, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
+            buf.pos(offsetX + width, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
+            buf.pos(offsetX + width, offsetY + height, 0).color(r, g, b, alpha.get()).endVertex();
 
-        buf.pos(offsetX + width, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
-        buf.pos(offsetX + width, offsetY + height, 0).color(r, g, b, alpha.get()).endVertex();
+            buf.pos(offsetX + width, offsetY + height, 0).color(r, g, b, alpha.get()).endVertex();
+            buf.pos(offsetX, offsetY + height, 0).color(r, g, b, alpha.get()).endVertex();
 
-        buf.pos(offsetX + width, offsetY + height, 0).color(r, g, b, alpha.get()).endVertex();
-        buf.pos(offsetX, offsetY + height, 0).color(r, g, b, alpha.get()).endVertex();
-
-        buf.pos(offsetX, offsetY + height, 0).color(r, g, b, alpha.get()).endVertex();
-        buf.pos(offsetX, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
-
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+            buf.pos(offsetX, offsetY + height, 0).color(r, g, b, alpha.get()).endVertex();
+            buf.pos(offsetX, offsetY, 0).color(r, g, b, alpha.get()).endVertex();
+        });
 
         RenderSystem.enableDepthTest();
         RenderSystem.enableTexture();

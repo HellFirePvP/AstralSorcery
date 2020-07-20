@@ -187,25 +187,23 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
         WorldContext ctx = SkyHandler.getContext(Minecraft.getInstance().world, LogicalSide.CLIENT);
         if (ctx != null && canSeeSky) {
             Random gen = ctx.getDayRandom();
-            BufferBuilder buf = Tessellator.getInstance().getBuffer();
 
             this.changeZLevel(1);
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
             TexturesAS.TEX_STAR_1.bindTexture();
-            for (Point.Float star : usedStars) {
-                float size = 3 + gen.nextFloat() * 3F;
-                float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
-                brightness = this.multiplyStarBrightness(pTicks, brightness);
-                brightness *= brMultiplier;
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                for (Point.Float star : usedStars) {
+                    float size = 3 + gen.nextFloat() * 3F;
+                    float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
+                    brightness = this.multiplyStarBrightness(pTicks, brightness);
+                    brightness *= brMultiplier;
 
-                RenderingGuiUtils.rect(buf, this)
-                        .at(FRAME_TEXTURE_SIZE + star.x, FRAME_TEXTURE_SIZE + star.y)
-                        .dim(size, size)
-                        .color(brightness, brightness, brightness, brightness)
-                        .draw();
-            }
-            buf.finishDrawing();
-            WorldVertexBufferUploader.draw(buf);
+                    RenderingGuiUtils.rect(buf, this)
+                            .at(FRAME_TEXTURE_SIZE + star.x, FRAME_TEXTURE_SIZE + star.y)
+                            .dim(size, size)
+                            .color(brightness, brightness, brightness, brightness)
+                            .draw();
+                }
+            });
             this.changeZLevel(-1);
 
             this.changeZLevel(3);

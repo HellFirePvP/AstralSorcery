@@ -40,7 +40,6 @@ public class RenderingOverlayUtils {
         int offsetX =  30;
         int offsetY =  15;
 
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
         ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 
@@ -52,40 +51,38 @@ public class RenderingOverlayUtils {
         for (int i = 0; i < itemStacks.size(); i++) {
             boolean first = i == 0;
             boolean last = i + 1 == itemStacks.size();
+            float currentY = tempY;
 
             if (first) {
                 //Draw upper half of the 1st slot
-                buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
                 TexturesAS.TEX_OVERLAY_ITEM_FRAME.bindTexture();
-                buf.pos(offsetX,            tempY + heightSplit, 10).tex(0, 0.5F).endVertex();
-                buf.pos(offsetX + width, tempY + heightSplit, 10).tex(1, 0.5F).endVertex();
-                buf.pos(offsetX + width,    tempY,               10).tex(1, 0)  .endVertex();
-                buf.pos(offsetX,               tempY,               10).tex(0, 0)  .endVertex();
-                buf.finishDrawing();
-                WorldVertexBufferUploader.draw(buf);
+                RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
+                    buf.pos(offsetX,            currentY + heightSplit, 10).tex(0, 0.5F).endVertex();
+                    buf.pos(offsetX + width, currentY + heightSplit, 10).tex(1, 0.5F).endVertex();
+                    buf.pos(offsetX + width,    currentY,               10).tex(1, 0)  .endVertex();
+                    buf.pos(offsetX,               currentY,               10).tex(0, 0)  .endVertex();
+                });
                 tempY += heightSplit;
             } else {
                 //Draw lower half and upper next half of the sequence
-                buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
                 TexturesAS.TEX_OVERLAY_ITEM_FRAME_EXTENSION.bindTexture();
-                buf.pos(offsetX,            tempY + heightNormal, 10).tex(0, 1).endVertex();
-                buf.pos(offsetX + width, tempY + heightNormal, 10).tex(1, 1).endVertex();
-                buf.pos(offsetX + width,    tempY,                10).tex(1, 0).endVertex();
-                buf.pos(offsetX,               tempY,                10).tex(0, 0).endVertex();
-                buf.finishDrawing();
-                WorldVertexBufferUploader.draw(buf);
+                RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
+                    buf.pos(offsetX,            currentY + heightNormal, 10).tex(0, 1).endVertex();
+                    buf.pos(offsetX + width, currentY + heightNormal, 10).tex(1, 1).endVertex();
+                    buf.pos(offsetX + width,    currentY,                10).tex(1, 0).endVertex();
+                    buf.pos(offsetX,               currentY,                10).tex(0, 0).endVertex();
+                });
                 tempY += heightNormal;
             }
             if (last) {
                 //Draw lower half of the slot
-                buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
                 TexturesAS.TEX_OVERLAY_ITEM_FRAME.bindTexture();
-                buf.pos(offsetX,            tempY + heightSplit, 10).tex(0, 1)  .endVertex();
-                buf.pos(offsetX + width, tempY + heightSplit, 10).tex(1, 1)  .endVertex();
-                buf.pos(offsetX + width,    tempY,               10).tex(1, 0.5F).endVertex();
-                buf.pos(offsetX,               tempY,               10).tex(0, 0.5F).endVertex();
-                buf.finishDrawing();
-                WorldVertexBufferUploader.draw(buf);
+                RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
+                    buf.pos(offsetX,            currentY + heightSplit, 10).tex(0, 1)  .endVertex();
+                    buf.pos(offsetX + width, currentY + heightSplit, 10).tex(1, 1)  .endVertex();
+                    buf.pos(offsetX + width,    currentY,               10).tex(1, 0.5F).endVertex();
+                    buf.pos(offsetX,               currentY,               10).tex(0, 0.5F).endVertex();
+                });
                 tempY += heightSplit;
             }
         }

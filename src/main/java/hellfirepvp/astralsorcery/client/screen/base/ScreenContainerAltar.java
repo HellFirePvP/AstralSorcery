@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipeContext;
@@ -60,23 +61,22 @@ public abstract class ScreenContainerAltar<T extends ContainerAltarBase> extends
 
     protected void renderStarlightBar(int offsetX, int offsetZ, int width, int height) {
         TileAltar altar = this.getContainer().getTileEntity();
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
 
         RenderSystem.disableAlphaTest();
 
         TexturesAS.TEX_BLACK.bindTexture();
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-        RenderingGuiUtils.rect(buf, guiLeft + offsetX, guiTop + offsetZ, this.getBlitOffset(), width, height).draw();
-        buf.finishDrawing();
-        WorldVertexBufferUploader.draw(buf);
+        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+            RenderingGuiUtils.rect(buf, guiLeft + offsetX, guiTop + offsetZ, this.getBlitOffset(), width, height).draw();
+        });
 
         float percFilled;
-        Color barColor = Color.WHITE;
+        Color barColor;
         if (altar.hasMultiblock()) {
             percFilled = altar.getAmbientStarlightPercent();
+            barColor = Color.WHITE;
         } else {
-            barColor = Color.RED;
             percFilled = 1.0F;
+            barColor = Color.RED;
         }
 
         if (percFilled > 0) {
@@ -85,13 +85,12 @@ public abstract class ScreenContainerAltar<T extends ContainerAltarBase> extends
 
             int tick = altar.getTicksExisted();
             Tuple<Float, Float> uvOffset = spriteStarlight.getUVOffset(tick);
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-            RenderingGuiUtils.rect(buf, guiLeft + offsetX, guiTop + offsetZ, this.getBlitOffset(), (int) (width * percFilled), height)
-                    .tex(uvOffset.getA(), uvOffset.getB(), spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength())
-                    .color(barColor)
-                    .draw();
-            buf.finishDrawing();
-            WorldVertexBufferUploader.draw(buf);
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                RenderingGuiUtils.rect(buf, guiLeft + offsetX, guiTop + offsetZ, this.getBlitOffset(), (int) (width * percFilled), height)
+                        .tex(uvOffset.getA(), uvOffset.getB(), spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength())
+                        .color(barColor)
+                        .draw();
+            });
 
             if (altar.hasMultiblock()) {
                 SimpleAltarRecipe aar = findRecipe(true);
@@ -104,13 +103,12 @@ public abstract class ScreenContainerAltar<T extends ContainerAltarBase> extends
                         int from = (int) (width * percFilled);
                         int to = (int) (width * percReq);
 
-                        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-                        RenderingGuiUtils.rect(buf, guiLeft + offsetX + from, guiTop + offsetZ, this.getBlitOffset(), to, height)
-                                .tex(uvOffset.getA() + spriteStarlight.getULength() * percFilled, uvOffset.getB(), spriteStarlight.getULength() * percReq, spriteStarlight.getVLength())
-                                .color(0.2F, 0.5F, 1.0F, 0.4F)
-                                .draw();
-                        buf.finishDrawing();
-                        WorldVertexBufferUploader.draw(buf);
+                        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                            RenderingGuiUtils.rect(buf, guiLeft + offsetX + from, guiTop + offsetZ, this.getBlitOffset(), to, height)
+                                    .tex(uvOffset.getA() + spriteStarlight.getULength() * percFilled, uvOffset.getB(), spriteStarlight.getULength() * percReq, spriteStarlight.getVLength())
+                                    .color(0.2F, 0.5F, 1.0F, 0.4F)
+                                    .draw();
+                        });
                     }
                 }
             }

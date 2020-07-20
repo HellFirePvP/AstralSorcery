@@ -15,10 +15,7 @@ import hellfirepvp.astralsorcery.client.screen.base.NavigationArrowScreen;
 import hellfirepvp.astralsorcery.client.screen.base.SkyScreen;
 import hellfirepvp.astralsorcery.client.screen.base.TileConstellationDiscoveryScreen;
 import hellfirepvp.astralsorcery.client.screen.telescope.TelescopeRotationDrawArea;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
@@ -155,30 +152,27 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
             Random gen = ctx.getDayRandom();
             PlayerProgress prog = ResearchHelper.getClientProgress();
 
-            BufferBuilder buf = Tessellator.getInstance().getBuffer();
-
             for (int i = 0; i < this.rotation.ordinal(); i++) {
                 gen.nextFloat(); //Flush
             }
 
             this.changeZLevel(1);
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-            TexturesAS.TEX_STAR_1.bindTexture();
             float starSize = 5F;
-            for (int i = 0; i < 72 + gen.nextInt(108); i++) {
-                float innerOffsetX = starSize + gen.nextFloat() * (guiWidth  - starSize) + this.getGuiLeft();
-                float innerOffsetY = starSize + gen.nextFloat() * (guiHeight - starSize) + this.getGuiTop();
-                float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
-                brightness = this.multiplyStarBrightness(pTicks, brightness);
+            TexturesAS.TEX_STAR_1.bindTexture();
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                for (int i = 0; i < 72 + gen.nextInt(108); i++) {
+                    float innerOffsetX = starSize + gen.nextFloat() * (guiWidth  - starSize) + this.getGuiLeft();
+                    float innerOffsetY = starSize + gen.nextFloat() * (guiHeight - starSize) + this.getGuiTop();
+                    float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
+                    brightness = this.multiplyStarBrightness(pTicks, brightness);
 
-                RenderingGuiUtils.rect(buf, this)
-                        .at(innerOffsetX, innerOffsetY)
-                        .dim(starSize, starSize)
-                        .color(brightness, brightness, brightness, brightness)
-                        .draw();
-            }
-            buf.finishDrawing();
-            WorldVertexBufferUploader.draw(buf);
+                    RenderingGuiUtils.rect(buf, this)
+                            .at(innerOffsetX, innerOffsetY)
+                            .dim(starSize, starSize)
+                            .color(brightness, brightness, brightness, brightness)
+                            .draw();
+                }
+            });
             this.changeZLevel(-1);
 
             this.changeZLevel(3);

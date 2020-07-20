@@ -15,10 +15,7 @@ import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.base.ConstellationDiscoveryScreen;
 import hellfirepvp.astralsorcery.client.screen.base.SkyScreen;
 import hellfirepvp.astralsorcery.client.screen.telescope.PlayerAngledConstellationInformation;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
@@ -132,7 +129,6 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
         WorldContext ctx = SkyHandler.getContext(Minecraft.getInstance().world, LogicalSide.CLIENT);
         if (ctx != null && canSeeSky) {
             Random gen = ctx.getDayRandom();
-            BufferBuilder buf = Tessellator.getInstance().getBuffer();
             double guiFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
 
             float playerYaw = Minecraft.getInstance().player.rotationYaw % 360F;
@@ -145,22 +141,21 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
             float playerPitch = Minecraft.getInstance().player.rotationPitch;
 
             this.changeZLevel(1);
-            TexturesAS.TEX_STAR_1.bindTexture();
-            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
             float starSize = 5F;
-            for (Point.Float pos : this.usedStars) {
-                float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
-                brightness = this.multiplyStarBrightness(pTicks, brightness);
-                brightness *= brMultiplier;
+            TexturesAS.TEX_STAR_1.bindTexture();
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                for (Point.Float pos : this.usedStars) {
+                    float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
+                    brightness = this.multiplyStarBrightness(pTicks, brightness);
+                    brightness *= brMultiplier;
 
-                RenderingGuiUtils.rect(buf, this)
-                        .at(pos.x + this.getGuiLeft(), pos.y + this.getGuiTop())
-                        .dim(starSize, starSize)
-                        .color(brightness, brightness, brightness, brightness)
-                        .draw();
-            }
-            buf.finishDrawing();
-            WorldVertexBufferUploader.draw(buf);
+                    RenderingGuiUtils.rect(buf, this)
+                            .at(pos.x + this.getGuiLeft(), pos.y + this.getGuiTop())
+                            .dim(starSize, starSize)
+                            .color(brightness, brightness, brightness, brightness)
+                            .draw();
+                }
+            });
             this.changeZLevel(-1);
 
             this.changeZLevel(3);
