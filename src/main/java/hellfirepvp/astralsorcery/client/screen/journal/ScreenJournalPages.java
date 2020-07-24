@@ -123,7 +123,7 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
 
             String headline = this.getTitle().getFormattedText();
             double width = font.getStringWidth(headline);
-            RenderSystem.translated(guiLeft + 117, guiTop + 22, 0);
+            RenderSystem.translated(guiLeft + 117, guiTop + 22, this.getGuiZLevel());
             RenderSystem.scaled(1.3, 1.3, 1.3);
             RenderSystem.translated(-(width / 2), 0, 0);
             RenderingDrawUtils.renderStringAtCurrentPos(font, headline, 0x00DDDDDD);

@@ -157,12 +157,13 @@ public class ScreenJournalProgression extends ScreenJournal {
     private void renderSearchView(int mouseX, int mouseY, float pTicks) {
         this.drawDefault(TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
 
+        this.changeZLevel(150);
         this.drawSearchResults(mouseX, mouseY, pTicks);
         this.drawSearchBox();
 
-        this.changeZLevel(150);
+        this.changeZLevel(20);
         this.drawSearchPageNavArrows(mouseX, mouseY, pTicks);
-        this.changeZLevel(-150);
+        this.changeZLevel(-170);
     }
 
     private void renderProgressView(int mouseX, int mouseY, float pTicks) {

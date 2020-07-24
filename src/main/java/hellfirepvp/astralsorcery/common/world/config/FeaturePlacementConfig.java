@@ -15,9 +15,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.IBiomeMagnifier;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 
@@ -115,7 +117,10 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         if (!this.generatesInWorld(iWorld.getDimension().getType())) {
             return false;
         }
-        if (!this.generatesInBiome(biomeProvider.getNoiseBiome(pos.getX(), pos.getY(), pos.getZ()))) {
+        long hashedSeed = WorldInfo.byHashing(iWorld.getSeed());
+        IBiomeMagnifier biomeZoom = iWorld.getDimension().getType().getMagnifier();
+        Biome biome = biomeZoom.getBiome(hashedSeed, pos.getX(), pos.getY(), pos.getZ(), iWorld::getNoiseBiomeRaw);
+        if (!this.generatesInBiome(biome)) {
             return false;
         }
         int rMinY = this.configMinY.get();
@@ -163,7 +168,7 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         this.configGenerationChance = cfgBuilder
                 .comment("Set this to set the overall chance for this feature to generate. The higher, the rarer.")
                 .translation(translationKey("generationchance"))
-                .defineInRange("generationChance", this.defaultGenerationChance, 5, 200_000);
+                .defineInRange("generationChance", this.defaultGenerationChance, 2, 200_000);
         this.configGenerationAmount = cfgBuilder
                 .comment("Set the amount this feature tries to generate per chunk")
                 .translation(translationKey("generationamount"))
