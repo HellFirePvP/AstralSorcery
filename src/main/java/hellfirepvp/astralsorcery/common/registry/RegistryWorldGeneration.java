@@ -79,9 +79,9 @@ public class RegistryWorldGeneration {
                 Lists.newArrayList(), Lists.newArrayList(DimensionType.OVERWORLD),
                 2, 5, 55, 2,
                 Lists.newArrayList(Blocks.STONE.getDefaultState(), Blocks.DIORITE.getDefaultState(), Blocks.GRANITE.getDefaultState(), Blocks.ANDESITE.getDefaultState())));
-        WorldGenerationAS.Placement.AQUAMARINE = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("aquamarine", true, true,
-                Lists.newArrayList(BiomeDictionary.Type.RIVER, BiomeDictionary.Type.BEACH), Lists.newArrayList(DimensionType.OVERWORLD),
-                50, 65, 1, 35,
+        WorldGenerationAS.Placement.AQUAMARINE = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("aquamarine", false, true,
+                Lists.newArrayList(), Lists.newArrayList(DimensionType.OVERWORLD),
+                52, 67, 2, 50,
                 Lists.newArrayList(Blocks.SAND.getDefaultState())));
 
         WorldGenerationAS.Placement.MARBLE = new CountRangeConfig(10, 0, 0, 64);

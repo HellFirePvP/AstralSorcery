@@ -234,6 +234,13 @@ public class ScreenJournalClusterRenderer {
                 res.getResource().bindTexture();
                 Tuple<Float, Float> uvTexture = res.getUVOffset(ClientScheduler.getClientTick());
 
+                RenderSystem.pushMatrix();
+                RenderSystem.translated(offsetX, offsetY, 0);
+
+                RenderSystem.enableTexture();
+                RenderSystem.enableBlend();
+                Blending.DEFAULT.apply();
+
                 RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
                     buf.pos(pxWH, zoomedWH - pxWH, zLevel)
                             .color(r, g, b, a)
@@ -252,6 +259,12 @@ public class ScreenJournalClusterRenderer {
                             .tex(uvTexture.getA(), uvTexture.getB())
                             .endVertex();
                 });
+
+                RenderSystem.defaultBlendFunc();
+                RenderSystem.disableBlend();
+                RenderSystem.disableTexture();
+
+                RenderSystem.popMatrix();
                 break;
             default:
                 break;

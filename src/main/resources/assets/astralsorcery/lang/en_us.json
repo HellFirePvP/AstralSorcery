@@ -99,10 +99,10 @@
   "effect.astralsorcery.drop_modifier": "Inner Wealth",
   "effect.astralsorcery.time_freeze": "Time Freeze",
 
+  "enchantment.astralsorcery.night_vision": "Night Vision",
   "enchantment.astralsorcery.scorching_heat": "Scorching Heat",
-  "enchantment.astralsorcery.night_vision": "Nwight Vision",
-  "enchantment.astralsorcery.scorching_heat.desc": "Grants the wearer night vision.",
-  "enchantment.astralsorcery.night_vision.desc": "Blocks mined with this enchantment will have their drops smelted, as though in a furnace.",
+  "enchantment.astralsorcery.night_vision.desc": "Grants the wearer night vision.",
+  "enchantment.astralsorcery.scorching_heat.desc": "Blocks mined with this enchantment will have their drops smelted, as though in a furnace.",
 
   "astralsorcery.amulet.enchantment.level.one": "level",
   "astralsorcery.amulet.enchantment.level.more": "levels",

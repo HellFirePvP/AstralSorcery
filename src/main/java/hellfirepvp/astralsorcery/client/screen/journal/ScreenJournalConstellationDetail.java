@@ -215,6 +215,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
 
         drawNavArrows(pTicks, mouseX, mouseY);
 
+        this.changeZLevel(120);
         switch (doublePageID) {
             case 0:
                 drawPageConstellation(pTicks);
@@ -230,6 +231,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
             default:
                 break;
         }
+        this.changeZLevel(-120);
     }
 
     private void drawCapeInformationPages(int mouseX, int mouseY, float partialTicks) {
