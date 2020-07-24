@@ -24,6 +24,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -48,7 +49,7 @@ public class InfusedWoodRecipe extends LiquidStarlightRecipe {
     @Override
     @OnlyIn(Dist.CLIENT)
     public List<Ingredient> getInputForRender() {
-        return Arrays.asList(Ingredient.fromStacks(new ItemStack(Items.OAK_LOG)));
+        return Arrays.asList(Ingredient.fromTag(ItemTags.LOGS));
     }
 
     @Override
@@ -56,7 +57,7 @@ public class InfusedWoodRecipe extends LiquidStarlightRecipe {
         if (!CraftingConfig.CONFIG.liquidStarlightDropInfusedWood.get()) {
             return false;
         }
-        return item.getItem().equals(Blocks.OAK_LOG.asItem());
+        return item.getItem().isIn(ItemTags.LOGS);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class InfusedWoodRecipe extends LiquidStarlightRecipe {
     @Override
     public void doServerCraftTick(ItemEntity trigger, World world, BlockPos at) {
         if (getAndIncrementCraftingTick(trigger) > 10) {
-            if (consumeItemEntityInBlock(world, at, Blocks.OAK_LOG.asItem()) != null) {
+            if (consumeItemEntityInBlock(world, at, 1, (ItemStack stack) -> !stack.isEmpty() && stack.getItem().isIn(ItemTags.LOGS)) != null) {
                 ItemUtils.dropItemNaturally(world, trigger.getPosX(), trigger.getPosY(), trigger.getPosZ(), new ItemStack(BlocksAS.INFUSED_WOOD));
             }
         }
