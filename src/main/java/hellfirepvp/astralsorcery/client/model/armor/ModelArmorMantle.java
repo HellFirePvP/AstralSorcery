@@ -74,31 +74,26 @@ public class ModelArmorMantle extends CustomArmorModel {
         this.armLAnchor = new ModelRenderer(this, 0, 41);
         this.armLAnchor.mirror = true;
         this.armLAnchor.setRotationPoint(4.0F, 2.0F, 0.0F);
-        this.armLAnchor.addBox(0.0F, -1.0F, -1.0F, 2, 2, 2, s);
+        this.armLAnchor.addBox(-6F, -2.0F, -1.0F, 2, 2, 2, s);
         this.armLpauldron = new ModelRenderer(this, 0, 21);
         this.armLpauldron.mirror = true;
         this.armLpauldron.setRotationPoint(0.0F, 0.0F, -0.0F);
-        this.armLpauldron.addBox(0.55F, -3.0F, -3.0F, 5, 6, 6, s);
+        this.armLpauldron.addBox(-5.45F, -4.0F, -3.0F, 5, 6, 6, s);
         this.fitting_l = new ModelRenderer(this, 18, 12);
         this.fitting_l.setRotationPoint(0.5F, -3.0F, 0.0F);
-        this.fitting_l.addBox(0.0F, -1.0F, -1.0F, 4, 1, 2, s);
+        this.fitting_l.addBox(-6.0F, -2.0F, -1.0F, 4, 1, 2, s);
         this.setRotateAngle(fitting_l, 0.0F, 0.0F, 0.08726646259971647F);
 
         this.armRAnchor = new ModelRenderer(this, 0, 41);
         this.armRAnchor.mirror = true;
         this.armRAnchor.setRotationPoint(-4.0F, 2.0F, 0.0F);
-        this.armRAnchor.addBox(-2.0F, -1.0F, -1.0F, 2, 2, 2, s);
+        this.armRAnchor.addBox(4F, -2.0F, -1.0F, 2, 2, 2, s);
         this.armRpauldron = new ModelRenderer(this, 0, 21);
         this.armRpauldron.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.armRpauldron.addBox(-5.55F, -3.0F, -3.0F, 5, 6, 6, s);
+        this.armRpauldron.addBox(0.45F, -4.0F, -3.0F, 5, 6, 6, s);
         this.fitting_r = new ModelRenderer(this, 18, 12);
         this.fitting_r.setRotationPoint(0.0F, -3.0F, 0.0F);
-        this.fitting_r.addBox(-4.5F, -1.0F, -1.0F, 4, 1, 2, s);
-        this.setRotateAngle(fitting_r, 0.0F, 0.0F, -0.08726646259971647F);
-
-        this.fitting_r = new ModelRenderer(this, 18, 12);
-        this.fitting_r.setRotationPoint(0.0F, -3.0F, 0.0F);
-        this.fitting_r.addBox(-4.5F, -1.0F, -1.0F, 4, 1, 2, s);
+        this.fitting_r.addBox(1.5F, -2.0F, -1.0F, 4, 1, 2, s);
         this.setRotateAngle(fitting_r, 0.0F, 0.0F, -0.08726646259971647F);
 
         this.bodyReplacement = new ModelRenderer(this);
@@ -112,13 +107,11 @@ public class ModelArmorMantle extends CustomArmorModel {
         this.headReplacement.addChild(this.cowl);
 
         this.lArm = new ModelRenderer(this);
-        //this.lArm.offsetX = -0.40F; TODO UHMM....
         this.lArm.addChild(this.armLAnchor);
         this.armLAnchor.addChild(this.armLpauldron);
         this.armLpauldron.addChild(this.fitting_l);
 
         this.rArm = new ModelRenderer(this);
-        //this.rArm.offsetX = 0.40F;
         this.rArm.addChild(this.armRAnchor);
         this.armRAnchor.addChild(this.armRpauldron);
         this.armRpauldron.addChild(this.fitting_r);
