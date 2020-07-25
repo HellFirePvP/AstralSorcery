@@ -400,9 +400,11 @@ public class ScreenJournalProgressionRenderer {
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             drawStarOverlay(buf, zLevel, offsetX, offsetY, 2F);
-            drawStarOverlay(buf, zLevel, offsetX, offsetY, 1.75F);
             drawStarOverlay(buf, zLevel, offsetX, offsetY, 1.5F);
             drawStarOverlay(buf, zLevel, offsetX, offsetY, 1F);
+            drawStarOverlay(buf, zLevel, offsetX, offsetY, 0.75F);
+            drawStarOverlay(buf, zLevel, offsetX, offsetY, 0.5F);
+            drawStarOverlay(buf, zLevel, offsetX, offsetY, 0.3F);
         });
 
         Blending.DEFAULT.apply();
@@ -421,6 +423,10 @@ public class ScreenJournalProgressionRenderer {
         float v  = 0.2F + scalePosY + scaleFactor + scale;
         float uL = 0.6F * scaleFactor - (scale * 2);
         float vL = 0.6F * scaleFactor - (scale * 2);
+
+        if (vL <= 0 || uL <= 0) {
+            return;
+        }
 
         buf.pos(x, y + height, zLevel)
                 .color(0.75F, 0.75F, 0.75F, 0.7F).tex(u,  v + vL).endVertex();

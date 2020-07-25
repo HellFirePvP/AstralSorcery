@@ -54,7 +54,10 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
     public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
         this.clearFrameRectangles();
 
+        RenderSystem.depthMask(false);
         this.renderRecipeGrid(offsetX, offsetY, zLevel, TexturesAS.TEX_GUI_BOOK_GRID_TRANSMUTATION);
+        RenderSystem.depthMask(true);
+
         this.renderExpectedItemStackOutput(offsetX + 78, offsetY + 25, zLevel, 1.4F, this.recipe.getOutputDisplay());
         if (this.recipe.getRequiredConstellation() != null) {
             this.renderInfoStar(offsetX, offsetY, zLevel, pTicks);
@@ -85,7 +88,7 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
 
         MatrixStack renderStack = new MatrixStack();
         renderStack.translate(renderX + 11, renderY + 11, 0);
-        renderStack.scale(40, 40, 40);
+        renderStack.scale(40, 40, 0);
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR, buf -> {
             RenderingDrawUtils.renderLightRayFan(renderStack, (renderType) -> buf, ColorsAS.ROCK_CRYSTAL, getNodePage(), 9, 9, 20);
