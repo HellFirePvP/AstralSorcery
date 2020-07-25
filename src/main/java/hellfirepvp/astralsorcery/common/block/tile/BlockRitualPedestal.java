@@ -49,7 +49,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork implements Custom
 
     public BlockRitualPedestal() {
         super(PropertiesMarble.defaultMarble()
-                .harvestLevel(2)
+                .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE));
 
         this.shape = createShape();
@@ -134,7 +134,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork implements Custom
 
     @Override
     public int getHarvestLevel(BlockState p_getHarvestLevel_1_) {
-        return 2;
+        return 1;
     }
 
     @Nullable

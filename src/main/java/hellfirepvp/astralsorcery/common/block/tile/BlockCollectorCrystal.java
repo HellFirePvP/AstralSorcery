@@ -70,7 +70,7 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
         super(Properties.create(Material.GLASS, type.getMaterialColor())
                 .hardnessAndResistance(-1.0F, 3600000.0F)
                 .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(2)
+                .harvestLevel(1)
                 .sound(SoundType.GLASS)
                 .lightValue(11));
     }

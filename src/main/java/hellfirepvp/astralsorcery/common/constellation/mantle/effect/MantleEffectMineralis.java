@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 import hellfirepvp.astralsorcery.client.util.MiscPlayEffect;
 import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
@@ -54,10 +55,12 @@ public class MantleEffectMineralis extends MantleEffect {
 
     private void onBreak(BlockEvent.BreakEvent event) {
         PlayerEntity player = event.getPlayer();
-        LogicalSide side = player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
-        if (side.isServer()) {
-            float charge = Math.min(AlignmentChargeHandler.INSTANCE.getCurrentCharge(player, side), CONFIG.chargeCostPerBreak.get());
-            AlignmentChargeHandler.INSTANCE.drainCharge(player, side, charge, false);
+        if (ItemMantle.getEffect(player, ConstellationsAS.mineralis) != null) {
+            LogicalSide side = player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
+            if (side.isServer()) {
+                float charge = Math.min(AlignmentChargeHandler.INSTANCE.getCurrentCharge(player, side), CONFIG.chargeCostPerBreak.get());
+                AlignmentChargeHandler.INSTANCE.drainCharge(player, side, charge, false);
+            }
         }
     }
 

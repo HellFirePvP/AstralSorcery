@@ -60,7 +60,7 @@ public class BlockWell extends BlockStarlightNetwork implements CustomItemBlock 
 
     public BlockWell() {
         super(PropertiesMarble.defaultMarble()
-                .harvestLevel(2)
+                .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE));
         this.shape = createShape();
     }

@@ -47,7 +47,7 @@ public class BlockInfuser extends BlockInventory implements CustomItemBlock {
 
     public BlockInfuser() {
         super(PropertiesMarble.defaultMarble()
-                .harvestLevel(2)
+                .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE));
     }
 

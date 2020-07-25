@@ -371,7 +371,7 @@ public class Vector3 {
         return this;
     }
 
-    public Vector3 fastLowAccNormalize() {
+    public Vector3 fNormalize() {
         double lengthSq = lengthSquared();
         lengthSq = fastInvSqrt(lengthSq);
 
@@ -381,8 +381,6 @@ public class Vector3 {
         return this;
     }
 
-    //x -> about 1/sqrt(x)
-    //~50% faster than 1/Math.sqrt(x) in its ~3-4th iterations for about the same numbers.
     public static double fastInvSqrt(double x) {
         double xhalf = 0.5d * x;
         long i = Double.doubleToLongBits(x);

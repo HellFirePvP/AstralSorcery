@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.perk.node.key.KeyMantleFlight;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -62,7 +63,11 @@ public class MantleEffectVicio extends MantleEffect {
         super.tickClient(player);
 
         if (player.isElytraFlying() || (!player.isCreative() && player.abilities.isFlying)) {
-            this.playCapeSparkles(player, 0.7F);
+            if (Minecraft.getInstance().gameSettings.thirdPersonView == 1) {
+                this.playCapeSparkles(player, 0.1F);
+            } else {
+                this.playCapeSparkles(player, 0.7F);
+            }
         } else {
             this.playCapeSparkles(player, 0.15F);
         }

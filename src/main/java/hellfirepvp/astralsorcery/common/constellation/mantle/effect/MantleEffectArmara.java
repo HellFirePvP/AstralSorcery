@@ -18,9 +18,11 @@ import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -88,7 +90,9 @@ public class MantleEffectArmara extends MantleEffect {
         this.playCapeSparkles(player, 0.15F);
 
         Vector3 at = Vector3.atEntityCorner(player);
-        at.addY(player.getHeight() / 2F);
+        at.addY(player.getHeight() / 3F * 2F);
+
+        Vector3 lookVec = new Vector3(player.getLookVec()).normalize();
 
         int stacks = getCurrentImmunityStacks(player);
         if (stacks > 0) {
@@ -103,13 +107,24 @@ public class MantleEffectArmara extends MantleEffect {
                 int ticksPerCircle = 80 + sRand.nextInt(50);
                 int tick = (player.ticksExisted) % ticksPerCircle;
 
-                Vector3 pos = perpEffect.normalize().multiply(sRand.nextFloat() * 0.4F + 0.9F)
+                Vector3 anglePlayer = perpEffect.normalize()
                         .rotate(Math.toRadians(360 * ((float) (tick) / (float) (ticksPerCircle))), axis)
-                        .add(at);
+                        .normalize();
+                Vector3 pos = anglePlayer.clone().multiply(sRand.nextFloat() * 0.4F + 0.9F).add(at);
+
+                float alpha = 0.8F;
+                if (Minecraft.getInstance().gameSettings.thirdPersonView == 0) {
+                    float deg = (float) Math.toDegrees(lookVec.angle(anglePlayer));
+                    if (deg < 70F) {
+                        float tansparentDegree = 40F;
+                        alpha *= MathHelper.clamp((deg - tansparentDegree) / (80F - tansparentDegree), 0F, 1F);
+                    }
+                }
 
                 EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                         .spawn(pos)
                         .alpha(VFXAlphaFunction.FADE_OUT)
+                        .setAlphaMultiplier(alpha)
                         .color(VFXColorFunction.constant(ColorsAS.MANTLE_ARMARA_STACKS))
                         .setScaleMultiplier(scale)
                         .setMaxAge(20 + rand.nextInt(20));
@@ -117,6 +132,7 @@ public class MantleEffectArmara extends MantleEffect {
                 EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                         .spawn(pos)
                         .alpha(VFXAlphaFunction.FADE_OUT)
+                        .setAlphaMultiplier(alpha)
                         .color(VFXColorFunction.WHITE)
                         .setScaleMultiplier(scale * 0.4F)
                         .setMaxAge(10 + rand.nextInt(10));

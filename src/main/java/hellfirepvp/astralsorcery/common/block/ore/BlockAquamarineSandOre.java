@@ -24,11 +24,6 @@ import net.minecraft.world.IWorldReader;
 public class BlockAquamarineSandOre extends BlockSandTemplate {
 
     @Override
-    public int getHarvestLevel(BlockState state) {
-        return 1;
-    }
-
-    @Override
     public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
         return silktouch == 0 ? fortune * MathHelper.nextInt(RANDOM, 2, 5) : 0;
     }
