@@ -147,12 +147,12 @@ public class ScreenJournalClusterRenderer {
         rescale(progressionSizeHandler.getScalingFactor());
     }
 
-    public float getScaleMouseX() {
-        return mousePointScaled.getScaledPosX();
+    public float getMouseX() {
+        return mousePointScaled.getPosX();
     }
 
-    public float getScaleMouseY() {
-        return mousePointScaled.getScaledPosY();
+    public float getMouseY() {
+        return mousePointScaled.getPosY();
     }
 
     private void rescale(float newScale) {

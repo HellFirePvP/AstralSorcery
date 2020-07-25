@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.screen.journal.progression;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.screen.helper.ScalingPoint;
@@ -29,7 +30,6 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -264,8 +264,8 @@ public class ScreenJournalProgressionRenderer {
             drawClusterBackground(cluster.clusterBackgroundTexture, zLevel);
 
             clusterRenderer.drawClusterScreen(this.parentGui, zLevel);
-            scaleX = clusterRenderer.getScaleMouseX();
-            scaleY = clusterRenderer.getScaleMouseY();
+            scaleX = clusterRenderer.getMouseX();
+            scaleY = clusterRenderer.getMouseY();
         }
 
         if (focusedClusterMouse != null) {
@@ -310,14 +310,6 @@ public class ScreenJournalProgressionRenderer {
         return null;
     }
 
-    private Rectangle2D calcBoundingRectangle(ResearchProgression progression) {
-        JournalCluster cluster = JournalProgressionClusterMapping.getClusterMapping(progression);
-        Point.Float offset = this.sizeHandler.scalePointToGui(this.parentGui, this.mousePointScaled, new Point.Float(cluster.x, cluster.y));
-        float width  = this.sizeHandler.scaledDistanceX(cluster.x, cluster.maxX);
-        float height = this.sizeHandler.scaledDistanceY(cluster.y, cluster.maxY);
-        return new Rectangle.Float(offset.x, offset.y, width, height);
-    }
-
     private void drawClusters(float zLevel) {
         clusterRectMap.clear();
         if (sizeHandler.getScalingFactor() >= 8.01) return;
@@ -326,19 +318,6 @@ public class ScreenJournalProgressionRenderer {
         for (ResearchProgression progress : thisProgress.getResearchProgression()) {
             renderCluster(progress, JournalProgressionClusterMapping.getClusterMapping(progress), zLevel);
         }
-    }
-
-    private void drawStarParallaxLayers(float scalePosX, float scalePosY, float zLevel) {
-        TexturesAS.TEX_GUI_STARFIELD_OVERLAY.bindTexture();
-        RenderSystem.enableBlend();
-        Blending.OVERLAYDARK.apply();
-
-        //drawStarOverlay(zLevel, scalePosX, scalePosY, 1.5F);
-        //drawStarOverlay(zLevel, scalePosX, scalePosY, 2.5F);
-        //drawStarOverlay(zLevel, scalePosX, scalePosY, 3.5F);
-
-        Blending.DEFAULT.apply();
-        RenderSystem.disableBlend();
     }
 
     private void renderCluster(ResearchProgression p, JournalCluster cluster, float zLevel) {
@@ -401,7 +380,7 @@ public class ScreenJournalProgressionRenderer {
     }
 
     private void drawBackground(float zLevel) {
-        float br = 0.2F;
+        float br = 0.35F;
         TexturesAS.TEX_GUI_BACKGROUND_DEFAULT.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             buf.pos(realCoordLowerX,                   realCoordLowerY + realRenderHeight, zLevel).color(br, br, br, 1.0F).tex(0, 1).endVertex();
@@ -411,26 +390,45 @@ public class ScreenJournalProgressionRenderer {
         });
     }
 
-    //TODO.. ugh
-    private void drawStarOverlay(float zLevel, float scalePosX, float scalePosY, float scaleFactor) {
-        RenderSystem.pushMatrix();
-        RenderSystem.scaled(scaleFactor, scaleFactor, scaleFactor);
+    private void drawStarParallaxLayers(float scalePosX, float scalePosY, float zLevel) {
+        TexturesAS.TEX_GUI_STARFIELD_OVERLAY.bindTexture();
+        RenderSystem.enableBlend();
+        Blending.OVERLAYDARK.apply();
 
-        float th = sizeHandler.getTotalHeight() / sizeHandler.getScalingFactor();
-        float tw = sizeHandler.getTotalWidth()  / sizeHandler.getScalingFactor();
-
-        float lowU = (scalePosX - 1) / tw;
-        float highU = lowU + (((float) realRenderWidth) / tw);
-        float lowV = (scalePosY - 1) / th;
-        float highV = lowV + (((float) realRenderHeight) / th);
+        float offsetX = scalePosX / 2000F;
+        float offsetY = scalePosY / 1000F;
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            buf.pos(0,               realRenderHeight, zLevel).color(0.6F, 0.6F, 0.6F, 1F).tex(lowU,  highV).endVertex();
-            buf.pos(realRenderWidth, realRenderHeight, zLevel).color(0.6F, 0.6F, 0.6F, 1F).tex(highU, highV).endVertex();
-            buf.pos(realRenderWidth, 0,                zLevel).color(0.6F, 0.6F, 0.6F, 1F).tex(highU, lowV).endVertex();
-            buf.pos(0,               0,                zLevel).color(0.6F, 0.6F, 0.6F, 1F).tex(lowU, lowV).endVertex();
+            drawStarOverlay(buf, zLevel, offsetX, offsetY, 2F);
+            drawStarOverlay(buf, zLevel, offsetX, offsetY, 1.75F);
+            drawStarOverlay(buf, zLevel, offsetX, offsetY, 1.5F);
+            drawStarOverlay(buf, zLevel, offsetX, offsetY, 1F);
         });
 
-        RenderSystem.popMatrix();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableBlend();
+    }
+
+    private void drawStarOverlay(IVertexBuilder buf, float zLevel, float scalePosX, float scalePosY, float scaleFactor) {
+        float scale = this.sizeHandler.getScalingFactor() / 40F;
+
+        float x      = this.parentGui.getGuiLeft();
+        float y      = this.parentGui.getGuiTop();
+        float width  = this.parentGui.getGuiWidth();
+        float height = this.parentGui.getGuiHeight();
+
+        float u  = 0.2F + scalePosX + scaleFactor + scale;
+        float v  = 0.2F + scalePosY + scaleFactor + scale;
+        float uL = 0.6F * scaleFactor - (scale * 2);
+        float vL = 0.6F * scaleFactor - (scale * 2);
+
+        buf.pos(x, y + height, zLevel)
+                .color(0.75F, 0.75F, 0.75F, 0.7F).tex(u,  v + vL).endVertex();
+        buf.pos(x + width, y + height, zLevel)
+                .color(0.75F, 0.75F, 0.75F, 0.7F).tex(u + uL, v + vL).endVertex();
+        buf.pos(x + width, y, zLevel)
+                .color(0.75F, 0.75F, 0.75F, 0.7F).tex(u + uL, v).endVertex();
+        buf.pos(x, y, zLevel)
+                .color(0.75F, 0.75F, 0.75F, 0.7F).tex(u, v).endVertex();
     }
 }
