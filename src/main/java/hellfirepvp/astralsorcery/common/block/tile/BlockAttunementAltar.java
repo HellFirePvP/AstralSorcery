@@ -42,7 +42,7 @@ public class BlockAttunementAltar extends ContainerBlock implements CustomItemBl
     public BlockAttunementAltar() {
         super(PropertiesMarble.defaultMarble()
                 .lightValue(4)
-                .harvestLevel(2)
+                .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE));
     }
 

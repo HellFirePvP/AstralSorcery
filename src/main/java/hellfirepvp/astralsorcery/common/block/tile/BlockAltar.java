@@ -50,7 +50,7 @@ public abstract class BlockAltar extends BlockStarlightNetwork implements Custom
 
     public BlockAltar(AltarType type) {
         super(PropertiesMarble.defaultMarble()
-                .harvestLevel(2)
+                .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE));
 
         this.type = type;

@@ -31,7 +31,7 @@ public class BlockMarbleTemplate extends Block implements CustomItemBlock {
 
     @Override
     public int getHarvestLevel(BlockState state) {
-        return 2;
+        return 1;
     }
 
     @Nullable

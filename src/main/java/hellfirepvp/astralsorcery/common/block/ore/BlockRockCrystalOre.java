@@ -24,6 +24,11 @@ import net.minecraft.world.IWorldReader;
 public class BlockRockCrystalOre extends BlockRockTemplate {
 
     @Override
+    public int getHarvestLevel(BlockState state) {
+        return 2;
+    }
+
+    @Override
     public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
         return fortune * MathHelper.nextInt(RANDOM, 8, 14);
     }
