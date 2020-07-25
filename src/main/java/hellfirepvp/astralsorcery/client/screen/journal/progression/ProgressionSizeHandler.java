@@ -25,8 +25,7 @@ public class ProgressionSizeHandler extends SizeHandler {
 
     private ResearchProgression part;
 
-    public ProgressionSizeHandler(ResearchProgression part, int height, int width) {
-        super(height, width);
+    public ProgressionSizeHandler(ResearchProgression part) {
         this.part = part;
     }
 

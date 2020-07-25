@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.crafting.nojson.starlight;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
@@ -30,11 +29,11 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,7 +50,14 @@ public class MergeCrystalsRecipe extends LiquidStarlightRecipe {
 
     @Override
     public List<Ingredient> getInputForRender() {
-        return Lists.newArrayList(new CrystalIngredient(false, false));
+        return Arrays.asList(new CrystalIngredient(false, false),
+                new CrystalIngredient(false, false));
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public List<Ingredient> getOutputForRender() {
+        return Collections.singletonList(new CrystalIngredient(false, false));
     }
 
     @Override

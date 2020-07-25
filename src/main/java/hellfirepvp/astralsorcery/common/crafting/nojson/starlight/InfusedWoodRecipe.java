@@ -31,6 +31,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,7 +50,13 @@ public class InfusedWoodRecipe extends LiquidStarlightRecipe {
     @Override
     @OnlyIn(Dist.CLIENT)
     public List<Ingredient> getInputForRender() {
-        return Arrays.asList(Ingredient.fromTag(ItemTags.LOGS));
+        return Collections.singletonList(Ingredient.fromTag(ItemTags.LOGS));
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public List<Ingredient> getOutputForRender() {
+        return Collections.singletonList(Ingredient.fromItems(BlocksAS.INFUSED_WOOD));
     }
 
     @Override

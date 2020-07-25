@@ -60,13 +60,13 @@ public class ScreenJournalProgressionRenderer {
     private boolean hasPrevOffset = false;
     private Map<Rectangle, ResearchProgression> clusterRectMap = new HashMap<>();
 
-    public ScreenJournalProgressionRenderer(ScreenJournalProgression gui, int guiHeight, int guiWidth) {
+    public ScreenJournalProgressionRenderer(ScreenJournalProgression gui) {
         this.parentGui = gui;
-        this.sizeHandler = new GalaxySizeHandler(guiHeight, guiWidth);
+        this.sizeHandler = new GalaxySizeHandler();
         refreshSize();
         this.mousePointScaled = ScalingPoint.createPoint(
-                this.sizeHandler.clampX(this.sizeHandler.getMidX()),
-                this.sizeHandler.clampY(this.sizeHandler.getMidY()),
+                this.sizeHandler.clampX(this.sizeHandler.getTotalWidth() / 2F),
+                this.sizeHandler.clampY(this.sizeHandler.getTotalHeight() / 2F),
                 this.sizeHandler.getScalingFactor(),
                 false);
         this.moveMouse(this.sizeHandler.getTotalWidth() / 2, this.sizeHandler.getTotalHeight() / 2);
@@ -94,8 +94,8 @@ public class ScreenJournalProgressionRenderer {
                         sizeHandler.getScalingFactor());
             } else {
                 mousePointScaled.updateScaledPos(
-                        sizeHandler.clampX(changedX),
-                        sizeHandler.clampY(changedY),
+                        sizeHandler.clampX(mousePointScaled.getScaledPosX()),
+                        sizeHandler.clampY(mousePointScaled.getScaledPosY()),
                         sizeHandler.getScalingFactor());
             }
         }
@@ -120,7 +120,7 @@ public class ScreenJournalProgressionRenderer {
     }
 
     public void centerMouse() {
-        this.moveMouse(parentGui.getGuiLeft() + this.sizeHandler.getMidX(), parentGui.getGuiTop() + this.sizeHandler.getMidY());
+        this.moveMouse(parentGui.getGuiLeft() + this.sizeHandler.getTotalWidth() / 2F, parentGui.getGuiTop() + this.sizeHandler.getTotalHeight() / 2F);
     }
 
     public void updateMouseState() {
@@ -206,8 +206,12 @@ public class ScreenJournalProgressionRenderer {
             }
             if (scale < 6.1F) { //Floating point shenanigans
                 float vDiv = (2F - (scale - 4F)) * 10F;
-                Rectangle2D rect = calcBoundingRectangle(focusedClusterZoom);
-                Vector3 center = new Vector3(rect.getCenterX(), rect.getCenterY(), 0);
+                JournalCluster cluster = JournalProgressionClusterMapping.getClusterMapping(focusedClusterZoom);
+                float x = this.sizeHandler.evRelativePosX(cluster.x);
+                float y = this.sizeHandler.evRelativePosY(cluster.y);
+                float width  = this.sizeHandler.scaledDistanceX(cluster.x, cluster.maxX);
+                float height = this.sizeHandler.scaledDistanceY(cluster.y, cluster.maxY);
+                Vector3 center = new Vector3(x + width / 2, y + height / 2, 0);
                 Vector3 mousePos = new Vector3(mousePointScaled.getScaledPosX(), mousePointScaled.getScaledPosY(), 0);
                 Vector3 dir = center.subtract(mousePos);
                 if (vDiv > 0.05) {
@@ -231,7 +235,10 @@ public class ScreenJournalProgressionRenderer {
             }
         }
         this.sizeHandler.handleZoomIn();
-        rescale(sizeHandler.getScalingFactor());
+        this.mousePointScaled.rescale(sizeHandler.getScalingFactor());
+        if (this.previousMousePointScaled != null) {
+            this.previousMousePointScaled.rescale(sizeHandler.getScalingFactor());
+        }
     }
 
     private void rescale(float newScale) {
@@ -256,23 +263,16 @@ public class ScreenJournalProgressionRenderer {
             JournalCluster cluster = JournalProgressionClusterMapping.getClusterMapping(focusedClusterZoom);
             drawClusterBackground(cluster.clusterBackgroundTexture, zLevel);
 
-            clusterRenderer.drawClusterScreen(zLevel);
+            clusterRenderer.drawClusterScreen(this.parentGui, zLevel);
             scaleX = clusterRenderer.getScaleMouseX();
             scaleY = clusterRenderer.getScaleMouseY();
         }
 
         if (focusedClusterMouse != null) {
             JournalCluster cluster = JournalProgressionClusterMapping.getClusterMapping(focusedClusterMouse);
-            float lX = sizeHandler.evRelativePosX(cluster.x);
-            float rX = sizeHandler.evRelativePosX(cluster.maxX);
-            float lY = sizeHandler.evRelativePosY(cluster.y);
-            float rY = sizeHandler.evRelativePosY(cluster.maxY);
-            float scaledLeft = this.mousePointScaled.getScaledPosX() - sizeHandler.widthToBorder;
-            float scaledTop = this.mousePointScaled.getScaledPosY() - sizeHandler.heightToBorder;
-            float xAdd = lX - scaledLeft;
-            float yAdd = lY - scaledTop;
-            float offsetX = realCoordLowerX + xAdd;
-            float offsetY = realCoordLowerY + yAdd;
+            float width  = this.sizeHandler.scaledDistanceX(cluster.x, cluster.maxX);
+            float height = this.sizeHandler.scaledDistanceY(cluster.y, cluster.maxY);
+            Point.Float offset = this.sizeHandler.scalePointToGui(this.parentGui, this.mousePointScaled, new Point.Float(cluster.x, cluster.y));
 
             float scale = sizeHandler.getScalingFactor();
             float br = 1F;
@@ -286,7 +286,7 @@ public class ScreenJournalProgressionRenderer {
             float length = Minecraft.getInstance().fontRenderer.getStringWidth(name) * 1.4F;
 
             RenderSystem.pushMatrix();
-            RenderSystem.translated(offsetX + ((rX - lX) / 2) - length / 2D, offsetY + ((rY - lY) / 3), 0);
+            RenderSystem.translated(offset.x + (width / 2F) - length / 2D, offset.y + (height / 3F), 0);
             RenderSystem.scaled(1.4, 1.4, 1.4);
             int alpha = 0xCC;
             alpha *= br;
@@ -312,11 +312,10 @@ public class ScreenJournalProgressionRenderer {
 
     private Rectangle2D calcBoundingRectangle(ResearchProgression progression) {
         JournalCluster cluster = JournalProgressionClusterMapping.getClusterMapping(progression);
-        float lX = sizeHandler.evRelativePosX(cluster.x);
-        float rX = sizeHandler.evRelativePosX(cluster.maxX);
-        float lY = sizeHandler.evRelativePosY(cluster.y);
-        float rY = sizeHandler.evRelativePosY(cluster.maxY);
-        return new Rectangle2D.Float(lX, lY, rX - lX, rY - lY);
+        Point.Float offset = this.sizeHandler.scalePointToGui(this.parentGui, this.mousePointScaled, new Point.Float(cluster.x, cluster.y));
+        float width  = this.sizeHandler.scaledDistanceX(cluster.x, cluster.maxX);
+        float height = this.sizeHandler.scaledDistanceY(cluster.y, cluster.maxY);
+        return new Rectangle.Float(offset.x, offset.y, width, height);
     }
 
     private void drawClusters(float zLevel) {
@@ -325,12 +324,7 @@ public class ScreenJournalProgressionRenderer {
 
         PlayerProgress thisProgress = ResearchHelper.getClientProgress();
         for (ResearchProgression progress : thisProgress.getResearchProgression()) {
-            JournalCluster cluster = JournalProgressionClusterMapping.getClusterMapping(progress);
-            float lX = sizeHandler.evRelativePosX(cluster.x);
-            float rX = sizeHandler.evRelativePosX(cluster.maxX);
-            float lY = sizeHandler.evRelativePosY(cluster.y);
-            float rY = sizeHandler.evRelativePosY(cluster.maxY);
-            renderCluster(progress, cluster, lX, lY, rX, rY, zLevel);
+            renderCluster(progress, JournalProgressionClusterMapping.getClusterMapping(progress), zLevel);
         }
     }
 
@@ -339,27 +333,20 @@ public class ScreenJournalProgressionRenderer {
         RenderSystem.enableBlend();
         Blending.OVERLAYDARK.apply();
 
-        drawStarOverlay(zLevel, scalePosX, scalePosY, 1.5F);
-        drawStarOverlay(zLevel, scalePosX, scalePosY, 2.5F);
-        drawStarOverlay(zLevel, scalePosX, scalePosY, 3.5F);
+        //drawStarOverlay(zLevel, scalePosX, scalePosY, 1.5F);
+        //drawStarOverlay(zLevel, scalePosX, scalePosY, 2.5F);
+        //drawStarOverlay(zLevel, scalePosX, scalePosY, 3.5F);
 
         Blending.DEFAULT.apply();
         RenderSystem.disableBlend();
     }
 
-    private void renderCluster(ResearchProgression p, JournalCluster cluster,
-                               float lowerPosX, float lowerPosY, float higherPosX, float higherPosY, float zLevel) {
-        float scaledLeft = this.mousePointScaled.getScaledPosX() - sizeHandler.widthToBorder;
-        float scaledTop =  this.mousePointScaled.getScaledPosY() - sizeHandler.heightToBorder;
-        float xAdd = lowerPosX - scaledLeft;
-        float yAdd = lowerPosY - scaledTop;
-        float offsetX = realCoordLowerX + xAdd;
-        float offsetY = realCoordLowerY + yAdd;
+    private void renderCluster(ResearchProgression p, JournalCluster cluster, float zLevel) {
+        Point.Float offset = this.sizeHandler.scalePointToGui(this.parentGui, this.mousePointScaled, new Point.Float(cluster.x, cluster.y));
+        float width  = this.sizeHandler.scaledDistanceX(cluster.x, cluster.maxX);
+        float height = this.sizeHandler.scaledDistanceY(cluster.y, cluster.maxY);
 
-        float width =  higherPosX - lowerPosX;
-        float height = higherPosY - lowerPosY;
-
-        Rectangle r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
+        Rectangle r = new Rectangle(MathHelper.floor(offset.x), MathHelper.floor(offset.y), MathHelper.floor(width), MathHelper.floor(height));
         clusterRectMap.put(r, p);
 
         cluster.cloudTexture.bindTexture();
@@ -377,10 +364,10 @@ public class ScreenJournalProgressionRenderer {
         RenderSystem.enableBlend();
         Blending.ADDITIVEDARK.apply();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            buf.pos(offsetX + 0,     offsetY + height, zLevel).color(br, br, br, br).tex(0, 1).endVertex();
-            buf.pos(offsetX + width, offsetY + height, zLevel).color(br, br, br, br).tex(1, 1).endVertex();
-            buf.pos(offsetX + width, offsetY + 0,      zLevel).color(br, br, br, br).tex(1, 0).endVertex();
-            buf.pos(offsetX + 0,     offsetY + 0,      zLevel).color(br, br, br, br).tex(0, 0).endVertex();
+            buf.pos(offset.x + 0,     offset.y + height, zLevel).color(br, br, br, br).tex(0, 1).endVertex();
+            buf.pos(offset.x + width, offset.y + height, zLevel).color(br, br, br, br).tex(1, 1).endVertex();
+            buf.pos(offset.x + width, offset.y + 0,      zLevel).color(br, br, br, br).tex(1, 0).endVertex();
+            buf.pos(offset.x + 0,     offset.y + 0,      zLevel).color(br, br, br, br).tex(0, 0).endVertex();
         });
 
         Blending.DEFAULT.apply();
@@ -424,6 +411,7 @@ public class ScreenJournalProgressionRenderer {
         });
     }
 
+    //TODO.. ugh
     private void drawStarOverlay(float zLevel, float scalePosX, float scalePosY, float scaleFactor) {
         RenderSystem.pushMatrix();
         RenderSystem.scaled(scaleFactor, scaleFactor, scaleFactor);
@@ -431,9 +419,9 @@ public class ScreenJournalProgressionRenderer {
         float th = sizeHandler.getTotalHeight() / sizeHandler.getScalingFactor();
         float tw = sizeHandler.getTotalWidth()  / sizeHandler.getScalingFactor();
 
-        float lowU = (scalePosX - sizeHandler.widthToBorder) / tw;
+        float lowU = (scalePosX - 1) / tw;
         float highU = lowU + (((float) realRenderWidth) / tw);
-        float lowV = (scalePosY - sizeHandler.heightToBorder) / th;
+        float lowV = (scalePosY - 1) / th;
         float highV = lowV + (((float) realRenderHeight) / th);
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
@@ -445,5 +433,4 @@ public class ScreenJournalProgressionRenderer {
 
         RenderSystem.popMatrix();
     }
-
 }

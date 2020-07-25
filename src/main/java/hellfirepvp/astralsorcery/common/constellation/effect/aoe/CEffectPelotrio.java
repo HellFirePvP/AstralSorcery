@@ -138,7 +138,7 @@ public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawn
 
     private static class PelotrioConfig extends CountConfig {
 
-        private final double defaultSpawnChance = 5D;
+        private final double defaultSpawnChance = 0.05D;
         private final int defaultProximityAmount = 24;
 
         public ForgeConfigSpec.DoubleValue spawnChance;

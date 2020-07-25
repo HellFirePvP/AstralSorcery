@@ -63,7 +63,7 @@ public class StructurePlacement<DC extends StructurePlacementConfig> extends Pla
 
     protected boolean hasSafeFoundation(ChunkGenerator<?> chunkGen, BlockPos pos, int structSize) {
         int y = pos.getY();
-        int diff = structSize / 3;
+        int diff = structSize / 2;
         int offsetY = this.getHeight(chunkGen, pos, Heightmap.Type.OCEAN_FLOOR_WG);
         if (Math.abs(offsetY - y) > diff) {
             return false;

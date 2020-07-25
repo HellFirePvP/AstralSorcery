@@ -24,10 +24,6 @@ import javax.annotation.Nullable;
  */
 public class GalaxySizeHandler extends SizeHandler {
 
-    public GalaxySizeHandler(int height, int width) {
-        super(height, width);
-    }
-
     @Nullable
     @Override
     public float[] buildRequiredRectangle() {
@@ -46,6 +42,7 @@ public class GalaxySizeHandler extends SizeHandler {
             if (x > rightMost) rightMost = x;
             if (y > lowerMost) lowerMost = y;
             if (y < upperMost) upperMost = y;
+
             x = cluster.maxX;
             y = cluster.maxY;
             if (x < leftMost) leftMost = x;

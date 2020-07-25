@@ -35,10 +35,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -58,6 +55,12 @@ public class FormCelestialCrystalClusterRecipe extends LiquidStarlightRecipe {
     public List<Ingredient> getInputForRender() {
         return Arrays.asList(Ingredient.fromStacks(new ItemStack(ItemsAS.STARDUST)),
                 new CrystalIngredient(false, false));
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public List<Ingredient> getOutputForRender() {
+        return Collections.singletonList(Ingredient.fromStacks(new ItemStack(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER)));
     }
 
     @Override

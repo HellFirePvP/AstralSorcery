@@ -14,6 +14,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
 import hellfirepvp.astralsorcery.client.screen.helper.ScalingPoint;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPages;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
@@ -58,18 +59,17 @@ public class ScreenJournalClusterRenderer {
 
     public ScreenJournalClusterRenderer(ResearchProgression progression, int guiHeight, int guiWidth, int guiLeft, int guiTop) {
         this.progression = progression;
-        this.progressionSizeHandler = new ProgressionSizeHandler(progression, guiHeight, guiWidth);
+        this.progressionSizeHandler = new ProgressionSizeHandler(progression);
         this.progressionSizeHandler.setMaxScale(1.2F);
         this.progressionSizeHandler.setMinScale(0.1F);
         this.progressionSizeHandler.setScaleSpeed(0.9F / 20F);
         this.progressionSizeHandler.updateSize();
         this.progressionSizeHandler.forceScaleTo(0.1F);
 
-        this.mousePointScaled = ScalingPoint.createPoint(
-                this.progressionSizeHandler.clampX(this.progressionSizeHandler.getMidX()),
-                this.progressionSizeHandler.clampY(this.progressionSizeHandler.getMidY()),
-                this.progressionSizeHandler.getScalingFactor(),
-                false);
+        this.mousePointScaled = ScalingPoint.createPoint(0, 0, this.progressionSizeHandler.getScalingFactor(), false);
+        this.centerMouse();
+        this.applyMovedMouseOffset();
+
         this.renderOffsetX = guiLeft;
         this.renderOffsetY = guiTop;
         this.renderGuiHeight = guiHeight;
@@ -107,6 +107,11 @@ public class ScreenJournalClusterRenderer {
                 }
             }
         }
+    }
+
+    public void centerMouse() {
+        Point.Float center = this.progressionSizeHandler.getRelativeCenter();
+        this.moveMouse(center.x, center.y);
     }
 
     public void moveMouse(float changedX, float changedY) {
@@ -158,55 +163,44 @@ public class ScreenJournalClusterRenderer {
         moveMouse(0, 0);
     }
 
-    public void drawClusterScreen(float zLevel) {
+    public void drawClusterScreen(WidthHeightScreen parentGui, float zLevel) {
         clickableNodes.clear();
 
-        drawNodesAndConnections(zLevel);
+        drawNodesAndConnections(parentGui, zLevel);
     }
 
-    private void drawNodesAndConnections(float zLevel) {
+    private void drawNodesAndConnections(WidthHeightScreen parentGui, float zLevel) {
         alpha = progressionSizeHandler.getScalingFactor(); //between 0.25F and ~1F
         alpha -= 0.25F;
         alpha /= 0.75F;
         alpha = MathHelper.clamp(alpha, 0F, 1F);
 
-        double midX = renderGuiWidth  / 2F;
-        double midY = renderGuiHeight / 2F;
-
-        Map<ResearchNode, double[]> displayPositions = new HashMap<>();
+        Map<ResearchNode, Point.Float> displayPositions = new HashMap<>();
         for (ResearchNode node : progression.getResearchNodes()) {
             if (!node.canSee(ResearchHelper.getClientProgress())) {
                 continue;
             }
-            double absX = node.renderPosX;
-            double absZ = node.renderPosZ;
-            double lX = midX + (absX * (progressionSizeHandler.getZoomedWHNode() + progressionSizeHandler.getZoomedSpaceBetweenNodes()));
-            double lZ = midY + (absZ * (progressionSizeHandler.getZoomedWHNode() + progressionSizeHandler.getZoomedSpaceBetweenNodes()));
+            Point.Float from = this.progressionSizeHandler.scalePointToGui(parentGui, this.mousePointScaled, new Point.Float(node.renderPosX, node.renderPosZ));
+            for (ResearchNode target : node.getConnectionsTo()) {
+                Point.Float to = this.progressionSizeHandler.scalePointToGui(parentGui, this.mousePointScaled, new Point.Float(target.renderPosX, target.renderPosZ));
+                drawConnection(from.x, from.y, to.x, to.y, zLevel);
+            }
 
-            renderConnectionLines(node, lX, lZ, midX, midY, zLevel);
-
-            displayPositions.put(node, new double[] { lX, lZ });
+            displayPositions.put(node, from);
         }
-        for (ResearchNode node : displayPositions.keySet()) {
-            double[] pos = displayPositions.get(node);
-            renderNodeToGUI(node, pos[0], pos[1], zLevel);
-        }
+        displayPositions.forEach((node, pos) -> renderNodeToGUI(node, pos, zLevel));
     }
 
-    private void renderNodeToGUI(ResearchNode node, double lowerPosX, double lowerPosY, float zLevel) {
-        double scaledLeft = this.mousePointScaled.getScaledPosX() - progressionSizeHandler.widthToBorder;
-        double scaledTop =  this.mousePointScaled.getScaledPosY() - progressionSizeHandler.heightToBorder;
-        double xAdd = lowerPosX - scaledLeft;
-        double yAdd = lowerPosY - scaledTop;
-        double offsetX = renderOffsetX + xAdd;
-        double offsetY = renderOffsetY + yAdd;
+    private void renderNodeToGUI(ResearchNode node, Point.Float offset, float zLevel) {
+        float zoomedWH = progressionSizeHandler.getZoomedWHNode();
+        float offsetX = offset.x - zoomedWH / 2F;
+        float offsetY = offset.y - zoomedWH / 2F;
 
         node.getBackgroundTexture().resolve().bindTexture();
-        double zoomedWH = progressionSizeHandler.getZoomedWHNode();
         if (progressionSizeHandler.getScalingFactor() >= 0.7) {
             clickableNodes.put(new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(zoomedWH), MathHelper.floor(zoomedWH)), node);
         }
-        drawResearchItemBackground(zoomedWH, xAdd, yAdd, zLevel);
+        drawResearchItemBackground(zoomedWH, offsetX, offsetY, zLevel);
 
         float pxWH = progressionSizeHandler.getZoomedWHNode() / 16F;
 
@@ -271,23 +265,7 @@ public class ScreenJournalClusterRenderer {
         }
     }
 
-    private void renderConnectionLines(ResearchNode node, double lowerPosX, double lowerPosY, double midX, double midY, float zLevel) {
-        double xAdd = (lowerPosX - (this.mousePointScaled.getScaledPosX() - progressionSizeHandler.widthToBorder)) + progressionSizeHandler.getZoomedWHNode() / 2;
-        double yAdd = (lowerPosY - (this.mousePointScaled.getScaledPosY() - progressionSizeHandler.heightToBorder)) + progressionSizeHandler.getZoomedWHNode() / 2;
-        for (ResearchNode other : node.getConnectionsTo()) {
-            renderConnection(other, xAdd, yAdd, midX, midY, zLevel);
-        }
-    }
-
-    private void renderConnection(ResearchNode to, double fromX, double fromY, double midX, double midY, float zLevel) {
-        double relToX = midX + (to.renderPosX * (progressionSizeHandler.getZoomedWHNode() + progressionSizeHandler.getZoomedSpaceBetweenNodes()));
-        double relToY = midY + (to.renderPosZ * (progressionSizeHandler.getZoomedWHNode() + progressionSizeHandler.getZoomedSpaceBetweenNodes()));
-        double targetXOffset = (relToX - (this.mousePointScaled.getScaledPosX() - progressionSizeHandler.widthToBorder)) +  (progressionSizeHandler.getZoomedWHNode() / 2);
-        double targetYOffset = (relToY - (this.mousePointScaled.getScaledPosY() - progressionSizeHandler.heightToBorder)) + (progressionSizeHandler.getZoomedWHNode() / 2);
-        drawConnection(fromX, fromY, targetXOffset, targetYOffset, zLevel);
-    }
-
-    private void drawConnection(double originX, double originY, double targetX, double targetY, float zLevel) {
+    private void drawConnection(float originX, float originY, float targetX, float targetY, float zLevel) {
         RenderSystem.disableTexture();
         RenderSystem.enableBlend();
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
@@ -315,14 +293,15 @@ public class ScreenJournalClusterRenderer {
 
         RenderSystem.lineWidth(2.0F);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        RenderSystem.disableBlend();
         RenderSystem.enableTexture();
     }
 
-    private void drawLinePart(IVertexBuilder buf, double lx, double ly, double hx, double hy, double zLevel, float brightness) {
-        buf.pos(lx + renderOffsetX, ly + renderOffsetY, zLevel)
+    private void drawLinePart(IVertexBuilder buf, double lx, double ly, double hx, double hy, float zLevel, float brightness) {
+        buf.pos(lx, ly, zLevel)
                 .color(brightness * alpha, brightness * alpha, brightness * alpha, 0.4F * alpha)
                 .endVertex();
-        buf.pos(hx + renderOffsetX, hy + renderOffsetY, zLevel)
+        buf.pos(hx, hy, zLevel)
                 .color(brightness * alpha, brightness * alpha, brightness * alpha, 0.4F * alpha)
                 .endVertex();
     }
@@ -333,14 +312,16 @@ public class ScreenJournalClusterRenderer {
         return Math.max(0, res);
     }
 
-
     private void drawResearchItemBackground(double zoomedWH, double xAdd, double yAdd, float zLevel) {
+        RenderSystem.enableTexture();
+        RenderSystem.enableBlend();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            buf.pos(renderOffsetX + xAdd,            renderOffsetY + yAdd + zoomedWH, zLevel).color(alpha, alpha, alpha, alpha).tex(0, 1).endVertex();
-            buf.pos(renderOffsetX + xAdd + zoomedWH, renderOffsetY + yAdd + zoomedWH, zLevel).color(alpha, alpha, alpha, alpha).tex(1, 1).endVertex();
-            buf.pos(renderOffsetX + xAdd + zoomedWH, renderOffsetY + yAdd,            zLevel).color(alpha, alpha, alpha, alpha).tex(1, 0).endVertex();
-            buf.pos(renderOffsetX + xAdd,            renderOffsetY + yAdd,            zLevel).color(alpha, alpha, alpha, alpha).tex(0, 0).endVertex();
+            buf.pos(xAdd,            yAdd + zoomedWH, zLevel).color(alpha, alpha, alpha, alpha).tex(0, 1).endVertex();
+            buf.pos(xAdd + zoomedWH, yAdd + zoomedWH, zLevel).color(alpha, alpha, alpha, alpha).tex(1, 1).endVertex();
+            buf.pos(xAdd + zoomedWH, yAdd,            zLevel).color(alpha, alpha, alpha, alpha).tex(1, 0).endVertex();
+            buf.pos(xAdd,            yAdd,            zLevel).color(alpha, alpha, alpha, alpha).tex(0, 0).endVertex();
         });
+        RenderSystem.disableBlend();
+        RenderSystem.disableTexture();
     }
-
 }

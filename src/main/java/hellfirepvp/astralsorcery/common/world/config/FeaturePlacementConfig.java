@@ -160,15 +160,15 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         this.configMinY = cfgBuilder
                 .comment("Set this to the lowest possible Y-level this feature should be able to generate at. Should be lower than 'maxY'")
                 .translation(translationKey("miny"))
-                .defineInRange("minY", this.defaultMinY, 1, 186);
+                .defineInRange("minY", this.defaultMinY, 1, 216);
         this.configMaxY = cfgBuilder
                 .comment("Set this to the highest possible Y-level this feature should be able to generate at. Should be higher than 'minY'")
                 .translation(translationKey("maxy"))
-                .defineInRange("maxY", this.defaultMaxY, 2, 187);
+                .defineInRange("maxY", this.defaultMaxY, 2, 217);
         this.configGenerationChance = cfgBuilder
                 .comment("Set this to set the overall chance for this feature to generate. The higher, the rarer.")
                 .translation(translationKey("generationchance"))
-                .defineInRange("generationChance", this.defaultGenerationChance, 2, 200_000);
+                .defineInRange("generationChance", this.defaultGenerationChance, 1, 200_000);
         this.configGenerationAmount = cfgBuilder
                 .comment("Set the amount this feature tries to generate per chunk")
                 .translation(translationKey("generationamount"))

@@ -48,6 +48,10 @@ public class RiverbedPlacement extends Placement<ReplacingFeaturePlacementConfig
 
     @Override
     public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, ReplacingFeaturePlacementConfig configIn, BlockPos pos) {
+        if (random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
+            return Stream.empty();
+        }
+
         List<BlockPos> result = new ArrayList<>();
         for (int i = 0; i < configIn.getGenerationAmount(); i++) {
             BlockPos at = pos.add(random.nextInt(16), configIn.getRandomY(random), random.nextInt(16));
@@ -57,7 +61,7 @@ public class RiverbedPlacement extends Placement<ReplacingFeaturePlacementConfig
             }
 
             boolean foundWater = false;
-            for (int yy = 0; yy < 2; yy++) {
+            for (int yy = 0; yy < 3; yy++) {
                 BlockPos check = at.offset(Direction.UP, yy);
                 BlockState bs = worldIn.getBlockState(check);
                 Block block = bs.getBlock();
