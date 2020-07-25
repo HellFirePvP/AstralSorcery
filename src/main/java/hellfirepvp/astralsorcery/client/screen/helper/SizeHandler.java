@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.screen.helper;
 
+import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
+import net.minecraft.util.math.MathHelper;
+
 import javax.annotation.Nullable;
 import java.awt.*;
 
@@ -22,15 +25,13 @@ public abstract class SizeHandler {
 
     private static final int W_H_NODE = 18;
 
-    //Space between outermost nodes and border.
-    public final float heightToBorder;
-    public final float widthToBorder;
-
     private float widthHeightNodes = W_H_NODE;
     private float spaceBetweenNodes = W_H_NODE;
 
-    private float midX;
-    private float midY;
+    private float shiftX;
+    private float shiftY;
+    private float leftOffset;
+    private float topOffset;
 
     private float totalWidth;
     private float totalHeight;
@@ -39,11 +40,6 @@ public abstract class SizeHandler {
     private float maxScale = 10F;
     private float minScale = 1F;
     private float scaleSpeed = 0.2F;
-
-    public SizeHandler(int height, int width) {
-        this.heightToBorder = height / 2;
-        this.widthToBorder = width / 2;
-    }
 
     public void setMaxScale(float maxScale) {
         this.maxScale = maxScale;
@@ -81,34 +77,21 @@ public abstract class SizeHandler {
             lowerMost = requiredRect[3];
         }
 
-        leftMost = Math.abs(leftMost);
-        rightMost = Math.abs(rightMost);
+        shiftX = (leftMost + rightMost) / 2F;
+        shiftY = (lowerMost + upperMost) / 2F;
 
-        upperMost = Math.abs(upperMost);
-        lowerMost = Math.abs(lowerMost);
+        float width = rightMost - leftMost;
+        float height = lowerMost - upperMost;
 
-        float leftAdded  = (leftMost  * this.widthHeightNodes + leftMost  * this.spaceBetweenNodes);
-        float rightAdded = (rightMost * this.widthHeightNodes + rightMost * this.spaceBetweenNodes);
+        leftOffset = leftMost - shiftX;
+        topOffset = upperMost - shiftY;
 
-        float upperAdded = (upperMost * this.widthHeightNodes + upperMost * this.spaceBetweenNodes);
-        float lowerAdded = (lowerMost * this.widthHeightNodes + lowerMost * this.spaceBetweenNodes);
-
-        midX = widthToBorder + leftAdded;
-        totalWidth = widthToBorder + rightAdded + midX;
-        midY = heightToBorder + upperAdded;
-        totalHeight = heightToBorder + lowerAdded + midY;
+        totalWidth  = width  * widthHeightNodes + Math.max(width  - 1, 0) * spaceBetweenNodes;
+        totalHeight = height * widthHeightNodes + Math.max(height - 1, 0) * spaceBetweenNodes;
     }
 
     @Nullable
     public abstract float[] buildRequiredRectangle();
-
-    public float getMidX() {
-        return midX * scalingFactor;
-    }
-
-    public float getMidY() {
-        return midY * scalingFactor;
-    }
 
     public float getTotalWidth() {
         return totalWidth * scalingFactor;
@@ -116,6 +99,10 @@ public abstract class SizeHandler {
 
     public float getTotalHeight() {
         return totalHeight * scalingFactor;
+    }
+
+    public Point.Float getRelativeCenter() {
+        return new Point.Float(this.getTotalWidth() / 2F, this.getTotalHeight() / 2F);
     }
 
     public float getScalingFactor() {
@@ -152,36 +139,31 @@ public abstract class SizeHandler {
         this.scalingFactor = 1F;
     }
 
-    //ensures that the cursor pos never gets too close to a border. (X)
-    //scaled or not, widthToBorder and heightToBorder are defined by the real GUI size!
     public float clampX(float centerX) {
-        if ((centerX + widthToBorder) > getTotalWidth()) {
-            centerX = getTotalWidth() - widthToBorder;
-        }
-        if ((centerX - widthToBorder) < 0) {
-            centerX = widthToBorder;
-        }
-        return centerX;
+        return MathHelper.clamp(centerX, 0, this.getTotalWidth());
     }
 
-    //ensures that the cursor pos never gets too close to a border. (Y)
     public float clampY(float centerY) {
-        if ((centerY + heightToBorder) > getTotalHeight()) {
-            centerY = getTotalHeight() - heightToBorder;
-        }
-        if ((centerY - heightToBorder) < 0) {
-            centerY = heightToBorder;
-        }
-        return centerY;
+        return MathHelper.clamp(centerY, 0, this.getTotalHeight());
     }
 
     //Translates a renderPos into a gui-valid renderPosition (zoomed)
     public float evRelativePosX(float relativeX) {
-        return getMidX() + (relativeX * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
+        float shiftedX = relativeX - shiftX;
+        float leftShift = shiftedX - leftOffset;
+
+        float offsetX = leftShift * (getZoomedWHNode() + getZoomedSpaceBetweenNodes());
+        offsetX += 0.5F * getZoomedWHNode();
+        return offsetX;
     }
 
     public float evRelativePosY(float relativeY) {
-        return getMidY() + (relativeY * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
+        float shiftedY = relativeY - shiftY;
+        float topShift = shiftedY - topOffset;
+
+        float offsetY = topShift * (getZoomedWHNode() + getZoomedSpaceBetweenNodes());
+        offsetY += 0.5F * getZoomedWHNode();
+        return offsetY;
     }
 
     public Point.Float evRelativePos(Point.Float offset) {
@@ -190,5 +172,20 @@ public abstract class SizeHandler {
 
     public Point.Float evRelativePos(Point offset) {
         return new Point.Float(evRelativePosX(offset.x), evRelativePosY(offset.y));
+    }
+
+    public float scaledDistanceX(float fromX, float toX) {
+        return this.evRelativePosX(toX) - this.evRelativePosX(fromX);
+    }
+
+    public float scaledDistanceY(float fromY, float toY) {
+        return this.evRelativePosY(toY) - this.evRelativePosY(fromY);
+    }
+
+    public Point.Float scalePointToGui(WidthHeightScreen screen, ScalingPoint currentOffset, Point.Float point) {
+        Point.Float shifted = this.evRelativePos(point);
+        float fX = shifted.x - currentOffset.getScaledPosX() + screen.getGuiLeft() + screen.getGuiWidth() / 2F;
+        float fY = shifted.y - currentOffset.getScaledPosY() + screen.getGuiTop()  + screen.getGuiHeight() / 2F;
+        return new Point.Float(fX, fY);
     }
 }

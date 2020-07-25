@@ -42,25 +42,20 @@ public class RandomFlowerPlacement extends Placement<FeaturePlacementConfig> {
 
     @Override
     public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, FeaturePlacementConfig configIn, BlockPos pos) {
+        if (random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
+            return Stream.empty();
+        }
         Set<BlockPos> result = new HashSet<>();
         for (int i = 0; i < configIn.getGenerationAmount(); i++) {
-            if (random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
-                return Stream.empty();
-            }
             if (!configIn.generatesInBiome(worldIn.getBiome(pos))) {
                 return Stream.empty();
             }
 
-            BlockPos at;
-            int count = 5;
-            do {
-                count--;
-                at = pos.add(random.nextInt(16), 0, random.nextInt(16));
-                at = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, at);
-                if (configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), at, random)) {
-                    result.add(at);
-                }
-            } while (count > 0);
+            BlockPos at = pos.add(random.nextInt(16), 0, random.nextInt(16));
+            at = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, at);
+            if (configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), at, random)) {
+                result.add(at);
+            }
         }
         return result.stream();
     }

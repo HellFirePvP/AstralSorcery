@@ -51,6 +51,9 @@ public abstract class LiquidStarlightRecipe extends CustomRecipe {
     @OnlyIn(Dist.CLIENT)
     public abstract List<Ingredient> getInputForRender();
 
+    @OnlyIn(Dist.CLIENT)
+    public abstract List<Ingredient> getOutputForRender();
+
     public abstract boolean doesStartRecipe(ItemStack item);
 
     public abstract boolean matches(ItemEntity trigger, World world, BlockPos at);

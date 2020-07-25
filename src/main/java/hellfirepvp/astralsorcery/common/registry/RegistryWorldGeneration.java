@@ -61,11 +61,11 @@ public class RegistryWorldGeneration {
     public static void registerFeatureConfigurations(ServerConfig cfg) {
         WorldGenerationAS.Placement.DESERT_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig("struct_desert", 9,
                 Lists.newArrayList(BiomeDictionary.Type.SANDY), Lists.newArrayList(DimensionType.OVERWORLD),
-                20, 90, 140,
+                20, 90, 90,
                 12, 5));
         WorldGenerationAS.Placement.MOUNTAIN_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig("struct_mountain", 19,
                 Lists.newArrayList(BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.MOUNTAIN), Lists.newArrayList(DimensionType.OVERWORLD),
-                50, 160, 140,
+                50, 160, 90,
                 12, 5));
         WorldGenerationAS.Placement.SMALL_SHRINE = cfg.addConfigEntry(new StructurePlacementConfig("struct_small", 9,
                 Lists.newArrayList(BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.FOREST), Lists.newArrayList(DimensionType.OVERWORLD),
@@ -74,14 +74,14 @@ public class RegistryWorldGeneration {
 
         WorldGenerationAS.Placement.GLOW_FLOWER = cfg.addConfigEntry(new FeaturePlacementConfig("glow_flower", true, true,
                 Lists.newArrayList(BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.COLD), Lists.newArrayList(DimensionType.OVERWORLD),
-                50, 210, 40, 1));
+                50, 210, 12, 5));
         WorldGenerationAS.Placement.ROCK_CRYSTAL = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("rock_crystal", false, true,
                 Lists.newArrayList(), Lists.newArrayList(DimensionType.OVERWORLD),
-                2, 5, 55, 2,
+                2, 8, 14, 2,
                 Lists.newArrayList(Blocks.STONE.getDefaultState(), Blocks.DIORITE.getDefaultState(), Blocks.GRANITE.getDefaultState(), Blocks.ANDESITE.getDefaultState())));
         WorldGenerationAS.Placement.AQUAMARINE = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("aquamarine", false, true,
                 Lists.newArrayList(), Lists.newArrayList(DimensionType.OVERWORLD),
-                52, 67, 2, 50,
+                52, 67, 1, 50,
                 Lists.newArrayList(Blocks.SAND.getDefaultState())));
 
         WorldGenerationAS.Placement.MARBLE = new CountRangeConfig(10, 0, 0, 64);

@@ -36,6 +36,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -54,7 +55,13 @@ public class GrowCrystalSizeRecipe extends LiquidStarlightRecipe {
 
     @Override
     public List<Ingredient> getInputForRender() {
-        return Lists.newArrayList(new CrystalIngredient(false, false));
+        return Collections.singletonList(new CrystalIngredient(false, false));
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public List<Ingredient> getOutputForRender() {
+        return Collections.singletonList(new CrystalIngredient(false, false));
     }
 
     @Override

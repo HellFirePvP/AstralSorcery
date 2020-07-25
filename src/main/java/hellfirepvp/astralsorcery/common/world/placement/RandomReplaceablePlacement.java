@@ -44,6 +44,10 @@ public class RandomReplaceablePlacement extends Placement<ReplacingFeaturePlacem
         if (!configIn.generatesInBiome(worldIn.getBiome(pos))) {
             return Stream.empty();
         }
+        if (random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
+            return Stream.empty();
+        }
+
         List<BlockPos> result = new ArrayList<>();
 
         BlockPos at = pos.add(random.nextInt(16), 0, random.nextInt(16));
@@ -56,10 +60,6 @@ public class RandomReplaceablePlacement extends Placement<ReplacingFeaturePlacem
         int amt = configIn.getGenerationAmount();
         while (amt > 0) {
             amt--;
-
-            if (random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
-                continue;
-            }
 
             BlockPos offset = at.add(-1 + random.nextInt(3),
                     -1 + random.nextInt(3),

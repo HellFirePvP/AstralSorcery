@@ -80,7 +80,7 @@ public class BlockLootTableProvider extends BlockLootTables {
         this.registerLootTable(ROCK_CRYSTAL_ORE, (block) -> {
             return LootTable.builder()
                     .addLootPool(LootPool.builder()
-                            .rolls(RandomValueRange.of(3F, 6F))
+                            .rolls(RandomValueRange.of(2F, 5F))
                             .addEntry(ItemLootEntry.builder(ItemsAS.ROCK_CRYSTAL)
                                     .acceptFunction(RandomCrystalProperty.builder())
                                     .acceptFunction(ExplosionDecay.builder())

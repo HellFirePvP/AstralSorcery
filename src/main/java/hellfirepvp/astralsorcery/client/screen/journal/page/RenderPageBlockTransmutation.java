@@ -67,6 +67,7 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
 
         SpritesAS.SPR_LIGHTBEAM.bindTexture();
 
+        RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         Blending.ADDITIVE_ALPHA.apply();
 
@@ -78,6 +79,7 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
 
         Blending.DEFAULT.apply();
         RenderSystem.disableBlend();
+        RenderSystem.depthMask(true);
 
         RenderSystem.disableDepthTest();
 

@@ -124,7 +124,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private void buildTree() {
         this.guiBox = new ScreenRenderBoundingBox(10, 10, guiWidth - 10, guiHeight - 10);
 
-        this.sizeHandler = new PerkTreeSizeHandler(this.guiHeight - 40, this.guiWidth - 20);
+        this.sizeHandler = new PerkTreeSizeHandler();
         this.sizeHandler.setScaleSpeed(0.04F);
         this.sizeHandler.setMaxScale(1F);
         this.sizeHandler.setMinScale(0.1F);
@@ -342,12 +342,9 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 return;
             }
 
-            Point.Float offset = sMenuPerk.getPoint().getOffset();
-            float x = this.sizeHandler.evRelativePosX(offset.x);
-            float y = this.sizeHandler.evRelativePosY(offset.y);
-            Point.Float scaledOffset = shift2DOffset(x, y);
-            float offsetX = MathHelper.floor(scaledOffset.x);
-            float offsetY = MathHelper.floor(scaledOffset.y);
+            Point.Float offset = this.sizeHandler.scalePointToGui(this, this.mousePosition, sMenuPerk.getPoint().getOffset());
+            float offsetX = MathHelper.floor(offset.x);
+            float offsetY = MathHelper.floor(offset.y);
 
             float scale = this.sizeHandler.getScalingFactor();
             float scaledSlotSize = 18F * scale;
@@ -482,9 +479,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
                 Point.Float offsetOne = perkConnection.getA().getPoint().getOffset();
                 Point.Float offsetTwo = perkConnection.getB().getPoint().getOffset();
-                Point.Float shiftOne = this.sizeHandler.evRelativePos(offsetOne);
-                Point.Float shiftTwo = this.sizeHandler.evRelativePos(offsetTwo);
-                drawConnection(buf, status, shiftOne, shiftTwo, ClientScheduler.getClientTick() + (int) offsetOne.x + (int) offsetOne.y + (int) offsetTwo.x + (int) offsetTwo.y);
+                drawConnection(buf, status, offsetOne, offsetTwo, ClientScheduler.getClientTick() + (int) offsetOne.x + (int) offsetOne.y + (int) offsetTwo.x + (int) offsetTwo.y);
             }
         });
         RenderSystem.disableBlend();
@@ -494,10 +489,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         List<Runnable> renderDynamic = Lists.newArrayList();
         for (PerkTreePoint perkPoint : PerkTree.PERK_TREE.getPerkPoints()) {
             Point.Float offset = perkPoint.getOffset();
-            float x = this.sizeHandler.evRelativePosX(offset.x);
-            float y = this.sizeHandler.evRelativePosY(offset.y);
             Rectangle.Float perkRect = drawPerk(drawBuffer, perkPoint,
-                    x, y,
                     partialTicks, ClientScheduler.getClientTick() + (int) offset.x + (int) offset.y,
                     progress.isPerkSealed(perkPoint.getPerk()),
                     renderDynamic);
@@ -523,8 +515,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         if (count >= sealBreakSprite.getFrameCount()) {
             return false;
         }
-        Point.Float oPos = this.sizeHandler.evRelativePos(perk.getOffset());
-        Point.Float offset = shift2DOffset(oPos.x, oPos.y);
+        Point.Float offset = this.sizeHandler.scalePointToGui(this, this.mousePosition, perk.getOffset());
 
         float sealFade = 1.0F - (((float) count) + pTicks) / ((float) sealBreakSprite.getFrameCount());
         float width = 22;
@@ -564,8 +555,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         if (count >= spritePerkUnlock.getFrameCount()) {
             return false;
         }
-        Point.Float oPos = this.sizeHandler.evRelativePos(perk.getOffset());
-        Point.Float offset = shift2DOffset(oPos.x, oPos.y);
+        Point.Float offset = this.sizeHandler.scalePointToGui(this, this.mousePosition, perk.getOffset());
 
         float width = 22;
         Rectangle.Float rct;
@@ -592,9 +582,9 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
     @Nullable
     private Rectangle.Float drawPerk(BatchPerkContext ctx, PerkTreePoint perkPoint,
-                                      float minX, float minY, float pTicks, long effectTick, boolean renderSeal,
+                                      float pTicks, long effectTick, boolean renderSeal,
                                       Collection<Runnable> outRenderDynamic) {
-        Point.Float offset = shift2DOffset(minX, minY);
+        Point.Float offset = this.sizeHandler.scalePointToGui(this, this.mousePosition, perkPoint.getOffset());
 
         float scale = this.sizeHandler.getScalingFactor();
         AllocationStatus status = perkPoint.getPerk().getPerkStatus(Minecraft.getInstance().player, LogicalSide.CLIENT);
@@ -686,8 +676,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     }
 
     private void drawConnection(BufferBuilder vb, AllocationStatus status, Point.Float offset, Point.Float target, long effectTick) {
-        Point.Float offsetSrc = shift2DOffset(offset.x, offset.y);
-        Point.Float offsetDst = shift2DOffset(target.x, target.y);
+        Point.Float offsetSrc = this.sizeHandler.scalePointToGui(this, this.mousePosition, offset);
+        Point.Float offsetDst = this.sizeHandler.scalePointToGui(this, this.mousePosition, target);
         Color overlay = Color.WHITE;
         switch (status) {
             case UNALLOCATED:
@@ -731,16 +721,6 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     .tex(u, v)
                     .endVertex();
         }
-    }
-
-    private Point.Float shift2DOffset(float x, float y) {
-        float scaledLeft = this.mousePosition.getScaledPosX() - sizeHandler.widthToBorder;
-        float scaledTop =  this.mousePosition.getScaledPosY() - sizeHandler.heightToBorder;
-        float xAdd = x - scaledLeft;
-        float yAdd = y - scaledTop;
-        float offsetX = guiOffsetX + xAdd;
-        float offsetY = guiOffsetY + yAdd;
-        return new Point.Float(offsetX, offsetY);
     }
 
     @Override

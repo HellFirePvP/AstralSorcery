@@ -95,8 +95,8 @@ public class FluidIngredient extends Ingredient {
             return false;
         }
 
-        FluidStack contained = FluidUtil.getFluidContained(input).orElse(null);
-        if (contained == null || contained.getFluid() == null || contained.getAmount() <= 0) {
+        FluidStack contained = FluidUtil.getFluidContained(input).orElse(FluidStack.EMPTY);
+        if (contained.isEmpty() || contained.getFluid() == null || contained.getAmount() <= 0) {
             return false;
         }
 

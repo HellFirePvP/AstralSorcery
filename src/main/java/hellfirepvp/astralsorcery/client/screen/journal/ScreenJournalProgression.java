@@ -115,7 +115,7 @@ public class ScreenJournalProgression extends ScreenJournal {
 
         if (currentInstance == null || progressionRenderer == null) {
             currentInstance = this;
-            progressionRenderer = new ScreenJournalProgressionRenderer(currentInstance, guiHeight - 10, guiWidth - 10);
+            progressionRenderer = new ScreenJournalProgressionRenderer(currentInstance);
             progressionRenderer.centerMouse();
         }
 

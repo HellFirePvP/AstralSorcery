@@ -24,8 +24,7 @@ import java.awt.*;
  */
 public class PerkTreeSizeHandler extends SizeHandler {
 
-    public PerkTreeSizeHandler(int height, int width) {
-        super(height, width);
+    public PerkTreeSizeHandler() {
         setWidthHeightNodes(10F);
         setSpaceBetweenNodes(10F);
     }
@@ -49,31 +48,4 @@ public class PerkTreeSizeHandler extends SizeHandler {
         }
         return new float[] { leftMost, rightMost, upperMost, lowerMost };
     }
-
-    // --------------------------------------
-    //  Temporary fix to scaling position issues :P
-    // --------------------------------------
-
-    @Override
-    public float clampX(float centerX) {
-        if ((centerX + widthToBorder) > getTotalWidth()) {
-            centerX = getTotalWidth() - widthToBorder;
-        }
-        if ((centerX - widthToBorder) < 0) {
-            centerX = Math.min(widthToBorder, getMidX());
-        }
-        return centerX;
-    }
-
-    @Override
-    public float clampY(float centerY) {
-        if ((centerY + heightToBorder) > getTotalHeight()) {
-            centerY = getTotalHeight() - heightToBorder;
-        }
-        if ((centerY - heightToBorder) < 0) {
-            centerY = Math.min(heightToBorder, getMidY());
-        }
-        return centerY;
-    }
-
 }
