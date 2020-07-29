@@ -1,41 +1,33 @@
 {
-	"Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
-	"parent": "block/block",
-	"textures": {
-		"texture": "astralsorcery:block/wood_column_top",
-		"texture1": "astralsorcery:block/wood_column_inner",
-		"texture2": "astralsorcery:block/wood_column_bottom",
-		"texture3": "astralsorcery:block/wood_column",
-		"texture4": "astralsorcery:block/wood_column_updown",
-		"texture5": "astralsorcery:block/wood_engraved",
-		"particle": "astralsorcery:block/wood_raw"
-	},
-	"elements": [
-		{
-			"comment": "column_b",
-			"from": [ 4, 2, 4 ],
-			"to": [ 12, 16, 12 ],
-			"faces": {
-				"down": { "uv": [ 4, 4, 12, 12 ], "texture": "#texture1" },
-				"up": { "uv": [ 4, 4, 12, 12 ], "texture": "#texture1" },
-				"north": { "uv": [ 4, 0, 12, 14 ], "texture": "#texture2" },
-				"south": { "uv": [ 4, 0, 12, 14 ], "texture": "#texture2" },
-				"west": { "uv": [ 4, 0, 12, 14 ], "texture": "#texture2" },
-				"east": { "uv": [ 4, 0, 12, 14 ], "texture": "#texture2" }
-			}
-		},	 
-		{
-			"comment": "bottom",
-			"from": [ 2, 0, 2 ],
-			"to": [ 14, 2, 14 ],
-			"faces": {
-				"down": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture4" },
-				"up": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture5" },
-				"north": { "uv": [ 2, 14, 14, 16 ], "texture": "#texture2" },
-				"south": { "uv": [ 2, 14, 14, 16 ], "texture": "#texture2" },
-				"west": { "uv": [ 2, 14, 14, 16 ], "texture": "#texture2" },
-				"east": { "uv": [ 2, 14, 14, 16 ], "texture": "#texture2" }
-			}
-		}
-	]
+  "textures": {
+    "particle": "astralsorcery:block/wood_column_bottom",
+    "side": "astralsorcery:block/wood_column_bottom",
+    "end": "astralsorcery:block/wood_column_inner",
+    "bottom": "astralsorcery:block/wood_column_updown"
+  },
+  "elements": [
+    {
+      "from": [ 4, 2, 4 ],
+      "to": [ 12, 16, 12 ],
+      "faces": {
+        "up": { "texture": "#end", "cullface": "up" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [ 2, 0, 2 ],
+      "to": [ 14, 2, 14 ],
+      "faces": {
+        "down": { "texture": "#bottom", "cullface": "down" },
+        "up": { "texture": "#end" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    }
+  ]
 }

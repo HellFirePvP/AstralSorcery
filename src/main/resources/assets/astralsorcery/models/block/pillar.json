@@ -1,14 +1,12 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": "astralsorcery:block/wood_column",
-    "end": "astralsorcery:block/wood_column_inner",
-    "side": "astralsorcery:block/wood_column"
+    "particle": "#side"
   },
   "elements": [
     {
-      "from": [ 4, 0, 4 ],
-      "to": [ 12, 16, 12 ],
+      "from": [ 2, 0, 2 ],
+      "to": [ 14, 16, 14 ],
       "faces": {
         "down": { "texture": "#end", "cullface": "down" },
         "up": { "texture": "#end", "cullface": "up" },
