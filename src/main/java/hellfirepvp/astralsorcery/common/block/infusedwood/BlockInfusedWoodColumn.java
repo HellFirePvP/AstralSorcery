@@ -59,7 +59,7 @@ public class BlockInfusedWoodColumn extends BlockInfusedWoodTemplate implements 
 
     protected VoxelShape createPillarTopShape() {
         VoxelShape column = Block.makeCuboidShape(4, 0, 4, 12, 14, 12);
-        VoxelShape top = Block.makeCuboidShape(2, 12, 2, 14, 16, 14);
+        VoxelShape top = Block.makeCuboidShape(2, 14, 2, 14, 16, 14);
 
         return VoxelUtils.combineAll(IBooleanFunction.OR,
                 column, top);
