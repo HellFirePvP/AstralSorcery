@@ -31,6 +31,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -97,6 +98,7 @@ public class ItemJournal extends Item {
                 out.add(c);
             }
         }
+        out.sort(Comparator.comparing(IConstellation::getSimpleName));
         return out;
     }
 

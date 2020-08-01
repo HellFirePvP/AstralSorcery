@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
@@ -47,8 +48,12 @@ public class CapeEffectVicio extends CapeArmorEffect {
     @SideOnly(Side.CLIENT)
     public void playActiveParticleTick(EntityPlayer pl) {
         if(pl.isElytraFlying() || (!pl.isCreative() && pl.capabilities.isFlying)) {
-            playVicioElytraSparkles(pl, 1F);
-            playVicioElytraSparkles(pl, 0.8F);
+            if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 1) {
+                playConstellationCapeSparkles(pl, 0.15F);
+            } else {
+                playVicioElytraSparkles(pl, 1F);
+                playVicioElytraSparkles(pl, 0.8F);
+            }
         } else {
             playConstellationCapeSparkles(pl, 0.15F);
         }

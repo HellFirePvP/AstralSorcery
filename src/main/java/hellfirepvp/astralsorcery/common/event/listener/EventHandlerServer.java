@@ -336,7 +336,7 @@ public class EventHandlerServer {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onHarvest(BlockEvent.HarvestDropsEvent event) {
         if(event.getHarvester() != null && !event.isSilkTouching()) {
             ItemStack main = event.getHarvester().getHeldItemMainhand();

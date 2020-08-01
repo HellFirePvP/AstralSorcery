@@ -311,7 +311,7 @@ public class EventHandlerEntity {
     public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
         if (event.getResult() == Event.Result.DENY) return; //Already denied anyway.
         if (event.getWorld().isRemote) return;
-        if (event.getSpawner() != null) return; //FINE, i'll allow spawners.
+        if (event.isSpawner()) return; //FINE, i'll allow spawners.
 
         EntityLivingBase toTest = event.getEntityLiving();
         if (spawnSkipId != -1 && toTest.getEntityId() == spawnSkipId) {

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
@@ -22,22 +23,28 @@ import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -55,10 +62,15 @@ public class CEffectMineralis extends CEffectPositionList {
     public static int searchRange = 8;
     public static int maxCount = 2;
 
+    private static List<IBlockState> replaceableStates = null;
+    private static List<String> replaceableStatesSerialized = new ArrayList<>();
+
     public CEffectMineralis(@Nullable ILocatable origin) {
         super(origin, Constellations.mineralis, "mineralis", maxCount, (world, pos) -> {
-            IBlockState state = world.getBlockState(pos);
-            return state.getBlock() == Blocks.STONE && state.getValue(BlockStone.VARIANT).equals(BlockStone.EnumType.STONE);
+            if (replaceableStates == null) {
+                resolveReplaceableStates();
+            }
+            return MiscUtils.getMatchingState(replaceableStates, world.getBlockState(pos)) != null;
         });
     }
 
@@ -159,6 +171,38 @@ public class CEffectMineralis extends CEffectPositionList {
         maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), maxCount, 1, 4000, "Defines the amount of block-positions the ritual can cache at max count");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
+        String[] applicableReplacements = cfg.getStringList("ReplacementStates", getConfigurationSection(), new String[] {
+                "minecraft:stone:0"
+        }, "Defines the blockstates that may be replaced by generated ore from the ritual. format: <modid>:<name>:<meta> - Use meta -1 for wildcard");
+        replaceableStatesSerialized = Arrays.asList(applicableReplacements);
     }
 
+    private static void resolveReplaceableStates() {
+        replaceableStates = new LinkedList<>();
+        for (String stateStr : replaceableStatesSerialized) {
+            String[] spl = stateStr.split(":");
+            if(spl.length != 3) {
+                AstralSorcery.log.info("Skipping invalid replacement state: " + stateStr);
+                continue;
+            }
+            String strMeta = spl[2];
+            Integer meta;
+            try {
+                meta = Integer.parseInt(strMeta);
+            } catch (NumberFormatException exc) {
+                AstralSorcery.log.error("Skipping invalid replacement state: " + stateStr + " - Its 'meta' is not a number!");
+                continue;
+            }
+            Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(spl[0], spl[1]));
+            if(b == null || b == Blocks.AIR) {
+                AstralSorcery.log.error("Skipping invalid replacement state: " + stateStr + " - The block does not exist!");
+                continue;
+            }
+            if(meta == -1) {
+                replaceableStates.addAll(b.getBlockState().getValidStates());
+            } else {
+                replaceableStates.add(b.getStateFromMeta(meta));
+            }
+        }
+    }
 }

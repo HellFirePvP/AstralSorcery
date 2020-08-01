@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
@@ -64,6 +65,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -181,19 +183,21 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                     if(!(activeEntity instanceof EntityPlayer) || activeEntity.isDead || Vector3.atEntityCorner(activeEntity).distance(new Vector3(this)) > 4) {
                         setAttunementState(0, null);
                     } else {
-                        if(playerAttunementWaitTick > 0) {
-                            playerAttunementWaitTick--;
-                        }
-                        if(playerAttunementWaitTick == 0) {
-                            setAttunementState(0, null);
-                            playerAttunementWaitTick = -1;
-                        } else {
-                            this.serverSyncAttTick++;
-                            if(EventHandlerEntity.invulnerabilityCooldown.contains((EntityPlayer) activeEntity)) {
-                                EventHandlerEntity.invulnerabilityCooldown.setTimeout(10, (EntityPlayer) activeEntity);
-                            } else {
-                                EventHandlerEntity.invulnerabilityCooldown.add(10, (EntityPlayer) activeEntity);
+                        if (ConfigEntryAttunementAltar.doAttunementTimeout) {
+                            if (playerAttunementWaitTick > 0) {
+                                playerAttunementWaitTick--;
                             }
+                            if(playerAttunementWaitTick == 0) {
+                                setAttunementState(0, null);
+                                return;
+                            }
+                        }
+
+                        this.serverSyncAttTick++;
+                        if(EventHandlerEntity.invulnerabilityCooldown.contains((EntityPlayer) activeEntity)) {
+                            EventHandlerEntity.invulnerabilityCooldown.setTimeout(10, (EntityPlayer) activeEntity);
+                        } else {
+                            EventHandlerEntity.invulnerabilityCooldown.add(10, (EntityPlayer) activeEntity);
                         }
                         markForUpdate();
                     }
@@ -1058,4 +1062,20 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     }*/
 
+
+    public static class ConfigEntryAttunementAltar extends ConfigEntry {
+
+        public static final ConfigEntryAttunementAltar instance = new ConfigEntryAttunementAltar();
+
+        private static boolean doAttunementTimeout = true;
+
+        private ConfigEntryAttunementAltar() {
+            super(Section.MACHINERY, "attunement-altar");
+        }
+
+        @Override
+        public void loadFromConfig(Configuration cfg) {
+            doAttunementTimeout = cfg.getBoolean("doAttunementTimeout", getConfigurationSection(), doAttunementTimeout, "Set this to 'false' to disable the timeout waiting for a player to attune. This can solve issues with players having high latency or a bad ingame performance.");
+        }
+    }
 }

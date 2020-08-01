@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -69,6 +70,9 @@ public abstract class CapeArmorEffect extends ConfigEntry {
 
     @SideOnly(Side.CLIENT)
     protected void playConstellationCapeSparkles(EntityPlayer pl, float strength) {
+        if (pl == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+            strength *= 0.1F;
+        }
         if(rand.nextFloat() < strength) {
             Color c = getAssociatedConstellation().getConstellationColor();
             if(c != null) {

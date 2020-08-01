@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
 apply plugin: "java"
 
-version = "1.12.2-1.10.24"
+version = "1.12.2-1.10.25"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 String build_version = ""
@@ -99,7 +99,7 @@ dependencies {
 
     deobfCompile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
 
-    deobfCompile "net.darkhax.bookshelf:Bookshelf-1.12.2:2.2.458"
+    deobfCompile "net.darkhax.bookshelf:Bookshelf-1.12.2:2.3.543"
 
 }
 
