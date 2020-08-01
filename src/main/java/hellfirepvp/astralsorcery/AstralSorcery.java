@@ -33,7 +33,7 @@ public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";
     public static final String NAME = "Astral Sorcery";
-    public static final String VERSION = "1.12.1";
+    public static final String VERSION = "1.12.2";
 
     public static Logger log = LogManager.getLogger(NAME);
 
