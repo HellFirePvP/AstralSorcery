@@ -174,7 +174,7 @@
 // - (int) craftTickTime,
 // - Inputs-Array (*has* to be 13 elements)
 // Example:
-// mods.astralsorcery.Altar.addAttunmentAltarRecipe("mypackname:shaped/internal/altar/iguessmarble", <minecraft:dirt>, 500, 300, [
+// mods.astralsorcery.Altar.addAttunementAltarRecipe("mypackname:shaped/internal/altar/iguessmarble", <minecraft:dirt>, 500, 300, [
 // null, null, null,
 // <ore:treeLeaves>, <astralsorcery:blockmarble:2>, <ore:treeLeaves>,
 // null, <liquid:astralsorcery.liquidstarlight>, null,
