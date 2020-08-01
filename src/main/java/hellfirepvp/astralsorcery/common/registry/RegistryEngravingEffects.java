@@ -39,11 +39,12 @@ public class RegistryEngravingEffects {
                 .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_HEALTH, ModifierType.ADDITION, 1F, 3F)
                         .addApplicableType(EnchantmentType.WEARABLE)
                         .formatResultAsInteger())
-                .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_ATTACK_LIFE_LEECH, ModifierType.ADDED_MULTIPLY, 0.04F, 0.08F)
+                .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_ATTACK_LIFE_LEECH, ModifierType.ADDITION, 2F, 4F)
                         .addApplicableType(EnchantmentType.WEAPON)
                         .addApplicableType(EnchantmentType.BOW)
                         .addApplicableType(EnchantmentType.CROSSBOW)
-                        .addApplicableType(EnchantmentType.TRIDENT));
+                        .addApplicableType(EnchantmentType.TRIDENT)
+                        .formatResultAsInteger());
         ARMARA = newEffect(ConstellationsAS.armara)
                 .addEffect(new EngravingEffect.PotionEffect(() -> Effects.RESISTANCE, 0, 0))
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.PROTECTION, 2, 5))
@@ -211,6 +212,7 @@ public class RegistryEngravingEffects {
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.BANE_OF_ARTHROPODS, 4, 7).setIgnoreCompatibility())
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.SHARPNESS, 3, 4).setIgnoreCompatibility())
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.POWER, 3, 4).setIgnoreCompatibility())
+                .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.CHANNELING, 3, 4).setIgnoreCompatibility())
                 .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_MOVESPEED, ModifierType.ADDED_MULTIPLY, 0.05F, 0.1F)
                         .addApplicableType(EnchantmentType.WEARABLE));
     }

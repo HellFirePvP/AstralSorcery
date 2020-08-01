@@ -87,7 +87,7 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
         RenderSystem.disableDepthTest();
 
         MatrixStack renderStack = new MatrixStack();
-        renderStack.translate(renderX + 11, renderY + 11, 0);
+        renderStack.translate(renderX + 11, renderY + 11, zLevel);
         renderStack.scale(40, 40, 0);
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR, buf -> {

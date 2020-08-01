@@ -28,7 +28,7 @@ public class PerkLevelManager {
 
     private Map<Integer, Long> totalExpLevelRequired = new HashMap<>();
     private int lastKnownLevelCap = -1;
-    private int levelCap = 30;
+    private int levelCap = 40;
 
     private PerkLevelManager() {}
 
@@ -45,7 +45,7 @@ public class PerkLevelManager {
             
             for (int i = 1; i <= this.levelCap; i++) {
                 long prev = this.totalExpLevelRequired.getOrDefault(i - 1, 0L);
-                this.totalExpLevelRequired.put(i, prev + 150L + (MathHelper.lfloor(Math.pow(2, (i / 2) + 3))));
+                this.totalExpLevelRequired.put(i, prev + 150L + 100L * MathHelper.floor(Math.pow(1.2F, i)));
             }
         }
     }

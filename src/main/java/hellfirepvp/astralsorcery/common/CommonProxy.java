@@ -107,7 +107,8 @@ public class CommonProxy {
             .setDamageBypassesArmor();
     public static DamageSource DAMAGE_SOURCE_STELLAR = DamageSourceUtil.newType("astralsorcery.stellar")
             .setDamageBypassesArmor().setMagicDamage();
-    public static DamageSource DAMAGE_SOURCE_REFLECT = DamageSourceUtil.newType("thorns");
+    public static DamageSource DAMAGE_SOURCE_REFLECT = DamageSourceUtil.newType("thorns")
+            .setDamageBypassesArmor().setDamageIsAbsolute();
 
     public static final ItemGroup ITEM_GROUP_AS = new ItemGroup(AstralSorcery.MODID) {
         @Override

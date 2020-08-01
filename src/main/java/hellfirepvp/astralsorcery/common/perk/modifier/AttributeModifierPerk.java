@@ -46,14 +46,14 @@ public class AttributeModifierPerk extends AttributeConverterPerk implements Att
     }
 
     @Nonnull
-    public <T extends PerkAttributeModifier> T addModifier(float modifier, ModifierType mode, PerkAttributeType type) {
-        return (T) this.addModifier(type.createModifier(modifier, mode));
+    public <V extends AttributeModifierPerk> V addModifier(float modifier, ModifierType mode, PerkAttributeType type) {
+        return (V) this.addModifier(type.createModifier(modifier, mode));
     }
 
     @Nonnull
-    protected <T extends PerkAttributeModifier> T addModifier(T modifier) {
+    protected <T extends PerkAttributeModifier, V extends AttributeModifierPerk> V addModifier(T modifier) {
         typeModifierList.add(modifier);
-        return modifier;
+        return (V) this;
     }
 
     @Override

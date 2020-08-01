@@ -37,6 +37,7 @@ public class RegistryPerkAttributeReaders {
         register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR_TOUGHNESS, SharedMonsterAttributes.ARMOR_TOUGHNESS));
         register(new ReaderVanillaAttribute(ATTR_TYPE_ATTACK_SPEED, SharedMonsterAttributes.ATTACK_SPEED).formatAsDecimal());
         register(new ReaderVanillaAttribute(ATTR_TYPE_REACH, PlayerEntity.REACH_DISTANCE).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_LUCK, SharedMonsterAttributes.LUCK).formatAsDecimal());
         register(new ReaderFlatAttribute(ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM, 1000F)).formatAsDecimal();
         register(new ReaderFlatAttribute(ATTR_TYPE_MINING_SIZE, 0F));
 
@@ -54,6 +55,7 @@ public class RegistryPerkAttributeReaders {
         registerDefaultReader(ATTR_TYPE_INC_CRIT_CHANCE);
         registerDefaultReader(ATTR_TYPE_ATTACK_LIFE_LEECH);
         registerDefaultReader(ATTR_TYPE_INC_THORNS);
+        registerDefaultReader(ATTR_TYPE_COOLDOWN_REDUCTION);
 
         register(new ReaderBreakSpeed(ATTR_TYPE_INC_HARVEST_SPEED));
     }

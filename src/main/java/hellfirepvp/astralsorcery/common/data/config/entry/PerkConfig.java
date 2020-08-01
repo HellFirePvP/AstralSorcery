@@ -33,7 +33,7 @@ public class PerkConfig extends ConfigEntry {
         perkLevelCap = cfgBuilder
                 .comment("Sets the max level for the perk tree levels.")
                 .translation(translationKey("perkLevelCap"))
-                .defineInRange("perkLevelCap", 30, 10, 100);
+                .defineInRange("perkLevelCap", 40, 10, 100);
     }
 
 }

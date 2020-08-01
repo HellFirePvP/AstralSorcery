@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -48,18 +49,14 @@ public class KeyTreeConnector extends MajorPerk {
 
         boolean hasAllAdjacent = true;
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {
-            if (!progress.hasPerkEffect(otherPerks)) {
+            if (!progress.hasPerkUnlocked(otherPerks)) {
                 hasAllAdjacent = false;
                 break;
             }
         }
         if (!hasAllAdjacent) {
-            for (KeyTreeConnector conn : connectorCache) {
-                if (progress.hasPerkEffect(conn)) {
-                    return true;
-                }
-            }
-            return false;
+            connectorCache.removeIf(perk -> PerkTree.PERK_TREE.getConnector(perk) == null);
+            return connectorCache.stream().anyMatch(progress::hasPerkUnlocked);
         } else {
             return true;
         }

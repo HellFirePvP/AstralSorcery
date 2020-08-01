@@ -39,17 +39,7 @@ public class KeyAlcara extends ConstellationPerk {
             @Override
             public PerkAttributeModifier convertModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
                 if (modifier.getAttributeType().equals(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP)) {
-                    switch (modifier.getMode()) {
-                        case ADDITION:
-                        case ADDED_MULTIPLY:
-                            return modifier.convertModifier(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, modifier.getMode(), modifier.getValue(player, progress) * 0.5F);
-                        case STACKING_MULTIPLY:
-                            float val = modifier.getValue(player, progress) - 1;
-                            val *= 0.5F;
-                            return modifier.convertModifier(PerkAttributeTypesAS. ATTR_TYPE_INC_PERK_EFFECT, modifier.getMode(), val + 1F);
-                        default:
-                            break;
-                    }
+                    return modifier.convertModifier(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, modifier.getMode(), modifier.getValue(player, progress));
                 }
                 return modifier;
             }

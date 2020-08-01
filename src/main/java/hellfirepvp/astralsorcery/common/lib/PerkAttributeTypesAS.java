@@ -34,6 +34,7 @@ public class PerkAttributeTypesAS {
     public static final ResourceLocation KEY_ATTR_TYPE_ARMOR_TOUGHNESS =               key("armortoughness");
     public static final ResourceLocation KEY_ATTR_TYPE_ATTACK_SPEED =                  key("attackspeed");
     public static final ResourceLocation KEY_ATTR_TYPE_REACH =                         key("reach");
+    public static final ResourceLocation KEY_ATTR_TYPE_LUCK =                          key("luck");
 
     public static final ResourceLocation KEY_ATTR_TYPE_LIFE_RECOVERY =                 key("liferecovery");
     public static final ResourceLocation KEY_ATTR_TYPE_POTION_DURATION =               key("potionduration");
@@ -41,9 +42,6 @@ public class PerkAttributeTypesAS {
     public static final ResourceLocation KEY_ATTR_TYPE_BLEED_STACKS =                  key("bleedamount");
     public static final ResourceLocation KEY_ATTR_TYPE_BLEED_CHANCE =                  key("bleedchance");
     public static final ResourceLocation KEY_ATTR_TYPE_RAMPAGE_DURATION =              key("rampageduration");
-    public static final ResourceLocation KEY_ATTR_TYPE_MINING_CHAIN_CHANCE =           key("chainchance");
-    public static final ResourceLocation KEY_ATTR_TYPE_MINING_CHAIN_LENGTH =           key("chainlength");
-    public static final ResourceLocation KEY_ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN =  key("chainchancing");
     public static final ResourceLocation KEY_ATTR_TYPE_ATTACK_LIFE_LEECH =             key("lifeleech");
     public static final ResourceLocation KEY_ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION = key("chargeregeneration");
     public static final ResourceLocation KEY_ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM      = key("chargecap");
@@ -59,6 +57,7 @@ public class PerkAttributeTypesAS {
     public static final ResourceLocation KEY_ATTR_TYPE_INC_THORNS =                    key("thorns");
     public static final ResourceLocation KEY_ATTR_TYPE_INC_THORNS_RANGED =             key("rangedthorns");
     public static final ResourceLocation KEY_ATTR_TYPE_INC_ENCH_EFFECT =               key("dynenchantmenteffect");
+    public static final ResourceLocation KEY_ATTR_TYPE_COOLDOWN_REDUCTION =            key("cooldown_reduction");
 
     public static PerkAttributeType ATTR_TYPE_MELEE_DAMAGE;
     public static PerkAttributeType ATTR_TYPE_PROJ_DAMAGE;
@@ -70,6 +69,7 @@ public class PerkAttributeTypesAS {
     public static PerkAttributeType ATTR_TYPE_ARMOR_TOUGHNESS;
     public static PerkAttributeType ATTR_TYPE_ATTACK_SPEED;
     public static PerkAttributeType ATTR_TYPE_REACH;
+    public static PerkAttributeType ATTR_TYPE_LUCK;
 
     public static PerkAttributeType ATTR_TYPE_LIFE_RECOVERY;
     public static PerkAttributeType ATTR_TYPE_POTION_DURATION;
@@ -77,9 +77,6 @@ public class PerkAttributeTypesAS {
     public static PerkAttributeType ATTR_TYPE_BLEED_STACKS;
     public static PerkAttributeType ATTR_TYPE_BLEED_CHANCE;
     public static PerkAttributeType ATTR_TYPE_RAMPAGE_DURATION;
-    public static PerkAttributeType ATTR_TYPE_MINING_CHAIN_CHANCE;
-    public static PerkAttributeType ATTR_TYPE_MINING_CHAIN_LENGTH;
-    public static PerkAttributeType ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN;
     public static PerkAttributeType ATTR_TYPE_ATTACK_LIFE_LEECH;
     public static PerkAttributeType ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION;
     public static PerkAttributeType ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM;
@@ -95,5 +92,6 @@ public class PerkAttributeTypesAS {
     public static PerkAttributeType ATTR_TYPE_INC_THORNS;
     public static PerkAttributeType ATTR_TYPE_INC_THORNS_RANGED;
     public static PerkAttributeType ATTR_TYPE_INC_ENCH_EFFECT;
+    public static PerkAttributeType ATTR_TYPE_COOLDOWN_REDUCTION;
 
 }

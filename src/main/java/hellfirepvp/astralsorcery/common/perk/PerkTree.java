@@ -38,7 +38,7 @@ import java.util.function.Predicate;
  */
 public class PerkTree {
 
-    public static final int PERK_TREE_VERSION = 3;
+    public static final int PERK_TREE_VERSION = 4;
     public static final PerkTree PERK_TREE = new PerkTree();
 
     private List<PerkTreePoint<?>> treePoints = new LinkedList<>();
@@ -71,6 +71,15 @@ public class PerkTree {
         return RegistriesAS.REGISTRY_PERKS.getValues().stream()
                 .filter(test)
                 .findFirst()
+                .orElse(null);
+    }
+
+    @Nullable
+    public AbstractPerk getPerk(float x, float y) {
+        return this.treePoints.stream()
+                .filter(treePoint -> treePoint.getOffset().distance(x, y) <= 1E-4)
+                .findFirst()
+                .map(PerkTreePoint::getPerk)
                 .orElse(null);
     }
 
@@ -133,7 +142,7 @@ public class PerkTree {
 
         private final AbstractPerk point;
 
-        public PointConnector(AbstractPerk point) {
+        private PointConnector(AbstractPerk point) {
             this.point = point;
         }
 
@@ -190,6 +199,10 @@ public class PerkTree {
             return connect(other.point);
         }
 
+        public PointConnector chain(PointConnector other) {
+            connect(other.point);
+            return other;
+        }
     }
 
 }

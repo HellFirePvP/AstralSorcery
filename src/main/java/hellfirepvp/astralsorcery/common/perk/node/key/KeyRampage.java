@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
  */
 public class KeyRampage extends KeyPerk {
 
-    private static final float defaultRampageChance = 0.35F;
+    private static final float defaultRampageChance = 1F;
     private static final int defaultRampageDuration = 100;
 
     private final Config config;

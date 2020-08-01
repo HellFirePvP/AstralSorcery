@@ -81,7 +81,7 @@ public class RegistryWorldGeneration {
                 Lists.newArrayList(Blocks.STONE.getDefaultState(), Blocks.DIORITE.getDefaultState(), Blocks.GRANITE.getDefaultState(), Blocks.ANDESITE.getDefaultState())));
         WorldGenerationAS.Placement.AQUAMARINE = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("aquamarine", false, true,
                 Lists.newArrayList(), Lists.newArrayList(DimensionType.OVERWORLD),
-                52, 67, 1, 50,
+                52, 67, 2, 40,
                 Lists.newArrayList(Blocks.SAND.getDefaultState())));
 
         WorldGenerationAS.Placement.MARBLE = new CountRangeConfig(10, 0, 0, 64);

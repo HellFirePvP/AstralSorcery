@@ -37,10 +37,8 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collection;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -61,8 +59,8 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
     public static final PerkCategory CATEGORY_FOCUS = new PerkCategory("focus", TextFormatting.GOLD);
 
     protected final Point.Float offset;
+    private String unlocalizedKey;
     private PerkCategory category = CATEGORY_BASE;
-    protected String ovrUnlocalizedNamePrefix = null;
     private PerkTreePoint<? extends AbstractPerk> treePoint = null;
 
     private List<ITextComponent> tooltipCache = null;
@@ -73,6 +71,7 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
         this.setRegistryName(name);
         this.offset = new Point.Float(x, y);
         this.attachListeners(MinecraftForge.EVENT_BUS);
+        this.unlocalizedKey = String.format("perk.%s.%s", name.getNamespace(), name.getPath());
     }
 
     protected PerkTreePoint<? extends AbstractPerk> initPerkTreePoint() {
@@ -185,12 +184,12 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
      */
     public void onRemovePerkServer(PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {}
 
-    public <T> T setNameOverride(AbstractPerk other) {
-        return setNameOverride(other.getUnlocalizedName());
+    public <T extends AbstractPerk> T setName(AbstractPerk other) {
+        return setName(other.unlocalizedKey);
     }
 
-    public <T> T setNameOverride(String namePrefix) {
-        this.ovrUnlocalizedNamePrefix = namePrefix;
+    public <T extends AbstractPerk> T setName(String namePrefix) {
+        this.unlocalizedKey = namePrefix;
         return (T) this;
     }
 
@@ -225,11 +224,27 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
         return false;
     }
 
-    public String getUnlocalizedName() {
-        if (this.ovrUnlocalizedNamePrefix != null) {
-            return this.ovrUnlocalizedNamePrefix;
+    public ITextComponent getName() {
+        return new TranslationTextComponent(this.unlocalizedKey + ".name")
+                .applyTextStyle(this.getCategory().getTextFormatting());
+    }
+
+    @Nonnull
+    @OnlyIn(Dist.CLIENT)
+    public Collection<ITextComponent> getDescription() {
+        List<ITextComponent> toolTip = new ArrayList<>();
+        if (I18n.hasKey(this.unlocalizedKey + ".desc.1")) { // Might have a indexed list there
+            int count = 1;
+            while (I18n.hasKey(this.unlocalizedKey + ".desc." + count)) {
+                toolTip.add(new TranslationTextComponent(this.unlocalizedKey + ".desc." + count));
+                count++;
+            }
+            toolTip.add(new StringTextComponent(""));
+        } else if (I18n.hasKey(this.unlocalizedKey + ".desc")) {
+            toolTip.add(new TranslationTextComponent(this.unlocalizedKey + ".desc"));
+            toolTip.add(new StringTextComponent(""));
         }
-        return "perk." + getRegistryName().getNamespace() + "." + getRegistryName().getPath();
+        return toolTip;
     }
 
     protected void disableTooltipCaching() {
@@ -244,33 +259,18 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
         }
 
         tooltipCache = Lists.newArrayList();
-        String key = this.ovrUnlocalizedNamePrefix;
         if (modifiersDisabled(Minecraft.getInstance().player, LogicalSide.CLIENT)) {
             tooltipCache.add(new TranslationTextComponent("perk.info.astralsorcery.disabled")
                     .setStyle(new Style().setColor(TextFormatting.GRAY)));
         } else if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
-            tooltipCache.add(new TranslationTextComponent(this.getUnlocalizedName() + ".name")
-                    .setStyle(new Style().setColor(this.getCategory().getTextFormatting())));
+            tooltipCache.add(this.getName());
 
-            if (key == null) {
-                key = "perk." + getRegistryName().getNamespace() + "." + getRegistryName().getPath();
-            }
             int prevLength = tooltipCache.size();
             boolean shouldAdd = addLocalizedTooltip(tooltipCache);
             if (shouldAdd && prevLength != tooltipCache.size()) {
                 tooltipCache.add(new StringTextComponent(""));
             }
-            if (I18n.hasKey(key + ".desc.1")) { // Might have a indexed list there
-                int count = 1;
-                while (I18n.hasKey(key + ".desc." + count)) {
-                    tooltipCache.add(new TranslationTextComponent(key + ".desc." + count));
-                    count++;
-                }
-                tooltipCache.add(new StringTextComponent(""));
-            } else if (I18n.hasKey(key + ".desc")) {
-                tooltipCache.add(new TranslationTextComponent(key + ".desc"));
-                tooltipCache.add(new StringTextComponent(""));
-            }
+            tooltipCache.addAll(this.getDescription());
         } else {
             tooltipCache.add(new TranslationTextComponent("perk.info.astralsorcery.missing_progress")
                     .setStyle(new Style().setColor(TextFormatting.RED)));

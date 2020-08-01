@@ -36,8 +36,8 @@ import javax.annotation.Nullable;
  */
 public class KeyBleed extends KeyPerk {
 
-    private static final int defaultBleedDuration = 30;
-    private static final float defaultBleedChance = 0.15F;
+    private static final int defaultBleedDuration = 40;
+    private static final float defaultBleedChance = 0.25F;
 
     private final Config config;
 

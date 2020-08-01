@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.perk.type;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 
+import java.text.DecimalFormat;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -24,6 +26,8 @@ public enum ModifierType {
     ADDED_MULTIPLY,
     STACKING_MULTIPLY;
 
+    private static final DecimalFormat DISPLAY_NUMBER_FORMAT = new DecimalFormat("0.##");
+
     public static ModifierType fromVanillaAttributeOperation(AttributeModifier.Operation op) {
         return MiscUtils.getEnumEntry(ModifierType.class, op.getId());
     }
@@ -35,14 +39,14 @@ public enum ModifierType {
     // We don't need the explicit + addition to positive percentages
     public String stringifyValue(float number) {
         if (this == ADDITION) {
-            String str = Integer.toString(Math.round(number));
+            String str = DISPLAY_NUMBER_FORMAT.format(number);
             if (number > 0) {
                 str = "+" + str;
             }
             return str;
         } else {
             int nbr = Math.round(number * 100);
-            return Integer.toString(Math.abs(this == STACKING_MULTIPLY ? 100 - nbr : nbr));
+            return DISPLAY_NUMBER_FORMAT.format(Math.abs(this == STACKING_MULTIPLY ? 100 - nbr : nbr));
         }
     }
 

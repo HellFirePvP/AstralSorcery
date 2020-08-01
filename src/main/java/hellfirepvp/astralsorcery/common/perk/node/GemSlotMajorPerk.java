@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.node;
 
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
+import hellfirepvp.astralsorcery.common.lib.PerkNamesAS;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreeGem;
@@ -37,6 +38,7 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
 
     public GemSlotMajorPerk(ResourceLocation name, int x, int y) {
         super(name, x, y);
+        this.setName(PerkNamesAS.name("gem_socket"));
         this.disableTooltipCaching();
     }
 
@@ -61,14 +63,6 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
     public void onRemovePerkServer(PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {
         super.onRemovePerkServer(player, progress, dataStorage);
         dropItemToPlayer(player, dataStorage);
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-        if (this.ovrUnlocalizedNamePrefix != null) {
-            return this.ovrUnlocalizedNamePrefix;
-        }
-        return "perk.astralsorcery.gemsocket";
     }
 
     @Override

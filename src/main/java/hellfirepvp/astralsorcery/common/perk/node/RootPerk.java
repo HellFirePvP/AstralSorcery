@@ -10,11 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.node;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierPerk;
-import hellfirepvp.astralsorcery.common.perk.node.key.KeyCore;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreeConstellation;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.util.DiminishingMultiplier;
@@ -65,18 +61,6 @@ public abstract class RootPerk extends AttributeModifierPerk {
 
     public IMajorConstellation getConstellation() {
         return constellation;
-    }
-
-    @Override
-    public boolean mayUnlockPerk(PlayerProgress progress, PlayerEntity player) {
-        if (progress.hasFreeAllocationPoint(player) && canSee(player, progress)) {
-            AbstractPerk core = PerkTree.PERK_TREE.getPerk(KeyCore.NAME);
-            if (core != null && progress.hasPerkEffect(core)) {
-                return true;
-            }
-        }
-
-        return super.mayUnlockPerk(progress, player);
     }
 
     @Override

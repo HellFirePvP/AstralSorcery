@@ -152,11 +152,11 @@ public class RenderingConstellationUtils {
         }
     }
 
-    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(IConstellation c, float offsetX, float offsetY, float zLevel, int width, int height, double linebreadth, Supplier<Float> brightnessFn, boolean isKnown, boolean applyStarBrightness) {
+    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(IConstellation c, float offsetX, float offsetY, float zLevel, float width, float height, double linebreadth, Supplier<Float> brightnessFn, boolean isKnown, boolean applyStarBrightness) {
         return renderConstellationIntoGUI(c.getTierRenderColor(), c, offsetX, offsetY, zLevel, width, height, linebreadth, brightnessFn, isKnown, applyStarBrightness);
     }
 
-    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, float offsetX, float offsetY, float zLevel, int width, int height, double linebreadth, Supplier<Float> brightnessFn, boolean isKnown, boolean applyStarBrightness) {
+    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, float offsetX, float offsetY, float zLevel, float width, float height, double linebreadth, Supplier<Float> brightnessFn, boolean isKnown, boolean applyStarBrightness) {
         double ulength = ((double) width) / IConstellation.STAR_GRID_WIDTH_HEIGHT;
         double vlength = ((double) height) / IConstellation.STAR_GRID_WIDTH_HEIGHT;
 

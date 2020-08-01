@@ -88,16 +88,16 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
                 break;
         }
 
-        int size = MathHelper.floor(perkSpriteSize * 0.85 * scale);
-        int fX = Math.round(x);
-        int fY = Math.round(y);
+        float size = perkSpriteSize * 0.85F * scale;
 
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
+
         RenderingConstellationUtils.renderConstellationIntoGUI(overlay, this.associatedConstellation,
-                fX - size, fY - size, 0,
+                x - size, y - size, 0,
                 size * 2, size * 2, 1.5 * scale,
                 () -> 0.75F, true, false);
+
         RenderSystem.disableBlend();
     }
 

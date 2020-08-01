@@ -51,7 +51,9 @@ public class RenderTranslucentBlock extends CustomTileEntityRenderer<TileTranslu
         RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(type, () -> {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
+            RenderSystem.depthMask(false);
         }, () -> {
+            RenderSystem.depthMask(true);
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableBlend();
         });

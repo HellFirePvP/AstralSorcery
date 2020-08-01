@@ -49,14 +49,13 @@ public class RegistryPerkAttributeTypes {
         ATTR_TYPE_INC_THORNS = register(new AttributeTypeThorns());
         ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM = register(new AttributeTypeChargeMaximum());
         ATTR_TYPE_MINING_SIZE = register(new AttributeTypeMiningSize());
+        ATTR_TYPE_COOLDOWN_REDUCTION = register(new AttributeTypeCooldown());
+        ATTR_TYPE_LUCK = register(new AttributeTypeLuck());
 
         ATTR_TYPE_BLEED_DURATION = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_BLEED_DURATION, false));
         ATTR_TYPE_BLEED_CHANCE = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_BLEED_CHANCE, false));
         ATTR_TYPE_BLEED_STACKS = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_BLEED_STACKS, false));
         ATTR_TYPE_RAMPAGE_DURATION = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_RAMPAGE_DURATION, false));
-        ATTR_TYPE_MINING_CHAIN_CHANCE = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_MINING_CHAIN_CHANCE, false));
-        ATTR_TYPE_MINING_CHAIN_LENGTH = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_MINING_CHAIN_LENGTH, false));
-        ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN, false));
         ATTR_TYPE_INC_THORNS_RANGED = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_INC_THORNS_RANGED, false));
         ATTR_TYPE_ARC_CHAINS = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_ARC_CHAINS, false));
         ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION = register(PerkAttributeType.makeDefault(KEY_ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION, true));
@@ -65,7 +64,8 @@ public class RegistryPerkAttributeTypes {
 
         PerkAttributeLimiter.limit(ATTR_TYPE_INC_DODGE, () -> 0.0, () -> 0.75);
         PerkAttributeLimiter.limit(ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST, () -> 0.0, () -> 0.6);
-        PerkAttributeLimiter.limit(ATTR_TYPE_ATTACK_LIFE_LEECH, () -> 0.0, () -> 0.1);
+        PerkAttributeLimiter.limit(ATTR_TYPE_ATTACK_LIFE_LEECH, () -> 0.0, () -> 0.2);
+        PerkAttributeLimiter.limit(ATTR_TYPE_COOLDOWN_REDUCTION, () -> 0.0, () -> 0.8);
     }
 
     private static <T extends PerkAttributeType> T register(T type) {
