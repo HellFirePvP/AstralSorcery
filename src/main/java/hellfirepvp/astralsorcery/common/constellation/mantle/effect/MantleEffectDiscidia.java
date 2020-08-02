@@ -109,7 +109,7 @@ public class MantleEffectDiscidia extends MantleEffect {
         if (world.isRemote()) {
             return;
         }
-        MantleEffectArmara armara = ItemMantle.getEffect(hurt, ConstellationsAS.discidia);
+        MantleEffectDiscidia armara = ItemMantle.getEffect(hurt, ConstellationsAS.discidia);
         if (armara != null) {
             this.writeLastAttackDamage(hurt, event.getAmount());
         }
