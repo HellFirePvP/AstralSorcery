@@ -16,11 +16,13 @@ import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstractList;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ListEntries;
+import hellfirepvp.astralsorcery.common.data.config.base.ConfiguredBlockStateList;
 import hellfirepvp.astralsorcery.common.data.config.registry.OreBlockRarityRegistry;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.BlockStateList;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.block.iterator.BlockLayerPositionGenerator;
 import hellfirepvp.astralsorcery.common.util.block.iterator.BlockPositionGenerator;
@@ -34,6 +36,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,7 +51,7 @@ import java.awt.*;
  */
 public class CEffectMineralis extends CEffectAbstractList<ListEntries.PosEntry> {
 
-    public static MineralisConfig CONFIG = new MineralisConfig();
+    public static MineralisConfig CONFIG = new MineralisConfig(new BlockStateList().add(Blocks.STONE));
 
     public CEffectMineralis(@Nonnull ILocatable origin) {
         super(origin, ConstellationsAS.mineralis, CONFIG.maxAmount.get(), (world, pos, state) -> true);
@@ -121,7 +124,7 @@ public class CEffectMineralis extends CEffectAbstractList<ListEntries.PosEntry> 
                     }
                 }
             } else {
-                if (atState.getBlock() == Blocks.STONE) {
+                if (CONFIG.replaceableStates.test(atState)) {
                     Block ore = OreBlockRarityRegistry.MINERALIS_RITUAL.getRandomBlock(rand);
                     if (ore != null) {
                         return world.setBlockState(entry.getPos(), ore.getDefaultState());
@@ -139,8 +142,23 @@ public class CEffectMineralis extends CEffectAbstractList<ListEntries.PosEntry> 
 
     private static class MineralisConfig extends CountConfig {
 
-        public MineralisConfig() {
+        private final BlockStateList defaultReplaceableStates;
+
+        private ConfiguredBlockStateList replaceableStates;
+
+        public MineralisConfig(BlockStateList defaultReplaceableStates) {
             super("mineralis", 6D, 4D, 1);
+            this.defaultReplaceableStates = defaultReplaceableStates;
+        }
+
+        @Override
+        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+            super.createEntries(cfgBuilder);
+
+            this.replaceableStates = this.defaultReplaceableStates.getAsConfig(
+                    cfgBuilder, "replaceableStates", translationKey("replaceableStates"),
+                    "Defines the blockstates that may be replaced by generated ore from the ritual."
+            );
         }
     }
 }

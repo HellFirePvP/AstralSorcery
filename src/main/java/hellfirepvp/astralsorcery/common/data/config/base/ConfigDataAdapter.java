@@ -50,6 +50,10 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
     }
 
     public synchronized List<T> getConfiguredValues() {
+        if (registryStore == null) {
+            return new ArrayList<>();
+        }
+
         if (configuredValues == null) {
             configuredValues = new ArrayList<>();
             for (String str : registryStore.get()) {

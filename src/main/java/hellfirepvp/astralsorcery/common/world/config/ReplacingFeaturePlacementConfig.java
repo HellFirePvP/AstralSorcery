@@ -8,9 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.world.config;
 
-import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.util.block.BlockStateHelper;
-import net.minecraft.block.BlockState;
+import hellfirepvp.astralsorcery.common.data.config.base.ConfiguredBlockStateList;
+import hellfirepvp.astralsorcery.common.util.block.BlockStateList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.provider.BiomeProvider;
@@ -20,7 +19,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,26 +29,17 @@ import java.util.stream.Collectors;
  */
 public class ReplacingFeaturePlacementConfig extends FeaturePlacementConfig {
 
-    private final List<BlockState> defaultReplaceableBlockstates;
-
-    private ForgeConfigSpec.ConfigValue<List<String>> configReplaceableBlockstates;
-    private List<BlockState> replaceableBlockStates = null;
+    private final BlockStateList defaultReplaceableBlockstates;
+    private ConfiguredBlockStateList configReplaceableBlockstates;
 
     public ReplacingFeaturePlacementConfig(String featureName, boolean defaultWhitelistBiomeSpecification, boolean defaultWhitelistDimensionSpecification,
                                            List<BiomeDictionary.Type> defaultApplicableBiomeTypes, List<DimensionType> defaultApplicableDimensions,
                                            int defaultMinY, int defaultMaxY, int defaultGenerationChance, int generationAmount,
-                                           List<BlockState> defaultReplaceableBlockstates) {
+                                           BlockStateList defaultReplaceableBlockstates) {
         super(featureName, defaultWhitelistBiomeSpecification, defaultWhitelistDimensionSpecification,
                 defaultApplicableBiomeTypes, defaultApplicableDimensions,
                 defaultMinY, defaultMaxY, defaultGenerationChance, generationAmount);
         this.defaultReplaceableBlockstates = defaultReplaceableBlockstates;
-    }
-
-    public List<BlockState> getReplaceableBlockStates() {
-        if (this.replaceableBlockStates == null) {
-            this.replaceableBlockStates = convertBlockStates();
-        }
-        return this.replaceableBlockStates;
     }
 
     @Override
@@ -58,30 +47,15 @@ public class ReplacingFeaturePlacementConfig extends FeaturePlacementConfig {
         if (!super.canPlace(iWorld, biomeProvider, pos, rand)) {
             return false;
         }
-        BlockState atState = iWorld.getBlockState(pos);
-        return this.getReplaceableBlockStates().contains(atState);
-    }
-
-    private List<BlockState> convertBlockStates() {
-        List<BlockState> states = Lists.newArrayList();
-        for (String str : this.configReplaceableBlockstates.get()) {
-            BlockState state = BlockStateHelper.deserialize(str);
-            if (!states.contains(state)) {
-                states.add(state);
-            }
-        }
-        return states;
+        return this.configReplaceableBlockstates.test(iWorld.getBlockState(pos));
     }
 
     @Override
     public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
         super.createEntries(cfgBuilder);
 
-        this.configReplaceableBlockstates = cfgBuilder
-                .comment("List all blockstates here that this feature should be able to replace with its own blocks")
-                .translation(translationKey("replaceable"))
-                .define("replaceable", this.defaultReplaceableBlockstates.stream()
-                        .map(BlockStateHelper::serialize)
-                        .collect(Collectors.toList()));
+        this.configReplaceableBlockstates = this.defaultReplaceableBlockstates.getAsConfig(
+                cfgBuilder, "replaceable", translationKey("replaceable"),
+                "List all blockstates here that this feature should be able to replace with its own blocks.");
     }
 }

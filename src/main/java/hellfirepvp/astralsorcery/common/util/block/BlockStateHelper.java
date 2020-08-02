@@ -40,6 +40,11 @@ public class BlockStateHelper {
     private static final Splitter PROP_ELEMENT_SPLITTER = Splitter.on('=');
 
     @Nonnull
+    public static String serialize(@Nonnull Block block) {
+        return block.getRegistryName().toString();
+    }
+
+    @Nonnull
     public static <V extends Comparable<V>> String serialize(@Nonnull BlockState state) {
         StringBuilder name = new StringBuilder(state.getBlock().getRegistryName().toString());
         List<IProperty<?>> props = new ArrayList<>(state.getProperties());
@@ -79,14 +84,20 @@ public class BlockStateHelper {
     }
 
     @Nonnull
+    public static Block deserializeBlock(@Nonnull String serialized) {
+        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(serialized));
+        return block == null ? Blocks.AIR : block;
+    }
+
+    @Nonnull
     public static <T extends Comparable<T>> BlockState deserialize(@Nonnull String serialized) {
         int propIndex = serialized.indexOf('[');
-        boolean hasProperties = propIndex != -1;
+        boolean hasProperties = isMissingStateInformation(serialized);
         ResourceLocation key;
-        if (!hasProperties) {
-            key = new ResourceLocation(serialized.toLowerCase());
-        } else {
+        if (hasProperties) {
             key = new ResourceLocation(serialized.substring(0, propIndex).toLowerCase());
+        } else {
+            key = new ResourceLocation(serialized.toLowerCase());
         }
         Block block = ForgeRegistries.BLOCKS.getValue(key);
         BlockState state = block.getDefaultState();

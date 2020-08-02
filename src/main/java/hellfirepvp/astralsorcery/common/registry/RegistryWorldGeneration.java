@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.WorldGenerationAS;
+import hellfirepvp.astralsorcery.common.util.block.BlockStateList;
 import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.config.ReplacingFeaturePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.config.StructurePlacementConfig;
@@ -78,11 +79,11 @@ public class RegistryWorldGeneration {
         WorldGenerationAS.Placement.ROCK_CRYSTAL = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("rock_crystal", false, true,
                 Lists.newArrayList(), Lists.newArrayList(DimensionType.OVERWORLD),
                 2, 8, 14, 2,
-                Lists.newArrayList(Blocks.STONE.getDefaultState(), Blocks.DIORITE.getDefaultState(), Blocks.GRANITE.getDefaultState(), Blocks.ANDESITE.getDefaultState())));
+                new BlockStateList().add(Blocks.STONE).add(Blocks.DIORITE).add(Blocks.GRANITE).add(Blocks.ANDESITE)));
         WorldGenerationAS.Placement.AQUAMARINE = cfg.addConfigEntry(new ReplacingFeaturePlacementConfig("aquamarine", false, true,
                 Lists.newArrayList(), Lists.newArrayList(DimensionType.OVERWORLD),
                 52, 67, 2, 40,
-                Lists.newArrayList(Blocks.SAND.getDefaultState())));
+                new BlockStateList().add(Blocks.SAND)));
 
         WorldGenerationAS.Placement.MARBLE = new CountRangeConfig(10, 0, 0, 64);
     }
