@@ -63,6 +63,7 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, float x, float y, float zLevel, float scale) {
         if (this.associatedConstellation == null) {
             return;
@@ -103,6 +104,7 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
 
     @Nullable
     @Override
+    @OnlyIn(Dist.CLIENT)
     public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx,
                                                 AllocationStatus status,
                                                 long spriteOffsetTick, float pTicks,
