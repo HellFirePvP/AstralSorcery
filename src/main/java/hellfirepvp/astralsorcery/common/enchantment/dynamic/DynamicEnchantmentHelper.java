@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.data.config.registry.AmuletEnchantmentRegistry;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantmentHelper;
 import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
+import hellfirepvp.astralsorcery.common.event.EventFlags;
+import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -160,20 +162,30 @@ public class DynamicEnchantmentHelper {
     }
 
     public static boolean canHaveDynamicEnchantment(ItemStack stack) {
-        if (stack.isEmpty()) {
-            return false;
+        if (!EventFlags.CAN_HAVE_DYN_ENCHANTMENTS.isSet()) {
+            ObjectReference<Boolean> mayHaveDynamicEnchantments = new ObjectReference<>(true);
+            EventFlags.CAN_HAVE_DYN_ENCHANTMENTS.executeWithFlag(() -> {
+                if (stack.isEmpty()) {
+                    return;
+                }
+                Item i = stack.getItem();
+                if (i.getRegistryName() == null) {
+                    return;
+                }
+                if (!i.isEnchantable(stack) || !stack.isDamageable()) {
+                    return;
+                }
+                if (Mods.DRACONIC_EVOLUTION.owns(stack.getItem())) {
+                    return;
+                }
+                mayHaveDynamicEnchantments.set(true);
+            });
+            return mayHaveDynamicEnchantments.get();
         }
-        Item i = stack.getItem();
-        if (i.getRegistryName() == null) {
-            return false;
-        }
-        if (!i.isEnchantable(stack) || !stack.isDamageable()) {
-            return false;
-        }
-        if (Mods.DRACONIC_EVOLUTION.owns(stack.getItem())) {
-            return false;
-        }
-        return true;
+        //If we ever end up here, we have a cycle somewhere, probably as a result of checking
+        //if the item is enchantable or damageable relies on if enchantments are already being applied on it or not.
+        //This probably means we don't want to influence the item with dynamic enchantments.
+        return false;
     }
 
     //This is more or less just a map to say whatever we add upon.

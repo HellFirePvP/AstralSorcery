@@ -33,6 +33,9 @@ public class EventFlags {
     public static BooleanFlag SKY_RENDERING = new BooleanFlag(false);
     public static BooleanFlag GUI_CLOSING = new BooleanFlag(false);
 
+    //Misc
+    public static BooleanFlag CAN_HAVE_DYN_ENCHANTMENTS = new BooleanFlag(false);
+
     public static class BooleanFlag {
 
         private boolean originalState;
