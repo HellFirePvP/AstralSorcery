@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.resource;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderState;
@@ -83,6 +84,13 @@ public class BindableResource extends AbstractRenderableTexture.Full {
 
     @Override
     public RenderState.TextureState asState() {
-        return new RenderState.TextureState(this.getKey(), false, false);
+        return new RenderState.TextureState(this.getKey(), false, false) {
+            @Override
+            public void setupRenderState() {
+                RenderSystem.enableTexture();
+                BindableResource.this.bindTexture();
+                BindableResource.this.resource.setBlurMipmap(false, false);
+            }
+        };
     }
 }

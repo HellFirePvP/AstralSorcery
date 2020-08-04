@@ -119,7 +119,7 @@ public class EntityNocturnalSpark extends ThrowableEntity {
             if (this.ticksExisted % 5 == 0) {
                 List<BlockPos> lightPositions = BlockDiscoverer.searchForBlocksAround(
                         sWorld, this.getPosition(), 8,
-                        (world, pos, state) -> !(state.getBlock() instanceof AirBlock) && state.getLightValue(world, pos) > 3);
+                        (world, pos, state) -> !(state.getBlock() instanceof AirBlock) && state.getBlockHardness(world, pos) != -1 && state.getLightValue(world, pos) > 3);
                 for (BlockPos light : lightPositions) {
                     if (!BlockUtils.breakBlockWithoutPlayer(sWorld, light, sWorld.getBlockState(light), ItemStack.EMPTY, true, true, true)) {
                         sWorld.removeBlock(light, false);
