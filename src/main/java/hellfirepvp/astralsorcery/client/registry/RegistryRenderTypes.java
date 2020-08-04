@@ -162,6 +162,20 @@ public class RegistryRenderTypes {
                         .disableDepthMask()
                         .enableDiffuseLighting()
                         .build());
+
+        CONSTELLATION_WORLD_STAR = createType("effect_render_cst_star", DefaultVertexFormats.POSITION_COLOR_TEX,
+                RenderStateBuilder.builder()
+                        .texture(TexturesAS.TEX_STAR_1)
+                        .blend(Blending.DEFAULT)
+                        .disableDepthMask()
+                        .build());
+
+        CONSTELLATION_WORLD_CONNECTION = createType("effect_render_cst_connection", DefaultVertexFormats.POSITION_COLOR_TEX,
+                RenderStateBuilder.builder()
+                        .texture(TexturesAS.TEX_STAR_CONNECTION)
+                        .blend(Blending.DEFAULT)
+                        .disableDepthMask()
+                        .build());
     }
 
     private static void initGuiTypes() {
