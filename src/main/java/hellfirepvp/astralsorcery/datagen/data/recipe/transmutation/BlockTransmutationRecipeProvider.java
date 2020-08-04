@@ -32,7 +32,7 @@ public class BlockTransmutationRecipeProvider {
                 .setOutput(BlocksAS.STARMETAL_ORE)
                 .build(registrar);
         BlockTransmutationBuilder.builder(AstralSorcery.key("craftingtable_altar"))
-                .multiplyStarlightCost(0.6F)
+                .multiplyStarlightCost(0.3F)
                 .addInputCheck(Blocks.CRAFTING_TABLE)
                 .setOutput(BlocksAS.ALTAR_DISCOVERY)
                 .build(registrar);
