@@ -21,7 +21,7 @@
       "conditions": {
         "recipeOutputs": [
           {
-            "item": "astralsorcery:altar_constellation"
+            "item": "astralsorcery:altar_radiance"
           }
         ]
       }

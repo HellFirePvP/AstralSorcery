@@ -126,7 +126,7 @@ public class AstralAdvancementProvider extends AdvancementProvider {
                 .withParent(craftAltarT3)
                 .withDisplay(BlocksAS.ALTAR_CONSTELLATION, title("craft_t4_altar"), description("craft_t4_altar"),
                         null, FrameType.CHALLENGE, true, true, false)
-                .withCriterion("altar_craft_t3_altar", AltarRecipeInstance.withOutput(BlocksAS.ALTAR_CONSTELLATION))
+                .withCriterion("altar_craft_t3_altar", AltarRecipeInstance.withOutput(BlocksAS.ALTAR_RADIANCE))
                 .register(registrar, AstralSorcery.key("craft_t4_altar").toString());
 
         Advancement findAnyConstellation = Advancement.Builder.builder()
