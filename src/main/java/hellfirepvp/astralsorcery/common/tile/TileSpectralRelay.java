@@ -139,7 +139,7 @@ public class TileSpectralRelay extends TileEntityTick {
         if (this.doesSeeSky()) {
             double starlight = 0.3;
 
-            starlight *= Math.max((getPos().getY() - 40) / 100, 0);
+            starlight *= Math.max((getPos().getY() - 40) / 100.0, 0);
             starlight *= (0.3 + (0.7 * DayTimeHelper.getCurrentDaytimeDistribution(getWorld())));
             if (starlight > 1E-4) {
                 ta.receiveStarlight(starlight);
