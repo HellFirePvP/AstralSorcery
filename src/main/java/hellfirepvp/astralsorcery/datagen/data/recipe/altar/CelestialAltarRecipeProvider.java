@@ -169,8 +169,9 @@ public class CelestialAltarRecipeProvider {
                 .addOutput(new ItemStack(BlocksAS.RITUAL_LINK, 2))
                 .build(registrar);
 
-        SimpleAltarRecipeBuilder.ofType(AltarRecipeTypeHandler.CONSTELLATION_CRYSTAL_AVERAGE)
+        SimpleAltarRecipeBuilder.ofType(AltarRecipeTypeHandler.CONSTELLATION_COPY_CRYSTAL)
                 .createRecipe(BlocksAS.ROCK_COLLECTOR_CRYSTAL, AltarType.CONSTELLATION)
+                .modify(recipe -> recipe.setConstellationSlot(12))
                 .setStarlightRequirement(0.8F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("SI IS")
@@ -186,8 +187,9 @@ public class CelestialAltarRecipeProvider {
                 .addOutput(BlocksAS.ROCK_COLLECTOR_CRYSTAL)
                 .build(registrar);
 
-        SimpleAltarRecipeBuilder.ofType(AltarRecipeTypeHandler.CONSTELLATION_CRYSTAL_AVERAGE)
+        SimpleAltarRecipeBuilder.ofType(AltarRecipeTypeHandler.CONSTELLATION_COPY_CRYSTAL)
                 .createRecipe(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL, AltarType.CONSTELLATION)
+                .modify(recipe -> recipe.setConstellationSlot(12))
                 .setStarlightRequirement(0.8F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("SI IS")

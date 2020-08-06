@@ -28,13 +28,16 @@
       "canBeCelestialCrystal": false
     }
   },
-  "recipe_class": "astralsorcery:constellation_base_average",
+  "recipe_class": "astralsorcery:constellation_copy_stats",
   "output": [
     {
       "item": "astralsorcery:rock_collector_crystal",
       "count": 1
     }
   ],
+  "options": {
+    "constellationSlot": 12
+  },
   "effects": [
     "astralsorcery:built_in_effect_constellation_finish",
     "astralsorcery:built_in_effect_discovery_central_beam",

@@ -36,6 +36,7 @@ public class AltarRecipeTypeHandler {
     public static final Type<ConstellationItemRecipe> CONSTELLATION_ITEM = new Type<>(AstralSorcery.key("constellation_item"));
     public static final Type<CrystalCountRecipe> CRYSTAL_SET_COUNT = new Type<>(AstralSorcery.key("crystal_count"));
     public static final Type<ConstellationBaseNBTCopyRecipe> CONSTELLATION_BASE_NBT_COPY = new Type<>(AstralSorcery.key("constellation_base_nbt_copy"));
+    public static final Type<ConstellationCopyStatsRecipe> CONSTELLATION_COPY_CRYSTAL = new Type<>(AstralSorcery.key("constellation_copy_stats"));
     public static final Type<NBTCopyRecipe> NBT_COPY = new Type<>(AstralSorcery.key("nbt_copy"));
     public static final Type<SimpleAltarRecipe> DEFAULT = new Type<>(AstralSorcery.key("default"));
 
@@ -67,6 +68,7 @@ public class AltarRecipeTypeHandler {
         registerInternal(CONSTELLATION_ITEM, ConstellationItemRecipe::convertToThis);
         registerInternal(CRYSTAL_SET_COUNT, CrystalCountRecipe::convertToThis);
         registerInternal(CONSTELLATION_BASE_NBT_COPY, ConstellationBaseNBTCopyRecipe::convertToThis);
+        registerInternal(CONSTELLATION_COPY_CRYSTAL, ConstellationCopyStatsRecipe::convertToThis);
         registerInternal(NBT_COPY, NBTCopyRecipe::convertToThis);
         registerInternal(DEFAULT, Function.identity());
     }

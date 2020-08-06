@@ -37,7 +37,7 @@
     {
       "item": "astralsorcery:resonator",
       "count": 1,
-      "nbt": "{astralsorcery:{selected_upgrade:0,upgrades:[0]}}"
+      "nbt": "{astralsorcery:{upgrades:[0],selected_upgrade:0}}"
     }
   ],
   "effects": [
