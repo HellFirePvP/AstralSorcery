@@ -66,7 +66,7 @@ public class KeyLastBreath extends KeyPerk {
             if (prog.hasPerkEffect(this)) {
                 float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, damageIncrease);
-                float healthPerc = 1F - (player.getHealth() / player.getMaxHealth());
+                float healthPerc = 1F - (Math.min(player.getHealth(), player.getMaxHealth()) / player.getMaxHealth());
                 event.setAmount(event.getAmount() * (1F + (healthPerc * actIncrease)));
             }
         }
@@ -80,7 +80,7 @@ public class KeyLastBreath extends KeyPerk {
         if (prog.hasPerkEffect(this)) {
             float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)
                     .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, digSpeedIncrease);
-            float healthPerc = 1F - (player.getHealth() / player.getMaxHealth());
+            float healthPerc = 1F - (Math.min(player.getHealth(), player.getMaxHealth()) / player.getMaxHealth());
             event.setNewSpeed(event.getNewSpeed() * (1F + (healthPerc * actIncrease)));
         }
     }
