@@ -163,7 +163,7 @@ public class DynamicEnchantmentHelper {
 
     public static boolean canHaveDynamicEnchantment(ItemStack stack) {
         if (!EventFlags.CAN_HAVE_DYN_ENCHANTMENTS.isSet()) {
-            ObjectReference<Boolean> mayHaveDynamicEnchantments = new ObjectReference<>(true);
+            ObjectReference<Boolean> mayHaveDynamicEnchantments = new ObjectReference<>(false);
             EventFlags.CAN_HAVE_DYN_ENCHANTMENTS.executeWithFlag(() -> {
                 if (stack.isEmpty()) {
                     return;

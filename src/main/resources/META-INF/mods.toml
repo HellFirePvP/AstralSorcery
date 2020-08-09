@@ -1,45 +1,21 @@
-# This is an example mods.toml file. It contains the data relating to the loading mods.
-# There are several mandatory fields (#mandatory), and many more that are optional (#optional).
-# The overall format is standard TOML format, v0.5.0.
-# Note that there are a couple of TOML lists in this file.
-# Find more information on toml format here:  https://github.com/toml-lang/toml
-# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
-modLoader="javafml" #mandatory
-# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[28,)" #mandatory (24 is current forge version)
-# A URL to refer people to when problems occur with this mod
-issueTrackerURL="https://github.com/HellFirePvP/AstralSorcery/issues" #optional
-# A list of mods - how many allowed here is determined by the individual mod loader
-[[mods]] #mandatory
-# The modid of the mod
-modId="astralsorcery" #mandatory
-# The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
-version="${file.jarVersion}" #mandatory
- # A display name for the mod
-displayName="Astral Sorcery" #mandatory
-# A URL for the "homepage" for this mod, displayed in the mod UI
-displayURL="https://minecraft.curseforge.com/projects/astral-sorcery" #optional
-# A file name (in the root of the mod JAR) containing a logo for display
-logoFile="logo.png" #optional
-# A text field displayed in the mod UI
-credits="HellFirePvP (code), wiiv (models & textures)" #optional
-# A text field displayed in the mod UI
-authors="HellFirePvP, wiiv" #optional
-# The description text for the mod (multi line!) (#mandatory)
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/HellFirePvP/AstralSorcery/issues"
+[[mods]]
+modId="astralsorcery"
+version="${file.jarVersion}"
+displayName="Astral Sorcery"
+displayURL="https://minecraft.curseforge.com/projects/astral-sorcery"
+logoFile="logo.png"
+credits="HellFirePvP (code), wiiv (models & textures), VulpTheHorseDog (models & textures)"
+authors="HellFirePvP, wiiv, VulpTheHorseDog"
 description='''Magic mod that draws power from stars and their constellations'''
-# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.astralsorcery]] #optional
-    # the modid of the dependency
-    modId="forge" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
-    # The version range of the dependency
-    versionRange="[28,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+[[dependencies.astralsorcery]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28,)"
     ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
-# Here's another dependency
 [[dependencies.astralsorcery]]
     modId="minecraft"
     mandatory=true
