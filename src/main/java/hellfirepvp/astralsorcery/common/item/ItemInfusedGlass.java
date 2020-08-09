@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.engraving.EngravedStarMap;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -55,18 +56,21 @@ public class ItemInfusedGlass extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         EngravedStarMap map = getEngraving(stack);
         if (map != null) {
-            for (IConstellation cst : map.getConstellations()) {
-                String format = "item.astralsorcery.infused_glass.ttip";
-                ITextComponent cstName = cst.getConstellationName().applyTextStyle(TextFormatting.BLUE);
+            for (ResourceLocation key : map.getConstellationKeys()) {
+                IConstellation cst = ConstellationRegistry.getConstellation(key);
+                if (cst != null) {
+                    String format = "item.astralsorcery.infused_glass.ttip";
+                    ITextComponent cstName = cst.getConstellationName().applyTextStyle(TextFormatting.BLUE);
 
-                if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isCreative()) {
-                    String percent = String.valueOf(Math.round(map.getDistribution(cst) * 100F));
-                    ITextComponent creativeHint = new TranslationTextComponent("item.astralsorcery.infused_glass.ttip.creative", percent)
-                            .applyTextStyle(TextFormatting.LIGHT_PURPLE);
+                    if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isCreative()) {
+                        String percent = String.valueOf(Math.round(map.getDistribution(cst) * 100F));
+                        ITextComponent creativeHint = new TranslationTextComponent("item.astralsorcery.infused_glass.ttip.creative", percent)
+                                .applyTextStyle(TextFormatting.LIGHT_PURPLE);
 
-                    tooltip.add(new TranslationTextComponent(format, cstName, creativeHint).applyTextStyle(TextFormatting.GRAY));
-                } else {
-                    tooltip.add(new TranslationTextComponent(format, cstName, "").applyTextStyle(TextFormatting.GRAY));
+                        tooltip.add(new TranslationTextComponent(format, cstName, creativeHint).applyTextStyle(TextFormatting.GRAY));
+                    } else {
+                        tooltip.add(new TranslationTextComponent(format, cstName, "").applyTextStyle(TextFormatting.GRAY));
+                    }
                 }
             }
         }

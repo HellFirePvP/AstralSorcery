@@ -38,10 +38,10 @@ public class EngravedStarMap {
 
     private static final Random rand = new Random();
 
-    private Map<IConstellation, Float> distributions;
+    private Map<ResourceLocation, Float> distributions;
     private List<DrawnConstellation> drawInformation;
 
-    private EngravedStarMap(Map<IConstellation, Float> distributions, List<DrawnConstellation> drawnConstellations) {
+    private EngravedStarMap(Map<ResourceLocation, Float> distributions, List<DrawnConstellation> drawnConstellations) {
         this.distributions = distributions;
         this.drawInformation = drawnConstellations;
     }
@@ -54,13 +54,13 @@ public class EngravedStarMap {
             cstCoordinates.put(drawnCst, createConstellationOffsets(drawnCst));
         }
 
-        Map<IConstellation, Float> distributionMap = new HashMap<>();
-        for (DrawnConstellation cst : cstCoordinates.keySet()) {
-            List<Rectangle.Double> positions = cstCoordinates.get(cst);
+        Map<ResourceLocation, Float> distributionMap = new HashMap<>();
+        for (DrawnConstellation drawn : cstCoordinates.keySet()) {
+            List<Rectangle.Double> positions = cstCoordinates.get(drawn);
             Set<Rectangle.Double> foundPositions = new HashSet<>();
 
             for (DrawnConstellation otherCst : cstCoordinates.keySet()) {
-                if (cst.equals(otherCst)) {
+                if (drawn.equals(otherCst)) {
                     continue;
                 }
 
@@ -75,10 +75,11 @@ public class EngravedStarMap {
                 }
             }
 
+            IConstellation drawnConstellation = drawn.getConstellation();
             float percent = 0.1F + 0.9F * MathHelper.clamp(((foundPositions.size() * 1.5F) / positions.size()) * nightPerc, 0F, 1F);
-            float existingPercent = distributionMap.getOrDefault(cst.getConstellation(), 0.1F);
+            float existingPercent = distributionMap.getOrDefault(drawnConstellation.getRegistryName(), 0.1F);
             if (percent >= existingPercent) {
-                distributionMap.put(cst.getConstellation(), percent);
+                distributionMap.put(drawnConstellation.getRegistryName(), percent);
             }
         }
         return new EngravedStarMap(distributionMap, constellations);
@@ -105,10 +106,13 @@ public class EngravedStarMap {
     }
 
     public boolean canAffect(@Nonnull ItemStack stack) {
-        for (IConstellation cst : this.getConstellations()) {
-            EngravingEffect effect = cst.getEngravingEffect();
-            if (effect != null && !effect.getApplicableEffects(stack).isEmpty()) {
-                return true;
+        for (ResourceLocation key : this.getConstellationKeys()) {
+            IConstellation cst = ConstellationRegistry.getConstellation(key);
+            if (cst != null) {
+                EngravingEffect effect = cst.getEngravingEffect();
+                if (effect != null && !effect.getApplicableEffects(stack).isEmpty()) {
+                    return true;
+                }
             }
         }
         return false;
@@ -117,12 +121,15 @@ public class EngravedStarMap {
     @Nonnull
     public ItemStack applyEffects(@Nonnull ItemStack stack) {
         Map<IConstellation, List<EngravingEffect.ApplicableEffect>> effects = new HashMap<>();
-        for (IConstellation cst : this.getConstellations()) {
-            EngravingEffect effect = cst.getEngravingEffect();
-            if (effect != null) {
-                List<EngravingEffect.ApplicableEffect> applicable = effect.getApplicableEffects(stack);
-                if (!applicable.isEmpty()) {
-                    effects.put(cst, applicable);
+        for (ResourceLocation key : this.getConstellationKeys()) {
+            IConstellation cst = ConstellationRegistry.getConstellation(key);
+            if (cst != null) {
+                EngravingEffect effect = cst.getEngravingEffect();
+                if (effect != null) {
+                    List<EngravingEffect.ApplicableEffect> applicable = effect.getApplicableEffects(stack);
+                    if (!applicable.isEmpty()) {
+                        effects.put(cst, applicable);
+                    }
                 }
             }
         }
@@ -140,20 +147,20 @@ public class EngravedStarMap {
         return Collections.unmodifiableCollection(this.drawInformation);
     }
 
-    public Collection<IConstellation> getConstellations() {
+    public Collection<ResourceLocation> getConstellationKeys() {
         return Collections.unmodifiableCollection(this.distributions.keySet());
     }
 
     public float getDistribution(IConstellation cst) {
-        return this.distributions.getOrDefault(cst, 0F);
+        return this.distributions.getOrDefault(cst.getRegistryName(), 0F);
     }
 
     public CompoundNBT serialize() {
         CompoundNBT tag = new CompoundNBT();
         ListNBT list = new ListNBT();
-        distributions.forEach((cst, percent) -> {
+        distributions.forEach((constellationKey, percent) -> {
             CompoundNBT cstTag = new CompoundNBT();
-            NBTHelper.setResourceLocation(cstTag, "cst", cst.getRegistryName());
+            NBTHelper.setResourceLocation(cstTag, "cst", constellationKey);
             cstTag.putFloat("percent", percent);
             list.add(cstTag);
         });
@@ -171,14 +178,14 @@ public class EngravedStarMap {
     }
 
     public static EngravedStarMap deserialize(CompoundNBT tag) {
-        Map<IConstellation, Float> distributionMap = new HashMap<>();
+        Map<ResourceLocation, Float> distributionMap = new HashMap<>();
         ListNBT list = tag.getList("distributions", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
             CompoundNBT cstTag = list.getCompound(i);
-            IConstellation cst = ConstellationRegistry.getConstellation(new ResourceLocation(cstTag.getString("cst")));
+            ResourceLocation constellationKey = new ResourceLocation(cstTag.getString("cst"));
             float percent = cstTag.getFloat("percent");
-            if (cst != null && percent > 0) {
-                distributionMap.put(cst, percent);
+            if (percent > 0) {
+                distributionMap.put(constellationKey, percent);
             }
         }
         List<DrawnConstellation> drawnConstellations = new ArrayList<>();

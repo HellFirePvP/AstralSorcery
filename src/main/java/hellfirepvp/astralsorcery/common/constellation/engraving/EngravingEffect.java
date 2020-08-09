@@ -113,7 +113,7 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
         @Override
         public ItemStack apply(@Nonnull ItemStack stack, float percent, Random rand) {
-            float rValue = percent * (Math.min(0, this.max - this.min));
+            float rValue = percent * (Math.max(0, this.max - this.min));
             if (this.formatToInteger) {
                 rValue = Math.round(rValue);
             }
@@ -168,7 +168,7 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
         @Override
         public ItemStack apply(@Nonnull ItemStack stack, float percent, Random rand) {
-            int level = this.min + Math.round(percent * (Math.min(0, this.max - this.min)));
+            int level = this.min + Math.round(percent * (Math.max(0, this.max - this.min)));
             if (stack.getItem() instanceof BookItem) {
                 stack = ItemUtils.changeItem(stack, Items.ENCHANTED_BOOK);
             }
@@ -203,7 +203,7 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
         @Override
         public ItemStack apply(@Nonnull ItemStack stack, float percent, Random rand) {
-            int amp = this.min + Math.round(percent * (Math.min(0, this.max - this.min)));
+            int amp = this.min + Math.round(percent * (Math.max(0, this.max - this.min)));
             int dur = 3 * 60 * 20 + Math.round(rand.nextFloat() * 4 * 60 * 20);
             EffectInstance effectInstance = new EffectInstance(this.effect.get(), dur, amp, true, false, true);
 
