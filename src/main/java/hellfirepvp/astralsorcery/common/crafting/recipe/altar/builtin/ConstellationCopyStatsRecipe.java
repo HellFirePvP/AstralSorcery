@@ -87,7 +87,7 @@ public class ConstellationCopyStatsRecipe extends ConstellationBaseAverageStatsR
             ConstellationItem iOut = (ConstellationItem) out.getItem();
             if (iOut.getAttunedConstellation(out) == null || iOut.getTraitConstellation(out) == null) {
                 //Make a prioritizing iterable with the given index, if possible
-                if (this.constellationSlot < 0) {
+                if (this.constellationSlot >= 0) {
                     inventoryContents = Iterables.concat(Lists.newArrayList(Iterables.get(inventoryContents, this.constellationSlot, ItemStack.EMPTY)), inventoryContents);
                 }
                 for (ItemStack stack : inventoryContents) {
