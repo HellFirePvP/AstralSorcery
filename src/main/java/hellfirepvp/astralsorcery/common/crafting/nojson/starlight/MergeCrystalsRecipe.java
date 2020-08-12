@@ -96,7 +96,7 @@ public class MergeCrystalsRecipe extends LiquidStarlightRecipe {
                 CrystalAttributes attrTwo = crystalTwo.getAttributes(crystalFoundTwo);
                 attrTwo = attrTwo != null ? attrTwo : CrystalAttributes.Builder.newBuilder(false).build();
 
-                CrystalAttributes mergeTo = attrOne.getTotalTierLevel() >= attrTwo.getTotalTierLevel() ? attrOne : attrOne;
+                CrystalAttributes mergeTo = attrOne.getTotalTierLevel() >= attrTwo.getTotalTierLevel() ? attrOne : attrTwo;
                 CrystalAttributes mergeFrom = attrOne.getTotalTierLevel() >= attrTwo.getTotalTierLevel() ? attrTwo : attrOne;
 
                 ItemStack resultStack = attrOne.getTotalTierLevel() >= attrTwo.getTotalTierLevel() ? crystalFoundOne.copy() : crystalFoundTwo.copy();
