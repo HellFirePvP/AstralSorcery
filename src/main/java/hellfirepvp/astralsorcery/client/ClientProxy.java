@@ -87,6 +87,8 @@ public class ClientProxy extends CommonProxy {
         super.initialize();
 
         this.addTomeBookmarks();
+
+        this.clientConfig.buildConfiguration();
     }
 
     @Override
@@ -161,8 +163,6 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void onClientSetup(FMLClientSetupEvent event) {
-        this.clientConfig.buildConfiguration();
-
         RegistryContainerTypes.initClient();
         RegistryEntities.initClient();
         RegistryTileEntities.initClient();

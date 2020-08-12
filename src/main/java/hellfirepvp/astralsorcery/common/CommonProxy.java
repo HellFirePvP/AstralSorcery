@@ -175,6 +175,9 @@ public class CommonProxy {
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(BlockBreakHelper::clearServerCache));
 
         SyncDataHolder.initialize();
+
+        this.commonConfig.buildConfiguration();
+        this.serverConfig.buildConfiguration();
     }
 
     public void attachLifecycle(IEventBus modEventBus) {
@@ -316,9 +319,6 @@ public class CommonProxy {
     // Mod events
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
-        this.commonConfig.buildConfiguration();
-        this.serverConfig.buildConfiguration();
-
         RegistryCapabilities.init(MinecraftForge.EVENT_BUS);
         StarlightNetworkRegistry.setupRegistry();
 
