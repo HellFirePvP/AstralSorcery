@@ -36,8 +36,10 @@ import javax.annotation.Nonnull;
  */
 public class RootArmara extends RootPerk {
 
-    public RootArmara(ResourceLocation name, int x, int y) {
-        super(name, ConstellationsAS.armara, x, y);
+    public static final Config CONFIG = new Config("root_armara");
+
+    public RootArmara(ResourceLocation name, float x, float y) {
+        super(name, CONFIG, ConstellationsAS.armara, x, y);
     }
 
     @Nonnull

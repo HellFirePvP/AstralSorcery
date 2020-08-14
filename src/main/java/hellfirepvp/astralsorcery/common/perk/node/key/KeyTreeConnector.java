@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
+import hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler;
 import hellfirepvp.astralsorcery.common.perk.node.MajorPerk;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -20,6 +21,7 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,9 +36,9 @@ import java.util.List;
  */
 public class KeyTreeConnector extends MajorPerk {
 
-    private static List<KeyTreeConnector> connectorCache = new ArrayList<>();
+    private static final List<KeyTreeConnector> connectorCache = new ArrayList<>();
 
-    public KeyTreeConnector(ResourceLocation name, int x, int y) {
+    public KeyTreeConnector(ResourceLocation name, float x, float y) {
         super(name, x, y);
         this.setCategory(CATEGORY_EPIPHANY);
         connectorCache.add(this);
@@ -55,7 +57,7 @@ public class KeyTreeConnector extends MajorPerk {
             }
         }
         if (!hasAllAdjacent) {
-            connectorCache.removeIf(perk -> PerkTree.PERK_TREE.getConnector(perk) == null);
+            connectorCache.removeIf(perk -> !PerkTree.PERK_TREE.getPerk(otherPerk -> otherPerk == perk).isPresent());
             return connectorCache.stream().anyMatch(progress::hasPerkUnlocked);
         } else {
             return true;

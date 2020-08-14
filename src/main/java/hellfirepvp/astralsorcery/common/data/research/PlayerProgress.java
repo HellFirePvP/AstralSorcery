@@ -91,15 +91,15 @@ public class PlayerProgress {
         if (compound.contains("attuned")) {
             String cst = compound.getString("attuned");
             IConstellation c = ConstellationRegistry.getConstellation(new ResourceLocation(cst));
-            if (c == null || !(c instanceof IMajorConstellation)) {
+            if (!(c instanceof IMajorConstellation)) {
                 AstralSorcery.log.warn("Failed to load attuned Constellation: " + cst + " - constellation doesn't exist or isn't major.");
             } else {
                 attunedConstellation = (IMajorConstellation) c;
             }
         }
 
-        int perkTreeLevel = compound.getInt("perkTreeVersion");
-        if (perkTreeLevel < PerkTree.PERK_TREE_VERSION) { //If your perk tree version is outdated, clear it.
+        long perkTreeLevel = compound.getLong("perkTreeVersion");
+        if (PerkTree.PERK_TREE.getVersion().map(v -> !v.equals(perkTreeLevel)).orElse(true)) { //If your perk tree is different, clear it.
             AstralSorcery.log.info("Clearing perk-tree because the player's skill-tree version was outdated!");
             if (attunedConstellation != null) {
                 AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(attunedConstellation);
@@ -117,11 +117,10 @@ public class PlayerProgress {
                     CompoundNBT tag = list.getCompound(i);
                     String perkRegName = tag.getString("perkName");
                     CompoundNBT data = tag.getCompound("perkData");
-                    AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
-                    if (perk != null) {
+                    PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName)).ifPresent(perk -> {
                         appliedPerks.add(perk);
                         appliedPerkData.put(perk, data);
-                    }
+                    });
                 }
             }
             if (compound.contains("sealedPerks")) {
@@ -129,10 +128,9 @@ public class PlayerProgress {
                 for (int i = 0; i < list.size(); i++) {
                     CompoundNBT tag = list.getCompound(i);
                     String perkRegName = tag.getString("perkName");
-                    AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
-                    if (perk != null) {
+                    PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName)).ifPresent(perk -> {
                         sealedPerks.add(perk);
-                    }
+                    });
                 }
             }
 
@@ -215,7 +213,7 @@ public class PlayerProgress {
             list.add(tag);
         }
         cmp.put("sealedPerks", list);
-        cmp.putInt("perkTreeVersion", PerkTree.PERK_TREE_VERSION);
+        PerkTree.PERK_TREE.getVersion().ifPresent(version -> cmp.putLong("perkTreeVersion", version));
 
         cmp.putDouble("perkExp", perkExp);
         cmp.putBoolean("bookReceived", tomeReceived);
@@ -334,7 +332,7 @@ public class PlayerProgress {
 
     public boolean hasPerkEffect(Predicate<AbstractPerk> perkMatch) {
         AbstractPerk perk = MiscUtils.iterativeSearch(appliedPerks, perkMatch);
-        return perk != null && RegistriesAS.REGISTRY_PERKS.containsValue(perk) && hasPerkEffect(perk);
+        return perk != null && hasPerkEffect(perk);
     }
 
     public boolean hasPerkEffect(AbstractPerk perk) {

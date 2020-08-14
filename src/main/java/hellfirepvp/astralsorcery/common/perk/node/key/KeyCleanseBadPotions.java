@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  */
 public class KeyCleanseBadPotions extends KeyPerk {
 
-    public KeyCleanseBadPotions(ResourceLocation name, int x, int y) {
+    public KeyCleanseBadPotions(ResourceLocation name, float x, float y) {
         super(name, x, y);
     }
 

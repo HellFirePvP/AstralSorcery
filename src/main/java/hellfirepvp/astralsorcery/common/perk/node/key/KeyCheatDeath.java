@@ -38,23 +38,16 @@ public class KeyCheatDeath extends KeyPerk implements CooldownPerk {
     private static final int defaultPotionDuration = 600;
     private static final int defaultPotionAmplifier = 0;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_cheat_death");
 
-    public KeyCheatDeath(ResourceLocation name, int x, int y) {
+    public KeyCheatDeath(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
     public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
         bus.addListener(this::onDeath);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     private void onDeath(LivingDeathEvent event) {
@@ -64,10 +57,10 @@ public class KeyCheatDeath extends KeyPerk implements CooldownPerk {
             PlayerProgress progress = ResearchHelper.getProgress(player, side);
             if (progress.hasPerkEffect(this)) {
                 if (!PerkCooldownHelper.isCooldownActiveForPlayer(player, this)) {
-                    PerkCooldownHelper.setCooldownActiveForPlayer(player, this, this.applyMultiplierI(this.config.cooldownPotionApplication.get()));
+                    PerkCooldownHelper.setCooldownActiveForPlayer(player, this, this.applyMultiplierI(CONFIG.cooldownPotionApplication.get()));
                     player.addPotionEffect(new EffectInstance(EffectsAS.EFFECT_CHEAT_DEATH,
-                            this.applyMultiplierI(this.config.potionDuration.get()),
-                            this.applyMultiplierI(this.config.potionAmplifier.get()),
+                            this.applyMultiplierI(CONFIG.potionDuration.get()),
+                            this.applyMultiplierI(CONFIG.potionAmplifier.get()),
                             true, false, true));
                 }
             }

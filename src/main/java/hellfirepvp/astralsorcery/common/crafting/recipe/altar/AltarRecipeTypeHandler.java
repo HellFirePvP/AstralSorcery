@@ -40,24 +40,24 @@ public class AltarRecipeTypeHandler {
     public static final Type<NBTCopyRecipe> NBT_COPY = new Type<>(AstralSorcery.key("nbt_copy"));
     public static final Type<SimpleAltarRecipe> DEFAULT = new Type<>(AstralSorcery.key("default"));
 
-    private static Map<ResourceLocation, Type<?>> typeConverterMap = new HashMap<>();
+    private static final Map<ResourceLocation, Type<?>> CONVERTER_MAP = new HashMap<>();
 
     public static <T extends SimpleAltarRecipe> Type<T> registerConverter(ResourceLocation name, Function<SimpleAltarRecipe, T> converter) {
         Type<T> type = new Type<>(name, converter);
-        typeConverterMap.put(name, type);
+        CONVERTER_MAP.put(name, type);
         return type;
     }
 
     private static <T extends SimpleAltarRecipe> void registerInternal(Type<T> type, Function<SimpleAltarRecipe, T> converter) {
         type.converter = converter;
-        typeConverterMap.put(type.key, type);
+        CONVERTER_MAP.put(type.key, type);
     }
 
     public static <T extends SimpleAltarRecipe> T convert(SimpleAltarRecipe recipe, ResourceLocation alternativeBase) {
-        return (T) typeConverterMap.getOrDefault(alternativeBase, DEFAULT).convert(recipe);
+        return (T) CONVERTER_MAP.getOrDefault(alternativeBase, DEFAULT).convert(recipe);
     }
 
-    public static void registerDefaultConverters() {
+    public static void init() {
         registerInternal(ALTAR_UPGRADE_ATTUNEMENT, AttunementUpgradeRecipe::convertToThis);
         registerInternal(ALTAR_UPGRADE_CONSTELLATION, ConstellationUpgradeRecipe::convertToThis);
         registerInternal(ALTAR_UPGRADE_TRAIT, TraitUpgradeRecipe::convertToThis);

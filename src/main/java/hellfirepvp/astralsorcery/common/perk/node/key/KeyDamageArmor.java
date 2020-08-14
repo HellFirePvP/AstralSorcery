@@ -39,11 +39,10 @@ public class KeyDamageArmor extends KeyPerk {
 
     private static final float defaultDamagePerArmor = 0.05F;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_damage_armor");
 
-    public KeyDamageArmor(ResourceLocation name, int x, int y) {
+    public KeyDamageArmor(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -51,12 +50,6 @@ public class KeyDamageArmor extends KeyPerk {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.LOW, this::onDamage);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     private void onDamage(LivingHurtEvent event) {
@@ -76,7 +69,7 @@ public class KeyDamageArmor extends KeyPerk {
                     return;
                 }
 
-                double dmgArmor = applyMultiplierD(this.config.damagePerArmor.get());
+                double dmgArmor = applyMultiplierD(CONFIG.damagePerArmor.get());
                 float dmg = event.getAmount();
                 dmg *= ((dmgArmor * armorPieces) * PerkAttributeHelper.getOrCreateMap(player, side)
                         .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT));

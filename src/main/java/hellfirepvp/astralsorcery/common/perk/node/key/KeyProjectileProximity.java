@@ -36,22 +36,15 @@ public class KeyProjectileProximity extends KeyPerk {
     private static final float defaultCapDistance = 100;
     private static final float defaultMaxAdditionalMultiplier = 0.75F;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_proj_proximity");
 
-    public KeyProjectileProximity(ResourceLocation name, int x, int y) {
+    public KeyProjectileProximity(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
     public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     private void onProjDamage(LivingHurtEvent event) {
@@ -62,10 +55,10 @@ public class KeyProjectileProximity extends KeyPerk {
                 LogicalSide side = this.getSide(player);
                 PlayerProgress prog = ResearchHelper.getProgress(player, side);
                 if (prog.hasPerkEffect(this)) {
-                    float added = (float) this.applyMultiplierD(this.config.maxAdditionalMultiplier.get());
+                    float added = (float) this.applyMultiplierD(CONFIG.maxAdditionalMultiplier.get());
                     added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
 
-                    float capDstSq = this.config.capDistance.get().floatValue();
+                    float capDstSq = CONFIG.capDistance.get().floatValue();
                     float dst = -(((float) (player.getDistanceSq(event.getEntityLiving()))) - capDstSq);
                     dst /= capDstSq;
                     if (dst < 0) {

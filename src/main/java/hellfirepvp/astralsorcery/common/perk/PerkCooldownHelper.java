@@ -106,10 +106,11 @@ public class PerkCooldownHelper {
 
         @Override
         public void onContainerTimeout(PlayerWrapperContainer plWrapper, ResourceLocation key) {
-            AbstractPerk perk = PerkTree.PERK_TREE.getPerk(key);
-            if (perk instanceof CooldownPerk) {
-                ((CooldownPerk) perk).onCooldownTimeout(plWrapper.player);
-            }
+            PerkTree.PERK_TREE.getPerk(key).ifPresent(perk -> {
+                if (perk instanceof CooldownPerk) {
+                    ((CooldownPerk) perk).onCooldownTimeout(plWrapper.player);
+                }
+            });
         }
     }
 

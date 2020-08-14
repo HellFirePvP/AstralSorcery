@@ -37,11 +37,10 @@ public class KeyCullingAttack extends KeyPerk {
 
     private static final float defaultCullHealth = 0.15F;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_culling");
 
-    public KeyCullingAttack(ResourceLocation name, int x, int y) {
+    public KeyCullingAttack(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -49,12 +48,6 @@ public class KeyCullingAttack extends KeyPerk {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.LOW, this::onDamage);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return config;
     }
 
     private void onDamage(LivingDamageEvent event) {
@@ -66,7 +59,7 @@ public class KeyCullingAttack extends KeyPerk {
             if (prog.hasPerkEffect(this)) {
                 LivingEntity attacked = event.getEntityLiving();
                 float actCull = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(this.config.cullHealth.get()));
+                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.cullHealth.get()));
                 float lifePerc = attacked.getHealth() / attacked.getMaxHealth();
                 if (lifePerc < actCull) {
                     attacked.setHealth(0); // Try faithfully...

@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
+import hellfirepvp.astralsorcery.common.lib.PerkCustomModifiersAS;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.node.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
@@ -31,27 +32,10 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class KeyVorux extends ConstellationPerk {
 
-    public KeyVorux(ResourceLocation name, int x, int y) {
+    public KeyVorux(ResourceLocation name, float x, float y) {
         super(name, ConstellationsAS.vorux, x, y);
         setCategory(CATEGORY_FOCUS);
-        this.addModifier(new PerkAttributeModifier(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, ModifierType.ADDED_MULTIPLY, 0.01F) {
-            @Override
-            protected void initModifier() {
-                super.initModifier();
-
-                this.setAbsolute();
-            }
-
-            @Override
-            public float getValue(PlayerEntity player, PlayerProgress progress) {
-                return getRawValue() * (progress.getAppliedPerks().size() - progress.getSealedPerks().size());
-            }
-
-            @Override
-            public boolean hasDisplayString() {
-                return false;
-            }
-        });
+        this.addModifier(PerkCustomModifiersAS.FOCUS_VORUX);
     }
 
     @Override

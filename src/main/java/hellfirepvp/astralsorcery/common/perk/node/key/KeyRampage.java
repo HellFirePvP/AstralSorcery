@@ -39,11 +39,10 @@ public class KeyRampage extends KeyPerk {
     private static final float defaultRampageChance = 1F;
     private static final int defaultRampageDuration = 100;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_rampage");
 
-    public KeyRampage(ResourceLocation name, int x, int y) {
+    public KeyRampage(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -53,12 +52,6 @@ public class KeyRampage extends KeyPerk {
         bus.addListener(EventPriority.LOWEST, this::onEntityDeath);
     }
 
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
-    }
-
     private void onEntityDeath(LivingDeathEvent event) {
         DamageSource source = event.getSource();
         if (source.getTrueSource() != null && source.getTrueSource() instanceof PlayerEntity) {
@@ -66,12 +59,12 @@ public class KeyRampage extends KeyPerk {
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
             if (side.isServer() && prog.hasPerkEffect(this)) {
-                float ch = (float) this.applyMultiplierD(this.config.rampageChance.get());
+                float ch = (float) this.applyMultiplierD(CONFIG.rampageChance.get());
                 ch = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, ch);
                 if (rand.nextFloat() < ch) {
 
-                    int dur = (int) this.applyMultiplierD(this.config.rampageDuration.get());
+                    int dur = (int) this.applyMultiplierD(CONFIG.rampageDuration.get());
                     dur = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_RAMPAGE_DURATION, dur));
                     dur = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)

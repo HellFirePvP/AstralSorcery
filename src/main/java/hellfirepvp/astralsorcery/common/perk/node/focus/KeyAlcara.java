@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk.node.focus;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
+import hellfirepvp.astralsorcery.common.lib.PerkConvertersAS;
 import hellfirepvp.astralsorcery.common.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.node.ConstellationPerk;
@@ -31,19 +32,10 @@ import javax.annotation.Nullable;
  */
 public class KeyAlcara extends ConstellationPerk {
 
-    public KeyAlcara(ResourceLocation name, int x, int y) {
+    public KeyAlcara(ResourceLocation name, float x, float y) {
         super(name, ConstellationsAS.alcara, x, y);
         setCategory(CATEGORY_FOCUS);
-        this.addConverter(new PerkConverter() {
-            @Nonnull
-            @Override
-            public PerkAttributeModifier convertModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
-                if (modifier.getAttributeType().equals(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP)) {
-                    return modifier.convertModifier(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, modifier.getMode(), modifier.getValue(player, progress));
-                }
-                return modifier;
-            }
-        });
+        this.addConverter(PerkConvertersAS.FOCUS_ALCARA);
     }
 
     @Override

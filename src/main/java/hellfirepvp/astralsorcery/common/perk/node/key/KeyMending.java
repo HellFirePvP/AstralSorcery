@@ -33,23 +33,16 @@ public class KeyMending extends KeyPerk implements PlayerTickPerk {
 
     private static final int defaultChanceToRepair = 800;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_mending");
 
-    public KeyMending(ResourceLocation name, int x, int y) {
+    public KeyMending(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     @Override
     public void onPlayerTick(PlayerEntity player, LogicalSide side) {
         if (side.isServer()) {
-            int repairChance = this.applyMultiplierI(this.config.chanceToRepair.get());
+            int repairChance = this.applyMultiplierI(CONFIG.chanceToRepair.get());
             repairChance /= PerkAttributeHelper.getOrCreateMap(player, side)
                     .getModifier(player, ResearchHelper.getProgress(player, side), PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
             repairChance = Math.max(repairChance, 1);

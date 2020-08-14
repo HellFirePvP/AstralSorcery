@@ -41,11 +41,10 @@ public class KeyDisarm extends KeyPerk {
 
     private static final float defaultDropChance = 0.05F;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_disarm");
 
-    public KeyDisarm(ResourceLocation name, int x, int y) {
+    public KeyDisarm(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -53,12 +52,6 @@ public class KeyDisarm extends KeyPerk {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.HIGH, this::onAttack);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     private void onAttack(LivingHurtEvent event) {
@@ -69,7 +62,7 @@ public class KeyDisarm extends KeyPerk {
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(this.config.dropChance.get()));
+                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.dropChance.get()));
                 float currentChance = MathHelper.clamp(chance, 0F, 1F);
                 for (EquipmentSlotType slot : EquipmentSlotType.values()) {
                     if (rand.nextFloat() >= currentChance) {

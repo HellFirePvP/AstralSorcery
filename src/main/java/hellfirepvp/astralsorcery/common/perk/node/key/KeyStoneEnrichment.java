@@ -41,28 +41,21 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
     private static final int defaultEnrichmentRadius = 3;
     private static final int defaultChanceToEnrich = 55;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_stone_enrichment");
 
-    public KeyStoneEnrichment(ResourceLocation name, int x, int y) {
+    public KeyStoneEnrichment(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     @Override
     public void onPlayerTick(PlayerEntity player, LogicalSide side) {
         if (side.isServer()) {
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
-            float modChance = (float) this.applyMultiplierD(this.config.chanceToEnrich.get());
+            float modChance = (float) this.applyMultiplierD(CONFIG.chanceToEnrich.get());
             modChance /= PerkAttributeHelper.getOrCreateMap(player, side)
                     .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
             if (rand.nextInt(Math.round(Math.max(modChance, 1))) == 0) {
-                float radius = (float) this.applyMultiplierD(this.config.enrichmentRadius.get());
+                float radius = (float) this.applyMultiplierD(CONFIG.enrichmentRadius.get());
                 radius *= PerkAttributeHelper.getOrCreateMap(player, side)
                         .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
 

@@ -20,7 +20,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -39,24 +38,18 @@ public abstract class RootPerk extends AttributeModifierPerk {
 
     private final Config config;
 
-    public RootPerk(ResourceLocation name, IMajorConstellation constellation, int x, int y) {
+    public RootPerk(ResourceLocation name, Config rootConfig, IMajorConstellation constellation, float x, float y) {
         super(name, x, y);
         this.constellation = constellation;
-        this.config = new Config(name.getPath());
+        this.config = rootConfig;
         this.setCategory(CATEGORY_ROOT);
-        this.setRequireDiscoveredConstellation(this.constellation);
+        this.addRequireConstellation(this.constellation);
     }
 
     @Override
     protected PerkTreePoint<? extends RootPerk> initPerkTreePoint() {
         return new PerkTreeConstellation<>(this, getOffset(),
                 this.constellation, PerkTreeConstellation.ROOT_SPRITE_SIZE);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     public IMajorConstellation getConstellation() {
@@ -88,7 +81,7 @@ public abstract class RootPerk extends AttributeModifierPerk {
 
         private ForgeConfigSpec.DoubleValue expMultiplier;
 
-        private Config(String section) {
+        public Config(String section) {
             super(section);
         }
 

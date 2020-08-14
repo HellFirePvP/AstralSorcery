@@ -12,9 +12,10 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.datagen.assets.AstralBlockStateMappingProvider;
 import hellfirepvp.astralsorcery.datagen.data.advancements.AstralAdvancementProvider;
 import hellfirepvp.astralsorcery.datagen.data.loot.AstralLootTableProvider;
-import hellfirepvp.astralsorcery.datagen.data.recipe.AstralRecipeProvider;
-import hellfirepvp.astralsorcery.datagen.data.tag.AstralBlockTagsProvider;
-import hellfirepvp.astralsorcery.datagen.data.tag.AstralItemTagsProvider;
+import hellfirepvp.astralsorcery.datagen.data.perks.AstralPerkTreeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.AstralRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.tags.AstralBlockTagsProvider;
+import hellfirepvp.astralsorcery.datagen.data.tags.AstralItemTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,6 +48,7 @@ public class AstralDataGenerator {
             gen.addProvider(new AstralBlockTagsProvider(gen));
             gen.addProvider(new AstralLootTableProvider(gen));
             gen.addProvider(new AstralRecipeProvider(gen));
+            gen.addProvider(new AstralPerkTreeProvider(gen));
         }
 
         if (event.includeClient()) {

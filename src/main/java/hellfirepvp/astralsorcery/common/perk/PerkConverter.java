@@ -9,19 +9,22 @@
 package hellfirepvp.astralsorcery.common.perk;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonObject;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,27 +33,10 @@ import java.util.Collections;
  * Created by HellFirePvP
  * Date: 08.08.2019 / 17:28
  */
-public abstract class PerkConverter {
+public abstract class PerkConverter extends ForgeRegistryEntry<PerkConverter> {
 
-    private static int counter = 0;
-
-    private final int id;
-
-    public PerkConverter() {
-        this.id = counter;
-        counter++;
-    }
-
-    public static final PerkConverter IDENTITY = new PerkConverter() {
-        @Nonnull
-        @Override
-        public PerkAttributeModifier convertModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier perkAttributeModifier, @Nullable ModifierSource owningSource) {
-            return perkAttributeModifier;
-        }
-    };
-
-    public int getId() {
-        return id;
+    public PerkConverter(ResourceLocation id) {
+        this.setRegistryName(id);
     }
 
     /**
@@ -72,20 +58,9 @@ public abstract class PerkConverter {
 
     public void onRemove(PlayerEntity player, LogicalSide dist) {}
 
-    public PerkConverter andThen(PerkConverter next) {
-        PerkConverter thisConverter = this;
-        return new PerkConverter() {
-            @Nonnull
-            @Override
-            public PerkAttributeModifier convertModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
-                return thisConverter.convertModifier(player, progress, next.convertModifier(player, progress, modifier, owningSource), owningSource);
-            }
-        };
-    }
-
     public Radius asRangedConverter(Point.Float offset, float radius) {
         PerkConverter thisConverter = this;
-        return new Radius(offset, radius) {
+        return new Radius(this.getRegistryName(), offset, radius) {
             @Nonnull
             @Override
             public PerkAttributeModifier convertModifierInRange(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, AbstractPerk owningPerk) {
@@ -105,7 +80,12 @@ public abstract class PerkConverter {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PerkConverter that = (PerkConverter) o;
-        return id == that.id;
+        return this.getRegistryName() == that.getRegistryName();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getRegistryName());
     }
 
     public static abstract class Radius extends PerkConverter {
@@ -113,7 +93,8 @@ public abstract class PerkConverter {
         private final float radius;
         private final Point.Float offset;
 
-        public Radius(Point.Float point, float radius) {
+        public Radius(ResourceLocation id, Point.Float point, float radius) {
+            super(id);
             this.offset = point;
             this.radius = radius;
         }
@@ -128,7 +109,7 @@ public abstract class PerkConverter {
 
         public Radius withNewRadius(float radius) {
             Radius thisRadius = this;
-            return new Radius(thisRadius.getOffset(), radius) {
+            return new Radius(this.getRegistryName(), thisRadius.getOffset(), radius) {
                 @Nonnull
                 @Override
                 public PerkAttributeModifier convertModifierInRange(PlayerEntity player, PlayerProgress progress, PerkAttributeModifier modifier, AbstractPerk owningPerk) {

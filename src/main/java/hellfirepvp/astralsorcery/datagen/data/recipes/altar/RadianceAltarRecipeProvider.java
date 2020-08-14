@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.datagen.data.recipe.altar;
+package hellfirepvp.astralsorcery.datagen.data.recipes.altar;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;

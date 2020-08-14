@@ -6,14 +6,14 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.datagen.data.recipe.vanilla;
+package hellfirepvp.astralsorcery.datagen.data.recipes.vanilla;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
-import hellfirepvp.astralsorcery.datagen.data.recipe.builder.ResultCookingRecipeBuilder;
-import hellfirepvp.astralsorcery.datagen.data.recipe.builder.SimpleShapedRecipeBuilder;
+import hellfirepvp.astralsorcery.datagen.data.recipes.builder.ResultCookingRecipeBuilder;
+import hellfirepvp.astralsorcery.datagen.data.recipes.builder.SimpleShapedRecipeBuilder;
 import net.minecraft.data.CustomRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;

@@ -31,7 +31,7 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class KeyDigTypes extends KeyPerk {
 
-    public KeyDigTypes(ResourceLocation name, int x, int y) {
+    public KeyDigTypes(ResourceLocation name, float x, float y) {
         super(name, x, y);
     }
 

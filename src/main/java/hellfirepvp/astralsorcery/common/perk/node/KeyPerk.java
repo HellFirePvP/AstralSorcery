@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.perk.node;
 
+import hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler;
 import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,7 +22,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class KeyPerk extends MajorPerk {
 
-    public KeyPerk(ResourceLocation name, int x, int y) {
+    public KeyPerk(ResourceLocation name, float x, float y) {
         super(name, x, y);
         this.setCategory(CATEGORY_KEY);
     }

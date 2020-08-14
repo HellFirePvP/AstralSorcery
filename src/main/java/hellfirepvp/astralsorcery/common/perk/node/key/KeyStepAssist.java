@@ -29,7 +29,7 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class KeyStepAssist extends KeyPerk implements PlayerTickPerk, CooldownPerk {
 
-    public KeyStepAssist(ResourceLocation name, int x, int y) {
+    public KeyStepAssist(ResourceLocation name, float x, float y) {
         super(name, x, y);
     }
 

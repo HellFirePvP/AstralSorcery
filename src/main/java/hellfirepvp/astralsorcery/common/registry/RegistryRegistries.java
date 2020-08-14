@@ -17,7 +17,9 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipe
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
+import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeTypeHelper;
@@ -72,14 +74,17 @@ public class RegistryRegistries {
                 .disableOverrides()
                 .create();
 
-        REGISTRY_PERKS = (IForgeRegistryModifiable<AbstractPerk>) new RegistryBuilder<AbstractPerk>()
-                .setName(REGISTRY_NAME_PERKS)
-                .setType(AbstractPerk.class)
-                .add((IForgeRegistry.AddCallback<AbstractPerk>) (owner, stage, id, obj, oldObj) -> {
-                    if (PerkTree.PERK_TREE.getConnector(obj) == null) {
-                        PerkTree.PERK_TREE.addPerk(obj);
-                    }
-                })
+        REGISTRY_PERK_ATTRIBUTE_CONVERTERS = new RegistryBuilder<PerkConverter>()
+                .setName(REGISTRY_NAME_PERK_ATTRIBUTE_CONVERTERS)
+                .setType(PerkConverter.class)
+                .disableSaving()
+                .disableOverrides()
+                .allowModification()
+                .create();
+
+        REGISTRY_PERK_CUSTOM_MODIFIERS = new RegistryBuilder<PerkAttributeModifier>()
+                .setName(REGISTRY_NAME_PERK_CUSTOM_MODIFIERS)
+                .setType(PerkAttributeModifier.class)
                 .disableSaving()
                 .disableOverrides()
                 .allowModification()

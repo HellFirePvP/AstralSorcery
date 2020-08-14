@@ -36,7 +36,7 @@ import java.util.Objects;
  */
 public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
 
-    private Point.Float offset;
+    private final Point.Float offset;
     private final T perk;
     private int renderSize;
 

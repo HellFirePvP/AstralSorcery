@@ -25,6 +25,7 @@ public class AttributeModifierDodge extends PerkAttributeModifier {
     public AttributeModifierDodge(PerkAttributeType type, ModifierType mode, float value) {
         super(type, mode, value);
     }
+
     @Override
     @OnlyIn(Dist.CLIENT)
     public String getLocalizedAttributeValue() {

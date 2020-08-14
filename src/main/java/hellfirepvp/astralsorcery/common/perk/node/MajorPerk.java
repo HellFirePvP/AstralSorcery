@@ -8,10 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.perk.node;
 
+import hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreeMajor;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,9 +25,9 @@ import net.minecraft.util.ResourceLocation;
  */
 public class MajorPerk extends AttributeModifierPerk {
 
-    public MajorPerk(ResourceLocation name, int x, int y) {
+    public MajorPerk(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        setCategory(CATEGORY_MAJOR);
+        this.setCategory(CATEGORY_MAJOR);
     }
 
     @Override

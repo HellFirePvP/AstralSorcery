@@ -72,5 +72,4 @@ public class RegistryPerkAttributeTypes {
         AstralSorcery.getProxy().getRegistryPrimer().register(type);
         return type;
     }
-
 }

@@ -20,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class KeyChargeBalancing extends KeyPerk {
 
-    public KeyChargeBalancing(ResourceLocation name, int x, int y) {
+    public KeyChargeBalancing(ResourceLocation name, float x, float y) {
         super(name, x, y);
     }
 }

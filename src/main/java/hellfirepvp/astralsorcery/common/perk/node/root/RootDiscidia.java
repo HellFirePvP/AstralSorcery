@@ -37,8 +37,10 @@ import javax.annotation.Nonnull;
  */
 public class RootDiscidia extends RootPerk {
 
-    public RootDiscidia(ResourceLocation name, int x, int y) {
-        super(name, ConstellationsAS.discidia, x, y);
+    public static final Config CONFIG = new Config("root_discidia");
+
+    public RootDiscidia(ResourceLocation name, float x, float y) {
+        super(name, CONFIG, ConstellationsAS.discidia, x, y);
     }
 
     @Nonnull

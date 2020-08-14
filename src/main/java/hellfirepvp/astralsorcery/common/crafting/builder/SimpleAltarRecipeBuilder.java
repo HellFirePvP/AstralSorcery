@@ -40,7 +40,7 @@ import java.util.function.Consumer;
  */
 public class SimpleAltarRecipeBuilder<T extends SimpleAltarRecipe> extends CustomRecipeBuilder<T> {
 
-    private T recipe;
+    private final T recipe;
 
     private SimpleAltarRecipeBuilder(T recipe) {
         this.recipe = recipe;

@@ -35,11 +35,10 @@ public class KeyNoArmor extends KeyPerk {
 
     private static final float defaultDamageTakenMultiplier = 0.7F;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_no_armor");
 
-    public KeyNoArmor(ResourceLocation name, int x, int y) {
+    public KeyNoArmor(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -47,12 +46,6 @@ public class KeyNoArmor extends KeyPerk {
         super.attachListeners(bus);
 
         bus.addListener(this::onLivingHurt);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     private void onLivingHurt(LivingHurtEvent event) {
@@ -71,7 +64,7 @@ public class KeyNoArmor extends KeyPerk {
                 }
             }
             if (eq < 2) {
-                float multiplier = (float) this.applyMultiplierD(this.config.damageTakenMultiplier.get());
+                float multiplier = (float) this.applyMultiplierD(CONFIG.damageTakenMultiplier.get());
                 float effMulti = PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
                 event.setAmount(event.getAmount() * (multiplier * (1F / effMulti)));
             }

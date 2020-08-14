@@ -27,7 +27,7 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class KeyNoKnockback extends KeyPerk {
 
-    public KeyNoKnockback(ResourceLocation name, int x, int y) {
+    public KeyNoKnockback(ResourceLocation name, float x, float y) {
         super(name, x, y);
     }
 

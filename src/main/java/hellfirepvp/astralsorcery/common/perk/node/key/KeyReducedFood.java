@@ -24,7 +24,7 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class KeyReducedFood extends KeyPerk implements PlayerTickPerk {
 
-    public KeyReducedFood(ResourceLocation name, int x, int y) {
+    public KeyReducedFood(ResourceLocation name, float x, float y) {
         super(name, x, y);
     }
 

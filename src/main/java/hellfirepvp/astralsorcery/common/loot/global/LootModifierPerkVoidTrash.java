@@ -63,19 +63,17 @@ public class LootModifierPerkVoidTrash extends LootModifier {
         if (!prog.isValid() || !prog.hasPerkEffect(perk -> perk instanceof KeyVoidTrash)) {
             return generatedLoot;
         }
-        AbstractPerk registeredPerk = PerkTree.PERK_TREE.getPerk(perk -> perk instanceof KeyVoidTrash);
-        if (registeredPerk == null) {
+        if (!PerkTree.PERK_TREE.getPerk(perk -> perk instanceof KeyVoidTrash).isPresent()) {
             return generatedLoot;
         }
-        KeyVoidTrash voidTrashPerk = (KeyVoidTrash) registeredPerk;
 
-        double chance = voidTrashPerk.getConfig().getOreChance() *
+        double chance = KeyVoidTrash.CONFIG.getOreChance() *
                 PerkAttributeHelper.getOrCreateMap(player, LogicalSide.SERVER).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
 
         return generatedLoot.stream()
                 .filter(stack -> !stack.isEmpty())
                 .map(result -> {
-                    if (voidTrashPerk.getConfig().isTrash(result)) {
+                    if (KeyVoidTrash.CONFIG.isTrash(result)) {
                         result = ItemStack.EMPTY;
 
                         if (context.getRandom().nextFloat() < chance) {

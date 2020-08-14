@@ -44,11 +44,10 @@ public class KeyGrowables extends KeyPerk implements PlayerTickPerk {
     private static final float defaultChanceToBonemeal = 0.3F;
     private static final int defaultRadius = 3;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_growable");
 
-    public KeyGrowables(ResourceLocation name, int x, int y) {
+    public KeyGrowables(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -59,10 +58,10 @@ public class KeyGrowables extends KeyPerk implements PlayerTickPerk {
 
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
         float cChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(this.config.chanceToBonemeal.get()));
+                .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.chanceToBonemeal.get()));
         if (rand.nextFloat() < cChance) {
             float fRadius = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, this.applyMultiplierI(this.config.radius.get()));
+                    .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, this.applyMultiplierI(CONFIG.radius.get()));
             int rRadius = Math.max(MathHelper.floor(fRadius), 1);
 
             BlockPos pos = player.getPosition().add(
@@ -90,12 +89,6 @@ public class KeyGrowables extends KeyPerk implements PlayerTickPerk {
                 PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(w, pos, 16));
             }
         }
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     public static class Config extends ConfigEntry {

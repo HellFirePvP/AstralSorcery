@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.datagen.data.recipe.infuser;
+package hellfirepvp.astralsorcery.datagen.data.recipes.infuser;
 
 import hellfirepvp.astralsorcery.common.crafting.builder.LiquidInfusionBuilder;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;

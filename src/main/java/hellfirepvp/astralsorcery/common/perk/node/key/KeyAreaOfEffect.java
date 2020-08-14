@@ -36,7 +36,7 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class KeyAreaOfEffect extends KeyAddEnchantment {
 
-    public KeyAreaOfEffect(ResourceLocation name, int x, int y) {
+    public KeyAreaOfEffect(ResourceLocation name, float x, float y) {
         super(name, x, y);
         this.addEnchantment(Enchantments.SWEEPING, 2);
     }

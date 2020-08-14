@@ -20,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class KeyMantleFlight extends KeyPerk {
 
-    public KeyMantleFlight(ResourceLocation name, int x, int y) {
+    public KeyMantleFlight(ResourceLocation name, float x, float y) {
         super(name, x, y);
     }
 }

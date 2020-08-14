@@ -30,7 +30,7 @@ public class BaseConfiguration {
     public static final String FILE_SEPARATOR = System.getProperty("file.separator");
     public static final Splitter DOT_SPLITTER = Splitter.on(".");
 
-    private List<ConfigEntry> configEntries = new ArrayList<>();
+    private final List<ConfigEntry> configEntries = new ArrayList<>();
 
     private final ModConfig.Type configType;
 

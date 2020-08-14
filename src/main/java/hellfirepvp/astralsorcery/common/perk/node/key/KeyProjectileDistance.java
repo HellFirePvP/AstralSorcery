@@ -37,11 +37,10 @@ public class KeyProjectileDistance extends KeyPerk {
     private static final float defaultCapDistance = 6400;
     private static final float defaultMaxAdditionalMultiplier = 0.75F;
 
-    private Config config;
+    public static final Config CONFIG = new Config("key_proj_distance");
 
-    public KeyProjectileDistance(ResourceLocation name, int x, int y) {
+    public KeyProjectileDistance(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -49,12 +48,6 @@ public class KeyProjectileDistance extends KeyPerk {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.HIGH, this::onProjDamage);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     private void onProjDamage(LivingHurtEvent event) {
@@ -65,10 +58,10 @@ public class KeyProjectileDistance extends KeyPerk {
                 LogicalSide side = this.getSide(player);
                 PlayerProgress prog = ResearchHelper.getProgress(player, side);
                 if (prog.hasPerkEffect(this)) {
-                    float added = (float) this.applyMultiplierD(this.config.maxAdditionalMultiplier.get());
+                    float added = (float) this.applyMultiplierD(CONFIG.maxAdditionalMultiplier.get());
                     added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
 
-                    float capDstSq = (this.config.capDistance.get().floatValue());
+                    float capDstSq = (CONFIG.capDistance.get().floatValue());
                     float mul = ((float) (player.getDistanceSq(event.getEntityLiving()))) / capDstSq;
                     added *= (mul > 1 ? 1 : mul);
 

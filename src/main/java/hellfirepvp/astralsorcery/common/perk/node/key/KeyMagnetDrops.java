@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class KeyMagnetDrops extends KeyPerk {
 
-    public KeyMagnetDrops(ResourceLocation name, int x, int y) {
+    public KeyMagnetDrops(ResourceLocation name, float x, float y) {
         super(name, x, y);
     }
 

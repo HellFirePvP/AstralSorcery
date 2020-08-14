@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.datagen.data.recipe.builder;
+package hellfirepvp.astralsorcery.datagen.data.recipes.builder;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

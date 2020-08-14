@@ -37,22 +37,15 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
     private static final int defaultLightSpawnRate = 15;
     private static final int defaultLightSpawnRadius = 5;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_spawn_lights");
 
-    public KeySpawnLights(ResourceLocation name, int x, int y) {
+    public KeySpawnLights(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
     public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     @Override
@@ -62,12 +55,12 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
             if (!prog.isValid() || !prog.doPerkAbilities()) {
                 return;
             }
-            int spawnRate = this.applyMultiplierI(this.config.lightSpawnRate.get());
+            int spawnRate = this.applyMultiplierI(CONFIG.lightSpawnRate.get());
             spawnRate = Math.max(spawnRate, 1);
             if (player.ticksExisted % spawnRate == 0) {
                 int attempts = 4;
                 while (attempts > 0) {
-                    int radius = this.applyMultiplierI(this.config.lightSpawnRadius.get());
+                    int radius = this.applyMultiplierI(CONFIG.lightSpawnRadius.get());
                     BlockPos pos = player.getPosition().add(
                             rand.nextInt(radius) * (rand.nextBoolean() ? 1 : -1),
                             rand.nextInt(radius) * (rand.nextBoolean() ? 1 : -1),

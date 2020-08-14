@@ -36,7 +36,7 @@ import java.util.Collection;
  */
 public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
 
-    public GemSlotMajorPerk(ResourceLocation name, int x, int y) {
+    public GemSlotMajorPerk(ResourceLocation name, float x, float y) {
         super(name, x, y);
         this.setName(PerkNamesAS.name("gem_socket"));
         this.disableTooltipCaching();

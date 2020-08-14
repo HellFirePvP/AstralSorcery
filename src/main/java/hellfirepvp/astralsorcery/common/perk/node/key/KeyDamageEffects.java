@@ -39,11 +39,10 @@ public class KeyDamageEffects extends KeyPerk {
 
     private static final float defaultApplicationChance = 0.08F;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_damage_effects");
 
-    public KeyDamageEffects(ResourceLocation name, int x, int y) {
+    public KeyDamageEffects(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -51,12 +50,6 @@ public class KeyDamageEffects extends KeyPerk {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.LOWEST, this::onDamageResult);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     private void onDamageResult(LivingDamageEvent event) {
@@ -68,7 +61,7 @@ public class KeyDamageEffects extends KeyPerk {
             if (prog.hasPerkEffect(this)) {
                 LivingEntity attacked = event.getEntityLiving();
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(this.config.applicationChance.get()));
+                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.applicationChance.get()));
                 if (rand.nextFloat() < chance) {
                     switch (rand.nextInt(3)) {
                         case 0:

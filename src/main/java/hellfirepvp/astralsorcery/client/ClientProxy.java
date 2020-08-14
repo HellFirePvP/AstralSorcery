@@ -34,6 +34,8 @@ import hellfirepvp.astralsorcery.common.base.patreon.manager.PatreonManagerClien
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
+import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
@@ -78,7 +80,9 @@ public class ClientProxy extends CommonProxy {
                         if (!SelectiveReloadStateHandler.INSTANCE.get().test(VanillaResourceType.LANGUAGES)) {
                             return;
                         }
-                        RegistriesAS.REGISTRY_PERKS.forEach(AbstractPerk::clearClientTextCaches);
+                        PerkTree.PERK_TREE.getPerkPoints().stream()
+                                .map(PerkTreePoint::getPerk)
+                                .forEach(AbstractPerk::clearClientTextCaches);
                     }));
         }
 

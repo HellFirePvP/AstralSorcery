@@ -14,7 +14,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.datagen.data.tag;
+package hellfirepvp.astralsorcery.datagen.data.tags;
 
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.data.DataGenerator;

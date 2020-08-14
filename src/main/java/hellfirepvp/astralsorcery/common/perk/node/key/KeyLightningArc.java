@@ -60,11 +60,10 @@ public class KeyLightningArc extends KeyPerk {
 
     private static final int arcChains = 3;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_lightning_arc");
 
-    public KeyLightningArc(ResourceLocation name, int x, int y) {
+    public KeyLightningArc(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -72,12 +71,6 @@ public class KeyLightningArc extends KeyPerk {
         super.attachListeners(bus);
 
         bus.addListener(EventPriority.LOWEST, this::onAttack);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     private void onAttack(LivingHurtEvent event) {
@@ -92,16 +85,16 @@ public class KeyLightningArc extends KeyPerk {
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
             if (side.isServer() && prog.hasPerkEffect(this) && prog.doPerkAbilities()) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(this.config.arcChance.get()));
+                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.arcChance.get()));
                 if (rand.nextFloat() < chance) {
                     float dmg = event.getAmount();
-                    dmg *= this.applyMultiplierD(this.config.arcPercent.get());
+                    dmg *= this.applyMultiplierD(CONFIG.arcPercent.get());
                     new RepetitiveArcEffect(player.world,
                             player,
-                            this.applyMultiplierI(this.config.arcTicks.get()),
+                            this.applyMultiplierI(CONFIG.arcTicks.get()),
                             event.getEntityLiving().getEntityId(),
                             dmg,
-                            this.applyMultiplierD(this.config.arcDistance.get())).fire();
+                            this.applyMultiplierD(CONFIG.arcDistance.get())).fire();
                 }
             }
         }

@@ -39,10 +39,12 @@ import java.util.UUID;
  */
 public class RootVicio extends RootPerk implements PlayerTickPerk {
 
+    public static final Config CONFIG = new Config("root_vicio");
+
     private Map<ResourceLocation, Map<UUID, Integer>> moveTrackMap = new HashMap<>();
 
-    public RootVicio(ResourceLocation name, int x, int y) {
-        super(name, ConstellationsAS.vicio, x, y);
+    public RootVicio(ResourceLocation name, float x, float y) {
+        super(name, CONFIG, ConstellationsAS.vicio, x, y);
     }
 
     @Nonnull

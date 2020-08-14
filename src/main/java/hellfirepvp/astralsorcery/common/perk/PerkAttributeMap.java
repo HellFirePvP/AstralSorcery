@@ -51,14 +51,14 @@ public class PerkAttributeMap {
         for (PerkAttributeModifier mod : modify) {
 
             PerkAttributeModifier preMod = mod;
-            LogCategory.PERKS.info(() -> "Applying unique modifier " + preMod.getId());
+            LogCategory.PERKS.info(() -> "Applying unique modifier " + preMod.getComparisonKey());
 
             mod = this.convertModifier(player, prog, mod, owningSource);
 
             PerkAttributeModifier postMod = mod;
-            LogCategory.PERKS.info(() -> "Applying converted modifier " + postMod.getId());
+            LogCategory.PERKS.info(() -> "Applying converted modifier " + postMod.getComparisonKey());
             if (!this.cacheModifier(player, mod.getAttributeType(), mod)) {
-                LogCategory.PERKS.warn(() -> "Could not apply modifier " + postMod.getId() + " - already applied!");
+                LogCategory.PERKS.warn(() -> "Could not apply modifier " + postMod.getComparisonKey() + " - already applied!");
             }
         }
     }
@@ -86,14 +86,14 @@ public class PerkAttributeMap {
         for (PerkAttributeModifier mod : modify) {
 
             PerkAttributeModifier preMod = mod;
-            LogCategory.PERKS.info(() -> "Removing unique modifier " + preMod.getId());
+            LogCategory.PERKS.info(() -> "Removing unique modifier " + preMod.getComparisonKey());
 
             mod = this.convertModifier(player, prog, mod, owningSource);
 
             PerkAttributeModifier postMod = mod;
-            LogCategory.PERKS.info(() -> "Removing converted modifier " + postMod.getId());
+            LogCategory.PERKS.info(() -> "Removing converted modifier " + postMod.getComparisonKey());
             if (!this.dropModifier(player, mod.getAttributeType(), mod)) {
-                LogCategory.PERKS.warn(() -> "Could not remove modifier " + postMod.getId() + " - not applied!");
+                LogCategory.PERKS.warn(() -> "Could not remove modifier " + postMod.getComparisonKey() + " - not applied!");
             }
         }
     }
@@ -130,7 +130,7 @@ public class PerkAttributeMap {
     boolean applyConverter(PlayerEntity player, PerkConverter converter) {
         assertConvertersModifiable();
 
-        LogCategory.PERKS.info(() -> "Try adding converter " + converter.getId() + " on " + this.side.name());
+        LogCategory.PERKS.info(() -> "Try adding converter " + converter.getRegistryName() + " on " + this.side.name());
 
         if (converters.contains(converter)) {
             return false;
@@ -139,19 +139,19 @@ public class PerkAttributeMap {
         converters.add(converter);
         converter.onApply(player, side);
 
-        LogCategory.PERKS.info(() -> "Added converter " + converter.getId());
+        LogCategory.PERKS.info(() -> "Added converter " + converter.getRegistryName());
         return true;
     }
 
     boolean removeConverter(PlayerEntity player, PerkConverter converter) {
         assertConvertersModifiable();
 
-        LogCategory.PERKS.info(() -> "Try removing converter " + converter.getId() + " on " + this.side.name());
+        LogCategory.PERKS.info(() -> "Try removing converter " + converter.getRegistryName() + " on " + this.side.name());
 
         if (converters.remove(converter)) {
             converter.onRemove(player, side);
 
-            LogCategory.PERKS.info(() -> "Removed converter " + converter.getId());
+            LogCategory.PERKS.info(() -> "Removed converter " + converter.getRegistryName());
             return true;
         }
         return false;
@@ -167,7 +167,7 @@ public class PerkAttributeMap {
             LogCategory.PERKS.warn(() -> "Following modifiers are still applied on " + this.side.name() + " while trying to modify converters:");
             for (List<PerkAttributeModifier> modifiers : this.modifiers.values()) {
                 for (PerkAttributeModifier modifier : modifiers) {
-                    LogCategory.PERKS.warn(() -> "Modifier: " + modifier.getId());
+                    LogCategory.PERKS.warn(() -> "Modifier: " + modifier.getComparisonKey());
                 }
             }
 

@@ -45,6 +45,8 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktOpenGui;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeLimiter;
 import hellfirepvp.astralsorcery.common.perk.PerkCooldownHelper;
+import hellfirepvp.astralsorcery.common.perk.data.PerkTreeLoader;
+import hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import hellfirepvp.astralsorcery.common.perk.tick.PerkTickHelper;
 import hellfirepvp.astralsorcery.common.registry.*;
@@ -68,6 +70,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
@@ -80,10 +83,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.event.server.*;
 
 import java.io.File;
 import java.util.List;
@@ -157,11 +157,15 @@ public class CommonProxy {
         RegistryStructureTypes.init();
         PacketChannel.registerPackets();
         RegistryPerkAttributeTypes.init();
+        RegistryPerkConverters.init();
+        RegistryPerkCustomModifiers.init();
         RegistryPerkAttributeReaders.init();
         RegistryIngredientTypes.init();
         RegistryAdvancements.init();
-        AltarRecipeTypeHandler.registerDefaultConverters();
+        AltarRecipeTypeHandler.init();
+        PerkTypeHandler.init();
         ModifierManager.init();
+        RegistryConstellations.init();
 
         this.initializeConfigurations();
         ConfigRegistries.getRegistries().buildDataRegistries(this.serverConfig);
@@ -177,12 +181,12 @@ public class CommonProxy {
         SyncDataHolder.initialize();
 
         this.commonConfig.buildConfiguration();
-        this.serverConfig.buildConfiguration();
     }
 
     public void attachLifecycle(IEventBus modEventBus) {
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onEnqueueIMC);
+        modEventBus.addListener(this::onServerAboutToStart);
 
         modEventBus.addListener(RegistryRegistries::buildRegistries);
         registryEventHandler.attachEventHandlers(modEventBus);
@@ -256,6 +260,8 @@ public class CommonProxy {
         this.serverConfig.addConfigEntry(PerkConfig.CONFIG);
         this.serverConfig.addConfigEntry(AmuletRandomizeHelper.CONFIG);
 
+        RegistryPerks.initConfig(PerkConfig.CONFIG::newSubSection);
+
         this.commonConfig.addConfigEntry(CommonGeneralConfig.CONFIG);
 
         ConstellationEffectRegistry.addConfigEntries(this.serverConfig);
@@ -319,6 +325,8 @@ public class CommonProxy {
     // Mod events
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
+        this.serverConfig.buildConfiguration();
+
         RegistryCapabilities.init(MinecraftForge.EVENT_BUS);
         StarlightNetworkRegistry.setupRegistry();
 
@@ -335,6 +343,12 @@ public class CommonProxy {
 
     private void onClientInitialized(ClientInitializedEvent event) {
 
+    }
+
+    private void onServerAboutToStart(FMLServerAboutToStartEvent event) {
+        IReloadableResourceManager mgr = event.getServer().getResourceManager();
+
+        mgr.addReloadListener(PerkTreeLoader.INSTANCE);
     }
 
     private void onServerStarted(FMLServerStartedEvent event) {

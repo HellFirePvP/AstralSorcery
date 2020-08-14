@@ -6,16 +6,16 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.datagen.data.recipe;
+package hellfirepvp.astralsorcery.datagen.data.recipes;
 
-import hellfirepvp.astralsorcery.datagen.data.recipe.altar.AttunementAltarRecipeProvider;
-import hellfirepvp.astralsorcery.datagen.data.recipe.altar.CelestialAltarRecipeProvider;
-import hellfirepvp.astralsorcery.datagen.data.recipe.altar.DiscoveryAltarRecipeProvider;
-import hellfirepvp.astralsorcery.datagen.data.recipe.altar.RadianceAltarRecipeProvider;
-import hellfirepvp.astralsorcery.datagen.data.recipe.infuser.InfuserRecipeProvider;
-import hellfirepvp.astralsorcery.datagen.data.recipe.transmutation.BlockTransmutationRecipeProvider;
-import hellfirepvp.astralsorcery.datagen.data.recipe.vanilla.VanillaTypedRecipeProvider;
-import hellfirepvp.astralsorcery.datagen.data.recipe.well.LightwellRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.altar.AttunementAltarRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.altar.CelestialAltarRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.altar.DiscoveryAltarRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.altar.RadianceAltarRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.infuser.InfuserRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.transmutation.BlockTransmutationRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.vanilla.VanillaTypedRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.well.LightwellRecipeProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;

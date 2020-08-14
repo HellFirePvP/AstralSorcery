@@ -37,11 +37,10 @@ public class KeyLastBreath extends KeyPerk {
     private static final float defaultDigSpeedMultiplier = 1.5F;
     private static final float defaultDamageMultiplier = 3F;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_last_breath");
 
-    public KeyLastBreath(ResourceLocation name, int x, int y) {
+    public KeyLastBreath(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
@@ -52,12 +51,6 @@ public class KeyLastBreath extends KeyPerk {
         bus.addListener(this::onBreakSpeed);
     }
 
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
-    }
-
     private void onAttack(LivingHurtEvent event) {
         DamageSource source = event.getSource();
         if (source.getTrueSource() != null && source.getTrueSource() instanceof PlayerEntity) {
@@ -66,7 +59,7 @@ public class KeyLastBreath extends KeyPerk {
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
                 float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(this.config.damageMultiplier.get()));
+                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.damageMultiplier.get()));
                 float healthPerc = 1F - (player.getHealth() / player.getMaxHealth());
                 event.setAmount(event.getAmount() * (1F + (healthPerc * actIncrease)));
             }
@@ -79,7 +72,7 @@ public class KeyLastBreath extends KeyPerk {
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(this.config.digSpeedMultiplier.get()));
+                    .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.digSpeedMultiplier.get()));
             float healthPerc = 1F - (player.getHealth() / player.getMaxHealth());
             event.setNewSpeed(event.getNewSpeed() * (1F + (healthPerc * actIncrease)));
         }

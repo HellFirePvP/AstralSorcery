@@ -25,8 +25,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
-import javax.annotation.Nullable;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -39,23 +37,16 @@ public class KeyBleed extends KeyPerk {
     private static final int defaultBleedDuration = 40;
     private static final float defaultBleedChance = 0.25F;
 
-    private final Config config;
+    public static final Config CONFIG = new Config("key_bleed");
 
-    public KeyBleed(ResourceLocation name, int x, int y) {
+    public KeyBleed(ResourceLocation name, float x, float y) {
         super(name, x, y);
-        this.config = new Config(name.getPath());
     }
 
     @Override
     public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
         bus.addListener(this::onAttack);
-    }
-
-    @Nullable
-    @Override
-    protected ConfigEntry addConfig() {
-        return this.config;
     }
 
     private void onAttack(LivingHurtEvent event) {
@@ -67,14 +58,14 @@ public class KeyBleed extends KeyPerk {
             if (prog.hasPerkEffect(this)) {
                 LivingEntity target = event.getEntityLiving();
 
-                double chance = this.applyMultiplierD(this.config.bleedChance.get());
+                double chance = this.applyMultiplierD(CONFIG.bleedChance.get());
                 chance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_BLEED_CHANCE, (float) chance);
                 if (rand.nextFloat() < chance) {
                     int stackCap = 3; //So the "real" stackcap is 'amplifier = 3' that means we always have to be lower than this value.
                     stackCap = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_BLEED_STACKS, stackCap));
-                    int duration = this.applyMultiplierI(this.config.bleedDuration.get());
+                    int duration = this.applyMultiplierI(CONFIG.bleedDuration.get());
                     duration = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_BLEED_DURATION, duration));
 

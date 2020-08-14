@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk.modifier;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkConverter;
@@ -19,12 +20,15 @@ import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,11 +37,11 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 08.08.2019 / 17:25
  */
-public class PerkAttributeModifier {
+public class PerkAttributeModifier extends ForgeRegistryEntry<PerkAttributeModifier> {
 
     private static long counter = 0;
 
-    private long id;
+    protected ResourceLocation comparisonKey;
     protected final ModifierType mode;
     protected final PerkAttributeType attributeType;
     protected float value;
@@ -51,16 +55,24 @@ public class PerkAttributeModifier {
     private Map<PerkConverter, Table<PerkAttributeType, ModifierType, PerkAttributeModifier>> cachedConverters = Maps.newHashMap();
 
     public PerkAttributeModifier(PerkAttributeType type, ModifierType mode, float value) {
-        this.id = counter;
-        counter++;
+        this.comparisonKey = AstralSorcery.key("generic_perk_modifier_" + counter++);
         this.attributeType = type;
         this.mode = mode;
         this.value = value;
-        initModifier();
+        this.initModifier();
     }
 
-    public long getId() {
-        return id;
+    public PerkAttributeModifier(ResourceLocation persistentKey, PerkAttributeType type, ModifierType mode, float value) {
+        this.comparisonKey = persistentKey;
+        this.attributeType = type;
+        this.mode = mode;
+        this.value = value;
+        this.setRegistryName(persistentKey);
+        this.initModifier();
+    }
+
+    public ResourceLocation getComparisonKey() {
+        return comparisonKey;
     }
 
     protected void initModifier() {}
@@ -87,7 +99,7 @@ public class PerkAttributeModifier {
             return this;
         }
         PerkAttributeModifier mod = this.createModifier(type, mode, value);
-        mod.id = this.id;
+        mod.comparisonKey = this.comparisonKey;
         return mod;
     }
 
@@ -186,11 +198,11 @@ public class PerkAttributeModifier {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PerkAttributeModifier that = (PerkAttributeModifier) o;
-        return id == that.id;
+        return this.comparisonKey.equals(that.comparisonKey);
     }
 
     @Override
     public int hashCode() {
-        return Long.hashCode(id);
+        return Objects.hashCode(this.comparisonKey);
     }
 }

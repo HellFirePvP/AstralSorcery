@@ -9,8 +9,8 @@
 package hellfirepvp.astralsorcery.common.perk;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
-import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
@@ -47,7 +47,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 02.06.2019 / 01:59
  */
-public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> implements ModifierSource {
+public class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> implements ModifierSource {
 
     protected static final Random rand = new Random();
 
@@ -63,11 +63,13 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
     private PerkCategory category = CATEGORY_BASE;
     private PerkTreePoint<? extends AbstractPerk> treePoint = null;
 
+    private ResourceLocation customPerkType = null;
+
     private List<ITextComponent> tooltipCache = null;
     private boolean cacheTooltip = true;
     private float cacheEffectMultiplier = 1.0F;
 
-    public AbstractPerk(ResourceLocation name, int x, int y) {
+    public AbstractPerk(ResourceLocation name, float x, float y) {
         this.setRegistryName(name);
         this.offset = new Point.Float(x, y);
         this.attachListeners(MinecraftForge.EVENT_BUS);
@@ -79,11 +81,6 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
     }
 
     protected void attachListeners(IEventBus bus) {}
-
-    @Nullable
-    protected ConfigEntry addConfig() {
-        return null;
-    }
 
     @Nonnull
     public Point.Float getOffset() {
@@ -184,12 +181,8 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
      */
     public void onRemovePerkServer(PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {}
 
-    public <T extends AbstractPerk> T setName(AbstractPerk other) {
-        return setName(other.unlocalizedKey);
-    }
-
-    public <T extends AbstractPerk> T setName(String namePrefix) {
-        this.unlocalizedKey = namePrefix;
+    public <T extends AbstractPerk> T setName(String name) {
+        this.unlocalizedKey = name;
         return (T) this;
     }
 
@@ -332,10 +325,43 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
         return false;
     }
 
+    /**
+     * Deserialize data from Json to the perk.
+     */
+    public void deserializeData(JsonObject perkData) {}
+
+    /**
+     * Push the perk's custom additional data into the jsonObject given.
+     */
+    public void serializeData(JsonObject perkData) {}
+
+    @Nullable
+    public final ResourceLocation getCustomPerkType() {
+        return customPerkType;
+    }
+
+    public final void setCustomPerkType(ResourceLocation customPerkType) {
+        this.customPerkType = customPerkType;
+    }
+
+    public final JsonObject serializePerk() {
+        JsonObject data = new JsonObject();
+
+        if (this.getCustomPerkType() != null) {
+            data.addProperty("perk_class", this.getCustomPerkType().toString());
+        }
+        data.addProperty("x", this.getOffset().x);
+        data.addProperty("y", this.getOffset().y);
+        data.addProperty("name", this.unlocalizedKey);
+
+        this.serializeData(data);
+        return data;
+    }
+
     public static class PerkCategory {
 
         private final String unlocName;
-        private TextFormatting color;
+        private final TextFormatting color;
 
         public PerkCategory(@Nonnull String unlocName, @Nonnull TextFormatting color) {
             this.unlocName = unlocName;
@@ -367,7 +393,5 @@ public abstract class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> impl
         public int hashCode() {
             return Objects.hash(unlocName);
         }
-
     }
-
 }

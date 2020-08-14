@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.datagen.data.recipe.transmutation;
+package hellfirepvp.astralsorcery.datagen.data.recipes.transmutation;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.builder.BlockTransmutationBuilder;

@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
@@ -19,6 +20,8 @@ import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.function.Consumer;
+
 import static hellfirepvp.astralsorcery.AstralSorcery.key;
 import static hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS.*;
 import static hellfirepvp.astralsorcery.common.lib.PerkNamesAS.*;
@@ -36,6 +39,32 @@ public class RegistryPerks {
     private static int travelNodeCount = 0;
 
     private RegistryPerks() {}
+
+    public static void initConfig(Consumer<ConfigEntry> registrar) {
+        registrar.accept(KeyBleed.CONFIG);
+        registrar.accept(KeyCheatDeath.CONFIG);
+        registrar.accept(KeyCullingAttack.CONFIG);
+        registrar.accept(KeyDamageArmor.CONFIG);
+        registrar.accept(KeyDamageEffects.CONFIG);
+        registrar.accept(KeyDisarm.CONFIG);
+        registrar.accept(KeyGrowables.CONFIG);
+        registrar.accept(KeyLastBreath.CONFIG);
+        registrar.accept(KeyLightningArc.CONFIG);
+        registrar.accept(KeyMending.CONFIG);
+        registrar.accept(KeyNoArmor.CONFIG);
+        registrar.accept(KeyProjectileDistance.CONFIG);
+        registrar.accept(KeyProjectileProximity.CONFIG);
+        registrar.accept(KeyRampage.CONFIG);
+        registrar.accept(KeySpawnLights.CONFIG);
+        registrar.accept(KeyStoneEnrichment.CONFIG);
+        registrar.accept(KeyVoidTrash.CONFIG);
+
+        registrar.accept(RootAevitas.CONFIG);
+        registrar.accept(RootArmara.CONFIG);
+        registrar.accept(RootDiscidia.CONFIG);
+        registrar.accept(RootEvorsio.CONFIG);
+        registrar.accept(RootVicio.CONFIG);
+    }
 
     //Names for initialize correspond with the layers on the perkTreeMap file.
     public static void init() {
@@ -559,10 +588,10 @@ public class RegistryPerks {
                 .connect(tree(aevitasCC))
                 .chain(tree(aevitasCC2))
                 .connect(tree(aevitasCC));
-        aevitasCC1.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        aevitasCC2.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        aevitasCC3.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        aevitasCC.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
+        aevitasCC1.addRequireConstellation(ConstellationsAS.aevitas);
+        aevitasCC2.addRequireConstellation(ConstellationsAS.aevitas);
+        aevitasCC3.addRequireConstellation(ConstellationsAS.aevitas);
+        aevitasCC.addRequireConstellation(ConstellationsAS.aevitas);
 
         AttributeModifierPerk vicioCC1 = new AttributeModifierPerk(key("vicio_connector_1"), 59, 69)
                 .addModifier(effect, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
@@ -586,10 +615,10 @@ public class RegistryPerks {
                 .connect(tree(vicioCC))
                 .chain(tree(vicioCC2))
                 .connect(tree(vicioCC));
-        vicioCC1.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        vicioCC2.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        vicioCC3.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        vicioCC.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
+        vicioCC1.addRequireConstellation(ConstellationsAS.vicio);
+        vicioCC2.addRequireConstellation(ConstellationsAS.vicio);
+        vicioCC3.addRequireConstellation(ConstellationsAS.vicio);
+        vicioCC.addRequireConstellation(ConstellationsAS.vicio);
 
         AttributeModifierPerk armaraCC1 = new AttributeModifierPerk(key("armara_connector_1"), 74, 26)
                 .addModifier(effect, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
@@ -613,10 +642,10 @@ public class RegistryPerks {
                 .connect(tree(armaraCC))
                 .chain(tree(armaraCC2))
                 .connect(tree(armaraCC));
-        armaraCC1.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        armaraCC2.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        armaraCC3.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        armaraCC.setRequireDiscoveredConstellation(ConstellationsAS.armara);
+        armaraCC1.addRequireConstellation(ConstellationsAS.armara);
+        armaraCC2.addRequireConstellation(ConstellationsAS.armara);
+        armaraCC3.addRequireConstellation(ConstellationsAS.armara);
+        armaraCC.addRequireConstellation(ConstellationsAS.armara);
 
         AttributeModifierPerk discidiaCC1 = new AttributeModifierPerk(key("discidia_connector_1"), 39, 7)
                 .addModifier(effect, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
@@ -640,10 +669,10 @@ public class RegistryPerks {
                 .connect(tree(discidiaCC))
                 .chain(tree(discidiaCC2))
                 .connect(tree(discidiaCC));
-        discidiaCC1.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        discidiaCC2.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        discidiaCC3.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        discidiaCC.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
+        discidiaCC1.addRequireConstellation(ConstellationsAS.discidia);
+        discidiaCC2.addRequireConstellation(ConstellationsAS.discidia);
+        discidiaCC3.addRequireConstellation(ConstellationsAS.discidia);
+        discidiaCC.addRequireConstellation(ConstellationsAS.discidia);
 
         AttributeModifierPerk evorsioCC1 = new AttributeModifierPerk(key("evorsio_connector_1"), 6, 26)
                 .addModifier(effect, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
@@ -667,10 +696,10 @@ public class RegistryPerks {
                 .connect(tree(evorsioCC))
                 .chain(tree(evorsioCC2))
                 .connect(tree(evorsioCC));
-        evorsioCC1.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        evorsioCC2.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        evorsioCC3.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        evorsioCC.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
+        evorsioCC1.addRequireConstellation(ConstellationsAS.evorsio);
+        evorsioCC2.addRequireConstellation(ConstellationsAS.evorsio);
+        evorsioCC3.addRequireConstellation(ConstellationsAS.evorsio);
+        evorsioCC.addRequireConstellation(ConstellationsAS.evorsio);
     }
 
     private static void initializeFocusPerks(float effect, float exp) {
@@ -688,9 +717,9 @@ public class RegistryPerks {
                 .chain(tree(voruxExp))
                 .chain(tree(key("travel_47")));
 
-        voruxEffect.setRequireDiscoveredConstellation(ConstellationsAS.vorux);
-        voruxExp.setRequireDiscoveredConstellation(ConstellationsAS.vorux);
-        vorux.setRequireDiscoveredConstellation(ConstellationsAS.vorux);
+        voruxEffect.addRequireConstellation(ConstellationsAS.vorux);
+        voruxExp.addRequireConstellation(ConstellationsAS.vorux);
+        vorux.addRequireConstellation(ConstellationsAS.vorux);
 
         AttributeModifierPerk alcaraEffect = new AttributeModifierPerk(key("alcara_effect"), 75, 56)
                 .addModifier(effect, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
@@ -706,9 +735,9 @@ public class RegistryPerks {
                 .chain(tree(alcaraExp))
                 .chain(tree(key("travel_37")));
 
-        alcaraEffect.setRequireDiscoveredConstellation(ConstellationsAS.alcara);
-        alcaraExp.setRequireDiscoveredConstellation(ConstellationsAS.alcara);
-        alcara.setRequireDiscoveredConstellation(ConstellationsAS.alcara);
+        alcaraEffect.addRequireConstellation(ConstellationsAS.alcara);
+        alcaraExp.addRequireConstellation(ConstellationsAS.alcara);
+        alcara.addRequireConstellation(ConstellationsAS.alcara);
 
         AttributeModifierPerk ulteriaEffect = new AttributeModifierPerk(key("ulteria_effect"), 68, 15)
                 .addModifier(effect, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
@@ -724,9 +753,9 @@ public class RegistryPerks {
                 .chain(tree(ulteriaExp))
                 .chain(tree(key("travel_33")));
 
-        ulteriaEffect.setRequireDiscoveredConstellation(ConstellationsAS.ulteria);
-        ulteriaExp.setRequireDiscoveredConstellation(ConstellationsAS.ulteria);
-        ulteria.setRequireDiscoveredConstellation(ConstellationsAS.ulteria);
+        ulteriaEffect.addRequireConstellation(ConstellationsAS.ulteria);
+        ulteriaExp.addRequireConstellation(ConstellationsAS.ulteria);
+        ulteria.addRequireConstellation(ConstellationsAS.ulteria);
 
         AttributeModifierPerk geluEffect = new AttributeModifierPerk(key("gelu_effect"), 14, 13)
                 .addModifier(effect, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
@@ -742,9 +771,9 @@ public class RegistryPerks {
                 .chain(tree(geluExp))
                 .chain(tree(key("travel_51")));
 
-        geluEffect.setRequireDiscoveredConstellation(ConstellationsAS.gelu);
-        geluExp.setRequireDiscoveredConstellation(ConstellationsAS.gelu);
-        gelu.setRequireDiscoveredConstellation(ConstellationsAS.gelu);
+        geluEffect.addRequireConstellation(ConstellationsAS.gelu);
+        geluExp.addRequireConstellation(ConstellationsAS.gelu);
+        gelu.addRequireConstellation(ConstellationsAS.gelu);
     }
 
     private static void initializeRootConnector() {
@@ -1717,20 +1746,20 @@ public class RegistryPerks {
                 .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
                 .setName(NAME_INC_MINING_SPEED);
 
-        rEvorsio.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r1EvorsioMeleeDamage.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r2EvorsioMeleeDamage.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r1EvorsioMiningSpeed.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r2EvorsioMiningSpeed.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        mEvorsioDmgAts.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        mEvorsioMiningReach.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r1Bridge.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r2Bridge.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r3Bridge.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r1EvorsioConnectArmor.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r2EvorsioConnectArmor.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r1EvorsioConnectMining.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
-        r2EvorsioConnectMining.setRequireDiscoveredConstellation(ConstellationsAS.evorsio);
+        rEvorsio.addRequireConstellation(ConstellationsAS.evorsio);
+        r1EvorsioMeleeDamage.addRequireConstellation(ConstellationsAS.evorsio);
+        r2EvorsioMeleeDamage.addRequireConstellation(ConstellationsAS.evorsio);
+        r1EvorsioMiningSpeed.addRequireConstellation(ConstellationsAS.evorsio);
+        r2EvorsioMiningSpeed.addRequireConstellation(ConstellationsAS.evorsio);
+        mEvorsioDmgAts.addRequireConstellation(ConstellationsAS.evorsio);
+        mEvorsioMiningReach.addRequireConstellation(ConstellationsAS.evorsio);
+        r1Bridge.addRequireConstellation(ConstellationsAS.evorsio);
+        r2Bridge.addRequireConstellation(ConstellationsAS.evorsio);
+        r3Bridge.addRequireConstellation(ConstellationsAS.evorsio);
+        r1EvorsioConnectArmor.addRequireConstellation(ConstellationsAS.evorsio);
+        r2EvorsioConnectArmor.addRequireConstellation(ConstellationsAS.evorsio);
+        r1EvorsioConnectMining.addRequireConstellation(ConstellationsAS.evorsio);
+        r2EvorsioConnectMining.addRequireConstellation(ConstellationsAS.evorsio);
 
         tree(rEvorsio)
                 .chain(tree(r1EvorsioMeleeDamage))
@@ -1816,20 +1845,20 @@ public class RegistryPerks {
                 .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
                 .setName(NAME_INC_ATTACK_SPEED);
 
-        rDiscidia.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r1DiscidiaProj.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r2DiscidiaProj.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r1DiscidiaMelee.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r2DiscidiaMelee.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        mDiscidiaProjDmgSpeed.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        mDiscidiaMeleeReach.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r1Bridge.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r2Bridge.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r3Bridge.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r1DiscidiaConnectDmg.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r2DiscidiaConnectDmg.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r1DiscidiaConnectAts.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
-        r2DiscidiaConnectAts.setRequireDiscoveredConstellation(ConstellationsAS.discidia);
+        rDiscidia.addRequireConstellation(ConstellationsAS.discidia);
+        r1DiscidiaProj.addRequireConstellation(ConstellationsAS.discidia);
+        r2DiscidiaProj.addRequireConstellation(ConstellationsAS.discidia);
+        r1DiscidiaMelee.addRequireConstellation(ConstellationsAS.discidia);
+        r2DiscidiaMelee.addRequireConstellation(ConstellationsAS.discidia);
+        mDiscidiaProjDmgSpeed.addRequireConstellation(ConstellationsAS.discidia);
+        mDiscidiaMeleeReach.addRequireConstellation(ConstellationsAS.discidia);
+        r1Bridge.addRequireConstellation(ConstellationsAS.discidia);
+        r2Bridge.addRequireConstellation(ConstellationsAS.discidia);
+        r3Bridge.addRequireConstellation(ConstellationsAS.discidia);
+        r1DiscidiaConnectDmg.addRequireConstellation(ConstellationsAS.discidia);
+        r2DiscidiaConnectDmg.addRequireConstellation(ConstellationsAS.discidia);
+        r1DiscidiaConnectAts.addRequireConstellation(ConstellationsAS.discidia);
+        r2DiscidiaConnectAts.addRequireConstellation(ConstellationsAS.discidia);
 
         tree(rDiscidia)
                 .chain(tree(r1DiscidiaProj))
@@ -1912,20 +1941,20 @@ public class RegistryPerks {
                 .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
                 .setName(NAME_INC_LIFE_RECOVERY);
 
-        rArmara.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r1ArmaraArmor.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r2ArmaraArmor.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r1ArmaraResist.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r2ArmaraResist.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        mArmaraLifeArmor.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        mArmaraResistArmor.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r1Bridge.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r2Bridge.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r3Bridge.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r1ArmaraConnectMovespeed.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r2ArmaraConnectMovespeed.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r1ArmaraConnectRecovery.setRequireDiscoveredConstellation(ConstellationsAS.armara);
-        r2ArmaraConnectRecovery.setRequireDiscoveredConstellation(ConstellationsAS.armara);
+        rArmara.addRequireConstellation(ConstellationsAS.armara);
+        r1ArmaraArmor.addRequireConstellation(ConstellationsAS.armara);
+        r2ArmaraArmor.addRequireConstellation(ConstellationsAS.armara);
+        r1ArmaraResist.addRequireConstellation(ConstellationsAS.armara);
+        r2ArmaraResist.addRequireConstellation(ConstellationsAS.armara);
+        mArmaraLifeArmor.addRequireConstellation(ConstellationsAS.armara);
+        mArmaraResistArmor.addRequireConstellation(ConstellationsAS.armara);
+        r1Bridge.addRequireConstellation(ConstellationsAS.armara);
+        r2Bridge.addRequireConstellation(ConstellationsAS.armara);
+        r3Bridge.addRequireConstellation(ConstellationsAS.armara);
+        r1ArmaraConnectMovespeed.addRequireConstellation(ConstellationsAS.armara);
+        r2ArmaraConnectMovespeed.addRequireConstellation(ConstellationsAS.armara);
+        r1ArmaraConnectRecovery.addRequireConstellation(ConstellationsAS.armara);
+        r2ArmaraConnectRecovery.addRequireConstellation(ConstellationsAS.armara);
 
         tree(rArmara)
                 .chain(tree(r1ArmaraArmor))
@@ -2008,20 +2037,20 @@ public class RegistryPerks {
                 .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
                 .setName(NAME_INC_ARMOR);
 
-        rVicio.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r1VicioReach.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r2VicioReach.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r1VicioDodge.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r2VicioDodge.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        mVicioReachMovespeed.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        mVicioDodgeMovespeed.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r1Bridge.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r2Bridge.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r3Bridge.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r1VicioConnectMining.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r2VicioConnectMining.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r1VicioConnectArmor.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
-        r2VicioConnectArmor.setRequireDiscoveredConstellation(ConstellationsAS.vicio);
+        rVicio.addRequireConstellation(ConstellationsAS.vicio);
+        r1VicioReach.addRequireConstellation(ConstellationsAS.vicio);
+        r2VicioReach.addRequireConstellation(ConstellationsAS.vicio);
+        r1VicioDodge.addRequireConstellation(ConstellationsAS.vicio);
+        r2VicioDodge.addRequireConstellation(ConstellationsAS.vicio);
+        mVicioReachMovespeed.addRequireConstellation(ConstellationsAS.vicio);
+        mVicioDodgeMovespeed.addRequireConstellation(ConstellationsAS.vicio);
+        r1Bridge.addRequireConstellation(ConstellationsAS.vicio);
+        r2Bridge.addRequireConstellation(ConstellationsAS.vicio);
+        r3Bridge.addRequireConstellation(ConstellationsAS.vicio);
+        r1VicioConnectMining.addRequireConstellation(ConstellationsAS.vicio);
+        r2VicioConnectMining.addRequireConstellation(ConstellationsAS.vicio);
+        r1VicioConnectArmor.addRequireConstellation(ConstellationsAS.vicio);
+        r2VicioConnectArmor.addRequireConstellation(ConstellationsAS.vicio);
 
         tree(rVicio)
                 .chain(tree(r1VicioReach))
@@ -2108,20 +2137,20 @@ public class RegistryPerks {
                 .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
                 .setName(NAME_INC_REACH);
 
-        rAevitas.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r1AevitasLifeArmor.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r2AevitasLifeArmor.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r1AevitasLifeReach.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r2AevitasLifeReach.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        mAevitasLifeArmor.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        mAevitasLifeResist.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r1Bridge.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r2Bridge.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r3Bridge.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r1AevitasConnectArmor.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r2AevitasConnectArmor.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r1AevitasConnectReach.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
-        r2AevitasConnectReach.setRequireDiscoveredConstellation(ConstellationsAS.aevitas);
+        rAevitas.addRequireConstellation(ConstellationsAS.aevitas);
+        r1AevitasLifeArmor.addRequireConstellation(ConstellationsAS.aevitas);
+        r2AevitasLifeArmor.addRequireConstellation(ConstellationsAS.aevitas);
+        r1AevitasLifeReach.addRequireConstellation(ConstellationsAS.aevitas);
+        r2AevitasLifeReach.addRequireConstellation(ConstellationsAS.aevitas);
+        mAevitasLifeArmor.addRequireConstellation(ConstellationsAS.aevitas);
+        mAevitasLifeResist.addRequireConstellation(ConstellationsAS.aevitas);
+        r1Bridge.addRequireConstellation(ConstellationsAS.aevitas);
+        r2Bridge.addRequireConstellation(ConstellationsAS.aevitas);
+        r3Bridge.addRequireConstellation(ConstellationsAS.aevitas);
+        r1AevitasConnectArmor.addRequireConstellation(ConstellationsAS.aevitas);
+        r2AevitasConnectArmor.addRequireConstellation(ConstellationsAS.aevitas);
+        r1AevitasConnectReach.addRequireConstellation(ConstellationsAS.aevitas);
+        r2AevitasConnectReach.addRequireConstellation(ConstellationsAS.aevitas);
 
         tree(rAevitas)
                 .chain(tree(r1AevitasLifeArmor))
@@ -2164,18 +2193,18 @@ public class RegistryPerks {
     }
 
     private static <T extends AbstractPerk> PerkTree.PointConnector tree(T perk) {
-        if (PERK_TREE.getPerk(perk.getRegistryName()) == null) {
+        if (!PERK_TREE.getPerk(perk.getRegistryName()).isPresent()) {
             AstralSorcery.getProxy().getRegistryPrimer().register(perk);
-            PERK_TREE.addPerk(perk);
+            throw new IllegalArgumentException("unsupported operation");
         }
-        return PERK_TREE.getConnector(perk);
+        throw new IllegalArgumentException("unsupported operation");
     }
 
     private static PerkTree.PointConnector tree(float x, float y) {
-        return PERK_TREE.getConnector(PERK_TREE.getPerk(x, y));
+        throw new IllegalArgumentException("unsupported operation");
     }
 
     private static PerkTree.PointConnector tree(ResourceLocation key) {
-        return PERK_TREE.getConnector(PERK_TREE.getPerk(key));
+        throw new IllegalArgumentException("unsupported operation");
     }
 }

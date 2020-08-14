@@ -15,7 +15,8 @@ import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.AltarRecipeEffect;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.crystal.calc.PropertyUsage;
-import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.PerkConverter;
+import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.registry.*;
@@ -71,7 +72,6 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(SoundEvent.class, this::registerSounds);
         eventBus.addGenericListener(GlobalLootModifierSerializer.class, this::registerGlobalLootModifierSerializers);
         eventBus.addGenericListener(IConstellation.class, this::registerConstellations);
-        eventBus.addGenericListener(AbstractPerk.class, this::registerPerks);
         eventBus.addGenericListener(DataSerializerEntry.class, this::registerDataSerializers);
         eventBus.addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
         eventBus.addGenericListener(MatchableStructure.class, this::registerStructures);
@@ -81,6 +81,8 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(MantleEffect.class, this::registerMantleEffects);
         eventBus.addGenericListener(EngravingEffect.class, this::registerEngravingEffects);
         eventBus.addGenericListener(PerkAttributeType.class, this::registerPerkAttributeTypes);
+        eventBus.addGenericListener(PerkConverter.class, this::registerPerkConverters);
+        eventBus.addGenericListener(PerkAttributeModifier.class, this::registerPerkCustomModifiers);
         eventBus.addGenericListener(PerkAttributeReader.class, this::registerPerkAttributeReaders);
         eventBus.addGenericListener(ContainerType.class, this::registerContainerTypes);
         eventBus.addGenericListener(CrystalProperty.class, this::registerCrystalProperties);
@@ -91,7 +93,6 @@ public class PrimerEventHandler {
     //This exists because you can't sort registries in any fashion or make one load after another in forge.
     //So. thanks. this is the result i guess.
     private void registerRemainingData() {
-        RegistryConstellations.init();
         RegistryConstellationEffects.init();
         RegistryMantleEffects.init();
         RegistryEngravingEffects.init();
@@ -170,11 +171,6 @@ public class PrimerEventHandler {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
-    private void registerPerks(RegistryEvent.Register<AbstractPerk> event) {
-        RegistryPerks.init();
-        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
-    }
-
     private void registerConstellationEffects(RegistryEvent.Register<ConstellationEffectProvider> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
@@ -188,6 +184,14 @@ public class PrimerEventHandler {
     }
 
     private void registerPerkAttributeTypes(RegistryEvent.Register<PerkAttributeType> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerPerkConverters(RegistryEvent.Register<PerkConverter> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerPerkCustomModifiers(RegistryEvent.Register<PerkAttributeModifier> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
