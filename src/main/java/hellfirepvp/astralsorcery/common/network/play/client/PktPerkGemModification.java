@@ -12,11 +12,13 @@ import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
@@ -57,7 +59,7 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
     public Encoder<PktPerkGemModification> encoder() {
         return (packet, buffer) -> {
             buffer.writeInt(packet.action);
-            ByteBufUtils.writeOptional(buffer, packet.perk, ByteBufUtils::writeRegistryEntry);
+            ByteBufUtils.writeOptional(buffer, packet.perk, AbstractPerk::getRegistryName, ByteBufUtils::writeResourceLocation);
             buffer.writeInt(packet.slotId);
         };
     }
@@ -69,7 +71,8 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
             PktPerkGemModification pkt = new PktPerkGemModification();
 
             pkt.action = buffer.readInt();
-            pkt.perk = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
+            ResourceLocation perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
+            pkt.perk = perkKey == null ? null : PerkTree.PERK_TREE.getPerk(perkKey).orElse(null);
             pkt.slotId = buffer.readInt();
 
             return pkt;

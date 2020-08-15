@@ -52,9 +52,13 @@ public class ByteBufUtils {
     }
 
     public static <T> void writeOptional(PacketBuffer buf, @Nullable T object, BiConsumer<PacketBuffer, T> applyFct) {
+        writeOptional(buf, object, Function.identity(), applyFct);
+    }
+
+    public static <T, R> void writeOptional(PacketBuffer buf, @Nullable T object, Function<T, R> converter, BiConsumer<PacketBuffer, R> applyFct) {
         buf.writeBoolean(object != null);
         if (object != null) {
-            applyFct.accept(buf, object);
+            applyFct.accept(buf, converter.apply(object));
         }
     }
 

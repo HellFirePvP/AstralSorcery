@@ -82,12 +82,12 @@ public class PerkDataBuilder<T extends AbstractPerk> {
             this.perkType = perkType;
         }
 
-        public PerkDataBuilder<T> create(String perkName, float x, float y) {
-            return create(AstralSorcery.key(perkName), x, y);
-        }
-
         public PerkDataBuilder<T> create(ResourceLocation perkKey, float x, float y) {
-            return new PerkDataBuilder<>(this.perkType.convert(perkKey, x, y));
+            T perk = this.perkType.convert(perkKey, x, y);
+            if (!perkType.getKey().equals(PerkTypeHandler.DEFAULT.getKey())) {
+                perk.setCustomPerkType(perkType.getKey());
+            }
+            return new PerkDataBuilder<>(perk);
         }
     }
 }

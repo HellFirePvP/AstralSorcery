@@ -87,6 +87,10 @@ public class MapStream<K, V> implements Stream<Tuple<K, V>> {
         return decorated.map(tpl -> flatFunction.apply(tpl.getA(), tpl.getB()));
     }
 
+    public MapStream<K, V> filterKey(Predicate<K> predicate) {
+        return of(decorated.filter(tpl -> predicate.test(tpl.getA())));
+    }
+
     @Override
     public Stream<Tuple<K, V>> filter(Predicate<? super Tuple<K, V>> predicate) {
         return decorated.filter(predicate);

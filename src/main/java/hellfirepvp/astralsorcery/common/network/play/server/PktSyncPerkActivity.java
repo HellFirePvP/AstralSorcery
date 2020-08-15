@@ -11,10 +11,12 @@ package hellfirepvp.astralsorcery.common.network.play.server;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -57,7 +59,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
         return (packet, buffer) -> {
             ByteBufUtils.writeOptional(buffer, packet.type, ByteBufUtils::writeEnumValue);
 
-            ByteBufUtils.writeOptional(buffer, packet.perk, ByteBufUtils::writeRegistryEntry);
+            ByteBufUtils.writeOptional(buffer, packet.perk, AbstractPerk::getRegistryName, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeOptional(buffer, packet.newData, ByteBufUtils::writeNBTTag);
             ByteBufUtils.writeOptional(buffer, packet.oldData, ByteBufUtils::writeNBTTag);
         };
@@ -71,7 +73,8 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
 
             pkt.type = ByteBufUtils.readOptional(buffer, (byteBuf) -> ByteBufUtils.readEnumValue(byteBuf, Type.class));
 
-            pkt.perk = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
+            ResourceLocation perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
+            pkt.perk = perkKey == null ? null : PerkTree.PERK_TREE.getPerk(perkKey).orElse(null);
             pkt.newData = ByteBufUtils.readOptional(buffer, ByteBufUtils::readNBTTag);
             pkt.oldData = ByteBufUtils.readOptional(buffer, ByteBufUtils::readNBTTag);
             return pkt;

@@ -47,7 +47,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 02.06.2019 / 01:59
  */
-public class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> implements ModifierSource {
+public class AbstractPerk implements ModifierSource {
 
     protected static final Random rand = new Random();
 
@@ -58,6 +58,7 @@ public class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> implements Mo
     public static final PerkCategory CATEGORY_EPIPHANY = new PerkCategory("epiphany", TextFormatting.GOLD);
     public static final PerkCategory CATEGORY_FOCUS = new PerkCategory("focus", TextFormatting.GOLD);
 
+    private final ResourceLocation registryName;
     protected final Point.Float offset;
     private String unlocalizedKey;
     private PerkCategory category = CATEGORY_BASE;
@@ -70,7 +71,7 @@ public class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> implements Mo
     private float cacheEffectMultiplier = 1.0F;
 
     public AbstractPerk(ResourceLocation name, float x, float y) {
-        this.setRegistryName(name);
+        this.registryName = name;
         this.offset = new Point.Float(x, y);
         this.attachListeners(MinecraftForge.EVENT_BUS);
         this.unlocalizedKey = String.format("perk.%s.%s", name.getNamespace(), name.getPath());
@@ -92,6 +93,10 @@ public class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> implements Mo
             treePoint = initPerkTreePoint();
         }
         return treePoint;
+    }
+
+    public ResourceLocation getRegistryName() {
+        return this.registryName;
     }
 
     public <T> T setCategory(PerkCategory category) {
@@ -347,6 +352,7 @@ public class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> implements Mo
     public final JsonObject serializePerk() {
         JsonObject data = new JsonObject();
 
+        data.addProperty("registry_name", this.getRegistryName().toString());
         if (this.getCustomPerkType() != null) {
             data.addProperty("perk_class", this.getCustomPerkType().toString());
         }
@@ -354,7 +360,9 @@ public class AbstractPerk extends ForgeRegistryEntry<AbstractPerk> implements Mo
         data.addProperty("y", this.getOffset().y);
         data.addProperty("name", this.unlocalizedKey);
 
-        this.serializeData(data);
+        JsonObject perkData = new JsonObject();
+        this.serializeData(perkData);
+        data.add("data", perkData);
         return data;
     }
 

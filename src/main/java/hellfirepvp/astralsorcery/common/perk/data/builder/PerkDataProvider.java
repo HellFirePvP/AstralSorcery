@@ -54,8 +54,8 @@ public abstract class PerkDataProvider implements IDataProvider {
             this.savePerkFile(cache, finishedPerk.serialize(), path.resolve(String.format("data/%s/perks/%s.json", perkName.getNamespace(), perkName.getPath())));
         });
 
-        JsonArray allPerks = new JsonArray();
-        builtPerks.forEach(perk -> allPerks.add(perk.serialize()));
+        JsonObject allPerks = new JsonObject();
+        builtPerks.forEach(perk -> allPerks.add(perk.perk.getRegistryName().toString(), perk.serialize()));
         this.savePerkFile(cache, allPerks, path.resolve("data/astralsorcery/perks/_full_tree.json"));
     }
 

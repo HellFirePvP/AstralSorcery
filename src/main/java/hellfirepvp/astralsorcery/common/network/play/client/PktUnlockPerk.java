@@ -14,10 +14,12 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -48,7 +50,7 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
     @Override
     public Encoder<PktUnlockPerk> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeOptional(buffer, packet.perk, ByteBufUtils::writeRegistryEntry);
+            ByteBufUtils.writeOptional(buffer, packet.perk, AbstractPerk::getRegistryName, ByteBufUtils::writeResourceLocation);
             buffer.writeBoolean(packet.serverAccept);
         };
     }
@@ -59,7 +61,8 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
         return buffer -> {
             PktUnlockPerk pkt = new PktUnlockPerk();
 
-            pkt.perk = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
+            ResourceLocation perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
+            pkt.perk = perkKey == null ? null : PerkTree.PERK_TREE.getPerk(perkKey).orElse(null);
             pkt.serverAccept = buffer.readBoolean();
 
             return pkt;

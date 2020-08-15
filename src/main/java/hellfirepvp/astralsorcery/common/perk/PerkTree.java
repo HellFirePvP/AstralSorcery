@@ -43,7 +43,7 @@ public class PerkTree {
 
     private Long treeVersion = null;
 
-    private final List<PerkTreePoint<? extends AbstractPerk>> treePoints = new LinkedList<>();
+    private final List<PerkTreePoint<AbstractPerk>> treePoints = new LinkedList<>();
     private final Map<AbstractPerk, Collection<AbstractPerk>> doubleConnections = new HashMap<>();
     private final List<Tuple<AbstractPerk, AbstractPerk>> connections = new LinkedList<>();
 
@@ -51,11 +51,11 @@ public class PerkTree {
 
     private PerkTree() {}
 
-    public Optional<? extends AbstractPerk> getPerk(ResourceLocation key) {
+    public Optional<AbstractPerk> getPerk(ResourceLocation key) {
         return this.getPerk(perk -> key.equals(perk.getRegistryName()));
     }
 
-    public Optional<? extends AbstractPerk> getPerk(Predicate<AbstractPerk> test) {
+    public Optional<AbstractPerk> getPerk(Predicate<AbstractPerk> test) {
         return this.treePoints.stream().map(PerkTreePoint::getPerk).filter(test).findFirst();
     }
 
@@ -106,11 +106,11 @@ public class PerkTree {
             if (perk instanceof RootPerk) {
                 this.rootPerks.put(((RootPerk) perk).getConstellation(), (RootPerk) perk);
             }
-            PerkTreePoint<?> offsetPoint = perk.getPoint();
+            PerkTreePoint<? extends AbstractPerk> offsetPoint = perk.getPoint();
             if (this.treePoints.contains(offsetPoint)) {
                 throw new IllegalArgumentException("Tried to register perk-point at already placed position: " + offsetPoint.getOffset().toString());
             }
-            this.treePoints.add(offsetPoint);
+            this.treePoints.add((PerkTreePoint<AbstractPerk>) offsetPoint);
         });
         newTree.getLoadedPerks().forEach(perkData -> {
             for (ResourceLocation connection : perkData.getConnections()) {

@@ -82,6 +82,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private static Rectangle rectSealBox = new Rectangle(29, 16, 16, 16);
     private static Rectangle rectSearchTextEntry = new Rectangle(300, 16, 88, 15);
 
+    private static Long lastPreparedBuffer = null;
     private static BatchPerkContext drawBuffer;
     private static BatchPerkContext.TextureObjectGroup searchContext;
     private static BatchPerkContext.TextureObjectGroup sealContext;
@@ -134,19 +135,29 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         this.mousePosition = ScalingPoint.createPoint(0, 0, this.sizeHandler.getScalingFactor(), false);
     }
 
+    public static void refreshDrawBuffer() {
+        lastPreparedBuffer = null;
+    }
+
     public static void initializeDrawBuffer() {
-        drawBuffer = new BatchPerkContext();
+        PerkTree.PERK_TREE.getVersion().ifPresent(version -> {
+            if (lastPreparedBuffer == null || version.longValue() != lastPreparedBuffer) {
+                drawBuffer = new BatchPerkContext();
 
-        searchContext = drawBuffer.addContext(SpritesAS.SPR_PERK_SEARCH, BatchPerkContext.PRIORITY_OVERLAY);
-        sealContext = drawBuffer.addContext(SpritesAS.SPR_PERK_SEAL, BatchPerkContext.PRIORITY_FOREGROUND);
+                searchContext = drawBuffer.addContext(SpritesAS.SPR_PERK_SEARCH, BatchPerkContext.PRIORITY_OVERLAY);
+                sealContext = drawBuffer.addContext(SpritesAS.SPR_PERK_SEAL, BatchPerkContext.PRIORITY_FOREGROUND);
 
-        List<PerkRenderGroup> groups = Lists.newArrayList();
-        for (PerkTreePoint<?> p : PerkTree.PERK_TREE.getPerkPoints()) {
-            p.addGroups(groups);
-        }
-        for (PerkRenderGroup group : groups) {
-            group.batchRegister(drawBuffer);
-        }
+                List<PerkRenderGroup> groups = Lists.newArrayList();
+                for (PerkTreePoint<?> p : PerkTree.PERK_TREE.getPerkPoints()) {
+                    p.addGroups(groups);
+                }
+                for (PerkRenderGroup group : groups) {
+                    group.batchRegister(drawBuffer);
+                }
+
+                lastPreparedBuffer = version;
+            }
+        });
     }
 
     @Override
@@ -184,6 +195,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        initializeDrawBuffer();
+
         this.thisFramePerks.clear();
 
         double guiFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();

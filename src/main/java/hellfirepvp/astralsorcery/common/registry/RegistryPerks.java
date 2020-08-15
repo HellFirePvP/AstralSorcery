@@ -2194,7 +2194,6 @@ public class RegistryPerks {
 
     private static <T extends AbstractPerk> PerkTree.PointConnector tree(T perk) {
         if (!PERK_TREE.getPerk(perk.getRegistryName()).isPresent()) {
-            AstralSorcery.getProxy().getRegistryPrimer().register(perk);
             throw new IllegalArgumentException("unsupported operation");
         }
         throw new IllegalArgumentException("unsupported operation");

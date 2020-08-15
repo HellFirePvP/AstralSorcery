@@ -9,11 +9,13 @@
 package hellfirepvp.astralsorcery.common.perk.source.provider;
 
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSourceProvider;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,11 +35,12 @@ public class PerkSourceProvider extends ModifierSourceProvider<AbstractPerk> {
 
     @Override
     public void serialize(AbstractPerk source, PacketBuffer buf) {
-        ByteBufUtils.writeRegistryEntry(buf, source);
+        ByteBufUtils.writeResourceLocation(buf, source.getRegistryName());
     }
 
     @Override
     public AbstractPerk deserialize(PacketBuffer buf) {
-        return ByteBufUtils.readRegistryEntry(buf);
+        ResourceLocation perkKey = ByteBufUtils.readResourceLocation(buf);
+        return PerkTree.PERK_TREE.getPerk(perkKey).orElse(null);
     }
 }

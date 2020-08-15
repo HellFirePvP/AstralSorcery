@@ -43,7 +43,7 @@ public class AssetPreLoader implements ISelectiveResourceReloadListener {
             RegistryRenderTypes.init();
             RegistryEffectTemplates.init();
             RegistryEffectTypes.init();
-            ScreenJournalPerkTree.initializeDrawBuffer();
+            ScreenJournalPerkTree.refreshDrawBuffer();
 
             initialized = true;
         }

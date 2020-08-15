@@ -13,10 +13,12 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.useables.ItemPerkSeal;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -47,7 +49,7 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
     @Override
     public Encoder<PktRequestPerkSealAction> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeRegistryEntry(buffer, packet.perk);
+            ByteBufUtils.writeResourceLocation(buffer, packet.perk.getRegistryName());
             buffer.writeBoolean(packet.doSealing);
         };
     }
@@ -58,7 +60,8 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
         return buffer -> {
             PktRequestPerkSealAction pkt = new PktRequestPerkSealAction();
 
-            pkt.perk = ByteBufUtils.readRegistryEntry(buffer);
+            ResourceLocation perkKey = ByteBufUtils.readResourceLocation(buffer);
+            pkt.perk = PerkTree.PERK_TREE.getPerk(perkKey).orElse(null);
             pkt.doSealing = buffer.readBoolean();
 
             return pkt;
@@ -85,6 +88,10 @@ public class PktRequestPerkSealAction extends ASPacket<PktRequestPerkSealAction>
             @Override
             public void handle(PktRequestPerkSealAction packet, NetworkEvent.Context context, LogicalSide side) {
                 context.enqueueWork(() -> {
+                    if (packet.perk == null) {
+                        return;
+                    }
+
                     PlayerEntity player = context.getSender();
                     if (packet.doSealing) {
                         if (ItemPerkSeal.useSeal(player, true) &&

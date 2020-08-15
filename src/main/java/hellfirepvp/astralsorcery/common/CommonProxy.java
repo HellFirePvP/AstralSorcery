@@ -186,7 +186,6 @@ public class CommonProxy {
     public void attachLifecycle(IEventBus modEventBus) {
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onEnqueueIMC);
-        modEventBus.addListener(this::onServerAboutToStart);
 
         modEventBus.addListener(RegistryRegistries::buildRegistries);
         registryEventHandler.attachEventHandlers(modEventBus);
@@ -199,6 +198,7 @@ public class CommonProxy {
         eventBus.addListener(this::onServerStopping);
         eventBus.addListener(this::onServerStarting);
         eventBus.addListener(this::onServerStarted);
+        eventBus.addListener(this::onServerAboutToStart);
 
         EventHandlerInteract.attachListeners(eventBus);
         EventHandlerCache.attachListeners(eventBus);

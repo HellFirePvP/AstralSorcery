@@ -16,21 +16,22 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.data.research.ResearchSyncHelper;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
+import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -81,12 +82,19 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         return (packet, buffer) -> {
             buffer.writeByte(packet.state);
 
+            Map<ResourceLocation, CompoundNBT> perkData = MapStream.of(packet.usedPerks)
+                    .mapKey(AbstractPerk::getRegistryName)
+                    .toMap();
+            ByteBufUtils.writeMap(buffer, perkData, ByteBufUtils::writeResourceLocation, ByteBufUtils::writeNBTTag);
+            List<ResourceLocation> sealedPerkData = packet.sealedPerks.stream()
+                    .map(AbstractPerk::getRegistryName)
+                    .collect(Collectors.toList());
+            ByteBufUtils.writeList(buffer,sealedPerkData, ByteBufUtils::writeResourceLocation);
+
             ByteBufUtils.writeList(buffer, packet.knownConstellations, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeList(buffer, packet.seenConstellations, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeList(buffer, packet.researchProgression, ByteBufUtils::writeEnumValue);
             ByteBufUtils.writeOptional(buffer, packet.attunedConstellation, ByteBufUtils::writeRegistryEntry);
-            ByteBufUtils.writeMap(buffer, packet.usedPerks, ByteBufUtils::writeRegistryEntry, ByteBufUtils::writeNBTTag);
-            ByteBufUtils.writeList(buffer, packet.sealedPerks, ByteBufUtils::writeRegistryEntry);
             ByteBufUtils.writeList(buffer, packet.freePointTokens, ByteBufUtils::writeString);
             buffer.writeBoolean(packet.wasOnceAttuned);
             buffer.writeInt(packet.progressTier);
@@ -100,12 +108,23 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         return buffer -> {
             PktSyncKnowledge pkt = new PktSyncKnowledge(buffer.readByte());
 
+            Map<ResourceLocation, CompoundNBT> perkData = ByteBufUtils.readMap(buffer, ByteBufUtils::readResourceLocation, ByteBufUtils::readNBTTag);
+            pkt.usedPerks = MapStream.of(perkData)
+                    .mapKey(PerkTree.PERK_TREE::getPerk)
+                    .filterKey(Optional::isPresent)
+                    .mapKey(Optional::get)
+                    .toMap();
+            List<ResourceLocation> sealedPerkData = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
+            pkt.sealedPerks = sealedPerkData.stream()
+                    .map(PerkTree.PERK_TREE::getPerk)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toList());
+
             pkt.knownConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.seenConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.researchProgression = ByteBufUtils.readList(buffer, buf -> ByteBufUtils.readEnumValue(buf, ResearchProgression.class));
             pkt.attunedConstellation = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
-            pkt.usedPerks = ByteBufUtils.readMap(buffer, ByteBufUtils::readRegistryEntry, ByteBufUtils::readNBTTag);
-            pkt.sealedPerks = ByteBufUtils.readList(buffer, ByteBufUtils::readRegistryEntry);
             pkt.freePointTokens = ByteBufUtils.readList(buffer, ByteBufUtils::readString);
             pkt.wasOnceAttuned = buffer.readBoolean();
             pkt.progressTier = buffer.readInt();
