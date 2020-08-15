@@ -38,6 +38,10 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
 
     private void registerRoots(Consumer<FinishedPerk> registrar) {
         registerAevitasRoot(registrar);
+        registerVicioRoot(registrar);
+    }
+
+    private void registerVicioRoot(Consumer<FinishedPerk> registrar) {
 
     }
 
@@ -95,6 +99,51 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
         PerkDataBuilder.ofType(GEM_SLOT_PERK)
                 .create("aevitas_m_gem", 17, 48)
                 .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
+                .build(registrar);
+
+        PerkDataBuilder.ofType(MODIFIER_PERK)
+                .create("aevitas_life_bridge_1", 19, 45)
+                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
+                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
+                .setName(NAME_ADD_LIFE)
+                .build(registrar);
+        PerkDataBuilder.ofType(MODIFIER_PERK)
+                .create("aevitas_life_bridge_2", 21, 47)
+                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
+                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
+                .setName(NAME_ADD_LIFE)
+                .build(registrar);
+        PerkDataBuilder.ofType(MODIFIER_PERK)
+                .create("aevitas_life_bridge_3", 20, 50)
+                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
+                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
+                .setName(NAME_ADD_LIFE)
+                .build(registrar);
+
+        PerkDataBuilder.ofType(MODIFIER_PERK)
+                .create("aevitas_c_armor_1", 17, 40)
+                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
+                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
+                .setName(NAME_INC_ARMOR)
+                .build(registrar);
+        PerkDataBuilder.ofType(MODIFIER_PERK)
+                .create("aevitas_c_armor_2", 19, 36)
+                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
+                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
+                .setName(NAME_INC_ARMOR)
+                .build(registrar);
+
+        PerkDataBuilder.ofType(MODIFIER_PERK)
+                .create("aevitas_c_reach_1", 22, 56)
+                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
+                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
+                .setName(NAME_INC_REACH)
+                .build(registrar);
+        PerkDataBuilder.ofType(MODIFIER_PERK)
+                .create("aevitas_c_reach_2", 26, 57)
+                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
+                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
+                .setName(NAME_INC_REACH)
                 .build(registrar);
     }
 

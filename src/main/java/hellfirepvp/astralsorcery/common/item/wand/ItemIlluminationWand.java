@@ -147,6 +147,10 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
             placePos = placePos.offset(dir);
         }
 
+        if (!BlockUtils.isReplaceable(world, placePos)) {
+            return ActionResultType.SUCCESS;
+        }
+
         if (player.canPlayerEdit(placePos, dir, stack)) {
             if (state.equals(placeState)) {
                 if (world.setBlockState(placePos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {

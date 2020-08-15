@@ -30,6 +30,8 @@ import java.util.Map;
  */
 public class PerkTypeHandler {
 
+    private static final Map<ResourceLocation, Type<? extends AbstractPerk>> CONVERTER_MAP = new HashMap<>();
+
     public static final Type<AbstractPerk> DEFAULT = new Type<>(AstralSorcery.key("default"), AbstractPerk::new);
 
     public static final Type<KeyAddEnchantment> KEY_ADD_ENCHANTMENT = registerConverter(AstralSorcery.key("key_add_enchantment"), KeyAddEnchantment::new);
@@ -79,8 +81,6 @@ public class PerkTypeHandler {
     public static final Type<AttributeModifierPerk> MODIFIER_PERK = registerConverter(AstralSorcery.key("modifier_perk"), AttributeModifierPerk::new);
     public static final Type<AttributeConverterPerk> CONVERTER_PERK = registerConverter(AstralSorcery.key("converter_perk"), AttributeConverterPerk::new);
     public static final Type<ProgressGatedPerk> GATED_PERK = registerConverter(AstralSorcery.key("gated_perk"), ProgressGatedPerk::new);
-
-    private static final Map<ResourceLocation, Type<? extends AbstractPerk>> CONVERTER_MAP = new HashMap<>();
 
     public static <T extends AbstractPerk> Type<T> registerConverter(ResourceLocation name, TriFunction<ResourceLocation, Float, Float, T> converter) {
         Type<T> type = new Type<>(name, converter);

@@ -43,7 +43,6 @@ public abstract class RootPerk extends AttributeModifierPerk {
         this.constellation = constellation;
         this.config = rootConfig;
         this.setCategory(CATEGORY_ROOT);
-        this.addRequireConstellation(this.constellation);
     }
 
     @Override
