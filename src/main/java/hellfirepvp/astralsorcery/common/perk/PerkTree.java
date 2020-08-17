@@ -86,13 +86,13 @@ public class PerkTree {
     }
 
     public Collection<PerkTreePoint<?>> getPerkPoints() {
-        return ImmutableList.copyOf(this.treePoints);
+        return Collections.unmodifiableList(this.treePoints);
     }
 
     //Only for rendering purposes.
     @OnlyIn(Dist.CLIENT)
     public Collection<Tuple<AbstractPerk, AbstractPerk>> getConnections() {
-        return ImmutableList.copyOf(this.connections);
+        return Collections.unmodifiableList(this.connections);
     }
 
     public Optional<Long> getVersion() {

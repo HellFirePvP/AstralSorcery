@@ -64,11 +64,11 @@ public class PerkTreeLoader extends JsonReloadListener {
             }
 
             ConnectedPerkData connector = newTree.addPerk(perk);
-            if (serializedPerkData.has("connections")) {
-                JsonArray connectionArray = JSONUtils.getJsonArray(serializedPerkData, "connections");
+            if (serializedPerkData.has("connection")) {
+                JsonArray connectionArray = JSONUtils.getJsonArray(serializedPerkData, "connection");
                 for (int i = 0; i < connectionArray.size(); i++) {
                     JsonElement connection = connectionArray.get(i);
-                    String connectedPerkKey = JSONUtils.getString(connection, String.format("connections[%s]", i));
+                    String connectedPerkKey = JSONUtils.getString(connection, String.format("connection[%s]", i));
                     connector.addConnection(new ResourceLocation(connectedPerkKey));
                 }
             }
