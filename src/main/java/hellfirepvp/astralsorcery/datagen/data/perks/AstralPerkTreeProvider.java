@@ -992,11 +992,11 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .connect(key("aevitas_m_life_resist"))
                 .build(registrar);
         PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_co_ats_1"), 15, 56)
+                .create(key("aevitas_co_ats_2"), 15, 56)
                 .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
                 .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
                 .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("aevitas_co_armor_1"))
+                .connect(key("aevitas_co_ats_1"))
                 .connect(key("travel_46"))
                 .build(registrar);
 

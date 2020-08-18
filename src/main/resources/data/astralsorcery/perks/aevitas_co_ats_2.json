@@ -1,8 +1,8 @@
 {
-  "registry_name": "astralsorcery:aevitas_co_ats_1",
+  "registry_name": "astralsorcery:aevitas_co_ats_2",
   "perk_class": "astralsorcery:modifier_perk",
-  "x": 18.0,
-  "y": 55.0,
+  "x": 15.0,
+  "y": 56.0,
   "name": "perk.astralsorcery.generic.inc.attack_speed",
   "data": {
     "modifiers": [
@@ -19,6 +19,7 @@
     ]
   },
   "connection": [
-    "astralsorcery:aevitas_m_life_resist"
+    "astralsorcery:aevitas_co_ats_1",
+    "astralsorcery:travel_46"
   ]
 }
