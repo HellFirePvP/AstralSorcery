@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:aevitas_outer_mending_2",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 10.0,
+  "y": 32.0,
+  "name": "perk.astralsorcery.generic.add.armor",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:allres",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.07
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:aevitas_outer_mending_1"
+  ]
+}

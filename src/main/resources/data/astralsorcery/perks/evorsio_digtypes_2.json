@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:evorsio_digtypes_2",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 35.0,
+  "y": 22.0,
+  "name": "perk.astralsorcery.generic.inc.reach",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:reach",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.05
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:evorsio_digtypes_1"
+  ]
+}

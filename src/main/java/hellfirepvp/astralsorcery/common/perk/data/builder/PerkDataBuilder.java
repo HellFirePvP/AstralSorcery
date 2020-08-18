@@ -3,8 +3,11 @@ package hellfirepvp.astralsorcery.common.perk.data.builder;
 import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler;
+import hellfirepvp.astralsorcery.common.perk.modifier.AttributeConverterPerk;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierPerk;
+import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.util.ResourceLocation;
@@ -47,6 +50,22 @@ public class PerkDataBuilder<T extends AbstractPerk> {
             throw new IllegalArgumentException("Cannot add modifiers to non-modifier perks!");
         }
         ((AttributeModifierPerk) this.perk).addModifier(modifier, mode, type);
+        return this;
+    }
+
+    public PerkDataBuilder<T> addModifier(PerkAttributeModifier modifier) {
+        if (!(this.perk instanceof AttributeModifierPerk)) {
+            throw new IllegalArgumentException("Cannot add modifiers to non-modifier perks!");
+        }
+        ((AttributeModifierPerk) this.perk).addModifier(modifier);
+        return this;
+    }
+
+    public PerkDataBuilder<T> addConverter(PerkConverter converter) {
+        if (!(this.perk instanceof AttributeConverterPerk)) {
+            throw new IllegalArgumentException("Cannot add converter to non-converter perks!");
+        }
+        ((AttributeConverterPerk) this.perk).addConverter(converter);
         return this;
     }
 

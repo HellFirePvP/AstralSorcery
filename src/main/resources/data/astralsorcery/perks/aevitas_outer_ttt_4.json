@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:aevitas_outer_ttt_4",
+  "perk_class": "astralsorcery:key_void_trash",
+  "x": 22.0,
+  "y": 62.0,
+  "name": "perk.astralsorcery.key.void_trash",
+  "data": {},
+  "connection": [
+    "astralsorcery:aevitas_outer_ttt_3"
+  ]
+}

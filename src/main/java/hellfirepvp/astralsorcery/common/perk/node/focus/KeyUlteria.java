@@ -28,7 +28,6 @@ public class KeyUlteria extends ConstellationPerk {
     public KeyUlteria(ResourceLocation name, float x, float y) {
         super(name, ConstellationsAS.ulteria, x, y);
         this.setCategory(CATEGORY_FOCUS);
-        this.addModifier(PerkCustomModifiersAS.FOCUS_ULTERIA);
     }
 
     @Override

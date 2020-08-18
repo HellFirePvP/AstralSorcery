@@ -1,0 +1,22 @@
+{
+  "registry_name": "astralsorcery:focus_ulteria",
+  "perk_class": "astralsorcery:focus_ulteria",
+  "x": 70.0,
+  "y": 11.0,
+  "name": "perk.astralsorcery.special.focus.ulteria",
+  "data": {
+    "neededConstellations": [
+      "astralsorcery:ulteria"
+    ],
+    "modifiers": [
+      {
+        "custom": "astralsorcery:focus_ulteria"
+      }
+    ],
+    "constellation": "astralsorcery:ulteria"
+  },
+  "connection": [
+    "astralsorcery:ulteria_effect",
+    "astralsorcery:ulteria_exp"
+  ]
+}

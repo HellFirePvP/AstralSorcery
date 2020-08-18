@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:armara_outer_reflect_3",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 77.0,
+  "y": 46.0,
+  "name": "perk.astralsorcery.generic.inc.thorns",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:thorns",
+        "mode": "ADDITION",
+        "value": 5.0
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:armara_outer_reflect_2"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:armara_outer_worn_4",
+  "perk_class": "astralsorcery:key_no_armor",
+  "x": 71.0,
+  "y": 61.0,
+  "name": "perk.astralsorcery.key.no_armor",
+  "data": {},
+  "connection": [
+    "astralsorcery:armara_outer_worn_3"
+  ]
+}

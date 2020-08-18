@@ -48,7 +48,7 @@ public class PerkTypeHandler {
     public static final Type<KeyGrowables> KEY_GROWABLES = registerConverter(AstralSorcery.key("key_growables"), KeyGrowables::new);
     public static final Type<KeyLastBreath> KEY_LOW_LIFE = registerConverter(AstralSorcery.key("key_low_life"), KeyLastBreath::new);
     public static final Type<KeyLightningArc> KEY_LIGHTNING_ARC = registerConverter(AstralSorcery.key("key_lightning_arc"), KeyLightningArc::new);
-    public static final Type<KeyMagnetDrops> KEY_MANGET_DROPS = registerConverter(AstralSorcery.key("key_magnet_drops"), KeyMagnetDrops::new);
+    public static final Type<KeyMagnetDrops> KEY_MAGNET_DROPS = registerConverter(AstralSorcery.key("key_magnet_drops"), KeyMagnetDrops::new);
     public static final Type<KeyMantleFlight> KEY_MANTLE_CREATIVE_FLIGHT = registerConverter(AstralSorcery.key("key_vicio_mantle_creative_flight"), KeyMantleFlight::new);
     public static final Type<KeyMending> KEY_ARMOR_MENDING = registerConverter(AstralSorcery.key("key_armor_mending"), KeyMending::new);
     public static final Type<KeyNoArmor> KEY_NO_ARMOR = registerConverter(AstralSorcery.key("key_no_armor"), KeyNoArmor::new);

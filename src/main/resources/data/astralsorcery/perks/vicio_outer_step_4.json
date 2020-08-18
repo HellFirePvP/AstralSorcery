@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:vicio_outer_step_4",
+  "perk_class": "astralsorcery:key_step_assist",
+  "x": 50.0,
+  "y": 66.0,
+  "name": "perk.astralsorcery.key.step_assist",
+  "data": {},
+  "connection": [
+    "astralsorcery:vicio_outer_step_3"
+  ]
+}

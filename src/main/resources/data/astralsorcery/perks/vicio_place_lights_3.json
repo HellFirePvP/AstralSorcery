@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:vicio_place_lights_3",
+  "perk_class": "astralsorcery:key_spawn_lights",
+  "x": 36.0,
+  "y": 52.0,
+  "name": "perk.astralsorcery.key.place_lights",
+  "data": {},
+  "connection": [
+    "astralsorcery:vicio_place_lights_2"
+  ]
+}

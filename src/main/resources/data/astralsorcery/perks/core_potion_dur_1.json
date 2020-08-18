@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:core_potion_dur_1",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 43.0,
+  "y": 37.0,
+  "name": "perk.astralsorcery.generic.inc.potion_duration",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:potionduration",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.1
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:travel_26"
+  ]
+}

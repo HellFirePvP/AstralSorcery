@@ -1,0 +1,24 @@
+{
+  "registry_name": "astralsorcery:core_charge_cave_3",
+  "perk_class": "astralsorcery:key_charge_balancing",
+  "x": 44.0,
+  "y": 35.0,
+  "name": "perk.astralsorcery.key.charge_regen",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:chargeregeneration",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.15
+      },
+      {
+        "type": "astralsorcery:chargecap",
+        "mode": "STACKING_MULTIPLY",
+        "value": 0.7
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:core_charge_cave_2"
+  ]
+}

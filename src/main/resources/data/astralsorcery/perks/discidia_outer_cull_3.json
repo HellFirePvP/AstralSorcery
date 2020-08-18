@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:discidia_outer_cull_3",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 64.0,
+  "y": 7.0,
+  "name": "perk.astralsorcery.generic.inc.crit_chance",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:critchance",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.05
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:discidia_outer_cull_2"
+  ]
+}

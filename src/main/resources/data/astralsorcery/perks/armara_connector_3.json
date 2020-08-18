@@ -1,0 +1,28 @@
+{
+  "registry_name": "astralsorcery:armara_connector_3",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 79.0,
+  "y": 25.0,
+  "name": "perk.astralsorcery.special.connector.armara",
+  "data": {
+    "neededConstellations": [
+      "astralsorcery:armara"
+    ],
+    "modifiers": [
+      {
+        "type": "astralsorcery:expgain",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.02
+      },
+      {
+        "type": "astralsorcery:perkeffect",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.02
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:armara_connector_1",
+    "astralsorcery:armara_connector_2"
+  ]
+}

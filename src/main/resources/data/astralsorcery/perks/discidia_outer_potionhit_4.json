@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:discidia_outer_potionhit_4",
+  "perk_class": "astralsorcery:key_on_hit_potions",
+  "x": 66.0,
+  "y": 23.0,
+  "name": "perk.astralsorcery.key.damage_types",
+  "data": {},
+  "connection": [
+    "astralsorcery:discidia_outer_potionhit_3"
+  ]
+}

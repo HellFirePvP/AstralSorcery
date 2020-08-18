@@ -1,0 +1,27 @@
+{
+  "registry_name": "astralsorcery:evorsio_m_dmg_ats",
+  "perk_class": "astralsorcery:major_perk",
+  "x": 30.0,
+  "y": 18.0,
+  "name": "perk.astralsorcery.named.expertise",
+  "data": {
+    "neededConstellations": [
+      "astralsorcery:evorsio"
+    ],
+    "modifiers": [
+      {
+        "type": "astralsorcery:attackspeed",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.05
+      },
+      {
+        "type": "astralsorcery:meleeattackdamage",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.05
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:evorsio_mining_bridge_1"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:evorsio_digtypes_3",
+  "perk_class": "astralsorcery:key_dig_types",
+  "x": 34.0,
+  "y": 21.0,
+  "name": "perk.astralsorcery.key.dig_types",
+  "data": {},
+  "connection": [
+    "astralsorcery:evorsio_digtypes_2"
+  ]
+}

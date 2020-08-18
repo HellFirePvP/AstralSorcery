@@ -1,0 +1,25 @@
+{
+  "registry_name": "astralsorcery:aevitas_co_armor_2",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 9.0,
+  "y": 45.0,
+  "name": "perk.astralsorcery.generic.add.armor",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:perkeffect",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.02
+      },
+      {
+        "type": "astralsorcery:armor",
+        "mode": "ADDITION",
+        "value": 1.0
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:aevitas_co_armor_1",
+    "astralsorcery:travel_48"
+  ]
+}

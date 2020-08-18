@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:travel_33",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 65.0,
+  "y": 16.0,
+  "name": "perk.astralsorcery.generic.inc.perk_effect",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:perkeffect",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.02
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:travel_32"
+  ]
+}

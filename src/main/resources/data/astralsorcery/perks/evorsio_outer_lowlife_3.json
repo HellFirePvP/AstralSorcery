@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:evorsio_outer_lowlife_3",
+  "perk_class": "astralsorcery:key_low_life",
+  "x": 30.0,
+  "y": 8.0,
+  "name": "perk.astralsorcery.key.low_life",
+  "data": {},
+  "connection": [
+    "astralsorcery:evorsio_outer_lowlife_2"
+  ]
+}

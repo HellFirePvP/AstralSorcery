@@ -1,0 +1,20 @@
+{
+  "registry_name": "astralsorcery:evorsio_inner_3",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 32.0,
+  "y": 25.0,
+  "name": "perk.astralsorcery.generic.inc.mining_speed",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:harvestspeed",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.03
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:evorsio_mining_bridge_1",
+    "astralsorcery:evorsio_inner_4"
+  ]
+}

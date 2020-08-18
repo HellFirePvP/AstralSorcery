@@ -1,0 +1,17 @@
+{
+  "registry_name": "astralsorcery:ae_ev_effect_2",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 16.0,
+  "y": 29.0,
+  "name": "perk.astralsorcery.generic.inc.perk_effect",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:perkeffect",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.04
+      }
+    ]
+  },
+  "connection": []
+}

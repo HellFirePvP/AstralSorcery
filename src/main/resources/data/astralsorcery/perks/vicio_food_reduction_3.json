@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:vicio_food_reduction_3",
+  "perk_class": "astralsorcery:key_reduced_food_need",
+  "x": 45.0,
+  "y": 56.0,
+  "name": "perk.astralsorcery.key.reduced_food",
+  "data": {},
+  "connection": [
+    "astralsorcery:vicio_food_reduction_2"
+  ]
+}

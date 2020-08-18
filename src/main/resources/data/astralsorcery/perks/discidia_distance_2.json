@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:discidia_distance_2",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 55.0,
+  "y": 27.0,
+  "name": "perk.astralsorcery.generic.inc.damage_proj",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:projectileattackdamage",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.04
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:discidia_distance_1"
+  ]
+}

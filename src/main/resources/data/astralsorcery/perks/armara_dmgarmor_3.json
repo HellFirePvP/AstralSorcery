@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:armara_dmgarmor_3",
+  "perk_class": "astralsorcery:key_damage_armor",
+  "x": 51.0,
+  "y": 51.0,
+  "name": "perk.astralsorcery.key.damage_armor",
+  "data": {},
+  "connection": [
+    "astralsorcery:armara_dmgarmor_2"
+  ]
+}

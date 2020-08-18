@@ -35,7 +35,6 @@ public class KeyVorux extends ConstellationPerk {
     public KeyVorux(ResourceLocation name, float x, float y) {
         super(name, ConstellationsAS.vorux, x, y);
         setCategory(CATEGORY_FOCUS);
-        this.addModifier(PerkCustomModifiersAS.FOCUS_VORUX);
     }
 
     @Override

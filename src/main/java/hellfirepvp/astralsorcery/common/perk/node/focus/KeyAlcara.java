@@ -35,7 +35,6 @@ public class KeyAlcara extends ConstellationPerk {
     public KeyAlcara(ResourceLocation name, float x, float y) {
         super(name, ConstellationsAS.alcara, x, y);
         setCategory(CATEGORY_FOCUS);
-        this.addConverter(PerkConvertersAS.FOCUS_ALCARA);
     }
 
     @Override

@@ -1,0 +1,24 @@
+{
+  "registry_name": "astralsorcery:vicio_co_dodge_1",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 47.0,
+  "y": 66.0,
+  "name": "perk.astralsorcery.generic.inc.dodge",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:dodge",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.1
+      },
+      {
+        "type": "astralsorcery:perkeffect",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.02
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:vicio_m_dodge_movespeed"
+  ]
+}

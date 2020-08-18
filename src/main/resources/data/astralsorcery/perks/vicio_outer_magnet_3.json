@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:vicio_outer_magnet_3",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 29.0,
+  "y": 75.0,
+  "name": "perk.astralsorcery.generic.inc.reach",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:reach",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.02
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:vicio_outer_magnet_2"
+  ]
+}

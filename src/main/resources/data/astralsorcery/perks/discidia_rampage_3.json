@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:discidia_rampage_3",
+  "perk_class": "astralsorcery:key_rampage",
+  "x": 44.0,
+  "y": 24.0,
+  "name": "perk.astralsorcery.key.rampage",
+  "data": {},
+  "connection": [
+    "astralsorcery:discidia_rampage_2"
+  ]
+}

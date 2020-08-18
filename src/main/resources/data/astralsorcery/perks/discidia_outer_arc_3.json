@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:discidia_outer_arc_3",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 51.0,
+  "y": 6.0,
+  "name": "perk.astralsorcery.special.arc_chain_1",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:archops",
+        "mode": "ADDITION",
+        "value": 1.0
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:discidia_outer_arc_2"
+  ]
+}

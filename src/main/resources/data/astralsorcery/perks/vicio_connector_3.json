@@ -1,0 +1,28 @@
+{
+  "registry_name": "astralsorcery:vicio_connector_3",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 60.0,
+  "y": 74.0,
+  "name": "perk.astralsorcery.special.connector.vicio",
+  "data": {
+    "neededConstellations": [
+      "astralsorcery:vicio"
+    ],
+    "modifiers": [
+      {
+        "type": "astralsorcery:perkeffect",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.02
+      },
+      {
+        "type": "astralsorcery:expgain",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.02
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:vicio_connector_1",
+    "astralsorcery:vicio_connector_2"
+  ]
+}

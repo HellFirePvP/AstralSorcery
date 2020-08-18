@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:evorsio_outer_luck_3",
+  "perk_class": "astralsorcery:key_add_enchantment",
+  "x": 10.0,
+  "y": 19.0,
+  "name": "perk.astralsorcery.key.luck",
+  "data": {
+    "enchantments": [
+      {
+        "type": "ADD_TO_SPECIFIC",
+        "enchantment": "minecraft:fortune",
+        "level": 1
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:evorsio_outer_luck_2"
+  ]
+}

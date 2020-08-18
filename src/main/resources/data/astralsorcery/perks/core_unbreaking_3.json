@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:core_unbreaking_3",
+  "perk_class": "astralsorcery:key_add_enchantment",
+  "x": 34.0,
+  "y": 46.0,
+  "name": "perk.astralsorcery.key.enduring",
+  "data": {
+    "enchantments": [
+      {
+        "type": "ADD_TO_SPECIFIC",
+        "enchantment": "minecraft:unbreaking",
+        "level": 1
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:core_unbreaking_2"
+  ]
+}

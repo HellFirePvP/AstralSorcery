@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:discidia_outer_cull_4",
+  "perk_class": "astralsorcery:key_culling",
+  "x": 63.0,
+  "y": 8.0,
+  "name": "perk.astralsorcery.key.cull_attack",
+  "data": {},
+  "connection": [
+    "astralsorcery:discidia_outer_cull_3"
+  ]
+}

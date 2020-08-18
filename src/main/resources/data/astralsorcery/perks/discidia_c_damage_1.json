@@ -1,0 +1,28 @@
+{
+  "registry_name": "astralsorcery:discidia_c_damage_1",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 57.0,
+  "y": 26.0,
+  "name": "perk.astralsorcery.hybrid.melee_proj_dmg",
+  "data": {
+    "neededConstellations": [
+      "astralsorcery:discidia"
+    ],
+    "modifiers": [
+      {
+        "type": "astralsorcery:meleeattackdamage",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.03
+      },
+      {
+        "type": "astralsorcery:projectileattackdamage",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.03
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:discidia_m_proj_dmg_speed",
+    "astralsorcery:discidia_c_damage_2"
+  ]
+}

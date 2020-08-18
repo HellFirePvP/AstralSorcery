@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:aevitas_outer_mending_4",
+  "perk_class": "astralsorcery:key_armor_mending",
+  "x": 10.0,
+  "y": 34.0,
+  "name": "perk.astralsorcery.key.mending",
+  "data": {},
+  "connection": [
+    "astralsorcery:aevitas_outer_mending_3"
+  ]
+}

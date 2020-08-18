@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:evorsio_charge_inner_3",
+  "perk_class": "astralsorcery:major_perk",
+  "x": 37.0,
+  "y": 24.0,
+  "name": "perk.astralsorcery.named.bloom",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:chargecap",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.2
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:evorsio_charge_inner_2"
+  ]
+}

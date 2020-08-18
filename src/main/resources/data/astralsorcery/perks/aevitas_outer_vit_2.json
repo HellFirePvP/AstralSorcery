@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:aevitas_outer_vit_2",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 2.0,
+  "y": 41.0,
+  "name": "perk.astralsorcery.generic.inc.life_recovery",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:liferecovery",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.12
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:aevitas_outer_vit_1"
+  ]
+}

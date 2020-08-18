@@ -29,8 +29,6 @@ public class KeyGelu extends ConstellationPerk {
     public KeyGelu(ResourceLocation name, float x, float y) {
         super(name, ConstellationsAS.gelu, x, y);
         this.setCategory(CATEGORY_FOCUS);
-        this.addModifier(PerkCustomModifiersAS.FOCUS_GELU);
-        this.addConverter(PerkConvertersAS.FOCUS_GELU);
     }
 
     @Override

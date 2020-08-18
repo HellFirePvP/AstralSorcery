@@ -1,0 +1,24 @@
+{
+  "registry_name": "astralsorcery:core_perk_exp_2",
+  "perk_class": "astralsorcery:major_perk",
+  "x": 38.0,
+  "y": 33.0,
+  "name": "perk.astralsorcery.named.precision",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:expgain",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.15
+      },
+      {
+        "type": "astralsorcery:critchance",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.04
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:core_perk_exp_1"
+  ]
+}

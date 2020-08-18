@@ -52,7 +52,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk implements Att
     }
 
     @Nonnull
-    protected <T extends PerkAttributeModifier, V extends AttributeModifierPerk> V addModifier(T modifier) {
+    public <T extends PerkAttributeModifier, V extends AttributeModifierPerk> V addModifier(T modifier) {
         this.modifiers.add(modifier);
         return (V) this;
     }

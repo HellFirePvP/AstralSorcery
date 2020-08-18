@@ -1,0 +1,23 @@
+{
+  "registry_name": "astralsorcery:discidia_c_ats_bridge_1",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 47.0,
+  "y": 17.0,
+  "name": "perk.astralsorcery.generic.inc.attack_speed",
+  "data": {
+    "neededConstellations": [
+      "astralsorcery:discidia"
+    ],
+    "modifiers": [
+      {
+        "type": "astralsorcery:attackspeed",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.05
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:discidia_m_melee_reach",
+    "astralsorcery:discidia_c_ats_bridge_2"
+  ]
+}
