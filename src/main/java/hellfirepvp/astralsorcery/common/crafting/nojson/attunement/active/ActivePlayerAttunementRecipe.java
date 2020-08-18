@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -304,7 +305,9 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
 
     @OnlyIn(Dist.CLIENT)
     private void doClientSetup(TileAttunementAltar altar) {
-        if (this.cameraHack == null) {
+        if (this.cameraHack == null &&
+                Minecraft.getInstance().player != null &&
+                Minecraft.getInstance().player.getUniqueID().equals(this.getPlayerUUID())) {
             Vector3 offset = new Vector3(altar).add(0.5, 6, 0.5);
             CameraPathBuilder builder = CameraPathBuilder.builder(offset.clone().add(4, 0, 4), new Vector3(altar).add(0.5, 0.5, 0.5));
             builder.addCircularPoints(offset, CameraPathBuilder.DynamicRadiusGetter.dyanmicIncrease( 5,  0.025), 200, 2);
