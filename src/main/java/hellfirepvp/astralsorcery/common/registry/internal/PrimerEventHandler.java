@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.registry.*;
+import hellfirepvp.astralsorcery.common.util.ASDataSerializers;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
@@ -22,6 +23,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -95,6 +97,13 @@ public class PrimerEventHandler {
     public void registerSounds(RegistryEvent.Register<SoundEvent> event) {
         registry.wipe(event.getClass());
         RegistrySounds.init();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+    
+    @SubscribeEvent
+    public void registerDataSerializers(RegistryEvent.Register<DataSerializerEntry> event) {
+        registry.wipe(event.getClass());
+        ASDataSerializers.registerSerializers();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
