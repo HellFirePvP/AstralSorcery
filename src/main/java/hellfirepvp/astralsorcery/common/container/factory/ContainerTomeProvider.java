@@ -46,13 +46,13 @@ public class ContainerTomeProvider extends CustomContainerProvider<ContainerTome
     @Nonnull
     @Override
     public ContainerTome createMenu(int id, PlayerInventory plInventory, PlayerEntity player) {
-        return new ContainerTome(id, plInventory, this.stackTome, this.slotTome);
+        return new ContainerTome(id, plInventory, player, this.stackTome, this.slotTome);
     }
 
     private static ContainerTome createFromPacket(int id, PlayerInventory plInventory, PacketBuffer data) {
         ItemStack tome = ByteBufUtils.readItemStack(data);
         int slot = data.readInt();
-        return new ContainerTome(id, plInventory, tome, slot);
+        return new ContainerTome(id, plInventory, plInventory.player, tome, slot);
     }
 
     public static class Factory implements IContainerFactory<ContainerTome> {

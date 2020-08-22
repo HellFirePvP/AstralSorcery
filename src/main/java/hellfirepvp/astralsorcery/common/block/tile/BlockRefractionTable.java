@@ -101,18 +101,7 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         ItemStack held = player.getHeldItem(hand);
-        if (world.isRemote()) {
-            if (!player.isSneaking()) {
-                TileRefractionTable tft = MiscUtils.getTileAt(world, pos, TileRefractionTable.class, true);
-                if (tft != null) {
-                    if (!held.isEmpty() && (held.getItem() instanceof ItemParchment || tft.getInputStack().isEmpty() ||
-                            (TileRefractionTable.isValidGlassStack(held) && tft.getGlassStack().isEmpty()))) {
-                        return ActionResultType.PASS;
-                    }
-                    AstralSorcery.getProxy().openGui(player, GuiType.REFRACTION_TABLE, pos);
-                }
-            }
-        } else {
+        if (!world.isRemote()) {
             TileRefractionTable tft = MiscUtils.getTileAt(world, pos, TileRefractionTable.class, true);
             if (tft != null) {
                 if (player.isSneaking()) {
@@ -131,7 +120,7 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
                         return ActionResultType.SUCCESS;
                     }
                 } else if (!held.isEmpty()) {
-                    if (held.getItem() instanceof ItemParchment) {
+                    if (held.getItem() instanceof ItemParchment && tft.getParchmentCount() < 64) {
                         int leftover = tft.addParchment(held.getCount());
                         if (leftover < tft.getParchmentCount()) {
                             if (!player.isCreative()) {
@@ -156,6 +145,7 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
                                 player.setHeldItem(hand, held);
                             }
                         }
+                        return ActionResultType.PASS;
                     } else if (tft.getInputStack().isEmpty()) {
                         ItemStack previous = tft.setInputStack(ItemUtils.copyStackWithSize(held, 1));
                         if (!previous.isEmpty()) {
@@ -169,7 +159,11 @@ public class BlockRefractionTable extends ContainerBlock implements CustomItemBl
                                 player.setHeldItem(hand, held);
                             }
                         }
+                    } else {
+                        AstralSorcery.getProxy().openGui(player, GuiType.REFRACTION_TABLE, pos);
                     }
+                } else {
+                    AstralSorcery.getProxy().openGui(player, GuiType.REFRACTION_TABLE, pos);
                 }
             }
         }

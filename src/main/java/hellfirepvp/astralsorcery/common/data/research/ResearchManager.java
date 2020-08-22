@@ -32,13 +32,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -144,6 +143,17 @@ public class ResearchManager {
         if (!progress.isValid()) return false;
 
         progress.memorizeConstellation(c.getRegistryName());
+
+        ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
+        ResearchHelper.savePlayerKnowledge(player);
+        return true;
+    }
+
+    public static boolean updateConstellationPapers(List<IConstellation> papers, PlayerEntity player) {
+        PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+        if (!progress.isValid()) return false;
+
+        progress.setStoredConstellationPapers(papers.stream().map(IForgeRegistryEntry::getRegistryName).collect(Collectors.toList()));
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);

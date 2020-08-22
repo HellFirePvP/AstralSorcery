@@ -48,6 +48,11 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
+    public List<ResourceLocation> getStoredConstellationPapers() {
+        return Collections.emptyList();
+    }
+
+    @Override
     public double getPerkExp() {
         return 0;
     }

@@ -43,6 +43,7 @@ public class PlayerProgress {
 
     private List<ResourceLocation> knownConstellations = new ArrayList<>();
     private List<ResourceLocation> seenConstellations = new ArrayList<>();
+    private List<ResourceLocation> storedConstellationPapers = new ArrayList<>();
     private IMajorConstellation attunedConstellation = null;
     private boolean wasOnceAttuned = false;
     private List<ResearchProgression> researchProgression = new LinkedList<>();
@@ -60,6 +61,7 @@ public class PlayerProgress {
         knownConstellations.clear();
         seenConstellations.clear();
         researchProgression.clear();
+        storedConstellationPapers.clear();
         attunedConstellation = null;
         tierReached = ProgressionTier.DISCOVERY;
         wasOnceAttuned = false;
@@ -78,10 +80,20 @@ public class PlayerProgress {
             }
         }
         if (compound.contains("constellations")) {
-            ListNBT list = compound.getList("constellations", 8);
+            ListNBT list = compound.getList("constellations", Constants.NBT.TAG_STRING);
             for (int i = 0; i < list.size(); i++) {
                 ResourceLocation s = new ResourceLocation(list.getString(i));
                 knownConstellations.add(s);
+                if (!seenConstellations.contains(s)) {
+                    seenConstellations.add(s);
+                }
+            }
+        }
+        if (compound.contains("storedConstellationPapers")) {
+            ListNBT list = compound.getList("storedConstellationPapers", Constants.NBT.TAG_STRING);
+            for (int i = 0; i < list.size(); i++) {
+                ResourceLocation s = new ResourceLocation(list.getString(i));
+                storedConstellationPapers.add(s);
                 if (!seenConstellations.contains(s)) {
                     seenConstellations.add(s);
                 }
@@ -112,7 +124,7 @@ public class PlayerProgress {
             }
         } else {
             if (compound.contains("perks")) {
-                ListNBT list = compound.getList("perks", 10);
+                ListNBT list = compound.getList("perks", Constants.NBT.TAG_COMPOUND);
                 for (int i = 0; i < list.size(); i++) {
                     CompoundNBT tag = list.getCompound(i);
                     String perkRegName = tag.getString("perkName");
@@ -124,7 +136,7 @@ public class PlayerProgress {
                 }
             }
             if (compound.contains("sealedPerks")) {
-                ListNBT list = compound.getList("sealedPerks", 10);
+                ListNBT list = compound.getList("sealedPerks", Constants.NBT.TAG_COMPOUND);
                 for (int i = 0; i < list.size(); i++) {
                     CompoundNBT tag = list.getCompound(i);
                     String perkRegName = tag.getString("perkName");
@@ -173,16 +185,21 @@ public class PlayerProgress {
 
     //For file saving, persistent saving.
     public void store(CompoundNBT cmp) {
-        ListNBT list = new ListNBT();
+        ListNBT known = new ListNBT();
         for (ResourceLocation s : knownConstellations) {
-            list.add(StringNBT.valueOf(s.toString()));
+            known.add(StringNBT.valueOf(s.toString()));
         }
-        ListNBT l = new ListNBT();
+        ListNBT seen = new ListNBT();
         for (ResourceLocation s : seenConstellations) {
-            l.add(StringNBT.valueOf(s.toString()));
+            seen.add(StringNBT.valueOf(s.toString()));
         }
-        cmp.put("constellations", list);
-        cmp.put("seenConstellations", l);
+        ListNBT storedPapers = new ListNBT();
+        for (ResourceLocation s : storedConstellationPapers) {
+            storedPapers.add(StringNBT.valueOf(s.toString()));
+        }
+        cmp.put("constellations", known);
+        cmp.put("seenConstellations", seen);
+        cmp.put("storedConstellationPapers", storedPapers);
         cmp.putInt("tierReached", tierReached.ordinal());
         cmp.putBoolean("wasAttuned", wasOnceAttuned);
         ListNBT listTokens = new ListNBT();
@@ -198,21 +215,21 @@ public class PlayerProgress {
         if (attunedConstellation != null) {
             cmp.putString("attuned", attunedConstellation.getRegistryName().toString());
         }
-        list = new ListNBT();
+        known = new ListNBT();
         for (Map.Entry<AbstractPerk, CompoundNBT> entry : appliedPerkData.entrySet()) {
             CompoundNBT tag = new CompoundNBT();
             tag.putString("perkName", entry.getKey().getRegistryName().toString());
             tag.put("perkData", entry.getValue());
-            list.add(tag);
+            known.add(tag);
         }
-        cmp.put("perks", list);
-        list = new ListNBT();
+        cmp.put("perks", known);
+        known = new ListNBT();
         for (AbstractPerk perk : sealedPerks) {
             CompoundNBT tag = new CompoundNBT();
             tag.putString("perkName", perk.getRegistryName().toString());
-            list.add(tag);
+            known.add(tag);
         }
-        cmp.put("sealedPerks", list);
+        cmp.put("sealedPerks", known);
         PerkTree.PERK_TREE.getVersion().ifPresent(version -> cmp.putLong("perkTreeVersion", version));
 
         cmp.putDouble("perkExp", perkExp);
@@ -492,6 +509,10 @@ public class PlayerProgress {
         return seenConstellations;
     }
 
+    public List<ResourceLocation> getStoredConstellationPapers() {
+        return storedConstellationPapers;
+    }
+
     public boolean hasSeenConstellation(IConstellation constellation) {
         return hasSeenConstellation(constellation.getRegistryName());
     }
@@ -517,9 +538,15 @@ public class PlayerProgress {
         if (!seenConstellations.contains(name)) seenConstellations.add(name);
     }
 
+    protected void setStoredConstellationPapers(List<ResourceLocation> names) {
+        this.storedConstellationPapers.clear();
+        this.storedConstellationPapers.addAll(names);
+    }
+
     protected void receive(PktSyncKnowledge message) {
         this.knownConstellations = message.knownConstellations;
         this.seenConstellations = message.seenConstellations;
+        this.storedConstellationPapers = message.storedConstellationPapers;
         this.researchProgression = message.researchProgression;
         this.tierReached = MiscUtils.getEnumEntry(ProgressionTier.class, message.progressTier);
         this.attunedConstellation = message.attunedConstellation;

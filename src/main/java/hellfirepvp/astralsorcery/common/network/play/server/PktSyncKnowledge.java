@@ -48,6 +48,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
     private byte state;
     public List<ResourceLocation> knownConstellations = new ArrayList<>();
     public List<ResourceLocation> seenConstellations = new ArrayList<>();
+    public List<ResourceLocation> storedConstellationPapers = new ArrayList<>();
     public List<ResearchProgression> researchProgression = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
     public Map<AbstractPerk, CompoundNBT> usedPerks = new HashMap<>();
@@ -66,6 +67,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
     public void load(PlayerProgress progress) {
         this.knownConstellations = progress.getKnownConstellations();
         this.seenConstellations = progress.getSeenConstellations();
+        this.storedConstellationPapers = progress.getStoredConstellationPapers();
         this.researchProgression = progress.getResearchProgression();
         this.progressTier = progress.getTierReached().ordinal();
         this.attunedConstellation = progress.getAttunedConstellation();
@@ -93,6 +95,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
 
             ByteBufUtils.writeList(buffer, packet.knownConstellations, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeList(buffer, packet.seenConstellations, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeList(buffer, packet.storedConstellationPapers, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeList(buffer, packet.researchProgression, ByteBufUtils::writeEnumValue);
             ByteBufUtils.writeOptional(buffer, packet.attunedConstellation, ByteBufUtils::writeRegistryEntry);
             ByteBufUtils.writeList(buffer, packet.freePointTokens, ByteBufUtils::writeString);
@@ -123,6 +126,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
 
             pkt.knownConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.seenConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
+            pkt.storedConstellationPapers = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.researchProgression = ByteBufUtils.readList(buffer, buf -> ByteBufUtils.readEnumValue(buf, ResearchProgression.class));
             pkt.attunedConstellation = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
             pkt.freePointTokens = ByteBufUtils.readList(buffer, ByteBufUtils::readString);

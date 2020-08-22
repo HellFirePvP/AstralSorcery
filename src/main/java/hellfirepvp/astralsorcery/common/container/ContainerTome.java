@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.container.slot.SlotConstellationPaper;
 import hellfirepvp.astralsorcery.common.container.slot.SlotUnclickable;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.ItemTome;
 import hellfirepvp.astralsorcery.common.lib.ContainerTypesAS;
@@ -35,15 +36,17 @@ import java.util.LinkedList;
  */
 public class ContainerTome extends Container {
 
+    private final PlayerEntity owningPlayer;
     private final ItemStack parentTome;
     private final int tomeIndex;
 
-    public ContainerTome(int id, PlayerInventory plInventory, ItemStack tome, int tomeIndex) {
+    public ContainerTome(int id, PlayerInventory plInventory, PlayerEntity owningPlayer, ItemStack tome, int tomeIndex) {
         super(ContainerTypesAS.TOME, id);
         this.parentTome = tome;
         this.tomeIndex = tomeIndex;
+        this.owningPlayer = owningPlayer;
         buildPlayerSlots(plInventory);
-        buildSlots(new InvWrapper(ItemTome.getTomeStorage(tome)));
+        buildSlots(new InvWrapper(ItemTome.getTomeStorage(tome, this.owningPlayer)));
     }
 
     private void buildPlayerSlots(PlayerInventory playerInv) {
@@ -141,7 +144,7 @@ public class ContainerTome extends Container {
                     saveConstellations.add(c);
                 }
             }
-            ItemTome.setStoredConstellations(parentTome, saveConstellations);
+            ResearchManager.updateConstellationPapers(saveConstellations, this.owningPlayer);
         }
     }
 }
