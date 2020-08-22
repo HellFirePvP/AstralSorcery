@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 
 import static hellfirepvp.astralsorcery.common.lib.TagsAS.Items.*;
@@ -39,6 +40,9 @@ public class AstralItemTagsProvider extends ItemTagsProvider {
 
     @Override
     protected void registerTags() {
+        this.tag(ItemTags.LECTERN_BOOKS)
+                .add(ItemsAS.TOME);
+
         this.tag(CURIOS_NECKLACE)
                 .add(ItemsAS.ENCHANTMENT_AMULET);
 

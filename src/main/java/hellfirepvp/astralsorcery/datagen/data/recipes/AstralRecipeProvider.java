@@ -46,6 +46,7 @@ public class AstralRecipeProvider extends RecipeProvider {
         LightwellRecipeProvider.registerLightwellRecipes(registrar);
         BlockTransmutationRecipeProvider.registerTransmutationRecipes(registrar);
 
+        VanillaTypedRecipeProvider.registerStoneCutterRecipes(registrar);
         VanillaTypedRecipeProvider.registerShapedRecipes(registrar);
         VanillaTypedRecipeProvider.registerCookingRecipes(registrar);
         VanillaTypedRecipeProvider.registerCustomRecipes(registrar);

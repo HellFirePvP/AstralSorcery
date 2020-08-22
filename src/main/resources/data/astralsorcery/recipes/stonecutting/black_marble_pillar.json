@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "astralsorcery:black_marble_raw"
+  },
+  "result": "astralsorcery:black_marble_pillar",
+  "count": 1
+}

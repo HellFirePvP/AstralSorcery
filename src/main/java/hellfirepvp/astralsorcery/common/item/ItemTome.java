@@ -18,18 +18,24 @@ import hellfirepvp.astralsorcery.common.item.base.PerkExperienceRevealer;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.LecternBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -60,6 +66,17 @@ public class ItemTome extends Item implements PerkExperienceRevealer {
                     .openFor((ServerPlayerEntity) player);
         }
         return ActionResult.resultSuccess(player.getHeldItem(hand));
+    }
+
+    @Override
+    public ActionResultType onItemUse(ItemUseContext context) {
+        World world = context.getWorld();
+        BlockState blockstate = world.getBlockState(context.getPos());
+        if (blockstate.getBlock() instanceof LecternBlock) {
+            return LecternBlock.tryPlaceBook(world, context.getPos(), blockstate, context.getItem()) ? ActionResultType.SUCCESS : ActionResultType.PASS;
+        } else {
+            return ActionResultType.PASS;
+        }
     }
 
     public static IInventory getTomeStorage(ItemStack stack) {

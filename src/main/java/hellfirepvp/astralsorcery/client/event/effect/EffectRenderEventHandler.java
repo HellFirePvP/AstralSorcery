@@ -34,6 +34,7 @@ public class EffectRenderEventHandler {
     public void attachEventListeners(IEventBus bus) {
         bus.addListener(this::onDebugText);
         bus.addListener(ClientMiscEventHandler::onRender);
+        bus.addListener(ClientMiscEventHandler::onLecternOpen);
         bus.addListener(EffectHandler.getInstance()::render);
     }
 

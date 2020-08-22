@@ -14,8 +14,10 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.datagen.data.recipes.builder.ResultCookingRecipeBuilder;
 import hellfirepvp.astralsorcery.datagen.data.recipes.builder.SimpleShapedRecipeBuilder;
+import hellfirepvp.astralsorcery.datagen.data.recipes.builder.StoneCuttingRecipeBuilder;
 import net.minecraft.data.CustomRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.SingleItemRecipeBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -32,6 +34,42 @@ import java.util.function.Consumer;
  * Date: 07.03.2020 / 18:09
  */
 public class VanillaTypedRecipeProvider {
+
+    public static void registerStoneCutterRecipes(Consumer<IFinishedRecipe> registrar) {
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_RAW), BlocksAS.MARBLE_ARCH)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_RAW), BlocksAS.MARBLE_BRICKS)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_RAW), BlocksAS.MARBLE_CHISELED)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_RAW), BlocksAS.MARBLE_ENGRAVED)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_RAW), BlocksAS.MARBLE_PILLAR)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_RAW), BlocksAS.MARBLE_RUNED)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_RAW), BlocksAS.MARBLE_SLAB, 2)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_RAW), BlocksAS.MARBLE_STAIRS)
+                .build(registrar);
+
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.BLACK_MARBLE_RAW), BlocksAS.BLACK_MARBLE_ARCH)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.BLACK_MARBLE_RAW), BlocksAS.BLACK_MARBLE_BRICKS)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.BLACK_MARBLE_RAW), BlocksAS.BLACK_MARBLE_CHISELED)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.BLACK_MARBLE_RAW), BlocksAS.BLACK_MARBLE_ENGRAVED)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.BLACK_MARBLE_RAW), BlocksAS.BLACK_MARBLE_PILLAR)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.BLACK_MARBLE_RAW), BlocksAS.BLACK_MARBLE_RUNED)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.BLACK_MARBLE_RAW), BlocksAS.BLACK_MARBLE_SLAB, 2)
+                .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.BLACK_MARBLE_RAW), BlocksAS.BLACK_MARBLE_STAIRS)
+                .build(registrar);
+    }
 
     public static void registerShapedRecipes(Consumer<IFinishedRecipe> registrar) {
         SimpleShapedRecipeBuilder.shapedRecipe(ItemsAS.TOME)
@@ -145,7 +183,7 @@ public class VanillaTypedRecipeProvider {
                 .patternLine("M")
                 .patternLine("M")
                 .key('M', BlocksAS.BLACK_MARBLE_RAW)
-                .subDirectory("marble")
+                .subDirectory("black_marble")
                 .build(registrar);
         SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.BLACK_MARBLE_RUNED, 3)
                 .patternLine("MCM")
