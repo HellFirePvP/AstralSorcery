@@ -41,10 +41,10 @@ public class RandomReplaceablePlacement extends Placement<ReplacingFeaturePlacem
 
     @Override
     public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, ReplacingFeaturePlacementConfig configIn, BlockPos pos) {
-        if (!configIn.generatesInBiome(worldIn.getBiome(pos))) {
+        if (!configIn.canGenerateAtAll() || random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
             return Stream.empty();
         }
-        if (random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
+        if (!configIn.generatesInBiome(worldIn.getBiome(pos))) {
             return Stream.empty();
         }
 

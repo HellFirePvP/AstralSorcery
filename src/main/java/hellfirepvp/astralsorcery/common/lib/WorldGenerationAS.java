@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureDesertShr
 import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureSmallShrineStructure;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.placement.CountRangeConfig;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,7 +48,7 @@ public class WorldGenerationAS {
         public static FeaturePlacementConfig GLOW_FLOWER;
         public static ReplacingFeaturePlacementConfig ROCK_CRYSTAL;
         public static ReplacingFeaturePlacementConfig AQUAMARINE;
-        public static CountRangeConfig MARBLE;
+        public static FeaturePlacementConfig MARBLE;
 
     }
 

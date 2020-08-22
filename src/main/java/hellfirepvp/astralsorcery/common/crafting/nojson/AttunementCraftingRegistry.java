@@ -11,7 +11,7 @@ import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunementRec
  * Created by HellFirePvP
  * Date: 18.11.2019 / 19:00
  */
-public class AttunementCraftingRegistry extends CustomRecipeRegistry<AttunementRecipe> {
+public class AttunementCraftingRegistry extends CustomRecipeRegistry<AttunementRecipe<?>> {
 
     public static final AttunementCraftingRegistry INSTANCE = new AttunementCraftingRegistry();
 

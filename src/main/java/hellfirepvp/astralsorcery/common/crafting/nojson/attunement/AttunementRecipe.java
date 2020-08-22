@@ -19,7 +19,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 18.11.2019 / 19:02
  */
-public abstract class AttunementRecipe<T extends AttunementRecipe.Active> extends CustomRecipe {
+public abstract class AttunementRecipe<T extends AttunementRecipe.Active<?>> extends CustomRecipe {
 
     public AttunementRecipe(ResourceLocation key) {
         super(key);
@@ -64,6 +64,9 @@ public abstract class AttunementRecipe<T extends AttunementRecipe.Active> extend
 
         //Called on server when this recipe should stop (stop effects, world interactions, ...)
         public abstract void stopCrafting(TileAttunementAltar altar);
+
+        //Called on server when this recipe starts
+        public abstract void startCrafting(TileAttunementAltar altar);
 
         //Called on server when this recipe should create rewards
         public abstract void finishRecipe(TileAttunementAltar altar);

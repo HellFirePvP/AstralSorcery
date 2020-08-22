@@ -45,6 +45,7 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
     private final int defaultGenerationChance;
     private final int defaultGenerationAmount;
 
+    private ForgeConfigSpec.BooleanValue configEnabled;
     private ForgeConfigSpec.IntValue configMinY;
     private ForgeConfigSpec.IntValue configMaxY;
     private ForgeConfigSpec.IntValue configGenerationChance;
@@ -73,6 +74,10 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         this.defaultMaxY = defaultMaxY;
         this.defaultGenerationChance = defaultGenerationChance;
         this.defaultGenerationAmount = defaultGenerationAmount;
+    }
+
+    public boolean canGenerateAtAll() {
+        return this.configEnabled.get();
     }
 
     public int getRandomY(Random rand) {
@@ -114,6 +119,9 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
     }
 
     public boolean canPlace(IWorld iWorld, BiomeProvider biomeProvider, BlockPos pos, Random rand) {
+        if (!this.canGenerateAtAll()) {
+            return false;
+        }
         if (!this.generatesInWorld(iWorld.getDimension().getType())) {
             return false;
         }
@@ -157,6 +165,11 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
 
     @Override
     public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+        this.configEnabled = cfgBuilder
+                .comment("Set this to false to disable this feature from generation.")
+                .translation(translationKey("enabled"))
+                .define("enabled", true);
+
         this.configMinY = cfgBuilder
                 .comment("Set this to the lowest possible Y-level this feature should be able to generate at. Should be lower than 'maxY'")
                 .translation(translationKey("miny"))

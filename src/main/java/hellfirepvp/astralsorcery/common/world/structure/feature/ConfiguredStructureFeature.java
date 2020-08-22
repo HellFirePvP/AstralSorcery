@@ -69,6 +69,9 @@ public abstract class ConfiguredStructureFeature extends ScatteredStructure<NoFe
 
     @Override
     public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> chunkGenerator, Random rand, int chunkX, int chunkZ, Biome biomeIn) {
+        if (!this.getPlacementConfig().canGenerateAtAll()) {
+            return false;
+        }
         ChunkPos chunkpos = this.getStartPositionForPosition(chunkGenerator, rand, chunkX, chunkZ, 0, 0);
         if (chunkX == chunkpos.x && chunkZ == chunkpos.z) {
             BlockPos at = new BlockPos(chunkX * 16 + 9, 0, chunkZ * 16 + 9);

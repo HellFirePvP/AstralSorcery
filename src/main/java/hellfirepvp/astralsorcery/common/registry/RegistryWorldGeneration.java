@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.world.feature.RockCrystalFeature;
 import hellfirepvp.astralsorcery.common.world.placement.RandomFlowerPlacement;
 import hellfirepvp.astralsorcery.common.world.placement.RandomReplaceablePlacement;
 import hellfirepvp.astralsorcery.common.world.placement.RiverbedPlacement;
+import hellfirepvp.astralsorcery.common.world.placement.SimpleCountRangePlacement;
 import hellfirepvp.astralsorcery.common.world.structure.AncientShrineStructure;
 import hellfirepvp.astralsorcery.common.world.structure.DesertShrineStructure;
 import hellfirepvp.astralsorcery.common.world.structure.SmallShrineStructure;
@@ -85,7 +86,9 @@ public class RegistryWorldGeneration {
                 52, 67, 2, 40,
                 new BlockStateList().add(Blocks.SAND)));
 
-        WorldGenerationAS.Placement.MARBLE = new CountRangeConfig(10, 0, 0, 64);
+        WorldGenerationAS.Placement.MARBLE = cfg.addConfigEntry(new FeaturePlacementConfig("marble", false, false,
+                Lists.newArrayList(), Lists.newArrayList(),
+                0, 64, 1, 8));
     }
 
     public static void registerFeatures() {
@@ -119,8 +122,8 @@ public class RegistryWorldGeneration {
                 new RiverbedPlacement(WorldGenerationAS.Placement.AQUAMARINE), WorldGenerationAS.Placement.AQUAMARINE);
 
         registerFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
-                Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BlocksAS.MARBLE_RAW.getDefaultState(), 33),
-                Placement.COUNT_RANGE, WorldGenerationAS.Placement.MARBLE);
+                Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, BlocksAS.MARBLE_RAW.getDefaultState(), 27),
+                new SimpleCountRangePlacement(WorldGenerationAS.Placement.MARBLE), WorldGenerationAS.Placement.MARBLE);
     }
 
     private static <FC extends IFeatureConfig, PC extends IPlacementConfig> void registerFeature(

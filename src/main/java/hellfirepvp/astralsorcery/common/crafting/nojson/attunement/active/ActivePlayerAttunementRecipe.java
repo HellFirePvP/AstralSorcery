@@ -82,6 +82,16 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
     }
 
     @Override
+    public void startCrafting(TileAttunementAltar altar) {
+        PlayerEntity player = altar.getWorld().getPlayerByUuid(this.playerUUID);
+        if (player != null && player.isAlive()) {
+            Vector3 offset = new Vector3(altar).add(0.5F, 1.2F, 0.5F);
+            player.setPositionAndRotation(offset.getX(), offset.getY(), offset.getZ(), 0F, 0F);
+            player.setPositionAndRotation(offset.getX(), offset.getY(), offset.getZ(), 0F, 0F);
+        }
+    }
+
+    @Override
     public void stopCrafting(TileAttunementAltar altar) {
 
     }
@@ -281,8 +291,8 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
             }
         }
 
-        if (tick >= (DURATION_PLAYER_ATTUNEMENT - 10)) {
-            for (int i = 0; i < 25; i++) {
+        if (tick >= (DURATION_PLAYER_ATTUNEMENT - 4)) {
+            for (int i = 0; i < 60; i++) {
                 Vector3 at = new Vector3(altar)
                         .add(0.5, 0, 0.5)
                         .addY(rand.nextFloat() * 15);

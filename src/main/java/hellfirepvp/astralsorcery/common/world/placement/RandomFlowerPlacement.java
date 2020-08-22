@@ -42,7 +42,7 @@ public class RandomFlowerPlacement extends Placement<FeaturePlacementConfig> {
 
     @Override
     public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, FeaturePlacementConfig configIn, BlockPos pos) {
-        if (random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
+        if (!configIn.canGenerateAtAll() || random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
             return Stream.empty();
         }
         Set<BlockPos> result = new HashSet<>();

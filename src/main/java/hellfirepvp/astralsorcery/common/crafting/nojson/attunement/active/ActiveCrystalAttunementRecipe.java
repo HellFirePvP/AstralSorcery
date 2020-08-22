@@ -85,6 +85,11 @@ public class ActiveCrystalAttunementRecipe extends AttunementRecipe.Active<Attun
     }
 
     @Override
+    public void startCrafting(TileAttunementAltar altar) {
+
+    }
+
+    @Override
     public void stopCrafting(TileAttunementAltar altar) {
 
     }

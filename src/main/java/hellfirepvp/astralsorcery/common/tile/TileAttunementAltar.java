@@ -68,7 +68,7 @@ import java.util.Set;
 public class TileAttunementAltar extends TileEntityTick {
 
     private IConstellation activeConstellation = null;
-    private AttunementRecipe.Active currentRecipe = null;
+    private AttunementRecipe.Active<?> currentRecipe = null;
 
     //Client Misc visuals
     private Map<BlockPos, Object> activeStarSprites = new HashMap<>();
@@ -420,7 +420,7 @@ public class TileAttunementAltar extends TileEntityTick {
     }
 
     @Nullable
-    public AttunementRecipe.Active getActiveRecipe() {
+    public AttunementRecipe.Active<?> getActiveRecipe() {
         return currentRecipe;
     }
 
@@ -434,16 +434,17 @@ public class TileAttunementAltar extends TileEntityTick {
         if (this.currentRecipe != null) {
             return;
         }
-        AttunementRecipe match = this.searchMatchingRecipe();
+        AttunementRecipe<?> match = this.searchMatchingRecipe();
         if (match != null) {
             this.currentRecipe = match.createRecipe(this);
+            this.currentRecipe.startCrafting(this);
             this.markForUpdate();
         }
     }
 
     @Nullable
-    private AttunementRecipe searchMatchingRecipe() {
-        for (AttunementRecipe recipe : AttunementCraftingRegistry.INSTANCE.getRecipes()) {
+    private AttunementRecipe<?> searchMatchingRecipe() {
+        for (AttunementRecipe<?> recipe : AttunementCraftingRegistry.INSTANCE.getRecipes()) {
             if (recipe.canStartCrafting(this)) {
                 return recipe;
             }

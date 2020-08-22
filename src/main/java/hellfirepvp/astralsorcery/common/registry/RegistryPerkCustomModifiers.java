@@ -22,7 +22,7 @@ public class RegistryPerkCustomModifiers {
 
     public static void init() {
         FOCUS_GELU = register(new PerkAttributeModifier(AstralSorcery.key("focus_gelu"),
-                PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, ModifierType.ADDED_MULTIPLY, 0.03F) {
+                PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, ModifierType.ADDED_MULTIPLY, 0.02F) {
             @Override
             protected void initModifier() {
                 super.initModifier();

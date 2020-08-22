@@ -52,8 +52,12 @@ public class AlignmentChargeHandler implements ITickHandler {
         float cap = PerkAttributeHelper.getOrCreateMap(player, side)
                 .modifyValue(player, ResearchHelper.getProgress(player, side), PerkAttributeTypesAS.ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM, MAX_CHARGE);
         cap = AttributeEvent.postProcessModded(player, PerkAttributeTypesAS.ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM, cap);
+        cap = Math.max(0, cap);
 
         maximumCharge.computeIfAbsent(side, s -> new HashMap<>()).put(player.getUniqueID(), cap);
+        if (getCurrentCharge(player, side) > cap) {
+            currentCharge.computeIfAbsent(side, s -> new HashMap<>()).put(player.getUniqueID(), cap);
+        }
     }
 
     public float getMaximumCharge(PlayerEntity player, LogicalSide side) {
@@ -100,7 +104,7 @@ public class AlignmentChargeHandler implements ITickHandler {
         }
         if (!simulate) {
             currentCharge.computeIfAbsent(side, s -> new HashMap<>())
-                    .put(player.getUniqueID(), Math.min(result, this.getMaximumCharge(player, side)));
+                    .put(player.getUniqueID(), MathHelper.clamp(result, this.getMaximumCharge(player, side), 0));
         }
         return true;
     }

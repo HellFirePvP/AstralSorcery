@@ -113,9 +113,9 @@ public class RegistryEngravingEffects {
                 .addEffect(new EngravingEffect.PotionEffect(() -> Effects.HASTE, 2, 3))
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.FORTUNE, 4, 6))
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.LOOTING, 3, 6))
-                .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP, ModifierType.STACKING_MULTIPLY, 1.2F, 1.35F)
+                .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EXP, ModifierType.STACKING_MULTIPLY, 1.1F, 1.2F)
                         .addApplicableType(EnchantmentType.ARMOR_HEAD))
-                .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, ModifierType.STACKING_MULTIPLY, 1.1F, 1.2F)
+                .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, ModifierType.STACKING_MULTIPLY, 1.04F, 1.08F)
                         .addApplicableType(EnchantmentType.ARMOR_FEET)
                         .addApplicableType(EnchantmentType.ARMOR_CHEST)
                         .addApplicableType(EnchantmentType.ARMOR_LEGS));

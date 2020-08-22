@@ -39,6 +39,9 @@ public class StructurePlacement<DC extends StructurePlacementConfig> extends Pla
 
     @Override
     public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, DC configIn, BlockPos pos) {
+        if (!configIn.canGenerateAtAll()) {
+            return Stream.empty();
+        }
         BlockPos generationPos = this.getStructurePosition(generatorIn, random, configIn.getStructureSize(), new ChunkPos(pos));
         return generationPos != null ? Stream.of(generationPos) : Stream.empty();
     }
