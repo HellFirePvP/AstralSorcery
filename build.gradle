@@ -26,7 +26,7 @@ if (System.getenv("BUILD_NUMBER") != null) {
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2781"
+    version = "1.12.2-14.23.5.2847"
     runDir = "run"
     useDepAts = true
 

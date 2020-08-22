@@ -8,12 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
-import net.minecraft.network.datasync.DataSerializers;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.DataSerializerEntry;
 
 import java.io.IOException;
 
@@ -98,9 +100,9 @@ public class ASDataSerializers {
     };
 
     public static void registerSerializers() {
-        DataSerializers.registerSerializer(VECTOR);
-        DataSerializers.registerSerializer(FLUID);
-        DataSerializers.registerSerializer(LONG);
+        CommonProxy.registryPrimer.register(new DataSerializerEntry(ASDataSerializers.FLUID).setRegistryName(AstralSorcery.MODID, "serializer_fluid"));
+        CommonProxy.registryPrimer.register(new DataSerializerEntry(ASDataSerializers.LONG).setRegistryName(AstralSorcery.MODID, "serializer_long"));
+        CommonProxy.registryPrimer.register(new DataSerializerEntry(ASDataSerializers.VECTOR).setRegistryName(AstralSorcery.MODID, "serializer_vec3d"));
     }
 
 }
