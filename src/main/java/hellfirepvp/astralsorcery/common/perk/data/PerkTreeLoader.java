@@ -4,13 +4,16 @@ import com.google.gson.*;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
+import hellfirepvp.astralsorcery.common.util.MapStream;
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,17 +33,21 @@ public class PerkTreeLoader extends JsonReloadListener {
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonObject> object, IResourceManager resourceManager, IProfiler profiler) {
+    protected void apply(Map<ResourceLocation, JsonObject> dataMap, IResourceManager resourceManager, IProfiler profiler) {
+        Collection<JsonObject> loadingPerkObjects = MapStream.of(dataMap)
+                .filterKey(key -> !key.getPath().startsWith("_"))
+                .valueStream()
+                .collect(Collectors.toList());
+        PerkTree.PERK_TREE.updateOriginPerkTree(loadPerkTree(loadingPerkObjects));
+    }
+
+    public static PerkTreeData loadPerkTree(Collection<JsonObject> perkTreeObjects) {
         PerkTreeData newTree = new PerkTreeData();
 
-        for(Map.Entry<ResourceLocation, JsonObject> entry : object.entrySet()) {
-            ResourceLocation perkKey = entry.getKey();
-            if (perkKey.getPath().startsWith("_")) {
-                continue;
-            }
+        int count = 0;
+        for(JsonObject serializedPerkData : perkTreeObjects) {
 
-            JsonObject serializedPerkData = entry.getValue();
-
+            ResourceLocation perkRegistryName = new ResourceLocation(JSONUtils.getString(serializedPerkData, "registry_name"));
             ResourceLocation customClass = PerkTypeHandler.DEFAULT.getKey();
             if (serializedPerkData.has("perk_class")) {
                 customClass = new ResourceLocation(JSONUtils.getString(serializedPerkData, "perk_class"));
@@ -52,7 +59,7 @@ public class PerkTreeLoader extends JsonReloadListener {
             float posX = JSONUtils.getFloat(serializedPerkData, "x");
             float posY = JSONUtils.getFloat(serializedPerkData, "y");
 
-            AbstractPerk perk = PerkTypeHandler.convert(perkKey, posX, posY, customClass);
+            AbstractPerk perk = PerkTypeHandler.convert(perkRegistryName, posX, posY, customClass);
             if (serializedPerkData.has("name")) {
                 String name = JSONUtils.getString(serializedPerkData, "name");
                 perk.setName(name);
@@ -63,7 +70,7 @@ public class PerkTreeLoader extends JsonReloadListener {
                 perk.deserializeData(perkData);
             }
 
-            ConnectedPerkData connector = newTree.addPerk(perk);
+            LoadedPerkData connector = newTree.addPerk(perk, serializedPerkData);
             if (serializedPerkData.has("connection")) {
                 JsonArray connectionArray = JSONUtils.getJsonArray(serializedPerkData, "connection");
                 for (int i = 0; i < connectionArray.size(); i++) {
@@ -72,10 +79,12 @@ public class PerkTreeLoader extends JsonReloadListener {
                     connector.addConnection(new ResourceLocation(connectedPerkKey));
                 }
             }
+
+            count++;
         }
 
-        AstralSorcery.log.info("Loaded {} perks", newTree.getLoadedPerks().size());
+        AstralSorcery.log.info("Built PerkTree with {} perks!", count);
 
-        PerkTree.PERK_TREE.updatePerkTree(newTree);
+        return newTree;
     }
 }

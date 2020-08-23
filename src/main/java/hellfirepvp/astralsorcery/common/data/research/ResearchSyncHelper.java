@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.network.play.server.PktSyncKnowledge;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,10 +32,10 @@ public class ResearchSyncHelper {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void recieveProgressFromServer(PktSyncKnowledge message, PlayerEntity player) {
-        int currentLvl = ResearchHelper.getClientProgress().getPerkLevel(player);
-        ResearchHelper.updateClientResearch(message);
-        if (ResearchHelper.getClientProgress().getPerkLevel(player) > currentLvl) {
+    public static void recieveProgressFromServer(PktSyncKnowledge packet, PlayerEntity player) {
+        int currentLvl = ResearchHelper.getClientProgress().getPerkLevel(player, LogicalSide.CLIENT);
+        ResearchHelper.updateClientResearch(packet);
+        if (ResearchHelper.getClientProgress().getPerkLevel(player, LogicalSide.CLIENT) > currentLvl) {
             PerkExperienceRenderer.INSTANCE.revealExperience(160);
         }
     }

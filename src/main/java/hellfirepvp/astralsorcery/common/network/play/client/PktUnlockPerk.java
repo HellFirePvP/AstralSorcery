@@ -36,21 +36,21 @@ import javax.annotation.Nonnull;
  */
 public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
 
-    private AbstractPerk perk = null;
+    private ResourceLocation perkKey = null;
     private boolean serverAccept = false;
 
     public PktUnlockPerk() {}
 
     public PktUnlockPerk(boolean serverAccepted, AbstractPerk perk) {
         this.serverAccept = serverAccepted;
-        this.perk = perk;
+        this.perkKey = perk.getRegistryName();
     }
 
     @Nonnull
     @Override
     public Encoder<PktUnlockPerk> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeOptional(buffer, packet.perk, AbstractPerk::getRegistryName, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeOptional(buffer, packet.perkKey, ByteBufUtils::writeResourceLocation);
             buffer.writeBoolean(packet.serverAccept);
         };
     }
@@ -61,8 +61,7 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
         return buffer -> {
             PktUnlockPerk pkt = new PktUnlockPerk();
 
-            ResourceLocation perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
-            pkt.perk = perkKey == null ? null : PerkTree.PERK_TREE.getPerk(perkKey).orElse(null);
+            pkt.perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
             pkt.serverAccept = buffer.readBoolean();
 
             return pkt;
@@ -78,10 +77,12 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
             public void handleClient(PktUnlockPerk packet, NetworkEvent.Context context) {
                 context.enqueueWork(() -> {
                     if (packet.serverAccept) {
-                        Screen current = Minecraft.getInstance().currentScreen;
-                        if (current instanceof ScreenJournalPerkTree) {
-                            Minecraft.getInstance().enqueue(() -> ((ScreenJournalPerkTree) current).playUnlockAnimation(packet.perk));
-                        }
+                        PerkTree.PERK_TREE.getPerk(LogicalSide.CLIENT, packet.perkKey).ifPresent(perk -> {
+                            Screen current = Minecraft.getInstance().currentScreen;
+                            if (current instanceof ScreenJournalPerkTree) {
+                                Minecraft.getInstance().enqueue(() -> ((ScreenJournalPerkTree) current).playUnlockAnimation(perk));
+                            }
+                        });
                     }
                 });
             }
@@ -89,13 +90,15 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
             @Override
             public void handle(PktUnlockPerk packet, NetworkEvent.Context context, LogicalSide side) {
                 context.enqueueWork(() -> {
-                    PlayerEntity player = context.getSender();
-                    PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-                    if (!prog.hasPerkUnlocked(packet.perk) && prog.isValid()) {
-                        if (packet.perk.mayUnlockPerk(prog, player) && ResearchManager.applyPerk(player, packet.perk)) {
-                            packet.replyWith(new PktUnlockPerk(true, packet.perk), context);
+                    PerkTree.PERK_TREE.getPerk(LogicalSide.CLIENT, packet.perkKey).ifPresent(perk -> {
+                        PlayerEntity player = context.getSender();
+                        PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+                        if (!prog.hasPerkUnlocked(perk) && prog.isValid()) {
+                            if (perk.mayUnlockPerk(prog, player) && ResearchManager.applyPerk(player, perk)) {
+                                packet.replyWith(new PktUnlockPerk(true, perk), context);
+                            }
                         }
-                    }
+                    });
                 });
             }
         };

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.perk.data;
 
+import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import net.minecraft.util.ResourceLocation;
 
@@ -11,17 +12,19 @@ import java.util.Set;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ConnectedPerkData
+ * Class: LoadedPerkData
  * Created by HellFirePvP
  * Date: 13.08.2020 / 17:17
  */
-public class ConnectedPerkData {
+public class LoadedPerkData {
 
     private final AbstractPerk perk;
+    private final JsonObject perkDataObject;
     private final Set<ResourceLocation> connections = new HashSet<>();
 
-    public ConnectedPerkData(AbstractPerk perk) {
+    public LoadedPerkData(AbstractPerk perk, JsonObject perkDataObject) {
         this.perk = perk;
+        this.perkDataObject = perkDataObject;
     }
 
     void addConnection(ResourceLocation to) {
@@ -36,11 +39,15 @@ public class ConnectedPerkData {
         return perk;
     }
 
+    public JsonObject getPerkDataObject() {
+        return perkDataObject;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ConnectedPerkData that = (ConnectedPerkData) o;
+        LoadedPerkData that = (LoadedPerkData) o;
         return Objects.equals(perk.getRegistryName(), that.perk.getRegistryName());
     }
 

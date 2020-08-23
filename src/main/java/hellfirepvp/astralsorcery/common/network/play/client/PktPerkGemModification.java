@@ -34,7 +34,7 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
 
     private int action = 0;
 
-    private AbstractPerk perk = null;
+    private ResourceLocation perkKey = null;
     private int slotId = -1;
 
     public PktPerkGemModification() {}
@@ -42,7 +42,7 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
     public static PktPerkGemModification insertItem(AbstractPerk perk, int slotId) {
         PktPerkGemModification pkt = new PktPerkGemModification();
         pkt.action = 0;
-        pkt.perk = perk;
+        pkt.perkKey = perk.getRegistryName();
         pkt.slotId = slotId;
         return pkt;
     }
@@ -50,7 +50,7 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
     public static PktPerkGemModification dropItem(AbstractPerk perk) {
         PktPerkGemModification pkt = new PktPerkGemModification();
         pkt.action = 1;
-        pkt.perk = perk;
+        pkt.perkKey = perk.getRegistryName();
         return pkt;
     }
 
@@ -59,7 +59,7 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
     public Encoder<PktPerkGemModification> encoder() {
         return (packet, buffer) -> {
             buffer.writeInt(packet.action);
-            ByteBufUtils.writeOptional(buffer, packet.perk, AbstractPerk::getRegistryName, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeOptional(buffer, packet.perkKey, ByteBufUtils::writeResourceLocation);
             buffer.writeInt(packet.slotId);
         };
     }
@@ -71,8 +71,7 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
             PktPerkGemModification pkt = new PktPerkGemModification();
 
             pkt.action = buffer.readInt();
-            ResourceLocation perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
-            pkt.perk = perkKey == null ? null : PerkTree.PERK_TREE.getPerk(perkKey).orElse(null);
+            pkt.perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
             pkt.slotId = buffer.readInt();
 
             return pkt;
@@ -84,31 +83,33 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
     public Handler<PktPerkGemModification> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
-                PlayerEntity player = context.getSender();
-                if (!(packet.perk instanceof GemSlotPerk)) { //Exclusively for socketable gem perks.
-                    return;
-                }
+                PerkTree.PERK_TREE.getPerk(side, packet.perkKey).ifPresent(perk -> {
+                    PlayerEntity player = context.getSender();
+                    if (!(perk instanceof GemSlotPerk)) { //Exclusively for socketable gem perks.
+                        return;
+                    }
 
-                switch (packet.action) {
-                    case 0:
-                        ItemStack stack = player.inventory.getStackInSlot(packet.slotId);
-                        ItemStack toInsert = ItemUtils.copyStackWithSize(stack, 1);
-                        if (!toInsert.isEmpty() &&
-                                toInsert.getItem() instanceof ItemPerkGem &&
-                                !DynamicModifierHelper.getStaticModifiers(toInsert).isEmpty() &&
-                                !((GemSlotPerk) packet.perk).hasItem(player, LogicalSide.SERVER) &&
-                                ((GemSlotPerk) packet.perk).setContainedItem(player, LogicalSide.SERVER, toInsert)) {
-                            player.inventory.setInventorySlotContents(packet.slotId, ItemUtils.copyStackWithSize(stack, stack.getCount() - 1));
-                        }
-                        break;
-                    case 1:
-                        if (((GemSlotPerk) packet.perk).hasItem(player, LogicalSide.SERVER)) {
-                            ((GemSlotPerk) packet.perk).dropItemToPlayer(player);
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                    switch (packet.action) {
+                        case 0:
+                            ItemStack stack = player.inventory.getStackInSlot(packet.slotId);
+                            ItemStack toInsert = ItemUtils.copyStackWithSize(stack, 1);
+                            if (!toInsert.isEmpty() &&
+                                    toInsert.getItem() instanceof ItemPerkGem &&
+                                    !DynamicModifierHelper.getStaticModifiers(toInsert).isEmpty() &&
+                                    !((GemSlotPerk) perk).hasItem(player, LogicalSide.SERVER) &&
+                                    ((GemSlotPerk) perk).setContainedItem(player, LogicalSide.SERVER, toInsert)) {
+                                player.inventory.setInventorySlotContents(packet.slotId, ItemUtils.copyStackWithSize(stack, stack.getCount() - 1));
+                            }
+                            break;
+                        case 1:
+                            if (((GemSlotPerk) perk).hasItem(player, LogicalSide.SERVER)) {
+                                ((GemSlotPerk) perk).dropItemToPlayer(player);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                });
             });
         };
     }

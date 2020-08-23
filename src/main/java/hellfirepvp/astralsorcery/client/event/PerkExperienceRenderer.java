@@ -26,6 +26,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
 import java.util.EnumSet;
@@ -80,7 +81,7 @@ public class PerkExperienceRenderer implements ITickHandler {
                     .draw();
         });
 
-        float perc = ResearchHelper.getClientProgress().getPercentToNextLevel(player);
+        float perc = ResearchHelper.getClientProgress().getPercentToNextLevel(player, LogicalSide.CLIENT);
         float expHeight  =  78F * perc;
         float expWidth   =  32F;
         float expOffsetX =   0F;
@@ -94,7 +95,7 @@ public class PerkExperienceRenderer implements ITickHandler {
                     .draw();
         });
 
-        String strLevel = String.valueOf(ResearchHelper.getClientProgress().getPerkLevel(player));
+        String strLevel = String.valueOf(ResearchHelper.getClientProgress().getPerkLevel(player, LogicalSide.CLIENT));
         int strLength = Minecraft.getInstance().fontRenderer.getStringWidth(strLevel);
 
         RenderSystem.pushMatrix();

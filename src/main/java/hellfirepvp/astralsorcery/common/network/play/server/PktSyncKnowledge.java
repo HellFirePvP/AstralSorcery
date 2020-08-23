@@ -51,9 +51,9 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
     public List<ResourceLocation> storedConstellationPapers = new ArrayList<>();
     public List<ResearchProgression> researchProgression = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
-    public Map<AbstractPerk, CompoundNBT> usedPerks = new HashMap<>();
+    public Map<ResourceLocation, CompoundNBT> usedPerks = new HashMap<>();
     public List<String> freePointTokens = Lists.newArrayList();
-    public List<AbstractPerk> sealedPerks = Lists.newArrayList();
+    public List<ResourceLocation> sealedPerks = Lists.newArrayList();
     public boolean wasOnceAttuned = false;
     public int progressTier = 0;
     public double perkExp = 0;
@@ -72,8 +72,8 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         this.progressTier = progress.getTierReached().ordinal();
         this.attunedConstellation = progress.getAttunedConstellation();
         this.freePointTokens = progress.getFreePointTokens();
-        this.usedPerks = progress.getUnlockedPerkData();
-        this.sealedPerks = progress.getSealedPerks();
+        this.usedPerks = MapStream.of(progress.getUnlockedPerkData()).mapKey(AbstractPerk::getRegistryName).toMap();
+        this.sealedPerks = progress.getSealedPerks().stream().map(AbstractPerk::getRegistryName).collect(Collectors.toList());
         this.perkExp = progress.getPerkExp();
         this.wasOnceAttuned = progress.wasOnceAttuned();
     }
@@ -84,15 +84,8 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         return (packet, buffer) -> {
             buffer.writeByte(packet.state);
 
-            Map<ResourceLocation, CompoundNBT> perkData = MapStream.of(packet.usedPerks)
-                    .mapKey(AbstractPerk::getRegistryName)
-                    .toMap();
-            ByteBufUtils.writeMap(buffer, perkData, ByteBufUtils::writeResourceLocation, ByteBufUtils::writeNBTTag);
-            List<ResourceLocation> sealedPerkData = packet.sealedPerks.stream()
-                    .map(AbstractPerk::getRegistryName)
-                    .collect(Collectors.toList());
-            ByteBufUtils.writeList(buffer,sealedPerkData, ByteBufUtils::writeResourceLocation);
-
+            ByteBufUtils.writeMap(buffer, packet.usedPerks, ByteBufUtils::writeResourceLocation, ByteBufUtils::writeNBTTag);
+            ByteBufUtils.writeList(buffer,packet.sealedPerks, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeList(buffer, packet.knownConstellations, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeList(buffer, packet.seenConstellations, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeList(buffer, packet.storedConstellationPapers, ByteBufUtils::writeResourceLocation);
@@ -111,19 +104,8 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         return buffer -> {
             PktSyncKnowledge pkt = new PktSyncKnowledge(buffer.readByte());
 
-            Map<ResourceLocation, CompoundNBT> perkData = ByteBufUtils.readMap(buffer, ByteBufUtils::readResourceLocation, ByteBufUtils::readNBTTag);
-            pkt.usedPerks = MapStream.of(perkData)
-                    .mapKey(PerkTree.PERK_TREE::getPerk)
-                    .filterKey(Optional::isPresent)
-                    .mapKey(Optional::get)
-                    .toMap();
-            List<ResourceLocation> sealedPerkData = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
-            pkt.sealedPerks = sealedPerkData.stream()
-                    .map(PerkTree.PERK_TREE::getPerk)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toList());
-
+            pkt.usedPerks = ByteBufUtils.readMap(buffer, ByteBufUtils::readResourceLocation, ByteBufUtils::readNBTTag);
+            pkt.sealedPerks = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.knownConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.seenConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.storedConstellationPapers = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);

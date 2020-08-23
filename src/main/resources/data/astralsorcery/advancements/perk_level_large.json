@@ -19,7 +19,7 @@
     "gain_perk_level_large": {
       "trigger": "astralsorcery:perk_level",
       "conditions": {
-        "levelNeeded": 30
+        "levelNeeded": 40
       }
     }
   },

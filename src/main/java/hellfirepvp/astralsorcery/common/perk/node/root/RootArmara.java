@@ -17,7 +17,9 @@ import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.node.RootPerk;
 import hellfirepvp.astralsorcery.common.util.DiminishingMultiplier;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.CombatTracker;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -45,7 +47,7 @@ public class RootArmara extends RootPerk {
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(4_000L, 0.2F, 0.125F, 0.01F);
+        return new DiminishingMultiplier(2_000L, 0.3F, 0.2F, 0.01F);
     }
 
     @Override
@@ -71,7 +73,20 @@ public class RootArmara extends RootPerk {
             return;
         }
 
-        float expGain = Math.min(MathHelper.sqrt(event.getAmount()) * 5.0F, 70F);
+        float mul = 0.5F;
+        CombatTracker combat = player.getCombatTracker();
+        if (combat.inCombat) {
+            //noone is this long in combat...
+            if (combat.getCombatDuration() <= (4 * 60 * 20)) {
+                mul = 10.0F;
+            } else {
+                mul = 0.05F;
+            }
+        } else if (event.getSource().getTrueSource() instanceof LivingEntity) {
+            mul = 3.0F;
+        }
+
+        float expGain = Math.min(event.getAmount() * mul, 70F);
         expGain *= this.getExpMultiplier();
         expGain *= this.getDiminishingReturns(player);
         expGain *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);

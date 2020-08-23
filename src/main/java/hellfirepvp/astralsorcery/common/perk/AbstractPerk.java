@@ -212,9 +212,9 @@ public class AbstractPerk implements ModifierSource {
     }
 
     public boolean mayUnlockPerk(PlayerProgress progress, PlayerEntity player) {
-        if (!progress.hasFreeAllocationPoint(player)) return false;
+        if (!progress.hasFreeAllocationPoint(player, getSide(player))) return false;
 
-        for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {
+        for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(getSide(player), this)) {
             if (progress.hasPerkUnlocked(otherPerks)) {
                 return true;
             }

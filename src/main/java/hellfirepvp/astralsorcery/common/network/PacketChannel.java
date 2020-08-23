@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.network.channel.SimpleSendChannel;
 import hellfirepvp.astralsorcery.common.network.login.client.PktLoginAcknowledge;
 import hellfirepvp.astralsorcery.common.network.login.server.PktLoginSyncDataHolder;
 import hellfirepvp.astralsorcery.common.network.login.server.PktLoginSyncGateway;
+import hellfirepvp.astralsorcery.common.network.login.server.PktLoginSyncPerkInformation;
 import hellfirepvp.astralsorcery.common.network.play.client.*;
 import hellfirepvp.astralsorcery.common.network.play.server.*;
 import net.minecraft.util.math.Vec3i;
@@ -52,6 +53,7 @@ public class PacketChannel {
         // LOGIN DEDICATED_SERVER -> CLIENT
         registerLoginMessage(PktLoginSyncDataHolder::new, PktLoginSyncDataHolder::makeLogin);
         registerLoginMessage(PktLoginSyncGateway::new, PktLoginSyncGateway::makeLogin);
+        registerLoginMessage(PktLoginSyncPerkInformation::new, PktLoginSyncPerkInformation::makeLogin);
 
         // LOGIN CLIENT -> DEDICATED_SERVER
         registerLoginMessage(PktLoginAcknowledge::new, PktLoginAcknowledge::new);

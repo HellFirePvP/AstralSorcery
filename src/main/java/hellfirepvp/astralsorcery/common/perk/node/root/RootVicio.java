@@ -123,7 +123,7 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
         if (elytra > lastElytra) {
             added += Math.min(elytra - lastElytra, 500F);
             added *= 0.7F;
-            this.moveTrackMap.get(Stats.AVIATE_ONE_CM).put(uuid, flown);
+            this.moveTrackMap.get(Stats.AVIATE_ONE_CM).put(uuid, elytra);
         }
         if (swam > lastSwam) {
             added += Math.min(swam - lastSwam, 500F);

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,6 +42,6 @@ public class PerkSourceProvider extends ModifierSourceProvider<AbstractPerk> {
     @Override
     public AbstractPerk deserialize(PacketBuffer buf) {
         ResourceLocation perkKey = ByteBufUtils.readResourceLocation(buf);
-        return PerkTree.PERK_TREE.getPerk(perkKey).orElse(null);
+        return PerkTree.PERK_TREE.getPerk(LogicalSide.CLIENT, perkKey).orElse(null);
     }
 }

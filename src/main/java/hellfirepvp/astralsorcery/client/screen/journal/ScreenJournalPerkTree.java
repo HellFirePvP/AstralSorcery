@@ -140,7 +140,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     }
 
     public static void initializeDrawBuffer() {
-        PerkTree.PERK_TREE.getVersion().ifPresent(version -> {
+        PerkTree.PERK_TREE.getVersion(LogicalSide.CLIENT).ifPresent(version -> {
             if (lastPreparedBuffer == null || version.longValue() != lastPreparedBuffer) {
                 drawBuffer = new BatchPerkContext();
 
@@ -148,7 +148,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 sealContext = drawBuffer.addContext(SpritesAS.SPR_PERK_SEAL, BatchPerkContext.PRIORITY_FOREGROUND);
 
                 List<PerkRenderGroup> groups = Lists.newArrayList();
-                for (PerkTreePoint<?> p : PerkTree.PERK_TREE.getPerkPoints()) {
+                for (PerkTreePoint<?> p : PerkTree.PERK_TREE.getPerkPoints(LogicalSide.CLIENT)) {
                     p.addGroups(groups);
                 }
                 for (PerkRenderGroup group : groups) {
@@ -177,7 +177,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         IMajorConstellation attunement = progress.getAttunedConstellation();
         if (attunement != null) {
-            AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(attunement);
+            AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(LogicalSide.CLIENT, attunement);
             if (root != null) {
                 Point.Float shift = this.sizeHandler.evRelativePos(root.getOffset());
                 this.moveMouse(MathHelper.floor(shift.x), MathHelper.floor(shift.y));
@@ -423,7 +423,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         PlayerEntity player = Minecraft.getInstance().player;
 
         int availablePerks;
-        if (prog.getAttunedConstellation() != null && (availablePerks = prog.getAvailablePerkPoints(player)) > 0) {
+        if (prog.getAttunedConstellation() != null && (availablePerks = prog.getAvailablePerkPoints(player, LogicalSide.CLIENT)) > 0) {
             RenderingDrawUtils.renderStringAtPos(guiLeft + 50, guiTop + 18, this.getGuiZLevel(), font,
                     I18n.format("perk.info.astralsorcery.points", availablePerks), 0xCCCCCC, false);
         }
@@ -485,7 +485,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 }
                 if (alloc == 2) {
                     status = AllocationStatus.ALLOCATED;
-                } else if (alloc == 1 && progress.hasFreeAllocationPoint(player)) {
+                } else if (alloc == 1 && progress.hasFreeAllocationPoint(player, LogicalSide.CLIENT)) {
                     status = AllocationStatus.UNLOCKABLE;
                 } else {
                     status = AllocationStatus.UNALLOCATED;
@@ -501,7 +501,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         drawBuffer.beginDrawingPerks();
 
         List<Runnable> renderDynamic = Lists.newArrayList();
-        for (PerkTreePoint perkPoint : PerkTree.PERK_TREE.getPerkPoints()) {
+        for (PerkTreePoint<?> perkPoint : PerkTree.PERK_TREE.getPerkPoints(LogicalSide.CLIENT)) {
             Point.Float offset = perkPoint.getOffset();
             Rectangle.Float perkRect = drawPerk(drawBuffer, perkPoint,
                     partialTicks, ClientScheduler.getClientTick() + (int) offset.x + (int) offset.y,
@@ -595,7 +595,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     }
 
     @Nullable
-    private Rectangle.Float drawPerk(BatchPerkContext ctx, PerkTreePoint perkPoint,
+    private Rectangle.Float drawPerk(BatchPerkContext ctx, PerkTreePoint<?> perkPoint,
                                       float pTicks, long effectTick, boolean renderSeal,
                                       Collection<Runnable> outRenderDynamic) {
         Point.Float offset = this.sizeHandler.scalePointToGui(this, this.mousePosition, perkPoint.getOffset());
@@ -789,7 +789,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         String matchText = this.searchTextEntry.getText().toLowerCase();
         if (matchText.length() < 3) return;
-        for (PerkTreePoint point : PerkTree.PERK_TREE.getPerkPoints()) {
+        for (PerkTreePoint<?> point : PerkTree.PERK_TREE.getPerkPoints(LogicalSide.CLIENT)) {
             AbstractPerk perk = point.getPerk();
             if (perk instanceof ProgressGatedPerk &&
                     !((ProgressGatedPerk) perk).canSeeClient()) {

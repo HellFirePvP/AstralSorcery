@@ -203,7 +203,7 @@ public class ResearchManager {
         progress.setExp(0);
         progress.setAttunedConstellation(constellation);
         AbstractPerk root;
-        if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
+        if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(LogicalSide.SERVER, constellation)) != null) {
             CompoundNBT data = new CompoundNBT();
             root.onUnlockPerkServer(player, progress, data);
             progress.applyPerk(root, data);
@@ -238,7 +238,7 @@ public class ResearchManager {
     public static boolean applyPerk(PlayerEntity player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;
-        if (!progress.hasFreeAllocationPoint(player)) return false;
+        if (!progress.hasFreeAllocationPoint(player, LogicalSide.SERVER)) return false;
         if (progress.hasPerkUnlocked(perk)) return false;
 
         CompoundNBT data = new CompoundNBT();
@@ -416,7 +416,7 @@ public class ResearchManager {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;
 
-        progress.modifyExp(exp, player);
+        progress.modifyExp(exp, player, LogicalSide.SERVER);
 
         AdvancementsAS.PERK_LEVEL.trigger((ServerPlayerEntity) player);
 

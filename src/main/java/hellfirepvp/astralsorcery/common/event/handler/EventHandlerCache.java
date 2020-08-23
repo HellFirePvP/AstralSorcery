@@ -24,10 +24,7 @@ import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.perk.PerkCooldownHelper;
-import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
-import hellfirepvp.astralsorcery.common.perk.PerkTree;
+import hellfirepvp.astralsorcery.common.perk.*;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
@@ -70,6 +67,7 @@ public class EventHandlerCache {
 
         SyncDataHolder.clear(LogicalSide.CLIENT);
         PerkTree.PERK_TREE.clearCache(LogicalSide.CLIENT);
+        PerkLevelManager.clearCache(LogicalSide.CLIENT);
         PerkAttributeHelper.clearClient();
         PerkAttributeType.clearCache(LogicalSide.CLIENT);
         PerkEffectHelper.clientClearAllPerks();

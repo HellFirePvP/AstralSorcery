@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -58,12 +59,12 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public int getPerkLevel(PlayerEntity player) {
+    public int getPerkLevel(PlayerEntity player, LogicalSide side) {
         return 0;
     }
 
     @Override
-    public float getPercentToNextLevel(PlayerEntity player) {
+    public float getPercentToNextLevel(PlayerEntity player, LogicalSide side) {
         return 0F;
     }
 
@@ -114,12 +115,12 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public int getAvailablePerkPoints(PlayerEntity player) {
+    public int getAvailablePerkPoints(PlayerEntity player, LogicalSide side) {
         return 0;
     }
 
     @Override
-    public boolean hasFreeAllocationPoint(PlayerEntity player) {
+    public boolean hasFreeAllocationPoint(PlayerEntity player, LogicalSide side) {
         return false;
     }
 

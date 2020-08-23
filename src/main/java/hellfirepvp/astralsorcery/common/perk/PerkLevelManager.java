@@ -9,9 +9,14 @@
 package hellfirepvp.astralsorcery.common.perk;
 
 import hellfirepvp.astralsorcery.common.data.config.entry.PerkConfig;
+import hellfirepvp.astralsorcery.common.util.SidedReference;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,104 +29,91 @@ import java.util.Map;
  */
 public class PerkLevelManager {
 
-    private static final PerkLevelManager INSTANCE = new PerkLevelManager();
-
-    private Map<Integer, Long> totalExpLevelRequired = new HashMap<>();
-    private int lastKnownLevelCap = -1;
-    private int levelCap = 40;
+    private static final SidedReference<LevelData> LEVEL_DATA = new SidedReference<>();
 
     private PerkLevelManager() {}
 
-    public static PerkLevelManager getInstance() {
-        return INSTANCE;
+    public static void clearCache(LogicalSide side) {
+        LEVEL_DATA.setData(side, null);
     }
 
-    private void ensureLevels() {
-        this.levelCap = PerkConfig.CONFIG.perkLevelCap.get();
-        
-        if (totalExpLevelRequired.isEmpty() || lastKnownLevelCap != this.levelCap) {
-            this.totalExpLevelRequired.clear();
-            this.lastKnownLevelCap = this.levelCap;
-            
-            for (int i = 1; i <= this.levelCap; i++) {
-                long prev = this.totalExpLevelRequired.getOrDefault(i - 1, 0L);
-                this.totalExpLevelRequired.put(i, prev + 150L + 100L * MathHelper.floor(Math.pow(1.2F, i)));
-            }
-        }
+    @OnlyIn(Dist.CLIENT)
+    public static void receiveLevelCap(int maxLevel) {
+        LEVEL_DATA.setData(LogicalSide.CLIENT, new LevelData(maxLevel));
     }
 
-    public int getLevel(double totalExp, PlayerEntity player) {
-        return getLevel(MathHelper.lfloor(totalExp), player);
+    public static void loadPerkLevels() {
+        LEVEL_DATA.setData(LogicalSide.SERVER, new LevelData(PerkConfig.CONFIG.perkLevelCap.get()));
     }
 
-    private int getLevel(long totalExp, PlayerEntity player) {
-        ensureLevels();
+    public static int getLevel(double totalExp, PlayerEntity player, LogicalSide side) {
+        return getLevel(MathHelper.lfloor(totalExp), player, side);
+    }
 
+    private static int getLevel(long totalExp, PlayerEntity player, LogicalSide side) {
         if (totalExp <= 0) {
             return 1;
         }
+        int levelCap = getLevelCap(side, player);
 
-        int levelCap = getLevelCapFor(player);
-
-        for (int i = 1; i <= levelCap; i++) {
-            if (totalExp < this.totalExpLevelRequired.getOrDefault(i, Long.MAX_VALUE)) {
-                return i;
+        return LEVEL_DATA.getData(side).map(data -> {
+            for (int i = 1; i <= levelCap; i++) {
+                if (totalExp < data.totalExpLevelRequired.getOrDefault(i, Long.MAX_VALUE)) {
+                    return i;
+                }
             }
-        }
-        return levelCap;
+            return levelCap;
+        }).orElse(1);
     }
 
-    public long getExpForLevel(int level, PlayerEntity player) {
-        ensureLevels();
-
-        if (level <= 1) {
+    public static long getExpForLevel(int targetLevel, PlayerEntity player, LogicalSide side) {
+        if (targetLevel <= 1) {
             return 0;
         }
-        int levelCap = getLevelCapFor(player);
+        int levelCap = getLevelCap(side, player);
 
-        if (level > levelCap) {
-            level = levelCap;
-        }
-        return totalExpLevelRequired.get(level);
+        return LEVEL_DATA.getData(side).map(data -> {
+            int level = targetLevel;
+            if (level > levelCap) {
+                level = levelCap;
+            }
+            return data.totalExpLevelRequired.get(level);
+        }).orElse(0L);
     }
 
-    public float getNextLevelPercent(double totalExp, PlayerEntity player) {
-        ensureLevels();
-
-        int level = getLevel(totalExp, player);
-        if (level >= this.levelCap) {
+    public static float getNextLevelPercent(double totalExp, PlayerEntity player, LogicalSide side) {
+        int level = getLevel(totalExp, player, side);
+        if (level >= getLevelCap(side, player)) {
             return 1F; //Done.
         }
-        long nextLevel = this.totalExpLevelRequired.getOrDefault(level, 0L);
-        long prevLevel = this.totalExpLevelRequired.getOrDefault(level - 1, 0L);
-        return ((float) (totalExp - prevLevel)) / ((float) (nextLevel - prevLevel));
+        return LEVEL_DATA.getData(side).map(data -> {
+            long nextLevel = data.totalExpLevelRequired.getOrDefault(level, 0L);
+            long prevLevel = data.totalExpLevelRequired.getOrDefault(level - 1, 0L);
+            return ((float) (totalExp - prevLevel)) / ((float) (nextLevel - prevLevel));
+        }).orElse(1F);
     }
 
-    public static int getLevelCapFor(PlayerEntity player) {
-        //if (Mods.GAMESTAGES.isPresent() && Mods.CRAFTTWEAKER.isPresent()) {
-        //    return resolveLevelCap(player);
-        //}
-        return getInstance().levelCap;
+    public static int getLevelCap(LogicalSide side, @Nullable PlayerEntity player) {
+        return LEVEL_DATA.getData(side).map(data -> data.levelCap).orElse(1);
     }
 
-    //@Optional.Method(modid = "gamestages")
-    //private static int resolveLevelCap(PlayerEntity player) {
-    //    if (player == null) {
-    //        return this.levelCap;
-    //    }
-    //    int highestFound = -1;
+    private static class LevelData {
 
-    //    IStageData data = GameStageHelper.getPlayerData(player);
-    //    if (data == null) {
-    //        return this.levelCap;
-    //    }
-    //    for (String stage : data.getStages()) {
-    //        int cap = GameStageTweaks.getMaxCap(stage);
-    //        if (cap > highestFound) {
-    //            highestFound = cap;
-    //        }
-    //    }
-    //    return highestFound > -1 ? highestFound : this.levelCap;
-    //}
+        private final Map<Integer, Long> totalExpLevelRequired = new HashMap<>();
+        private final int levelCap;
 
+        public LevelData(int levelCap) {
+            this.levelCap = levelCap;
+            this.buildLevelRequirements();
+        }
+
+        private void buildLevelRequirements() {
+            if (this.totalExpLevelRequired.isEmpty()) {
+                for (int i = 1; i <= this.levelCap; i++) {
+                    long prev = this.totalExpLevelRequired.getOrDefault(i - 1, 0L);
+                    this.totalExpLevelRequired.put(i, prev + 150L + 100L * MathHelper.floor(Math.pow(1.2F, i)));
+                }
+            }
+        }
+    }
 }

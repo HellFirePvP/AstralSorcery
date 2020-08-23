@@ -177,13 +177,13 @@ public class AstralAdvancementProvider extends AdvancementProvider {
                 .withParent(perkLevelSmall)
                 .withDisplay(BlocksAS.SPECTRAL_RELAY, title("perk_level_medium"), description("perk_level_medium"),
                         null, FrameType.TASK, true, true, false)
-                .withCriterion("gain_perk_level_medium", PerkLevelInstance.reachLevel(20))
+                .withCriterion("gain_perk_level_medium", PerkLevelInstance.reachLevel(25))
                 .register(registrar, AstralSorcery.key("perk_level_medium").toString());
         Advancement perkLevelLarge = Advancement.Builder.builder()
                 .withParent(perkLevelMedium)
                 .withDisplay(BlocksAS.SPECTRAL_RELAY, title("perk_level_large"), description("perk_level_large"),
                         null, FrameType.CHALLENGE, true, true, false)
-                .withCriterion("gain_perk_level_large", PerkLevelInstance.reachLevel(30))
+                .withCriterion("gain_perk_level_large", PerkLevelInstance.reachLevel(40))
                 .register(registrar, AstralSorcery.key("perk_level_large").toString());
     }
 }

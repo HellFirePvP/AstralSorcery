@@ -53,6 +53,6 @@ public class PerkLevelInstance extends CriterionInstance {
     }
 
     public boolean test(ServerPlayerEntity player) {
-        return ResearchHelper.getProgress(player, LogicalSide.SERVER).getPerkLevel(player) >= this.levelNeeded;
+        return ResearchHelper.getProgress(player, LogicalSide.SERVER).getPerkLevel(player, LogicalSide.SERVER) >= this.levelNeeded;
     }
 }

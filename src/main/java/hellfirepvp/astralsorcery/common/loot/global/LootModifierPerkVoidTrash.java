@@ -63,7 +63,7 @@ public class LootModifierPerkVoidTrash extends LootModifier {
         if (!prog.isValid() || !prog.hasPerkEffect(perk -> perk instanceof KeyVoidTrash)) {
             return generatedLoot;
         }
-        if (!PerkTree.PERK_TREE.getPerk(perk -> perk instanceof KeyVoidTrash).isPresent()) {
+        if (!PerkTree.PERK_TREE.getPerk(LogicalSide.SERVER, perk -> perk instanceof KeyVoidTrash).isPresent()) {
             return generatedLoot;
         }
 

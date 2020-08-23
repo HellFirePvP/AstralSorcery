@@ -14,11 +14,11 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
+import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -26,11 +26,15 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,7 +50,7 @@ public class PlayerProgress {
     private List<ResourceLocation> storedConstellationPapers = new ArrayList<>();
     private IMajorConstellation attunedConstellation = null;
     private boolean wasOnceAttuned = false;
-    private List<ResearchProgression> researchProgression = new LinkedList<>();
+    private List<ResearchProgression> researchProgression = new ArrayList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
     private List<String> freePointTokens = Lists.newArrayList();
     private Set<AbstractPerk> appliedPerks = new HashSet<>();
@@ -111,10 +115,10 @@ public class PlayerProgress {
         }
 
         long perkTreeLevel = compound.getLong("perkTreeVersion");
-        if (PerkTree.PERK_TREE.getVersion().map(v -> !v.equals(perkTreeLevel)).orElse(true)) { //If your perk tree is different, clear it.
+        if (PerkTree.PERK_TREE.getVersion(LogicalSide.SERVER).map(v -> !v.equals(perkTreeLevel)).orElse(true)) { //If your perk tree is different, clear it.
             AstralSorcery.log.info("Clearing perk-tree because the player's skill-tree version was outdated!");
             if (attunedConstellation != null) {
-                AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(attunedConstellation);
+                AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(LogicalSide.SERVER, attunedConstellation);
                 if (root != null) {
                     CompoundNBT data = new CompoundNBT();
                     root.onUnlockPerkServer(null, this, data);
@@ -129,7 +133,7 @@ public class PlayerProgress {
                     CompoundNBT tag = list.getCompound(i);
                     String perkRegName = tag.getString("perkName");
                     CompoundNBT data = tag.getCompound("perkData");
-                    PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName)).ifPresent(perk -> {
+                    PerkTree.PERK_TREE.getPerk(LogicalSide.SERVER, new ResourceLocation(perkRegName)).ifPresent(perk -> {
                         appliedPerks.add(perk);
                         appliedPerkData.put(perk, data);
                     });
@@ -140,7 +144,7 @@ public class PlayerProgress {
                 for (int i = 0; i < list.size(); i++) {
                     CompoundNBT tag = list.getCompound(i);
                     String perkRegName = tag.getString("perkName");
-                    PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName)).ifPresent(perk -> {
+                    PerkTree.PERK_TREE.getPerk(LogicalSide.SERVER, new ResourceLocation(perkRegName)).ifPresent(perk -> {
                         sealedPerks.add(perk);
                     });
                 }
@@ -230,7 +234,7 @@ public class PlayerProgress {
             known.add(tag);
         }
         cmp.put("sealedPerks", known);
-        PerkTree.PERK_TREE.getVersion().ifPresent(version -> cmp.putLong("perkTreeVersion", version));
+        PerkTree.PERK_TREE.getVersion(LogicalSide.SERVER).ifPresent(version -> cmp.putLong("perkTreeVersion", version));
 
         cmp.putDouble("perkExp", perkExp);
         cmp.putBoolean("bookReceived", tomeReceived);
@@ -448,35 +452,35 @@ public class PlayerProgress {
         return Collections.unmodifiableList(freePointTokens);
     }
 
-    public int getAvailablePerkPoints(PlayerEntity player) {
+    public int getAvailablePerkPoints(PlayerEntity player, LogicalSide side) {
         int allocatedPerks = this.appliedPerks.size() - 1; //Root perk doesn't count
-        int allocationLevels = PerkLevelManager.getInstance().getLevel(getPerkExp(), player);
+        int allocationLevels = PerkLevelManager.getLevel(getPerkExp(), player, side);
         return (allocationLevels + this.freePointTokens.size()) - allocatedPerks;
     }
 
-    public boolean hasFreeAllocationPoint(PlayerEntity player) {
-        return getAvailablePerkPoints(player) > 0;
+    public boolean hasFreeAllocationPoint(PlayerEntity player, LogicalSide side) {
+        return getAvailablePerkPoints(player, side) > 0;
     }
 
     public double getPerkExp() {
         return perkExp;
     }
 
-    public int getPerkLevel(PlayerEntity player) {
-        return PerkLevelManager.getInstance().getLevel(getPerkExp(), player);
+    public int getPerkLevel(PlayerEntity player, LogicalSide side) {
+        return PerkLevelManager.getLevel(getPerkExp(), player, side);
     }
 
-    public float getPercentToNextLevel(PlayerEntity player) {
-        return PerkLevelManager.getInstance().getNextLevelPercent(getPerkExp(), player);
+    public float getPercentToNextLevel(PlayerEntity player, LogicalSide side) {
+        return PerkLevelManager.getNextLevelPercent(getPerkExp(), player, side);
     }
 
-    protected void modifyExp(double exp, PlayerEntity player) {
-        int currLevel = PerkLevelManager.getInstance().getLevel(getPerkExp(), player);
-        if (exp >= 0 && currLevel >= PerkLevelManager.getLevelCapFor(player)) {
+    protected void modifyExp(double exp, PlayerEntity player, LogicalSide side) {
+        int currLevel = PerkLevelManager.getLevel(getPerkExp(), player, side);
+        if (exp >= 0 && currLevel >= PerkLevelManager.getLevelCap(side, player)) {
             return;
         }
-        long expThisLevel = PerkLevelManager.getInstance().getExpForLevel(currLevel, player);
-        long expNextLevel = PerkLevelManager.getInstance().getExpForLevel(currLevel + 1, player);
+        long expThisLevel = PerkLevelManager.getExpForLevel(currLevel, player, side);
+        long expNextLevel = PerkLevelManager.getExpForLevel(currLevel + 1, player, side);
         long cap = MathHelper.lfloor(((float) (expNextLevel - expThisLevel)) * 0.08F);
         if (exp > cap) {
             exp = cap;
@@ -543,6 +547,7 @@ public class PlayerProgress {
         this.storedConstellationPapers.addAll(names);
     }
 
+    @OnlyIn(Dist.CLIENT)
     protected void receive(PktSyncKnowledge message) {
         this.knownConstellations = message.knownConstellations;
         this.seenConstellations = message.seenConstellations;
@@ -552,9 +557,20 @@ public class PlayerProgress {
         this.attunedConstellation = message.attunedConstellation;
         this.wasOnceAttuned = message.wasOnceAttuned;
         this.freePointTokens = message.freePointTokens;
-        this.appliedPerks = new HashSet<>(message.usedPerks.keySet());
-        this.appliedPerkData = message.usedPerks;
-        this.sealedPerks = message.sealedPerks;
+        this.appliedPerks = message.usedPerks.keySet().stream()
+                .map(perkKey -> PerkTree.PERK_TREE.getPerk(LogicalSide.CLIENT, perkKey))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+        this.appliedPerkData = MapStream.of(message.usedPerks)
+                .mapKey(perkKey -> PerkTree.PERK_TREE.getPerk(LogicalSide.CLIENT, perkKey))
+                .filterKey(Optional::isPresent)
+                .mapKey(Optional::get).toMap();
+        this.sealedPerks = message.sealedPerks.stream()
+                .map(perkKey -> PerkTree.PERK_TREE.getPerk(LogicalSide.CLIENT, perkKey))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
         this.perkExp = message.perkExp;
     }
 

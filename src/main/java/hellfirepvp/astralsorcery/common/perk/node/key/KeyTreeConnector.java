@@ -20,6 +20,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,18 +47,19 @@ public class KeyTreeConnector extends MajorPerk {
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, PlayerEntity player) {
-        if (!progress.hasFreeAllocationPoint(player) ||
+        if (!progress.hasFreeAllocationPoint(player, getSide(player)) ||
                 !canSee(player, progress)) return false;
 
+        LogicalSide side = getSide(player);
         boolean hasAllAdjacent = true;
-        for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {
+        for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(side, this)) {
             if (!progress.hasPerkUnlocked(otherPerks)) {
                 hasAllAdjacent = false;
                 break;
             }
         }
         if (!hasAllAdjacent) {
-            connectorCache.removeIf(perk -> !PerkTree.PERK_TREE.getPerk(otherPerk -> otherPerk == perk).isPresent());
+            connectorCache.removeIf(perk -> !PerkTree.PERK_TREE.getPerk(side, otherPerk -> otherPerk == perk).isPresent());
             return connectorCache.stream().anyMatch(progress::hasPerkUnlocked);
         } else {
             return true;
@@ -69,7 +71,7 @@ public class KeyTreeConnector extends MajorPerk {
         super.onUnlockPerkServer(player, progress, dataStorage);
 
         ListNBT listTokens = new ListNBT();
-        for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(this)) {
+        for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(LogicalSide.SERVER, this)) {
             if (ResearchManager.forceApplyPerk(player, otherPerk)) {
                 String token = "connector-tk-" + otherPerk.getRegistryName().toString();
                 if (ResearchManager.grantFreePerkPoint(player, token)) {

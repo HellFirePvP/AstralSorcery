@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -190,6 +193,14 @@ public class ByteBufUtils {
             throw new IllegalArgumentException("Passed class is not an enum!");
         }
         return enumClazz.getEnumConstants()[buf.readInt()];
+    }
+
+    public static void writeJsonObject(PacketBuffer buf, JsonObject object) {
+        writeString(buf, object.toString());
+    }
+
+    public static JsonObject readJsonObject(PacketBuffer buf) {
+        return new JsonParser().parse(readString(buf)).getAsJsonObject();
     }
 
     public static void writePos(PacketBuffer buf, BlockPos pos) {

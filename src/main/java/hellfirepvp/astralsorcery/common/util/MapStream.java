@@ -91,6 +91,14 @@ public class MapStream<K, V> implements Stream<Tuple<K, V>> {
         return of(decorated.filter(tpl -> predicate.test(tpl.getA())));
     }
 
+    public Stream<V> valueStream() {
+        return decorated.map(Tuple::getB);
+    }
+
+    public Stream<K> keyStream() {
+        return decorated.map(Tuple::getA);
+    }
+
     @Override
     public Stream<Tuple<K, V>> filter(Predicate<? super Tuple<K, V>> predicate) {
         return decorated.filter(predicate);

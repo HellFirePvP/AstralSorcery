@@ -19,7 +19,7 @@
     "gain_perk_level_medium": {
       "trigger": "astralsorcery:perk_level",
       "conditions": {
-        "levelNeeded": 20
+        "levelNeeded": 25
       }
     }
   },

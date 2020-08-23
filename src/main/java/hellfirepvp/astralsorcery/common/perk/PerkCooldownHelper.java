@@ -106,7 +106,8 @@ public class PerkCooldownHelper {
 
         @Override
         public void onContainerTimeout(PlayerWrapperContainer plWrapper, ResourceLocation key) {
-            PerkTree.PERK_TREE.getPerk(key).ifPresent(perk -> {
+            LogicalSide side = plWrapper.player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
+            PerkTree.PERK_TREE.getPerk(side, key).ifPresent(perk -> {
                 if (perk instanceof CooldownPerk) {
                     ((CooldownPerk) perk).onCooldownTimeout(plWrapper.player);
                 }

@@ -44,7 +44,7 @@ public class RootAevitas extends RootPerk {
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(1_000L, 1F, 1F, 0.01F);
+        return new DiminishingMultiplier(600L, 1F, 1F, 0.01F);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class RootAevitas extends RootPerk {
         } catch (Exception exc) {
             hardness = 1F;
         }
-        float xp = Math.min(MathHelper.sqrt(hardness) * 4.5F, 100F);
+        float xp = Math.min(hardness * 6F, 100F);
         xp *= this.getExpMultiplier();
         xp *= this.getDiminishingReturns(player);
         xp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);

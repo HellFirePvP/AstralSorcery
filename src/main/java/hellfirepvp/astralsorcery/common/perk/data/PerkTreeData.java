@@ -1,10 +1,12 @@
 package hellfirepvp.astralsorcery.common.perk.data;
 
+import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -15,15 +17,19 @@ import java.util.Set;
  */
 public class PerkTreeData {
 
-    private final Set<ConnectedPerkData> perks = new HashSet<>();
+    private final Set<LoadedPerkData> perks = new HashSet<>();
 
-    ConnectedPerkData addPerk(AbstractPerk perk) {
-        ConnectedPerkData data = new ConnectedPerkData(perk);
+    LoadedPerkData addPerk(AbstractPerk perk, JsonObject perkDataObject) {
+        LoadedPerkData data = new LoadedPerkData(perk, perkDataObject);
         this.perks.add(data);
         return data;
     }
 
-    public Set<ConnectedPerkData> getLoadedPerks() {
-        return Collections.unmodifiableSet(this.perks);
+    public PreparedPerkTreeData prepare() {
+        return PreparedPerkTreeData.create(this.perks);
+    }
+
+    public Collection<JsonObject> getAsDataTree() {
+        return this.perks.stream().map(LoadedPerkData::getPerkDataObject).collect(Collectors.toList());
     }
 }

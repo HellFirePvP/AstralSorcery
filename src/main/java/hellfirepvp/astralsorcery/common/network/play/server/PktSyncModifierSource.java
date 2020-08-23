@@ -33,7 +33,6 @@ import javax.annotation.Nonnull;
  */
 public class PktSyncModifierSource extends ASPacket<PktSyncModifierSource> {
 
-
     private ModifierSource source = null;
     private PerkEffectHelper.Action action = null;
 
@@ -67,7 +66,7 @@ public class PktSyncModifierSource extends ASPacket<PktSyncModifierSource> {
 
             pkt.action = ByteBufUtils.readOptional(buffer, (byteBuf) -> ByteBufUtils.readEnumValue(byteBuf, PerkEffectHelper.Action.class));
             ResourceLocation providerName = ByteBufUtils.readResourceLocation(buffer);
-            ModifierSourceProvider provider = ModifierManager.getProvider(providerName);
+            ModifierSourceProvider<?> provider = ModifierManager.getProvider(providerName);
             if (provider == null) {
                 throw new IllegalArgumentException("Unknown provider: " + providerName);
             }

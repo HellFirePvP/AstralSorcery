@@ -22,9 +22,4 @@ import javax.annotation.Nullable;
  */
 public interface IMajorConstellation extends IWeakConstellation {
 
-    @Nullable
-    default public RootPerk getRootPerk() {
-        return PerkTree.PERK_TREE.getRootPerk(this);
-    }
-
 }

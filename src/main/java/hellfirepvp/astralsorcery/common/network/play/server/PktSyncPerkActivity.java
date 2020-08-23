@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
 
     private Type type = null;
-    private AbstractPerk perk = null;
+    private ResourceLocation perkKey = null;
     private CompoundNBT newData = null, oldData = null;
 
     public PktSyncPerkActivity() {}
@@ -48,7 +48,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
 
     public PktSyncPerkActivity(AbstractPerk perk, CompoundNBT oldData, CompoundNBT newData) {
         this.type = Type.DATACHANGE;
-        this.perk = perk;
+        this.perkKey = perk.getRegistryName();
         this.oldData = oldData;
         this.newData = newData;
     }
@@ -59,7 +59,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
         return (packet, buffer) -> {
             ByteBufUtils.writeOptional(buffer, packet.type, ByteBufUtils::writeEnumValue);
 
-            ByteBufUtils.writeOptional(buffer, packet.perk, AbstractPerk::getRegistryName, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeOptional(buffer, packet.perkKey, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeOptional(buffer, packet.newData, ByteBufUtils::writeNBTTag);
             ByteBufUtils.writeOptional(buffer, packet.oldData, ByteBufUtils::writeNBTTag);
         };
@@ -73,8 +73,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
 
             pkt.type = ByteBufUtils.readOptional(buffer, (byteBuf) -> ByteBufUtils.readEnumValue(byteBuf, Type.class));
 
-            ResourceLocation perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
-            pkt.perk = perkKey == null ? null : PerkTree.PERK_TREE.getPerk(perkKey).orElse(null);
+            pkt.perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
             pkt.newData = ByteBufUtils.readOptional(buffer, ByteBufUtils::readNBTTag);
             pkt.oldData = ByteBufUtils.readOptional(buffer, ByteBufUtils::readNBTTag);
             return pkt;
@@ -102,7 +101,9 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
                             PerkEffectHelper.clientRefreshAllPerks();
                             break;
                         case DATACHANGE:
-                            PerkEffectHelper.clientChangePerkData(packet.perk, packet.oldData, packet.newData);
+                            PerkTree.PERK_TREE.getPerk(LogicalSide.CLIENT, packet.perkKey).ifPresent(perk -> {
+                                PerkEffectHelper.clientChangePerkData(perk, packet.oldData, packet.newData);
+                            });
                             break;
                         default:
                             break;

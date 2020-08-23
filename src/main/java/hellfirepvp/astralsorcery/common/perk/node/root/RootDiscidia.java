@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.node.RootPerk;
 import hellfirepvp.astralsorcery.common.util.DiminishingMultiplier;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.CombatTracker;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -46,7 +47,7 @@ public class RootDiscidia extends RootPerk {
     @Nonnull
     @Override
     protected DiminishingMultiplier createMultiplier() {
-        return new DiminishingMultiplier(3_000, 0.075F, 0.025F, 0.15F);
+        return new DiminishingMultiplier(6_000, 0.075F, 0.025F, 0.15F);
     }
 
     @Override
@@ -81,7 +82,15 @@ public class RootDiscidia extends RootPerk {
             return;
         }
 
-        float expGain = Math.min(MathHelper.sqrt(event.getAmount()) * 3.0F, 100F);
+        float mul = 4.0F;
+        CombatTracker combat = event.getEntityLiving().getCombatTracker();
+        if (combat.inCombat) {
+            if (combat.getCombatDuration() > (2 * 60 * 20)) {
+                mul = 0.01F;
+            }
+        }
+
+        float expGain = Math.min(event.getAmount() * mul, 100F);
         expGain *= this.getExpMultiplier();
         expGain *= this.getDiminishingReturns(player);
         expGain *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);

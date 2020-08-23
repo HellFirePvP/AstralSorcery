@@ -47,6 +47,7 @@ import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.Unit;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.resource.SelectiveReloadStateHandler;
 import net.minecraftforge.resource.VanillaResourceType;
@@ -80,7 +81,7 @@ public class ClientProxy extends CommonProxy {
                         if (!SelectiveReloadStateHandler.INSTANCE.get().test(VanillaResourceType.LANGUAGES)) {
                             return;
                         }
-                        PerkTree.PERK_TREE.getPerkPoints().stream()
+                        PerkTree.PERK_TREE.getPerkPoints(LogicalSide.CLIENT).stream()
                                 .map(PerkTreePoint::getPerk)
                                 .forEach(AbstractPerk::clearClientTextCaches);
                     }));

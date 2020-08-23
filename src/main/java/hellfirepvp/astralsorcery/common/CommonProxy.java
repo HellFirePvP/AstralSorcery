@@ -45,6 +45,8 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktOpenGui;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeLimiter;
 import hellfirepvp.astralsorcery.common.perk.PerkCooldownHelper;
+import hellfirepvp.astralsorcery.common.perk.PerkLevelManager;
+import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.data.PerkTreeLoader;
 import hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
@@ -177,6 +179,8 @@ public class CommonProxy {
         this.serverLifecycleListeners.add(ServerLifecycleListener.wrap(EventHandlerCache::onServerStart, EventHandlerCache::onServerStop));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(CelestialGatewayHandler.INSTANCE::onServerStart));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(BlockBreakHelper::clearServerCache));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkTree.PERK_TREE::setupServerPerkTree));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkLevelManager::loadPerkLevels));
 
         SyncDataHolder.initialize();
 
