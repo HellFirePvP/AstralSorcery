@@ -75,13 +75,14 @@ public class RenderingOverlayUtils {
                 tempY += heightNormal;
             }
             if (last) {
+                float drawY = tempY;
                 //Draw lower half of the slot
                 TexturesAS.TEX_OVERLAY_ITEM_FRAME.bindTexture();
                 RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
-                    buf.pos(offsetX,            currentY + heightSplit, 10).tex(0, 1)  .endVertex();
-                    buf.pos(offsetX + width, currentY + heightSplit, 10).tex(1, 1)  .endVertex();
-                    buf.pos(offsetX + width,    currentY,               10).tex(1, 0.5F).endVertex();
-                    buf.pos(offsetX,               currentY,               10).tex(0, 0.5F).endVertex();
+                    buf.pos(offsetX,            drawY + heightSplit, 10).tex(0, 1)  .endVertex();
+                    buf.pos(offsetX + width, drawY + heightSplit, 10).tex(1, 1)  .endVertex();
+                    buf.pos(offsetX + width,    drawY,               10).tex(1, 0.5F).endVertex();
+                    buf.pos(offsetX,               drawY,               10).tex(0, 0.5F).endVertex();
                 });
                 tempY += heightSplit;
             }
