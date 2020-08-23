@@ -74,30 +74,15 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
             return;
         }
 
-        Color overlay = Color.WHITE;
-        switch (status) {
-            case UNALLOCATED:
-                overlay = ColorsAS.PERK_UNALLOCATED;
-                break;
-            case ALLOCATED:
-                overlay = ColorsAS.PERK_ALLOCATED;
-                break;
-            case UNLOCKABLE:
-                overlay = ColorsAS.PERK_UNLOCKABLE;
-                break;
-            default:
-                break;
-        }
-
-        float size = perkSpriteSize * 0.85F * scale;
+        float size = perkSpriteSize * scale * 0.85F;
 
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
 
-        RenderingConstellationUtils.renderConstellationIntoGUI(overlay, this.associatedConstellation,
+        RenderingConstellationUtils.renderConstellationIntoGUI(Color.WHITE, this.associatedConstellation,
                 x - size, y - size, 0,
-                size * 2, size * 2, 1.5 * scale,
-                () -> 0.75F, true, false);
+                size * 2, size * 2, 3 * scale,
+                () -> 0.8F, true, false);
 
         RenderSystem.disableBlend();
     }

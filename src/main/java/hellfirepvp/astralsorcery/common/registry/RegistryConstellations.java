@@ -127,7 +127,7 @@ public class RegistryConstellations {
     }
 
     private static void buildConstellations() {
-        StarLocation sl1, sl2, sl3, sl4, sl5, sl6, sl7, sl8, sl9;
+        StarLocation sl1, sl2, sl3, sl4, sl5, sl6, sl7, sl8;
 
         // DOR/Dorado
         discidia = new ConstellationBase.Major("discidia", CONSTELLATION_DISCIDIA);
@@ -191,15 +191,17 @@ public class RegistryConstellations {
         sl2 = aevitas.addStar(15, 18);
         sl3 = aevitas.addStar(10, 27);
         sl4 = aevitas.addStar(27, 24);
-        sl5 = aevitas.addStar(25, 10);
-        sl6 = aevitas.addStar(3, 6);
+        sl5 = aevitas.addStar(24, 19);
+        sl6 = aevitas.addStar(25, 10);
+        sl7 = aevitas.addStar(3, 6);
 
         aevitas.addConnection(sl1, sl2);
         aevitas.addConnection(sl2, sl3);
         aevitas.addConnection(sl3, sl4);
         aevitas.addConnection(sl4, sl5);
-        aevitas.addConnection(sl5, sl1);
-        aevitas.addConnection(sl1, sl6);
+        aevitas.addConnection(sl5, sl6);
+        aevitas.addConnection(sl6, sl1);
+        aevitas.addConnection(sl1, sl7);
         register(aevitas);
 
         // TAU/Taurus
