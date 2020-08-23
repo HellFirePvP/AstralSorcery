@@ -60,7 +60,7 @@ public class EngravedStarMap {
             Set<Rectangle.Double> foundPositions = new HashSet<>();
 
             for (DrawnConstellation otherCst : cstCoordinates.keySet()) {
-                if (drawn.equals(otherCst)) {
+                if (drawn.equals(otherCst) || drawn.getConstellation().equals(otherCst.getConstellation())) {
                     continue;
                 }
 

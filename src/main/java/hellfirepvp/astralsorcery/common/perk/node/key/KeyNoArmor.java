@@ -35,7 +35,7 @@ public class KeyNoArmor extends KeyPerk {
 
     private static final float defaultDamageTakenMultiplier = 0.7F;
 
-    public static final Config CONFIG = new Config("key_no_armor");
+    public static final Config CONFIG = new Config("key.no_armor");
 
     public KeyNoArmor(ResourceLocation name, float x, float y) {
         super(name, x, y);

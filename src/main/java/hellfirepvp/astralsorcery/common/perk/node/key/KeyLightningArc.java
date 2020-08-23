@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk.node.key;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -57,10 +58,11 @@ public class KeyLightningArc extends KeyPerk {
     private static final float defaultArcPercent = 0.6F;
     private static final float defaultArcDistance = 7F;
     private static final int defaultArcTicks = 3;
+    private static final int defaultChargeCost = 60;
 
     private static final int arcChains = 3;
 
-    public static final Config CONFIG = new Config("key_lightning_arc");
+    public static final Config CONFIG = new Config("key.lightning_arc");
 
     public KeyLightningArc(ResourceLocation name, float x, float y) {
         super(name, x, y);
@@ -86,7 +88,7 @@ public class KeyLightningArc extends KeyPerk {
             if (side.isServer() && prog.hasPerkEffect(this) && prog.doPerkAbilities()) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.arcChance.get()));
-                if (rand.nextFloat() < chance) {
+                if (rand.nextFloat() < chance && AlignmentChargeHandler.INSTANCE.drainCharge(player, side, CONFIG.chargeCost.get(), false)) {
                     float dmg = event.getAmount();
                     dmg *= this.applyMultiplierD(CONFIG.arcPercent.get());
                     new RepetitiveArcEffect(player.world,
@@ -107,6 +109,8 @@ public class KeyLightningArc extends KeyPerk {
         private ForgeConfigSpec.DoubleValue arcDistance;
         private ForgeConfigSpec.IntValue arcTicks;
 
+        private ForgeConfigSpec.IntValue chargeCost;
+
         public Config(String section) {
             super(section);
         }
@@ -117,30 +121,32 @@ public class KeyLightningArc extends KeyPerk {
                     .comment("Sets the chance to spawn a damage-arc effect when an enemy is hit (value is in percent).")
                     .translation(translationKey("arcChance"))
                     .defineInRange("arcChance", defaultArcChance, 0.1, 1.0);
-
             this.arcPercent = cfgBuilder
                     .comment("Defines the damage-multiplier which gets added to the damage dealt initially.")
                     .translation(translationKey("arcPercent"))
                     .defineInRange("arcPercent", defaultArcPercent, 0.1, 8.0);
-
             this.arcDistance = cfgBuilder
                     .comment("Defines the distance for how far a single arc can jump/search for nearby entities.")
                     .translation(translationKey("arcDistance"))
                     .defineInRange("arcDistance", defaultArcDistance, 0.2, 16.0);
-
             this.arcTicks = cfgBuilder
                     .defineInRange("arcTicks", defaultArcTicks, 1, 32);
+            this.chargeCost = cfgBuilder
+                    .comment("Defines the amount of starlight charge consumed per spawned lighning arc.")
+                    .translation(translationKey("chargeCost"))
+                    .defineInRange("chargeCost", defaultChargeCost, 1, 500);
         }
     }
 
     static class RepetitiveArcEffect {
 
-        private World world;
-        private PlayerEntity player;
+        private final World world;
+        private final PlayerEntity player;
+        private final int entityStartId;
+        private final float damage;
+        private final double distance;
+
         private int count;
-        private int entityStartId;
-        private float damage;
-        private double distance;
 
         public RepetitiveArcEffect(World world, PlayerEntity player, int count, int entityStartId, float damage, double distance) {
             this.world = world;
@@ -192,9 +198,7 @@ public class KeyLightningArc extends KeyPerk {
                     if (last != null) {
                         entities.remove(last);
                     }
-                    if (player != null) {
-                        entities.remove(player);
-                    }
+                    entities.remove(player);
                     entities.removeAll(visitedEntities);
 
                     entities.removeIf(e -> !TechnicalEntityRegistry.INSTANCE.canAffect(e));

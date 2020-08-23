@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  */
 public class EventHelperTemporaryFlight {
 
-    private static TimeoutList<PlayerEntity> ritualFlight = new TimeoutList<>(player -> {
+    private static final TimeoutList<PlayerEntity> temporaryFlight = new TimeoutList<>(player -> {
         if (player instanceof ServerPlayerEntity && ((ServerPlayerEntity) player).interactionManager.getGameType().isSurvivalOrAdventure()) {
             player.abilities.allowFlying = false;
             player.abilities.isFlying = false;
@@ -36,19 +36,21 @@ public class EventHelperTemporaryFlight {
     private EventHelperTemporaryFlight() {}
 
     public static void clearServer() {
-        ritualFlight.clear();
+        temporaryFlight.clear();
     }
 
     public static void onDisconnect(ServerPlayerEntity player) {
-        ritualFlight.remove(player);
+        temporaryFlight.remove(player);
     }
 
     public static void attachTickListener(Consumer<ITickHandler> registrar) {
-        registrar.accept(ritualFlight);
+        registrar.accept(temporaryFlight);
     }
 
-    public static boolean allowFlight(PlayerEntity entity) {
-        return ritualFlight.setOrAddTimeout(20, entity);
+    public static boolean allowFlight(PlayerEntity player) {
+        return allowFlight(player, 20);
     }
-
+    public static boolean allowFlight(PlayerEntity player, int timeout) {
+        return temporaryFlight.setOrAddTimeout(timeout, player);
+    }
 }

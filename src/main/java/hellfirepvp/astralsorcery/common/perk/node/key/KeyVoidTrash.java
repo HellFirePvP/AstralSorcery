@@ -43,7 +43,7 @@ public class KeyVoidTrash extends KeyPerk {
         }
     };
 
-    public static final Config CONFIG = new Config("key_voic_trash");
+    public static final Config CONFIG = new Config("key.void_trash");
 
     /**
      * @see hellfirepvp.astralsorcery.common.loot.global.LootModifierPerkVoidTrash

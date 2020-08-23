@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
  */
 public class RootAevitas extends RootPerk {
 
-    public static final Config CONFIG = new Config("root_aevitas");
+    public static final Config CONFIG = new Config("root.aevitas");
 
     public RootAevitas(ResourceLocation name, float x, float y) {
         super(name, CONFIG, ConstellationsAS.aevitas, x, y);

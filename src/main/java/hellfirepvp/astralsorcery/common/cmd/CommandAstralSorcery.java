@@ -29,14 +29,14 @@ public class CommandAstralSorcery {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralCommandNode<CommandSource> cmdAstralSorcery = dispatcher.register(
-                Commands.literal(AstralSorcery.MODID)
+                Commands.literal("as")
                         .then(CommandAttune.register())
                         .then(CommandExp.register())
                         .then(CommandMaximizeAll.register())
                         .then(CommandReset.register())
         );
 
-        dispatcher.register(Commands.literal("as")
+        dispatcher.register(Commands.literal(AstralSorcery.MODID)
                 .redirect(cmdAstralSorcery));
     }
 

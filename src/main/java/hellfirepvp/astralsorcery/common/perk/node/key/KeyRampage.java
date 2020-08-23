@@ -39,7 +39,7 @@ public class KeyRampage extends KeyPerk {
     private static final float defaultRampageChance = 1F;
     private static final int defaultRampageDuration = 100;
 
-    public static final Config CONFIG = new Config("key_rampage");
+    public static final Config CONFIG = new Config("key.rampage");
 
     public KeyRampage(ResourceLocation name, float x, float y) {
         super(name, x, y);

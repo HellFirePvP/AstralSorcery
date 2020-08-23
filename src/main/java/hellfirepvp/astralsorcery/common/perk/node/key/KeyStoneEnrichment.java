@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node.key;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.config.registry.OreBlockRarityRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -40,8 +41,9 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
 
     private static final int defaultEnrichmentRadius = 3;
     private static final int defaultChanceToEnrich = 55;
+    private static final int defaultChargeCost = 150;
 
-    public static final Config CONFIG = new Config("key_stone_enrichment");
+    public static final Config CONFIG = new Config("key.stone_enrichment");
 
     public KeyStoneEnrichment(ResourceLocation name, float x, float y) {
         super(name, x, y);
@@ -54,7 +56,8 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
             float modChance = (float) this.applyMultiplierD(CONFIG.chanceToEnrich.get());
             modChance /= PerkAttributeHelper.getOrCreateMap(player, side)
                     .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
-            if (rand.nextInt(Math.round(Math.max(modChance, 1))) == 0) {
+            if (rand.nextInt(Math.round(Math.max(modChance, 1))) == 0 &&
+                    AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
                 float radius = (float) this.applyMultiplierD(CONFIG.enrichmentRadius.get());
                 radius *= PerkAttributeHelper.getOrCreateMap(player, side)
                         .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
@@ -68,7 +71,9 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
                 if (Tags.Blocks.STONE.contains(world.getBlockState(pos).getBlock())) {
                     Block block = OreBlockRarityRegistry.STONE_ENRICHMENT.getRandomBlock(rand);
                     if (block != null) {
-                        world.setBlockState(pos, block.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                        if (world.setBlockState(pos, block.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
+                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
+                        }
                     }
                 }
             }
@@ -79,6 +84,7 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
 
         private ForgeConfigSpec.IntValue enrichmentRadius;
         private ForgeConfigSpec.IntValue chanceToEnrich;
+        private ForgeConfigSpec.IntValue chargeCost;
 
         private Config(String section) {
             super(section);
@@ -94,6 +100,10 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
                     .comment("Sets the chance (Random.nextInt(chance) == 0) to try to see if a random stone next to the player should get turned into an ore; the lower the more likely")
                     .translation(translationKey("chanceToEnrich"))
                     .defineInRange("chanceToEnrich", defaultChanceToEnrich, 2, 512);
+            this.chargeCost = cfgBuilder
+                    .comment("Defines the amount of starlight charge consumed per created ore.")
+                    .translation(translationKey("chargeCost"))
+                    .defineInRange("chargeCost", defaultChargeCost, 1, 500);
         }
     }
 }

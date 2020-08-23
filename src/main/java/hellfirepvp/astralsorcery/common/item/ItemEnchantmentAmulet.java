@@ -21,10 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -60,6 +57,12 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
         List<AmuletEnchantment> enchantments = getAmuletEnchantments(stack);
         for (AmuletEnchantment ench : enchantments) {
             tooltip.add(new StringTextComponent(ench.getDisplay()).setStyle(new Style().setColor(TextFormatting.BLUE)));
+        }
+
+        if (getAmuletColor(stack).map(color -> color == 0xFFFFFFFF).orElse(false)) {
+            tooltip.add(new TranslationTextComponent("astralsorcery.amulet.color.colorless")
+                    .applyTextStyle(TextFormatting.ITALIC)
+                    .applyTextStyle(TextFormatting.GRAY));
         }
     }
 

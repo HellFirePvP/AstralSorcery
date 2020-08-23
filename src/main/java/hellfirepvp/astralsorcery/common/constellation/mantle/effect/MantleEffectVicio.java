@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -22,6 +23,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
@@ -35,7 +37,7 @@ import javax.annotation.Nonnull;
  */
 public class MantleEffectVicio extends MantleEffect {
 
-    public static Config CONFIG = new Config("vicio");
+    public static VicioConfig CONFIG = new VicioConfig();
 
     public MantleEffectVicio() {
         super(ConstellationsAS.vicio);
@@ -46,14 +48,18 @@ public class MantleEffectVicio extends MantleEffect {
         super.tickServer(player);
 
         PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if (prog.hasPerkEffect(p -> p instanceof KeyMantleFlight) && prog.doPerkAbilities()) {
+        if (prog.hasPerkEffect(p -> p instanceof KeyMantleFlight) && prog.doPerkAbilities() &&
+                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
             boolean prev = player.abilities.allowFlying;
             player.abilities.allowFlying = true;
             if (!prev) {
                 player.sendPlayerAbilities();
             }
 
-            EventHelperTemporaryFlight.allowFlight(player);
+            EventHelperTemporaryFlight.allowFlight(player, 10);
+            if (player.abilities.isFlying && !player.onGround && player.ticksExisted % 10 == 0) {
+                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
+            }
         }
     }
 
@@ -100,5 +106,26 @@ public class MantleEffectVicio extends MantleEffect {
     @Override
     protected boolean usesTickMethods() {
         return true;
+    }
+
+    private static class VicioConfig extends Config {
+
+        private static final int defaultChargeCost = 60;
+
+        private ForgeConfigSpec.IntValue chargeCost;
+
+        public VicioConfig() {
+            super("vicio");
+        }
+
+        @Override
+        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+            super.createEntries(cfgBuilder);
+
+            this.chargeCost = cfgBuilder
+                    .comment("Defines the amount of starlight charge consumed per !second! during creative-flight with the vicio mantle.")
+                    .translation(translationKey("chargeCost"))
+                    .defineInRange("chargeCost", defaultChargeCost, 1, 500);
+        }
     }
 }

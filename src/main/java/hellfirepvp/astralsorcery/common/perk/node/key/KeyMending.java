@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node.key;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
@@ -32,8 +33,9 @@ import javax.annotation.Nullable;
 public class KeyMending extends KeyPerk implements PlayerTickPerk {
 
     private static final int defaultChanceToRepair = 800;
+    private static final int defaultChargeCost = 60;
 
-    public static final Config CONFIG = new Config("key_mending");
+    public static final Config CONFIG = new Config("key.mending");
 
     public KeyMending(ResourceLocation name, float x, float y) {
         super(name, x, y);
@@ -51,7 +53,9 @@ public class KeyMending extends KeyPerk implements PlayerTickPerk {
                     continue;
                 }
                 if (!armor.isEmpty() && armor.isDamageable() && armor.isDamaged()) {
-                    armor.setDamage(armor.getDamage() - 1);
+                    if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false)) {
+                        armor.setDamage(armor.getDamage() - 1);
+                    }
                 }
             }
         }
@@ -60,6 +64,7 @@ public class KeyMending extends KeyPerk implements PlayerTickPerk {
     public static class Config extends ConfigEntry {
 
         private ForgeConfigSpec.IntValue chanceToRepair;
+        private ForgeConfigSpec.IntValue chargeCost;
 
         private Config(String section) {
             super(section);
@@ -71,6 +76,10 @@ public class KeyMending extends KeyPerk implements PlayerTickPerk {
                     .comment("Sets the chance (Random.nextInt(chance) == 0) to try to see if a piece of armor on the player that is damageable and damaged can be repaired; the lower the more likely.")
                     .translation(translationKey("chanceToRepair"))
                     .defineInRange("chanceToRepair", defaultChanceToRepair, 5, Integer.MAX_VALUE);
+            this.chargeCost = cfgBuilder
+                    .comment("Defines the amount of starlight charge consumed per restored durability point.")
+                    .translation(translationKey("chargeCost"))
+                    .defineInRange("chargeCost", defaultChargeCost, 1, 500);
         }
     }
 }

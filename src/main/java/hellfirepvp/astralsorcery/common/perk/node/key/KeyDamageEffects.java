@@ -39,7 +39,7 @@ public class KeyDamageEffects extends KeyPerk {
 
     private static final float defaultApplicationChance = 0.08F;
 
-    public static final Config CONFIG = new Config("key_damage_effects");
+    public static final Config CONFIG = new Config("key.damage_effects");
 
     public KeyDamageEffects(ResourceLocation name, float x, float y) {
         super(name, x, y);

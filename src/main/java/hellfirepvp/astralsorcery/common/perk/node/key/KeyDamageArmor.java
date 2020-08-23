@@ -39,7 +39,7 @@ public class KeyDamageArmor extends KeyPerk {
 
     private static final float defaultDamagePerArmor = 0.05F;
 
-    public static final Config CONFIG = new Config("key_damage_armor");
+    public static final Config CONFIG = new Config("key.damage_armor");
 
     public KeyDamageArmor(ResourceLocation name, float x, float y) {
         super(name, x, y);

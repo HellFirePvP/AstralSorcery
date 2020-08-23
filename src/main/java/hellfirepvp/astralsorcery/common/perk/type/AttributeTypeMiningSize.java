@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
+import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
@@ -21,6 +23,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
@@ -33,6 +36,8 @@ import net.minecraftforge.fml.LogicalSide;
  * Date: 29.03.2020 / 15:50
  */
 public class AttributeTypeMiningSize extends PerkAttributeType {
+
+    public static final Config CONFIG = new Config("type." + PerkAttributeTypesAS.KEY_ATTR_TYPE_MINING_SIZE.getPath());
 
     public AttributeTypeMiningSize() {
         super(PerkAttributeTypesAS.KEY_ATTR_TYPE_MINING_SIZE);
@@ -88,8 +93,11 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                     if (sideBroken.getDirectionVec().getZ() != 0 && zz != 0) continue;
 
                     BlockPos other = at.add(xx, yy, zz);
-                    if (world.getBlockState(other).getBlockHardness(world, other) != -1) {
-                        player.interactionManager.tryHarvestBlock(other);
+                    if (world.getBlockState(other).getBlockHardness(world, other) != -1 &&
+                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
+                        if (player.interactionManager.tryHarvestBlock(other)) {
+                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
+                        }
                     }
                 }
             }
@@ -106,10 +114,30 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                 if (sideBroken.getDirectionVec().getZ() != 0 && zz != 0) continue;
 
                 BlockPos other = at.add(xx, 0, zz);
-                if (world.getBlockState(other).getBlockHardness(world, other) != -1) {
-                    player.interactionManager.tryHarvestBlock(other);
+                if (world.getBlockState(other).getBlockHardness(world, other) != -1 &&
+                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
+                    if (player.interactionManager.tryHarvestBlock(other)) {
+                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
+                    }
                 }
             }
+        }
+    }
+
+    private static class Config extends ConfigEntry {
+
+        private ForgeConfigSpec.IntValue chargeCost;
+
+        private Config(String section) {
+            super(section);
+        }
+
+        @Override
+        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+            chargeCost = cfgBuilder
+                    .comment("Defines the amount of starlight charge consumed per additional block break through this attribute.")
+                    .translation(translationKey("chargeCost"))
+                    .defineInRange("chargeCost", 4, 1, 500);
         }
     }
 }

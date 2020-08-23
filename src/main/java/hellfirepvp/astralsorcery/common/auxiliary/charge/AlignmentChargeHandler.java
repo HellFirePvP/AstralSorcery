@@ -104,7 +104,7 @@ public class AlignmentChargeHandler implements ITickHandler {
         }
         if (!simulate) {
             currentCharge.computeIfAbsent(side, s -> new HashMap<>())
-                    .put(player.getUniqueID(), MathHelper.clamp(result, this.getMaximumCharge(player, side), 0));
+                    .put(player.getUniqueID(), MathHelper.clamp(result, 0, this.getMaximumCharge(player, side)));
         }
         return true;
     }

@@ -37,7 +37,7 @@ public class KeyBleed extends KeyPerk {
     private static final int defaultBleedDuration = 40;
     private static final float defaultBleedChance = 0.25F;
 
-    public static final Config CONFIG = new Config("key_bleed");
+    public static final Config CONFIG = new Config("key.bleed");
 
     public KeyBleed(ResourceLocation name, float x, float y) {
         super(name, x, y);

@@ -3,6 +3,8 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.perk.node.key.*;
 import hellfirepvp.astralsorcery.common.perk.node.root.*;
+import hellfirepvp.astralsorcery.common.perk.type.AttributeTypeDodge;
+import hellfirepvp.astralsorcery.common.perk.type.AttributeTypeMiningSize;
 
 import java.util.function.Consumer;
 
@@ -18,6 +20,9 @@ public class RegistryPerks {
     private RegistryPerks() {}
 
     public static void initConfig(Consumer<ConfigEntry> registrar) {
+        registrar.accept(AttributeTypeMiningSize.CONFIG);
+        registrar.accept(AttributeTypeDodge.CONFIG);
+
         registrar.accept(KeyBleed.CONFIG);
         registrar.accept(KeyCheatDeath.CONFIG);
         registrar.accept(KeyCullingAttack.CONFIG);

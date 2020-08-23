@@ -48,7 +48,7 @@ public class OreBlockRarityRegistry extends ConfigDataAdapter<OreBlockRarityEntr
 
         while (visitedEntires.size() < entries.size()) {
             OreBlockRarityEntry entry = MiscUtils.getWeightedRandomEntry(entries.stream()
-                    .filter(visitedEntires::contains)
+                    .filter(e -> !visitedEntires.contains(e))
                     .collect(Collectors.toList()), rand, OreBlockRarityEntry::getWeight);
 
             if (entry != null) {

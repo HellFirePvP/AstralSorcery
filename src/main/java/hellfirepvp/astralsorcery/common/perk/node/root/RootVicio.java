@@ -39,7 +39,7 @@ import java.util.UUID;
  */
 public class RootVicio extends RootPerk implements PlayerTickPerk {
 
-    public static final Config CONFIG = new Config("root_vicio");
+    public static final Config CONFIG = new Config("root.vicio");
 
     private Map<ResourceLocation, Map<UUID, Integer>> moveTrackMap = new HashMap<>();
 
@@ -105,6 +105,7 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
             if (added >= 500F) {
                 added = 500F;
             }
+            added *= 0.9F;
             this.moveTrackMap.get(Stats.WALK_ONE_CM).put(uuid, walked);
         }
         if (sprint > lastSprint) {
@@ -112,22 +113,22 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
             if (added >= 500F) {
                 added = 500F;
             }
-            added *= 1.2F;
+            added *= 0.8F;
             this.moveTrackMap.get(Stats.SPRINT_ONE_CM).put(uuid, sprint);
         }
         if (flown > lastFly) {
             added += Math.min(flown - lastFly, 500F);
-            added *= 0.4F;
+            added *= 0.3F;
             this.moveTrackMap.get(Stats.FLY_ONE_CM).put(uuid, flown);
         }
         if (elytra > lastElytra) {
             added += Math.min(elytra - lastElytra, 500F);
-            added *= 0.7F;
+            added *= 0.55F;
             this.moveTrackMap.get(Stats.AVIATE_ONE_CM).put(uuid, elytra);
         }
         if (swam > lastSwam) {
             added += Math.min(swam - lastSwam, 500F);
-            added *= 1.4F;
+            added *= 1.2F;
             this.moveTrackMap.get(Stats.SWIM_ONE_CM).put(uuid, swam);
         }
 

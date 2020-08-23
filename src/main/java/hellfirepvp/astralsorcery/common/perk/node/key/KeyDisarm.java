@@ -41,7 +41,7 @@ public class KeyDisarm extends KeyPerk {
 
     private static final float defaultDropChance = 0.05F;
 
-    public static final Config CONFIG = new Config("key_disarm");
+    public static final Config CONFIG = new Config("key.disarm");
 
     public KeyDisarm(ResourceLocation name, float x, float y) {
         super(name, x, y);

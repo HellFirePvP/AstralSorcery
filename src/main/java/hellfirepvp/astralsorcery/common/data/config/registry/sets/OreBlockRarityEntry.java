@@ -46,7 +46,7 @@ public class OreBlockRarityEntry implements ConfigDataSet {
     public Block getRandomBlock(Random rand) {
         return MiscUtils.getRandomEntry(this.blockTag.getAllElements()
                 .stream()
-                .filter(item -> GeneralConfig.CONFIG.modidOreBlacklist.get().contains(item.getRegistryName().getNamespace()))
+                .filter(item -> !GeneralConfig.CONFIG.modidOreBlacklist.get().contains(item.getRegistryName().getNamespace()))
                 .collect(Collectors.toList()), rand);
     }
 

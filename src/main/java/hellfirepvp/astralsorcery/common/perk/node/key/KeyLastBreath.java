@@ -37,7 +37,7 @@ public class KeyLastBreath extends KeyPerk {
     private static final float defaultDigSpeedMultiplier = 1.5F;
     private static final float defaultDamageMultiplier = 3F;
 
-    public static final Config CONFIG = new Config("key_last_breath");
+    public static final Config CONFIG = new Config("key.last_breath");
 
     public KeyLastBreath(ResourceLocation name, float x, float y) {
         super(name, x, y);

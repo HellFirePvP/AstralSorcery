@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node.key;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -20,6 +21,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -34,11 +36,12 @@ import javax.annotation.Nullable;
  */
 public class KeyCheatDeath extends KeyPerk implements CooldownPerk {
 
-    private static final int defaultCooldownPotionApplication = 1000;
-    private static final int defaultPotionDuration = 600;
+    private static final int defaultCooldownPotionApplication = 600;
+    private static final int defaultPotionDuration = 500;
     private static final int defaultPotionAmplifier = 0;
+    private static final int defaultChargeCost = 350;
 
-    public static final Config CONFIG = new Config("key_cheat_death");
+    public static final Config CONFIG = new Config("key.cheat_death");
 
     public KeyCheatDeath(ResourceLocation name, float x, float y) {
         super(name, x, y);
@@ -47,7 +50,7 @@ public class KeyCheatDeath extends KeyPerk implements CooldownPerk {
     @Override
     public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
-        bus.addListener(this::onDeath);
+        bus.addListener(EventPriority.HIGHEST, this::onDeath);
     }
 
     private void onDeath(LivingDeathEvent event) {
@@ -55,8 +58,9 @@ public class KeyCheatDeath extends KeyPerk implements CooldownPerk {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             LogicalSide side = this.getSide(player);
             PlayerProgress progress = ResearchHelper.getProgress(player, side);
-            if (progress.hasPerkEffect(this)) {
-                if (!PerkCooldownHelper.isCooldownActiveForPlayer(player, this)) {
+            if (side.isServer() && progress.hasPerkEffect(this)) {
+                if (!PerkCooldownHelper.isCooldownActiveForPlayer(player, this) &&
+                        AlignmentChargeHandler.INSTANCE.drainCharge(player, side, CONFIG.chargeCost.get(), false)) {
                     PerkCooldownHelper.setCooldownActiveForPlayer(player, this, this.applyMultiplierI(CONFIG.cooldownPotionApplication.get()));
                     player.addPotionEffect(new EffectInstance(EffectsAS.EFFECT_CHEAT_DEATH,
                             this.applyMultiplierI(CONFIG.potionDuration.get()),
@@ -75,6 +79,7 @@ public class KeyCheatDeath extends KeyPerk implements CooldownPerk {
         private ForgeConfigSpec.IntValue cooldownPotionApplication;
         private ForgeConfigSpec.IntValue potionDuration;
         private ForgeConfigSpec.IntValue potionAmplifier;
+        private ForgeConfigSpec.IntValue chargeCost;
 
         private Config(String section) {
             super(section);
@@ -94,6 +99,10 @@ public class KeyCheatDeath extends KeyPerk implements CooldownPerk {
                     .comment("Once the potion effect gets applied by any of the triggers, this will be used as amplifier of the potion effect.")
                     .translation(translationKey("potionAmplifier"))
                     .defineInRange("potionAmplifier", defaultPotionAmplifier, 0, 4);
+            chargeCost = cfgBuilder
+                    .comment("Defines the amount of starlight charge consumed per death-prevention.")
+                    .translation(translationKey("chargeCost"))
+                    .defineInRange("chargeCost", defaultChargeCost, 1, 500);
         }
     }
 }

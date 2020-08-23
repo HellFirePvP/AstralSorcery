@@ -37,7 +37,7 @@ public class KeyProjectileDistance extends KeyPerk {
     private static final float defaultCapDistance = 6400;
     private static final float defaultMaxAdditionalMultiplier = 0.75F;
 
-    public static final Config CONFIG = new Config("key_proj_distance");
+    public static final Config CONFIG = new Config("key.proj_distance");
 
     public KeyProjectileDistance(ResourceLocation name, float x, float y) {
         super(name, x, y);

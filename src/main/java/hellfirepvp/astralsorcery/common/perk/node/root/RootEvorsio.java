@@ -37,7 +37,7 @@ import javax.annotation.Nonnull;
  */
 public class RootEvorsio extends RootPerk {
 
-    public static final Config CONFIG = new Config("root_evorsio");
+    public static final Config CONFIG = new Config("root.evorsio");
 
     public RootEvorsio(ResourceLocation name, float x, float y) {
         super(name, CONFIG, ConstellationsAS.evorsio, x, y);

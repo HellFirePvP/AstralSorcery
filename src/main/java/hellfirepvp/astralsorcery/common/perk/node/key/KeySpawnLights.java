@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node.key;
 
+import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -36,8 +37,9 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
 
     private static final int defaultLightSpawnRate = 15;
     private static final int defaultLightSpawnRadius = 5;
+    private static final int defaultChargeCost = 60;
 
-    public static final Config CONFIG = new Config("key_spawn_lights");
+    public static final Config CONFIG = new Config("key.spawn_lights");
 
     public KeySpawnLights(ResourceLocation name, float x, float y) {
         super(name, x, y);
@@ -66,8 +68,13 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
                             rand.nextInt(radius) * (rand.nextBoolean() ? 1 : -1),
                             rand.nextInt(radius) * (rand.nextBoolean() ? 1 : -1));
                     if (MiscUtils.executeWithChunk(player.getEntityWorld(), pos, () -> {
-                        if (TileIlluminator.ILLUMINATOR_CHECK.test(player.getEntityWorld(), pos, player.getEntityWorld().getBlockState(pos))) {
-                            return player.getEntityWorld().setBlockState(pos, BlocksAS.FLARE_LIGHT.getDefaultState());
+                        if (TileIlluminator.ILLUMINATOR_CHECK.test(player.getEntityWorld(), pos, player.getEntityWorld().getBlockState(pos)) &&
+                                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
+                            if (player.getEntityWorld().setBlockState(pos, BlocksAS.FLARE_LIGHT.getDefaultState())) {
+                                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
+                                return true;
+                            }
+                            return false;
                         }
                         return false;
                     }, false)) {
@@ -84,6 +91,7 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
 
         private ForgeConfigSpec.IntValue lightSpawnRate;
         private ForgeConfigSpec.IntValue lightSpawnRadius;
+        private ForgeConfigSpec.IntValue chargeCost;
 
         private Config(String section) {
             super(section);
@@ -99,6 +107,10 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
                     .comment("Defines the radius around the player the perk will search for a suitable position")
                     .translation(translationKey("lightSpawnRadius"))
                     .defineInRange("lightSpawnRadius", defaultLightSpawnRadius, 2, 10);
+            this.chargeCost = cfgBuilder
+                    .comment("Defines the amount of starlight charge consumed per spawned light.")
+                    .translation(translationKey("chargeCost"))
+                    .defineInRange("chargeCost", defaultChargeCost, 1, 500);
         }
     }
 }

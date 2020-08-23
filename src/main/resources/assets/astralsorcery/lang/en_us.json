@@ -104,6 +104,7 @@
   "enchantment.astralsorcery.night_vision.desc": "Grants the wearer night vision.",
   "enchantment.astralsorcery.scorching_heat.desc": "Blocks mined with this enchantment will have their drops smelted, as though in a furnace.",
 
+  "astralsorcery.amulet.color.colorless": "Pristine",
   "astralsorcery.amulet.enchantment.level.one": "level",
   "astralsorcery.amulet.enchantment.level.more": "levels",
   "astralsorcery.amulet.enchantment.add_to_specific.name": "+%s %s to %s",
