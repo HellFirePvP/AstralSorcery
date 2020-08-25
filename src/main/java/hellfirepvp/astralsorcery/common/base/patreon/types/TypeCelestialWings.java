@@ -147,6 +147,7 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
         this.renderWings(player, event.getMatrixStack(), event.getPartialRenderTick());
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void renderWings(PlayerEntity player, MatrixStack renderStack, float pTicks) {
         float rot = RenderingVectorUtils.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, pTicks);
         float yOffset = 1.3F;
