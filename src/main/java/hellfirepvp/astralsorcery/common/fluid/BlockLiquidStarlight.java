@@ -80,10 +80,6 @@ public class BlockLiquidStarlight extends FlowingFluidBlock {
     @Override
     public boolean reactWithNeighbors(World world, BlockPos pos, BlockState state) {
         for (Direction dir : Direction.values()) {
-            if (dir == Direction.DOWN) {
-                continue;
-            }
-
             IFluidState otherState = world.getFluidState(pos.offset(dir));
             Fluid otherFluid = otherState.getFluid();
             if (otherFluid instanceof FlowingFluid) {
