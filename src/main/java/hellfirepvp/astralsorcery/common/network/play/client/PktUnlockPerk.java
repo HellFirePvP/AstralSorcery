@@ -90,7 +90,7 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
             @Override
             public void handle(PktUnlockPerk packet, NetworkEvent.Context context, LogicalSide side) {
                 context.enqueueWork(() -> {
-                    PerkTree.PERK_TREE.getPerk(LogicalSide.CLIENT, packet.perkKey).ifPresent(perk -> {
+                    PerkTree.PERK_TREE.getPerk(side, packet.perkKey).ifPresent(perk -> {
                         PlayerEntity player = context.getSender();
                         PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
                         if (!prog.hasPerkUnlocked(perk) && prog.isValid()) {
