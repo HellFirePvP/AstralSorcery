@@ -114,6 +114,24 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .setName(name("key.luck"))
                 .connect(key("evorsio_outer_luck_2"))
                 .build(registrar);
+
+        PerkDataBuilder.ofType(MODIFIER_PERK)
+                .create(key("evorsio_outer_entity_reach_1"), 15, 24)
+                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
+                .setName(NAME_INC_REACH)
+                .connect(key("travel_50"))
+                .build(registrar);
+        PerkDataBuilder.ofType(MODIFIER_PERK)
+                .create(key("evorsio_outer_entity_reach_2"), 16, 25)
+                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
+                .setName(NAME_INC_REACH)
+                .connect(key("evorsio_outer_entity_reach_1"))
+                .build(registrar);
+        PerkDataBuilder.ofType(KEY_ENTITY_REACH)
+                .create(key("evorsio_outer_entity_reach_3"), 15, 26)
+                .setName(name("key.entity_reach"))
+                .connect(key("evorsio_outer_entity_reach_2"))
+                .build(registrar);
     }
 
     private void registerDiscidiaOuter(Consumer<FinishedPerk> registrar) {

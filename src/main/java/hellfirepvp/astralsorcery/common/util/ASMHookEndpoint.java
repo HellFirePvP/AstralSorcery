@@ -12,11 +12,15 @@ import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectOctans;
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectVicio;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.event.CooldownSetEvent;
 import hellfirepvp.astralsorcery.common.event.PotionApplyEvent;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
+import hellfirepvp.astralsorcery.common.perk.node.key.KeyEntityReach;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -151,4 +155,26 @@ public class ASMHookEndpoint {
         return AttributeEvent.postProcessVanilla(value, attributeInstance);
     }
 
+    public static double getOverriddenSeenEntityReachMaximum(PlayerEntity player) {
+        PlayerProgress prog = ResearchHelper.getProgress(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER);
+        if (prog.isValid() && prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
+            return 999_999_999.0;
+        }
+        return 36.0;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static double getOverriddenCreativeEntityReach(double blockReach) {
+        PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
+        if (prog.isValid() && prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
+            return blockReach;
+        }
+        return 6.0;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static boolean doesOverrideDistanceRuling() {
+        PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
+        return !prog.isValid() || !prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach);
+    }
 }

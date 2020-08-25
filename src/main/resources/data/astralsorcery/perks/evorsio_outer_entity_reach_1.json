@@ -1,0 +1,19 @@
+{
+  "registry_name": "astralsorcery:evorsio_outer_entity_reach_1",
+  "perk_class": "astralsorcery:modifier_perk",
+  "x": 15.0,
+  "y": 24.0,
+  "name": "perk.astralsorcery.generic.inc.reach",
+  "data": {
+    "modifiers": [
+      {
+        "type": "astralsorcery:reach",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.04
+      }
+    ]
+  },
+  "connection": [
+    "astralsorcery:travel_50"
+  ]
+}

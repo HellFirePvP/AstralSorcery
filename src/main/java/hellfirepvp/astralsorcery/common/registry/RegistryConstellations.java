@@ -412,13 +412,13 @@ public class RegistryConstellations {
 
         // CYG/Cygnus
         alcara = new ConstellationBase.Minor("alcara", CONSTELLATION_ALCARA, MoonPhase.WANING_1_2, MoonPhase.WAXING_1_2);
-        sl1 = alcara.addStar(27, 27);
-        sl2 = alcara.addStar(17, 15);
-        sl3 = alcara.addStar(9, 7);
-        sl4 = alcara.addStar(21, 9);
-        sl5 = alcara.addStar(20, 1);
-        sl6 = alcara.addStar(10, 19);
-        sl7 = alcara.addStar(3, 21);
+        sl1 = alcara.addStar(24, 27);
+        sl2 = alcara.addStar(17, 16);
+        sl3 = alcara.addStar(12, 9);
+        sl4 = alcara.addStar(23, 9);
+        sl5 = alcara.addStar(21, 2);
+        sl6 = alcara.addStar(10, 21);
+        sl7 = alcara.addStar(3, 20);
 
         alcara.addConnection(sl1, sl2);
         alcara.addConnection(sl2, sl3);

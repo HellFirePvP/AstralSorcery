@@ -45,6 +45,7 @@ public class PerkTypeHandler {
     public static final Type<KeyDamageEffects> KEY_ON_HIT_POTIONS = registerConverter(AstralSorcery.key("key_on_hit_potions"), KeyDamageEffects::new);
     public static final Type<KeyDigTypes> KEY_DIG_TYPES = registerConverter(AstralSorcery.key("key_dig_types"), KeyDigTypes::new);
     public static final Type<KeyDisarm> KEY_DISARM = registerConverter(AstralSorcery.key("key_disarm"), KeyDisarm::new);
+    public static final Type<KeyEntityReach> KEY_ENTITY_REACH = registerConverter(AstralSorcery.key("key_entity_reach"), KeyEntityReach::new);
     public static final Type<KeyGrowables> KEY_GROWABLES = registerConverter(AstralSorcery.key("key_growables"), KeyGrowables::new);
     public static final Type<KeyLastBreath> KEY_LOW_LIFE = registerConverter(AstralSorcery.key("key_low_life"), KeyLastBreath::new);
     public static final Type<KeyLightningArc> KEY_LIGHTNING_ARC = registerConverter(AstralSorcery.key("key_lightning_arc"), KeyLightningArc::new);

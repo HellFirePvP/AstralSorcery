@@ -14,7 +14,10 @@ function initializeCoreMod() {
 
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var LdcInsnNode = Java.type('org.objectweb.asm.tree.LdcInsnNode');
+                var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
+                var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
 
+                var playerField = ASMAPI.mapField('field_147369_b');
 
                 var loadSqReach = ASMAPI.findFirstInstruction(method, Opcodes.LDC);
                 while (loadSqReach.cst.doubleValue() != 36.0) {
@@ -23,7 +26,16 @@ function initializeCoreMod() {
 
                 var prevLoadSqReach = loadSqReach.getPrevious();
                 method.instructions.remove(loadSqReach);
-                method.instructions.insert(prevLoadSqReach, new LdcInsnNode(99999999.0)); //99_999_999.0
+                method.instructions.insert(prevLoadSqReach, ASMAPI.buildMethodCall(
+                                    'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
+                                    'getOverriddenSeenEntityReachMaximum',
+                                    '(Lnet/minecraft/entity/player/PlayerEntity;)D',
+                                    ASMAPI.MethodType.STATIC));
+                method.instructions.insert(prevLoadSqReach, new FieldInsnNode(Opcodes.GETFIELD,
+                                    'net/minecraft/network/play/ServerPlayNetHandler',
+                                    playerField,
+                                    'Lnet/minecraft/entity/player/ServerPlayerEntity;'));
+                method.instructions.insert(prevLoadSqReach, new VarInsnNode(Opcodes.ALOAD, 0));
 
 
                 ASMAPI.log('INFO', 'Added \'reach_set_server_entity_interact\' ASM patch!');

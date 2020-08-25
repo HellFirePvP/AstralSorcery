@@ -1,0 +1,11 @@
+{
+  "registry_name": "astralsorcery:evorsio_outer_entity_reach_3",
+  "perk_class": "astralsorcery:key_entity_reach",
+  "x": 15.0,
+  "y": 26.0,
+  "name": "perk.astralsorcery.key.entity_reach",
+  "data": {},
+  "connection": [
+    "astralsorcery:evorsio_outer_entity_reach_2"
+  ]
+}

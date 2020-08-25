@@ -33,7 +33,13 @@ function initializeCoreMod() {
 
                 var prevSetExtendedReach = setExtendedReach.getPrevious();
                 method.instructions.remove(setExtendedReach);
-                method.instructions.insert(prevSetExtendedReach, new VarInsnNode(Opcodes.DLOAD, 8));
+
+                method.instructions.insert(prevSetExtendedReach, ASMAPI.buildMethodCall(
+                    'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
+                    'getOverriddenCreativeEntityReach',
+                    '(D)D',
+                    ASMAPI.MethodType.STATIC));
+                method.instructions.insert(prevSetExtendedReach, new VarInsnNode(Opcodes.DLOAD, 3));
 
 
                 var setOverreachFlag = extendedReach;
@@ -43,9 +49,13 @@ function initializeCoreMod() {
                         method.instructions.indexOf(setOverreachFlag));
                 } while (setOverreachFlag.var != 6);
 
-                var prevSetOverreachFlag = setOverreachFlag.getPrevious();
-                method.instructions.insert(prevSetExtendedReach, new VarInsnNode(Opcodes.ISTORE, 6));
-                method.instructions.insert(prevSetExtendedReach, new InsnNode(Opcodes.ICONST_0));
+
+                method.instructions.insert(setOverreachFlag, new VarInsnNode(Opcodes.ISTORE, 6));
+                method.instructions.insert(setOverreachFlag, ASMAPI.buildMethodCall(
+                    'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
+                    'doesOverrideDistanceRuling',
+                    '()Z',
+                    ASMAPI.MethodType.STATIC));
 
                 ASMAPI.log('INFO', 'Added \'reach_set_client_renderer\' ASM patch!');
                 return method;
