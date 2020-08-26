@@ -8,17 +8,23 @@
 
 package hellfirepvp.astralsorcery.common.event.handler;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.effect.EffectDropModifier;
+import hellfirepvp.astralsorcery.common.item.ItemTome;
 import hellfirepvp.astralsorcery.common.lib.CapabilitiesAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.LecternTileEntity;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -37,6 +43,21 @@ public class EventHandlerMisc {
         bus.addListener(EventHandlerMisc::onSpawnEffectCloud);
         bus.addListener(EventHandlerMisc::onPlayerSleepEclipse);
         bus.addListener(EventHandlerMisc::onChunkLoad);
+        bus.addListener(EventHandlerMisc::onLecternOpen);
+    }
+
+    private static void onLecternOpen(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getWorld().isRemote()) {
+            return;
+        }
+        LecternTileEntity lectern = MiscUtils.getTileAt(event.getWorld(), event.getPos(), LecternTileEntity.class, false);
+        if (lectern != null) {
+            ItemStack contained = lectern.getBook();
+            if (contained.getItem() instanceof ItemTome) {
+                event.setCanceled(true);
+                AstralSorcery.getProxy().openGui(event.getPlayer(), GuiType.TOME);
+            }
+        }
     }
 
     private static void onChunkLoad(ChunkEvent.Load event) {

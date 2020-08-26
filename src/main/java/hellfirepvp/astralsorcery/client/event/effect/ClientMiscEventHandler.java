@@ -144,18 +144,4 @@ public class ClientMiscEventHandler {
 
         renderStack.pop();
     }
-
-    static void onLecternOpen(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getWorld().isRemote()) {
-            return;
-        }
-        LecternTileEntity lectern = MiscUtils.getTileAt(event.getWorld(), event.getPos(), LecternTileEntity.class, false);
-        if (lectern != null) {
-            ItemStack contained = lectern.getBook();
-            if (contained.getItem() instanceof ItemTome) {
-                event.setCanceled(true);
-                AstralSorcery.getProxy().openGui(event.getPlayer(), GuiType.TOME);
-            }
-        }
-    }
 }
