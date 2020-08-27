@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantmentHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.event.CooldownSetEvent;
-import hellfirepvp.astralsorcery.common.event.PotionApplyEvent;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.node.key.KeyEntityReach;
 import net.minecraft.client.Minecraft;
@@ -27,13 +26,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.ServerCooldownTracker;
 import net.minecraft.util.text.ITextComponent;
@@ -118,14 +115,6 @@ public class ASMHookEndpoint {
             }
         }
         return elytraStack;
-    }
-
-    public static void fireNewPotionEffectEvent(LivingEntity entity, EffectInstance newEffect) {
-        MinecraftForge.EVENT_BUS.post(new PotionApplyEvent.New(entity, newEffect));
-    }
-
-    public static void fireChangedPotionEffectEvent(LivingEntity entity, EffectInstance previous, EffectInstance newCombinedEffect) {
-        MinecraftForge.EVENT_BUS.post(new PotionApplyEvent.Changed(entity, previous, newCombinedEffect));
     }
 
     public static int fireCooldownEvent(CooldownTracker tracker, Item item, int ticks) {

@@ -10,13 +10,13 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
-import hellfirepvp.astralsorcery.common.event.PotionApplyEvent;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -36,30 +36,31 @@ public class AttributeTypePotionDuration extends PerkAttributeType {
     @Override
     protected void attachListeners(IEventBus eventBus) {
         super.attachListeners(eventBus);
-        eventBus.addListener(this::onNewEffect);
-        eventBus.addListener(this::onChangeEffect);
+        eventBus.addListener(this::onEffect);
     }
 
-    private void onNewEffect(PotionApplyEvent.New event) {
+    private void onEffect(PotionEvent.PotionAddedEvent event) {
         if (event.getEntityLiving() instanceof PlayerEntity) {
-            modifyPotionDuration((PlayerEntity) event.getEntityLiving(), event.getPotionEffect(), event.getPotionEffect());
+            if (event.getOldPotionEffect() == null) {
+                //New effect
+                modifyPotionDuration((PlayerEntity) event.getEntityLiving(), event.getPotionEffect(), event.getPotionEffect());
+            } else {
+                //Existing effect
+                if (new EffectInstance(event.getOldPotionEffect()).combine(event.getPotionEffect())) {
+                    modifyPotionDuration((PlayerEntity) event.getEntityLiving(), event.getPotionEffect(), event.getOldPotionEffect());
+                }
+            }
         }
     }
 
-    private void onChangeEffect(PotionApplyEvent.Changed event) {
-        if (event.getEntityLiving() instanceof PlayerEntity) {
-            modifyPotionDuration((PlayerEntity) event.getEntityLiving(), event.getNewCombinedEffect(), event.getAddedEffect());
-        }
-    }
-
-    private void modifyPotionDuration(PlayerEntity player, EffectInstance newSetEffect, EffectInstance addedEffect) {
+    private void modifyPotionDuration(PlayerEntity player, EffectInstance newSetEffect, EffectInstance existingEffect) {
         if (player.getEntityWorld().isRemote() ||
                 newSetEffect.getPotion().getEffectType().equals(EffectType.HARMFUL) ||
-                addedEffect.getAmplifier() < newSetEffect.getAmplifier()) {
+                existingEffect.getAmplifier() < newSetEffect.getAmplifier()) {
             return;
         }
 
-        float newDuration = addedEffect.getDuration();
+        float newDuration = existingEffect.getDuration();
         newDuration = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.SERVER)
                 .modifyValue(player, ResearchHelper.getProgress(player, LogicalSide.SERVER), this, newDuration);
         newDuration = AttributeEvent.postProcessModded(player, this, newDuration);
