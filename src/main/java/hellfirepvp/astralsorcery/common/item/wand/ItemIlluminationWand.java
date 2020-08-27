@@ -152,7 +152,7 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
         }
 
         if (player.canPlayerEdit(placePos, dir, stack)) {
-            if (state.equals(placeState)) {
+            if (world.getBlockState(placePos).equals(placeState)) {
                 if (world.setBlockState(placePos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
                     SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_LIGHT, SoundCategory.BLOCKS, world, pos, 1F, 1F);
                 }
