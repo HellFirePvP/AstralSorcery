@@ -14,7 +14,6 @@ function initializeCoreMod() {
 
                 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
-                var putSkyLight = ASMAPI.findFirstInstructionAfter(method, Opcodes.PUTFIELD, 0);
 
                 var node = method.instructions.getFirst();
                 while ((node = ASMAPI.findFirstInstructionAfter(method, Opcodes.FRETURN, method.instructions.indexOf(node))) !== null) {

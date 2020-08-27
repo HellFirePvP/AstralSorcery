@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JSONUtils;
@@ -349,7 +350,7 @@ public class AltarRecipeGrid {
             return this;
         }
 
-        public Builder key(Character key, Tag<Item> tagIn) {
+        public Builder key(Character key, ITag.INamedTag<Item> tagIn) {
             return this.key(key, Ingredient.fromTag(tagIn));
         }
 

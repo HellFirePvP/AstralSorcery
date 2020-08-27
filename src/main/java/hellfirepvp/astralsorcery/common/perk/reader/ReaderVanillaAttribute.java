@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.perk.PerkAttributeMap;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
@@ -33,11 +33,11 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class ReaderVanillaAttribute extends PerkAttributeReader {
 
-    protected final IAttribute attribute;
+    protected final Attribute attribute;
 
     protected boolean formatAsDecimal = false;
 
-    public ReaderVanillaAttribute(PerkAttributeType type, IAttribute vanillaAttribute) {
+    public ReaderVanillaAttribute(PerkAttributeType type, Attribute vanillaAttribute) {
         super(type);
         this.attribute = vanillaAttribute;
     }
@@ -73,8 +73,7 @@ public class ReaderVanillaAttribute extends PerkAttributeReader {
                 this.getType(), (float) value);
 
         String postProcess = "";
-        double post = AttributeEvent.postProcessVanilla(value,
-                (ModifiableAttributeInstance) player.getAttribute(this.attribute));
+        double post = AttributeEvent.postProcessVanilla(value, player.getAttribute(this.attribute));
         if (Math.abs(value - post) > 1E-4 &&
                 (limit == null || Math.abs(post - limit) > 1E-4)) {
             if (Math.abs(post) >= 1E-4) {

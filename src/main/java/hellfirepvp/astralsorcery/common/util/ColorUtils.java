@@ -16,6 +16,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -107,7 +108,7 @@ public class ColorUtils {
     }
 
     @Nonnull
-    public static ITextComponent getTranslation(DyeColor color) {
+    public static IFormattableTextComponent getTranslation(DyeColor color) {
         return new TranslationTextComponent(String.format("color.minecraft.%s", color.getTranslationKey()));
     }
 

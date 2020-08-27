@@ -79,8 +79,8 @@ public class RenderingConfig extends ConfigEntry {
                 return false;
             }
         },
-        MINIMAL(40),
-        LOWERED(8),
+        MINIMAL(30),
+        LOWERED(6),
         ALL(1);
 
         private final int rChance;

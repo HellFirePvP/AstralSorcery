@@ -8,18 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.world.placement;
 
-import com.mojang.datafixers.Dynamic;
 import hellfirepvp.astralsorcery.common.world.config.ReplacingFeaturePlacementConfig;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.WorldDecoratingHelper;
 import net.minecraft.world.gen.placement.Placement;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -31,42 +27,36 @@ import java.util.stream.Stream;
  */
 public class RandomReplaceablePlacement extends Placement<ReplacingFeaturePlacementConfig> {
 
-    public RandomReplaceablePlacement(Function<Dynamic<?>, ? extends ReplacingFeaturePlacementConfig> cfgSupplier) {
-        super(cfgSupplier);
-    }
+    private final ReplacingFeaturePlacementConfig config;
 
     public RandomReplaceablePlacement(ReplacingFeaturePlacementConfig config) {
-        super(dyn -> config);
+        super(ReplacingFeaturePlacementConfig.CODEC);
+        this.config = config;
     }
 
     @Override
-    public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, ReplacingFeaturePlacementConfig configIn, BlockPos pos) {
-        if (!configIn.canGenerateAtAll() || random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
-            return Stream.empty();
-        }
-        if (!configIn.generatesInBiome(worldIn.getBiome(pos))) {
+    public Stream<BlockPos> func_241857_a(WorldDecoratingHelper world, Random random, ReplacingFeaturePlacementConfig config, BlockPos pos) {
+        if (!this.config.canGenerateAtAll() || random.nextInt(Math.max(this.config.getGenerationChance(), 1)) != 0) {
             return Stream.empty();
         }
 
         List<BlockPos> result = new ArrayList<>();
 
         BlockPos at = pos.add(random.nextInt(16), 0, random.nextInt(16));
-        at = new BlockPos(at.getX(), configIn.getRandomY(random), at.getZ());
+        at = new BlockPos(at.getX(), this.config.getRandomY(random), at.getZ());
 
-        if (configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), at, random)) {
+        if (this.config.canPlace(world.field_242889_a, at, random)) {
             result.add(at);
         }
 
-        int amt = configIn.getGenerationAmount();
+        int amt = this.config.getGenerationAmount();
         while (amt > 0) {
             amt--;
 
             BlockPos offset = at.add(-1 + random.nextInt(3),
                     -1 + random.nextInt(3),
                     -1 + random.nextInt(3));
-            if (!offset.equals(at) &&
-                    worldIn.chunkExists(offset.getX() >> 4, offset.getZ() >> 4) &&
-                    configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), offset, random)) {
+            if (!offset.equals(at) && this.config.canPlace(world.field_242889_a, offset, random)) {
                 result.add(offset);
             }
         }

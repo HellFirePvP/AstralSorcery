@@ -14,9 +14,11 @@ import hellfirepvp.astralsorcery.common.tile.TileRefractionTable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -34,14 +36,14 @@ import java.util.List;
  */
 public class PktEngraveGlass extends ASPacket<PktEngraveGlass> {
 
-    private DimensionType type;
+    private ResourceLocation dim;
     private BlockPos pos;
     private List<DrawnConstellation> constellations = new LinkedList<>();
 
     public PktEngraveGlass() {}
 
-    public PktEngraveGlass(DimensionType type, BlockPos pos, List<DrawnConstellation> constellations) {
-        this.type = type;
+    public PktEngraveGlass(ResourceLocation dim, BlockPos pos, List<DrawnConstellation> constellations) {
+        this.dim = dim;
         this.pos = pos;
         this.constellations = constellations;
     }
@@ -49,7 +51,7 @@ public class PktEngraveGlass extends ASPacket<PktEngraveGlass> {
     @Override
     public Encoder<PktEngraveGlass> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeRegistryEntry(buffer, packet.type);
+            ByteBufUtils.writeResourceLocation(buffer, packet.dim);
             ByteBufUtils.writePos(buffer, packet.pos);
             ByteBufUtils.writeList(buffer, packet.constellations, (buf, cst) -> {
                 buf.writeInt(cst.getPoint().x);
@@ -65,7 +67,7 @@ public class PktEngraveGlass extends ASPacket<PktEngraveGlass> {
         return buffer -> {
             PktEngraveGlass pkt = new PktEngraveGlass();
 
-            pkt.type = ByteBufUtils.readRegistryEntry(buffer);
+            pkt.dim = ByteBufUtils.readResourceLocation(buffer);
             pkt.pos = ByteBufUtils.readPos(buffer);
             pkt.constellations = ByteBufUtils.readList(buffer, buf ->
                     new DrawnConstellation(
@@ -81,8 +83,10 @@ public class PktEngraveGlass extends ASPacket<PktEngraveGlass> {
     public Handler<PktEngraveGlass> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
+                //TODO 1.16.2 re-check once worlds are not all constantly loaded
                 MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                World world = srv.getWorld(packet.type);
+                RegistryKey<World> dimKey = RegistryKey.func_240903_a_(Registry.WORLD_KEY, packet.dim);
+                World world = srv.getWorld(dimKey);
                 TileRefractionTable tmt = MiscUtils.getTileAt(world, packet.pos, TileRefractionTable.class, false);
                 if (tmt != null && !packet.constellations.isEmpty()) {
                     List<DrawnConstellation> cstList = packet.constellations.subList(0, Math.min(3, packet.constellations.size()));

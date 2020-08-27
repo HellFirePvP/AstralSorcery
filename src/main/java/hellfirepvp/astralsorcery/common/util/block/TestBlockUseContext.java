@@ -15,7 +15,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -32,7 +32,7 @@ public class TestBlockUseContext extends BlockItemUseContext {
     private final Entity entity;
 
     private TestBlockUseContext(World worldIn, @Nullable Entity usingEntity, Hand hand, ItemStack stack, BlockPos at, Direction side) {
-        super(worldIn, null, hand, stack, new BlockRayTraceResult(new Vec3d(at).add(0.5, 0.5, 0.5), side, at, false));
+        super(worldIn, null, hand, stack, new BlockRayTraceResult(Vector3d.copyCentered(at), side, at, false));
         this.entity = usingEntity;
     }
 

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.datagen.data.perks.AstralPerkTreeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipes.AstralRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.tags.AstralBlockTagsProvider;
 import hellfirepvp.astralsorcery.datagen.data.tags.AstralItemTagsProvider;
+import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,8 +45,9 @@ public class AstralDataGenerator {
 
         if (event.includeServer()) {
             gen.addProvider(new AstralAdvancementProvider(gen));
-            gen.addProvider(new AstralItemTagsProvider(gen));
-            gen.addProvider(new AstralBlockTagsProvider(gen));
+            BlockTagsProvider blockTagGen = new AstralBlockTagsProvider(gen);
+            gen.addProvider(blockTagGen);
+            gen.addProvider(new AstralItemTagsProvider(gen, blockTagGen));
             gen.addProvider(new AstralLootTableProvider(gen));
             gen.addProvider(new AstralRecipeProvider(gen));
             gen.addProvider(new AstralPerkTreeProvider(gen));

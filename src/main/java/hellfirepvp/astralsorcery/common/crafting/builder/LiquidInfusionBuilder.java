@@ -17,6 +17,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
@@ -67,7 +68,7 @@ public class LiquidInfusionBuilder extends CustomRecipeBuilder<LiquidInfusion> {
         return this;
     }
 
-    public LiquidInfusionBuilder setItemInput(Tag<Item> tag) {
+    public LiquidInfusionBuilder setItemInput(ITag.INamedTag<Item> tag) {
         this.itemInput = Ingredient.fromTag(tag);
         return this;
     }

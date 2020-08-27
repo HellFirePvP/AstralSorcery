@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.source.FXSource;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,7 +64,7 @@ public final class EffectHelper {
         }
 
         @Override
-        public Builder<T> setPosition(@Nonnull Vec3i position) {
+        public Builder<T> setPosition(@Nonnull Vector3i position) {
             return super.setPosition(position);
         }
 

@@ -12,8 +12,8 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.LootTableProvider;
+import net.minecraft.loot.*;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.*;
 
 import java.util.List;
 import java.util.Map;
@@ -44,7 +44,7 @@ public final class AstralLootTableProvider extends LootTableProvider {
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker validationtracker) {
-        map.forEach((key, lootTable) -> LootTableManager.func_227508_a_(validationtracker, key, lootTable));
+    protected void validate(Map<ResourceLocation, LootTable> tables, ValidationTracker tracker) {
+        tables.forEach((key, table) -> LootTableManager.func_227508_a_(tracker, key, table));
     }
 }

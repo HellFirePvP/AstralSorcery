@@ -10,9 +10,8 @@ package hellfirepvp.astralsorcery.common.world.feature;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.common.util.Constants;
@@ -29,11 +28,11 @@ import java.util.Random;
 public class AquamarineFeature extends Feature<NoFeatureConfig> {
 
     public AquamarineFeature() {
-        super((dyn) -> NoFeatureConfig.NO_FEATURE_CONFIG);
+        super(NoFeatureConfig.field_236558_a_);
     }
 
     @Override
-    public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        return worldIn.setBlockState(pos, BlocksAS.AQUAMARINE_SAND_ORE.getDefaultState(), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+    public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+        return world.setBlockState(pos, BlocksAS.AQUAMARINE_SAND_ORE.getDefaultState(), Constants.BlockFlags.DEFAULT);
     }
 }

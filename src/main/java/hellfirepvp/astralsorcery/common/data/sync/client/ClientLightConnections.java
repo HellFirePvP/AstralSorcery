@@ -10,13 +10,16 @@ package hellfirepvp.astralsorcery.common.data.sync.client;
 
 import hellfirepvp.astralsorcery.common.data.sync.base.ClientData;
 import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
+import hellfirepvp.observerlib.common.util.RegistryUtil;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
@@ -34,16 +37,16 @@ import java.util.Set;
  */
 public class ClientLightConnections extends ClientData<ClientLightConnections> {
 
-    private Map<DimensionType, Map<BlockPos, Set<BlockPos>>> clientPosBuffer = new HashMap<>();
+    private Map<ResourceLocation, Map<BlockPos, Set<BlockPos>>> clientPosBuffer = new HashMap<>();
 
     @Nonnull
-    public Map<BlockPos, Set<BlockPos>> getClientConnections(DimensionType dimType) {
-        return this.clientPosBuffer.getOrDefault(dimType, new HashMap<>());
+    public Map<BlockPos, Set<BlockPos>> getClientConnections(RegistryKey<World> dim) {
+        return this.clientPosBuffer.getOrDefault(dim.func_240901_a_(), new HashMap<>());
     }
 
     @Override
-    public void clear(DimensionType dimId) {
-        this.clientPosBuffer.remove(dimId);
+    public void clear(RegistryKey<World> dim) {
+        this.clientPosBuffer.remove(dim.func_240901_a_());
     }
 
     @Override
@@ -57,14 +60,11 @@ public class ClientLightConnections extends ClientData<ClientLightConnections> {
         public void readFromIncomingFullSync(ClientLightConnections cl, CompoundNBT compound) {
             cl.clientPosBuffer.clear();
 
-            for (String dimTypeKey : compound.keySet()) {
-                DimensionType type = DimensionManager.getRegistry().getValue(new ResourceLocation(dimTypeKey)).orElse(null);
-                if (type == null) {
-                    continue;
-                }
+            for (String dimKey : compound.keySet()) {
+                ResourceLocation dim = new ResourceLocation(dimKey);
 
                 Map<BlockPos, Set<BlockPos>> posMap = new HashMap<>();
-                ListNBT list = compound.getList(dimTypeKey, Constants.NBT.TAG_COMPOUND);
+                ListNBT list = compound.getList(dimKey, Constants.NBT.TAG_COMPOUND);
                 for (INBT iTag : list) {
                     CompoundNBT tag = (CompoundNBT) iTag;
 
@@ -74,7 +74,7 @@ public class ClientLightConnections extends ClientData<ClientLightConnections> {
                             .add(end);
                 }
 
-                cl.clientPosBuffer.put(type, posMap);
+                cl.clientPosBuffer.put(dim, posMap);
             }
         }
 
@@ -83,24 +83,21 @@ public class ClientLightConnections extends ClientData<ClientLightConnections> {
             Set<String> clearedDimensions = new HashSet<>();
             for (INBT dimKeyNBT : compound.getList("clear", Constants.NBT.TAG_STRING)) {
                 String dimKey = dimKeyNBT.getString();
-                DimensionType type = DimensionManager.getRegistry()
-                        .getValue(new ResourceLocation(dimKey)).orElse(null);
-                if (type != null) {
-                    cl.clientPosBuffer.remove(type);
-                }
+                ResourceLocation dim = new ResourceLocation(dimKey);
+                cl.clientPosBuffer.remove(dim);
 
                 clearedDimensions.add(dimKey);
             }
 
-            for (String dimTypeKey : compound.keySet()) {
-                if (clearedDimensions.contains(dimTypeKey)) {
+            for (String dimKey : compound.keySet()) {
+                if (clearedDimensions.contains(dimKey)) {
                     continue;
                 }
-                DimensionType type = DimensionManager.getRegistry().getValue(new ResourceLocation(dimTypeKey)).orElse(null);
+                ResourceLocation dim = new ResourceLocation(dimKey);
 
-                Map<BlockPos, Set<BlockPos>> posMap = cl.clientPosBuffer.computeIfAbsent(type, d -> new HashMap<>());
+                Map<BlockPos, Set<BlockPos>> posMap = cl.clientPosBuffer.computeIfAbsent(dim, d -> new HashMap<>());
 
-                ListNBT list = compound.getList(dimTypeKey, Constants.NBT.TAG_COMPOUND);
+                ListNBT list = compound.getList(dimKey, Constants.NBT.TAG_COMPOUND);
                 for (INBT iTag : list) {
                     CompoundNBT tag = (CompoundNBT) iTag;
 

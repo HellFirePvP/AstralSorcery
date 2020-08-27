@@ -24,10 +24,10 @@ import hellfirepvp.astralsorcery.common.util.block.WorldBlockPos;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.tick.TickTokenMap;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
@@ -86,16 +86,16 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
         if (!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
                 if (e.isAlive() && TechnicalEntityRegistry.INSTANCE.canAffect(e)) {
-                    if (e instanceof IProjectile) {
+                    if (e instanceof ProjectileEntity) {
                         double xRatio = (pos.getX() + 0.5) - e.getPosX();
                         double zRatio = (pos.getZ() + 0.5) - e.getPosZ();
                         float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
                         Vector3 motion = new Vector3(e.getMotion());
                         motion.multiply(new Vector3(0.5, 1, 0.5));
                         motion.subtract(xRatio / f * 0.4, 0, zRatio / f * 0.4);
-                        ((IProjectile) e).shoot(motion.getX(), motion.getY(), motion.getZ(), 1.5F, 0F);
+                        ((ProjectileEntity) e).shoot(motion.getX(), motion.getY(), motion.getZ(), 1.5F, 0F);
                     } else if (e instanceof MobEntity) {
-                        ((LivingEntity) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.getPosX(), (pos.getZ() + 0.5) - e.getPosZ());
+                        ((LivingEntity) e).applyKnockback(0.4F, (pos.getX() + 0.5) - e.getPosX(), (pos.getZ() + 0.5) - e.getPosZ());
                     }
                 }
             }
@@ -124,16 +124,16 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
             if (!projectiles.isEmpty()) {
                 for (Entity e : projectiles) {
                     if (e.isAlive() && TechnicalEntityRegistry.INSTANCE.canAffect(e)) {
-                        if (e instanceof IProjectile) {
+                        if (e instanceof ProjectileEntity) {
                             double xRatio = (pos.getX() + 0.5) - e.getPosX();
                             double zRatio = (pos.getZ() + 0.5) - e.getPosZ();
                             float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
                             Vector3 motion = new Vector3(e.getMotion());
                             motion.multiply(new Vector3(0.5, 1, 0.5));
                             motion.subtract(xRatio / f * 0.4, 0, zRatio / f * 0.4);
-                            ((IProjectile) e).shoot(motion.getX(), motion.getY(), motion.getZ(), 1.5F, 0F);
+                            ((ProjectileEntity) e).shoot(motion.getX(), motion.getY(), motion.getZ(), 1.5F, 0F);
                         } else if (e instanceof MobEntity) {
-                            ((LivingEntity) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.getPosX(), (pos.getZ() + 0.5) - e.getPosZ());
+                            ((LivingEntity) e).applyKnockback(0.4F, (pos.getX() + 0.5) - e.getPosX(), (pos.getZ() + 0.5) - e.getPosZ());
                         }
                     }
                 }

@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.world.config;
 
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.BiomeDictionary;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -23,24 +25,40 @@ import java.util.List;
  */
 public class StructurePlacementConfig extends FeaturePlacementConfig {
 
+    public static final Codec<StructurePlacementConfig> CODEC = RecordCodecBuilder.create((codecBuilder) -> codecBuilder.group(
+            Codec.STRING.fieldOf("featureName").forGetter(cfg -> cfg.featureName),
+            Codec.INT.fieldOf("structureSize").forGetter(cfg -> cfg.defaultStructureSize),
+            Codec.BOOL.fieldOf("whitelistBiomeSpecification").forGetter(cfg -> cfg.defaultWhitelistBiomeSpecification),
+            Codec.BOOL.fieldOf("whitelistDimensionTypeSpecification").forGetter(cfg -> cfg.defaultWhitelistDimensionSpecification),
+            Codec.STRING.listOf().fieldOf("applicableBiomeCategories").forGetter(cfg -> cfg.defaultApplicableBiomeCategories),
+            ResourceLocation.RESOURCE_LOCATION_CODEC.listOf().fieldOf("applicableDimensionTypes").forGetter(cfg -> cfg.defaultApplicableDimensionTypes),
+            Codec.INT.fieldOf("minY").forGetter(cfg -> cfg.defaultMinY),
+            Codec.INT.fieldOf("maxY").forGetter(cfg -> cfg.defaultMaxY),
+            Codec.INT.fieldOf("generationChance").forGetter(cfg -> cfg.defaultGenerationChance),
+            Codec.INT.fieldOf("structureSpacing").forGetter(cfg -> cfg.defaultStructureSpacing),
+            Codec.INT.fieldOf("structureSeparation").forGetter(cfg -> cfg.defaultStructureSeparation))
+                .apply(codecBuilder, StructurePlacementConfig::new));
+
     private final int defaultStructureSize;
-    private final int defaultStructureDistance;
+    private final int defaultStructureSpacing;
     private final int defaultStructureSeparation;
 
     private ForgeConfigSpec.IntValue configStructureSize;
-    private ForgeConfigSpec.IntValue configStructureDistance;
+    private ForgeConfigSpec.IntValue configStructureSpacing;
     private ForgeConfigSpec.IntValue configStructureSeparation;
 
     public StructurePlacementConfig(String featureName, int structureSize,
-                                    List<BiomeDictionary.Type> applicableBiomeTypes,
-                                    List<DimensionType> applicableDimensions,
+                                    boolean defaultWhitelistBiomeSpecification,
+                                    boolean defaultWhitelistDimensionSpecification,
+                                    List<String> applicableBiomeCategories,
+                                    List<ResourceLocation> applicableDimensionTypes,
                                     int minY, int maxY, int generationChance,
-                                    int defaultStructureDistance, int defaultStructureSeparation) {
-        super(featureName, true, true,
-                applicableBiomeTypes, applicableDimensions,
+                                    int defaultStructureSpacing, int defaultStructureSeparation) {
+        super(featureName, defaultWhitelistBiomeSpecification, defaultWhitelistDimensionSpecification,
+                applicableBiomeCategories, applicableDimensionTypes,
                 minY, maxY, generationChance, 1);
         this.defaultStructureSize = structureSize;
-        this.defaultStructureDistance = defaultStructureDistance;
+        this.defaultStructureSpacing = defaultStructureSpacing;
         this.defaultStructureSeparation = defaultStructureSeparation;
     }
 
@@ -48,12 +66,20 @@ public class StructurePlacementConfig extends FeaturePlacementConfig {
         return this.configStructureSize.get();
     }
 
-    public int getStructureDistance() {
-        return this.configStructureDistance.get();
+    public int getStructureSpacing() {
+        return this.configStructureSpacing.get();
     }
 
     public int getStructureSeparation() {
         return this.configStructureSeparation.get();
+    }
+
+    public int getFeatureSalt() {
+        return 0x5815931A ^ (this.featureName.hashCode() * 31);
+    }
+
+    public StructureSeparationSettings makeSpacingSettings() {
+        return new DynamicStructureSpacing(this::getStructureSpacing, this::getStructureSeparation, this::getFeatureSalt);
     }
 
     @Override
@@ -64,10 +90,10 @@ public class StructurePlacementConfig extends FeaturePlacementConfig {
                 .comment("Set this to the estimated structure size to be generated. Should match the structure's bigger width/length.")
                 .translation(translationKey("structuresize"))
                 .defineInRange("structureSize", this.defaultStructureSize, 1, 10_000);
-        this.configStructureDistance = cfgBuilder
+        this.configStructureSpacing = cfgBuilder
                 .comment("Defines the average structure distance between two structures of this type")
-                .translation(translationKey("structuredistance"))
-                .defineInRange("structuredistance", this.defaultStructureDistance, 1, 150);
+                .translation(translationKey("structurespacing"))
+                .defineInRange("structurespacing", this.defaultStructureSpacing, 1, 150);
         this.configStructureSeparation = cfgBuilder
                 .comment("Defines the average structure separation/position-shift between two structures of this type")
                 .translation(translationKey("structureseparation"))

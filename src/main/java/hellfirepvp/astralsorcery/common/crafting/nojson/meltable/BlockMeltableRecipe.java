@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.util.block.WorldBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -49,8 +50,8 @@ public class BlockMeltableRecipe extends WorldMeltableRecipe {
                 BlockPredicates.isState(stateIn), stateOut);
     }
 
-    public static BlockMeltableRecipe of(Tag<Block> blockTagIn, BlockState stateOut) {
-        return new BlockMeltableRecipe(AstralSorcery.key(String.format("tag_%s", blockTagIn.getId().getPath())),
+    public static BlockMeltableRecipe of(ITag.INamedTag<Block> blockTagIn, BlockState stateOut) {
+        return new BlockMeltableRecipe(AstralSorcery.key(String.format("tag_%s", blockTagIn.getName().getPath())),
                 BlockPredicates.isInTag(blockTagIn), stateOut);
     }
 

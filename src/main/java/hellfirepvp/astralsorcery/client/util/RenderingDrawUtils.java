@@ -25,7 +25,10 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import org.lwjgl.opengl.GL11;
@@ -353,7 +356,7 @@ public class RenderingDrawUtils {
         float arXY = ri.getRotationXY();
         float arXZ = ri.getRotationXZ();
 
-        Vec3d view = ari.getProjectedView();
+        Vector3d view = ari.getProjectedView();
         Vector3f look = ari.getViewVector();
 
         Vector3 iPos = new Vector3(view);

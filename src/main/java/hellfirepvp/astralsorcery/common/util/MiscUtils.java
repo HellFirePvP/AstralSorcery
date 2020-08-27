@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -20,28 +21,22 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Tuple;
-import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.*;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.dimension.Dimension;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
@@ -56,6 +51,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.awt.Dimension;
 import java.util.List;
 import java.util.*;
 import java.util.function.*;
@@ -268,7 +264,7 @@ public class MiscUtils {
             return null;
         }
         if (state.getBlock() instanceof FlowingFluidBlock) {
-            IFluidState fluidState = state.getBlock().getFluidState(state);
+            FluidState fluidState = state.getBlock().getFluidState(state);
             if (!fluidState.isEmpty()) {
                 return fluidState.getFluid();
             }
@@ -305,15 +301,33 @@ public class MiscUtils {
     }
 
     public static boolean canPlayerPlaceBlockPos(PlayerEntity player, BlockState tryPlace, BlockPos pos, Direction againstSide) {
-        BlockSnapshot snapshot = new BlockSnapshot(player.getEntityWorld(), pos, tryPlace);
-        return !ForgeEventFactory.onBlockPlace(player, snapshot, againstSide);
+        World world = player.getEntityWorld();
+        world.captureBlockSnapshots = true;
+        world.setBlockState(pos, tryPlace);
+        world.captureBlockSnapshots = false;
+
+        List<BlockSnapshot> blockSnapshots = (List<BlockSnapshot>) world.capturedBlockSnapshots.clone();
+        world.capturedBlockSnapshots.clear();
+
+        boolean cancelPlacement = false;
+        if (blockSnapshots.size() > 1) {
+            cancelPlacement = ForgeEventFactory.onMultiBlockPlace(player, blockSnapshots, againstSide);
+        } else if (blockSnapshots.size() == 1) {
+            cancelPlacement = ForgeEventFactory.onBlockPlace(player, blockSnapshots.get(0), againstSide);
+        }
+        for (BlockSnapshot blocksnapshot : Lists.reverse(blockSnapshots)) {
+            world.restoringBlockSnapshots = true;
+            blocksnapshot.restore(true, false);
+            world.restoringBlockSnapshots = false;
+        }
+        return !cancelPlacement;
     }
 
     public static boolean isConnectionEstablished(ServerPlayerEntity player) {
         return player.connection != null && player.connection.netManager != null && player.connection.netManager.isChannelOpen();
     }
 
-    public static long getRandomWorldSeed(IWorld world) {
+    public static long getRandomWorldSeed(ISeedReader world) {
         return new Random(world.getSeed()).nextLong();
     }
 
@@ -344,20 +358,23 @@ public class MiscUtils {
     }
 
     @Nullable
-    public static <T extends Entity> T transferEntityTo(T entity, DimensionType target, BlockPos targetPos) {
+    public static <T extends Entity> T transferEntityTo(T entity, RegistryKey<World> target, BlockPos targetPos) {
         if (entity.getEntityWorld().isRemote) {
             return null; //No transfers on clientside.
         }
         entity.setSneaking(false);
-        Dimension dimFrom = entity.getEntityWorld().getDimension();
-        if (dimFrom.getType() != target) {
+        RegistryKey<World> src = entity.getEntityWorld().func_234923_W_();
+        if (!src.equals(target)) {
             if (!ForgeHooks.onTravelToDimension(entity, target)) {
                 return null;
             }
 
+            MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+            ServerWorld targetWorld = srv.getWorld(target);
+            if (targetWorld == null) {
+                return null;
+            }
             if (entity instanceof ServerPlayerEntity) {
-                MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                ServerWorld targetWorld = srv.getWorld(target);
                 ((ServerPlayerEntity) entity).teleport(targetWorld,
                         targetPos.getX() + 0.5,
                         targetPos.getY() + 0.1,
@@ -365,7 +382,7 @@ public class MiscUtils {
                         entity.rotationYaw,
                         entity.rotationPitch);
             } else {
-                entity = (T) entity.changeDimension(target);
+                entity = (T) entity.changeDimension(targetWorld);
                 if (entity == null) {
                     return null;
                 }
@@ -383,8 +400,7 @@ public class MiscUtils {
         for (BlockPos blockpos = new BlockPos(at.getX(), chunk.getTopFilledSegment() + 16, at.getZ()); blockpos.getY() >= 0; blockpos = downPos) {
             downPos = blockpos.down();
             BlockState test = world.getBlockState(downPos);
-            IFluidState state = test.getFluidState();
-            if (!world.isAirBlock(downPos) && !test.isIn(BlockTags.LEAVES) && !test.isFoliage(world, downPos)) {
+            if (!world.isAirBlock(downPos) && !test.isIn(BlockTags.LEAVES) && test.isSolidSide(world, downPos, Direction.UP)) {
                 break;
             }
         }
@@ -405,22 +421,22 @@ public class MiscUtils {
 
     @Nullable
     public static BlockRayTraceResult rayTraceLookBlock(PlayerEntity player) {
-        return rayTraceLookBlock(player, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
+        return rayTraceLookBlock(player, player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue());
     }
 
     @Nonnull
     public static RayTraceResult rayTraceLook(PlayerEntity player) {
-        return rayTraceLook(player, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
+        return rayTraceLook(player, player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue());
     }
 
     @Nullable
     public static BlockRayTraceResult rayTraceLookBlock(PlayerEntity player, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode) {
-        return rayTraceLookBlock(player, blockMode, fluidMode, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
+        return rayTraceLookBlock(player, blockMode, fluidMode, player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue());
     }
 
     @Nonnull
     public static RayTraceResult rayTraceLook(PlayerEntity player, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode) {
-        return rayTraceLook(player, blockMode, fluidMode, player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue());
+        return rayTraceLook(player, blockMode, fluidMode, player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue());
     }
 
     @Nullable
@@ -444,9 +460,9 @@ public class MiscUtils {
 
     @Nonnull
     public static RayTraceResult rayTraceLook(Entity entity, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode, double reachDst) {
-        Vec3d pos = new Vec3d(entity.getPosX(), entity.getPosY() + entity.getEyeHeight(), entity.getPosZ());
-        Vec3d lookVec = entity.getLookVec();
-        Vec3d end = pos.add(lookVec.x * reachDst, lookVec.y * reachDst, lookVec.z * reachDst);
+        Vector3d pos = new Vector3d(entity.getPosX(), entity.getPosY() + entity.getEyeHeight(), entity.getPosZ());
+        Vector3d lookVec = entity.getLookVec();
+        Vector3d end = pos.add(lookVec.x * reachDst, lookVec.y * reachDst, lookVec.z * reachDst);
         RayTraceContext ctx = new RayTraceContext(pos, end, blockMode, fluidMode, entity);
         return entity.world.rayTraceBlocks(ctx);
     }

@@ -9,19 +9,28 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import net.minecraft.loot.LootFunctionType;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: LootTablesAS
+ * Class: LootAS
  * Created by HellFirePvP
  * Date: 02.05.2020 / 15:41
  */
-public class LootTablesAS {
+public class LootAS {
 
-    private LootTablesAS() {}
+    private LootAS() {}
 
     public static final ResourceLocation SHRINE_CHEST = AstralSorcery.key("shrine_chest");
 
+    public static class Functions {
+
+        public static LootFunctionType LINEAR_LUCK_BONUS;
+        public static LootFunctionType RANDOM_CRYSTAL_PROPERTIES;
+        public static LootFunctionType COPY_CRYSTAL_PROPERTIES;
+        public static LootFunctionType COPY_CONSTELLATION;
+
+    }
 }

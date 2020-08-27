@@ -22,7 +22,7 @@ import java.util.function.Predicate;
  */
 public class SimpleBlockPredicate implements BlockPredicate, Predicate<BlockState> {
 
-    private final Either<List<BlockState>, Block> validMatch;
+    final Either<List<BlockState>, Block> validMatch;
 
     public SimpleBlockPredicate(Block block) {
         this.validMatch = Either.right(block);

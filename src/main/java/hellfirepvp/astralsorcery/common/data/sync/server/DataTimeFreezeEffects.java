@@ -16,9 +16,10 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopEffectHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ import java.util.Map;
  */
 public class DataTimeFreezeEffects extends AbstractData {
 
-    private Map<DimensionType, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
+    private Map<ResourceLocation, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
 
     private List<ServerSyncAction> scheduledServerSyncChanges = new LinkedList<>();
 
@@ -43,24 +44,24 @@ public class DataTimeFreezeEffects extends AbstractData {
         super(key);
     }
 
-    public void addNewEffect(DimensionType dimType, TimeStopEffectHelper effectHelper) {
-        List<TimeStopEffectHelper> zones = serverActiveFreezeZones.computeIfAbsent(dimType, (id) -> new LinkedList<>());
+    public void addNewEffect(ResourceLocation dim, TimeStopEffectHelper effectHelper) {
+        List<TimeStopEffectHelper> zones = serverActiveFreezeZones.computeIfAbsent(dim, (id) -> new LinkedList<>());
         zones.add(effectHelper);
-        scheduledServerSyncChanges.add(new ServerSyncAction(ServerSyncAction.ActionType.ADD, dimType, effectHelper));
+        scheduledServerSyncChanges.add(new ServerSyncAction(ServerSyncAction.ActionType.ADD, dim, effectHelper));
         markDirty();
     }
 
-    public void removeEffect(DimensionType dimType, TimeStopEffectHelper effectHelper) {
-        if (serverActiveFreezeZones.containsKey(dimType)) {
-            serverActiveFreezeZones.get(dimType).remove(effectHelper);
+    public void removeEffect(ResourceLocation dim, TimeStopEffectHelper effectHelper) {
+        if (serverActiveFreezeZones.containsKey(dim)) {
+            serverActiveFreezeZones.get(dim).remove(effectHelper);
         }
-        scheduledServerSyncChanges.add(new ServerSyncAction(ServerSyncAction.ActionType.REMOVE, dimType, effectHelper));
+        scheduledServerSyncChanges.add(new ServerSyncAction(ServerSyncAction.ActionType.REMOVE, dim, effectHelper));
         markDirty();
     }
 
     @Override
-    public void clear(DimensionType dimType) {
-        this.serverActiveFreezeZones.remove(dimType);
+    public void clear(RegistryKey<World> dim) {
+        this.serverActiveFreezeZones.remove(dim.func_240901_a_());
     }
 
     @Override
@@ -72,12 +73,12 @@ public class DataTimeFreezeEffects extends AbstractData {
     @Override
     public void writeAllDataToPacket(CompoundNBT compound) {
         CompoundNBT dimTag = new CompoundNBT();
-        for (DimensionType type : this.serverActiveFreezeZones.keySet()) {
+        for (ResourceLocation dimKey : this.serverActiveFreezeZones.keySet()) {
             ListNBT tagList = new ListNBT();
-            for (TimeStopEffectHelper effect : this.serverActiveFreezeZones.get(type)) {
+            for (TimeStopEffectHelper effect : this.serverActiveFreezeZones.get(dimKey)) {
                 tagList.add(effect.serializeNBT());
             }
-            dimTag.put(type.getRegistryName().toString(), tagList);
+            dimTag.put(dimKey.toString(), tagList);
         }
         compound.put("dimTypes", dimTag);
     }
@@ -97,19 +98,19 @@ public class DataTimeFreezeEffects extends AbstractData {
 
         private final ActionType type;
 
-        private final DimensionType dimType;
+        private final ResourceLocation dim;
         private TimeStopEffectHelper involvedEffect;
 
-        private ServerSyncAction(ActionType type, DimensionType dimType, TimeStopEffectHelper involvedEffect) {
+        private ServerSyncAction(ActionType type, ResourceLocation dim, TimeStopEffectHelper involvedEffect) {
             this.type = type;
-            this.dimType = dimType;
+            this.dim = dim;
             this.involvedEffect = involvedEffect;
         }
 
         private CompoundNBT serializeNBT() {
             CompoundNBT out = new CompoundNBT();
             out.putInt("type", type.ordinal());
-            out.putString("dimType", this.dimType.getRegistryName().toString());
+            out.putString("dimType", this.dim.toString());
             switch (type) {
                 case ADD:
                 case REMOVE:
@@ -119,14 +120,9 @@ public class DataTimeFreezeEffects extends AbstractData {
             return out;
         }
 
-        @Nullable
         public static ServerSyncAction deserializeNBT(CompoundNBT cmp) {
             ActionType type = MiscUtils.getEnumEntry(ActionType.class, cmp.getInt("type"));
-            String dimTypeKey = cmp.getString("dimType");
-            DimensionType dimType = DimensionManager.getRegistry().getValue(new ResourceLocation(dimTypeKey)).orElse(null);
-            if (dimType == null) {
-                return null;
-            }
+            String dimKey = cmp.getString("dimType");
             TimeStopEffectHelper helper = null;
             switch (type) {
                 case ADD:
@@ -134,7 +130,7 @@ public class DataTimeFreezeEffects extends AbstractData {
                     helper = TimeStopEffectHelper.deserializeNBT(cmp.getCompound("effectTag"));
                     break;
             }
-            return new ServerSyncAction(type, dimType, helper);
+            return new ServerSyncAction(type, new ResourceLocation(dimKey), helper);
         }
 
         @Nullable
@@ -142,8 +138,8 @@ public class DataTimeFreezeEffects extends AbstractData {
             return involvedEffect;
         }
 
-        public DimensionType getDimType() {
-            return dimType;
+        public ResourceLocation getDimKey() {
+            return dim;
         }
 
         public ActionType getType() {

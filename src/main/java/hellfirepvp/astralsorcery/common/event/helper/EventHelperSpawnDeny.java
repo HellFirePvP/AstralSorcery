@@ -62,7 +62,7 @@ public class EventHelperSpawnDeny {
         if (GeneralConfig.CONFIG.mobSpawningDenyAllTypes.get() || entity.getClassification(false) == EntityClassification.MONSTER) {
             Vector3 entityPos = Vector3.atEntityCorner(entity);
             for (Map.Entry<WorldBlockPos, TickTokenMap.SimpleTickToken<Double>> entry : spawnDenyRegions.entrySet()) {
-                if (!entry.getKey().getDimensionType().equals(entity.getEntityWorld().getDimension().getType())) {
+                if (!entry.getKey().getWorldKey().equals(entity.getEntityWorld().func_234923_W_())) {
                     continue;
                 }
 

@@ -14,8 +14,11 @@ import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.world.WorldSeedCache;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -33,14 +36,14 @@ import javax.annotation.Nonnull;
  */
 public class PktRequestSeed extends ASPacket<PktRequestSeed> {
 
-    private DimensionType type;
+    private ResourceLocation dim;
     private Integer session;
     private Long seed;
 
     public PktRequestSeed() {}
 
-    public PktRequestSeed(Integer session, DimensionType type) {
-        this.type = type;
+    public PktRequestSeed(Integer session, ResourceLocation dim) {
+        this.dim = dim;
         this.session = session;
         this.seed = -1L;
     }
@@ -54,7 +57,7 @@ public class PktRequestSeed extends ASPacket<PktRequestSeed> {
     @Override
     public Encoder<PktRequestSeed> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeOptional(buffer, packet.type, ByteBufUtils::writeRegistryEntry);
+            ByteBufUtils.writeOptional(buffer, packet.dim, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeOptional(buffer, packet.session, PacketBuffer::writeInt);
             ByteBufUtils.writeOptional(buffer, packet.seed, PacketBuffer::writeLong);
         };
@@ -66,7 +69,7 @@ public class PktRequestSeed extends ASPacket<PktRequestSeed> {
         return buffer -> {
             PktRequestSeed pkt = new PktRequestSeed();
 
-            pkt.type = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
+            pkt.dim = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
             pkt.session = ByteBufUtils.readOptional(buffer, PacketBuffer::readInt);
             pkt.seed = ByteBufUtils.readOptional(buffer, PacketBuffer::readLong);
 
@@ -81,15 +84,17 @@ public class PktRequestSeed extends ASPacket<PktRequestSeed> {
             @Override
             @OnlyIn(Dist.CLIENT)
             public void handleClient(PktRequestSeed packet, NetworkEvent.Context context) {
-                context.enqueueWork(() -> WorldSeedCache.updateSeedCache(packet.type, packet.session, packet.seed));
+                context.enqueueWork(() -> WorldSeedCache.updateSeedCache(packet.dim, packet.session, packet.seed));
             }
 
             @Override
             public void handle(PktRequestSeed packet, NetworkEvent.Context context, LogicalSide side) {
                 context.enqueueWork(() -> {
+                    //TODO 1.16.2 re-check once worlds are not all constantly loaded
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                    World w = srv.getWorld(packet.type);
-                    PktRequestSeed seedResponse = new PktRequestSeed(packet.session, packet.type);
+                    RegistryKey<World> dimKey = RegistryKey.func_240903_a_(Registry.WORLD_KEY, packet.dim);
+                    ServerWorld w = srv.getWorld(dimKey);
+                    PktRequestSeed seedResponse = new PktRequestSeed(packet.session, packet.dim);
                     seedResponse.seed(MiscUtils.getRandomWorldSeed(w));
                     packet.replyWith(seedResponse, context);
                 });

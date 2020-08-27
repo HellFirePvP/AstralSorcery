@@ -40,10 +40,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -75,7 +72,7 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(getBlinkMode(stack).getDisplay().setStyle(new Style().setColor(TextFormatting.GOLD)));
+        tooltip.add(getBlinkMode(stack).getDisplay().mergeStyle(TextFormatting.GOLD));
     }
 
     @Override
@@ -163,7 +160,7 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
                         motion.setY(MathHelper.clamp(motion.getY() + (0.7F * strength), 0.7F * strength, Float.MAX_VALUE));
                     }
 
-                    player.setMotion(motion.toVec3d());
+                    player.setMotion(motion.toVector3d());
                     player.fallDistance = 0F;
 
                     if (ItemMantle.getEffect(player, ConstellationsAS.vicio) != null) {
@@ -309,11 +306,11 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
             this.name = name;
         }
 
-        public ITextComponent getName() {
+        public IFormattableTextComponent getName() {
             return new TranslationTextComponent("astralsorcery.misc.blink.mode." + this.name);
         }
 
-        public ITextComponent getDisplay() {
+        public IFormattableTextComponent getDisplay() {
             return new TranslationTextComponent("astralsorcery.misc.blink.mode", this.getName());
         }
 

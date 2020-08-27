@@ -2,8 +2,8 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaAttributeType;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
@@ -32,8 +32,8 @@ public class AttributeTypeLuck extends VanillaAttributeType {
 
     @Nonnull
     @Override
-    public IAttribute getAttribute() {
-        return SharedMonsterAttributes.LUCK;
+    public Attribute getAttribute() {
+        return Attributes.LUCK;
     }
 
     @Override

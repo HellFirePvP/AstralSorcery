@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.client.effect;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,7 +32,7 @@ public class EffectProperties<T extends EntityVisualFX> {
 
     private EffectType type = null;
     private UUID owner = null;
-    private Vec3i position = Vec3i.NULL_VECTOR;
+    private Vector3i position = Vector3i.NULL_VECTOR;
     private boolean ignoreLimit = false;
 
     public EffectProperties(BatchRenderContext<T> ctx) {
@@ -52,7 +52,7 @@ public class EffectProperties<T extends EntityVisualFX> {
     }
 
     // The position the effect originates from, if any.
-    public <I extends EffectProperties<T>> I setPosition(@Nonnull Vec3i position) {
+    public <I extends EffectProperties<T>> I setPosition(@Nonnull Vector3i position) {
         this.position = position;
         return (I) this;
     }
@@ -78,7 +78,7 @@ public class EffectProperties<T extends EntityVisualFX> {
     }
 
     @Nonnull
-    public Vec3i getPosition() {
+    public Vector3i getPosition() {
         return position;
     }
 

@@ -23,7 +23,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -57,7 +57,7 @@ public class ItemUtils {
             return null;
         }
         ItemEntity ei = new ItemEntity(world, x, y, z, stack);
-        ei.setMotion(new Vec3d(0, 0, 0));
+        ei.setMotion(new Vector3d(0, 0, 0));
         world.addEntity(ei);
         ei.setPickupDelay(20);
         return ei;

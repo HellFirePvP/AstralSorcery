@@ -3,7 +3,7 @@ function initializeCoreMod() {
         'add_player_field': {
             'target': {
                 'type': 'CLASS',
-                'name': 'net.minecraft.entity.ai.attributes.AbstractAttributeMap'
+                'name': 'net.minecraft.entity.ai.attributes.AttributeModifierManager'
             },
             'transformer': function(classNode) {
                 var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');

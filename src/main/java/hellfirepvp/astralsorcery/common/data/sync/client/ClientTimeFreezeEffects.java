@@ -15,10 +15,9 @@ import hellfirepvp.astralsorcery.common.util.time.TimeStopEffectHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
@@ -33,32 +32,32 @@ import java.util.*;
  */
 public class ClientTimeFreezeEffects extends ClientData<ClientTimeFreezeEffects> {
 
-    private Map<DimensionType, List<TimeStopEffectHelper>> clientActiveFreezeZones = new HashMap<>();
+    private Map<ResourceLocation, List<TimeStopEffectHelper>> clientActiveFreezeZones = new HashMap<>();
 
     @Nonnull
-    public List<TimeStopEffectHelper> getTimeStopEffects(IWorld world) {
-        return getTimeStopEffects(world.getDimension().getType());
+    public List<TimeStopEffectHelper> getTimeStopEffects(World world) {
+        return getTimeStopEffects(world.func_234923_W_());
     }
 
     @Nonnull
-    public List<TimeStopEffectHelper> getTimeStopEffects(DimensionType dimType) {
-        return clientActiveFreezeZones.getOrDefault(dimType, Collections.emptyList());
+    public List<TimeStopEffectHelper> getTimeStopEffects(RegistryKey<World> dim) {
+        return clientActiveFreezeZones.getOrDefault(dim.func_240901_a_(), Collections.emptyList());
     }
 
     private void applyChange(DataTimeFreezeEffects.ServerSyncAction action) {
-        DimensionType type = action.getDimType();
+        ResourceLocation worldKey = action.getDimKey();
         switch (action.getType()) {
             case ADD:
-                List<TimeStopEffectHelper> zones = clientActiveFreezeZones.computeIfAbsent(type, (id) -> new LinkedList<>());
+                List<TimeStopEffectHelper> zones = clientActiveFreezeZones.computeIfAbsent(worldKey, (id) -> new LinkedList<>());
                 zones.add(action.getInvolvedEffect());
                 break;
             case REMOVE:
-                if (clientActiveFreezeZones.containsKey(type)) {
-                    clientActiveFreezeZones.get(type).remove(action.getInvolvedEffect());
+                if (clientActiveFreezeZones.containsKey(worldKey)) {
+                    clientActiveFreezeZones.get(worldKey).remove(action.getInvolvedEffect());
                 }
                 break;
             case CLEAR:
-                clientActiveFreezeZones.remove(type);
+                clientActiveFreezeZones.remove(worldKey);
                 break;
             default:
                 break;
@@ -66,8 +65,8 @@ public class ClientTimeFreezeEffects extends ClientData<ClientTimeFreezeEffects>
     }
 
     @Override
-    public void clear(DimensionType dimType) {
-        this.clientActiveFreezeZones.remove(dimType);
+    public void clear(RegistryKey<World> dim) {
+        this.clientActiveFreezeZones.remove(dim.func_240901_a_());
     }
 
     @Override
@@ -83,17 +82,14 @@ public class ClientTimeFreezeEffects extends ClientData<ClientTimeFreezeEffects>
 
             CompoundNBT dimTag = compound.getCompound("dimTypes");
             for (String dimKey : dimTag.keySet()) {
-                DimensionType dimType = DimensionManager.getRegistry().getValue(new ResourceLocation(dimKey)).orElse(null);
-                if (dimType == null) {
-                    continue;
-                }
+                ResourceLocation dim = new ResourceLocation(dimKey);
 
                 List<TimeStopEffectHelper> effects = new LinkedList<>();
                 ListNBT listEffects = dimTag.getList(dimKey, Constants.NBT.TAG_COMPOUND);
                 for (INBT iNBT : listEffects) {
                     effects.add(TimeStopEffectHelper.deserializeNBT((CompoundNBT) iNBT));
                 }
-                data.clientActiveFreezeZones.put(dimType, effects);
+                data.clientActiveFreezeZones.put(dim, effects);
             }
         }
 
@@ -102,9 +98,7 @@ public class ClientTimeFreezeEffects extends ClientData<ClientTimeFreezeEffects>
             ListNBT changes = compound.getList("changes", Constants.NBT.TAG_COMPOUND);
             for (INBT iNBT : changes) {
                 DataTimeFreezeEffects.ServerSyncAction action = DataTimeFreezeEffects.ServerSyncAction.deserializeNBT((CompoundNBT) iNBT);
-                if (action != null) {
-                    data.applyChange(action);
-                }
+                data.applyChange(action);
             }
         }
     }

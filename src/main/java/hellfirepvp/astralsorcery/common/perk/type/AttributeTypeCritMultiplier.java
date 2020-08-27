@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -48,18 +49,17 @@ public class AttributeTypeCritMultiplier extends PerkAttributeType {
                 return;
             }
 
-            if (arrow.shootingEntity != null) {
-                PlayerEntity player = event.getWorld().getPlayerByUuid(arrow.shootingEntity);
-                if (player != null) {
-                    LogicalSide side = this.getSide(player);
-                    if (!hasTypeApplied(player, side)) {
-                        return;
-                    }
-                    float dmgMod = PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(player, ResearchHelper.getProgress(player, side), this, 1F);
-                    dmgMod = AttributeEvent.postProcessModded(player, this, dmgMod);
-                    arrow.setDamage(arrow.getDamage() * dmgMod);
+            Entity shooter = arrow.func_234616_v_();
+            if (shooter instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) shooter;
+                LogicalSide side = this.getSide(player);
+                if (!hasTypeApplied(player, side)) {
+                    return;
                 }
+                float dmgMod = PerkAttributeHelper.getOrCreateMap(player, side)
+                        .modifyValue(player, ResearchHelper.getProgress(player, side), this, 1F);
+                dmgMod = AttributeEvent.postProcessModded(player, this, dmgMod);
+                arrow.setDamage(arrow.getDamage() * dmgMod);
             }
         }
     }

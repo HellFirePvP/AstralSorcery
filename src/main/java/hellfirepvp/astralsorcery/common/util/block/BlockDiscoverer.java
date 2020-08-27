@@ -94,18 +94,17 @@ public class BlockDiscoverer {
     public static List<BlockPos> searchForBlocksAround(World world, BlockPos origin, int cubeSize, BlockPredicate match) {
         List<BlockPos> out = new ArrayList<>();
 
-        try (BlockPos.PooledMutable offset = BlockPos.PooledMutable.retain()) {
-            for (int xx = -cubeSize; xx <= cubeSize; xx++) {
-                for (int zz = -cubeSize; zz <= cubeSize; zz++) {
-                    for (int yy = -cubeSize; yy <= cubeSize; yy++) {
-                        offset.setPos(origin.getX() + xx, origin.getY() + yy, origin.getZ() + zz);
-                        MiscUtils.executeWithChunk(world, offset, () -> {
-                            BlockState atState = world.getBlockState(offset);
-                            if (match.test(world, offset, atState)) {
-                                out.add(new BlockPos(offset));
-                            }
-                        });
-                    }
+        BlockPos.Mutable offset = new BlockPos.Mutable();
+        for (int xx = -cubeSize; xx <= cubeSize; xx++) {
+            for (int zz = -cubeSize; zz <= cubeSize; zz++) {
+                for (int yy = -cubeSize; yy <= cubeSize; yy++) {
+                    offset.setPos(origin.getX() + xx, origin.getY() + yy, origin.getZ() + zz);
+                    MiscUtils.executeWithChunk(world, offset, () -> {
+                        BlockState atState = world.getBlockState(offset);
+                        if (match.test(world, offset, atState)) {
+                            out.add(new BlockPos(offset));
+                        }
+                    });
                 }
             }
         }

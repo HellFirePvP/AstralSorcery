@@ -16,9 +16,10 @@ import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.client.SkyRenderHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +28,7 @@ import net.minecraftforge.client.IRenderHandler;
  * Created by HellFirePvP
  * Date: 13.01.2020 / 19:48
  */
-public class ChainingSkyRenderer implements IRenderHandler {
+public class ChainingSkyRenderer implements SkyRenderHandler {
 
     private IRenderHandler existingSkyRenderer;
 
@@ -36,21 +37,17 @@ public class ChainingSkyRenderer implements IRenderHandler {
     }
 
     @Override
-    public void render(int ticks, float partialTicks, ClientWorld world, Minecraft mc) {
+    public void render(int ticks, float partialTicks, MatrixStack renderStack, ClientWorld world, Minecraft mc) {
         EventFlags.SKY_RENDERING.executeWithFlag(() -> {
-
-            //Massive assumptions here noone messed with the rendering stack.
-            MatrixStack renderStack = new MatrixStack();
-            ActiveRenderInfo ari = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
-            renderStack.rotate(Vector3f.ZP.rotationDegrees(0));
-            renderStack.rotate(Vector3f.XP.rotationDegrees(ari.getPitch()));
-            renderStack.rotate(Vector3f.YP.rotationDegrees(ari.getYaw() + 180.0F));
-
             int dimId = world.getDimension().getType().getId();
             if (world.dimension.isSurfaceWorld()) {
                 if (RenderingConfig.CONFIG.weakSkyRenders.get().contains(dimId)) {
                     if (existingSkyRenderer != null) {
-                        existingSkyRenderer.render(ticks, partialTicks, world, mc);
+                        if (existingSkyRenderer instanceof SkyRenderHandler) {
+                            ((SkyRenderHandler) existingSkyRenderer).render(ticks, partialTicks, renderStack, world, mc);
+                        } else {
+                            existingSkyRenderer.render(ticks, partialTicks, world, mc);
+                        }
                     } else {
                         IRenderHandler existing = world.getDimension().getSkyRenderer();
                         world.getDimension().setSkyRenderer(null);

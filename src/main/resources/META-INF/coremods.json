@@ -2,19 +2,17 @@
   "add_player_field": "coremods/add_player_field.js",
   "set_player_field": "coremods/set_player_field.js",
   "post_process_vanilla": "coremods/post_process_vanilla.js",
-  "add_enchantment_helper_apply_modifier": "coremods/add_enchantment_helper_apply_modifier.js",
-  "add_enchantment_helper_enchantments": "coremods/add_enchantment_helper_enchantments.js",
-  "add_enchantment_helper_levels": "coremods/add_enchantment_helper_levels.js",
-  "add_enchantment_tooltip": "coremods/add_enchantment_tooltip.js",
-  "add_missing_tag_enchantment_tooltip": "coremods/add_missing_tag_enchantment_tooltip.js",
-  "sun_brightness_client": "coremods/sun_brightness_client.js",
-  "sun_brightness_server": "coremods/sun_brightness_server.js",
-  "elytra_start_client_flight": "coremods/elytra_start_client_flight.js",
-  "elytra_start_server_flight": "coremods/elytra_start_server_flight.js",
-  "elytra_living_update_tick": "coremods/elytra_living_update_tick.js",
   "cooldown_tracker_set": "coremods/cooldown_tracker_set.js",
   "reach_set_client_renderer": "coremods/reach_set_client_renderer.js",
   "reach_set_server_entity_interact": "coremods/reach_set_server_entity_interact.js",
   "water_movement_slowdown_prevention": "coremods/water_movement_slowdown_prevention.js",
-  "allow_entity_interaction": "coremods/allow_entity_interaction.js"
+  "allow_entity_interaction": "coremods/allow_entity_interaction.js",
+  "sun_brightness_client": "coremods/sun_brightness_client.js",
+  "add_missing_tag_enchantment_tooltip": "coremods/add_missing_tag_enchantment_tooltip.js",
+  "add_enchantment_tooltip": "coremods/add_enchantment_tooltip.js",
+  "add_enchantment_helper_apply_modifier": "coremods/add_enchantment_helper_apply_modifier.js",
+  "add_enchantment_helper_enchantments": "coremods/add_enchantment_helper_enchantments.js",
+  "add_enchantment_helper_levels": "coremods/add_enchantment_helper_levels.js",
+
+  "sun_brightness_server": "coremods/sun_brightness_server.js"
 }

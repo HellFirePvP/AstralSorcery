@@ -29,7 +29,7 @@ public class EntityTechnicalEntry implements ConfigDataSet {
     private final ResourceLocation name;
 
     public EntityTechnicalEntry(@Nullable Mods mod, String name) {
-        this(new ResourceLocation(mod == null ? "minecraft" : mod.getModId(), name));
+        this(mod == null ? Mods.MINECRAFT.key(name) : mod.key(name));
     }
 
     public EntityTechnicalEntry(ResourceLocation name) {

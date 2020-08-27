@@ -12,11 +12,10 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.object.TransformReference;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -33,30 +32,30 @@ import java.util.function.Function;
  */
 public class WorldBlockPos extends BlockPos {
 
-    private final TransformReference<DimensionType, World> worldReference;
+    private final TransformReference<RegistryKey<World>, World> worldReference;
 
-    private WorldBlockPos(TransformReference<DimensionType, World> worldReference, BlockPos pos) {
+    private WorldBlockPos(TransformReference<RegistryKey<World>, World> worldReference, BlockPos pos) {
         super(pos);
         this.worldReference = worldReference;
     }
 
-    private WorldBlockPos(DimensionType type, BlockPos pos, Function<DimensionType, World> worldProvider) {
+    private WorldBlockPos(RegistryKey<World> type, BlockPos pos, Function<RegistryKey<World>, World> worldProvider) {
         super(pos);
         this.worldReference = new TransformReference<>(type, worldProvider);
     }
 
     public static WorldBlockPos wrapServer(World world, BlockPos pos) {
-        return new WorldBlockPos(world.getDimension().getType(), pos, type -> {
+        return new WorldBlockPos(world.func_234923_W_(), pos, type -> {
             MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-            return DimensionManager.getWorld(server, type, true, false);
+            return server.getWorld(type);
         });
     }
 
     public static WorldBlockPos wrapTileEntity(TileEntity tile) {
-        return new WorldBlockPos(tile.getWorld().getDimension().getType(), tile.getPos(), type -> tile.getWorld());
+        return new WorldBlockPos(tile.getWorld().func_234923_W_(), tile.getPos(), type -> tile.getWorld());
     }
 
-    public DimensionType getDimensionType() {
+    public RegistryKey<World> getWorldKey() {
         return this.worldReference.getReference();
     }
 
@@ -75,7 +74,7 @@ public class WorldBlockPos extends BlockPos {
     }
 
     @Override
-    public WorldBlockPos add(Vec3i vec) {
+    public WorldBlockPos add(Vector3i vec) {
         return wrapInternal(super.add(vec));
     }
 
@@ -99,13 +98,13 @@ public class WorldBlockPos extends BlockPos {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         WorldBlockPos that = (WorldBlockPos) o;
-        return Objects.equals(getDimensionType(), that.getDimensionType());
+        return Objects.equals(getWorldKey(), that.getWorldKey());
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + getDimensionType().hashCode();
+        result = 31 * result + getWorldKey().hashCode();
         return result;
     }
 }

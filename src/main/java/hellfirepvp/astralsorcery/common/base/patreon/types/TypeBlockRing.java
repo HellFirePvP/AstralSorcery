@@ -88,7 +88,7 @@ public class TypeBlockRing extends PatreonEffect {
     @OnlyIn(Dist.CLIENT)
     public void onRenderLast(RenderWorldLastEvent event) {
         PlayerEntity pl = Minecraft.getInstance().player;
-        if (Minecraft.getInstance().gameSettings.thirdPersonView == 0 && //First person
+        if (Minecraft.getInstance().gameSettings.func_243230_g().func_243192_a() && //First person
                 pl != null && pl.getUniqueID().equals(playerUUID)) {
             MatrixStack renderStack = event.getMatrixStack();
 

@@ -9,15 +9,15 @@
 package hellfirepvp.astralsorcery.datagen.data.loot;
 
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.lib.LootTablesAS;
+import hellfirepvp.astralsorcery.common.lib.LootAS;
 import net.minecraft.data.loot.ChestLootTables;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.ItemLootEntry;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTable;
-import net.minecraft.world.storage.loot.RandomValueRange;
-import net.minecraft.world.storage.loot.functions.SetCount;
+import net.minecraft.loot.ItemLootEntry;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.RandomValueRange;
+import net.minecraft.loot.functions.SetCount;
 
 import java.util.function.BiConsumer;
 
@@ -32,7 +32,7 @@ public class ChestLootTableProvider extends ChestLootTables {
 
     @Override
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> registrar) {
-        registrar.accept(LootTablesAS.SHRINE_CHEST,
+        registrar.accept(LootAS.SHRINE_CHEST,
                 LootTable.builder()
                     .addLootPool(LootPool.builder()
                             .rolls(RandomValueRange.of(3, 5))

@@ -8,9 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.util.loot;
 
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameter;
-import net.minecraft.world.storage.loot.LootParameterSet;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameter;
+import net.minecraft.loot.LootParameterSet;
 
 /**
  * This class is part of the Astral Sorcery Mod

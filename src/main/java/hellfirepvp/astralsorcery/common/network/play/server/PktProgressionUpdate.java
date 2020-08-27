@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -82,12 +83,12 @@ public class PktProgressionUpdate extends ASPacket<PktProgressionUpdate> {
                     if (packet.tier != null) {
                         Minecraft.getInstance().player.sendMessage(
                                 new TranslationTextComponent("astralsorcery.progress.gain.progress.chat")
-                                        .applyTextStyle(TextFormatting.BLUE));
+                                        .mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);
                     }
                     if (packet.prog != null) {
                         Minecraft.getInstance().player.sendMessage(
                                 new TranslationTextComponent("astralsorcery.progress.gain.research.chat", packet.prog.getName())
-                                        .applyTextStyle(TextFormatting.AQUA));
+                                        .mergeStyle(TextFormatting.AQUA), Util.DUMMY_UUID);
                     }
                     packet.refreshJournal();
                 });

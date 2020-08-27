@@ -3,8 +3,8 @@ function initializeCoreMod() {
         'sun_brightness_client': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.world.World',
-                'methodName': 'getSunBrightnessBody',
+                'class': 'net.minecraft.client.world.ClientWorld',
+                'methodName': 'func_228326_g_ ',
                 'methodDesc': '(F)F'
             },
             'transformer': function(method) {

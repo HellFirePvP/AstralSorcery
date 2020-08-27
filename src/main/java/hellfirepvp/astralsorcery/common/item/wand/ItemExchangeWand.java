@@ -51,10 +51,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -87,7 +84,7 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(getSizeMode(stack).getDisplay().setStyle(new Style().setColor(TextFormatting.GOLD)));
+        tooltip.add(getSizeMode(stack).getDisplay().mergeStyle(TextFormatting.GOLD));
     }
 
     @Override
@@ -341,11 +338,11 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
             return searchRadius;
         }
 
-        public ITextComponent getName() {
+        public IFormattableTextComponent getName() {
             return new TranslationTextComponent("astralsorcery.misc.exchange.size." + this.searchRadius);
         }
 
-        public ITextComponent getDisplay() {
+        public IFormattableTextComponent getDisplay() {
             return new TranslationTextComponent("astralsorcery.misc.exchange.size", this.getName());
         }
 

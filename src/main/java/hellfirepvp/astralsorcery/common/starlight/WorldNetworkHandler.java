@@ -20,7 +20,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -80,12 +80,12 @@ public class WorldNetworkHandler {
                 IPrismTransmissionNode node = getTransmissionNode(source.getA());
                 if (node == null) {
                     AstralSorcery.log.warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");
-                    AstralSorcery.log.warn("Details: Dim=" + getWorld().getDimension().getType().getId() + " at " + source.getA());
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().func_234923_W_().func_240901_a_() + " at " + source.getA());
                     continue;
                 }
                 if (!(node instanceof ITransmissionSource)) {
                     AstralSorcery.log.warn("Found TransmissionNode that isn't a source at a source position!");
-                    AstralSorcery.log.warn("Details: Dim=" + getWorld().getDimension().getType().getId() + " at " + source.getA());
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().func_234923_W_().func_240901_a_() + " at " + source.getA());
                     continue;
                 }
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
@@ -110,12 +110,12 @@ public class WorldNetworkHandler {
                 IPrismTransmissionNode node = getTransmissionNode(source.getA());
                 if (node == null) {
                     AstralSorcery.log.warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");
-                    AstralSorcery.log.warn("Details: Dim=" + getWorld().getDimension().getType().getId() + " at " + source.getA());
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().func_234923_W_().func_240901_a_() + " at " + source.getA());
                     continue;
                 }
                 if (!(node instanceof ITransmissionSource)) {
                     AstralSorcery.log.warn("Found TransmissionNode that isn't a source at a source position!");
-                    AstralSorcery.log.warn("Details: Dim=" + getWorld().getDimension().getType().getId() + " at " + source.getA());
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().func_234923_W_().func_240901_a_() + " at " + source.getA());
                     continue;
                 }
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
@@ -140,8 +140,8 @@ public class WorldNetworkHandler {
         return null;
     }
 
-    public void markDirty(Vec3i... positions) {
-        for (Vec3i pos : positions) {
+    public void markDirty(Vector3i... positions) {
+        for (Vector3i pos : positions) {
             buffer.markDirty(pos);
         }
     }

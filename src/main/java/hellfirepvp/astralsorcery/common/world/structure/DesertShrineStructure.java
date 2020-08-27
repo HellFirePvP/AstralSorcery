@@ -8,14 +8,19 @@
 
 package hellfirepvp.astralsorcery.common.world.structure;
 
-import hellfirepvp.astralsorcery.common.lib.LootTablesAS;
+import hellfirepvp.astralsorcery.common.lib.LootAS;
 import hellfirepvp.astralsorcery.common.lib.WorldGenerationAS;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
 
@@ -44,18 +49,18 @@ public class DesertShrineStructure extends TemplateStructure {
     }
 
     @Override
-    protected void handleDataMarker(String marker, BlockPos blockPos, IWorld world, Random random, MutableBoundingBox structureBox) {
+    protected void handleDataMarker(String marker, BlockPos blockPos, IServerWorld world, Random random, MutableBoundingBox structureBox) {
         switch (marker) {
             case "shrine_chest":
                 if (random.nextInt(3) == 0) {
-                    this.generateChest(world, structureBox, random, blockPos, LootTablesAS.SHRINE_CHEST, null);
+                    this.generateChest(world, structureBox, random, blockPos, LootAS.SHRINE_CHEST, null);
                 } else {
                     world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
                 }
                 break;
             case "random_top_block":
                 if (random.nextBoolean()) {
-                    world.setBlockState(blockPos, world.getBiome(blockPos).getSurfaceBuilderConfig().getTop(), Constants.BlockFlags.BLOCK_UPDATE);
+                    world.setBlockState(blockPos, world.getBiome(blockPos).func_242440_e().func_242502_e().getTop(), Constants.BlockFlags.BLOCK_UPDATE);
                 } else {
                     world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
                 }

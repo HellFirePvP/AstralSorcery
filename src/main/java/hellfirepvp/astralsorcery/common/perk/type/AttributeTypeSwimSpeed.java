@@ -10,8 +10,8 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaAttributeType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraftforge.common.ForgeMod;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
@@ -40,8 +40,8 @@ public class AttributeTypeSwimSpeed extends VanillaAttributeType {
 
     @Nonnull
     @Override
-    public IAttribute getAttribute() {
-        return LivingEntity.SWIM_SPEED;
+    public Attribute getAttribute() {
+        return ForgeMod.SWIM_SPEED.get();
     }
 
     @Override

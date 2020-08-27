@@ -11,8 +11,8 @@ package hellfirepvp.astralsorcery.common.network.play.client;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nonnull;
 
@@ -25,20 +25,20 @@ import javax.annotation.Nonnull;
  */
 public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
 
-    private DimensionType type;
+    private ResourceLocation dim;
     private BlockPos pos;
 
     public PktRequestTeleport() {}
 
-    public PktRequestTeleport(DimensionType type, BlockPos pos) {
-        this.type = type;
+    public PktRequestTeleport(ResourceLocation dim, BlockPos pos) {
+        this.dim = dim;
         this.pos = pos;
     }
     @Nonnull
     @Override
     public Encoder<PktRequestTeleport> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeRegistryEntry(buffer, packet.type);
+            ByteBufUtils.writeResourceLocation(buffer, packet.dim);
             ByteBufUtils.writePos(buffer, packet.pos);
         };
     }
@@ -49,7 +49,7 @@ public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
         return buffer -> {
             PktRequestTeleport pkt = new PktRequestTeleport();
 
-            pkt.type = ByteBufUtils.readRegistryEntry(buffer);
+            pkt.dim = ByteBufUtils.readResourceLocation(buffer);
             pkt.pos = ByteBufUtils.readPos(buffer);
 
             return pkt;
@@ -61,6 +61,7 @@ public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
     public Handler<PktRequestTeleport> handler() {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
+                //TODO 1.16.2 re-check once worlds are not all constantly loaded
                 PlayerEntity player = context.getSender();
                 //TODO gateway
                 //TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, false);

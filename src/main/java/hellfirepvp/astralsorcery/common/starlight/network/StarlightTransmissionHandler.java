@@ -9,9 +9,8 @@
 package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import net.minecraft.world.IWorld;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.TickEvent;
 
 import javax.annotation.Nullable;
@@ -29,7 +28,7 @@ import java.util.Map;
 public class StarlightTransmissionHandler implements ITickHandler {
 
     private static final StarlightTransmissionHandler instance = new StarlightTransmissionHandler();
-    private Map<DimensionType, TransmissionWorldHandler> worldHandlers = new HashMap<>();
+    private Map<ResourceLocation, TransmissionWorldHandler> worldHandlers = new HashMap<>();
 
     private StarlightTransmissionHandler() {}
 
@@ -44,7 +43,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
             return;
         }
 
-        worldHandlers.computeIfAbsent(world.getDimension().getType(), TransmissionWorldHandler::new)
+        worldHandlers.computeIfAbsent(world.func_234923_W_().func_240901_a_(), TransmissionWorldHandler::new)
                 .tick(world);
     }
 
@@ -53,21 +52,21 @@ public class StarlightTransmissionHandler implements ITickHandler {
         worldHandlers.clear();
     }
 
-    public void informWorldUnload(IWorld world) {
-        DimensionType dimType = world.getDimension().getType();
-        TransmissionWorldHandler handle = worldHandlers.get(dimType);
+    public void informWorldUnload(World world) {
+        ResourceLocation dimKey = world.func_234923_W_().func_240901_a_();
+        TransmissionWorldHandler handle = worldHandlers.get(dimKey);
         if (handle != null) {
             handle.clear();
         }
-        this.worldHandlers.remove(dimType);
+        this.worldHandlers.remove(dimKey);
     }
 
     @Nullable
-    public TransmissionWorldHandler getWorldHandler(IWorld world) {
+    public TransmissionWorldHandler getWorldHandler(World world) {
         if (world == null) {
             return null;
         }
-        return worldHandlers.get(world.getDimension().getType());
+        return worldHandlers.get(world.func_234923_W_().func_240901_a_());
     }
 
     @Override

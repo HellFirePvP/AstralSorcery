@@ -28,19 +28,18 @@ import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.FogRenderer;
-import net.minecraft.client.renderer.Matrix4f;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.client.SkyRenderHandler;
 import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
@@ -57,7 +56,7 @@ import java.util.Random;
  * Date: 13.01.2020 / 20:11
  */
 @OnlyIn(Dist.CLIENT)
-public class AstralSkyRenderer implements IRenderHandler {
+public class AstralSkyRenderer implements SkyRenderHandler {
 
     private static final Random RAND = new Random();
     private static final ResourceLocation REF_TEX_MOON_PHASES = new ResourceLocation("textures/environment/moon_phases.png");
@@ -65,9 +64,9 @@ public class AstralSkyRenderer implements IRenderHandler {
 
     public static AstralSkyRenderer INSTANCE = new AstralSkyRenderer();
 
-    private BatchedVertexList sky = new BatchedVertexList(DefaultVertexFormats.POSITION);
-    private BatchedVertexList skyHorizon = new BatchedVertexList(DefaultVertexFormats.POSITION);
-    private List<StarDrawList> starLists = new LinkedList<>();
+    private final BatchedVertexList sky = new BatchedVertexList(DefaultVertexFormats.POSITION);
+    private final BatchedVertexList skyHorizon = new BatchedVertexList(DefaultVertexFormats.POSITION);
+    private final List<StarDrawList> starLists = new LinkedList<>();
 
     private boolean initialized = false;
 
@@ -98,7 +97,7 @@ public class AstralSkyRenderer implements IRenderHandler {
     }
 
     @Override
-    public void render(int ticks, float pTicks, ClientWorld world, Minecraft mc) {
+    public void render(int ticks, float pTicks, MatrixStack renderStack, ClientWorld world, Minecraft mc) {
         if (AssetLibrary.isReloading()) {
             return;
         }
@@ -106,14 +105,7 @@ public class AstralSkyRenderer implements IRenderHandler {
             initialize();
         }
 
-        //Massive assumptions here noone messed with the rendering stack.
-        MatrixStack renderStack = new MatrixStack();
-        ActiveRenderInfo ari = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
-        renderStack.rotate(Vector3f.ZP.rotationDegrees(0));
-        renderStack.rotate(Vector3f.XP.rotationDegrees(ari.getPitch()));
-        renderStack.rotate(Vector3f.YP.rotationDegrees(ari.getYaw() + 180.0F));
-
-        Vec3d color = world.getSkyColor(mc.gameRenderer.getActiveRenderInfo().getBlockPos(), pTicks);
+        Vector3d color = world.getSkyColor(mc.gameRenderer.getActiveRenderInfo().getBlockPos(), pTicks);
         float skyR = (float) color.x;
         float skyG = (float) color.y;
         float skyB = (float) color.z;
@@ -143,7 +135,7 @@ public class AstralSkyRenderer implements IRenderHandler {
         Blending.DEFAULT.apply();
 
         RenderSystem.shadeModel(GL11.GL_SMOOTH);
-        float[] duskDawnColors = world.getDimension().calcSunriseSunsetColors(world.getCelestialAngle(pTicks), pTicks);
+        float[] duskDawnColors = world.func_239132_a_().func_230492_a_(world.func_242415_f(pTicks), pTicks);
         if (duskDawnColors != null) {
             this.renderDuskDawn(duskDawnColors, renderStack, world, pTicks);
         }
@@ -155,7 +147,7 @@ public class AstralSkyRenderer implements IRenderHandler {
 
         renderStack.push();
         renderStack.rotate(Vector3f.YP.rotationDegrees(-90.0F));
-        renderStack.rotate(Vector3f.XP.rotationDegrees(world.getCelestialAngle(pTicks) * 360.0F));
+        renderStack.rotate(Vector3f.XP.rotationDegrees(world.func_242415_f(pTicks) * 360.0F));
 
         this.renderCelestials(world, renderStack, pTicks);
         this.renderStars(world, renderStack, pTicks);
@@ -178,7 +170,7 @@ public class AstralSkyRenderer implements IRenderHandler {
         RenderSystem.disableTexture();
 
         RenderSystem.color4f(0F, 0F, 0F, 1F);
-        double horizonDiff = Minecraft.getInstance().player.getEyePosition(pTicks).y - world.getHorizonHeight();
+        double horizonDiff = Minecraft.getInstance().player.getEyePosition(pTicks).y - world.getWorldInfo().getVoidFogHeight();
         if (horizonDiff < 0D) {
             renderStack.push();
             renderStack.translate(0, 12, 0);
@@ -359,7 +351,7 @@ public class AstralSkyRenderer implements IRenderHandler {
         float moonSize = 20F;
 
         //Don't ask me.. i'm just copying this and be done with it
-        int moonPhase = world.getMoonPhase();
+        int moonPhase = world.func_242414_af();
         int i = moonPhase % 4;
         int j = moonPhase / 4 % 2;
         float minU = (i) / 4F;

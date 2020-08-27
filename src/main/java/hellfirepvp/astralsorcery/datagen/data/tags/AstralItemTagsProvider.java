@@ -17,11 +17,13 @@
 package hellfirepvp.astralsorcery.datagen.data.tags;
 
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
+import net.minecraft.data.TagsProvider;
 import net.minecraft.item.Item;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 
 import static hellfirepvp.astralsorcery.common.lib.TagsAS.Items.*;
 
@@ -34,8 +36,8 @@ import static hellfirepvp.astralsorcery.common.lib.TagsAS.Items.*;
  */
 public class AstralItemTagsProvider extends ItemTagsProvider {
 
-    public AstralItemTagsProvider(DataGenerator generatorIn) {
-        super(generatorIn);
+    public AstralItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagsProvider) {
+        super(dataGenerator, blockTagsProvider);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class AstralItemTagsProvider extends ItemTagsProvider {
                 .add(ItemsAS.STARMETAL_INGOT);
     }
 
-    private Tag.Builder<Item> tag(Tag<Item> tag) {
-        return this.getBuilder(tag);
+    private TagsProvider.Builder<Item> tag(ITag.INamedTag<Item> tag) {
+        return this.getOrCreateBuilder(tag);
     }
 }

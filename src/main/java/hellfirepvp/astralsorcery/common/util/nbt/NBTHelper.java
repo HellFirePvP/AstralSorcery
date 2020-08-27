@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -112,7 +112,7 @@ public class NBTHelper {
                 if (dst.contains(s, Constants.NBT.TAG_LIST)) {
                     ListNBT dstList = (ListNBT) dst.get(s);
                     ListNBT srcList = (ListNBT) nbtElement;
-                    if (dstList.getTagType() == srcList.getTagType()) {
+                    if (dstList.func_230528_d__() == srcList.func_230528_d__()) {
                         deepMergeList(dstList, srcList);
                     } else {
                         dst.put(s, srcList.copy());
@@ -234,7 +234,7 @@ public class NBTHelper {
         CompoundNBT tag = new CompoundNBT();
         tag.putString("registryName", state.getBlock().getRegistryName().toString());
         ListNBT properties = new ListNBT();
-        for (IProperty property : state.getProperties()) {
+        for (Property property : state.getProperties()) {
             CompoundNBT propTag = new CompoundNBT();
             try {
                 propTag.putString("value", property.getName(state.get(property)));
@@ -259,13 +259,13 @@ public class NBTHelper {
         Block block = ForgeRegistries.BLOCKS.getValue(key);
         if (block == null || block == Blocks.AIR) return _default;
         BlockState state = block.getDefaultState();
-        Collection<IProperty<?>> properties = state.getProperties();
+        Collection<Property<?>> properties = state.getProperties();
         ListNBT list = cmp.getList("properties", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
             CompoundNBT propertyTag = list.getCompound(i);
             String valueStr = propertyTag.getString("value");
             String propertyStr = propertyTag.getString("property");
-            IProperty<T> match = (IProperty<T>) MiscUtils.iterativeSearch(properties, prop -> prop.getName().equalsIgnoreCase(propertyStr));
+            Property<T> match = (Property<T>) MiscUtils.iterativeSearch(properties, prop -> prop.getName().equalsIgnoreCase(propertyStr));
             if (match != null) {
                 try {
                     Optional<T> opt = match.parseValue(valueStr);

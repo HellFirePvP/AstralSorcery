@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.advancements.criterion.TickTrigger;
 import net.minecraft.data.AdvancementProvider;
@@ -94,7 +95,7 @@ public class AstralAdvancementProvider extends AdvancementProvider {
                 .withDisplay(ItemsAS.TOME, title("root"), description("root"),
                         AstralSorcery.key("textures/block/black_marble_raw.png"),
                         FrameType.TASK, false, false, false)
-                .withCriterion("astralsorcery_present", new TickTrigger.Instance())
+                .withCriterion("astralsorcery_present", new TickTrigger.Instance(EntityPredicate.AndPredicate.ANY_AND))
                 .register(registrar, AstralSorcery.key("root").toString());
 
         Advancement foundRockCrystals = Advancement.Builder.builder()

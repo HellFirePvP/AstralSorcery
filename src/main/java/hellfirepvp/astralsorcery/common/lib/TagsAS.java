@@ -12,9 +12,10 @@ import hellfirepvp.astralsorcery.common.base.Mods;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Tags;
 
 import static hellfirepvp.astralsorcery.common.base.Mods.*;
 
@@ -31,34 +32,34 @@ public class TagsAS {
 
     public static class Blocks {
 
-        public static final Tag<Block> MARBLE = blockTagForge("marble");
-        public static final Tag<Block> ORES = blockTagForge("ores");
+        public static final ITag.INamedTag<Block> MARBLE = blockTagForge("marble");
+        public static final ITag.INamedTag<Block> ORES = blockTagForge("ores");
 
     }
 
     public static class Items {
 
-        public static final Tag<Item> CURIOS_NECKLACE = itemTag(CURIOS, "necklace");
+        public static final ITag.INamedTag<Item> CURIOS_NECKLACE = itemTag(CURIOS, "necklace");
 
-        public static final Tag<Item> DUSTS_STARDUST = itemTag(ASTRAL_SORCERY, "stardust");
-        public static final Tag<Item> INGOTS_STARMETAL = itemTag(ASTRAL_SORCERY, "starmetal");
-        public static final Tag<Item> COLORED_LENS = itemTag(ASTRAL_SORCERY, "colored_lens");
+        public static final ITag.INamedTag<Item> DUSTS_STARDUST = itemTag(ASTRAL_SORCERY, "stardust");
+        public static final ITag.INamedTag<Item> INGOTS_STARMETAL = itemTag(ASTRAL_SORCERY, "starmetal");
+        public static final ITag.INamedTag<Item> COLORED_LENS = itemTag(ASTRAL_SORCERY, "colored_lens");
 
     }
 
-    private static Tag<Block> blockTag(Mods mod, String name) {
-        return new BlockTags.Wrapper(new ResourceLocation(mod.getModId(), name));
+    private static ITag.INamedTag<Block> blockTagForge(String name) {
+        return blockTag(FORGE, name);
     }
 
-    private static Tag<Block> blockTagForge(String name) {
-        return new BlockTags.Wrapper(new ResourceLocation("forge", name));
+    private static ITag.INamedTag<Block> blockTag(Mods mod, String name) {
+        return BlockTags.makeWrapperTag(mod.key(name).toString());
     }
 
-    private static Tag<Item> itemTag(Mods mod, String name) {
-        return new ItemTags.Wrapper(new ResourceLocation(mod.getModId(), name));
+    private static ITag.INamedTag<Item> itemTagForge(String name) {
+        return itemTag(FORGE, name);
     }
 
-    private static Tag<Item> itemTagForge(String name) {
-        return new ItemTags.Wrapper(new ResourceLocation("forge", name));
+    private static ITag.INamedTag<Item> itemTag(Mods mod, String name) {
+        return ItemTags.makeWrapperTag(mod.key(name).toString());
     }
 }

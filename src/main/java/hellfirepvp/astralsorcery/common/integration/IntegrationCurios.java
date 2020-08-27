@@ -13,8 +13,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.InterModComms;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
-import top.theillusivec4.curios.api.CuriosAPI;
-import top.theillusivec4.curios.api.imc.CurioIMCMessage;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+import top.theillusivec4.curios.api.SlotTypePreset;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -29,11 +30,12 @@ import java.util.function.Predicate;
 public class IntegrationCurios {
 
     public static void initIMC() {
-        InterModComms.sendTo(Mods.CURIOS.getModId(), CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("necklace"));
+        InterModComms.sendTo(Mods.CURIOS.getModId(), SlotTypeMessage.REGISTER_TYPE,
+                () -> SlotTypePreset.NECKLACE.getMessageBuilder().build());
     }
 
     public static Optional<ImmutableTriple<String, Integer, ItemStack>> getCurio(PlayerEntity player, Predicate<ItemStack> match) {
-        return CuriosAPI.getCurioEquipped(match, player);
+        return CuriosApi.getCuriosHelper().findEquippedCurio(match, player);
     }
 
 }

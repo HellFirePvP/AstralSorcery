@@ -47,7 +47,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -352,7 +352,7 @@ public class TileAttunementAltar extends TileEntityTick {
         }
 
         PlayerEntity player = Minecraft.getInstance().player;
-        if (player == null || player.getDistanceSq(new Vec3d(getPos())) >= 256) {
+        if (player == null || player.getDistanceSq(Vector3d.copyCentered(getPos())) >= 256) {
             return;
         }
         Tuple<Hand, ItemStack> heldTpl = MiscUtils.getMainOrOffHand(player, stack -> stack.getItem() instanceof ItemConstellationPaper);

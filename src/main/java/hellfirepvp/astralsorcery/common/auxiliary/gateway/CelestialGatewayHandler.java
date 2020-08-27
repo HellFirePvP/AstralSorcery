@@ -15,9 +15,9 @@ import hellfirepvp.astralsorcery.common.network.play.server.PktUpdateGateways;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -56,14 +56,15 @@ public class CelestialGatewayHandler {
         startUp = true;
         CelestialGatewayFilter filter = getFilter();
         MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-        DimensionManager.getRegistry().stream()
-                .filter(DimensionManager::keepLoaded)
-                .forEach(type -> {
-                    if (!filter.hasGateways(type.getRegistryName())) {
-                        return;
-                    }
-                    loadIntoCache(server.getWorld(type));
-                });
+        //TODO gateway network startup load
+        //DimensionManager.getRegistry().stream()
+        //        .filter(DimensionManager::keepLoaded)
+        //        .forEach(type -> {
+        //            if (!filter.hasGateways(type.getRegistryName())) {
+        //                return;
+        //            }
+        //            loadIntoCache(server.getWorld(type));
+        //        });
         startUp = false;
     }
 
@@ -73,18 +74,18 @@ public class CelestialGatewayHandler {
         }
 
         IWorld world = event.getWorld();
-        if (world.isRemote()) {
+        if (world.isRemote() || !(world instanceof World)) {
             return;
         }
 
-        this.loadIntoCache(world);
+        this.loadIntoCache((World) world);
 
         PktUpdateGateways pkt = new PktUpdateGateways(this.getGatewayCache(LogicalSide.SERVER));
         PacketChannel.CHANNEL.sendToAll(pkt);
     }
 
-    public List<GatewayCache.GatewayNode> getGatewaysForWorld(IWorld world, LogicalSide side) {
-        return (side == LogicalSide.SERVER ? serverCache : clientCache).get(world.getDimension().getType().getRegistryName());
+    public List<GatewayCache.GatewayNode> getGatewaysForWorld(World world, LogicalSide side) {
+        return (side == LogicalSide.SERVER ? serverCache : clientCache).get(world.func_234923_W_().func_240901_a_());
     }
 
     public Map<ResourceLocation, List<GatewayCache.GatewayNode>> getGatewayCache(LogicalSide side) {
@@ -96,9 +97,9 @@ public class CelestialGatewayHandler {
         this.clientCache = positions;
     }
 
-    private void loadIntoCache(IWorld world) {
+    private void loadIntoCache(World world) {
         GatewayCache cache = DataAS.DOMAIN_AS.getData(world, DataAS.KEY_GATEWAY_CACHE);
-        this.serverCache.put(world.getDimension().getType().getRegistryName(), cache.getGatewayPositions());
+        this.serverCache.put(world.func_234923_W_().func_240901_a_(), cache.getGatewayPositions());
     }
 
 }

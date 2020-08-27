@@ -16,7 +16,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
@@ -39,7 +39,7 @@ public class BlockGlowFlower extends BlockFlowerTemplate implements IPlantable {
 
     public BlockGlowFlower() {
         super(PropertiesMisc.defaultTickingPlant()
-                .lightValue(5));
+                .setLightLevel(state -> 5));
         this.shape = createShape();
     }
 
@@ -49,7 +49,7 @@ public class BlockGlowFlower extends BlockFlowerTemplate implements IPlantable {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx) {
-        Vec3d offset = state.getOffset(world, pos);
+        Vector3d offset = state.getOffset(world, pos);
         return this.shape.withOffset(offset.x, offset.y, offset.z);
     }
 
@@ -77,7 +77,7 @@ public class BlockGlowFlower extends BlockFlowerTemplate implements IPlantable {
 
     @Override
     public PlantType getPlantType(IBlockReader world, BlockPos pos) {
-        return PlantType.Cave;
+        return PlantType.CAVE;
     }
 
 }

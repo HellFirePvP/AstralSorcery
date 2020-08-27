@@ -106,22 +106,6 @@ public class ItemTome extends Item implements PerkExperienceRevealer {
                     .filter(Objects::nonNull)
                     .forEach(out::add);
         }
-
-        //Legacy, copy constellations from tome items into player-progress
-        //TODO remove this after alpha 1.15.2
-        CompoundNBT cmp = NBTHelper.getPersistentData(stack);
-        if (cmp.contains("constellations", Constants.NBT.TAG_LIST)) {
-            ListNBT constellationPapers = cmp.getList("constellations", Constants.NBT.TAG_STRING);
-            for (int i = 0; i < constellationPapers.size(); i++) {
-                IConstellation c = RegistriesAS.REGISTRY_CONSTELLATIONS.getValue(new ResourceLocation(constellationPapers.getString(i)));
-                if (c != null) {
-                    out.add(c);
-                }
-            }
-            ResearchManager.updateConstellationPapers(out, player);
-            cmp.remove("constellations");
-        }
-
         return out;
     }
 }

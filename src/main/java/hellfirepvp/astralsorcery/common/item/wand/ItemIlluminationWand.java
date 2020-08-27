@@ -75,7 +75,7 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
         super.addInformation(stack, worldIn, tooltip, flagIn);
 
         DyeColor color = getConfiguredColor(stack);
-        tooltip.add(ColorUtils.getTranslation(color).setStyle(new Style().setColor(ColorUtils.textFormattingForDye(color))));
+        tooltip.add(ColorUtils.getTranslation(color).mergeStyle(ColorUtils.textFormattingForDye(color)));
     }
 
     @Override

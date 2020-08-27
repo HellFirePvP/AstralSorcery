@@ -12,7 +12,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 
 /**

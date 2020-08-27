@@ -12,8 +12,8 @@ import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeTypeHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -62,7 +62,7 @@ public class AttributeEvent {
             return instance;
         }
 
-        public IAttribute getAttribute() {
+        public Attribute getAttribute() {
             return instance.getAttribute();
         }
 
@@ -70,21 +70,6 @@ public class AttributeEvent {
         public PerkAttributeType resolveAttributeType() {
             return PerkAttributeTypeHelper.findVanillaType(getAttribute());
         }
-
-        @Nullable
-        public LivingEntity getEntityLiving() {
-            return getEntity(this.getInstance().attributeMap);
-        }
-
-        @Nullable
-        public PlayerEntity getPlayer() {
-            LivingEntity owner = getEntityLiving();
-            if (owner instanceof PlayerEntity) {
-                return (PlayerEntity) owner;
-            }
-            return null;
-        }
-
     }
 
     public static class PostProcessModded extends Event {
@@ -151,7 +136,7 @@ public class AttributeEvent {
     }
 
     @Nullable
-    private static LivingEntity getEntity(AbstractAttributeMap map) {
+    private static LivingEntity getEntity(AttributeModifierManager map) {
         if (fAttributeMapEntity != null) {
             try {
                 return (LivingEntity) fAttributeMapEntity.get(map);
@@ -160,7 +145,7 @@ public class AttributeEvent {
         return null;
     }
 
-    public static void setEntity(AbstractAttributeMap map, LivingEntity entity) {
+    public static void setEntity(AttributeModifierManager map, LivingEntity entity) {
         try {
             fAttributeMapEntity.set(map, entity);
         } catch (Exception ignored) {}
@@ -170,7 +155,7 @@ public class AttributeEvent {
         Field f = null;
         try {
             //Added via ASM
-            f = AbstractAttributeMap.class.getDeclaredField("as_entity");
+            f = AttributeModifierManager.class.getDeclaredField("as_entity");
         } catch (Exception exc) {
             f = null;
         } finally {

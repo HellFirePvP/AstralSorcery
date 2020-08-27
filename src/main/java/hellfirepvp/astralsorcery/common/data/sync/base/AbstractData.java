@@ -10,8 +10,10 @@ package hellfirepvp.astralsorcery.common.data.sync.base;
 
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +34,7 @@ public abstract class AbstractData {
         SyncDataHolder.markForUpdate(this.key);
     }
 
-    public abstract void clear(DimensionType dimType);
+    public abstract void clear(RegistryKey<World> dim);
 
     public abstract void clearServer();
 

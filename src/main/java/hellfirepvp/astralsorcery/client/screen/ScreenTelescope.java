@@ -226,12 +226,12 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
 
         Point p = new Point((int) mouseX, (int) mouseY);
         if (rectArrowCW != null && rectArrowCW.contains(p)) {
-            PktRotateTelescope pkt = new PktRotateTelescope(true, this.getTile().getWorld().getDimension().getType(), this.getTile().getPos());
+            PktRotateTelescope pkt = new PktRotateTelescope(true, this.getTile().getWorld().func_234923_W_().func_240901_a_(), this.getTile().getPos());
             PacketChannel.CHANNEL.sendToServer(pkt);
             return true;
         }
         if (rectArrowCCW != null && rectArrowCCW.contains(p)) {
-            PktRotateTelescope pkt = new PktRotateTelescope(false, this.getTile().getWorld().getDimension().getType(), this.getTile().getPos());
+            PktRotateTelescope pkt = new PktRotateTelescope(false, this.getTile().getWorld().func_234923_W_().func_240901_a_(), this.getTile().getPos());
             PacketChannel.CHANNEL.sendToServer(pkt);
             return true;
         }

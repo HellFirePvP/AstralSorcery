@@ -13,8 +13,8 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,7 +50,7 @@ public interface RefreshFunction<T extends EntityComplexFX> {
         private final Class<E> clazzExpected;
 
         public TileExists(E tile) {
-            this.dimType = tile.getWorld().getDimension().getType();
+            this.dimType = tile.getWorld().func_230315_m_();
             this.pos = tile.getPos();
             this.clazzExpected = (Class<E>) tile.getClass();
         }
@@ -65,7 +65,7 @@ public interface RefreshFunction<T extends EntityComplexFX> {
             World clWorld = Minecraft.getInstance().world;
             E tile;
             if (clWorld != null &&
-                    clWorld.getDimension().getType().equals(dimType) &&
+                    clWorld.func_230315_m_().equals(dimType) &&
                     (tile = MiscUtils.getTileAt(clWorld, pos, clazzExpected, true)) != null &&
                     !tile.isRemoved()) {
                 return tile;

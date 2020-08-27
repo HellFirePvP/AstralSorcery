@@ -34,7 +34,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -68,7 +68,7 @@ public class EntityNocturnalSpark extends ThrowableEntity {
 
     public EntityNocturnalSpark(LivingEntity thrower, World world) {
         super(EntityTypesAS.NOCTURNAL_SPARK, thrower, world);
-        this.shoot(thrower, thrower.rotationPitch, thrower.rotationYaw, 0F, 0.7F, 0.9F);
+        this.func_234612_a_(thrower, thrower.rotationPitch, thrower.rotationYaw, 0F, 0.7F, 0.9F);
     }
 
     public static EntityType.IFactory<EntityNocturnalSpark> factory() {
@@ -81,7 +81,7 @@ public class EntityNocturnalSpark extends ThrowableEntity {
     }
 
     public void setSpawning() {
-        this.setMotion(Vec3d.ZERO);
+        this.setMotion(Vector3d.ZERO);
         this.dataManager.set(SPAWNING, true);
     }
 
@@ -225,7 +225,7 @@ public class EntityNocturnalSpark extends ThrowableEntity {
         if (RayTraceResult.Type.ENTITY.equals(result.getType())) {
             return;
         }
-        Vec3d hit = result.getHitVec();
+        Vector3d hit = result.getHitVec();
         this.setSpawning();
         this.setPosition(hit.x, hit.y, hit.z);
     }

@@ -19,7 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -61,7 +61,7 @@ public class SimpleShapedRecipeBuilder {
         return new SimpleShapedRecipeBuilder(result, count);
     }
 
-    public SimpleShapedRecipeBuilder key(Character symbol, Tag<Item> tag) {
+    public SimpleShapedRecipeBuilder key(Character symbol, ITag.INamedTag<Item> tag) {
         return this.key(symbol, Ingredient.fromTag(tag));
     }
 

@@ -25,20 +25,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -59,7 +59,7 @@ public class BlockTranslucentBlock extends ContainerBlock {
     public BlockTranslucentBlock() {
         super(Properties.create(Material.BARRIER, MaterialColor.AIR)
                 .hardnessAndResistance(-1.0F, 6_000_000.0F)
-                .lightValue(12));
+                .setLightLevel(state -> 12));
     }
 
     @Override
@@ -121,8 +121,10 @@ public class BlockTranslucentBlock extends ContainerBlock {
         return Lists.newArrayList();
     }
 
+    /*
+    TODO custom states via state container
     @Override
-    public Vec3d getOffset(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public Vector3d getOffset(BlockState state, IBlockReader worldIn, BlockPos pos) {
         BlockState fakeState = this.getFakedState(worldIn, pos);
         try {
             //if (fakeState.getBlock().getOffsetType())
@@ -130,8 +132,8 @@ public class BlockTranslucentBlock extends ContainerBlock {
         } catch (Exception exc) {
             //Ignore the result if this happens to be more complex than expected
         }
-        return Vec3d.ZERO;
-    }
+        return Vector3d.ZERO;
+    }*/
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {

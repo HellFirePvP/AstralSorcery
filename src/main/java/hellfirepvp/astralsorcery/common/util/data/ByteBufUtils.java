@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -20,10 +19,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
@@ -140,26 +140,23 @@ public class ByteBufUtils {
     }
 
     public static <T> void writeRegistryEntry(PacketBuffer buf, IForgeRegistryEntry<T> entry) {
-        if (entry instanceof DimensionType) {
-            buf.writeInt(1);
-            writeResourceLocation(buf, DimensionType.getKey((DimensionType) entry));
-        } else {
-            buf.writeInt(0);
-            writeResourceLocation(buf, entry.getRegistryName());
-            writeResourceLocation(buf, RegistryManager.ACTIVE.getRegistry(entry.getRegistryType()).getRegistryName());
-        }
+        writeResourceLocation(buf, entry.getRegistryName());
+        writeResourceLocation(buf, RegistryManager.ACTIVE.getRegistry(entry.getRegistryType()).getRegistryName());
     }
 
     public static <T> T readRegistryEntry(PacketBuffer buf) {
-        int type = buf.readInt();
-        if (type == 1) {
-            ResourceLocation entryName = readResourceLocation(buf);
-            return (T) DimensionType.byName(entryName);
-        } else {
-            ResourceLocation entryName = readResourceLocation(buf);
-            ResourceLocation registryName = readResourceLocation(buf);
-            return (T) RegistryManager.ACTIVE.getRegistry(registryName).getValue(entryName);
-        }
+        ResourceLocation entryName = readResourceLocation(buf);
+        ResourceLocation registryName = readResourceLocation(buf);
+        return (T) RegistryManager.ACTIVE.getRegistry(registryName).getValue(entryName);
+    }
+
+    public static void writeVanillaRegistryEntry(PacketBuffer buf, RegistryKey<?> key) {
+        writeResourceLocation(buf, key.func_240901_a_());
+    }
+
+    public static <T> RegistryKey<T> readVanillaRegistryEntry(PacketBuffer buf, RegistryKey<Registry<T>> registry) {
+        ResourceLocation key = readResourceLocation(buf);
+        return RegistryKey.func_240903_a_(registry, key);
     }
 
     public static void writeResourceLocation(PacketBuffer buf, ResourceLocation key) {
@@ -252,9 +249,9 @@ public class ByteBufUtils {
     public static void writeBlockState(PacketBuffer byteBuf, @Nonnull BlockState state) {
         ByteBufUtils.writeRegistryEntry(byteBuf, state.getBlock());
 
-        Collection<IProperty<?>> properties = state.getProperties();
+        Collection<Property<?>> properties = state.getProperties();
         byteBuf.writeInt(properties.size());
-        for (IProperty prop : properties) {
+        for (Property prop : properties) {
             ByteBufUtils.writeString(byteBuf, prop.getName());
             ByteBufUtils.writeString(byteBuf, prop.getName(state.get(prop)));
         }
@@ -268,7 +265,7 @@ public class ByteBufUtils {
         for (int i = 0; i < properties; i++) {
             String propName = ByteBufUtils.readString(byteBuf);
             String valueStr = ByteBufUtils.readString(byteBuf);
-            IProperty<T> property = (IProperty<T>) MiscUtils.iterativeSearch(state.getProperties(), prop -> prop.getName().equalsIgnoreCase(propName));
+            Property<T> property = (Property<T>) MiscUtils.iterativeSearch(state.getProperties(), prop -> prop.getName().equalsIgnoreCase(propName));
             if (property != null) {
                 Optional<T> value = property.parseValue(valueStr);
                 if (value.isPresent()) {

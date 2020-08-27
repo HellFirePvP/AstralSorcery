@@ -14,7 +14,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -104,7 +104,7 @@ public class TreeDiscoverer {
         }
     }
 
-    private static double flatDistanceSq(Vec3i from, Vec3i to) {
+    private static double flatDistanceSq(Vector3i from, Vector3i to) {
         double xDiff = (double) from.getX() - to.getX();
         double zDiff = (double) from.getZ() - to.getZ();
         return xDiff * xDiff + zDiff * zDiff;

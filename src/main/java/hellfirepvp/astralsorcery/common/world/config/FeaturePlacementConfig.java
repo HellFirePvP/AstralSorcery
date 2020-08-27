@@ -8,19 +8,20 @@
 
 package hellfirepvp.astralsorcery.common.world.config;
 
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.observerlib.common.util.RegistryUtil;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.biome.IBiomeMagnifier;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.storage.WorldInfo;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -36,14 +37,27 @@ import java.util.stream.Collectors;
  */
 public class FeaturePlacementConfig extends ConfigEntry implements IPlacementConfig {
 
-    private final boolean defaultWhitelistBiomeSpecification;
-    private final boolean defaultWhitelistDimensionSpecification;
-    private final List<BiomeDictionary.Type> defaultApplicableBiomeTypes;
-    private final List<DimensionType> defaultApplicableDimensionTypes;
-    private final int defaultMinY;
-    private final int defaultMaxY;
-    private final int defaultGenerationChance;
-    private final int defaultGenerationAmount;
+    public static final Codec<FeaturePlacementConfig> CODEC = RecordCodecBuilder.create(codecBuilder -> codecBuilder.group(
+            Codec.STRING.fieldOf("featureName").forGetter(cfg -> cfg.featureName),
+            Codec.BOOL.fieldOf("whitelistBiomeSpecification").forGetter(cfg -> cfg.defaultWhitelistBiomeSpecification),
+            Codec.BOOL.fieldOf("whitelistDimensionTypeSpecification").forGetter(cfg -> cfg.defaultWhitelistDimensionSpecification),
+            Codec.STRING.listOf().fieldOf("applicableBiomeCategories").forGetter(cfg -> cfg.defaultApplicableBiomeCategories),
+            ResourceLocation.RESOURCE_LOCATION_CODEC.listOf().fieldOf("applicableDimensionTypes").forGetter(cfg -> cfg.defaultApplicableDimensionTypes),
+            Codec.INT.fieldOf("minY").forGetter(cfg -> cfg.defaultMinY),
+            Codec.INT.fieldOf("maxY").forGetter(cfg -> cfg.defaultMaxY),
+            Codec.INT.fieldOf("generationChance").forGetter(cfg -> cfg.defaultGenerationChance),
+            Codec.INT.fieldOf("generationAmount").forGetter(cfg -> cfg.defaultGenerationAmount))
+                .apply(codecBuilder, FeaturePlacementConfig::new));
+
+    protected final String featureName;
+    protected final boolean defaultWhitelistBiomeSpecification;
+    protected final boolean defaultWhitelistDimensionSpecification;
+    protected final List<String> defaultApplicableBiomeCategories;
+    protected final List<ResourceLocation> defaultApplicableDimensionTypes;
+    protected final int defaultMinY;
+    protected final int defaultMaxY;
+    protected final int defaultGenerationChance;
+    protected final int defaultGenerationAmount;
 
     private ForgeConfigSpec.BooleanValue configEnabled;
     private ForgeConfigSpec.IntValue configMinY;
@@ -52,23 +66,24 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
     private ForgeConfigSpec.IntValue configGenerationAmount;
     private ForgeConfigSpec.BooleanValue configWhitelistBiomeCfg;
     private ForgeConfigSpec.BooleanValue configWhitelistDimensionCfg;
-    private ForgeConfigSpec.ConfigValue<List<String>> configBiomeTypes;
+    private ForgeConfigSpec.ConfigValue<List<String>> configBiomeCategories;
     private ForgeConfigSpec.ConfigValue<List<String>> configDimensionTypes;
 
-    private List<BiomeDictionary.Type> convertedBiomeTypes = null;
-    private List<DimensionType> convertedDimensionTypes = null;
+    private List<Biome.Category> convertedBiomeCategories = null;
+    private List<ResourceLocation> convertedDimensionTypes = null;
 
     public FeaturePlacementConfig(String featureName,
                                   boolean defaultWhitelistBiomeSpecification,
                                   boolean defaultWhitelistDimensionSpecification,
-                                  List<BiomeDictionary.Type> defaultApplicableBiomeTypes,
-                                  List<DimensionType> defaultApplicableDimensionTypes,
+                                  List<String> defaultApplicableBiomeTypes,
+                                  List<ResourceLocation> defaultApplicableDimensionTypes,
                                   int defaultMinY, int defaultMaxY,
                                   int defaultGenerationChance, int defaultGenerationAmount) {
         super(String.format("world.generation.%s", featureName.toLowerCase()));
+        this.featureName = featureName.toLowerCase();
         this.defaultWhitelistBiomeSpecification = defaultWhitelistBiomeSpecification;
         this.defaultWhitelistDimensionSpecification = defaultWhitelistDimensionSpecification;
-        this.defaultApplicableBiomeTypes = defaultApplicableBiomeTypes;
+        this.defaultApplicableBiomeCategories = defaultApplicableBiomeTypes;
         this.defaultApplicableDimensionTypes = defaultApplicableDimensionTypes;
         this.defaultMinY = defaultMinY;
         this.defaultMaxY = defaultMaxY;
@@ -86,47 +101,39 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         return minY + rand.nextInt(Math.max(maxY - minY, 1));
     }
 
-    public boolean generatesInWorld(DimensionType dimType) {
+    public boolean generatesInWorld(RegistryKey<DimensionType> dimTypeKey) {
         if (this.convertedDimensionTypes == null) {
             this.convertedDimensionTypes = this.convertDimensionTypeNames();
         }
         if (this.configWhitelistDimensionCfg.get()) {
-            return this.convertedDimensionTypes.contains(dimType);
+            return this.convertedDimensionTypes.contains(dimTypeKey.func_240901_a_());
         } else {
-            return !this.convertedDimensionTypes.contains(dimType);
+            return !this.convertedDimensionTypes.contains(dimTypeKey.func_240901_a_());
         }
     }
 
     public boolean generatesInBiome(Biome biome) {
-        if (this.convertedBiomeTypes == null) {
-            this.convertedBiomeTypes = this.convertBiomeTypeNames();
+        if (this.convertedBiomeCategories == null) {
+            this.convertedBiomeCategories = this.convertBiomeTypeNames();
         }
+        Biome.Category biomeCategory = biome.getCategory();
         if (this.configWhitelistBiomeCfg.get()) {
-            for (BiomeDictionary.Type type : this.convertedBiomeTypes) {
-                if (BiomeDictionary.hasType(biome, type)) {
-                    return true;
-                }
-            }
-            return false;
+            return this.convertedBiomeCategories.contains(biomeCategory);
         } else {
-            for (BiomeDictionary.Type type : this.convertedBiomeTypes) {
-                if (BiomeDictionary.hasType(biome, type)) {
-                    return false;
-                }
-            }
-            return true;
+            return !this.convertedBiomeCategories.contains(biomeCategory);
         }
     }
 
-    public boolean canPlace(IWorld iWorld, BiomeProvider biomeProvider, BlockPos pos, Random rand) {
+    public boolean canPlace(ISeedReader iWorld, BlockPos pos, Random rand) {
         if (!this.canGenerateAtAll()) {
             return false;
         }
-        if (!this.generatesInWorld(iWorld.getDimension().getType())) {
+        RegistryKey<DimensionType> dimTypeKey = RegistryUtil.server().getRegistryKey(Registry.DIMENSION_TYPE_KEY, iWorld.func_230315_m_());
+        if (!this.generatesInWorld(dimTypeKey)) {
             return false;
         }
-        long hashedSeed = WorldInfo.byHashing(iWorld.getSeed());
-        IBiomeMagnifier biomeZoom = iWorld.getDimension().getType().getMagnifier();
+        long hashedSeed = BiomeManager.func_235200_a_(iWorld.getSeed());
+        IBiomeMagnifier biomeZoom = iWorld.func_230315_m_().getMagnifier();
         Biome biome = biomeZoom.getBiome(hashedSeed, pos.getX(), pos.getY(), pos.getZ(), iWorld::getNoiseBiomeRaw);
         if (!this.generatesInBiome(biome)) {
             return false;
@@ -136,17 +143,16 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
         return rMinY <= rMaxY && pos.getY() >= rMinY && pos.getY() <= rMaxY;
     }
 
-    private List<BiomeDictionary.Type> convertBiomeTypeNames() {
-        return this.configBiomeTypes.get().stream()
-                .filter(name -> BiomeDictionary.Type.getType(name) != null)
-                .map(name -> BiomeDictionary.Type.getType(name))
+    private List<Biome.Category> convertBiomeTypeNames() {
+        return this.configBiomeCategories.get().stream()
+                .filter(strKey -> Biome.Category.func_235103_a_(strKey) != null)
+                .map(Biome.Category::func_235103_a_)
                 .collect(Collectors.toList());
     }
 
-    private List<DimensionType> convertDimensionTypeNames() {
+    private List<ResourceLocation> convertDimensionTypeNames() {
         return this.configDimensionTypes.get().stream()
-                .filter(name -> DimensionType.byName(new ResourceLocation(name)) != null)
-                .map(name -> DimensionType.byName(new ResourceLocation(name)))
+                .map(ResourceLocation::new)
                 .collect(Collectors.toList());
     }
 
@@ -156,11 +162,6 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
 
     public int getGenerationAmount() {
         return this.configGenerationAmount.get();
-    }
-
-    @Override
-    public <T> Dynamic<T> serialize(DynamicOps<T> dynamicOps) {
-        return new Dynamic<>(dynamicOps, dynamicOps.emptyMap());
     }
 
     @Override
@@ -200,14 +201,12 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
                 .comment("List all dimensionIds here that this feature should spawn in")
                 .translation(translationKey("dimensions"))
                 .define("dimensionids", this.defaultApplicableDimensionTypes.stream()
-                        .map(dimType -> dimType.getRegistryName().toString())
+                        .map(ResourceLocation::toString)
                         .collect(Collectors.toList()));
-        this.configBiomeTypes = cfgBuilder
+        this.configBiomeCategories = cfgBuilder
                 .comment("List all biome types here that this feature should be able to spawn in")
                 .translation(translationKey("biometypes"))
-                .define("biomeTypes", this.defaultApplicableBiomeTypes.stream()
-                        .map(BiomeDictionary.Type::getName)
-                        .collect(Collectors.toList()));
+                .define("biomeTypes", this.defaultApplicableBiomeCategories);
 
     }
 }

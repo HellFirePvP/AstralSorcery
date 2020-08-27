@@ -8,19 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.world.placement;
 
-import com.mojang.datafixers.Dynamic;
 import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.WorldDecoratingHelper;
 import net.minecraft.world.gen.placement.Placement;
 
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -32,28 +28,24 @@ import java.util.stream.Stream;
  */
 public class RandomFlowerPlacement extends Placement<FeaturePlacementConfig> {
 
-    public RandomFlowerPlacement(Function<Dynamic<?>, ? extends FeaturePlacementConfig> cfgSupplier) {
-        super(cfgSupplier);
-    }
+    private final FeaturePlacementConfig config;
 
     public RandomFlowerPlacement(FeaturePlacementConfig config) {
-        super(dyn -> config);
+        super(FeaturePlacementConfig.CODEC);
+        this.config = config;
     }
 
     @Override
-    public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, FeaturePlacementConfig configIn, BlockPos pos) {
-        if (!configIn.canGenerateAtAll() || random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
+    public Stream<BlockPos> func_241857_a(WorldDecoratingHelper decoratingHelper, Random random, FeaturePlacementConfig config, BlockPos pos) {
+        if (!this.config.canGenerateAtAll() || random.nextInt(Math.max(this.config.getGenerationChance(), 1)) != 0) {
             return Stream.empty();
         }
         Set<BlockPos> result = new HashSet<>();
-        for (int i = 0; i < configIn.getGenerationAmount(); i++) {
-            if (!configIn.generatesInBiome(worldIn.getBiome(pos))) {
-                return Stream.empty();
-            }
-
+        for (int i = 0; i < this.config.getGenerationAmount(); i++) {
             BlockPos at = pos.add(random.nextInt(16), 0, random.nextInt(16));
-            at = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, at);
-            if (configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), at, random)) {
+            int y = decoratingHelper.func_242893_a(Heightmap.Type.WORLD_SURFACE_WG, at.getX(), at.getZ());
+            at = new BlockPos(at.getX(), y, at.getZ());
+            if (this.config.canPlace(decoratingHelper.field_242889_a, at, random)) {
                 result.add(at);
             }
         }

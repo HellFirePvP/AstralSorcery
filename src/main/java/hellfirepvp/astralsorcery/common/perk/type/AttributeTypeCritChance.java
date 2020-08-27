@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierCritChance;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -54,20 +55,19 @@ public class AttributeTypeCritChance extends PerkAttributeType {
     private void onArrowCrit(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof ArrowEntity) {
             ArrowEntity arrow = (ArrowEntity) event.getEntity();
-            if (arrow.shootingEntity != null) {
-                PlayerEntity player = event.getWorld().getPlayerByUuid(arrow.shootingEntity);
-                if (player != null) {
-                    LogicalSide side = this.getSide(player);
-                    if (!hasTypeApplied(player, side)) {
-                        return;
-                    }
-                    float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(player, ResearchHelper.getProgress(player, side), this, 0F);
-                    critChance = AttributeEvent.postProcessModded(player, this, critChance);
-                    critChance /= 100.0F;
-                    if (critChance >= rand.nextFloat()) {
-                        arrow.setIsCritical(true);
-                    }
+            Entity shooter = arrow.func_234616_v_();
+            if (shooter instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) shooter;
+                LogicalSide side = this.getSide(player);
+                if (!hasTypeApplied(player, side)) {
+                    return;
+                }
+                float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
+                        .modifyValue(player, ResearchHelper.getProgress(player, side), this, 0F);
+                critChance = AttributeEvent.postProcessModded(player, this, critChance);
+                critChance /= 100.0F;
+                if (critChance >= rand.nextFloat()) {
+                    arrow.setIsCritical(true);
                 }
             }
         }

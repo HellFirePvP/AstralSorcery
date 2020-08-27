@@ -91,7 +91,7 @@ public class PktShootEntity extends ASPacket<PktShootEntity> {
                     Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT);
                     Entity entity = world.map(w -> w.getEntityByID(packet.entityId)).orElse(null);
                     if (entity != null) {
-                        entity.setMotion(packet.motionVector.toVec3d());
+                        entity.setMotion(packet.motionVector.toVector3d());
 
                         if (packet.hasEffect) {
                             Vector3 origin = Vector3.atEntityCenter(entity)

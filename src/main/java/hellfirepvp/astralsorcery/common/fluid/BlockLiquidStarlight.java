@@ -28,7 +28,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.fluid.EmptyFluid;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.Direction;
@@ -53,7 +53,7 @@ public class BlockLiquidStarlight extends FlowingFluidBlock {
     public BlockLiquidStarlight(Supplier<? extends FlowingFluid> fluidSupplier) {
         super(fluidSupplier, Block.Properties.create(Material.WATER)
                 .doesNotBlockMovement()
-                .lightValue(15)
+                .setLightLevel(state -> 15)
                 .hardnessAndResistance(100.0F)
                 .noDrops());
     }
@@ -77,10 +77,21 @@ public class BlockLiquidStarlight extends FlowingFluidBlock {
         }
     }
 
-    @Override
-    public boolean reactWithNeighbors(World world, BlockPos pos, BlockState state) {
+    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (this.reactWithNeighbors(worldIn, pos, state)) {
+            worldIn.getPendingFluidTicks().scheduleTick(pos, state.getFluidState().getFluid(), this.getFluid().getTickRate(worldIn));
+        }
+    }
+
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+        if (this.reactWithNeighbors(worldIn, pos, state)) {
+            worldIn.getPendingFluidTicks().scheduleTick(pos, state.getFluidState().getFluid(), this.getFluid().getTickRate(worldIn));
+        }
+    }
+
+    private boolean reactWithNeighbors(World world, BlockPos pos, BlockState state) {
         for (Direction dir : Direction.values()) {
-            IFluidState otherState = world.getFluidState(pos.offset(dir));
+            FluidState otherState = world.getFluidState(pos.offset(dir));
             Fluid otherFluid = otherState.getFluid();
             if (otherFluid instanceof FlowingFluid) {
                 otherFluid = ((FlowingFluid) otherFluid).getStillFluid();

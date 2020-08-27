@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeType;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.Attribute;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public class PerkAttributeTypeHelper {
 
-    private static Map<IAttribute, PerkAttributeType> vanillaTypes = new HashMap<>();
+    private static Map<Attribute, PerkAttributeType> vanillaTypes = new HashMap<>();
 
     public static void register(PerkAttributeType type) {
         if (type instanceof VanillaPerkAttributeType) {
@@ -33,7 +33,7 @@ public class PerkAttributeTypeHelper {
     }
 
     @Nullable
-    public static PerkAttributeType findVanillaType(IAttribute attribute) {
+    public static PerkAttributeType findVanillaType(Attribute attribute) {
         return vanillaTypes.get(attribute);
     }
 }

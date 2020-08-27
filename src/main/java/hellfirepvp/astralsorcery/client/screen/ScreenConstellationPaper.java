@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
@@ -73,6 +74,11 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
+
     }
 
     @Override

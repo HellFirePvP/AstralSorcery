@@ -348,7 +348,7 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             List<DrawnConstellation> copyList = new ArrayList<>(this.currentlyDrawnConstellations);
 
             PktEngraveGlass engraveGlass = new PktEngraveGlass(
-                    this.getTile().getWorld().getDimension().getType(),
+                    this.getTile().getWorld().func_234923_W_().func_240901_a_(),
                     this.getTile().getPos(), copyList);
             PacketChannel.CHANNEL.sendToServer(engraveGlass);
             this.currentlyDrawnConstellations.clear();

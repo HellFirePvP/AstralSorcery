@@ -19,8 +19,12 @@ import hellfirepvp.astralsorcery.common.network.login.server.PktLoginSyncGateway
 import hellfirepvp.astralsorcery.common.network.login.server.PktLoginSyncPerkInformation;
 import hellfirepvp.astralsorcery.common.network.play.client.*;
 import hellfirepvp.astralsorcery.common.network.play.server.*;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.IWorld;
+import hellfirepvp.observerlib.common.util.RegistryUtil;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.FMLHandshakeHandler;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -77,7 +81,6 @@ public class PacketChannel {
         registerMessage(PktAttunePlayerConstellation::new);
         registerMessage(PktClearBlockStorageStack::new);
         registerMessage(PktDiscoverConstellation::new);
-        registerMessage(PktElytraCapeState::new);
         registerMessage(PktEngraveGlass::new);
         registerMessage(PktPerkGemModification::new);
         registerMessage(PktRequestPerkSealAction::new);
@@ -118,8 +121,13 @@ public class PacketChannel {
                 .add();
     }
 
-    public static PacketDistributor.TargetPoint pointFromPos(IWorld world, Vec3i pos, double range) {
-        return new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world.getDimension().getType());
+    public static PacketDistributor.TargetPoint pointFromPos(World world, Vector3i pos, double range) {
+        LogicalSide side = world.isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
+        RegistryKey<World> key = RegistryUtil.side(side).getRegistryKey(Registry.WORLD_KEY, world);
+        return pointFromPos(key, pos, range);
     }
 
+    public static PacketDistributor.TargetPoint pointFromPos(RegistryKey<World> world, Vector3i pos, double range) {
+        return new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world);
+    }
 }

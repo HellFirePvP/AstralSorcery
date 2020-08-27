@@ -51,18 +51,18 @@ public class CelestialGatewayFilter {
         return gatewayFilter;
     }
 
-    public boolean hasGateways(ResourceLocation dimType) {
-        return this.cache.contains(dimType);
+    public boolean hasGateways(ResourceLocation worldKey) {
+        return this.cache.contains(worldKey);
     }
 
-    void addDim(ResourceLocation type) {
-        if (cache.add(type)) {
+    void addDim(ResourceLocation worldKey) {
+        if (cache.add(worldKey)) {
             this.saveCache();
         }
     }
 
-    void removeDim(ResourceLocation type) {
-        if (cache.remove(type)) {
+    void removeDim(ResourceLocation worldKey) {
+        if (cache.remove(worldKey)) {
             this.saveCache();
         }
     }

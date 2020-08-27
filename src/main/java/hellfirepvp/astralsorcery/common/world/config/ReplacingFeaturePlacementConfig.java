@@ -8,13 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.world.config;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfiguredBlockStateList;
 import hellfirepvp.astralsorcery.common.util.block.BlockStateList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.BiomeDictionary;
+import net.minecraft.world.ISeedReader;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -29,25 +29,41 @@ import java.util.Random;
  */
 public class ReplacingFeaturePlacementConfig extends FeaturePlacementConfig {
 
+    public static final Codec<ReplacingFeaturePlacementConfig> CODEC = RecordCodecBuilder.create(codecBuilder -> codecBuilder.group(
+            Codec.STRING.fieldOf("featureName").forGetter(cfg -> cfg.featureName),
+            Codec.BOOL.fieldOf("whitelistBiomeSpecification").forGetter(cfg -> cfg.defaultWhitelistBiomeSpecification),
+            Codec.BOOL.fieldOf("whitelistDimensionTypeSpecification").forGetter(cfg -> cfg.defaultWhitelistDimensionSpecification),
+            Codec.STRING.listOf().fieldOf("applicableBiomeCategories").forGetter(cfg -> cfg.defaultApplicableBiomeCategories),
+            ResourceLocation.RESOURCE_LOCATION_CODEC.listOf().fieldOf("applicableDimensionTypes").forGetter(cfg -> cfg.defaultApplicableDimensionTypes),
+            Codec.INT.fieldOf("minY").forGetter(cfg -> cfg.defaultMinY),
+            Codec.INT.fieldOf("maxY").forGetter(cfg -> cfg.defaultMaxY),
+            Codec.INT.fieldOf("generationChance").forGetter(cfg -> cfg.defaultGenerationChance),
+            Codec.INT.fieldOf("generationAmount").forGetter(cfg -> cfg.defaultGenerationAmount),
+            BlockStateList.CODEC.fieldOf("blockStates").forGetter(cfg -> cfg.defaultReplaceableBlockstates))
+            .apply(codecBuilder, ReplacingFeaturePlacementConfig::new));
+
     private final BlockStateList defaultReplaceableBlockstates;
     private ConfiguredBlockStateList configReplaceableBlockstates;
 
-    public ReplacingFeaturePlacementConfig(String featureName, boolean defaultWhitelistBiomeSpecification, boolean defaultWhitelistDimensionSpecification,
-                                           List<BiomeDictionary.Type> defaultApplicableBiomeTypes, List<DimensionType> defaultApplicableDimensions,
+    public ReplacingFeaturePlacementConfig(String featureName,
+                                           boolean defaultWhitelistBiomeSpecification,
+                                           boolean defaultWhitelistDimensionSpecification,
+                                           List<String> defaultApplicableBiomeTypes,
+                                           List<ResourceLocation> defaultApplicableDimensionTypes,
                                            int defaultMinY, int defaultMaxY, int defaultGenerationChance, int generationAmount,
                                            BlockStateList defaultReplaceableBlockstates) {
         super(featureName, defaultWhitelistBiomeSpecification, defaultWhitelistDimensionSpecification,
-                defaultApplicableBiomeTypes, defaultApplicableDimensions,
+                defaultApplicableBiomeTypes, defaultApplicableDimensionTypes,
                 defaultMinY, defaultMaxY, defaultGenerationChance, generationAmount);
         this.defaultReplaceableBlockstates = defaultReplaceableBlockstates;
     }
 
     @Override
-    public boolean canPlace(IWorld iWorld, BiomeProvider biomeProvider, BlockPos pos, Random rand) {
-        if (!super.canPlace(iWorld, biomeProvider, pos, rand)) {
+    public boolean canPlace(ISeedReader world, BlockPos pos, Random rand) {
+        if (!super.canPlace(world, pos, rand)) {
             return false;
         }
-        return this.configReplaceableBlockstates.test(iWorld.getBlockState(pos));
+        return this.configReplaceableBlockstates.test(world.getBlockState(pos));
     }
 
     @Override

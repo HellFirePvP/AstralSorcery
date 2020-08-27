@@ -73,13 +73,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.FolderName;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -198,6 +201,7 @@ public class CommonProxy {
     public void attachEventHandlers(IEventBus eventBus) {
         eventBus.addListener(this::onClientInitialized);
 
+        eventBus.addListener(this::onRegisterCommands);
         eventBus.addListener(this::onServerStop);
         eventBus.addListener(this::onServerStopping);
         eventBus.addListener(this::onServerStarting);
@@ -292,7 +296,8 @@ public class CommonProxy {
         if (server == null) {
             return null;
         }
-        File asDataDir = server.getActiveAnvilConverter().getFile(server.getFolderName(), AstralSorcery.MODID);
+
+        File asDataDir = server.func_240776_a_(new FolderName(AstralSorcery.MODID)).toFile();
         if (!asDataDir.exists()) {
             asDataDir.mkdirs();
         }
@@ -339,6 +344,10 @@ public class CommonProxy {
         PatreonDataManager.loadPatreonEffects();
     }
 
+    private void onRegisterCommands(RegisterCommandsEvent event) {
+        CommandAstralSorcery.register(event.getDispatcher());
+    }
+
     private void onEnqueueIMC(InterModEnqueueEvent event) {
         Mods.CURIOS.executeIfPresent(() -> IntegrationCurios::initIMC);
     }
@@ -350,9 +359,11 @@ public class CommonProxy {
     }
 
     private void onServerAboutToStart(FMLServerAboutToStartEvent event) {
-        IReloadableResourceManager mgr = event.getServer().getResourceManager();
+        IResourceManager mgr = event.getServer().getDataPackRegistries().getResourceManager();
 
-        mgr.addReloadListener(PerkTreeLoader.INSTANCE);
+        if (mgr instanceof IReloadableResourceManager) {
+            ((IReloadableResourceManager) mgr).addReloadListener(PerkTreeLoader.INSTANCE);
+        }
     }
 
     private void onServerStarted(FMLServerStartedEvent event) {
@@ -360,7 +371,7 @@ public class CommonProxy {
     }
 
     private void onServerStarting(FMLServerStartingEvent event) {
-        CommandAstralSorcery.register(event.getCommandDispatcher());
+
     }
 
     private void onServerStopping(FMLServerStoppingEvent event) {

@@ -15,8 +15,8 @@ import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.vector.Matrix4f;
 
 import java.awt.*;
 

@@ -35,7 +35,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeRegistry;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
@@ -65,7 +65,6 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(Fluid.class, this::registerFluids);
         eventBus.addGenericListener(TileEntityType.class, this::registerTiles);
         eventBus.addGenericListener(EntityType.class, this::registerEntities);
-        eventBus.addGenericListener(Biome.class, this::registerBiomes);
         eventBus.addGenericListener(Feature.class, this::registerFeatures);
         eventBus.addGenericListener(Effect.class, this::registerEffects);
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
@@ -142,12 +141,10 @@ public class PrimerEventHandler {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
-    private void registerBiomes(RegistryEvent.Register<Biome> event) {
-        //? maybe. one day.
-        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
-    }
-
     private void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
+        //Query ocean-biome key to start creating the biome instances
+        BiomeRegistry.func_244203_a(0);
+
         RegistryWorldGeneration.registerFeatures();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }

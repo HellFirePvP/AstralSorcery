@@ -54,7 +54,7 @@ public class EntityIlluminationSpark extends ThrowableEntity {
 
     public EntityIlluminationSpark(LivingEntity thrower, World world) {
         super(EntityTypesAS.ILLUMINATION_SPARK, thrower, world);
-        this.shoot(thrower, thrower.rotationPitch, thrower.rotationYaw, 0F, 0.7F, 0.9F);
+        this.func_234612_a_(thrower, thrower.rotationPitch, thrower.rotationYaw, 0F, 0.7F, 0.9F);
     }
 
     public static EntityType.IFactory<EntityIlluminationSpark> factory() {
@@ -122,11 +122,11 @@ public class EntityIlluminationSpark extends ThrowableEntity {
         if (world.isRemote()) {
             return;
         }
-        if (!(result instanceof BlockRayTraceResult) || !(this.getThrower() instanceof PlayerEntity)) {
+        if (!(result instanceof BlockRayTraceResult) || !(this.func_234616_v_() instanceof PlayerEntity)) {
             remove();
             return;
         }
-        PlayerEntity player = (PlayerEntity) this.getThrower();
+        PlayerEntity player = (PlayerEntity) this.func_234616_v_();
         BlockRayTraceResult brtr = (BlockRayTraceResult) result;
 
         BlockItemUseContext bCtx = new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND, brtr));
@@ -136,7 +136,7 @@ public class EntityIlluminationSpark extends ThrowableEntity {
             pos = pos.offset(bCtx.getFace());
         }
 
-        if (!ForgeEventFactory.onBlockPlace(player, BlockSnapshot.getBlockSnapshot(world, pos), bCtx.getFace())) {
+        if (!ForgeEventFactory.onBlockPlace(player, BlockSnapshot.create(world.func_234923_W_(), world, pos), bCtx.getFace())) {
             world.setBlockState(pos, BlocksAS.FLARE_LIGHT.getDefaultState());
         }
         remove();

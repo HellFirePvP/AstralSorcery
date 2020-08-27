@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 
@@ -30,10 +31,10 @@ import java.util.stream.Collectors;
  */
 public class OreBlockRarityEntry implements ConfigDataSet {
 
-    private final Tag<Block> blockTag;
+    private final ITag.INamedTag<Block> blockTag;
     private final int weight;
 
-    public OreBlockRarityEntry(Tag<Block> blockTag, int weight) {
+    public OreBlockRarityEntry(ITag.INamedTag<Block> blockTag, int weight) {
         this.blockTag = blockTag;
         this.weight = weight;
     }
@@ -57,8 +58,8 @@ public class OreBlockRarityEntry implements ConfigDataSet {
             return null;
         }
         ResourceLocation keyBlockTag = new ResourceLocation(split[0]);
-        Tag<Block> blockTag = BlockTags.getCollection().get(keyBlockTag);
-        if (blockTag == null) {
+        ITag<Block> blockTag = BlockTags.getCollection().get(keyBlockTag);
+        if (!(blockTag instanceof ITag.INamedTag)) {
             return null;
         }
         String strWeight = split[1];
@@ -68,12 +69,12 @@ public class OreBlockRarityEntry implements ConfigDataSet {
         } catch (NumberFormatException exc) {
             return null;
         }
-        return new OreBlockRarityEntry(blockTag, weight);
+        return new OreBlockRarityEntry((ITag.INamedTag<Block>) blockTag, weight);
     }
 
     @Nonnull
     @Override
     public String serialize() {
-        return blockTag.getId().toString() + ";" + weight;
+        return String.format("%s;%s", blockTag.getName().toString(), weight);
     }
 }

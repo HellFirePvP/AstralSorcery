@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectOctans;
-import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectVicio;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -24,14 +23,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
+import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.CooldownTracker;
@@ -58,18 +55,22 @@ import java.util.Map;
  */
 public class ASMHookEndpoint {
 
+    //ported
     public static Map<Enchantment, Integer> applyNewEnchantmentLevels(Map<Enchantment, Integer> enchantments, ItemStack stack) {
         return DynamicEnchantmentHelper.addNewLevels(enchantments, stack);
     }
 
+    //ported
     public static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack stack) {
         return DynamicEnchantmentHelper.getNewEnchantmentLevel(current, enchantment, stack, null);
     }
 
+    //ported
     public static ListNBT addNewEnchantmentLevelsTag(ListNBT list, ItemStack stack) {
         return DynamicEnchantmentHelper.modifyEnchantmentTags(list, stack);
     }
 
+    //ported
     @OnlyIn(Dist.CLIENT)
     public static void addTooltipPreEnchantments(ItemStack stack, List<ITextComponent> tooltip) {
         List<ITextComponent> addition = new ArrayList<>();
@@ -86,11 +87,12 @@ public class ASMHookEndpoint {
             }
         } catch (Exception exc) {
             addition.clear();
-            tooltip.add(new TranslationTextComponent("astralsorcery.misc.tooltipError").applyTextStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent("astralsorcery.misc.tooltipError").mergeStyle(TextFormatting.GRAY));
         }
         tooltip.addAll(addition);
     }
 
+    //ported
     @OnlyIn(Dist.CLIENT)
     public static float overrideSunBrightnessClient(float prevBrightness, World world) {
         WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
@@ -103,6 +105,7 @@ public class ASMHookEndpoint {
         return prevBrightness;
     }
 
+    // TODO 1.16.2 this needs way more work
     public static int overrideSunBrightnessServer(int prevSkyLight, World world) {
         WorldContext ctx = SkyHandler.getContext(world);
         if (ctx != null && ctx.getCelestialHandler().isSolarEclipseActive()) {
@@ -111,23 +114,7 @@ public class ASMHookEndpoint {
         return prevSkyLight;
     }
 
-    public static ItemStack transformElytraItem(ItemStack elytraStack, LivingEntity wearingEntity) {
-        if (!elytraStack.isEmpty() && wearingEntity instanceof PlayerEntity) {
-            if (MantleEffectVicio.isUsableElytra(elytraStack, (PlayerEntity) wearingEntity)) {
-                elytraStack = new ItemStack(Items.ELYTRA);
-            }
-        }
-        return elytraStack;
-    }
-
-    public static void fireNewPotionEffectEvent(LivingEntity entity, EffectInstance newEffect) {
-        MinecraftForge.EVENT_BUS.post(new PotionApplyEvent.New(entity, newEffect));
-    }
-
-    public static void fireChangedPotionEffectEvent(LivingEntity entity, EffectInstance previous, EffectInstance newCombinedEffect) {
-        MinecraftForge.EVENT_BUS.post(new PotionApplyEvent.Changed(entity, previous, newCombinedEffect));
-    }
-
+    //ported
     public static int fireCooldownEvent(CooldownTracker tracker, Item item, int ticks) {
         if (tracker instanceof ServerCooldownTracker) {
             CooldownSetEvent event = new CooldownSetEvent(((ServerCooldownTracker) tracker).player, item, ticks);
@@ -137,6 +124,7 @@ public class ASMHookEndpoint {
         return ticks;
     }
 
+    //ported
     public static float getLivingEntityWaterSlowDown(float slowDownIn, LivingEntity entity) {
         if (!entity.getItemStackFromSlot(EquipmentSlotType.CHEST).isEmpty()) {
             if (MantleEffectOctans.shouldPreventWaterSlowdown(entity.getItemStackFromSlot(EquipmentSlotType.CHEST), entity)) {
@@ -146,15 +134,18 @@ public class ASMHookEndpoint {
         return slowDownIn;
     }
 
-    public static AbstractAttributeMap markPlayer(AbstractAttributeMap map, LivingEntity entity) {
+    //ported
+    public static AttributeModifierManager markPlayer(AttributeModifierManager map, LivingEntity entity) {
         AttributeEvent.setEntity(map, entity);
         return map;
     }
 
+    //ported
     public static double postProcessVanilla(double value, ModifiableAttributeInstance attributeInstance) {
         return AttributeEvent.postProcessVanilla(value, attributeInstance);
     }
 
+    //ported
     public static double getOverriddenSeenEntityReachMaximum(PlayerEntity player) {
         PlayerProgress prog = ResearchHelper.getProgress(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER);
         if (prog.isValid() && prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
@@ -163,6 +154,7 @@ public class ASMHookEndpoint {
         return 36.0;
     }
 
+    //ported
     @OnlyIn(Dist.CLIENT)
     public static double getOverriddenCreativeEntityReach(double blockReach) {
         PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
@@ -172,6 +164,7 @@ public class ASMHookEndpoint {
         return 6.0;
     }
 
+    //ported
     @OnlyIn(Dist.CLIENT)
     public static boolean doesOverrideDistanceRuling() {
         PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);

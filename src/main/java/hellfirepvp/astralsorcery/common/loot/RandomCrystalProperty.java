@@ -13,11 +13,12 @@ import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeGenItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalGenerator;
+import hellfirepvp.astralsorcery.common.lib.LootAS;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.loot.conditions.ILootCondition;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,6 +31,11 @@ public class RandomCrystalProperty extends LootFunction {
 
     private RandomCrystalProperty(ILootCondition[] conditions) {
         super(conditions);
+    }
+
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return LootAS.Functions.RANDOM_CRYSTAL_PROPERTIES;
     }
 
     @Override
@@ -46,10 +52,6 @@ public class RandomCrystalProperty extends LootFunction {
     }
 
     public static class Serializer extends LootFunction.Serializer<RandomCrystalProperty> {
-
-        public Serializer(ResourceLocation name) {
-            super(name, RandomCrystalProperty.class);
-        }
 
         @Override
         public RandomCrystalProperty deserialize(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, ILootCondition[] iLootConditions) {

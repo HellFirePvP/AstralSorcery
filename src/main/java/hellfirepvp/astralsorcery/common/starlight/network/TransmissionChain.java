@@ -58,10 +58,10 @@ public class TransmissionChain {
             TransmissionChain chain = buildFromSource(netHandler, sourcePos);
             handle.threadTransmissionChainCallback(world, chain, source, netHandler, sourcePos);
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
-                data.updateNewConnectionsThreaded(netHandler.getWorld().getDimension().getType(), chain.getFoundConnections());
+                data.updateNewConnectionsThreaded(netHandler.getWorld().func_234923_W_(), chain.getFoundConnections());
             });
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
-                data.updateNewEndpoints(netHandler.getWorld().getDimension().getType(), chain.getResolvedNormalBlockPositions());
+                data.updateNewEndpoints(netHandler.getWorld().func_234923_W_(), chain.getResolvedNormalBlockPositions());
             });
         });
         tr.setName("TrChainCalculationThread");
@@ -99,7 +99,7 @@ public class TransmissionChain {
         if (uncheckedEndpointsBlock.contains(pos) && !resolvedNormalBlockPositions.contains(pos)) {
             resolvedNormalBlockPositions.add(pos);
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
-                data.updateNewEndpoint(world.getDimension().getType(), pos);
+                data.updateNewEndpoint(world.func_234923_W_(), pos);
             });
         }
     }

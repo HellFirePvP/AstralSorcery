@@ -31,11 +31,12 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -178,13 +179,13 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
         builder.withLuck(rand.nextInt(2) * rand.nextFloat());
         builder.withRandom(rand);
         builder.withParameter(LootParameters.TOOL, tool);
-        builder.withParameter(LootParameters.POSITION, pos);
+        builder.withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos));
         LootTable table = world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING);
         for (ItemStack loot : table.generate(builder.build(LootParameterSets.FISHING))) {
             ItemEntity ei = ItemUtils.dropItemNaturally(world, dropLoc.getX(), dropLoc.getY(), dropLoc.getZ(), loot);
             Vector3 motion = new Vector3(ei.getMotion());
             motion.setY(Math.abs(motion.getY()));
-            ei.setMotion(motion.toVec3d());
+            ei.setMotion(motion.toVector3d());
         }
     }
 

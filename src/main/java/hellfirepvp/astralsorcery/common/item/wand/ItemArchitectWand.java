@@ -51,10 +51,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -86,7 +83,7 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(getPlaceMode(stack).getDisplay().setStyle(new Style().setColor(TextFormatting.GOLD)));
+        tooltip.add(getPlaceMode(stack).getDisplay().mergeStyle(TextFormatting.GOLD));
     }
 
     @Override
@@ -411,11 +408,11 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
             this.placeCostMulitplier = placeCostMultiplier;
         }
 
-        public ITextComponent getName() {
+        public IFormattableTextComponent getName() {
             return new TranslationTextComponent("astralsorcery.misc.architect.mode." + this.name);
         }
 
-        public ITextComponent getDisplay() {
+        public IFormattableTextComponent getDisplay() {
             return new TranslationTextComponent("astralsorcery.misc.architect.mode", this.getName());
         }
 

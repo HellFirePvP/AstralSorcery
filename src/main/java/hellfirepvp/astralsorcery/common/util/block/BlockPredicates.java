@@ -12,12 +12,13 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -34,7 +35,7 @@ import java.util.Set;
  */
 public class BlockPredicates {
 
-    public static BlockPredicate isInTag(Tag<Block> blockTag) {
+    public static BlockPredicate isInTag(ITag<Block> blockTag) {
         return (world, pos, state) -> state.isIn(blockTag);
     }
 
@@ -49,13 +50,18 @@ public class BlockPredicates {
     }
 
     public static <T extends TileEntity> BlockPredicate doesTileExist(T tile, boolean loadTileWorldAndChunk) {
-        DimensionType dimType = tile.getWorld().getDimension().getType();
+        RegistryKey<World> dim = tile.getWorld().func_234923_W_();
         TileEntityType<?> tileType = tile.getType();
         MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
 
         return (world, pos, state) -> {
-            if (loadTileWorldAndChunk || srv.forgeGetWorldMap().containsKey(dimType)) {
-                World foundWorld = srv.getWorld(dimType);
+            if (loadTileWorldAndChunk || srv.forgeGetWorldMap().containsKey(dim)) {
+                World foundWorld = srv.getWorld(dim);
+                if (foundWorld == null) {
+                    //If the intent was to load the world and it doesn't exist, then the tile doesn't exist either
+                    //If the intent was to NOT load the world, but the world isn't there, we assume the tile still exists.
+                    return !loadTileWorldAndChunk;
+                }
                 if (!loadTileWorldAndChunk && !foundWorld.getChunkProvider().isChunkLoaded(new ChunkPos(pos))) {
                     return true;
                 }

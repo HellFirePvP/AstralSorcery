@@ -17,15 +17,16 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.IProperty;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
+import net.minecraft.state.Property;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.BlockSnapshot;
@@ -52,7 +53,7 @@ public class BlockUtils {
     public static List<ItemStack> getDrops(ServerWorld world, BlockPos pos, int harvestFortune, Random rand) {
         BlockState state;
         LootContext.Builder builder = new LootContext.Builder(world)
-                .withParameter(LootParameters.POSITION, pos)
+                .withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos))
                 .withParameter(LootParameters.BLOCK_STATE, (state = world.getBlockState(pos)))
                 .withParameter(LootParameters.TOOL, ItemStack.EMPTY)
                 .withNullableParameter(LootParameters.BLOCK_ENTITY, world.getTileEntity(pos))
@@ -103,7 +104,7 @@ public class BlockUtils {
             return false;
         }
 
-        for (IProperty<?> prop : state.getProperties()) {
+        for (Property<?> prop : state.getProperties()) {
             Comparable<?> original = state.get(prop);
             try {
                 Comparable<?> test = stateToTest.get(prop);
@@ -121,18 +122,18 @@ public class BlockUtils {
         if (state.getBlockHardness(world, pos) == -1) {
             return false;
         }
-        if (state.getMaterial().isToolNotRequired()) {
+        if (!state.getRequiresTool()) {
             return true;
         }
 
         ToolType tool = state.getHarvestTool();
         if (stack.isEmpty() || tool == null) {
-            return state.getMaterial().isToolNotRequired() || stack.canHarvestBlock(state);
+            return !state.getRequiresTool() || stack.canHarvestBlock(state);
         }
 
         int toolLevel = stack.getItem().getHarvestLevel(stack, tool, null, state);
         if (toolLevel < 0) {
-            return state.getMaterial().isToolNotRequired() || stack.canHarvestBlock(state);
+            return!state.getRequiresTool() || stack.canHarvestBlock(state);
         }
 
         return toolLevel >= state.getHarvestLevel();

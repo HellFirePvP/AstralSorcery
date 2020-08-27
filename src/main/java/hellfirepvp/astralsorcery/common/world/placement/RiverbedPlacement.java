@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.world.placement;
 
-import com.mojang.datafixers.Dynamic;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.world.config.ReplacingFeaturePlacementConfig;
 import net.minecraft.block.Block;
@@ -18,15 +17,12 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.WorldDecoratingHelper;
 import net.minecraft.world.gen.placement.Placement;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -38,32 +34,31 @@ import java.util.stream.Stream;
  */
 public class RiverbedPlacement extends Placement<ReplacingFeaturePlacementConfig> {
 
-    public RiverbedPlacement(Function<Dynamic<?>, ? extends ReplacingFeaturePlacementConfig> cfgSupplier) {
-        super(cfgSupplier);
-    }
+    private final ReplacingFeaturePlacementConfig config;
 
     public RiverbedPlacement(ReplacingFeaturePlacementConfig config) {
-        super(dyn -> config);
+        super(ReplacingFeaturePlacementConfig.CODEC);
+        this.config = config;
     }
 
     @Override
-    public Stream<BlockPos> getPositions(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generatorIn, Random random, ReplacingFeaturePlacementConfig configIn, BlockPos pos) {
-        if (!configIn.canGenerateAtAll() || random.nextInt(Math.max(configIn.getGenerationChance(), 1)) != 0) {
+    public Stream<BlockPos> func_241857_a(WorldDecoratingHelper world, Random random, ReplacingFeaturePlacementConfig cfgIn, BlockPos pos) {
+        if (!this.config.canGenerateAtAll() || random.nextInt(Math.max(this.config.getGenerationChance(), 1)) != 0) {
             return Stream.empty();
         }
 
         List<BlockPos> result = new ArrayList<>();
-        for (int i = 0; i < configIn.getGenerationAmount(); i++) {
-            BlockPos at = pos.add(random.nextInt(16), configIn.getRandomY(random), random.nextInt(16));
+        for (int i = 0; i < this.config.getGenerationAmount(); i++) {
+            BlockPos at = pos.add(random.nextInt(16), this.config.getRandomY(random), random.nextInt(16));
 
-            if (!configIn.canPlace(worldIn, generatorIn.getBiomeProvider(), at, random)) {
+            if (!this.config.canPlace(world.field_242889_a, at, random)) {
                 continue;
             }
 
             boolean foundWater = false;
             for (int yy = 0; yy < 3; yy++) {
                 BlockPos check = at.offset(Direction.UP, yy);
-                BlockState bs = worldIn.getBlockState(check);
+                BlockState bs = world.func_242894_a(check);
                 Block block = bs.getBlock();
                 Fluid f;
                 if ((f = MiscUtils.tryGetFuild(bs)) != null && f.isIn(FluidTags.WATER) || block.isIn(BlockTags.ICE)) {

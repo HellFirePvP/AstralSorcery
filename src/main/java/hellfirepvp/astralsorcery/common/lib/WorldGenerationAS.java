@@ -12,11 +12,11 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.config.ReplacingFeaturePlacementConfig;
 import hellfirepvp.astralsorcery.common.world.config.StructurePlacementConfig;
-import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureAncientShrineStructure;
-import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureDesertShrineStructure;
-import hellfirepvp.astralsorcery.common.world.structure.feature.FeatureSmallShrineStructure;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.Structure;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,9 +35,9 @@ public class WorldGenerationAS {
     public static IStructurePieceType DESERT_SHRINE_PIECE;
     public static IStructurePieceType SMALL_SHRINE_PIECE;
 
-    public static FeatureAncientShrineStructure STRUCTURE_ANCIENT_SHRINE;
-    public static FeatureDesertShrineStructure  STRUCTURE_DESERT_SHRINE;
-    public static FeatureSmallShrineStructure   STRUCTURE_SMALL_SHRINE;
+    public static StructureFeature<NoFeatureConfig, ? extends Structure<?>> STRUCTURE_ANCIENT_SHRINE;
+    public static StructureFeature<NoFeatureConfig, ? extends Structure<?>> STRUCTURE_DESERT_SHRINE;
+    public static StructureFeature<NoFeatureConfig, ? extends Structure<?>> STRUCTURE_SMALL_SHRINE;
 
     public static class Placement {
 

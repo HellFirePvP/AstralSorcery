@@ -10,8 +10,9 @@ package hellfirepvp.astralsorcery.common.util.world;
 
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.client.PktRequestSeed;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -30,7 +31,7 @@ public class WorldSeedCache {
 
     private static int activeSession = 0;
 
-    private static Map<DimensionType, Long> cacheSeedLookup = new HashMap<>();
+    private static Map<ResourceLocation, Long> cacheSeedLookup = new HashMap<>();
 
     @OnlyIn(Dist.CLIENT)
     public static void clearClient() {
@@ -39,27 +40,27 @@ public class WorldSeedCache {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void updateSeedCache(DimensionType type, int session, long seed) {
+    public static void updateSeedCache(ResourceLocation dim, int session, long seed) {
         if (activeSession == session) {
-            cacheSeedLookup.put(type, seed);
+            cacheSeedLookup.put(dim, seed);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static Optional<Long> getSeedIfPresent(World world) {
-        if (world == null) return Optional.empty();
-        return getSeedIfPresent(world.getDimension().getType());
+    public static Optional<Long> getSeedIfPresent(RegistryKey<World> dim) {
+        if (dim == null) return Optional.empty();
+        return getSeedIfPresent(dim.func_240901_a_());
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static Optional<Long> getSeedIfPresent(DimensionType type) {
-        if (!cacheSeedLookup.containsKey(type)) {
+    public static Optional<Long> getSeedIfPresent(ResourceLocation dim) {
+        if (!cacheSeedLookup.containsKey(dim)) {
             activeSession++;
-            PktRequestSeed req = new PktRequestSeed(activeSession, type);
+            PktRequestSeed req = new PktRequestSeed(activeSession, dim);
             PacketChannel.CHANNEL.sendToServer(req);
             return Optional.empty();
         }
-        return Optional.of(cacheSeedLookup.get(type));
+        return Optional.of(cacheSeedLookup.get(dim));
     }
 
 }

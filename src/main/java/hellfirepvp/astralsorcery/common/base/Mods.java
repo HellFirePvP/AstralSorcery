@@ -27,18 +27,9 @@ import java.util.function.Supplier;
  */
 public enum Mods {
 
-    MINECRAFT("minecraft") {
-        @Override
-        public boolean isPresent() {
-            return true;
-        }
-    },
-    ASTRAL_SORCERY(AstralSorcery.MODID) {
-        @Override
-        public boolean isPresent() {
-            return true;
-        }
-    },
+    MINECRAFT("minecraft", true),
+    FORGE("forge", true),
+    ASTRAL_SORCERY(AstralSorcery.MODID, true),
     DRACONIC_EVOLUTION("draconicevolution"),
     CURIOS("curios"),
     BOTANIA("botania");
@@ -48,9 +39,13 @@ public enum Mods {
 
     //private static Class<?> gcPlayerClass, urPlayerClass;
 
-    private Mods(String modName) {
-        this.modid = modName;
-        this.loaded = ModList.get().isLoaded(this.modid);
+    private Mods(String modid) {
+        this(modid, ModList.get().isLoaded(modid));
+    }
+
+    private Mods(String modid, boolean loaded) {
+        this.modid = modid;
+        this.loaded = loaded;
     }
 
     public String getModId() {

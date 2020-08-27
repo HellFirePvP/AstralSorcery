@@ -29,6 +29,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -131,8 +132,8 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
 
     @Nullable
     @Override
-    public LivingEntity getThrower() {
-        return this.throwingEntity != null ? this.throwingEntity : super.getThrower();
+    public Entity func_234616_v_() {
+        return this.throwingEntity != null ? this.throwingEntity : super.func_234616_v_();
     }
 
     @Override
@@ -144,7 +145,7 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
     public void tick() {
         super.tick();
 
-        if (getThrower() == null || !getThrower().isAlive()) {
+        if (func_234616_v_() == null || !func_234616_v_().isAlive()) {
             setDespawning();
             return;
         }
@@ -167,7 +168,7 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
                 this.playDespawnSparkles();
             }
         } else {
-            LivingEntity thrower = getThrower();
+            Entity thrower = func_234616_v_();
             double dist = Math.max(0.01, thrower.getDistance(this));
             if (isAlive() && isPulling()) {
                 if (getPulling() != null) {
@@ -178,28 +179,28 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
                 if (((getPulling() != null && ticksExisted > 60 && dist < 2) || (getPulling() == null && ticksExisted > 15 && dist < 2)) || timeout > 15) {
                     setDespawning();
                 } else {
-                    getThrower().fallDistance = -5F;
+                    thrower.fallDistance = -5F;
 
-                    double mx = this.getPosX() - getThrower().getPosX();
-                    double my = this.getPosY() - getThrower().getPosY();
-                    double mz = this.getPosZ() - getThrower().getPosZ();
+                    double mx = this.getPosX() - thrower.getPosX();
+                    double my = this.getPosY() - thrower.getPosY();
+                    double mz = this.getPosZ() - thrower.getPosZ();
                     mx /= dist * 5.0D;
                     my /= dist * 5.0D;
                     mz /= dist * 5.0D;
-                    Vec3d v2 = new Vec3d(mx, my, mz);
+                    Vector3d v2 = new Vector3d(mx, my, mz);
                     if (v2.length() > 0.25D) {
                         v2 = v2.normalize();
                         mx = v2.x / 4.0D;
                         my = v2.y / 4.0D;
                         mz = v2.z / 4.0D;
                     }
-                    Vec3d motion = getThrower().getMotion();
+                    Vector3d motion = thrower.getMotion();
                     motion = motion.add(mx, my + 0.04F, mz);
                     if (!launchedThrower) {
                         motion = motion.add(0, 0.4F, 0);
                         launchedThrower = true;
                     }
-                    getThrower().setMotion(motion);
+                    thrower.setMotion(motion);
 
                     int roughDst = (int) (dist / 2.5D);
                     if (roughDst >= this.previousDist) {
@@ -273,24 +274,26 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
     }
 
     public List<Vector3> buildLine(float partial) {
-        if (getThrower() == null) {
+        Entity thrower = func_234616_v_();
+        if (thrower == null) {
             return Collections.emptyList();
         }
+
         List<Vector3> list = Lists.newLinkedList();
-        Vector3 interpThrower = RenderingVectorUtils.interpolatePosition(getThrower(), partial);
-        interpThrower.add(getThrower().getWidth() / 2, 0, getThrower().getWidth() / 2);
+        Vector3 interpThrower = RenderingVectorUtils.interpolatePosition(thrower, partial);
+        interpThrower.add(thrower.getWidth() / 2, 0, thrower.getWidth() / 2);
         Vector3 interpHook = RenderingVectorUtils.interpolatePosition(this, partial);
         interpHook.add(getWidth() / 2, 0, getWidth() / 2);
         Vector3 origin = new Vector3();
-        Vector3 to = interpThrower.clone().subtract(interpHook).addY(getThrower().getHeight() / 4);
+        Vector3 to = interpThrower.clone().subtract(interpHook).addY(thrower.getHeight() / 4);
         float lineLength = (float) (to.length() * 5);
         list.add(origin.clone());
         int iter = (int) lineLength;
         for (int xx = 1; xx < iter - 1; xx++) {
             float dist = xx * (lineLength / iter);
-            double dx = (interpThrower.getX() - interpHook.getX())                                 / iter * xx + MathHelper.sin(dist / 10.0F) * pullFactor;
-            double dy = (interpThrower.getY() - interpHook.getY() + getThrower().getHeight() / 2F) / iter * xx + MathHelper.sin(dist / 7.0F)  * pullFactor;
-            double dz = (interpThrower.getZ() - interpHook.getZ())                                 / iter * xx + MathHelper.sin(dist / 2.0F)  * pullFactor;
+            double dx = (interpThrower.getX() - interpHook.getX())                            / iter * xx + MathHelper.sin(dist / 10.0F) * pullFactor;
+            double dy = (interpThrower.getY() - interpHook.getY() + thrower.getHeight() / 2F) / iter * xx + MathHelper.sin(dist / 7.0F)  * pullFactor;
+            double dz = (interpThrower.getZ() - interpHook.getZ())                            / iter * xx + MathHelper.sin(dist / 2.0F)  * pullFactor;
             list.add(new Vector3(dx, dy, dz));
         }
         list.add(to.clone());
@@ -305,18 +308,18 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
 
     @Override
     protected void onImpact(RayTraceResult result) {
-        Vec3d hit = result.getHitVec();
+        Vector3d hit = result.getHitVec();
         switch (result.getType()) {
             case BLOCK:
                 setPulling(true, null);
                 break;
             case ENTITY:
                 Entity e = ((EntityRayTraceResult) result).getEntity();
-                if (!(e instanceof LivingEntity) || (getThrower() != null && e.equals(getThrower()))) {
+                if (!(e instanceof LivingEntity) || (func_234616_v_() != null && e.equals(func_234616_v_()))) {
                     return;
                 }
                 setPulling(true, (LivingEntity) ((EntityRayTraceResult) result).getEntity());
-                hit = new Vec3d(hit.x, hit.y + ((EntityRayTraceResult) result).getEntity().getHeight() * 3 / 4, hit.z);
+                hit = new Vector3d(hit.x, hit.y + ((EntityRayTraceResult) result).getEntity().getHeight() * 3 / 4, hit.z);
                 break;
             default:
                 break;

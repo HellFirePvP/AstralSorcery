@@ -11,18 +11,16 @@ package hellfirepvp.astralsorcery.common.loot;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+import hellfirepvp.astralsorcery.common.lib.LootAS;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.*;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.LootParameter;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
+import net.minecraft.loot.conditions.ILootCondition;
 
 import java.util.Random;
 import java.util.Set;
@@ -43,6 +41,11 @@ public class LinearLuckBonus extends LootFunction {
     @Override
     public Set<LootParameter<?>> getRequiredParameters() {
         return ImmutableSet.of(LootParameters.TOOL);
+    }
+
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return LootAS.Functions.LINEAR_LUCK_BONUS;
     }
 
     @Override
@@ -72,10 +75,6 @@ public class LinearLuckBonus extends LootFunction {
     }
 
     public static class Serializer extends LootFunction.Serializer<LinearLuckBonus> {
-
-        public Serializer(ResourceLocation name) {
-            super(name, LinearLuckBonus.class);
-        }
 
         @Override
         public LinearLuckBonus deserialize(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, ILootCondition[] iLootConditions) {

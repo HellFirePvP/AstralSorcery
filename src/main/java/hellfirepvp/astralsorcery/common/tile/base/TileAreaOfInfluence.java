@@ -9,8 +9,9 @@
 package hellfirepvp.astralsorcery.common.tile.base;
 
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,7 +39,7 @@ public interface TileAreaOfInfluence {
     public BlockPos getEffectOriginPosition();
 
     @Nonnull
-    public DimensionType getDimensionType();
+    public RegistryKey<World> getDimension();
 
     public boolean providesEffect();
 

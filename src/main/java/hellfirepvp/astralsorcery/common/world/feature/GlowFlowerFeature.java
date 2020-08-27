@@ -11,9 +11,8 @@ package hellfirepvp.astralsorcery.common.world.feature;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.common.util.Constants;
@@ -30,15 +29,15 @@ import java.util.Random;
 public class GlowFlowerFeature extends Feature<NoFeatureConfig> {
 
     public GlowFlowerFeature() {
-        super((dyn) -> new NoFeatureConfig());
+        super(NoFeatureConfig.field_236558_a_);
     }
 
     @Override
-    public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+    public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
         BlockState glowFlower = BlocksAS.GLOW_FLOWER.getDefaultState();
 
-        if (worldIn.isAirBlock(pos) && glowFlower.isValidPosition(worldIn, pos)) {
-            return worldIn.setBlockState(pos, glowFlower, Constants.BlockFlags.DEFAULT);
+        if (world.isAirBlock(pos) && glowFlower.isValidPosition(world, pos)) {
+            return world.setBlockState(pos, glowFlower, Constants.BlockFlags.DEFAULT);
         }
         return false;
     }

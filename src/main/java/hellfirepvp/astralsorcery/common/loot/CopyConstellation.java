@@ -14,13 +14,14 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationItem;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationTile;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.lib.LootAS;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.conditions.ILootCondition;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,6 +34,11 @@ public class CopyConstellation extends LootFunction {
 
     private CopyConstellation(ILootCondition[] conditionsIn) {
         super(conditionsIn);
+    }
+
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return LootAS.Functions.COPY_CONSTELLATION;
     }
 
     @Override
@@ -55,10 +61,6 @@ public class CopyConstellation extends LootFunction {
     }
 
     public static class Serializer extends LootFunction.Serializer<CopyConstellation> {
-
-        public Serializer(ResourceLocation name) {
-            super(name, CopyConstellation.class);
-        }
 
         @Override
         public CopyConstellation deserialize(JsonObject jsonObject, JsonDeserializationContext ctx, ILootCondition[] conditions) {

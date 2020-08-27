@@ -10,9 +10,8 @@ package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import net.minecraft.world.IWorld;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.*;
@@ -27,7 +26,7 @@ import java.util.*;
 public class StarlightUpdateHandler implements ITickHandler {
 
     private static final StarlightUpdateHandler instance = new StarlightUpdateHandler();
-    private static Map<DimensionType, List<IPrismTransmissionNode>> updateRequired = new HashMap<>();
+    private static Map<ResourceLocation, List<IPrismTransmissionNode>> updateRequired = new HashMap<>();
     private static final Object accessLock = new Object();
 
     private StarlightUpdateHandler() {}
@@ -51,26 +50,25 @@ public class StarlightUpdateHandler implements ITickHandler {
         }
     }
 
-    private List<IPrismTransmissionNode> getNodes(IWorld world) {
-        DimensionType dimType = world.getDimension().getType();
-        return updateRequired.computeIfAbsent(dimType, k -> new LinkedList<>());
+    private List<IPrismTransmissionNode> getNodes(World world) {
+        return updateRequired.computeIfAbsent(world.func_234923_W_().func_240901_a_(), k -> new LinkedList<>());
     }
 
-    public void removeNode(IWorld world, IPrismTransmissionNode node) {
+    public void removeNode(World world, IPrismTransmissionNode node) {
         synchronized (accessLock) {
             getNodes(world).remove(node);
         }
     }
 
-    public void addNode(IWorld world, IPrismTransmissionNode node) {
+    public void addNode(World world, IPrismTransmissionNode node) {
         synchronized (accessLock) {
             getNodes(world).add(node);
         }
     }
 
-    public void informWorldLoad(IWorld world) {
+    public void informWorldLoad(World world) {
         synchronized (accessLock) {
-            updateRequired.remove(world.getDimension().getType());
+            updateRequired.remove(world.func_234923_W_().func_240901_a_());
         }
     }
 

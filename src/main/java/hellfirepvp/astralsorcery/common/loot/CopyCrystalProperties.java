@@ -13,13 +13,15 @@ import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeTile;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.lib.LootAS;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.conditions.ILootCondition;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,6 +34,11 @@ public class CopyCrystalProperties extends LootFunction {
 
     private CopyCrystalProperties(ILootCondition[] conditionsIn) {
         super(conditionsIn);
+    }
+
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return LootAS.Functions.COPY_CRYSTAL_PROPERTIES;
     }
 
     @Override
@@ -53,10 +60,6 @@ public class CopyCrystalProperties extends LootFunction {
     }
 
     public static class Serializer extends LootFunction.Serializer<CopyCrystalProperties> {
-
-        public Serializer(ResourceLocation name) {
-            super(name, CopyCrystalProperties.class);
-        }
 
         @Override
         public CopyCrystalProperties deserialize(JsonObject jsonObject, JsonDeserializationContext ctx, ILootCondition[] conditions) {

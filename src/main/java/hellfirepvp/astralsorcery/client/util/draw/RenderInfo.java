@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.TickEvent;
 
 import javax.annotation.Nullable;
@@ -41,7 +41,7 @@ public class RenderInfo implements ITickHandler {
     /** The Y component (scaled along the X axis) of the entity's pitch rotation */
     private float rotationXY;
 
-    private Vec3d view = Vec3d.ZERO;
+    private Vector3d view = Vector3d.ZERO;
 
     private RenderInfo() {}
 

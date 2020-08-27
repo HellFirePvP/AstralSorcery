@@ -30,6 +30,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -40,6 +41,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.IBlockDisplayReader;
 import net.minecraft.world.ILightReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biomes;
@@ -67,13 +70,13 @@ import java.util.function.Function;
 public class RenderingUtils {
 
     private static final Random rand = new Random();
-    private static ILightReader plainRenderWorld = null;
+    private static IBlockDisplayReader plainRenderWorld = null;
 
     public static long getPositionSeed(BlockPos pos) {
         long seed = 1553015L;
-        seed ^= (long) pos.getX();
-        seed ^= (long) pos.getY();
-        seed ^= (long) pos.getZ();
+        seed ^= pos.getX();
+        seed ^= pos.getY();
+        seed ^= pos.getZ();
         return seed;
     }
 
@@ -121,7 +124,7 @@ public class RenderingUtils {
 
     //Straight up ripped off of MC code.
     public static void playBlockBreakParticles(BlockPos pos, @Nullable BlockState actualState, BlockState particleState) {
-        World world = Minecraft.getInstance().world;
+        ClientWorld world = Minecraft.getInstance().world;
         ParticleManager mgr = Minecraft.getInstance().particles;
 
         VoxelShape voxelshape;
@@ -284,7 +287,7 @@ public class RenderingUtils {
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
 
         IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> {
+        renderItemModelWithColor(stack, ItemCameraTransforms.TransformType.GROUND, bakedModel, renderStack, (renderType) -> {
             RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(renderType, () -> {
                 RenderSystem.enableBlend();
                 blendMode.apply();
@@ -317,7 +320,7 @@ public class RenderingUtils {
         }
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.ENTITY, buf -> {
-            renderItemModelWithColor(stack, bakedModel, renderStack, (renderType) -> buf,
+            renderItemModelWithColor(stack, ItemCameraTransforms.TransformType.GUI, bakedModel, renderStack, (renderType) -> buf,
                     LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, MathHelper.clamp(alpha, 0, 255));
         });
 
@@ -335,7 +338,7 @@ public class RenderingUtils {
         return Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, Minecraft.getInstance().world, Minecraft.getInstance().player);
     }
 
-    private static void renderItemModelWithColor(ItemStack stack, IBakedModel model, MatrixStack renderStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, Color c, int alpha) {
+    private static void renderItemModelWithColor(ItemStack stack, ItemCameraTransforms.TransformType transformType, IBakedModel model, MatrixStack renderStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, Color c, int alpha) {
         if (!stack.isEmpty()) {
             renderStack.push();
             renderStack.translate(-0.5, -0.5, -0.5);
@@ -343,7 +346,7 @@ public class RenderingUtils {
             if (model.isBuiltInRenderer()) {
                 int[] colors = new int[] { c.getRed(), c.getGreen(), c.getBlue(), alpha };
                 IRenderTypeBuffer decoratedBuffer = type -> BufferDecoratorBuilder.withColor((r, g, b, a) -> colors).decorate(buffer.getBuffer(type));
-                stack.getItem().getItemStackTileEntityRenderer().render(stack, renderStack, decoratedBuffer, combinedLight, combinedOverlay);
+                stack.getItem().getItemStackTileEntityRenderer().func_239207_a_(stack, transformType, renderStack, decoratedBuffer, combinedLight, combinedOverlay);
             } else {
                 renderColoredItemModel(stack, model, renderStack, buffer, combinedLight, combinedOverlay, c, alpha);
             }

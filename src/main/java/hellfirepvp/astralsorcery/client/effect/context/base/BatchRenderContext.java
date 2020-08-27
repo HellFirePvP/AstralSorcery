@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.effect.context.base;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityDynamicFX;
@@ -19,14 +18,13 @@ import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
-import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.order.OrderSortable;
 import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -102,7 +100,7 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
 
     private void drawBatched(IVertexBuilder buf, IDrawRenderTypeBuffer renderTypeBuffer) {
         if (buf instanceof BufferBuilder) {
-            Vec3d view = RenderInfo.getInstance().getARI().getProjectedView();
+            Vector3d view = RenderInfo.getInstance().getARI().getProjectedView();
             ((BufferBuilder) buf).sortVertexData((float) view.x, (float) view.y, (float) view.z);
         }
         renderTypeBuffer.draw();

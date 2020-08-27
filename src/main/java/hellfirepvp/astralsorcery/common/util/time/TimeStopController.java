@@ -15,10 +15,10 @@ import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.TickEvent;
 
 import javax.annotation.Nonnull;
@@ -34,7 +34,7 @@ import java.util.*;
  */
 public class TimeStopController implements ITickHandler {
 
-    private static Map<DimensionType, List<TimeStopZone>> activeTimeStopZones = new HashMap<>();
+    private static Map<ResourceLocation, List<TimeStopZone>> activeTimeStopZones = new HashMap<>();
 
     public static final TimeStopController INSTANCE = new TimeStopController();
 
@@ -45,8 +45,8 @@ public class TimeStopController implements ITickHandler {
         if (world.isRemote) {
             return null;
         }
-        DimensionType dimType = world.getDimension().getType();
-        List<TimeStopZone> zones = activeTimeStopZones.getOrDefault(dimType, Collections.emptyList());
+        ResourceLocation dimKey = world.func_234923_W_().func_240901_a_();
+        List<TimeStopZone> zones = activeTimeStopZones.getOrDefault(dimKey, Collections.emptyList());
         for (TimeStopZone zone : zones) {
             if (zone.offset.equals(pos)) {
                 return zone;
@@ -68,26 +68,26 @@ public class TimeStopController implements ITickHandler {
     @Nonnull
     public static TimeStopZone freezeWorldAt(@Nonnull TimeStopZone.EntityTargetController controller, @Nonnull World world, @Nonnull BlockPos offset, float range, int maxAge) {
         TimeStopZone stopZone = new TimeStopZone(controller, range, offset, world, maxAge);
-        DimensionType type = world.getDimension().getType();
-        List<TimeStopZone> zones = activeTimeStopZones.computeIfAbsent(type, (id) -> new LinkedList<>());
+        ResourceLocation dimKey = world.func_234923_W_().func_240901_a_();
+        List<TimeStopZone> zones = activeTimeStopZones.computeIfAbsent(dimKey, (id) -> new LinkedList<>());
         zones.add(stopZone);
 
         SyncDataHolder.executeServer(SyncDataHolder.DATA_TIME_FREEZE_EFFECTS, DataTimeFreezeEffects.class, data -> {
-            data.addNewEffect(type, TimeStopEffectHelper.fromZone(stopZone));
+            data.addNewEffect(dimKey, TimeStopEffectHelper.fromZone(stopZone));
         });
         return stopZone;
     }
 
     public static void onWorldUnload(IWorld world) {
-        if (world.isRemote()) {
+        if (world.isRemote() || !(world instanceof World)) {
             return;
         }
 
-        DimensionType type = world.getDimension().getType();
-        for (TimeStopZone stop : activeTimeStopZones.getOrDefault(type, Collections.emptyList())) {
+        ResourceLocation dimKey = ((World) world).func_234923_W_().func_240901_a_();
+        for (TimeStopZone stop : activeTimeStopZones.getOrDefault(dimKey, Collections.emptyList())) {
             stop.stopEffect();
         }
-        activeTimeStopZones.remove(type);
+        activeTimeStopZones.remove(dimKey);
     }
 
     public static boolean skipLivingTick(LivingEntity e) {
@@ -107,8 +107,8 @@ public class TimeStopController implements ITickHandler {
                 return true;
             }
         }
-        DimensionType type = e.getEntityWorld().getDimension().getType();
-        List<TimeStopZone> freezeAreas = activeTimeStopZones.get(type);
+        ResourceLocation dimKey = e.getEntityWorld().func_234923_W_().func_240901_a_();
+        List<TimeStopZone> freezeAreas = activeTimeStopZones.get(dimKey);
         if (freezeAreas != null && !freezeAreas.isEmpty()) {
             for (TimeStopZone stop : freezeAreas) {
                 if (stop.interceptEntityTick(e)) {
@@ -122,7 +122,7 @@ public class TimeStopController implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        for (Map.Entry<DimensionType, List<TimeStopZone>> zoneMap : activeTimeStopZones.entrySet()) {
+        for (Map.Entry<ResourceLocation, List<TimeStopZone>> zoneMap : activeTimeStopZones.entrySet()) {
             Iterator<TimeStopZone> iterator = zoneMap.getValue().iterator();
             while (iterator.hasNext()) {
                 TimeStopZone zone = iterator.next();

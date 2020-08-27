@@ -21,11 +21,13 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionRece
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 
 import java.util.*;
 
@@ -55,10 +57,10 @@ public class TransmissionWorldHandler {
     //Contains a list of source positions whose sources currently calculate their network.
     private Set<BlockPos> sourcePosBuilding = new HashSet<>();
 
-    private final DimensionType dimType;
+    private final RegistryKey<World> dim;
 
-    public TransmissionWorldHandler(DimensionType dimType) {
-        this.dimType = dimType;
+    public TransmissionWorldHandler(ResourceLocation dimKey) {
+        this.dim = RegistryKey.func_240903_a_(Registry.WORLD_KEY, dimKey);
     }
 
     public void tick(World world) {
@@ -193,10 +195,10 @@ public class TransmissionWorldHandler {
                 }
             }
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
-                data.removeOldConnectionsThreaded(dimType, knownChain.getFoundConnections());
+                data.removeOldConnectionsThreaded(dim, knownChain.getFoundConnections());
             });
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
-                data.removeEndpoints(dimType, knownChain.getResolvedNormalBlockPositions());
+                data.removeEndpoints(dim, knownChain.getResolvedNormalBlockPositions());
             });
         }
         activeChunkMap.remove(source);

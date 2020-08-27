@@ -17,7 +17,7 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,11 +33,11 @@ import java.util.function.Predicate;
  */
 public class SoundHelper {
 
-    public static void playSoundAround(SoundEvent sound, World world, Vec3i position, float volume, float pitch) {
+    public static void playSoundAround(SoundEvent sound, World world, Vector3i position, float volume, float pitch) {
         playSoundAround(sound, SoundCategory.MASTER, world, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
-    public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, Vec3i position, float volume, float pitch) {
+    public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, Vector3i position, float volume, float pitch) {
         playSoundAround(sound, category, world, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 

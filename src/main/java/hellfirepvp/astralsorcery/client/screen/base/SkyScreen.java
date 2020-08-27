@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
 
 import java.awt.*;
 
@@ -36,7 +36,7 @@ public interface SkyScreen {
 
     public static Tuple<Color, Color> getSkyGradient(boolean canSeeSky, float angleTransparency, float partialTicks) {
         ClientWorld renderWorld = Minecraft.getInstance().world;
-        if (renderWorld.getDimension().getType().equals(DimensionType.THE_END)) {
+        if (renderWorld.func_230315_m_().func_242725_p().equals(DimensionType.THE_END.func_240901_a_())) {
             canSeeSky = false; //Only for effect rendering purposes, not functionality.
         }
         int rgbFrom, rgbTo;

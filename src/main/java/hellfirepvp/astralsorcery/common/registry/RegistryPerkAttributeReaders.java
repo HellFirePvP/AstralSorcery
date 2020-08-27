@@ -12,8 +12,9 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.perk.reader.*;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.common.ForgeMod;
 
 import static hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS.*;
 
@@ -29,15 +30,15 @@ public class RegistryPerkAttributeReaders {
     private RegistryPerkAttributeReaders() {}
 
     public static void init() {
-        register(new ReaderVanillaAttribute(ATTR_TYPE_MELEE_DAMAGE, SharedMonsterAttributes.ATTACK_DAMAGE).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_HEALTH, SharedMonsterAttributes.MAX_HEALTH));
-        register(new ReaderVanillaAttribute(ATTR_TYPE_MOVESPEED, SharedMonsterAttributes.MOVEMENT_SPEED).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_SWIMSPEED, LivingEntity.SWIM_SPEED).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR, SharedMonsterAttributes.ARMOR));
-        register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR_TOUGHNESS, SharedMonsterAttributes.ARMOR_TOUGHNESS));
-        register(new ReaderVanillaAttribute(ATTR_TYPE_ATTACK_SPEED, SharedMonsterAttributes.ATTACK_SPEED).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_REACH, PlayerEntity.REACH_DISTANCE).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_LUCK, SharedMonsterAttributes.LUCK).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_MELEE_DAMAGE, Attributes.ATTACK_DAMAGE).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_HEALTH, Attributes.MAX_HEALTH));
+        register(new ReaderVanillaAttribute(ATTR_TYPE_MOVESPEED, Attributes.MOVEMENT_SPEED).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_SWIMSPEED, ForgeMod.SWIM_SPEED.get()).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR, Attributes.ARMOR));
+        register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR_TOUGHNESS, Attributes.ARMOR_TOUGHNESS));
+        register(new ReaderVanillaAttribute(ATTR_TYPE_ATTACK_SPEED, Attributes.ATTACK_SPEED).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_REACH, ForgeMod.REACH_DISTANCE.get()).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_LUCK, Attributes.LUCK).formatAsDecimal());
         register(new ReaderFlatAttribute(ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM, 1000F)).formatAsDecimal();
         register(new ReaderFlatAttribute(ATTR_TYPE_MINING_SIZE, 0F));
 

@@ -70,7 +70,7 @@ public class TypeCrystalFootprints extends PatreonEffect implements ITickHandler
     private boolean shouldDoEffect(PlayerEntity player) {
         return player.getUniqueID().equals(playerUUID) &&
                 !player.isPotionActive(Effects.INVISIBILITY) &&
-                player.onGround;
+                player.isOnGround();
     }
 
     @OnlyIn(Dist.CLIENT)

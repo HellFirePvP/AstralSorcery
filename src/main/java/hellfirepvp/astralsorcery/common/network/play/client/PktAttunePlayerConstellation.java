@@ -16,9 +16,11 @@ import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -34,14 +36,14 @@ import javax.annotation.Nonnull;
 public class PktAttunePlayerConstellation extends ASPacket<PktAttunePlayerConstellation> {
 
     private IMajorConstellation attunement = null;
-    private DimensionType type = null;
+    private RegistryKey<World> world = null;
     private BlockPos at = BlockPos.ZERO;
 
     public PktAttunePlayerConstellation() {}
 
-    public PktAttunePlayerConstellation(IMajorConstellation attunement, DimensionType type, BlockPos at) {
+    public PktAttunePlayerConstellation(IMajorConstellation attunement, RegistryKey<World> world, BlockPos at) {
         this.attunement = attunement;
-        this.type = type;
+        this.world = world;
         this.at = at;
     }
 
@@ -50,7 +52,7 @@ public class PktAttunePlayerConstellation extends ASPacket<PktAttunePlayerConste
     public Encoder<PktAttunePlayerConstellation> encoder() {
         return (packet, buffer) -> {
             ByteBufUtils.writeRegistryEntry(buffer, packet.attunement);
-            ByteBufUtils.writeRegistryEntry(buffer, packet.type);
+            ByteBufUtils.writeVanillaRegistryEntry(buffer, packet.world);
             ByteBufUtils.writePos(buffer, packet.at);
         };
     }
@@ -62,7 +64,7 @@ public class PktAttunePlayerConstellation extends ASPacket<PktAttunePlayerConste
             PktAttunePlayerConstellation pkt = new PktAttunePlayerConstellation();
 
             pkt.attunement = ByteBufUtils.readRegistryEntry(buffer);
-            pkt.type = ByteBufUtils.readRegistryEntry(buffer);
+            pkt.world = ByteBufUtils.readVanillaRegistryEntry(buffer, Registry.WORLD_KEY);
             pkt.at = ByteBufUtils.readPos(buffer);
 
             return pkt;
@@ -77,13 +79,15 @@ public class PktAttunePlayerConstellation extends ASPacket<PktAttunePlayerConste
                 IMajorConstellation cst = packet.attunement;
                 if (cst != null) {
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                    World world = srv.getWorld(packet.type);
-                    TileAttunementAltar ta = MiscUtils.getTileAt(world, packet.at, TileAttunementAltar.class, false);
-                    if (ta != null && ta.getActiveRecipe() instanceof ActivePlayerAttunementRecipe) {
-                        if (context.getSender().getUniqueID().equals(((ActivePlayerAttunementRecipe) ta.getActiveRecipe()).getPlayerUUID()) &&
-                                AttunePlayerRecipe.isEligablePlayer(context.getSender(), ta.getActiveConstellation())) {
+                    if (srv.forgeGetWorldMap().containsKey(packet.world)) {
+                        World world = srv.getWorld(packet.world);
+                        TileAttunementAltar ta = MiscUtils.getTileAt(world, packet.at, TileAttunementAltar.class, false);
+                        if (ta != null && ta.getActiveRecipe() instanceof ActivePlayerAttunementRecipe) {
+                            if (context.getSender().getUniqueID().equals(((ActivePlayerAttunementRecipe) ta.getActiveRecipe()).getPlayerUUID()) &&
+                                    AttunePlayerRecipe.isEligablePlayer(context.getSender(), ta.getActiveConstellation())) {
 
-                            ta.finishActiveRecipe();
+                                ta.finishActiveRecipe();
+                            }
                         }
                     }
                 }

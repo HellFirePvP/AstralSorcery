@@ -14,7 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
@@ -105,8 +105,8 @@ public class BlockBlackMarblePillar extends BlockBlackMarbleTemplate implements 
     public BlockState getStateForPlacement(BlockItemUseContext ctx) {
         BlockPos blockpos = ctx.getPos();
         World world = ctx.getWorld();
-        IFluidState ifluidstate = world.getFluidState(blockpos);
-        return this.getThisState(world, blockpos).with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
+        FluidState fluidState = world.getFluidState(blockpos);
+        return this.getThisState(world, blockpos).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
     }
 
     private BlockState getThisState(IBlockReader world, BlockPos pos) {
@@ -123,7 +123,7 @@ public class BlockBlackMarblePillar extends BlockBlackMarbleTemplate implements 
         return this.getDefaultState().with(PILLAR_TYPE, PillarType.MIDDLE);
     }
 
-    public IFluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
@@ -134,13 +134,13 @@ public class BlockBlackMarblePillar extends BlockBlackMarbleTemplate implements 
         BOTTOM;
 
         @Override
-        public String getName() {
+        public String getString() {
             return name().toLowerCase();
         }
 
         @Override
         public String toString() {
-            return this.getName();
+            return this.getString();
         }
     }
 }
