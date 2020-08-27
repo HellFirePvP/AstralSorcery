@@ -347,18 +347,22 @@ public class EventHandlerServer {
                     Iterator<ItemStack> iterator = event.getDrops().iterator();
                     while (iterator.hasNext()) {
                         ItemStack stack = iterator.next();
+                        if (stack.isEmpty()) {
+                            continue;
+                        }
                         ItemStack out = FurnaceRecipes.instance().getSmeltingResult(stack);
-                        if (!out.isEmpty()) {
-                            ItemStack furnaced = ItemUtils.copyStackWithSize(out, 1);
-                            iterator.remove();
-                            newStacks.add(furnaced);
-                            furnaced.onCrafting(event.getWorld(), event.getHarvester(), 1);
-                            FMLCommonHandler.instance().firePlayerSmeltedEvent(event.getHarvester(), furnaced);
-                            if (fortuneLvl > 0 && !(out.getItem() instanceof ItemBlock)) {
-                                for (int i = 0; i < fortuneLvl; i++) {
-                                    if (rand.nextFloat() < 0.5F) {
-                                        newStacks.add(ItemUtils.copyStackWithSize(out, 1));
-                                    }
+                        if (out.isEmpty()) {
+                            continue;
+                        }
+                        ItemStack furnaced = ItemUtils.copyStackWithSize(out, 1);
+                        iterator.remove();
+                        newStacks.add(furnaced);
+                        furnaced.onCrafting(event.getWorld(), event.getHarvester(), 1);
+                        FMLCommonHandler.instance().firePlayerSmeltedEvent(event.getHarvester(), furnaced);
+                        if (fortuneLvl > 0 && !(out.getItem() instanceof ItemBlock)) {
+                            for (int i = 0; i < fortuneLvl; i++) {
+                                if (rand.nextFloat() < 0.5F) {
+                                    newStacks.add(ItemUtils.copyStackWithSize(out, 1));
                                 }
                             }
                         }

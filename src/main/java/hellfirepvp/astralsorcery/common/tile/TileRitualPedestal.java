@@ -422,7 +422,8 @@ public class TileRitualPedestal extends TileReceiverBase implements IMultiblockD
     }
 
     @Override
-    public void onLoad() {
+    public void onFirstTick() {
+        super.onFirstTick();
         if(!world.isRemote) {
             TransmissionReceiverRitualPedestal ped = getUpdateCache();
             if(ped != null) {
