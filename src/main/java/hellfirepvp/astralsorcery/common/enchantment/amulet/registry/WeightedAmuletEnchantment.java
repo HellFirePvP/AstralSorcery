@@ -65,6 +65,11 @@ public class WeightedAmuletEnchantment extends WeightedRandom.Item implements Co
             AstralSorcery.log.info("Ignoring amulet enchantment 'cofhcore:holding' as it's prone to cause issues.");
             return null;
         }
+        //see #1302
+        if (domain.equalsIgnoreCase("dungeontactics")) {
+            AstralSorcery.log.info("Ignoring amulet enchantments for '" + registryName + "' as dungeontactic's enchantments generated through the prism are prone to cause issues.");
+            return null;
+        }
         Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(registryName));
         if(ench == null) {
             AstralSorcery.log.info("Ignoring whitelist entry " + str + " for amulet enchantments - Enchantment does not exist!");
