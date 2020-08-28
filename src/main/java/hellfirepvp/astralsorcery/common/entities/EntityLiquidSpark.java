@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.entities;
 
+import com.google.common.base.Predicates;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFloatingCube;
@@ -34,6 +35,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -46,6 +48,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -144,6 +148,13 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
         if(!world.isRemote) {
             if(ticksExisted > 800) {
+                setDead();
+                return;
+            }
+
+            List<Entity> nearby = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(1),
+                    Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.NOT_SPECTATING));
+            if (nearby.size() > 2) {
                 setDead();
                 return;
             }

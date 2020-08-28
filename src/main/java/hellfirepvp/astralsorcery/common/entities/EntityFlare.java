@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
@@ -83,6 +84,7 @@ public class EntityFlare extends EntityFlying {
 
     public static void spawnAmbient(World world, Vector3 at) {
         if(world.isRemote) return;
+        if(!MiscUtils.isChunkLoaded(world, at.toBlockPos())) return;
         if(Config.ambientFlareChance <= 0) return;
         float nightPerc = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
         if(world.rand.nextInt(Config.ambientFlareChance) == 0 && world.isAirBlock(at.toBlockPos()) && world.rand.nextFloat() < nightPerc) {
