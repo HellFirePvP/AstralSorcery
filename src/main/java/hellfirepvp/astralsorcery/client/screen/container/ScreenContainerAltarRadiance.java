@@ -61,7 +61,7 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
             ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity().getInventory());
             RenderSystem.pushMatrix();
             RenderSystem.translated(190, 35, 0);
-            RenderSystem.scaled(2.5, 2.5, 2.5);
+            RenderSystem.scaled(2.5, 2.5, 1);
 
             RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), out, 0, 0, null);
 

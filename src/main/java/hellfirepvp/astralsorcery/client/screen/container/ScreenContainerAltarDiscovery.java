@@ -45,7 +45,7 @@ public class ScreenContainerAltarDiscovery extends ScreenContainerAltar<Containe
             ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity().getInventory());
             RenderSystem.pushMatrix();
             RenderSystem.translated(130, 20, 0);
-            RenderSystem.scaled(1.7, 1.7, 1.7);
+            RenderSystem.scaled(1.7, 1.7, 1);
 
             RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), out, 0, 0, null);
 
