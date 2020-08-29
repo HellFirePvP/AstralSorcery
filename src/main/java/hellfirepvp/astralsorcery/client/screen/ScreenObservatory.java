@@ -128,6 +128,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        RenderSystem.enableDepthTest();
         super.render(mouseX, mouseY, pTicks);
 
         Minecraft.getInstance().gameSettings.thirdPersonView = 0;

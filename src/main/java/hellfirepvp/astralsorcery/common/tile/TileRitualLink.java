@@ -113,6 +113,13 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
 
     @Override
     public void onLinkCreate(PlayerEntity player, BlockPos other) {
+        if (this.linkedTo != null) {
+            TileRitualLink otherLink = MiscUtils.getTileAt(player.getEntityWorld(), this.linkedTo, TileRitualLink.class, true);
+            if (otherLink != null) {
+                otherLink.linkedTo = null;
+                otherLink.markForUpdate();
+            }
+        }
         this.linkedTo = other;
         TileRitualLink otherLink = MiscUtils.getTileAt(player.getEntityWorld(), other, TileRitualLink.class, true);
         if (otherLink != null) {

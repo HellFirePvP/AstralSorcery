@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.network.play.server;
 
 import hellfirepvp.astralsorcery.client.util.MiscPlayEffect;
 import hellfirepvp.astralsorcery.common.auxiliary.BlockBreakHelper;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
 import hellfirepvp.astralsorcery.common.item.lens.ItemColoredLensFire;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
@@ -114,7 +115,9 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         INFUSER_RECIPE_FINISH,
         BLOCK_TRANSMUTATION_TICK,
         TIME_FREEZE_EFFECT,
-        LIQUID_FOUNTAIN;
+        LIQUID_FOUNTAIN,
+        CONSTELLATION_EFFECT_PING,
+        ;
 
         @OnlyIn(Dist.CLIENT)
         private Consumer<PktPlayEffect> runEffect() {
@@ -151,6 +154,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return BlockTransmutationHandler::playTransmutation;
                 case LIQUID_FOUNTAIN:
                     return MiscPlayEffect::liquidFountain;
+                case CONSTELLATION_EFFECT_PING:
+                    return ConstellationEffect::playConstellationPing;
             }
             return (pkt) -> {};
         }

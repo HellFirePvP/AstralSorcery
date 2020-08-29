@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.client.model.builtin;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
 /**
@@ -29,7 +31,7 @@ public class ModelLens extends CustomModel {
     public ModelRenderer frame2;
 
     public ModelLens() {
-        super((resKey) -> RenderTypesAS.MODEL_LENS);
+        super((resKey) -> RenderTypesAS.MODEL_LENS_SOLID);
         this.textureWidth = 64;
         this.textureHeight = 32;
         this.base = new ModelRenderer(this, 0, 13);
@@ -47,13 +49,29 @@ public class ModelLens extends CustomModel {
         this.lens.addBox(-6.0F, -6.0F, -0.5F, 12, 12, 1, 0.0F);
     }
 
-    @Override
-    public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        this.base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        this.frame1.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        this.frame2.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        this.lens.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    public void renderFrame(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        IVertexBuilder vb = buffer.getBuffer(RenderTypesAS.MODEL_LENS_SOLID);
+        this.base.render(matrixStackIn, vb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        this.frame1.render(matrixStackIn, vb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        this.frame2.render(matrixStackIn, vb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        RenderingUtils.refreshDrawing(vb, RenderTypesAS.MODEL_LENS_SOLID);
+    }
+
+    public void renderGlass(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        IVertexBuilder vb = buffer.getBuffer(RenderTypesAS.MODEL_LENS_GLASS);
+        this.lens.render(matrixStackIn, vb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 
         this.lens.rotateAngleX = 0;
+        RenderingUtils.refreshDrawing(vb, RenderTypesAS.MODEL_LENS_GLASS);
     }
+
+    @Override
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int packedOverlayIn) {
+        super.render(matrixStackIn, buffer, packedLightIn, packedOverlayIn);
+        this.renderFrame(matrixStackIn, buffer, packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
+        this.renderGlass(matrixStackIn, buffer, packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
+    }
+
+    @Override
+    public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {}
 }

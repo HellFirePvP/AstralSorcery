@@ -55,6 +55,7 @@ public abstract class ScreenContainerAltar<T extends ContainerAltarBase> extends
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        RenderSystem.enableDepthTest();
         this.renderGuiBackground(partialTicks, mouseX, mouseY);
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
     }

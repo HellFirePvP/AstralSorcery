@@ -70,6 +70,7 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        RenderSystem.enableDepthTest();
         super.render(mouseX, mouseY, pTicks);
         this.mapRenderedConstellations.clear();
 

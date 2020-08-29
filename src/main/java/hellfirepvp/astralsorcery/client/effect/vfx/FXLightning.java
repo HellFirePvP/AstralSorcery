@@ -13,6 +13,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
+import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.Matrix4f;
@@ -127,16 +128,19 @@ public class FXLightning extends EntityVisualFX {
 
         Color c = this.getColor(pTicks);
         bufRenderDepth = Math.min(1F, (age + pTicks) / (buildSpeed * 20F));
-        renderRec(this.root, vb, renderStack, c.getRed(), c.getGreen(), c.getBlue());
+        renderRec(this.root, vb, renderStack, pTicks, c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F);
     }
 
-    private void renderRec(LightningVertex root, IVertexBuilder vb, MatrixStack renderStack, float r, float g, float b) {
+    private void renderRec(LightningVertex root, IVertexBuilder vb, MatrixStack renderStack, float pTicks, float r, float g, float b) {
         int allDepth = root.followingDepth;
         boolean mayRenderNext = 1F - (((float) root.followingDepth) / ((float) allDepth)) <= bufRenderDepth;
+        Vector3 playerOffset = RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks);
         for (LightningVertex next : root.next) {
-            drawLine(root.offset, next.offset, vb, renderStack, r, g, b);
+            Vector3 from = root.offset.clone().subtract(playerOffset);
+            Vector3 to = next.offset.clone().subtract(playerOffset);
+            drawLine(from, to, vb, renderStack, r, g, b);
             if (mayRenderNext) {
-                renderRec(next, vb, renderStack, r, g, b);
+                renderRec(next, vb, renderStack, pTicks, r, g, b);
             }
         }
     }

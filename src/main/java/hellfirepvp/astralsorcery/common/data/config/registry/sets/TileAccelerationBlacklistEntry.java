@@ -31,7 +31,7 @@ public class TileAccelerationBlacklistEntry implements ConfigDataSet, Predicate<
         this.filterString = filterString.toLowerCase();
         try {
             this.filteredSuperClass = Class.forName(filterString);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
             this.filteredSuperClass = null; //Then we match by string..
         }
     }

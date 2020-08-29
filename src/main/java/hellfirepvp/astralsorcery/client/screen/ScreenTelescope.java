@@ -110,6 +110,7 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        RenderSystem.enableDepthTest();
         super.render(mouseX, mouseY, pTicks);
 
         this.drawWHRect(TexturesAS.TEX_GUI_TELESCOPE);

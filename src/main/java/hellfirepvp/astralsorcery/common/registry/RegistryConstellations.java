@@ -262,7 +262,7 @@ public class RegistryConstellations {
         horologium = new ConstellationBase.WeakSpecial("horologium", CONSTELLATION_HOROLOGIUM) {
             @Override
             public boolean doesShowUp(World world, long day) {
-                WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
+                WorldContext ctx = SkyHandler.getContext(world);
                 if (ctx != null) {
                     return ctx.getCelestialHandler().isDayOfSolarEclipse();
                 }

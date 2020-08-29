@@ -213,7 +213,15 @@ public class RegistryRenderTypes {
                         .enableOverlay()
                         .build());
 
-        MODEL_LENS = createType("model_lens", DefaultVertexFormats.ENTITY,
+        MODEL_LENS_SOLID = createType("model_lens", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_frame"))
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
+                        .build());
+
+        MODEL_LENS_GLASS = createType("model_lens_glass", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_frame"))
                         .blend(Blending.DEFAULT)
@@ -223,7 +231,15 @@ public class RegistryRenderTypes {
                         .enableOverlay()
                         .build());
 
-        MODEL_LENS_COLORED = createType("model_lens_colored", DefaultVertexFormats.ENTITY,
+        MODEL_LENS_COLORED_SOLID = createType("model_lens_colored", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_color"))
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
+                        .build());
+
+        MODEL_LENS_COLORED_GLASS = createType("model_lens_colored_glass", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_color"))
                         .blend(Blending.DEFAULT)

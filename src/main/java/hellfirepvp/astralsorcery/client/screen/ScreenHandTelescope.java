@@ -90,6 +90,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        RenderSystem.enableDepthTest();
         super.render(mouseX, mouseY, pTicks);
 
         this.drawWHRect(TexturesAS.TEX_GUI_HAND_TELESCOPE);

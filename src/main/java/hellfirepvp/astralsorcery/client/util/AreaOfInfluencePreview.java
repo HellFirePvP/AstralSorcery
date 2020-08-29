@@ -49,6 +49,14 @@ public class AreaOfInfluencePreview implements ITickHandler {
 
     private AreaOfInfluencePreview() {}
 
+    public void showOrRemoveIdentical(TileAreaOfInfluence aoeTile) {
+        if (this.tileDimension == aoeTile.getDimensionType() && aoeTile.getEffectOriginPosition().equals(this.tilePosition)) {
+            this.clearClient();
+            return;
+        }
+        this.show(aoeTile);
+    }
+
     public void show(TileAreaOfInfluence aoeTile) {
         if (!(aoeTile instanceof TileEntity)) {
             return;

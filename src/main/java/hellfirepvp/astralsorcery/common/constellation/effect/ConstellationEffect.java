@@ -8,18 +8,28 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
+import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -69,7 +79,10 @@ public abstract class ConstellationEffect {
         if (te instanceof TileRitualLink) {
             TileRitualLink link = (TileRitualLink) te;
             pos = link.getLinkedTo();
-            return MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);
+            if (pos != null) {
+                pos = pos.subtract(TileRitualPedestal.RITUAL_ANCHOR_OFFEST);
+                return MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);
+            }
         }
         return te instanceof TileRitualPedestal ? (TileRitualPedestal) te : null;
     }
@@ -103,6 +116,35 @@ public abstract class ConstellationEffect {
             return pedestal.getOwner();
         }
         return null;
+    }
+
+    public void sendConstellationPing(IWorld world, Vector3 at) {
+        sendConstellationPing(world, at, this.getConstellation());
+    }
+
+    public static void sendConstellationPing(IWorld world, Vector3 at, IConstellation cst) {
+        PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.CONSTELLATION_EFFECT_PING)
+                .addData(buf -> {
+                    ByteBufUtils.writeVector(buf, at);
+                    ByteBufUtils.writeRegistryEntry(buf, cst);
+                });
+        PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, at.toBlockPos(), 32));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void playConstellationPing(PktPlayEffect pktPlayEffect) {
+        Vector3 at = ByteBufUtils.readVector(pktPlayEffect.getExtraData());
+        IConstellation cst = ByteBufUtils.readRegistryEntry(pktPlayEffect.getExtraData());
+
+        for (int i = 0; i < 6; i++) {
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(at.clone().add(Vector3.random().multiply(0.25F)))
+                    .setMotion(Vector3.random().multiply(0.015F))
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .color(VFXColorFunction.constant(cst.getConstellationColor().brighter()))
+                    .setScaleMultiplier(0.25F + rand.nextFloat() * 0.15F)
+                    .setMaxAge(35 + rand.nextInt(20));
+        }
     }
 
     public static abstract class Config extends ConfigEntry {

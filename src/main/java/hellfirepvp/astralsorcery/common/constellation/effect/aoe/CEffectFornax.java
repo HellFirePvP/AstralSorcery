@@ -112,27 +112,27 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
 
         Consumer<ItemStack> dropResult = stack -> ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, stack);
 
-        ListEntries.PosEntry newEntry = this.peekNewPosition(world, pos, properties);
-        if (newEntry == null) {
-            return false;
-        }
-        BlockPos at = newEntry.getPos();
+        return this.peekNewPosition(world, pos, properties).mapLeft(newEntry -> {
+            BlockPos at = newEntry.getPos();
 
-        if (properties.isCorrupted()) {
-            WorldFreezingRecipe freezingRecipe = WorldFreezingRegistry.INSTANCE.getRecipeFor(world, at);
-            if (freezingRecipe != null) {
-                freezingRecipe.doOutput(world, at, world.getBlockState(at), dropResult);
+            if (properties.isCorrupted()) {
+                WorldFreezingRecipe freezingRecipe = WorldFreezingRegistry.INSTANCE.getRecipeFor(world, at);
+                if (freezingRecipe != null) {
+                    freezingRecipe.doOutput(world, at, world.getBlockState(at), dropResult);
+                    return true;
+                }
+                return false;
+            }
+
+            WorldMeltableRecipe meltRecipe = WorldMeltableRegistry.INSTANCE.getRecipeFor(world, at);
+            if (meltRecipe != null) {
+                meltRecipe.doOutput(world, at, world.getBlockState(at), dropResult);
                 return true;
             }
             return false;
-        }
-
-        WorldMeltableRecipe meltRecipe = WorldMeltableRegistry.INSTANCE.getRecipeFor(world, at);
-        if (meltRecipe != null) {
-            meltRecipe.doOutput(world, at, world.getBlockState(at), dropResult);
-            return true;
-        }
-        return false;
+        }).ifRight(attemptedBreak -> {
+            sendConstellationPing(world, new Vector3(attemptedBreak).add(0.5, 0.5, 0.5));
+        }).left().orElse(false);
     }
 
     @Override

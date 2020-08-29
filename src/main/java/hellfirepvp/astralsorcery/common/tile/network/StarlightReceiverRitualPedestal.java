@@ -249,6 +249,13 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             }
         }
 
+        boolean ritualLinkChanged;
+        if (this.ritualLinkPos == null) {
+            ritualLinkChanged = trp.getRitualLinkTo() != null;
+        } else {
+            ritualLinkChanged = !this.ritualLinkPos.equals(trp.getRitualLinkTo());
+        }
+
         this.doesSeeSky = trp.doesSeeSky();
         this.hasMultiblock = trp.hasMultiblock();
         this.channelingType = trp.getRitualConstellation();
@@ -256,7 +263,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         this.attributes = trp.getAttributes();
         this.ritualLinkPos = trp.getRitualLinkTo();
 
-        if (this.channelingType != null && this.attributes != null && this.hasMultiblock && this.effect == null) {
+        if (this.channelingType != null && this.attributes != null && this.hasMultiblock && (this.effect == null || ritualLinkChanged)) {
             this.effect = ConstellationEffectRegistry.createInstance(this, this.channelingType);
             this.needsTileSync = true;
         }
@@ -290,8 +297,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
         lblWhile: while (offset == null && c > 0) {
             c--;
 
-            BlockPos test = MiscUtils.getRandomEntry(TileRitualPedestal.RITUAL_CIRCLE_OFFSETS, r)
-                    .add(TileRitualPedestal.RITUAL_LENS_OFFSET);
+            BlockPos test = MiscUtils.getRandomEntry(TileRitualPedestal.RITUAL_CIRCLE_OFFSETS, r);
             RaytraceAssist ray = new RaytraceAssist(getLocationPos(), getLocationPos().add(test));
             Vector3 from = new Vector3(0.5, 0.7, 0.5);
             Vector3 newDir = new Vector3(test).add(0.5, 0.5, 0.5).subtract(from);

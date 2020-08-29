@@ -155,11 +155,11 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
                     entity.addPotionEffect(new EffectInstance(Effects.STRENGTH, 100, potionAmplifier + 4));
                     entity.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 100, potionAmplifier + 4));
                     entity.addPotionEffect(new EffectInstance(Effects.HASTE, 100, potionAmplifier + 4));
-                    entity.addPotionEffect(new EffectInstance(EffectsAS.EFFECT_DROP_MODIFIER, 100, 6));
+                    entity.addPotionEffect(new EffectInstance(EffectsAS.EFFECT_DROP_MODIFIER, 100, 5));
                 } else {
-                    entity.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 30, Math.min(potionAmplifier, 3)));
+                    entity.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 30, Math.min(potionAmplifier, 3), true, true));
                     if (entity instanceof PlayerEntity) {
-                        entity.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 30, potionAmplifier));
+                        entity.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 30, potionAmplifier, true, false));
                     }
                 }
             }
@@ -194,7 +194,7 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
         public ForgeConfigSpec.IntValue potionAmplifier;
 
         public ArmaraConfig() {
-            super("armara", 24, 12);
+            super("armara", 16, 2);
         }
 
         @Override

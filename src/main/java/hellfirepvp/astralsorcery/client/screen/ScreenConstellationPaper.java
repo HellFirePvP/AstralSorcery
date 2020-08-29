@@ -77,6 +77,7 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        RenderSystem.enableDepthTest();
         drawWHRect(TexturesAS.TEX_GUI_CONSTELLATION_PAPER);
         drawHeader();
         drawConstellation();

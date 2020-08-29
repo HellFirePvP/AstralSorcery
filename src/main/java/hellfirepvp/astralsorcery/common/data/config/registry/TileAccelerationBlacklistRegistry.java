@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileSourceBase;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileTransmissionBase;
-import net.minecraft.client.renderer.texture.ITickable;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nullable;
@@ -39,7 +39,7 @@ public class TileAccelerationBlacklistRegistry extends ConfigDataAdapter<TileAcc
     private TileAccelerationBlacklistRegistry() {}
 
     public boolean canBeAccelerated(TileEntity tile) {
-        if (!(tile instanceof ITickable)) {
+        if (!(tile instanceof ITickableTileEntity)) {
             return false;
         }
 

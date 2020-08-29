@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.model.builtin;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -35,8 +36,8 @@ public abstract class CustomModel extends Model {
         return this.getRenderType(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
     }
 
-    public final void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn) {
-        this.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int packedOverlayIn) {
+        this.render(matrixStackIn, buffer.getBuffer(this.getGeneralType()), packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
     }
 
     protected void setRotateAngle(ModelRenderer modelPart, float x, float y, float z) {

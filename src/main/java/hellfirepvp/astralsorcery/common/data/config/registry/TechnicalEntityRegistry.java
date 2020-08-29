@@ -36,7 +36,7 @@ public class TechnicalEntityRegistry extends ConfigDataAdapter<EntityTechnicalEn
     }
 
     public boolean canAffect(EntityType<?> type) {
-        return MiscUtils.contains(this.getConfiguredValues(), e -> e.getEntityType().equals(type));
+        return !MiscUtils.contains(this.getConfiguredValues(), e -> e.getEntityType().equals(type));
     }
 
     private TechnicalEntityRegistry() {}
@@ -47,6 +47,9 @@ public class TechnicalEntityRegistry extends ConfigDataAdapter<EntityTechnicalEn
                 new EntityTechnicalEntry(Mods.MINECRAFT, "ender_pearl"),
                 new EntityTechnicalEntry(Mods.MINECRAFT, "firework_rocket"),
                 new EntityTechnicalEntry(Mods.ASTRAL_SORCERY, "observatory_helper"),
+                new EntityTechnicalEntry(Mods.ASTRAL_SORCERY, "nocturnal_spark"),
+                new EntityTechnicalEntry(Mods.ASTRAL_SORCERY, "illumination_spark"),
+                new EntityTechnicalEntry(Mods.ASTRAL_SORCERY, "grappling_hook"),
                 new EntityTechnicalEntry(Mods.BOTANIA, "mana_burst"),
                 new EntityTechnicalEntry(Mods.BOTANIA, "spark"),
                 new EntityTechnicalEntry(Mods.BOTANIA, "corporea_spark")

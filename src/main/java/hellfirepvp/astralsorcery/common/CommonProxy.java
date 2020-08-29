@@ -33,7 +33,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
-import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.*;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperEnchantmentTick;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
@@ -196,8 +195,6 @@ public class CommonProxy {
     }
 
     public void attachEventHandlers(IEventBus eventBus) {
-        eventBus.addListener(this::onClientInitialized);
-
         eventBus.addListener(this::onServerStop);
         eventBus.addListener(this::onServerStopping);
         eventBus.addListener(this::onServerStarting);
@@ -246,6 +243,7 @@ public class CommonProxy {
     protected void initializeConfigurations() {
         ConfigRegistries.getRegistries().addDataRegistry(FluidRarityRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(TechnicalEntityRegistry.INSTANCE);
+        ConfigRegistries.getRegistries().addDataRegistry(TileAccelerationBlacklistRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(AmuletEnchantmentRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(WeightedPerkAttributeRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(OreItemRarityRegistry.VOID_TRASH_REWARD);
@@ -344,10 +342,6 @@ public class CommonProxy {
     }
 
     // Generic events
-
-    private void onClientInitialized(ClientInitializedEvent event) {
-
-    }
 
     private void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         IReloadableResourceManager mgr = event.getServer().getResourceManager();

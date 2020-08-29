@@ -13,6 +13,7 @@ import com.google.common.collect.Sets;
 import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXMotionController;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXSpritePlane;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
@@ -63,6 +64,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -74,33 +76,11 @@ import java.util.*;
 public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitualPedestal> implements CrystalAttributeTile, TileAreaOfInfluence {
 
     public static final BlockPos RITUAL_ANCHOR_OFFEST = new BlockPos(0, 5, 0);
-    public static final BlockPos RITUAL_LENS_OFFSET = new BlockPos(0, 2, 0);
-    public static final Set<BlockPos> RITUAL_CIRCLE_OFFSETS = ImmutableSet.copyOf(new BlockPos[] {
-            new BlockPos(4, 0, 0),
-            new BlockPos(4, 0, 1),
-            new BlockPos(3, 0, 2),
-            new BlockPos(2, 0, 3),
-            new BlockPos(1, 0, 4),
-            new BlockPos(0, 0, 4),
-            new BlockPos(-1, 0, 4),
-            new BlockPos(-2, 0, 3),
-            new BlockPos(-3, 0, 2),
-            new BlockPos(-4, 0, 1),
-            new BlockPos(-4, 0, 0),
-            new BlockPos(-4, 0, -1),
-            new BlockPos(-3, 0, -2),
-            new BlockPos(-2, 0, -3),
-            new BlockPos(-1, 0, -4),
-            new BlockPos(0, 0, -4),
-            new BlockPos(1, 0, -4),
-            new BlockPos(2, 0, -3),
-            new BlockPos(3, 0, -2),
-            new BlockPos(4, 0, -1)
-    });
+    public static final Set<BlockPos> RITUAL_CIRCLE_OFFSETS;
     public static final int MAX_MIRROR_COUNT = 5;
 
     private TileInventoryFiltered inventory;
-    private Map<BlockPos, BlockState> offsetConfigurations = new HashMap<>();
+    private final Map<BlockPos, BlockState> offsetConfigurations = new HashMap<>();
 
     //Own sync data
     private UUID ownerUUID = null;
@@ -301,15 +281,21 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                         .spawn(at)
                         .setAlphaMultiplier(0.7F)
                         .color(VFXColorFunction.WHITE)
-                        .setGravityStrength(0.09F)
+                        .setMotion(Vector3.positiveYRandom(rand).addY(2).normalize().multiply(0.4F))
                         .setScaleMultiplier(0.2F + rand.nextFloat() * 0.15F)
+                        .motion(VFXMotionController.target(() -> new Vector3(this).add(RITUAL_ANCHOR_OFFEST).add(0.5, 0.5, 0.5), 0.1F))
                         .setMaxAge(30 + rand.nextInt(50));
             }
         }
 
+        List<BlockPos> activeMirrors = this.offsetMirrors.entrySet().stream()
+                .filter(Map.Entry::getValue)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
         IWeakConstellation ritualConstellation = getRitualConstellation();
         if (this.working && ritualConstellation != null) {
-            if (!this.offsetMirrors.isEmpty() && DayTimeHelper.isNight(getWorld())) {
+            if (!activeMirrors.isEmpty() && DayTimeHelper.isNight(getWorld())) {
                 if (rand.nextInt(chance * 2) == 0) {
                     Vector3 from = new Vector3(this).add(0.5, 0.1, 0.5);
                     MiscUtils.applyRandomOffset(from, rand, 2F);
@@ -368,7 +354,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
             }
 
             CrystalAttributes prop = this.getAttributes();
-            if (prop != null && rand.nextInt(4) == 0) {
+            if (prop != null && rand.nextInt(3) == 0) {
                 for (int i = 0; i < 3; i++) {
                     Vector3 at = new Vector3(this)
                             .add(0.5, 1.35, 0.5)
@@ -389,10 +375,10 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                 if (rand.nextInt(3) == 0) {
                     Vector3 from = new Vector3(this).add(0.5, 1.2, 0.5);
                     Vector3 to;
-                    if (this.offsetMirrors.isEmpty()) {
+                    if (activeMirrors.isEmpty()) {
                         to = new Vector3(this).add(0.5, 3.5 + rand.nextFloat() * 2.5, 0.5);
                     } else {
-                        BlockPos mirror = MiscUtils.getRandomEntry(this.getMirrors().keySet(), rand);
+                        BlockPos mirror = MiscUtils.getRandomEntry(activeMirrors, rand).add(this.getPos());
                         to = new Vector3(mirror).add(0.5, 0.5, 0.5);
                     }
 
@@ -415,7 +401,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
                         .spawn(source)
                         .setup(to, 0.8F, 0.8F);
 
-                if (this.ritualLinkTo != null) {
+                if (this.ritualLinkTo != null && this.offsetMirrors.get(mirror)) {
                     source = new Vector3(this).add(RITUAL_ANCHOR_OFFEST).add(0.5, 0.5, 0.5);
 
                     EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
@@ -659,5 +645,34 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
             return this.inventory.getCapability().cast();
         }
         return super.getCapability(cap, side);
+    }
+
+    static {
+        Set<BlockPos> circleOffsets = Sets.newHashSet(
+                new BlockPos(4, 1, 0),
+                new BlockPos(4, 1, 1),
+                new BlockPos(3, 1, 2),
+                new BlockPos(2, 1, 3),
+                new BlockPos(1, 1, 4),
+                new BlockPos(0, 1, 4),
+                new BlockPos(-1, 1, 4),
+                new BlockPos(-2, 1, 3),
+                new BlockPos(-3, 1, 2),
+                new BlockPos(-4, 1, 1),
+                new BlockPos(-4, 1, 0),
+                new BlockPos(-4, 1, -1),
+                new BlockPos(-3, 1, -2),
+                new BlockPos(-2, 1, -3),
+                new BlockPos(-1, 1, -4),
+                new BlockPos(0, 1, -4),
+                new BlockPos(1, 1, -4),
+                new BlockPos(2, 1, -3),
+                new BlockPos(3, 1, -2),
+                new BlockPos(4, 1, -1)
+        );
+        Set<BlockPos> ritualOffsets = new HashSet<>(circleOffsets);
+        circleOffsets.stream().map(pos -> pos.add(0, 1, 0)).forEach(ritualOffsets::add);
+        circleOffsets.stream().map(pos -> pos.add(0, 2, 0)).forEach(ritualOffsets::add);
+        RITUAL_CIRCLE_OFFSETS = ImmutableSet.copyOf(ritualOffsets);
     }
 }

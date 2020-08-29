@@ -226,7 +226,7 @@ public class ItemResonator extends Item implements OverrideInteractItem {
 
     @OnlyIn(Dist.CLIENT)
     private void playAreaOfInfluenceEffect(TileAreaOfInfluence aoeTile) {
-        AreaOfInfluencePreview.INSTANCE.show(aoeTile);
+        AreaOfInfluencePreview.INSTANCE.showOrRemoveIdentical(aoeTile);
     }
 
     @Override

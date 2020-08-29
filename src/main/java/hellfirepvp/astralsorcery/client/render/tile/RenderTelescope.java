@@ -37,7 +37,7 @@ public class RenderTelescope extends CustomTileEntityRenderer<TileTelescope> {
         renderStack.rotate(Vector3f.XP.rotationDegrees(180F));
         renderStack.rotate(Vector3f.YP.rotationDegrees(180F + tile.getRotation().ordinal() * 45F));
 
-        MODEL_TELESCOPE.render(renderStack, renderTypeBuffer.getBuffer(MODEL_TELESCOPE.getGeneralType()), combinedLight, combinedOverlay);
+        MODEL_TELESCOPE.render(renderStack, renderTypeBuffer, combinedLight, combinedOverlay);
 
         renderStack.pop();
     }
