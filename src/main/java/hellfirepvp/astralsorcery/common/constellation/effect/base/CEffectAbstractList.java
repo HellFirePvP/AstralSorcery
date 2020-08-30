@@ -172,7 +172,7 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
                 }
             }
             return Either.right(actual);
-        });
+        }, Either.right(actual));
     }
 
     @Nonnull
