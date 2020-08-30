@@ -164,7 +164,12 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         }
         return MiscUtils.executeWithChunk(world, actual, () -> {
             if (this.verifier.test(world, actual, world.getBlockState(actual))) {
-                return Either.left(this.createElement(world, actual));
+                T element = this.createElement(world, actual);
+                if (element == null) {
+                    return Either.right(actual);
+                } else {
+                    return Either.left(element);
+                }
             }
             return Either.right(actual);
         });
