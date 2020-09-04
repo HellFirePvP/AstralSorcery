@@ -245,7 +245,7 @@ public class RenderingUtils {
     public static void renderItemStack(ItemRenderer itemRenderer, ItemStack stack, int x, int y, @Nullable String alternativeText) {
         RenderSystem.pushMatrix();
         RenderSystem.translated(0, 0, 32);
-        itemRenderer.zLevel = 200.0F;
+        itemRenderer.zLevel = 200;
         FontRenderer font = stack.getItem().getFontRenderer(stack);
         if (font == null) {
             font = Minecraft.getInstance().fontRenderer;
@@ -253,7 +253,7 @@ public class RenderingUtils {
         itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
         itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y, alternativeText);
 
-        itemRenderer.zLevel = 0.0F;
+        itemRenderer.zLevel = 0;
         RenderSystem.popMatrix();
     }
 

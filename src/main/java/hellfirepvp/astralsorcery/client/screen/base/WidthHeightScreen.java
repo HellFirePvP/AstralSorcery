@@ -56,10 +56,6 @@ public class WidthHeightScreen extends InputScreen {
         return this.getBlitOffset();
     }
 
-    public void changeZLevel(int change) {
-        this.setBlitOffset(this.getBlitOffset() + change);
-    }
-
     public int getGuiWidth() {
         return this.guiWidth;
     }

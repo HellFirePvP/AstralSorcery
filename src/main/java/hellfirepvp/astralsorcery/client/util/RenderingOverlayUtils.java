@@ -94,9 +94,9 @@ public class RenderingOverlayUtils {
         //Draw itemstacks on frame
         tempY = offsetY;
         for (Tuple<ItemStack, Integer> stackTpl : itemStacks) {
-            itemRender.zLevel -= 250;
+            itemRender.zLevel = 250;
             itemRender.renderItemAndEffectIntoGUI(Minecraft.getInstance().player, stackTpl.getA(), offsetX + 5, tempY + 5);
-            itemRender.zLevel += 250;
+            itemRender.zLevel = 0;
             tempY += heightNormal;
         }
 

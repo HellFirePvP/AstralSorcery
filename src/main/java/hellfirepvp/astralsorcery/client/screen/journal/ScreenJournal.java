@@ -66,14 +66,14 @@ public class ScreenJournal extends WidthHeightScreen {
     }
 
     protected void drawDefault(AbstractRenderableTexture texture, int mouseX, int mouseY) {
-        this.changeZLevel(100);
+        this.setBlitOffset(100);
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
         drawWHRect(texture);
         RenderSystem.disableBlend();
 
         drawBookmarks(mouseX, mouseY);
-        this.changeZLevel(-100);
+        this.setBlitOffset(0);
     }
 
     private void drawBookmarks(int mouseX, int mouseY) {

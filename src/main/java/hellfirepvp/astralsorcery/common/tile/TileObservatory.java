@@ -132,7 +132,6 @@ public class TileObservatory extends TileEntityTick implements NamedInventoryTil
         this.prevObservatoryPitch = prevPitch;
         this.observatoryYaw = yaw;
         this.prevObservatoryYaw = prevYaw;
-        markForUpdate();
     }
 
     @Override

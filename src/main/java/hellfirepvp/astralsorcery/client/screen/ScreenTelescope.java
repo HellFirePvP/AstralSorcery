@@ -115,9 +115,7 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
 
         this.drawWHRect(TexturesAS.TEX_GUI_TELESCOPE);
 
-        this.changeZLevel(-10);
         this.drawConstellationCell(pTicks);
-        this.changeZLevel(10);
 
         this.drawNavArrows(mouseX, mouseY, pTicks);
     }
@@ -157,7 +155,7 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                 gen.nextFloat(); //Flush
             }
 
-            this.changeZLevel(1);
+            this.setBlitOffset(5);
             float starSize = 5F;
             TexturesAS.TEX_STAR_1.bindTexture();
             RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
@@ -174,9 +172,7 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                             .draw();
                 }
             });
-            this.changeZLevel(-1);
 
-            this.changeZLevel(3);
             for (TelescopeRotationDrawArea area : this.getVisibleDrawAreas()) {
                 for (IConstellation cst : area.getDisplayMap().keySet()) {
                     ConstellationDisplayInformation info = area.getDisplayMap().get(cst);
@@ -200,11 +196,9 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                     info.getFrameDrawInformation().putAll(cstRenderInfo);
                 }
             }
-            this.changeZLevel(-3);
 
-            this.changeZLevel(5);
             this.renderDrawnLines(gen, pTicks);
-            this.changeZLevel(-5);
+            this.setBlitOffset(0);
         }
 
         Blending.DEFAULT.apply();
@@ -215,8 +209,8 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
     private void drawSkyBackground(float pTicks, boolean canSeeSky) {
         Tuple<Color, Color> rgbFromTo = SkyScreen.getSkyGradient(canSeeSky, 1F, pTicks);
         RenderingDrawUtils.drawGradientRect(this.getGuiZLevel(),
-                this.guiLeft, this.guiTop,
-                this.guiLeft + this.guiWidth, this.guiTop + this.guiHeight,
+                this.guiLeft + 5, this.guiTop + 5,
+                this.guiLeft + this.guiWidth - 5, this.guiTop + this.guiHeight - 5,
                 rgbFromTo.getA().getRGB(), rgbFromTo.getB().getRGB());
     }
     @Override

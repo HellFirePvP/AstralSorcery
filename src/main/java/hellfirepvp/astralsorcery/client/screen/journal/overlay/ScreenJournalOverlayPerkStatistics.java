@@ -93,13 +93,13 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         int width = 275;
         int height = 344;
 
-        this.changeZLevel(150);
+        this.setBlitOffset(150);
         TexturesAS.TEX_GUI_PARCHMENT_BLANK.bindTexture();
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
         RenderingGuiUtils.drawRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, this.getGuiZLevel(), width, height);
         RenderSystem.disableBlend();
-        this.changeZLevel(-150);
+        this.setBlitOffset(0);
 
         drawHeader();
         drawPageText(mouseX, mouseY);

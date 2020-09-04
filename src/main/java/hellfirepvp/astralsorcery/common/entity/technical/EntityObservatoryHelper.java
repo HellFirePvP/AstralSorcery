@@ -94,7 +94,7 @@ public class EntityObservatoryHelper extends Entity {
 
         Entity riding = Iterables.getFirst(this.getPassengers(), null);
         if (riding instanceof PlayerEntity) {
-            this.applyObservatoryRotationsFrom(observatory, (PlayerEntity) riding);
+            this.applyObservatoryRotationsFrom(observatory, (PlayerEntity) riding, true);
         } else {
             this.prevRotationYaw = this.rotationYaw;
             this.prevRotationPitch = this.rotationPitch;
@@ -104,7 +104,7 @@ public class EntityObservatoryHelper extends Entity {
         }
     }
 
-    public void applyObservatoryRotationsFrom(TileObservatory to, PlayerEntity riding) {
+    public void applyObservatoryRotationsFrom(TileObservatory to, PlayerEntity riding, boolean updateTile) {
         if (riding.openContainer instanceof ContainerObservatory) {
             //Adjust observatory pitch and jaw to player head
             this.rotationYaw = riding.rotationYawHead;
@@ -118,6 +118,9 @@ public class EntityObservatoryHelper extends Entity {
         }
 
         to.updatePitchYaw(this.rotationPitch, this.prevRotationPitch, this.rotationYaw, this.prevRotationYaw);
+        if (updateTile) {
+            to.markForUpdate();
+        }
 
         double xOffset = -0.85;
         double zOffset = 0.15;

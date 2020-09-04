@@ -43,7 +43,7 @@ public class RenderObservatory extends CustomTileEntityRenderer<TileObservatory>
                 (ridden = Minecraft.getInstance().player.getRidingEntity()) != null &&
                 ridden instanceof EntityObservatoryHelper &&
                 ((EntityObservatoryHelper) ridden).getAssociatedObservatory() != null) {
-            ((EntityObservatoryHelper) ridden).applyObservatoryRotationsFrom(tile, player);
+            ((EntityObservatoryHelper) ridden).applyObservatoryRotationsFrom(tile, player, false);
         }
 
         float prevYaw = tile.prevObservatoryYaw;
