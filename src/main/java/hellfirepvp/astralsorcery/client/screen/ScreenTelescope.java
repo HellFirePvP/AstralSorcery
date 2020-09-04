@@ -137,9 +137,12 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
 
+        this.setBlitOffset(-10);
         this.drawSkyBackground(pTicks, canSeeSky);
 
         if (!this.isInitialized()) {
+            this.setBlitOffset(0);
+
             Blending.DEFAULT.apply();
             RenderSystem.disableBlend();
             RenderSystem.enableAlphaTest();
@@ -155,7 +158,7 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                 gen.nextFloat(); //Flush
             }
 
-            this.setBlitOffset(5);
+            this.setBlitOffset(-9);
             float starSize = 5F;
             TexturesAS.TEX_STAR_1.bindTexture();
             RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
@@ -173,6 +176,7 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                 }
             });
 
+            this.setBlitOffset(-7);
             for (TelescopeRotationDrawArea area : this.getVisibleDrawAreas()) {
                 for (IConstellation cst : area.getDisplayMap().keySet()) {
                     ConstellationDisplayInformation info = area.getDisplayMap().get(cst);
@@ -197,9 +201,11 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                 }
             }
 
+            this.setBlitOffset(-5);
             this.renderDrawnLines(gen, pTicks);
-            this.setBlitOffset(0);
         }
+
+        this.setBlitOffset(0);
 
         Blending.DEFAULT.apply();
         RenderSystem.disableBlend();

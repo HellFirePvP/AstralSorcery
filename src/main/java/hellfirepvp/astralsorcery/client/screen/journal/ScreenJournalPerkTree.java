@@ -204,8 +204,9 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         GL11.glScissor(MathHelper.floor((guiLeft + 27) * guiFactor), MathHelper.floor((guiTop + 27) * guiFactor),
                 MathHelper.floor((guiWidth - 54) * guiFactor), MathHelper.floor((guiHeight - 54) * guiFactor));
 
-        this.setBlitOffset(0);
+        this.setBlitOffset(-50);
         this.drawBackground();
+        this.setBlitOffset(0);
 
         this.drawPerkTree(pTicks);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -219,7 +220,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         drawSocketContextMenu();
         drawSealBox();
 
-        this.setBlitOffset(250);
+        this.setBlitOffset(510);
         drawHoverTooltips(mouseX, mouseY);
         this.setBlitOffset(0);
 

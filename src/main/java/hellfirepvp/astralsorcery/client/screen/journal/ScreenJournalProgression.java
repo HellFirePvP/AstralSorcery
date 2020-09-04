@@ -182,7 +182,7 @@ public class ScreenJournalProgression extends ScreenJournal {
 
         this.setBlitOffset(150);
         drawMouseHighlight(this.getGuiZLevel(), mouseX, mouseY);
-        this.setBlitOffset(100);
+        this.setBlitOffset(0);
     }
 
     private void drawSearchResults(int mouseX, int mouseY, float pTicks) {

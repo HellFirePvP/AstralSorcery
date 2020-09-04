@@ -116,9 +116,12 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
         Blending.DEFAULT.apply();
         RenderSystem.disableAlphaTest();
 
+        this.setBlitOffset(-10);
         this.drawSkyBackground(pTicks, canSeeSky, angleOpacity);
 
         if (!this.isInitialized()) {
+            this.setBlitOffset(0);
+
             RenderSystem.enableAlphaTest();
             Blending.DEFAULT.apply();
             RenderSystem.disableBlend();
@@ -139,7 +142,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
             }
             float playerPitch = Minecraft.getInstance().player.rotationPitch;
 
-            this.setBlitOffset(5);
+            this.setBlitOffset(-9);
             float starSize = 5F;
             TexturesAS.TEX_STAR_1.bindTexture();
             RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
@@ -156,6 +159,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
                 }
             });
 
+            this.setBlitOffset(-7);
             for (DrawArea areas : this.getVisibleDrawAreas()) {
                 for (IConstellation cst : areas.getDisplayMap().keySet()) {
                     ConstellationDisplayInformation info = areas.getDisplayMap().get(cst);
@@ -202,10 +206,12 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
                     }
                 }
             }
+
+            this.setBlitOffset(-5);
             this.renderDrawnLines(gen, pTicks);
-            this.setBlitOffset(0);
         }
 
+        this.setBlitOffset(0);
         RenderSystem.enableAlphaTest();
         Blending.DEFAULT.apply();
         RenderSystem.disableBlend();

@@ -75,7 +75,7 @@ public class ScreenJournalConstellationOverview extends ScreenJournal implements
         drawConstellationBackground();
         drawDefault(TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
 
-        this.setBlitOffset(150);
+        this.setBlitOffset(250);
         drawNavArrows(pTicks, mouseX, mouseY);
         drawConstellations(pTicks, mouseX, mouseY);
         this.setBlitOffset(0);
