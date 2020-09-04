@@ -48,16 +48,18 @@ public class MantleEffectAevitas extends MantleEffect {
 
         World world = player.getEntityWorld();
         BlockPos playerPos = player.getPosition();
-        for (int xx = -3; xx <= 3; xx++) {
-            for (int zz = -3; zz <= 3; zz++) {
-                BlockPos at = playerPos.add(xx, -1, zz);
-                MiscUtils.executeWithChunk(world, at, () -> {
-                    if (world.getBlockState(at).isAir(world, at) && AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBlock.get())) {
-                        if (world.setBlockState(at, BlocksAS.VANISHING.getDefaultState())) {
-                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBlock.get(), false);
+        if (!player.abilities.isFlying){
+            for (int xx = -3; xx <= 3; xx++) {
+                for (int zz = -3; zz <= 3; zz++) {
+                    BlockPos at = playerPos.add(xx, -1, zz);
+                    MiscUtils.executeWithChunk(world, at, () -> {
+                        if (world.getBlockState(at).isAir(world, at) && AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBlock.get())) {
+                            if (world.setBlockState(at, BlocksAS.VANISHING.getDefaultState())) {
+                                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBlock.get(), false);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
 
