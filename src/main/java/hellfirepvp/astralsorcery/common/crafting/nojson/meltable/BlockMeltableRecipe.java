@@ -58,7 +58,7 @@ public class BlockMeltableRecipe extends WorldMeltableRecipe {
     public void doOutput(World world, BlockPos pos, BlockState state, Consumer<ItemStack> itemOutput) {
         BlockState generated = this.outputGenerator.apply(WorldBlockPos.wrapServer(world, pos), state);
         if (generated != state) {
-            world.setBlockState(pos, generated, Constants.BlockFlags.DEFAULT_AND_RERENDER);
+            world.setBlockState(pos, generated, Constants.BlockFlags.DEFAULT);
         }
     }
 }

@@ -1,15 +1,7 @@
-/*******************************************************************************
- * HellFirePvP / Astral Sorcery 2020
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- * For further details, see the License file there.
- ******************************************************************************/
-
 package hellfirepvp.astralsorcery.common.block.tile;
 
 import hellfirepvp.astralsorcery.common.block.base.BlockFakedState;
-import hellfirepvp.astralsorcery.common.tile.TileTranslucentBlock;
+import hellfirepvp.astralsorcery.common.tile.TileTreeBeaconComponent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -26,13 +18,13 @@ import java.util.Random;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockTranslucentBlock
+ * Class: BlockTreeBeaconComponent
  * Created by HellFirePvP
- * Date: 28.11.2019 / 19:16
+ * Date: 04.09.2020 / 19:18
  */
-public class BlockTranslucentBlock extends BlockFakedState {
+public class BlockTreeBeaconComponent extends BlockFakedState {
 
-    public BlockTranslucentBlock() {
+    public BlockTreeBeaconComponent() {
         super(Properties.create(Material.BARRIER, MaterialColor.AIR)
                 .hardnessAndResistance(-1.0F, 6_000_000.0F)
                 .lightValue(12));
@@ -46,7 +38,7 @@ public class BlockTranslucentBlock extends BlockFakedState {
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader world) {
-        return new TileTranslucentBlock();
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+        return new TileTreeBeaconComponent();
     }
 }

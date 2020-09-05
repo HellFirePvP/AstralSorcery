@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.starlight.network.handler.BlockTransmutationHandler;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
+import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.util.CelestialStrike;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopEffectHelper;
@@ -117,6 +118,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         TIME_FREEZE_EFFECT,
         LIQUID_FOUNTAIN,
         CONSTELLATION_EFFECT_PING,
+        BLOCK_HARVEST_DRAW,
         ;
 
         @OnlyIn(Dist.CLIENT)
@@ -156,6 +158,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return MiscPlayEffect::liquidFountain;
                 case CONSTELLATION_EFFECT_PING:
                     return ConstellationEffect::playConstellationPing;
+                case BLOCK_HARVEST_DRAW:
+                    return TileTreeBeacon::playDrawParticles;
             }
             return (pkt) -> {};
         }

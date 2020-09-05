@@ -50,7 +50,7 @@ import static hellfirepvp.astralsorcery.common.lib.BlocksAS.*;
  */
 public class RegistryBlocks {
 
-    private static List<BlockDynamicColor> colorBlocks = Lists.newArrayList();
+    private static final List<BlockDynamicColor> COLOR_BLOCKS = Lists.newArrayList();
     static final List<CustomItemBlock> ITEM_BLOCKS = new LinkedList<>();
 
     private RegistryBlocks() {}
@@ -110,6 +110,8 @@ public class RegistryBlocks {
         TELESCOPE                   = registerBlock(new BlockTelescope());
         OBSERVATORY                 = registerBlock(new BlockObservatory());
         REFRACTION_TABLE            = registerBlock(new BlockRefractionTable());
+        TREE_BEACON                 = registerBlock(new BlockTreeBeacon());
+        TREE_BEACON_COMPONENT       = registerBlock(new BlockTreeBeaconComponent());
 
         FLARE_LIGHT         = registerBlock(new BlockFlareLight());
         TRANSLUCENT_BLOCK   = registerBlock(new BlockTranslucentBlock());
@@ -123,7 +125,7 @@ public class RegistryBlocks {
 
     @OnlyIn(Dist.CLIENT)
     public static void registerColors(ColorHandlerEvent.Block blockColorEvent) {
-        colorBlocks.forEach(block -> blockColorEvent.getBlockColors().register(block::getColor, (Block) block));
+        COLOR_BLOCKS.forEach(block -> blockColorEvent.getBlockColors().register(block::getColor, (Block) block));
     }
 
     private static BlockSlabTemplate makeSlab(BlockState base, String name) {
@@ -151,7 +153,7 @@ public class RegistryBlocks {
             ITEM_BLOCKS.add((CustomItemBlock) block);
         }
         if (block instanceof BlockDynamicColor) {
-            colorBlocks.add((BlockDynamicColor) block);
+            COLOR_BLOCKS.add((BlockDynamicColor) block);
         }
         return block;
     }

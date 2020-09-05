@@ -51,12 +51,12 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 09.07.2019 / 19:26
  */
-public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver {
+public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver<TileRitualPedestal> {
 
     private static final Random rand = new Random();
 
     //own receiver data
-    private Map<BlockPos, Boolean> offsetMirrors = new HashMap<>();
+    private final Map<BlockPos, Boolean> offsetMirrors = new HashMap<>();
     private List<CrystalAttributes> fracturedCrystalStats = new ArrayList<>();
 
     //tile data
@@ -71,7 +71,6 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     private ConstellationEffect effect = null;
     private double collectedStarlight = 0;
 
-    private boolean needsTileSync = false;
     private float noiseDistribution = -1;
 
     public StarlightReceiverRitualPedestal(BlockPos thisPos) {
@@ -80,12 +79,8 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
 
     @Override
     public void update(World world) {
+        super.update(world);
         this.ticksExisted++;
-
-        if (this.needsTileSync && this.syncData(world)) {
-            this.needsTileSync = false;
-            this.markDirty(world);
-        }
 
         if (!this.hasMultiblock || this.channelingType == null || this.attributes == null) {
             return;
@@ -185,7 +180,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
                 this.attributes = null;
             }
 
-            this.needsTileSync = true;
+            this.markForTileSync();
             this.markDirty(world);
         }
     }
@@ -221,14 +216,13 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     // Tile/Node sync stuff
     //=========================================================================================
 
-    private boolean syncData(World world) {
-        TileRitualPedestal trp = this.getTileAtPos(world, TileRitualPedestal.class);
-        if (trp != null) {
-            trp.setReceiverData(this.effect != null, this.offsetMirrors, this.attributes, this.fracturedCrystalStats);
-            this.fracturedCrystalStats.clear();
-            return true;
-        }
-        return false;
+
+    @Override
+    public boolean syncTileData(World world, TileRitualPedestal tile) {
+        tile.setReceiverData(this.effect != null, this.offsetMirrors, this.attributes, this.fracturedCrystalStats);
+        this.fracturedCrystalStats.clear();
+        this.markDirty(world);
+        return true;
     }
 
     @Override
@@ -245,7 +239,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             this.effect = null;
             this.offsetMirrors.clear();
             if (trp.isWorking() || !trp.getMirrors().isEmpty()) {
-                this.needsTileSync = true;
+                this.markForTileSync();
             }
         }
 
@@ -265,7 +259,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
 
         if (this.channelingType != null && this.attributes != null && this.hasMultiblock && (this.effect == null || ritualLinkChanged)) {
             this.effect = ConstellationEffectRegistry.createInstance(this, this.channelingType);
-            this.needsTileSync = true;
+            this.markForTileSync();
         }
 
         if (!this.hasMultiblock || this.effect == null) {
@@ -274,6 +268,11 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
 
         this.markDirty(trp.getWorld());
         return super.updateFromTileEntity(tile);
+    }
+
+    @Override
+    public Class<TileRitualPedestal> getTileClass() {
+        return TileRitualPedestal.class;
     }
 
     //=========================================================================================
@@ -320,8 +319,8 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
 
         if (offset != null) {
             this.offsetMirrors.put(offset, false);
+            this.markForTileSync();
             this.markDirty(world);
-            this.needsTileSync = true;
         }
     }
 
@@ -369,7 +368,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
             }
         }
         if (needsUpdate) {
-            this.needsTileSync = true;
+            this.markForTileSync();
         }
     }
 
@@ -406,8 +405,6 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     @Override
     public void readFromNBT(CompoundNBT compound) {
         super.readFromNBT(compound);
-
-        this.needsTileSync = compound.getBoolean("needsTileSync");
 
         this.doesSeeSky = compound.getBoolean("doesSeeSky");
         this.hasMultiblock = compound.getBoolean("hasMultiblock");
@@ -454,8 +451,6 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver 
     @Override
     public void writeToNBT(CompoundNBT compound) {
         super.writeToNBT(compound);
-
-        compound.putBoolean("needsTileSync", this.needsTileSync);
 
         compound.putBoolean("doesSeeSky", this.doesSeeSky);
         compound.putBoolean("hasMultiblock", this.hasMultiblock);

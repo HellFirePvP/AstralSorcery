@@ -180,6 +180,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     //=========================================================================================
 
 
+    @OnlyIn(Dist.CLIENT)
     @Nullable
     @Override
     public Color getEffectColor() {

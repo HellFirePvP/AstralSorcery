@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.tile.base;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -113,8 +115,14 @@ public abstract class TileEntitySynchronized extends TileEntity implements ILoca
         markDirty();
     }
 
-    public void dropItemOnTop(ItemStack stack) {
-        ItemUtils.dropItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.5, getPos().getZ() + 0.5, stack);
+    public ItemEntity dropItemOnTop(ItemStack stack) {
+        return ItemUtils.dropItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.5, getPos().getZ() + 0.5, stack);
     }
 
+    public boolean removeSelf() {
+        if (this.getWorld().isRemote()) {
+            return false;
+        }
+        return this.getWorld().setBlockState(this.getPos(), Blocks.AIR.getDefaultState());
+    }
 }

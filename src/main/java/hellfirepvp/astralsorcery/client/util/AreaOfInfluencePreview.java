@@ -41,7 +41,7 @@ public class AreaOfInfluencePreview implements ITickHandler {
 
     private static final int MAX_LIFE = 40;
     private static final float alphaTick = 1F / MAX_LIFE;
-    private static final float sizeCube1 = 0.9F, sizeCube2 = 1.05F;
+    private static final float sizeCube1 = 1.25F, sizeCube2 = 1.35F;
 
     private DimensionType tileDimension = null;
     private BlockPos tilePosition = null;

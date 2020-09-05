@@ -22,7 +22,7 @@ import java.util.EnumSet;
  */
 public class EffectUpdater implements ITickHandler {
 
-    private static EffectUpdater INSTANCE = new EffectUpdater();
+    private static final EffectUpdater INSTANCE = new EffectUpdater();
 
     public static EffectUpdater getInstance() {
         return INSTANCE;

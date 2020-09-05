@@ -175,7 +175,7 @@ public class FXLightning extends EntityVisualFX {
 
     private static class LightningVertex {
 
-        private Vector3 offset;
+        private final Vector3 offset;
         private List<LightningVertex> next = new LinkedList<>();
         private int followingDepth = -1;
 
@@ -190,7 +190,7 @@ public class FXLightning extends EntityVisualFX {
                 for (LightningVertex vertex : next) {
                     vertex.calcDepthRec();
                 }
-                this.followingDepth = MiscUtils.getMaxEntry(this.next, (v) -> v.followingDepth) + 1;
+                this.followingDepth = MiscUtils.getMaxEntry(this.next, (v) -> v.followingDepth).followingDepth + 1;
             }
         }
     }

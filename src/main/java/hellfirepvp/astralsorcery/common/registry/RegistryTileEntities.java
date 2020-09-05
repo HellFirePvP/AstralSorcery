@@ -52,6 +52,8 @@ public class RegistryTileEntities {
         RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class, BlocksAS.RITUAL_PEDESTAL);
         TELESCOPE = registerTile(TileTelescope.class, BlocksAS.TELESCOPE);
         TRANSLUCENT_BLOCK = registerTile(TileTranslucentBlock.class, BlocksAS.TRANSLUCENT_BLOCK);
+        TREE_BEACON = registerTile(TileTreeBeacon.class, BlocksAS.TREE_BEACON);
+        TREE_BEACON_COMPONENT = registerTile(TileTreeBeaconComponent.class, BlocksAS.TREE_BEACON_COMPONENT);
         VANISHING = registerTile(TileVanishing.class, BlocksAS.VANISHING);
         WELL = registerTile(TileWell.class, BlocksAS.WELL);
     }
@@ -70,7 +72,8 @@ public class RegistryTileEntities {
         ClientRegistry.bindTileEntityRenderer(RITUAL_PEDESTAL, RenderRitualPedestal::new);
         ClientRegistry.bindTileEntityRenderer(SPECTRAL_RELAY, RenderSpectralRelay::new);
         ClientRegistry.bindTileEntityRenderer(TELESCOPE, RenderTelescope::new);
-        ClientRegistry.bindTileEntityRenderer(TRANSLUCENT_BLOCK, RenderTranslucentBlock::new);
+        ClientRegistry.bindTileEntityRenderer(TRANSLUCENT_BLOCK, RenderTileFakedState::new);
+        ClientRegistry.bindTileEntityRenderer(TREE_BEACON_COMPONENT, RenderTileFakedState::new);
         ClientRegistry.bindTileEntityRenderer(WELL, RenderWell::new);
     }
 

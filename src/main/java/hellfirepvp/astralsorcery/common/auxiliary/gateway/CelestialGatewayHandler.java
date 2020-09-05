@@ -57,7 +57,6 @@ public class CelestialGatewayHandler {
         CelestialGatewayFilter filter = getFilter();
         MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
         DimensionManager.getRegistry().stream()
-                .filter(DimensionManager::keepLoaded)
                 .forEach(type -> {
                     if (!filter.hasGateways(type.getRegistryName())) {
                         return;

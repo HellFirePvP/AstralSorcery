@@ -13,6 +13,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucentBlock;
+import hellfirepvp.astralsorcery.common.tile.base.TileFakedState;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
 import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
@@ -28,23 +29,23 @@ import java.awt.*;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RenderTranslucentBlock
+ * Class: RenderTileFakedState
  * Created by HellFirePvP
  * Date: 28.11.2019 / 19:52
  */
-public class RenderTranslucentBlock extends CustomTileEntityRenderer<TileTranslucentBlock> {
+public class RenderTileFakedState extends CustomTileEntityRenderer<TileFakedState> {
 
-    public RenderTranslucentBlock(TileEntityRendererDispatcher tileRenderer) {
+    public RenderTileFakedState(TileEntityRendererDispatcher tileRenderer) {
         super(tileRenderer);
     }
 
     @Override
-    public void render(TileTranslucentBlock tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
+    public void render(TileFakedState tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
         BlockState fakedState = tile.getFakedState();
         if (fakedState.getBlock() instanceof AirBlock) {
             return;
         }
-        Color blendColor = ColorUtils.flareColorFromDye(tile.getOverlayColor());
+        Color blendColor = tile.getOverlayColor();
         int[] color = new int[] { blendColor.getRed(), blendColor.getGreen(), blendColor.getBlue(), 128 };
 
         RenderType type = RenderTypeLookup.getRenderType(fakedState);

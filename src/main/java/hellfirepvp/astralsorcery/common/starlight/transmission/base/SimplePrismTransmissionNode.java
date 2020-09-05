@@ -35,11 +35,9 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
     private boolean ignoreBlockCollision = false;
 
-    private Map<BlockPos, PrismNext> nextNodes = new HashMap<>();
-
     private BlockPos thisPos;
-
-    private Set<BlockPos> sourcesToThis = new HashSet<>();
+    private final Set<BlockPos> sourcesToThis = new HashSet<>();
+    private final Map<BlockPos, PrismNext> nextNodes = new HashMap<>();
 
     public SimplePrismTransmissionNode(BlockPos thisPos) {
         this.thisPos = thisPos;
@@ -98,7 +96,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
     @Override
     public void notifySourceLink(World world, BlockPos source) {
-        if (!sourcesToThis.contains(source)) sourcesToThis.add(source);
+        sourcesToThis.add(source);
     }
 
     @Override
@@ -172,10 +170,10 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     private static class PrismNext {
 
         private final SimplePrismTransmissionNode parent;
-        private boolean reachable = false;
+        private boolean reachable;
         private double distanceSq;
         private final BlockPos pos;
-        private RaytraceAssist rayAssist = null;
+        private RaytraceAssist rayAssist;
 
         private PrismNext(SimplePrismTransmissionNode parent, World world, BlockPos start, BlockPos end, boolean doRayTest, boolean oldRayState) {
             this.parent = parent;

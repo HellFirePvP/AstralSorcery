@@ -97,6 +97,15 @@ public class MiscUtils {
         return world.isAreaLoaded(test, range);
     }
 
+    public static List<BlockSnapshot> captureBlockChanges(World world, Runnable r) {
+        world.captureBlockSnapshots = true;
+        r.run();
+        world.captureBlockSnapshots = false;
+        List<BlockSnapshot> blockSnapshots = (List<BlockSnapshot>) world.capturedBlockSnapshots.clone();
+        world.capturedBlockSnapshots.clear();
+        return blockSnapshots;
+    }
+
     @Nullable
     public static <T> T getRandomEntry(Collection<T> collection, Random rand) {
         if (collection == null || collection.isEmpty()) {
@@ -144,15 +153,30 @@ public class MiscUtils {
         return item != null ? item.getValue() : null;
     }
 
-    public static <T, V extends Comparable<V>> V getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {
+    public static <T, V extends Comparable<V>> T getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {
         V max = null;
+        T maxElement = null;
         for (T element : elements) {
             V val = valueFunction.apply(element);
             if (max == null || max.compareTo(val) < 0) {
                 max = val;
+                maxElement = element;
             }
         }
-        return max;
+        return maxElement;
+    }
+
+    public static <T, V extends Comparable<V>> T getMinEntry(Collection<T> elements, Function<T, V> valueFunction) {
+        V min = null;
+        T minElement = null;
+        for (T element : elements) {
+            V val = valueFunction.apply(element);
+            if (min == null || min.compareTo(val) > 0) {
+                min = val;
+                minElement = element;
+            }
+        }
+        return minElement;
     }
 
     public static boolean canSeeSky(World world, BlockPos at, boolean loadChunk, boolean defaultValue) {
@@ -401,6 +425,15 @@ public class MiscUtils {
             out.add(circleVec.clone().rotate(Math.toRadians(deg), axis.clone()).add(centerOffset));
         }
         return out;
+    }
+
+    public static Vector3 getRandomCirclePosition(Vector3 centerOffset, Vector3 axis, double radius) {
+        return getCirclePosition(centerOffset, axis, radius, Math.random() * 360);
+    }
+
+    public static Vector3 getCirclePosition(Vector3 centerOffset, Vector3 axis, double radius, double degree) {
+        Vector3 circleVec = axis.clone().perpendicular().normalize().multiply(radius);
+        return circleVec.rotate(Math.toRadians(degree), axis.clone()).add(centerOffset);
     }
 
     @Nullable

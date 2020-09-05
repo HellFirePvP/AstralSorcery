@@ -641,6 +641,7 @@
   "block.astralsorcery.observatory": "Observatory",
   "block.astralsorcery.prism": "PrismLens",
   "block.astralsorcery.refraction_table": "Stellar Refraction Table",
+  "block.astralsorcery.tree_beacon": "Tree Beacon",
   "block.astralsorcery.ritual_link": "Ritual Anchor",
   "block.astralsorcery.ritual_pedestal": "Ritual Pedestal",
   "block.astralsorcery.telescope": "Telescope",
@@ -653,7 +654,6 @@
 
   "__comment": "",
 
-  "block.astralsorcery.blocktreebeacon": "Tree Beacon",
   "block.astralsorcery.blockcelestialgateway": "Celestial Gateway",
   "block.astralsorcery.blockbore": "Evershifting Fountain",
   "block.astralsorcery.blockborehead.liquid": "Neromantic Prime",

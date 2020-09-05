@@ -105,8 +105,9 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
             if (state.getBlock() instanceof BlockTranslucentBlock) {
                 TileTranslucentBlock tb = MiscUtils.getTileAt(world, pos, TileTranslucentBlock.class, true);
                 if (tb != null && (tb.getPlayerUUID() == null || tb.getPlayerUUID().equals(player.getUniqueID()))) {
-                    SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_UNHIGHLIGHT, SoundCategory.BLOCKS, world, pos, 1F, 0.9F + random.nextFloat() * 0.2F);
-                    world.setBlockState(pos, tb.getFakedState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                    if (tb.revert()) {
+                        SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_UNHIGHLIGHT, SoundCategory.BLOCKS, world, pos, 1F, 0.9F + random.nextFloat() * 0.2F);
+                    }
                 }
             } else {
                 TileEntity tile = MiscUtils.getTileAt(world, pos, TileEntity.class, true);
@@ -120,7 +121,7 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
                             TileTranslucentBlock tb = MiscUtils.getTileAt(world, pos, TileTranslucentBlock.class, true);
                             if (tb != null) {
                                 tb.setFakedState(state);
-                                tb.setOverlayColor(getConfiguredColor(stack));
+                                tb.setOverlayColor(ColorUtils.flareColorFromDye(getConfiguredColor(stack)));
                                 tb.setPlayerUUID(player.getUniqueID());
                             } else {
                                 //Abort, we didn't get a tileentity... for some reason.

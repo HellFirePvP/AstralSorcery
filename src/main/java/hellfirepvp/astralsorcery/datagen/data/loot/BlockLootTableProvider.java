@@ -196,6 +196,8 @@ public class BlockLootTableProvider extends BlockLootTables {
         this.registerDropSelfLootTable(TELESCOPE);
         this.registerDropSelfLootTable(OBSERVATORY);
         this.registerDropSelfLootTable(REFRACTION_TABLE);
+        this.registerDropSelfLootTable(TREE_BEACON);
+        this.registerLootTable(TREE_BEACON_COMPONENT, LootTable.builder());
 
         this.registerLootTable(FLARE_LIGHT, LootTable.builder());
         this.registerLootTable(TRANSLUCENT_BLOCK, LootTable.builder());

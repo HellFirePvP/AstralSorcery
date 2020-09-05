@@ -27,10 +27,10 @@ public interface VFXMotionController<T extends EntityVisualFX> {
     VFXMotionController<?> IDENTITY = (fx, motion) -> motion;
 
     public static <T extends EntityVisualFX> VectorTarget<T> target(Supplier<Vector3> targetSupplier) {
-        return target(targetSupplier, 1);
+        return target(targetSupplier, 0.1F);
     }
 
-    public static <T extends EntityVisualFX> VectorTarget<T> target(Supplier<Vector3> targetSupplier, double velocityMultiplier) {
+    public static <T extends EntityVisualFX> VectorTarget<T> target(Supplier<Vector3> targetSupplier, float velocityMultiplier) {
         return new VectorTarget<>(targetSupplier, velocityMultiplier);
     }
 
@@ -62,9 +62,9 @@ public interface VFXMotionController<T extends EntityVisualFX> {
     public static class VectorTarget<T extends EntityVisualFX> implements VFXMotionController<T> {
 
         private final Supplier<Vector3> positionSupplier;
-        private final double velocityMultiplier;
+        private final float velocityMultiplier;
 
-        protected VectorTarget(Supplier<Vector3> positionSupplier, double velocityMultiplier) {
+        protected VectorTarget(Supplier<Vector3> positionSupplier, float velocityMultiplier) {
             this.positionSupplier = positionSupplier;
             this.velocityMultiplier = velocityMultiplier;
         }

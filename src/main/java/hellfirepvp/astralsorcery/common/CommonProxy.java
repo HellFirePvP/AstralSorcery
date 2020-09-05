@@ -57,6 +57,7 @@ import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegist
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
+import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.DamageSourceUtil;
 import hellfirepvp.astralsorcery.common.util.ServerLifecycleListener;
@@ -79,6 +80,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -177,9 +179,10 @@ public class CommonProxy {
         this.serverLifecycleListeners.add(ResearchIOThread.startup());
         this.serverLifecycleListeners.add(ServerLifecycleListener.wrap(EventHandlerCache::onServerStart, EventHandlerCache::onServerStop));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(CelestialGatewayHandler.INSTANCE::onServerStart));
-        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(BlockBreakHelper::clearServerCache));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkTree.PERK_TREE::setupServerPerkTree));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkLevelManager::loadPerkLevels));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(BlockBreakHelper::clearServerCache));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(TileTreeBeacon.TreeWatcher::clearServerCache));
 
         SyncDataHolder.initialize();
 
@@ -212,6 +215,7 @@ public class CommonProxy {
         eventBus.addListener(PlayerAmuletHandler::onEnchantmentAdd);
         eventBus.addListener(BlockDropCaptureAssist.INSTANCE::onDrop);
         eventBus.addListener(CelestialGatewayHandler.INSTANCE::onWorldInit);
+        eventBus.addListener(EventPriority.LOW, TileTreeBeacon.TreeWatcher::onGrow);
 
         tickManager.attachListeners(eventBus);
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);
@@ -252,6 +256,7 @@ public class CommonProxy {
         ConfigRegistries.getRegistries().addDataRegistry(EntityTransmutationRegistry.INSTANCE);
 
         ToolsConfig.CONFIG.newSubSection(WandsConfig.CONFIG);
+        MachineryConfig.CONFIG.newSubSection(TileTreeBeacon.Config.CONFIG);
 
         this.serverConfig.addConfigEntry(GeneralConfig.CONFIG);
         this.serverConfig.addConfigEntry(ToolsConfig.CONFIG);
@@ -261,6 +266,7 @@ public class CommonProxy {
         this.serverConfig.addConfigEntry(LogConfig.CONFIG);
         this.serverConfig.addConfigEntry(PerkConfig.CONFIG);
         this.serverConfig.addConfigEntry(AmuletRandomizeHelper.CONFIG);
+        this.serverConfig.addConfigEntry(MachineryConfig.CONFIG);
 
         RegistryPerks.initConfig(PerkConfig.CONFIG::newSubSection);
 

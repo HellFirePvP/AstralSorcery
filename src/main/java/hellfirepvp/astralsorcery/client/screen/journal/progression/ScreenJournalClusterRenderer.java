@@ -208,9 +208,9 @@ public class ScreenJournalClusterRenderer {
             case ITEMSTACK:
                 MatrixStack renderStack = new MatrixStack();
                 renderStack.translate(offsetX, offsetY, 0);
-                renderStack.scale(progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor());
-                renderStack.translate(3, 3, 3);
-                renderStack.scale(0.75F, 0.75F, 0.75F);
+                renderStack.scale(progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor(), 1);
+                renderStack.translate(3, 3, 0);
+                renderStack.scale(0.75F, 0.75F, 1);
                 renderStack.translate(0, 0, 100);
 
                 RenderingUtils.renderTranslucentItemStackModelGUI(node.getRenderItemStack(ClientScheduler.getClientTick()),

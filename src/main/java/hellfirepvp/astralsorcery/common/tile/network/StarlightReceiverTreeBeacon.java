@@ -1,11 +1,3 @@
-/*******************************************************************************
- * HellFirePvP / Astral Sorcery 2020
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- * For further details, see the License file there.
- ******************************************************************************/
-
 package hellfirepvp.astralsorcery.common.tile.network;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
@@ -13,39 +5,39 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
+import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: StarlightReceiverWell
+ * Class: StarlightReceiverTreeBeacon
  * Created by HellFirePvP
- * Date: 30.06.2019 / 21:57
+ * Date: 04.09.2020 / 19:58
  */
-public class StarlightReceiverWell extends SimpleTransmissionReceiver<TileWell> {
+public class StarlightReceiverTreeBeacon extends SimpleTransmissionReceiver<TileTreeBeacon> {
 
-    public StarlightReceiverWell(BlockPos thisPos) {
+    public StarlightReceiverTreeBeacon(BlockPos thisPos) {
         super(thisPos);
     }
 
     @Override
     public void onStarlightReceive(World world, IWeakConstellation type, double amount) {
-        TileWell well = getTileAtPos(world);
+        TileTreeBeacon well = getTileAtPos(world);
         if (well != null) {
-            well.receiveStarlight(amount);
+            well.receiveStarlight(amount, type);
         }
     }
 
     @Override
-    public boolean syncTileData(World world, TileWell tile) {
+    public boolean syncTileData(World world, TileTreeBeacon tile) {
         return true;
     }
 
     @Override
-    public Class<TileWell> getTileClass() {
-        return TileWell.class;
+    public Class<TileTreeBeacon> getTileClass() {
+        return TileTreeBeacon.class;
     }
 
     @Override
@@ -57,9 +49,8 @@ public class StarlightReceiverWell extends SimpleTransmissionReceiver<TileWell> 
 
         @Override
         public IPrismTransmissionNode get() {
-            return new StarlightReceiverWell(null);
+            return new StarlightReceiverTreeBeacon(null);
         }
 
     }
-
 }

@@ -93,6 +93,8 @@ public class BlocksAS {
     public static BlockTelescope                 TELESCOPE;
     public static BlockObservatory               OBSERVATORY;
     public static BlockRefractionTable           REFRACTION_TABLE;
+    public static BlockTreeBeacon                TREE_BEACON;
+    public static BlockTreeBeaconComponent       TREE_BEACON_COMPONENT;
 
     public static BlockFlareLight                FLARE_LIGHT;
     public static BlockTranslucentBlock          TRANSLUCENT_BLOCK;

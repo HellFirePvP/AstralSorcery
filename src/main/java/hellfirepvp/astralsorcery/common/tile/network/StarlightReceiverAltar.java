@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,7 +24,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 12.08.2019 / 19:54
  */
-public class StarlightReceiverAltar extends SimpleTransmissionReceiver {
+public class StarlightReceiverAltar extends SimpleTransmissionReceiver<TileAltar> {
 
     public StarlightReceiverAltar(BlockPos thisPos) {
         super(thisPos);
@@ -31,10 +32,20 @@ public class StarlightReceiverAltar extends SimpleTransmissionReceiver {
 
     @Override
     public void onStarlightReceive(World world, IWeakConstellation type, double amount) {
-        TileAltar well = getTileAtPos(world, TileAltar.class);
+        TileAltar well = getTileAtPos(world);
         if (well != null) {
             well.receiveStarlight(amount);
         }
+    }
+
+    @Override
+    public boolean syncTileData(World world, TileAltar tile) {
+        return true;
+    }
+
+    @Override
+    public Class<TileAltar> getTileClass() {
+        return TileAltar.class;
     }
 
     @Override

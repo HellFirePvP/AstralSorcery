@@ -47,8 +47,8 @@ public class FXFacingAtlasParticle extends EntityVisualFX {
 
     public <T extends FXFacingAtlasParticle> T selectFraction(float percentage) {
         percentage = MathHelper.clamp(percentage, 0F, 1F);
-        this.minU *= (1F - percentage) * rand.nextFloat();
-        this.minV *= (1F - percentage) * rand.nextFloat();
+        this.minU += this.uLength * (1F - percentage) * rand.nextFloat();
+        this.minV += this.vLength * (1F - percentage) * rand.nextFloat();
         this.uLength *= percentage;
         this.vLength *= percentage;
         return (T) this;

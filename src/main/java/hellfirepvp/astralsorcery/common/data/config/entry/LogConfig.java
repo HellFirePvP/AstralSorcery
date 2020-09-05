@@ -46,7 +46,7 @@ public class LogConfig extends ConfigEntry {
 
     public boolean isLoggingEnabled(LogCategory category) {
         ForgeConfigSpec.BooleanValue cfg = this.loggingConfigurations.get(category);
-        return cfg == null ? false : cfg.get();
+        return cfg != null && cfg.get();
     }
 
 }

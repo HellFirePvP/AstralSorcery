@@ -52,9 +52,9 @@ public interface VFXColorFunction<T extends EntityVisualFX> {
             @Nonnull
             @Override
             public Color getColor(@Nonnull T fx, float pTicks) {
-                float h = (float) RenderingVectorUtils.interpolate(hsb1[0], hsb2[0], degree);
-                float s = (float) RenderingVectorUtils.interpolate(hsb1[1], hsb2[1], degree);
-                float b = (float) RenderingVectorUtils.interpolate(hsb1[2], hsb2[2], degree);
+                float h = RenderingVectorUtils.interpolate(hsb1[0], hsb2[0], degree);
+                float s = RenderingVectorUtils.interpolate(hsb1[1], hsb2[1], degree);
+                float b = RenderingVectorUtils.interpolate(hsb1[2], hsb2[2], degree);
                 return Color.getHSBColor(h, s, b);
             }
         };

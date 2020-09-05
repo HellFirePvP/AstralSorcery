@@ -50,11 +50,20 @@ public class BlockUtils {
 
     @Nonnull
     public static List<ItemStack> getDrops(ServerWorld world, BlockPos pos, int harvestFortune, Random rand) {
-        BlockState state;
+        return getDrops(world, pos, harvestFortune, rand, ItemStack.EMPTY);
+    }
+
+    @Nonnull
+    public static List<ItemStack> getDrops(ServerWorld world, BlockPos pos, int harvestFortune, Random rand, ItemStack tool) {
+        return getDrops(world, pos, world.getBlockState(pos), harvestFortune, rand, tool);
+    }
+
+    @Nonnull
+    public static List<ItemStack> getDrops(ServerWorld world, BlockPos pos, BlockState state, int harvestFortune, Random rand, ItemStack tool) {
         LootContext.Builder builder = new LootContext.Builder(world)
                 .withParameter(LootParameters.POSITION, pos)
-                .withParameter(LootParameters.BLOCK_STATE, (state = world.getBlockState(pos)))
-                .withParameter(LootParameters.TOOL, ItemStack.EMPTY)
+                .withParameter(LootParameters.BLOCK_STATE, state)
+                .withParameter(LootParameters.TOOL, tool)
                 .withNullableParameter(LootParameters.BLOCK_ENTITY, world.getTileEntity(pos))
                 .withRandom(rand)
                 .withLuck(harvestFortune);
@@ -235,7 +244,9 @@ public class BlockUtils {
         try {
             //Capturing block snapshots is aids. don't try that at home kids.
             world.captureBlockSnapshots = false;
+            world.restoringBlockSnapshots = true;
             world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
+            world.restoringBlockSnapshots = false;
             world.capturedBlockSnapshots.forEach((s) -> world.setBlockState(s.getPos(), Blocks.AIR.getDefaultState()));
         } finally {
             BlockDropCaptureAssist.getCapturedStacksAndStop(); //Discard
@@ -250,7 +261,11 @@ public class BlockUtils {
 
     private static void restoreWorldState(World world, boolean prevCaptureFlag, List<BlockSnapshot> prevSnapshots) {
         world.captureBlockSnapshots = false;
+
+        world.restoringBlockSnapshots = true;
         world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
+        world.restoringBlockSnapshots = false;
+
         world.capturedBlockSnapshots.clear();
 
         world.captureBlockSnapshots = prevCaptureFlag;
