@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
+import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.lib.ContainerTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
@@ -46,6 +47,8 @@ public class ContainerAltarAttunement extends ContainerAltarBase {
 
     @Override
     void bindAltarInventory(TileInventory altarInventory) {
+        addSlot(new SlotItemHandler(altarInventory,  0, 84,  11));
+        addSlot(new SlotItemHandler(altarInventory,  4, 156, 11));
         for (int xx = 0; xx < 3; xx++) {
             addSlot(new SlotItemHandler(altarInventory,  6 + xx, 102 + xx * 18, 29));
         }
@@ -55,8 +58,6 @@ public class ContainerAltarAttunement extends ContainerAltarBase {
         for (int xx = 0; xx < 3; xx++) {
             addSlot(new SlotItemHandler(altarInventory, 16 + xx, 102 + xx * 18, 65));
         }
-        addSlot(new SlotItemHandler(altarInventory,  0, 84,  11));
-        addSlot(new SlotItemHandler(altarInventory,  4, 156, 11));
         addSlot(new SlotItemHandler(altarInventory, 20, 84,  83));
         addSlot(new SlotItemHandler(altarInventory, 24, 156, 83));
     }
@@ -64,5 +65,28 @@ public class ContainerAltarAttunement extends ContainerAltarBase {
     @Override
     Optional<ItemStack> handleCustomTransfer(PlayerEntity player, int index) {
         return Optional.empty();
+    }
+
+    @Override
+    public int translateIndex(int fromIndex) {
+        if (fromIndex == 24) {
+            return 12;
+        }
+        if (fromIndex >= 20) {
+            return 11;
+        }
+        if (fromIndex >= 16) {
+            return fromIndex - 8;
+        }
+        if (fromIndex >= 11) {
+            return fromIndex - 6;
+        }
+        if (fromIndex >= 6) {
+            return fromIndex - 4;
+        }
+        if (fromIndex >= 4) {
+            return 1;
+        }
+        return 0;
     }
 }

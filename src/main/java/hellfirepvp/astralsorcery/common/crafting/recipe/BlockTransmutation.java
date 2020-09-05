@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -70,7 +71,13 @@ public class BlockTransmutation extends CustomMatcherRecipe {
     }
 
     public List<BlockMatchInformation> getInputOptions() {
-        return stateCheck;
+        return this.stateCheck;
+    }
+
+    public List<ItemStack> getInputDisplay() {
+        return this.getInputOptions().stream()
+                .map(BlockMatchInformation::getDisplayStack)
+                .collect(Collectors.toList());
     }
 
     @Nonnull

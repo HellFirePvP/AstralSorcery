@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.15.2-1.12.8'
+version = '1.15.2-1.12.9'
 group = 'hellfirepvp.astralsorcery'
 archivesBaseName = 'astralsorcery'
 String build_version = ""
@@ -117,7 +117,7 @@ dependencies {
     compileOnly 'top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.4:api'
     runtimeOnly 'top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.4:deobf'
 
-    compileOnly fg.deobf('mezz.jei:jei-1.15.2:6.0.2.12:api')
+    compileOnly fg.deobf('mezz.jei:jei-1.15.2:6.0.2.12')
     runtimeOnly fg.deobf('mezz.jei:jei-1.15.2:6.0.2.12')
 
 }

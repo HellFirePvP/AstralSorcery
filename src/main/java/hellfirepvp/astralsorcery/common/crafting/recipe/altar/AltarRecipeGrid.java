@@ -335,8 +335,8 @@ public class AltarRecipeGrid {
 
     public static class Builder {
 
-        private LinkedList<String> pattern = Lists.newLinkedList();
-        private Map<Character, Ingredient> inputMapping = Maps.newHashMap();
+        private final LinkedList<String> pattern = Lists.newLinkedList();
+        private final Map<Character, Ingredient> inputMapping = Maps.newHashMap();
 
         public Builder patternLine(String line) {
             if (line.length() > GRID_SIZE) {

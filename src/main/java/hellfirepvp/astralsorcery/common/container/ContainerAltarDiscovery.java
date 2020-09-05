@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
+import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.lib.ContainerTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
@@ -15,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.Optional;
@@ -60,5 +62,16 @@ public class ContainerAltarDiscovery extends ContainerAltarBase {
     @Override
     Optional<ItemStack> handleCustomTransfer(PlayerEntity player, int index) {
         return Optional.empty();
+    }
+
+    @Override
+    public int translateIndex(int fromIndex) {
+        if (fromIndex >= 16) {
+            return fromIndex - 10;
+        }
+        if (fromIndex >= 11) {
+            return fromIndex - 8;
+        }
+        return fromIndex - 6;
     }
 }

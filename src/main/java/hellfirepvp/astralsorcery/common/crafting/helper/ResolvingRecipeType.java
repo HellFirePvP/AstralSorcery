@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -70,6 +72,13 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
             recipes.add((T) rec);
         }
         return recipes;
+    }
+
+    @Nonnull
+    public Collection<T> getRecipes(Predicate<T> test) {
+        return this.getAllRecipes().stream()
+                .filter(test)
+                .collect(Collectors.toList());
     }
 
     public final Class<T> getBaseClass() {

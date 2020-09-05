@@ -51,7 +51,7 @@ public enum AltarType {
     private final int defaultAltarCraftingDuration;
     private final Supplier<Item> altarItemSupplier;
     private final Supplier<StructureType> structureSupplier;
-    private Predicate<Integer> slotValidator;
+    private final Predicate<Integer> slotValidator;
 
     AltarType(ResearchProgression progressTier, int defaultAltarCraftingDuration, Supplier<Item> altarItemSupplier, Supplier<StructureType> structureSupplier, int... validSlots) {
         this.associatedTier = progressTier;

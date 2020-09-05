@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
+import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,6 +47,9 @@ public abstract class ContainerAltarBase extends ContainerTileEntity<TileAltar> 
     abstract void bindAltarInventory(TileInventory altarInventory);
 
     abstract Optional<ItemStack> handleCustomTransfer(PlayerEntity player, int index);
+
+    //Yes this is not a pretty solution. tell me a better one.
+    public abstract int translateIndex(int fromIndex);
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {

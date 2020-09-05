@@ -68,11 +68,14 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
             RenderSystem.popMatrix();
         }
 
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableDepthTest();
+
         float pTicks = Minecraft.getInstance().getRenderPartialTicks();
         TexturesAS.TEX_STAR_1.bindTexture();
-        RenderSystem.disableDepthTest();
         rand.setSeed(0x889582997FF29A92L);
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 18; i++) {
 
             int x = rand.nextInt(54);
             int y = rand.nextInt(54);
@@ -91,15 +94,14 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
         if (c != null && altar.hasMultiblock() && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
             rand.setSeed(0x61FF25A5B7C24109L);
 
-            RenderSystem.enableBlend();
-            Blending.DEFAULT.apply();
             RenderingConstellationUtils.renderConstellationIntoGUI(c.getConstellationColor(), c,
                     16, 41, this.getBlitOffset(),
                     58, 58,
                     2, () -> 0.2F + 0.8F * RenderingConstellationUtils.conCFlicker(Minecraft.getInstance().world.getDayTime(), pTicks, 5 + rand.nextInt(5)),
                     true, false);
-            RenderSystem.disableBlend();
         }
+
+        RenderSystem.disableBlend();
         RenderSystem.enableDepthTest();
     }
 
