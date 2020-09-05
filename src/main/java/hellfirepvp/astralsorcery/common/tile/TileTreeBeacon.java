@@ -195,26 +195,27 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
 
         float radius = Config.CONFIG.range.get().floatValue();
         Vector3 thisPos = new Vector3(this.getPos()).add(0.5, 0.5, 0.5);
-        int amt = MathHelper.floor( radius * Math.PI / 3);
+        int amt = MathHelper.floor( radius * Math.PI / 8);
         for (int i = 0; i < amt; i++) {
             Vector3 at = MiscUtils.getRandomCirclePosition(thisPos, Vector3.RotAxis.Y_AXIS, radius);
+            MiscUtils.applyRandomOffset(at, rand, 0.35F);
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(at)
                     .color(colorFn)
-                    .setGravityStrength(-0.0025F)
+                    .setGravityStrength(-0.0015F + rand.nextFloat() * -0.001F)
                     .setScaleMultiplier(0.3F + rand.nextFloat() * 0.1F)
                     .setMaxAge(30 + rand.nextInt(20));
         }
 
-        for (int i = 0; i < Math.ceil(amt * 0.8F); i++) {
+        for (int i = 0; i < Math.ceil(amt * 1.5F); i++) {
             Vector3 offset = new Vector3(0.5, 0.5, 0.5);
-            MiscUtils.applyRandomOffset(offset, rand, radius * 0.65F);
+            MiscUtils.applyRandomCircularOffset(offset, rand, radius);
             offset.setY(offset.getY() * 0.75F);
             Vector3 at = new Vector3(this.getPos()).add(offset);
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(at)
                     .color(colorFn)
-                    .setGravityStrength(-0.0015F)
+                    .setGravityStrength(rand.nextBoolean() ? -0.0015F : 0)
                     .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F)
                     .setMaxAge(25 + rand.nextInt(10));
         }

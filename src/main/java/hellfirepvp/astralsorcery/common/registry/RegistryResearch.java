@@ -232,11 +232,10 @@ public class RegistryResearch {
                 .addTomeLookup(ItemsAS.INFUSED_CRYSTAL_SHOVEL, 5, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        //TODO tree beacon
-        ResearchNode resTreeBeacon = new ResearchNode(Items.APPLE, "TREEBEACON", 1.25F, 0.5F)
+        ResearchNode resTreeBeacon = new ResearchNode(BlocksAS.TREE_BEACON, "TREEBEACON", 1.25F, 0.5F)
                 .addPage(text("TREEBEACON.1"))
-                //.addPage(recipe(BlocksAS.TREE_BEACON))
-                //.addTomeLookup(BlocksAS.TREE_BEACON, 1, ResearchProgression.ATTUNEMENT)
+                .addPage(recipe(BlocksAS.TREE_BEACON))
+                .addTomeLookup(BlocksAS.TREE_BEACON, 1, ResearchProgression.CONSTELLATION)
                 .addPage(text("TREEBEACON.3"))
                 .register(ResearchProgression.CONSTELLATION);
 

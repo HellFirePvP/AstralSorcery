@@ -12,6 +12,9 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -27,11 +30,13 @@ import javax.annotation.Nullable;
  */
 public class BlockTreeBeacon extends BlockStarlightNetwork implements CustomItemBlock {
 
+    private static final VoxelShape SHAPE = VoxelShapes.create(3D / 16D, 0D / 16D, 3D / 16D, 13D / 16D, 16D / 16D, 13D / 16D);
+
     public BlockTreeBeacon() {
         super(PropertiesMisc.defaultPlant()
                 .hardnessAndResistance(1.5F, 6.0F)
                 .lightValue(6)
-                .sound(SoundType.WOOD));
+                .sound(SoundType.PLANT));
     }
 
     @Override
@@ -42,6 +47,11 @@ public class BlockTreeBeacon extends BlockStarlightNetwork implements CustomItem
         if (ttb != null && !world.isRemote() && placer instanceof ServerPlayerEntity && !MiscUtils.isPlayerFakeMP((ServerPlayerEntity) placer)) {
             ttb.setPlayerUUID(placer.getUniqueID());
         }
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+        return SHAPE;
     }
 
     @Override

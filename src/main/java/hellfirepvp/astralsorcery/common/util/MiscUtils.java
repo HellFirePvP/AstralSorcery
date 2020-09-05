@@ -498,6 +498,17 @@ public class MiscUtils {
         target.addZ(rand.nextFloat() * multiplier * (rand.nextBoolean() ? 1 : -1));
     }
 
+    public static void applyRandomCircularOffset(Vector3 target, Random rand) {
+        applyRandomOffset(target, rand, 1F);
+    }
+
+    public static void applyRandomCircularOffset(Vector3 target, Random rand, float multiplier) {
+        Vector3 v = Vector3.random().normalize().multiply(rand.nextFloat() * multiplier);
+        target.addX(v.getX() * (rand.nextBoolean() ? 1 : -1));
+        target.addY(v.getY() * (rand.nextBoolean() ? 1 : -1));
+        target.addZ(v.getZ() * (rand.nextBoolean() ? 1 : -1));
+    }
+
     public static void executeWithChunk(IWorldReader world, ChunkPos pos, Runnable run) {
         executeWithChunk(world, pos.asBlockPos(), nullSupplier(run));
     }
