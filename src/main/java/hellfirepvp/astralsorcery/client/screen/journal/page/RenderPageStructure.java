@@ -125,7 +125,7 @@ public class RenderPageStructure extends RenderablePage {
         Rectangle rect = RenderingDrawUtils.drawInfoStar(renderStack, IDrawRenderTypeBuffer.defaultBuffer(), 15, pTicks);
         rect.translate((int) (offsetX + 160), (int) (offsetY + 10));
         if (rect.contains(mouseX, mouseY)) {
-            RenderingDrawUtils.renderBlueTooltip(offsetX + 160, offsetY + 10, zLevel + 150, this.contentStacks, RenderablePage.getFontRenderer(), false);
+            RenderingDrawUtils.renderBlueTooltip(offsetX + 160, offsetY + 10, zLevel + 650, this.contentStacks, RenderablePage.getFontRenderer(), false);
         }
     }
 
