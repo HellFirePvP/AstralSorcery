@@ -132,7 +132,6 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
 
     protected void renderItemStack(float offsetX, float offsetY, float zLevel, double scale, ItemStack stack) {
         RenderSystem.depthMask(true);
-        RenderHelper.enableStandardItemLighting();
 
         RenderSystem.pushMatrix();
         RenderSystem.translated(offsetX, offsetY, zLevel + 60);
@@ -140,7 +139,6 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), stack, 0, 0, null);
         RenderSystem.popMatrix();
 
-        RenderHelper.disableStandardItemLighting();
         RenderSystem.depthMask(false);
     }
 

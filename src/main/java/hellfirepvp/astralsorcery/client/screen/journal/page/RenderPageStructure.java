@@ -91,7 +91,7 @@ public class RenderPageStructure extends RenderablePage {
     }
 
     private float renderSizeDescription(float offsetX, float offsetY, float zLevel) {
-        Vector3 size = new Vector3(this.structure.getMaximumOffset()).subtract(this.structure.getMinimumOffset());
+        Vector3 size = new Vector3(this.structure.getMaximumOffset()).subtract(this.structure.getMinimumOffset()).add(1, 1, 1);
         FontRenderer fr = RenderablePage.getFontRenderer();
         float scale = 1.3F;
         String desc = (int) size.getX() + " - " + (int) size.getY() + " - " + (int) size.getZ();
