@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.util;
 import com.google.common.collect.Iterables;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.lib.GameRulesAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.block.BlockState;
@@ -180,9 +181,9 @@ public class MiscUtils {
     }
 
     public static boolean canSeeSky(World world, BlockPos at, boolean loadChunk, boolean defaultValue) {
-        //if (world.getGameRules().getBoolean(GameRulesAS.IGNORE_SKYLIGHT_CHECK_RULE)) {
-        //    return true;
-        //}
+        if (world.getGameRules().getBoolean(GameRulesAS.IGNORE_SKYLIGHT_CHECK_RULE)) {
+            return true;
+        }
 
         if (!world.getChunkProvider().isChunkLoaded(new ChunkPos(at)) && !loadChunk) {
             return defaultValue;
