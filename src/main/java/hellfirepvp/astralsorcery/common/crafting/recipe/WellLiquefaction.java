@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.crafting.recipe;
 
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import net.minecraft.fluid.Fluid;
@@ -29,7 +30,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 30.06.2019 / 23:30
  */
-public class WellLiquefaction extends CustomMatcherRecipe {
+public class WellLiquefaction extends CustomMatcherRecipe implements GatedRecipe.Progression {
 
     private final Color catalystColor;
     private final Ingredient input;
@@ -49,6 +50,12 @@ public class WellLiquefaction extends CustomMatcherRecipe {
         this.catalystColor = catalystColor;
         this.productionMultiplier = productionMultiplier;
         this.shatterMultiplier = shatterMultiplier;
+    }
+
+    @Nonnull
+    @Override
+    public ResearchProgression getRequiredProgression() {
+        return ResearchProgression.BASIC_CRAFT;
     }
 
     public boolean matches(ItemStack input) {

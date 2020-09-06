@@ -22,7 +22,6 @@ import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.LogicalSide;
 
 import static hellfirepvp.astralsorcery.common.lib.ColorsAS.*;
 import static hellfirepvp.astralsorcery.common.lib.ConstellationsAS.*;

@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantment;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
+import hellfirepvp.astralsorcery.common.item.base.client.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -41,7 +41,7 @@ import java.util.*;
  */
 public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
 
-    private static Random rand = new Random();
+    private static final Random rand = new Random();
 
     public ItemEnchantmentAmulet() {
         super(new Properties()

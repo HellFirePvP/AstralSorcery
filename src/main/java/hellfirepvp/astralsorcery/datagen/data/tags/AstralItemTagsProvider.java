@@ -6,14 +6,6 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-/*******************************************************************************
- * HellFirePvP / Astral Sorcery 2020
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- * For further details, see the License file there.
- ******************************************************************************/
-
 package hellfirepvp.astralsorcery.datagen.data.tags;
 
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;

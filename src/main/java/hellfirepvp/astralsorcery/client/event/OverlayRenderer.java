@@ -1,14 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- *  All rights reserved.
- *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- *  For further details, see the License file there.
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.client.event;
 
-import hellfirepvp.astralsorcery.common.item.base.render.ItemOverlayRender;
+import hellfirepvp.astralsorcery.common.item.base.client.ItemOverlayRender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;

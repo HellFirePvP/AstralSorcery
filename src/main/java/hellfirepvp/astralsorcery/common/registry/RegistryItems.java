@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlockProperties;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
+import hellfirepvp.astralsorcery.common.item.base.client.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
@@ -52,7 +52,7 @@ import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
  */
 public class RegistryItems {
 
-    private static List<ItemDynamicColor> colorItems = Lists.newArrayList();
+    private static final List<ItemDynamicColor> colorItems = Lists.newArrayList();
 
     private RegistryItems() {}
 

@@ -41,7 +41,6 @@ import hellfirepvp.astralsorcery.common.network.play.client.PktPerkGemModificati
 import hellfirepvp.astralsorcery.common.network.play.client.PktRequestPerkSealAction;
 import hellfirepvp.astralsorcery.common.network.play.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.perk.*;
-import hellfirepvp.astralsorcery.common.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
 import hellfirepvp.astralsorcery.common.perk.source.AttributeConverterProvider;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;

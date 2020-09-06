@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXBlock;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXColorEffectSphere;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXCube;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
-import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 
 import java.util.LinkedList;
 import java.util.List;

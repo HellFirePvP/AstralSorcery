@@ -350,7 +350,7 @@ public class ScreenJournalProgression extends ScreenJournal {
         this.searchResultPageIndex.clear();
         String searchText = this.searchTextEntry.getText().toLowerCase();
         for (ResearchProgression research : ResearchProgression.values()) {
-            if (!prog.getResearchProgression().contains(research)) {
+            if (!prog.hasResearch(research)) {
                 continue;
             }
 

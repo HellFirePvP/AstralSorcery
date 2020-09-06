@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
-import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.container.slot.SlotConstellationFocus;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.item.base.IConstellationFocus;

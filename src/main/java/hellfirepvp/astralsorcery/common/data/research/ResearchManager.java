@@ -61,7 +61,7 @@ public class ResearchManager {
         progToGive.add(prog);
         while (!progToGive.isEmpty()) {
             ResearchProgression give = progToGive.pop();
-            if (!progress.getResearchProgression().contains(give)) {
+            if (!progress.hasResearch(give)) {
                 progress.forceGainResearch(give);
             }
             progToGive.addAll(give.getPreConditions());
@@ -81,7 +81,7 @@ public class ResearchManager {
         ProgressionTier tier = prog.getRequiredProgress();
         if (!progress.getTierReached().isThisLaterOrEqual(tier)) return;
         for (ResearchProgression other : prog.getPreConditions()) {
-            if (!progress.getResearchProgression().contains(other)) return;
+            if (!progress.hasResearch(other)) return;
         }
 
         if (progress.forceGainResearch(prog)) {

@@ -36,8 +36,8 @@ public enum ResearchProgression implements IExtensibleEnum {
     BRILLIANCE(ProgressionTier.BRILLIANCE, RADIANCE)
     ;
 
-    private List<ResearchProgression> preConditions = new LinkedList<>();
-    private List<ResearchNode> researchNodes = new LinkedList<>();
+    private final List<ResearchProgression> preConditions = new LinkedList<>();
+    private final List<ResearchNode> researchNodes = new LinkedList<>();
     private final ProgressionTier requiredProgress;
     private final String unlocName;
 

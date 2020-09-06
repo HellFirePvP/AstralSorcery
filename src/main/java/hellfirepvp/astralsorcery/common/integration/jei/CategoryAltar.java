@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.integration.jei;
 
 import com.google.common.collect.ImmutableList;
@@ -9,30 +17,23 @@ import hellfirepvp.astralsorcery.common.block.tile.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
-import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
-import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
-import hellfirepvp.astralsorcery.common.integration.IntegrationJEI;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,14 +46,12 @@ public class CategoryAltar extends JEICategory<SimpleAltarRecipe> {
 
     private final IDrawable background, icon;
     private final AltarType altarType;
-    private final Predicate<Integer> gridFilter;
 
     public CategoryAltar(ResourceLocation id, String textureRef, BlockAltar altarRef, IGuiHelper guiHelper) {
         super(id);
         this.background = guiHelper.createDrawable(AstralSorcery.key(String.format("textures/gui/jei/%s.png", textureRef)), 0, 0, 116, 162);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(altarRef));
         this.altarType = altarRef.getAltarType();
-        this.gridFilter = this.altarType::hasSlot;
     }
 
     @Override
@@ -72,6 +71,11 @@ public class CategoryAltar extends JEICategory<SimpleAltarRecipe> {
 
     public AltarType getAltarType() {
         return altarType;
+    }
+
+    @Override
+    public Collection<SimpleAltarRecipe> getRecipes() {
+        return RecipeTypesAS.TYPE_ALTAR.getRecipes(recipe -> recipe.getAltarType().equals(this.getAltarType()));
     }
 
     @Override

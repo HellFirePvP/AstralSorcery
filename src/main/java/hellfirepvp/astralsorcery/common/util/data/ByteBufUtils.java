@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;

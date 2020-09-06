@@ -1,9 +1,9 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- *  All rights reserved.
- *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- *  For further details, see the License file there.
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.client.screen;
@@ -27,9 +27,6 @@ import hellfirepvp.astralsorcery.common.network.play.client.PktRotateTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
 import org.lwjgl.opengl.GL11;

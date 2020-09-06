@@ -1,9 +1,9 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- *  All rights reserved.
- *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- *  For further details, see the License file there.
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.client.event.effect;
@@ -14,33 +14,20 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
-import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
-import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
-import hellfirepvp.astralsorcery.common.GuiType;
-import hellfirepvp.astralsorcery.common.item.ItemTome;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LecternBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.LecternScreen;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.LecternTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event;
 import org.lwjgl.opengl.GL11;
 
 import java.util.zip.GZIPInputStream;

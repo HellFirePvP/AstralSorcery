@@ -41,6 +41,7 @@ public enum Mods {
     },
     DRACONIC_EVOLUTION("draconicevolution"),
     CURIOS("curios"),
+    JEI("jei"),
     BOTANIA("botania");
 
     private final String modid;
@@ -48,7 +49,7 @@ public enum Mods {
 
     //private static Class<?> gcPlayerClass, urPlayerClass;
 
-    private Mods(String modName) {
+    Mods(String modName) {
         this.modid = modName;
         this.loaded = ModList.get().isLoaded(this.modid);
     }

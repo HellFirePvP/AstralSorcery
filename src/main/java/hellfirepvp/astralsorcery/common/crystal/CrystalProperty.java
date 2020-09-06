@@ -79,7 +79,7 @@ public abstract class CrystalProperty extends ForgeRegistryEntry<CrystalProperty
     }
 
     public boolean canSee(PlayerProgress progress) {
-        return this.requiredResearch == null || progress.getResearchProgression().contains(this.requiredResearch);
+        return this.requiredResearch == null || progress.hasResearch(this.requiredResearch);
     }
 
     public boolean hasUsageFor(CalculationContext ctx) {

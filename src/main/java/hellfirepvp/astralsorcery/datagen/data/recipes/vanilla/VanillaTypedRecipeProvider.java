@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.datagen.data.recipes.builder.SimpleShapedRecipe
 import hellfirepvp.astralsorcery.datagen.data.recipes.builder.StoneCuttingRecipeBuilder;
 import net.minecraft.data.CustomRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.SingleItemRecipeBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;

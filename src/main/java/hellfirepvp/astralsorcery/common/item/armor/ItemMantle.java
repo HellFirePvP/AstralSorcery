@@ -1,9 +1,9 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- *  All rights reserved.
- *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- *  For further details, see the License file there.
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.item.armor;
@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
+import hellfirepvp.astralsorcery.common.item.base.client.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
@@ -90,20 +90,20 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
     }
 
     @Override
-    public Collection<PerkAttributeModifier> getModifiers(ItemStack stack, PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
-        if (ItemMantle.getEffect(stack, ConstellationsAS.evorsio) == null) {
-            return Collections.emptyList();
-        }
-        return Collections.singletonList(EVORSIO_MANTLE_MINING_SIZE);
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         IConstellation cst = this.getConstellation(stack);
         if (cst instanceof IWeakConstellation) {
             tooltip.add(cst.getConstellationName().applyTextStyle(TextFormatting.BLUE));
         }
+    }
+
+    @Override
+    public Collection<PerkAttributeModifier> getModifiers(ItemStack stack, PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
+        if (ItemMantle.getEffect(stack, ConstellationsAS.evorsio) == null) {
+            return Collections.emptyList();
+        }
+        return Collections.singletonList(EVORSIO_MANTLE_MINING_SIZE);
     }
 
     @Override

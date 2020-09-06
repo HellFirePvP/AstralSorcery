@@ -50,7 +50,7 @@ public class PlayerProgress {
     private List<ResourceLocation> storedConstellationPapers = new ArrayList<>();
     private IMajorConstellation attunedConstellation = null;
     private boolean wasOnceAttuned = false;
-    private List<ResearchProgression> researchProgression = new ArrayList<>();
+    private Set<ResearchProgression> researchProgression = new HashSet<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
     private List<String> freePointTokens = Lists.newArrayList();
     private Set<AbstractPerk> appliedPerks = new HashSet<>();
@@ -166,7 +166,7 @@ public class PlayerProgress {
         if (compound.contains("research")) {
             int[] research = compound.getIntArray("research");
             for (int resOrdinal : research) {
-                researchProgression.add(ResearchProgression.values()[resOrdinal]);
+                researchProgression.add(MiscUtils.getEnumEntry(ResearchProgression.class, resOrdinal));
             }
         }
 
@@ -211,10 +211,9 @@ public class PlayerProgress {
             listTokens.add(StringNBT.valueOf(s));
         }
         cmp.put("pointTokens", listTokens);
-        int[] researchArray = new int[researchProgression.size()];
-        for (int i = 0; i < researchProgression.size(); i++) {
-            researchArray[i] = researchProgression.get(i).ordinal();
-        }
+        int[] researchArray = researchProgression.stream()
+                .mapToInt(ResearchProgression::ordinal)
+                .toArray();
         cmp.putIntArray("research", researchArray);
         if (attunedConstellation != null) {
             cmp.putString("attuned", attunedConstellation.getRegistryName().toString());
@@ -255,10 +254,9 @@ public class PlayerProgress {
         cmp.put("seenConstellations", l);
         cmp.putInt("tierReached", tierReached.ordinal());
         cmp.putBoolean("wasAttuned", wasOnceAttuned);
-        int[] researchArray = new int[researchProgression.size()];
-        for (int i = 0; i < researchProgression.size(); i++) {
-            researchArray[i] = researchProgression.get(i).ordinal();
-        }
+        int[] researchArray = researchProgression.stream()
+                .mapToInt(ResearchProgression::ordinal)
+                .toArray();
         cmp.putIntArray("research", researchArray);
     }
 
@@ -302,7 +300,7 @@ public class PlayerProgress {
         if (compound.contains("research")) {
             int[] research = compound.getIntArray("research");
             for (int resOrdinal : research) {
-                researchProgression.add(ResearchProgression.values()[resOrdinal]);
+                researchProgression.add(MiscUtils.getEnumEntry(ResearchProgression.class, resOrdinal));
             }
         }
 
@@ -320,13 +318,6 @@ public class PlayerProgress {
         return true;
     }
 
-    protected boolean forceGainResearch(ResearchProgression progression) {
-        if (!researchProgression.contains(progression)) {
-            researchProgression.add(progression);
-            return true;
-        }
-        return false;
-    }
 
     protected void setAttunedConstellation(IMajorConstellation constellation) {
         this.attunedConstellation = constellation;
@@ -399,9 +390,16 @@ public class PlayerProgress {
         return sealedPerks.remove(perk);
     }
 
-    public List<ResearchProgression> getResearchProgression() {
-        researchProgression.removeIf(Objects::isNull);
-        return Lists.newLinkedList(researchProgression);
+    public Collection<ResearchProgression> getResearchProgression() {
+        return Collections.unmodifiableCollection(researchProgression);
+    }
+
+    public boolean hasResearch(ResearchProgression progression) {
+        return getResearchProgression().contains(progression);
+    }
+
+    protected boolean forceGainResearch(ResearchProgression progression) {
+        return researchProgression.add(progression);
     }
 
     public ProgressionTier getTierReached() {
@@ -552,7 +550,7 @@ public class PlayerProgress {
         this.knownConstellations = message.knownConstellations;
         this.seenConstellations = message.seenConstellations;
         this.storedConstellationPapers = message.storedConstellationPapers;
-        this.researchProgression = message.researchProgression;
+        this.researchProgression = new HashSet<>(message.researchProgression);
         this.tierReached = MiscUtils.getEnumEntry(ProgressionTier.class, message.progressTier);
         this.attunedConstellation = message.attunedConstellation;
         this.wasOnceAttuned = message.wasOnceAttuned;

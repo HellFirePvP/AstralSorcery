@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.integration.jei;
 
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
@@ -8,6 +16,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -46,6 +55,8 @@ public abstract class JEICategory<T> implements IRecipeCategory<T> {
     protected static void initFluidOutput(IGuiFluidStackGroup group, int index, int x, int y) {
         group.init(index, false, x + 1, y + 1, 16, 16, 1000, false, null);
     }
+
+    public abstract Collection<T> getRecipes();
 
     @Override
     public ResourceLocation getUid() {

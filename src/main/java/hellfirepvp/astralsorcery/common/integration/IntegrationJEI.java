@@ -1,27 +1,33 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.integration;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttunement;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarTrait;
-import hellfirepvp.astralsorcery.common.integration.jei.CategoryAltar;
-import hellfirepvp.astralsorcery.common.integration.jei.CategoryInfuser;
-import hellfirepvp.astralsorcery.common.integration.jei.CategoryTransmutation;
-import hellfirepvp.astralsorcery.common.integration.jei.CategoryWell;
-import hellfirepvp.astralsorcery.common.integration.jei.TieredAltarRecipeTransferHandler;
+import hellfirepvp.astralsorcery.common.integration.jei.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IStackHelper;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import mezz.jei.api.registration.*;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,6 +39,8 @@ import net.minecraft.util.ResourceLocation;
 @JeiPlugin
 public class IntegrationJEI implements IModPlugin {
 
+    public static final List<JEICategory<?>> CATEGORIES = new ArrayList<>();
+
     public static final ResourceLocation CATEGORY_ALTAR_ATTUNEMENT = AstralSorcery.key("altar_attunement");
     public static final ResourceLocation CATEGORY_ALTAR_CONSTELLATION = AstralSorcery.key("altar_constellation");
     public static final ResourceLocation CATEGORY_ALTAR_DISCOVERY = AstralSorcery.key("altar_discovery");
@@ -40,6 +48,8 @@ public class IntegrationJEI implements IModPlugin {
     public static final ResourceLocation CATEGORY_INFUSER = AstralSorcery.key("infuser");
     public static final ResourceLocation CATEGORY_TRANSMUTATION = AstralSorcery.key("transmutation");
     public static final ResourceLocation CATEGORY_WELL = AstralSorcery.key("well");
+
+    public static IJeiRuntime runtime = null;
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registry) {
@@ -59,26 +69,20 @@ public class IntegrationJEI implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registry) {
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
 
-        registry.addRecipeCategories(
-                new CategoryAltar(CATEGORY_ALTAR_DISCOVERY, "altar_discovery", BlocksAS.ALTAR_DISCOVERY, guiHelper),
-                new CategoryAltar(CATEGORY_ALTAR_ATTUNEMENT, "altar_attunement", BlocksAS.ALTAR_ATTUNEMENT, guiHelper),
-                new CategoryAltar(CATEGORY_ALTAR_CONSTELLATION, "altar_constellation", BlocksAS.ALTAR_CONSTELLATION, guiHelper),
-                new CategoryAltar(CATEGORY_ALTAR_TRAIT, "altar_trait", BlocksAS.ALTAR_RADIANCE, guiHelper),
-                new CategoryInfuser(guiHelper),
-                new CategoryTransmutation(guiHelper),
-                new CategoryWell(guiHelper)
-        );
+        CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_DISCOVERY, "altar_discovery", BlocksAS.ALTAR_DISCOVERY, guiHelper));
+        CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_ATTUNEMENT, "altar_attunement", BlocksAS.ALTAR_ATTUNEMENT, guiHelper));
+        CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_CONSTELLATION, "altar_constellation", BlocksAS.ALTAR_CONSTELLATION, guiHelper));
+        CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_TRAIT, "altar_trait", BlocksAS.ALTAR_RADIANCE, guiHelper));
+        CATEGORIES.add(new CategoryInfuser(guiHelper));
+        CATEGORIES.add(new CategoryTransmutation(guiHelper));
+        CATEGORIES.add(new CategoryWell(guiHelper));
+
+        CATEGORIES.forEach(registry::addRecipeCategories);
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
-        registry.addRecipes(RecipeTypesAS.TYPE_ALTAR.getRecipes(recipe -> recipe.getAltarType().equals(AltarType.DISCOVERY)), CATEGORY_ALTAR_DISCOVERY);
-        registry.addRecipes(RecipeTypesAS.TYPE_ALTAR.getRecipes(recipe -> recipe.getAltarType().equals(AltarType.ATTUNEMENT)), CATEGORY_ALTAR_ATTUNEMENT);
-        registry.addRecipes(RecipeTypesAS.TYPE_ALTAR.getRecipes(recipe -> recipe.getAltarType().equals(AltarType.CONSTELLATION)), CATEGORY_ALTAR_CONSTELLATION);
-        registry.addRecipes(RecipeTypesAS.TYPE_ALTAR.getRecipes(recipe -> recipe.getAltarType().equals(AltarType.RADIANCE)), CATEGORY_ALTAR_TRAIT);
-        registry.addRecipes(RecipeTypesAS.TYPE_INFUSION.getAllRecipes(), CATEGORY_INFUSER);
-        registry.addRecipes(RecipeTypesAS.TYPE_BLOCK_TRANSMUTATION.getAllRecipes(), CATEGORY_TRANSMUTATION);
-        registry.addRecipes(RecipeTypesAS.TYPE_WELL.getAllRecipes(), CATEGORY_WELL);
+        CATEGORIES.forEach(category -> registry.addRecipes(category.getRecipes(), category.getUid()));
     }
 
     @Override
@@ -124,6 +128,11 @@ public class IntegrationJEI implements IModPlugin {
         // T4 recipes
         registry.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class,
                 stackHelper, transferHelper, 25), CATEGORY_ALTAR_TRAIT);
+    }
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        runtime = jeiRuntime;
     }
 
     @Override

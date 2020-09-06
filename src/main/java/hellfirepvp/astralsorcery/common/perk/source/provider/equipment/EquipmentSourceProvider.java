@@ -43,6 +43,11 @@ public class EquipmentSourceProvider extends ModifierSourceProvider<EquipmentMod
     @Override
     protected void update(ServerPlayerEntity playerEntity) {
         for (EquipmentSlotType slot : EquipmentSlotType.values()) {
+            //Items held in offhand will not provide modifers.
+            if (slot == EquipmentSlotType.OFFHAND) {
+                return;
+            }
+
             ResourceLocation id = AstralSorcery.key("slot_" + slot.getName());
 
             ItemStack stack = playerEntity.getItemStackFromSlot(slot);

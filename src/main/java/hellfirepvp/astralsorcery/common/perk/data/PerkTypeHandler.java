@@ -1,9 +1,17 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.perk.data;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.perk.modifier.AttributeConverterPerk;
 import hellfirepvp.astralsorcery.common.perk.ProgressGatedPerk;
+import hellfirepvp.astralsorcery.common.perk.modifier.AttributeConverterPerk;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.perk.node.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.perk.node.GemSlotMajorPerk;

@@ -8,10 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node;
 
-import hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod

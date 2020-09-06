@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
-import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.lib.ContainerTypesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;

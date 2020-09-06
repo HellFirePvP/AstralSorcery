@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item.base.render;
+package hellfirepvp.astralsorcery.common.item.base.client;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,13 +15,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemOverlayRender
+ * Class: ItemDynamicColor
  * Created by HellFirePvP
- * Date: 28.02.2020 / 18:48
+ * Date: 01.06.2019 / 15:14
  */
-public interface ItemOverlayRender {
+public interface ItemDynamicColor {
 
     @OnlyIn(Dist.CLIENT)
-    boolean renderOverlay(ItemStack stack, float pTicks);
+    public int getColor(ItemStack stack, int tintIndex);
 
 }

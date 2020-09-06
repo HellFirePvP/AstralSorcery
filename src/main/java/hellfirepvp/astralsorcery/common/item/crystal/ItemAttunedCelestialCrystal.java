@@ -11,15 +11,11 @@ package hellfirepvp.astralsorcery.common.item.crystal;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.awt.*;
 
@@ -30,7 +26,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 21.07.2019 / 13:49
  */
-public class ItemAttunedCelestialCrystal extends ItemAttunedCrystalBase implements ItemGatedVisibility {
+public class ItemAttunedCelestialCrystal extends ItemAttunedCrystalBase {
 
     public ItemAttunedCelestialCrystal() {
         super(new Properties()
@@ -57,12 +53,6 @@ public class ItemAttunedCelestialCrystal extends ItemAttunedCrystalBase implemen
     @Override
     public int getMaxPropertyTiers() {
         return 18;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean isSupposedToSeeInRender(ItemStack stack) {
-        return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT);
     }
 
     protected Color getItemEntityColor(ItemStack stack) {
