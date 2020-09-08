@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.impl.RenderOffsetNoisePlane;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraftforge.api.distmarker.Dist;

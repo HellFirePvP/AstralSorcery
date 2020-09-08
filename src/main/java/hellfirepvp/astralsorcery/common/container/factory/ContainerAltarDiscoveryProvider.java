@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.container.factory;
 
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.lib.ContainerTypesAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.entity.player.PlayerEntity;

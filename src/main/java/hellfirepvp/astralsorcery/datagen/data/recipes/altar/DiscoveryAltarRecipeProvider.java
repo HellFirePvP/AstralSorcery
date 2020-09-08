@@ -57,7 +57,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(ItemsAS.WAND, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" AE")
                         .patternLine(" MA")
@@ -71,7 +71,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(ItemsAS.HAND_TELESCOPE, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.3F)
+                .setStarlightRequirement(0.2F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" SL")
                         .patternLine("SGS")
@@ -105,7 +105,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(ItemsAS.TOME, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" P ")
                         .patternLine("ABA")
@@ -145,7 +145,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.SPECTRAL_RELAY, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.4F)
+                .setStarlightRequirement(0.2F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("NGN")
                         .patternLine("PMP")
@@ -159,7 +159,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.WELL, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.3F)
+                .setStarlightRequirement(0.2F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("R R")
                         .patternLine("CZC")
@@ -174,7 +174,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.ILLUMINATOR, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.7F)
+                .setStarlightRequirement(0.8F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("RIR")
                         .patternLine("A A")
@@ -188,7 +188,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(ItemsAS.ILLUMINATION_POWDER, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.4F)
                 .multiplyDuration(0.6F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" G ")
@@ -202,7 +202,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(ItemsAS.NOCTURNAL_POWDER, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.4F)
+                .setStarlightRequirement(0.8F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" D ")
                         .patternLine("CPC")
@@ -279,7 +279,7 @@ public class DiscoveryAltarRecipeProvider {
          *****************************************************************************/
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.INFUSED_WOOD_ARCH, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("PP")
@@ -290,7 +290,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.INFUSED_WOOD_COLUMN, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("P")
@@ -302,7 +302,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.INFUSED_WOOD_ENGRAVED, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" P ")
@@ -315,7 +315,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.INFUSED_WOOD_ENRICHED, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" P ")
@@ -329,7 +329,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.INFUSED_WOOD_PLANKS, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("L")
@@ -340,7 +340,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.INFUSED_WOOD_SLAB, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("PPP")
@@ -351,7 +351,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.INFUSED_WOOD_STAIRS, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("P  ")
@@ -367,7 +367,7 @@ public class DiscoveryAltarRecipeProvider {
          *****************************************************************************/
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.MARBLE_ARCH, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("MM")
@@ -378,7 +378,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.MARBLE_PILLAR, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("M")
@@ -390,7 +390,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.MARBLE_BRICKS, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("MM")
@@ -402,7 +402,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.MARBLE_CHISELED, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" M ")
@@ -415,7 +415,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.MARBLE_ENGRAVED, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" M ")
@@ -428,7 +428,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.MARBLE_RUNED, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("MCM")
@@ -440,7 +440,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.MARBLE_SLAB, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("MMM")
@@ -451,7 +451,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.MARBLE_STAIRS, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("M  ")
@@ -467,7 +467,7 @@ public class DiscoveryAltarRecipeProvider {
          *****************************************************************************/
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.BLACK_MARBLE_RAW, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("MMM")
@@ -481,7 +481,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.BLACK_MARBLE_PILLAR, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("M")
@@ -493,7 +493,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.BLACK_MARBLE_ARCH, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("MM")
@@ -504,7 +504,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.BLACK_MARBLE_BRICKS, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("MM")
@@ -516,7 +516,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.BLACK_MARBLE_CHISELED, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" M ")
@@ -529,7 +529,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.BLACK_MARBLE_ENGRAVED, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine(" M ")
@@ -542,7 +542,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.BLACK_MARBLE_RUNED, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("MCM")
@@ -554,7 +554,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.BLACK_MARBLE_SLAB, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("MMM")
@@ -565,7 +565,7 @@ public class DiscoveryAltarRecipeProvider {
 
         SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.BLACK_MARBLE_STAIRS, AltarType.DISCOVERY)
-                .setStarlightRequirement(0.2F)
+                .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
                 .setInputs(AltarRecipeGrid.builder()
                         .patternLine("M  ")

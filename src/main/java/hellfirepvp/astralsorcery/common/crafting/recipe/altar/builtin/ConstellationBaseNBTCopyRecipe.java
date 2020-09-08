@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;

@@ -19,6 +19,8 @@ import hellfirepvp.astralsorcery.common.item.ItemGlassLens;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import hellfirepvp.astralsorcery.common.tile.altar.AltarCollectionCategory;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
@@ -30,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -137,12 +140,10 @@ public class TileSpectralRelay extends TileEntityTick {
 
     private void provideStarlight(TileAltar ta) {
         if (this.doesSeeSky()) {
-            double starlight = 0.5;
-
-            starlight *= Math.max((getPos().getY() - 40) / 100F, 0);
-            starlight *= (0.3 + (0.7 * DayTimeHelper.getCurrentDaytimeDistribution(getWorld())));
-            if (starlight > 1E-4) {
-                ta.receiveStarlight(starlight);
+            float heightAmount = MathHelper.clamp((float) Math.pow(getPos().getY() / 7F, 1.5F) / 60F, 0F, 1F);
+            heightAmount *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
+            if (heightAmount > 1E-4) {
+                ta.collectStarlight(heightAmount * 45F, AltarCollectionCategory.RELAY);
             }
         }
     }

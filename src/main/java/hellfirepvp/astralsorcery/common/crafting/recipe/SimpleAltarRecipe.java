@@ -25,7 +25,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.JsonHelper;

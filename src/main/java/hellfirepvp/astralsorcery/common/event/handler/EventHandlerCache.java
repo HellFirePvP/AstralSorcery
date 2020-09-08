@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.handler.EffectHandler;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
 import hellfirepvp.astralsorcery.client.util.AreaOfInfluencePreview;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
+import hellfirepvp.astralsorcery.common.auxiliary.gateway.CelestialGatewayHandler;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -72,6 +73,7 @@ public class EventHandlerCache {
         PerkAttributeType.clearCache(LogicalSide.CLIENT);
         PerkEffectHelper.clientClearAllPerks();
         PerkCooldownHelper.clearCache(LogicalSide.CLIENT);
+        CelestialGatewayHandler.INSTANCE.updateClientCache(null);
 
         WorldSeedCache.clearClient();
         SkyHandler.getInstance().clientClearCache();

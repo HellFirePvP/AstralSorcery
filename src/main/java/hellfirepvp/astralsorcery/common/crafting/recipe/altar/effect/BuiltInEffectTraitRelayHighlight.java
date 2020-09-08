@@ -20,7 +20,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingFocusStack;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;

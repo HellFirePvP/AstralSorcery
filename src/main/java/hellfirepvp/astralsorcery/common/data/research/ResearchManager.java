@@ -23,7 +23,7 @@ import hellfirepvp.astralsorcery.common.network.play.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;

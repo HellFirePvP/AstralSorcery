@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

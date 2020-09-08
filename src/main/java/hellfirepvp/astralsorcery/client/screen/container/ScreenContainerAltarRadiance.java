@@ -21,7 +21,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarTrait;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerInventory;

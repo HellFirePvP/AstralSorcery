@@ -18,7 +18,7 @@ import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.ResourceLocation;

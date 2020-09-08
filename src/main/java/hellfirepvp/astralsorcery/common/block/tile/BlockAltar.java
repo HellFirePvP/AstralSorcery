@@ -17,7 +17,7 @@ import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockRenderType;

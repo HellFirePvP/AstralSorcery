@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.item.lens.ItemColoredLensFire;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.starlight.network.handler.BlockTransmutationHandler;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
 import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.util.CelestialStrike;

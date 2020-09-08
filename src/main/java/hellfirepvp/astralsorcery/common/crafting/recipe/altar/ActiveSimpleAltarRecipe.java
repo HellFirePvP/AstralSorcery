@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingFocusStack;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RecipeHelper;

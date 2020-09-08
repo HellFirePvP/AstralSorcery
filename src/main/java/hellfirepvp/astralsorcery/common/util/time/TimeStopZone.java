@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.time;
 
+import hellfirepvp.astralsorcery.common.data.config.registry.TileAccelerationBlacklistRegistry;
 import hellfirepvp.astralsorcery.common.lib.EffectsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
@@ -19,7 +20,6 @@ import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -75,7 +75,7 @@ public class TimeStopZone {
                     Map<BlockPos, TileEntity> map = ch.getTileEntityMap();
                     for (Map.Entry<BlockPos, TileEntity> teEntry : map.entrySet()) {
                         TileEntity te = teEntry.getValue();
-                        if (te instanceof ITickableTileEntity &&
+                        if (TileAccelerationBlacklistRegistry.INSTANCE.canBeInfluenced(te) &&
                                 te.getPos().withinDistance(offset, range) &&
                                 world.tickableTileEntities.contains(te)) {
                             world.tickableTileEntities.remove(te);

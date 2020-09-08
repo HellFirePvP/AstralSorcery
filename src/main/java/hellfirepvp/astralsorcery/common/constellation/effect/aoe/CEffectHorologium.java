@@ -52,7 +52,7 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
     public static HorologiumConfig CONFIG = new HorologiumConfig();
 
     public CEffectHorologium(@Nonnull ILocatable origin) {
-        super(origin, ConstellationsAS.horologium, CONFIG.maxAmount.get(), (world, pos, state) -> TileAccelerationBlacklistRegistry.INSTANCE.canBeAccelerated(world.getTileEntity(pos)));
+        super(origin, ConstellationsAS.horologium, CONFIG.maxAmount.get(), (world, pos, state) -> TileAccelerationBlacklistRegistry.INSTANCE.canBeInfluenced(world.getTileEntity(pos)));
     }
 
     @Nonnull
@@ -118,7 +118,7 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
         if (entry != null) {
             if (MiscUtils.executeWithChunk(world, entry.getPos(), () -> {
                 TileEntity tile = MiscUtils.getTileAt(world, entry.getPos(), TileEntity.class, true);
-                if (tile != null && TileAccelerationBlacklistRegistry.INSTANCE.canBeAccelerated(tile)) {
+                if (tile != null && TileAccelerationBlacklistRegistry.INSTANCE.canBeInfluenced(tile)) {
                     sendConstellationPing(world, new Vector3(entry.getPos()).add(Vector3.positiveRandom()));
                     sendConstellationPing(world, new Vector3(entry.getPos()).add(Vector3.positiveRandom()));
                     try {

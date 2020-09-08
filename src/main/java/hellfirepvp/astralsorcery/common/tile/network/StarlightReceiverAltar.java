@@ -12,7 +12,8 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.AltarCollectionCategory;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,9 +32,10 @@ public class StarlightReceiverAltar extends SimpleTransmissionReceiver<TileAltar
 
     @Override
     public void onStarlightReceive(World world, IWeakConstellation type, double amount) {
-        TileAltar well = getTileAtPos(world);
-        if (well != null) {
-            well.receiveStarlight(amount);
+        TileAltar altar = getTileAtPos(world);
+        if (altar != null) {
+            int altarTier = altar.getAltarType().ordinal();
+            altar.collectStarlight(((float) amount) * Math.min(altarTier, 1) * 60F, AltarCollectionCategory.FOCUSED_NETWORK);
         }
     }
 

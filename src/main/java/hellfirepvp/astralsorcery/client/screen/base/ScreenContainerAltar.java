@@ -18,7 +18,7 @@ import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipeContext;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerInventory;

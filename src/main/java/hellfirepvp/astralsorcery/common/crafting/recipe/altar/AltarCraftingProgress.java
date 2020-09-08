@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar;
 
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import net.minecraft.nbt.CompoundNBT;
 
 /**

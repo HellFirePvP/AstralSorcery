@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.common.container.slot.SlotConstellationFocus;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.item.base.IConstellationFocus;
 import hellfirepvp.astralsorcery.common.lib.ContainerTypesAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

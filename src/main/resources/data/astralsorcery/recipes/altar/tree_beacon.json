@@ -7,8 +7,8 @@
     "_____",
     "_ABA_",
     "_ACA_",
-    "_AEA_",
-    "DD_DD"
+    "_ADA_",
+    "EE_EE"
   ],
   "key": {
     "A": {
@@ -21,9 +21,6 @@
       "tag": "minecraft:saplings"
     },
     "D": {
-      "item": "astralsorcery:marble_runed"
-    },
-    "E": {
       "type": "astralsorcery:fluid",
       "fluid": [
         {
@@ -31,6 +28,9 @@
           "amount": 1000
         }
       ]
+    },
+    "E": {
+      "item": "astralsorcery:marble_runed"
     }
   },
   "output": [

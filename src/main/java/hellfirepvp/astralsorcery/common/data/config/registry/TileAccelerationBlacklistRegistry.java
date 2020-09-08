@@ -11,8 +11,9 @@ package hellfirepvp.astralsorcery.common.data.config.registry;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.TileAccelerationBlacklistEntry;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
+import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileSourceBase;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileTransmissionBase;
@@ -34,11 +35,11 @@ public class TileAccelerationBlacklistRegistry extends ConfigDataAdapter<TileAcc
 
     public static final TileAccelerationBlacklistRegistry INSTANCE = new TileAccelerationBlacklistRegistry();
 
-    private List<Class<?>> erroredTiles = Lists.newArrayList();
+    private final List<Class<?>> erroredTiles = Lists.newArrayList();
 
     private TileAccelerationBlacklistRegistry() {}
 
-    public boolean canBeAccelerated(TileEntity tile) {
+    public boolean canBeInfluenced(TileEntity tile) {
         if (!(tile instanceof ITickableTileEntity)) {
             return false;
         }
@@ -65,17 +66,18 @@ public class TileAccelerationBlacklistRegistry extends ConfigDataAdapter<TileAcc
     @Override
     public List<TileAccelerationBlacklistEntry> getDefaultValues() {
         return Lists.newArrayList(
-                //Accelerating storage system components looks like a bad idea
+                // Accelerating storage system components looks like a bad idea
                 new TileAccelerationBlacklistEntry("appeng"),
                 new TileAccelerationBlacklistEntry("raoulvdberge.refinedstorage"),
 
-                //Filter all transmission & source tiles
+                // Filter all transmission & source tiles
                 new TileAccelerationBlacklistEntry(TileTransmissionBase.class.getName()),
                 new TileAccelerationBlacklistEntry(TileSourceBase.class.getName()),
 
-                //Bad news when accelerating in terms of performance and matching of processes... x)
+                // Bad news for potentially various reasons
                 new TileAccelerationBlacklistEntry(TileAltar.class.getName()),
                 new TileAccelerationBlacklistEntry(TileAttunementAltar.class.getName()),
+                new TileAccelerationBlacklistEntry(TileObservatory.class.getName()),
                 new TileAccelerationBlacklistEntry(TileRitualPedestal.class.getName())
         );
     }

@@ -16,7 +16,7 @@ import com.google.gson.JsonSyntaxException;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.item.Item;

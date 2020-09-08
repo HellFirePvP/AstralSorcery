@@ -178,7 +178,7 @@ public class CommonProxy {
 
         this.serverLifecycleListeners.add(ResearchIOThread.startup());
         this.serverLifecycleListeners.add(ServerLifecycleListener.wrap(EventHandlerCache::onServerStart, EventHandlerCache::onServerStop));
-        this.serverLifecycleListeners.add(ServerLifecycleListener.start(CelestialGatewayHandler.INSTANCE::onServerStart));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.wrap(CelestialGatewayHandler.INSTANCE::onServerStart, CelestialGatewayHandler.INSTANCE::onServerStop));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkTree.PERK_TREE::setupServerPerkTree));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkLevelManager::loadPerkLevels));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(BlockBreakHelper::clearServerCache));

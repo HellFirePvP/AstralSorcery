@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.tile;
+package hellfirepvp.astralsorcery.common.tile.altar;
 
 import hellfirepvp.astralsorcery.client.util.sound.PositionedLoopSound;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
+import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -48,6 +49,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -57,7 +59,9 @@ import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -73,6 +77,8 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
     private AltarType altarType = AltarType.DISCOVERY;
     private TileInventoryFiltered inventory;
+
+    private final Map<AltarCollectionCategory, Float> tickStarlightCollectionMap = new HashMap<>();
 
     private ActiveSimpleAltarRecipe activeRecipe = null;
     private ItemStack focusItem = ItemStack.EMPTY;
@@ -278,38 +284,47 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     }
 
     private void gatherStarlight() {
-        if (this.storedStarlight > 0) {
-            this.storedStarlight *= 0.95;
-            this.markForUpdate();
-        }
+        this.tickStarlightCollectionMap.clear();
 
         WorldContext ctx = SkyHandler.getContext(getWorld());
-        if (ctx == null || !this.doesSeeSky()) {
+        if (ctx == null) {
+            if (this.storedStarlight > 0) {
+                this.storedStarlight = 0;
+                this.markForUpdate();
+            }
             return;
         }
+        this.storedStarlight *= 0.9F;
 
-        int yLevel = getPos().getY();
-        if (yLevel > 40) {
-            float collect = 160;
+        if (this.doesSeeSky()) {
+            int altarTier = this.getAltarType().ordinal() + 1;
 
-            float dstr;
-            if (yLevel > 120) {
-                dstr = 1F + ((yLevel - 120) / 272F);
-            } else {
-                dstr = (yLevel - 20) / 100F;
-            }
+            float heightAmount = MathHelper.clamp((float) Math.pow(getPos().getY() / 7F, 1.5F) / 65F, 0F, 1F);
+            heightAmount *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
+            this.collectStarlight(heightAmount * altarTier * 50F, AltarCollectionCategory.HEIGHT);
 
             if (posDistribution == -1) {
                 posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
             }
-
-            collect *= dstr;
-            collect *= (0.75 + (0.25 * posDistribution));
-            collect *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
-
-            this.storedStarlight = Math.min(getAltarType().getStarlightCapacity(), (int) (this.storedStarlight + collect));
-            this.markForUpdate();
+            float fieldAmount = posDistribution * posDistribution;
+            fieldAmount *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
+            this.collectStarlight(fieldAmount * altarTier * 65F, AltarCollectionCategory.FOSIC_FIELD);
         }
+    }
+
+    public void collectStarlight(float percent, AltarCollectionCategory category) {
+        int collectable = MathHelper.floor(Math.min(percent, getRemainingCollectionCapacity(category)));
+        this.storedStarlight = MathHelper.clamp(this.storedStarlight + collectable, 0, this.getAltarType().getStarlightCapacity());
+        this.tickStarlightCollectionMap.computeIfPresent(category, (cat, remaining) -> Math.max(remaining - collectable, 0));
+        this.markForUpdate();
+    }
+
+    public float getRemainingCollectionCapacity(AltarCollectionCategory category) {
+        return this.tickStarlightCollectionMap.computeIfAbsent(category, this::getCollectionCap);
+    }
+
+    public float getCollectionCap(AltarCollectionCategory category) {
+        return this.getAltarType().getStarlightCapacity() / 10F / this.getAltarType().getMinimumSources();
     }
 
     @Nonnull
@@ -329,15 +344,6 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
             }
         }
         return eligableRelayOffsets;
-    }
-
-    public void receiveStarlight(double amount) {
-        if (amount <= 0.01) {
-            return;
-        }
-
-        storedStarlight = Math.min(this.getAltarType().getStarlightCapacity(), (int) (storedStarlight + (amount * 80D)));
-        markForUpdate();
     }
 
     @Override
