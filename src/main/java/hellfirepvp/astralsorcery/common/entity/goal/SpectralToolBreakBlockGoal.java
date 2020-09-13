@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.entity.goal;
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectPelotrio;
 import hellfirepvp.astralsorcery.common.entity.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
@@ -21,6 +22,7 @@ import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -45,7 +47,7 @@ public class SpectralToolBreakBlockGoal extends SpectralToolGoal {
 
     private BlockPredicate breakableSimpleBlocks() {
         return (world, pos, state) -> {
-            return world.getTileEntity(pos) == null &&
+            return MiscUtils.getTileAt(world, pos, TileEntity.class, false) == null &&
                     pos.getY() >= this.getEntity().getStartPosition().getY() &&
                     !state.isAir(world, pos) &&
                     state.getBlockHardness(world, pos) != -1 &&

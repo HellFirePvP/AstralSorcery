@@ -69,7 +69,7 @@ public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
                     .forEach(effect -> effect.onTESR(tile, recipe.getState(), renderStack, renderTypeBuffer, pTicks, combinedLight));
         }
 
-        if (tile.getAltarType().isThisGEThan(AltarType.RADIANCE)) {
+        if (tile.getAltarType().isThisGEThan(AltarType.RADIANCE) && tile.hasMultiblock()) {
             renderStack.push();
             renderStack.translate(0.5F, 4.5F, 0.5F);
 

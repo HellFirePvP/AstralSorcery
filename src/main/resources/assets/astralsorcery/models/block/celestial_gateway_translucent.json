@@ -1,0 +1,51 @@
+{
+	"comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+    "ambientocclusion": false,
+	"parent": "block/block",
+	"textures": {
+		"particle": "astralsorcery:block/celestial_gateway_platform",
+		"outer": "astralsorcery:block/celestial_gateway_orb_outer"
+	},
+	"elements": [
+		{
+			"from": [ 2, 8, 2 ],
+			"to": [ 14, 8.001, 14 ],
+			"faces": {
+				"down": { "uv": [ 2, 2, 14, 14 ], "texture": "#outer" },
+				"up": { "uv": [ 2, 2, 14, 14 ], "texture": "#outer" }
+			}
+		},
+		{
+			"from": [ 2, 1, 2 ],
+			"to": [ 2.001, 8, 14 ],
+			"faces": {
+				"west": { "uv": [ 2, 2, 14, 9 ], "texture": "#outer" },
+				"east": { "uv": [ 2, 2, 14, 9 ], "texture": "#outer" }
+			}
+		},
+		{
+			"from": [ 2, 1, 2 ],
+			"to": [ 14, 8, 2.001 ],
+			"faces": {
+				"north": { "uv": [ 2, 2, 14, 9 ], "texture": "#outer" },
+				"south": { "uv": [ 2, 2, 14, 9 ], "texture": "#outer" }
+			}
+		},
+		{
+			"from": [ 14, 1, 2 ],
+			"to": [ 14.001, 8, 14 ],
+			"faces": {
+				"west": { "uv": [ 2, 2, 14, 9 ], "texture": "#outer" },
+				"east": { "uv": [ 2, 2, 14, 9 ], "texture": "#outer" }
+			}
+		},
+		{
+			"from": [ 2, 1, 14 ],
+			"to": [ 14, 8, 14.001 ],
+			"faces": {
+				"north": { "uv": [ 2, 2, 14, 9 ], "texture": "#outer" },
+				"south": { "uv": [ 2, 2, 14, 9 ], "texture": "#outer" }
+			}
+		}
+	]
+}

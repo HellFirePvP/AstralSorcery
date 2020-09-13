@@ -52,7 +52,7 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
     public static HorologiumConfig CONFIG = new HorologiumConfig();
 
     public CEffectHorologium(@Nonnull ILocatable origin) {
-        super(origin, ConstellationsAS.horologium, CONFIG.maxAmount.get(), (world, pos, state) -> TileAccelerationBlacklistRegistry.INSTANCE.canBeInfluenced(world.getTileEntity(pos)));
+        super(origin, ConstellationsAS.horologium, CONFIG.maxAmount.get(), (world, pos, state) -> TileAccelerationBlacklistRegistry.INSTANCE.canBeInfluenced(MiscUtils.getTileAt(world, pos, TileEntity.class, false)));
     }
 
     @Nonnull

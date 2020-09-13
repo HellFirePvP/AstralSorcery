@@ -89,6 +89,7 @@ public class RegistryBlockRenderTypes {
         setRenderLayer(REFRACTION_TABLE,            RenderType.getSolid());
         setRenderLayer(TREE_BEACON,                 RenderType.getSolid());
         setRenderLayer(TREE_BEACON_COMPONENT,       RenderType.getTranslucent());
+        setRenderLayer(GATEWAY,                     RenderType.getSolid(), RenderType.getTranslucent());
 
         setRenderLayer(FLARE_LIGHT,       RenderType.getTranslucent());
         setRenderLayer(TRANSLUCENT_BLOCK, RenderType.getTranslucent());

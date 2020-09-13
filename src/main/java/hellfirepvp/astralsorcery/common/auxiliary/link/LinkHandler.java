@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary.link;
 
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -47,11 +48,10 @@ public class LinkHandler implements ITickHandler {
     @Nonnull
     public static RightClickResult onRightClick(PlayerEntity clicked, World world, BlockPos pos, boolean sneak) {
         if (!players.containsKey(clicked)) {
-            TileEntity te = world.getTileEntity(pos);
-            if (!(te instanceof LinkableTileEntity)) {
+            LinkableTileEntity tile = MiscUtils.getTileAt(world, pos, LinkableTileEntity.class, true);
+            if (tile == null) {
                 return new RightClickResult(RightClickResultType.NONE, null);
             }
-            LinkableTileEntity tile = (LinkableTileEntity) te;
 
             players.put(clicked, new LinkSession(tile));
             return new RightClickResult(RightClickResultType.SELECT, tile);
@@ -65,7 +65,7 @@ public class LinkHandler implements ITickHandler {
         }
     }
 
-    public static void propagateClick(RightClickResult result, PlayerEntity playerIn, World worldIn, BlockPos pos) {
+    public static void propagateClick(RightClickResult result, PlayerEntity playerIn, World world, BlockPos pos) {
         LinkableTileEntity tile = result.getInteracted();
         Style green = new Style().setColor(TextFormatting.GREEN);
         switch (result.getType()) {
@@ -78,7 +78,7 @@ public class LinkHandler implements ITickHandler {
                 }
                 break;
             case TRY_LINK:
-                TileEntity te = worldIn.getTileEntity(pos);
+                TileEntity te = MiscUtils.getTileAt(world, pos, TileEntity.class, true);
                 if (te instanceof LinkableTileEntity) {
                     if (!((LinkableTileEntity) te).doesAcceptLinks()) return;
                 }
@@ -100,7 +100,7 @@ public class LinkHandler implements ITickHandler {
             case TRY_UNLINK:
                 if (tile.tryUnlink(playerIn, pos)) {
                     String linkedTo = "astralsorcery.misc.link.link.block";
-                    te = worldIn.getTileEntity(pos);
+                    te = MiscUtils.getTileAt(world, pos, TileEntity.class, true);
                     if (te instanceof LinkableTileEntity) {
                         String unloc = ((LinkableTileEntity) te).getUnLocalizedDisplayName();
                         if (unloc != null) {

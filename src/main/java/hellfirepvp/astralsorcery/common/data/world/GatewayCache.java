@@ -8,24 +8,25 @@
 
 package hellfirepvp.astralsorcery.common.data.world;
 
+import hellfirepvp.astralsorcery.common.auxiliary.gateway.CelestialGatewayHandler;
+import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import hellfirepvp.astralsorcery.common.util.log.LogUtil;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.observerlib.common.data.WorldCacheDomain;
 import hellfirepvp.observerlib.common.data.base.GlobalWorldData;
+import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +37,7 @@ import java.util.List;
  */
 public class GatewayCache extends GlobalWorldData {
 
-    private List<GatewayNode> gatewayPositions = new LinkedList<>();
+    private final List<GatewayNode> gatewayPositions = new LinkedList<>();
 
     public GatewayCache(WorldCacheDomain.SaveKey<?> key) {
         super(key);
@@ -46,29 +47,29 @@ public class GatewayCache extends GlobalWorldData {
         return new ArrayList<>(gatewayPositions);
     }
 
-    public void offerPosition(World world, BlockPos pos, @Nonnull String display) {
-        TileEntity te = world.getTileEntity(pos);
-        //TODO gateways
-        if (true) {
-        //if (te == null || !(te instanceof TileCelestialGateway)) {
+    public boolean hasGateway(BlockPos pos) {
+        return this.gatewayPositions.stream().anyMatch(gateway -> gateway.getPos().equals(pos));
+    }
+
+    public void offerPosition(World world, BlockPos pos, @Nullable ITextComponent display, @Nullable DyeColor color) {
+        TileCelestialGateway te = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, false);
+        if (te == null) {
             return;
         }
-        GatewayNode node = new GatewayNode(pos, display);
+        GatewayNode node = new GatewayNode(pos, display, color);
         if (gatewayPositions.contains(node)) {
             return;
         }
         gatewayPositions.add(node);
         markDirty();
-        //TODO gateways
-        //CelestialGatewaySystem.instance.addPosition(world, node);
+        CelestialGatewayHandler.INSTANCE.addPosition(world, node);
         LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Added new gateway node at: dim=" + world.getDimension().getType().getId() + ", " + pos.toString());
     }
 
     public void removePosition(World world, BlockPos pos) {
-        if (gatewayPositions.remove(pos)) {
+        if (gatewayPositions.removeIf(node -> node.getPos().equals(pos))) {
             markDirty();
-            //TODO gateways
-            //CelestialGatewaySystem.instance.removePosition(world, pos);
+            CelestialGatewayHandler.INSTANCE.removePosition(world, pos);
             LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Removed gateway node at: dim=" + world.getDimension().getType().getId() + ", " + pos.toString());
         }
     }
@@ -86,15 +87,13 @@ public class GatewayCache extends GlobalWorldData {
         Iterator<GatewayNode> iterator = gatewayPositions.iterator();
         while (iterator.hasNext()) {
             GatewayNode node = iterator.next();
-            TileEntity gateway = null;
-            //TODO gateways
-            //TileCelestialGateway gateway;
-            //try {
-            //    gateway = MiscUtils.getTileAt(world, node, TileCelestialGateway.class, true);
-            //} catch (Exception loadEx) {
-            //    LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Failed to check gateway for " + node + " skipping");
-            //    continue;
-            //}
+            TileCelestialGateway gateway;
+            try {
+                gateway = MiscUtils.getTileAt(world, node.getPos(), TileCelestialGateway.class, true);
+            } catch (Exception loadEx) {
+                LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Failed to check gateway for " + node + " skipping");
+                continue;
+            }
             if (gateway == null) {
                 iterator.remove();
                 LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Invalid entry: " + node + " - no gateway tileentity found there!");
@@ -111,8 +110,7 @@ public class GatewayCache extends GlobalWorldData {
         ListNBT list = new ListNBT();
         for (GatewayNode node : gatewayPositions) {
             CompoundNBT tag = new CompoundNBT();
-            NBTHelper.writeBlockPosToNBT(node, tag);
-            tag.putString("display", node.display);
+            node.write(tag);
             list.add(tag);
         }
         compound.put("posList", list);
@@ -123,35 +121,70 @@ public class GatewayCache extends GlobalWorldData {
         ListNBT list = compound.getList("posList", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
             CompoundNBT tag = list.getCompound(i);
-            BlockPos pos = NBTHelper.readBlockPosFromNBT(tag);
-            String display = tag.getString("display");
-            GatewayNode node = new GatewayNode(pos, display);
-            gatewayPositions.add(node);
+            gatewayPositions.add(GatewayNode.read(tag));
         }
     }
 
-    public static class GatewayNode extends BlockPos {
+    public static class GatewayNode {
 
-        private final String display;
+        private final BlockPos pos;
+        private final ITextComponent display;
+        private final DyeColor color;
 
-        public GatewayNode(BlockPos pos, String display) {
-            super(pos.getX(), pos.getY(), pos.getZ());
+        public GatewayNode(BlockPos pos, @Nullable ITextComponent display, @Nullable DyeColor color) {
+            this.pos = pos;
             this.display = display;
+            this.color = color;
         }
 
-        public String getDisplayName() {
+        @Nullable
+        public ITextComponent getDisplayName() {
             return display;
         }
 
+        @Nullable
+        public DyeColor getColor() {
+            return color;
+        }
+
+        public BlockPos getPos() {
+            return pos;
+        }
+
+        public void write(CompoundNBT tag) {
+            NBTHelper.writeBlockPosToNBT(this.pos, tag);
+            if (this.display != null) {
+                tag.putString("display", ITextComponent.Serializer.toJson(this.display));
+            }
+            if (this.color != null) {
+                NBTHelper.writeEnum(tag, "color", this.color);
+            }
+        }
+
+        public static GatewayNode read(CompoundNBT tag) {
+            BlockPos pos = NBTHelper.readBlockPosFromNBT(tag);
+            ITextComponent display = null;
+            if (tag.contains("display")) {
+                display = ITextComponent.Serializer.fromJson(tag.getString("display"));
+            }
+            DyeColor color = null;
+            if (tag.contains("color")) {
+                color = NBTHelper.readEnum(tag, "color", DyeColor.class);
+            }
+            return new GatewayNode(pos, display, color);
+        }
+
         @Override
-        public boolean equals(Object pos) {
-            return super.equals(pos);
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            GatewayNode that = (GatewayNode) o;
+            return Objects.equals(pos, that.pos);
         }
 
         @Override
         public int hashCode() {
-            return super.hashCode();
+            return Objects.hash(pos);
         }
-
     }
 }

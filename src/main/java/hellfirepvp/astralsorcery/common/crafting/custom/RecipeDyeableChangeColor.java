@@ -8,11 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.crafting.custom;
 
+import hellfirepvp.astralsorcery.common.block.tile.BlockCelestialGateway;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.DyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
@@ -21,18 +24,27 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RecipeChangeWandColor
+ * Class: RecipeDyeableChangeColor
  * Created by HellFirePvP
  * Date: 29.11.2019 / 13:24
  */
-public class RecipeChangeWandColor extends SpecialRecipe {
+public class RecipeDyeableChangeColor extends SpecialRecipe {
 
-    public RecipeChangeWandColor(ResourceLocation idIn) {
+    private final Supplier<IRecipeSerializer<?>> serializer;
+    private final Item output;
+    private final BiConsumer<ItemStack, DyeColor> colorFn;
+
+    public RecipeDyeableChangeColor(ResourceLocation idIn, Supplier<IRecipeSerializer<?>> serializer, Item output, BiConsumer<ItemStack, DyeColor> colorFn) {
         super(idIn);
+        this.serializer = serializer;
+        this.output = output;
+        this.colorFn = colorFn;
     }
 
     @Override
@@ -46,7 +58,7 @@ public class RecipeChangeWandColor extends SpecialRecipe {
         if (color == null) {
             return ItemStack.EMPTY;
         }
-        ItemStack wand = new ItemStack(ItemsAS.ILLUMINATION_WAND);
+        ItemStack wand = new ItemStack(this.output);
         ItemIlluminationWand.setConfiguredColor(wand, color);
         return wand;
     }
@@ -62,7 +74,7 @@ public class RecipeChangeWandColor extends SpecialRecipe {
             if (!in.isEmpty()) {
                 nonEmptyItemsFound++;
 
-                if (in.getItem() instanceof ItemIlluminationWand) {
+                if (in.getItem().equals(this.output)) {
                     foundWand = true;
                 } else {
                     DyeColor color = DyeColor.getColor(in);
@@ -87,14 +99,24 @@ public class RecipeChangeWandColor extends SpecialRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return RecipeSerializersAS.CUSTOM_CHANGE_WAND_COLOR_SERIALIZER;
+        return this.serializer.get();
     }
 
-    public static class Serializer extends SpecialRecipeSerializer<RecipeChangeWandColor> {
+    public static class IlluminationWandColorSerializer extends SpecialRecipeSerializer<RecipeDyeableChangeColor> {
 
-        public Serializer() {
-            super(RecipeChangeWandColor::new);
+        public IlluminationWandColorSerializer() {
+            super(id -> new RecipeDyeableChangeColor(id, () -> RecipeSerializersAS.CUSTOM_CHANGE_WAND_COLOR_SERIALIZER,
+                    ItemsAS.ILLUMINATION_WAND, ItemIlluminationWand::setConfiguredColor));
             this.setRegistryName(RecipeSerializersAS.CUSTOM_CHANGE_WAND_COLOR);
+        }
+    }
+
+    public static class CelestialGatewayColorSerializer extends SpecialRecipeSerializer<RecipeDyeableChangeColor> {
+
+        public CelestialGatewayColorSerializer() {
+            super(id -> new RecipeDyeableChangeColor(id, () -> RecipeSerializersAS.CUSTOM_CHANGE_GATEWAY_COLOR_SERIALIZER,
+                    BlocksAS.GATEWAY.asItem(), BlockCelestialGateway::setColor));
+            this.setRegistryName(RecipeSerializersAS.CUSTOM_CHANGE_GATEWAY_COLOR);
         }
     }
 }

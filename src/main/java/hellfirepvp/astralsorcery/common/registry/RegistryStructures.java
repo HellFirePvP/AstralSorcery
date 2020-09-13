@@ -38,6 +38,7 @@ public class RegistryStructures {
         STRUCT_ENHANCED_COLLECTOR_CRYSTAL = register(new PatternEnhancedCollectorCrystal());
         STRUCT_SPECTRAL_RELAY = register(new PatternSpectralRelay());
         STRUCT_ATTUNEMENT_ALTAR = register(new PatternAttunementAltar());
+        STRUCT_CELESTIAL_GATEWAY = register(new PatternCelestialGateway());
     }
 
     private static <T extends MatchableStructure> T register(T struct) {

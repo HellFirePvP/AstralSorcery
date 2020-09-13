@@ -111,15 +111,16 @@ public class BlockGemCrystalCluster extends ContainerBlock implements CustomItem
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-        BlockPos blockpos = pos.down();
-        return hasSolidSideOnTop(worldIn, blockpos) || hasEnoughSolidSide(worldIn, blockpos, Direction.UP);
+    public BlockState updatePostPlacement(BlockState state, Direction placedAgainst, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
+        if (!this.isValidPosition(state, world, pos)) {
+            return Blocks.AIR.getDefaultState();
+        }
+        return state;
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        return facing == Direction.DOWN && !state.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() :
-                super.updatePostPlacement(state, facing, facingState, worldIn, currentPos, facingPos);
+    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
+        return hasSolidSideOnTop(world, pos.down());
     }
 
     @Override

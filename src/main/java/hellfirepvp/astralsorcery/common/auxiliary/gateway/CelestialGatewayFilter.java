@@ -30,7 +30,7 @@ import java.util.Set;
  */
 public class CelestialGatewayFilter {
 
-    private File gatewayFilter;
+    private final File gatewayFilter;
     private Set<ResourceLocation> cache = new HashSet<>();
 
     CelestialGatewayFilter() {

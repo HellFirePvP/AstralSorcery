@@ -31,12 +31,6 @@ public class BlockSandTemplate extends FallingBlock implements CustomItemBlock {
         super(PropertiesMisc.defaultSand());
     }
 
-    @Nullable
-    @Override
-    public ToolType getHarvestTool(BlockState p_getHarvestTool_1_) {
-        return ToolType.SHOVEL;
-    }
-
     @Override
     @OnlyIn(Dist.CLIENT)
     public int getDustColor(BlockState p_189876_1_) {

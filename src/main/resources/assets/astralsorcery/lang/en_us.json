@@ -53,6 +53,7 @@
   "structure.astralsorcery.pattern_altar_attunement.name": "Starlight Crafting Altar",
   "structure.astralsorcery.pattern_altar_constellation.name": "Celestial Altar",
   "structure.astralsorcery.pattern_altar_trait.name": "Iridescent Altar",
+  "structure.astralsorcery.pattern_celestial_gateway.name": "Celestial Gateway",
   "structure.astralsorcery.pattern_ritual_pedestal.name": "Ritual Pedestal",
   "structure.astralsorcery.pattern_infuser.name": "Starlight Infuser",
   "structure.astralsorcery.pattern_enhanced_collector_crystal.name": "Enhanced Collector Crystal",
@@ -635,6 +636,7 @@
   "block.astralsorcery.altar_brilliance": "Altar",
   "block.astralsorcery.attunement_altar": "Attunement Altar",
   "block.astralsorcery.chalice": "Containment Chalice",
+  "block.astralsorcery.celestial_gateway": "Celestial Gateway",
   "block.astralsorcery.illuminator": "Cave Illuminator",
   "block.astralsorcery.infuser": "Starlight Infuser",
   "block.astralsorcery.lens": "Lens",
@@ -654,7 +656,6 @@
 
   "__comment": "",
 
-  "block.astralsorcery.blockcelestialgateway": "Celestial Gateway",
   "block.astralsorcery.blockbore": "Evershifting Fountain",
   "block.astralsorcery.blockborehead.liquid": "Neromantic Prime",
   "block.astralsorcery.blockborehead.vortex": "Fysallidic Prime",

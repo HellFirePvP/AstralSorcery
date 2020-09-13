@@ -28,10 +28,4 @@ public class BlockRockTemplate extends Block implements CustomItemBlock {
     public BlockRockTemplate() {
         super(PropertiesMisc.defaultRock());
     }
-
-    @Nullable
-    @Override
-    public ToolType getHarvestTool(BlockState p_getHarvestTool_1_) {
-        return ToolType.PICKAXE;
-    }
 }

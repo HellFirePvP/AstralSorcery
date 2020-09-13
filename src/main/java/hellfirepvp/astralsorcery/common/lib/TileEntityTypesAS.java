@@ -27,6 +27,7 @@ public class TileEntityTypesAS {
     public static TileEntityType<TileAltar> ALTAR;
     public static TileEntityType<TileAttunementAltar> ATTUNEMENT_ALTAR;
     public static TileEntityType<TileCelestialCrystals> CELESTIAL_CRYSTAL_CLUSTER;
+    public static TileEntityType<TileCelestialGateway> GATEWAY;
     public static TileEntityType<TileChalice> CHALICE;
     public static TileEntityType<TileCollectorCrystal> COLLECTOR_CRYSTAL;
     public static TileEntityType<TileGemCrystals> GEM_CRYSTAL_CLUSTER;

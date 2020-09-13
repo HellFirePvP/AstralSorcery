@@ -9,10 +9,14 @@
 package hellfirepvp.astralsorcery.client.event.effect;
 
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHandler;
+import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,7 +27,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
  */
 public class EffectRenderEventHandler {
 
-    private static EffectRenderEventHandler INSTANCE = new EffectRenderEventHandler();
+    private static final EffectRenderEventHandler INSTANCE = new EffectRenderEventHandler();
 
     private EffectRenderEventHandler() {}
 
@@ -35,6 +39,11 @@ public class EffectRenderEventHandler {
         bus.addListener(this::onDebugText);
         bus.addListener(ClientMiscEventHandler::onRender);
         bus.addListener(EffectHandler.getInstance()::render);
+        bus.addListener(EventPriority.LOW, GatewayUIRenderHandler.getInstance()::render);
+    }
+
+    public void attachTickListeners(Consumer<ITickHandler> registrar) {
+        registrar.accept(GatewayUIRenderHandler.getInstance());
     }
 
     private void onDebugText(RenderGameOverlayEvent.Text event) {

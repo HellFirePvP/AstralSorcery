@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary.gateway;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -15,7 +16,10 @@ import hellfirepvp.astralsorcery.common.network.play.server.PktUpdateGateways;
 import hellfirepvp.astralsorcery.common.util.SidedReference;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.DimensionManager;
@@ -24,10 +28,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,6 +52,54 @@ public class CelestialGatewayHandler {
             filter = new CelestialGatewayFilter();
         }
         return filter;
+    }
+
+    public void addPosition(IWorld world, GatewayCache.GatewayNode node) {
+        if (world.isRemote()) {
+            return;
+        }
+
+        ResourceLocation dimKey = world.getDimension().getType().getRegistryName();
+        if (!cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey)).isPresent()) {
+            forceLoad(world.getDimension().getType());
+        }
+
+        Optional<List<GatewayCache.GatewayNode>> worldData = cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey));
+        if (!worldData.isPresent()) {
+            AstralSorcery.log.info("Couldn't add gateway at " + node.getPos() + " - loading the world failed.");
+            return;
+        }
+        List<GatewayCache.GatewayNode> nodes = worldData.get();
+
+        getFilter().addDim(dimKey);
+        if (!nodes.contains(node)) {
+            nodes.add(node);
+            syncToAll();
+        }
+    }
+
+    public void removePosition(IWorld world, BlockPos pos) {
+        if (world.isRemote()) {
+            return;
+        }
+
+        ResourceLocation dimKey = world.getDimension().getType().getRegistryName();
+        Optional<List<GatewayCache.GatewayNode>> worldData = cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey));
+        if (!worldData.isPresent()) {
+            return;
+        }
+        List<GatewayCache.GatewayNode> nodes = worldData.get();
+        if (nodes.removeIf(node -> node.getPos().equals(pos))) {
+            if (nodes.isEmpty()) {
+                getFilter().removeDim(dimKey);
+            }
+            syncToAll();
+        }
+    }
+
+    private void forceLoad(DimensionType type) {
+        MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+        srv.getWorld(type);
     }
 
     public void onServerStart() {
@@ -82,7 +131,10 @@ public class CelestialGatewayHandler {
         }
 
         this.loadIntoCache(world);
+        this.syncToAll();
+    }
 
+    public void syncToAll() {
         PktUpdateGateways pkt = new PktUpdateGateways(this.getGatewayCache(LogicalSide.SERVER));
         PacketChannel.CHANNEL.sendToAll(pkt);
     }

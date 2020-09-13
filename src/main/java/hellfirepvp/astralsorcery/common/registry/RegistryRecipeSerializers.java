@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.crafting.custom.RecipeChangeWandColor;
+import hellfirepvp.astralsorcery.common.crafting.custom.RecipeDyeableChangeColor;
 import hellfirepvp.astralsorcery.common.crafting.serializer.BlockTransmutationSerializer;
 import hellfirepvp.astralsorcery.common.crafting.serializer.LiquidInfusionSerializer;
 import hellfirepvp.astralsorcery.common.crafting.serializer.SimpleAltarRecipeSerializer;
@@ -37,7 +37,8 @@ public class RegistryRecipeSerializers {
         BLOCK_TRANSMUTATION_SERIALIZER = register(new BlockTransmutationSerializer());
         ALTAR_RECIPE_SERIALIZER = register(new SimpleAltarRecipeSerializer());
 
-        CUSTOM_CHANGE_WAND_COLOR_SERIALIZER = register(new RecipeChangeWandColor.Serializer());
+        CUSTOM_CHANGE_WAND_COLOR_SERIALIZER = register(new RecipeDyeableChangeColor.IlluminationWandColorSerializer());
+        CUSTOM_CHANGE_GATEWAY_COLOR_SERIALIZER = register(new RecipeDyeableChangeColor.CelestialGatewayColorSerializer());
     }
 
     private static <C extends IInventory, R extends IRecipe<C>, T extends IRecipeSerializer<R>> T register(T serializer) {

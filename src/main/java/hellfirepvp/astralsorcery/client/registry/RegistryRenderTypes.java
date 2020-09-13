@@ -158,7 +158,6 @@ public class RegistryRenderTypes {
                 RenderStateBuilder.builder()
                         .blend(Blending.DEFAULT)
                         .alpha(0.00001F)
-                        .disableDepthMask()
                         .build());
     }
 

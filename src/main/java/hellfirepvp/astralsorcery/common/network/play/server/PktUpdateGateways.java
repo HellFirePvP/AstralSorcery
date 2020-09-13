@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.gateway.CelestialGatewayHandle
 import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,8 +52,9 @@ public class PktUpdateGateways extends ASPacket<PktUpdateGateways> {
                 ByteBufUtils.writeResourceLocation(buffer, dim);
                 buffer.writeInt(gatewayNodes.size());
                 for (GatewayCache.GatewayNode node : gatewayNodes) {
-                    ByteBufUtils.writePos(buffer, node);
-                    ByteBufUtils.writeString(buffer, node.getDisplayName());
+                    ByteBufUtils.writePos(buffer, node.getPos());
+                    ByteBufUtils.writeOptional(buffer, node.getDisplayName(), ByteBufUtils::writeTextComponent);
+                    ByteBufUtils.writeOptional(buffer, node.getColor(), ByteBufUtils::writeEnumValue);
                 }
             }
         };
@@ -71,7 +73,8 @@ public class PktUpdateGateways extends ASPacket<PktUpdateGateways> {
                     GatewayCache.GatewayNode newNode =
                             new GatewayCache.GatewayNode(
                                     ByteBufUtils.readPos(buffer),
-                                    ByteBufUtils.readString(buffer));
+                                    ByteBufUtils.readOptional(buffer, ByteBufUtils::readTextComponent),
+                                    ByteBufUtils.readOptional(buffer, buf -> ByteBufUtils.readEnumValue(buf, DyeColor.class)));
                     pkt.positions.computeIfAbsent(dim, (ii) -> new LinkedList<>()).add(newNode);
                 }
             }

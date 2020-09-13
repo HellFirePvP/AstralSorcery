@@ -12,10 +12,7 @@ import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.block.tile.BlockCelestialCrystalCluster;
 import hellfirepvp.astralsorcery.common.block.tile.BlockGemCrystalCluster;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.loot.CopyConstellation;
-import hellfirepvp.astralsorcery.common.loot.CopyCrystalProperties;
-import hellfirepvp.astralsorcery.common.loot.LinearLuckBonus;
-import hellfirepvp.astralsorcery.common.loot.RandomCrystalProperty;
+import hellfirepvp.astralsorcery.common.loot.*;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.data.loot.BlockLootTables;
@@ -198,6 +195,8 @@ public class BlockLootTableProvider extends BlockLootTables {
         this.registerDropSelfLootTable(REFRACTION_TABLE);
         this.registerDropSelfLootTable(TREE_BEACON);
         this.registerLootTable(TREE_BEACON_COMPONENT, LootTable.builder());
+        this.registerLootTable(GATEWAY, BlockLootTables.droppingWithName(GATEWAY)
+                .acceptFunction(CopyGatewayColor.builder()));
 
         this.registerLootTable(FLARE_LIGHT, LootTable.builder());
         this.registerLootTable(TRANSLUCENT_BLOCK, LootTable.builder());

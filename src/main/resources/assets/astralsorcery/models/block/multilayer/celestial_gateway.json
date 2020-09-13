@@ -1,0 +1,15 @@
+{
+  "parent": "block/block",
+  "loader": "forge:multi-layer",
+  "layers": {
+    "solid": {
+      "parent": "astralsorcery:block/celestial_gateway_solid"
+    },
+    "translucent": {
+      "parent": "astralsorcery:block/celestial_gateway_translucent"
+    }
+  },
+  "textures": {
+    "particle": "astralsorcery:block/celestial_gateway_platform"
+  }
+}

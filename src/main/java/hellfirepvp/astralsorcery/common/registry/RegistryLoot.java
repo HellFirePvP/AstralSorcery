@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.loot.CopyConstellation;
-import hellfirepvp.astralsorcery.common.loot.CopyCrystalProperties;
-import hellfirepvp.astralsorcery.common.loot.LinearLuckBonus;
-import hellfirepvp.astralsorcery.common.loot.RandomCrystalProperty;
+import hellfirepvp.astralsorcery.common.loot.*;
 import hellfirepvp.astralsorcery.common.loot.global.LootModifierMagnetDrops;
 import hellfirepvp.astralsorcery.common.loot.global.LootModifierPerkVoidTrash;
 import hellfirepvp.astralsorcery.common.loot.global.LootModifierScorchingHeat;
@@ -42,6 +39,7 @@ public class RegistryLoot {
         registerFunction(new RandomCrystalProperty.Serializer(AstralSorcery.key("random_crystal_property")));
         registerFunction(new CopyCrystalProperties.Serializer(AstralSorcery.key("copy_crystal_properties")));
         registerFunction(new CopyConstellation.Serializer(AstralSorcery.key("copy_constellation")));
+        registerFunction(new CopyGatewayColor.Serializer(AstralSorcery.key("copy_gateway_color")));
     }
 
     private static <T extends ILootFunction> void registerFunction(ILootFunction.Serializer<T> serializer) {

@@ -31,5 +31,6 @@ public class StructuresAS {
     public static PatternBlockArray STRUCT_ENHANCED_COLLECTOR_CRYSTAL;
     public static PatternBlockArray STRUCT_SPECTRAL_RELAY;
     public static PatternBlockArray STRUCT_ATTUNEMENT_ALTAR;
+    public static PatternBlockArray STRUCT_CELESTIAL_GATEWAY;
 
 }

@@ -22,6 +22,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -123,6 +124,14 @@ public class ByteBufUtils {
             map.put(readKey.apply(buf), readValue.apply(buf));
         }
         return map;
+    }
+
+    public static void writeTextComponent(PacketBuffer buf, ITextComponent cmp) {
+        writeString(buf, ITextComponent.Serializer.toJson(cmp));
+    }
+
+    public static ITextComponent readTextComponent(PacketBuffer buf) {
+        return ITextComponent.Serializer.fromJson(readString(buf));
     }
 
     public static void writeString(PacketBuffer buf, String toWrite) {

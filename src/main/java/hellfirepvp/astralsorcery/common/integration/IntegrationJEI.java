@@ -69,13 +69,15 @@ public class IntegrationJEI implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registry) {
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
 
-        CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_DISCOVERY, "altar_discovery", BlocksAS.ALTAR_DISCOVERY, guiHelper));
-        CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_ATTUNEMENT, "altar_attunement", BlocksAS.ALTAR_ATTUNEMENT, guiHelper));
-        CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_CONSTELLATION, "altar_constellation", BlocksAS.ALTAR_CONSTELLATION, guiHelper));
-        CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_TRAIT, "altar_trait", BlocksAS.ALTAR_RADIANCE, guiHelper));
-        CATEGORIES.add(new CategoryInfuser(guiHelper));
-        CATEGORIES.add(new CategoryTransmutation(guiHelper));
-        CATEGORIES.add(new CategoryWell(guiHelper));
+        if (CATEGORIES.isEmpty()) {
+            CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_DISCOVERY, "altar_discovery", BlocksAS.ALTAR_DISCOVERY, guiHelper));
+            CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_ATTUNEMENT, "altar_attunement", BlocksAS.ALTAR_ATTUNEMENT, guiHelper));
+            CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_CONSTELLATION, "altar_constellation", BlocksAS.ALTAR_CONSTELLATION, guiHelper));
+            CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_TRAIT, "altar_trait", BlocksAS.ALTAR_RADIANCE, guiHelper));
+            CATEGORIES.add(new CategoryInfuser(guiHelper));
+            CATEGORIES.add(new CategoryTransmutation(guiHelper));
+            CATEGORIES.add(new CategoryWell(guiHelper));
+        }
 
         CATEGORIES.forEach(registry::addRecipeCategories);
     }

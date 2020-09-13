@@ -13,6 +13,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
@@ -75,5 +77,10 @@ public abstract class TileFakedState extends TileEntityTick {
 
         NBTHelper.setBlockState(compound, "fakedState", this.fakedState);
         compound.putInt("color", this.overlayColor.getRGB());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public double getMaxRenderDistanceSquared() {
+        return 65536.0D;
     }
 }

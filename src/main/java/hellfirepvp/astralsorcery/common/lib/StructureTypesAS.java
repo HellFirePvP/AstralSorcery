@@ -31,5 +31,6 @@ public class StructureTypesAS {
     public static StructureType PTYPE_ENHANCED_COLLECTOR_CRYSTAL;
     public static StructureType PTYPE_SPECTRAL_RELAY;
     public static StructureType PTYPE_ATTUNEMENT_ALTAR;
+    public static StructureType PTYPE_CELESTIAL_GATEWAY;
 
 }

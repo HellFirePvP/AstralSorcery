@@ -8,11 +8,21 @@
 
 package hellfirepvp.astralsorcery.common.network.play.client;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 
 import javax.annotation.Nonnull;
 
@@ -25,12 +35,12 @@ import javax.annotation.Nonnull;
  */
 public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
 
-    private DimensionType type;
+    private ResourceLocation type;
     private BlockPos pos;
 
     public PktRequestTeleport() {}
 
-    public PktRequestTeleport(DimensionType type, BlockPos pos) {
+    public PktRequestTeleport(ResourceLocation type, BlockPos pos) {
         this.type = type;
         this.pos = pos;
     }
@@ -38,7 +48,7 @@ public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
     @Override
     public Encoder<PktRequestTeleport> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeRegistryEntry(buffer, packet.type);
+            ByteBufUtils.writeResourceLocation(buffer, packet.type);
             ByteBufUtils.writePos(buffer, packet.pos);
         };
     }
@@ -49,7 +59,7 @@ public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
         return buffer -> {
             PktRequestTeleport pkt = new PktRequestTeleport();
 
-            pkt.type = ByteBufUtils.readRegistryEntry(buffer);
+            pkt.type = ByteBufUtils.readResourceLocation(buffer);
             pkt.pos = ByteBufUtils.readPos(buffer);
 
             return pkt;
@@ -62,20 +72,19 @@ public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
         return (packet, context, side) -> {
             context.enqueueWork(() -> {
                 PlayerEntity player = context.getSender();
-                //TODO gateway
-                //TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, false);
-                //if (gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
-                //    MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                //    if (server != null) {
-                //        World to = server.getWorld(packet.type);
-                //        if (to != null) {
-                //            GatewayCache data = WorldCacheManager.getOrLoadData(to, WorldCacheManager.SaveKey.GATEWAY_DATA);
-                //            if (MiscUtils.contains(data.getGatewayPositions(), gatewayNode -> gatewayNode.equals(packet.pos))) {
-                //                AstralSorcery.getProxy().scheduleDelayed(() -> MiscUtils.transferEntityTo(player, packet.type, packet.pos));
-                //            }
-                //        }
-                //    }
-                //}
+                TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, false);
+                if (gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
+                    MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+                    if (server != null) {
+                        DimensionType type = DimensionType.byName(packet.type);
+                        if (type != null) {
+                            World to = server.getWorld(type);
+                            if (to != null && DataAS.DOMAIN_AS.getData(to, DataAS.KEY_GATEWAY_CACHE).hasGateway(packet.pos)) {
+                                AstralSorcery.getProxy().scheduleDelayed(() -> MiscUtils.transferEntityTo(player, type, packet.pos));
+                            }
+                        }
+                    }
+                }
             });
         };
     }

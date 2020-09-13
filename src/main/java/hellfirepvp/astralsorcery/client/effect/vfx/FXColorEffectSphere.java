@@ -13,6 +13,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.context.base.BatchRenderContext;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
 import hellfirepvp.astralsorcery.client.util.SphereBuilder;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -58,6 +59,7 @@ public class FXColorEffectSphere extends EntityVisualFX {
 
     public FXColorEffectSphere setAlphaFadeDistance(double fadeDistance) {
         if (fadeDistance > 0) {
+            this.alphaFadeMaxDist = fadeDistance;
             this.alpha((fx, alpha, pTicks) -> {
                 Entity rView = Minecraft.getInstance().getRenderViewEntity();
                 if (rView == null) {
@@ -82,13 +84,6 @@ public class FXColorEffectSphere extends EntityVisualFX {
     }
 
     @Override
-    public void tick() {
-        if (alphaFadeMaxDist == -1 && !removeIfInvisible) {
-            super.tick();
-        }
-    }
-
-    @Override
     public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {
         int alpha = this.getAlpha(pTicks);
         if (this.removeIfInvisible && alpha <= 0) {
@@ -102,6 +97,7 @@ public class FXColorEffectSphere extends EntityVisualFX {
 
         Matrix4f matr = renderStack.getLast().getMatrix();
         Vector3 pos = this.getRenderPosition(pTicks);
+        pos.subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
         for (SphereBuilder.TriangleFace face : this.sphereFaces) {
             pos.clone().add(face.getV1()).drawPos(matr, vb).color(r, g, b, alpha).endVertex();
             pos.clone().add(face.getV2()).drawPos(matr, vb).color(r, g, b, alpha).endVertex();

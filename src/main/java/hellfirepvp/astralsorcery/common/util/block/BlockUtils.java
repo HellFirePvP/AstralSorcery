@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.util.block;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -64,7 +65,7 @@ public class BlockUtils {
                 .withParameter(LootParameters.POSITION, pos)
                 .withParameter(LootParameters.BLOCK_STATE, state)
                 .withParameter(LootParameters.TOOL, tool)
-                .withNullableParameter(LootParameters.BLOCK_ENTITY, world.getTileEntity(pos))
+                .withNullableParameter(LootParameters.BLOCK_ENTITY, MiscUtils.getTileAt(world, pos, TileEntity.class, true))
                 .withRandom(rand)
                 .withLuck(harvestFortune);
         return state.getDrops(builder);
@@ -181,8 +182,6 @@ public class BlockUtils {
             return false;
         }
 
-        TileEntity tileentity = world.getTileEntity(pos);
-
         if (heldItem.onBlockStartBreak(pos, fakePlayer)) {
             return false;
         }
@@ -229,6 +228,7 @@ public class BlockUtils {
 
         if (harvestable) {
             try {
+                TileEntity tileentity = MiscUtils.getTileAt(world, pos, TileEntity.class, true);
                 ItemStack harvestStack = heldCopy.isEmpty() ? ItemStack.EMPTY : heldCopy.copy();
                 stateBroken.getBlock().harvestBlock(world, fakePlayer, pos, stateBroken, tileentity, harvestStack);
             } catch (Exception exc) {

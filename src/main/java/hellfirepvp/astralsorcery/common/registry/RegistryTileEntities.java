@@ -40,6 +40,7 @@ public class RegistryTileEntities {
         ALTAR = registerTile(TileAltar.class, BlocksAS.ALTAR_DISCOVERY, BlocksAS.ALTAR_ATTUNEMENT, BlocksAS.ALTAR_CONSTELLATION, BlocksAS.ALTAR_RADIANCE);
         ATTUNEMENT_ALTAR = registerTile(TileAttunementAltar.class, BlocksAS.ATTUNEMENT_ALTAR);
         CELESTIAL_CRYSTAL_CLUSTER = registerTile(TileCelestialCrystals.class, BlocksAS.CELESTIAL_CRYSTAL_CLUSTER);
+        GATEWAY = registerTile(TileCelestialGateway.class, BlocksAS.GATEWAY);
         CHALICE = registerTile(TileChalice.class, BlocksAS.CHALICE);
         COLLECTOR_CRYSTAL = registerTile(TileCollectorCrystal.class, BlocksAS.ROCK_COLLECTOR_CRYSTAL, BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
         GEM_CRYSTAL_CLUSTER = registerTile(TileGemCrystals.class, BlocksAS.GEM_CRYSTAL_CLUSTER);

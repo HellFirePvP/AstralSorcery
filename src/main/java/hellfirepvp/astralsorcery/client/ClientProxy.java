@@ -122,6 +122,7 @@ public class ClientProxy extends CommonProxy {
         OverlayRenderer.INSTANCE.attachEventListeners(eventBus);
 
         MouseUtil.attachEventListeners(eventBus);
+        eventBus.addListener(GatewayInteractionHandler::clientTick);
 
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onRender);
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onFog);
@@ -142,6 +143,7 @@ public class ClientProxy extends CommonProxy {
         registrar.accept(AreaOfInfluencePreview.INSTANCE);
 
         LightbeamRenderHelper.attachTickListener(registrar);
+        EffectRenderEventHandler.getInstance().attachTickListeners(registrar);
     }
 
     @Override
