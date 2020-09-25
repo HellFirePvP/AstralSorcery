@@ -12,9 +12,7 @@ rm -rf AS-Example.zs perkMapDraft.pdn README.html README.md AstralSorcery'''
     }
     stage('Build') {
       when {
-        not {
-          branch 'master'
-        }
+        branch 'master'
       }
       steps {
         sh '''./gradlew build publish'''
