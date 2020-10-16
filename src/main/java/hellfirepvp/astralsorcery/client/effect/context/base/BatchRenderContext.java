@@ -43,6 +43,7 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
 
     private final int id;
     private final SpriteSheetResource sprite;
+    private boolean drawWithTexture = true;
     protected RenderType renderType;
     protected BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator;
 
@@ -76,6 +77,11 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
         return this.particleCreator.apply(this, pos);
     }
 
+    public BatchRenderContext<T> setDrawWithTexture(boolean drawWithTexture) {
+        this.drawWithTexture = drawWithTexture;
+        return this;
+    }
+
     public SpriteSheetResource getSprite() {
         return sprite;
     }
@@ -87,14 +93,17 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
                 .filter(effect -> effect.getEffect() instanceof EntityDynamicFX)
                 .forEach(effect -> ((EntityDynamicFX) effect.getEffect()).renderNow(blankCtx, renderStack, drawBuffer, pTicks));
 
-        RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(this.getRenderType(), () -> {
-            RenderSystem.enableTexture();
-            this.getSprite().bindTexture();
-        }, () -> {
-            BlockAtlasTexture.getInstance().bindTexture();
-            RenderSystem.disableTexture();
-        });
-        IVertexBuilder buf = drawBuffer.getBuffer(decorated);
+        RenderType drawType = this.getRenderType();
+        if (this.drawWithTexture) {
+            drawType = RenderTypeDecorator.wrapSetup(this.getRenderType(), () -> {
+                RenderSystem.enableTexture();
+                this.getSprite().bindTexture();
+            }, () -> {
+                BlockAtlasTexture.getInstance().bindTexture();
+                RenderSystem.disableTexture();
+            });
+        }
+        IVertexBuilder buf = drawBuffer.getBuffer(drawType);
         effects.forEach(effect -> effect.getEffect().render(this, renderStack, buf, pTicks));
         this.drawBatched(buf, drawBuffer);
     }

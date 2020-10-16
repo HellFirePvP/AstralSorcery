@@ -46,6 +46,11 @@ public class RenderStateBuilder {
         return this;
     }
 
+    public RenderStateBuilder disableTexture() {
+        this.builder.texture(new RenderState.TextureState());
+        return this;
+    }
+
     public RenderStateBuilder blend(Blending blendMode) {
         this.builder.transparency(blendMode.asState());
         return this;

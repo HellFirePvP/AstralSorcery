@@ -64,6 +64,7 @@ public class RegistryEffectTemplates {
         BLOCK_TRANSLUCENT_IGNORE_DEPTH = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_BLOCK_TRANSLUCENT_DEPTH, (ctx, pos) -> new FXBlock(pos)));
 
         COLOR_SPHERE = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_COLOR_SPHERE, (ctx, pos) -> new FXColorEffectSphere(pos)));
+        COLOR_SPHERE.setDrawWithTexture(false);
         GENERIC_GATEWAY_PARTICLE = register(new RenderContextGenericParticle());
 
         setupRenderOrder();

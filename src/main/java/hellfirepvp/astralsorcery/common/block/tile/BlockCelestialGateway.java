@@ -113,9 +113,7 @@ public class BlockCelestialGateway extends ContainerBlock implements CustomItemB
             if (gateway.hasCustomName()) {
                 stack.setDisplayName(gateway.getDisplayName());
             }
-            if (gateway.getColor() != null) {
-                setColor(stack, gateway.getColor());
-            }
+            gateway.getColor().ifPresent(color -> setColor(stack, color));
         }
         return stack;
     }

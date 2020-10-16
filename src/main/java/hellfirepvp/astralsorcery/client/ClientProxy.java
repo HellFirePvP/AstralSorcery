@@ -123,6 +123,7 @@ public class ClientProxy extends CommonProxy {
 
         MouseUtil.attachEventListeners(eventBus);
         eventBus.addListener(GatewayInteractionHandler::clientTick);
+        eventBus.addListener(EventPriority.LOWEST, GatewayInteractionHandler::renderTick);
 
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onRender);
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onFog);

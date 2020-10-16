@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.event.effect;
 
+import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
@@ -29,6 +30,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -162,52 +164,31 @@ public class GatewayUIRenderHandler implements ITickHandler {
             ITextComponent display = entry.getNode().getDisplayName();
             if (display != null && !display.getFormattedText().isEmpty()) {
                 String text = display.getFormattedText();
-                Vector3 at = entry.getRelativePos().clone().add(renderOffset);
+                Vector3 at = entry.getRelativePos().clone();
+                at.add(this.currentUI.getRenderCenter());
                 at.subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
                 FontRenderer fr = Minecraft.getInstance().fontRenderer;
 
-                Color color = c;
                 DyeColor nodeColor = entry.getNode().getColor();
                 if (nodeColor != null) {
-                    color = ColorUtils.flareColorFromDye(nodeColor);
+                    c = ColorUtils.flareColorFromDye(nodeColor);
                 }
+                float scale = 1 / 80F;
 
-                //MatrixStack st = new MatrixStack();
+                renderStack.push();
+                renderStack.translate(at.getX(), at.getY() + 0.4, at.getZ());
+                renderStack.scale(scale, -scale, scale);
 
-                //st.push();
-                //st.translate(at.getX(), at.getY() + 2, at.getZ());
-                //st.scale(0.15F, 0.15F, 0.15F);
-                //float iYaw = RenderingVectorUtils.interpolate(MathHelper.wrapDegrees(player.prevRotationYaw), MathHelper.wrapDegrees(player.rotationYaw), pTicks);
-                //st.rotate(Vector3f.YP.rotationDegrees(-iYaw + 180F));
+                float iYaw = RenderingVectorUtils.interpolate(MathHelper.wrapDegrees(player.prevRotationYaw), MathHelper.wrapDegrees(player.rotationYaw), pTicks);
+                renderStack.rotate(Vector3f.YP.rotationDegrees(-iYaw + 180F));
 
-                //Matrix4f matr = renderStack.getLast().getMatrix();
-                //int length = fr.getStringWidth(text);
-                //IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-                //fr.renderString(text, -(length / 2F), 0, color.getRGB(), false, matr, buffers, true, 0, LightmapUtil.getPackedFullbrightCoords());
-                //buffers.finish();
+                Matrix4f matr = renderStack.getLast().getMatrix();
+                int length = fr.getStringWidth(text);
+                IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+                fr.renderString(text, -(length / 2F), 0, c.getRGB(), false, matr, buffers, true, 0, LightmapUtil.getPackedFullbrightCoords());
+                buffers.finish();
 
-                //st.pop();
-
-                /*
-                                GlStateManager.pushMatrix();
-                FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-                Vector3 pos = entry.relativePos.clone().add(origin);
-                RenderingUtils.removeStandartTranslationFromTESRMatrix(pticks);
-                GlStateManager.translate(pos.getX(), pos.getY() + 0.25, pos.getZ());
-                GlStateManager.scale(0.015, -0.015, 0.015);
-                GlStateManager.glNormal3f(0.0F, 0.0F, -0.010416667F);
-                float plRot = RenderingUtils.interpolateRotation(MathHelper.wrapDegrees(player.prevRotationYaw), MathHelper.wrapDegrees(player.rotationYaw), pticks);
-                GlStateManager.rotate(-plRot + 180, 0, 1, 0);
-                GlStateManager.depthMask(false);
-                GlStateManager.disableDepth();
-                int length = fr.getStringWidth(display);
-                fr.drawString(display, -(length / 2), 0, 0x88F0BD00);
-
-                GlStateManager.depthMask(true);
-                GlStateManager.enableDepth();
-                GlStateManager.color(1F, 1F, 1F, 1F);
-                GlStateManager.popMatrix();
-                 */
+                renderStack.pop();
             }
         }
     }

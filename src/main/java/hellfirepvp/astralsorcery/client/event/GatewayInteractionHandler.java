@@ -18,10 +18,12 @@ import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.client.PktRequestTeleport;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
+import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
@@ -45,6 +47,8 @@ public class GatewayInteractionHandler {
     public static GatewayUI.GatewayEntry focusingEntry = null;
     public static int focusTicks = 0;
 
+    private static double fovPre = 0;
+
     public static void clientTick(TickEvent.ClientTickEvent event) {
         PlayerEntity player = Minecraft.getInstance().player;
         World world = Minecraft.getInstance().world;
@@ -61,7 +65,6 @@ public class GatewayInteractionHandler {
             return;
         }
 
-        //TODO
         TileCelestialGateway gateway = MiscUtils.getTileAt(world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, true);
         if (gateway == null || !gateway.hasMultiblock() || !gateway.doesSeeSky()) {
             focusingEntry = null;
@@ -97,6 +100,8 @@ public class GatewayInteractionHandler {
         Vector3 mov = dir.clone().normalize().multiply(0.25F).negate();
         Vector3 pos = focusingEntry.getRelativePos().clone().add(ui.getRenderCenter());
 
+        DyeColor nodeColor = focusingEntry.getNode().getColor();
+        Color gatewayColor = ColorUtils.flareColorFromDye(nodeColor == null ? DyeColor.YELLOW : nodeColor);
         if (focusTicks <= 40) {
             pos = focusingEntry.getRelativePos().clone().multiply(0.8).add(ui.getRenderCenter());
 
@@ -106,10 +111,7 @@ public class GatewayInteractionHandler {
                 float pc = ((float) i) / ((float) positions.size());
                 if (pc >= perc) continue;
 
-                Color color = MiscUtils.eitherOf(rand,
-                        Color.WHITE,
-                        ColorsAS.EFFECT_BLUE_LIGHT,
-                        ColorsAS.EFFECT_BLUE_DARK);
+                Color color = MiscUtils.eitherOf(rand, Color.WHITE, gatewayColor, gatewayColor.brighter());
                 Vector3 at = positions.get(i);
                 FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_GATEWAY_PARTICLE)
                         .spawn(at)
@@ -129,10 +131,7 @@ public class GatewayInteractionHandler {
                 float pc = ((float) i) / ((float) positions.size());
                 if (pc >= perc) continue;
 
-                Color color = MiscUtils.eitherOf(rand,
-                        Color.WHITE,
-                        ColorsAS.EFFECT_BLUE_LIGHT,
-                        ColorsAS.EFFECT_BLUE_DARK);
+                Color color = MiscUtils.eitherOf(rand, Color.WHITE, gatewayColor, gatewayColor.brighter());
                 Vector3 at = positions.get(i);
                 FXFacingParticle p = EffectHelper.of(EffectTemplatesAS.GENERIC_GATEWAY_PARTICLE)
                         .spawn(at)
@@ -148,10 +147,7 @@ public class GatewayInteractionHandler {
         } else {
             for (Vector3 v : MiscUtils.getCirclePositions(pos, dir, rand.nextFloat() * 0.3 + 0.2, rand.nextInt(20) + 30)) {
 
-                Color color = MiscUtils.eitherOf(rand,
-                        Color.WHITE,
-                        ColorsAS.EFFECT_BLUE_LIGHT,
-                        ColorsAS.EFFECT_BLUE_DARK);
+                Color color = MiscUtils.eitherOf(rand, Color.WHITE, gatewayColor, gatewayColor.brighter());
                 Vector3 m = mov.clone().multiply(0.5 + rand.nextFloat() * 0.5);
                 EffectHelper.of(EffectTemplatesAS.GENERIC_GATEWAY_PARTICLE)
                         .spawn(v)
@@ -167,6 +163,26 @@ public class GatewayInteractionHandler {
             PacketChannel.CHANNEL.sendToServer(pkt);
             focusingEntry = null;
             focusTicks = 0;
+        }
+    }
+
+    public static void renderTick(TickEvent.RenderTickEvent event) {
+        GatewayUI ui = GatewayUIRenderHandler.getInstance().getCurrentUI();
+        if (ui == null) {
+            return;
+        }
+
+        if (event.phase == TickEvent.Phase.START) {
+            fovPre = Minecraft.getInstance().gameSettings.fov;
+            if(focusTicks < 80) {
+                return;
+            }
+            float percDone = 1F - ((focusTicks - 80F + event.renderTickTime) / 15F);
+            float targetFov = 10F;
+            double diff = fovPre - targetFov;
+            Minecraft.getInstance().gameSettings.fov = Math.max(targetFov, targetFov + diff * percDone);
+        } else {
+            Minecraft.getInstance().gameSettings.fov = fovPre;
         }
     }
 }

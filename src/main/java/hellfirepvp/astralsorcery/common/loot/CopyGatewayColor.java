@@ -47,10 +47,9 @@ public class CopyGatewayColor extends LootFunction {
     protected ItemStack doApply(ItemStack stack, LootContext context) {
         TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
         if (tile instanceof TileCelestialGateway) {
-            DyeColor color = ((TileCelestialGateway) tile).getColor();
-            if (color != null) {
+            ((TileCelestialGateway) tile).getColor().ifPresent(color -> {
                 BlockCelestialGateway.setColor(stack, color);
-            }
+            });
         }
         return stack;
     }

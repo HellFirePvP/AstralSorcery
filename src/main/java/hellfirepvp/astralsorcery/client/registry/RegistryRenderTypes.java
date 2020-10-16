@@ -157,6 +157,7 @@ public class RegistryRenderTypes {
         EFFECT_FX_COLOR_SPHERE = createType("effect_fx_color_sphere", DefaultVertexFormats.POSITION_COLOR, GL11.GL_TRIANGLES, 32768,
                 RenderStateBuilder.builder()
                         .blend(Blending.DEFAULT)
+                        .disableTexture()
                         .alpha(0.00001F)
                         .build());
     }

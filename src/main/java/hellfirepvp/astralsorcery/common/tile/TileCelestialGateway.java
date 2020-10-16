@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
+import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -36,6 +37,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -126,6 +128,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable {
             return;
         }
 
+        Color gatewayColor = ColorUtils.flareColorFromDye(this.getColor().orElse(DyeColor.YELLOW));
         for (int i = 0; i < 3; i++) {
             Vector3 offset = new Vector3(this).add(-2, 0.05, -2);
             if (rand.nextBoolean()) {
@@ -134,17 +137,26 @@ public class TileCelestialGateway extends TileEntityTick implements INameable {
                 offset.add(rand.nextFloat() * 5, 0, 5 * (rand.nextBoolean() ? 1 : 0));
             }
 
-            Color c = MiscUtils.eitherOf(rand,
-                    Color.WHITE,
-                    ColorsAS.DEFAULT_GENERIC_PARTICLE,
-                    ColorsAS.DEFAULT_GENERIC_PARTICLE.brighter());
-
+            Color c = MiscUtils.eitherOf(rand, Color.WHITE, gatewayColor, gatewayColor.brighter());
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(offset)
                     .setGravityStrength(-0.0001F)
                     .color(VFXColorFunction.constant(c))
                     .setScaleMultiplier(0.25F + rand.nextFloat() * 0.15F)
                     .setMaxAge(30 + rand.nextInt(30));
+        }
+        for (int i = 0; i < 2; i++) {
+            Vector3 offset = new Vector3();
+            MiscUtils.applyRandomOffset(offset, rand, 3F);
+            offset.add(new Vector3(this)).add(0.5, 0, 0.5).setY(this.getPos().getY() + 0.05);
+
+            Color c = MiscUtils.eitherOf(rand, Color.WHITE, gatewayColor, gatewayColor.brighter());
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(offset)
+                    .setGravityStrength(-0.00004F)
+                    .color(VFXColorFunction.constant(c))
+                    .setScaleMultiplier(0.15F + rand.nextFloat() * 0.1F)
+                    .setMaxAge(15 + rand.nextInt(10));
         }
     }
 
@@ -187,9 +199,8 @@ public class TileCelestialGateway extends TileEntityTick implements INameable {
         return getName();
     }
 
-    @Nullable
-    public DyeColor getColor() {
-        return this.color;
+    public Optional<DyeColor> getColor() {
+        return Optional.ofNullable(this.color);
     }
 
     @Override
