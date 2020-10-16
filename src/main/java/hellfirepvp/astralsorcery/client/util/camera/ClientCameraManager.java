@@ -16,6 +16,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -346,6 +347,13 @@ public class ClientCameraManager implements ITickHandler {
         public EntityClientReplacement() {
             super(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getGameProfile());
         }
+
+        @SideOnly(Side.CLIENT)
+        @Override
+        public boolean isWearing(EnumPlayerModelParts part) {
+            return Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.isWearing(part);
+        }
+
     }
 
 }
