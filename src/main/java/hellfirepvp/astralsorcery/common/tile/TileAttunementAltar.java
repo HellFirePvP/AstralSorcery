@@ -367,9 +367,7 @@ public class TileAttunementAltar extends TileEntityTick {
         if (heldTpl != null) {
             ItemStack cstPaper = heldTpl.getB();
             IConstellation cst = ((ItemConstellationPaper) cstPaper.getItem()).getConstellation(cstPaper);
-            if (cst != null &&
-                    ResearchHelper.getClientProgress().hasConstellationDiscovered(cst) &&
-                    ctx.getConstellationHandler().isActiveCurrently(cst, MoonPhase.fromWorld(getWorld()))) {
+            if (cst != null && ResearchHelper.getClientProgress().hasConstellationDiscovered(cst)) {
                 float night = DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
                 if (night >= 0.1F) {
                     for (BlockPos pos : this.getConstellationPositions(cst)) {
