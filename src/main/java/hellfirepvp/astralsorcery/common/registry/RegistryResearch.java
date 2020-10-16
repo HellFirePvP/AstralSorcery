@@ -395,13 +395,12 @@ public class RegistryResearch {
                 .addPage(recipe(stack -> ItemsAS.RESONATOR.equals(stack.getItem()) && ItemResonator.getCurrentUpgrade(null, stack) == ItemResonator.ResonatorUpgrade.AREA_SIZE))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        //TODO celestial gateway
-        ResearchNode resCelestialGateway = new ResearchNode(Items.APPLE, "CELESTIAL_GATEWAY", 7.5F, 1.5F)
+        ResearchNode resCelestialGateway = new ResearchNode(BlocksAS.GATEWAY, "CELESTIAL_GATEWAY", 7.5F, 1.5F)
                 .addPage(text("CELESTIAL_GATEWAY.1"))
-                //.addPage(recipe(BlocksAS.CELESTIAL_GATEWAY))
-                //.addTomeLookup(BlocksAS.CELESTIAL_GATEWAY, 1, ResearchProgression.ATTUNEMENT)
+                .addPage(recipe(BlocksAS.GATEWAY))
+                .addTomeLookup(BlocksAS.GATEWAY, 1, ResearchProgression.ATTUNEMENT)
                 .addPage(text("CELESTIAL_GATEWAY.3"))
-                //.addPage(structure(StructureTypesAS.PTYPE_CELESTIAL_GATEWAY))
+                .addPage(structure(StructureTypesAS.PTYPE_CELESTIAL_GATEWAY))
                 .register(ResearchProgression.ATTUNEMENT);
 
         ResearchNode resAltar3 = new ResearchNode(BlocksAS.ALTAR_CONSTELLATION, "ALTAR3", 7.25F, 0)

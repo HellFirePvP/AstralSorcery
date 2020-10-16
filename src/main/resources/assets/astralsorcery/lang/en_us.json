@@ -272,7 +272,7 @@
   "astralsorcery.journal.node.RESONATOR_AREA_SIZE.name": "Domic Resonator",
   "astralsorcery.journal.RESONATOR_AREA_SIZE.1.text": "Viewing high concentrations in the Fosic Field is useful, but viewing the applicable reach of applied Starlight is often of more interest to an initiate. Adding specially reactive lenses, powders, and Stardust to a Fosic Resonator will allow it to instead display the disruption in natural starlight areas that denotes the area of effect of a ritual pedestal when right-clicked. <NL>Shift-right-clicking will cycle the resonator between Fosic and Domic modes.",
 
-  "astralsorcery.journal.node.CELESTIAL_GATEWAY.name": "Celestial Gateway [WIP]",
+  "astralsorcery.journal.node.CELESTIAL_GATEWAY.name": "Celestial Gateway",
   "astralsorcery.journal.CELESTIAL_GATEWAY.1.text": "Few Sorcerers find all the needed resources for their craft nearby. Most have to journey for raw crystals, Fosic concentrations, or even into other dimensions for materials. A reliable, and expandable, means of safely traveling is an important tool even for an Academy initiate. A network of Celestial Gateways makes even cross-dimensional travel easy, and the Gateway itself can be named using an Anvil.",
   "astralsorcery.journal.CELESTIAL_GATEWAY.3.text": "Standing on the Gateway block will allow for seeing between worlds, with each other Gateway showing up as a star among the twinkling void. Gateways will be located in relation to each other, with extra-dimensional gateways showing higher in the sky. Holding shift while facing a Gateway star will transport the user to that Gateway. <NL>Too many Gateways in the same area of the void will result in some not being shown.",
 
