@@ -49,11 +49,11 @@ public class ItemColoredLensGrowth extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(Vector3 origin, Vector3 target, Entity entity, float beamStrength) {}
+        public void entityInBeam(IWorld world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {}
 
         @Override
         public void blockInBeam(IWorld world, BlockPos pos, BlockState state, float beamStrength) {
-            if (random.nextFloat() > beamStrength) {
+            if (world.isRemote() || random.nextFloat() > beamStrength) {
                 return;
             }
             CropHelper.GrowablePlant plant = CropHelper.wrapPlant(world, pos);

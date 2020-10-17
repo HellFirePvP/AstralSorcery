@@ -81,7 +81,7 @@ public abstract class LensColorType {
         return BY_NAME.get(name);
     }
 
-    public abstract void entityInBeam(Vector3 origin, Vector3 target, Entity entity, float beamStrength);
+    public abstract void entityInBeam(IWorld world, Vector3 origin, Vector3 target, Entity entity, float beamStrength);
 
     public abstract void blockInBeam(IWorld world, BlockPos pos, BlockState state, float beamStrength);
 

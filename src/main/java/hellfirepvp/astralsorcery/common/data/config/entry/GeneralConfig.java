@@ -32,6 +32,8 @@ public class GeneralConfig extends ConfigEntry {
     public ForgeConfigSpec.BooleanValue mobSpawningDenyAllTypes;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> modidOreBlacklist;
 
+    public ForgeConfigSpec.BooleanValue doColoredLensesAffectPlayers;
+
     private GeneralConfig() {
         super("general");
     }
@@ -57,6 +59,11 @@ public class GeneralConfig extends ConfigEntry {
                 .comment("Features generating random ores in AstralSorcery will not spawn ores from mods listed here.")
                 .translation(translationKey("modidOreBlacklist"))
                 .defineList("modidOreBlacklist", Arrays.asList("techreborn", "gregtech"), Predicates.alwaysTrue());
+
+        doColoredLensesAffectPlayers = cfgBuilder
+                .comment("Set this to false to prevent players from being affected by entity-related colored lens effects.")
+                .translation(translationKey("doColoredLensesAffectPlayers"))
+                .define("doColoredLensesAffectPlayers", true);
     }
 
 }

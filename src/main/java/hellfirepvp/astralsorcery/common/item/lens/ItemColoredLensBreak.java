@@ -50,10 +50,14 @@ public class ItemColoredLensBreak extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(Vector3 origin, Vector3 target, Entity entity, float beamStrength) {}
+        public void entityInBeam(IWorld world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {}
 
         @Override
         public void blockInBeam(IWorld world, BlockPos pos, BlockState state, float beamStrength) {
+            if (world.isRemote()) {
+                return;
+            }
+
             float hardness = state.getBlockHardness(world, pos);
             if (hardness < 0) {
                 return;
