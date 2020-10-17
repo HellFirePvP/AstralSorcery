@@ -155,7 +155,8 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
                         int min = Math.min(CONFIG.minFishTickTime.get(), CONFIG.maxFishTickTime.get());
                         int max = Math.max(CONFIG.minFishTickTime.get(), CONFIG.maxFishTickTime.get());
 
-                        entry.setMaxCount(min + rand.nextInt(max - min + 1));
+                        int diff = Math.max(1, max - min + 1);
+                        entry.setMaxCount(min + rand.nextInt(diff));
                         entry.setCounter(0);
 
                         spawnFishingDropsAt((ServerWorld) world, entry.getPos());

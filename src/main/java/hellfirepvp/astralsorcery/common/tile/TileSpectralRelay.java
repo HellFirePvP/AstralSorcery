@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXMotionController;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.block.tile.BlockSpectralRelay;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.item.ItemGlassLens;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
@@ -24,6 +25,7 @@ import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
+import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -33,6 +35,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -40,7 +43,9 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,6 +59,9 @@ public class TileSpectralRelay extends TileEntityTick {
     private TileInventory inventory;
 
     private BlockPos altarPos;
+
+    private BlockPos closestRelayPos;
+    private float proximityMultiplier = 1F;
 
     public TileSpectralRelay() {
         super(TileEntityTypesAS.SPECTRAL_RELAY);
@@ -94,6 +102,47 @@ public class TileSpectralRelay extends TileEntityTick {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onFirstTick() {
+        this.updateRelayProximity();
+    }
+
+    public static void cascadeRelayProximityUpdates(World world, BlockPos pos) {
+        if (world.isRemote()) {
+            return;
+        }
+        foreachNearbyRelay(world, pos, TileSpectralRelay::updateRelayProximity);
+    }
+
+    private void updateRelayProximity() {
+        if (this.getWorld().isRemote()) {
+            return;
+        }
+        this.setClosestRelayPos(null);
+        BlockPos thisPos = this.getPos();
+        foreachNearbyRelay(this.getWorld(), thisPos, relay -> {
+            BlockPos relayPos = relay.getPos();
+            BlockPos otherClosestPos = relay.closestRelayPos;
+            if (otherClosestPos == null || thisPos.distanceSq(relayPos) < otherClosestPos.distanceSq(relayPos)) {
+                relay.setClosestRelayPos(thisPos);
+            }
+            if (this.closestRelayPos == null || relayPos.distanceSq(thisPos) < this.closestRelayPos.distanceSq(thisPos)) {
+                this.setClosestRelayPos(relayPos);
+            }
+        });
+    }
+
+    private static void foreachNearbyRelay(World world, BlockPos pos, Consumer<TileSpectralRelay> relayConsumer) {
+        List<BlockPos> nearbyRelays = BlockDiscoverer.searchForBlocksAround(world, pos, 15,
+                ((world1, pos1, state) -> state.getBlock() instanceof BlockSpectralRelay));
+        nearbyRelays.forEach(relayPos -> {
+            TileSpectralRelay relay = MiscUtils.getTileAt(world, relayPos, TileSpectralRelay.class, false);
+            if (relay != null) {
+                relayConsumer.accept(relay);
+            }
+        });
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -142,6 +191,7 @@ public class TileSpectralRelay extends TileEntityTick {
         if (this.doesSeeSky()) {
             float heightAmount = MathHelper.clamp((float) Math.pow(getPos().getY() / 7F, 1.5F) / 60F, 0F, 1F);
             heightAmount *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
+            heightAmount *= this.proximityMultiplier;
             if (heightAmount > 1E-4) {
                 ta.collectStarlight(heightAmount * 45F, AltarCollectionCategory.RELAY);
             }
@@ -178,7 +228,6 @@ public class TileSpectralRelay extends TileEntityTick {
     }
 
     private void updateAltarPos() {
-
         Set<BlockPos> altarPositions = BlockDiscoverer.searchForTileEntitiesAround(getWorld(), getPos(), 16, tile -> tile instanceof TileAltar);
 
         BlockPos closestAltar = null;
@@ -190,6 +239,17 @@ public class TileSpectralRelay extends TileEntityTick {
 
         this.altarPos = closestAltar;
         this.markForUpdate();
+    }
+
+    private void setClosestRelayPos(@Nullable BlockPos closestRelayPos) {
+        this.closestRelayPos = closestRelayPos;
+        this.markForUpdate();
+
+        if (this.closestRelayPos == null) {
+            this.proximityMultiplier = 1F;
+        } else {
+            this.proximityMultiplier = MathHelper.clamp((float) new Vector3(this.getPos()).distance(this.closestRelayPos) / 16F, 0F, 1F);
+        }
     }
 
     public boolean hasGlassLens() {
@@ -211,6 +271,11 @@ public class TileSpectralRelay extends TileEntityTick {
         } else {
             this.altarPos = null;
         }
+        if (compound.contains("closestRelayPos")) {
+            this.setClosestRelayPos(NBTHelper.readBlockPosFromNBT(compound.getCompound("closestRelayPos")));
+        } else {
+            this.setClosestRelayPos(null);
+        }
     }
 
     @Override
@@ -220,6 +285,9 @@ public class TileSpectralRelay extends TileEntityTick {
         compound.put("inventory", this.inventory.serialize());
         if (this.altarPos != null) {
             compound.put("altarPos", NBTHelper.writeBlockPosToNBT(this.altarPos, new CompoundNBT()));
+        }
+        if (this.closestRelayPos != null) {
+            compound.put("closestRelayPos", NBTHelper.writeBlockPosToNBT(this.closestRelayPos, new CompoundNBT()));
         }
     }
 

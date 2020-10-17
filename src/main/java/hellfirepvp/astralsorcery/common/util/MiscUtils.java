@@ -86,16 +86,16 @@ public class MiscUtils {
     }
 
     public static boolean canEntityTickAt(IWorld world, BlockPos pos) {
-        if (!world.getChunkProvider().isChunkLoaded(new ChunkPos(pos))) {
+        ChunkPos chPos = new ChunkPos(pos);
+        if (!world.getChunkProvider().isChunkLoaded(chPos)) {
             return false;
         }
-        BlockPos test = new BlockPos(pos.getX(), 0, pos.getZ());
-        boolean isForced = false;
-        if (world instanceof ServerWorld) {
-            isForced = ((ServerWorld) world).getForcedChunks().contains(new ChunkPos(test).asLong());
+        if (world.isRemote() || !(world instanceof ServerWorld)) {
+            //Assume if a chunk is present and loaded on the client that it is valid for the client.
+            return true;
         }
-        int range = isForced ? 0 : 32;
-        return world.isAreaLoaded(test, range);
+        ServerChunkProvider chunkProvider = ((ServerWorld) world).getChunkProvider();
+        return !chunkProvider.chunkManager.isOutsideSpawningRadius(chPos);
     }
 
     public static List<BlockSnapshot> captureBlockChanges(World world, Runnable r) {

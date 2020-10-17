@@ -51,7 +51,7 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
     }
 
     @Override
-    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
         return RELAY;
     }
 
@@ -92,6 +92,14 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
             }
         }
         return ActionResultType.SUCCESS;
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        if (!worldIn.isRemote()) {
+            TileSpectralRelay.cascadeRelayProximityUpdates(worldIn, pos);
+        }
     }
 
     @Override

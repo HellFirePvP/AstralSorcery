@@ -95,7 +95,15 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
 
         int inputCount = 0;
         IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
-        for (IGuiIngredient<ItemStack> ingredient : itemStackGroup.getGuiIngredients().values()) {
+        //Remove relay inputs from the input grid.
+        Map<Integer, ? extends IGuiIngredient<ItemStack>> itemStacks = new HashMap<>(itemStackGroup.getGuiIngredients());
+        itemStacks.keySet().stream().max(Comparator.naturalOrder()).ifPresent(maxIndex -> {
+            for (int i = 25; i <= maxIndex; i++) {
+                itemStacks.remove(i);
+            }
+        });
+
+        for (IGuiIngredient<ItemStack> ingredient : itemStacks.values()) {
             if (ingredient.isInput() && !ingredient.getAllIngredients().isEmpty()) {
                 inputCount++;
             }
@@ -137,7 +145,7 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
             return handlerHelper.createUserErrorWithTooltip(message);
         }
 
-        RecipeTransferUtil.MatchingItemsResult matchingItemsResult = RecipeTransferUtil.getMatchingItems(stackHelper, availableItemStacks, itemStackGroup.getGuiIngredients());
+        RecipeTransferUtil.MatchingItemsResult matchingItemsResult = RecipeTransferUtil.getMatchingItems(stackHelper, availableItemStacks, itemStacks);
 
         if (matchingItemsResult.missingItems.size() > 0) {
             String message = Translator.translateToLocal("jei.tooltip.error.recipe.transfer.missing");

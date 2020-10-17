@@ -301,7 +301,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
             float heightAmount = MathHelper.clamp((float) Math.pow(getPos().getY() / 7F, 1.5F) / 65F, 0F, 1F);
             heightAmount *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
-            this.collectStarlight(heightAmount * altarTier * 50F, AltarCollectionCategory.HEIGHT);
+            this.collectStarlight(heightAmount * altarTier * 60F, AltarCollectionCategory.HEIGHT);
 
             if (posDistribution == -1) {
                 posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
@@ -324,7 +324,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     }
 
     public float getCollectionCap(AltarCollectionCategory category) {
-        return this.getAltarType().getStarlightCapacity() / 10F / this.getAltarType().getMinimumSources();
+        return this.getAltarType().getStarlightCapacity() / 7F / this.getAltarType().getMinimumSources();
     }
 
     @Nonnull

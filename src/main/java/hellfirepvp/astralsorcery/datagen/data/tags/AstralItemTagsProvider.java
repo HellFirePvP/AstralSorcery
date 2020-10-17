@@ -38,6 +38,9 @@ public class AstralItemTagsProvider extends ItemTagsProvider {
         this.tag(CURIOS_NECKLACE)
                 .add(ItemsAS.ENCHANTMENT_AMULET);
 
+        this.tag(FORGE_GEM_AQUAMARINE)
+                .add(ItemsAS.AQUAMARINE);
+
         this.tag(COLORED_LENS)
                 .add(ItemsAS.COLORED_LENS_BREAK)
                 .add(ItemsAS.COLORED_LENS_DAMAGE)

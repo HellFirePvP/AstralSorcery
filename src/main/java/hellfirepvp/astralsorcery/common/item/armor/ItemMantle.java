@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
+import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectVicio;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.base.client.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
@@ -87,6 +88,14 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
                 items.add(stack);
             }
         }
+    }
+
+    @Override
+    public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
+        if (!(entity instanceof PlayerEntity)) {
+            return false;
+        }
+        return MantleEffectVicio.isUsableElytra(stack, (PlayerEntity) entity);
     }
 
     @Override

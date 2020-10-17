@@ -41,6 +41,8 @@ public class TagsAS {
 
         public static final Tag<Item> CURIOS_NECKLACE = itemTag(CURIOS, "necklace");
 
+        public static final Tag<Item> FORGE_GEM_AQUAMARINE = itemTagForge("gems/aquamarine");
+
         public static final Tag<Item> DUSTS_STARDUST = itemTag(ASTRAL_SORCERY, "stardust");
         public static final Tag<Item> INGOTS_STARMETAL = itemTag(ASTRAL_SORCERY, "starmetal");
         public static final Tag<Item> COLORED_LENS = itemTag(ASTRAL_SORCERY, "colored_lens");

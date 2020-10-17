@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.tile.base.TileAreaOfInfluence;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverTreeBeacon;
+import hellfirepvp.astralsorcery.common.util.CalendarUtils;
 import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
@@ -58,6 +59,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -280,7 +282,8 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
                         .map(effect -> (TypeTreeBeaconColor) effect)
                         .findFirst())
                 .map(TypeTreeBeaconColor::getTreeBeaconColor)
-                .orElse(ConstellationsAS.aevitas.getConstellationColor());
+                .orElse(CalendarUtils.isAprilFirst() ? Color.getHSBColor(rand.nextFloat() * 360, 1F, 1F) :
+                        ConstellationsAS.aevitas.getConstellationColor());
     }
 
     @Nonnull
@@ -463,7 +466,11 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
             if (type == null) {
                 return;
             }
-            Set<BlockPos> watchers = WATCHERS.getOrDefault(world.getDimension().getType(), Collections.emptySet());
+            double rangeSq = Config.CONFIG.range.get() * Config.CONFIG.range.get();
+            Set<BlockPos> watchers = WATCHERS.getOrDefault(world.getDimension().getType(), Collections.emptySet())
+                    .stream()
+                    .filter(pos -> pos.distanceSq(treePos) < rangeSq)
+                    .collect(Collectors.toSet());
             BlockPos closestBeacon = MiscUtils.getMinEntry(watchers, pos -> pos.distanceSq(treePos));
             TileTreeBeacon ttb = MiscUtils.getTileAt(world, closestBeacon, TileTreeBeacon.class, false);
             if (ttb == null) {
