@@ -95,12 +95,12 @@ public class ItemWand extends Item implements OverrideInteractItem {
     }
 
     @Override
-    public boolean shouldInterceptInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean shouldInterceptBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         return true;
     }
 
     @Override
-    public boolean doInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean doBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         World world = player.getEntityWorld();
         BlockState state = world.getBlockState(pos);
         Block b = state.getBlock();

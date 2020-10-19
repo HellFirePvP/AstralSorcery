@@ -207,13 +207,13 @@ public class ItemResonator extends Item implements OverrideInteractItem {
     }
 
     @Override
-    public boolean shouldInterceptInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean shouldInterceptBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         ResonatorUpgrade upgrade = getCurrentUpgrade(player, player.getHeldItem(hand));
         return upgrade == ResonatorUpgrade.AREA_SIZE && MiscUtils.getTileAt(player.getEntityWorld(), pos, TileAreaOfInfluence.class, false) != null;
     }
 
     @Override
-    public boolean doInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean doBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         ResonatorUpgrade upgrade = getCurrentUpgrade(player, player.getHeldItem(hand));
         if (upgrade == ResonatorUpgrade.AREA_SIZE && player.getEntityWorld().isRemote()) {
             TileAreaOfInfluence aoeTile = MiscUtils.getTileAt(player.getEntityWorld(), pos, TileAreaOfInfluence.class, false);

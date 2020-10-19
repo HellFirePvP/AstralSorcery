@@ -127,7 +127,7 @@ public class BlockTransmutationSerializer extends CustomRecipeSerializer<BlockTr
 
     @Override
     public void write(PacketBuffer buffer, BlockTransmutation recipe) {
-        ByteBufUtils.writeList(buffer, recipe.getInputOptions(), (buf, match) -> {
+        ByteBufUtils.writeCollection(buffer, recipe.getInputOptions(), (buf, match) -> {
             ByteBufUtils.writeBlockState(buf, match.getMatchState());
             ByteBufUtils.writeItemStack(buf, match.getDisplayStack());
             buf.writeBoolean(match.doesMatchExact());

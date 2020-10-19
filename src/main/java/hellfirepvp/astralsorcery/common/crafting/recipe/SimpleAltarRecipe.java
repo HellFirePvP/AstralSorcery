@@ -255,10 +255,10 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
         this.getInputs().write(buffer);
         ByteBufUtils.writeOptional(buffer, this.getCustomRecipeType(), ByteBufUtils::writeResourceLocation);
 
-        ByteBufUtils.writeList(buffer, this.outputs, ByteBufUtils::writeItemStack);
+        ByteBufUtils.writeCollection(buffer, this.outputs, ByteBufUtils::writeItemStack);
         ByteBufUtils.writeOptional(buffer, this.getFocusConstellation(), ByteBufUtils::writeRegistryEntry);
-        ByteBufUtils.writeList(buffer, this.getRelayInputs(), (buf, ingredient) -> ingredient.getIngredient().write(buf));
-        ByteBufUtils.writeList(buffer, this.getCraftingEffects(), ByteBufUtils::writeRegistryEntry);
+        ByteBufUtils.writeCollection(buffer, this.getRelayInputs(), (buf, ingredient) -> ingredient.getIngredient().write(buf));
+        ByteBufUtils.writeCollection(buffer, this.getCraftingEffects(), ByteBufUtils::writeRegistryEntry);
         this.writeRecipeSync(buffer);
     }
 

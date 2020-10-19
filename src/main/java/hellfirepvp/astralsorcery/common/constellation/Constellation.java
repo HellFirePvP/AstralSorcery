@@ -30,27 +30,25 @@ import java.util.*;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ConstellationBase
+ * Class: Constellation
  * Created by HellFirePvP
  * Date: 01.06.2019 / 15:59
  */
-public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellation> implements IConstellation {
+public abstract class Constellation extends BaseConstellation implements IConstellation {
 
     private static int counter = 0;
 
-    private List<StarLocation> starLocations = new ArrayList<>(); //31x31 locations are valid. 0-indexed.
-    private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
-    private List<Ingredient> signatureItems = new LinkedList<>();
+    private final List<Ingredient> signatureItems = new LinkedList<>();
 
     private final String name, simpleName;
     private final Color color;
     private final int id;
 
-    public ConstellationBase(String name) {
+    public Constellation(String name) {
         this(name, ColorsAS.CONSTELLATION_TYPE_MAJOR);
     }
 
-    public ConstellationBase(String name, Color color) {
+    public Constellation(String name, Color color) {
         this.id = counter++;
         this.simpleName = name;
         ModContainer mod = MiscUtils.getCurrentlyActiveMod();
@@ -64,28 +62,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
         this.color = color;
     }
 
-    public StarLocation addStar(int x, int y) {
-        x %= (STAR_GRID_INDEX - 1); //31x31
-        y %= (STAR_GRID_INDEX - 1);
-        StarLocation star = new StarLocation(x, y);
-        if (!starLocations.contains(star)) {
-            starLocations.add(star);
-            return star;
-        }
-        return null;
-    }
-
-    public StarConnection addConnection(StarLocation star1, StarLocation star2) {
-        if (star1.equals(star2)) return null;
-        StarConnection sc = new StarConnection(star1, star2);
-        if (!connections.contains(sc)) {
-            connections.add(sc);
-            return sc;
-        }
-        return null;
-    }
-
-    public ConstellationBase addSignatureItem(Ingredient handle) {
+    public Constellation addSignatureItem(Ingredient handle) {
         this.signatureItems.add(handle);
         return this;
     }
@@ -132,16 +109,6 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
     }
 
     @Override
-    public List<StarLocation> getStars() {
-        return Collections.unmodifiableList(starLocations);
-    }
-
-    @Override
-    public List<StarConnection> getStarConnections() {
-        return Collections.unmodifiableList(connections);
-    }
-
-    @Override
     public String getTranslationKey() {
         return this.name;
     }
@@ -160,7 +127,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ConstellationBase that = (ConstellationBase) o;
+        Constellation that = (Constellation) o;
         return Objects.equals(getRegistryName(), that.getRegistryName());
     }
 
@@ -196,7 +163,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
         //}
     }
 
-    public static class Weak extends ConstellationBase implements IWeakConstellation {
+    public static class Weak extends Constellation implements IWeakConstellation {
 
         public Weak(String name) {
             super(name);
@@ -225,7 +192,7 @@ public abstract class ConstellationBase extends ForgeRegistryEntry<IConstellatio
         }
     }
 
-    public static class Minor extends ConstellationBase implements IMinorConstellation {
+    public static class Minor extends Constellation implements IMinorConstellation {
 
         private final List<MoonPhase> phases;
 

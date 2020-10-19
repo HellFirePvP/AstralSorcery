@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.link.LinkableTileEntity;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
@@ -47,10 +48,18 @@ public abstract class TileReceiverBase<T extends ITransmissionReceiver> extends 
     }
 
     @Override
-    public void onLinkCreate(PlayerEntity player, BlockPos other) {}
+    public void onBlockLinkCreate(PlayerEntity player, BlockPos other) {}
 
     @Override
-    public boolean tryLink(PlayerEntity player, BlockPos other) {
+    public void onEntityLinkCreate(PlayerEntity player, LivingEntity linked) {}
+
+    @Override
+    public boolean tryLinkBlock(PlayerEntity player, BlockPos other) {
+        return false;
+    }
+
+    @Override
+    public boolean tryLinkEntity(PlayerEntity player, LivingEntity other) {
         return false;
     }
 

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSour
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -90,7 +91,7 @@ public abstract class TileSourceBase<T extends ITransmissionSource> extends Tile
     }
 
     @Override
-    public void onLinkCreate(PlayerEntity player, BlockPos other) {
+    public void onBlockLinkCreate(PlayerEntity player, BlockPos other) {
         if (other.equals(getPos())) return;
 
         if (TransmissionNetworkHelper.createTransmissionLink(this, other)) {
@@ -107,8 +108,17 @@ public abstract class TileSourceBase<T extends ITransmissionSource> extends Tile
     }
 
     @Override
-    public boolean tryLink(PlayerEntity player, BlockPos other) {
+    public void onEntityLinkCreate(PlayerEntity player, LivingEntity linked) {
+    }
+
+    @Override
+    public boolean tryLinkBlock(PlayerEntity player, BlockPos other) {
         return !other.equals(getPos()) && TransmissionNetworkHelper.canCreateTransmissionLink(this, other);
+    }
+
+    @Override
+    public boolean tryLinkEntity(PlayerEntity player, LivingEntity other) {
+        return false;
     }
 
     @Override

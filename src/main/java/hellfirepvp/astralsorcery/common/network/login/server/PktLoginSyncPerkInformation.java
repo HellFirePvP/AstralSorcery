@@ -51,7 +51,7 @@ public class PktLoginSyncPerkInformation extends ASLoginPacket<PktLoginSyncPerkI
     @Override
     public Encoder<PktLoginSyncPerkInformation> encoder() {
         return (pkt, buf) -> {
-            ByteBufUtils.writeList(buf, pkt.rawPerkTreeData, ByteBufUtils::writeJsonObject);
+            ByteBufUtils.writeCollection(buf, pkt.rawPerkTreeData, ByteBufUtils::writeJsonObject);
             buf.writeInt(pkt.maxLevel);
         };
     }

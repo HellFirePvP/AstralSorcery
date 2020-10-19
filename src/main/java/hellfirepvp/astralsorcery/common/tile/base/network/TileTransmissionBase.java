@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -39,7 +40,7 @@ import java.util.List;
  */
 public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> extends TileNetwork<T> implements IStarlightTransmission<T>, LinkableTileEntity {
 
-    private List<BlockPos> positions = new LinkedList<>();
+    private final List<BlockPos> positions = new LinkedList<>();
 
     protected TileTransmissionBase(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
@@ -87,7 +88,7 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
     }
 
     @Override
-    public void onLinkCreate(PlayerEntity player, BlockPos other) {
+    public void onBlockLinkCreate(PlayerEntity player, BlockPos other) {
         if (other.equals(getPos())) return;
 
         if (TransmissionNetworkHelper.createTransmissionLink(this, other)) {
@@ -103,6 +104,10 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
     }
 
     @Override
+    public void onEntityLinkCreate(PlayerEntity player, LivingEntity linked) {
+    }
+
+    @Override
     @Nonnull
     public BlockPos getTrPos() {
         return getPos();
@@ -115,8 +120,13 @@ public abstract class TileTransmissionBase<T extends IPrismTransmissionNode> ext
     }
 
     @Override
-    public boolean tryLink(PlayerEntity player, BlockPos other) {
+    public boolean tryLinkBlock(PlayerEntity player, BlockPos other) {
         return !other.equals(getPos()) && TransmissionNetworkHelper.canCreateTransmissionLink(this, other);
+    }
+
+    @Override
+    public boolean tryLinkEntity(PlayerEntity player, LivingEntity other) {
+        return false;
     }
 
     @Override

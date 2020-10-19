@@ -56,7 +56,7 @@ public class ItemColoredLensPush extends ItemColoredLens {
             Vec3d eMotion = entity.getMotion();
             Vector3 motion = new Vector3(
                     Math.min(1F, eMotion.x + dir.getX()),
-                    Math.min(1F, eMotion.y + dir.getY()),
+                    dir.getY() + 0.04F,
                     Math.min(1F, eMotion.z + dir.getZ())
             );
             entity.setMotion(motion.toVec3d());

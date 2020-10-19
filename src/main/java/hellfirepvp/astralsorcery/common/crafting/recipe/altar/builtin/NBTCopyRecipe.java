@@ -124,6 +124,6 @@ public class NBTCopyRecipe extends SimpleAltarRecipe {
     public void writeRecipeSync(PacketBuffer buf) {
         super.writeRecipeSync(buf);
 
-        ByteBufUtils.writeList(buf, this.searchIngredients, (buffer, ingredient) -> ingredient.write(buffer));
+        ByteBufUtils.writeCollection(buf, this.searchIngredients, (buffer, ingredient) -> ingredient.write(buffer));
     }
 }

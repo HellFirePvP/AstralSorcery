@@ -50,7 +50,7 @@ public class EntityTechnicalEntry implements ConfigDataSet {
         ResourceLocation name = new ResourceLocation(string);
         Mods mod = Mods.byModId(name.getNamespace());
         if (mod != null && !mod.isPresent()) {
-            throw new IllegalArgumentException("Mod not present: " + mod.getModId());
+            throw new IllegalArgumentException("Entry " + string + ", Mod not present: " + mod.getModId());
         }
         if (ForgeRegistries.ENTITIES.getValue(name) == null) {
             throw new IllegalArgumentException("Unknown Entity Type: " + name);

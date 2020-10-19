@@ -43,7 +43,7 @@ public class CelestialGatewayHandler {
     private CelestialGatewayFilter filter = null;
     private boolean startUp = false;
 
-    private final SidedReference<Map<ResourceLocation, List<GatewayCache.GatewayNode>>> cache = new SidedReference<>();
+    private final SidedReference<Map<ResourceLocation, Collection<GatewayCache.GatewayNode>>> cache = new SidedReference<>();
 
     private CelestialGatewayHandler() {}
 
@@ -64,12 +64,12 @@ public class CelestialGatewayHandler {
             forceLoad(world.getDimension().getType());
         }
 
-        Optional<List<GatewayCache.GatewayNode>> worldData = cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey));
+        Optional<Collection<GatewayCache.GatewayNode>> worldData = cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey));
         if (!worldData.isPresent()) {
             AstralSorcery.log.info("Couldn't add gateway at " + node.getPos() + " - loading the world failed.");
             return;
         }
-        List<GatewayCache.GatewayNode> nodes = worldData.get();
+        Collection<GatewayCache.GatewayNode> nodes = worldData.get();
 
         getFilter().addDim(dimKey);
         if (!nodes.contains(node)) {
@@ -84,11 +84,11 @@ public class CelestialGatewayHandler {
         }
 
         ResourceLocation dimKey = world.getDimension().getType().getRegistryName();
-        Optional<List<GatewayCache.GatewayNode>> worldData = cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey));
+        Optional<Collection<GatewayCache.GatewayNode>> worldData = cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey));
         if (!worldData.isPresent()) {
             return;
         }
-        List<GatewayCache.GatewayNode> nodes = worldData.get();
+        Collection<GatewayCache.GatewayNode> nodes = worldData.get();
         if (nodes.removeIf(node -> node.getPos().equals(pos))) {
             if (nodes.isEmpty()) {
                 getFilter().removeDim(dimKey);
@@ -139,24 +139,24 @@ public class CelestialGatewayHandler {
         PacketChannel.CHANNEL.sendToAll(pkt);
     }
 
-    public List<GatewayCache.GatewayNode> getGatewaysForWorld(IWorld world, LogicalSide side) {
+    public Collection<GatewayCache.GatewayNode> getGatewaysForWorld(IWorld world, LogicalSide side) {
         return this.cache.getData(side)
                 .map(data -> data.getOrDefault(world.getDimension().getType().getRegistryName(), Collections.emptyList()))
                 .orElse(Collections.emptyList());
     }
 
-    public Map<ResourceLocation, List<GatewayCache.GatewayNode>> getGatewayCache(LogicalSide side) {
+    public Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> getGatewayCache(LogicalSide side) {
         return this.cache.getData(side).orElse(Collections.emptyMap());
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void updateClientCache(@Nullable Map<ResourceLocation, List<GatewayCache.GatewayNode>> positions) {
+    public void updateClientCache(@Nullable Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> positions) {
         this.cache.setData(LogicalSide.CLIENT, positions);
     }
 
     private void loadIntoCache(IWorld world) {
         GatewayCache cache = DataAS.DOMAIN_AS.getData(world, DataAS.KEY_GATEWAY_CACHE);
-        Map<ResourceLocation, List<GatewayCache.GatewayNode>> gatewayCache = this.cache.getData(LogicalSide.SERVER).orElse(new HashMap<>());
+        Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> gatewayCache = this.cache.getData(LogicalSide.SERVER).orElse(new HashMap<>());
         gatewayCache.put(world.getDimension().getType().getRegistryName(), cache.getGatewayPositions());
         this.cache.setData(LogicalSide.SERVER, gatewayCache);
     }

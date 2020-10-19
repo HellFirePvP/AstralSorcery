@@ -164,31 +164,15 @@ public class GatewayUIRenderHandler implements ITickHandler {
             ITextComponent display = entry.getNode().getDisplayName();
             if (display != null && !display.getFormattedText().isEmpty()) {
                 String text = display.getFormattedText();
-                Vector3 at = entry.getRelativePos().clone();
-                at.add(this.currentUI.getRenderCenter());
-                at.subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
-                FontRenderer fr = Minecraft.getInstance().fontRenderer;
-
+                Vector3 at = entry.getRelativePos().clone()
+                        .add(this.currentUI.getRenderCenter())
+                        .addY(0.4F);
                 DyeColor nodeColor = entry.getNode().getColor();
                 if (nodeColor != null) {
                     c = ColorUtils.flareColorFromDye(nodeColor);
                 }
-                float scale = 1 / 80F;
 
-                renderStack.push();
-                renderStack.translate(at.getX(), at.getY() + 0.4, at.getZ());
-                renderStack.scale(scale, -scale, scale);
-
-                float iYaw = RenderingVectorUtils.interpolate(MathHelper.wrapDegrees(player.prevRotationYaw), MathHelper.wrapDegrees(player.rotationYaw), pTicks);
-                renderStack.rotate(Vector3f.YP.rotationDegrees(-iYaw + 180F));
-
-                Matrix4f matr = renderStack.getLast().getMatrix();
-                int length = fr.getStringWidth(text);
-                IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-                fr.renderString(text, -(length / 2F), 0, c.getRGB(), false, matr, buffers, true, 0, LightmapUtil.getPackedFullbrightCoords());
-                buffers.finish();
-
-                renderStack.pop();
+                RenderingUtils.renderInWorldText(text, c, at, renderStack, pTicks, true);
             }
         }
     }

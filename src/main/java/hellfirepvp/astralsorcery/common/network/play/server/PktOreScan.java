@@ -46,7 +46,7 @@ public class PktOreScan extends ASPacket<PktOreScan> {
     @Override
     public Encoder<PktOreScan> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeList(buffer, packet.positions, ByteBufUtils::writePos);
+            ByteBufUtils.writeCollection(buffer, packet.positions, ByteBufUtils::writePos);
         };
     }
 

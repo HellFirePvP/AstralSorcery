@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item.base;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -23,8 +24,18 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public interface OverrideInteractItem {
 
-    boolean shouldInterceptInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face);
+    boolean shouldInterceptBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face);
 
-    boolean doInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face);
+    default boolean shouldInterceptEntityInteract(LogicalSide side, PlayerEntity player, Hand hand, Entity interacted) {
+        return false;
+    }
+
+    //Returning true cancels the event
+    boolean doBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face);
+
+    //Returning true cancels the event
+    default boolean doEntityInteract(LogicalSide side, PlayerEntity player, Hand hand, Entity interacted) {
+        return false;
+    }
 
 }

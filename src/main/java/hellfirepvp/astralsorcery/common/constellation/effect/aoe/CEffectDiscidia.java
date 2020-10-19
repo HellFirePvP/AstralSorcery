@@ -54,7 +54,7 @@ public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEnti
 
     public CEffectDiscidia(@Nonnull ILocatable origin) {
         super(origin, ConstellationsAS.discidia, LivingEntity.class,
-                entity -> entity.isAlive() && !TechnicalEntityRegistry.INSTANCE.canAffect(entity));
+                entity -> entity.isAlive() && TechnicalEntityRegistry.INSTANCE.canAffect(entity));
     }
 
     @Override
@@ -80,10 +80,6 @@ public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEnti
 
     @Override
     public boolean playEffect(World world, BlockPos pos, ConstellationEffectProperties properties, @Nullable IMinorConstellation trait) {
-        if ((world.getGameTime() % 20) != 0) { // Run once per second.
-            return false;
-        }
-
         boolean didEffect = false;
 
         float damage = CONFIG.damage.get().floatValue(); //Randomize?..
@@ -92,21 +88,21 @@ public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEnti
                 DamageSourceUtil.withEntityDirect(CommonProxy.DAMAGE_SOURCE_STELLAR, owner);
         List<LivingEntity> entities = this.collectEntities(world, pos, properties);
         for (LivingEntity entity : entities) {
+            if (rand.nextInt(10) != 0) {
+                continue;
+            }
             if (properties.isCorrupted()) {
                 entity.heal(damage);
                 entity.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 30, 1));
-                didEffect = true;
-
             } else {
                 if (entity instanceof PlayerEntity &&
                         !MiscUtils.canPlayerAttackServer(null, entity)) {
                     continue;
                 }
-
                 DamageUtil.shotgunAttack(entity, e -> DamageUtil.attackEntityFrom(entity, src, damage));
-                didEffect = true;
             }
 
+            didEffect = true;
         }
 
         return didEffect;
@@ -119,7 +115,7 @@ public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEnti
 
     private static class DiscidiaConfig extends Config {
 
-        private final double defaultDamage = 5D;
+        private final double defaultDamage = 3D;
 
         public ForgeConfigSpec.DoubleValue damage;
 

@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
@@ -112,7 +113,7 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
     }
 
     @Override
-    public void onLinkCreate(PlayerEntity player, BlockPos other) {
+    public void onBlockLinkCreate(PlayerEntity player, BlockPos other) {
         if (this.linkedTo != null) {
             TileRitualLink otherLink = MiscUtils.getTileAt(player.getEntityWorld(), this.linkedTo, TileRitualLink.class, true);
             if (otherLink != null) {
@@ -131,9 +132,18 @@ public class TileRitualLink extends TileEntityTick implements LinkableTileEntity
     }
 
     @Override
-    public boolean tryLink(PlayerEntity player, BlockPos other) {
+    public void onEntityLinkCreate(PlayerEntity player, LivingEntity linked) {
+    }
+
+    @Override
+    public boolean tryLinkBlock(PlayerEntity player, BlockPos other) {
         TileRitualLink otherLink = MiscUtils.getTileAt(player.getEntityWorld(), other, TileRitualLink.class, true);
         return otherLink != null && otherLink.linkedTo == null && !other.equals(getPos());
+    }
+
+    @Override
+    public boolean tryLinkEntity(PlayerEntity player, LivingEntity other) {
+        return false;
     }
 
     @Override

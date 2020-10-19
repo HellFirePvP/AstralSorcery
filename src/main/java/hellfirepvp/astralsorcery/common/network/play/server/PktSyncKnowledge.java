@@ -83,13 +83,13 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
             buffer.writeByte(packet.state);
 
             ByteBufUtils.writeMap(buffer, packet.usedPerks, ByteBufUtils::writeResourceLocation, ByteBufUtils::writeNBTTag);
-            ByteBufUtils.writeList(buffer,packet.sealedPerks, ByteBufUtils::writeResourceLocation);
-            ByteBufUtils.writeList(buffer, packet.knownConstellations, ByteBufUtils::writeResourceLocation);
-            ByteBufUtils.writeList(buffer, packet.seenConstellations, ByteBufUtils::writeResourceLocation);
-            ByteBufUtils.writeList(buffer, packet.storedConstellationPapers, ByteBufUtils::writeResourceLocation);
-            ByteBufUtils.writeList(buffer, packet.researchProgression, ByteBufUtils::writeEnumValue);
+            ByteBufUtils.writeCollection(buffer,packet.sealedPerks, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeCollection(buffer, packet.knownConstellations, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeCollection(buffer, packet.seenConstellations, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeCollection(buffer, packet.storedConstellationPapers, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeCollection(buffer, packet.researchProgression, ByteBufUtils::writeEnumValue);
             ByteBufUtils.writeOptional(buffer, packet.attunedConstellation, ByteBufUtils::writeRegistryEntry);
-            ByteBufUtils.writeList(buffer, packet.freePointTokens, ByteBufUtils::writeString);
+            ByteBufUtils.writeCollection(buffer, packet.freePointTokens, ByteBufUtils::writeString);
             buffer.writeBoolean(packet.wasOnceAttuned);
             buffer.writeInt(packet.progressTier);
             buffer.writeDouble(packet.perkExp);

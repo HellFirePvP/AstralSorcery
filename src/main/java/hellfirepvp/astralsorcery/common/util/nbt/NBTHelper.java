@@ -32,10 +32,7 @@ import net.minecraftforge.registries.RegistryManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -159,6 +156,21 @@ public class NBTHelper {
         return nbt.stream()
                 .map(n -> deserializer.apply((N) n))
                 .collect(Collectors.toList());
+    }
+
+    @Nonnull
+    public static <E, N extends INBT> Set<E> readSet(CompoundNBT nbt, String key, int type, Function<N, E> deserializer) {
+        if (!nbt.contains(key, Constants.NBT.TAG_LIST)) {
+            return new HashSet<>();
+        }
+        return readSet(nbt.getList(key, type), deserializer);
+    }
+
+    @Nonnull
+    public static <E, N extends INBT> Set<E> readSet(ListNBT nbt, Function<N, E> deserializer) {
+        return nbt.stream()
+                .map(n -> deserializer.apply((N) n))
+                .collect(Collectors.toSet());
     }
 
     public static <E> void writeList(CompoundNBT tag, String key, Collection<E> collection, Function<E, INBT> serializer) {

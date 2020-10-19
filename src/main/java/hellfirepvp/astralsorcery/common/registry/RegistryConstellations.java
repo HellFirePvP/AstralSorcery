@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
+import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
@@ -129,7 +129,7 @@ public class RegistryConstellations {
         StarLocation sl1, sl2, sl3, sl4, sl5, sl6, sl7, sl8;
 
         // DOR/Dorado
-        discidia = new ConstellationBase.Major("discidia", CONSTELLATION_DISCIDIA);
+        discidia = new Constellation.Major("discidia", CONSTELLATION_DISCIDIA);
         sl1 = discidia.addStar(9, 25);
         sl2 = discidia.addStar(6, 18);
         sl3 = discidia.addStar(13, 16);
@@ -147,7 +147,7 @@ public class RegistryConstellations {
         register(discidia);
 
         // CEP/Cepheus
-        armara = new ConstellationBase.Major("armara", CONSTELLATION_ARMARA);
+        armara = new Constellation.Major("armara", CONSTELLATION_ARMARA);
         sl1 = armara.addStar(5, 5);
         sl2 = armara.addStar(7, 16);
         sl3 = armara.addStar(15, 9);
@@ -167,7 +167,7 @@ public class RegistryConstellations {
         register(armara);
 
         // PHE/Phoenix
-        vicio = new ConstellationBase.Major("vicio", CONSTELLATION_VICIO);
+        vicio = new Constellation.Major("vicio", CONSTELLATION_VICIO);
         sl1 = vicio.addStar(13, 11);
         sl2 = vicio.addStar(26, 10);
         sl3 = vicio.addStar(23, 4);
@@ -185,7 +185,7 @@ public class RegistryConstellations {
         register(vicio);
 
         // ARA/Ara
-        aevitas = new ConstellationBase.Major("aevitas", CONSTELLATION_AEVITAS);
+        aevitas = new Constellation.Major("aevitas", CONSTELLATION_AEVITAS);
         sl1 = aevitas.addStar(13, 4);
         sl2 = aevitas.addStar(15, 18);
         sl3 = aevitas.addStar(10, 27);
@@ -204,7 +204,7 @@ public class RegistryConstellations {
         register(aevitas);
 
         // TAU/Taurus
-        evorsio = new ConstellationBase.Major("evorsio", CONSTELLATION_EVORSIO);
+        evorsio = new Constellation.Major("evorsio", CONSTELLATION_EVORSIO);
         sl1 = evorsio.addStar(27, 17);
         sl2 = evorsio.addStar(19, 23);
         sl3 = evorsio.addStar(25, 27);
@@ -222,7 +222,7 @@ public class RegistryConstellations {
         register(evorsio);
 
         // CRB/Corona Borealis
-        lucerna = new ConstellationBase.Weak("lucerna", CONSTELLATION_LUCERNA);
+        lucerna = new Constellation.Weak("lucerna", CONSTELLATION_LUCERNA);
         sl1 = lucerna.addStar(19, 4);
         sl2 = lucerna.addStar(25, 14);
         sl3 = lucerna.addStar(22, 22);
@@ -238,7 +238,7 @@ public class RegistryConstellations {
         register(lucerna);
 
         // LAC/Lacerta
-        mineralis = new ConstellationBase.Weak("mineralis", CONSTELLATION_MINERALIS);
+        mineralis = new Constellation.Weak("mineralis", CONSTELLATION_MINERALIS);
         sl1 = mineralis.addStar(17, 2);
         sl2 = mineralis.addStar(19, 10);
         sl3 = mineralis.addStar(13, 7);
@@ -258,7 +258,7 @@ public class RegistryConstellations {
         register(mineralis);
 
         // HOR/Horologium
-        horologium = new ConstellationBase.WeakSpecial("horologium", CONSTELLATION_HOROLOGIUM) {
+        horologium = new Constellation.WeakSpecial("horologium", CONSTELLATION_HOROLOGIUM) {
             @Override
             public boolean doesShowUp(World world, long day) {
                 WorldContext ctx = SkyHandler.getContext(world);
@@ -288,7 +288,7 @@ public class RegistryConstellations {
         register(horologium);
 
         // OCT/Octans
-        octans = new ConstellationBase.Weak("octans", CONSTELLATION_OCTANS);
+        octans = new Constellation.Weak("octans", CONSTELLATION_OCTANS);
         sl1 = octans.addStar(25, 25);
         sl2 = octans.addStar(17, 5);
         sl3 = octans.addStar(11, 10);
@@ -301,7 +301,7 @@ public class RegistryConstellations {
         register(octans);
 
         // BOO/Bootes
-        bootes = new ConstellationBase.Weak("bootes", CONSTELLATION_BOOTES);
+        bootes = new Constellation.Weak("bootes", CONSTELLATION_BOOTES);
         sl1 = bootes.addStar(9, 22);
         sl2 = bootes.addStar(3, 14);
         sl3 = bootes.addStar(22, 27);
@@ -319,7 +319,7 @@ public class RegistryConstellations {
 
         // Fornax itself is boring gameplay-wise. so have another one instead.
         // CRT/Crater
-        fornax = new ConstellationBase.Weak("fornax", CONSTELLATION_FORNAX);
+        fornax = new Constellation.Weak("fornax", CONSTELLATION_FORNAX);
         sl1 = fornax.addStar(18, 29);
         sl2 = fornax.addStar(28, 18);
         sl3 = fornax.addStar(21, 13);
@@ -340,7 +340,7 @@ public class RegistryConstellations {
         register(fornax);
 
         // LEP/Lepus
-        pelotrio = new ConstellationBase.WeakSpecial("pelotrio", CONSTELLATION_PELOTRIO) {
+        pelotrio = new Constellation.WeakSpecial("pelotrio", CONSTELLATION_PELOTRIO) {
             @Override
             public boolean doesShowUp(World world, long day) {
                 MoonPhase phase = MoonPhase.fromWorld(world);
@@ -376,7 +376,7 @@ public class RegistryConstellations {
         register(pelotrio);
 
         // CAP/Capricornus
-        gelu = new ConstellationBase.Minor("gelu", CONSTELLATION_GELU, MoonPhase.NEW, MoonPhase.WAXING_1_4, MoonPhase.WAXING_1_2);
+        gelu = new Constellation.Minor("gelu", CONSTELLATION_GELU, MoonPhase.NEW, MoonPhase.WAXING_1_4, MoonPhase.WAXING_1_2);
         sl1 = gelu.addStar(21, 28);
         sl2 = gelu.addStar(27, 13);
         sl3 = gelu.addStar(29, 4);
@@ -393,7 +393,7 @@ public class RegistryConstellations {
         register(gelu);
 
         // GRU/Grus
-        ulteria = new ConstellationBase.Minor("ulteria", CONSTELLATION_ULTERIA, MoonPhase.WANING_1_2, MoonPhase.WANING_3_4, MoonPhase.NEW);
+        ulteria = new Constellation.Minor("ulteria", CONSTELLATION_ULTERIA, MoonPhase.WANING_1_2, MoonPhase.WANING_3_4, MoonPhase.NEW);
         sl1 = ulteria.addStar(4, 28);
         sl2 = ulteria.addStar(7, 22);
         sl3 = ulteria.addStar(9, 14);
@@ -410,7 +410,7 @@ public class RegistryConstellations {
         register(ulteria);
 
         // CYG/Cygnus
-        alcara = new ConstellationBase.Minor("alcara", CONSTELLATION_ALCARA, MoonPhase.WANING_1_2, MoonPhase.WAXING_1_2);
+        alcara = new Constellation.Minor("alcara", CONSTELLATION_ALCARA, MoonPhase.WANING_1_2, MoonPhase.WAXING_1_2);
         sl1 = alcara.addStar(24, 27);
         sl2 = alcara.addStar(17, 16);
         sl3 = alcara.addStar(12, 9);
@@ -430,7 +430,7 @@ public class RegistryConstellations {
         register(alcara);
 
         // COL/Columba
-        vorux = new ConstellationBase.Minor("vorux", CONSTELLATION_VORUX, MoonPhase.FULL, MoonPhase.WAXING_3_4, MoonPhase.WANING_3_4);
+        vorux = new Constellation.Minor("vorux", CONSTELLATION_VORUX, MoonPhase.FULL, MoonPhase.WAXING_3_4, MoonPhase.WANING_3_4);
         sl1 = vorux.addStar(7, 29);
         sl2 = vorux.addStar(15, 12);
         sl3 = vorux.addStar(23, 7);

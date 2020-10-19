@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.common.auxiliary.gateway.CelestialGatewayHandle
 import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -47,8 +49,12 @@ public class GatewayUI {
     public static GatewayUI create(IWorld world, BlockPos tilePos, Vector3 renderPos, double sphereRadius) {
         ResourceLocation dimType = world.getDimension().getType().getRegistryName();
         GatewayUI ui = new GatewayUI(dimType, tilePos, renderPos, sphereRadius);
+        PlayerEntity thisPlayer = Minecraft.getInstance().player;
 
         for (GatewayCache.GatewayNode node : CelestialGatewayHandler.INSTANCE.getGatewaysForWorld(world, LogicalSide.CLIENT)) {
+            if (!node.hasAccess(thisPlayer)) {
+                continue;
+            }
             appendEntry(ui, node, dimType, true, sphereRadius);
         }
 
@@ -57,6 +63,9 @@ public class GatewayUI {
                 return;
             }
             for (GatewayCache.GatewayNode node : gatewayNodes) {
+                if (!node.hasAccess(thisPlayer)) {
+                    continue;
+                }
                 appendEntry(ui, node, dimTypeKey, false, sphereRadius);
             }
         });

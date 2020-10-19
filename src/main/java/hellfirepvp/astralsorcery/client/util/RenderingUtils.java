@@ -14,6 +14,8 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.common.util.ColorUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
 import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
 import net.minecraft.block.BlockRenderType;
@@ -31,7 +33,9 @@ import net.minecraft.client.renderer.texture.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -230,6 +234,35 @@ public class RenderingUtils {
             type.finish((BufferBuilder) vb, 0, 0, 0);
             ((BufferBuilder) vb).begin(type.getDrawMode(), type.getVertexFormat());
         }
+    }
+
+    public static void renderInWorldText(String text, Color color, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
+        renderInWorldText(text, color, 1 / 80F, at, renderStack, pTicks, facePlayer);
+    }
+
+    public static void renderInWorldText(String text, Color color, float scale, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
+        FontRenderer fr = Minecraft.getInstance().fontRenderer;
+
+        renderStack.push();
+        renderStack.translate(at.getX(), at.getY(), at.getZ());
+        renderStack.scale(scale, -scale, scale);
+
+        if (facePlayer) {
+            Entity le = Minecraft.getInstance().renderViewEntity;
+            if (le == null) {
+                le = Minecraft.getInstance().player;
+            }
+            float iYaw = RenderingVectorUtils.interpolate(MathHelper.wrapDegrees(le.prevRotationYaw), MathHelper.wrapDegrees(le.rotationYaw), pTicks);
+            renderStack.rotate(Vector3f.YP.rotationDegrees(-iYaw + 180F));
+        }
+
+        Matrix4f matr = renderStack.getLast().getMatrix();
+        int length = fr.getStringWidth(text);
+        IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        fr.renderString(text, -(length / 2F), 0, color.getRGB(), false, matr, buffers, true, 0, LightmapUtil.getPackedFullbrightCoords());
+        buffers.finish();
+
+        renderStack.pop();
     }
 
     public static void renderItemAsEntity(ItemStack stack, MatrixStack renderStack, IRenderTypeBuffer buffers, double x, double y, double z, int combinedLight, float pTicks, int age) {

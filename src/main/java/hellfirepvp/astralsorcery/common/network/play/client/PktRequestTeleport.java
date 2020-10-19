@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.play.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
@@ -79,8 +80,11 @@ public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
                         DimensionType type = DimensionType.byName(packet.type);
                         if (type != null) {
                             World to = server.getWorld(type);
-                            if (to != null && DataAS.DOMAIN_AS.getData(to, DataAS.KEY_GATEWAY_CACHE).hasGateway(packet.pos)) {
-                                AstralSorcery.getProxy().scheduleDelayed(() -> MiscUtils.transferEntityTo(player, type, packet.pos));
+                            if (to != null) {
+                                GatewayCache.GatewayNode node = DataAS.DOMAIN_AS.getData(to, DataAS.KEY_GATEWAY_CACHE).getGatewayNode(packet.pos);
+                                if (node != null && node.hasAccess(player)) {
+                                    AstralSorcery.getProxy().scheduleDelayed(() -> MiscUtils.transferEntityTo(player, type, packet.pos));
+                                }
                             }
                         }
                     }

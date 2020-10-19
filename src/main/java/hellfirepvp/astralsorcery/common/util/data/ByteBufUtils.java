@@ -36,6 +36,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -74,7 +75,7 @@ public class ByteBufUtils {
         return new UUID(buf.readLong(), buf.readLong());
     }
 
-    public static <T> void writeList(PacketBuffer buf, @Nullable Collection<T> list, BiConsumer<PacketBuffer, T> iterationFct) {
+    public static <T> void writeCollection(PacketBuffer buf, @Nullable Collection<T> list, BiConsumer<PacketBuffer, T> iterationFct) {
         if (list != null) {
             buf.writeInt(list.size());
             list.forEach(e -> iterationFct.accept(buf, e));
@@ -85,15 +86,25 @@ public class ByteBufUtils {
 
     @Nullable
     public static <T> List<T> readList(PacketBuffer buf, Function<PacketBuffer, T> readFct) {
+        return readCollection(buf, ArrayList::new, List::add, readFct);
+    }
+
+    @Nullable
+    public static <T> Set<T> readSet(PacketBuffer buf, Function<PacketBuffer, T> readFct) {
+        return readCollection(buf, HashSet::new, Set::add, readFct);
+    }
+
+    @Nullable
+    public static <T, C extends Collection<T>> C readCollection(PacketBuffer buf, Supplier<C> newCollection, BiConsumer<C, T> addFn, Function<PacketBuffer, T> readFct) {
         int size = buf.readInt();
         if (size == -1) {
             return null;
         }
-        List<T> list = new ArrayList<>(size);
+        C collection = newCollection.get();
         for (int i = 0; i < size; i++) {
-            list.add(readFct.apply(buf));
+            addFn.accept(collection, readFct.apply(buf));
         }
-        return list;
+        return collection;
     }
 
     public static <K, V> void writeMap(PacketBuffer buf,
