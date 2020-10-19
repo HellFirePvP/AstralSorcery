@@ -103,24 +103,28 @@ public class BlockCelestialGateway extends ContainerBlock implements CustomItemB
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if (!world.isRemote()) {
-            TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, false);
-            if (gateway != null &&
-                    gateway.getOwner() != null &&
-                    gateway.getOwner().isPlayer(player)) {
+        TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, false);
+        if (gateway != null &&
+                gateway.getOwner() != null &&
+                gateway.getOwner().isPlayer(player)) {
 
-                if (gateway.isLocked()) {
+            if (gateway.isLocked()) {
+                if (!world.isRemote()) {
                     ItemStack remaining = ItemUtils.dropItemToPlayer(player, new ItemStack(ItemsAS.AQUAMARINE));
                     if (!remaining.isEmpty()) {
                         ItemUtils.dropItemNaturally(world, player.getPosX(), player.getPosY(), player.getPosZ(), remaining);
                     }
                     gateway.unlock();
-                } else {
-                    ItemStack held = player.getHeldItem(hand);
-                    if (held.getItem() instanceof ItemAquamarine) {
+                }
+                return ActionResultType.SUCCESS;
+            } else {
+                ItemStack held = player.getHeldItem(hand);
+                if (held.getItem() instanceof ItemAquamarine) {
+                    if (!world.isRemote()) {
                         held.shrink(1);
                         gateway.lock();
                     }
+                    return ActionResultType.SUCCESS;
                 }
             }
         }

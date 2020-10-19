@@ -157,7 +157,7 @@ public class CelestialGatewayHandler {
     private void loadIntoCache(IWorld world) {
         GatewayCache cache = DataAS.DOMAIN_AS.getData(world, DataAS.KEY_GATEWAY_CACHE);
         Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> gatewayCache = this.cache.getData(LogicalSide.SERVER).orElse(new HashMap<>());
-        gatewayCache.put(world.getDimension().getType().getRegistryName(), cache.getGatewayPositions());
+        gatewayCache.put(world.getDimension().getType().getRegistryName(), new HashSet<>(cache.getGatewayPositions()));
         this.cache.setData(LogicalSide.SERVER, gatewayCache);
     }
 
