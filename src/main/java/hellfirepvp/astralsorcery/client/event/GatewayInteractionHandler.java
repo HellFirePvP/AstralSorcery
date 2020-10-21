@@ -14,19 +14,29 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.event.effect.GatewayUIRenderHandler;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.util.GatewayUI;
+import hellfirepvp.astralsorcery.client.util.MouseUtil;
+import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.client.PktRequestTeleport;
+import hellfirepvp.astralsorcery.common.network.play.client.PktRevokeGatewayAccess;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
+import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 
 import java.awt.*;
 import java.util.Collections;
@@ -49,7 +59,46 @@ public class GatewayInteractionHandler {
 
     private static double fovPre = 0;
 
-    public static void clientTick(TickEvent.ClientTickEvent event) {
+    public static void attachEventListeners(IEventBus eventBus) {
+        eventBus.addListener(GatewayInteractionHandler::clientTick);
+        eventBus.addListener(EventPriority.LOWEST, GatewayInteractionHandler::renderTick);
+        eventBus.addListener(GatewayInteractionHandler::onAccessRevoke);
+    }
+
+    private static void onAccessRevoke(PlayerInteractEvent.RightClickBlock event) {
+        PlayerEntity player = event.getPlayer();
+        World world = event.getWorld();
+        if (player == null || world == null || !world.isRemote() || event.getHand() != Hand.MAIN_HAND) {
+            return;
+        }
+        GatewayUI ui = GatewayUIRenderHandler.getInstance().getCurrentUI();
+        if (ui == null) {
+            return;
+        }
+        GatewayCache.GatewayNode node = ui.getThisGatewayNode();
+        if (node == null || !node.isLocked() || node.getOwner() == null || node.getAllowedUsers().isEmpty()) {
+            return;
+        }
+        TileCelestialGateway gateway = MiscUtils.getTileAt(world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, true);
+        if (gateway == null || !gateway.hasMultiblock() || !gateway.doesSeeSky()) {
+            return;
+        }
+
+        BlockPos clickedPos = event.getPos();
+        MapStream.of(node.getAllowedUsers())
+                .filter(tpl -> TileCelestialGateway.getAllowedUserOffset(tpl.getA())
+                        .add(node.getPos())
+                        .down()
+                        .equals(clickedPos))
+                .findAny()
+                .map(Tuple::getB)
+                .ifPresent(playerRef -> {
+                    PktRevokeGatewayAccess pkt = new PktRevokeGatewayAccess(world.getDimension().getType(), gateway.getPos(), playerRef.getPlayerUUID());
+                    PacketChannel.CHANNEL.sendToServer(pkt);
+                });
+    }
+
+    private static void clientTick(TickEvent.ClientTickEvent event) {
         PlayerEntity player = Minecraft.getInstance().player;
         World world = Minecraft.getInstance().world;
         if (player == null || world == null) {
@@ -166,7 +215,7 @@ public class GatewayInteractionHandler {
         }
     }
 
-    public static void renderTick(TickEvent.RenderTickEvent event) {
+    private static void renderTick(TickEvent.RenderTickEvent event) {
         GatewayUI ui = GatewayUIRenderHandler.getInstance().getCurrentUI();
         if (ui == null) {
             return;
@@ -178,6 +227,7 @@ public class GatewayInteractionHandler {
                 return;
             }
             float percDone = 1F - ((focusTicks - 80F + event.renderTickTime) / 15F);
+            percDone = (float) Math.pow(percDone, 2.4F);
             float targetFov = 10F;
             double diff = fovPre - targetFov;
             Minecraft.getInstance().gameSettings.fov = Math.max(targetFov, targetFov + diff * percDone);

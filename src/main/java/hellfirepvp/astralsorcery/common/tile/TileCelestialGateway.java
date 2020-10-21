@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXColorEffectSphere;
@@ -17,9 +18,11 @@ import hellfirepvp.astralsorcery.client.event.effect.GatewayUIRenderHandler;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkableTileEntity;
 import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
+import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.tile.base.TileOwned;
@@ -35,8 +38,11 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.INameable;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -88,7 +94,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
 
     private boolean locked = false;
     private PlayerReference owner = null;
-    private List<PlayerReference> allowedUsers = new ArrayList<>();
+    private Map<Integer, PlayerReference> allowedUsers = new HashMap<>();
 
     private Object clientGatewaySphereEffect = null;
 
@@ -112,6 +118,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
                             node.setDisplayName(this.displayText);
                             node.setColor(this.color);
                         });
+                        this.updateAccessInformation();
                         networkRegistered = true;
                         markForUpdate();
                     }
@@ -199,6 +206,32 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
                     .setScaleMultiplier(0.15F + rand.nextFloat() * 0.1F)
                     .setMaxAge(15 + rand.nextInt(10));
         }
+
+        if (this.isLocked()) {
+            Vector3 center = new Vector3(this).add(0.5, 0.2, 0.5);
+            for (int i = 0; i < rand.nextInt(5) + 2; i++) {
+                Vector3 pos = MiscUtils.getRandomCirclePosition(center, Vector3.RotAxis.Y_AXIS, 1.7);
+                MiscUtils.applyRandomOffset(pos, rand, 0.05F);
+                Color c = MiscUtils.eitherOf(rand, Color.WHITE, ColorsAS.EFFECT_BLUE_LIGHT, ColorsAS.EFFECT_BLUE_DARK);
+                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                        .spawn(pos)
+                        .color(VFXColorFunction.constant(c))
+                        .setScaleMultiplier(0.25F + rand.nextFloat() * 0.15F)
+                        .alpha(VFXAlphaFunction.FADE_OUT)
+                        .setMaxAge(15 + rand.nextInt(10));
+            }
+            for (int i = 0; i < rand.nextInt(3) + 1; i++) {
+                Vector3 pos = MiscUtils.getRandomCirclePosition(center, Vector3.RotAxis.Y_AXIS, 1.1).addY(0.3);
+                MiscUtils.applyRandomOffset(pos, rand, 0.05F);
+                Color c = MiscUtils.eitherOf(rand, Color.WHITE, ColorsAS.EFFECT_BLUE_LIGHT, ColorsAS.EFFECT_BLUE_DARK);
+                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                        .spawn(pos)
+                        .color(VFXColorFunction.constant(c))
+                        .setScaleMultiplier(0.25F + rand.nextFloat() * 0.15F)
+                        .alpha(VFXAlphaFunction.FADE_OUT)
+                        .setMaxAge(15 + rand.nextInt(10));
+            }
+        }
     }
 
     public boolean isLocked() {
@@ -249,7 +282,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
         if (this.allowedUsers.size() >= OFFSETS_ALLOWED_PREVIEW.length) {
             return false;
         }
-        return !this.allowedUsers.contains(otherUser);
+        return !this.allowedUsers.containsValue(otherUser);
     }
 
     public boolean addAllowedUser(PlayerEntity otherUser) {
@@ -260,25 +293,60 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
         if (!this.canAddAllowedUser(otherUser)) {
             return false;
         }
-        this.allowedUsers.add(otherUser);
+        List<Integer> availableIndices = new ArrayList<>();
+        for (int i = 0; i < OFFSETS_ALLOWED_PREVIEW.length; i++) {
+            if (!this.allowedUsers.containsKey(i)) {
+                availableIndices.add(i);
+            }
+        }
+        if (availableIndices.isEmpty()) {
+            return false;
+        }
+
+        Collections.shuffle(availableIndices);
+        this.allowedUsers.put(MiscUtils.getRandomEntry(availableIndices, rand), otherUser);
         this.updateAccessInformation();
         return true;
     }
 
-    public List<PlayerReference> getAllowedUsers() {
-        if (this.getOwner() == null) {
-            return Collections.emptyList();
+    @Nullable
+    public PlayerReference removeAllowedUser(UUID otherUser) {
+        if (this.allowedUsers.isEmpty()) {
+            return null;
         }
-        return Collections.unmodifiableList(this.allowedUsers);
+        for (Map.Entry<Integer, PlayerReference> entry : this.allowedUsers.entrySet()) {
+            if (entry.getValue().getPlayerUUID().equals(otherUser)) {
+                this.allowedUsers.remove(entry.getKey());
+                this.updateAccessInformation();
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    public Map<Integer, PlayerReference> getAllowedUsers() {
+        if (this.getOwner() == null) {
+            return Collections.emptyMap();
+        }
+        return Collections.unmodifiableMap(this.allowedUsers);
     }
 
     private void updateAccessInformation() {
         DataAS.DOMAIN_AS.getData(world, DataAS.KEY_GATEWAY_CACHE).updateGatewayNode(this.getPos(), node -> {
             node.setLocked(this.isLocked());
             node.setOwner(this.getOwner());
-            node.setAllowedUsers(this.getAllowedUsers());
+            node.setAllowedUsers(this.allowedUsers);
         });
         this.markForUpdate();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void playAccessRevokeEffect(PktPlayEffect pktPlayEffect) {
+
+    }
+
+    public static BlockPos getAllowedUserOffset(int index) {
+        return OFFSETS_ALLOWED_PREVIEW[MathHelper.clamp(index, 0, OFFSETS_ALLOWED_PREVIEW.length - 1)];
     }
 
     public void setDisplayText(@Nullable ITextComponent displayText) {
@@ -325,7 +393,11 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
 
         this.locked = compound.getBoolean("locked");
         this.owner = NBTHelper.readOptional(compound, "owningPlayer", PlayerReference::deserialize);
-        this.allowedUsers = NBTHelper.readList(compound, "allowedUsers", Constants.NBT.TAG_COMPOUND, nbt -> PlayerReference.deserialize((CompoundNBT) nbt));
+        this.allowedUsers.clear();
+        NBTHelper.readList(compound, "allowedUsers", Constants.NBT.TAG_COMPOUND, nbt -> {
+            CompoundNBT tag = (CompoundNBT) nbt;
+            return new Tuple<>(tag.getInt("index"), PlayerReference.deserialize(tag.getCompound("player")));
+        }).forEach(tpl -> this.allowedUsers.put(tpl.getA(), tpl.getB()));
     }
 
     @Override
@@ -342,7 +414,12 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
 
         compound.putBoolean("locked", this.locked);
         NBTHelper.writeOptional(compound, "owningPlayer", this.owner, (tag, playerRef) -> playerRef.writeToNBT(tag));
-        NBTHelper.writeList(compound, "allowedUsers", this.allowedUsers, PlayerReference::serialize);
+        NBTHelper.writeList(compound, "allowedUsers", this.allowedUsers.entrySet(), entry -> {
+            CompoundNBT tag = new CompoundNBT();
+            tag.putInt("index", entry.getKey());
+            tag.put("player", entry.getValue().serialize());
+            return tag;
+        });
     }
 
     @Override
@@ -351,7 +428,15 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
     @Override
     public void onEntityLinkCreate(PlayerEntity player, LivingEntity linked) {
         if (linked instanceof PlayerEntity) {
-            this.addAllowedUser((PlayerEntity) linked);
+            if (this.addAllowedUser((PlayerEntity) linked)) {
+
+                ITextComponent accessGrantedMessage = new TranslationTextComponent(
+                        "astralsorcery.misc.link.gateway.link",
+                        linked.getDisplayName())
+                        .applyTextStyle(TextFormatting.GREEN);
+                player.sendMessage(accessGrantedMessage);
+                linked.sendMessage(accessGrantedMessage);
+            }
         }
     }
 

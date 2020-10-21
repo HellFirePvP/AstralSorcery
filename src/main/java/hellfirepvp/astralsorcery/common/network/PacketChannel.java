@@ -86,6 +86,7 @@ public class PacketChannel {
         registerMessage(PktRotateTelescope::new);
         registerMessage(PktUnlockPerk::new);
         registerMessage(PktToggleClientOption::new);
+        registerMessage(PktRevokeGatewayAccess::new);
     }
 
     private static <T extends ASLoginPacket<T>> void registerLoginMessage(Supplier<T> pktSupplier, Supplier<T> makeLoginPacket) {

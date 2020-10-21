@@ -149,11 +149,15 @@ public class BlockCelestialGateway extends ContainerBlock implements CustomItemB
 
     @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moving) {
-        super.onReplaced(state, world, pos, newState, moving);
-
-        if (state != newState) {
+        if (state != newState && !world.isRemote()) {
             DataAS.DOMAIN_AS.getData(world, DataAS.KEY_GATEWAY_CACHE).removePosition(world, pos);
+            TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, true);
+            if (gateway != null && gateway.isLocked()) {
+                ItemUtils.dropItemNaturally(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemsAS.AQUAMARINE));
+            }
         }
+
+        super.onReplaced(state, world, pos, newState, moving);
     }
 
     @Override

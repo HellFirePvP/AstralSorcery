@@ -125,11 +125,6 @@ public class LinkHandler implements ITickHandler {
                     LivingEntity linked = session.getSelectedEntity();
                     if (linkTarget.tryLinkEntity(playerIn, linked)) {
                         linkTarget.onEntityLinkCreate(playerIn, linked);
-
-                        playerIn.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.link",
-                                linked.getDisplayName(),
-                                new TranslationTextComponent(linkedToName))
-                                .applyTextStyle(TextFormatting.GREEN));
                     }
                 } else {
                     if (tile.tryLinkBlock(playerIn, pos)) {

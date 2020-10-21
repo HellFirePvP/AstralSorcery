@@ -75,9 +75,6 @@ public class PktElytraCapeState extends ASPacket<PktElytraCapeState> {
 
                 PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
                 boolean hasFlightPerk = progress.hasPerkEffect(p -> p instanceof KeyMantleFlight);
-                if (!progress.doPerkAbilities()) {
-                    hasFlightPerk = false;
-                }
 
                 switch (packet.type) {
                     case 0: {

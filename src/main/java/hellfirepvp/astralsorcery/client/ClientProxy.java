@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.client.util.ColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.MouseUtil;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
+import hellfirepvp.astralsorcery.client.util.word.RandomWordGenerator;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.GuiType;
 import hellfirepvp.astralsorcery.common.base.patreon.manager.PatreonManagerClient;
@@ -91,6 +92,7 @@ public class ClientProxy extends CommonProxy {
         super.initialize();
 
         this.addTomeBookmarks();
+        RandomWordGenerator.init();
 
         this.clientConfig.buildConfiguration();
     }
@@ -122,8 +124,7 @@ public class ClientProxy extends CommonProxy {
         OverlayRenderer.INSTANCE.attachEventListeners(eventBus);
 
         MouseUtil.attachEventListeners(eventBus);
-        eventBus.addListener(GatewayInteractionHandler::clientTick);
-        eventBus.addListener(EventPriority.LOWEST, GatewayInteractionHandler::renderTick);
+        GatewayInteractionHandler.attachEventListeners(eventBus);
 
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onRender);
         eventBus.addListener(EventPriority.LOWEST, SkyRenderEventHandler::onFog);

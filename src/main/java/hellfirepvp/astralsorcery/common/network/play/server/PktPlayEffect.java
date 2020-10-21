@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.item.lens.ItemColoredLensFire;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.starlight.network.handler.BlockTransmutationHandler;
+import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
 import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileInfuser;
 import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
@@ -119,6 +120,7 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         LIQUID_FOUNTAIN,
         CONSTELLATION_EFFECT_PING,
         BLOCK_HARVEST_DRAW,
+        GATEWAY_REVOKE_EFFECT,
         ;
 
         @OnlyIn(Dist.CLIENT)
@@ -160,6 +162,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return ConstellationEffect::playConstellationPing;
                 case BLOCK_HARVEST_DRAW:
                     return TileTreeBeacon::playDrawParticles;
+                case GATEWAY_REVOKE_EFFECT:
+                    return TileCelestialGateway::playAccessRevokeEffect;
             }
             return (pkt) -> {};
         }

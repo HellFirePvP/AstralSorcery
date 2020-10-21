@@ -78,6 +78,8 @@
   "astralsorcery.misc.link.link.block": "a block",
   "astralsorcery.misc.link.unlink": "Unlinked %s from %s!",
   "astralsorcery.misc.link.unlink.all": "Unlinked all links!",
+  "astralsorcery.misc.link.gateway.link": "Granted access to the celestial gateway to %s!",
+  "astralsorcery.misc.link.gateway.unlink": "Revoked access to the celestial gateway from %s!",
 
   "astralsorcery.misc.exchange.size": "Size: %s",
   "astralsorcery.misc.exchange.size.2": "5 x 5",

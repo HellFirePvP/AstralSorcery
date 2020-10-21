@@ -8,29 +8,31 @@
 
 package hellfirepvp.astralsorcery.client.event.effect;
 
-import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.*;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Matrix4f;
-import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -41,6 +43,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.EnumSet;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -67,7 +70,9 @@ public class GatewayUIRenderHandler implements ITickHandler {
                 !currentUI.getPos().equals(pos)) {
             currentUI = GatewayUI.create(world, pos, renderPos, 5.5D);
         }
-        currentUI.refreshView();
+        if (currentUI != null) {
+            currentUI.refreshView();
+        }
         return currentUI;
     }
 
@@ -101,10 +106,79 @@ public class GatewayUIRenderHandler implements ITickHandler {
         Vector3 renderOffset = this.currentUI.getRenderCenter();
 
         PlayerEntity player = Minecraft.getInstance().player;
-        double dst = new Vector3(renderOffset).distance(Vector3.atEntityCorner(player).addY(1.5));
-        if(dst > 3) return;
-        float alpha = MathHelper.clamp(1F - ((float) (dst / 2D)), 0F, 1F);
-        Color c = new Color(0xF0BD00);
+        double dst = renderOffset.distance(Vector3.atEntityCorner(player).addY(1.5));
+        if(dst > 3) {
+            return;
+        }
+
+        this.renderGatewayShieldOverlay(renderStack, renderOffset, dst, pTicks);
+        this.renderGatewayFocusedEntry(renderStack, renderOffset, pTicks);
+        this.renderGatewayAllowedPlayers(renderStack, renderOffset, dst, pTicks);
+    }
+
+    private void renderGatewayAllowedPlayers(MatrixStack renderStack, Vector3 renderOffset, double distance, float pTicks) {
+        GatewayCache.GatewayNode node = this.currentUI.getThisGatewayNode();
+        if (node == null || !node.isLocked() || node.getOwner() == null || node.getAllowedUsers().isEmpty()) {
+            return;
+        }
+        UUID currentUUID = Minecraft.getInstance().player != null ? Minecraft.getInstance().player.getUniqueID() : null;
+        RayTraceResult mouseOverRtr = Minecraft.getInstance().objectMouseOver;
+        BlockPos blockSelected;
+        if (mouseOverRtr != null && mouseOverRtr.getType() == RayTraceResult.Type.BLOCK && mouseOverRtr instanceof BlockRayTraceResult) {
+            blockSelected = ((BlockRayTraceResult) mouseOverRtr).getPos().up();
+        } else {
+            blockSelected = null;
+        }
+
+        Color c = ColorsAS.CONSTELLATION_TYPE_MAJOR;
+        float alpha = MathHelper.clamp(1F - ((float) (distance / 2D)), 0F, 1F);
+
+        IRenderTypeBuffer.Impl drawBuffers = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        node.getAllowedUsers().forEach((index, playerRef) -> {
+            BlockPos drawPos = TileCelestialGateway.getAllowedUserOffset(index).add(node.getPos());
+            Vector3 at = new Vector3(drawPos)
+                    .add(0.5, 0.001, 0.5)
+                    .subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
+            IConstellation cst = this.getCurrentUI().getGeneratedConstellation(playerRef.getPlayerUUID());
+            if (cst != null) {
+                RenderingConstellationUtils.renderConstellationIntoWorldFlat(c, cst, renderStack, drawBuffers, at, 1.2, 1, alpha);
+
+                UUID targetUUID = playerRef.getPlayerUUID();
+                if ((node.getOwner().getPlayerUUID().equals(currentUUID) || targetUUID.equals(currentUUID)) && drawPos.equals(blockSelected)) {
+                    RenderingUtils.renderInWorldText(playerRef.getPlayerName().getFormattedText(), c, 1 / 48F, at.clone().addY(0.2),
+                            renderStack, pTicks, true);
+                }
+            }
+        });
+        drawBuffers.finish();
+    }
+
+    private void renderGatewayFocusedEntry(MatrixStack renderStack, Vector3 renderOffset, float pTicks) {
+        PlayerEntity player = Minecraft.getInstance().player;
+        GatewayUI.GatewayEntry entry = findMatchingEntry(MathHelper.wrapDegrees(player.rotationYaw), MathHelper.wrapDegrees(player.rotationPitch));
+        if (entry != null) {
+            ITextComponent display = entry.getNode().getDisplayName();
+            if (display != null && !display.getFormattedText().isEmpty()) {
+                String text = display.getFormattedText();
+                Vector3 at = entry.getRelativePos().clone()
+                        .add(renderOffset)
+                        .addY(0.4F)
+                        .subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
+
+                Color c = ColorsAS.CONSTELLATION_SINGLE_STAR;
+                DyeColor nodeColor = entry.getNode().getColor();
+                if (nodeColor != null) {
+                    c = ColorUtils.flareColorFromDye(nodeColor);
+                }
+
+                RenderingUtils.renderInWorldText(text, c, at, renderStack, pTicks, true);
+            }
+        }
+    }
+
+    private void renderGatewayShieldOverlay(MatrixStack renderStack, Vector3 renderOffset, double distance, float pTicks) {
+        float alpha = MathHelper.clamp(1F - ((float) (distance / 2D)), 0F, 1F);
+        Color c = ColorsAS.CONSTELLATION_SINGLE_STAR;
         int red = c.getRed();
         int green = c.getGreen();
         int blue = c.getBlue();
@@ -158,23 +232,6 @@ public class GatewayUIRenderHandler implements ITickHandler {
         RenderSystem.depthMask(true);
         RenderSystem.disableDepthTest();
         RenderSystem.disableBlend();
-
-        GatewayUI.GatewayEntry entry = findMatchingEntry(MathHelper.wrapDegrees(player.rotationYaw), MathHelper.wrapDegrees(player.rotationPitch));
-        if (entry != null) {
-            ITextComponent display = entry.getNode().getDisplayName();
-            if (display != null && !display.getFormattedText().isEmpty()) {
-                String text = display.getFormattedText();
-                Vector3 at = entry.getRelativePos().clone()
-                        .add(this.currentUI.getRenderCenter())
-                        .addY(0.4F);
-                DyeColor nodeColor = entry.getNode().getColor();
-                if (nodeColor != null) {
-                    c = ColorUtils.flareColorFromDye(nodeColor);
-                }
-
-                RenderingUtils.renderInWorldText(text, c, at, renderStack, pTicks, true);
-            }
-        }
     }
 
     @Nullable

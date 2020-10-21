@@ -23,8 +23,10 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -75,6 +77,7 @@ public class GatewayCache extends GlobalWorldData {
     private void update(GatewayNode node, Consumer<GatewayNodeAccess> nodeFn) {
         nodeFn.accept(node.writeAccess());
         this.markDirty();
+        CelestialGatewayHandler.INSTANCE.syncToAll();
     }
 
     public boolean offerPosition(World world, BlockPos pos) {
@@ -159,7 +162,7 @@ public class GatewayCache extends GlobalWorldData {
 
         private boolean locked = false;
         private PlayerReference owner = null;
-        private Set<PlayerReference> allowedUsers = new HashSet<>();
+        private Map<Integer, PlayerReference> allowedUsers = new HashMap<>();
 
         private GatewayNode(BlockPos pos) {
             this.pos = pos;
@@ -193,8 +196,8 @@ public class GatewayCache extends GlobalWorldData {
             return owner;
         }
 
-        public Collection<PlayerReference> getAllowedUsers() {
-            return Collections.unmodifiableCollection(allowedUsers);
+        public Map<Integer, PlayerReference> getAllowedUsers() {
+            return Collections.unmodifiableMap(this.allowedUsers);
         }
 
         public boolean hasAccess(PlayerEntity player) {
@@ -202,7 +205,7 @@ public class GatewayCache extends GlobalWorldData {
             if (owner == null || !this.isLocked()) {
                 return true;
             }
-            return owner.isPlayer(player) || this.getAllowedUsers().stream().anyMatch(ref -> ref.isPlayer(player));
+            return owner.isPlayer(player) || this.getAllowedUsers().values().stream().anyMatch(ref -> ref.isPlayer(player));
         }
 
         public void write(CompoundNBT tag) {
@@ -216,7 +219,12 @@ public class GatewayCache extends GlobalWorldData {
 
             tag.putBoolean("locked", this.isLocked());
             NBTHelper.writeOptional(tag, "owningPlayer", this.getOwner(), (compound, playerRef) -> playerRef.writeToNBT(compound));
-            NBTHelper.writeList(tag, "allowedUsers", this.getAllowedUsers(), PlayerReference::serialize);
+            NBTHelper.writeList(tag, "allowedUsers", this.allowedUsers.entrySet(), entry -> {
+                CompoundNBT compound = new CompoundNBT();
+                compound.putInt("index", entry.getKey());
+                compound.put("player", entry.getValue().serialize());
+                return compound;
+            });
         }
 
         public void write(PacketBuffer buf) {
@@ -225,7 +233,7 @@ public class GatewayCache extends GlobalWorldData {
             ByteBufUtils.writeOptional(buf, this.getColor(), ByteBufUtils::writeEnumValue);
             buf.writeBoolean(this.isLocked());
             ByteBufUtils.writeOptional(buf, this.getOwner(), (buffer, ref) -> ref.write(buffer));
-            ByteBufUtils.writeCollection(buf, this.getAllowedUsers(), (buffer, ref) -> ref.write(buffer));
+            ByteBufUtils.writeMap(buf, this.getAllowedUsers(), PacketBuffer::writeInt, (buffer, ref) -> ref.write(buffer));
         }
 
         public static GatewayNode read(CompoundNBT tag) {
@@ -239,7 +247,10 @@ public class GatewayCache extends GlobalWorldData {
 
             node.locked = tag.getBoolean("locked");
             node.owner = NBTHelper.readOptional(tag, "owningPlayer", PlayerReference::deserialize);
-            node.allowedUsers = NBTHelper.readSet(tag, "allowedUsers", Constants.NBT.TAG_COMPOUND, nbt -> PlayerReference.deserialize((CompoundNBT) nbt));
+            NBTHelper.readList(tag, "allowedUsers", Constants.NBT.TAG_COMPOUND, nbt -> {
+                CompoundNBT compound = (CompoundNBT) nbt;
+                return new Tuple<>(compound.getInt("index"), PlayerReference.deserialize(compound.getCompound("player")));
+            }).forEach(tpl -> node.allowedUsers.put(tpl.getA(), tpl.getB()));
             return node;
         }
 
@@ -249,7 +260,7 @@ public class GatewayCache extends GlobalWorldData {
             node.color = ByteBufUtils.readOptional(buf, buffer -> ByteBufUtils.readEnumValue(buffer, DyeColor.class));
             node.locked = buf.readBoolean();
             node.owner = ByteBufUtils.readOptional(buf, PlayerReference::read);
-            node.allowedUsers = ByteBufUtils.readSet(buf, PlayerReference::read);
+            node.allowedUsers = ByteBufUtils.readMap(buf, PacketBuffer::readInt, PlayerReference::read);
             return node;
         }
 
@@ -316,13 +327,13 @@ public class GatewayCache extends GlobalWorldData {
         }
 
         @Override
-        public Collection<PlayerReference> getAllowedUsers() {
+        public Map<Integer, PlayerReference> getAllowedUsers() {
             return this.decorated.getAllowedUsers();
         }
 
-        public void setAllowedUsers(Collection<PlayerReference> users) {
+        public void setAllowedUsers(Map<Integer, PlayerReference> users) {
             this.decorated.allowedUsers.clear();
-            this.decorated.allowedUsers.addAll(users);
+            this.decorated.allowedUsers.putAll(users);
         }
     }
 }

@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.common.auxiliary.gateway.CelestialGatewayHandler;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationGenerator;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
+import hellfirepvp.astralsorcery.common.util.PlayerReference;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 import net.minecraft.client.Minecraft;
@@ -17,9 +20,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.LogicalSide;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -35,6 +38,7 @@ public class GatewayUI {
     private final BlockPos pos;
     private final Vector3 renderCenter;
     private final double sphereRadius;
+    private final Map<UUID, IConstellation> playerConstellations = new HashMap<>();
     private final List<GatewayEntry> gatewayEntries = new ArrayList<>();
 
     private int visibleTicks = 20;
@@ -44,9 +48,29 @@ public class GatewayUI {
         this.pos = pos;
         this.renderCenter = renderCenter;
         this.sphereRadius = sphereRadius;
+        this.initializePlayerConstellations();
+    }
+
+    private void initializePlayerConstellations() {
+        if (!this.getThisGatewayNode().isLocked() || this.getThisGatewayNode().getAllowedUsers().isEmpty()) {
+            return;
+        }
+        for (PlayerReference playerRef : this.getThisGatewayNode().getAllowedUsers().values()) {
+            UUID playerUUID = playerRef.getPlayerUUID();
+            long plSeed = playerUUID.getMostSignificantBits() ^ playerUUID.getLeastSignificantBits();
+            Random sRand = new Random(plSeed);
+            for (int i = 0; i < sRand.nextInt(5); i++) {
+                sRand.nextLong();
+            }
+            this.playerConstellations.put(playerUUID, ConstellationGenerator.generateRandom(sRand.nextLong()));
+        }
     }
 
     public static GatewayUI create(IWorld world, BlockPos tilePos, Vector3 renderPos, double sphereRadius) {
+        GatewayCache.GatewayNode gatewayNode = CelestialGatewayHandler.INSTANCE.getGatewayNode(world, LogicalSide.CLIENT, tilePos);
+        if (gatewayNode == null) {
+            return null;
+        }
         ResourceLocation dimType = world.getDimension().getType().getRegistryName();
         GatewayUI ui = new GatewayUI(dimType, tilePos, renderPos, sphereRadius);
         PlayerEntity thisPlayer = Minecraft.getInstance().player;
@@ -150,6 +174,16 @@ public class GatewayUI {
 
     public double getSphereRadius() {
         return sphereRadius;
+    }
+
+    @Nullable
+    public GatewayCache.GatewayNode getThisGatewayNode() {
+        return CelestialGatewayHandler.INSTANCE.getGatewayNode(Minecraft.getInstance().world, LogicalSide.CLIENT, this.getPos());
+    }
+
+    @Nullable
+    public IConstellation getGeneratedConstellation(UUID playerUUID) {
+        return this.playerConstellations.get(playerUUID);
     }
 
     public List<GatewayEntry> getGatewayEntries() {

@@ -48,7 +48,7 @@ public class MantleEffectVicio extends MantleEffect {
         super.tickServer(player);
 
         PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if (prog.hasPerkEffect(p -> p instanceof KeyMantleFlight) && prog.doPerkAbilities() &&
+        if (prog.hasPerkEffect(p -> p instanceof KeyMantleFlight) &&
                 AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
             boolean prev = player.abilities.allowFlying;
             player.abilities.allowFlying = true;
@@ -93,7 +93,7 @@ public class MantleEffectVicio extends MantleEffect {
         if (elytraStack.getItem() instanceof ItemMantle) {
             MantleEffect effect = ItemMantle.getEffect(wearingEntity, ConstellationsAS.vicio);
             PlayerProgress progress = ResearchHelper.getProgress(wearingEntity, LogicalSide.SERVER);
-            return effect != null && (!progress.hasPerkEffect(p -> p instanceof KeyMantleFlight) || !progress.doPerkAbilities());
+            return effect != null && !progress.hasPerkEffect(p -> p instanceof KeyMantleFlight);
         }
         return false;
     }

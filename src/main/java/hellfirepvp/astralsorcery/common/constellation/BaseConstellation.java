@@ -30,8 +30,8 @@ public abstract class BaseConstellation extends ForgeRegistryEntry<IConstellatio
 
     @Override
     public StarLocation addStar(int x, int y) {
-        x %= (STAR_GRID_INDEX - 1); //31x31
-        y %= (STAR_GRID_INDEX - 1);
+        x %= STAR_GRID_INDEX; //31x31
+        y %= STAR_GRID_INDEX;
         StarLocation star = new StarLocation(x, y);
         if (!starLocations.contains(star)) {
             starLocations.add(star);

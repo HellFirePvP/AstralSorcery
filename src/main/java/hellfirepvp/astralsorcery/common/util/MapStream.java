@@ -179,6 +179,10 @@ public class MapStream<K, V> implements Stream<Tuple<K, V>> {
         decorated.forEach(action);
     }
 
+    public void forEach(BiConsumer<K, V> forEachFn) {
+        decorated.forEach(tpl -> forEachFn.accept(tpl.getA(), tpl.getB()));
+    }
+
     @Override
     public void forEachOrdered(Consumer<? super Tuple<K, V>> action) {
         decorated.forEachOrdered(action);

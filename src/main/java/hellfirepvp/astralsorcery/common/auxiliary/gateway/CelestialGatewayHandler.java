@@ -149,6 +149,17 @@ public class CelestialGatewayHandler {
         return this.cache.getData(side).orElse(Collections.emptyMap());
     }
 
+    @Nullable
+    public GatewayCache.GatewayNode getGatewayNode(IWorld world, LogicalSide side, BlockPos pos) {
+        return this.cache.getData(side)
+                .map(data -> data.get(world.getDimension().getType().getRegistryName()))
+                .orElse(Collections.emptyList())
+                .stream()
+                .filter(node -> node.getPos().equals(pos))
+                .findFirst()
+                .orElse(null);
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void updateClientCache(@Nullable Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> positions) {
         this.cache.setData(LogicalSide.CLIENT, positions);
