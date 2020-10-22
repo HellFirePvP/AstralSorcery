@@ -57,7 +57,7 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             ItemStack held = player.getHeldItem(hand);
             TileSpectralRelay tar = MiscUtils.getTileAt(world, pos, TileSpectralRelay.class, true);
             if (tar != null) {
@@ -68,6 +68,7 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
                         player.inventory.placeItemBackInInventory(world, stack);
                         inv.setStackInSlot(0, ItemStack.EMPTY);
                         tar.markForUpdate();
+                        TileSpectralRelay.cascadeRelayProximityUpdates(world, pos);
                     }
 
                     if (!world.isAirBlock(pos.up())) {
@@ -80,12 +81,14 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
                         held.shrink(1);
                     }
                     tar.updateAltarLinkState();
+                    TileSpectralRelay.cascadeRelayProximityUpdates(world, pos);
                     tar.markForUpdate();
                 } else {
                     if (!inv.getStackInSlot(0).isEmpty()) {
                         ItemStack stack = inv.getStackInSlot(0);
                         player.inventory.placeItemBackInInventory(world, stack);
                         inv.setStackInSlot(0, ItemStack.EMPTY);
+                        TileSpectralRelay.cascadeRelayProximityUpdates(world, pos);
                         tar.markForUpdate();
                     }
                 }

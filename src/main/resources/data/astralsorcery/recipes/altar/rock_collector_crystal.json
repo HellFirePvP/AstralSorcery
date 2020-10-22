@@ -2,7 +2,7 @@
   "type": "astralsorcery:altar",
   "altar_type": 2,
   "duration": 400,
-  "starlight": 3200,
+  "starlight": 2600,
   "pattern": [
     "AB_BA",
     "C___C",

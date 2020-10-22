@@ -116,15 +116,13 @@ public class CategoryAltar extends JEICategory<SimpleAltarRecipe> {
     public void setRecipe(IRecipeLayout recipeLayout, SimpleAltarRecipe altarRecipe, IIngredients ingredients) {
         IGuiItemStackGroup itemStacks = recipeLayout.getItemStacks();
 
-        itemStacks.init(0, false, 48, 18);
-
         int step = 19;
         int xOffset = 11;
         int yOffset = 57;
         for (int yy = 0; yy < AltarRecipeGrid.GRID_SIZE; yy++) {
             for (int xx = 0; xx < AltarRecipeGrid.GRID_SIZE; xx++) {
                 int slot = xx + yy * AltarRecipeGrid.GRID_SIZE;
-                itemStacks.init(slot + 1, true, xOffset + step * xx, yOffset + step * yy);
+                itemStacks.init(slot, true, xOffset + step * xx, yOffset + step * yy);
             }
         }
 
@@ -137,8 +135,10 @@ public class CategoryAltar extends JEICategory<SimpleAltarRecipe> {
             part += Math.PI;
             double xAdd = Math.sin(part) * 60.0;
             double yAdd = Math.cos(part) * 60.0;
-            itemStacks.init(26 + i, true, MathHelper.floor(centerX + xAdd), MathHelper.floor(centerY + yAdd));
+            itemStacks.init(25 + i, true, MathHelper.floor(centerX + xAdd), MathHelper.floor(centerY + yAdd));
         }
+
+        itemStacks.init(itemStacks.getGuiIngredients().size(), false, 48, 18);
 
         itemStacks.set(ingredients);
     }

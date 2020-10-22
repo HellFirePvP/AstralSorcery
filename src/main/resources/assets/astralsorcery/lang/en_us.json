@@ -655,16 +655,12 @@
   "block.astralsorcery.gem_crystal_cluster.day": "Ilium Crystal Cluster",
   "block.astralsorcery.gem_crystal_cluster.night": "Fengarum Crystal Cluster",
   "block.astralsorcery.gem_crystal_cluster.sky": "Ourium Crystal Cluster",
-
-  "__comment": "",
-
-  "block.astralsorcery.blockbore": "Evershifting Fountain",
-  "block.astralsorcery.blockborehead.liquid": "Neromantic Prime",
-  "block.astralsorcery.blockborehead.vortex": "Fysallidic Prime",
-
-  "block.astralsorcery.blockborehead.ore": "Petromantic Prime",
-
-  "__comment": "",
+  "block.astralsorcery.singularity": "Arnima Singularity",
+  "block.astralsorcery.bore": "Evershifting Fountain",
+  "block.astralsorcery.bore_head": "Prime",
+  "block.astralsorcery.bore_head.liquid": "Neromantic Prime",
+  "block.astralsorcery.bore_head.vortex": "Fysallidic Prime",
+  "block.astralsorcery.bore_head.ore": "Petromantic Prime",
 
   "astralsorcery.journal.constellation.enchantments": "Refraction Table:",
   "astralsorcery.journal.constellation.ritual": "Ritual Effect:",

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.integration.jei;
 
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
+import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.MapStream;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredient;
@@ -96,12 +97,12 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
         int inputCount = 0;
         IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
         //Remove relay inputs from the input grid.
-        Map<Integer, ? extends IGuiIngredient<ItemStack>> itemStacks = new HashMap<>(itemStackGroup.getGuiIngredients());
-        itemStacks.keySet().stream().max(Comparator.naturalOrder()).ifPresent(maxIndex -> {
-            for (int i = 25; i <= maxIndex; i++) {
-                itemStacks.remove(i);
+        Map<Integer, IGuiIngredient<ItemStack>> itemStacks = new HashMap<>();
+        for (Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> entry : itemStackGroup.getGuiIngredients().entrySet()) {
+            if (entry.getKey() < 25) {
+                itemStacks.put(entry.getKey(), entry.getValue());
             }
-        });
+        }
 
         for (IGuiIngredient<ItemStack> ingredient : itemStacks.values()) {
             if (ingredient.isInput() && !ingredient.getAllIngredients().isEmpty()) {

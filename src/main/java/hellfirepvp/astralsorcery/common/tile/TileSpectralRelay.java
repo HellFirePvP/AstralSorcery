@@ -117,13 +117,16 @@ public class TileSpectralRelay extends TileEntityTick {
     }
 
     private void updateRelayProximity() {
-        if (this.getWorld().isRemote()) {
+        if (this.getWorld().isRemote() || !this.hasGlassLens()) {
             return;
         }
         this.setClosestRelayPos(null);
         BlockPos thisPos = this.getPos();
         foreachNearbyRelay(this.getWorld(), thisPos, relay -> {
             BlockPos relayPos = relay.getPos();
+            if (relayPos.equals(thisPos)) {
+                return;
+            }
             BlockPos otherClosestPos = relay.closestRelayPos;
             if (otherClosestPos == null || thisPos.distanceSq(relayPos) < otherClosestPos.distanceSq(relayPos)) {
                 relay.setClosestRelayPos(thisPos);
@@ -136,7 +139,12 @@ public class TileSpectralRelay extends TileEntityTick {
 
     private static void foreachNearbyRelay(World world, BlockPos pos, Consumer<TileSpectralRelay> relayConsumer) {
         List<BlockPos> nearbyRelays = BlockDiscoverer.searchForBlocksAround(world, pos, 15,
-                ((world1, pos1, state) -> state.getBlock() instanceof BlockSpectralRelay));
+                ((world1, pos1, state) -> {
+                    TileSpectralRelay relay;
+                    return state.getBlock() instanceof BlockSpectralRelay &&
+                            (relay = MiscUtils.getTileAt(world1, pos1, TileSpectralRelay.class, false)) != null &&
+                            relay.hasGlassLens();
+                }));
         nearbyRelays.forEach(relayPos -> {
             TileSpectralRelay relay = MiscUtils.getTileAt(world, relayPos, TileSpectralRelay.class, false);
             if (relay != null) {
