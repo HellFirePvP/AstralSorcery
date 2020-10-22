@@ -99,6 +99,14 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
     }
 
     @Override
+    public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
+        if (!(entity instanceof PlayerEntity)) {
+            return false;
+        }
+        return MantleEffectVicio.isUsableElytra(stack, (PlayerEntity) entity);
+    }
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         IConstellation cst = this.getConstellation(stack);

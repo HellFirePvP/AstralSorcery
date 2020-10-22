@@ -92,7 +92,12 @@ public class MantleEffectVicio extends MantleEffect {
     public static boolean isUsableElytra(ItemStack elytraStack, PlayerEntity wearingEntity) {
         if (elytraStack.getItem() instanceof ItemMantle) {
             MantleEffect effect = ItemMantle.getEffect(wearingEntity, ConstellationsAS.vicio);
-            PlayerProgress progress = ResearchHelper.getProgress(wearingEntity, LogicalSide.SERVER);
+            PlayerProgress progress;
+            if (wearingEntity.getEntityWorld().isRemote()) {
+                progress = ResearchHelper.getClientProgress();
+            } else {
+                progress = ResearchHelper.getProgress(wearingEntity, LogicalSide.SERVER);
+            }
             return effect != null && !progress.hasPerkEffect(p -> p instanceof KeyMantleFlight);
         }
         return false;
