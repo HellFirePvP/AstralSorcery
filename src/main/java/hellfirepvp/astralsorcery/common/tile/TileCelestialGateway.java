@@ -207,7 +207,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
                     .setMaxAge(15 + rand.nextInt(10));
         }
 
-        if (this.isLocked()) {
+        if (this.isLocked() && this.getOwner() != null) {
             Vector3 center = new Vector3(this).add(0.5, 0.2, 0.5);
             for (int i = 0; i < rand.nextInt(5) + 2; i++) {
                 Vector3 pos = MiscUtils.getRandomCirclePosition(center, Vector3.RotAxis.Y_AXIS, 1.7);

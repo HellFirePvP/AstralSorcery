@@ -148,6 +148,25 @@ public class BlockCelestialGateway extends ContainerBlock implements CustomItemB
     }
 
     @Override
+    public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader world, BlockPos pos) {
+        TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, true);
+        if (gateway != null && gateway.isLocked() && gateway.getOwner() != null) {
+            return gateway.getOwner().isPlayer(player) ? this.blockHardness : -1F;
+        }
+        return this.blockHardness;
+    }
+
+    @Override
+    public float getBlockHardness(BlockState blockState, IBlockReader world, BlockPos pos) {
+        TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, true);
+        if (gateway != null && gateway.isLocked() && gateway.getOwner() != null) {
+            //Assume this is non-player related hardness. In which case, it cannot be mined to begin with.
+            return -1;
+        }
+        return this.blockHardness;
+    }
+
+    @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moving) {
         if (state != newState && !world.isRemote()) {
             DataAS.DOMAIN_AS.getData(world, DataAS.KEY_GATEWAY_CACHE).removePosition(world, pos);
