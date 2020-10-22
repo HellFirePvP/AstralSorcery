@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crystal.CrystalProperty;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 
-import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.USE_RITUAL_CAPACITY;
 import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Usages.USE_RITUAL_EFFECT;
 
 /**
@@ -29,9 +28,8 @@ public class PropertyRitualEffect extends CrystalProperty {
         this.setRequiredResearch(ResearchProgression.ATTUNEMENT);
 
         this.addUsage(ctx -> ctx.uses(USE_RITUAL_EFFECT));
-        this.addUsage(ctx -> ctx.uses(USE_RITUAL_CAPACITY));
         this.addModifier((value, originalValue, propertyLevel, context) -> {
-            if (context.uses(USE_RITUAL_EFFECT) || context.uses(USE_RITUAL_CAPACITY)) {
+            if (context.uses(USE_RITUAL_EFFECT)) {
                 return value * (1.0 + (0.25 * propertyLevel));
             }
             return value;

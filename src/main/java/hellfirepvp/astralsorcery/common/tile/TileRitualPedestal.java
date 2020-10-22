@@ -541,20 +541,12 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     }
 
     //Stuff sent over from StarlightReceiverRitualPedestal
-    public void setReceiverData(boolean working, Map<BlockPos, Boolean> mirrorData, @Nullable CrystalAttributes newAttributes, List<CrystalAttributes> fracturedCrystalStats) {
-        boolean needsReSync = false;
-
+    public void setReceiverData(boolean working, Map<BlockPos, Boolean> mirrorData, @Nullable CrystalAttributes newAttributes) {
         this.working = working;
         this.offsetMirrors = new HashMap<>(mirrorData);
 
         ItemStack crystal = this.getCurrentCrystal();
         if (!crystal.isEmpty() && crystal.getItem() instanceof CrystalAttributeItem) {
-            for (CrystalAttributes attr : fracturedCrystalStats) {
-                ItemStack newCrystal = new ItemStack(crystal.getItem(), 1);
-                ((CrystalAttributeItem) newCrystal.getItem()).setAttributes(newCrystal, attr);
-                ItemUtils.dropItemNaturally(this.getWorld(), this.getPos().getX() + 0.5, this.getPos().getY() + 0.8, this.getPos().getZ() + 0.5, newCrystal);
-            }
-
             if (newAttributes == null) {
                 this.tryPlaceCrystalInPedestal(ItemStack.EMPTY);
             } else {
@@ -564,9 +556,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
 
         this.markForUpdate();
 
-        if (!needsReSync) {
-            this.preventNetworkSync();
-        }
+        this.preventNetworkSync();
     }
 
     //=========================================================================================

@@ -39,25 +39,6 @@ public class CrystalCalculations {
         return value;
     }
 
-    public static float getRitualCrystalFractureChance(int executionTimes, int nonFracturingExecutionTimes) {
-        int fractureExecutions = executionTimes - nonFracturingExecutionTimes;
-        if (fractureExecutions <= 0) {
-            return 0F;
-        }
-        return Math.max(1E-6F, fractureExecutions / TICKS_PER_HOUR);
-    }
-
-    // Range: 1.0 - 5.39
-    public static double getRitualEffectCapacityFactor(StarlightReceiverRitualPedestal pedestal,
-                                                       CrystalAttributes attributes) {
-        CalculationContext ctx = CalculationContext.Builder.newBuilder()
-                .fromSource(SOURCE_RITUAL_PEDESTAL.createInstance(pedestal))
-                .addUsage(USE_RITUAL_CAPACITY)
-                .build();
-
-        return calculate(1.0, attributes, ctx);
-    }
-
     // Range: 1.0 - 2.73
     public static double getRitualEffectRangeFactor(StarlightReceiverRitualPedestal pedestal, CrystalAttributes attributes) {
         return getRitualEffectRangeFactor(SOURCE_RITUAL_PEDESTAL.createInstance(pedestal), attributes);
