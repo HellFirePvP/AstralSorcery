@@ -45,7 +45,7 @@ public class EquipmentSourceProvider extends ModifierSourceProvider<EquipmentMod
         for (EquipmentSlotType slot : EquipmentSlotType.values()) {
             //Items held in offhand will not provide modifers.
             if (slot == EquipmentSlotType.OFFHAND) {
-                return;
+                continue;
             }
 
             ResourceLocation id = AstralSorcery.key("slot_" + slot.getName());
