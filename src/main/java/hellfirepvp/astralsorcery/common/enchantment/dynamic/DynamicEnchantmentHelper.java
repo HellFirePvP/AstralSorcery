@@ -149,10 +149,6 @@ public class DynamicEnchantmentHelper {
                 if (ench == null || !AmuletEnchantmentRegistry.canBeInfluenced(ench)) {
                     continue;
                 }
-                EnchantmentType type = ench.type;
-                if (type != null && !type.canEnchantItem(stack.getItem())) {
-                    continue;
-                }
                 if (!enchantmentLevelMap.containsKey(ench)) { //Means we didn't add the levels on the other iteration
                     copyRet.put(ench, getNewEnchantmentLevel(0, ench, stack, context));
                 }
