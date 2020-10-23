@@ -18,6 +18,9 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
 /**
@@ -31,6 +34,12 @@ public class KeyStepAssist extends KeyPerk implements PlayerTickPerk, CooldownPe
 
     public KeyStepAssist(ResourceLocation name, float x, float y) {
         super(name, x, y);
+    }
+
+    @Override
+    protected void attachListeners(IEventBus bus) {
+        super.attachListeners(bus);
+        bus.addListener(EventPriority.LOWEST, this::onTeleport);
     }
 
     @Override
@@ -64,6 +73,12 @@ public class KeyStepAssist extends KeyPerk implements PlayerTickPerk, CooldownPe
         if (player instanceof ServerPlayerEntity && MiscUtils.isConnectionEstablished((ServerPlayerEntity) player)) {
             PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
             PacketChannel.CHANNEL.sendToPlayer(player, sync);
+        }
+    }
+
+    private void onTeleport(EntityTravelToDimensionEvent event) {
+        if (!event.getEntity().getEntityWorld().isRemote() && event.getEntity() instanceof PlayerEntity) {
+            PerkCooldownHelper.removeAllCooldowns((PlayerEntity) event.getEntity(), LogicalSide.SERVER);
         }
     }
 }
