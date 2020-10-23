@@ -50,6 +50,7 @@ public class EventHelperTemporaryFlight {
     public static boolean allowFlight(PlayerEntity player) {
         return allowFlight(player, 20);
     }
+
     public static boolean allowFlight(PlayerEntity player, int timeout) {
         return temporaryFlight.setOrAddTimeout(timeout, player);
     }

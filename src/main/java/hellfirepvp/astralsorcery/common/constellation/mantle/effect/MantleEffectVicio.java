@@ -68,7 +68,7 @@ public class MantleEffectVicio extends MantleEffect {
     protected void tickClient(PlayerEntity player) {
         super.tickClient(player);
 
-        if (player.isElytraFlying() || (!player.isCreative() && player.abilities.isFlying)) {
+        if (player.isElytraFlying() || (!(player.isCreative() || player.isSpectator()) && player.abilities.isFlying)) {
             if (Minecraft.getInstance().gameSettings.thirdPersonView == 1) {
                 this.playCapeSparkles(player, 0.1F);
             } else {
@@ -83,7 +83,7 @@ public class MantleEffectVicio extends MantleEffect {
     @Override
     @OnlyIn(Dist.CLIENT)
     protected FXFacingParticle spawnFacingParticle(PlayerEntity player, Vector3 at) {
-        if (player.isElytraFlying() || (!player.isCreative() && player.abilities.isFlying)) {
+        if (player.isElytraFlying() || (!(player.isCreative() || player.isSpectator()) && player.abilities.isFlying)) {
             at.subtract(player.getMotion().mul(1.5, 1.5, 1.5));
         }
         return super.spawnFacingParticle(player, at);

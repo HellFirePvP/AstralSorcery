@@ -66,7 +66,7 @@ public class AlignmentChargeHandler implements ITickHandler {
     }
 
     public float getCurrentCharge(PlayerEntity player, LogicalSide side) {
-        if (player.isCreative()) {
+        if (player.isCreative() || player.isSpectator()) {
             return getMaximumCharge(player, side);
         }
         return currentCharge.computeIfAbsent(side, s -> new HashMap<>())
@@ -74,7 +74,7 @@ public class AlignmentChargeHandler implements ITickHandler {
     }
 
     public float getFilledPercentage(PlayerEntity player, LogicalSide side) {
-        if (player.isCreative()) {
+        if (player.isCreative() || player.isSpectator()) {
             return 1F;
         }
         float max = this.getMaximumCharge(player, side);
@@ -83,7 +83,7 @@ public class AlignmentChargeHandler implements ITickHandler {
     }
 
     public boolean hasCharge(PlayerEntity player, LogicalSide side, float charge) {
-        if (player.isCreative()) {
+        if (player.isCreative() || player.isSpectator()) {
             return true;
         }
         float current = this.getCurrentCharge(player, side);
@@ -91,7 +91,7 @@ public class AlignmentChargeHandler implements ITickHandler {
     }
 
     public boolean drainCharge(PlayerEntity player, LogicalSide side, float charge, boolean simulate) {
-        if (player.isCreative()) {
+        if (player.isCreative() || player.isSpectator()) {
             return true;
         }
         if (!this.hasCharge(player, side, charge)) {
