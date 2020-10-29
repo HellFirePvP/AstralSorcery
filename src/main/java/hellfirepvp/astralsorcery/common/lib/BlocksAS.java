@@ -96,6 +96,7 @@ public class BlocksAS {
     public static BlockTreeBeacon                TREE_BEACON;
     public static BlockTreeBeaconComponent       TREE_BEACON_COMPONENT;
     public static BlockCelestialGateway          GATEWAY;
+    public static BlockFountain                  FOUNTAIN;
 
     public static BlockFlareLight                FLARE_LIGHT;
     public static BlockTranslucentBlock          TRANSLUCENT_BLOCK;

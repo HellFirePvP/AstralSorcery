@@ -139,7 +139,9 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         if (this.elements.isEmpty()) {
             return null;
         }
-        if (rand.nextInt(Math.max(0, (this.maxAmount - this.getCount()) / 4) + 1) == 0) {
+        float perc = 1F - (((float) this.getCount()) / this.maxAmount);
+        perc = 0.1F / ((perc / 2F) + 0.1F);
+        if (rand.nextFloat() < perc) {
             return getRandomElement();
         }
         return null;

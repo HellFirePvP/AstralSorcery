@@ -113,6 +113,7 @@ public class RegistryBlocks {
         TREE_BEACON                 = registerBlock(new BlockTreeBeacon());
         TREE_BEACON_COMPONENT       = registerBlock(new BlockTreeBeaconComponent());
         GATEWAY                     = registerBlock(new BlockCelestialGateway());
+        FOUNTAIN                    = registerBlock(new BlockFountain());
 
         FLARE_LIGHT         = registerBlock(new BlockFlareLight());
         TRANSLUCENT_BLOCK   = registerBlock(new BlockTranslucentBlock());

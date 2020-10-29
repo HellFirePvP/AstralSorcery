@@ -30,6 +30,7 @@ public class TileEntityTypesAS {
     public static TileEntityType<TileCelestialGateway> GATEWAY;
     public static TileEntityType<TileChalice> CHALICE;
     public static TileEntityType<TileCollectorCrystal> COLLECTOR_CRYSTAL;
+    public static TileEntityType<TileFountain> FOUNTAIN;
     public static TileEntityType<TileGemCrystals> GEM_CRYSTAL_CLUSTER;
     public static TileEntityType<TileIlluminator> ILLUMINATOR;
     public static TileEntityType<TileInfuser> INFUSER;

@@ -10,10 +10,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.custom.RecipeDyeableChangeColor;
-import hellfirepvp.astralsorcery.common.crafting.serializer.BlockTransmutationSerializer;
-import hellfirepvp.astralsorcery.common.crafting.serializer.LiquidInfusionSerializer;
-import hellfirepvp.astralsorcery.common.crafting.serializer.SimpleAltarRecipeSerializer;
-import hellfirepvp.astralsorcery.common.crafting.serializer.WellRecipeSerializer;
+import hellfirepvp.astralsorcery.common.crafting.serializer.*;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -36,6 +33,7 @@ public class RegistryRecipeSerializers {
         LIQUID_INFUSION_SERIALIZER = register(new LiquidInfusionSerializer());
         BLOCK_TRANSMUTATION_SERIALIZER = register(new BlockTransmutationSerializer());
         ALTAR_RECIPE_SERIALIZER = register(new SimpleAltarRecipeSerializer());
+        LIQUID_INTERACTION_SERIALIZER = register(new LiquidInteractionSerializer());
 
         CUSTOM_CHANGE_WAND_COLOR_SERIALIZER = register(new RecipeDyeableChangeColor.IlluminationWandColorSerializer());
         CUSTOM_CHANGE_GATEWAY_COLOR_SERIALIZER = register(new RecipeDyeableChangeColor.CelestialGatewayColorSerializer());

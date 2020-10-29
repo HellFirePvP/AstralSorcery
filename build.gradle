@@ -105,11 +105,6 @@ repositories {
         url = "https://dvs1.progwml6.com/files/maven"
     }
 
-
-    maven {
-        name 'Quark @ jareds maven'
-        url = "https://maven.blamejared.com"
-    }
 }
 
 dependencies {
@@ -124,12 +119,6 @@ dependencies {
 
     compileOnly fg.deobf('mezz.jei:jei-1.15.2:6.0.2.12')
     runtimeOnly fg.deobf('mezz.jei:jei-1.15.2:6.0.2.12')
-
-    compileOnly fg.deobf('vazkii.autoreglib:AutoRegLib:1.5-40.79')
-    runtimeOnly fg.deobf('vazkii.autoreglib:AutoRegLib:1.5-40.79')
-
-    compileOnly fg.deobf('vazkii.quark:Quark:r2.1-245.1170')
-    runtimeOnly fg.deobf('vazkii.quark:Quark:r2.1-245.1170')
 
 }
 

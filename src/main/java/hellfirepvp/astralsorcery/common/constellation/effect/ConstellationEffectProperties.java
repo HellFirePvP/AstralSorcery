@@ -24,7 +24,6 @@ public class ConstellationEffectProperties {
     private double potency = 1;
     private double effectAmplifier = 1;
     private boolean corrupted = false;
-    private double fracturationLower = 1F, fracturationRate = 1F;
 
     public ConstellationEffectProperties(double size) {
         this.size = size;
@@ -50,14 +49,6 @@ public class ConstellationEffectProperties {
         return corrupted;
     }
 
-    public double getFracturationLowerBoundaryMultiplier() {
-        return fracturationLower;
-    }
-
-    public double getFracturationRate() {
-        return fracturationRate;
-    }
-
     public ConstellationEffectProperties modify(IMinorConstellation trait) {
         if (trait != null) {
             if (trait.equals(ConstellationsAS.gelu)) {
@@ -69,19 +60,12 @@ public class ConstellationEffectProperties {
                 size *= 0.4F;
             }
             if (trait.equals(ConstellationsAS.alcara)) {
-                fracturationLower *= 0.015F;
-                fracturationRate *= 700F;
-
                 size *= 1.5F;
-                effectAmplifier *= 2.5F;
                 corrupted = true;
             }
             if (trait.equals(ConstellationsAS.vorux)) {
-                fracturationLower *= 0.15F;
-                fracturationRate *= 400F;
-
-                potency *= 1.2F;
-                effectAmplifier *= 5F;
+                potency *= 4F;
+                effectAmplifier *= 0.8F;
                 size *= 2F;
             }
         }

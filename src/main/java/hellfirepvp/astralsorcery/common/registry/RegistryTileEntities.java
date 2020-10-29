@@ -43,6 +43,7 @@ public class RegistryTileEntities {
         GATEWAY = registerTile(TileCelestialGateway.class, BlocksAS.GATEWAY);
         CHALICE = registerTile(TileChalice.class, BlocksAS.CHALICE);
         COLLECTOR_CRYSTAL = registerTile(TileCollectorCrystal.class, BlocksAS.ROCK_COLLECTOR_CRYSTAL, BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
+        FOUNTAIN = registerTile(TileFountain.class, BlocksAS.FOUNTAIN);
         GEM_CRYSTAL_CLUSTER = registerTile(TileGemCrystals.class, BlocksAS.GEM_CRYSTAL_CLUSTER);
         ILLUMINATOR = registerTile(TileIlluminator.class, BlocksAS.ILLUMINATOR);
         INFUSER = registerTile(TileInfuser.class, BlocksAS.INFUSER);

@@ -98,4 +98,10 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
         return MiscUtils.iterativeSearch(this.getAllRecipes(), (recipe) -> this.matchFct.test(recipe, context));
     }
 
+    @Nullable
+    public Collection<T> findMatchingRecipes(R context) {
+        return this.getAllRecipes().stream()
+                .filter((recipe) -> this.matchFct.test(recipe, context))
+                .collect(Collectors.toList());
+    }
 }

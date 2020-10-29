@@ -108,8 +108,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver<
         double maxDrain = 15;
         maxDrain *= CrystalCalculations.getRitualCostReductionFactor(this, this.attributes);
         maxDrain /= Math.max(1F, ((float) (this.getMirrorCount() - 1)) * 0.33F);
-        collectedStarlight *= properties.getPotency();
-        int ritualStrength = MathHelper.floor(collectedStarlight / maxDrain);
+        int ritualStrength = MathHelper.floor(collectedStarlight * properties.getPotency() / maxDrain);
 
         BlockPos to = getLocationPos();
         if (this.ritualLinkPos != null) {
@@ -126,6 +125,9 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver<
 
         ritualStrength = MathHelper.floor(ritualStrength * properties.getEffectAmplifier());
         double executeTimes = Math.atan(ritualStrength / 10.0) * 4.0;
+        if (properties.isCorrupted()) {
+            executeTimes *= Math.max(rand.nextDouble() * 1.4, 0.2);
+        }
         while (executeTimes > 0) {
             boolean execute = executeTimes >= 1 || rand.nextFloat() < executeTimes;
             executeTimes--;

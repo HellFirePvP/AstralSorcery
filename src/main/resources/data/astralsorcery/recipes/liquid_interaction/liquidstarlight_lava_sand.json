@@ -1,0 +1,14 @@
+{
+  "type": "astralsorcery:liquid_interaction",
+  "reactant1": "astralsorcery:liquid_starlight",
+  "reactant1Amount": 10,
+  "reactant2": "minecraft:lava",
+  "reactant2Amount": 10,
+  "chanceConsumeReactant1": 0.15,
+  "chanceConsumeReactant2": 1.0,
+  "weight": 160,
+  "output": {
+    "item": "minecraft:sand",
+    "count": 1
+  }
+}

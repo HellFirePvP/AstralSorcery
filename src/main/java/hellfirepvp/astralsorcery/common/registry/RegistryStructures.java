@@ -39,6 +39,8 @@ public class RegistryStructures {
         STRUCT_SPECTRAL_RELAY = register(new PatternSpectralRelay());
         STRUCT_ATTUNEMENT_ALTAR = register(new PatternAttunementAltar());
         STRUCT_CELESTIAL_GATEWAY = register(new PatternCelestialGateway());
+        STRUCT_SINGULARITY = register(new PatternSingularity());
+        STRUCT_FOUNTAIN = register(new PatternFountain());
     }
 
     private static <T extends MatchableStructure> T register(T struct) {

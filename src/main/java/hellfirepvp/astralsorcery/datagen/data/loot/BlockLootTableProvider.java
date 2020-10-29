@@ -197,6 +197,7 @@ public class BlockLootTableProvider extends BlockLootTables {
         this.registerLootTable(TREE_BEACON_COMPONENT, LootTable.builder());
         this.registerLootTable(GATEWAY, BlockLootTables.droppingWithName(GATEWAY)
                 .acceptFunction(CopyGatewayColor.builder()));
+        this.registerDropSelfLootTable(FOUNTAIN);
 
         this.registerLootTable(FLARE_LIGHT, LootTable.builder());
         this.registerLootTable(TRANSLUCENT_BLOCK, LootTable.builder());

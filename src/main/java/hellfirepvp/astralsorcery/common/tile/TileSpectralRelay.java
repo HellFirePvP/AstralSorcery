@@ -236,7 +236,7 @@ public class TileSpectralRelay extends TileEntityTick {
     }
 
     private void updateAltarPos() {
-        Set<BlockPos> altarPositions = BlockDiscoverer.searchForTileEntitiesAround(getWorld(), getPos(), 16, tile -> tile instanceof TileAltar);
+        Set<BlockPos> altarPositions = BlockDiscoverer.searchForTileEntitiesAround(getWorld(), getPos(), 8, tile -> tile instanceof TileAltar);
 
         BlockPos closestAltar = null;
         for (BlockPos other : altarPositions) {
