@@ -1,0 +1,15 @@
+{
+    "parent": "block/block",
+    "loader": "forge:multi-layer",
+    "layers": {
+        "solid": {
+            "parent": "astralsorcery:block/fountain_prime_liquid_solid"
+        },
+        "translucent": {
+            "parent": "astralsorcery:block/fountain_prime_liquid_translucent"
+        }
+    },
+    "textures": {
+        "particle": "astralsorcery:block/fountain_prime_base"
+    }
+}

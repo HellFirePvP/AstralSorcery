@@ -74,7 +74,7 @@ public class CategoryAltar extends JEICategory<SimpleAltarRecipe> {
     }
 
     @Override
-    public Collection<SimpleAltarRecipe> getRecipes() {
+    public List<SimpleAltarRecipe> getRecipes() {
         return RecipeTypesAS.TYPE_ALTAR.getRecipes(recipe -> recipe.getAltarType().equals(this.getAltarType()));
     }
 

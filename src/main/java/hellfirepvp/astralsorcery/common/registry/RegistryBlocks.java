@@ -28,6 +28,9 @@ import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarDiscovery;
 import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarRadiance;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockCelestialCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockRockCollectorCrystal;
+import hellfirepvp.astralsorcery.common.block.tile.fountain.BlockFountainPrimeLiquid;
+import hellfirepvp.astralsorcery.common.block.tile.fountain.BlockFountainPrimeOre;
+import hellfirepvp.astralsorcery.common.block.tile.fountain.BlockFountainPrimeVortex;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -114,6 +117,9 @@ public class RegistryBlocks {
         TREE_BEACON_COMPONENT       = registerBlock(new BlockTreeBeaconComponent());
         GATEWAY                     = registerBlock(new BlockCelestialGateway());
         FOUNTAIN                    = registerBlock(new BlockFountain());
+        FOUNTAIN_PRIME_LIQUID       = registerBlock(new BlockFountainPrimeLiquid());
+        FOUNTAIN_PRIME_VORTEX       = registerBlock(new BlockFountainPrimeVortex());
+        FOUNTAIN_PRIME_ORE          = registerBlock(new BlockFountainPrimeOre());
 
         FLARE_LIGHT         = registerBlock(new BlockFlareLight());
         TRANSLUCENT_BLOCK   = registerBlock(new BlockTranslucentBlock());

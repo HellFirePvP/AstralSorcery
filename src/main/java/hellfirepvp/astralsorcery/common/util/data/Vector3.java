@@ -18,6 +18,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -265,13 +267,6 @@ public class Vector3 {
         return (float) Math.acos(dot);
     }
 
-    public Vector3 midpoint(Vector3 other) {
-        this.x = ((this.x + other.x) / 2.0D);
-        this.y = ((this.y + other.y) / 2.0D);
-        this.z = ((this.z + other.z) / 2.0D);
-        return this;
-    }
-
     public Vector3 getMidpoint(Vector3 other) {
         double x = (this.x + other.x) / 2.0D;
         double y = (this.y + other.y) / 2.0D;
@@ -464,6 +459,17 @@ public class Vector3 {
 
     public Vector3 vectorFromHereTo(double tX, double tY, double tZ) {
         return new Vector3(tX - x, tY - y, tZ - z);
+    }
+
+    public void stepAlongVector(double stepWidth, Consumer<Vector3> consumer) {
+        int steps = (int) Math.round(this.length() / stepWidth);
+        Vector3 step = this.clone().divide(steps);
+        Vector3 at = new Vector3();
+        consumer.accept(at.clone());
+        for (int i = 0; i < steps; i++) {
+            at.add(step);
+            consumer.accept(at.clone());
+        }
     }
 
     //copy & converts to polar coordinates (in degrees)

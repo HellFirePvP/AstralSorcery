@@ -7,8 +7,13 @@
   "chanceConsumeReactant1": 0.0,
   "chanceConsumeReactant2": 0.0,
   "weight": 6,
-  "output": {
-    "item": "minecraft:cobblestone",
-    "count": 1
+  "result": {
+    "id": "astralsorcery:drop_item",
+    "data": {
+      "output": {
+        "item": "minecraft:cobblestone",
+        "count": 1
+      }
+    }
   }
 }

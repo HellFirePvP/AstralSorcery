@@ -43,7 +43,13 @@ public class PatternEnhancedCollectorCrystal extends PatternBlockArray {
         BlockState engraved = BlocksAS.MARBLE_ENGRAVED.getDefaultState();
 
         addBlockCube(raw, -1, -5, -1, 1, -5, 1);
-        addBlockCube(Blocks.AIR.getDefaultState(), 1, 1, 1, -1, -1, -1);
+        for (int xx = -1; xx <= 1; xx++) {
+            for (int zz = -1; zz <= 1; zz++) {
+                for (int yy = -1; yy <= 1; yy++) {
+                    this.addBlock(MatchableState.REQUIRES_AIR, xx, yy, zz);
+                }
+            }
+        }
         for (BlockPos offset : TileCollectorCrystal.OFFSETS_LIQUID_STARLIGHT) {
             addBlock(BlocksAS.FLUID_LIQUID_STARLIGHT.getDefaultState(), offset.getX(), offset.getY(), offset.getZ());
         }

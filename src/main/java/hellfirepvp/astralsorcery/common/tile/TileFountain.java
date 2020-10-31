@@ -1,7 +1,12 @@
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
+import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
+import hellfirepvp.astralsorcery.common.tile.base.TileRequiresMultiblock;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -14,5 +19,20 @@ public class TileFountain extends TileEntityTick {
 
     public TileFountain() {
         super(TileEntityTypesAS.FOUNTAIN);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (!getWorld().isRemote()) {
+            this.hasMultiblock();
+        }
+    }
+
+    @Nullable
+    @Override
+    public StructureType getRequiredStructureType() {
+        return StructureTypesAS.PTYPE_FOUNTAIN;
     }
 }

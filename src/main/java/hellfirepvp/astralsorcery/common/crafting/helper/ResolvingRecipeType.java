@@ -61,7 +61,7 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
     }
 
     @Nonnull
-    public Collection<T> getAllRecipes() {
+    public List<T> getAllRecipes() {
         RecipeManager mgr = RecipeHelper.getRecipeManager();
         if (mgr == null) {
             return Collections.emptyList();
@@ -75,7 +75,7 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
     }
 
     @Nonnull
-    public Collection<T> getRecipes(Predicate<T> test) {
+    public List<T> getRecipes(Predicate<T> test) {
         return this.getAllRecipes().stream()
                 .filter(test)
                 .collect(Collectors.toList());
@@ -98,8 +98,8 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
         return MiscUtils.iterativeSearch(this.getAllRecipes(), (recipe) -> this.matchFct.test(recipe, context));
     }
 
-    @Nullable
-    public Collection<T> findMatchingRecipes(R context) {
+    @Nonnull
+    public List<T> findMatchingRecipes(R context) {
         return this.getAllRecipes().stream()
                 .filter((recipe) -> this.matchFct.test(recipe, context))
                 .collect(Collectors.toList());

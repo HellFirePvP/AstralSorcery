@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarDiscovery;
 import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarRadiance;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockCelestialCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.tile.crystal.BlockRockCollectorCrystal;
+import hellfirepvp.astralsorcery.common.block.tile.fountain.BlockFountainPrime;
 import hellfirepvp.astralsorcery.common.fluid.BlockLiquidStarlight;
 
 /**
@@ -97,6 +98,9 @@ public class BlocksAS {
     public static BlockTreeBeaconComponent       TREE_BEACON_COMPONENT;
     public static BlockCelestialGateway          GATEWAY;
     public static BlockFountain                  FOUNTAIN;
+    public static BlockFountainPrime             FOUNTAIN_PRIME_LIQUID;
+    public static BlockFountainPrime             FOUNTAIN_PRIME_VORTEX;
+    public static BlockFountainPrime             FOUNTAIN_PRIME_ORE;
 
     public static BlockFlareLight                FLARE_LIGHT;
     public static BlockTranslucentBlock          TRANSLUCENT_BLOCK;

@@ -67,7 +67,7 @@ public class CategoryWell extends JEICategory<WellLiquefaction> {
     }
 
     @Override
-    public Collection<WellLiquefaction> getRecipes() {
+    public List<WellLiquefaction> getRecipes() {
         return RecipeTypesAS.TYPE_WELL.getAllRecipes();
     }
 

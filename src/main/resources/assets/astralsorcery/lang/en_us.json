@@ -7,11 +7,14 @@
 
   "jei.category.astralsorcery.well": "Lightwell",
   "jei.category.astralsorcery.infuser": "Starlight Infusion",
+  "jei.category.astralsorcery.interaction": "Liquid Interaction",
   "jei.category.astralsorcery.transmutation": "Starlight Transmutation",
   "jei.category.astralsorcery.altar_attunement": "Starlight Crafting Altar",
   "jei.category.astralsorcery.altar_constellation": "Celestial Altar",
   "jei.category.astralsorcery.altar_discovery": "Luminous Crafting Table",
   "jei.category.astralsorcery.altar_trait": "Iridescent Altar",
+
+  "jei.astralsorcery.tip.chance": "%s%%",
 
   "advancements.astralsorcery.attune_crystal.title": "Picking up good vibrations",
   "advancements.astralsorcery.attune_crystal.desc": "Attune a crystal to a Constellation.",
@@ -59,6 +62,8 @@
   "structure.astralsorcery.pattern_enhanced_collector_crystal.name": "Enhanced Collector Crystal",
   "structure.astralsorcery.pattern_spectral_relay.name": "Astral Relay",
   "structure.astralsorcery.pattern_attunement_altar.name": "Attunement Altar",
+  "structure.astralsorcery.pattern_singularity.name": "Arnima Singularity",
+  "structure.astralsorcery.pattern_fountain.name": "Evershifting Fountain",
 
   "astralsorcery.misc.ctrlcopy": "CTRL + leftclick to copy",
   "astralsorcery.misc.ctrlcopy.copied": "Copied: %s",
@@ -656,11 +661,10 @@
   "block.astralsorcery.gem_crystal_cluster.night": "Fengarum Crystal Cluster",
   "block.astralsorcery.gem_crystal_cluster.sky": "Ourium Crystal Cluster",
   "block.astralsorcery.singularity": "Arnima Singularity",
-  "block.astralsorcery.bore": "Evershifting Fountain",
-  "block.astralsorcery.bore_head": "Prime",
-  "block.astralsorcery.bore_head.liquid": "Neromantic Prime",
-  "block.astralsorcery.bore_head.vortex": "Fysallidic Prime",
-  "block.astralsorcery.bore_head.ore": "Petromantic Prime",
+  "block.astralsorcery.fountain": "Evershifting Fountain",
+  "block.astralsorcery.fountain_prime_liquid": "Neromantic Prime",
+  "block.astralsorcery.fountain_prime_vortex": "Fysallidic Prime",
+  "block.astralsorcery.fountain_prime_ore": "Petromantic Prime",
 
   "astralsorcery.journal.constellation.enchantments": "Refraction Table:",
   "astralsorcery.journal.constellation.ritual": "Ritual Effect:",

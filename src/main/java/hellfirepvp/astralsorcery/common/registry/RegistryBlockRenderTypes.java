@@ -90,6 +90,10 @@ public class RegistryBlockRenderTypes {
         setRenderLayer(TREE_BEACON,                 RenderType.getSolid());
         setRenderLayer(TREE_BEACON_COMPONENT,       RenderType.getTranslucent());
         setRenderLayer(GATEWAY,                     RenderType.getSolid(), RenderType.getTranslucent());
+        setRenderLayer(FOUNTAIN,                    RenderType.getSolid());
+        setRenderLayer(FOUNTAIN_PRIME_LIQUID,       RenderType.getSolid(), RenderType.getTranslucent());
+        setRenderLayer(FOUNTAIN_PRIME_VORTEX,       RenderType.getSolid(), RenderType.getTranslucent());
+        setRenderLayer(FOUNTAIN_PRIME_ORE,          RenderType.getSolid(), RenderType.getTranslucent());
 
         setRenderLayer(FLARE_LIGHT,       RenderType.getTranslucent());
         setRenderLayer(TRANSLUCENT_BLOCK, RenderType.getTranslucent());

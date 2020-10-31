@@ -1,11 +1,15 @@
 package hellfirepvp.astralsorcery.common.structure;
 
+import hellfirepvp.astralsorcery.common.block.marble.BlockMarblePillar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
+import hellfirepvp.observerlib.api.block.MatchableState;
+import hellfirepvp.observerlib.api.block.SimpleMatchableBlock;
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,8 +28,21 @@ public class PatternFountain extends PatternBlockArray {
 
     private void makeStructure() {
         BlockState runed = BlocksAS.MARBLE_RUNED.getDefaultState();
-        BlockState pillar = BlocksAS.MARBLE_PILLAR.getDefaultState();
         BlockState sooty = BlocksAS.BLACK_MARBLE_RAW.getDefaultState();
+
+        for (int xx = -3; xx <= 3; xx++) {
+            for (int zz = -3; zz <= 3; zz++) {
+                for (int yy = -6; yy <= 3; yy++) {
+                    if (Math.abs(xx) == 3 && Math.abs(zz) == 3) {
+                        continue; //Exclude corners
+                    }
+                    if (xx == 0 && zz == 0 && Math.abs(yy) == 1) {
+                        continue; //Exclude chalice and prime
+                    }
+                    this.addBlock(MatchableState.REQUIRES_AIR, xx, yy, zz);
+                }
+            }
+        }
 
         addBlock(BlocksAS.FOUNTAIN, 0, 0, 0);
 
@@ -34,25 +51,25 @@ public class PatternFountain extends PatternBlockArray {
         addBlock(sooty,  0,  0,  4);
         addBlock(sooty,  0,  0, -4);
 
-        addBlock(pillar, 4,  1,  0);
-        addBlock(pillar, 4,  2,  0);
-        addBlock(pillar, 4, -1,  0);
-        addBlock(pillar, 4, -2,  0);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM), 4,  1,  0);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP), 4,  2,  0);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP), 4, -1,  0);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM), 4, -2,  0);
 
-        addBlock(pillar,-4,  1,  0);
-        addBlock(pillar,-4,  2,  0);
-        addBlock(pillar,-4, -1,  0);
-        addBlock(pillar,-4, -2,  0);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM),-4,  1,  0);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP),-4,  2,  0);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP),-4, -1,  0);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM),-4, -2,  0);
 
-        addBlock(pillar, 0,  1,  4);
-        addBlock(pillar, 0,  2,  4);
-        addBlock(pillar, 0, -1,  4);
-        addBlock(pillar, 0, -2,  4);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM), 0,  1,  4);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP), 0,  2,  4);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP), 0, -1,  4);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM), 0, -2,  4);
 
-        addBlock(pillar, 0,  1, -4);
-        addBlock(pillar, 0,  2, -4);
-        addBlock(pillar, 0, -1, -4);
-        addBlock(pillar, 0, -2, -4);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM), 0,  1, -4);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP), 0,  2, -4);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.TOP), 0, -1, -4);
+        addBlock(getPillarState(BlockMarblePillar.PillarType.BOTTOM), 0, -2, -4);
 
         addBlock(runed,  4,  0,  1);
         addBlock(runed,  4,  0,  2);
@@ -78,21 +95,15 @@ public class PatternFountain extends PatternBlockArray {
         addBlock(runed,  3,  0, -3);
         addBlock(runed, -3,  0, -3);
         addBlock(runed, -3,  0,  3);
+    }
 
-        for (int yy = -2; yy <= 2; yy++) {
-            for (int xx = -3; xx <= 3; xx++) {
-                for (int zz = -3; zz <= 3; zz++) {
-                    if(Math.abs(xx) == 3 && Math.abs(zz) == 3) continue; //corners
-
-                    if(xx == 0 && zz == 0) {
-                        if (yy == -2) {
-                            addBlock(Blocks.AIR, xx, yy, zz);
-                        }
-                    } else {
-                        addBlock(Blocks.AIR, xx, yy, zz);
-                    }
-                }
+    private MatchableState getPillarState(BlockMarblePillar.PillarType type) {
+        return new SimpleMatchableBlock(BlocksAS.MARBLE_PILLAR) {
+            @Nonnull
+            @Override
+            public BlockState getDescriptiveState(long tick) {
+                return BlocksAS.MARBLE_PILLAR.getDefaultState().with(BlockMarblePillar.PILLAR_TYPE, type);
             }
-        }
+        };
     }
 }

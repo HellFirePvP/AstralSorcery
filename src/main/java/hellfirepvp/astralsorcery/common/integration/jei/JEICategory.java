@@ -12,6 +12,7 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
@@ -26,7 +27,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 05.09.2020 / 12:38
  */
-public abstract class JEICategory<T> implements IRecipeCategory<T> {
+public abstract class JEICategory<T extends IRecipe<?>> implements IRecipeCategory<T> {
 
     private final String locTitle;
     private final ResourceLocation uid;
@@ -56,7 +57,7 @@ public abstract class JEICategory<T> implements IRecipeCategory<T> {
         group.init(index, false, x + 1, y + 1, 16, 16, 1000, false, null);
     }
 
-    public abstract Collection<T> getRecipes();
+    public abstract List<T> getRecipes();
 
     @Override
     public ResourceLocation getUid() {

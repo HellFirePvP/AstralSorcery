@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInteraction;
+import hellfirepvp.astralsorcery.common.crafting.recipe.interaction.InteractionResult;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +27,7 @@ public class LiquidInteractionBuilder extends CustomRecipeBuilder<LiquidInteract
     private FluidStack reactant1 = FluidStack.EMPTY, reactant2 = FluidStack.EMPTY;
     private float chanceConsume1 = 1F, chanceConsume2 = 1F;
     private int weight = 1;
-    private ItemStack output = ItemStack.EMPTY;
+    private InteractionResult result = null;
 
     private LiquidInteractionBuilder(ResourceLocation id) {
         this.id = id;
@@ -65,8 +66,8 @@ public class LiquidInteractionBuilder extends CustomRecipeBuilder<LiquidInteract
         return this;
     }
 
-    public LiquidInteractionBuilder setOutput(ItemStack output) {
-        this.output = output;
+    public LiquidInteractionBuilder setResult(InteractionResult result) {
+        this.result = result;
         return this;
     }
 
@@ -82,13 +83,13 @@ public class LiquidInteractionBuilder extends CustomRecipeBuilder<LiquidInteract
         if (this.weight <= 0) {
             throw new IllegalArgumentException("Weight has to be positive!");
         }
-        if (this.output.isEmpty()) {
-            throw new IllegalArgumentException("Output must not be empty!");
+        if (this.result == null) {
+            throw new IllegalArgumentException("A result must be defined!");
         }
         return new LiquidInteraction(this.id,
                 this.reactant1, this.chanceConsume1,
                 this.reactant2, this.chanceConsume2,
-                this.weight, this.output);
+                this.weight, this.result);
     }
 
     @Override

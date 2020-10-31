@@ -59,7 +59,7 @@ public class CategoryTransmutation extends JEICategory<BlockTransmutation> {
     }
 
     @Override
-    public Collection<BlockTransmutation> getRecipes() {
+    public List<BlockTransmutation> getRecipes() {
         return RecipeTypesAS.TYPE_BLOCK_TRANSMUTATION.getAllRecipes();
     }
 

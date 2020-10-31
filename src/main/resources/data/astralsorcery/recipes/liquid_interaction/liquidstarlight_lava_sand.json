@@ -5,10 +5,15 @@
   "reactant2": "minecraft:lava",
   "reactant2Amount": 10,
   "chanceConsumeReactant1": 0.15,
-  "chanceConsumeReactant2": 1.0,
-  "weight": 160,
-  "output": {
-    "item": "minecraft:sand",
-    "count": 1
+  "chanceConsumeReactant2": 0.15,
+  "weight": 49,
+  "result": {
+    "id": "astralsorcery:drop_item",
+    "data": {
+      "output": {
+        "item": "minecraft:sand",
+        "count": 1
+      }
+    }
   }
 }

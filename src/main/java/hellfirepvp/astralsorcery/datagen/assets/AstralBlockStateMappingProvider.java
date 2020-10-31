@@ -146,6 +146,10 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
         this.simpleBlockState(BlocksAS.TREE_BEACON);
         this.simpleBlockState(BlocksAS.TREE_BEACON_COMPONENT, this.modelNothing());
         this.multiLayerBlockState(BlocksAS.GATEWAY);
+        this.simpleBlockState(BlocksAS.FOUNTAIN);
+        this.multiLayerBlockState(BlocksAS.FOUNTAIN_PRIME_LIQUID);
+        this.multiLayerBlockState(BlocksAS.FOUNTAIN_PRIME_VORTEX);
+        this.multiLayerBlockState(BlocksAS.FOUNTAIN_PRIME_ORE);
 
         this.getVariantBuilder(BlocksAS.FLARE_LIGHT).forAllStates(state -> ArrayUtils.toArray(new ConfiguredModel(this.modelNothing())));
         this.simpleBlockState(BlocksAS.TRANSLUCENT_BLOCK, this.modelNothing());

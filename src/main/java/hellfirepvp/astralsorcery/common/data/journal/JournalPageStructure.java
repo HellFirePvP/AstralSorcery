@@ -29,9 +29,9 @@ import javax.annotation.Nullable;
  */
 public class JournalPageStructure implements JournalPage {
 
-    private BlockArray structure;
-    private ITextComponent name;
-    private Vector3 shift;
+    private final BlockArray structure;
+    private final ITextComponent name;
+    private final Vector3 shift;
 
     public JournalPageStructure(BlockArray struct) {
         this(struct, null);

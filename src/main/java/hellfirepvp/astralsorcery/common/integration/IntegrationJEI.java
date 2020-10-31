@@ -24,9 +24,12 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -46,6 +49,7 @@ public class IntegrationJEI implements IModPlugin {
     public static final ResourceLocation CATEGORY_ALTAR_DISCOVERY = AstralSorcery.key("altar_discovery");
     public static final ResourceLocation CATEGORY_ALTAR_TRAIT = AstralSorcery.key("altar_trait");
     public static final ResourceLocation CATEGORY_INFUSER = AstralSorcery.key("infuser");
+    public static final ResourceLocation CATEGORY_LIQUID_INTERACTION = AstralSorcery.key("interaction");
     public static final ResourceLocation CATEGORY_TRANSMUTATION = AstralSorcery.key("transmutation");
     public static final ResourceLocation CATEGORY_WELL = AstralSorcery.key("well");
 
@@ -75,6 +79,7 @@ public class IntegrationJEI implements IModPlugin {
             CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_CONSTELLATION, "altar_constellation", BlocksAS.ALTAR_CONSTELLATION, guiHelper));
             CATEGORIES.add(new CategoryAltar(CATEGORY_ALTAR_TRAIT, "altar_trait", BlocksAS.ALTAR_RADIANCE, guiHelper));
             CATEGORIES.add(new CategoryInfuser(guiHelper));
+            CATEGORIES.add(new CategoryLiquidInteraction(guiHelper));
             CATEGORIES.add(new CategoryTransmutation(guiHelper));
             CATEGORIES.add(new CategoryWell(guiHelper));
         }
@@ -84,7 +89,11 @@ public class IntegrationJEI implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
-        CATEGORIES.forEach(category -> registry.addRecipes(category.getRecipes(), category.getUid()));
+        CATEGORIES.forEach(category -> {
+            List<? extends IRecipe<?>> recipes = category.getRecipes();
+            recipes.sort(Comparator.comparing(recipe -> recipe.getId().toString()));
+            registry.addRecipes(recipes, category.getUid());
+        });
     }
 
     @Override
@@ -94,6 +103,7 @@ public class IntegrationJEI implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.ALTAR_CONSTELLATION), CATEGORY_ALTAR_CONSTELLATION);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.ALTAR_RADIANCE), CATEGORY_ALTAR_TRAIT);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.INFUSER), CATEGORY_INFUSER);
+        registry.addRecipeCatalyst(new ItemStack(BlocksAS.CHALICE), CATEGORY_LIQUID_INTERACTION);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.LENS), CATEGORY_TRANSMUTATION);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.WELL), CATEGORY_WELL);
     }

@@ -2,9 +2,12 @@ package hellfirepvp.astralsorcery.datagen.data.recipes.interaction;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.builder.LiquidInteractionBuilder;
+import hellfirepvp.astralsorcery.common.crafting.recipe.interaction.ResultDropItem;
+import hellfirepvp.astralsorcery.common.crafting.recipe.interaction.ResultSpawnEntity;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -29,28 +32,30 @@ public class InteractionRecipeProvider {
                 .setReactant2(new FluidStack(Fluids.LAVA, 10))
                 .setChanceConsumeReactant2(0F)
                 .setWeight(6)
-                .setOutput(new ItemStack(Items.COBBLESTONE))
+                .setResult(ResultDropItem.dropItem(new ItemStack(Items.COBBLESTONE)))
                 .build(registrar);
         LiquidInteractionBuilder.builder(AstralSorcery.key("water_lava_stone"))
                 .setReactant1(new FluidStack(Fluids.WATER, 10))
-                .setChanceConsumeReactant1(0.2F)
+                .setChanceConsumeReactant1(0.1F)
                 .setReactant2(new FluidStack(Fluids.LAVA, 10))
-                .setChanceConsumeReactant2(0.2F)
+                .setChanceConsumeReactant2(0.1F)
                 .setWeight(3)
-                .setOutput(new ItemStack(Items.STONE))
+                .setResult(ResultDropItem.dropItem(new ItemStack(Items.STONE)))
                 .build(registrar);
         LiquidInteractionBuilder.builder(AstralSorcery.key("water_lava_obsidian"))
-                .setReactant1(new FluidStack(Fluids.WATER, 10))
-                .setReactant2(new FluidStack(Fluids.LAVA, 10))
+                .setReactant1(new FluidStack(Fluids.WATER, 100))
+                .setChanceConsumeReactant1(0.5F)
+                .setReactant2(new FluidStack(Fluids.LAVA, 100))
+                .setChanceConsumeReactant2(0.5F)
                 .setWeight(1)
-                .setOutput(new ItemStack(Items.OBSIDIAN))
+                .setResult(ResultDropItem.dropItem(new ItemStack(Items.OBSIDIAN)))
                 .build(registrar);
 
         // LS/Water
         LiquidInteractionBuilder.builder(AstralSorcery.key("liquidstarlight_water_ice"))
                 .setReactant1(new FluidStack(FluidsAS.LIQUID_STARLIGHT_SOURCE, 10))
                 .setReactant2(new FluidStack(Fluids.WATER, 10))
-                .setOutput(new ItemStack(Items.ICE))
+                .setResult(ResultDropItem.dropItem(new ItemStack(Items.ICE)))
                 .build(registrar);
 
         // LS/Lava
@@ -58,15 +63,17 @@ public class InteractionRecipeProvider {
                 .setReactant1(new FluidStack(FluidsAS.LIQUID_STARLIGHT_SOURCE, 10))
                 .setChanceConsumeReactant1(0.15F)
                 .setReactant2(new FluidStack(Fluids.LAVA, 10))
-                .setChanceConsumeReactant1(0.15F)
-                .setWeight(160)
-                .setOutput(new ItemStack(Items.SAND))
+                .setChanceConsumeReactant2(0.15F)
+                .setWeight(49)
+                .setResult(ResultDropItem.dropItem(new ItemStack(Items.SAND)))
                 .build(registrar);
         LiquidInteractionBuilder.builder(AstralSorcery.key("liquidstarlight_lava_aquamarine"))
                 .setReactant1(new FluidStack(FluidsAS.LIQUID_STARLIGHT_SOURCE, 10))
+                .setChanceConsumeReactant1(0.5F)
                 .setReactant2(new FluidStack(Fluids.LAVA, 10))
+                .setChanceConsumeReactant2(0.5F)
                 .setWeight(1)
-                .setOutput(new ItemStack(BlocksAS.AQUAMARINE_SAND_ORE))
+                .setResult(ResultDropItem.dropItem(new ItemStack(BlocksAS.AQUAMARINE_SAND_ORE)))
                 .build(registrar);
     }
 }

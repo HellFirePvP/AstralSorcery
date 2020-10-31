@@ -63,7 +63,7 @@ public class CategoryInfuser extends JEICategory<LiquidInfusion> {
     }
 
     @Override
-    public Collection<LiquidInfusion> getRecipes() {
+    public List<LiquidInfusion> getRecipes() {
         return RecipeTypesAS.TYPE_INFUSION.getAllRecipes();
     }
 

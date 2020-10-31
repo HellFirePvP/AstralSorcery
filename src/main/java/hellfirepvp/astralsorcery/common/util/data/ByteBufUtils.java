@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -146,7 +147,7 @@ public class ByteBufUtils {
     }
 
     public static void writeString(PacketBuffer buf, String toWrite) {
-        byte[] str = toWrite.getBytes(Charset.forName("UTF-8"));
+        byte[] str = toWrite.getBytes(StandardCharsets.UTF_8);
         buf.writeInt(str.length);
         buf.writeBytes(str);
     }
@@ -155,7 +156,7 @@ public class ByteBufUtils {
         int length = buf.readInt();
         byte[] strBytes = new byte[length];
         buf.readBytes(strBytes, 0, length);
-        return new String(strBytes, Charset.forName("UTF-8"));
+        return new String(strBytes, StandardCharsets.UTF_8);
     }
 
     public static <T> void writeRegistryEntry(PacketBuffer buf, IForgeRegistryEntry<T> entry) {

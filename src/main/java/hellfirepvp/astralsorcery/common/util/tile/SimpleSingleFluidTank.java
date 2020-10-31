@@ -31,7 +31,7 @@ public class SimpleSingleFluidTank implements IFluidTank {
     private int amount = 0;
     private Fluid fluid = Fluids.EMPTY;
     private int maxCapacity;
-    private Runnable onUpdate = null;
+    private Runnable onUpdate = () -> {};
 
     private boolean allowInput = true, allowOutput = true;
 
@@ -41,8 +41,12 @@ public class SimpleSingleFluidTank implements IFluidTank {
         this.maxCapacity = Math.max(0, maxCapacity);
     }
 
-    public void setOnUpdate(Runnable onUpdate) {
-        this.onUpdate = onUpdate;
+    public void addUpdateFunction(Runnable onUpdate) {
+        Runnable prevRunnable = this.onUpdate;
+        this.onUpdate = () -> {
+            prevRunnable.run();
+            onUpdate.run();
+        };
     }
 
     public void setAllowInput(boolean allowInput) {
@@ -69,7 +73,7 @@ public class SimpleSingleFluidTank implements IFluidTank {
         }
         int addable = getMaxAddable(amount);
         this.amount += addable;
-        if (Math.abs(addable) > 0 && this.onUpdate != null) {
+        if (Math.abs(addable) > 0) {
             this.onUpdate.run();
         }
         return amount - addable;
@@ -87,7 +91,7 @@ public class SimpleSingleFluidTank implements IFluidTank {
         if (this.amount <= 0) {
             setFluid(Fluids.EMPTY);
         }
-        if (Math.abs(drainable) > 0 && this.onUpdate != null) {
+        if (Math.abs(drainable) > 0) {
             this.onUpdate.run();
         }
         return new FluidStack(drainedFluid, drainable);
@@ -100,7 +104,7 @@ public class SimpleSingleFluidTank implements IFluidTank {
             update = true;
         }
         this.fluid = fluid;
-        if (update && this.onUpdate != null) {
+        if (update) {
             this.onUpdate.run();
         }
     }
