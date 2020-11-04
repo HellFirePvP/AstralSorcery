@@ -80,7 +80,7 @@ public class BlockUtils {
         return it;
     }
 
-    public static boolean isReplaceable(World world, BlockPos pos){
+    public static boolean isReplaceable(World world, BlockPos pos) {
         return isReplaceable(world, pos, world.getBlockState(pos));
     }
 
@@ -90,6 +90,14 @@ public class BlockUtils {
         }
         BlockItemUseContext ctx = TestBlockUseContext.getHandContext(world, null, Hand.MAIN_HAND, pos, Direction.UP);
         return state.isReplaceable(ctx);
+    }
+
+    public static boolean isFluidBlock(World world, BlockPos pos) {
+        return isFluidBlock(world.getBlockState(pos));
+    }
+
+    public static boolean isFluidBlock(BlockState state) {
+        return state == state.getFluidState().getBlockState();
     }
 
     @Nullable
@@ -156,10 +164,15 @@ public class BlockUtils {
     //Duplicate break functionality without a active player.
     //Emulates a FakePlayer - attempts without a player as harvester in case a fakeplayer leads to issues.
     public static boolean breakBlockWithoutPlayer(ServerWorld world, BlockPos pos) {
-        return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), ItemStack.EMPTY, true, false, true);
+        return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), ItemStack.EMPTY, true, false);
     }
 
+    @Deprecated
     public static boolean breakBlockWithoutPlayer(ServerWorld world, BlockPos pos, BlockState stateBroken, ItemStack heldItem, boolean breakBlock, boolean ignoreHarvestRestrictions, boolean playEffects) {
+        return breakBlockWithoutPlayer(world, pos, stateBroken, heldItem, breakBlock, ignoreHarvestRestrictions);
+    }
+
+    public static boolean breakBlockWithoutPlayer(ServerWorld world, BlockPos pos, BlockState stateBroken, ItemStack heldItem, boolean breakBlock, boolean ignoreHarvestRestrictions) {
         FakePlayer fakePlayer = AstralSorcery.getProxy().getASFakePlayerServer(world);
         int xp;
         try {
@@ -200,10 +213,6 @@ public class BlockUtils {
             heldCopy.onBlockDestroyed(world, stateBroken, pos, fakePlayer);
         } catch (Exception exc) {
             return false;
-        }
-
-        if (playEffects) {
-            world.playEvent(null, 2001, pos, Block.getStateId(stateBroken));
         }
 
         boolean wasCapturingStates = world.captureBlockSnapshots;

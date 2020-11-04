@@ -136,7 +136,6 @@ public class BuiltInEffectTraitRelayHighlight extends AltarRecipeEffect {
                     ItemStack potential = match.getRandomMatchingStack(getClientTick());
                     renderStack.push();
                     renderStack.translate(0.5 + offset.getX(), 0.35 + offset.getY(), 0.5  + offset.getZ());
-                    renderStack.scale(0.5F, 0.5F, 0.5F);
                     RenderingUtils.renderTranslucentItemStack(potential, renderStack, pTicks);
                     renderStack.pop();
                 }

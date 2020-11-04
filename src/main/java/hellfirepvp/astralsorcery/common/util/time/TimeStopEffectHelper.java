@@ -45,12 +45,12 @@ import java.util.Random;
  */
 public class TimeStopEffectHelper {
 
-    private static Random rand = new Random();
+    private static final Random rand = new Random();
 
     @Nonnull
-    private BlockPos position;
-    private float range;
-    private TimeStopZone.EntityTargetController targetController;
+    private final BlockPos position;
+    private final float range;
+    private final TimeStopZone.EntityTargetController targetController;
 
     private TimeStopEffectHelper(@Nonnull BlockPos position, float range, TimeStopZone.EntityTargetController targetController) {
         this.position = position;

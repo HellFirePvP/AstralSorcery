@@ -94,7 +94,7 @@ public class MantleEffectPelotrio extends MantleEffect {
 
                 if (rand.nextFloat() < CONFIG.chanceSpawnPickaxe.get()) {
                     if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerPickaxe.get())) {
-                        if (world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), player, EntitySpectralTool.ToolTask.createPickaxeTask()))) {
+                        if (world.addEntity(new EntitySpectralTool((World) world, player.getPosition(), player, EntitySpectralTool.ToolTask.createPickaxeTask()))) {
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerPickaxe.get(), false);
                         }
                     }
@@ -109,7 +109,7 @@ public class MantleEffectPelotrio extends MantleEffect {
 
                 if (rand.nextFloat() < CONFIG.chanceSpawnAxe.get()) {
                     if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAxe.get())) {
-                        if (world.addEntity(new EntitySpectralTool((World) world, player.getPosition().up(), player, EntitySpectralTool.ToolTask.createLogTask()))) {
+                        if (world.addEntity(new EntitySpectralTool((World) world, player.getPosition(), player, EntitySpectralTool.ToolTask.createLogTask()))) {
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAxe.get(), false);
                         }
                     }

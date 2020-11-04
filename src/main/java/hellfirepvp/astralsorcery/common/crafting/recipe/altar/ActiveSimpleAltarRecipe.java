@@ -136,7 +136,7 @@ public class ActiveSimpleAltarRecipe {
         }
     }
 
-    public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement) {
+    public boolean matches(TileAltar altar, boolean ignoreStarlightRequirement, boolean testNecessaryRelayInputs) {
         if (!this.getRecipeToCraft().matches(LogicalSide.SERVER, this.tryGetCraftingPlayerServer(), altar, ignoreStarlightRequirement)) {
             return false;
         }
@@ -147,6 +147,12 @@ public class ActiveSimpleAltarRecipe {
                 TileSpectralRelay relay = MiscUtils.getTileAt(altar.getWorld(), stack.getRealPosition(), TileSpectralRelay.class, true);
                 if (relay == null) {
                     return false;
+                }
+                if (testNecessaryRelayInputs) {
+                    WrappedIngredient ingredient = listIngredients.get(stack.getStackIndex());
+                    if (!ingredient.getIngredient().test(relay.getInventory().getStackInSlot(0))) {
+                        return false;
+                    }
                 }
             } else {
                 //The recipe changed?

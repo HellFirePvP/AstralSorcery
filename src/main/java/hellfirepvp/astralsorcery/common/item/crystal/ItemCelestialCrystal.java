@@ -36,12 +36,12 @@ public class ItemCelestialCrystal extends ItemCrystalBase {
 
     @Override
     public int getGeneratedPropertyTiers() {
-        return 12;
+        return 8;
     }
 
     @Override
     public int getMaxPropertyTiers() {
-        return 18;
+        return 10;
     }
 
     @Override

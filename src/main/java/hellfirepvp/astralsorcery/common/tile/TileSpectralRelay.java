@@ -138,7 +138,7 @@ public class TileSpectralRelay extends TileEntityTick {
     }
 
     private static void foreachNearbyRelay(World world, BlockPos pos, Consumer<TileSpectralRelay> relayConsumer) {
-        List<BlockPos> nearbyRelays = BlockDiscoverer.searchForBlocksAround(world, pos, 15,
+        List<BlockPos> nearbyRelays = BlockDiscoverer.searchForBlocksAround(world, pos, 8,
                 ((world1, pos1, state) -> {
                     TileSpectralRelay relay;
                     return state.getBlock() instanceof BlockSpectralRelay &&
@@ -198,6 +198,7 @@ public class TileSpectralRelay extends TileEntityTick {
     private void provideStarlight(TileAltar ta) {
         if (this.doesSeeSky()) {
             float heightAmount = MathHelper.clamp((float) Math.pow(getPos().getY() / 7F, 1.5F) / 60F, 0F, 1F);
+            heightAmount = 0.7F + heightAmount * 0.3F;
             heightAmount *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
             heightAmount *= this.proximityMultiplier;
             if (heightAmount > 1E-4) {
@@ -236,7 +237,7 @@ public class TileSpectralRelay extends TileEntityTick {
     }
 
     private void updateAltarPos() {
-        Set<BlockPos> altarPositions = BlockDiscoverer.searchForTileEntitiesAround(getWorld(), getPos(), 8, tile -> tile instanceof TileAltar);
+        Set<BlockPos> altarPositions = BlockDiscoverer.searchForTileEntitiesAround(getWorld(), getPos(), 16, tile -> tile instanceof TileAltar);
 
         BlockPos closestAltar = null;
         for (BlockPos other : altarPositions) {
@@ -256,7 +257,7 @@ public class TileSpectralRelay extends TileEntityTick {
         if (this.closestRelayPos == null) {
             this.proximityMultiplier = 1F;
         } else {
-            this.proximityMultiplier = MathHelper.clamp((float) new Vector3(this.getPos()).distance(this.closestRelayPos) / 16F, 0F, 1F);
+            this.proximityMultiplier = MathHelper.clamp((float) new Vector3(this.getPos()).distance(this.closestRelayPos) / 8F, 0F, 1F);
         }
     }
 

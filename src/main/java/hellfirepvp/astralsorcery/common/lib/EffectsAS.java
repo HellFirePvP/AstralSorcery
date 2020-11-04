@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.common.effect.EffectBleed;
 import hellfirepvp.astralsorcery.common.effect.EffectCheatDeath;
 import hellfirepvp.astralsorcery.common.effect.EffectDropModifier;
-import hellfirepvp.astralsorcery.common.effect.EffectTimeFreeze;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,6 +26,5 @@ public class EffectsAS {
     public static EffectBleed        EFFECT_BLEED;
     public static EffectCheatDeath   EFFECT_CHEAT_DEATH;
     public static EffectDropModifier EFFECT_DROP_MODIFIER;
-    public static EffectTimeFreeze   EFFECT_TIME_FREEZE;
 
 }

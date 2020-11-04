@@ -300,7 +300,7 @@ public class RenderingUtils {
         // EntityItemRenderer entity bobbing
         float sinBobY = MathHelper.sin((ClientScheduler.getClientTick() + pTicks) / 10.0F) * 0.1F + 0.1F;
         renderStack.translate(0, sinBobY, 0);
-        float ageRotate = ((ClientScheduler.getClientTick() + pTicks) / 20.0F) * (180F / (float) Math.PI);
+        float ageRotate = ((ClientScheduler.getClientTick() + pTicks) / 20.0F);
         renderStack.rotate(Vector3f.YP.rotation(ageRotate));
 
         renderTranslucentItemStackModel(stack, renderStack, overlayColor, Blending.PREALPHA, alpha);

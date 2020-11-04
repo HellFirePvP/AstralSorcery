@@ -28,7 +28,7 @@ public class BlockSpherePositionGenerator extends BlockPositionGenerator {
 
     private int currentRadius = 0;
 
-    private List<BlockPos> currentPositions = new ArrayList<>();
+    private final List<BlockPos> currentPositions = new ArrayList<>();
 
     @Override
     public BlockPos genNext(BlockPos offset, double radius) {

@@ -30,7 +30,7 @@ public class BlockLayerPositionGenerator extends BlockPositionGenerator {
 
     private int layer = 0;
 
-    private LinkedList<BlockPos> currentPositions = new LinkedList<>();
+    private final LinkedList<BlockPos> currentPositions = new LinkedList<>();
 
     @Override
     protected BlockPos genNext(BlockPos offset, double radius) {

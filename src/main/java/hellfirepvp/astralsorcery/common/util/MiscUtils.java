@@ -188,6 +188,9 @@ public class MiscUtils {
         if (!world.getChunkProvider().isChunkLoaded(new ChunkPos(at)) && !loadChunk) {
             return defaultValue;
         }
+        if (!world.getDimension().hasSkyLight()) {
+            return true;
+        }
         return world.canBlockSeeSky(at);
     }
 
@@ -209,6 +212,17 @@ public class MiscUtils {
 
     public static <T, P, R> Function<P, R> apply(BiFunction<T, P, R> func, Supplier<T> supply) {
         return p -> func.apply(supply.get(), p);
+    }
+
+    public static <T, V> Function<T, V> nullFunction(Runnable run) {
+        return nullFunction((v) -> run.run());
+    }
+
+    public static <T, V> Function<T, V> nullFunction(Consumer<T> run) {
+        return (t) -> {
+            run.accept(t);
+            return null;
+        };
     }
 
     public static <T> Supplier<T> nullSupplier(Runnable run) {

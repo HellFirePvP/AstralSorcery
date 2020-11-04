@@ -119,6 +119,8 @@ public class RegistryTextures {
         TEX_AREA_OF_EFFECT_CUBE     = loadTexture(EFFECT, "area_of_effect_cube");
         TEX_HALO_INFUSION           = loadTexture(EFFECT, "halo_infusion");
         TEX_HALO_RITUAL             = loadTexture(EFFECT, "halo_ritual");
+        TEX_FOUNTAIN_LIQUID         = loadTexture(EFFECT, "fountain_liquid");
+        TEX_FOUNTAIN_VORTEX         = loadTexture(EFFECT, "fountain_vortex");
 
         TEX_LIGHTNING_PART      = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM           = loadTexture(EFFECT, "lightbeam");

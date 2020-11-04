@@ -32,7 +32,7 @@ import java.util.*;
  */
 public class ClientPatreonFlares extends ClientData<ClientPatreonFlares> {
 
-    private Map<UUID, Set<PatreonPartialEntity>> entitiesClient = new HashMap<>();
+    private final Map<UUID, Set<PatreonPartialEntity>> entitiesClient = new HashMap<>();
 
     @Nonnull
     public Collection<UUID> getOwners() {

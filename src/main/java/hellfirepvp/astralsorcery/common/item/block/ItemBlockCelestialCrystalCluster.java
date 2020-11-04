@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.block.tile.BlockCelestialCrystalCluster;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeGenItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalGenerator;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -91,12 +92,12 @@ public class ItemBlockCelestialCrystalCluster extends ItemBlockCustom implements
 
     @Override
     public int getGeneratedPropertyTiers() {
-        return 12;
+        return ItemsAS.CELESTIAL_CRYSTAL.getGeneratedPropertyTiers();
     }
 
     @Override
     public int getMaxPropertyTiers() {
-        return 18;
+        return ItemsAS.CELESTIAL_CRYSTAL.getMaxPropertyTiers();
     }
 
     @Nullable

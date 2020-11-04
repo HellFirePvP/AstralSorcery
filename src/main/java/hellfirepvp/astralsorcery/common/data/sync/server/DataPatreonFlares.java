@@ -33,10 +33,10 @@ import java.util.*;
  */
 public class DataPatreonFlares extends AbstractData {
 
-    private Map<UUID, Set<PatreonPartialEntity>> entitiesServer = new HashMap<>();
+    private final Map<UUID, Set<PatreonPartialEntity>> entitiesServer = new HashMap<>();
 
-    private Set<UUID> flarePlayerUpdates = new HashSet<>();
-    private Set<UUID> flareRemovals = new HashSet<>();
+    private final Set<UUID> flarePlayerUpdates = new HashSet<>();
+    private final Set<UUID> flareRemovals = new HashSet<>();
 
     private DataPatreonFlares(ResourceLocation key) {
         super(key);

@@ -30,7 +30,9 @@ import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.*;
 import hellfirepvp.astralsorcery.common.item.wand.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
+import hellfirepvp.astralsorcery.common.util.dispenser.FluidContainerDispenseBehavior;
 import net.minecraft.block.Block;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -129,6 +131,10 @@ public class RegistryItems {
     @OnlyIn(Dist.CLIENT)
     public static void registerColors(ColorHandlerEvent.Item itemColorEvent) {
         colorItems.forEach(item -> itemColorEvent.getItemColors().register(item::getColor, (Item) item));
+    }
+
+    public static void registerDispenseBehaviors() {
+        DispenserBlock.registerDispenseBehavior(BUCKET_LIQUID_STARLIGHT, FluidContainerDispenseBehavior.getInstance());
     }
 
     private static void registerItemBlock(CustomItemBlock block) {

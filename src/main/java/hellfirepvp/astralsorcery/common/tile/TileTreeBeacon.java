@@ -282,7 +282,7 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
                         .map(effect -> (TypeTreeBeaconColor) effect)
                         .findFirst())
                 .map(TypeTreeBeaconColor::getTreeBeaconColor)
-                .orElse(CalendarUtils.isAprilFirst() ? Color.getHSBColor(rand.nextFloat() * 360, 1F, 1F) :
+                .orElse(CalendarUtils.isAprilFirst() ? Color.getHSBColor(rand.nextFloat(), 1F, 1F) :
                         ConstellationsAS.aevitas.getConstellationColor());
     }
 

@@ -13,12 +13,10 @@ import hellfirepvp.astralsorcery.common.data.sync.base.AbstractData;
 import hellfirepvp.astralsorcery.common.data.sync.base.AbstractDataProvider;
 import hellfirepvp.astralsorcery.common.data.sync.base.ClientData;
 import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
-import hellfirepvp.astralsorcery.common.data.sync.server.DataLightBlockEndpoints;
-import hellfirepvp.astralsorcery.common.data.sync.server.DataLightConnections;
-import hellfirepvp.astralsorcery.common.data.sync.server.DataPatreonFlares;
-import hellfirepvp.astralsorcery.common.data.sync.server.DataTimeFreezeEffects;
+import hellfirepvp.astralsorcery.common.data.sync.server.*;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncData;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -30,6 +28,7 @@ import net.minecraftforge.fml.LogicalSide;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,13 +44,14 @@ public class SyncDataHolder implements ITickHandler {
     public static final ResourceLocation DATA_LIGHT_CONNECTIONS = AstralSorcery.key("connections");
     public static final ResourceLocation DATA_LIGHT_BLOCK_ENDPOINTS = AstralSorcery.key("endpoints");
     public static final ResourceLocation DATA_TIME_FREEZE_EFFECTS = AstralSorcery.key("time_freeze");
+    public static final ResourceLocation DATA_TIME_FREEZE_ENTITIES = AstralSorcery.key("time_freeze_entities");
     public static final ResourceLocation DATA_PATREON_FLARES = AstralSorcery.key("patreon");
 
-    private static Map<ResourceLocation, AbstractData> serverData = new HashMap<>();
-    private static Map<ResourceLocation, ClientData<?>> clientData = new HashMap<>();
-    private static Map<ResourceLocation, ClientDataReader<?>> readers = new HashMap<>();
+    private static final Map<ResourceLocation, AbstractData> serverData = new HashMap<>();
+    private static final Map<ResourceLocation, ClientData<?>> clientData = new HashMap<>();
+    private static final Map<ResourceLocation, ClientDataReader<?>> readers = new HashMap<>();
 
-    private static Set<ResourceLocation> dirtyData = new HashSet<>();
+    private static final Set<ResourceLocation> dirtyData = new HashSet<>();
     private static final Object lck = new Object();
 
     private SyncDataHolder() {}
@@ -68,19 +68,29 @@ public class SyncDataHolder implements ITickHandler {
     }
 
     public static <T extends AbstractData> void executeServer(ResourceLocation key, Class<T> typeHint, Consumer<T> fct) {
+        computeServer(key, typeHint, MiscUtils.nullFunction(fct));
+    }
+
+    public static <T extends AbstractData, V> Optional<V> computeServer(ResourceLocation key, Class<T> typeHint, Function<T, V> fct) {
         synchronized (lck) {
             T dat = (T) serverData.get(key);
             if (dat != null) {
-                fct.accept(dat);
+                return Optional.ofNullable(fct.apply(dat));
             }
+            return Optional.empty();
         }
     }
 
     public static <T extends ClientData<T>> void executeClient(ResourceLocation key, Class<T> typeHint, Consumer<T> fct) {
+        computeClient(key, typeHint, MiscUtils.nullFunction(fct));
+    }
+
+    public static <T extends ClientData<T>, V> Optional<V> computeClient(ResourceLocation key, Class<T> typeHint, Function<T, V> fct) {
         T dat = (T) clientData.get(key);
         if (dat != null) {
-            fct.accept(dat);
+            return Optional.ofNullable(fct.apply(dat));
         }
+        return Optional.empty();
     }
 
     @Nullable
@@ -119,6 +129,7 @@ public class SyncDataHolder implements ITickHandler {
         register(new DataLightConnections.Provider(DATA_LIGHT_CONNECTIONS));
         register(new DataLightBlockEndpoints.Provider(DATA_LIGHT_BLOCK_ENDPOINTS));
         register(new DataTimeFreezeEffects.Provider(DATA_TIME_FREEZE_EFFECTS));
+        register(new DataTimeFreezeEntities.Provider(DATA_TIME_FREEZE_ENTITIES));
         register(new DataPatreonFlares.Provider(DATA_PATREON_FLARES));
     }
 

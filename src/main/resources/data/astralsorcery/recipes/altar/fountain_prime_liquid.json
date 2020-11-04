@@ -1,0 +1,57 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 3,
+  "duration": 600,
+  "starlight": 5600,
+  "pattern": [
+    "ABBBA",
+    "CA_AC",
+    "_DED_",
+    "_C_C_",
+    "_CEC_"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:ingots/gold"
+    },
+    "B": {
+      "item": "astralsorcery:black_marble_raw"
+    },
+    "C": {
+      "item": "astralsorcery:resonating_gem"
+    },
+    "D": {
+      "tag": "astralsorcery:starmetal"
+    },
+    "E": {
+      "item": "astralsorcery:glass_lens"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:fountain_prime_liquid",
+      "count": 1
+    }
+  ],
+  "focus_constellation": "astralsorcery:octans",
+  "relay_inputs": [
+    {
+      "tag": "astralsorcery:stardust"
+    },
+    {
+      "tag": "astralsorcery:stardust"
+    },
+    {
+      "tag": "astralsorcery:stardust"
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_trait_relay_highlight",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_trait_focus_circle",
+    "astralsorcery:altar_default_sparkle",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

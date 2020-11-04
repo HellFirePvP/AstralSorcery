@@ -140,7 +140,7 @@
   "astralsorcery.progress.constellation.seen.track": "You add a tab to the Astral Tome to keep track of it.",
   "astralsorcery.progress.remove.attunement": "Your light fades...",
   "astralsorcery.progress.switch.attunement": "The light subtly shifts...",
-  "astralsorcery.progress.perk_abilities": "Perk abilites are now %s",
+  "astralsorcery.progress.perk_abilities": "Perk abilities are now %s",
   "astralsorcery.progress.perk_abilities.enable": "enabled",
   "astralsorcery.progress.perk_abilities.disable": "disabled",
 
@@ -448,26 +448,21 @@
   "astralsorcery.journal.C_CHALICE.3.text": "Using Resonating Gems to keep the contents under high compression results in 24 buckets of storage in a small space. This also means that relocating a Chalice without first removing the stored fluid will result in the fluid being dispersed into the ether.<NL>The Chalice is able to draw Liquid Starlight through the ether from Lightwells within 16 meters it has Line-of-Sight with. Like the Lightwell, a Chalice can be connected to pipes from the bottom face.",
   "astralsorcery.journal.C_CHALICE.4.text": "As the Chalice facilitates magical transport from Lightwells, the essence of any fluid contained within may leak, seeking out other fluidic essence to merge with. This results in the creation of materials as though the two fluids had met in the world, though very slight dissipation of the stored fluid can occur when this happens. <NL>An active redstone signal disables both of these features.",
 
-  "astralsorcery.journal.node.BORE_CORE.name": "Evershifting Fountain [WIP]",
+  "astralsorcery.journal.node.BORE_CORE.name": "Evershifting Fountain",
   "astralsorcery.journal.BORE_CORE.1.text": "Liquid Starlight may store Starlight energy in a condensed and manageable form, but it is easy to unleash that same power again. Through use of a magical centrifuge, a chaotic fountain of Starlight can be spun up for times when raw brute magical force are needed to accomplish a goal. <NL>The containment ring of an Evershifting Fountain serves as a stable focus for these energies, and any blocks left within the structure are likely to be destroyed",
-  "astralsorcery.journal.BORE_CORE.2.text": "No view of the sky is needed to operate this device, as it is operated by an internal storage reservoir of Liquid Starlight. Safely feeding Liquid Starlight into this reservoir is performed by placing a Chalice directly on top of the Fountain. <NL>The desired magic must first be §5Primed§r for this power to have any effect.",
+  "astralsorcery.journal.BORE_CORE.3.text": "No view of the sky is needed to operate this device, as it is operated by an internal storage reservoir of Liquid Starlight. Safely feeding Liquid Starlight into this reservoir is performed by placing a Chalice directly on top of the Fountain. <NL>The desired magic must first be §5Primed§r for this power to have any effect.",
 
-  "astralsorcery.journal.node.BORE_HEAD_LIQUID.name": "Neromantic Prime [WIP]",
+  "astralsorcery.journal.node.BORE_HEAD_LIQUID.name": "Neromantic Prime",
   "astralsorcery.journal.BORE_HEAD_LIQUID.1.text": "Eons of fluidic essence trickling into the void from above bedrock means there are vast, untapped oceans of fluid ripe for retrieval. Using the affinity of Octans for this fluidic essence allows this Prime to draw it to the surface. <NL>Powering a Neromantic Prime will result in a highly destructive bore comprised of Starlight energy burning a hole down to bedrock, at which point the energy reacts with the bedrock to reach into the fluidic essence oceans in the ethereal below, dragging it back to the Fountain.",
-  "astralsorcery.journal.BORE_HEAD_LIQUID.2.text": "Retrieval of liquids harvested in this way requires an empty Chalice with Line-of-Sight to the Fountain. <NL>The majority of fluidic essence available is water, though when other reservoirs of essence in the area are exhausted by the Prime, water essence will fill the gap left behind. <NL>An §1Ichosic Resonator§r should be used to scout fluid locations in advance.",
+  "astralsorcery.journal.BORE_HEAD_LIQUID.3.text": "Retrieval of liquids harvested in this way requires an empty Chalice with Line-of-Sight to the Fountain. <NL>The majority of fluidic essence available is water, though when other reservoirs of essence in the area are exhausted by the Prime, water essence will fill the gap left behind. <NL>An §1Ichosic Resonator§r should be used to scout fluid locations in advance.",
   "astralsorcery.journal.BORE_HEAD_LIQUID.4.text": "With no method to determine which essence is below, moving the Fountain structure constantly is tiresome, and also expensive in Liquid Starlight. With some tinkering, the Fosic Resonator should be able to sample this information instead.<NL>This improved Ichosic Resonator, drawing on Resonating Gem resonance to fluid, still only works during the night. Shifting modes between the old Fosic, and the new Ichosic, can be accomplished by shift-right-clicking.",
 
   "astralsorcery.journal.node.ICHOSIC.name": "Ichosic Resonator",
   "astralsorcery.journal.ICHOSIC.1.text": "Moving a Neromantic Prime Fountain structure constantly to determine what fluidic essence lies below is inefficient of effort and time. With some minor changes, the Fosic Resonator can be used to sample this information instead. Leveraging Resonating Gems and Stardust, holding the Ichosic Resonator at night will draw forth plumes of fluidic essence. <NL>Shifting modes between Fosic and Ichosic can be accomplished by shift-right-clicking.",
 
-  "astralsorcery.journal.node.BORE_HEAD_VORTEX.name": "Fysallidic Prime [WIP]",
+  "astralsorcery.journal.node.BORE_HEAD_VORTEX.name": "Fysallidic Prime",
   "astralsorcery.journal.BORE_HEAD_VORTEX.1.text": "Tapping Vicio for movement allows this Prime to draw close any creatures nearby, trapping them in a vortical current of Starlight. These trapped creatures remain unable to act or defend themselves while so trapped, for as long as Liquid Starlight is fed to the Fountain. <NL>The cost in Starlight to restrain a creature is influenced by the strength of that creature to fight against the vortical currents.",
   "astralsorcery.journal.BORE_HEAD_VORTEX.3.text": "Even mythical creatures are capable of being held by this Prime, though it seems to require its full and focused power to do so. These creatures require more Starlight power than a Chalice is able to consistently feed into a Fountain over time. Certain creatures, like the Wither or Ender Dragon, may only be contained until the internal reservoir runs dry.",
-
-
-
-  "astralsorcery.journal.node.SHOOTING_STARS.name": "Shooting Stars",
-  "astralsorcery.journal.SHOOTING_STARS.1.text": "While not true stars, magical constructs generated from background Starlight energies will coalesce at the height of night, falling towards any localized body. Academy studies show these coalescence are linked to the presence of one sensitive to Starlight, and will be bound to their unique magical signature. Attempting to grasp one with a different signature will cause it to burst apart into ethereal energy, while one matching signatures will contain potentially rare resources. <NL>Waiting for impact is not required, and they have been seen to be very short-lived, some not even making it to the ground.",
 
 
   "astralsorcery.journal.recipe.removalinfo": "§cThis recipe was removed in the current modpack! Check other sources of information to see how it is made!",

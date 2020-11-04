@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.block.tile.fountain;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMarble;
 import hellfirepvp.astralsorcery.common.block.tile.BlockFountain;
+import hellfirepvp.astralsorcery.common.crafting.nojson.fountain.FountainEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -11,6 +12,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,6 +28,9 @@ public abstract class BlockFountainPrime extends Block implements CustomItemBloc
         super(PropertiesMarble.defaultMarble()
                 .notSolid());
     }
+
+    @Nonnull
+    public abstract FountainEffect provideEffect();
 
     @Override
     public BlockState updatePostPlacement(BlockState state, Direction placedAgainst, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {

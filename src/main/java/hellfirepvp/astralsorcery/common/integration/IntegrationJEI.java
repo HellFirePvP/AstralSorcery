@@ -9,17 +9,23 @@
 package hellfirepvp.astralsorcery.common.integration;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationBaseItem;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationItem;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttunement;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarTrait;
 import hellfirepvp.astralsorcery.common.integration.jei.*;
+import hellfirepvp.astralsorcery.common.item.ItemResonator;
+import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IStackHelper;
+import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
@@ -27,10 +33,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,10 +67,16 @@ public class IntegrationJEI implements IModPlugin {
                 BlocksAS.ROCK_COLLECTOR_CRYSTAL.asItem(),
                 BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL.asItem(),
                 BlocksAS.CELESTIAL_CRYSTAL_CLUSTER.asItem(),
-                BlocksAS.GEM_CRYSTAL_CLUSTER.asItem(),
-                ItemsAS.MANTLE,
-                ItemsAS.RESONATOR
+                BlocksAS.GEM_CRYSTAL_CLUSTER.asItem()
         );
+
+        registry.registerSubtypeInterpreter(ItemsAS.RESONATOR, stack -> ItemResonator.getUpgrades(stack)
+                .stream()
+                .map(ItemResonator.ResonatorUpgrade::getAppendix)
+                .collect(Collectors.joining(",")));
+        registry.registerSubtypeInterpreter(ItemsAS.MANTLE, stack -> Optional.ofNullable(ItemsAS.MANTLE.getConstellation(stack))
+                .map(IConstellation::getSimpleName)
+                .orElse("none"));
     }
 
     @Override

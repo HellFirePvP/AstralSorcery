@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.IPhase;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
@@ -23,6 +24,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -143,13 +145,8 @@ public class TimeStopZone {
         e.prevSwingProgress = e.swingProgress;
         e.prevDistanceWalkedModified = e.distanceWalkedModified;
 
-        if (e.isPotionActive(EffectsAS.EFFECT_TIME_FREEZE)) {
-            EffectInstance eff = e.getActivePotionEffect(EffectsAS.EFFECT_TIME_FREEZE);
-            if (!eff.tick(e, () -> {})) {
-                if (!e.world.isRemote()) {
-                    e.removePotionEffect(EffectsAS.EFFECT_TIME_FREEZE);
-                }
-            }
+        if (!e.getEntityWorld().isRemote()) {
+            e.travel(Vec3d.ZERO);
         }
 
         if (e instanceof EnderDragonEntity) {

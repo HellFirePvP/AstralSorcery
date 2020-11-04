@@ -34,10 +34,7 @@ import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.event.handler.*;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperEnchantmentTick;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
+import hellfirepvp.astralsorcery.common.event.helper.*;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.item.armor.ArmorMaterialImbuedLeather;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -210,6 +207,7 @@ public class CommonProxy {
         EventHandlerMisc.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
         EventHelperInvulnerability.attachListeners(eventBus);
+        EventHelperEntityFreeze.attachListeners(eventBus);
         PerkAttributeLimiter.attachListeners(eventBus);
 
         eventBus.addListener(PlayerAmuletHandler::onEnchantmentAdd);
@@ -241,6 +239,7 @@ public class CommonProxy {
         EventHelperTemporaryFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);
         EventHelperInvulnerability.attachTickListener(registrar);
+        EventHelperEntityFreeze.attachTickListener(registrar);
         PerkCooldownHelper.attachTickListeners(registrar);
     }
 

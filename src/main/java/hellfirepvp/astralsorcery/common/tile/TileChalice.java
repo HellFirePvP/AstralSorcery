@@ -39,6 +39,7 @@ import hellfirepvp.astralsorcery.common.util.tile.FluidTankAccess;
 import hellfirepvp.astralsorcery.common.util.tile.SimpleSingleFluidTank;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -108,7 +109,7 @@ public class TileChalice extends TileEntityTick {
             }
             nextInteraction = ticksExisted + 20 + rand.nextInt(40);
 
-            if (!tickLightwellDraw()) {
+            if (!tickLightwellDraw() && !tickFountainDraw()) {
                 tickChaliceInteractions();
             }
         }
@@ -146,25 +147,62 @@ public class TileChalice extends TileEntityTick {
 
                     recipe.getResult().doResult(getWorld(), target.clone());
 
-                    PacketDistributor.TargetPoint point = PacketChannel.pointFromPos(getWorld(), target.toBlockPos(), 32);
                     PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.LIQUID_INTERACTION_LINE).addData(buf -> {
                         ByteBufUtils.writeVector(buf, thisChaliceV);
                         ByteBufUtils.writeVector(buf, target);
                         ByteBufUtils.writeFluidStack(buf, thisFluid);
-                    });
-                    PacketChannel.CHANNEL.sendToAllAround(pkt, point);
-                    pkt = new PktPlayEffect(PktPlayEffect.Type.LIQUID_INTERACTION_LINE).addData(buf -> {
                         ByteBufUtils.writeVector(buf, otherChaliceV);
                         ByteBufUtils.writeVector(buf, target);
                         ByteBufUtils.writeFluidStack(buf, otherFluid);
                     });
-                    PacketChannel.CHANNEL.sendToAllAround(pkt, point);
+                    PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(getWorld(), target.toBlockPos(), 32));
                     return;
                 }
                 recipes.remove(recipe);
                 recipe = LiquidInteraction.pickRecipe(recipes);
             }
         }
+    }
+
+    private boolean tickFountainDraw() {
+        if (getWorld().isBlockPowered(pos)) {
+            return false;
+        }
+
+        Vector3 thisVector = new Vector3(this).add(0.5, 1.5, 0.5);
+        List<BlockPos> fountains = BlockDiscoverer.searchForBlocksAround(world, pos, 16,
+                BlockPredicates.isBlock(BlocksAS.FOUNTAIN));
+        fountains.removeIf(pos -> {
+            Vector3 fountainVec = new Vector3(pos).add(0.5, 0.5, 0.5);
+            RaytraceAssist assist = new RaytraceAssist(thisVector, fountainVec);
+            return !assist.isClear(world);
+        });
+        Collections.shuffle(fountains, rand);
+
+        for (BlockPos wellPos : fountains) {
+            TileFountain fountain = MiscUtils.getTileAt(world, wellPos, TileFountain.class, true);
+            if (fountain != null) {
+                FluidStack drained = fountain.getTank().drain(400, IFluidHandler.FluidAction.SIMULATE);
+                if (drained.getAmount() > 100) {
+                    int maxFillable = this.getTank().fill(drained, IFluidHandler.FluidAction.SIMULATE);
+                    if (maxFillable > 0) {
+                        FluidStack actual = fountain.getTank().drain(new FluidStack(drained, maxFillable), IFluidHandler.FluidAction.EXECUTE);
+                        this.getTank().fill(actual, IFluidHandler.FluidAction.EXECUTE);
+
+                        Vector3 wellVec = new Vector3(wellPos).add(0.5, 0.5, 0.5);
+
+                        PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.LIQUID_INTERACTION_LINE).addData(buf -> {
+                            ByteBufUtils.writeVector(buf, wellVec);
+                            ByteBufUtils.writeVector(buf, thisVector);
+                            ByteBufUtils.writeFluidStack(buf, actual);
+                        });
+                        PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(getWorld(), wellVec.toBlockPos(), 32));
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private boolean tickLightwellDraw() {
@@ -215,14 +253,17 @@ public class TileChalice extends TileEntityTick {
 
     @OnlyIn(Dist.CLIENT)
     public static void drawLiquidLine(PktPlayEffect pktPlayEffect) {
-        Vector3 from = ByteBufUtils.readVector(pktPlayEffect.getExtraData());
-        Vector3 to = ByteBufUtils.readVector(pktPlayEffect.getExtraData());
-        FluidStack fluid = ByteBufUtils.readFluidStack(pktPlayEffect.getExtraData());
-        VFXColorFunction<?> colorFn = VFXColorFunction.constant(ColorizationHelper.getColor(fluid).orElse(Color.WHITE).brighter());
+        PacketBuffer buf = pktPlayEffect.getExtraData();
+        while (buf.isReadable()) {
+            Vector3 from = ByteBufUtils.readVector(pktPlayEffect.getExtraData());
+            Vector3 to = ByteBufUtils.readVector(pktPlayEffect.getExtraData());
+            FluidStack fluid = ByteBufUtils.readFluidStack(pktPlayEffect.getExtraData());
+            VFXColorFunction<?> colorFn = VFXColorFunction.constant(ColorizationHelper.getColor(fluid).orElse(Color.WHITE).brighter());
 
-        playLineGenericParticles(from, to, 0.1F + rand.nextFloat() * 0.2F, colorFn);
-        playLineGenericParticles(from, to, 0.1F + rand.nextFloat() * 0.2F, colorFn);
-        playLineFluidParticles(from, to, 0.25F + rand.nextFloat() * 0.2F, fluid);
+            playLineGenericParticles(from, to, 0.1F + rand.nextFloat() * 0.2F, colorFn);
+            playLineGenericParticles(from, to, 0.1F + rand.nextFloat() * 0.2F, colorFn);
+            playLineFluidParticles(from, to, 0.25F + rand.nextFloat() * 0.2F, fluid);
+        }
     }
 
     @OnlyIn(Dist.CLIENT)

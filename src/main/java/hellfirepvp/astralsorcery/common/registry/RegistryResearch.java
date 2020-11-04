@@ -98,16 +98,19 @@ public class RegistryResearch {
                 .addPage(text("C_CHALICE.4"))
                 .register(ResearchProgression.RADIANCE);
 
-        //TODO evershifting fountain
-        ResearchNode resFountain = new ResearchNode(Items.APPLE, "BORE_CORE", 2.25F, 4F)
+        ResearchNode resFountain = new ResearchNode(BlocksAS.FOUNTAIN, "BORE_CORE", 2.25F, 4F)
                 .addPage(text("BORE_CORE.1"))
-                .addPage(text("BORE_CORE.2"))
+                .addPage(recipe(BlocksAS.FOUNTAIN))
+                .addTomeLookup(BlocksAS.FOUNTAIN, 1, ResearchProgression.RADIANCE)
+                .addPage(text("BORE_CORE.3"))
+                .addPage(structure(StructureTypesAS.PTYPE_FOUNTAIN))
                 .register(ResearchProgression.RADIANCE);
 
-        //TODO neromantic prime
-        ResearchNode resLiquidBore = new ResearchNode(Items.APPLE, "BORE_HEAD_LIQUID", 1.5F, 5F)
+        ResearchNode resLiquidBore = new ResearchNode(BlocksAS.FOUNTAIN_PRIME_LIQUID, "BORE_HEAD_LIQUID", 1.5F, 5F)
                 .addPage(text("BORE_HEAD_LIQUID.1"))
-                .addPage(text("BORE_HEAD_LIQUID.2"))
+                .addPage(recipe(BlocksAS.FOUNTAIN_PRIME_LIQUID))
+                .addTomeLookup(BlocksAS.FOUNTAIN_PRIME_LIQUID, 1, ResearchProgression.RADIANCE)
+                .addPage(text("BORE_HEAD_LIQUID.3"))
                 .addPage(text("BORE_HEAD_LIQUID.4"))
                 .register(ResearchProgression.RADIANCE);
 
@@ -118,9 +121,10 @@ public class RegistryResearch {
                 .addPage(recipe(stack -> ItemsAS.RESONATOR.equals(stack.getItem()) && ItemResonator.getCurrentUpgrade(null, stack) == ItemResonator.ResonatorUpgrade.FLUID_FIELDS))
                 .register(ResearchProgression.RADIANCE);
 
-        //TODO fysallidic prime
-        ResearchNode resVortexBore = new ResearchNode(Items.APPLE, "BORE_HEAD_VORTEX", 3.5F, 4.75F)
+        ResearchNode resVortexBore = new ResearchNode(BlocksAS.FOUNTAIN_PRIME_VORTEX, "BORE_HEAD_VORTEX", 3.5F, 4.75F)
                 .addPage(text("BORE_HEAD_VORTEX.1"))
+                .addPage(recipe(BlocksAS.FOUNTAIN_PRIME_VORTEX))
+                .addTomeLookup(BlocksAS.FOUNTAIN_PRIME_VORTEX, 1, ResearchProgression.RADIANCE)
                 .addPage(text("BORE_HEAD_VORTEX.3"))
                 .register(ResearchProgression.RADIANCE);
 

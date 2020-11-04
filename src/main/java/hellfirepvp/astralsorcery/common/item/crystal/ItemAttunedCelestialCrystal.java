@@ -47,12 +47,12 @@ public class ItemAttunedCelestialCrystal extends ItemAttunedCrystalBase {
 
     @Override
     public int getGeneratedPropertyTiers() {
-        return 12;
+        return 8;
     }
 
     @Override
     public int getMaxPropertyTiers() {
-        return 18;
+        return 10;
     }
 
     protected Color getItemEntityColor(ItemStack stack) {

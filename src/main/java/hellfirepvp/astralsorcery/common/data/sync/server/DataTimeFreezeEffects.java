@@ -35,9 +35,9 @@ import java.util.Map;
  */
 public class DataTimeFreezeEffects extends AbstractData {
 
-    private Map<DimensionType, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
+    private final Map<DimensionType, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
 
-    private List<ServerSyncAction> scheduledServerSyncChanges = new LinkedList<>();
+    private final List<ServerSyncAction> scheduledServerSyncChanges = new LinkedList<>();
 
     private DataTimeFreezeEffects(ResourceLocation key) {
         super(key);
@@ -98,7 +98,7 @@ public class DataTimeFreezeEffects extends AbstractData {
         private final ActionType type;
 
         private final DimensionType dimType;
-        private TimeStopEffectHelper involvedEffect;
+        private final TimeStopEffectHelper involvedEffect;
 
         private ServerSyncAction(ActionType type, DimensionType dimType, TimeStopEffectHelper involvedEffect) {
             this.type = type;

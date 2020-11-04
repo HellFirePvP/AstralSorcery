@@ -31,8 +31,7 @@ import java.util.*;
  */
 public class ClientLightBlockEndpoints extends ClientData<ClientLightBlockEndpoints> {
 
-    private Map<DimensionType, Set<BlockPos>> clientPositions = new HashMap<>();
-
+    private final Map<DimensionType, Set<BlockPos>> clientPositions = new HashMap<>();
 
     public boolean doesPositionReceiveStarlightClient(IWorld world, BlockPos pos) {
         return this.clientPositions.getOrDefault(world.getDimension().getType(), Collections.emptySet()).contains(pos);

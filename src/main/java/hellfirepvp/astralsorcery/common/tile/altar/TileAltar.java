@@ -201,7 +201,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
             return;
         }
 
-        if (!this.hasMultiblock() || !this.activeRecipe.matches(this, false)) {
+        if (!this.hasMultiblock() || !this.activeRecipe.matches(this, false, false)) {
             this.abortCrafting();
             return;
         }
@@ -224,7 +224,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
         boolean isChaining;
         ResourceLocation recipeName = finishedRecipe.getRecipeToCraft().getId();
 
-        if (!(isChaining = finishedRecipe.matches(this, false))) {
+        if (!(isChaining = finishedRecipe.matches(this, false, true))) {
             this.abortCrafting();
 
             EntityFlare.spawnAmbientFlare(getWorld(), getPos().add(-3 + rand.nextInt(7), 1 + rand.nextInt(3), -3 + rand.nextInt(7)));
@@ -269,7 +269,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     public boolean onInteract(World world, BlockPos pos, PlayerEntity player, Direction side, boolean sneak) {
         if (!world.isRemote() && this.hasMultiblock()) {
             if (this.getActiveRecipe() != null) {
-                if (this.getActiveRecipe().matches(this, false)) {
+                if (this.getActiveRecipe().matches(this, false, false)) {
                     return true;
                 }
                 abortCrafting();
@@ -324,7 +324,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     }
 
     public float getCollectionCap(AltarCollectionCategory category) {
-        return this.getAltarType().getStarlightCapacity() / 7F / this.getAltarType().getMinimumSources();
+        return this.getAltarType().getStarlightCapacity() / 8.5F / this.getAltarType().getMinimumSources();
     }
 
     @Nonnull

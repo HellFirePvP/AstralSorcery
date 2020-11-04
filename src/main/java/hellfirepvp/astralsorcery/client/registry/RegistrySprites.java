@@ -55,6 +55,8 @@ public class RegistrySprites {
         SPR_GRAPPLING_HOOK = new SpriteSheetResource(TEX_GRAPPLING_HOOK, 4, 8);
         SPR_HALO_INFUSION = new SpriteSheetResource(TEX_HALO_INFUSION, 8, 8);
         SPR_HALO_RITUAL = new SpriteSheetResource(TEX_HALO_RITUAL, 6, 8);
+        SPR_FOUNTAIN_LIQUID = new SpriteSheetResource(TEX_FOUNTAIN_LIQUID, 4, 8);
+        SPR_FOUNTAIN_VORTEX = new SpriteSheetResource(TEX_FOUNTAIN_VORTEX, 5, 8);
 
         SPR_OVERLAY_CHARGE = new SpriteSheetResource(TEX_OVERLAY_CHARGE, 8, 4);
         SPR_OVERLAY_CHARGE_COLORLESS = new SpriteSheetResource(TEX_OVERLAY_CHARGE_COLORLESS, 8, 4);

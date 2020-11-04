@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -97,7 +98,7 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                     if (world.getBlockState(other).getBlockHardness(world, other) != -1 &&
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
                         BlockState state = world.getBlockState(other);
-                        if (state != state.getFluidState().getBlockState() && player.interactionManager.tryHarvestBlock(other)) {
+                        if (!BlockUtils.isFluidBlock(state) && player.interactionManager.tryHarvestBlock(other)) {
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
                         }
                     }
@@ -119,7 +120,7 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                 if (world.getBlockState(other).getBlockHardness(world, other) != -1 &&
                         AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
                     BlockState state = world.getBlockState(other);
-                    if (state != state.getFluidState().getBlockState() && player.interactionManager.tryHarvestBlock(other)) {
+                    if (!BlockUtils.isFluidBlock(state) && player.interactionManager.tryHarvestBlock(other)) {
                         AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
                     }
                 }

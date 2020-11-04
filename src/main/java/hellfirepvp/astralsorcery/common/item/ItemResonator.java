@@ -57,6 +57,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 
@@ -91,7 +92,9 @@ public class ItemResonator extends Item implements OverrideInteractItem {
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
-            items.add(new ItemStack(this));
+            ItemStack resonator = new ItemStack(this);
+            setUpgradeUnlocked(resonator, ResonatorUpgrade.STARLIGHT);
+            items.add(resonator);
 
             ItemStack upgradedResonator = new ItemStack(this);
             setUpgradeUnlocked(upgradedResonator, ResonatorUpgrade.values());
@@ -136,7 +139,7 @@ public class ItemResonator extends Item implements OverrideInteractItem {
                         IChunk ch = world.getChunk(pos);
                         if (ch instanceof Chunk) {
                             ((Chunk) ch).getCapability(CapabilitiesAS.CHUNK_FLUID).ifPresent(entry -> {
-                                FluidStack display = entry.drain(1, true);
+                                FluidStack display = entry.drain(1, IFluidHandler.FluidAction.SIMULATE);
                                 if (!display.isEmpty()) {
                                     PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.LIQUID_FOUNTAIN).addData(buf -> {
                                         ByteBufUtils.writeFluidStack(buf, display);
@@ -336,7 +339,6 @@ public class ItemResonator extends Item implements OverrideInteractItem {
 
     public static enum ResonatorUpgrade {
 
-
         STARLIGHT("starlight",
                 (player, side, stack) -> true),
         FLUID_FIELDS("liquid",
@@ -350,6 +352,10 @@ public class ItemResonator extends Item implements OverrideInteractItem {
         private ResonatorUpgrade(String appendixUpgrade, TriPredicate<PlayerEntity, LogicalSide, ItemStack> check) {
             this.check = check;
             this.appendixUpgrade = appendixUpgrade;
+        }
+
+        public String getAppendix() {
+            return appendixUpgrade;
         }
 
         public String getUnlocalizedItemName() {

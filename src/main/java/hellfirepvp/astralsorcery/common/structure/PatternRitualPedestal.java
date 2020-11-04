@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.structure;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
+import hellfirepvp.observerlib.api.block.MatchableState;
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -32,9 +33,9 @@ public class PatternRitualPedestal extends PatternBlockArray {
     private void makeStructure() {
         BlockState air = Blocks.AIR.getDefaultState();
 
-        addBlockCube(air, -2, 0, -2, 2, 2, 2);
-        addBlockCube(air, -3, 0, -1, 3, 2, 1);
-        addBlockCube(air, -1, 0, -3, 1, 2, 3);
+        addBlockCube(MatchableState.REQUIRES_AIR, -2, 0, -2, 2, 2, 2);
+        addBlockCube(MatchableState.REQUIRES_AIR, -3, 0, -1, 3, 2, 1);
+        addBlockCube(MatchableState.REQUIRES_AIR, -1, 0, -3, 1, 2, 3);
 
         addBlock(BlocksAS.RITUAL_PEDESTAL.getDefaultState(), 0, 0, 0);
 

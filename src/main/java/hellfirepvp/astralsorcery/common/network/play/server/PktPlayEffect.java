@@ -16,11 +16,8 @@ import hellfirepvp.astralsorcery.common.item.lens.ItemColoredLensFire;
 import hellfirepvp.astralsorcery.common.item.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.starlight.network.handler.BlockTransmutationHandler;
-import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
-import hellfirepvp.astralsorcery.common.tile.TileChalice;
+import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileInfuser;
-import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.util.CelestialStrike;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopEffectHelper;
@@ -123,6 +120,8 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
         BLOCK_HARVEST_DRAW,
         GATEWAY_REVOKE_EFFECT,
         LIQUID_INTERACTION_LINE,
+        FOUNTAIN_TRANSITION_SEGMENT,
+        FOUNTAIN_REPLACE_EFFECT,
         ;
 
         @OnlyIn(Dist.CLIENT)
@@ -168,6 +167,10 @@ public class PktPlayEffect extends ASPacket<PktPlayEffect> {
                     return TileCelestialGateway::playAccessRevokeEffect;
                 case LIQUID_INTERACTION_LINE:
                     return TileChalice::drawLiquidLine;
+                case FOUNTAIN_TRANSITION_SEGMENT:
+                    return TileFountain::playTransitionEffect;
+                case FOUNTAIN_REPLACE_EFFECT:
+                    return TileFountain::replaceEffect;
             }
             return (pkt) -> {};
         }

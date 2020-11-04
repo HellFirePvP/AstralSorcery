@@ -10,14 +10,17 @@ package hellfirepvp.astralsorcery.client.screen.journal.page;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
+import hellfirepvp.observerlib.api.block.MatchableState;
 import hellfirepvp.observerlib.api.client.StructureRenderer;
 import hellfirepvp.observerlib.api.structure.Structure;
 import net.minecraft.client.Minecraft;
@@ -49,13 +52,16 @@ public class RenderPageStructure extends RenderablePage {
     private final ITextComponent name;
 
     private Optional<Integer> drawSlice = Optional.empty();
-    private Rectangle switchView = null, sliceUp = null, sliceDown = null;
+    private Rectangle.Float switchView = null, sliceUp = null, sliceDown = null;
     private long totalRenderFrame = 0;
+    private final boolean canShowAirBlocks;
+    private boolean showAirBlocks = false;
 
     public RenderPageStructure(@Nullable ResearchNode node, int nodePage, Structure structure, @Nullable ITextComponent name, @Nonnull Vector3 shift) {
         super(node, nodePage);
         this.structure = structure;
         this.structureRenderer = new StructureRenderer(this.structure).setIsolateIndividualBlock(true);
+        this.canShowAirBlocks = structure.getContents().containsValue(MatchableState.REQUIRES_AIR);
         this.name = name;
         this.shift = shift;
         this.contentStacks = MapStream.ofKeys(
@@ -74,6 +80,96 @@ public class RenderPageStructure extends RenderablePage {
         if (this.name != null) {
             renderHeadline(offsetX + shift, offsetY + 5, zLevel, this.name);
         }
+
+        this.renderSliceButtons(offsetX, offsetY + 10, zLevel, mouseX, mouseY);
+    }
+
+    private void renderSliceButtons(float offsetX, float offsetY, float zLevel, float mouseX, float mouseY) {
+        TexturesAS.TEX_GUI_BOOK_STRUCTURE_ICONS.bindTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        this.switchView = null;
+        this.sliceDown = null;
+        this.sliceUp = null;
+
+        this.switchView = new Rectangle.Float(offsetX + 152, offsetY + 10, 16, 16);
+        float u = this.drawSlice.isPresent() ? 0.5F : 0;
+        RenderingGuiUtils.drawTexturedRect(switchView.x, switchView.y, zLevel, switchView.width, switchView.height,
+                u, 0, 0.5F, 0.25F);
+
+        if (this.drawSlice.isPresent()) {
+            int yLevel = this.drawSlice.get();
+
+            int minSlice = this.getCurrentMinSlice();
+            int maxSlice = this.getCurrentMaxSlice();
+
+            if (yLevel < minSlice) {
+                yLevel = maxSlice;
+            }
+            if (yLevel > maxSlice) {
+                yLevel = maxSlice;
+            }
+
+            if (minSlice <= yLevel - 1) {
+                sliceDown = new Rectangle.Float(offsetX + 160, offsetY + 28, 11, 16);
+                RenderSystem.pushMatrix();
+                RenderSystem.translatef(sliceDown.x + (sliceDown.width / 2), sliceDown.y + (sliceDown.height / 2), zLevel);
+                float v = 2F / 4F;
+                if (sliceDown.contains(mouseX, mouseY)) {
+                    v = 1F / 4F;
+                    RenderSystem.scalef(1.1F, 1.1F, 1.1F);
+                }
+                RenderSystem.translatef(-sliceDown.width / 2, -sliceDown.height / 2, 0);
+                RenderingGuiUtils.drawTexturedRect(0, 0, 0, sliceDown.width, sliceDown.height,
+                        12F / 32F, v, 11F / 32F, 1F / 4F);
+                RenderSystem.popMatrix();
+            }
+
+            if (maxSlice >= yLevel + 1) {
+                sliceUp = new Rectangle.Float(offsetX + 148, offsetY + 28, 11, 16);
+                RenderSystem.pushMatrix();
+                RenderSystem.translatef(sliceUp.x + (sliceUp.width / 2), sliceUp.y + (sliceUp.height / 2), zLevel);
+                float v = 2F / 4F;
+                if (sliceUp.contains(mouseX, mouseY)) {
+                    v = 1F / 4F;
+                    RenderSystem.scalef(1.1F, 1.1F, 1.1F);
+                }
+                RenderSystem.translatef(-sliceUp.width / 2, -sliceUp.height / 2, 0);
+                RenderingGuiUtils.drawTexturedRect(0, 0, 0, sliceUp.width, sliceUp.height,
+                        0, v, 11F / 32F, 1F / 4F);
+                RenderSystem.popMatrix();
+            }
+        }
+        RenderSystem.disableBlend();
+    }
+
+    private int getCurrentMinSlice() {
+        int minSlice = this.structure.getMinimumOffset().getY();
+        if (!this.showAirBlocks) {
+            for (int yy = minSlice; yy <= this.structure.getMaximumOffset().getY(); yy++) {
+                boolean onlyAir = this.structure.getStructureSlice(yy).stream()
+                        .allMatch(tpl -> tpl.getB().equals(MatchableState.REQUIRES_AIR));
+                if (!onlyAir) {
+                    return yy;
+                }
+            }
+        }
+        return minSlice;
+    }
+
+    private int getCurrentMaxSlice() {
+        int maxSlice = this.structure.getMaximumOffset().getY();
+        if (!this.showAirBlocks) {
+            for (int yy = maxSlice; yy >= this.structure.getMinimumOffset().getY(); yy--) {
+                boolean onlyAir = this.structure.getStructureSlice(yy).stream()
+                        .allMatch(tpl -> tpl.getB().equals(MatchableState.REQUIRES_AIR));
+                if (!onlyAir) {
+                    return yy;
+                }
+            }
+        }
+        return maxSlice;
     }
 
     private void renderHeadline(float offsetX, float offsetY, float zLevel, ITextComponent title) {
@@ -94,24 +190,40 @@ public class RenderPageStructure extends RenderablePage {
         Vector3 size = new Vector3(this.structure.getMaximumOffset()).subtract(this.structure.getMinimumOffset()).add(1, 1, 1);
         FontRenderer fr = RenderablePage.getFontRenderer();
         float scale = 1.3F;
-        String desc = (int) size.getX() + " - " + (int) size.getY() + " - " + (int) size.getZ();
+        String desc = String.format("%s - %s - %s", size.getBlockX(), size.getBlockY(), size.getBlockZ());
         float length = fr.getStringWidth(desc) * scale;
+
+        RenderSystem.disableDepthTest();
 
         RenderSystem.pushMatrix();
         RenderSystem.translated(offsetX, offsetY, 0);
         RenderSystem.scaled(scale, scale, scale);
-        RenderSystem.disableDepthTest();
-
         RenderingDrawUtils.renderStringAtPos(0, 0, zLevel, fr, desc, 0x00DDDDDD, true);
+        RenderSystem.popMatrix();
+
+        this.drawSlice.ifPresent(yLevel -> {
+            int min = this.getCurrentMinSlice();
+            int max = this.getCurrentMaxSlice();
+            int height = max - min;
+            int level = yLevel - min;
+            String sliceDescription = String.format("%s / %s", level + 1, height + 1);
+
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(offsetX, offsetY + 14, 0);
+            RenderSystem.scaled(scale, scale, scale);
+            RenderingDrawUtils.renderStringAtPos(0, 0, zLevel, fr, sliceDescription, 0x00DDDDDD, true);
+            RenderSystem.popMatrix();
+        });
 
         RenderSystem.enableDepthTest();
-        RenderSystem.popMatrix();
         return length + 8F;
     }
 
     private void renderStructure(float offsetX, float offsetY, float pTicks) {
         Point.Double renderOffset = renderOffset(offsetX + 8, offsetY);
+        this.structureRenderer.setRenderWithRequiredAir(this.showAirBlocks);
         this.structureRenderer.render3DSliceGUI(new MatrixStack(), renderOffset.x + shift.getX(), renderOffset.y + shift.getY(), pTicks, drawSlice);
+        this.structureRenderer.setRenderWithRequiredAir(false);
     }
 
     private Point.Double renderOffset(float stdPageOffsetX, float stdPageOffsetY) {
@@ -141,7 +253,7 @@ public class RenderPageStructure extends RenderablePage {
             if (drawSlice.isPresent()) {
                 drawSlice = Optional.empty();
             } else {
-                drawSlice = Optional.of(this.structureRenderer.getDefaultSlice());
+                drawSlice = Optional.of(this.getCurrentMinSlice());
             }
             SoundHelper.playSoundClient(SoundsAS.GUI_JOURNAL_PAGE, 1F, 1F);
             return true;

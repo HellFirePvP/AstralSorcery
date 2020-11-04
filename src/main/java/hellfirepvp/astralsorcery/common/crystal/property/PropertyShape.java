@@ -32,11 +32,11 @@ public class PropertyShape extends CrystalProperty {
         this.addUsage(ctx -> ctx.uses(USE_RITUAL_EFFECT));
         this.addModifier((value, originalValue, propertyLevel, context) -> {
             if (context.uses(USE_TOOL_EFFECTIVENESS)) {
-                return value * (1.0 + (0.2 * Math.min(propertyLevel, 4)));
+                return value * (1.0 + (0.15 * Math.min(propertyLevel, 4)));
             }
             if (context.uses(USE_COLLECTOR_CRYSTAL) ||
                     context.uses(USE_RITUAL_EFFECT)) {
-                return value * (1.0 + (0.25 * propertyLevel));
+                return value * (1.0 + (0.2 * propertyLevel));
             }
             return value;
         });

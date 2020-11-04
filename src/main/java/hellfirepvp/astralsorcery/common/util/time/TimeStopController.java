@@ -9,9 +9,11 @@
 package hellfirepvp.astralsorcery.common.util.time;
 
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.sync.client.ClientTimeFreezeEntities;
 import hellfirepvp.astralsorcery.common.data.sync.server.DataTimeFreezeEffects;
-import hellfirepvp.astralsorcery.common.lib.EffectsAS;
+import hellfirepvp.astralsorcery.common.data.sync.server.DataTimeFreezeEntities;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
@@ -34,7 +36,7 @@ import java.util.*;
  */
 public class TimeStopController implements ITickHandler {
 
-    private static Map<DimensionType, List<TimeStopZone>> activeTimeStopZones = new HashMap<>();
+    private static final Map<DimensionType, List<TimeStopZone>> activeTimeStopZones = new HashMap<>();
 
     public static final TimeStopController INSTANCE = new TimeStopController();
 
@@ -90,8 +92,16 @@ public class TimeStopController implements ITickHandler {
         activeTimeStopZones.remove(type);
     }
 
+    public static boolean isFrozenDirectly(Entity e) {
+        if (e.getEntityWorld().isRemote()) {
+            return SyncDataHolder.computeClient(SyncDataHolder.DATA_TIME_FREEZE_ENTITIES, ClientTimeFreezeEntities.class, data -> data.isFrozen(e)).orElse(false);
+        } else {
+            return SyncDataHolder.computeServer(SyncDataHolder.DATA_TIME_FREEZE_ENTITIES, DataTimeFreezeEntities.class, data -> data.isFrozen(e)).orElse(false);
+        }
+    }
+
     public static boolean skipLivingTick(LivingEntity e) {
-        if (e.isPotionActive(EffectsAS.EFFECT_TIME_FREEZE)) {
+        if (isFrozenDirectly(e)) {
             boolean shouldFreeze = true;
             if (!e.isAlive() || e.getHealth() <= 0) {
                 shouldFreeze = false;
@@ -103,8 +113,10 @@ public class TimeStopController implements ITickHandler {
                 if (e.world.isRemote() && e.world.rand.nextInt(5) == 0) {
                     TimeStopEffectHelper.playEntityParticles(e);
                 }
-                TimeStopZone.handleImportantEntityTicks(e);
-                return true;
+                if (!e.getEntityWorld().isRemote()) {
+                    TimeStopZone.handleImportantEntityTicks(e);
+                    return true;
+                }
             }
         }
         DimensionType type = e.getEntityWorld().getDimension().getType();
@@ -112,8 +124,10 @@ public class TimeStopController implements ITickHandler {
         if (freezeAreas != null && !freezeAreas.isEmpty()) {
             for (TimeStopZone stop : freezeAreas) {
                 if (stop.interceptEntityTick(e)) {
-                    TimeStopZone.handleImportantEntityTicks(e);
-                    return true;
+                    if (!e.getEntityWorld().isRemote()) {
+                        TimeStopZone.handleImportantEntityTicks(e);
+                        return true;
+                    }
                 }
             }
         }

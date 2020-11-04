@@ -160,8 +160,8 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
             TexturesAS.TEX_STAR_1.bindTexture();
             RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
                 for (int i = 0; i < 72 + gen.nextInt(108); i++) {
-                    float innerOffsetX = starSize + gen.nextFloat() * (guiWidth  - starSize) + this.getGuiLeft();
-                    float innerOffsetY = starSize + gen.nextFloat() * (guiHeight - starSize) + this.getGuiTop();
+                    float innerOffsetX = starSize + gen.nextFloat() * (guiWidth  - starSize * 2) + this.getGuiLeft();
+                    float innerOffsetY = starSize + gen.nextFloat() * (guiHeight - starSize * 2) + this.getGuiTop();
                     float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
                     brightness = this.multiplyStarBrightness(pTicks, brightness);
 

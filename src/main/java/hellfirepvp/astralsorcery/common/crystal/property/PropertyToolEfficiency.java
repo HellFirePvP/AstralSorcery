@@ -29,6 +29,6 @@ public class PropertyToolEfficiency extends CrystalProperty {
 
         this.addUsage(ctx -> ctx.uses(USE_TOOL_EFFECTIVENESS));
         this.addModifier((value, originalValue, propertyLevel, context) ->
-                context.withUse(USE_TOOL_EFFECTIVENESS, value, () -> value * (1.0 + (0.3 * Math.min(propertyLevel, 4)))));
+                context.withUse(USE_TOOL_EFFECTIVENESS, value, () -> value * (1.0 + (0.2 * Math.min(propertyLevel, 4)))));
     }
 }
