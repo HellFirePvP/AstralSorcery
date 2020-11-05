@@ -92,8 +92,8 @@ public class MantleEffectDiscidia extends MantleEffect {
                     float added = this.getLastAttackDamage(player);
 
                     if (added > 0.1F && AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAttack.get())) {
-                        DamageUtil.attackEntityFrom(attacked, CommonProxy.DAMAGE_SOURCE_STELLAR, added / 2F);
-                        DamageUtil.attackEntityFrom(attacked, DamageSource.causePlayerDamage(player), added / 2F, player);
+                        DamageUtil.shotgunAttack(attacked, entity -> DamageUtil.attackEntityFrom(entity, CommonProxy.DAMAGE_SOURCE_STELLAR, added / 2F));
+                        DamageUtil.shotgunAttack(attacked, entity -> DamageUtil.attackEntityFrom(entity, DamageSource.causePlayerDamage(player), added / 2F, player));
 
                         AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAttack.get(), false);
                     }
@@ -132,7 +132,7 @@ public class MantleEffectDiscidia extends MantleEffect {
 
         private final double defaultDamageMultiplier = 1.5F;
 
-        private final int defaultChargeCostPerAttack = 40;
+        private final int defaultChargeCostPerAttack = 100;
 
         public ForgeConfigSpec.DoubleValue damageMultiplier;
 

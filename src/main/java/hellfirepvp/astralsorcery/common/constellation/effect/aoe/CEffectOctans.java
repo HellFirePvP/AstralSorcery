@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
@@ -127,7 +128,7 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
                         }
                         world.neighborChanged(entry.getPos(), Blocks.WATER, entry.getPos());
                     }
-                } else if (state.getBlock() instanceof FlowingFluidBlock) {
+                } else if (BlockUtils.isFluidBlock(state)) {
                     if (state.getBlock() == Blocks.WATER) {
                         if (rand.nextInt(100) == 0) {
                             spawnFishingDropsAt((ServerWorld) world, entry.getPos());

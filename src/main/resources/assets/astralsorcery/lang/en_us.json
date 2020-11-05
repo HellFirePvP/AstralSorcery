@@ -219,7 +219,7 @@
 
   "astralsorcery.journal.node.TOOLS.name": "Crystal Tools",
   "astralsorcery.journal.TOOLS.1.text": "While particularly vulnerable to shear forces, Rock Crystals can be carefully shaped to channel background Starlight energies to become far more durable than metal tools. By using several crystals to specially craft common tools that channel background Starlight energies, these tools can be crafted to magically leverage the attributes of their component crystals. In this way, a tool may be specially shaped to a more specialized use, and even two tools from the same crafter may have completely different strengths or abilities, based on the crystals used.",
-  "astralsorcery.journal.TOOLS.3.text": "Submerging damaged tools into Liquid Starlight will recover their lost durability once the Liquid Starlight is absorbed. <NL>More learned initiates may even be able to find methods to provide outside Starlight energy to these tools while in-use to empower them further, or leverage their attributes in other ways.",
+  "astralsorcery.journal.TOOLS.3.text": "More learned initiates may even be able to find methods to provide outside Starlight energy to these tools while in-use to empower them further, or leverage their attributes in other ways.",
 
   "astralsorcery.journal.node.WELL.name": "Lightwell",
   "astralsorcery.journal.WELL.1.text": "Crystals are receptive to Starlight, naturally generating a dew-like condensate of Starlight when exposed to high concentrations of Starlight. This Liquid Starlight has many uses for a sorcerer, but trying to collect the faint amounts that naturally gather on Aquamarine gems or Crystals under normal concentrations is impossible. A special channeling container is needed for gathering and storing Starlight for accelerated, stable Liquid Starlight collection. The more Starlight that is provided to a Lightwell, the faster it will produce liquid from any given catalyst.",
@@ -444,7 +444,7 @@
 
   "astralsorcery.journal.node.C_CHALICE.name": "Containment Chalice",
   "astralsorcery.journal.C_CHALICE.1.text": "The largest drawback of a Lightwell is the reservoir size. While sufficient for generating liquids from a catalyst, the required design becomes prohibitively large when scaled up for greater storage. Pipes that can draw liquid from below the Lightwell may not be available, or the environment may not support their use. <NL>Magical teleportation of the fluid is the solution.",
-  "astralsorcery.journal.C_CHALICE.3.text": "Using Resonating Gems to keep the contents under high compression results in 24 buckets of storage in a small space. This also means that relocating a Chalice without first removing the stored fluid will result in the fluid being dispersed into the ether.<NL>The Chalice is able to draw Liquid Starlight through the ether from Lightwells within 16 meters it has Line-of-Sight with. Like the Lightwell, a Chalice can be connected to pipes from the bottom face.",
+  "astralsorcery.journal.C_CHALICE.3.text": "Using Resonating Gems to keep the contents under high compression results in 64 buckets of storage in a small space. This also means that relocating a Chalice without first removing the stored fluid will result in the fluid being dispersed into the ether.<NL>The Chalice is able to draw Liquid Starlight through the ether from Lightwells within 16 meters it has Line-of-Sight with. Like the Lightwell, a Chalice can be connected to pipes from the bottom face.",
   "astralsorcery.journal.C_CHALICE.4.text": "As the Chalice facilitates magical transport from Lightwells, the essence of any fluid contained within may leak, seeking out other fluidic essence to merge with. This results in the creation of materials as though the two fluids had met in the world, though very slight dissipation of the stored fluid can occur when this happens. <NL>An active redstone signal disables both of these features.",
 
   "astralsorcery.journal.node.BORE_CORE.name": "Evershifting Fountain",
@@ -678,7 +678,7 @@
   "astralsorcery.constellation.discidia.description": "Light from this constellation penetrates, piercing to the heart of both materials and creatures alike.",
   "astralsorcery.constellation.discidia.enchantments": "This constellation saturates potions to grant heavily increased strength to the consumer, and enchants weapons with great Power and Sharpness.",
   "astralsorcery.constellation.discidia.ritual": "Dispersing of this light into small discordant energies in the area creates a damaging field, lashing out at all enemies nearby. The intensity increases as more Starlight is channeled into the ritual.",
-  "astralsorcery.constellation.discidia.mantle": "Once infused with this Constellation's light, a mantle will draw strength from your enemies' blows, empowering your own against them. The wearer gains 1/3 of the damage most recently taken as additional damage channeled into each hit.",
+  "astralsorcery.constellation.discidia.mantle": "Once infused with this Constellation's light, a mantle will draw strength from your enemies' blows, empowering your own against them. The wearer gains the same amount of damage most recently taken as additional damage channeled into each hit.",
   "astralsorcery.constellation.discidia.corruption": "An offensive weapon empowers foes. Allies will find themselves wounded, and enemies will be rapidly healed of damage and become resistant to new wounds.",
 
   "astralsorcery.constellation.armara": "Armara",
@@ -710,7 +710,7 @@
   "astralsorcery.constellation.evorsio.description": "The light of this constellation can shatter its way through materials and objects.",
   "astralsorcery.constellation.evorsio.enchantments": "This constellation saturates potions to grant increased mining and attack Haste, and enchants tools with greatly improved Efficiency.",
   "astralsorcery.constellation.evorsio.ritual": "Dispersing this constellation's light with a ritual causes thorough destruction, breaking any solid blocks except those that cannot be broken. How quickly a block is broken increases as more Starlight is channeled into the ritual.",
-  "astralsorcery.constellation.evorsio.mantle": "This mantle enhances your destructive potential, allowing you to break planes of blocks at once, and causing enemies you kill to explode in a damaging burst to their allies equal to half of their life.",
+  "astralsorcery.constellation.evorsio.mantle": "This mantle enhances your destructive potential, allowing you to break planes of blocks at once.",
   "astralsorcery.constellation.evorsio.corruption": "Destruction turns to creation, with the air becoming dirt, stone, or sometimes ores.",
 
   "astralsorcery.constellation.mineralis": "Mineralis",
@@ -726,7 +726,7 @@
   "astralsorcery.constellation.lucerna.description": "The light of this constellation seems immensely bright despite it being far away. Bright enough that it may trick some into thinking it day.",
   "astralsorcery.constellation.lucerna.enchantments": "This constellation saturates potions to grant the ability to see in the dark, and enchants helmets to permanently provide the same.",
   "astralsorcery.constellation.lucerna.ritual": "While only Starlight, the fundamental brightness contained within prevents hostile creatures from arising in the area. The reach of the ritual increases based on the number of balancing lenses active on the ritual.",
-  "astralsorcery.constellation.lucerna.mantle": "This mantle reveals all creatures and spawners within 3 dozen paces, even through walls.",
+  "astralsorcery.constellation.lucerna.mantle": "This mantle reveals all creatures, spawners and containers within 3 dozen paces, even through walls.",
   "astralsorcery.constellation.lucerna.corruption": "Light is stretched, and the time of Starlight lasts far longer.",
 
   "astralsorcery.constellation.horologium": "Horologium",
@@ -758,7 +758,7 @@
   "astralsorcery.constellation.fornax.description": "A strong and intense heat follow closely to this constellation's light.",
   "astralsorcery.constellation.fornax.enchantments": "This constellation saturates potions to grant immunity to fire damage, enchanted weapons set foes on fire and tools automatically smelt their mined blocks.",
   "astralsorcery.constellation.fornax.ritual": "Distributing of the energies of this constellation prevent it from setting open fires, but the sustained heat will cause nearby mundane blocks to melt or simply burn. The speed of this depends on the amount of channeled Starlight.",
-  "astralsorcery.constellation.fornax.mantle": "While wearing this mantle, damage sustained from fire is regenerated. While on fire, the heat is channeled into the ground you stand on: either smelting or melting it.",
+  "astralsorcery.constellation.fornax.mantle": "While wearing this mantle, a part of the damage sustained from fire is regenerated.",
   "astralsorcery.constellation.fornax.corruption": "Heat flees the area, with liquids freezing, fires extinguished, and the very moisture in the air freezing solid.",
 
   "astralsorcery.constellation.pelotrio": "Pelotrio",
