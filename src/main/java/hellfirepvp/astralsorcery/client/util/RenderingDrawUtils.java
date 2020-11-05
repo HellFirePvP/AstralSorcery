@@ -240,7 +240,6 @@ public class RenderingDrawUtils {
         }
     }
 
-    //TODO zlevel layer offset
     public static void renderBlueTooltipBox(int x, int y, int width, int height) {
         renderTooltipBox(x, y, width, height, 0x000027, 0x000044);
     }

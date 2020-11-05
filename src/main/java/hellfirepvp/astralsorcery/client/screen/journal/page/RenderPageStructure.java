@@ -8,12 +8,15 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.IDrawRenderTypeBuffer;
+import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -23,12 +26,17 @@ import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.observerlib.api.block.MatchableState;
 import hellfirepvp.observerlib.api.client.StructureRenderer;
 import hellfirepvp.observerlib.api.structure.Structure;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.LanguageMap;
 import net.minecraft.util.text.StringTextComponent;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,16 +60,14 @@ public class RenderPageStructure extends RenderablePage {
     private final ITextComponent name;
 
     private Optional<Integer> drawSlice = Optional.empty();
-    private Rectangle.Float switchView = null, sliceUp = null, sliceDown = null;
+    private Rectangle.Float switchView = null, sliceUp = null, sliceDown = null, switchRequiredAir = null;
     private long totalRenderFrame = 0;
-    private final boolean canShowAirBlocks;
     private boolean showAirBlocks = false;
 
     public RenderPageStructure(@Nullable ResearchNode node, int nodePage, Structure structure, @Nullable ITextComponent name, @Nonnull Vector3 shift) {
         super(node, nodePage);
         this.structure = structure;
         this.structureRenderer = new StructureRenderer(this.structure).setIsolateIndividualBlock(true);
-        this.canShowAirBlocks = structure.getContents().containsValue(MatchableState.REQUIRES_AIR);
         this.name = name;
         this.shift = shift;
         this.contentStacks = MapStream.ofKeys(
@@ -92,6 +98,7 @@ public class RenderPageStructure extends RenderablePage {
         this.switchView = null;
         this.sliceDown = null;
         this.sliceUp = null;
+        this.switchRequiredAir = null;
 
         this.switchView = new Rectangle.Float(offsetX + 152, offsetY + 10, 16, 16);
         float u = this.drawSlice.isPresent() ? 0.5F : 0;
@@ -141,6 +148,27 @@ public class RenderPageStructure extends RenderablePage {
                 RenderSystem.popMatrix();
             }
         }
+
+        this.switchRequiredAir = new Rectangle.Float(offsetX + 134, offsetY + 10, 16, 16);
+        RenderingGuiUtils.drawTexturedRect(switchRequiredAir.x, switchRequiredAir.y, zLevel, switchRequiredAir.width, switchRequiredAir.height,
+                0, 0.75F, 0.5F, 0.25F);
+        if (this.showAirBlocks) {
+            BlockAtlasTexture.getInstance().bindTexture();
+            RenderSystem.depthMask(false);
+
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.BLOCK, buf -> {
+                MatrixStack renderStack = new MatrixStack();
+                renderStack.translate(switchRequiredAir.x + 13, switchRequiredAir.y + 11, zLevel + 60);
+                renderStack.scale(7, -7, 7);
+                renderStack.rotate(Vector3f.XP.rotationDegrees(30));
+                renderStack.rotate(Vector3f.YP.rotationDegrees(225));
+
+                RenderingUtils.renderSimpleBlockModel(Blocks.BLACK_STAINED_GLASS.getDefaultState(), renderStack, buf);
+            });
+
+            RenderSystem.depthMask(true);
+        }
+
         RenderSystem.disableBlend();
     }
 
@@ -239,6 +267,17 @@ public class RenderPageStructure extends RenderablePage {
         if (rect.contains(mouseX, mouseY)) {
             RenderingDrawUtils.renderBlueTooltip(offsetX + 160, offsetY + 10, zLevel + 650, this.contentStacks, RenderablePage.getFontRenderer(), false);
         }
+
+        if (this.switchView != null && this.switchView.contains(mouseX, mouseY)) {
+            String switchInfo = LanguageMap.getInstance().translateKey("astralsorcery.journal.structure.switch_view");
+            RenderingDrawUtils.renderBlueTooltipString(this.switchView.x + this.switchView.width / 2, this.switchView.y + this.switchView.height / 2, zLevel + 500,
+                    Lists.newArrayList(switchInfo), RenderablePage.getFontRenderer(), false);
+        }
+        if (this.switchRequiredAir != null && this.switchRequiredAir.contains(mouseX, mouseY)) {
+            String switchInfo = LanguageMap.getInstance().translateKey("astralsorcery.journal.structure.required_air");
+            RenderingDrawUtils.renderBlueTooltipString(this.switchRequiredAir.x + this.switchRequiredAir.width / 2, this.switchRequiredAir.y + this.switchRequiredAir.height / 2, zLevel + 500,
+                    Lists.newArrayList(switchInfo), RenderablePage.getFontRenderer(), false);
+        }
     }
 
     @Override
@@ -265,6 +304,23 @@ public class RenderPageStructure extends RenderablePage {
         }
         if (sliceDown != null && drawSlice.isPresent() && sliceDown.contains(mouseX, mouseZ)) {
             drawSlice = Optional.of(drawSlice.get() - 1);
+            SoundHelper.playSoundClient(SoundsAS.GUI_JOURNAL_PAGE, 1F, 1F);
+            return true;
+        }
+        if (switchRequiredAir != null && switchRequiredAir.contains(mouseX, mouseZ)) {
+            showAirBlocks = !showAirBlocks;
+            if (drawSlice.isPresent()) {
+                int yLevel = this.drawSlice.get();
+                int minSlice = this.getCurrentMinSlice();
+                int maxSlice = this.getCurrentMaxSlice();
+                if (yLevel < minSlice) {
+                    yLevel = maxSlice;
+                }
+                if (yLevel > maxSlice) {
+                    yLevel = maxSlice;
+                }
+                this.drawSlice = Optional.of(yLevel);
+            }
             SoundHelper.playSoundClient(SoundsAS.GUI_JOURNAL_PAGE, 1F, 1F);
             return true;
         }

@@ -43,7 +43,6 @@ import java.util.function.Consumer;
 public class RadianceAltarRecipeProvider {
 
     public static void registerAltarRecipes(Consumer<IFinishedRecipe> registrar) {
-        //TODO fountain + primes
         registerRecipes(registrar);
         registerConstellationRecipes(registrar);
     }

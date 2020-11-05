@@ -33,7 +33,6 @@ import java.util.function.Consumer;
 public class AttunementAltarRecipeProvider {
 
     public static void registerAltarRecipes(Consumer<IFinishedRecipe> registrar) {
-        //TODO gateway
         registerRecipes(registrar);
     }
 

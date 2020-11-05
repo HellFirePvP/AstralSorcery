@@ -127,7 +127,6 @@
   "screen.astralsorcery.tome.constellations": "Constellations",
   "screen.astralsorcery.tome.perks": "Perks",
   "screen.astralsorcery.tome.perks.stats": "Perk Statistics",
-  "screen.astralsorcery.tome.knowledge": "Knowledge",
   "screen.astralsorcery.tome": "Tome",
 
   "key.astralsorcery.disable_perk_abilities": "Toggle Perk Abilities",
@@ -488,6 +487,9 @@
   "astralsorcery.journal.recipe.altar.starlight.high": "Quite some",
   "astralsorcery.journal.recipe.altar.starlight.highest": "Large amounts",
   "astralsorcery.journal.recipe.altar.starlight.toomuch": "Too much",
+
+  "astralsorcery.journal.structure.switch_view": "Switch 2D / 3D",
+  "astralsorcery.journal.structure.required_air": "Show/Hide which block must be air",
 
   "crystal.info.astralsorcery.attuned": "Tuned to %s",
   "crystal.info.astralsorcery.trait": "Trait of %s",

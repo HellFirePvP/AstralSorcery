@@ -22,8 +22,6 @@ public class ToolsConfig extends ConfigEntry {
 
     public static final ToolsConfig CONFIG = new ToolsConfig();
 
-    //TODO everything?
-
     public ForgeConfigSpec.DoubleValue capeChaosResistance;
 
     public ForgeConfigSpec.BooleanValue chargedToolsRevert;

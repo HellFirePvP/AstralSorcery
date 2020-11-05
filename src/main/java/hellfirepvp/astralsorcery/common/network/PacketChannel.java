@@ -61,7 +61,6 @@ public class PacketChannel {
         // PLAY DEDICATED_SERVER -> CLIENT
         registerMessage(PktOreScan::new);
         registerMessage(PktPlayEffect::new);
-        registerMessage(PktPlayLiquidInteraction::new);
         registerMessage(PktProgressionUpdate::new);
         registerMessage(PktShootEntity::new);
         registerMessage(PktSyncCharge::new);
