@@ -23,17 +23,9 @@ public enum GatedKnowledge {
     CRYSTAL_COLLECT(ProgressionTier.BASIC_CRAFT),
     CRYSTAL_TUNE(ProgressionTier.ATTUNEMENT),
     CRYSTAL_TRAIT(ProgressionTier.TRAIT_CRAFT),
-    CRYSTAL_FRACTURE(ProgressionTier.ATTUNEMENT),
 
     COLLECTOR_CRYSTAL(ProgressionTier.CONSTELLATION_CRAFT),
-    COLLECTOR_TYPE(ProgressionTier.CONSTELLATION_CRAFT),
-
-    CONSTELLATION_RITUAL(ProgressionTier.ATTUNEMENT),
-    CONSTELLATION_ENCH_POTION(ProgressionTier.CONSTELLATION_CRAFT),
-
-    CONSTELLATION_PAPER_CRAFT(ProgressionTier.TRAIT_CRAFT),
-    CONSTELLATION_CAPE(ProgressionTier.TRAIT_CRAFT),
-    CONSTELLATION_CORRUPTION(ProgressionTier.TRAIT_CRAFT);
+    COLLECTOR_TYPE(ProgressionTier.CONSTELLATION_CRAFT);
 
     private final ProgressionTier capability;
 

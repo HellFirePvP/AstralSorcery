@@ -60,7 +60,7 @@ public class RegistryEngravingEffects {
                 .addEffect(new EngravingEffect.PotionEffect(() -> Effects.STRENGTH, 0, 3))
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.SHARPNESS, 3, 7))
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.POWER, 3, 7))
-                .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.CHANNELING, 3, 4).setIgnoreCompatibility())
+                .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.CHANNELING, 1, 1).setIgnoreCompatibility())
                 .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_INC_CRIT_CHANCE, ModifierType.ADDITION, 3F, 6F)
                         .addApplicableType(EnchantmentType.WEARABLE))
                 .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_MELEE_DAMAGE, ModifierType.STACKING_MULTIPLY, 1.05F, 1.2F)
