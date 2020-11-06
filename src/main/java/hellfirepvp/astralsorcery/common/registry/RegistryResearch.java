@@ -405,6 +405,7 @@ public class RegistryResearch {
                 .addTomeLookup(BlocksAS.GATEWAY, 1, ResearchProgression.ATTUNEMENT)
                 .addPage(text("CELESTIAL_GATEWAY.3"))
                 .addPage(structure(StructureTypesAS.PTYPE_CELESTIAL_GATEWAY))
+                .addPage(text("CELESTIAL_GATEWAY.5"))
                 .register(ResearchProgression.ATTUNEMENT);
 
         ResearchNode resAltar3 = new ResearchNode(BlocksAS.ALTAR_CONSTELLATION, "ALTAR3", 7.25F, 0)
