@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.effect.EffectDropModifier;
 import hellfirepvp.astralsorcery.common.item.ItemTome;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.CapabilitiesAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.AreaEffectCloudEntity;
@@ -24,6 +25,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -44,6 +46,16 @@ public class EventHandlerMisc {
         bus.addListener(EventHandlerMisc::onPlayerSleepEclipse);
         bus.addListener(EventHandlerMisc::onChunkLoad);
         bus.addListener(EventHandlerMisc::onLecternOpen);
+        bus.addListener(EventHandlerMisc::onCrystalToss);
+    }
+
+    private static void onCrystalToss(ItemTossEvent event) {
+        if (!event.getPlayer().getEntityWorld().isRemote()) {
+            ItemStack thrown = event.getEntityItem().getItem();
+            if (thrown.getItem() instanceof ItemCrystalBase) {
+                event.getEntityItem().setThrowerId(event.getPlayer().getUniqueID());
+            }
+        }
     }
 
     private static void onLecternOpen(PlayerInteractEvent.RightClickBlock event) {

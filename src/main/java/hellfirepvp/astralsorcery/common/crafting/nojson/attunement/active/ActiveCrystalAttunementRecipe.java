@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttuneCrystalRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.attunement.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.AdvancementsAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -35,6 +36,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -46,6 +49,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 /**
@@ -126,8 +130,13 @@ public class ActiveCrystalAttunementRecipe extends AttunementRecipe.Active<Attun
                 }
                 crystal.setItem(stack);
 
-                //TODO advancements; keep track of who's crafting
-                //AdvancementsAS.ATTUNE_CRYSTAL.trigger(???, altar.getActiveConstellation());
+                UUID throwerUUID = crystal.getThrowerId();
+                if (throwerUUID != null) {
+                    PlayerEntity thrower = altar.getWorld().getPlayerByUuid(throwerUUID);
+                    if (thrower instanceof ServerPlayerEntity) {
+                        AdvancementsAS.ATTUNE_CRYSTAL.trigger((ServerPlayerEntity) thrower, altar.getActiveConstellation());
+                    }
+                }
             }
         }
     }
